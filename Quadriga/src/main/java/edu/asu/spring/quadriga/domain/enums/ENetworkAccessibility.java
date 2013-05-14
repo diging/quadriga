@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.enums;
 
-public enum EDefaultAccessibility 
+public enum ENetworkAccessibility 
 {
 	PROJECT_COLLABORATORS("default_accessibility_collaborator"),
 	AUTHENTICATED_USERS("default_accessiblity_authenticated"),
@@ -13,7 +13,7 @@ public enum EDefaultAccessibility
 		return id;
 	}
 
-	private EDefaultAccessibility(String id)
+	private ENetworkAccessibility(String id)
 	{
 		this.id = id;
 	}

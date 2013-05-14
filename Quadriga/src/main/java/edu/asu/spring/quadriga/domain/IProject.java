@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.enums.EDefaultAccessibility;
+import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 
 public interface IProject {
@@ -35,9 +35,9 @@ public interface IProject {
 
 	public abstract void setProjectAccess(EProjectAccessibility projectAccess);
 
-	public abstract EDefaultAccessibility getNetworksDefaultAccess();
+	public abstract ENetworkAccessibility getNetworksDefaultAccess();
 
 	public abstract void setNetworksDefaultAccess(
-			EDefaultAccessibility networksDefaultAccess);
+			ENetworkAccessibility networksDefaultAccess);
 
 }
