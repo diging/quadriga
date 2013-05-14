@@ -10,7 +10,17 @@ public class User implements IUser
     private String name;
 	private String userName;
     private String password;
-    private List<IQuadrigaRoles> quadrigaRoles;
+    private String email;
+    
+    @Override
+	public String getEmail() {
+		return email;
+	}
+	@Override
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	private List<IQuadrigaRoles> quadrigaRoles;
     
     @Override
 	public String getName() {

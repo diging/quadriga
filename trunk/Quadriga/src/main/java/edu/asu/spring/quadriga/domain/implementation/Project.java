@@ -5,7 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.EDefaultAccessibility;
+import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 
 public class Project implements IProject 
@@ -18,7 +18,7 @@ public class Project implements IProject
 	private IUser owner;
 	private List<ICollaborator> collaborators;
     private EProjectAccessibility projectAccess;
-    private EDefaultAccessibility networksDefaultAccess;
+    private ENetworkAccessibility networksDefaultAccess;
 
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getName()
@@ -122,14 +122,14 @@ public class Project implements IProject
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getNetworksDefaultAccess()
 	 */
 	@Override
-	public EDefaultAccessibility getNetworksDefaultAccess() {
+	public ENetworkAccessibility getNetworksDefaultAccess() {
 		return networksDefaultAccess;
 	}
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setNetworksDefaultAccess(edu.asu.spring.quadriga.domain.enums.EDefaultAccessibility)
 	 */
 	@Override
-	public void setNetworksDefaultAccess(EDefaultAccessibility networksDefaultAccess) {
+	public void setNetworksDefaultAccess(ENetworkAccessibility networksDefaultAccess) {
 		this.networksDefaultAccess = networksDefaultAccess;
 	}
 

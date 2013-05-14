@@ -20,5 +20,9 @@ public interface IUser
 	public abstract void setName(String name);
 
 	public abstract String getName();
+
+	public abstract void setEmail(String email);
+
+	public abstract String getEmail();
    
 }
