@@ -1,52 +1,66 @@
 package edu.asu.spring.quadriga;
 
 import java.security.Principal;
-import java.security.Security;
-import java.util.Collection;
 import java.util.Set;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import edu.asu.spring.quadriga.domain.implementation.User;
+import edu.asu.spring.quadriga.domain.implementation.UserManager;
  
 @Controller
 public class LoginController {
  
+	UserManager userManager;
+	User user;
+	
+	public LoginController() {
+		userManager = new UserManager();
+		user = new User();
+	}
+	
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
-	public String printWelcome(ModelMap model, Principal principal,Authentication authentication) {
+	public String validUserHandle(ModelMap model, Principal principal,Authentication authentication) {
  
-		String name = principal.getName();
-		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-		String sRole = null;
+		//Get the LDAP-authenticated userid
+		String sUserId = principal.getName();
+		String sUserStatus = null;
 		
-		if(roles.contains("ROLE_ADMIN"))		
-			sRole="Admin";
+		//Check the status of the user in the Quad DB
+		user = userManager.getUserDetails(sUserId);
 		
-		if(roles.contains("ROLE_USER"))		
-			if(sRole == null)
-				sRole = "User";
+		//No such user present in Quad DB
+		if(user == null)
+		{
+			return "nouser";
+		}
+		//User is present in Quad DB
+		else
+		{
+			model.addAttribute("username", sUserId);
+			if(user.isActive())
+			{
+				model.addAttribute("role","Active");
+				sUserStatus = "hello";
+			}
 			else
-				sRole +=", User";
-				
-			
-		
-		model.addAttribute("username", name);		
-		model.addAttribute("role", sRole);
-		return "hello";
+			{
+				model.addAttribute("role","InActive");
+				sUserStatus = "inactiveuser";
+			}
+		}		
+		return sUserStatus;
  
 	}
  
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String login(ModelMap model) {
- 
+
 		return "login";
  
 	}
