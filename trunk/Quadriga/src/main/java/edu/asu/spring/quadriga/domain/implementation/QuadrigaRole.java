@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 
-public class QuadrigaRoles implements IQuadrigaRoles 
+public class QuadrigaRole implements IQuadrigaRoles 
 {
 	private String id;
 	private String name;

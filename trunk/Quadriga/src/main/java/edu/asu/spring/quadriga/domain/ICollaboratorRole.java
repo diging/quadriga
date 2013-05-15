@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain;
 
-public interface ICollaboratorRoles 
+public interface ICollaboratorRole 
 {
 
 	public abstract void setRoledescription(String roledescription);
