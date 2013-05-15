@@ -11,8 +11,15 @@ public class User implements IUser
 	private String userName;
     private String password;
     private String email;
+    private boolean isActive;
     
-    @Override
+    public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	@Override
 	public String getEmail() {
 		return email;
 	}
