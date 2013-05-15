@@ -5,9 +5,9 @@ import java.util.List;
 public interface ICollaborator 
 {
 
-	public abstract void setCollaboratorRoles(List<ICollaboratorRoles> collaboratorRoles);
+	public abstract void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles);
 
-	public abstract List<ICollaboratorRoles> getCollaboratorRoles();
+	public abstract List<ICollaboratorRole> getCollaboratorRoles();
 
 	public abstract void setDescription(String description);
 

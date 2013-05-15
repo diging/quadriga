@@ -1,8 +1,8 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import edu.asu.spring.quadriga.domain.ICollaboratorRoles;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 
-public class CollaboratorRoles implements ICollaboratorRoles 
+public class CollaboratorRole implements ICollaboratorRole 
 {
 	private String roleid;
 	private String rolename;

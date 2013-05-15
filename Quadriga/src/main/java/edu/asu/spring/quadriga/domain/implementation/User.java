@@ -53,6 +53,7 @@ public class User implements IUser
 	@Override
 	public void setQuadrigaRoles(List<IQuadrigaRoles> quadrigaRoles) {
 		this.quadrigaRoles = quadrigaRoles;
+		
 	}
 
     
