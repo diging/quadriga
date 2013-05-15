@@ -24,5 +24,9 @@ public interface IUser
 	public abstract void setEmail(String email);
 
 	public abstract String getEmail();
+	
+	 public abstract boolean isActive();
+	 
+	 public void setActive(boolean isActive);
    
 }
