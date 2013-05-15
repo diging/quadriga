@@ -16,10 +16,23 @@
 	<resources mapping="/resources/**" location="/resources/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<!-- <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+	</beans:bean> -->
+	
+	<beans:bean id="tilesViewResolver" 
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver" >
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
 	</beans:bean>
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <beans:property name="definitions">
+            <beans:list>
+                <beans:value>/WEB-INF/tiles-defs.xml</beans:value>
+            </beans:list>
+        </beans:property>
+	</beans:bean>
+	
 	
 	<context:component-scan base-package="edu.asu.spring.quadriga" />
 	
