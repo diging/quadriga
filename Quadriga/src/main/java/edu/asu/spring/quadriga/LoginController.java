@@ -1,8 +1,10 @@
 package edu.asu.spring.quadriga;
 
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
@@ -10,22 +12,23 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.domain.IUserManager;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.domain.implementation.UserManager;
  
 @Controller
 public class LoginController {
  
-	UserManager userManager;
+	@Autowired 
+	IUserManager userManager;
 	User user;
 	
 	public LoginController() {
-		userManager = new UserManager();
 		user = new User();
 	}
 	
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
-	public String validUserHandle(ModelMap model, Principal principal,Authentication authentication) {
+	public String validUserHandle(ModelMap model, Principal principal,Authentication authentication) throws SQLException {
  
 		//Get the LDAP-authenticated userid
 		String sUserId = principal.getName();
@@ -43,7 +46,7 @@ public class LoginController {
 		else
 		{
 			model.addAttribute("username", sUserId);
-			if(user.isActive())
+			if(user.getName()!=null)
 			{
 				model.addAttribute("role","Active");
 				sUserStatus = "hello";
