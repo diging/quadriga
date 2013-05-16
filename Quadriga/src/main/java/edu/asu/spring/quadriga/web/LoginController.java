@@ -32,7 +32,7 @@ public class LoginController {
 
 	}
 	
-	@RequestMapping(value="/welcome", method = RequestMethod.GET)
+	@RequestMapping(value="auth/welcome", method = RequestMethod.GET)
 	public String validUserHandle(ModelMap model, Principal principal,Authentication authentication) throws SQLException {
  
 		//Get the LDAP-authenticated userid
@@ -54,7 +54,7 @@ public class LoginController {
 			if(user.getName() != null)
 			{
 				model.addAttribute("role","Active");
-				sUserStatus = "loggedIn";
+				sUserStatus = "auth/loggedIn";
 			}
 			else
 			{

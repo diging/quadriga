@@ -7,8 +7,9 @@
 
 	<http auto-config="true" use-expressions="true">
 		<intercept-url pattern="/login*" access="permitAll" />
-		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-		<form-login login-page="/login" default-target-url="/welcome"
+		<intercept-url pattern="/resources/*" access="permitAll" />
+		<intercept-url pattern="/auth/*" access="hasRole('ROLE_USER')" />
+		<form-login login-page="/login" default-target-url="/auth/welcome"
 			authentication-failure-url="/loginfailed" />
 		<logout logout-success-url="/logout" invalidate-session="true" />
 	</http>

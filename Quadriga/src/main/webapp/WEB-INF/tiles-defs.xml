@@ -11,13 +11,13 @@
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
-	<definition name="workbench" extends="base.definition">
+	<definition name="auth/workbench" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Workbench" />
 		<put-attribute name="content" value="/WEB-INF/views/workbench.jsp" />
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
 	
-	<definition name="loggedIn" extends="base.definition">
+	<definition name="auth/loggedIn" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Network Management" />
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
@@ -28,7 +28,7 @@
 		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
 	</definition>
 	
-	<definition name="home" extends="base.definition">
+	<definition name="auth/home" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
