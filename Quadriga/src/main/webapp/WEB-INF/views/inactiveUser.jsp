@@ -5,5 +5,5 @@
 
 <section>
 	<h3>Sorry...</h3>
-	<p>You're account has been deactivated. Please contact an Quadriga Administrator.</p>
+	<p>You're account has been deactivated. Please contact a Quadriga Administrator.</p>
 </section>

@@ -1,4 +1,4 @@
-<
+
 	<header>
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>

@@ -6,8 +6,8 @@
 	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
 	<http auto-config="true" use-expressions="true">
-		<intercept-url pattern="/login" access="permitAll" />
-		<intercept-url pattern="/welcome" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/login*" access="permitAll" />
+		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 		<form-login login-page="/login" default-target-url="/welcome"
 			authentication-failure-url="/loginfailed" />
 		<logout logout-success-url="/logout" invalidate-session="true" />
@@ -18,23 +18,16 @@
 
 	<authentication-manager>
 		<ldap-authentication-provider
-			user-search-filter="(uid={0})" 
-			user-search-base="ou=users,o=diging"
-			group-search-filter="(uniqueMember={0})" 
-			group-search-base="ou=groups, o=diging"
+			user-search-filter="(uid={0})" user-search-base="ou=users,o=diging"
+			group-search-filter="(uniqueMember={0})" group-search-base="ou=groups, o=diging"
 			group-role-attribute="cn">
 		</ldap-authentication-provider>
 	</authentication-manager>
 
-<!-- 
-<authentication-manager>
-	  <authentication-provider>
-		<user-service>
-			<user name="test" password="test" authorities="ROLE_USER" />			
-		</user-service>
-	  </authentication-provider>
-	</authentication-manager>
-	 -->
+	
+	<!-- <authentication-manager> <authentication-provider> <user-service> <user 
+		name="test" password="test" authorities="ROLE_USER" /> </user-service> </authentication-provider> 
+		</authentication-manager> -->
 
 
 </beans:beans>
