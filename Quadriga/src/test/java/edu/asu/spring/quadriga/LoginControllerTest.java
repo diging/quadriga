@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga;
 import static org.junit.Assert.*;
 
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class LoginControllerTest {
 	}
 
 	@Test
-	public void testValidUserHandle() {
+	public void testValidUserHandle() throws SQLException {
 
 		//Valid and Active user
 		assertEquals(loginController.validUserHandle(model, principal, authentication),"hello");
