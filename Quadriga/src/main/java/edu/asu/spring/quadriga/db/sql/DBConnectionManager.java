@@ -15,6 +15,7 @@ public class DBConnectionManager implements IDBConnectionManager{
 	private Connection connection;
 	private String url, user, password;
 	
+	//TODO: Use Config file
 	public DBConnectionManager() {
 	connection = null;
 	url = "jdbc:mysql://localhost:3307/dblp";
