@@ -1,14 +1,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
-<h1>
-	Hello world!  
-</h1>
 
-<P>  The time on the server is ${serverTime}. </P>
-</body>
-</html>
+<!-- Content -->
+
+<article class="is-page-content">
+
+	<header>
+		<h2>Quadriga Home</h2>
+		<span class="byline">Welcome to Quadriga!</span>
+	</header>
+
+
+	<section>
+		<h3>This is Quadriga!</h3>
+		<p>Manage your network projects here.</p>
+	</section>
+
+	<a href="<c:url value="j_spring_security_logout" />"> Logout</a>
+
+</article>
+
+<!-- /Content -->
+

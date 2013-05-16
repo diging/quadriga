@@ -1,30 +1,27 @@
-package edu.asu.spring.quadriga;
+package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
 import java.sql.SQLException;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import edu.asu.spring.quadriga.domain.IUserManager;
-import edu.asu.spring.quadriga.domain.implementation.User;
-import edu.asu.spring.quadriga.domain.implementation.UserManager;
+import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.service.IUserManager;
  
 @Controller
 public class LoginController {
  
 	@Autowired 
 	IUserManager userManager;
-	User user;
+	IUser user;
 	
 	public LoginController() {
-		user = new User();
+		//user = new User();
 	}
 	
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
@@ -46,10 +43,10 @@ public class LoginController {
 		else
 		{
 			model.addAttribute("username", sUserId);
-			if(user.getName()!=null)
+			if(user.getName() != null)
 			{
 				model.addAttribute("role","Active");
-				sUserStatus = "hello";
+				sUserStatus = "loggedIn";
 			}
 			else
 			{

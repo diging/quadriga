@@ -16,6 +16,8 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.web.LoginController;
+
 public class LoginControllerTest {
 
 	LoginController loginController;

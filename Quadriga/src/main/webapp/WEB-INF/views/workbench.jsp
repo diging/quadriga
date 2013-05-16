@@ -1,7 +1,4 @@
-<!-- Content -->
-
-<article class="is-page-content">
-
+<
 	<header>
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>
@@ -40,44 +37,3 @@
 			arcu. Vestibulum purus augue, tincidunt sit amet iaculis id, porta eu
 			purus.</p>
 	</section>
-
-
-
-</article>
-
-<!-- /Content -->
-
-</div>
-</div>
-<div class="3u">
-	<div class="sidebar">
-
-		<!-- Sidebar -->
-
-		<!-- Recent Posts -->
-		<section>
-
-			<h2 class="major">
-				<span>Tools</span>
-			</h2>
-			<ul class="style2">
-				<li>
-					<article class="is-post-summary">
-						<h3>
-							<a href="#">» Add new project</a>
-						</h3>
-					</article>
-				</li>
-				<li>
-					<article class="is-post-summary">
-						<h3>
-							<a href="#">» Do something else</a>
-						</h3>
-					</article>
-				</li>
-			</ul>
-		</section>
-		<!-- /Recent Posts -->
-
-
-		<!-- /Sidebar -->

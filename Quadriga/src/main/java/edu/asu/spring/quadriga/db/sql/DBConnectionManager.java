@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.db.sql;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import edu.asu.spring.quadriga.domain.IDBConnectionManager;
+import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.domain.implementation.User;
 
 public class DBConnectionManager implements IDBConnectionManager{
 
