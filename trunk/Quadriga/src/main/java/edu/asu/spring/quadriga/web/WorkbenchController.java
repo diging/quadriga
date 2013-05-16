@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class WorkbenchController {
 
-	@RequestMapping(value="/workbench", method = RequestMethod.GET)
+	@RequestMapping(value="auth/workbench", method = RequestMethod.GET)
 	public String getProjectsOfUser() {
 		
 		// FIXME: to be implemented
-		return "workbench";
+		return "auth/workbench";
 	}
 }
