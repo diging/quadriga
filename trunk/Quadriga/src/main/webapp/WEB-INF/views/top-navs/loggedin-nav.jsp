@@ -1,11 +1,13 @@
+<jsp:useBean id="currentPage" type="java.lang.String" scope="request"/>
+
 <nav id="nav" class="skel-ui-fixed">
 	<ul>
-		<li><a href="index.html">Home</a></li>
-		<li class="current_page_item"><a href="workbench.html">Workbench</a></li>
-		<li><a href="concepts.html">Concept Collections</a></li>
-		<li><a href="dictionaries.html">Dictionaries</a></li>
-		<li><a href="editing.html">Editing</a></li>
-		<li><a href="no-sidebar.html">Networks</a></li>
-		<li><a href="no-sidebar.html">Admin</a></li>
+		<li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a href="home">Home</a></li>
+		<li ${currentPage == "workbench" ? "class=\"current_page_item\"" : ""}><a href="workbench">Workbench</a></li>
+		<li ${currentPage == "conceptCollections" ? "class=\"current_page_item\"" : ""}><a href="">Concept Collections</a></li>
+		<li ${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}><a href="">Dictionaries</a></li>
+		<li ${currentPage == "editing" ? "class=\"current_page_item\"" : ""}><a href="">Editing</a></li>
+		<li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="">Networks</a></li>
+		<li ${currentPage == "admin" ? "class=\"current_page_item\"" : ""}><a href="">Admin</a></li>
 	</ul>
 </nav>

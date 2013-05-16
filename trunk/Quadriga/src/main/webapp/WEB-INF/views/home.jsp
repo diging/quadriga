@@ -11,7 +11,7 @@
 
 
 	<section>
-		<h3>This is Quadriga!</h3>
+		<h3>Hi ${username}</h3>
 		<p>Manage your network projects here.</p>
 	</section>
 

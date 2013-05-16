@@ -30,6 +30,7 @@
 <!--[if lte IE 7]><link rel="stylesheet" href="resources/txt-layout/css/ie7.css" /><![endif]-->
 </head>
 <body>
+<tiles:importAttribute name="currentPage" scope="request" />
 
 	<!-- Header -->
 	<header id="header">
