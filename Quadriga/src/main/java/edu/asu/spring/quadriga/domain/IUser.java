@@ -25,8 +25,5 @@ public interface IUser
 
 	public abstract String getEmail();
 	
-	 public abstract boolean isActive();
-	 
-	 public void setActive(boolean isActive);
    
 }
