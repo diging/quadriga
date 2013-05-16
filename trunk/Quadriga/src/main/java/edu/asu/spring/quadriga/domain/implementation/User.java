@@ -11,14 +11,8 @@ public class User implements IUser
 	private String userName;
     private String password;
     private String email;
-    private boolean isActive;
-    
-    public boolean isActive() {
-		return isActive;
-	}
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
+    private List<IQuadrigaRoles> quadrigaRoles;
+
 	@Override
 	public String getEmail() {
 		return email;
@@ -27,8 +21,7 @@ public class User implements IUser
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	private List<IQuadrigaRoles> quadrigaRoles;
-    
+	    
     @Override
 	public String getName() {
 		return name;
