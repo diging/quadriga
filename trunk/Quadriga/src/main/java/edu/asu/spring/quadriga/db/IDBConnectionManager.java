@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.db;
 
 import java.sql.SQLException;
 

@@ -1,12 +1,13 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.service;
 
 import java.sql.SQLException;
 
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.User;
 
 public interface IUserManager {
 
-	public abstract User getUserDetails(String sUserId) throws SQLException;
+	public abstract IUser getUserDetails(String sUserId) throws SQLException;
 	
 	public abstract String updateUserDetails(User existingUser);
 	

@@ -5,8 +5,9 @@
 <tiles-definitions>
 	<definition name="base.definition" template="/WEB-INF/tiles/layouts/skeleton.jsp">
 		<put-attribute name="title" value="" />
-		<put-attribute name="navigation" value="/WEB-INF/tiles/nav.jsp" />
+		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="sub-navigation" value="" />
 	</definition>
 
 	<definition name="workbench" extends="base.definition">
@@ -14,13 +15,30 @@
 		<put-attribute name="content" value="/WEB-INF/views/workbench.jsp" />
 	</definition>
 	
-	<definition name="hello" extends="base.definition">
+	<definition name="loggedIn" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Network Management" />
-		<put-attribute name="content" value="/WEB-INF/views/hello.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
 	
 	<definition name="login" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
+	</definition>
+	
+	<definition name="home" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Login" />
+		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
+	</definition>
+	
+	<definition name="nouser" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - No Account" />
+		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/noaccount.jsp" />
+	</definition>
+	
+	<definition name="inactiveuser" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
+		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/inactiveUser.jsp" />
 	</definition>
 </tiles-definitions>

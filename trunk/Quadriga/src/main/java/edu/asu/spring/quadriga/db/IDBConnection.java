@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.db;
 
 import edu.asu.spring.quadriga.domain.implementation.User;
 

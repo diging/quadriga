@@ -19,9 +19,11 @@
 <script src="resources/txt-layout/js/skel.min.js"></script>
 <script src="resources/txt-layout/js/skel-ui.min.js"></script>
 <noscript>
-	<link rel="stylesheet" href="resources/txt-layout/css/skel-noscript.css" />
+	<link rel="stylesheet"
+		href="resources/txt-layout/css/skel-noscript.css" />
 	<link rel="stylesheet" href="resources/txt-layout/css/style.css" />
-	<link rel="stylesheet" href="resources/txt-layout/css/style-desktop.css" />
+	<link rel="stylesheet"
+		href="resources/txt-layout/css/style-desktop.css" />
 </noscript>
 <!--[if lte IE 9]><link rel="stylesheet" href="esources/txt-layout/css/ie9.css" /><![endif]-->
 <!--[if lte IE 8]><script src="resources/txt-layout/js/html5shiv.js"></script><link rel="stylesheet" href="resources/txt-layout/css/ie8.css" /><![endif]-->
@@ -53,7 +55,29 @@
 				<div class="9u skel-cell-mainContent">
 					<div class="content content-left">
 
-						<tiles:insertAttribute name="content" />
+						<!-- Content -->
+
+						<article class="is-page-content">
+
+							<tiles:insertAttribute name="content" />
+
+						</article>
+
+						<!-- /Content -->
+
+					</div>
+				</div>
+				<div class="3u">
+					<div class="sidebar">
+
+						<!-- Sidebar -->
+
+						<!-- Recent Posts -->
+						<tiles:insertAttribute name="sub-navigation" />
+						<!-- /Recent Posts -->
+
+
+						<!-- /Sidebar -->
 
 					</div>
 				</div>
@@ -71,7 +95,7 @@
 
 			<!-- Copyright -->
 			<div id="copyright">
-				&copy; 2012 Untitled Something | Images: <a
+				&copy; 2013 Digital Innovation Group | Images: <a
 					href="http://fotogrph.com">fotogrph</a> + <a
 					href="http://iconify.it">Iconify.it</a> | Design: <a
 					href="http://html5up.net/">HTML5 UP</a>
