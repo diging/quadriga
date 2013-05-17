@@ -29,14 +29,11 @@
 		</ldap-authentication-provider>
 	</authentication-manager>
 	
-	
-
-	<!-- <authentication-manager> <authentication-provider> <user-service> <user 
-		name="test" password="test" authorities="ROLE_USER" /> </user-service> </authentication-provider> 
-		</authentication-manager> -->
 
 	<!--Reference to Quad Database connection file-->
 	<beans:import resource="spring-dbconnectionmanager.xml" />
 
+	<!-- Reference to Quadriga roles -->
+	<beans:import resource="quadriga-roles.xml" />
 
 </beans:beans>
