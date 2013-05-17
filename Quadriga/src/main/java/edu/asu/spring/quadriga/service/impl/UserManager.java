@@ -15,8 +15,10 @@ import org.springframework.web.context.ContextLoader;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
+import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.User;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 //@Service("userManager")
@@ -30,14 +32,37 @@ public class UserManager implements IUserManager {
 	private QuadrigaRoleManager rolemanager;
 	
 	@Override
-	public IUser getUserDetails(String sUserId) throws SQLException {
-		IUser user = new User();
-		user = dbConnect.getUserDetails(sUserId);
-		
-		//TODO: Get roles from DB
-		
-		//TODO: Call RoleManager to get the Name and Description - Objects and load in User object
-		
+	public IUser getUserDetails(String sUserId)
+	{
+		int i = 0;
+		int size = 0;
+		IUser user = null;
+		List<String> userRoles = null;
+		IQuadrigaRoleManager roleManager = null;
+		IQuadrigaRoles quadrigaRole = null;
+		List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
+		try
+		{
+			user = dbConnect.getUserDetails(sUserId);
+
+			//TODO: Get roles from DB
+			userRoles = dbConnect.getUserRoles(sUserId);
+            size = userRoles.size();
+			//TODO: Call RoleManager to get the Name and Description - Objects and load in User object
+			for(i=0;i<size;i++)
+			{
+                roleManager = new QuadrigaRoleManager();				
+				quadrigaRole = roleManager.getQuadrigaRole(userRoles.get(i));
+				rolesList.add(quadrigaRole);
+			}
+			
+			//add the list of role objects to the user
+			user.setQuadrigaRoles(rolesList);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 		return user;
 	}
 
