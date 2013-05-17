@@ -29,15 +29,4 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 		this.quadrigaRoles = quadrigaRoles;
 	}
 
-
-
-	public void printRoles()
-	{
-		for(IQuadrigaRoles role: quadrigaRoles)
-		{
-			System.out.println(role.getId());
-			System.out.println(role.getName());
-			System.out.println(role.getDescription());
-		}
-	}
 }
