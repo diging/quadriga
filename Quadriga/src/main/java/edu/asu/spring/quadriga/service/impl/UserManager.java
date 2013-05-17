@@ -15,6 +15,7 @@ import org.springframework.web.context.ContextLoader;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -29,8 +30,8 @@ public class UserManager implements IUserManager {
 	private QuadrigaRoleManager rolemanager;
 	
 	@Override
-	public User getUserDetails(String sUserId) throws SQLException {
-		User user = new User();
+	public IUser getUserDetails(String sUserId) throws SQLException {
+		IUser user = new User();
 		user = dbConnect.getUserDetails(sUserId);
 		
 		//TODO: Get roles from DB
