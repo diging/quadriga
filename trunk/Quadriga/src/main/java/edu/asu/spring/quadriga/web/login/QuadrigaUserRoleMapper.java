@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.PersonContextMapper;
 
+import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -45,16 +46,20 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 			e.printStackTrace();
 		}
 
+		for (IQuadrigaRoles role : user.getQuadrigaRoles()) {
+			authorityList.add(new QuadrigaGrantedAuthority(role.getId()));
+		}
+
 		// No such user present in Quad DB
-		if (user != null && user.getName() != null) {
-			authorityList.add(new ActiveUserGrantedAuthority());
-		}
-		else if (user != null && user.getName() == null) {
-			authorityList.add(new InactiveUserGrantedAuthority());
-		}
-		else {
-			authorityList.add(new NoAccountGrantedAuthority());
-		}
+		// if (user != null && user.getName() != null) {
+		// authorityList.add(new ActiveUserGrantedAuthority());
+		// }
+		// else if (user != null && user.getName() == null) {
+		// authorityList.add(new InactiveUserGrantedAuthority());
+		// }
+		// else {
+		// authorityList.add(new NoAccountGrantedAuthority());
+		// }
 
 		UserDetails details = super.mapUserFromContext(ctx, username,
 				authorityList);
