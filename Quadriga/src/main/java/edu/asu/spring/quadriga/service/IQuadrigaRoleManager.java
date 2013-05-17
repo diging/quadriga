@@ -10,4 +10,6 @@ public interface IQuadrigaRoleManager {
 	
 	public abstract IQuadrigaRoles getQuadrigaRole(String sUserId);
 	
+	public abstract List<IQuadrigaRoles> getQuadrigaRoles();
+	
 }
