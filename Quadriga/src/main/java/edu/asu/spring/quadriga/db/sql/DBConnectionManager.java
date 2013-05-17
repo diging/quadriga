@@ -42,6 +42,7 @@ public class DBConnectionManager implements IDBConnectionManager{
 		String outputValue;
 		try
 		{
+			getConnection();
 			CallableStatement sqlStatement = connection.prepareCall("{call sp_getUserDetails(?,?)}");
 			sqlStatement.setString(1,userid);
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
@@ -51,7 +52,8 @@ public class DBConnectionManager implements IDBConnectionManager{
 
 			outputValue = sqlStatement.getString(2);
 
-			if( (outputValue.isEmpty())||(outputValue == null) )
+			//if( !(outputValue.isEmpty())||(outputValue != null) )
+			if(outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
 
@@ -66,6 +68,10 @@ public class DBConnectionManager implements IDBConnectionManager{
 		{
 			e.printStackTrace();
 		}
+		finally
+		{
+			closeConnection();
+		}
 
 		return user;
 	}
@@ -76,11 +82,12 @@ public class DBConnectionManager implements IDBConnectionManager{
 	@Override
 	public List<String> getUserRoles(String userid)
 	{
+		getConnection();
 		List<String> userRoles = new ArrayList<String>();
 		String outputValue;
 		try
 		{
-			CallableStatement sqlStatement = connection.prepareCall("{call sp_getUserDetails(?,?)}");
+			CallableStatement sqlStatement = connection.prepareCall("{call sp_getUserRoles(?,?)}");
 			sqlStatement.setString(1,userid);
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
@@ -89,7 +96,7 @@ public class DBConnectionManager implements IDBConnectionManager{
 
 			outputValue = sqlStatement.getString(2);
 
-			if( (outputValue.isEmpty())||(outputValue == null) )
+			if( outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
 
@@ -103,53 +110,12 @@ public class DBConnectionManager implements IDBConnectionManager{
 		{
 			e.printStackTrace();
 		}
+		finally
+		{
+			closeConnection();
+		}
 		return userRoles;
 	}
-
-	//	/**
-	//	 * Gets the userdetails from the Quad DB and creates a user object 
-	//	 * based on that information to be passed onto the application layer
-	//	 * 
-	//	 * @return User object corresponding to the user id
-	//	 * @throws SQLException
-	//	 */	
-	//	public User getUserDetails(String sUserId) throws SQLException
-	//	{
-	//		getConnection();
-	//				
-	//		User user = new User();
-	//		CallableStatement cStatement = connection.prepareCall("{call sp_getQuadrigaUserDetails(?,?,?,?,?)}");
-	//		cStatement.setString(1, sUserId);
-	//		cStatement.registerOutParameter(2, Types.VARCHAR);
-	//		cStatement.registerOutParameter(3, Types.VARCHAR);
-	//		cStatement.registerOutParameter(4, Types.VARCHAR);
-	//		cStatement.registerOutParameter(5, Types.INTEGER);
-	//		
-	//		//Make the call to the stored procedure
-	//		cStatement.execute();
-	//		int iError = cStatement.getInt(5);
-	//		
-	//		//User is valid and active
-	//		if(iError==0)
-	//		{
-	//			user.setName(cStatement.getString(2));
-	//			user.setEmail(cStatement.getString(3));
-	//			//TODO roles: string to list logic			
-	//		}
-	//		//User is valid but inactive
-	//		else if(iError==1)
-	//		{
-	//			//Set null for user name
-	//			user.setName(null);
-	//		}
-	//		else
-	//		{
-	//			user = null;
-	//		}
-	//		closeConnection();
-	//		return user;		
-	//	}
-
 	/**
 	 * Used to connect to the Quad DB using the provided
 	 * url, userid and password 
