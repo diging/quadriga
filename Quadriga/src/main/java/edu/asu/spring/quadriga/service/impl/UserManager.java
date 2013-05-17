@@ -4,7 +4,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.ContextLoader;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
@@ -17,9 +23,10 @@ public class UserManager implements IUserManager {
 	IDBConnectionManager dbConnect;
 
 	public UserManager() {
-		dbConnect = new DBConnectionManager();
+		ApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+		dbConnect= (DBConnectionManager) context.getBean("DBConnectionManagerBean");	
 	}
-
+	
 	@Override
 	public User getUserDetails(String sUserId) throws SQLException {
 		User user = new User();
