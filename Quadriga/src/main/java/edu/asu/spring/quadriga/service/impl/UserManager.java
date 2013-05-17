@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -17,20 +18,25 @@ import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-//@Service
+@Service("userManager")
 public class UserManager implements IUserManager {
 
-	IDBConnectionManager dbConnect;
+	@Autowired
+	@Qualifier("DBConnectionManagerBean")
+	private IDBConnectionManager dbConnect;
 
-	public UserManager() {
-		ApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
-		dbConnect= (DBConnectionManager) context.getBean("DBConnectionManagerBean");	
-	}
+	@Autowired
+	private QuadrigaRoleManager rolemanager;
 	
 	@Override
 	public User getUserDetails(String sUserId) throws SQLException {
 		User user = new User();
 		user = dbConnect.getUserDetails(sUserId);
+		
+		//TODO: Get roles from DB
+		
+		//TODO: Call RoleManager to get the Name and Description - Objects and load in User object
+		
 		return user;
 	}
 
