@@ -25,6 +25,10 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 		return null;
 	}
 
+	public List<IQuadrigaRoles> getQuadrigaRoles() {
+		return this.quadrigaRoles;
+	}
+	
 	public void setQuadrigaRoles(List<IQuadrigaRoles> quadrigaRoles) {
 		this.quadrigaRoles = quadrigaRoles;
 	}
