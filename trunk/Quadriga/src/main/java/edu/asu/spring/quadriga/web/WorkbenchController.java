@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class WorkbenchController {
 	
 	@Autowired IProjectManager projectmanager;
-	List<IProject> project;
+	List<IProject> projectlist;
 	
 	@Autowired IUserManager usermanager;
 	IUser user;
@@ -42,11 +42,10 @@ public class WorkbenchController {
 
 		String username = user.getUserName();
 		
-		project = projectmanager.getProjectsOfUser(sUserId);
+		projectlist = projectmanager.getProjectsOfUser(sUserId);
+		
+		model.addAttribute("projectlist", projectlist);
 		    
-		System.out.println("projectlist:" + project.toString());
-		
-		
 		return "auth/workbench"; 
 	}
 }

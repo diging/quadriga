@@ -16,8 +16,7 @@ public class MockupProjectManager implements IProjectManager{
 	@Override
 	public List<IProject> getProjectsOfUser(String sUserId) throws SQLException {
 		
-		System.out.println("in mockupprojectmanager");
-		
+			
 		IProject project = new Project();
 		IProject project1 = new Project();
 		
