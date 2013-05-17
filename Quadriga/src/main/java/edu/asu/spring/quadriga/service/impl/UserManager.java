@@ -18,7 +18,7 @@ import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-@Service("userManager")
+//@Service("userManager")
 public class UserManager implements IUserManager {
 
 	@Autowired
