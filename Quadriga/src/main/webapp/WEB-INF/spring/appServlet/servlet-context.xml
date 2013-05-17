@@ -11,6 +11,9 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
+	
+	<context:component-scan base-package="edu.asu.spring.quadriga" />
+	
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -33,9 +36,5 @@
         </beans:property>
 	</beans:bean>
 	
-	
-	<context:component-scan base-package="edu.asu.spring.quadriga" />
-	
-	
-	
+
 </beans:beans>
