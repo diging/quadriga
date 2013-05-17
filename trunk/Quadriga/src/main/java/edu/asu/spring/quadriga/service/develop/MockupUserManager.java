@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-@Service
+@Service("userManager")
 public class MockupUserManager implements IUserManager {
 
 	@Override
