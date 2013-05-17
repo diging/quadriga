@@ -1,4 +1,7 @@
-
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+	
+	
 	<header>
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>
