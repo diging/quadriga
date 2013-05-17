@@ -7,20 +7,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import javax.sql.DataSource;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Service;
+
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.implementation.User;
+
 
 public class DBConnectionManager implements IDBConnectionManager{
 
 	private Connection connection;
-	private String url, user, password;
-	
-	//TODO: Use Config file
-	public DBConnectionManager() {
-	connection = null;
-	url = "jdbc:mysql://localhost:3307/dblp";
-	user = "root";
-	password = "root";
+	private DataSource dataSource;
+
+	 @Override
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
 	
 	/**
@@ -33,7 +37,7 @@ public class DBConnectionManager implements IDBConnectionManager{
 	public User getUserDetails(String sUserId) throws SQLException
 	{
 		getConnection();
-		
+				
 		User user = new User();
 		CallableStatement cStatement = connection.prepareCall("{call sp_getQuadrigaUserDetails(?,?,?,?,?)}");
 		cStatement.setString(1, sUserId);
@@ -44,7 +48,6 @@ public class DBConnectionManager implements IDBConnectionManager{
 		
 		//Make the call to the stored procedure
 		cStatement.execute();
-		
 		int iError = cStatement.getInt(5);
 		
 		//User is valid and active
@@ -76,7 +79,7 @@ public class DBConnectionManager implements IDBConnectionManager{
 	 * @throws SQLException 
 	 */
 	private void getConnection() throws SQLException {
-		connection = DriverManager.getConnection(url, user, password);
+		connection = dataSource.getConnection();
 	}
 	
 	/**
