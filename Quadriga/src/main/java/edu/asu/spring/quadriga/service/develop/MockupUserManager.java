@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -31,16 +33,42 @@ public class MockupUserManager implements IUserManager {
 		if (listActiveUser.contains(sUserId)) {
 			user.setUserName(sUserId);
 			user.setName("John Doe");
+			
+			List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
+			
+			IQuadrigaRoles role = new QuadrigaRole();
+			role.setId("ROLE_QUADRIGA_USER_ADMIN");
+			roles.add(role);
+			
+			role = new QuadrigaRole();
+			role.setId("ROLE_QUADRIGA_USER_STANDARD");
+			roles.add(role);
+			
+			user.setQuadrigaRoles(roles);
+			
 			//user.setActive(true);
 		}
 		// The user account is deactivated in the Quad DB
 		else if (listInActiveUser.contains(sUserId)) {
-			user.setUserName(null);
+			user.setUserName("Test User");
+			
+			List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
+			
+			IQuadrigaRoles role = new QuadrigaRole();
+			role.setId("ROLE_QUADRIGA_DEACTIVATED");
+			roles.add(role);
+			user.setQuadrigaRoles(roles);
 			//user.setActive(false);
 		}
 		// No such user in the Quad Db
 		else {
-			user = null;
+			user.setUserName("no account user");
+	List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
+			
+			IQuadrigaRoles role = new QuadrigaRole();
+			role.setId("ROLE_QUADRIGA_NOACCOUNT");
+			roles.add(role);
+			user.setQuadrigaRoles(roles);
 		}
 		
 		return user;

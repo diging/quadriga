@@ -9,9 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import edu.asu.spring.quadriga.web.login.ActiveUserGrantedAuthority;
-import edu.asu.spring.quadriga.web.login.InactiveUserGrantedAuthority;
-import edu.asu.spring.quadriga.web.login.NoAccountGrantedAuthority;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class AccessForbiddenController {
@@ -24,10 +22,10 @@ public class AccessForbiddenController {
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		
 		for (GrantedAuthority ga : authorities) {
-			if (ga.getAuthority().equals(InactiveUserGrantedAuthority.ROLE)) {
+			if (ga.getAuthority().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
 				return "inactiveuser";
 			}
-			if (ga.getAuthority().equals(NoAccountGrantedAuthority.ROLE)) {
+			if (ga.getAuthority().equals(RoleNames.ROLE_QUADRIGA_NOACCOUNT)) {
 				return "nouser";
 			}
 		}
