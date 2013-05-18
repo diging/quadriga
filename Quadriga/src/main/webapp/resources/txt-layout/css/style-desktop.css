@@ -359,6 +359,17 @@
 					background: #e3daa8;
 					color: #fff;
 				}
+				
+			#nav li.page_item_logout
+			{
+			}
+
+				#nav li.page_item_logout a
+				{
+					background: rgb(241, 241, 241);
+					color: #6b7770;
+					margin-left: 10px;
+				}
 
 /*********************************************************************************/
 /* Banner                                                                        */
