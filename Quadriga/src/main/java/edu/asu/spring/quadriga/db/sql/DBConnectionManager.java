@@ -38,7 +38,7 @@ public class DBConnectionManager implements IDBConnectionManager{
 	 */
 	public IUser getUserDetails(String userid)
 	{
-		IUser user = new User();
+		IUser user = null;
 		String outputValue;
 		try
 		{
@@ -51,12 +51,11 @@ public class DBConnectionManager implements IDBConnectionManager{
 			sqlStatement.execute();
 
 			outputValue = sqlStatement.getString(2);
-
-			//if( !(outputValue.isEmpty())||(outputValue != null) )
+			
 			if(outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
-
+                user = new User();
 				while(result.next())
 				{
 					user.setName(result.getString(1));
@@ -83,8 +82,9 @@ public class DBConnectionManager implements IDBConnectionManager{
 	public List<String> getUserRoles(String userid)
 	{
 		getConnection();
-		List<String> userRoles = new ArrayList<String>();
+		List<String> userRoles = null;
 		String outputValue;
+		boolean isResultExists = false;
 		try
 		{
 			CallableStatement sqlStatement = connection.prepareCall("{call sp_getUserRoles(?,?)}");
@@ -92,12 +92,13 @@ public class DBConnectionManager implements IDBConnectionManager{
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
 			//execute the statement
-			sqlStatement.execute();
+			isResultExists = sqlStatement.execute();
 
 			outputValue = sqlStatement.getString(2);
 
-			if( outputValue.isEmpty())
+			if( outputValue.isEmpty() && (isResultExists))
 			{
+				userRoles = new ArrayList<String>();
 				ResultSet result =  sqlStatement.getResultSet();
 
 				while(result.next())
