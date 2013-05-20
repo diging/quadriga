@@ -51,8 +51,7 @@ public class UserManager implements IUserManager {
 			//TODO: Call RoleManager to get the Name and Description - Objects and load in User object
 			for(i=0;i<size;i++)
 			{
-                roleManager = new QuadrigaRoleManager();				
-				quadrigaRole = roleManager.getQuadrigaRole(userRoles.get(i));
+				quadrigaRole = rolemanager.getQuadrigaRole(userRoles.get(i));
 				rolesList.add(quadrigaRole);
 			}
 			

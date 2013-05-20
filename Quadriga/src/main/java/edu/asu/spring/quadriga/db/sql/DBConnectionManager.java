@@ -59,6 +59,7 @@ public class DBConnectionManager implements IDBConnectionManager{
 				while(result.next())
 				{
 					user.setName(result.getString(1));
+					user.setUserName(result.getString(2));
 					user.setEmail(result.getString(3));
 				}
 			}	 
