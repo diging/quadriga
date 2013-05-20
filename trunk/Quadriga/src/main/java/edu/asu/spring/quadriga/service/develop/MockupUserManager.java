@@ -4,10 +4,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -15,10 +17,13 @@ import edu.asu.spring.quadriga.service.IUserManager;
 @Service("userManager")
 public class MockupUserManager implements IUserManager {
 
+	@Autowired
+	private IUserFactory userFactory;
+	
 	@Override
 	public IUser getUserDetails(String sUserId) throws SQLException {
-		IUser user = new User();
-
+		IUser user = userFactory.createUserObject();
+		
 		// TODO: Remove these and code logic to check in Quad DB.
 		List<String> listActiveUser = new ArrayList<String>();
 		listActiveUser.add("jdoe");

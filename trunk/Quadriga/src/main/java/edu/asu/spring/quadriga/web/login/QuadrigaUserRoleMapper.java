@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.PersonContextMapper;
 
@@ -36,7 +34,7 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 
 		List<GrantedAuthority> authorityList = new ArrayList<GrantedAuthority>();
 		authorityList.addAll(authorities);
-
+		
 		// Check the status of the user in the Quad DB
 		IUser user = null;
 		try {
