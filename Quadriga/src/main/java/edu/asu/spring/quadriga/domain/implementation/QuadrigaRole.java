@@ -4,9 +4,20 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 
 public class QuadrigaRole implements IQuadrigaRoles 
 {
+	private String DBid;
 	private String id;
 	private String name;
 	private String description;
+	
+	@Override
+	public String getDBid() {
+		return DBid;
+	}
+	
+	@Override
+	public void setDBid(String dBid) {
+		DBid = dBid;
+	}
 	
 	@Override
 	public String getId() {
