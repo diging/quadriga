@@ -16,10 +16,10 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	@Autowired
 	private List<IQuadrigaRoles> quadrigaRoles;
 	
-	public IQuadrigaRoles getQuadrigaRole(String sQuadrigaRoleId) {
+	public IQuadrigaRoles getQuadrigaRole(String sQuadrigaRoleDBId) {
 		for(IQuadrigaRoles role: quadrigaRoles)
 		{
-			if(role.getId().equals(sQuadrigaRoleId))
+			if(role.getDBid().equals(sQuadrigaRoleDBId))
 				return role;
 		}
 		return null;
