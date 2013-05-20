@@ -46,8 +46,11 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 			e.printStackTrace();
 		}
 
+		if(user.getQuadrigaRoles()!=null)
+		{
 		for (IQuadrigaRoles role : user.getQuadrigaRoles()) {
 			authorityList.add(new QuadrigaGrantedAuthority(role.getId()));
+		}
 		}
 
 		// No such user present in Quad DB
