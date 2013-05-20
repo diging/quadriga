@@ -40,10 +40,12 @@ public class DBConnectionManager implements IDBConnectionManager{
 	{
 		IUser user = null;
 		String outputValue;
+		String dbCommand;
 		try
 		{
 			getConnection();
-			CallableStatement sqlStatement = connection.prepareCall("{call sp_getUserDetails(?,?)}");
+			dbCommand = DBConstants.SP_CALL + " " + DBConstants.USER_DETAILS + "(?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1,userid);
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
@@ -84,11 +86,13 @@ public class DBConnectionManager implements IDBConnectionManager{
 	{
 		getConnection();
 		List<String> userRoles = null;
+		String dbCommand;
 		String outputValue;
 		boolean isResultExists = false;
 		try
 		{
-			CallableStatement sqlStatement = connection.prepareCall("{call sp_getUserRoles(?,?)}");
+            dbCommand = DBConstants.SP_CALL + "  " + DBConstants.USER_ROLES + "(?,?)";
+        	CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1,userid);
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
