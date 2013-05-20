@@ -8,7 +8,7 @@ public interface IQuadrigaRoleManager {
 
 	public abstract void setQuadrigaRoles(List<IQuadrigaRoles> quadrigaRoles);
 	
-	public abstract IQuadrigaRoles getQuadrigaRole(String sUserId);
+	public abstract IQuadrigaRoles getQuadrigaRole(String sQuadrigaRoleDBId);
 	
 	public abstract List<IQuadrigaRoles> getQuadrigaRoles();
 	
