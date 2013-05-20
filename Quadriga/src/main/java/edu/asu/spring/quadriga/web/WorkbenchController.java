@@ -36,12 +36,9 @@ public class WorkbenchController {
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 	    String sUserId = principal.getUsername();
-		String sUserStatus = null;
-				
-		user =  usermanager.getUserDetails(sUserId);
-
-		String username = user.getUserName();
 		
+	    user =  usermanager.getUserDetails(sUserId);
+
 		projectlist = projectmanager.getProjectsOfUser(sUserId);
 		
 		model.addAttribute("projectlist", projectlist);
