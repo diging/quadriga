@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
