@@ -38,7 +38,6 @@ public class UserManager implements IUserManager {
 		int size = 0;
 		IUser user = null;
 		List<String> userRoles = null;
-		IQuadrigaRoleManager roleManager = null;
 		IQuadrigaRoles quadrigaRole = null;
 		List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
 		try
@@ -47,7 +46,11 @@ public class UserManager implements IUserManager {
 
 			//TODO: Get roles from DB
 			userRoles = dbConnect.getUserRoles(sUserId);
-            size = userRoles.size();
+			if(userRoles!=null)
+			{
+				size = userRoles.size();	
+			}
+            
 			//TODO: Call RoleManager to get the Name and Description - Objects and load in User object
 			for(i=0;i<size;i++)
 			{
@@ -55,8 +58,12 @@ public class UserManager implements IUserManager {
 				rolesList.add(quadrigaRole);
 			}
 			
-			//add the list of role objects to the user
-			user.setQuadrigaRoles(rolesList);
+			if(!rolesList.isEmpty())
+			{
+				//add the list of role objects to the user
+				user.setQuadrigaRoles(rolesList);	
+			}
+			
 		}
 		catch(SQLException e)
 		{
