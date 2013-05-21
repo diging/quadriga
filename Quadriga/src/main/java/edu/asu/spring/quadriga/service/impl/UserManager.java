@@ -1,26 +1,18 @@
 package edu.asu.spring.quadriga.service.impl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.ContextLoader;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
-import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 //@Service("userManager")
 public class UserManager implements IUserManager {
@@ -32,45 +24,45 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private QuadrigaRoleManager rolemanager;
 	
+	@Autowired
+	private IUserFactory userFactory;
+	
 	@Override
 	public IUser getUserDetails(String sUserId)
 	{
 		int i = 0;
-		int size = 0;
 		IUser user = null;
-		List<String> userRoles = null;
+		List<IQuadrigaRoles> userRole = null;
 		IQuadrigaRoles quadrigaRole = null;
 		List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
 		try
 		{
 			user = dbConnect.getUserDetails(sUserId);
-
-			//TODO: Get roles from DB
-			userRoles = dbConnect.getUserRoles(sUserId);
-			if(userRoles!=null)
+			
+			if(user!=null)
 			{
-				size = userRoles.size();	
+				userRole = user.getQuadrigaRoles();
+				
+				for(i=0;i<userRole.size();i++)
+				{
+					quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
+					rolesList.add(quadrigaRole);
+				}
+				user.setQuadrigaRoles(rolesList);
 			}
-            
-			//TODO: Call RoleManager to get the Name and Description - Objects and load in User object
-			for(i=0;i<size;i++)
+			else
 			{
-				quadrigaRole = rolemanager.getQuadrigaRole(userRoles.get(i));
+				user = userFactory.createUserObject();
+				quadrigaRole = rolemanager.getNoAccountRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
 				rolesList.add(quadrigaRole);
+				user.setQuadrigaRoles(rolesList);
 			}
-			
-			if(!rolesList.isEmpty())
-			{
-				//add the list of role objects to the user
-				user.setQuadrigaRoles(rolesList);	
-			}
-			
 		}
-		catch(SQLException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return user;
+	   return user;	
 	}
 
 	@Override
