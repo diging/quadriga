@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class MockupUserManager implements IUserManager {
 	@Override
 	public IUser getUserDetails(String sUserId) throws SQLException {
 		IUser user = userFactory.createUserObject();
+		//userFactory.cloneUserObject(null);
 		
 		// TODO: Remove these and code logic to check in Quad DB.
 		List<String> listActiveUser = new ArrayList<String>();
@@ -68,7 +70,7 @@ public class MockupUserManager implements IUserManager {
 		// No such user in the Quad Db
 		else {
 			user.setUserName("no account user");
-	List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
+			List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
 			
 			IQuadrigaRoles role = new QuadrigaRole();
 			role.setId("ROLE_QUADRIGA_NOACCOUNT");
@@ -81,8 +83,7 @@ public class MockupUserManager implements IUserManager {
 
 	@Override
 	public String updateUserDetails(User existingUser) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
 	}
 
 	@Override

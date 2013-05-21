@@ -40,6 +40,11 @@
 		text-decoration: none;
 		color: inherit;
 	}
+	
+	h1.noUppercase, h2.noUppercase, h3.noUppercase, h4.noUppercase, h5.noUppercase, h6.noUppercase, h7.noUppercase
+	{
+		text-transform: none;
+	}
 
 	
 	h2.major
