@@ -10,7 +10,7 @@
     <ol>
     <c:if test="${not empty projectlist}">
     <c:forEach var="project" items="${projectlist}">
-	<li><a href="${project.id}"><c:out value="${project.name}"></c:out></a></li>
+	<li><a href="workbench/${project.id}"><c:out value="${project.name}"></c:out></a></li>
 	<li><c:out value="${project.description}"></c:out></li>
 	</c:forEach></c:if>
 	</ol>
