@@ -45,8 +45,9 @@
 		<put-attribute name="content" value="/WEB-INF/views/users/manage.jsp" />
 	</definition>
 	
-	<definition name="auth/workbench/project" extends="base.definition.nonav">
+	<definition name="auth/workbench/project" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Manage Users" />
+		<put-attribute name="sub-navigation" value="/WEB-INF/views/workbench/project-right.jsp" />
 		<put-attribute name="content" value="/WEB-INF/views/workbench/project.jsp" />
 	</definition>
 	
