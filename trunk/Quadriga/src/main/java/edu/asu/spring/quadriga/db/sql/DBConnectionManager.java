@@ -33,6 +33,8 @@ public class DBConnectionManager implements IDBConnectionManager
 {
 
 	private Connection connection;
+	
+	@Autowired
 	private DataSource dataSource;
 
 	@Autowired
