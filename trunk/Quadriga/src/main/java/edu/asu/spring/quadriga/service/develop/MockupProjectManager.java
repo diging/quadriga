@@ -10,11 +10,36 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
 
+/*
+ *   @Description : This class acts as a dummy project manager which adds list of projects
+ *   				and their descriptions on the workbench.
+ *   
+ *   @implements  : IProjectManager Interface
+ *   
+ *   @Called By   : WorkbenchController.java
+ *   
+ *   @author      : Rohit Pendbhaje
+ * 
+ * 
+ */
 @Service
 public class MockupProjectManager implements IProjectManager{
 
+/*   
+ * @Description : creates list of objects consisting project names and their descriptions
+ * 
+ * @param 		: userID
+ * 
+ * @return 		: list of projects
+ * 
+ * @throws		: SQLException 
+ * 
+ * @author		: Rohit Pendbhaje
+ * 
+ */
+	
 	@Override
-	public List<IProject> getProjectsOfUser(String sUserId) throws SQLException {
+	public List<IProject> getProjectsOfUser() throws SQLException {
 		
 			
 		IProject project = new Project();
@@ -68,6 +93,5 @@ public class MockupProjectManager implements IProjectManager{
 		return project;
 	}
 
-	
 
 }
