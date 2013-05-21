@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.domain.implementation.Project;
 
 public interface IProjectManager {
 	
-	public abstract List<IProject> getProjectsOfUser() throws SQLException;
+	public abstract List<IProject> getProjectsOfUser(String sUserId) throws SQLException;
 	
 	public abstract String updateProjectDetails(Project existingProject);
 	
