@@ -81,7 +81,6 @@ public class DBConnectionManager implements IDBConnectionManager
 	{
 		List<IQuadrigaRoles> userRole = null;
 		String outputValue;
-		boolean hasResults = false;
 		String dbCommand;
 		IUser user = null;
 		try
@@ -93,13 +92,16 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
 			//execute the statement
-			hasResults = sqlStatement.execute();
+			sqlStatement.execute();
 
 			outputValue = sqlStatement.getString(2);
 			
-			if((outputValue.isEmpty())&&(hasResults))
+			if(outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
+				
+				if(result.isBeforeFirst())
+				{
                 user  = userFactory.createUserObject();
 				while(result.next())
 				{
@@ -108,6 +110,7 @@ public class DBConnectionManager implements IDBConnectionManager
 					user.setEmail(result.getString(3));
 					userRole = UserRoles(result.getString(4));
 					user.setQuadrigaRoles(userRole);
+				}
 				}
 			}	 
 		}
