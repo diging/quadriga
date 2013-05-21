@@ -5,6 +5,13 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
 
+/**
+ * @description : User class describing the properties 
+ *                of a User object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class User implements IUser 
 {
     private String name;

@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * @description   : interface to implement QuadrigaRoles class.
+ * 
+ * @author        : Kiran
+ *
+ */
 public interface IQuadrigaRoles 
 {
 

@@ -18,30 +18,48 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 
+/**
+ * @Description     : This call implements the database connection to retrieve
+ *                    the details of given user.
+ *                    
+ * @implements      : IDBConnectionManager interface.
+ *  
+ * @Called By       : UserManager.java
+ *                     
+ * @author          : Kiran
+ *
+ */
 public class DBConnectionManager implements IDBConnectionManager
 {
 
 	private Connection connection;
 	private DataSource dataSource;
-	
+
 	@Autowired
 	private IUserFactory userFactory;
-	
+
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
+	/**
+	 *  @Description: Assigns the data source
+	 *  
+	 *  @param : dataSource
+	 */
 	@Override
 	public void setDataSource(DataSource dataSource) 
 	{
 		this.dataSource = dataSource;
 	}
-	
+
 	/**
-	 * Used to close the opened database connection
+	 * @Description : Close the DB connection
 	 * 
-	 * @return  0 - successfully closed the connection
-	 *          1 - Exception occurred in closing the connection
-	 */	
+	 * @return : 0 on success
+	 *           -1 on failure
+	 *           
+	 * @throws : SQL Exception          
+	 */
 	private int closeConnection() {
 		try {
 			if (connection != null) {
@@ -54,13 +72,13 @@ public class DBConnectionManager implements IDBConnectionManager
 			return -1;
 		}
 	}
-	
+
 	/**
-	 * Used to connect to the Quad DB using the provided
-	 * url, userid and password 
+	 * @Description : Establishes connection with the Quadriga DB
 	 * 
-	 * @return connection handle for the created connection
-	 * @throws SQLException 
+	 * @return      : connection handle for the created connection
+	 * 
+	 * @throws      : SQLException 
 	 */
 	private void getConnection() {
 		try
@@ -73,8 +91,15 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 	}
 
-	/*
-	 *    Get the user details from the quadriga DB
+	/**
+	 *  @Description : Retrieves the user details for the given userid
+	 *  
+	 *  @param       : userid (the userid for which details are to be retrieved).
+	 *  
+	 *  @return      : null - if the user is not present in the quadriga DB
+	 *                 IUser - User object containing the user details.
+	 *                 
+	 *  @throws      : SQL Exception
 	 */
 	@Override
 	public IUser getUserDetails(String userid)
@@ -91,32 +116,31 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.setString(1,userid);
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
-			//execute the statement
 			sqlStatement.execute();
 
 			outputValue = sqlStatement.getString(2);
-			
+
 			if(outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
-				
+
 				if(result.isBeforeFirst())
 				{
-                user  = userFactory.createUserObject();
-				while(result.next())
-				{
-					user.setName(result.getString(1));
-					user.setUserName(result.getString(2));
-					user.setEmail(result.getString(3));
-					userRole = UserRoles(result.getString(4));
-					user.setQuadrigaRoles(userRole);
-				}
+					user  = userFactory.createUserObject();
+					while(result.next())
+					{
+						user.setName(result.getString(1));
+						user.setUserName(result.getString(2));
+						user.setEmail(result.getString(3));
+						userRole = UserRoles(result.getString(4));
+						user.setQuadrigaRoles(userRole);
+					}
 				}
 			}	 
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
+			throw new RuntimeException("Database Connection error");
 		}
 		finally
 		{
@@ -125,21 +149,29 @@ public class DBConnectionManager implements IDBConnectionManager
 
 		return user;
 	}
-	
+
+	/**
+	 *   @Description   : Splits the comma separated roles into a list
+	 *   
+	 *   @param         : roles - String containing the comma separated roles
+	 *                            (ex: role1,role3)
+	 *                            
+	 *   @return        : list of QuadrigaRoles.
+	 */
 	@Override
 	public List<IQuadrigaRoles> UserRoles(String roles)
 	{
-        String[] role;
-        List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
-        IQuadrigaRoles userRole = null;
-        
-        role = roles.split("\\s*,\\s*");
-        for(int i = 0; i<role.length;i++)
-        {
-        	userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
-        	userRole.setDBid(role[i]);
-        	rolesList.add(userRole);
-        }
+		String[] role;
+		List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
+		IQuadrigaRoles userRole = null;
+
+		role = roles.split("\\s*,\\s*");
+		for(int i = 0; i<role.length;i++)
+		{
+			userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
+			userRole.setDBid(role[i]);
+			rolesList.add(userRole);
+		}
 		return rolesList;
 	}
 }

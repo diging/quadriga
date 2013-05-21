@@ -6,6 +6,13 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IUser;
 
+/**
+ * @description : Dictionary class describing the properties 
+ *                of a Dictionary object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class Dictionary implements IDictionary 
 {
 	private String name;

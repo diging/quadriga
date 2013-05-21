@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.domain.enums;
 
+/**
+ * @description   : enumerated data type to hold project accessibility values
+ * 
+ * @author        : Kiran
+ *
+ */
 public enum EProjectAccessibility 
 {
 	ACCESSIBLE("project_accessibility_accessible"),

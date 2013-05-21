@@ -6,6 +6,13 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 
+/**
+ * @description : Collaborator class describing the properties 
+ *                of a Collaborator object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class Collaborator implements ICollaborator 
 {
 	private IUser userObj;

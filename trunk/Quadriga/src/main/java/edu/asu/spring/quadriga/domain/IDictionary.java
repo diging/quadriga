@@ -1,7 +1,12 @@
 package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
-
+/**
+ * @description   : interface to implement Dictionary.
+ * 
+ * @author        : Kiran
+ *
+ */
 public interface IDictionary 
 {
 

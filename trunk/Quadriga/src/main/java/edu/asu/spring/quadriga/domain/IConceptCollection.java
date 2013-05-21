@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
+/**
+ * @description   : interface to implement ConceptCollection.
+ * 
+ * @author        : Kiran
+ *
+ */
 public interface IConceptCollection 
 {
 

@@ -7,6 +7,13 @@ import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 
+/**
+ * @description : Network class describing the properties 
+ *                of a Network object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class Network implements INetwork 
 {
 	private IUser creator;

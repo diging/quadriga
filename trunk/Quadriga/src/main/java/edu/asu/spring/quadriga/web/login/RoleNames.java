@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.web.login;
 
+/**
+ *  @description   : Constant string values representing special Quariga roles.
+ *  
+ *  @Called by     : UserManager.java
+ *  
+ */
 public interface RoleNames {
 
 	public static final String ROLE_QUADRIGA_NOACCOUNT = "ROLE_QUADRIGA_NOACCOUNT";
