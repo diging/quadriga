@@ -39,7 +39,7 @@ public class MockupProjectManager implements IProjectManager{
  */
 	
 	@Override
-	public List<IProject> getProjectsOfUser() throws SQLException {
+	public List<IProject> getProjectsOfUser(String sUserId) throws SQLException {
 		
 			
 		IProject project = new Project();
