@@ -17,11 +17,18 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
+/*
+ * @Description : 
+ * 
+ * 
+ */
+
 @Controller
 public class WorkbenchController {
 	
 	@Autowired IProjectManager projectmanager;
 	List<IProject> projectlist;
+	String username;
 	
 	@Autowired IUserManager usermanager;
 	IUser user;
@@ -36,6 +43,10 @@ public class WorkbenchController {
 	    String sUserId = principal.getUsername();
 		
 	    user =  usermanager.getUserDetails(sUserId);
+	    
+	    username = user.getName();
+	    
+	    model.addAttribute("username", username);
 
 		projectlist = projectmanager.getProjectsOfUser(sUserId);
 		
