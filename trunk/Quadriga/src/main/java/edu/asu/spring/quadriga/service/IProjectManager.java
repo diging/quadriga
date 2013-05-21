@@ -15,5 +15,7 @@ public interface IProjectManager {
 	public abstract int deleteProject(String projectId);
 	
 	public abstract int addNewProject(Project newProject);
+	
+	public IProject getProject(String id);
 
 }

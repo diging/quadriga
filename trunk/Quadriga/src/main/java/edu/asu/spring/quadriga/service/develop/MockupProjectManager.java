@@ -20,6 +20,9 @@ public class MockupProjectManager implements IProjectManager{
 		IProject project = new Project();
 		IProject project1 = new Project();
 		
+		project.setId("id1");
+		project1.setId("id2");
+		
 		project.setName("quadriga 1");
 		project1.setName("quadriga 2");
 		
@@ -50,6 +53,19 @@ public class MockupProjectManager implements IProjectManager{
 	public int addNewProject(Project newProject) {
 		
 		return 0;
+	}
+
+	@Override
+	public IProject getProject(String id) {
+		IProject project = new Project();
+		
+		project.setId("id1");
+		
+		project.setName("quadriga 1");
+		
+		project.setDescription("Lifecycle of Amphibians");
+
+		return project;
 	}
 
 	
