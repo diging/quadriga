@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * @description   : interface to implement CollaboratorRole.
+ * 
+ * @author        : Kiran
+ *
+ */
 public interface ICollaboratorRole 
 {
 

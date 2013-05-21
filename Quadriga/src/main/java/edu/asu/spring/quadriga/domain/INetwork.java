@@ -5,6 +5,12 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 
+/**
+ * @description   : interface to implement Network class.
+ * 
+ * @author        : Kiran
+ *
+ */
 public interface INetwork 
 {
 

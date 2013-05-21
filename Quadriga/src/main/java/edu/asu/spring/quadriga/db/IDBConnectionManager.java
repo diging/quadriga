@@ -7,7 +7,12 @@ import javax.sql.DataSource;
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 import edu.asu.spring.quadriga.domain.IUser;
 
-
+/**
+ * @description : Interface for the DBConnectionManager Class.
+ * 
+ * @author : Kiran
+ *
+ */
 public interface IDBConnectionManager 
 {
 

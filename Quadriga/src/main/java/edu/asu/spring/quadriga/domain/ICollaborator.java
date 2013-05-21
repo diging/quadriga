@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
+/**
+ * @description  : interface to implement Collaborator class.
+ * 
+ * @author       : Kiran
+ *
+ */
 public interface ICollaborator 
 {
 

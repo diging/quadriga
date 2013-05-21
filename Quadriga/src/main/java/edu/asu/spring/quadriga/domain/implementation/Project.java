@@ -8,6 +8,13 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 
+/**
+ * @description : Project class describing the properties 
+ *                of a Project object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class Project implements IProject 
 {
 	

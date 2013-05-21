@@ -6,6 +6,13 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 
+/**
+ * @description : ConceptCollection class describing the properties 
+ *                of a ConceptCollection object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class ConceptCollection implements IConceptCollection 
 {
 	private String name;

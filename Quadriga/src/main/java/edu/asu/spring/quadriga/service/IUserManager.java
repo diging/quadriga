@@ -5,6 +5,12 @@ import java.sql.SQLException;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.User;
 
+/**
+ * @description : interface to implement UserManager class
+ * 
+ * @author      : Kiran
+ *
+ */
 public interface IUserManager {
 
 	public abstract IUser getUserDetails(String sUserId) throws SQLException;

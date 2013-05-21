@@ -1,7 +1,13 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-
+/**
+ * @description : CollaboratorRole class describing the properties 
+ *                of a CollaboratorRole object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class CollaboratorRole implements ICollaboratorRole 
 {
 	private String roleid;

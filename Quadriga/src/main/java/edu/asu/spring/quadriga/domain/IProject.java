@@ -5,6 +5,12 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 
+/**
+ * @description   : interface to implement Project class.
+ * 
+ * @author        : Kiran
+ *
+ */
 public interface IProject {
 
 	public abstract String getName();

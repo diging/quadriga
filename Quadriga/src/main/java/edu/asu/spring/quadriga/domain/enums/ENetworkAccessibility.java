@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.domain.enums;
 
+/**
+ * @description   : enumerated data type to hold network accessibility values
+ * 
+ * @author        : Kiran
+ *
+ */
 public enum ENetworkAccessibility 
 {
 	PROJECT_COLLABORATORS("default_accessibility_collaborator"),

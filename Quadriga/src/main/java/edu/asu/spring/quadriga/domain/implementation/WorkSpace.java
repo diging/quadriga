@@ -6,6 +6,13 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 
+/**
+ * @description : WorkSpace class describing the properties 
+ *                of a WorkSpace object
+ * 
+ * @author      : Kiran
+ *
+ */
 public class WorkSpace implements IWorkSpace 
 {
 	private String name;
