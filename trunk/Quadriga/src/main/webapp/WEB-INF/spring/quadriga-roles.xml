@@ -11,7 +11,7 @@
 </bean>	
 
 <bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
-<property name="DBid" value="role2"></property>
+<property name="DBid" value="role_noaccount"></property>
 <property name="id" value="ROLE_QUADRIGA_NOACCOUNT"></property>
 <property name="name" value="Invalid User"></property>
 <property name="description" value="No such user found in Quadriga"></property>
