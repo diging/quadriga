@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -153,6 +154,103 @@ public class DBConnectionManager implements IDBConnectionManager
 		return user;
 	}
 
+	@Override
+	public List<IUser> getAllActiveUsers()
+	{
+		List<IUser> listUsers = null;
+		String sDBCommand;
+		Integer iOutErrorValue;
+		
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ACTIVE_USER_DETAILS + "(?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			iOutErrorValue = sqlStatement.getInt(1);
+
+			if(iOutErrorValue == null)
+			{
+				listUsers = new ArrayList<IUser>();				
+				IUser user = this.userFactory.createUserObject();
+				List<IQuadrigaRole> userRole = null;
+				
+				ResultSet rs = sqlStatement.getResultSet();
+				while(rs.next())
+				{					
+					user.setName(rs.getString(1));
+					user.setUserName(rs.getString(2));
+					user.setEmail(rs.getString(3));
+					userRole = UserRoles(rs.getString(4));
+					user.setQuadrigaRoles(userRole);	
+					
+					listUsers.add(user);
+				}				
+			}			
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return listUsers;
+	}
+	
+	@Override
+	public List<IUser> getAllInActiveUsers()
+	{
+		List<IUser> listUsers = null;
+		String sDBCommand;
+		Integer iOutErrorValue;
+		
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.INACTIVE_USER_DETAILS + "(?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			iOutErrorValue = sqlStatement.getInt(1);
+
+			if(iOutErrorValue == null)
+			{
+				listUsers = new ArrayList<IUser>();				
+				IUser user = this.userFactory.createUserObject();
+				List<IQuadrigaRole> userRole = null;
+				
+				ResultSet rs = sqlStatement.getResultSet();
+				while(rs.next())
+				{					
+					user.setName(rs.getString(1));
+					user.setUserName(rs.getString(2));
+					user.setEmail(rs.getString(3));
+					userRole = UserRoles(rs.getString(4));
+					user.setQuadrigaRoles(userRole);	
+					
+					listUsers.add(user);
+				}				
+			}			
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return listUsers;
+	}
+	
+	
 	/**
 	 *   @Description   : Splits the comma separated roles into a list
 	 *   
@@ -177,4 +275,5 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
+	
 }
