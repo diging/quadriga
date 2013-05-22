@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.web.login;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,12 +36,7 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		
 		// Check the status of the user in the Quad DB
 		IUser user = null;
-		try {
-			user = userManager.getUserDetails(username);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		user = userManager.getUserDetails(username);
 
 		if(user.getQuadrigaRoles()!=null)
 		{
