@@ -1,14 +1,17 @@
 package edu.asu.spring.quadriga.domain.factories.impl;
 
-import org.apache.commons.lang.NotImplementedException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
 
 /**
- * Factory class for creating users.
+ * Factory class for creating {@link User}.
  * 
  * @author jdamerow
  *
@@ -29,7 +32,19 @@ public class UserFactory implements IUserFactory {
 	 */
 	@Override
 	public IUser cloneUserObject(IUser user) {
-		// FIXME: implementation needed
-		throw new NotImplementedException("Clone user is not yet implemented.");
+		IUser clone = createUserObject();
+		
+		clone.setEmail(user.getEmail());
+		clone.setName(user.getName());
+		clone.setPassword(user.getPassword());
+		clone.setUserName(user.getUserName());
+		
+		List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
+		for (IQuadrigaRole role : user.getQuadrigaRoles()) {
+			roles.add(role);
+		}
+		clone.setQuadrigaRoles(roles);
+		
+		return clone;
 	}
 }
