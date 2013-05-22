@@ -50,14 +50,6 @@ public class QuadrigaRoleManagerTest {
 		//Check if values are loaded
 		assertNotNull(quadrigaRoles);
 		
-		//Check if all roles are loaded
-		assertEquals(quadrigaRoles.size(), 6);
-		
-		//Check if each instance is of type QuadrigaRole
-		for(IQuadrigaRole role: quadrigaRoles)
-		{
-			assertTrue(role instanceof QuadrigaRole);
-		}
 	}
 
 	@Test
