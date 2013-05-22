@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.service.develop;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class MockupUserManager implements IUserManager {
 	private IUserFactory userFactory;
 	
 	@Override
-	public IUser getUserDetails(String sUserId) throws SQLException {
+	public IUser getUserDetails(String sUserId){
 		IUser user = userFactory.createUserObject();
 		//userFactory.cloneUserObject(null);
 		
