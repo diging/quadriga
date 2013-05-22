@@ -14,6 +14,14 @@ import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.IUser;
 
+/*
+* @Description 	: tests getters and setters for appelationId, relationId, creator, creationTime and
+* 				  textUrl
+* 
+* @author		: Rohit Pendbhaje
+* 
+*/
+
 public class NetworkTest {
 	
 	private Network network;

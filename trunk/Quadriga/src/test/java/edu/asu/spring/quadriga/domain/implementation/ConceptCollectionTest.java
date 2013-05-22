@@ -14,6 +14,14 @@ import org.junit.Test;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 
+/*
+* @Description 	: tests getters and setters for concept description, concept id , concept owner and
+* 				  concept collaborators 
+* 
+* @author		: Rohit Pendbhaje
+* 
+*/
+
 public class ConceptCollectionTest {
 	
 	private ConceptCollection conceptcollection;

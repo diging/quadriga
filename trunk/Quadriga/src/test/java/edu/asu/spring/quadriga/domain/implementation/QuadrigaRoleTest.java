@@ -8,6 +8,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/*
+* @Description 	: tests getters and setters for quadriga roleId, name, and description
+* 
+* @author		: Rohit Pendbhaje
+* 
+*/
+
 public class QuadrigaRoleTest {
 	
 	private QuadrigaRole quadrigaRole; 

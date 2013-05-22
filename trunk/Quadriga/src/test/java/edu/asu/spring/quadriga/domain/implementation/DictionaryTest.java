@@ -14,6 +14,14 @@ import org.junit.Test;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 
+/*
+* @Description 	: tests getters and setters for dictionary names, description, id, collaborators
+* 				  and owners
+* 
+* @author		: Rohit Pendbhaje
+* 
+*/
+
 public class DictionaryTest {
 	
 	private Dictionary dictionary;
