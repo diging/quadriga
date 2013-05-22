@@ -19,14 +19,15 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 
 /**
- * @Description     : This call implements the database connection to retrieve
- *                    the details of given user.
+ * @Description      This call implements the database connection to retrieve
+ *                   the details of given user.
  *                    
- * @implements      : IDBConnectionManager interface.
+ * @implements       IDBConnectionManager interface.
  *  
- * @Called By       : UserManager.java
+ * @Called By        UserManager.java
  *                     
- * @author          : Kiran
+ * @author           Kiran
+ * @author 			 Ram Kumar Kumaresan
  *
  */
 public class DBConnectionManager implements IDBConnectionManager
@@ -142,7 +143,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException("Database Connection error");
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
