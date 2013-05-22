@@ -13,6 +13,13 @@ import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 
+/*
+* @Description 	: tests getters and setters for user name, username, password, email and quadrigaRoles
+* 
+* @author		: Rohit Pendbhaje
+* 
+*/
+
 public class UserTest {
 	
 	private User user;

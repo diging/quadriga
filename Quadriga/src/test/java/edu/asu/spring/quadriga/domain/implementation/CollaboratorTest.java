@@ -14,7 +14,12 @@ import org.junit.Test;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 
-
+/*
+* @Description 	: tests getters and setters for collaboratorRoles, userObj
+* 
+* @author		: Rohit Pendbhaje
+* 
+*/
 
 public class CollaboratorTest {
 	

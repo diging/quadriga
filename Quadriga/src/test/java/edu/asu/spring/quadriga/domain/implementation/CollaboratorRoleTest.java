@@ -8,6 +8,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/*
+ * @Description : tests getters and setters for roleId, roleName and roleDescription
+ *  
+ * @author		: Rohit Pendbhaje
+ * 
+ * 
+ */
 public class CollaboratorRoleTest {
 	
 	private CollaboratorRole CollaboratorRole;
