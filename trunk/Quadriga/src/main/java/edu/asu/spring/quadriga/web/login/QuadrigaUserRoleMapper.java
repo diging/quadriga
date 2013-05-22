@@ -13,6 +13,12 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.service.IUserManager;
 
+/**
+ * This class is responsible for adding Quadriga specific roles to authenticated users.
+ * 
+ * @author Julia Damerow
+ *
+ */
 public class QuadrigaUserRoleMapper extends PersonContextMapper {
 
 	IUserManager userManager;
@@ -25,6 +31,11 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		this.userManager = userManager;
 	}
 
+	/**
+	 * This user is called with the username of the user that tries to login to Quadriga.
+	 * It asks the {@link IUserManager} for the details about the user then creates and adds the 
+	 * corresponding {@link QuadrigaGrantedAuthority}/ies.
+	 */
 	@Override
 	public UserDetails mapUserFromContext(DirContextOperations ctx,
 			String username, Collection<? extends GrantedAuthority> authorities) {

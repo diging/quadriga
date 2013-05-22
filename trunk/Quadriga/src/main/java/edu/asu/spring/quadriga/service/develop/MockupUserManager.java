@@ -13,13 +13,22 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.impl.UserManager;
 
+/**
+ * This class is a mock up for the {@link UserManager} for development and testing purposes.
+ * @author Julia Damerow
+ *
+ */
 @Service("userManager")
 public class MockupUserManager implements IUserManager {
 
 	@Autowired
 	private IUserFactory userFactory;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IUser getUserDetails(String sUserId){
 		IUser user = userFactory.createUserObject();
@@ -80,21 +89,28 @@ public class MockupUserManager implements IUserManager {
 		return user;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String updateUserDetails(User existingUser) {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int deleteUser(String sUserId) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new NotImplementedException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int addNewUser(User newUser) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new NotImplementedException();
 	}
 
 }
