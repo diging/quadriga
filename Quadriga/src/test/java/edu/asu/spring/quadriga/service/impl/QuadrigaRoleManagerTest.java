@@ -18,7 +18,7 @@ import org.junit.BeforeClass;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Configuration;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 
 @ContextConfiguration(locations={"file:///C:/Users/Ram/Documents/EclipseProjects/Quadriga/src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 public class QuadrigaRoleManagerTest {
 
 	@Autowired
-	private List<IQuadrigaRoles> quadrigaRoles;
+	private List<IQuadrigaRole> quadrigaRoles;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -54,7 +54,7 @@ public class QuadrigaRoleManagerTest {
 		assertEquals(quadrigaRoles.size(), 6);
 		
 		//Check if each instance is of type QuadrigaRole
-		for(IQuadrigaRoles role: quadrigaRoles)
+		for(IQuadrigaRole role: quadrigaRoles)
 		{
 			assertTrue(role instanceof QuadrigaRole);
 		}

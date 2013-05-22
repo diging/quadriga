@@ -11,9 +11,9 @@ import java.util.List;
 public interface IUser 
 {
 
-	public abstract void setQuadrigaRoles(List<IQuadrigaRoles> quadrigaRoles);
+	public abstract void setQuadrigaRoles(List<IQuadrigaRole> quadrigaRoles);
 
-	public abstract List<IQuadrigaRoles> getQuadrigaRoles();
+	public abstract List<IQuadrigaRole> getQuadrigaRoles();
 
 	public abstract void setPassword(String password);
 

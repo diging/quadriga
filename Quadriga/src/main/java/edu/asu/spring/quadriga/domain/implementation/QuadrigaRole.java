@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 
 /**
  * @description : QuadrigaRole class describing the properties 
@@ -9,7 +9,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
  * @author      : Kiran
  *
  */
-public class QuadrigaRole implements IQuadrigaRoles 
+public class QuadrigaRole implements IQuadrigaRole 
 {
 	private String DBid;
 	private String id;

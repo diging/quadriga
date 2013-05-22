@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 
 /**
@@ -16,7 +16,7 @@ import edu.asu.spring.quadriga.domain.IUser;
  */
 public interface IDBConnectionManager 
 {
-	public abstract List<IQuadrigaRoles> UserRoles(String roles);
+	public abstract List<IQuadrigaRole> UserRoles(String roles);
 
 	/**
 	 * Creates a user object for the given userid.

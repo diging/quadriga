@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 
 /*
 * @Description 	: tests getters and setters for user name, username, password, email and quadrigaRoles
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 public class UserTest {
 	
 	private User user;
-	private List<IQuadrigaRoles> quadrigaRoles; 
+	private List<IQuadrigaRole> quadrigaRoles; 
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -38,7 +38,7 @@ public class UserTest {
 		
 		this.user = new User();
 		
-		this.quadrigaRoles = new ArrayList<IQuadrigaRoles>();
+		this.quadrigaRoles = new ArrayList<IQuadrigaRole>();
 		quadrigaRoles.add(new QuadrigaRole());
 		quadrigaRoles.add(new QuadrigaRole());
 				

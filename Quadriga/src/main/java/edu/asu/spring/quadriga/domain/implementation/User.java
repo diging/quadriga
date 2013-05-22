@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 
 /**
@@ -18,7 +18,7 @@ public class User implements IUser
 	private String userName;
     private String password;
     private String email;
-    private List<IQuadrigaRoles> quadrigaRoles;
+    private List<IQuadrigaRole> quadrigaRoles;
 
 	@Override
 	public String getEmail() {
@@ -54,11 +54,11 @@ public class User implements IUser
 		this.password = password;
 	}
 	@Override
-	public List<IQuadrigaRoles> getQuadrigaRoles() {
+	public List<IQuadrigaRole> getQuadrigaRoles() {
 		return quadrigaRoles;
 	}
 	@Override
-	public void setQuadrigaRoles(List<IQuadrigaRoles> quadrigaRoles) {
+	public void setQuadrigaRoles(List<IQuadrigaRole> quadrigaRoles) {
 		this.quadrigaRoles = quadrigaRoles;
 		
 	}

@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -107,7 +107,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	@Override
 	public IUser getUserDetails(String userid)
 	{
-		List<IQuadrigaRoles> userRole = null;
+		List<IQuadrigaRole> userRole = null;
 		String outputValue;
 		String dbCommand;
 		IUser user = null;
@@ -162,11 +162,11 @@ public class DBConnectionManager implements IDBConnectionManager
 	 *   @return        : list of QuadrigaRoles.
 	 */
 	@Override
-	public List<IQuadrigaRoles> UserRoles(String roles)
+	public List<IQuadrigaRole> UserRoles(String roles)
 	{
 		String[] role;
-		List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
-		IQuadrigaRoles userRole = null;
+		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
+		IQuadrigaRole userRole = null;
 
 		role = roles.split("\\s*,\\s*");
 		for(int i = 0; i<role.length;i++)
