@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
@@ -15,10 +16,11 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
- * @description : UserManager class implementing the User
- *                functionality
+ * @description  UserManager class implementing the User
+ *               functionality
  * 
- * @author      : Kiran
+ * @author       Kiran
+ * @author 		 Ram Kumar Kumaresan
  *
  */
 //@Service("userManager")
@@ -30,7 +32,7 @@ public class UserManager implements IUserManager {
 
 	@Autowired
 	private QuadrigaRoleManager rolemanager;
-	
+
 	@Autowired
 	private IUserFactory userFactory;
 
@@ -55,14 +57,15 @@ public class UserManager implements IUserManager {
 		List<IQuadrigaRoles> userRole = null;
 		IQuadrigaRoles quadrigaRole = null;
 		List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
+		
+		user = dbConnect.getUserDetails(sUserId);
+		
 		try
 		{
-			user = dbConnect.getUserDetails(sUserId);
-			
 			if(user!=null)
 			{
 				userRole = user.getQuadrigaRoles();
-				
+
 				for(i=0;i<userRole.size();i++)
 				{
 					quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
@@ -73,7 +76,7 @@ public class UserManager implements IUserManager {
 			else
 			{
 				user = userFactory.createUserObject();
-				quadrigaRole = rolemanager.getNoAccountRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+				quadrigaRole = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
 				rolesList.add(quadrigaRole);
 				user.setQuadrigaRoles(rolesList);
 			}
@@ -81,8 +84,9 @@ public class UserManager implements IUserManager {
 		catch(Exception e)
 		{
 			throw new RuntimeException("Error occurred in associating roles to User");
-		}
-	   return user;	
+		}		
+
+		return user;	
 	}
 
 	/**
