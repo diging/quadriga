@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 
 /**
  * @description   : Factory interface for Quadriga Role factory
@@ -11,9 +11,9 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
 public interface IQuadrigaRoleFactory 
 {
 	
-	public abstract IQuadrigaRoles  createQuadrigaRoleObject();
+	public abstract IQuadrigaRole  createQuadrigaRoleObject();
 	
-	public abstract IQuadrigaRoles cloneQuadrigaRoleObject(IQuadrigaRoles quadrigaRole);
+	public abstract IQuadrigaRole cloneQuadrigaRoleObject(IQuadrigaRole quadrigaRole);
 	
 
 }

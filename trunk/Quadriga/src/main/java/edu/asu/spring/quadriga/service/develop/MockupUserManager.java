@@ -7,7 +7,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
@@ -40,9 +40,9 @@ public class MockupUserManager implements IUserManager {
 			user.setUserName(sUserId);
 			user.setName("John Doe");
 			
-			List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
+			List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 			
-			IQuadrigaRoles role = new QuadrigaRole();
+			IQuadrigaRole role = new QuadrigaRole();
 			role.setId("ROLE_QUADRIGA_USER_ADMIN");
 			roles.add(role);
 			
@@ -58,9 +58,9 @@ public class MockupUserManager implements IUserManager {
 		else if (listInActiveUser.contains(sUserId)) {
 			user.setUserName("Test User");
 			
-			List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
+			List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 			
-			IQuadrigaRoles role = new QuadrigaRole();
+			IQuadrigaRole role = new QuadrigaRole();
 			role.setId("ROLE_QUADRIGA_DEACTIVATED");
 			roles.add(role);
 			user.setQuadrigaRoles(roles);
@@ -69,9 +69,9 @@ public class MockupUserManager implements IUserManager {
 		// No such user in the Quad Db
 		else {
 			user.setUserName("no account user");
-			List<IQuadrigaRoles> roles = new ArrayList<IQuadrigaRoles>();
+			List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 			
-			IQuadrigaRoles role = new QuadrigaRole();
+			IQuadrigaRole role = new QuadrigaRole();
 			role.setId("ROLE_QUADRIGA_NOACCOUNT");
 			roles.add(role);
 			user.setQuadrigaRoles(roles);

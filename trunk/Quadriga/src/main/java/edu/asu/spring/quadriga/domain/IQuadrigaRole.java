@@ -6,7 +6,7 @@ package edu.asu.spring.quadriga.domain;
  * @author        : Kiran
  *
  */
-public interface IQuadrigaRoles 
+public interface IQuadrigaRole 
 {
 
 	public String getDBid();

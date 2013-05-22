@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.PersonContextMapper;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -40,7 +40,7 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 
 		if(user.getQuadrigaRoles()!=null)
 		{
-		for (IQuadrigaRoles role : user.getQuadrigaRoles()) {
+		for (IQuadrigaRole role : user.getQuadrigaRoles()) {
 			authorityList.add(new QuadrigaGrantedAuthority(role.getId()));
 		}
 		}

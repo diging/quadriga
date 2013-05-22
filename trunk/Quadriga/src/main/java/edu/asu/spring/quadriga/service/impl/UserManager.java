@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
@@ -54,9 +54,9 @@ public class UserManager implements IUserManager {
 	{
 		int i = 0;
 		IUser user = null;
-		List<IQuadrigaRoles> userRole = null;
-		IQuadrigaRoles quadrigaRole = null;
-		List<IQuadrigaRoles> rolesList = new ArrayList<IQuadrigaRoles>();
+		List<IQuadrigaRole> userRole = null;
+		IQuadrigaRole quadrigaRole = null;
+		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
 		
 		user = dbConnect.getUserDetails(sUserId);
 		

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRoles;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 /**
@@ -20,7 +20,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 
 	/**List of QuadrigaRole objects which will store various user roles.*/
 	@Autowired
-	private List<IQuadrigaRoles> quadrigaRoles;
+	private List<IQuadrigaRole> quadrigaRoles;
 	
 	/**
 	 * Return the corresponding QuadrigaRole for a given QuadrigaRoleId.
@@ -28,8 +28,8 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 * @param sQuadrigaRoleDBId		The role id fetched from the Quadriga database.
 	 * @return 						QuadrigaRole object corresponding to the role id.
 	 */
-	public IQuadrigaRoles getQuadrigaRole(String sQuadrigaRoleDBId) {
-		for(IQuadrigaRoles role: quadrigaRoles)
+	public IQuadrigaRole getQuadrigaRole(String sQuadrigaRoleDBId) {
+		for(IQuadrigaRole role: quadrigaRoles)
 		{
 			if(role.getDBid().equals(sQuadrigaRoleDBId))
 				return role;
@@ -42,7 +42,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 * 
 	 * @return 			List of QuadrigaRoles
 	 */
-	public List<IQuadrigaRoles> getQuadrigaRoles() {
+	public List<IQuadrigaRole> getQuadrigaRoles() {
 		return this.quadrigaRoles;
 	}
 	
@@ -50,7 +50,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 *  
 	 * @param quadrigaRoles List of QuadrigaRoles
 	 */
-	public void setQuadrigaRoles(List<IQuadrigaRoles> quadrigaRoles) {
+	public void setQuadrigaRoles(List<IQuadrigaRole> quadrigaRoles) {
 		this.quadrigaRoles = quadrigaRoles;
 	}
 
