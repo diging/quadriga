@@ -13,9 +13,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
+/**
+ * This controller returns the appropriate page for a user who doesn't have the required
+ * access rights to a page.
+ * 
+ * @author Julia Damerow
+ *
+ */
 @Controller
 public class AccessForbiddenController {
 
+	/**
+	 * This method answers requests to "forbidden". Inactive users and users without
+	 * a account get redirected to pages corresponding to their role.
+	 * 
+	 * @param model This object holds the attributes of the request.
+	 * @param principal This object holds the information about the user attempting to access a page.
+	 * @return path to "forbidden" webpage.
+	 */
 	@RequestMapping(value="forbidden", method = RequestMethod.GET)
 	public String getInactiveUserPage(ModelMap model, Principal principal) {
 
