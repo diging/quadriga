@@ -18,6 +18,9 @@ public interface IDBConnectionManager
 {
 	public abstract List<IQuadrigaRole> UserRoles(String roles);
 
+	public abstract List<IUser> getAllActiveUsers();
+	public abstract List<IUser> getAllInActiveUsers();
+	
 	/**
 	 * Creates a user object for the given userid.
 	 * @param userid	The unique userid of the user based on which a user object will be created
