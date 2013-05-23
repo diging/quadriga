@@ -57,25 +57,7 @@ public class LoginControllerTest {
 	public void testValidUserHandle() throws SQLException {
 
 		//Valid and Active user
-//		assertEquals(loginController.validUserHandle(model, principal, authentication),"auth/loggedIn");
-		
-		//Valid but inactive user		
-		principal = new Principal() {			
-			@Override
-			public String getName() {
-				return "jack";
-			}
-		};		
-//		assertEquals(loginController.validUserHandle(model, principal, authentication),"inactiveuser");
-//		
-//		//Ivalid user
-//		principal = new Principal() {			
-//			@Override
-//			public String getName() {
-//				return "abc";
-//			}
-//		};		
-//		assertEquals(loginController.validUserHandle(model, principal, authentication),"nouser");
+		assertEquals(loginController.validUserHandle(model, principal, authentication),"auth/loggedIn");
 
 	}
 
