@@ -1,21 +1,9 @@
 package edu.asu.spring.quadriga.web.manageusers;
 
 import java.security.Principal;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +15,11 @@ import edu.asu.spring.quadriga.service.IUserManager;
 @Controller
 public class UserController {
 
+	@Autowired 
+	IUserManager usermanager;
+	
 	@RequestMapping(value = "auth/users/manage", method = RequestMethod.GET)
-	public String manageUsers(ModelMap model, Principal principal,
-			Authentication authentication)
+	public String manageUsers(ModelMap model, Principal principal)
 	{
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();
@@ -38,11 +28,31 @@ public class UserController {
 		return "auth/users/manage";
 	}
 	
-	@RequestMapping(value = "auth/users/requests", method = RequestMethod.GET)
-	public String login(ModelMap model, Principal principal,
-			Authentication authentication)
+	@RequestMapping(value = "auth/users/requestslist", method = RequestMethod.GET)
+	public String userRequestList(ModelMap model, Principal principal)
 	{
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>...");
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Request List");		
 		return "auth/users/requests";
+	}
+	
+	@RequestMapping(value = "auth/users/activelist", method = RequestMethod.GET)
+	public String userActiveList(ModelMap model, Principal principal)
+	{
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Active List");
+		
+		String sUserId = principal.getName();
+		model.addAttribute("username", sUserId);
+		
+		List<IUser> activeUserList = usermanager.getAllActiveUsers();
+//		System.out.println(activeUserList.size());
+		model.addAttribute("activeUserList", activeUserList);
+		return "auth/users/active";
+	}
+	
+	@RequestMapping(value = "auth/users/inactivelist", method = RequestMethod.GET)
+	public String userInactiveList(ModelMap model, Principal principal)
+	{
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INActive List");
+		return "auth/users/inactive";
 	}
 }
