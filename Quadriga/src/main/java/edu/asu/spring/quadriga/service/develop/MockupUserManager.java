@@ -113,4 +113,16 @@ public class MockupUserManager implements IUserManager {
 		throw new NotImplementedException();
 	}
 
+	@Override
+	public List<IUser> getAllActiveUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IUser> getAllInActiveUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
