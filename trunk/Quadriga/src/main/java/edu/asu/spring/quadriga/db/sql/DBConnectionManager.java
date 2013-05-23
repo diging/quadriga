@@ -159,28 +159,29 @@ public class DBConnectionManager implements IDBConnectionManager
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
-		Integer iOutErrorValue;
+		String sOutErrorValue;
 		
 		try
 		{
 			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ACTIVE_USER_DETAILS + "(?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+			sqlStatement.registerOutParameter(1,Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			iOutErrorValue = sqlStatement.getInt(1);
+			sOutErrorValue = sqlStatement.getString(1);
 
-			if(iOutErrorValue == null)
+			if(sOutErrorValue == null)
 			{
 				listUsers = new ArrayList<IUser>();				
-				IUser user = this.userFactory.createUserObject();
+				IUser user = null;
 				List<IQuadrigaRole> userRole = null;
 				
 				ResultSet rs = sqlStatement.getResultSet();
 				while(rs.next())
 				{					
+					user = this.userFactory.createUserObject();
 					user.setName(rs.getString(1));
 					user.setUserName(rs.getString(2));
 					user.setEmail(rs.getString(3));
@@ -214,7 +215,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.INACTIVE_USER_DETAILS + "(?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+			sqlStatement.registerOutParameter(1,Types.VARCHAR);
 
 			sqlStatement.execute();
 
