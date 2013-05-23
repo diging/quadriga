@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @author 		 Ram Kumar Kumaresan
  *
  */
-//@Service("userManager")
+@Service("userManager")
 public class UserManager implements IUserManager {
 
 	@Autowired
@@ -87,6 +87,38 @@ public class UserManager implements IUserManager {
 		}		
 
 		return user;	
+	}
+	
+	@Override
+	public List<IUser> getAllActiveUsers()
+	{
+		List<IUser> listUsers = null;
+		
+		try
+		{
+			listUsers = dbConnect.getAllActiveUsers();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		return listUsers;		
+	}
+	
+	@Override
+	public List<IUser> getAllInActiveUsers()
+	{
+		List<IUser> listUsers = null;
+		
+		try
+		{
+			listUsers = dbConnect.getAllInActiveUsers();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		return listUsers;		
 	}
 
 	/**
