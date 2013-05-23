@@ -1,7 +1,13 @@
-<html>
-<body>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!-- Content -->
+
+<article class="is-page-content">
+
+
 		<p>
-			Users requesting access.
+			Users requesting access
 		</p>
-</body>
-</html>
+
+</article>
+	

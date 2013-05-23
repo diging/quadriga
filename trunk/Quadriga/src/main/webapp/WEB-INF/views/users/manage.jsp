@@ -13,8 +13,9 @@
 		<p>Huurahhhh.</p>
 
   <script>
+  
   $(function() {
-    $( "#tabs" ).tabs({
+	  $( "#tabs" ).tabs({
       beforeLoad: function( event, ui ) {
         ui.jqXHR.error(function() {
           ui.panel.html(
@@ -27,9 +28,9 @@
  
 <div id="tabs">
   <ul>
-    <li><a href="user requests">User Requests</a></li>
-    <li><a href="active">Active Users</a></li>
-    <li><a href="inactive">Deactivated Users</a></li>
+    <li><a href="requestslist">User Requests</a></li>
+    <li><a href="activelist">Active Users</a></li>
+    <li><a href="inactivelist">Deactivated Users</a></li>
   </ul>
 </div>
 		
