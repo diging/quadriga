@@ -55,12 +55,12 @@
 		<put-attribute name="content" value="/WEB-INF/views/users/requests.jsp" />
 	</definition> 
 	
-	<definition name="auth/users/active" extends="base.definition.empty">
+	<definition name="auth/users/active" extends="base.definition.nonav">
 		<put-attribute name="title" value="" />
 		<put-attribute name="content" value="/WEB-INF/views/users/active.jsp" />
 	</definition>
 	
-	<definition name="auth/users/inactive" extends="base.definition.empty">
+	<definition name="auth/users/inactive" extends="base.definition.nonav">
 		<put-attribute name="title" value="" />
 		<put-attribute name="content" value="/WEB-INF/views/users/inactive.jsp" />
 	</definition> 		
@@ -70,6 +70,18 @@
 		<put-attribute name="sub-navigation" value="/WEB-INF/views/workbench/project-right.jsp" />
 		<put-attribute name="content" value="/WEB-INF/views/workbench/project.jsp" />
 	</definition>
+	
+	<definition name="nouser" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - No Account" />
+		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/noaccount.jsp" />
+	</definition>
+	
+	<definition name="inactiveuser" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
+		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/inactiveUser.jsp" />
+ 	</definition>
 	
 	<definition name="auth/notImplemented" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
