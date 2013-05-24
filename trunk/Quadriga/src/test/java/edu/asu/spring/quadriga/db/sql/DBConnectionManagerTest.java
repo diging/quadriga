@@ -15,9 +15,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IUser;
 
-@ContextConfiguration(locations={"file:///C:/Users/Ram/Documents/EclipseProjects/Quadriga/src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
-		"file:///C:/Users/Ram/Documents/EclipseProjects/Quadriga/src/main/webapp/WEB-INF/spring/root-context.xml",
-		"file:///C:/Users/Ram/Documents/EclipseProjects/Quadriga/src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+/**
+ * 
+ * @author Who wrote this?
+ *
+ */
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
+		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DBConnectionManagerTest {
 
