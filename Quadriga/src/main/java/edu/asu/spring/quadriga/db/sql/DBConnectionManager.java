@@ -208,7 +208,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
-		Integer iOutErrorValue;
+		String sOutErrorValue;
 		
 		try
 		{
@@ -219,17 +219,18 @@ public class DBConnectionManager implements IDBConnectionManager
 
 			sqlStatement.execute();
 
-			iOutErrorValue = sqlStatement.getInt(1);
+			sOutErrorValue = sqlStatement.getString(1);
 
-			if(iOutErrorValue == null)
+			if(sOutErrorValue == null)
 			{
 				listUsers = new ArrayList<IUser>();				
-				IUser user = this.userFactory.createUserObject();
+				IUser user = null;
 				List<IQuadrigaRole> userRole = null;
 				
 				ResultSet rs = sqlStatement.getResultSet();
 				while(rs.next())
-				{					
+				{	
+					user = this.userFactory.createUserObject();
 					user.setName(rs.getString(1));
 					user.setUserName(rs.getString(2));
 					user.setEmail(rs.getString(3));
@@ -251,6 +252,85 @@ public class DBConnectionManager implements IDBConnectionManager
 		return listUsers;
 	}
 	
+	@Override
+	public int deactivateUser(String sUserId,String sDeactiveRoleDBId)
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+		
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DEACTIVATE_USER+ "(?,?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.setString(1, sUserId);
+			sqlStatement.setString(2, sDeactiveRoleDBId);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(3);
+
+			if(sOutErrorValue == null)
+			{
+				//User deactivated successfully
+				return 1;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return 0;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	@Override
+	public int updateUserRoles(String sUserId,String sRoles)
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+		
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_USER_ROLES+ "(?,?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.setString(1, sUserId);
+			sqlStatement.setString(2, sRoles);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(3);
+
+			if(sOutErrorValue == null)
+			{
+				//User roles updated successfully
+				return 1;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return 0;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
 	
 	/**
 	 *   @Description   : Splits the comma separated roles into a list
@@ -276,5 +356,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
+	
+	
 	
 }

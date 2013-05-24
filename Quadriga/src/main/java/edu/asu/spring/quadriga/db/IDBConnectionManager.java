@@ -33,4 +33,8 @@ public interface IDBConnectionManager
 	 * @param dataSource	The datasource object must contain the database connection details
 	 */
 	public abstract void setDataSource(DataSource dataSource);
+
+	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId);
+
+	public abstract int updateUserRoles(String sUserId, String sRoles);
 }

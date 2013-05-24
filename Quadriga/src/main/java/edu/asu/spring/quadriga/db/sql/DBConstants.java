@@ -15,5 +15,7 @@ public interface DBConstants
 	public final static String USER_DETAILS = "sp_getUserDetails";	
 	public final static String ACTIVE_USER_DETAILS="sp_getActiveUsers";
 	public final static String INACTIVE_USER_DETAILS="sp_getInActiveUsers";
+	public final static String DEACTIVATE_USER="sp_deactivateUser";
+	public final static String UPDATE_USER_ROLES="sp_updateUserRoles";
 	
 }
