@@ -14,11 +14,11 @@ import edu.asu.spring.quadriga.domain.IUser;
  */
 public class User implements IUser 
 {
-    private String name;
+	private String name;
 	private String userName;
-    private String password;
-    private String email;
-    private List<IQuadrigaRole> quadrigaRoles;
+	private String password;
+	private String email;
+	private List<IQuadrigaRole> quadrigaRoles;
 
 	@Override
 	public String getEmail() {
@@ -28,8 +28,8 @@ public class User implements IUser
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	    
-    @Override
+
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -60,9 +60,23 @@ public class User implements IUser
 	@Override
 	public void setQuadrigaRoles(List<IQuadrigaRole> quadrigaRoles) {
 		this.quadrigaRoles = quadrigaRoles;
-		
+
 	}
 
-    
-    
+	@Override
+	public String getQuadrigaRolesDBId()
+	{
+		StringBuilder sRoleDBIds = new StringBuilder();
+		System.out.println(sRoleDBIds.length());
+		for(IQuadrigaRole role:quadrigaRoles)
+		{
+			if(sRoleDBIds.length()==0)
+				sRoleDBIds.append(role.getDBid());
+			else
+				sRoleDBIds.append(","+role.getDBid());
+		}
+		System.out.println(sRoleDBIds.toString());
+		return sRoleDBIds.toString();
+	}
+
 }
