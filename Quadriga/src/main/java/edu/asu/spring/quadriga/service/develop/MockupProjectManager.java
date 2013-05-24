@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
 
-/*
+/**
  *   @Description : This class acts as a dummy project manager which adds list of projects
  *   				and their descriptions on the workbench.
  *   
@@ -22,10 +22,10 @@ import edu.asu.spring.quadriga.service.IProjectManager;
  * 
  * 
  */
-@Service
+//@Service
 public class MockupProjectManager implements IProjectManager{
 
-/*   
+/**   
  * @Description : creates list of objects consisting project names and their descriptions
  * 
  * @param 		: userID
@@ -84,12 +84,10 @@ public class MockupProjectManager implements IProjectManager{
 	public IProject getProject(String id) {
 		IProject project = new Project();
 		
-		project.setId("id1");
+		project.setId(id);
 		
-		project.setName("quadriga 1");
+		project.setName("quadriga" + id);
 		
-		project.setDescription("Lifecycle of Amphibians");
-
 		return project;
 	}
 
