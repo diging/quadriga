@@ -11,10 +11,10 @@
 	<!-- Highlight -->
 	<section class="is-highlight">
 		<ul class="special">
-			<li><a href="workbench" class="battery">Battery</a></li>
-			<li><a href="#" class="tablet">Tablet</a></li>
-			<li><a href="#" class="flask">Flask</a></li>
-			<li><a href="#" class="chart">Pie Chart?</a></li>
+			<li><a href="workbench" class="battery">Workbench</a></li>
+			<li><a href="#" class="tablet">Concept Collections</a></li>
+			<li><a href="#" class="flask">Networks</a></li>
+			<li><a href="#" class="chart">Dictionaries</a></li>
 		</ul>
 		<header>
 			<h2>${username}, welcome to Quadriga</h2>
@@ -28,13 +28,6 @@
 					Users</a>
 			</p>
 		</sec:authorize>
-
-		<p>
-			Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in
-			lectus. Praesent semper mod quis eget mi. Etiam eu<br /> ante risus.
-			Aliquam erat volutpat. Aliquam luctus et mattis lectus amet pulvinar.
-			Nam nec turpis consequat.
-		</p>
 	</section>
 	<!-- /Highlight -->
 
