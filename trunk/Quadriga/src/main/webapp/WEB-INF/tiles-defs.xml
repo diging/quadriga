@@ -37,31 +37,30 @@
 
 	<definition name="nouser" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - No Account" />
-		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
 		<put-attribute name="content" value="/WEB-INF/views/noaccount.jsp" />
 	</definition>
 
 	<definition name="inactiveuser" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
-		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
 		<put-attribute name="content" value="/WEB-INF/views/inactiveUser.jsp" />
 	</definition>
 
 	<definition name="forbidden" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
-		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
 		<put-attribute name="content" value="/WEB-INF/views/forbidden.jsp" />
 	</definition>
 
 
 	<!-- Workbench pages -->
-	<definition name="auth/workbench" extends="base.definition">
+	<definition name="base.definition.workbench" extends="base.definition">
+		<put-attribute name="currentPage" value="workbench" />
+	</definition>
+	<definition name="auth/workbench" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench_example.jsp" />
-		<put-attribute name="currentPage" value="workbench" />
 	</definition>
-	<definition name="auth/workbench/project" extends="base.definition">
+	<definition name="auth/workbench/project" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga - Manage Users" />
 		<put-attribute name="sub-navigation"
 			value="/WEB-INF/views/workbench/project-right.jsp" />
@@ -108,7 +107,6 @@
 	<!-- Error pages -->
 	<definition name="auth/notImplemented" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
-		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
 		<put-attribute name="content" value="/WEB-INF/views/notImplemented.jsp" />
 	</definition>
 </tiles-definitions>
