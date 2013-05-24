@@ -70,7 +70,7 @@ public class MockupUserManager implements IUserManager {
 			List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 			
 			IQuadrigaRole role = new QuadrigaRole();
-			role.setId("ROLE_QUADRIGA_DEACTIVATED");
+			role.setId("ROLE_QUADRIGA_USER_STANDARD");
 			roles.add(role);
 			user.setQuadrigaRoles(roles);
 			//user.setActive(false);
