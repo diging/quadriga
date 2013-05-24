@@ -1,5 +1,5 @@
 <header>
-	<h2>Account Deactivated</h2>
+	<h2>No access to this page</h2>
 	<span class="byline">Looks like life is a raptor farm...</span>
 </header>
 
