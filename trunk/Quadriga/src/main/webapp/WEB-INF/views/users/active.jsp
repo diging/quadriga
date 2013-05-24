@@ -7,10 +7,11 @@
 		<p>
 			Users-active List...
 		</p>
+
 <ol>
     <c:if test="${not empty activeUserList}">
     <c:forEach var="user" items="${activeUserList}">
-	<li><c:out value="${user.name}"></c:out>  <button value="deactivate/${user.userName}">Deactivate</button></li><br>
+	<li><c:out value="${user.name}"></c:out>  <button onclick="location.href='/quadriga/auth/users/deactivate/${user.userName}'" value="${user.userName}">Deactivate</button></li><br>
 	</c:forEach></c:if>
 	
 </ol>
