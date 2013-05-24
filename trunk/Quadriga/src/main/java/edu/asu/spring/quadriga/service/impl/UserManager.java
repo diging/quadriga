@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @author 		 Ram Kumar Kumaresan
  *
  */
-@Service("userManager")
+//@Service("userManager")
 public class UserManager implements IUserManager {
 
 	@Autowired

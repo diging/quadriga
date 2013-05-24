@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.service.IProjectManager;
  * 
  * 
  */
-//@Service
+@Service
 public class MockupProjectManager implements IProjectManager{
 
 /**   
