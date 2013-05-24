@@ -1,23 +1,26 @@
-package edu.asu.spring.quadriga;
+package edu.asu.spring.quadriga.web;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.security.Principal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.web.LoginController;
 
+/**
+ * 
+ * @author Who wrote this?
+ *
+ */
 public class LoginControllerTest {
 
 	LoginController loginController;

@@ -21,7 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 
-@ContextConfiguration(locations={"file:///C:/Users/Ram/Documents/EclipseProjects/Quadriga/src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+/**
+ * 
+ * @author Who wrote this?
+ *
+ */
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class QuadrigaRoleManagerTest {
 
