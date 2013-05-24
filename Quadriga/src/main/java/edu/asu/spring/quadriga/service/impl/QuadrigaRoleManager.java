@@ -37,6 +37,18 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 		return null;
 	}
 	
+	
+	public String getQuadrigaRoleDBId(String sQuadrigaRoleId)
+	{
+		for(IQuadrigaRole role:quadrigaRoles)
+		{
+			if(role.getId().equals(sQuadrigaRoleId))
+				return role.getDBid();
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * Returns the list of QuadrigaRoles used in the application context.
 	 * 
