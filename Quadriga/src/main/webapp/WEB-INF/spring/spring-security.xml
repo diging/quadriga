@@ -13,6 +13,7 @@
 		<intercept-url pattern="/resources/*" access="permitAll" />
 		<intercept-url pattern="/auth/*" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')" />
 		<intercept-url pattern="/auth/users/*" access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"/>
+		<intercept-url pattern="/auth/workbench/*" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<form-login login-page="/login" default-target-url="/auth/welcome"
 			authentication-failure-url="/loginfailed" />
 		<logout logout-success-url="/logout" invalidate-session="true" />
