@@ -97,32 +97,33 @@ public class MockupUserManager implements IUserManager {
 		throw new NotImplementedException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int deleteUser(String sUserId) {
-		throw new NotImplementedException();
-	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int addNewUser(User newUser) {
-		throw new NotImplementedException();
+		throw new NotImplementedException("addNewUser() is not yet implemented");
 	}
 
 	@Override
 	public List<IUser> getAllActiveUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException("getAllActiveUsers() is not yet implemented");
 	}
 
 	@Override
 	public List<IUser> getAllInActiveUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException("getAllInactivaeUsers is not yet implemented");
+	}
+
+	@Override
+	public int deactivateUser(String sUserId) {
+		throw new NotImplementedException("dectivateUser() is not yet implemented");
+	}
+
+	@Override
+	public int activateUser(String sUserId) {
+		throw new NotImplementedException("activateUser() is not yet implemented");
 	}
 
 }

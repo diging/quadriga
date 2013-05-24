@@ -50,6 +50,6 @@ public class AccessForbiddenController {
 		//An authenticated user can try to access other resources. So send them back to home page.
 		String sUserId = principal.getName();
 		model.addAttribute("username", sUserId);
-		return "auth/home";
+		return "forbidden";
 	}
 }
