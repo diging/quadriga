@@ -33,10 +33,8 @@ public class WorkbenchController {
 	@Autowired IUserManager usermanager;
 	IUser user;
 	
-	
-	
 	@RequestMapping(value="auth/workbench", method = RequestMethod.GET)
-	public String userWorkbenchHandle(ModelMap model) throws SQLException {
+	public String projectWorkbenchHandle(ModelMap model) throws SQLException {
 	
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -44,13 +42,13 @@ public class WorkbenchController {
 		
 	    user =  usermanager.getUserDetails(sUserId);
 	    
-	    username = user.getName();
-	    
-	    model.addAttribute("username", username);
-
-		projectlist = projectmanager.getProjectsOfUser(sUserId);
+	    projectlist = projectmanager.getProjectsOfUser(sUserId);
 		
 		model.addAttribute("projectlist", projectlist);
+		
+		username = user.getName();
+	    
+	    model.addAttribute("username", username);
 		    
 		return "auth/workbench"; 
 	}
@@ -60,6 +58,7 @@ public class WorkbenchController {
 		IProject project = projectmanager.getProject(id);
 		
 		model.addAttribute("project", project);
+		
 		return "auth/workbench/project";
 	}
 }
