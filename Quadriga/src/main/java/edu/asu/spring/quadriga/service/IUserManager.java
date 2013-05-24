@@ -36,7 +36,7 @@ public interface IUserManager {
 	 * @param sUserId			The unique userid of the user
 	 * @return					Integer to indicate the operation status. 0 - Success. 1 - Already Inactive user. -1 - Error in performing the operation
 	 */
-	public abstract int deleteUser(String sUserId);
+	public abstract int deactivateUser(String sUserId);
 	
 	/**
 	 * Method to add a new active user to the existing active user list in Quadriga database.
@@ -49,4 +49,6 @@ public interface IUserManager {
 	public abstract List<IUser> getAllActiveUsers();
 
 	public abstract List<IUser> getAllInActiveUsers();
+
+	public abstract int activateUser(String sUserId);
 }
