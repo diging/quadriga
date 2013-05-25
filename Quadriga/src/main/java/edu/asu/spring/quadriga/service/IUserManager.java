@@ -51,4 +51,6 @@ public interface IUserManager {
 	public abstract List<IUser> getAllInActiveUsers();
 
 	public abstract int activateUser(String sUserId);
+
+	public List<IUser> getUserRequests();
 }
