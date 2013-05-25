@@ -37,4 +37,6 @@ public interface IDBConnectionManager
 	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId);
 
 	public abstract int updateUserRoles(String sUserId, String sRoles);
+
+	public abstract List<IUser> getUserRequests();
 }
