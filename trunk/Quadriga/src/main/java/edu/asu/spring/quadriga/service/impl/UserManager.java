@@ -70,6 +70,8 @@ public class UserManager implements IUserManager {
 				for(i=0;i<userRole.size();i++)
 				{
 					quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
+					
+					//If user account is deactivated remove other roles 
 					if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
 					{
 						rolesList.clear();
@@ -118,6 +120,22 @@ public class UserManager implements IUserManager {
 		try
 		{
 			listUsers = dbConnect.getAllInActiveUsers();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		return listUsers;		
+	}
+	
+	@Override
+	public List<IUser> getUserRequests()
+	{
+		List<IUser> listUsers = null;
+
+		try
+		{
+			listUsers = dbConnect.getUserRequests();
 		}
 		catch(Exception e)
 		{
