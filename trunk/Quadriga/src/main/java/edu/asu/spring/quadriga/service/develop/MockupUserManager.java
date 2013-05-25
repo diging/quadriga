@@ -37,7 +37,6 @@ public class MockupUserManager implements IUserManager {
 		// TODO: Remove these and code logic to check in Quad DB.
 		List<String> listActiveUser = new ArrayList<String>();
 		listActiveUser.add("jdoe");
-		listActiveUser.add("bob");
 		List<String> listInActiveUser = new ArrayList<String>();
 		listInActiveUser.add("test");
 		listInActiveUser.add("jill");
@@ -124,6 +123,11 @@ public class MockupUserManager implements IUserManager {
 	@Override
 	public int activateUser(String sUserId) {
 		throw new NotImplementedException("activateUser() is not yet implemented");
+	}
+
+	@Override
+	public List<IUser> getUserRequests() {
+		throw new NotImplementedException("getUserRequest() is not yet implemented");
 	}
 
 }
