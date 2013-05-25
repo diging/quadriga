@@ -332,6 +332,55 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 	}
 	
+	@Override
+	public List<IUser> getUserRequests()
+	{
+		List<IUser> listUsers = null;
+		String sDBCommand;
+		String sOutErrorValue;
+		
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_USER_REQUESTS+ "(?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.registerOutParameter(1,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(1);
+
+			if(sOutErrorValue == null)
+			{
+				listUsers = new ArrayList<IUser>();				
+				IUser user = null;
+				
+				ResultSet rs = sqlStatement.getResultSet();
+				while(rs.next())
+				{					
+					user = this.userFactory.createUserObject();
+					user.setName(rs.getString(1));
+					user.setUserName(rs.getString(2));
+					user.setEmail(rs.getString(3));					
+					listUsers.add(user);
+				}				
+			}			
+			else
+			{
+				throw new SQLException("Error occurred in the Database");
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return listUsers;
+	}
 	/**
 	 *   @Description   : Splits the comma separated roles into a list
 	 *   
