@@ -33,7 +33,25 @@ public class UserController {
 	@RequestMapping(value = "auth/users/requestslist", method = RequestMethod.GET)
 	public String userRequestList(ModelMap model, Principal principal)
 	{
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Request List");		
+		String sUserId = principal.getName();
+		model.addAttribute("username", sUserId);
+		
+		List<IUser> userRequestsList = usermanager.getUserRequests();
+		model.addAttribute("userRequestsList", userRequestsList);
+		return "auth/users/requests";
+	}
+	
+	@RequestMapping(value = "auth/users/access/{accessRights}", method = RequestMethod.GET)
+	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal)
+	{
+		String sUserId = principal.getName();
+		model.addAttribute("username", sUserId);
+		
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+sAccessRights);
+		
+		//Reload the request list
+		List<IUser> userRequestsList = usermanager.getUserRequests();
+		model.addAttribute("userRequestsList", userRequestsList);
 		return "auth/users/requests";
 	}
 	
