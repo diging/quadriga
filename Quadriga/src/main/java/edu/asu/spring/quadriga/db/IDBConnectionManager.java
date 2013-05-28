@@ -40,6 +40,10 @@ public interface IDBConnectionManager
 	public abstract int updateUserRoles(String sUserId, String sRoles);
 
 	public abstract List<IUser> getUserRequests();
+
+	public abstract int approveUserRequest(String sUserId, String sRoles);
+
+	public abstract int denyUserRequest(String sUserId, String sAdminId);
 	
 	public abstract List<IProject> getProjectOfUser(String sUserId);
 
