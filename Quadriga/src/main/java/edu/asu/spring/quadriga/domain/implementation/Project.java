@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -15,6 +17,7 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
  * @author      : Kiran
  *
  */
+@Service
 public class Project implements IProject 
 {
 	
