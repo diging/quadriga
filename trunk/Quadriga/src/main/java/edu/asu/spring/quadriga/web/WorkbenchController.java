@@ -38,23 +38,24 @@ public class WorkbenchController {
 	
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-	    String sUserId = principal.getUsername();
-		
-	    user =  usermanager.getUserDetails(sUserId);
+	    String userId = principal.getUsername();
 	    
-	    projectlist = projectmanager.getProjectsOfUser(sUserId);
+	    projectlist = projectmanager.getProjectsOfUser(userId);
+	    System.out.println("Size: " + projectlist.size());
+	    model.addAttribute("projectlist", projectlist);
 		
-		model.addAttribute("projectlist", projectlist);
-		
-		username = user.getName();
+	    user =  usermanager.getUserDetails(userId);
+	    
+	    username = user.getName();
 	    
 	    model.addAttribute("username", username);
-		    
-		return "auth/workbench"; 
+	    
+	   	return "auth/workbench"; 
 	}
 	
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
 	public String getProjectPage(@PathVariable("projectid") String id, ModelMap model) {
+		
 		IProject project = projectmanager.getProject(id);
 		
 		model.addAttribute("project", project);

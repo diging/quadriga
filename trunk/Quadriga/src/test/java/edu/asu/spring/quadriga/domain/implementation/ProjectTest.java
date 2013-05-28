@@ -90,11 +90,11 @@ public class ProjectTest {
 	@Test
 	public void testGetInternalid() {
 		
-		project.setInternalid(null);
-		assertEquals(project.getInternalid(), null);
+		//project.setInternalid(null);
+		//assertEquals(project.getInternalid(), null);
 		
-		project.setInternalid("34@56");
-		assertEquals(project.getInternalid(), "34@56");
+		project.setInternalid(44);
+		assertEquals(project.getInternalid(), 44);
 	}
 
 	

@@ -76,5 +76,15 @@ public class User implements IUser
 		}
 		return sRoleDBIds.toString();
 	}
+	@Override
+	public String getProjectOwner() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setProjectOwner(String owner) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
