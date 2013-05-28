@@ -25,7 +25,14 @@ public class QuadrigaRoleFactory implements IQuadrigaRoleFactory {
 	@Override
 	public IQuadrigaRole cloneQuadrigaRoleObject(IQuadrigaRole quadrigaRole) {
 		// TODO Auto-generated method stub
-		throw new NotImplementedException("Clone Quadriga Role is not yet implemented.");
+		IQuadrigaRole clone = createQuadrigaRoleObject();
+		
+		clone.setDBid(quadrigaRole.getDBid());
+		clone.setId(quadrigaRole.getId());
+		clone.setName(quadrigaRole.getName());
+		clone.setDescription(quadrigaRole.getDescription());
+		
+		return clone;
 	}
 
 }

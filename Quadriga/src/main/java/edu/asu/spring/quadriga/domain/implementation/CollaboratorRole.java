@@ -10,9 +10,23 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
  */
 public class CollaboratorRole implements ICollaboratorRole 
 {
+	private String roleDBid;
 	private String roleid;
 	private String rolename;
 	private String roledescription;
+
+	@Override
+	public String getRoleDBid() 
+	{
+		return roleDBid;
+	}
+	
+	@Override
+	public void setRoleDBid(String roleDBid) 
+	{
+		this.roleDBid = roleDBid;
+	}
+	
 	@Override
 	public String getRoleid() {
 		return roleid;
