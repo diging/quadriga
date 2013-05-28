@@ -11,7 +11,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
-<link rel="stylesheet" href="/quadriga/resources/txt-layout/js/jquery-ui.css" />
+<link rel="stylesheet" href="/quadriga/resources/txt-layout/css/jquery-ui.css" />
 <link
 	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"
 	rel="stylesheet" />
@@ -20,6 +20,9 @@
 <script src="/quadriga/resources/txt-layout/js/skel.min.js"></script>
 <script src="/quadriga/resources/txt-layout/js/skel-ui.min.js"></script>
 <script src="/quadriga/resources/txt-layout/js/jquery-ui.js"></script>
+<script src="/quadriga/resources/txt-layout/js/jquery-alert.js"></script>
+
+
 <noscript>
 	<link rel="stylesheet"
 		href="/quadriga/resources/txt-layout/css/skel-noscript.css" />
