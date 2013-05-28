@@ -53,4 +53,8 @@ public interface IUserManager {
 	public abstract int activateUser(String sUserId);
 
 	public List<IUser> getUserRequests();
+
+	public abstract int approveUserRequest(String sUserId, String sRoles);
+
+	public abstract int denyUserRequest(String sUserId, String sAdminId);
 }
