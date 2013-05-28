@@ -9,15 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
+import edu.asu.spring.quadriga.domain.implementation.Project;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -44,6 +48,15 @@ public class DBConnectionManager implements IDBConnectionManager
 
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
+	
+	@Autowired
+	private IProject project;
+	
+	@Autowired
+	private IProjectFactory projectfactory;
+	
+	private ResultSet resultset;
+	
 
 	/**
 	 *  @Description: Assigns the data source
@@ -123,11 +136,11 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.execute();
 
 			outputValue = sqlStatement.getString(2);
-
+			
 			if(outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
-
+				
 				if(result.isBeforeFirst())
 				{
 					user  = userFactory.createUserObject();
@@ -405,7 +418,51 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
-	
-	
+
+
+	@Override
+	public List<IProject> getProjectOfUser(String sUserId) {
+		
+		String dbCommand;
+		
+		getConnection();
+		List<IProject> projectList = new ArrayList<IProject>();
+//		project = new Project();
+		
+		
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_DETAILS + "(?)";
+		try {
+			
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			sqlStatement.registerOutParameter(1, Types.VARCHAR);
+			
+			sqlStatement.execute();
+			
+			resultset = sqlStatement.getResultSet();
+
+	        while(resultset.next())
+	        {
+	            
+	           	project = projectfactory.createProjectObject();
+	        	project.setName(resultset.getString(1));
+	        	project.setDescription(resultset.getString(2));
+	        	project.setId(resultset.getString(2));
+	        	project.setInternalid(resultset.getString(2));
+	        	
+	        	projectList.add(project);
+	        	
+	         }
+	          	
+		} 
+		
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+		return projectList;
+	}
 	
 }
