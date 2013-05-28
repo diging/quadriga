@@ -19,4 +19,9 @@ public interface DBConstants
 	public final static String UPDATE_USER_ROLES="sp_updateUserRoles";
 	public final static String GET_USER_REQUESTS="sp_getUserRequests";
 	
+	public static final String PROJECT_DETAILS="sp_getListOfProjects";
+
+	
+	
+	
 }
