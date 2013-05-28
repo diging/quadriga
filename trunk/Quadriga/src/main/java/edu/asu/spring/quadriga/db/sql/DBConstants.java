@@ -18,6 +18,9 @@ public interface DBConstants
 	public final static String DEACTIVATE_USER="sp_deactivateUser";
 	public final static String UPDATE_USER_ROLES="sp_updateUserRoles";
 	public final static String GET_USER_REQUESTS="sp_getUserRequests";
+	public final static String APPROVE_USER_REQUEST="sp_approveUserRequest";
+	public final static String DENY_USER_REQUEST="sp_denyUserRequest";
+	
 	
 	public static final String PROJECT_DETAILS="sp_getListOfProjects";
 

@@ -347,6 +347,87 @@ public class DBConnectionManager implements IDBConnectionManager
 	}
 	
 	@Override
+	public int approveUserRequest(String sUserId,String sRoles)
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+		
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.APPROVE_USER_REQUEST+ "(?,?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.setString(1, sUserId);
+			sqlStatement.setString(2, sRoles);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(3);
+
+			if(sOutErrorValue == null)
+			{
+				//User request approved successfully
+				return 1;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return 0;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	@Override
+	public int denyUserRequest(String sUserId,String sAdminId)
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+		
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DENY_USER_REQUEST+ "(?,?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.setString(1, sUserId);
+			sqlStatement.setString(2, sAdminId);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(3);
+
+			if(sOutErrorValue == null)
+			{
+				//User request approved successfully
+				return 1;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return 0;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	
+	@Override
 	public List<IUser> getUserRequests()
 	{
 		List<IUser> listUsers = null;
