@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 
@@ -39,4 +40,7 @@ public interface IDBConnectionManager
 	public abstract int updateUserRoles(String sUserId, String sRoles);
 
 	public abstract List<IUser> getUserRequests();
+	
+	public abstract List<IProject> getProjectOfUser(String sUserId);
+
 }

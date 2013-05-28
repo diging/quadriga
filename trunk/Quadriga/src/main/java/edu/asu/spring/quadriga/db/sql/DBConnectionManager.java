@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.domain.IProject;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -427,9 +428,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		
 		getConnection();
 		List<IProject> projectList = new ArrayList<IProject>();
-//		project = new Project();
-		
-		
+			
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_DETAILS + "(?)";
 		try {
 			
@@ -464,5 +463,6 @@ public class DBConnectionManager implements IDBConnectionManager
 		
 		return projectList;
 	}
+	
 	
 }
