@@ -168,11 +168,24 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
+	public int approveUserRequest(String sUserId,String sRoles) {
+		
+		int iResult = dbConnect.approveUserRequest(sUserId, sRoles);
+		return iResult;
+	}
+	
+	@Override
+	public int denyUserRequest(String sUserId,String sAdminId) {
+		
+		int iResult = dbConnect.denyUserRequest(sUserId, sAdminId);
+		return iResult;
+	}
+	
+	@Override
 	public int activateUser(String sUserId) {
 
 		//Find the deactivated role id and create a QuadrigaRole Object
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
-		System.out.println(sDeactiveRoleDBId);
 
 		//Find all the roles of the user
 		IUser user = null;
