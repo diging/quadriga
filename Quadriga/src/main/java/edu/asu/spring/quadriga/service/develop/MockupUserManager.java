@@ -130,4 +130,14 @@ public class MockupUserManager implements IUserManager {
 		throw new NotImplementedException("getUserRequest() is not yet implemented");
 	}
 
+	@Override
+	public int approveUserRequest(String sUserId, String sRoles) {
+		throw new NotImplementedException("approveUserRequest() is not yet implemented");
+	}
+
+	@Override
+	public int denyUserRequest(String sUserId, String sAdminId) {
+		throw new NotImplementedException("denyUserRequest() is not yet implemented");
+	}
+
 }
