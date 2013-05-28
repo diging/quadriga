@@ -25,9 +25,9 @@ public interface IProject {
 
 	public abstract void setId(String id);
 
-	public abstract String getInternalid();
+	public abstract int getInternalid();
 
-	public abstract void setInternalid(String internalid);
+	public abstract void setInternalid(int internalid);
 
 	public abstract IUser getOwner();
 

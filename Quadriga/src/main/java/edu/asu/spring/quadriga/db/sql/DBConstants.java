@@ -22,7 +22,7 @@ public interface DBConstants
 	public final static String DENY_USER_REQUEST="sp_denyUserRequest";
 	
 	
-	public static final String PROJECT_DETAILS="sp_getListOfProjects";
+	public static final String PROJECT_DETAILS="sp_getProjectList";
 
 	
 	

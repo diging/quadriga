@@ -12,12 +12,14 @@ import javax.sql.DataSource;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.factories.IProjectOwnerFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
@@ -36,6 +38,7 @@ import edu.asu.spring.quadriga.domain.IProject;
  * @author 			 Ram Kumar Kumaresan
  *
  */
+
 public class DBConnectionManager implements IDBConnectionManager
 {
 
@@ -51,12 +54,14 @@ public class DBConnectionManager implements IDBConnectionManager
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 	
 	@Autowired
-	private IProject project;
-	
-	@Autowired
 	private IProjectFactory projectfactory;
 	
+	@Autowired
+	private IProjectOwnerFactory projectownerfactory;
+	
 	private ResultSet resultset;
+	
+	private IProject project;
 	
 
 	/**
@@ -500,18 +505,32 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
-
+	
+	public IUser projectOwner(String owner)
+	{
+			
+		IUser owner1 = null;
+		
+		owner1 = projectownerfactory.createProjectOwnerObject();
+		
+		owner1.setProjectOwner(owner);
+		
+		return owner1;
+		
+	}
 
 	@Override
 	public List<IProject> getProjectOfUser(String sUserId) {
 		
+	 	
 		String dbCommand;
+		IUser owner;
 		
 		getConnection();
 		List<IProject> projectList = new ArrayList<IProject>();
-			
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_DETAILS + "(?)";
 		try {
+			
 			
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			
@@ -520,16 +539,18 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.execute();
 			
 			resultset = sqlStatement.getResultSet();
-
+			
 	        while(resultset.next())
 	        {
-	            
-	           	project = projectfactory.createProjectObject();
+				
+	        	project = projectfactory.createProjectObject();
 	        	project.setName(resultset.getString(1));
 	        	project.setDescription(resultset.getString(2));
-	        	project.setId(resultset.getString(2));
-	        	project.setInternalid(resultset.getString(2));
-	        	
+	        	project.setId(resultset.getString(3));
+	        	project.setInternalid(resultset.getInt(4));
+	        	owner = projectOwner(resultset.getString(5));
+	        	project.setOwner(owner);
+	        	 	        		        	
 	        	projectList.add(project);
 	        	
 	         }

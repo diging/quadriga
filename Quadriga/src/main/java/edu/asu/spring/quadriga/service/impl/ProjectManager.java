@@ -27,8 +27,6 @@ public class ProjectManager implements IProjectManager {
 		
 		List<IProject> projectList = new ArrayList<IProject>();  
 		
-		System.out.println("--------------------in project manager---------------");
-		    		    
 		projectList = dbConnect.getProjectOfUser(sUserId);
 				
 		return projectList;
@@ -58,8 +56,9 @@ public class ProjectManager implements IProjectManager {
 		IProject project = new Project();
 		
 		project.setId(id);
+		project.setName("quadriga" + id);
 		
-		return null;
+		return project;
 	}
 	
 	

@@ -33,5 +33,11 @@ public interface IUser
 
 	public abstract String getQuadrigaRolesDBId();
 	
+	public String getProjectOwner();
+	
+	//public void setProjectOwner(String owner);
+
+	public abstract void setProjectOwner(String owner);
+	
    
 }

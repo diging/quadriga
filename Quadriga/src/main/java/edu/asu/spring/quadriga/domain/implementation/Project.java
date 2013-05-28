@@ -24,7 +24,7 @@ public class Project implements IProject
 	private String name;
 	private String description;
 	private String id;
-	private String internalid;
+	private int internalid;
 	private IUser owner;
 	private List<ICollaborator> collaborators;
     private EProjectAccessibility projectAccess;
@@ -76,14 +76,14 @@ public class Project implements IProject
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getInternalid()
 	 */
 	@Override
-	public String getInternalid() {
+	public int getInternalid() {
 		return internalid;
 	}
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setInternalid(java.lang.String)
 	 */
 	@Override
-	public void setInternalid(String internalid) {
+	public void setInternalid(int internalid) {
 		this.internalid = internalid;
 	}
 	/* (non-Javadoc)
