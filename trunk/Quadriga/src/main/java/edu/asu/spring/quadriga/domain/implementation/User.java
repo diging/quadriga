@@ -67,7 +67,6 @@ public class User implements IUser
 	public String getQuadrigaRolesDBId()
 	{
 		StringBuilder sRoleDBIds = new StringBuilder();
-		System.out.println(sRoleDBIds.length());
 		for(IQuadrigaRole role:quadrigaRoles)
 		{
 			if(sRoleDBIds.length()==0)
@@ -75,7 +74,6 @@ public class User implements IUser
 			else
 				sRoleDBIds.append(","+role.getDBid());
 		}
-		System.out.println(sRoleDBIds.toString());
 		return sRoleDBIds.toString();
 	}
 
