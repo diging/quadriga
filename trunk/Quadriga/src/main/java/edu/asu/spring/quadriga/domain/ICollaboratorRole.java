@@ -21,4 +21,8 @@ public interface ICollaboratorRole
 
 	public abstract String getRoleid();
 
+	public abstract void setRoleDBid(String roleDBid);
+
+	public abstract String getRoleDBid();
+
 }
