@@ -71,13 +71,13 @@
 					onclick="jqEnableAll('<c:out value="${user.userName}"></c:out>',1);"
 					name="<c:out value="${user.userName}"></c:out>" value="approve">Approve&nbsp;&nbsp;<input
 					type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-					name="admin" value="admin" disabled="disabled">Admin&nbsp;<input
+					name="admin" value="role3" disabled="disabled">Admin&nbsp;<input
 					type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-					name="std" value="std" disabled="disabled">Standard User&nbsp;<input
+					name="standard" value="role4" disabled="disabled">Standard User&nbsp;<input
 					type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-					name="rest" value="rest" disabled="disabled">Restricted User&nbsp;<input
+					name="restricted" value="role6" disabled="disabled">Restricted User&nbsp;<input
 					type="checkbox" class="<c:out value="${user.userName}"></c:out>"
-					name="collab" value="collab" disabled="disabled">Collaborator&nbsp;
+					name="collaborator" value="role5" disabled="disabled">Collaborator&nbsp;
 	<br>
 				<input type="radio" name="<c:out value="${user.userName}"></c:out>"
 					value="deny"
