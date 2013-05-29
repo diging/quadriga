@@ -11,8 +11,6 @@ import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
-import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -149,7 +147,7 @@ public class UserManager implements IUserManager {
 	 *                   (Not yet implemented)
 	 */
 	@Override
-	public String updateUserDetails(User existingUser) {
+	public String updateUserDetails(IUser existingUser) {
 		return null;
 	}
 
@@ -222,7 +220,7 @@ public class UserManager implements IUserManager {
 	 *                   (Not yet implemented)
 	 */
 	@Override
-	public int addNewUser(User newUser) {
+	public int addNewUser(IUser newUser) {
 		return 0;
 	}
 

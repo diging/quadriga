@@ -45,6 +45,16 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		List<GrantedAuthority> authorityList = new ArrayList<GrantedAuthority>();
 		authorityList.addAll(authorities);
 
+		fillAuthorityList(authorityList, username);
+
+		UserDetails details = super.mapUserFromContext(ctx, username,
+				authorityList);
+
+		return details;
+	}
+
+	public void fillAuthorityList(List<GrantedAuthority> authorities,
+			String username) {
 		// Check the status of the user in the Quadriga DB
 		IUser user = null;
 		user = userManager.getUserDetails(username);
@@ -52,14 +62,9 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		// add QuadrigaGrantedAuthorities with roles of user
 		if (user.getQuadrigaRoles() != null) {
 			for (IQuadrigaRole role : user.getQuadrigaRoles()) {
-				authorityList.add(new QuadrigaGrantedAuthority(role.getId()));
+				authorities.add(new QuadrigaGrantedAuthority(role.getId()));
 			}
 		}
-
-		UserDetails details = super.mapUserFromContext(ctx, username,
-				authorityList);
-
-		return details;
 	}
 
 }
