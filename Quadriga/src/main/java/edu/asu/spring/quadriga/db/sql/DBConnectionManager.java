@@ -343,7 +343,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * Overwrite the existing userroles with the new user roles.
 	 * 
 	 * @param sUserId The userid of the user whose roles are to be changed.
-	 * @param sRoles The new roles of the user.
+	 * @param sRoles The new roles of the user. Must be fetched from the applicaton context file.
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 */
@@ -392,7 +392,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * Approve the user request to access Quadriga and also assign new roles set by the admin.
 	 * 
 	 * @param sUserId The userid of the user whose access has been approved.
-	 * 
+	 * @param sRoles The roles set by the admin. Must correspond to the roles found in the application context file
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
@@ -412,6 +412,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.setString(2, sRoles);
 			sqlStatement.registerOutParameter(3,Types.VARCHAR);
 
+			//Execute the stored procedure
 			sqlStatement.execute();
 
 			sOutErrorValue = sqlStatement.getString(3);
@@ -437,6 +438,14 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 	}
 	
+	/**
+	 * A user has been denied the access to Quadriga.
+	 * 
+	 * @param sUserId		The userid of the user whose request is rejected
+	 * @param sAdminId 		The admin-userid who rejected the request
+	 * 
+	 * Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 */
 	@Override
 	public int denyUserRequest(String sUserId,String sAdminId)
 	{
@@ -478,6 +487,12 @@ public class DBConnectionManager implements IDBConnectionManager
 	}
 	
 	
+	/**
+	 * Returns all open user requests to quadriga.
+	 * 
+	 * @return Returns the list of user objects whose request are to be approved/denied.
+	 * 
+	 */	
 	@Override
 	public List<IUser> getUserRequests()
 	{
