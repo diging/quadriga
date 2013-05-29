@@ -173,6 +173,11 @@ public class DBConnectionManager implements IDBConnectionManager
 		return user;
 	}
 
+	/**
+	 * Queries the database and builds a list of active user objects
+	 * 
+	 * @return List containing user objects of all active users
+	 */
 	@Override
 	public List<IUser> getAllActiveUsers()
 	{
@@ -187,10 +192,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.registerOutParameter(1,Types.VARCHAR);
 
+			//Execute the SQL Stored Procedure
 			sqlStatement.execute();
 
 			sOutErrorValue = sqlStatement.getString(1);
 
+			//No SQL exception has occurred
 			if(sOutErrorValue == null)
 			{
 				listUsers = new ArrayList<IUser>();				
@@ -198,6 +205,8 @@ public class DBConnectionManager implements IDBConnectionManager
 				List<IQuadrigaRole> userRole = null;
 				
 				ResultSet rs = sqlStatement.getResultSet();
+				
+				//Iterate through each row returned by the database
 				while(rs.next())
 				{					
 					user = this.userFactory.createUserObject();
@@ -222,6 +231,11 @@ public class DBConnectionManager implements IDBConnectionManager
 		return listUsers;
 	}
 	
+	/**
+	 * Queries the database and builds a list of inactive user objects
+	 * 
+	 * @return List containing user objects of all inactive users
+	 */
 	@Override
 	public List<IUser> getAllInActiveUsers()
 	{
@@ -236,10 +250,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.registerOutParameter(1,Types.VARCHAR);
 
+			//Execute the SQL Stored Procedure
 			sqlStatement.execute();
 
 			sOutErrorValue = sqlStatement.getString(1);
 
+			//No SQL exception has occurred			
 			if(sOutErrorValue == null)
 			{
 				listUsers = new ArrayList<IUser>();				
@@ -247,6 +263,8 @@ public class DBConnectionManager implements IDBConnectionManager
 				List<IQuadrigaRole> userRole = null;
 				
 				ResultSet rs = sqlStatement.getResultSet();
+				
+				//Iterate through each row returned by the database
 				while(rs.next())
 				{	
 					user = this.userFactory.createUserObject();
@@ -271,6 +289,15 @@ public class DBConnectionManager implements IDBConnectionManager
 		return listUsers;
 	}
 	
+	/**
+	 * Deactivate a user in Quadriga.
+	 * 
+	 * @param 	sUserId					The userid of the user whose account has to be deactivated
+	 * @param 	sDeactiveRoleDBId		The roleid corresponding to the inactive role fetched from the application context file
+	 * 
+	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * 
+	 */
 	@Override
 	public int deactivateUser(String sUserId,String sDeactiveRoleDBId)
 	{
@@ -286,6 +313,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.setString(2, sDeactiveRoleDBId);
 			sqlStatement.registerOutParameter(3,Types.VARCHAR);
 
+			//Execute the Stored Procedure
 			sqlStatement.execute();
 
 			sOutErrorValue = sqlStatement.getString(3);
@@ -311,6 +339,14 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 	}
 	
+	/**
+	 * Overwrite the existing userroles with the new user roles.
+	 * 
+	 * @param sUserId The userid of the user whose roles are to be changed.
+	 * @param sRoles The new roles of the user.
+	 * 
+	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 */
 	@Override
 	public int updateUserRoles(String sUserId,String sRoles)
 	{
@@ -326,6 +362,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.setString(2, sRoles);
 			sqlStatement.registerOutParameter(3,Types.VARCHAR);
 
+			//Execute the stored procedure
 			sqlStatement.execute();
 
 			sOutErrorValue = sqlStatement.getString(3);
@@ -351,6 +388,15 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 	}
 	
+	/**
+	 * Approve the user request to access Quadriga and also assign new roles set by the admin.
+	 * 
+	 * @param sUserId The userid of the user whose access has been approved.
+	 * 
+	 * 
+	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * 
+	 */
 	@Override
 	public int approveUserRequest(String sUserId,String sRoles)
 	{
