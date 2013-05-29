@@ -14,12 +14,24 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.service.IUserManager;
 
+/**
+ * The controller to manage the user management part of the Quadriga.
+ * Can be called only by pages accessible by admins
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @Controller
 public class UserController {
 
 	@Autowired 
 	IUserManager usermanager;
 
+	/**
+	 * Admins are provided with the list of open user requets, active users and inactive users 
+	 * 
+	 * @return 	Return to the user management page of the quadriga
+	 */
 	@RequestMapping(value = "auth/users/manage", method = RequestMethod.GET)
 	public String manageUsers(ModelMap model, Principal principal)
 	{
@@ -38,6 +50,12 @@ public class UserController {
 		return "auth/users/manage";
 	}
 
+	/**
+	 * Admins are provided with the list of open user requests
+	 * Not used now. To be used when tabs are implemented in user management 
+	 * 
+	 * @return	Return to the page that displays all the open user requests
+	 */
 	@RequestMapping(value = "auth/users/requestslist", method = RequestMethod.GET)
 	public String userRequestList(ModelMap model, Principal principal)
 	{
@@ -46,6 +64,12 @@ public class UserController {
 		return "auth/users/requests";
 	}
 
+	/**
+	 * Method to handle the approval/denial of user requests
+	 * @param sAccessRights		Contains the access option selected by an admin for a particular user
+	 * 
+	 * @return	Return to the user management page of the quadriga	
+	 */
 	@RequestMapping(value = "auth/users/access/{accessRights}", method = RequestMethod.GET)
 	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal)
 	{
@@ -85,6 +109,12 @@ public class UserController {
 
 	}
 
+	/**
+	 * Admins are provided with the list of active users
+	 * Not used now. To be used when tabs are implemented in user management 
+	 * 
+	 * @return	Return to the page that displays all active users
+	 */
 	@RequestMapping(value = "auth/users/activelist", method = RequestMethod.GET)
 	public String userActiveList(ModelMap model, Principal principal)
 	{
@@ -93,6 +123,12 @@ public class UserController {
 		return "auth/users/active";
 	}
 
+	/**
+	 * Admins are provided with the list of inactive users
+	 * Not used now. To be used when tabs are implemented in user management 
+	 * 
+	 * @return	Return to the page that displays all inactive users
+	 */
 	@RequestMapping(value = "auth/users/inactivelist", method = RequestMethod.GET)
 	public String userInactiveList(ModelMap model, Principal principal)
 	{
@@ -103,6 +139,13 @@ public class UserController {
 	}
 
 
+	/**
+	 * Method to handle the deactivation of a Quadriga user by an admin
+	 * 
+	 * @param sUserName	The userid of the user whose account is to be deactivated
+	 * 
+	 * @return	Return to the user management page of the quadriga
+	 */
 	@RequestMapping(value="auth/users/deactivate/{userName}", method = RequestMethod.GET)
 	public String deactivateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
 
@@ -117,6 +160,13 @@ public class UserController {
 		return "redirect:/auth/users/manage";
 	}
 
+	/**
+	 * Method to handle the activation of a Quadriga user by an admin
+	 * 
+	 * @param sUserName	The userid of the user whose account is to be activated
+	 * 
+	 * @return	Return to the user management page of the quadriga
+	 */
 	@RequestMapping(value="auth/users/activate/{userName}", method = RequestMethod.GET)
 	public String activateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
 
