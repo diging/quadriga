@@ -46,18 +46,11 @@ public class DBConnectionManagerTest {
 	}
 	
 	@Test
-	public void testNoUserAccount()
+	public void testUserAccount()
 	{
 		IUser user = null;
-		user = dbConnection.getUserDetails("hello");
-		assertEquals(user,null);
-	}
-	
-	@Test
-	public void testUserAcount()
-	{
-		IUser user = null;
-		user = dbConnection.getUserDetails("jdoe");
-		assertEquals(user.getUserName(),"jdoe");
+		dbConnection.setUserDetails("usertest", "usertest", "usertest@test123.com", "role4,role5");
+		user = dbConnection.getUserDetails("usertest");
+		assertEquals(user.getUserName(),"usertest");
 	}
 }

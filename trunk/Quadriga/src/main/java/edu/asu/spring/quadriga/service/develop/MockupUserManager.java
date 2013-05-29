@@ -246,4 +246,11 @@ public class MockupUserManager implements IUserManager {
 		throw new NotImplementedException("denyUserRequest() is not yet implemented");
 	}
 
+	@Override
+	public void setUserDetails(String name, String username, String email,
+			String roles) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -24,14 +24,14 @@ import edu.asu.spring.quadriga.service.IUserManager;
  */
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
 		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserManagerTest 
 {
 
 	@Autowired
 	IUserManager usermanager;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -49,27 +49,12 @@ public class UserManagerTest
 	}
 
 	@Test
-	public void testNoAccountUserRole() throws SQLException
+	public void testUserAccount() throws SQLException
 	{
 		IUser user = null;
-		user = usermanager.getUserDetails("hello");
-		assertEquals(user.getQuadrigaRoles().get(0).getId(),"ROLE_QUADRIGA_NOACCOUNT");
-	}
-	
-	@Test
-	public void testDeactivatedUserRole() throws SQLException
-	{
-		IUser user = null;
-		user = usermanager.getUserDetails("jdoe");
-		assertEquals(user.getQuadrigaRoles().get(0).getId(),"ROLE_QUADRIGA_DEACTIVATED");
-	}
-	
-	@Test
-	public void testAdminUserRole() throws SQLException
-	{
-		IUser user = null;
-		user = usermanager.getUserDetails("test");
-		assertFalse(user.getQuadrigaRoles().size()==1);
+		usermanager.setUserDetails("usertest", "usertest", "usertest@test123.com", "role3,role4");
+		user = usermanager.getUserDetails("usertest");
+		assertEquals(user.getUserName(),"usertest");
 	}
 
 }
