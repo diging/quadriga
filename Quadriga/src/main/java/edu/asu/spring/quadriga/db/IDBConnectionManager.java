@@ -46,5 +46,7 @@ public interface IDBConnectionManager
 	public abstract int denyUserRequest(String sUserId, String sAdminId);
 	
 	public abstract List<IProject> getProjectOfUser(String sUserId);
+	
+	public abstract void setUserDetails(String name,String username,String email,String roles);
 
 }

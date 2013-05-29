@@ -565,6 +565,13 @@ public class DBConnectionManager implements IDBConnectionManager
 		
 		return projectList;
 	}
+
+	@Override
+	public void setUserDetails(String name, String username, String email,
+			String roles) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
