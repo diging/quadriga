@@ -9,6 +9,7 @@ import edu.asu.spring.quadriga.domain.implementation.Project;
 @Service
 public class ProjectFactory implements IProjectFactory {
 
+	@Override
 	public IProject createProjectObject() {
 				
 		return new Project();

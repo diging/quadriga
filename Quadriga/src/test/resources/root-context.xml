@@ -15,14 +15,23 @@
 	
 	<bean id="MockupUserManager"
 		class="edu.asu.spring.quadriga.service.develop.MockupUserManager">
+		<property name="userFactory" ref="userFactory"></property>
 	</bean>
 	
-	<bean 
+	<bean id="userFactory"
 		class="edu.asu.spring.quadriga.domain.factories.impl.UserFactory">
 	</bean>
 	
 	<bean 
+		class="edu.asu.spring.quadriga.domain.factories.impl.ProjectFactory">
+	</bean>
+	
+	<bean 
 		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
+	</bean>
+	
+	<bean 
+		class="edu.asu.spring.quadriga.domain.factories.impl.ProjectOwnerFactory">
 	</bean>
 
 </beans>
