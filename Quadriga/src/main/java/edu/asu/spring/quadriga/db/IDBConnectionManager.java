@@ -24,14 +24,14 @@ public interface IDBConnectionManager
 	 * 
 	 * @return List containing user objects of all active users
 	 */
-	public abstract List<IUser> getAllActiveUsers();
+	public abstract List<IUser> getAllActiveUsers(String sInactiveRoleId);
 	
 	/**
 	 * Queries the database and builds a list of inactive user objects
 	 * 
 	 * @return List containing user objects of all inactive users
 	 */
-	public abstract List<IUser> getAllInActiveUsers();
+	public abstract List<IUser> getAllInActiveUsers(String sInactiveRoleId);
 	
 	/**
 	 * Creates a user object for the given userid.
@@ -51,21 +51,23 @@ public interface IDBConnectionManager
 	 * 
 	 * @param 	sUserId					The userid of the user whose account has to be deactivated
 	 * @param 	sDeactiveRoleDBId		The roleid corresponding to the inactive role fetched from the application context file
+	 * @param 	sAdminId 				The userid of the admin who is changing the user setting
 	 * 
 	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 */
-	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId);
+	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId,String sAdminId);
 
 	/**
 	 * Overwrite the existing userroles with the new user roles.
 	 * 
 	 * @param sUserId The userid of the user whose roles are to be changed.
 	 * @param sRoles The new roles of the user. Must be fetched from the applicaton context file.
+	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 */
-	public abstract int updateUserRoles(String sUserId, String sRoles);
+	public abstract int updateUserRoles(String sUserId, String sRoles,String sAdminId);
 
 	/**
 	 * Returns all open user requests to quadriga.
@@ -80,11 +82,12 @@ public interface IDBConnectionManager
 	 * 
 	 * @param sUserId The userid of the user whose access has been approved.
 	 * @param sRoles The roles set by the admin. Must correspond to the roles found in the application context file
+	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 */
-	public abstract int approveUserRequest(String sUserId, String sRoles);
+	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId);
 
 	/**
 	 * A user has been denied the access to Quadriga.
