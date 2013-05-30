@@ -62,6 +62,11 @@
 		<put-attribute name="content" value="/WEB-INF/views/users/requestAccountSubmitted.jsp" />
 	</definition>
 	
+	<definition name="requests/error" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Account Request" />
+		<put-attribute name="content" value="/WEB-INF/views/users/requestAccountError.jsp" />
+	</definition>
+	
 
 
 	<!-- Workbench pages -->
