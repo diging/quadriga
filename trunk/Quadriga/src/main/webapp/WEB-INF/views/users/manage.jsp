@@ -75,8 +75,7 @@
 	<c:if test="${not empty userRequestsList}">
 		<h3>User Requests to access Quadriga</h3>
 		<c:forEach var="user" items="${userRequestsList}">
-    User Name: <b><c:out value="${user.userName}"></c:out></b>, Name     : <c:out
-				value="${user.name}"></c:out>, Email	 : <c:out value="${user.email}"></c:out>
+    User Name: <c:out value="${user.userName}"></c:out>
 			<br>
 			<input type="radio"
 				onclick="jqEnableAll('<c:out value="${user.userName}"></c:out>',1);"
