@@ -91,7 +91,7 @@ public class UserController {
 					sRoles.append(sAccessSelected[i]);
 				}
 			}
-			iResult = usermanager.approveUserRequest(sAccessSelected[0], sRoles.toString());
+			iResult = usermanager.approveUserRequest(sAccessSelected[0], sRoles.toString(), principal.getName());
 		}
 		else
 		{
@@ -149,7 +149,7 @@ public class UserController {
 	@RequestMapping(value="auth/users/deactivate/{userName}", method = RequestMethod.GET)
 	public String deactivateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
 
-		int iResult = usermanager.deactivateUser(sUserName);
+		int iResult = usermanager.deactivateUser(sUserName, principal.getName());
 
 		//TODO- Implement tabs or remove this
 		//		//Reload the active user list
@@ -171,7 +171,7 @@ public class UserController {
 	public String activateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
 
 		//Deactivate the user account
-		int iResult = usermanager.activateUser(sUserName);
+		int iResult = usermanager.activateUser(sUserName, principal.getName());
 
 		//TODO- Implement tabs or remove this
 		//		//Reload the inactive user list
