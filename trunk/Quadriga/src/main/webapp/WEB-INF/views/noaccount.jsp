@@ -6,4 +6,5 @@
 <section>
 	<h3>Sorry...</h3>
 	<p>You have no Quadriga account yet, please request one.</p>
+	<p><a href="${pageContext.servletContext.contextPath}/requests/requestAccount">Request account</a></p>
 </section>

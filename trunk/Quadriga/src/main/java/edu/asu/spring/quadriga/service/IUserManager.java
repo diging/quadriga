@@ -58,4 +58,10 @@ public interface IUserManager {
 	public abstract int denyUserRequest(String sUserId, String sAdminId);
 	
 	public abstract void setUserDetails(String name,String username,String email,String roles);
+	
+	/**
+	 * Adds a new request for an account to be approved by an admin.
+	 * @param user the user who asks for an account
+	 */
+	public void addAccountRequest(String userId);
 }

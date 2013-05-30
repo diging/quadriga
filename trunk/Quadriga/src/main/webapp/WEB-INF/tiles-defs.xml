@@ -44,11 +44,24 @@
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
 		<put-attribute name="content" value="/WEB-INF/views/inactiveUser.jsp" />
 	</definition>
-
+	
+	
 	<definition name="forbidden" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
 		<put-attribute name="content" value="/WEB-INF/views/forbidden.jsp" />
 	</definition>
+	
+	<!-- Request pages -->
+	<definition name="requests/accountRequest" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Account Request" />
+		<put-attribute name="content" value="/WEB-INF/views/users/requestAccount.jsp" />
+	</definition>
+	
+	<definition name="requests/accountRequested" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Account Request" />
+		<put-attribute name="content" value="/WEB-INF/views/users/requestAccountSubmitted.jsp" />
+	</definition>
+	
 
 
 	<!-- Workbench pages -->

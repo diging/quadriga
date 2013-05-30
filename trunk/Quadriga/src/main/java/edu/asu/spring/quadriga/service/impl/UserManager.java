@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -229,6 +230,11 @@ public class UserManager implements IUserManager {
 			String roles) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void addAccountRequest(String userId) {
+		throw new NotImplementedException("addAccountRequest is not yet implemented");
 	}
 
 }
