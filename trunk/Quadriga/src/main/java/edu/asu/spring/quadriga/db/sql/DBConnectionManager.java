@@ -179,7 +179,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return List containing user objects of all active users
 	 */
 	@Override
-	public List<IUser> getAllActiveUsers()
+	public List<IUser> getAllActiveUsers(String sInactiveRoleId)
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
@@ -188,14 +188,15 @@ public class DBConnectionManager implements IDBConnectionManager
 		try
 		{
 			getConnection();
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ACTIVE_USER_DETAILS + "(?)";
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ACTIVE_USER_DETAILS + "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
-			sqlStatement.registerOutParameter(1,Types.VARCHAR);
+			sqlStatement.setString(1, sInactiveRoleId);
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
 			//Execute the SQL Stored Procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(1);
+			sOutErrorValue = sqlStatement.getString(2);
 
 			//No SQL exception has occurred
 			if(sOutErrorValue == null)
@@ -218,7 +219,11 @@ public class DBConnectionManager implements IDBConnectionManager
 					
 					listUsers.add(user);
 				}				
-			}			
+			}
+			else
+			{
+				throw new SQLException(sOutErrorValue);
+			}
 		}
 		catch(SQLException e)
 		{
@@ -237,7 +242,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return List containing user objects of all inactive users
 	 */
 	@Override
-	public List<IUser> getAllInActiveUsers()
+	public List<IUser> getAllInActiveUsers(String sInactiveRoleId)
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
@@ -246,14 +251,15 @@ public class DBConnectionManager implements IDBConnectionManager
 		try
 		{
 			getConnection();
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.INACTIVE_USER_DETAILS + "(?)";
-			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
-			sqlStatement.registerOutParameter(1,Types.VARCHAR);
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.INACTIVE_USER_DETAILS + "(?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");	
+			sqlStatement.setString(1, sInactiveRoleId);
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
 			//Execute the SQL Stored Procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(1);
+			sOutErrorValue = sqlStatement.getString(2);
 
 			//No SQL exception has occurred			
 			if(sOutErrorValue == null)
@@ -276,7 +282,11 @@ public class DBConnectionManager implements IDBConnectionManager
 					
 					listUsers.add(user);
 				}				
-			}			
+			}
+			else
+			{
+				throw new SQLException(sOutErrorValue);
+			}
 		}
 		catch(SQLException e)
 		{
@@ -299,7 +309,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
 	 */
 	@Override
-	public int deactivateUser(String sUserId,String sDeactiveRoleDBId)
+	public int deactivateUser(String sUserId,String sDeactiveRoleDBId,String sAdminId)
 	{
 		String sDBCommand;
 		String sOutErrorValue;
@@ -307,16 +317,17 @@ public class DBConnectionManager implements IDBConnectionManager
 		try
 		{
 			getConnection();
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DEACTIVATE_USER+ "(?,?,?)";
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DEACTIVATE_USER+ "(?,?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
 			sqlStatement.setString(2, sDeactiveRoleDBId);
-			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+			sqlStatement.setString(3, sAdminId); 
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
 			//Execute the Stored Procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(3);
+			sOutErrorValue = sqlStatement.getString(4);
 
 			if(sOutErrorValue == null)
 			{
@@ -344,11 +355,12 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
 	 * @param sUserId The userid of the user whose roles are to be changed.
 	 * @param sRoles The new roles of the user. Must be fetched from the applicaton context file.
+	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 */
 	@Override
-	public int updateUserRoles(String sUserId,String sRoles)
+	public int updateUserRoles(String sUserId,String sRoles,String sAdminId)
 	{
 		String sDBCommand;
 		String sOutErrorValue;
@@ -356,16 +368,17 @@ public class DBConnectionManager implements IDBConnectionManager
 		try
 		{
 			getConnection();
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_USER_ROLES+ "(?,?,?)";
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_USER_ROLES+ "(?,?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
 			sqlStatement.setString(2, sRoles);
-			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+			sqlStatement.setString(3, sAdminId); 
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
 			//Execute the stored procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(3);
+			sOutErrorValue = sqlStatement.getString(4);
 
 			if(sOutErrorValue == null)
 			{
@@ -393,12 +406,13 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
 	 * @param sUserId The userid of the user whose access has been approved.
 	 * @param sRoles The roles set by the admin. Must correspond to the roles found in the application context file
+	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 */
 	@Override
-	public int approveUserRequest(String sUserId,String sRoles)
+	public int approveUserRequest(String sUserId, String sRoles, String sAdminId)
 	{
 		String sDBCommand;
 		String sOutErrorValue;
@@ -406,16 +420,17 @@ public class DBConnectionManager implements IDBConnectionManager
 		try
 		{
 			getConnection();
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.APPROVE_USER_REQUEST+ "(?,?,?)";
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.APPROVE_USER_REQUEST+ "(?,?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
 			sqlStatement.setString(2, sRoles);
-			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+			sqlStatement.setString(3,sAdminId);
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
 			//Execute the stored procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(3);
+			sOutErrorValue = sqlStatement.getString(4);
 
 			if(sOutErrorValue == null)
 			{
@@ -528,7 +543,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			}			
 			else
 			{
-				throw new SQLException("Error occurred in the Database");
+				throw new SQLException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
