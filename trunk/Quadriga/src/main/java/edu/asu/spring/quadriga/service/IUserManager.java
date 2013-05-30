@@ -99,8 +99,10 @@ public interface IUserManager {
 	public abstract void setUserDetails(String name,String username,String email,String roles);
 	
 	/**
-	 * Adds a new request for an account to be approved by an admin.
-	 * @param user the user who asks for an account
+	 * Add a new user request to access quadriga.
+	 * 
+	 * @param userId The user id of the user who needs access to quadriga 
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - An open request is already placed for the userid.
 	 */
-	public void addAccountRequest(String userId);
+	public int addAccountRequest(String userId);
 }

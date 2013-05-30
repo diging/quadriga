@@ -43,7 +43,7 @@ public class DBConnectionManager implements IDBConnectionManager
 {
 
 	private Connection connection;
-	
+
 	@Autowired
 	private DataSource dataSource;
 
@@ -52,17 +52,17 @@ public class DBConnectionManager implements IDBConnectionManager
 
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
-	
+
 	@Autowired
 	private IProjectFactory projectfactory;
-	
+
 	@Autowired
 	private IProjectOwnerFactory projectownerfactory;
-	
+
 	private ResultSet resultset;
-	
+
 	private IProject project;
-	
+
 
 	/**
 	 *  @Description: Assigns the data source
@@ -142,11 +142,11 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.execute();
 
 			outputValue = sqlStatement.getString(2);
-			
+
 			if(outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
-				
+
 				if(result.isBeforeFirst())
 				{
 					user  = userFactory.createUserObject();
@@ -184,7 +184,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-		
+
 		try
 		{
 			getConnection();
@@ -204,9 +204,9 @@ public class DBConnectionManager implements IDBConnectionManager
 				listUsers = new ArrayList<IUser>();				
 				IUser user = null;
 				List<IQuadrigaRole> userRole = null;
-				
+
 				ResultSet rs = sqlStatement.getResultSet();
-				
+
 				//Iterate through each row returned by the database
 				while(rs.next())
 				{					
@@ -216,7 +216,7 @@ public class DBConnectionManager implements IDBConnectionManager
 					user.setEmail(rs.getString(3));
 					userRole = UserRoles(rs.getString(4));
 					user.setQuadrigaRoles(userRole);	
-					
+
 					listUsers.add(user);
 				}				
 			}
@@ -235,7 +235,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return listUsers;
 	}
-	
+
 	/**
 	 * Queries the database and builds a list of inactive user objects
 	 * 
@@ -247,7 +247,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-		
+
 		try
 		{
 			getConnection();
@@ -267,9 +267,9 @@ public class DBConnectionManager implements IDBConnectionManager
 				listUsers = new ArrayList<IUser>();				
 				IUser user = null;
 				List<IQuadrigaRole> userRole = null;
-				
+
 				ResultSet rs = sqlStatement.getResultSet();
-				
+
 				//Iterate through each row returned by the database
 				while(rs.next())
 				{	
@@ -279,7 +279,7 @@ public class DBConnectionManager implements IDBConnectionManager
 					user.setEmail(rs.getString(3));
 					userRole = UserRoles(rs.getString(4));
 					user.setQuadrigaRoles(userRole);	
-					
+
 					listUsers.add(user);
 				}				
 			}
@@ -298,7 +298,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return listUsers;
 	}
-	
+
 	/**
 	 * Deactivate a user in Quadriga.
 	 * 
@@ -313,7 +313,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		
+
 		try
 		{
 			getConnection();
@@ -349,7 +349,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			closeConnection();
 		}
 	}
-	
+
 	/**
 	 * Overwrite the existing userroles with the new user roles.
 	 * 
@@ -364,7 +364,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		
+
 		try
 		{
 			getConnection();
@@ -400,7 +400,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			closeConnection();
 		}
 	}
-	
+
 	/**
 	 * Approve the user request to access Quadriga and also assign new roles set by the admin.
 	 * 
@@ -416,7 +416,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		
+
 		try
 		{
 			getConnection();
@@ -452,7 +452,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			closeConnection();
 		}
 	}
-	
+
 	/**
 	 * A user has been denied the access to Quadriga.
 	 * 
@@ -466,7 +466,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		
+
 		try
 		{
 			getConnection();
@@ -500,8 +500,8 @@ public class DBConnectionManager implements IDBConnectionManager
 			closeConnection();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Returns all open user requests to quadriga.
 	 * 
@@ -514,7 +514,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-		
+
 		try
 		{
 			getConnection();
@@ -530,7 +530,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			{
 				listUsers = new ArrayList<IUser>();				
 				IUser user = null;
-				
+
 				ResultSet rs = sqlStatement.getResultSet();
 				while(rs.next())
 				{					
@@ -554,9 +554,57 @@ public class DBConnectionManager implements IDBConnectionManager
 		{
 			closeConnection();
 		}
-		
+
 		return listUsers;
 	}
+
+	/**
+	 * Add a new account request to the quadriga.
+	 * 
+	 * @param sUserId The user id of the user who needs access to quadriga 
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 
+	 */
+	@Override
+	public int addAccountRequest(String sUserId)
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+
+		try
+		{
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_USER_REQUEST+ "(?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.setString(1, sUserId);;
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(2);
+
+			if(sOutErrorValue == null)
+			{
+				//User request submitted successfully
+				return 1;
+			}			
+			else
+			{
+				//Error occurred in database.
+				throw new SQLException(sOutErrorValue);
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}		
+	}
+
+
+
 	/**
 	 *   @Description   : Splits the comma separated roles into a list
 	 *   
@@ -581,64 +629,64 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
-	
+
 	public IUser projectOwner(String owner)
 	{
-			
+
 		IUser owner1 = null;
-		
+
 		owner1 = projectownerfactory.createProjectOwnerObject();
-		
+
 		owner1.setProjectOwner(owner);
-		
+
 		return owner1;
-		
+
 	}
 
 	@Override
 	public List<IProject> getProjectOfUser(String sUserId) {
-		
-	 	
+
+
 		String dbCommand;
 		IUser owner;
-		
+
 		getConnection();
 		List<IProject> projectList = new ArrayList<IProject>();
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_DETAILS + "(?)";
 		try {
-			
-			
+
+
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			
+
 			sqlStatement.registerOutParameter(1, Types.VARCHAR);
-			
+
 			sqlStatement.execute();
-			
+
 			resultset = sqlStatement.getResultSet();
-			
-	        while(resultset.next())
-	        {
-				
-	        	project = projectfactory.createProjectObject();
-	        	project.setName(resultset.getString(1));
-	        	project.setDescription(resultset.getString(2));
-	        	project.setId(resultset.getString(3));
-	        	project.setInternalid(resultset.getInt(4));
-	        	owner = projectOwner(resultset.getString(5));
-	        	project.setOwner(owner);
-	        	 	        		        	
-	        	projectList.add(project);
-	        	
-	         }
-	          	
+
+			while(resultset.next())
+			{
+
+				project = projectfactory.createProjectObject();
+				project.setName(resultset.getString(1));
+				project.setDescription(resultset.getString(2));
+				project.setId(resultset.getString(3));
+				project.setInternalid(resultset.getInt(4));
+				owner = projectOwner(resultset.getString(5));
+				project.setOwner(owner);
+
+				projectList.add(project);
+
+			}
+
 		} 
-		
+
 		catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
-		
-		
+
+
 		return projectList;
 	}
 
@@ -646,8 +694,8 @@ public class DBConnectionManager implements IDBConnectionManager
 	public void setUserDetails(String name, String username, String email,
 			String roles) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
+
 }

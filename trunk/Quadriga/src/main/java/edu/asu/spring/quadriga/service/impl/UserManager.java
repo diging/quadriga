@@ -279,9 +279,32 @@ public class UserManager implements IUserManager {
 
 	}
 
+	/**
+	 * Add a new user request to access quadriga.
+	 * 
+	 * @param userId The user id of the user who needs access to quadriga 
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - An open request is already placed for the userid.
+	 */
 	@Override
-	public void addAccountRequest(String userId) {
-		throw new NotImplementedException("addAccountRequest is not yet implemented");
+	public int addAccountRequest(String userId) {
+		int iUserStatus;
+		
+		//Get all open user requests
+		List<IUser> listUsers = dbConnect.getUserRequests();
+		
+		//Check if an open request is already placed for the userid
+		for(IUser user:listUsers)
+		{
+			if(user.getUserName().equalsIgnoreCase(userId))
+			{
+				iUserStatus = 0;
+				return iUserStatus;
+			}
+		}
+		
+		//Place a new access request
+		iUserStatus = dbConnect.addAccountRequest(userId);
+		return iUserStatus;
 	}
 
 }

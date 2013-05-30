@@ -25,14 +25,14 @@ public interface IDBConnectionManager
 	 * @return List containing user objects of all active users
 	 */
 	public abstract List<IUser> getAllActiveUsers(String sInactiveRoleId);
-	
+
 	/**
 	 * Queries the database and builds a list of inactive user objects
 	 * 
 	 * @return List containing user objects of all inactive users
 	 */
 	public abstract List<IUser> getAllInActiveUsers(String sInactiveRoleId);
-	
+
 	/**
 	 * Creates a user object for the given userid.
 	 * @param userid	The unique userid of the user based on which a user object will be created
@@ -98,9 +98,17 @@ public interface IDBConnectionManager
 	 * Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 */
 	public abstract int denyUserRequest(String sUserId, String sAdminId);
-	
+
 	public abstract List<IProject> getProjectOfUser(String sUserId);
-	
+
 	public abstract void setUserDetails(String name,String username,String email,String roles);
+
+	/**
+	 * Add a new account request to the quadriga.
+	 * 
+	 * @param sUserId The user id of the user who needs access to quadriga 
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 
+	 */
+	public abstract int addAccountRequest(String sUserId);
 
 }
