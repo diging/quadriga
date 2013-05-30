@@ -1,10 +1,21 @@
 <header>
-	<h2>No Account</h2>
+	<h2>${username}, you don't have a Quadriga account yet.</h2>
 	<span class="byline">Please request an account</span>
 </header>
 
+<script>
+$(function() {
+	$("input[type=submit]").button().click(function(event) {
+		event.preventDefault();
+		$('#requestForm').submit();
+	});
+});
+</script>
 <section>
-	<h3>Sorry...</h3>
-	<p>You have no Quadriga account yet, please request one.</p>
-	<p><a href="${pageContext.servletContext.contextPath}/requests/requestAccount">Request account</a></p>
+	<p>Place the request for a Quadriga Account by using the button below.</p>
+	<form id='requestForm'
+		action="${pageContext.servletContext.contextPath}/requests/submitAccountRequest"
+		method='POST'>
+		<input type="submit" type="submit" value="Request Account">
+	</form>
 </section>

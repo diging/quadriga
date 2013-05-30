@@ -40,9 +40,13 @@ public class AccessForbiddenController {
 
 		for (GrantedAuthority ga : authorities) {
 			if (ga.getAuthority().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
+				String sUserId = principal.getName();
+				model.addAttribute("username", sUserId);
 				return "inactiveuser";
 			}
 			if (ga.getAuthority().equals(RoleNames.ROLE_QUADRIGA_NOACCOUNT)) {
+				String sUserId = principal.getName();
+				model.addAttribute("username", sUserId);
 				return "nouser";
 			}
 		}

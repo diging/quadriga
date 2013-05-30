@@ -21,20 +21,6 @@ public class RequestAccountController {
 
 	@Autowired
 	private IUserManager userManager;
-
-	/**
-	 * This simply fills in the username for the request account page.
-	 * @param model Model for jsp page.
-	 * @param principal Information about logged in user.
-	 * @return path to request account page.
-	 */
-	@RequestMapping(value = "requests/requestAccount", method = RequestMethod.GET)
-	public String requestAccount(Model model, Principal principal) {
-		String sUserId = principal.getName();		
-		model.addAttribute("username", sUserId);
-		
-		return "requests/accountRequest";
-	}
 	
 	/**
 	 * This sends a request for a user account to the {@link IUserManager}.
@@ -51,6 +37,7 @@ public class RequestAccountController {
 		
 		int iRequestStatus = userManager.addAccountRequest(userId);
 		model.addAttribute("requestStatus", iRequestStatus);
+		model.addAttribute("username", principal.getName());
 
 		return "requests/accountRequested";
 	}
