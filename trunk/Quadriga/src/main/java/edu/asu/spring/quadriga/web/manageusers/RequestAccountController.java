@@ -49,7 +49,8 @@ public class RequestAccountController {
 		if (userId == null || userId.trim().isEmpty())
 			return "requests/error";
 		
-		userManager.addAccountRequest(userId);
+		int iRequestStatus = userManager.addAccountRequest(userId);
+		model.addAttribute("requestStatus", iRequestStatus);
 
 		return "requests/accountRequested";
 	}
