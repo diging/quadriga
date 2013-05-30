@@ -30,12 +30,13 @@ public interface IUserManager {
 	public abstract String updateUserDetails(IUser existingUser);
 	
 	/**
-	 * Method to deactivate the user account in Quadriga database.
-	 * 
-	 * @param sUserId			The unique userid of the user
-	 * @return					Integer to indicate the operation status. 0 - Success. 1 - Already Inactive user. -1 - Error in performing the operation
+	 *  Deactivate a user account so that the particular user cannot access quadriga anymore.
+	 *  
+	 *  @param sUserId	The userid of the user whose account is to be deactivated.
+	 *  @param sAdminId  The userid of the admin who is changing the user setting.
+	 *  @return Return the status of the operation. 1- Success and 0 - Failure.
 	 */
-	public abstract int deactivateUser(String sUserId);
+	public abstract int deactivateUser(String sUserId,String sAdminId);
 	
 	/**
 	 * Method to add a new active user to the existing active user list in Quadriga database.
@@ -45,16 +46,54 @@ public interface IUserManager {
 	 */
 	public abstract int addNewUser(IUser newUser);
 
+	/**
+	 * List all active users in the Quadriga database
+	 * 
+	 * @return List of all active user objects
+	 * 
+	 */
 	public abstract List<IUser> getAllActiveUsers();
 
+	/**
+	 * List all inactive users in the quadriga database
+	 * 
+	 * @return List of all inactive user objects
+	 */
 	public abstract List<IUser> getAllInActiveUsers();
 
-	public abstract int activateUser(String sUserId);
+	/**
+	 * Activate an already existing user so that the user can access quadriga.
+	 * 	 
+	 * @param sUserId	The userid of the user whose account has been activated. 
+	 * @param sAdminId  The userid of the admin who is changing the user setting.
+	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 */
+	public abstract int activateUser(String sUserId,String sAdminId);
 
+	/**
+	 * List all the open user requests available in the quadriga database
+	 * 
+	 * @return List all open user requests
+	 */
 	public List<IUser> getUserRequests();
 
-	public abstract int approveUserRequest(String sUserId, String sRoles);
+	/**
+	 * Approve a user request to access quadriga.
+	 * 
+	 * @param sUserId	The userid of the user whose account has been approved.
+	 * @param sRoles 	The set of roles that are assigned to the user.
+	 * @param sAdminId  The userid of the admin who is changing the user setting
+	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 */
+	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId);
 
+	/**
+	 * Deny a user request to access the quadriga.
+	 * 
+	 * @param sUserId	The userid of the user whose account has been denied.
+	 * @param sAdminId  The userid of the admin who is changing the user setting.
+	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 */
 	public abstract int denyUserRequest(String sUserId, String sAdminId);
 	
 	public abstract void setUserDetails(String name,String username,String email,String roles);
