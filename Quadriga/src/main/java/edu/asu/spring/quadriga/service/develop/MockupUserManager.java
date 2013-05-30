@@ -198,13 +198,13 @@ public class MockupUserManager implements IUserManager {
 	}
 
 	@Override
-	public int deactivateUser(String sUserId) {
+	public int deactivateUser(String sUserId, String sAdminId) {
 		throw new NotImplementedException(
 				"dectivateUser() is not yet implemented");
 	}
 
 	@Override
-	public int activateUser(String sUserId) {
+	public int activateUser(String sUserId, String sAdminId) {
 		throw new NotImplementedException(
 				"activateUser() is not yet implemented");
 	}
@@ -240,7 +240,7 @@ public class MockupUserManager implements IUserManager {
 	}
 
 	@Override
-	public int approveUserRequest(String sUserId, String sRoles) {
+	public int approveUserRequest(String sUserId, String sRoles, String sAdminId) {
 		throw new NotImplementedException("approveUserRequest() is not yet implemented");
 	}
 
@@ -252,7 +252,7 @@ public class MockupUserManager implements IUserManager {
 	@Override
 	public void setUserDetails(String name, String username, String email,
 			String roles) {
-		// TODO Auto-generated method stub
+		throw new NotImplementedException("setUserDetails() is not yet implemented");
 		
 	}
 
