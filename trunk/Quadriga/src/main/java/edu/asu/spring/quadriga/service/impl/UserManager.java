@@ -65,11 +65,11 @@ public class UserManager implements IUserManager {
 			if(user!=null)
 			{
 				userRole = user.getQuadrigaRoles();
-				
+
 				for(i=0;i<userRole.size();i++)
 				{
 					quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
-					
+
 					//If user account is deactivated remove other roles 
 					if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
 					{
@@ -95,14 +95,23 @@ public class UserManager implements IUserManager {
 		return user;	
 	}
 
+	/**
+	 * List all active users in the Quadriga database
+	 * 
+	 * @return List of all active user objects
+	 * 
+	 */
 	@Override
 	public List<IUser> getAllActiveUsers()
 	{
 		List<IUser> listUsers = null;
+		
+		//Find the ROLEDBID for Deactivated account
+		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		try
 		{
-			listUsers = dbConnect.getAllActiveUsers();
+			listUsers = dbConnect.getAllActiveUsers(sDeactiveRoleDBId);
 		}
 		catch(Exception e)
 		{
@@ -111,14 +120,22 @@ public class UserManager implements IUserManager {
 		return listUsers;		
 	}
 
+	/**
+	 * List all inactive users in the quadriga database
+	 * 
+	 * @return List of all inactive user objects
+	 */
 	@Override
 	public List<IUser> getAllInActiveUsers()
 	{
 		List<IUser> listUsers = null;
+		
+		//Find the ROLEDBID for Deactivated account
+		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		try
 		{
-			listUsers = dbConnect.getAllInActiveUsers();
+			listUsers = dbConnect.getAllInActiveUsers(sDeactiveRoleDBId);
 		}
 		catch(Exception e)
 		{
@@ -126,7 +143,12 @@ public class UserManager implements IUserManager {
 		}
 		return listUsers;		
 	}
-	
+
+	/**
+	 * List all the open user requests available in the quadriga database
+	 * 
+	 * @return List all open user requests
+	 */
 	@Override
 	public List<IUser> getUserRequests()
 	{
@@ -153,35 +175,60 @@ public class UserManager implements IUserManager {
 	}
 
 	/**
-	 *  @description   : delete a user
-	 *                   (Not yet implemented)
+	 *  Deactivate a user account so that the particular user cannot access quadriga anymore.
+	 *  
+	 *  @param sUserId	The userid of the user whose account is to be deactivated.
+	 *  @param sAdminId  The userid of the admin who is changing the user setting.
+	 *  @return Return the status of the operation. 1- Success and 0 - Failure.
 	 */
 	@Override
-	public int deactivateUser(String sUserId) {
+	public int deactivateUser(String sUserId,String sAdminId) {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		//Add the new role to the user.
-		int iResult = dbConnect.deactivateUser(sUserId, sDeactiveRoleDBId);
+		int iResult = dbConnect.deactivateUser(sUserId, sDeactiveRoleDBId, sAdminId);
 		return iResult;
 	}
 
+	/**
+	 * Approve a user request to access quadriga.
+	 * 
+	 * @param sUserId	The userid of the user whose account has been approved.
+	 * @param sRoles 	The set of roles that are assigned to the user.
+	 * @param sAdminId  The userid of the admin who is changing the user setting
+	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 */
 	@Override
-	public int approveUserRequest(String sUserId,String sRoles) {
-		
-		int iResult = dbConnect.approveUserRequest(sUserId, sRoles);
+	public int approveUserRequest(String sUserId,String sRoles,String sAdminId) {
+
+		int iResult = dbConnect.approveUserRequest(sUserId, sRoles, sAdminId);
 		return iResult;
 	}
-	
+
+	/**
+	 * Deny a user request to access the quadriga.
+	 * 
+	 * @param sUserId	The userid of the user whose account has been denied.
+	 * @param sAdminId  The userid of the admin who is changing the user setting.
+	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 */
 	@Override
 	public int denyUserRequest(String sUserId,String sAdminId) {
-		
+
 		int iResult = dbConnect.denyUserRequest(sUserId, sAdminId);
 		return iResult;
 	}
-	
+
+	/**
+	 * Activate an already existing user so that the user can access quadriga.
+	 * 	 
+	 * @param sUserId	The userid of the user whose account has been activated. 
+	 * @param sAdminId  The userid of the admin who is changing the user setting.
+	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 */
 	@Override
-	public int activateUser(String sUserId) {
+	public int activateUser(String sUserId,String sAdminId) {
 
 		//Find the deactivated role id and create a QuadrigaRole Object
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
@@ -211,7 +258,7 @@ public class UserManager implements IUserManager {
 
 		//Convert the user roles to one string with DBROLEIDs
 		//Update the role in the Quadriga Database.
-		int iResult = dbConnect.updateUserRoles(sUserId, user.getQuadrigaRolesDBId());
+		int iResult = dbConnect.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(),sAdminId);
 
 		return iResult;
 	}
@@ -222,14 +269,14 @@ public class UserManager implements IUserManager {
 	 */
 	@Override
 	public int addNewUser(IUser newUser) {
-		return 0;
+		throw new NotImplementedException("addNewUser() is not yet implemented");
 	}
 
 	@Override
 	public void setUserDetails(String name, String username, String email,
 			String roles) {
-		// TODO Auto-generated method stub
-		
+		throw new NotImplementedException("setUserDetails() is not yet implemented");
+
 	}
 
 	@Override
