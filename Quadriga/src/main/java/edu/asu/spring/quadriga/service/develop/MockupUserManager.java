@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -33,6 +34,7 @@ public class MockupUserManager implements IUserManager {
 	private Map<String, IUser> users;
 	private List<String> activeUsers;
 	private List<String> inactiveUsers;
+	private List<String> userRequests;
 
 	public MockupUserManager() {
 		
@@ -43,6 +45,7 @@ public class MockupUserManager implements IUserManager {
 		users = new HashMap<String, IUser>();
 		activeUsers = new ArrayList<String>();
 		inactiveUsers = new ArrayList<String>();
+		userRequests = new ArrayList<String>();
 
 		// Add John Doe
 		{
@@ -251,6 +254,11 @@ public class MockupUserManager implements IUserManager {
 			String roles) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void addAccountRequest(String userId) {
+		userRequests.add(userId);
 	}
 
 }
