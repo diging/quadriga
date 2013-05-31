@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 
 /**
  * 
@@ -28,6 +29,9 @@ public class DBConnectionManagerTest {
 
 	@Autowired
 	IDBConnectionManager dbConnection;
+	
+	@Autowired
+	private IUserFactory userFactory;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -49,8 +53,10 @@ public class DBConnectionManagerTest {
 	public void testUserAccount()
 	{
 		IUser user = null;
-		dbConnection.setUserDetails("usertest", "usertest", "usertest@test123.com", "role4,role5");
-		user = dbConnection.getUserDetails("usertest");
-		assertEquals(user.getUserName(),"usertest");
+		IUser testUser = userFactory.createUserObject();
+		testUser.setUserName("testuser");
+		dbConnection.addAccountRequest("testuser");
+		user = dbConnection.getUserDetails("testuser");
+		assertEquals(user,testUser);
 	}
 }

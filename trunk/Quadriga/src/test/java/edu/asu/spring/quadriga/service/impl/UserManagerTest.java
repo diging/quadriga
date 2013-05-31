@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -31,6 +32,9 @@ public class UserManagerTest
 
 	@Autowired
 	IUserManager usermanager;
+	
+	@Autowired
+	private IUserFactory userFactory;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -52,9 +56,11 @@ public class UserManagerTest
 	public void testUserAccount() throws SQLException
 	{
 		IUser user = null;
-		usermanager.setUserDetails("usertest", "usertest", "usertest@test123.com", "role3,role4");
+		IUser testUser = userFactory.createUserObject();
+		testUser.setUserName("usertest");
+		usermanager.addAccountRequest("usertest");
 		user = usermanager.getUserDetails("usertest");
-		assertEquals(user.getUserName(),"usertest");
+		assertEquals(user,testUser);
 	}
 
 }
