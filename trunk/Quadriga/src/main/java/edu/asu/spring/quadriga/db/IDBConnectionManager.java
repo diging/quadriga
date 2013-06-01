@@ -99,7 +99,31 @@ public interface IDBConnectionManager
 	 */
 	public abstract int denyUserRequest(String sUserId, String sAdminId);
 
+	/**
+	 * fetches list of projects
+	 * 
+	 * @param sUserId   userid for logged in user
+	 * 
+	 * @return list of projects
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
+	
 	public abstract List<IProject> getProjectOfUser(String sUserId);
+	
+	/**
+	 * fetches details of projects
+	 * 
+	 * @param sUserId   userid for logged in user
+	 * 
+	 * @return list of projects
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
+	
+	public abstract IProject getProjectDetails(String sUserId);
 
 	public abstract void setUserDetails(String name,String username,String email,String roles);
 

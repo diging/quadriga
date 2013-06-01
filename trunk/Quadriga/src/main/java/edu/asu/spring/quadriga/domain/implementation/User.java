@@ -19,7 +19,8 @@ public class User implements IUser
 	private String password;
 	private String email;
 	private List<IQuadrigaRole> quadrigaRoles;
-
+	private String collaborator;
+	
 	@Override
 	public String getEmail() {
 		return email;
@@ -86,5 +87,11 @@ public class User implements IUser
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void setProjectCollaborator(String collaborator) {
+		this.collaborator = collaborator;
+		
+	}
+	
 
 }

@@ -35,9 +35,11 @@ public interface IUser
 	
 	public String getProjectOwner();
 	
-	//public void setProjectOwner(String owner);
-
 	public abstract void setProjectOwner(String owner);
+	
+	public abstract void setProjectCollaborator(String collaborator);
+	
+
 	
    
 }

@@ -11,7 +11,7 @@ public class ProjectFactory implements IProjectFactory {
 
 	@Override
 	public IProject createProjectObject() {
-				
+		
 		return new Project();
 	}
 	
