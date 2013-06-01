@@ -5,6 +5,8 @@ package edu.asu.spring.quadriga.web.login;
  *  
  *  @Called by     : UserManager.java
  *  
+ *  @author        : Kiran Kumar Batna
+ *  
  */
 public interface RoleNames {
 
