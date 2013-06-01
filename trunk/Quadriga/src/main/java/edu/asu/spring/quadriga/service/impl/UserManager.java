@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @author 		 Ram Kumar Kumaresan
  *
  */
-@Service("userManager")
+//@Service("userManager")
 public class UserManager implements IUserManager {
 
 	@Autowired
@@ -157,6 +158,10 @@ public class UserManager implements IUserManager {
 		try
 		{
 			listUsers = dbConnect.getUserRequests();
+		}
+		catch(NullPointerException e)
+		{
+			throw new NullPointerException(e.getMessage());
 		}
 		catch(Exception e)
 		{
