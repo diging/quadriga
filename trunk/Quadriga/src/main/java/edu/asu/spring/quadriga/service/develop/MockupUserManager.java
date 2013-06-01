@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
+import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
 
@@ -25,7 +26,7 @@ import edu.asu.spring.quadriga.service.impl.UserManager;
  * @author Julia Damerow
  * 
  */
-//@Service("userManager")
+@Service("userManager")
 public class MockupUserManager implements IUserManager {
 
 	@Autowired
@@ -37,9 +38,9 @@ public class MockupUserManager implements IUserManager {
 	private List<String> userRequests;
 
 	public MockupUserManager() {
-		
+
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		users = new HashMap<String, IUser>();
@@ -115,13 +116,17 @@ public class MockupUserManager implements IUserManager {
 
 			users.put("bob", user);
 		}
-		
+
 		// initialize active user list
 		activeUsers.add("jdoe");
-		
+
 		// initialize inactive user list
 		inactiveUsers.add("test");
 		inactiveUsers.add("bob");
+
+		//initialize user requests list
+		userRequests.add("dexter");
+		userRequests.add("deb");
 	}
 
 	/**
@@ -129,7 +134,7 @@ public class MockupUserManager implements IUserManager {
 	 */
 	@Override
 	public IUser getUserDetails(String sUserId) {
-		
+
 		// The user is active in Quad DB
 		if (activeUsers.contains(sUserId)) {
 			if (users.get(sUserId) != null)
@@ -138,7 +143,7 @@ public class MockupUserManager implements IUserManager {
 		// The user account is deactivated in the Quad DB
 		else if (inactiveUsers.contains(sUserId)) {
 			IUser user = users.get(sUserId);
-			
+
 			if (user != null) {
 
 				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
@@ -147,7 +152,7 @@ public class MockupUserManager implements IUserManager {
 				role.setId("ROLE_QUADRIGA_USER_STANDARD");
 				roles.add(role);
 				user.setQuadrigaRoles(roles);
-				
+
 				return user;
 			}
 		}
@@ -187,14 +192,30 @@ public class MockupUserManager implements IUserManager {
 
 	@Override
 	public List<IUser> getAllActiveUsers() {
-		throw new NotImplementedException(
-				"getAllActiveUsers() is not yet implemented");
+		List<IUser> listUser = new ArrayList<IUser>();
+
+		for(String sUsername: activeUsers)
+		{
+			IUser user = new User();
+			user.setUserName(sUsername);
+			listUser.add(user);
+		}
+
+		return listUser;
 	}
 
 	@Override
 	public List<IUser> getAllInActiveUsers() {
-		throw new NotImplementedException(
-				"getAllInactivaeUsers is not yet implemented");
+		List<IUser> listUser = new ArrayList<IUser>();
+
+		for(String sUsername: inactiveUsers)
+		{
+			IUser user = new User();
+			user.setUserName(sUsername);
+			listUser.add(user);
+		}
+
+		return listUser;
 	}
 
 	@Override
@@ -211,10 +232,18 @@ public class MockupUserManager implements IUserManager {
 
 	@Override
 	public List<IUser> getUserRequests() {
-		throw new NotImplementedException(
-				"getUserRequest() is not yet implemented");
+		List<IUser> listUser = new ArrayList<IUser>();
+
+		for(String sUsername: userRequests)
+		{
+			IUser user = new User();
+			user.setUserName(sUsername);
+			listUser.add(user);
+		}
+
+		return listUser;
 	}
-	
+
 	public IUserFactory getUserFactory() {
 		return userFactory;
 	}
@@ -222,7 +251,7 @@ public class MockupUserManager implements IUserManager {
 	public void setUserFactory(IUserFactory userFactory) {
 		this.userFactory = userFactory;
 	}
-	
+
 	public List<String> getActiveUsers() {
 		return activeUsers;
 	}
@@ -253,7 +282,7 @@ public class MockupUserManager implements IUserManager {
 	public void setUserDetails(String name, String username, String email,
 			String roles) {
 		throw new NotImplementedException("setUserDetails() is not yet implemented");
-		
+
 	}
 
 	@Override
