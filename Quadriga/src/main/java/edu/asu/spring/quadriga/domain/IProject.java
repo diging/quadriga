@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 /**
  * @description   : interface to implement Project class.
  * 
- * @author        : Kiran
+ * @author        : Kiran Kumar Batna
  *
  */
 public interface IProject {
