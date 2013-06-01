@@ -77,7 +77,7 @@ public class QuadrigaUserRoleMapperTest {
 		List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 		
 		jdoe.setQuadrigaRoles(roles);
-		userManager.addNewUser(jdoe);
+//		userManager.addNewUser(jdoe);
 		
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		UserDetails details = mapper.mapUserFromContext(ctx, "jdoe", authorities);
@@ -100,7 +100,7 @@ public class QuadrigaUserRoleMapperTest {
 		roles.add(role);
 
 		jdoe.setQuadrigaRoles(roles);
-		userManager.addNewUser(jdoe);
+//		userManager.addNewUser(jdoe);
 		
 		authorities = new ArrayList<GrantedAuthority>();
 		details = mapper.mapUserFromContext(ctx, "jdoe", authorities);
