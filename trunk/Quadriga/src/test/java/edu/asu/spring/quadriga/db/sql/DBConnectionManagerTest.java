@@ -18,7 +18,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 
 /**
  * 
- * @author Who wrote this?
+ * @author Ram Kumar Kumaresan
  *
  */
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
