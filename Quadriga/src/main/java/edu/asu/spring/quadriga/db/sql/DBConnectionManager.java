@@ -34,7 +34,7 @@ import edu.asu.spring.quadriga.domain.IProject;
  *  
  * @Called By        UserManager.java
  *                     
- * @author           Kiran
+ * @author           Kiran Kumar Batna
  * @author 			 Ram Kumar Kumaresan
  *
  */

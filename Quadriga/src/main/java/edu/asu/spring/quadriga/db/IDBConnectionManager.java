@@ -11,7 +11,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 /**
  * Interface for the DBConnectionManager Class.
  * 
- * @author Kiran
+ * @author Kiran Kumar Batna
  * @author Ram Kumar Kumaresan
  *
  */

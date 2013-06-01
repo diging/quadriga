@@ -5,7 +5,7 @@ package edu.asu.spring.quadriga.db.sql;
  * 
  * @Called By     : DBConnectionManager.java
  * 
- * @author        : Kiran
+ * @author        : Kiran Kumar Batna
  * @author 		  : Ram Kumar Kumaresan
  */
 public interface DBConstants 

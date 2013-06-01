@@ -19,8 +19,9 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
+ * @Description : this test unit implements the test methods for User Manager class.
  * 
- * @author Who wrote this?
+ * @author : Kiran Kumar Batna
  *
  */
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
