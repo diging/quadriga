@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 
 /**
  * 
- * @author Who wrote this?
+ * @author Ram Kumar Kumaresan
  *
  */
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
