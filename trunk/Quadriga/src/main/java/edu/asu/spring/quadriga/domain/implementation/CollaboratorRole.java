@@ -5,7 +5,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
  * @description : CollaboratorRole class describing the properties 
  *                of a CollaboratorRole object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 public class CollaboratorRole implements ICollaboratorRole 

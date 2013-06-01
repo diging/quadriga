@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.IUser;
  * @description : Dictionary class describing the properties 
  *                of a Dictionary object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 public class Dictionary implements IDictionary 

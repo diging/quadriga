@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.IUser;
  * @description : Collaborator class describing the properties 
  *                of a Collaborator object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 public class Collaborator implements ICollaborator 

@@ -6,7 +6,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
  * @description : QuadrigaRole class describing the properties 
  *                of a QuadrigaRole object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 public class QuadrigaRole implements IQuadrigaRole 

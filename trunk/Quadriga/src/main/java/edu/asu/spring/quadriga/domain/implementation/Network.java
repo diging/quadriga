@@ -11,7 +11,7 @@ import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
  * @description : Network class describing the properties 
  *                of a Network object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 public class Network implements INetwork 

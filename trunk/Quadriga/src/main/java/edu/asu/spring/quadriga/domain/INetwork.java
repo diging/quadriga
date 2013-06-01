@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 /**
  * @description   : interface to implement Network class.
  * 
- * @author        : Kiran
+ * @author        : Kiran Kumar Batna
  *
  */
 public interface INetwork 

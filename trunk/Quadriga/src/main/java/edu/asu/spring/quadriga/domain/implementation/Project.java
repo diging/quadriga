@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
  * @description : Project class describing the properties 
  *                of a Project object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 @Service

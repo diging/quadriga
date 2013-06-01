@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.IUser;
  * @description : ConceptCollection class describing the properties 
  *                of a ConceptCollection object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 public class ConceptCollection implements IConceptCollection 

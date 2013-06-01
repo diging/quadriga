@@ -4,7 +4,7 @@ import java.util.List;
 /**
  * @description   : interface to implement Dictionary.
  * 
- * @author        : Kiran
+ * @author        : Kiran Kumar Batna
  *
  */
 public interface IDictionary 

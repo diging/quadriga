@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @description  : interface to implement Collaborator class.
  * 
- * @author       : Kiran
+ * @author       : Kiran Kumar Batna
  *
  */
 public interface ICollaborator 

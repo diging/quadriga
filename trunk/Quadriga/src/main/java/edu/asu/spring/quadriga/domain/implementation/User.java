@@ -9,7 +9,7 @@ import edu.asu.spring.quadriga.domain.IUser;
  * @description : User class describing the properties 
  *                of a User object
  * 
- * @author      : Kiran
+ * @author      : Kiran Kumar Batna
  *
  */
 public class User implements IUser 
