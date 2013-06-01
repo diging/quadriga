@@ -173,22 +173,6 @@ public class MockupUserManager implements IUserManager {
 		return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String updateUserDetails(IUser existingUser) {
-		throw new NotImplementedException();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int addNewUser(IUser newUser) {
-		users.put(newUser.getUserName(), newUser);
-		return 0;
-	}
 
 	@Override
 	public List<IUser> getAllActiveUsers() {
@@ -278,12 +262,6 @@ public class MockupUserManager implements IUserManager {
 		throw new NotImplementedException("denyUserRequest() is not yet implemented");
 	}
 
-	@Override
-	public void setUserDetails(String name, String username, String email,
-			String roles) {
-		throw new NotImplementedException("setUserDetails() is not yet implemented");
-
-	}
 
 	@Override
 	public int addAccountRequest(String userId) {

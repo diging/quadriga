@@ -20,14 +20,7 @@ public interface IUserManager {
 	 * @return					User object created based on the userId
 	 */
 	public abstract IUser getUserDetails(String sUserId);
-	
-	/**
-	 * Method to update the user details.
-	 * 
-	 * @param existingUser		The user object corresponding to the authenticated user.
-	 * @return					String which indicates the operations status.
-	 */
-	public abstract String updateUserDetails(IUser existingUser);
+
 	
 	/**
 	 *  Deactivate a user account so that the particular user cannot access quadriga anymore.
@@ -38,13 +31,6 @@ public interface IUserManager {
 	 */
 	public abstract int deactivateUser(String sUserId,String sAdminId);
 	
-	/**
-	 * Method to add a new active user to the existing active user list in Quadriga database.
-	 * 
-	 * @param newUser			The user object which contains the details of the user to be added to Quadriga database.
-	 * @return					Integer to indicate the operation status. 0 - Success. 1 - Userid is taken. -1 - Error in performing the operation
-	 */
-	public abstract int addNewUser(IUser newUser);
 
 	/**
 	 * List all active users in the Quadriga database
@@ -96,13 +82,11 @@ public interface IUserManager {
 	 */
 	public abstract int denyUserRequest(String sUserId, String sAdminId);
 	
-	public abstract void setUserDetails(String name,String username,String email,String roles);
-	
 	/**
 	 * Add a new user request to access quadriga.
 	 * 
 	 * @param userId The user id of the user who needs access to quadriga 
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - An open request is already placed for the userid.
 	 */
-	public int addAccountRequest(String userId);
+	public abstract int addAccountRequest(String userId);
 }

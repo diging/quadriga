@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @description  UserManager class implementing the User
  *               functionality
  * 
- * @author       Kiran
+ * @author       Kiran Kumar Batna
  * @author 		 Ram Kumar Kumaresan
  *
  */
@@ -170,14 +170,6 @@ public class UserManager implements IUserManager {
 		return listUsers;		
 	}
 
-	/**
-	 *  @description   : update the user details
-	 *                   (Not yet implemented)
-	 */
-	@Override
-	public String updateUserDetails(IUser existingUser) {
-		return null;
-	}
 
 	/**
 	 *  Deactivate a user account so that the particular user cannot access quadriga anymore.
@@ -266,22 +258,6 @@ public class UserManager implements IUserManager {
 		int iResult = dbConnect.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(),sAdminId);
 
 		return iResult;
-	}
-
-	/**
-	 *  @description   : adding new user
-	 *                   (Not yet implemented)
-	 */
-	@Override
-	public int addNewUser(IUser newUser) {
-		throw new NotImplementedException("addNewUser() is not yet implemented");
-	}
-
-	@Override
-	public void setUserDetails(String name, String username, String email,
-			String roles) {
-		throw new NotImplementedException("setUserDetails() is not yet implemented");
-
 	}
 
 	/**
