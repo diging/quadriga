@@ -59,4 +59,59 @@ public class DBConnectionManagerTest {
 		user = dbConnection.getUserDetails("testuser");
 		assertEquals(user,testUser);
 	}
+	
+	@Test
+	public void testGetUserDetails() {
+		fail("Needs to be implemented!!!");
+	}
+	
+	@Test
+	public void testGetAllActiveUsers() {
+		fail("Needs to be implemnted as well!");
+	}
+	
+	@Test
+	public void testGetAllInactiveUser() {
+		fail("And once again: implemented!");
+	}
+	
+	@Test
+	public void testDeactivateUser() {
+		fail("Oh no! No implementation.");
+	}
+	
+	@Test
+	public void updateUserRoles() {
+		fail("I'm starting to repeat myself...");
+	}
+	
+	@Test
+	public void testApproveUserRequest() {
+		fail("Nothing there!!!");
+	}
+	
+	@Test
+	public void testDenyUserRequest() {
+		fail("No implementation once again.");
+	}
+	
+	@Test
+	public void testGetUserRequests() {
+		fail("No implementation, I'm almost crying...");
+	}
+	
+	@Test
+	public void testAddAccountRequest() {
+		fail("Nothing here...");
+	}
+	
+	@Test
+	public void testUserRoles() {
+		fail("Who spelled that with an upper case U? And no test implementation as well!");
+	}
+	
+	@Test
+	public void testGetProjectOfUser() {
+		fail("No test implementation!!!!!!! WHAAAA");
+	}
 }

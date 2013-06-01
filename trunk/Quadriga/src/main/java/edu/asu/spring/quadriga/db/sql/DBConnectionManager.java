@@ -604,7 +604,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	}
 
 
-
+	// who capitalized a method name???
 	/**
 	 *   @Description   : Splits the comma separated roles into a list
 	 *   
@@ -630,6 +630,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		return rolesList;
 	}
 
+	// who wrote that and what does this method do? projectOwner is a pretty bad method name.
 	public IUser projectOwner(String owner)
 	{
 
@@ -643,6 +644,9 @@ public class DBConnectionManager implements IDBConnectionManager
 
 	}
 
+	/** 
+	 * This needs javadoc!
+	 */
 	@Override
 	public List<IProject> getProjectOfUser(String sUserId) {
 
@@ -690,6 +694,9 @@ public class DBConnectionManager implements IDBConnectionManager
 		return projectList;
 	}
 
+	/**
+	 * What does this method do!
+	 */
 	@Override
 	public void setUserDetails(String name, String username, String email,
 			String roles) {
