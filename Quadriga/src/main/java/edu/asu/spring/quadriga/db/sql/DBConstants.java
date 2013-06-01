@@ -22,7 +22,9 @@ public interface DBConstants
 	public final static String DENY_USER_REQUEST="sp_denyUserRequest";
 	public final static String ADD_USER_REQUEST="sp_addUserRequest";
 	
-	public static final String PROJECT_DETAILS="sp_getProjectList";
+	public static final String PROJECT_LIST="sp_getProjectList";
+	public static final String PROJECT_DETAILS="sp_getProjectDetails";
+	//public static final String PROJECT_COLLABORATORS="sp_getProjectCollaborators";
 
 	
 	

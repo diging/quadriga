@@ -29,6 +29,8 @@ public class Project implements IProject
 	private List<ICollaborator> collaborators;
     private EProjectAccessibility projectAccess;
     private ENetworkAccessibility networksDefaultAccess;
+	private String projectcollaborator;
+	private List<IUser> projectcollaboratorList;
 
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getName()
@@ -110,10 +112,12 @@ public class Project implements IProject
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setCollaborators(java.util.List)
 	 */
+	
 	@Override
 	public void setCollaborators(List<ICollaborator> collaborators) {
 		this.collaborators = collaborators;
 	}
+	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getProjectAccess()
 	 */
@@ -142,8 +146,17 @@ public class Project implements IProject
 	public void setNetworksDefaultAccess(ENetworkAccessibility networksDefaultAccess) {
 		this.networksDefaultAccess = networksDefaultAccess;
 	}
-
-    
+	
+	@Override
+	public void setProjectCollaborator(List<IUser> projectcollaboratorList) {
+		
+		this.projectcollaboratorList = projectcollaboratorList;
+	}
+	@Override
+	public List<IUser> getProjectCollaborator() {
+		
+		return projectcollaboratorList;
+	}   
     
     
 }

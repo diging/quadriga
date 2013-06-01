@@ -1,9 +1,11 @@
 package edu.asu.spring.quadriga.service.impl;
 
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,13 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
 
-
-
+/**
+ * @description	 	this class manages the projects and acts as a bridge between 
+ * 					controller and database 
+ * 
+ * @author 			rohit pendbhaje
+ *
+ */
 @Service
 public class ProjectManager implements IProjectManager {
 	
@@ -22,42 +29,57 @@ public class ProjectManager implements IProjectManager {
 	@Qualifier("DBConnectionManagerBean")
 	private IDBConnectionManager dbConnect;
 
+	/**
+	 * @description: this method takes up userid as an argument of the logged in user and returns 
+	 * 				 list of projects for the user
+	 *
+	 * @throws		 SQLException
+	 * 
+	 * @author 		 rohit pendbhaje
+	 * 
+	 */
+	
 	@Override
-	public List<IProject> getProjectsOfUser(String sUserId) throws SQLException {
+	public List<IProject> getProjectsOfUser(String userid) throws SQLException {
 		
 		List<IProject> projectList = new ArrayList<IProject>();  
 		
-		projectList = dbConnect.getProjectOfUser(sUserId);
+		projectList = dbConnect.getProjectOfUser(userid);
 				
 		return projectList;
 	} 
 
 	@Override
 	public String updateProjectDetails(Project existingProject) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException("updateProjectDetails() is not yet implemented");
+		
 	}
 
 	@Override
 	public int deleteProject(String projectId) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new NotImplementedException("deleteProject() is not yet implemented");
+		
 	}
 
 	@Override
 	public int addNewProject(Project newProject) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new NotImplementedException("addNewProject() is not yet implemented");
 	}
 
+	/**
+	 * @description: this method takes up userid as an argument of the logged in user and returns 
+	 * 				 project object containing all project details
+	 *
+	 * @throws		 SQLException
+	 * 
+	 * @author 		 rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public IProject getProject(String id) {
-		
-		IProject project = new Project();
-		
-		project.setId(id);
-		project.setName("quadriga" + id);
-		
+	    
+		IProject project = dbConnect.getProjectDetails(id);
+			
 		return project;
 	}
 	

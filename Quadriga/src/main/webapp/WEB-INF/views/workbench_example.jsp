@@ -3,23 +3,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	
 	
-<%-- 	<header>
+ 	<header>
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>
 	</header>
 	
-	
-	
     <ul>
     <c:if test="${not empty projectlist}">
     <c:forEach var="project" items="${projectlist}">
-	<li><a href="workbench/${project.id}"><c:out value="${project.name}"></c:out></a></li>
-	<%-- <li><c:out value="${project.description}"></c:out></li> 
-	</c:forEach></c:if>
-	</ul>  --%>
+	<li><a href="workbench/${project.id}">
+	<c:out value="${project.name}"></c:out>  
+	</a></li>
+	</c:forEach>
+	</c:if>
+	</ul>  
 	
 	
-	<html>
+	<%--<html>
 	<head>
 	<style>
 	 ul.a {list-style-type:circle;}
@@ -38,13 +38,27 @@
     <c:forEach var="project" items="${projectlist}">
 	<dt><a href="workbench/${project.id}"><c:out value="${project.name}"></c:out></a></dt>
 	<dd><c:out value="${project.description}"></c:out></dd>
-	<%-- <li><c:out value="${project.description}"></c:out></li> --%>
+	<%-- <li><c:out value="${project.description}"></c:out></li>
 	</c:forEach></c:if>
 	</ul>
 	
 	</body>
-	</html>
+	</html>   --%>
 	
+	
+	<%-- <ul>
+    <c:if test="${not empty projectlist}">
+    <c:forEach var="project" items="${projectlist}">
+	<li><a href="workbench/${project.id}"><c:out value="${project.name}"></c:out></a></li>
+	<li><c:out value="${project.description}"></c:out></li> 
+	<li><c:out value="${project.owner.name}"></c:out></li> 
+	</c:forEach>
+	<c:forEach var="collaborator" items="${collaboratorList}">
+	<li><c:out value="${project.collaborator.name}"></c:out></li> 
+	</c:forEach> 
+	</c:if>
+	</ul>  
+	--%>
 	
 	
 	
