@@ -27,6 +27,14 @@ public class UserController {
 	@Autowired 
 	IUserManager usermanager;
 
+	public IUserManager getUsermanager() {
+		return usermanager;
+	}
+
+	public void setUsermanager(IUserManager usermanager) {
+		this.usermanager = usermanager;
+	}
+
 	/**
 	 * Admins are provided with the list of open user requets, active users and inactive users 
 	 * 
@@ -181,4 +189,6 @@ public class UserController {
 
 		return "redirect:/auth/users/manage";
 	}
+
+	
 }
