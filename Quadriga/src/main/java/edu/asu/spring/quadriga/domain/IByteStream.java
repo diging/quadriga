@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * Javadoc missing
+ * 
+ */
 public interface IByteStream {
 
 	public abstract String getName();

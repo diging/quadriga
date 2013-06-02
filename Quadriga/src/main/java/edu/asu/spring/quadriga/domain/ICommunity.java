@@ -2,6 +2,10 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
+/**
+ * Javadoc missing
+ * 
+ */
 public interface ICommunity {
 
 	public abstract String getTitle();

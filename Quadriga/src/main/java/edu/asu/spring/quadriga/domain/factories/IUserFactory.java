@@ -7,7 +7,7 @@ import edu.asu.spring.quadriga.domain.implementation.User;
 
 /**
  * Factory interface for user factories.
- * @author jdamerow
+ * @author Julia Damerow
  *
  */
 public interface IUserFactory {

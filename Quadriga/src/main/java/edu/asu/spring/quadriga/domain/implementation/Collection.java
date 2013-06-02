@@ -5,6 +5,10 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.IItem;
 
+/**
+ * Javadoc missing
+ * 
+ */
 public class Collection implements ICollection{
 
 	private String title;

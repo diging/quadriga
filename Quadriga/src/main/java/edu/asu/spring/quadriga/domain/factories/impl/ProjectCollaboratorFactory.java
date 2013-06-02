@@ -1,8 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories.impl;
 
-import org.springframework.stereotype.Service;
-
-import edu.asu.spring.quadriga.domain.ICollaborator ;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.factories.IProjectCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 

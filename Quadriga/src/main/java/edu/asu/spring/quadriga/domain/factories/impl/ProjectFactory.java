@@ -6,6 +6,10 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 
+/**
+ * Javadoc missing
+ * 
+ */
 @Service
 public class ProjectFactory implements IProjectFactory {
 

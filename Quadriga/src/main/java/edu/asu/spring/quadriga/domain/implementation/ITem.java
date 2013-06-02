@@ -6,6 +6,10 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IByteStream;
 import edu.asu.spring.quadriga.domain.IItem;
 
+/**
+ * Javadoc missing
+ * 
+ */
 public class ITem implements IItem{
 
 	private String idetifierUri;
