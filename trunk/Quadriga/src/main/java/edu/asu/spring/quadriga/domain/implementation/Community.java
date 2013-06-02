@@ -6,7 +6,10 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 
-
+/**
+ * Javadoc missing
+ * 
+ */
 public class Community implements ICommunity{
 
 	private String title;

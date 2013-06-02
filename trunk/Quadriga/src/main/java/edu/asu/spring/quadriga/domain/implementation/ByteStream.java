@@ -2,6 +2,10 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import edu.asu.spring.quadriga.domain.IByteStream;
 
+/**
+ * Javadoc missing
+ * 
+ */
 public class ByteStream implements IByteStream{
 
 	private String name;

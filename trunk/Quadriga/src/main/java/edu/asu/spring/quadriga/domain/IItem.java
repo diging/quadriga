@@ -3,6 +3,10 @@ package edu.asu.spring.quadriga.domain;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Javadoc missing
+ * 
+ */
 public interface IItem {
 
 	public abstract String getIdentifierUri();

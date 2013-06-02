@@ -6,6 +6,10 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 
+/**
+ * Javadoc missing
+ * 
+ */
 public interface IProjectManager {
 	
 	public abstract List<IProject> getProjectsOfUser(String sUserId) throws SQLException;
