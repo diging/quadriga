@@ -14,7 +14,7 @@ BEGIN
     SET errmsg = "";
     -- fetch the results of the user and return
     SELECT  projectname,description,projectid,
-            id,projectowner,collaborator,accessibility
+            id,projectowner,accessibility
       FROM  vw_project; 
      END IF;
 END$$
