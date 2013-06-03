@@ -167,7 +167,11 @@ public class DBConnectionManager implements IDBConnectionManager
 						user.setQuadrigaRoles(userRole);
 					}
 				}
-			}	 
+			}
+			else
+			{
+				throw new SQLException(outputValue);
+			}
 		}
 		catch(SQLException e)
 		{
