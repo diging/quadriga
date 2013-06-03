@@ -3,12 +3,12 @@ DROP PROCEDURE IF EXISTS sp_getProjectCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectCollaborators
 (
-  IN inprojname  VARCHAR(20),
+ -- IN inprojname  VARCHAR(20),
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
     -- declare local variables
-    DECLARE projid   INT DEFAULT 0;
+ /*   DECLARE projid   INT DEFAULT 0;
 
 	-- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
@@ -28,12 +28,12 @@ BEGIN
      THEN SET errmsg = "";
       -- retrieve the projectid id of the project 
       SELECT projectid INTO projid FROM vw_project
-        WHERE projectname = inprojname;
+        WHERE projectname = inprojname; */
       
       -- retrieve the collaborator details
       SELECT collaboratoruser,collaboratorrole
         FROM vw_project_collaborator
-	   WHERE projectid = projid;
-     END IF;
+	 --  WHERE projectid = projid;
+    -- END IF;
 END$$
 DELIMITER ;
