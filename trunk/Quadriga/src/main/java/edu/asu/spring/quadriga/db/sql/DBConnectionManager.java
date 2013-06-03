@@ -572,6 +572,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @param sUserId The user id of the user who needs access to quadriga 
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 
 	 */
+	
 	@Override
 	public int addAccountRequest(String sUserId)
 	{
@@ -613,8 +614,6 @@ public class DBConnectionManager implements IDBConnectionManager
 
 
 
-	// who capitalized a method name???
-
 	/**
 	 *   @Description   : Splits the comma separated roles into a list
 	 *   
@@ -642,7 +641,6 @@ public class DBConnectionManager implements IDBConnectionManager
 
 
 	
-	
 	/**
 	 * @Description     This method fetches the list of projects for current logged in user                    
 	 * 
@@ -654,13 +652,6 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
      */
 	
-
-	// who wrote that and what does this method do? projectOwner is a pretty bad method name.
-	
-
-	/** 
-	 * This needs javadoc!
-	 */
 	@Override
 	public List<IProject> getProjectOfUser(String sUserId) {
 
@@ -773,7 +764,6 @@ public class DBConnectionManager implements IDBConnectionManager
 			
         	if( sUserId.equals(resultset.getString(3)))
         	{
-        		System.out.println("in if----------------");
         		project = projectfactory.createProjectObject();
 	        	project.setName(resultset.getString(1));
 	        	project.setDescription(resultset.getString(2));
@@ -791,5 +781,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		return project;
 	
 	}
+	
+	
 
 }

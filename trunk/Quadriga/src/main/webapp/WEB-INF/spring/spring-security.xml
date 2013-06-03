@@ -21,13 +21,13 @@
 	</http>
 	
 
-	<ldap-server url="ldap://diging.asu.edu:10389" manager-dn="uid=admin,ou=system"
-		manager-password="LDAPP@55wd" />
+	<ldap-server url="ldap://10.143.199.165:10389" manager-dn="uid=admin,ou=system"
+		manager-password="secret" />
 
 	<authentication-manager alias="authenticationManager">
 		<ldap-authentication-provider user-context-mapper-ref="QuadrigaRoleMapper"
-			user-search-filter="(uid={0})" user-search-base="ou=users,o=diging"
-			group-search-filter="(uniqueMember={0})" group-search-base="ou=groups, o=diging"
+			user-search-filter="(uid={0})" user-search-base="ou=users, dc=example, dc=com"
+			group-search-filter="(uniqueMember={0})" group-search-base="ou=groups, dc=example, dc=com"
 			group-role-attribute="cn">
 		</ldap-authentication-provider>
 	</authentication-manager>
