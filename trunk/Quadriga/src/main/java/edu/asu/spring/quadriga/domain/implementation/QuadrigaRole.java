@@ -51,6 +51,16 @@ public class QuadrigaRole implements IQuadrigaRole
 		this.description = description;
 	}
 	
+	@Override
+	public boolean compareQuadrigaRole(IQuadrigaRole role)
+	{
+		if(this.DBid.equalsIgnoreCase(role.getDBid()) && this.id.equalsIgnoreCase(role.getId()) 
+				&& this.description.equalsIgnoreCase(role.getDescription()) && this.name.equalsIgnoreCase(role.getName()))
+		{
+			return true;
+		}
+		return false;
+	}
 	
 
 }
