@@ -32,14 +32,9 @@ public interface IUser
 	public abstract String getEmail();
 
 	public abstract String getQuadrigaRolesDBId();
-	
-	public String getProjectOwner();
-	
-	public abstract void setProjectOwner(String owner);
-	
-	public abstract void setProjectCollaborator(String collaborator);
-	
 
-	
+	public abstract boolean compareUserObjects(IUser user);
+
+	public abstract void setProjectCollaborator(String collaborator);
    
 }

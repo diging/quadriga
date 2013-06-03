@@ -25,4 +25,6 @@ public interface IQuadrigaRole
 
 	public abstract String getId();
 
+	public abstract boolean compareQuadrigaRole(IQuadrigaRole role);
+
 }

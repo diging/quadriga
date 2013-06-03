@@ -77,21 +77,31 @@ public class User implements IUser
 		}
 		return sRoleDBIds.toString();
 	}
+	
 	@Override
-	public String getProjectOwner() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean compareUserObjects(IUser user)
+	{
+		//Check if username and name matches for the user objects
+		if(this.userName.equalsIgnoreCase(user.getUserName()) && this.name.equalsIgnoreCase(user.getName()))
+		{
+			//Check if all the roles match for the user objects
+			List<IQuadrigaRole> userRoles = user.getQuadrigaRoles();
+			if(this.quadrigaRoles.size() == userRoles.size())
+			{				
+				for(int i=0;i<this.quadrigaRoles.size();i++)
+				{
+					userRoles.get(i).compareQuadrigaRole(this.quadrigaRoles.get(i));				
+				}
+				return true;
+			}
+		}		
+		return false;
 	}
-	@Override
-	public void setProjectOwner(String owner) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	@Override
 	public void setProjectCollaborator(String collaborator) {
 		this.collaborator = collaborator;
 		
 	}
-	
 
 }
