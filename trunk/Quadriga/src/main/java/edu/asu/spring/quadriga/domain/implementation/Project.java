@@ -29,7 +29,6 @@ public class Project implements IProject
 	private List<ICollaborator> collaborators;
     private EProjectAccessibility projectAccess;
     private ENetworkAccessibility networksDefaultAccess;
-	private String projectcollaborator;
 	private List<IUser> projectcollaboratorList;
 
 	/* (non-Javadoc)
