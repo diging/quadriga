@@ -82,6 +82,15 @@
 			value="/WEB-INF/views/workbench/project.jsp" />
 	</definition>
 
+	<!-- dictionaries pages -->
+	<definition name="base.definition.dictionaries" extends="base.definition">
+		<put-attribute name="currentPage" value="dictionaries" />
+	</definition>
+	<definition name="auth/dictionaries" extends="base.definition.dictionaries">
+		<put-attribute name="title" value="Quadriga dictionaries" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionaries_example.jsp" />
+	</definition>
 
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.nonav">
