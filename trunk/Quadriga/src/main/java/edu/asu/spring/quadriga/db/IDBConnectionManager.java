@@ -102,10 +102,18 @@ public interface IDBConnectionManager
 	 * Add a new account request to the quadriga.
 	 * 
 	 * @param sUserId The user id of the user who needs access to quadriga 
-	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request.
+	 * 
+	 * @author Ram Kumar Kumaresan 
 	 */
 	public abstract int addAccountRequest(String sUserId);
 
+	/**
+	 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
+	 * 
+	 * @return Success - 1
+	 * @author Ram Kumar Kumaresan
+	 */
 	public abstract int setupTestEnvironment(String sQuery);
 
 }

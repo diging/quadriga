@@ -51,7 +51,7 @@ public class DBConnectionManager implements IDBConnectionManager
 
 	@Autowired
 	private IProjectFactory projectfactory;
-	
+
 	@Autowired
 	private ICollaboratorRoleFactory collaboratorRoleFactory;
 
@@ -104,7 +104,10 @@ public class DBConnectionManager implements IDBConnectionManager
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int setupTestEnvironment(String sQuery)
 	{
@@ -188,6 +191,8 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * Queries the database and builds a list of active user objects
 	 * 
 	 * @return List containing user objects of all active users
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public List<IUser> getAllActiveUsers(String sInactiveRoleId)
@@ -251,6 +256,8 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * Queries the database and builds a list of inactive user objects
 	 * 
 	 * @return List containing user objects of all inactive users
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public List<IUser> getAllInActiveUsers(String sInactiveRoleId)
@@ -318,6 +325,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
 	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int deactivateUser(String sUserId,String sDeactiveRoleDBId,String sAdminId)
@@ -369,6 +377,8 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int updateUserRoles(String sUserId,String sRoles,String sAdminId)
@@ -421,6 +431,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int approveUserRequest(String sUserId, String sRoles, String sAdminId)
@@ -470,7 +481,9 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @param sUserId		The userid of the user whose request is rejected
 	 * @param sAdminId 		The admin-userid who rejected the request
 	 * 
-	 * Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int denyUserRequest(String sUserId,String sAdminId)
@@ -518,6 +531,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
 	 * @return Returns the list of user objects whose request are to be approved/denied.
 	 * 
+	 * @author Ram Kumar Kumaresan
 	 */	
 	@Override
 	public List<IUser> getUserRequests()
@@ -573,9 +587,11 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * Add a new account request to the quadriga.
 	 * 
 	 * @param sUserId The user id of the user who needs access to quadriga 
-	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request.
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
-	
+
 	@Override
 	public int addAccountRequest(String sUserId)
 	{
@@ -641,4 +657,4 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
-	}
+}
