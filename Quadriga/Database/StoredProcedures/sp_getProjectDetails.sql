@@ -17,7 +17,6 @@ DROP PROCEDURE IF EXISTS sp_getProjectDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectDetails
 (
- 
   OUT errmsg      VARCHAR(255)
 )
 BEGIN

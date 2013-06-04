@@ -31,7 +31,7 @@ BEGIN
         WHERE projectname = inprojname; */
       
       -- retrieve the collaborator details
-      SELECT collaboratoruser,collaboratorrole
+      SELECT projectid,collaboratoruser,collaboratorrole
         FROM vw_project_collaborator
 	 --  WHERE projectid = projid;
     -- END IF;
