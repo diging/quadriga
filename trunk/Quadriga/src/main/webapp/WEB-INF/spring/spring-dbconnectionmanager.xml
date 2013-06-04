@@ -6,6 +6,10 @@
 	<bean id="DBConnectionManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+		<bean id="DBConnectionProjectManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionProjectManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
  
  <bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">

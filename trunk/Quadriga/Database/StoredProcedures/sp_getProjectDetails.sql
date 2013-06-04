@@ -17,11 +17,12 @@ DROP PROCEDURE IF EXISTS sp_getProjectDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectDetails
 (
+  IN  inprojname  VARCHAR(20),
   OUT errmsg      VARCHAR(255)
 )
 BEGIN
 
-/*    -- the error handler for any sql exception
+    -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
 
@@ -36,11 +37,11 @@ BEGIN
     END IF;
 
     IF (errmsg IS NULL)
-     THEN SET errmsg = "";   */
+     THEN SET errmsg = "";
      -- retrieve the project details
 	 SELECT projectname,description,projectid,projectowner,accessibility
-       FROM vw_project ;
-       -- WHERE projectname = inprojname;
-	-- END IF;
+       FROM vw_project
+	   WHERE projectname = inprojname;
+	END IF;
 END$$
 DELIMITER ;

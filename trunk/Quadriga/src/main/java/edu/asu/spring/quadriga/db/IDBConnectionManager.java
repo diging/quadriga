@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 
@@ -98,34 +97,6 @@ public interface IDBConnectionManager
 	 * Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 */
 	public abstract int denyUserRequest(String sUserId, String sAdminId);
-
-	/**
-	 * fetches list of projects
-	 * 
-	 * @param sUserId   userid for logged in user
-	 * 
-	 * @return list of projects
-	 * 
-	 * @author rohit pendbhaje
-	 * 
-	 */
-	
-	public abstract List<IProject> getProjectOfUser(String sUserId);
-	
-	/**
-	 * fetches details of projects
-	 * 
-	 * @param sUserId   userid for logged in user
-	 * 
-	 * @return list of projects
-	 * 
-	 * @author rohit pendbhaje
-	 * 
-	 */
-	
-	public abstract IProject getProjectDetails(String sUserId);
-
-	public abstract void setUserDetails(String name,String username,String email,String roles);
 
 	/**
 	 * Add a new account request to the quadriga.
