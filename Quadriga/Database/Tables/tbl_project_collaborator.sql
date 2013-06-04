@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_project_collaborator
 (
    projectid           VARCHAR(50) REFERENCES tbl_project(projectid),
    collaboratoruser    VARCHAR(20) REFERENCES tbl_quadriga_user(username),
-   collaboratorrole    VARCHAR(10),
+   collaboratorrole    VARCHAR(100),
    updatedby           VARCHAR(10)   NOT NULL,
    updateddate         TIMESTAMP     NOT NULL,
    createdby           VARCHAR(10)   NOT NULL,

@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.service.impl.UserManager;
  * @author Julia Damerow
  * 
  */
-@Service("userManager")
+//@Service("userManager")
 public class MockupUserManager implements IUserManager {
 
 	@Autowired

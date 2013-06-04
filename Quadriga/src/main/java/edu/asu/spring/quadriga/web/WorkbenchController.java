@@ -8,13 +8,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -35,7 +37,11 @@ public class WorkbenchController {
 	IProject project;
 	List<IUser> collaboratorList;
 	
-	@Autowired IUserManager usermanager;
+	@Autowired 
+	IUserManager usermanager;
+	
+	@Autowired 
+	IProjectFactory projectFactory;
 	IUser user;
 	
 	/**
@@ -100,5 +106,28 @@ public class WorkbenchController {
 
 		return "auth/workbench/project";
 	}
+	
+	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.GET)
+	public ModelAndView addprojectform() {
+		return new ModelAndView("project", "command",projectFactory.createProjectObject());
+	}
+
+	   @RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
+	   public String addStudent(@ModelAttribute("SpringWeb")IProject project, 
+	   ModelMap model) 
+	   {
+		  int success;
+		  
+		  success = projectmanager.addNewProject(project);
+		  
+		  if(success == 1)
+		  {
+			  return "auth/workbench/addProjectSuccess";
+		  }
+		  else
+		  {
+			  return "auth/workbench/addProjectFailure";
+		  }
+	   }
 }
 	

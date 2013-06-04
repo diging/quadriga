@@ -1,14 +1,28 @@
+/*******************************************
+Name          : sp_getProjectCollaborators
+
+Description   : retrieves the users and their
+                Collaborator role for a project
+
+Called By     : UI (DBConnectionManager.java)
+
+Create By     : Kiran Kumar Batna
+
+Modified Date : 05/30/2013
+
+********************************************/
+
 DROP PROCEDURE IF EXISTS sp_getProjectCollaborators;
 
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectCollaborators
 (
- -- IN inprojname  VARCHAR(20),
+  IN inprojname  VARCHAR(20),
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
     -- declare local variables
- /*   DECLARE projid   INT DEFAULT 0;
+     DECLARE projid   INT DEFAULT 0;
 
 	-- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
@@ -28,12 +42,14 @@ BEGIN
      THEN SET errmsg = "";
       -- retrieve the projectid id of the project 
       SELECT projectid INTO projid FROM vw_project
-        WHERE projectname = inprojname; */
+        WHERE projectname = inprojname; 
       
       -- retrieve the collaborator details
-      SELECT projectid,collaboratoruser,collaboratorrole
+      SELECT projectid,collaboratoruser, 
+         GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole'
         FROM vw_project_collaborator
-	 --  WHERE projectid = projid;
-    -- END IF;
+	    WHERE projectid = projid
+      GROUP BY collaboratoruser;
+     END IF;
 END$$
 DELIMITER ;

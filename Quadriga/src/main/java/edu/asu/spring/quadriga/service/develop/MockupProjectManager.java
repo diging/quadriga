@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
@@ -75,7 +73,7 @@ public class MockupProjectManager implements IProjectManager{
 	}
 
 	@Override
-	public int addNewProject(Project newProject) {
+	public int addNewProject(IProject newProject) {
 		
 		return 0;
 	}

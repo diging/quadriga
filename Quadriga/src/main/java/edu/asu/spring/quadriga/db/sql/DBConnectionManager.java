@@ -6,30 +6,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
 
 import java.sql.Statement;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.Project;
-import edu.asu.spring.quadriga.domain.implementation.User;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -63,11 +54,6 @@ public class DBConnectionManager implements IDBConnectionManager
 	
 	@Autowired
 	private ICollaboratorRoleFactory collaboratorRoleFactory;
-
-	private ResultSet resultset,resultset1;
-
-	private IProject project;
-
 
 	/**
 	 *  @Description: Assigns the data source
@@ -655,206 +641,4 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
-
-
-	
-	/**
-	 * @Description     This method fetches the list of projects for current logged in user                    
-	 * 
-	 * @returns         List of projects
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Rohit Sukelshwar Pendbhaje
-	 * 
-     */
-	
-	@Override
-	public List<IProject> getProjectOfUser(String sUserId) {
-
-
-		String dbCommand;
-		
-		getConnection();
-		List<IProject> projectList = new ArrayList<IProject>();
-		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_LIST + "(?)";
-		try {
-			
-			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			
-			sqlStatement.registerOutParameter(1, Types.VARCHAR);
-			
-			sqlStatement.execute();
-			
-			ResultSet resultset = sqlStatement.getResultSet();
-			
-			while(resultset.next())
-	        {
-	        	project = projectfactory.createProjectObject();
-	        	project.setName(resultset.getString(1));
-	        	project.setDescription(resultset.getString(2));
-	        	project.setId(resultset.getString(3));
-	           	
-	        	projectList.add(project);
-	        
-	         }
-		
-		} 
-		catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-
-		return projectList;
 	}
-
-
-	@Override
-	public void setUserDetails(String name, String username, String email,
-			String roles) {
-		
-		throw new NotImplementedException("setUserDetails is not implemented");
-
-	}
-	
-	/**
-	 * @Description     This method takes string from database and converts it into the owner 
-	 * 					(type of User class) object 
-	 * 					 
-	 * @returns         User object
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Rohit Sukelshwar Pendbhaje
-	 * 
-     */
-
-	public IUser projectOwner()
-	{
-		IUser owner = userFactory.createUserObject();
-        return owner;
-
-	}
-	
-	public IUser projectCollaborators(String collaborators)
-	{
-		String[] collaborator;
-		
-		List<IUser> collaboratorList = new ArrayList<IUser>();
-
-		IUser projectcollaborator = null;
-		
-		collaborator = collaborators.split(",");
-		
-		for(int i=0; i<collaborator.length;i++)
-		{
-			
-			projectcollaborator = userFactory.createUserObject();
-			
-			projectcollaborator.setProjectCollaborator(collaborator[i]);
-			
-			collaboratorList.add(projectcollaborator);
-		}
-		
-		return projectcollaborator;
-		
-	} 
-	
-	public ICollaboratorRole CollaboratorRole(String roles)
-	{
-		String role = null;
-		
-		ICollaboratorRole collaboratorRole = null;
-		
-		collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-		
-		collaboratorRole.setRoleDBid(role);
-		return collaboratorRole;
-	}
-	
-	/**
-	 * @Description     This method fetches the details of projects from database for the logged in user                    
-	 * 
-	 * @returns         project object
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Rohit Sukelshwar Pendbhaje
-	 * 
-     */
-	
-	@Override
-	public IProject getProjectDetails(String projectId) {
-		
-		String dbCommand,dbCommand1;
-		CallableStatement sqlStatement ;
-		
-		getConnection();
-
-		IProject project = new Project();
-		
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_DETAILS + "(?)";
-
-		try {
-				
-        sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-
-		sqlStatement.registerOutParameter(1, Types.VARCHAR);
-
-		sqlStatement.execute();
-		
-		ResultSet resultset = sqlStatement.getResultSet();
-
-		while(resultset.next())
-        {
-			
-        	if( projectId.equals(resultset.getString(3)))
-        	{
-        		project = projectfactory.createProjectObject();
-	        	project.setName(resultset.getString(1));
-	        	project.setDescription(resultset.getString(2));
-	        	project.setId("quadriga" + resultset.getString(3));
-	        	IUser owner = projectOwner();
-	        	owner.setName(resultset.getString(4));
-	        	project.setOwner(owner);
-        	}
-        }
-       
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		dbCommand1 = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_COLLABORATORS + "(?)";
-		 try {
-			sqlStatement = connection.prepareCall("{"+dbCommand1+"}");
-		
-			sqlStatement.registerOutParameter(1, Types.VARCHAR);
-
-			sqlStatement.execute();
-			
-			resultset1 = sqlStatement.getResultSet();
-			
-			while(resultset1.next())
-			{
-								
-				if( projectId.equals(resultset1.getString(1)))
-				{
-					project.setId(resultset1.getString(1));
-					IUser collaborator = projectCollaborators(resultset1.getString(2));
-					collaborator.setName(resultset1.getString(2));
-					project.setProjectCollaborator(collaborator);
-					ICollaboratorRole collaboratorrole = CollaboratorRole(resultset1.getString(3));
-					project.setProjectCollaboratorRole(collaboratorrole);
-				}
-			}
-		
-		 } 
-		 
-		 catch (SQLException e) {
-			 e.printStackTrace();
-		 }
-			
-		return project;
-	}
-
-}

@@ -26,4 +26,6 @@ public interface DBConstants
 	public static final String PROJECT_DETAILS="sp_getProjectDetails";
 	public static final String PROJECT_COLLABORATORS="sp_getProjectCollaborators";
 
+	public static final String ADD_PROJECT_REQUEST = "sp_addProjectDetails";
+
 }

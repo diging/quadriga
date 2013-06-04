@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
@@ -26,8 +26,8 @@ import edu.asu.spring.quadriga.service.IProjectManager;
 public class ProjectManager implements IProjectManager {
 	
 	@Autowired
-	@Qualifier("DBConnectionManagerBean")
-	private IDBConnectionManager dbConnect;
+	@Qualifier("DBConnectionProjectManagerBean")
+	private IDBConnectionProjectManager dbConnect;
 
 	/**
 	 * @description: this method takes up userid as an argument of the logged in user and returns 
@@ -61,9 +61,28 @@ public class ProjectManager implements IProjectManager {
 		
 	}
 
+	/**
+	 * This is used to add the project details
+	 * @param Projecy object
+	 * @return 1 on success and 0 on failure
+	 * @author Kiran Kumar Batna
+	 * 
+	 */
 	@Override
-	public int addNewProject(Project newProject) {
-		throw new NotImplementedException("addNewProject() is not yet implemented");
+	public int addNewProject(IProject newProject) 
+	{
+		int success;
+		
+		success = dbConnect.addProjectRequest(newProject);
+		
+		if(success == 1)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	/**
@@ -82,5 +101,4 @@ public class ProjectManager implements IProjectManager {
 			
 		return project;
 	}
-	
 }
