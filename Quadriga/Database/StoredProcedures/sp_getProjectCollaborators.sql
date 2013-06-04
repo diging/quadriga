@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getProjectCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectCollaborators
 (
-  IN inprojname  VARCHAR(20),
+  IN inprojid  VARCHAR(20),
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
@@ -29,20 +29,20 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(inprojname IS NULL OR inprojname = "")
-     THEN SET errmsg = "Project name cannot be empty.";
+    IF(inprojid IS NULL OR inprojid = "")
+     THEN SET errmsg = "Project id cannot be empty.";
     END IF;
     
     IF NOT EXISTS (SELECT 1 FROM vw_project
-                     WHERE projectname = inprojname)
-      THEN SET errmsg = "Project name is invalid.";
+                     WHERE projectid  = inprojid)
+      THEN SET errmsg = "Project id is invalid.";
     END IF;
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
       -- retrieve the projectid id of the project 
       SELECT projectid INTO projid FROM vw_project
-        WHERE projectname = inprojname; 
+        WHERE projectid = inprojid; 
       
       -- retrieve the collaborator details
       SELECT projectid,collaboratoruser, 
