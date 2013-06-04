@@ -29,9 +29,5 @@
 	<bean 
 		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
 	</bean>
-	
-	<bean 
-		class="edu.asu.spring.quadriga.domain.factories.impl.ProjectOwnerFactory">
-	</bean>
 
 </beans>
