@@ -101,7 +101,7 @@ public class UserManager implements IUserManager {
 	 * List all active users in the Quadriga database
 	 * 
 	 * @return List of all active user objects
-	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public List<IUser> getAllActiveUsers()
@@ -126,6 +126,7 @@ public class UserManager implements IUserManager {
 	 * List all inactive users in the quadriga database
 	 * 
 	 * @return List of all inactive user objects
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public List<IUser> getAllInActiveUsers()
@@ -150,6 +151,7 @@ public class UserManager implements IUserManager {
 	 * List all the open user requests available in the quadriga database
 	 * 
 	 * @return List all open user requests
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public List<IUser> getUserRequests()
@@ -178,6 +180,8 @@ public class UserManager implements IUserManager {
 	 *  @param sUserId	The userid of the user whose account is to be deactivated.
 	 *  @param sAdminId  The userid of the admin who is changing the user setting.
 	 *  @return Return the status of the operation. 1- Success and 0 - Failure.
+	 *  
+	 *  @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int deactivateUser(String sUserId,String sAdminId) {
@@ -196,6 +200,8 @@ public class UserManager implements IUserManager {
 	 * @param sRoles 	The set of roles that are assigned to the user.
 	 * @param sAdminId  The userid of the admin who is changing the user setting
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int approveUserRequest(String sUserId,String sRoles,String sAdminId) {
@@ -210,6 +216,8 @@ public class UserManager implements IUserManager {
 	 * @param sUserId	The userid of the user whose account has been denied.
 	 * @param sAdminId  The userid of the admin who is changing the user setting.
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int denyUserRequest(String sUserId,String sAdminId) {
@@ -224,6 +232,8 @@ public class UserManager implements IUserManager {
 	 * @param sUserId	The userid of the user whose account has been activated. 
 	 * @param sAdminId  The userid of the admin who is changing the user setting.
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int activateUser(String sUserId,String sAdminId) {
@@ -266,6 +276,8 @@ public class UserManager implements IUserManager {
 	 * 
 	 * @param userId The user id of the user who needs access to quadriga 
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - An open request is already placed for the userid.
+	 * 
+	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
 	public int addAccountRequest(String userId) {
