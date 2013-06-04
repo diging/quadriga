@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
@@ -25,11 +26,12 @@ public class Project implements IProject
 	private String description;
 	private String id;
 	private int internalid;
-	private IUser owner;
 	private List<ICollaborator> collaborators;
     private EProjectAccessibility projectAccess;
     private ENetworkAccessibility networksDefaultAccess;
-	private List<IUser> projectcollaboratorList;
+    private IUser owner;
+	private IUser projectcollaborator;
+	private ICollaboratorRole collaboratorrole;
 
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getName()
@@ -147,15 +149,27 @@ public class Project implements IProject
 	}
 	
 	@Override
-	public void setProjectCollaborator(List<IUser> projectcollaboratorList) {
+	public void setProjectCollaborator(IUser projectcollaborator) {
 		
-		this.projectcollaboratorList = projectcollaboratorList;
+		this.projectcollaborator = projectcollaborator;
+	}
+	
+	@Override
+	public IUser getProjectCollaborator() {
+		
+		return projectcollaborator;
 	}
 	@Override
-	public List<IUser> getProjectCollaborator() {
+	public ICollaboratorRole getProjectCollaboratorRole() {
 		
-		return projectcollaboratorList;
-	}   
-    
+		return collaboratorrole;
+	}
+	@Override
+	public void setProjectCollaboratorRole(ICollaboratorRole collaboratorrole) {
+
+		this.collaboratorrole = collaboratorrole;		
+	}
+	
+	
     
 }

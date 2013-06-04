@@ -799,9 +799,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	        	IUser owner = projectOwner();
 	        	owner.setName(resultset.getString(4));
 	        	project.setOwner(owner);
-	        	
         	}
-        		         
         }
        
 		} catch (SQLException e) {

@@ -59,6 +59,8 @@ public class WorkbenchController {
 		
 	    String userId = principal.getUsername();
 	    
+	    System.out.println("userid--------" + userId);
+	    
 	    projectlist = projectmanager.getProjectsOfUser(userId);
 	    model.addAttribute("projectlist", projectlist);
 	   
@@ -90,9 +92,9 @@ public class WorkbenchController {
 	
 	
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
-	public String getProjectPage(@PathVariable("projectid") String id, ModelMap model) throws SQLException {
+	public String getProjectPage(@PathVariable("projectid") String projectid, ModelMap model) throws SQLException {
 		
-		IProject project = projectmanager.getProject(id);
+		IProject project = projectmanager.getProject(projectid);
 		
 		model.addAttribute("project", project);
 

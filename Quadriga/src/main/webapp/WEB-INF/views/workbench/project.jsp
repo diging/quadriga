@@ -5,7 +5,7 @@
 
 
 
-<h2>welcome to: ${project.id}</h2>
+<h2>welcome to quadriga: ${project.id}</h2>
 <%--<c:forEach var = "project" items = "${project}">  --%>
 <ul>
 <li><c:out value="${project.name}"></c:out>

@@ -76,15 +76,11 @@ public class ProjectManager implements IProjectManager {
 	 * 
 	 */
 	@Override
-	public IProject getProject(String id) {
+	public IProject getProject(String projectid) {
 	    
-		IProject project = dbConnect.getProjectDetails(id);
+		IProject project = dbConnect.getProjectDetails(projectid);
 			
 		return project;
 	}
 	
-	
-
-	
-
 }
