@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.db;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -19,15 +20,12 @@ public interface IDBConnectionProjectManager
 	 * @return list of projects
 	 * 
 	 * @author rohit pendbhaje
+	 * @throws SQLException 
 	 * 
 	 */
-	public abstract IProject getProjectDetails(String projectId);
+	public abstract IProject getProjectDetails(String projectId) throws SQLException;
 
-	public abstract ICollaboratorRole CollaboratorRole(String roles);
-
-	public abstract IUser projectCollaborators(String collaborators);
-
-	public abstract IUser projectOwner();
+	public abstract List<ICollaboratorRole> splitAndCreateCollaboratorRoles(String roles);
 
 	/**
 	 * fetches list of projects
@@ -46,5 +44,6 @@ public interface IDBConnectionProjectManager
 	public abstract void setDataSource(DataSource dataSource);
 
 	public abstract int addProjectRequest(IProject project);
+
 
 }

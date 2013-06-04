@@ -11,12 +11,15 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.catalina.connector.OutputBuffer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
@@ -41,6 +44,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	
 	@Autowired
 	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	
+	@Autowired
+	private ICollaboratorFactory collaboratorFactory;
 
 	private ResultSet resultset1;
 
@@ -176,50 +182,27 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
      */
 
-	@Override
-	public IUser projectOwner()
-	{
-		IUser owner = userFactory.createUserObject();
-        return owner;
-
-	}
+	 
 	
 	@Override
-	public IUser projectCollaborators(String collaborators)
+	public List<ICollaboratorRole> splitAndCreateCollaboratorRoles(String role)
 	{
-		String[] collaborator;
+        String[] roles;
 		
-		List<IUser> collaboratorList = new ArrayList<IUser>();
-
-		IUser projectcollaborator = null;
-		
-		collaborator = collaborators.split(",");
-		
-		for(int i=0; i<collaborator.length;i++)
-		{
-			
-			projectcollaborator = userFactory.createUserObject();
-			
-			projectcollaborator.setProjectCollaborator(collaborator[i]);
-			
-			collaboratorList.add(projectcollaborator);
-		}
-		
-		return projectcollaborator;
-		
-	} 
-	
-	@Override
-	public ICollaboratorRole CollaboratorRole(String roles)
-	{
-		String role = null;
+		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
 		
 		ICollaboratorRole collaboratorRole = null;
 		
-		collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+		roles = role.split(",");
 		
-		collaboratorRole.setRoleDBid(role);
-		return collaboratorRole;
+		for(int i=0;i<roles.length;i++)
+		{
+			collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+			collaboratorRole.setRoleDBid(roles[i]);
+			collaboratorRoleList.add(collaboratorRole);
+		}
+		
+		return collaboratorRoleList;
 	}
 	
 	/**
@@ -234,14 +217,15 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
      */
 	
 	@Override
-	public IProject getProjectDetails(String projectId) {
+	public IProject getProjectDetails(String projectId) throws SQLException {
 		
 		String dbCommand,dbCommand1;
+		String outputValue;
 		CallableStatement sqlStatement ;
 		
 		getConnection();
 
-		IProject project = new Project();
+		IProject project = null;
 		
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_DETAILS + "(?)";
 
@@ -254,61 +238,61 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		sqlStatement.execute();
 		
 		ResultSet resultset = sqlStatement.getResultSet();
+		project = projectfactory.createProjectObject();
+		project.setCollaborators(new ArrayList<ICollaborator>());
 
 		while(resultset.next())
         {
-			
         	if( projectId.equals(resultset.getString(3)))
         	{
-        		project = projectfactory.createProjectObject();
 	        	project.setName(resultset.getString(1));
 	        	project.setDescription(resultset.getString(2));
 	        	project.setId("quadriga" + resultset.getString(3));
-	        	IUser owner = projectOwner();
+	        	IUser owner = userFactory.createUserObject();
 	        	owner.setName(resultset.getString(4));
 	        	project.setOwner(owner);
         	}
         }
        
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
+		
+		dbCommand1 = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_COLLABORATORS + "(?,?)";
+		sqlStatement = connection.prepareCall("{"+dbCommand1+"}");
+		sqlStatement.setString(1,projectId);
+		sqlStatement.registerOutParameter(2, Types.VARCHAR);
+
+		sqlStatement.execute();
+		
+		outputValue = sqlStatement.getString(2);
+		
+		if(outputValue.isEmpty())
+		{
+			resultset1 = sqlStatement.getResultSet();
 		}
 		
-		dbCommand1 = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_COLLABORATORS + "(?)";
-		 try {
-			sqlStatement = connection.prepareCall("{"+dbCommand1+"}");
-		
-			sqlStatement.registerOutParameter(1, Types.VARCHAR);
-
-			sqlStatement.execute();
-			
-			resultset1 = sqlStatement.getResultSet();
-			
 			while(resultset1.next())
 			{
 								
 				if( projectId.equals(resultset1.getString(1)))
 				{
+					
 					project.setId(resultset1.getString(1));
-					IUser collaborator = projectCollaborators(resultset1.getString(2));
-					collaborator.setName(resultset1.getString(2));
-					project.setProjectCollaborator(collaborator);
-					ICollaboratorRole collaboratorrole = CollaboratorRole(resultset1.getString(3));
-					project.setProjectCollaboratorRole(collaboratorrole);
+					IUser collaboratorUser = userFactory.createUserObject();
+					collaboratorUser.setName(resultset1.getString(2));
+					project.setProjectCollaborator(collaboratorUser);
+					List<ICollaboratorRole> collaboratorRoles = splitAndCreateCollaboratorRoles(resultset1.getString(3));
+					ICollaborator collaborator = collaboratorFactory.createCollaborator();
+					collaborator.setUserObj(collaboratorUser);
+					collaborator.setCollaboratorRoles(collaboratorRoles);
+					project.getCollaborators().add(collaborator);
 				}
 			}
-		
-		 } 
-		 
-		 catch (SQLException e) {
-			 e.printStackTrace();
-		 }
-			
-		 finally
-		 {
+		}
+	
+		 finally{
 			 closeConnection();
 		 }
+		 
+		
 		return project;
 	}
 	

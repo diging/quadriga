@@ -5,15 +5,19 @@
 
 
 
-<h2>welcome to quadriga: ${project.id}</h2>
-<%--<c:forEach var = "project" items = "${project}">  --%>
+
+
+<h2>welcome to ${project.name}</h2>
+<div style="opacity:0.5;position:relative;left:50px;width:170px;height:210px;background-color:#ffffcc">
 <ul>
-<li><c:out value="${project.name}"></c:out>
-</li>
-
-
-<li><c:out value="${project.description}"></c:out>
-<li><c:out value="${project.owner.name}"></c:out>
-
+<li><h6><FONT FACE="arial">Project name:</FONT></h6><c:out value="${project.name}"></c:out></li>
+<li><h5><FONT FACE="arial">What is it about: </FONT></h5><c:out value="${project.description}"></c:out>
+<li><h5><FONT FACE="arial">Owned by: </FONT></h5><c:out value="${project.owner.name}"></c:out>
 </ul>
+</div>
+
+	
+
+
+
 

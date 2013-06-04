@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
+import edu.asu.spring.quadriga.web.WorkbenchController;
 
 /**
  * @description	 	this class manages the projects and acts as a bridge between 
@@ -25,6 +28,8 @@ import edu.asu.spring.quadriga.service.IProjectManager;
 @Service
 public class ProjectManager implements IProjectManager {
 	
+	private static final Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
+
 	@Autowired
 	@Qualifier("DBConnectionProjectManagerBean")
 	private IDBConnectionProjectManager dbConnect;
@@ -97,7 +102,13 @@ public class ProjectManager implements IProjectManager {
 	@Override
 	public IProject getProject(String projectid) {
 	    
-		IProject project = dbConnect.getProjectDetails(projectid);
+		IProject project = null;
+		try {
+			project = dbConnect.getProjectDetails(projectid);
+		} catch (SQLException e) {
+			
+		logger.error("sqlException thrown",e);
+		}
 			
 		return project;
 	}

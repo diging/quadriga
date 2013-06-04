@@ -44,10 +44,6 @@ public interface IProject {
 	public abstract void setProjectCollaborator(IUser collaborators);
 	
 	public abstract IUser getProjectCollaborator();
-	
-	public abstract ICollaboratorRole getProjectCollaboratorRole();
-	
-	public abstract void setProjectCollaboratorRole(ICollaboratorRole collaboratorrole);
 
 	public abstract EProjectAccessibility getProjectAccess();
 
@@ -57,5 +53,7 @@ public interface IProject {
 
 	public abstract void setNetworksDefaultAccess(
 			ENetworkAccessibility networksDefaultAccess);
+
+	
 	
 }
