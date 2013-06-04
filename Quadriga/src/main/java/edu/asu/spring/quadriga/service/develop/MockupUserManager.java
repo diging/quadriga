@@ -37,6 +37,7 @@ public class MockupUserManager implements IUserManager {
 	private List<String> inactiveUsers;
 	private List<String> userRequests;
 
+	private List<String> deniedList;
 	public MockupUserManager() {
 
 	}
@@ -47,6 +48,7 @@ public class MockupUserManager implements IUserManager {
 		activeUsers = new ArrayList<String>();
 		inactiveUsers = new ArrayList<String>();
 		userRequests = new ArrayList<String>();
+		deniedList = new ArrayList<String>();
 
 		// Add John Doe
 		{
@@ -127,6 +129,8 @@ public class MockupUserManager implements IUserManager {
 		//initialize user requests list
 		userRequests.add("dexter");
 		userRequests.add("deb");
+		
+		deniedList.add("trinity");
 	}
 
 	/**
@@ -204,14 +208,16 @@ public class MockupUserManager implements IUserManager {
 
 	@Override
 	public int deactivateUser(String sUserId, String sAdminId) {
-		throw new NotImplementedException(
-				"dectivateUser() is not yet implemented");
+		activeUsers.remove(sUserId);
+		inactiveUsers.add(sUserId);
+		return 1;
 	}
 
 	@Override
 	public int activateUser(String sUserId, String sAdminId) {
-		throw new NotImplementedException(
-				"activateUser() is not yet implemented");
+		inactiveUsers.add(sUserId);
+		activeUsers.add(sUserId);		
+		return 1;
 	}
 
 	@Override
@@ -254,12 +260,16 @@ public class MockupUserManager implements IUserManager {
 
 	@Override
 	public int approveUserRequest(String sUserId, String sRoles, String sAdminId) {
-		throw new NotImplementedException("approveUserRequest() is not yet implemented");
+		userRequests.remove(sUserId);
+		activeUsers.add(sUserId);
+		return 1;
 	}
 
 	@Override
 	public int denyUserRequest(String sUserId, String sAdminId) {
-		throw new NotImplementedException("denyUserRequest() is not yet implemented");
+		userRequests.remove(sUserId);
+		deniedList.add(sUserId);
+		return 1;
 	}
 
 
