@@ -3,12 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	
 	
- 	<header>
+ 	<%-- <header>
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>
 	</header>
 	
-    <ul>
+    <ol type="">
     <c:if test="${not empty projectlist}">
     <c:forEach var="project" items="${projectlist}">
 	<li><a href="workbench/${project.id}">
@@ -16,10 +16,10 @@
 	</a></li>
 	</c:forEach>
 	</c:if>
-	</ul>  
+	</ol>  --%>
 	
 	
-	<%--<html>
+	<html>
 	<head>
 	<style>
 	 ul.a {list-style-type:circle;}
@@ -36,14 +36,13 @@
     <ul class='a'>
     <c:if test="${not empty projectlist}">
     <c:forEach var="project" items="${projectlist}">
-	<dt><a href="workbench/${project.id}"><c:out value="${project.name}"></c:out></a></dt>
-	<dd><c:out value="${project.description}"></c:out></dd>
-	<%-- <li><c:out value="${project.description}"></c:out></li>
+	<li><h5><a href="workbench/${project.id}"><c:out value="${project.name}"></c:out></a></h5></li>
+	<%-- <li><c:out value="${project.description}"></c:out></li> --%>
 	</c:forEach></c:if>
 	</ul>
 	
 	</body>
-	</html>   --%>
+	</html>   
 	
 	
 	<%-- <ul>

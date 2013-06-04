@@ -18,8 +18,7 @@ public class Collaborator implements ICollaborator
 	private IUser userObj;
 	private String description;
 	private List<ICollaboratorRole> collaboratorRoles;
-	private String collaborator;
-		
+	
 	public IUser getUserObj() {
 		return userObj;
 	}
@@ -50,7 +49,6 @@ public class Collaborator implements ICollaborator
 	} */
 	@Override
 	public void setCollaboratorName(String collaborator) {
-		this.collaborator = collaborator;
 		
 	}
 	

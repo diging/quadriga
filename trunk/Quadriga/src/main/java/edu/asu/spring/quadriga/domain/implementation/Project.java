@@ -31,7 +31,6 @@ public class Project implements IProject
     private ENetworkAccessibility networksDefaultAccess;
     private IUser owner;
 	private IUser projectcollaborator;
-	private ICollaboratorRole collaboratorrole;
 
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getName()
@@ -159,17 +158,5 @@ public class Project implements IProject
 		
 		return projectcollaborator;
 	}
-	@Override
-	public ICollaboratorRole getProjectCollaboratorRole() {
-		
-		return collaboratorrole;
-	}
-	@Override
-	public void setProjectCollaboratorRole(ICollaboratorRole collaboratorrole) {
-
-		this.collaboratorrole = collaboratorrole;		
-	}
 	
-	
-    
 }
