@@ -97,11 +97,10 @@ public class User implements IUser
 		}		
 		return false;
 	}
-	
 	@Override
 	public void setProjectCollaborator(String collaborator) {
-		this.collaborator = collaborator;
+		// TODO Auto-generated method stub
 		
 	}
-
+	
 }
