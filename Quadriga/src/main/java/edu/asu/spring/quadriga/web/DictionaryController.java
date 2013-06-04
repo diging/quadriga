@@ -28,18 +28,21 @@ import edu.asu.spring.quadriga.service.IProjectManager;
 @Controller
 public class DictionaryController {
 	@Autowired IDictionaryManager dictonaryManager;
-	ArrayList<IDictionary> dictionaryList;
-	
+	List<IDictionary> dictionaryList;
+
 	@RequestMapping(value="auth/dictionaries", method = RequestMethod.GET)
 	public String projectDictionaryHandle(ModelMap model){
-	
-		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-	    String userId = principal.getUsername();
-	    
-	    dictionaryList = dictonaryManager.getDictionaries(userId);
-	    model.addAttribute("dictinarylist", dictionaryList);
-	    
-	   	return "auth/dictionaries"; 
+		try{
+			UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+			String userId = principal.getUsername();
+
+			dictionaryList = dictonaryManager.getDictionariesList(userId);
+			model.addAttribute("dictinarylist", dictionaryList);
+			model.addAttribute("userId", userId);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "auth/dictionaries"; 
 	}
 }

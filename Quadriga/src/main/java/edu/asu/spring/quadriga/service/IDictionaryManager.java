@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.domain.implementation.Dictionary;
  *
  */
 public interface IDictionaryManager {
-	public abstract ArrayList<IDictionary> getDictionaries(String sUserId);
+	public abstract List<IDictionary> getDictionariesList(String sUserId);
 	
 	public abstract String updateDictionariesItems(Dictionary existingDictionaryList);
 	

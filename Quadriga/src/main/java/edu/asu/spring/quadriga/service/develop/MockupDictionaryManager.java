@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.service.develop;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -22,10 +22,10 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;;
  * 
  */
 
-@Service
+//@Service
 public class MockupDictionaryManager implements IDictionaryManager {
 
-	public ArrayList<IDictionary> getDictionaries(String userId){
+	public List<IDictionary> getDictionariesList(String userId){
 		
 		IDictionary diction1= new Dictionary();
 		IDictionary diction2= new Dictionary();
@@ -48,7 +48,7 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		diction3.setDescription("feline mammal usually having thick soft fur and no ability"+ 
 								"to roar: domestic cats; wildcats an informal term for a youth or man");
 		
-		ArrayList <IDictionary> dictionaryList = new ArrayList<IDictionary>();
+		List <IDictionary> dictionaryList = new ArrayList<IDictionary>();
 		dictionaryList.add(diction1);
 		dictionaryList.add(diction2);
 		dictionaryList.add(diction3);

@@ -107,7 +107,7 @@
 	<definition name="auth/dictionaries" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga dictionaries" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/dictionaries_example.jsp" />
+			value="/WEB-INF/views/dictionaries.jsp" />
 	</definition>
 
 	<!-- Home pages -->
