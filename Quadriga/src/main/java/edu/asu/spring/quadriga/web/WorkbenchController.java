@@ -72,8 +72,6 @@ public class WorkbenchController {
 
 		String userId = principal.getUsername();
 
-		System.out.println("userid--------" + userId);
-
 		projectlist = projectmanager.getProjectsOfUser(userId);
 		model.addAttribute("projectlist", projectlist);
 
@@ -124,9 +122,6 @@ public class WorkbenchController {
 			ModelMap model) 
 	{
 		int success;
-		System.out.println(project.getName());
-		System.out.println(project.getDescription());
-		System.out.println(project.getProjectAccess());
 
 		success = projectmanager.addNewProject(project);
 		if(success == 1)
