@@ -12,7 +12,7 @@
 	<section class="is-highlight">
 		<ul class="special">
 			<li><a href="workbench" class="battery">Workbench</a></li>
-			<li><a href="#" class="tablet">Concept Collections</a></li>
+			<li><a href="conceptcollections" class="tablet">Concept Collections</a></li>
 			<li><a href="#" class="flask">Networks</a></li>
 			<li><a href="dictionaries" class="chart">Dictionaries</a></li>
 		</ul>

@@ -62,8 +62,12 @@
 		<put-attribute name="title" value="Quadriga - Account Request" />
 		<put-attribute name="content" value="/WEB-INF/views/users/requestAccountError.jsp" />
 	</definition>
+	<!-- ConceptCollection pages -->
 	
-
+	<definition name="auth/conceptcollections" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Concept Collections" />
+		<put-attribute name="content" value="/WEB-INF/views/conceptcollection.jsp" />
+	</definition>
 
 	<!-- Workbench pages -->
 	<definition name="base.definition.workbench" extends="base.definition">

@@ -7,8 +7,10 @@
 	<ul>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN', 'ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_RESTRICTED', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "home" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/home">Home</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "workbench" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/workbench">Workbench</a></li></sec:authorize>
-		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "conceptCollections" ? "class=\"current_page_item\"" : ""}><a href="">Concept Collections</a></li></sec:authorize>
+
+		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "conceptCollections" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections">Concept Collections</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/dictionaries">Dictionaries</a></li></sec:authorize>
+
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "editing" ? "class=\"current_page_item\"" : ""}><a href="">Editing</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR', 'ROLE_QUADRIGA_USER_RESTRICTED')"><li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="">Networks</a></li></sec:authorize>
 		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"><li ${currentPage == "admin" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/users/manage">User Management</a></li></sec:authorize>
