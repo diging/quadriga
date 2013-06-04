@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
 
+import java.sql.Statement;
+
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -114,6 +116,22 @@ public class DBConnectionManager implements IDBConnectionManager
 		catch(SQLException e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public int setupTestEnvironment(String sQuery)
+	{
+		try
+		{
+			getConnection();
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate(sQuery);
+			return 1;
+		}
+		catch(SQLException ex)
+		{
+			throw new RuntimeException(ex.getMessage());
 		}
 	}
 

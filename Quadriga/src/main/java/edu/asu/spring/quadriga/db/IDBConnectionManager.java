@@ -135,4 +135,6 @@ public interface IDBConnectionManager
 	 */
 	public abstract int addAccountRequest(String sUserId);
 
+	public abstract int setupTestEnvironment(String sQuery);
+
 }
