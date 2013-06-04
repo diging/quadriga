@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.IUser;
  *                of a User object
  * 
  * @author      : Kiran Kumar Batna
- *
+ * @author 		: Ram Kumar Kumaresan
  */
 public class User implements IUser 
 {
@@ -19,8 +19,7 @@ public class User implements IUser
 	private String password;
 	private String email;
 	private List<IQuadrigaRole> quadrigaRoles;
-	private String collaborator;
-	
+
 	@Override
 	public String getEmail() {
 		return email;
@@ -64,6 +63,9 @@ public class User implements IUser
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getQuadrigaRolesDBId()
 	{
@@ -77,30 +79,31 @@ public class User implements IUser
 		}
 		return sRoleDBIds.toString();
 	}
-	
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean compareUserObjects(IUser user)
 	{
-		//Check if username and name matches for the user objects
-		if(this.userName.equalsIgnoreCase(user.getUserName()) && this.name.equalsIgnoreCase(user.getName()))
+		if(user!=null && user instanceof IUser)
 		{
-			//Check if all the roles match for the user objects
-			List<IQuadrigaRole> userRoles = user.getQuadrigaRoles();
-			if(this.quadrigaRoles.size() == userRoles.size())
-			{				
-				for(int i=0;i<this.quadrigaRoles.size();i++)
-				{
-					userRoles.get(i).compareQuadrigaRole(this.quadrigaRoles.get(i));				
+			//Check if username matches for the user objects
+			if(this.userName.equalsIgnoreCase(user.getUserName()))
+			{
+				//Check if all the roles match for the user objects
+				List<IQuadrigaRole> userRoles = user.getQuadrigaRoles();
+				if(this.quadrigaRoles.size() == userRoles.size())
+				{				
+					for(int i=0;i<this.quadrigaRoles.size();i++)
+					{
+						userRoles.get(i).compareQuadrigaRole(this.quadrigaRoles.get(i));				
+					}
+					return true;
 				}
-				return true;
-			}
-		}		
+			}		
+		}
 		return false;
-	}
-	@Override
-	public void setProjectCollaborator(String collaborator) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+	}	
 }
