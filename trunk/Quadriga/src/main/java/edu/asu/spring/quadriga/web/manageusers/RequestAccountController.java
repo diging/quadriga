@@ -22,6 +22,14 @@ public class RequestAccountController {
 	@Autowired
 	private IUserManager userManager;
 	
+	public IUserManager getUserManager() {
+		return userManager;
+	}
+
+	public void setUserManager(IUserManager userManager) {
+		this.userManager = userManager;
+	}
+
 	/**
 	 * This sends a request for a user account to the {@link IUserManager}.
 	 * @param model Model for jsp page.

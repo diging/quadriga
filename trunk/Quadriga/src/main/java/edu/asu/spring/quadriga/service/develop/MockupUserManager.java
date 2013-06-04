@@ -275,6 +275,9 @@ public class MockupUserManager implements IUserManager {
 
 	@Override
 	public int addAccountRequest(String userId) {
+		if (userRequests.contains(userId))
+			return 0;
+		
 		userRequests.add(userId);
 		return 1;
 	}
