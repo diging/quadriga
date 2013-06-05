@@ -24,6 +24,23 @@ BEGIN
 	-- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQLException occurred";
+      
+      IF(inusername IS NULL OR inusername = "")
+       THEN SET errMsg = "Error. Username is empty";
+	 END IF;
+	 
+	  IF(user IS NULL OR user = "")
+       THEN SET errMsg = "Admin username is empty";
+	 END IF;
+	 
+	  IF(userroles IS NULL OR userroles = "")
+       THEN SET errMsg = "Error. User roles are empty";
+	 END IF;
+      
+      IF NOT EXISTS(SELECT 1 FROM tbl_quadriga_user_requests
+                     WHERE username = inusername)
+       THEN SET errMsg = "No open request found for the user";
+     END IF;
 
     START TRANSACTION;
 

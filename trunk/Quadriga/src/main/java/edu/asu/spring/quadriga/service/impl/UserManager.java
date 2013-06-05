@@ -238,21 +238,21 @@ public class UserManager implements IUserManager {
 	@Override
 	public int activateUser(String sUserId,String sAdminId) {
 
+		int iResult=0;
+		
 		//Find the deactivated role id and create a QuadrigaRole Object
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		//Find all the roles of the user
 		IUser user = null;
-		List<IQuadrigaRole> userRole = null;
-		IQuadrigaRole quadrigaRole = null;
-		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-
 		user = dbConnect.getUserDetails(sUserId);
 
 		//Remove the deactivated role from user roles
 		if(user!=null)
 		{
-			userRole = user.getQuadrigaRoles();
+			IQuadrigaRole quadrigaRole = null;
+			List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
+			List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
 			for(int i=0;i<userRole.size();i++)
 			{				
 				if(!userRole.get(i).getDBid().equals(sDeactiveRoleDBId))
@@ -262,11 +262,11 @@ public class UserManager implements IUserManager {
 				}
 			}
 			user.setQuadrigaRoles(rolesList);
+			
+			//Convert the user roles to one string with DBROLEIDs
+			//Update the role in the Quadriga Database.
+			iResult = dbConnect.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(),sAdminId);
 		}
-
-		//Convert the user roles to one string with DBROLEIDs
-		//Update the role in the Quadriga Database.
-		int iResult = dbConnect.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(),sAdminId);
 
 		return iResult;
 	}
