@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web;
 
+import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class WorkbenchController {
 
 	private static final Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
-	
+
 	@Autowired IProjectManager projectmanager;
 	List<IProject> projectlist;
 	String username;
@@ -111,8 +112,8 @@ public class WorkbenchController {
 
 		IProject project = projectmanager.getProject(projectid);
 
-		
-		
+
+
 		model.addAttribute("project", project);
 
 		return "auth/workbench/project";
@@ -125,16 +126,21 @@ public class WorkbenchController {
 
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
 	public String addStudent(@ModelAttribute("SpringWeb")Project project, 
-			ModelMap model) 
+			ModelMap model, Principal principal) 
 	{
 		int success;
-
-		success = projectmanager.addNewProject(project);
-		if(success == 1)
+		IUser user = usermanager.getUserDetails(principal.getName());
+		if(user!=null)
 		{
-			model.addAttribute("success", 1);
-		}
+			project.setOwner(user);
 
+			success = projectmanager.addNewProject(project);
+			if(success == 1)
+			{
+				model.addAttribute("success", 1);
+			}
+
+		}
 		return "auth/workbench/addProjectStatus";
 	}
 }
