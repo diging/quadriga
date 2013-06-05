@@ -343,12 +343,25 @@
 			{
 				top: 3px;
 			}
-
+			#nav ul ul{
+			
+			 	display: none;
+			}
+			#nav ul li:hover > ul  {
+ 			 
+ 			display: block;
+			position: absolute;
+			}
 				#nav li:hover a
 				{
 					background: #C1CAC5;
 					color: #fff;
 				}
+				#nav li li a:hover {
+  				color:#fff;
+  				background: #C1CAC5;
+  				
+			}
 
 			#nav li.current_page_item
 			{
