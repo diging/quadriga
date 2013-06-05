@@ -38,8 +38,8 @@ BEGIN
 	 END IF;
 
      IF NOT EXISTS(SELECT 1 FROM tbl_quadriga_user
-                     WHERE username = inuser)
-       THEN SET errMsg = "Denied by user name does not exists.";
+                     WHERE username = inusername)
+       THEN SET errMsg = "Denied by user name does not exist.";
      END IF;
    
 

@@ -21,17 +21,18 @@ import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.develop.MockupUserManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
 
 /**
  * This class tests the {@link UserController}
+ * For test this class uses the {@link MockupUserManager}
  * 
  * @author Ram Kumar Kumaresan
  *
  */
-@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
-		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/spring-security.xml",
+@ContextConfiguration(locations={
+		"file:src/test/resources/root-context.xml",
 "file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserControllerTest {
@@ -121,7 +122,6 @@ public class UserControllerTest {
 	/**
 	 * This method tests if a user is approved/denied access to quadriga and also checks if the correct path is returned.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testUserAccessHandler() {
 		//Deny a user

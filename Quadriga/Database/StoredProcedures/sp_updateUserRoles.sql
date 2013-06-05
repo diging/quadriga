@@ -43,7 +43,7 @@ BEGIN
     END IF;
 
     IF NOT EXISTS(SELECT 1 FROM tbl_quadriga_user 
-                    WHERE username = inuser)
+                    WHERE username = inUserName)
 	 THEN SET errMsg = "user entered is invalid.";
 	END IF;
 

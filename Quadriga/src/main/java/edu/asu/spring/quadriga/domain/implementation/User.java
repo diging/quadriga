@@ -89,8 +89,23 @@ public class User implements IUser
 	{
 		if(user!=null && user instanceof IUser)
 		{
-			//Check if username matches for the user objects
-			if(this.userName.equalsIgnoreCase(user.getUserName()))
+			//Check the user name
+			if(this.userName !=null && user.getUserName() !=null)
+			{
+				//Check if username matches for the user objects
+				if(!(this.userName.equals(user.getUserName())))
+				{
+					return false;
+				}
+			}
+			else if(!(this.userName == null && user.getUserName() == null))
+			{
+				//One of the value is null and the other is not null
+				return false;
+			}
+
+			//Check the roles for user objects
+			if(this.quadrigaRoles != null && user.getQuadrigaRoles() != null)
 			{
 				//Check if all the roles match for the user objects
 				List<IQuadrigaRole> userRoles = user.getQuadrigaRoles();
@@ -98,11 +113,19 @@ public class User implements IUser
 				{				
 					for(int i=0;i<this.quadrigaRoles.size();i++)
 					{
-						userRoles.get(i).compareQuadrigaRole(this.quadrigaRoles.get(i));				
+						if(!(userRoles.get(i).compareQuadrigaRole(this.quadrigaRoles.get(i))))
+						{
+							return false;
+						}
 					}
 					return true;
 				}
-			}		
+			}
+			else if(this.quadrigaRoles == null && user.getQuadrigaRoles() == null)
+			{
+				//Both the roles are null
+				return true;
+			}
 		}
 		return false;
 	}	

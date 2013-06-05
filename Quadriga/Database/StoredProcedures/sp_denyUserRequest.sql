@@ -24,6 +24,19 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQLException occurred";
 
+      IF(inusername IS NULL OR inusername = "")
+       THEN SET errMsg = "Error. Username is empty";
+	 END IF;
+	 
+	 IF(inadminid IS NULL OR inadminid = "")
+       THEN SET errMsg = "Error. Admin username is empty";
+	 END IF;
+	 
+	 IF NOT EXISTS(SELECT 1 FROM tbl_quadriga_user_requests
+                     WHERE username = inusername)
+       THEN SET errMsg = "No open request found for the user";
+     END IF;
+	 
 	-- insert into the denied log table
     START TRANSACTION;
 
