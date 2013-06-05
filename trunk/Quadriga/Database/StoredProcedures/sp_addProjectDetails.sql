@@ -19,7 +19,7 @@ CREATE PROCEDURE sp_addProjectDetails
   IN  inprojectname    VARCHAR(50),
   IN  indescription    TEXT,
   IN  inprojectid      VARCHAR(100),
-  IN  inaccessibility  TINYINT,
+  IN  inaccessibility  VARCHAR(30),
   IN  inprojectowner   VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
