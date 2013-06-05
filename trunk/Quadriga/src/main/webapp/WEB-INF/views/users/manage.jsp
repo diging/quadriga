@@ -103,7 +103,7 @@
 			<c:forEach var="user" items="${activeUserList}">
 				<tr>
 					<td width="52%"><font size="3"><c:out
-								value="${user.name}"></c:out></font></td>
+								value="${user.userName}"></c:out></font></td>
 					<td><font size="1"> <input type="submit"
 							onclick="location.href='/quadriga/auth/users/deactivate/${user.userName}'"
 							value="Deactivate"></font></td>
@@ -120,7 +120,7 @@
 			<c:forEach var="user" items="${inactiveUserList}">
 				<tr>
 					<td width="54%"><font size="3"><c:out
-								value="${user.name}"></c:out></font></td>
+								value="${user.userName}"></c:out></font></td>
 					<td><font size="1"> <input type="submit"
 							onclick="location.href='/quadriga/auth/users/activate/${user.userName}'"
 							value="Activate"></font></td>
