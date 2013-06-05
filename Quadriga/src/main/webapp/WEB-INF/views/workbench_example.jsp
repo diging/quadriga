@@ -3,21 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	
 	
- 	<%-- <header>
-		<h2>Quadriga Workbench</h2>
-		<span class="byline">Manage projects and workspaces</span>
-	</header>
-	
-    <ol type="">
-    <c:if test="${not empty projectlist}">
-    <c:forEach var="project" items="${projectlist}">
-	<li><a href="workbench/${project.id}">
-	<c:out value="${project.name}"></c:out>  
-	</a></li>
-	</c:forEach>
-	</c:if>
-	</ol>  --%>
-	
+ 
 	
 	<html>
 	<head>
@@ -28,6 +14,7 @@
 	<header>
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>
+		<a href="/quadriga/auth/workbench/addproject">Add Project</a>
 		<h5>List Of ${username} projects</h5>
 	</header>
 	
