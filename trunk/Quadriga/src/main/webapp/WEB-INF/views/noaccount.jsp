@@ -1,5 +1,5 @@
 <header>
-	<h2>${username}, you don't have a Quadriga account yet.</h2>
+	<pre><h2>${username}, you don't have a Quadriga account yet.</h2></pre>
 	<span class="byline">Please request an account</span>
 </header>
 
