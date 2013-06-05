@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS tbl_project
   projectid       VARCHAR(100)  NOT NULL,
   id              INT           NOT NULL AUTO_INCREMENT,
   projectowner    VARCHAR(50)   NOT NULL REFERENCES tbl_quadriga_user(username),
-  accessibility   TINYINT       NOT NULL,
+  accessibility   VARCHAR(30)   NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
