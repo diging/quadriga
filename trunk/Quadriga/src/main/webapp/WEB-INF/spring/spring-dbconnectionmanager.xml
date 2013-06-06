@@ -27,7 +27,7 @@
 
 
 		<property name="username" value="root" />
-		<property name="password" value="" />
+		<property name="password" value="root" />
 
 		<!-- <property name="username" value="dbadmin" />
 		<property name="password" value="dbadmin" /> -->

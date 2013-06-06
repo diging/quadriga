@@ -3,8 +3,9 @@ package edu.asu.spring.quadriga.domain;
 import java.util.List;
 
 /**
- * Javadoc missing
+ * The interface that provides access to the class representation of the Collection got from Dspace repostiory.
  * 
+ * @author Ram Kumar Kumaresan
  */
 public interface ICollection {
 

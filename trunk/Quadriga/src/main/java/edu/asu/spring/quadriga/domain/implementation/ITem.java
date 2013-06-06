@@ -7,8 +7,9 @@ import edu.asu.spring.quadriga.domain.IByteStream;
 import edu.asu.spring.quadriga.domain.IItem;
 
 /**
- * Javadoc missing
+ * The class representation of the Item got from Dspace repostiory.
  * 
+ * @author Ram Kumar Kumaresan
  */
 public class ITem implements IItem{
 

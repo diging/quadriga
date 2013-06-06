@@ -130,7 +130,7 @@ public class TrialController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/workspace", method = RequestMethod.GET)
+//	@RequestMapping(value = "/workspace", method = RequestMethod.GET)
 	public String home(Locale locale, Model model, Principal principal) {
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();		

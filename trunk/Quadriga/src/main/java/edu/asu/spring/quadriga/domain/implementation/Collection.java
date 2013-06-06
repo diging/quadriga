@@ -6,8 +6,9 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.IItem;
 
 /**
- * Javadoc missing
+ * The class representation of the Collection got from Dspace repostiory.
  * 
+ * @author Ram Kumar Kumaresan
  */
 public class Collection implements ICollection{
 
