@@ -44,6 +44,12 @@ BEGIN
 				   WHERE username = indictionaryowner)
       THEN SET errmsg = "Invalid owner.Please enter the correct value.";
     END IF; 
+    
+    IF EXISTS(SELECT 1 FROM vw_dictionary_items
+				   WHERE dictionaryid = indictionaryid and items =initems)
+     
+      THEN SET errmsg = "ItemExists";
+    END IF; 
 	
     -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
