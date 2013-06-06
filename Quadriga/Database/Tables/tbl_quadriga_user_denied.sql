@@ -14,9 +14,10 @@ CREATE TABLE IF NOT EXISTS tbl_quadriga_user_denied
   username      VARCHAR(10) NOT NULL,
   passwd        VARCHAR(10) NULL,
   email         VARCHAR(50) NOT NULL,
-  deniedby		VARCHAR(50) NOT NULL  REFERENCES tbl_quadriga_user(username),
+  deniedby		VARCHAR(50) NOT NULL,
   updatedby     VARCHAR(10) NOT NULL,
   updateddate   TIMESTAMP   NOT NULL,
   createdby     VARCHAR(10) NOT NULL,
   createddate   DATETIME    NOT NULL
+  FOREIGN KEY(deniedby) REFERENCES tbl_quadriga_user(username) 
 )

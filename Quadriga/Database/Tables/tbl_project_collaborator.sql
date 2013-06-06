@@ -12,12 +12,14 @@ Modified Date : 05/24/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_project_collaborator
 (
-   projectid           VARCHAR(50) REFERENCES tbl_project(projectid),
-   collaboratoruser    VARCHAR(20) REFERENCES tbl_quadriga_user(username),
+   projectid           VARCHAR(50) ,
+   collaboratoruser    VARCHAR(20),
    collaboratorrole    VARCHAR(100),
    updatedby           VARCHAR(10)   NOT NULL,
    updateddate         TIMESTAMP     NOT NULL,
    createdby           VARCHAR(10)   NOT NULL,
    createddate         DATETIME      NOT NULL,
-   PRIMARY KEY(projectid,collaboratoruser,collaboratorrole)
+   PRIMARY KEY(projectid,collaboratoruser,collaboratorrole),
+   FOREIGN KEY(projectid) REFERENCES tbl_project(projectid)
+   FOREIGN KEY(collaboratoruser)  REFERENCES tbl_quadriga_user(username)  
 )
