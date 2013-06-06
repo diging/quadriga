@@ -12,11 +12,12 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_dictionary_items
 (
-  dictionaryid       VARCHAR(100)  NOT NULL REFERENCES tbl_dictionary(dictionaryid),
+  dictionaryid       VARCHAR(100)  NOT NULL,
   items    VARCHAR(50) NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(dictionaryid,items)
+  PRIMARY KEY(dictionaryid,items),
+  FOREIGN KEY(dictionaryid) REFERENCES tbl_dictionary(dictionaryid)
 )

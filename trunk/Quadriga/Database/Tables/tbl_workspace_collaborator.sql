@@ -13,11 +13,12 @@ Modified Date : 05/30/2013
 CREATE TABLE IF NOT EXISTS tbl_workspace_collaborator
 (
   id       INT   REFERENCES tbl_workspace(id),
-  username VARCHAR(20) REFERENCES tbl_quadriga_user(username),
+  username VARCHAR(20) ,
   collaboratorrole VARCHAR(20),
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id,username,collaboratorrole)
+  PRIMARY KEY(id,username,collaboratorrole),
+  FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username)
 )

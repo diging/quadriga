@@ -16,11 +16,12 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary
   description     TEXT          NULL,
   dictionaryid       VARCHAR(100)  NOT NULL,
   id              INT           NOT NULL AUTO_INCREMENT,
-  dictionaryowner    VARCHAR(50)   NOT NULL REFERENCES tbl_quadriga_user(username),
+  dictionaryowner    VARCHAR(50)   NOT NULL ,
   accessibility   TINYINT       NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id),UNIQUE KEY(dictionaryname),UNIQUE KEY(dictionaryid) 
+  PRIMARY KEY(id),UNIQUE KEY(dictionaryname),UNIQUE KEY(dictionaryid),
+  FOREIGN KEY(dictionaryowner) REFERENCES tbl_quadriga_user(username)
 )

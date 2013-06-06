@@ -18,5 +18,7 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections_items
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id,item)
+  PRIMARY KEY(id,item),
+  FOREIGN KEY(id) REFERENCES tbl_conceptcollections(id)
+  
 )
