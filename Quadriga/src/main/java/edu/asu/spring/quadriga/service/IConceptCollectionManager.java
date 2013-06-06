@@ -3,11 +3,9 @@
  */
 package edu.asu.spring.quadriga.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 
 
@@ -23,7 +21,8 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
  */
 public interface IConceptCollectionManager {
 
-	public abstract List<IConceptCollection> getCollectionsOfUser(String sUserId) throws SQLException;
+	public abstract List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId);
+	public abstract List<IConceptCollection> getUserCollaborations(String sUserId);
 	public abstract String updateConceptCollection(ConceptCollection conceptCollection);	
 	public abstract int deleteConceptCollection(String id);	
 	public abstract int addConceptCollection(ConceptCollection newConcept);	

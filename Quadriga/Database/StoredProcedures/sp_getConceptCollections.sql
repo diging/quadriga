@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getConceptCollections;
 DELIMITER $$
 CREATE PROCEDURE sp_getConceptCollections
 (
-  IN  incollectionname  VARCHAR(20),
+  IN  inusername  VARCHAR(20),
   OUT errmsg      VARCHAR(255)
 )
 BEGIN
@@ -27,12 +27,12 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(incollectionname IS NULL OR incollectionname = "")
+    IF(inusername IS NULL OR inusername = "")
      THEN SET errmsg = "Collection name cannot be empty.";
     END IF;
     
     IF NOT EXISTS (SELECT 1 FROM vw_conceptcollections
-                     WHERE collectionname = incollectionname)
+                     WHERE collectionowner = inusername)
       THEN SET errmsg = "collection name is invalid.";
     END IF;
 
@@ -41,7 +41,7 @@ BEGIN
      -- retrieve the project details
 	 SELECT collectionname,description,collectionid,collectionowner,accessibility
        FROM vw_conceptcollections
-	   WHERE collectionname = incollectionname;
+	   WHERE collectionowner = inusername;
 	END IF;
 END$$
 DELIMITER ;

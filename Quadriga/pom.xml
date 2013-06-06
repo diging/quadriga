@@ -37,6 +37,11 @@
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>displaytag</groupId>
+			<artifactId>displaytag</artifactId>
+			<version>1.2</version>
+		</dependency>
 
 		<!-- LDAP connection -->
 		<dependency>
@@ -136,7 +141,6 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

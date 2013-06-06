@@ -1,8 +1,12 @@
 package edu.asu.spring.quadriga.exceptions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+
+import edu.asu.spring.quadriga.web.HomeController;
 
 /**
  * This class handles exceptions thrown in Controller classes.
@@ -13,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class QuadrigaExceptionHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(QuadrigaExceptionHandler.class);
 	/**
 	 * For now this method handles all exceptions thrown in Controller classes. Eventually this method can be
 	 * replaced by methods that handle individual exceptions.
@@ -27,7 +32,8 @@ public class QuadrigaExceptionHandler {
 		modelAndView.setViewName("auth/notImplemented");
 		modelAndView.addObject("ex_name", ex.getClass().getName());
 		modelAndView.addObject("ex_message", ex.getMessage());
-		
+		logger.error(ex.getMessage()+""+ex.toString());
+		ex.printStackTrace();
 		return modelAndView;
 	}
 	

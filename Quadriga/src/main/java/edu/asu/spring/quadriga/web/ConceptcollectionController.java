@@ -42,12 +42,13 @@ public class ConceptcollectionController {
 		
 	    String userId = principal.getUsername();
 	    
-	    list = conceptControllerManager.getCollectionsOfUser(userId);
+	    list = conceptControllerManager.getCollectionsOwnedbyUser(userId);
 	    model.addAttribute("conceptlist", list);
-	   
+	    list = conceptControllerManager.getUserCollaborations(userId);
+	    model.addAttribute("collaborationlist", list);
 	    user =  usermanager.getUserDetails(userId);
-	    username = user.getName();
+	    username = user.getUserName();
 	    model.addAttribute("username", username);	
-	return "auth/conceptcollections";
+	    return "auth/conceptcollections";
 	}
 }
