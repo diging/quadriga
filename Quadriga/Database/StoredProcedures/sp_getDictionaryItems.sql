@@ -39,11 +39,10 @@ BEGIN
      THEN SET errmsg = "";
             
       -- retrieve the item details
-      SELECT dictionaryid AS ID, items
-           AS item
+      SELECT dictionaryid , items
         FROM vw_dictionary_items
 	    WHERE dictionaryid = indictionaryid
-      GROUP BY ID;
+      GROUP BY items;
      END IF;
 END$$
 DELIMITER ;
