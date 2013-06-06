@@ -120,7 +120,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} fetches the correct user object and if it handles invalid userid.
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -143,7 +143,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} fetches all the active users
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -163,7 +163,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test the method in {@link UserManager} which creates a list of inactive users.
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -182,7 +182,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} fetches all the open user requests
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -201,7 +201,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} can activate a valid user and can handle invalid user ids.
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -225,7 +225,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} can activate a user and handle invalid ids.
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -249,7 +249,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} can approve a user request and can handle invalid id.
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -277,7 +277,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} can deny a user request and can handle invalid user id.
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test
@@ -300,7 +300,7 @@ public class UserManagerTest {
 	}
 
 	/**
-	 * 
+	 * Test if the method in {@link UserManager} can handle new account requests. 
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Test

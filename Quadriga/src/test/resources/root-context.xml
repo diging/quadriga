@@ -22,9 +22,13 @@
 		class="edu.asu.spring.quadriga.domain.factories.impl.UserFactory">
 	</bean>
 	
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.CollaboratorRoleFactory">
+	</bean>
+	
 	<bean 
 		class="edu.asu.spring.quadriga.domain.factories.impl.ProjectFactory">
 	</bean>
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory"></bean>
 	
 	<bean 
 		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
