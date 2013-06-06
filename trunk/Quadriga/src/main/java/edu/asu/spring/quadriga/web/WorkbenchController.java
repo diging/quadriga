@@ -75,12 +75,12 @@ public class WorkbenchController {
 
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		String userId = principal.getUsername();
-
-		projectlist = projectmanager.getProjectsOfUser(userId);
+		String userName = principal.getUsername();
+		
+		projectlist = projectmanager.getProjectsOfUser(userName);
 		model.addAttribute("projectlist", projectlist);
 
-		user =  usermanager.getUserDetails(userId);
+		user =  usermanager.getUserDetails(userName);
 		username = user.getName();
 		model.addAttribute("username", username);
 
@@ -111,8 +111,6 @@ public class WorkbenchController {
 	public String getProjectPage(@PathVariable("projectid") String projectid, ModelMap model) throws SQLException {
 
 		IProject project = projectmanager.getProject(projectid);
-
-
 
 		model.addAttribute("project", project);
 

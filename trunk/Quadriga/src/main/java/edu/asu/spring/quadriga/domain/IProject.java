@@ -41,6 +41,10 @@ public interface IProject {
 
 	public abstract void setCollaborators(List<ICollaborator> collaborators);
 	
+	public abstract List<ICollaboratorRole> getCollaboratorRoles();
+	
+	public abstract void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles);
+	
 	public abstract void setProjectCollaborator(IUser collaborators);
 	
 	public abstract IUser getProjectCollaborator();

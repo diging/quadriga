@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.web.WorkbenchController;
 
@@ -33,6 +36,9 @@ public class ProjectManager implements IProjectManager {
 	@Autowired
 	@Qualifier("DBConnectionProjectManagerBean")
 	private IDBConnectionProjectManager dbConnect;
+	
+	@Autowired
+	private ICollaboratorRoleMapper roleMapper ;
 
 	/**
 	 * @description: this method takes up userid as an argument of the logged in user and returns 
@@ -53,6 +59,8 @@ public class ProjectManager implements IProjectManager {
 				
 		return projectList;
 	} 
+	
+	
 
 	@Override
 	public String updateProjectDetails(Project existingProject) {
@@ -103,13 +111,61 @@ public class ProjectManager implements IProjectManager {
 	public IProject getProject(String projectid) {
 	    
 		IProject project = null;
+		List<ICollaboratorRole> collaboratorDBRolesList;
+		ICollaboratorRole collaboratorRole;
+		List<ICollaboratorRole> collaboratorRolesList = new ArrayList<ICollaboratorRole>();
+		
 		try {
 			project = dbConnect.getProjectDetails(projectid);
 		} catch (SQLException e) {
 			
 		logger.error("sqlException thrown",e);
 		}
-			
+		
+		collaboratorDBRolesList =  project.getCollaboratorRoles();
+	
+		for(int i=0; i<collaboratorDBRolesList.size();i++)
+		{
+			collaboratorRole = roleMapper.getCollaboratorRoles(collaboratorDBRolesList.get(i).getRoleDBid());
+			collaboratorRolesList.add(collaboratorRole);
+		}
+		
+		project.setCollaboratorRoles(collaboratorRolesList);
+		System.out.println("------------getproject");	
 		return project;
+	}
+
+
+
+	@Override
+	public void setProjectCollaboratorRoles(IProject project) {
+		
+	}
+
+
+
+	@Override
+	public IProject getProjectCollaboratorRoles(String projectId) {
+		
+	/*	IProject project = null;
+		ICollaboratorRole collaboratorRole;
+		List<ICollaboratorRole> collaboratorRolesList = new ArrayList<ICollaboratorRole>();
+		
+		try {
+		
+			project = dbConnect.getProjectDetails(projectId);
+		
+		
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+				
+		collaboratorRolesList =  project.getCollaboratorRoles();
+		
+		System.out.println("------------------"+ project.getCollaboratorRoles().toString());
+		
+		*/
+		return null;
 	}
 }
