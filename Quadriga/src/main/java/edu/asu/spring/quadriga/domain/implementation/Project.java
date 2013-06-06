@@ -27,6 +27,7 @@ public class Project implements IProject
 	private String id;
 	private int internalid;
 	private List<ICollaborator> collaborators;
+	private List<ICollaboratorRole> collaboratorRoles;
     private EProjectAccessibility projectAccess;
     private ENetworkAccessibility networksDefaultAccess;
     private IUser owner;
@@ -157,6 +158,16 @@ public class Project implements IProject
 	public IUser getProjectCollaborator() {
 		
 		return projectcollaborator;
+	}
+	@Override
+	public List<ICollaboratorRole> getCollaboratorRoles() {
+		
+		return collaboratorRoles;
+	}
+	@Override
+	public void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles) {
+		
+		this.collaboratorRoles = collaboratorRoles;
 	}
 	
 }

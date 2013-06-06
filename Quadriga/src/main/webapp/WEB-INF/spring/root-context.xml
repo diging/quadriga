@@ -14,5 +14,7 @@
 		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">
 		<property name="userManager" ref="userManager"></property>
 	</bean>
+	
+	
 
 </beans>

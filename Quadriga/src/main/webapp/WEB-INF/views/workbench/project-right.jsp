@@ -33,8 +33,20 @@
 <ul class="a">
 <c:forEach var="projectcollaborator" items="${project.collaborators}">
 <li><h6><c:out value="${projectcollaborator.userObj.name}"></c:out></h6></li>
+<li><c:forEach var="collaboratorRoles" items="${collaboratorRoles.collaboratorRoles}">
+	<li><c:out value="${collboratorRoles.roleid}"></c:out></li>
+	</c:forEach>
+</li>
 </c:forEach>
 </ul>
+
+<%--<c:forEach var="projectcollaborator" items="${project.collaborators}"> 
+<li><c:forEach var="collaboratorRoles" items="${collaboratorRoles.collaboratorRoles}">
+	<li><c:out value="${collboratorRoles.roleDBid}"></c:out></li>
+	</c:forEach>
+</li>
+</c:forEach>--%>
+
 </div>
 </body> 
 
