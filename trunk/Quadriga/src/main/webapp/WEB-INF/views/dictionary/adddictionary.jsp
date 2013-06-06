@@ -32,7 +32,7 @@
 
 <article class="is-page-content">
 
-	<form:form method="POST" action="/auth/dictionaries/adddictionary">
+	<form:form method="POST" action="/auth/dictionaries/addDictionary">
 		<table>
 			<tr>
 				<td>Name:</td>
