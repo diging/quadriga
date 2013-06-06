@@ -14,7 +14,7 @@ Modified Date : 06/04/2013
 
 DROP PROCEDURE IF EXISTS sp_addDictionaryItems;
 DELIMITER $$
-CREATE PROCEDURE sp_addDictionaryItems
+CREATE PROCEDURE sp_addDictionaryItems	
 (
   IN  indictionaryid    VARCHAR(100),
   IN  initems    VARCHAR(50),

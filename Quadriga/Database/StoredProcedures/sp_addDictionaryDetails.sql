@@ -31,21 +31,21 @@ BEGIN
 	
     -- validating the input variables
     IF(indictionaryname IS NULL OR indictionaryname = "")
-	  THEN SET errmsg = "dictionary name cannot be empty.";
+	  THEN SET errmsg = "Dictionary name cannot be empty.";
     END IF;
 	
     IF EXISTS(SELECT 1 FROM vw_dictionary
                 WHERE dictionaryname = indictionaryname)
-      THEN SET errmsg = "dictionary name already exists.";
+      THEN SET errmsg = "Dictionary name already exists.";
 	END IF;
 	
     IF(indictionaryid IS NULL OR indictionaryid = "")
-      THEN SET errmsg = "dictionaryid cannot be empty.";
+      THEN SET errmsg = "Dictionary Id cannot be empty.";
     END IF;
 
 	IF EXISTS(SELECT 1 FROM vw_dictionary
                 WHERE dictionaryid = indictionaryid)
-      THEN SET errmsg = "dictionaryid is already assigned to a dictionary.";
+      THEN SET errmsg = "Dictionary Id is already assigned to a dictionary.";
      END IF;
 
     IF(inaccessibility IS NULL)

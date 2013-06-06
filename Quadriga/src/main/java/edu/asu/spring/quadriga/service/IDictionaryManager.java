@@ -1,9 +1,10 @@
 package edu.asu.spring.quadriga.service;
 
-import java.sql.SQLException;
+
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 /**
  * Interface that has methods to be implemented on the DictionaryManager class
@@ -20,5 +21,9 @@ public interface IDictionaryManager {
 	
 	public abstract int addNewDictionariesItems(Dictionary newDictionary);
 	
-	public abstract IDictionary getDictionariesItems(String id);
+	public abstract String addNewDictionary(Dictionary newDictionary);
+	
+	public abstract List<IDictionaryItems> getDictionariesItems(String dictionaryid);
+	
+	public abstract String getDictionaryName(String dictionaryid);
 }

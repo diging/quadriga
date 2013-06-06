@@ -105,10 +105,39 @@
 		<put-attribute name="currentPage" value="dictionaries" />
 	</definition>
 	<definition name="auth/dictionaries" extends="base.definition.dictionaries">
-		<put-attribute name="title" value="Quadriga dictionaries" />
+		<put-attribute name="title" value="Quadriga Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionaries.jsp" />
 	</definition>
+	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
+		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
+		<put-attribute name="sub-navigation"
+			value="/WEB-INF/views/dictionary/project-right.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionary/dictionaryChild.jsp" />
+	</definition>
+	<definition name="auth/dictionaries/addDictionary" extends="base.definition.dictionaries">
+		<put-attribute name="title" value="Quadriga Dictionary - Add Dictionary" />
+		<put-attribute name="sub-navigation"
+			value="/WEB-INF/views/dictionary/project-right.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionary/adddictionary.jsp" />
+	</definition>
+	<definition name="auth/dictionaries/addDictionaryStatus" extends="base.definition.dictionaries">
+		<put-attribute name="title" value="Quadriga Dictionary - Add Dictionary" />
+		<put-attribute name="sub-navigation"
+			value="/WEB-INF/views/dictionary/project-right.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionary/adddictionarystatus.jsp" />
+	</definition>
+	<definition name="auth/dictionaries/addDictionaryItems" extends="base.definition.dictionaries">
+		<put-attribute name="title" value="Quadriga Dictionary - Add Dictionary Item" />
+		<put-attribute name="sub-navigation"
+			value="/WEB-INF/views/dictionary/project-right.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionary/adddictionaryitems.jsp" />
+	</definition>
+
 
 	<!-- Home pages -->
 	<definition name="auth/home" extends="base.definition.nonav">

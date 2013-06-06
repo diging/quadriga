@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.db;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItems;
 
 /**
  * Interface for the DBConnectionDictionaryManager Class.
@@ -14,4 +15,7 @@ import edu.asu.spring.quadriga.domain.IDictionary;
 public interface IDBConnectionDictionaryManager {
 	
 	public abstract List<IDictionary> getDictionaryOfUser(String userName);
+	public abstract String addDictionary(IDictionary dictionary);
+	public abstract List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid);
+	public abstract String getDictionaryName(String dictionaryId);
 }

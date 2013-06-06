@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 
@@ -40,6 +43,14 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryList;
 	}
 	
+
+	public String addNewDictionary(Dictionary dictionary){
+
+		String msg = dbConnect.addDictionary(dictionary);
+		
+		return msg;
+	}
+	
 	public String updateDictionariesItems(Dictionary existingDictionaryList){
 		return "";
 	}
@@ -54,7 +65,34 @@ public class DictionaryManager implements IDictionaryManager {
 		
 	}
 	
-	public IDictionary getDictionariesItems(String id){
-		return null;
+
+
+	public List<IDictionaryItems> getDictionariesItems(String dictionaryid) {
+	    
+		List<IDictionaryItems> dictionaryItemList = null;
+		try {
+			dictionaryItemList = dbConnect.getDictionaryItemsDetails(dictionaryid);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+			
+		return dictionaryItemList;
 	}
+	
+	public String getDictionaryName(String dictionaryid) {
+	    
+		String dictionaryName="";
+		try {
+			dictionaryName = dbConnect.getDictionaryName(dictionaryid);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+			
+		return dictionaryName;
+	}
+
+
+
 }

@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
+import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 
@@ -32,11 +35,13 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
-	private IDictionary dictionary;
-
+	
+	
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
 
+	@Autowired
+	private IDictionaryItemsFactory dictionaryItemsFactory;
 	/**
 	 *  @Description: Assigns the data source
 	 *  
@@ -116,8 +121,9 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	@Override
 	public List<IDictionary> getDictionaryOfUser(String userId) {
 		String dbCommand;
-
+		String errmsg="";
 		getConnection();
+		IDictionary dictionary;
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_DETAILS + "(?,?)";
 		try {
@@ -129,16 +135,24 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			sqlStatement.execute();
 
 			ResultSet resultSet = sqlStatement.getResultSet();
-			if(resultSet.next()) { 
-				do { 
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
 					dictionary = dictionaryFactory.createDictionaryObject();
 					dictionary.setName(resultSet.getString(1));
 					dictionary.setDescription(resultSet.getString(2));
 					dictionary.setId(resultSet.getString(3));
-					System.out.println(" come in");
 					dictionaryList.add(dictionary);
-				} while (resultSet.next());
-			}		
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty())
+			{
+				return dictionaryList;
+			}
+			else
+			{
+				return null;
+			}
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -151,6 +165,166 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			closeConnection();
 		}
 		return dictionaryList;
+	}
+	
+	@Override
+	public List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid){
+		String dbCommand;
+		String errmsg="";
+		getConnection();
+		IDictionaryItems dictionaryItems;
+		List<IDictionaryItems> dictionaryList=new ArrayList<IDictionaryItems>();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_ITEMS_DETAILS + "(?,?)";
+		try {
+
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, dictionaryid);
+			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					dictionaryItems = dictionaryItemsFactory.createDictionaryItemsObject();
+					dictionaryItems.setDictionaryId(resultSet.getString(1));
+					dictionaryItems.setItems(resultSet.getString(2));					
+					dictionaryList.add(dictionaryItems);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty())
+			{
+				return dictionaryList;
+			}
+			else
+			{
+				return null;
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return dictionaryList;
+	}
+	
+	@Override
+	public String getDictionaryName(String dictionaryId)
+	{
+		String dbCommand;
+		String dictionaryName="";
+        String errmsg;
+        CallableStatement sqlStatement;
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_NAME  + "(?,?)";
+        
+        //get the connection
+        getConnection();
+      //establish the connection with the database
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, dictionaryId);
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					dictionaryName =resultSet.getString(1);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			
+        }
+        catch(SQLException e)
+        {
+        	throw new RuntimeException(e.getMessage());
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+        
+		return dictionaryName;
+	
+	}
+	
+	@Override
+	public String addDictionary(IDictionary dictionary)
+	{
+		String name;
+		String description;
+		String id;
+        IUser owner = null;
+        String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+        //fetch the values from the project object
+        name = dictionary.getName();
+        description = dictionary.getDescription();
+        id = dictionary.getId();
+        owner = dictionary.getOwner();
+        
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_DICTIONARY  + "(?,?,?,?,?,?)";
+        
+        //get the connection
+        getConnection();
+        
+        //establish the connection with the database
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, name);
+        	sqlStatement.setString(2, description);
+        	sqlStatement.setString(3,id);
+        	sqlStatement.setString(4,"0");
+        	sqlStatement.setString(5,owner.getUserName());
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(6);
+			
+			if(errmsg.isEmpty())
+			{
+				return errmsg;
+			}
+			else
+			{
+				System.out.println("Error message : "+errmsg);
+				return errmsg;
+			}
+			
+        }
+        catch(SQLException e)
+        {
+        	throw new RuntimeException(e.getMessage());
+        }
+        finally
+        {
+        	closeConnection();
+        }
 	}
 
 }

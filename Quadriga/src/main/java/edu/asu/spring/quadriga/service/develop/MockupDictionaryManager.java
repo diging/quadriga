@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.service.IDictionaryManager;;
 
@@ -63,13 +64,25 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		return 1;
 	}
 	
+	public String addNewDictionary(Dictionary newDictionary){
+		
+		return "";
+		
+	}
+
 	public int addNewDictionariesItems(Dictionary newDictionary){
 		
 		return 1;
 		
 	}
 	
-	public IDictionary getDictionariesItems(String id){
+	public List<IDictionaryItems> getDictionariesItems(String id){
+		return null;
+	}
+
+	@Override
+	public String getDictionaryName(String dictionaryid) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	
