@@ -3,8 +3,9 @@ package edu.asu.spring.quadriga.domain.implementation;
 import edu.asu.spring.quadriga.domain.IByteStream;
 
 /**
- * Javadoc missing
+ * The class representation of the ByteStream got from Dspace repostiory.
  * 
+ * @author Ram Kumar Kumaresan
  */
 public class ByteStream implements IByteStream{
 

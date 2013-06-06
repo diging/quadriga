@@ -1,8 +1,9 @@
 package edu.asu.spring.quadriga.domain;
 
 /**
- * Javadoc missing
+ * The interface that provides access to the class representation of the ByteStream got from Dspace repostiory.
  * 
+ * @author Ram Kumar Kumaresan
  */
 public interface IByteStream {
 

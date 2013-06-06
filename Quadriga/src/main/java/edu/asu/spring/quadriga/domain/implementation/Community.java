@@ -7,7 +7,9 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 
 /**
- * Javadoc missing
+ * The class representation of the community got from Dspace repostiory.
+ * 
+ * @author Ram Kumar Kumaresan
  * 
  */
 public class Community implements ICommunity{
