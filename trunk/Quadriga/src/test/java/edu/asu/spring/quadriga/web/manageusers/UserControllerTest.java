@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.web.manageusers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.security.Principal;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.CredentialsContainer;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
@@ -22,7 +22,6 @@ import org.springframework.validation.support.BindingAwareModelMap;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.develop.MockupUserManager;
-import edu.asu.spring.quadriga.service.impl.UserManager;
 
 /**
  * This class tests the {@link UserController}
@@ -85,8 +84,10 @@ public class UserControllerTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
+	@DirtiesContext
 	public void testManageUsers() {
 
+		
 		//Check the return value
 		assertEquals(userContoller.manageUsers(model, principal),"auth/users/manage");
 
@@ -109,6 +110,7 @@ public class UserControllerTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
+	@DirtiesContext
 	public void testUserRequestList() {
 		//Check the return value
 		assertEquals(userContoller.userRequestList(model, principal),"auth/users/requests");
@@ -123,6 +125,7 @@ public class UserControllerTest {
 	 * This method tests if a user is approved/denied access to quadriga and also checks if the correct path is returned.
 	 */
 	@Test
+	@DirtiesContext
 	public void testUserAccessHandler() {
 		//Deny a user
 		assertEquals(userContoller.userAccessHandler("charlie-denied", model, principal),"redirect:/auth/users/manage");
@@ -137,13 +140,14 @@ public class UserControllerTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
+	@DirtiesContext
 	public void testUserActiveList() {
 		//Check the return value
 		assertEquals(userContoller.userActiveList(model, principal),"auth/users/active");
 
 		//Active Users
 		List<IUser> activeList = (List<IUser>) model.get("activeUserList");
-		assertEquals(2,activeList.size());
+		assertEquals(1,activeList.size());
 	}
 
 	/**
@@ -151,6 +155,7 @@ public class UserControllerTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
+	@DirtiesContext
 	public void testUserInactiveList() {
 		//Check the return value
 		assertEquals(userContoller.userInactiveList(model, principal),"auth/users/inactive");
@@ -164,6 +169,7 @@ public class UserControllerTest {
 	 * This method tests if a user is deactivated and returns the appropriate path.
 	 */
 	@Test
+	@DirtiesContext
 	public void testDeactivateUser() {
 		//Check the return value
 		assertEquals(userContoller.deactivateUser("jdoe",model, principal),"redirect:/auth/users/manage");
@@ -173,6 +179,7 @@ public class UserControllerTest {
 	 * This method tests if a user is activated and returns the appropriate path. 
 	 */
 	@Test
+	@DirtiesContext
 	public void testActivateUser() {
 		//Check the return value
 		assertEquals(userContoller.activateUser("jdoe",model, principal),"redirect:/auth/users/manage");
