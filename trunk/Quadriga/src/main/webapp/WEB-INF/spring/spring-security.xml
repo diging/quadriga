@@ -38,5 +38,12 @@
 
 	<!-- Reference to Quadriga roles -->
 	<beans:import resource="quadriga-roles.xml" />
+	
+	<!-- Reference to Collaborator roles -->
+	<beans:import resource="collaborator-roles.xml"/>
+	
+	
+	
+	
 
 </beans:beans>
