@@ -18,13 +18,13 @@ import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 **  
 **  @implemented by : SatyaSwaroop   
 **/
-@Service
+//@Service
 public class MockupConceptCollectionManager implements
 		IConceptCollectionManager {
 	
 	@Override
-	public List<IConceptCollection> getCollectionsOfUser(String sUserId)
-			throws SQLException {
+	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId)
+			 {
 		
 		IConceptCollection cc1  = new ConceptCollection();
 		IConceptCollection cc2  = new ConceptCollection();
@@ -67,6 +67,12 @@ public class MockupConceptCollectionManager implements
 
 	@Override
 	public IConceptCollection getConceptCollection(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IConceptCollection> getUserCollaborations(String sUserId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

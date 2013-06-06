@@ -33,14 +33,14 @@ BEGIN
      THEN SET errmsg = "collection name cannot be empty.";
     END IF;
     
-    IF NOT EXISTS (SELECT 1 FROM vw_project
+    IF NOT EXISTS (SELECT 1 FROM vw_comceptcollections_collaborator
                      WHERE collectionname = incollectionname)
       THEN SET errmsg = "collection name is invalid.";
     END IF;
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
-      -- retrieve the projectid id of the project 
+      -- retrieve the collection id of the project 
       SELECT collectionid INTO varcollectionid FROM vw_conceptcollections
         WHERE collectionname = incollectionname; 
       
