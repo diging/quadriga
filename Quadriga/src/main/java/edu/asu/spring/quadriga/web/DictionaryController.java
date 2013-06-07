@@ -30,8 +30,6 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
-import edu.asu.spring.quadriga.domain.implementation.WordPower;
-import edu.asu.spring.quadriga.domain.implementation.extendingThis;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
