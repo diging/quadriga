@@ -14,8 +14,20 @@
 					}), "g" + (ignore ? "i" : "")), str2);
 		};
 
+		$(document).ready(function() {
+			$("input[type=submit]").button().click(function(event) {
+				event.preventDefault();
+			});
+		});
 
-		
+		$(document).ready(function() {
+			activeTable = $('.dataTable').dataTable({
+				"bJQueryUI" : true,
+				"sPaginationType" : "full_numbers",
+				"bAutoWidth": false
+			});
+		});
+
 		function jqEnableAll(name, flag) {
 			if (flag == 1) {
 				//Allow is selected. Enable user roles check boxes
@@ -38,8 +50,8 @@
 					function() {
 						return this.value;
 					}).get();
-			if (selectedAccess.length == 0) {				
-				$.alert("Please Approve/Deny the request","Oops !!!");
+			if (selectedAccess.length == 0) {
+				$.alert("Please Approve/Deny the request", "Oops !!!");
 				return;
 			}
 
@@ -48,7 +60,8 @@
 				return this.value;
 			}).get();
 			if (checkedVals.length == 0 && selectedAccess == 'approve') {
-				$.alert("Please select atleast one role for the user","Oops !!!");
+				$.alert("Please select atleast one role for the user",
+						"Oops !!!");
 				return;
 			}
 
@@ -57,13 +70,6 @@
 			path = path.replaceAll(",", "-");
 			location.href = '/quadriga/auth/users/access/' + path;
 		}
-
-		$(function() {
-			$("input[type=submit]").button().click(function(event) {
-				event.preventDefault();
-			});
-		});
-
 	</script>
 
 
@@ -96,36 +102,94 @@
 		</c:forEach>
 	</c:if>
 
+	<br> <br>
 
 	<c:if test="${not empty activeUserList}">
 		<h3>Current Active Users</h3>
-		<table>
-			<c:forEach var="user" items="${activeUserList}">
+		<table cellpadding="0" cellspacing="0" border="0"
+			class="display dataTable" width="100%">
+			<thead>
 				<tr>
-					<td width="52%"><font size="3"><c:out
-								value="${user.userName}"></c:out></font></td>
-					<td><font size="1"> <input type="submit"
-							onclick="location.href='/quadriga/auth/users/deactivate/${user.userName}'"
-							value="Deactivate"></font></td>
+					<th>Username</th>
+					<th>Admin</th>
+					<th>Standard User</th>
+					<th>Restricted User</th>
+					<th>Collaborator</th>
+					<th>Action</th>
 				</tr>
-			</c:forEach>
+			</thead>
+			<tbody>
+				<c:forEach var="user" items="${activeUserList}">
+					<tr>
+						<td width="20%"><font size="3"><c:out
+									value="${user.userName}"></c:out></font></td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center"><font size="1"> <input
+								type="submit"
+								onclick="location.href='/quadriga/auth/users/deactivate/${user.userName}'"
+								value="Deactivate"></font></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>Username</th>
+					<th>Admin</th>
+					<th>Standard User</th>
+					<th>Restricted User</th>
+					<th>Collaborator</th>
+					<th>Action</th>
+				</tr>
+			</tfoot>
 		</table>
 	</c:if>
 
+	<br />
 
 
 	<c:if test="${not empty inactiveUserList}">
 		<h3>Deactivated User Accounts</h3>
-		<table>
-			<c:forEach var="user" items="${inactiveUserList}">
+		<table cellpadding="0" cellspacing="0" border="0"
+			class="display dataTable" width="100%">
+			<thead>
 				<tr>
-					<td width="54%"><font size="3"><c:out
-								value="${user.userName}"></c:out></font></td>
-					<td><font size="1"> <input type="submit"
-							onclick="location.href='/quadriga/auth/users/activate/${user.userName}'"
-							value="Activate"></font></td>
+					<th>Username</th>
+					<th>Admin</th>
+					<th>Standard User</th>
+					<th>Restricted User</th>
+					<th>Collaborator</th>
+					<th>Action</th>
 				</tr>
-			</c:forEach>
+			</thead>
+			<tbody>
+				<c:forEach var="user" items="${inactiveUserList}">
+					<tr class="gradeX">
+						<td width="20%"><font size="3"><c:out
+									value="${user.userName}"></c:out></font></td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center"><font size="1"> <input
+								type="submit"
+								onclick="location.href='/quadriga/auth/users/activate/${user.userName}'"
+								value="Activate"></font></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>Username</th>
+					<th>Admin</th>
+					<th>Standard User</th>
+					<th>Restricted User</th>
+					<th>Collaborator</th>
+					<th>Action</th>
+				</tr>
+			</tfoot>
 		</table>
 	</c:if>
 
