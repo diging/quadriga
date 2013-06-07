@@ -112,33 +112,21 @@ public class ProjectManager implements IProjectManager {
 	public IProject getProject(String projectid) {
 	    
 		IProject project = null;
-		List<ICollaboratorRole> collaboratorDBRolesList;
-		ICollaborator collaborator;
-		ICollaboratorRole collaboratorRole;
-		List<ICollaboratorRole> collaboratorRolesList = new ArrayList<ICollaboratorRole>();
+		//List<ICollaboratorRole> collaboratorRolesList = new ArrayList<ICollaboratorRole>();
 		
 		try {
 			project = dbConnect.getProjectDetails(projectid);
-								
-			for(int j=0;j<project.getCollaborators().size();j++)
-			{
-				collaborator = project.getCollaborators().get(j);
-				collaboratorDBRolesList = collaborator.getCollaboratorRoles();
-				for(int i=0; i<collaboratorDBRolesList.size();i++)
+			
+			for (ICollaborator collaborator : project.getCollaborators()) {
+				
+				for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
 				{
-					collaboratorRole = roleMapper.getCollaboratorRoleId(collaboratorDBRolesList.get(i).getRoleid());
-					collaboratorRolesList.add(collaboratorRole);
+					roleMapper.getCollaboratorRoles(collaboratorRole);
+					
+					System.out.println("------------"+collaboratorRole.getRoleid());
 				}
 			}
-			//collaboratorDBRolesList =  project.getCollaboratorRoles();
-	
-			/*for(int i=0; i<collaboratorDBRolesList.size();i++)
-			{
-				collaboratorRole = roleMapper.getCollaboratorRoleId(collaboratorDBRolesList.get(i).getRoleid());
-				collaboratorRolesList.add(collaboratorRole);
-			} */
-		
-			project.setCollaboratorRoles(collaboratorRolesList);
+			
 		}
 		
 		catch (SQLException e) {

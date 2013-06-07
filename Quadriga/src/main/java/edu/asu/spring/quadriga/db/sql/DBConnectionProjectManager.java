@@ -205,7 +205,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		for(int i=0;i<roles.length;i++)
 		{
 			collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-			collaboratorRole.setRoleid(roles[i]);
+			collaboratorRole.setRoleDBid(roles[i]);
 			collaboratorRoleList.add(collaboratorRole);
 		}
 		
@@ -250,7 +250,8 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			
 			while(resultset.next())
 	        {
-		        	project.setName(resultset.getString(1));
+				
+				    project.setName(resultset.getString(1));
 		        	project.setDescription(resultset.getString(2));
 		        	project.setId("quadriga" + resultset.getString(3));
 		        	IUser owner = userFactory.createUserObject();
@@ -277,15 +278,18 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		
 			while(resultset1.next())
 			{		
-					
 				    project.setId(resultset1.getString(1));
+				    
+					//project.setProjectCollaborator(collaboratorUser);
+					
+					ICollaborator collaborator = collaboratorFactory.createCollaborator();
+					List<ICollaboratorRole> collaboratorRoles = splitAndCreateCollaboratorRoles(resultset1.getString(3));
+					collaborator.setCollaboratorRoles(collaboratorRoles);
+					
 					IUser collaboratorUser = userFactory.createUserObject();
 					collaboratorUser.setName(resultset1.getString(2));
-					project.setProjectCollaborator(collaboratorUser);
-					ICollaborator collaborator = collaboratorFactory.createCollaborator();
-					List<ICollaboratorRole> collaboratorRoles = splitAndCreateCollaboratorRoles(resultset1.getString(4));
-					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collaborator.setUserObj(collaboratorUser);
+					
 					project.getCollaborators().add(collaborator);
 			}
 		}
@@ -345,11 +349,11 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
         	sqlStatement.setString(5,owner.getUserName());
         	
         	//adding output variables to the SP
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+			sqlStatement.registerOutParameter(6,Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(6);
 			
 			if(errmsg.isEmpty())
 			{
