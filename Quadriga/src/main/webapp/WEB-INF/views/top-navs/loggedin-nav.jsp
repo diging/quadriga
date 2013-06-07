@@ -18,7 +18,13 @@
 		</ul>
 		</li>
 		</sec:authorize>
-		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/dictionaries">Dictionaries</a></li></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/dictionaries">Dictionaries</a>
+		<ul>
+				<li><a href="#">Add Dictionary</a></li>
+		        <li><a href="#">Modify Dictionary</a></li>
+		        <li><a href="#">Delete Dictionary</a></li>
+		</ul>
+		</li></sec:authorize>
 
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "editing" ? "class=\"current_page_item\"" : ""}><a href="">Editing</a></li></sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR', 'ROLE_QUADRIGA_USER_RESTRICTED')"><li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="">Networks</a></li></sec:authorize>

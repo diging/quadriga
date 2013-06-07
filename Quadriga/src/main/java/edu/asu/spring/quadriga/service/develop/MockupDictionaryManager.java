@@ -70,11 +70,6 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		
 	}
 
-	public int addNewDictionariesItems(Dictionary newDictionary){
-		
-		return 1;
-		
-	}
 	
 	public List<IDictionaryItems> getDictionariesItems(String id){
 		return null;
@@ -82,6 +77,13 @@ public class MockupDictionaryManager implements IDictionaryManager {
 
 	@Override
 	public String getDictionaryName(String dictionaryid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String addNewDictionariesItems(String dictionaryId, String item,
+			String owner) {
 		// TODO Auto-generated method stub
 		return null;
 	}

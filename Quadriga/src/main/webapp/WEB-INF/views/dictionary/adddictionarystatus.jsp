@@ -1,7 +1,19 @@
+<!--  
+	Author Lohith Dwaraka  
+	Used to list the items in a dictionary
+	and search for items	
+-->
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!-- Content -->
+<ul>
+	<li>
+		<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'" value='back'>
+	</li>
+</ul>
+
 
 <article class="is-page-content">
 
