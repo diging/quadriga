@@ -156,7 +156,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				
 				while(resultset.next())
 		        {
-		        	
+		        	System.out.println("-----------"+resultset.getString(1));
 					project = projectfactory.createProjectObject();
 		        	project.setName(resultset.getString(1));
 		        	project.setDescription(resultset.getString(2));
