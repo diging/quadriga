@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -31,8 +32,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 
 	@Autowired
 	private IConceptCollectionFactory conceptCollectionFactory;
-
-	
+	@Autowired
+	private IConcept concept;
 	/**
 	 * {@inheritDoc}
 	 */
@@ -121,5 +122,51 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 		}
 		return collectionsList;
 	}
+
+	@Override
+	public void getCollectionDetails(IConceptCollection collection) {
+		
+		String dbCommand;
+		String errmsg=null;
+		getConnection();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_COLLECTION_DETAILS + "(?,?)";
+		try {
+
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, collection.getName());
+			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
+
+			sqlStatement.execute();
+			 errmsg = sqlStatement.getString(2);
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet.next()) { 
+				do { 
+					collection.addItem(concept);
+					/*conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
+					conceptCollection.setName(resultSet.getString(1));
+					conceptCollection.setDescription(resultSet.getString(2));
+					conceptCollection.setId(resultSet.getString(3));
+					collectionsList.add(conceptCollection);*/
+					//concept.setDiscription(resultSet.getString(1));
+					concept.setName(resultSet.getString(1));
+					concept.setPos(resultSet.getString(2));
+					concept.setDescription(resultSet.getString(3));
+				} while (resultSet.next());
+			}		
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			System.out.println(""+errmsg);
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+
+	
 
 }

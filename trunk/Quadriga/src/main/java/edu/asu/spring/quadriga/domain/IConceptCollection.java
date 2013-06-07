@@ -30,5 +30,12 @@ public interface IConceptCollection
 	public abstract void setName(String name);
 
 	public abstract String getName();
+	
+	
+	
+	public abstract void addItem(IConcept concept);
+
+	public abstract List<IConcept> getItems();
+	
 
 }

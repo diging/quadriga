@@ -12,13 +12,14 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_conceptcollections_items
 (
-  id       INT   REFERENCES tbl_conceptcollections(id),
+  id       INT   NOT NULL,
   item      	  VARCHAR(10)	NOT NULL,
+  pos			  VARCHAR(10)   CHECK(pos IN ('noun', 'adjective', 'verb', 'adverb', 'other')),
+  description     TEXT,			
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
   PRIMARY KEY(id,item),
   FOREIGN KEY(id) REFERENCES tbl_conceptcollections(id)
-  
 )

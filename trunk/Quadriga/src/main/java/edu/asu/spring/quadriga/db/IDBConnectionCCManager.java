@@ -25,4 +25,5 @@ public interface IDBConnectionCCManager {
 		 * @return List containing user objects of all collections of the user
 		 */
 		public abstract List<IConceptCollection> getCollaboratedConceptsofUser(String userName);
+		public abstract void getCollectionDetails(IConceptCollection concept);
 	}

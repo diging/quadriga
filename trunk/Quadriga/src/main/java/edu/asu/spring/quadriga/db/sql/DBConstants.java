@@ -33,6 +33,7 @@ public interface DBConstants
 
 	public static final String GET_CCOWNED_DETAILS = "sp_getConceptCollections";
 	public static final String GET_CCCOLLABORATIONS_DETAILS = "sp_getUserCollectionCollaborations";
+	public static final String GET_COLLECTION_DETAILS = "sp_getConceptCollectionDetails";
 
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
 	public static final String GET_DICTIONARY_NAME = "sp_getDictionaryName";
