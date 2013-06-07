@@ -7,10 +7,10 @@ open (MYFILE, 'database.props');
 while($line=<MYFILE>){
 	chomp($line);
 	my @values = split('=', $line);
-	if($line=~/username/){
+	if($line=~/dbuser/){
 		$userName=$values[1];	
 	}
-	if($line=~/database/){
+	if($line=~/dbname/){
 		$dbName=$values[1];
 	}
 }
@@ -65,15 +65,13 @@ system("sudo mysql < ./createDB.txt >> dbCreation.log 2>&1");
 print "Assigning permission to user : $userName on Database : $dbName schema\n";
 system("sudo mysql < ./grantPerm.txt >> dbCreation.log 2>&1");
 print "Creating tables on the database : $dbName\n";
-print "Please enter your $userName password when prompted\n";
-
-
+print "Please enter your [$userName] user password when prompted\n";
 system("sudo mysql --user=$userName --password $dbName < ./dbTables.txt  >> dbCreation.log 2>&1" );
 print "Creating views on the database : $dbName\n";
-print "Please enter your $userName password when prompted\n";
+print "Please enter your [$userName] user password when prompted\n";
 system("sudo mysql --user=$userName --password $dbName < ./dbViews.txt  >> dbCreation.log 2>&1" );
 print "Creating stored procedures on the database : $dbName\n";
-print "Please enter your $userName password when prompted\n";
+print "Please enter your [$userName] user password when prompted\n";
 system("sudo mysql  --user=$userName --password $dbName < ./dbSP.txt  >> dbCreation.log 2>&1" );
 
 # Cleaning the file created by the script
