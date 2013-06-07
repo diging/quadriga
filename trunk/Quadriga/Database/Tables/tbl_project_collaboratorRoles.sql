@@ -1,5 +1,3 @@
-use quadriga;
-
 CREATE TABLE IF NOT EXISTS tbl_project_collaboratorRoles
 (
    collaboratorRoleName  	VARCHAR(50) ,

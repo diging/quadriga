@@ -19,7 +19,5 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary_collaborator
    updateddate         TIMESTAMP     NOT NULL,
    createdby           VARCHAR(10)   NOT NULL,
    createddate         DATETIME      NOT NULL,
-   PRIMARY KEY(dictionaryid,collaboratoruser,collaboratorrole),
-   FOREIGN KEY(dictionaryid)  REFERENCES tbl_dictionary(dictionaryid),
-   FOREIGN KEY(collaboratoruser)  REFERENCES tbl_quadriga_user(username)
+   PRIMARY KEY(dictionaryid,collaboratoruser,collaboratorrole)
 )

@@ -18,7 +18,5 @@ CREATE TABLE IF NOT EXISTS tbl_project_workspace
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(projectid,workspaceid),
-  FOREIGN KEY(projectid) REFERENCES tbl_project(projectid)
-  FOREIGN KEY(workspaceid)REFERENCES tbl_workspace(id)  
+  PRIMARY KEY(projectid,workspaceid)  
 )
