@@ -46,18 +46,18 @@ public class CollaboratorRoleMapper implements ICollaboratorRoleMapper{
  * 
  */
 	@Override
-	public ICollaboratorRole getCollaboratorRoles(String collaboratorRoleDBId) {
+	public void getCollaboratorRoles(ICollaboratorRole collaboratorRole) {
 		
 		
 		for(ICollaboratorRole role: collaboratorRoles)
 		{
-			if(role.getRoleDBid().equals(collaboratorRoleDBId))
+			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
-				return role;
+				collaboratorRole.setRoleid(role.getRoleid());
 			}
 		}
 		
-		return null;	
+			
 	}
 
 /**

@@ -10,9 +10,11 @@ public interface ICollaboratorRoleMapper {
 	
 	public abstract List<ICollaboratorRole> getCollaboratorRole();
 	
-	public abstract ICollaboratorRole getCollaboratorRoles(String CollaboratorRoleDBid);
+	public abstract void getCollaboratorRoles(ICollaboratorRole collaboratorRole);
 	
 	public abstract ICollaboratorRole getCollaboratorRoleId(String collaboratorRoleId);
+
+	
 
 	
 }
