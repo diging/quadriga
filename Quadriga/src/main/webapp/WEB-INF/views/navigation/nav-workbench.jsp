@@ -7,16 +7,10 @@
 		<li>
 			<article class="is-post-summary">
 				<h3>
-					<a href="#">» Add new project</a>
+					» <a href="/quadriga/auth/workbench/addproject">Add Project</a>
 				</h3>
 			</article>
 		</li>
-		<li>
-			<article class="is-post-summary">
-				<h3>
-					<a href="#">» Do something else</a>
-				</h3>
-			</article>
-		</li>
+		
 	</ul>
 </section>
