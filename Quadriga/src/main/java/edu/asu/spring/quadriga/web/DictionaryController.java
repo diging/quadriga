@@ -154,15 +154,15 @@ public class DictionaryController {
 	public String searchDictionaryItemRestHandle(@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model){
 		try{
 			
-			RestTemplate rest = new RestTemplate();
-			extendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
-					extendingThis.class);
-			WordPower wordPower =extendingthis.wordPower;
-			System.out.println("id "+wordPower.getIds());
-			System.out.println("Lemma "+wordPower.getLemmas());
-			System.out.println("Description "+wordPower.getDescriptions());
-			System.out.println(" item " + item);
-			System.out.println(" pos " + pos);
+//			RestTemplate rest = new RestTemplate();
+//			extendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
+//					extendingThis.class);
+//			WordPower wordPower =extendingthis.wordPower;
+//			System.out.println("id "+wordPower.getIds());
+//			System.out.println("Lemma "+wordPower.getLemmas());
+//			System.out.println("Description "+wordPower.getDescriptions());
+//			System.out.println(" item " + item);
+//			System.out.println(" pos " + pos);
 			
 			
 		}catch(Exception e){
