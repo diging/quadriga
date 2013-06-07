@@ -30,6 +30,7 @@
 <div style="font-family:verdana;padding:50px;border-radius:10px;border:5px solid #EE872A;">
 
 <ul class="a">
+hoiiiiiiiiiiiiiiiiiiiiiiiiiiii
 <c:forEach var="projectcollaborator" items="${project.collaborators}">
 <li><h6><c:out value="${projectcollaborator.userObj.name}"></c:out></h6></li>
 	<li><c:forEach var="collaboratorRoles1" items="${projectcollaborator.collaboratorRoles}">
