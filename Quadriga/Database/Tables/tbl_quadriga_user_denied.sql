@@ -18,6 +18,5 @@ CREATE TABLE IF NOT EXISTS tbl_quadriga_user_denied
   updatedby     VARCHAR(10) NOT NULL,
   updateddate   TIMESTAMP   NOT NULL,
   createdby     VARCHAR(10) NOT NULL,
-  createddate   DATETIME    NOT NULL
-  FOREIGN KEY(deniedby) REFERENCES tbl_quadriga_user(username) 
+  createddate   DATETIME    NOT NULL 
 )

@@ -22,6 +22,5 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id),UNIQUE KEY(collectionname),UNIQUE KEY(collectionid),
-  FOREIGN KEY(collectionowner) REFERENCES tbl_quadriga_user(username)
+  PRIMARY KEY(id),UNIQUE KEY(collectionname),UNIQUE KEY(collectionid)
 )

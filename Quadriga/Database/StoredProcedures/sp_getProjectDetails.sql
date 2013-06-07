@@ -11,21 +11,6 @@ Create By     : Kiran Kumar Batna
 Modified Date : 05/30/2013
 
 ********************************************/
-
-/*******************************************
-Name          : sp_getProjectDetails
-
-Description   : retrieves the project details
-				of a particular project
-
-Called By     : UI (DBConnectionManager.java)
-
-Create By     : Kiran Kumar Batna
-
-Modified Date : 05/30/2013
-
-********************************************/
-use quadriga;
 DROP PROCEDURE IF EXISTS sp_getProjectDetails;
 
 DELIMITER $$

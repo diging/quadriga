@@ -18,6 +18,5 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary_items
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(dictionaryid,items),
-  FOREIGN KEY(dictionaryid) REFERENCES tbl_dictionary(dictionaryid)
+  PRIMARY KEY(dictionaryid,items)
 )

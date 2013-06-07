@@ -19,7 +19,5 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections_collaborator
   updateddate     	 TIMESTAMP     NOT NULL,
   createdby       	 VARCHAR(10)   NOT NULL,
   createddate     	 DATETIME      NOT NULL,
-  PRIMARY KEY(collectionid,collaboratoruser,collaboratorrole),
-  FOREIGN KEY(collectionid) REFERENCES tbl_conceptcollections(collectionid),
-  FOREIGN KEY(collaboratoruser) REFERENCES tbl_quadriga_user(username)
+  PRIMARY KEY(collectionid,collaboratoruser,collaboratorrole)
 )

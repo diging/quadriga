@@ -143,11 +143,6 @@ ECHO ^[%DB_USER%^] Enter database user password when prompted below
 
 REM End block
 :END
-  REM Checking if the log file exists
-   IF EXIST %DB_LOG_FILE% (
-    DEL %DB_LOG_FILE%
-   )
-   
    REM Checking if the schema file exists
     IF EXIST %DB_SCHEMA_FILE% (
        DEL %DB_SCHEMA_FILE%

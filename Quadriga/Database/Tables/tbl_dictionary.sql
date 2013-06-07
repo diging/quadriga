@@ -22,6 +22,5 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id),UNIQUE KEY(dictionaryname),UNIQUE KEY(dictionaryid),
-  FOREIGN KEY(dictionaryowner) REFERENCES tbl_quadriga_user(username)
+  PRIMARY KEY(id),UNIQUE KEY(dictionaryname),UNIQUE KEY(dictionaryid)
 )
