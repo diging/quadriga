@@ -46,7 +46,7 @@ table.its tr.odd {
 	<div  style="float: left; width: 45%; border-radius:5px; border:2px solid #e3daa8; padding: 20px;">
 	<display:table class="its" name="conceptlist" keepStatus="true" requestURI="/auth/conceptcollections" uid="1" pagesize = "10">
 	<display:column property="name" sortable="false" title="You own these concept collections"
-	maxLength="25"   href="conceptDetails" paramId="name" />
+	maxLength="25"   href="conceptdetails" paramId="name"/>
 	</display:table>
 	<%-- <h4 align="center"> You own these concept collections</h4>
 	<ul>
@@ -64,7 +64,7 @@ table.its tr.odd {
 	<div  style="float: right; width: 45%; border-radius:5px; border:2px solid #e3daa8; padding: 20px;">	
 	<display:table class="its" name="collaborationlist" requestURI="/auth/conceptcollections" pagesize = "10" keepStatus="true" uid="2">
 	<display:column property="name" sortable="false" title="You also participate in these concept collections"
-	maxLength="25"  href="conceptDetails" paramId="name"/>
+	maxLength="25"  href="conceptdetails" paramId="name"/>
 	</display:table>
 	<%-- <h4 align="center"> You also participate in these concept collections</h4>
 	<ul>

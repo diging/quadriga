@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 
@@ -65,14 +66,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getConceptCollection(java.lang.String)
-	 */
-	@Override
-	public IConceptCollection getConceptCollection(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public List<IConceptCollection> getUserCollaborations(String sUserId) {
@@ -81,5 +75,12 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		conceptList = dbConnect.getCollaboratedConceptsofUser(sUserId);
 		return conceptList;
 	}
+
+	@Override
+	public void getCollectionDetails(IConceptCollection concept) {
+		dbConnect.getCollectionDetails(concept);
+		}
+
+	
 
 }

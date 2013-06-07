@@ -1,12 +1,10 @@
 package edu.asu.spring.quadriga.service.develop;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 /*	@Description : This class acts as a dummy Conceptcollection manager which adds list of concepts
@@ -65,16 +63,20 @@ public class MockupConceptCollectionManager implements
 		return 0;
 	}
 
-	@Override
-	public IConceptCollection getConceptCollection(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public List<IConceptCollection> getUserCollaborations(String sUserId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void getCollectionDetails(IConceptCollection concept) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

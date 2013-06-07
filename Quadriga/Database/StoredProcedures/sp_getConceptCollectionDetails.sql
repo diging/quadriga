@@ -1,5 +1,5 @@
 /*******************************************
-Name          : sp_getConceptCollectionCollaborators
+Name          : sp_getConceptCollectionDetails
 
 Description   : retrieves the users and their
                 Collaborator role for a concept
@@ -12,12 +12,13 @@ Modified Date : 06/04/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getConceptCollectionItems;
+DROP PROCEDURE IF EXISTS sp_getConceptCollectionDetails;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getConceptCollectionItems
+CREATE PROCEDURE sp_getConceptCollectionDetails
 (
   IN incollectionname  VARCHAR(20),
+ 
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
@@ -32,23 +33,26 @@ BEGIN
     IF(incollectionname IS NULL OR incollectionname = "")
      THEN SET errmsg = "collection name cannot be empty.";
     END IF;
+   
     
-    IF NOT EXISTS (SELECT 1 FROM vw_project
+    IF NOT EXISTS (SELECT 1 FROM vw_conceptcollections	
                      WHERE collectionname = incollectionname)
       THEN SET errmsg = "collection name is invalid.";
     END IF;
+    
+    
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
       -- retrieve the projectid id of the project 
-      SELECT collectionid INTO varcollectionid FROM vw_conceptcollections
+      SELECT id INTO varcollectionid FROM vw_conceptcollections
         WHERE collectionname = incollectionname; 
       
       -- retrieve the item details
-      SELECT id, item
+      SELECT incollectionname, item, description, pos
            AS item
         FROM vw_conceptcollections_items
-	    WHERE collectionid = varcollectionid
+	    WHERE id = varcollectionid
       GROUP BY id;
      END IF;
 END$$
