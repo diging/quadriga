@@ -14,10 +14,6 @@ public interface IProjectManager {
 	
 	public abstract List<IProject> getProjectsOfUser(String sUserId) throws SQLException;
 	
-	public abstract void setProjectCollaboratorRoles(IProject project);
-	
-	public abstract IProject getProjectCollaboratorRoles(String projectId);
-	
 	public abstract String updateProjectDetails(Project existingProject);
 	
 	public abstract int deleteProject(String projectId);

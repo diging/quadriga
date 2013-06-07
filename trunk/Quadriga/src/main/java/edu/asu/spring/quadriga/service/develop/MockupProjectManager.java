@@ -89,18 +89,5 @@ public class MockupProjectManager implements IProjectManager{
 		return project;
 	}
 
-	@Override
-	public void setProjectCollaboratorRoles(IProject project) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
-	@Override
-	public IProject getProjectCollaboratorRoles(String projectId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 }
