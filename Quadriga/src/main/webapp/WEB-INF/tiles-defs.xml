@@ -173,6 +173,7 @@
 	<definition name="auth/users/manage" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Manage Users" />
 		<put-attribute name="content" value="/WEB-INF/views/users/manage.jsp" />
+		<put-attribute name="currentPage" value="admin" />
 	</definition>
 
 	<!-- Workspace pages -->
