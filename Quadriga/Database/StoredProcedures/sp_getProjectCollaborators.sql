@@ -34,7 +34,7 @@ BEGIN
     END IF;
     
     IF NOT EXISTS (SELECT 1 FROM vw_project
-                     WHERE projectid  = inprojid)
+                     WHERE projectid = inprojid)
       THEN SET errmsg = "Project id is invalid.";
     END IF;
 
@@ -46,7 +46,8 @@ BEGIN
       
       -- retrieve the collaborator details
       SELECT projectid,collaboratoruser, 
-         GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole'
+         GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole',
+		 GROUP_CONCAT( collaboratorrolename SEPARATOR ',')  AS 'CollaboratorroleName'
         FROM vw_project_collaborator
 	    WHERE projectid = projid
       GROUP BY collaboratoruser;

@@ -13,9 +13,7 @@
 	 ul.a {list-style-type:circle;}
 	</style>
 	</head>
-<head> 
-<title>display data from the table using jsp</title> 
-</head> 
+
 <body> 
 <TABLE border="1" style="background-color: #ffffcc;"> 
 <TR> 
@@ -30,22 +28,16 @@
 
 </TABLE> 
 <div style="font-family:verdana;padding:50px;border-radius:10px;border:5px solid #EE872A;">
+
 <ul class="a">
 <c:forEach var="projectcollaborator" items="${project.collaborators}">
 <li><h6><c:out value="${projectcollaborator.userObj.name}"></c:out></h6></li>
-<li><c:forEach var="collaboratorRoles" items="${collaboratorRoles.collaboratorRoles}">
-	<li><c:out value="${collboratorRoles.roleid}"></c:out></li>
+	<li><c:forEach var="collaboratorRoles1" items="${projectcollaborator.collaboratorRoles}">
+	<li><c:out value="${collaboratorRoles1.roleid}"></c:out></li>
 	</c:forEach>
-</li>
+	</li>
 </c:forEach>
 </ul>
-
-<%--<c:forEach var="projectcollaborator" items="${project.collaborators}"> 
-<li><c:forEach var="collaboratorRoles" items="${collaboratorRoles.collaboratorRoles}">
-	<li><c:out value="${collboratorRoles.roleDBid}"></c:out></li>
-	</c:forEach>
-</li>
-</c:forEach>--%>
 
 </div>
 </body> 

@@ -197,9 +197,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	public List<ICollaboratorRole> splitAndCreateCollaboratorRoles(String role)
 	{
         String[] roles;
-		
 		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
-		
 		ICollaboratorRole collaboratorRole = null;
 		
 		roles = role.split(",");
@@ -207,7 +205,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		for(int i=0;i<roles.length;i++)
 		{
 			collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-			collaboratorRole.setRoleDBid(roles[i]);
+			collaboratorRole.setRoleid(roles[i]);
 			collaboratorRoleList.add(collaboratorRole);
 		}
 		
@@ -237,12 +235,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		IProject project = null;
 		project = projectfactory.createProjectObject();
 		project.setCollaborators(new ArrayList<ICollaborator>());
-
-		
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_DETAILS + "(?,?)";
 
-		try {
-				
+		try {		
         sqlStatement = connection.prepareCall("{"+dbCommand+"}");
         sqlStatement.setString(1, projectId);
 		sqlStatement.registerOutParameter(2, Types.VARCHAR);
@@ -267,8 +262,8 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		{
 			throw new RuntimeException(outErrorValue);
 		}
-       
-		dbCommand1 = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_COLLABORATORS + "(?,?)";
+	
+	    dbCommand1 = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_COLLABORATORS + "(?,?)";
 		sqlStatement = connection.prepareCall("{"+dbCommand1+"}");
 		sqlStatement.setString(1,projectId);
 		sqlStatement.registerOutParameter(2, Types.VARCHAR);
@@ -281,30 +276,29 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			ResultSet resultset1 = sqlStatement.getResultSet();
 		
 			while(resultset1.next())
-			{				
-					project.setId(resultset1.getString(1));
+			{		
+					
+				    project.setId(resultset1.getString(1));
 					IUser collaboratorUser = userFactory.createUserObject();
 					collaboratorUser.setName(resultset1.getString(2));
 					project.setProjectCollaborator(collaboratorUser);
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
-					List<ICollaboratorRole> collaboratorRoles = splitAndCreateCollaboratorRoles(resultset1.getString(3));
-					project.setCollaboratorRoles(collaboratorRoles);
-					//collaborator.setCollaboratorRoles(collaboratorRoles);
+					List<ICollaboratorRole> collaboratorRoles = splitAndCreateCollaboratorRoles(resultset1.getString(4));
+					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collaborator.setUserObj(collaboratorUser);
 					project.getCollaborators().add(collaborator);
 			}
 		}
 		
-	}
-	
+	} 
 		 finally{
 			 closeConnection();
 		 }
-		 
-		
+	
 		return project;
 	}
 	
+		
 	/**
 	 *  This method inserts a record for new project
 	 *  @param  project object
@@ -312,6 +306,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 *  @exception SQL Exception
 	 *  @author Kiran Kumar Batna 
 	 */
+	
 	@Override
 	public int addProjectRequest(IProject project)
 	{
@@ -375,5 +370,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
         	closeConnection();
         }
 	}
+
 	
 }

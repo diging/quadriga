@@ -44,6 +44,7 @@ public interface IDBConnectionProjectManager
 	public abstract void setDataSource(DataSource dataSource);
 
 	public abstract int addProjectRequest(IProject project);
+	
 
 
 }

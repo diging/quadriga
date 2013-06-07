@@ -12,9 +12,10 @@ Modified Date : 05/24/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_project_collaborator;
 
-CREATE VIEW vw_project_collaborator(projectid,collaboratoruser,collaboratorrole)
+CREATE VIEW vw_project_collaborator(projectid,collaboratoruser,collaboratorrole,collaboratorrolename)
 AS
    SELECT projectid,
           collaboratoruser,
-          collaboratorrole
+          collaboratorrole,
+		  collaboratorrolename
      FROM tbl_project_collaborator;
