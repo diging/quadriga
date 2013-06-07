@@ -277,7 +277,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
         
         //fetch the values from the project object
         name = dictionary.getName();
-        description = dictionary.getDescription();
+        description = dictionary.getDescription();        
         id = dictionary.getId();
         owner = dictionary.getOwner();
         
@@ -312,7 +312,60 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			}
 			else
 			{
-				System.out.println("Error message : "+errmsg);
+				return errmsg;
+			}
+			
+        }
+        catch(SQLException e)
+        {
+        	throw new RuntimeException(e.getMessage());
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
+	
+	
+	@Override
+	public String addDictionaryItems(String dictinaryId,String item,String owner)
+	{
+
+        String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+
+        
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_DICTIONARY_ITEM  + "(?,?,?,?)";
+        
+        //get the connection
+        getConnection();
+        System.out.println("dbCommand : "+dbCommand);
+        //establish the connection with the database
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, dictinaryId);
+        	sqlStatement.setString(2, item);
+        	sqlStatement.setString(3,owner);
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(4);
+			
+			if(errmsg.isEmpty())
+			{
+				return errmsg;
+			}
+			else
+			{
 				return errmsg;
 			}
 			

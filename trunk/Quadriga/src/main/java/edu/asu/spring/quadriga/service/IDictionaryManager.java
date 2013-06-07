@@ -19,7 +19,7 @@ public interface IDictionaryManager {
 	
 	public abstract int deleteDictionariesItems(String dictionaryId);
 	
-	public abstract int addNewDictionariesItems(Dictionary newDictionary);
+	public abstract String addNewDictionariesItems(String dictionaryId,String item,String owner);
 	
 	public abstract String addNewDictionary(Dictionary newDictionary);
 	

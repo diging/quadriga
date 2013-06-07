@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.service.impl;
 
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 
@@ -59,9 +58,16 @@ public class DictionaryManager implements IDictionaryManager {
 		return 1;
 	}
 	
-	public int addNewDictionariesItems(Dictionary newDictionary){
+	public String addNewDictionariesItems(String dictionaryId,String item,String owner){
+		String msg=null;
+		try {
+			msg = dbConnect.addDictionaryItems(dictionaryId,item,owner);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
 		
-		return 1;
+		return msg;
 		
 	}
 	

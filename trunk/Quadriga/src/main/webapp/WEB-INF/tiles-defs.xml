@@ -148,6 +148,13 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/adddictionaryitems.jsp" />
 	</definition>
+	<definition name="auth/dictionaries/dictionary/wordSearch" extends="base.definition.dictionaries">
+		<put-attribute name="title" value="Quadriga Dictionary - Show Word Search" />
+		<put-attribute name="sub-navigation"
+			value="/WEB-INF/views/dictionary/project-right.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
+	</definition>
 
 
 	<!-- Home pages -->
