@@ -12,10 +12,11 @@
 	</header>
 
 	
-	<h5>You are the owner of the following projects:</h5>
+	
     
     	<c:if test="${not empty projectlist}">
-    		<ul class='a'>
+    	You are the owner of the following projects:
+    		<ul class="style2">
    	 			<c:forEach var="project" items="${projectlist}">
 					<li>
 						<a href="workbench/${project.id}"><c:out value="${project.name}"></c:out></a>
@@ -25,7 +26,7 @@
 			</ul>
 		</c:if>
 		<c:if test="${empty projectlist}">
-			You don't have any projects yet.
+			You don't have any projects yet. You should create one!
 		</c:if>
 	
 	
