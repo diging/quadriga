@@ -37,11 +37,19 @@
 			<artifactId>spring-web</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+            
 		<dependency>
 			<groupId>displaytag</groupId>
 			<artifactId>displaytag</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-oxm</artifactId>
+      <version>3.0.0.RELEASE</version>
+    	</dependency>
+		
 
 		<!-- LDAP connection -->
 		<dependency>
