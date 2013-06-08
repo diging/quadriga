@@ -319,6 +319,7 @@
 			-o-transition: top .15s ease-in-out;
 			-ms-transition: top .15s ease-in-out;
 			transition: top .15s ease-in-out;
+			min-width: 150px;
 		}
 
 			#nav li a
@@ -347,6 +348,26 @@
 			
 			 	display: none;
 			}
+				#nav ul ul li {
+			 		font-size: 14px;
+					font-style: normal;
+					text-transform: none;
+					margin: 0px;
+					border-bottom-left-radius: 0px;
+					border-bottom-right-radius: 0px;
+					min-width: 135px;
+				}
+				
+				#nav ul ul li:last-child a {
+					border-bottom-left-radius: 6px;
+					border-bottom-right-radius: 6px;
+				}
+					#nav ul ul li a {
+				 		
+						border-bottom-left-radius: 0px;
+						border-bottom-right-radius: 0px;
+					}
+				
 			#nav ul li:hover > ul  {
  			 
  			display: block;
