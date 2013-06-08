@@ -35,6 +35,7 @@ public class WorkspaceController {
 	 */
 	@RequestMapping(value = "/auth/workspace", method = RequestMethod.GET)
 	public String workspaceRequest(ModelMap model, Principal principal) {
+		dspaceManager.checkRestConnection();
 		return "redirect:/auth/workspace/communities";
 	}
 

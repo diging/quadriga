@@ -11,4 +11,6 @@ public interface IDspaceManager {
 
 	public abstract List<ICollection> getAllCollections(String sCommunityTitle);
 
+	public abstract void checkRestConnection();
+
 }
