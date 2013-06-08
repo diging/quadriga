@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
 import edu.asu.spring.quadriga.service.IDictionaryManager;;
 
 /**
@@ -84,6 +86,12 @@ public class MockupDictionaryManager implements IDictionaryManager {
 	@Override
 	public String addNewDictionariesItems(String dictionaryId, String item,
 			String owner) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DictionaryEntry callRestUri(String url, String item, String pos) {
 		// TODO Auto-generated method stub
 		return null;
 	}

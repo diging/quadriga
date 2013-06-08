@@ -1,8 +1,6 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,17 +20,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
-import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
-import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 /**
  * @Description : this class will handle all dictionaries components  for the project 
@@ -59,7 +57,7 @@ public class DictionaryController {
 	public String listDictionary(ModelMap model){
 		try{
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+			logger.info("came to listDictionary");
 			String userId = user.getUsername();
 			List<IDictionary> dictionaryList;
 			dictionaryList = dictonaryManager.getDictionariesList(userId);
@@ -73,24 +71,26 @@ public class DictionaryController {
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
 
+		logger.info("came to getDictionaryPage");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);
 		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
-		model.addAttribute("dictID", dictionaryid);
+		model.addAttribute("dictionaryid", dictionaryid);
 		return "auth/dictionary/dictionary";
 	}
 	
 	
 	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.GET)
 	public ModelAndView addDictionaryForm() {
+		logger.info("came to addDictionaryForm get");
 		return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
 	}
 	
 	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.POST)
 	public String addDictionaryHandle(@ModelAttribute("SpringWeb")Dictionary dictionary,ModelMap model, Principal principal){
 		try{
-			
+			logger.info("came to addDictionaryHandle post");
 			IUser user = usermanager.getUserDetails(principal.getName());
 			dictionary.setOwner(user);
 			
@@ -109,15 +109,28 @@ public class DictionaryController {
 		return "auth/dictionaries/addDictionaryStatus"; 
 	}
 	
-	@RequestMapping(value="auth/dictionaries/addDictionaryItems", method = RequestMethod.GET)
+	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
 	public ModelAndView addDictionaryItemForm() {
-		return new ModelAndView("auth/dictionaries/addDictionaryItems", "command",dictionaryItemsFactory.createDictionaryItemsObject());
+		logger.info("came to addDictionaryItemForm get" );
+		return new ModelAndView("auth/dictionaries/addDictionaryItems/{dictionaryid}", "command",dictionaryItemsFactory.createDictionaryItemsObject());
+	}
+	
+	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
+	public String addDictionaryItem(@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) {
+		logger.info("came to addDictionaryItemForm post");
+		System.out.println(" --------------"+dictionaryItems.getDescription()+" "+((dictionaryItems==null)?0:1));
+		System.out.println(" --------------"+dictionaryItems.getId()+" "+((dictionaryItems==null)?0:1));
+		System.out.println(" --------------"+dictionaryItems.getItems()+" "+((dictionaryItems==null)?0:1));
+		System.out.println(" --------------"+dictionaryItems.getPos()+" "+((dictionaryItems==null)?0:1));
+		System.out.println(" --------------"+dictionaryItems.getVocabulary()+" "+((dictionaryItems==null)?0:1));
+
+		return "auth/dictionaries/addDictionaryItems";
 	}
 	
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}", method = RequestMethod.POST)
 	public String addDictionaryItemHandle(@RequestParam("itemName") String item,@PathVariable("dictionaryid") String dictionaryId, ModelMap model, Principal principal){
 		try{
-				
+			logger.info("came to addDictionaryItemHandle post");
 			String owner = usermanager.getUserDetails(principal.getName()).getUserName();
 
 			String msg= dictonaryManager.addNewDictionariesItems(dictionaryId,item,owner);
@@ -148,24 +161,26 @@ public class DictionaryController {
 	}
 	
 	
-	@RequestMapping(value="auth/dictionaries/dictionary/wordSearch", method = RequestMethod.POST)
-	public String searchDictionaryItemRestHandle(@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model){
+	@RequestMapping(value="auth/dictionaries/dictionary/wordSearch/{dictionaryid}", method = RequestMethod.POST)
+	public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model){
 		try{
-			
-//			RestTemplate rest = new RestTemplate();
-//			extendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
-//					extendingThis.class);
-//			WordPower wordPower =extendingthis.wordPower;
-//			System.out.println("id "+wordPower.getIds());
-//			System.out.println("Lemma "+wordPower.getLemmas());
-//			System.out.println("Description "+wordPower.getDescriptions());
-//			System.out.println(" item " + item);
-//			System.out.println(" pos " + pos);
-			
+			logger.info("came to searchDictionaryItemRestHandle post");
+			DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
+			model.addAttribute("status", 1);
+			model.addAttribute("dictionaryEntry", dictionaryEntry);
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);
+			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictionaryid", dictionaryid);
+			if(dictionaryEntry == null){
+				model.addAttribute("errorstatus", 1);
+			}
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "auth/dictionaries/dictionary/wordSearch";
+		//return "auth/dictionaries/dictionary/wordSearch";
+		return "auth/dictionary/dictionary";
 	}
 }

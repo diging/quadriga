@@ -31,6 +31,19 @@
 			table {border-collapse:collapse; table-layout:fixed; width:310px;}
   			 table td { width:400px; word-wrap:break-word;}
 	</style>
+	
+	<script>
+	$(function() {
+		$("input[type=submit]").button().click(function(event) {
+			if (!$.trim($("#itemname").val())) {
+					$.alert("Please enter a word","Oops !!!");
+					$("#itemname").val("");		            
+					event.preventDefault();
+					return;
+			}
+		});
+	});
+	</script>
 		
  	<header>
 		<span class="byline">Manage dictionary list for <c:out value="${userId}"></c:out></span>
