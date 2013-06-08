@@ -3,7 +3,7 @@
 	<h2 class="major">
 		<span>Tools</span>
 	</h2>
-	<ul class="style2">
+	<ul class="noStyle">
 		<li>
 			<article class="is-post-summary">
 				<h3>
