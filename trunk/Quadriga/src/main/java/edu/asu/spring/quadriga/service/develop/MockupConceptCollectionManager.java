@@ -6,6 +6,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
+import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 /*	@Description : This class acts as a dummy Conceptcollection manager which adds list of concepts
 **   				and their descriptions on the concept collection.
@@ -75,6 +76,12 @@ public class MockupConceptCollectionManager implements
 	public void getCollectionDetails(IConceptCollection concept) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ConceptpowerReply search(String item, String pos) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
