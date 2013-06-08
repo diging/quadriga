@@ -6,8 +6,8 @@ package edu.asu.spring.quadriga.service;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
+import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 
 
 /**
@@ -27,6 +27,6 @@ public interface IConceptCollectionManager {
 	public abstract String updateConceptCollection(ConceptCollection conceptCollection);	
 	public abstract int deleteConceptCollection(String id);	
 	public abstract int addConceptCollection(ConceptCollection newConcept);	
-	
+	public ConceptpowerReply search(String item, String pos);
 	public abstract void getCollectionDetails(IConceptCollection concept);
 }

@@ -75,6 +75,10 @@
 		<put-attribute name="title" value="Quadriga - Collection Details" />
 		<put-attribute name="content" value="/WEB-INF/views/collectiondetails.jsp" />
 	</definition>
+	<definition name="auth/searchitems" extends="base.definition">
+		<put-attribute name="title" value="Quadriga - Collection Details" />
+		<put-attribute name="content" value="/WEB-INF/views/searchconcept.jsp" />
+	</definition>
 
 	<!-- Workbench pages -->
 	<definition name="base.definition.workbench" extends="base.definition">

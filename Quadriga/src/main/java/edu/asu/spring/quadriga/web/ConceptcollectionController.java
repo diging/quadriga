@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -76,4 +77,14 @@ public class ConceptcollectionController {
 	    model.addAttribute("concept", concept);
 	    return "auth/conceptcollections/details";
 	}
+	@RequestMapping(value = "auth/searchitems", method = RequestMethod.GET)
+	public String conceptSearchHandler(HttpServletRequest req, ModelMap model) throws SQLException{
+		/*UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    String userId = principal.getUsername();*/
+		ConceptpowerReply c = conceptControllerManager.search(req.getParameter("name"), req.getParameter("pos"));
+		if(c!=null)
+	    model.addAttribute("result", c.getConceptEntry());
+	    return "auth/searchitems";
+	}
+	
 }
