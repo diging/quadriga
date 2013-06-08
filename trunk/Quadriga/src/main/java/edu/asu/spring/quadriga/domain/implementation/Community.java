@@ -16,7 +16,7 @@ public class Community implements ICommunity{
 
 	private String title;
 	private String description;
-	private List<ICollection> collections;
+
 	
 	
 	@Override
@@ -38,20 +38,4 @@ public class Community implements ICommunity{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	@Override
-	public List<ICollection> getCollections() {
-		return this.collections;
-	}
-
-	@Override
-	public void setCollections(List<ICollection> collections) {
-		this.collections= collections;		
-	}
-
-	@Override
-	public void addCollection(ICollection collection) {
-		this.collections.add(collection);
-	}
-
 }
