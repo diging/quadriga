@@ -16,4 +16,20 @@ public interface IDictionaryItems {
 	
 	public abstract void setDictionaryId(String dictionaryId);
 	
+	public abstract String getId();
+	
+	public abstract void setId(String id);
+	
+	public abstract String getPos();
+	
+	public abstract void setPos(String pos);
+	
+	public abstract String getVocabulary();
+	
+	public abstract void setVocabulary(String vocabulary);
+	
+	public abstract String getDescription();
+	
+	public abstract void setDescription(String description);
+	
 }

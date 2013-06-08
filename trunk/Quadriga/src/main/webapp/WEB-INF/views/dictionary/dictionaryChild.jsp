@@ -7,6 +7,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 	<style type="text/css">
 		 	 table, td, th, caption
@@ -38,7 +40,7 @@
 	         	
   				 
 	            height: 5%; 
-				width: 35%;
+				width: 40%;
 	            background: white;  
 	            display: -ms-grid;  
 	            -ms-grid-columns: 4;  
@@ -91,18 +93,27 @@
 		</li>
 	</ul>
 	
+<script>
+	$(function() {
+		$("input[type=submit]").button().click(function(event) {
+
+		});
+	});
+</script>
+
+
 	<div id="myGrid">  
  		<ul>
 			<li>
-				<form name='searchItem' method="POST" action="${pageContext.servletContext.contextPath}/auth/dictionaries/dictionary/wordSearch">
-					
-					<font color="black">Word </font>&nbsp;&nbsp; <input type="text"  name="itemName"><br>
+				<form name='searchItem' method="POST" action="${pageContext.servletContext.contextPath}/auth/dictionaries/dictionary/wordSearch/${dictionaryid}">
+				<!-- <form name='searchItem' method="POST" action="dictionary/wordSearch/${dictionaryid}"> -->	
+					<font color="black">Word </font>&nbsp;&nbsp; <input type="text"  name="itemName" id ="itemname"><br>
 
 		
 					<font color="black">Pos </font> 
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<select name="posdropdown">
-						<option value="nouns">Nouns</option>
+						<option value="noun">Nouns</option>
 						<option value="verb">Verb</option>
 						<option value="adverb">Adverb</option>
 						<option value="adjective">Adjective</option>
@@ -113,14 +124,77 @@
 					<input type="submit" value="Search">
 		 
 				</form>
+				<c:choose>
+				      <c:when test="${errorstatus=='1'}">
+					     <font color="blue"> <font color="red"> Word not found, please provide the correct input</font></font>
+				      </c:when>
+			     </c:choose>
 			</li>
 		</ul>
     </div>
     
 
-    
+    <c:out value="${dictionaryid}"></c:out>
+
+	<c:choose>
+	      <c:when test="${status=='1'}">
+		      <c:choose>
+    				<c:when test="${not empty dictionaryEntry}">
+					    <table>
+						   <tr>
+						    	<th width = "75" height = "20" align="center">Term </th>
+						    	<th width = "75" height = "20" align="center"> ID</th>
+						    	<th width = "75" height = "20" align="center"> POS	</th>
+						    	<th width = "90" height = "20" align="center"> Vocabulary</th>
+						    	<th width = "500" height = "20" align="center"> Description</th>
+						    	<th width = "75" height = "20" align="center"> Action</th>
+						    	
+						    </tr>
+						   
+								<tr>
+								
+									<td align="center">
+										<c:out value="${dictionaryEntry.lemma}"></c:out>
+									</td>
+									<td align="center">
+									
+										<c:out value="${dictionaryEntry.id}"></c:out>
+									</td>
+									<td align="center">
+										
+										<c:out value="${dictionaryEntry.pos}"></c:out>
+									</td>
+									<td align="center">
+										
+										<c:out value="${dictionaryEntry.vocabulary}"></c:out>
+									</td>
+									<td align="center">
+										
+										<c:out value="${dictionaryEntry.description}"></c:out>
+									</td>
+									<td align="center">
+										<input type="submit" value="Add">  
+									</td>
+								
+								</tr>	
+								
+						</table>
+
+				</c:when>
+	
+				
+			</c:choose>
+		      
+		</c:when>
+	
+		<c:otherwise>
 	
 	
+		</c:otherwise>
+     </c:choose>
+
+     <br>
+     
    <!-- <c:choose>
     <c:when test="${not empty dictionaryItemList}">
     <b>Dictionary Items of <c:out value="${dictName}"></c:out>:</b>
@@ -165,6 +239,6 @@
 		</table>
 	</c:when>
 	
-	<c:otherwise> No dictionary found</c:otherwise>
+	<c:otherwise> No dictionary items found</c:otherwise>
 	</c:choose>
 	
