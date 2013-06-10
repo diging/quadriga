@@ -38,7 +38,7 @@ public class LoginController {
 		String sUserId = principal.getName();		
 		model.addAttribute("username", sUserId);
 		
-		return "auth/loggedIn";
+		return "auth/home";
 
 	}
 

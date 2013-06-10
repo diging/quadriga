@@ -168,11 +168,6 @@
 		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
 	</definition>
 
-	<definition name="auth/loggedIn" extends="base.definition.nonav">
-		<put-attribute name="title" value="Quadriga - Network Management" />
-		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
-	</definition>
-
 
 	<!-- User management pages -->
 	<definition name="auth/users/manage" extends="base.definition.nonav">
