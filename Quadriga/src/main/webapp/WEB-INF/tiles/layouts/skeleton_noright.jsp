@@ -24,7 +24,7 @@
 <script src="/quadriga/resources/txt-layout/js/jquery-ui.js"></script>
 <script src="/quadriga/resources/txt-layout/js/jquery-alert.js"></script>
 <script src="/quadriga/resources/txt-layout/js/jquery.dataTables.js"></script>
-<script src="/quadriga/resources/txt-layout/js/jquery.dataTables.min.js"></script>
+
 
 
 <noscript>
