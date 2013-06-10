@@ -12,7 +12,7 @@
 <meta name="description" content="" />
 <meta name="keywords" content="" />
 <link rel="stylesheet" href="/quadriga/resources/txt-layout/css/jquery-ui.css" />
-<link rel="stylesheet" href="/quadriga/resources/txt-layout/css/jquer.dataTables_themeroller.css" />
+<link rel="stylesheet" href="/quadriga/resources/txt-layout/css/jquery.dataTables_themeroller.css" />
 <link rel="stylesheet" href="/quadriga/resources/txt-layout/css/demo_table_jui.css" />
 <link
 	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"
