@@ -177,11 +177,11 @@
 	</definition>
 
 	<!-- Workspace pages -->
-	<definition name="auth/workspace/communities" extends="base.definition.nonav">
+	<definition name="auth/workbench/workspace/communities" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Communities" />
 		<put-attribute name="content" value="/WEB-INF/views/workspace/communities.jsp" />
 	</definition>
-	<definition name="auth/workspace/community/collection" extends="base.definition.nonav">
+	<definition name="auth/workbench/workspace/community/collection" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Collections in Community" />
 		<put-attribute name="content" value="/WEB-INF/views/workspace/communitycollection.jsp" />
 	</definition>
