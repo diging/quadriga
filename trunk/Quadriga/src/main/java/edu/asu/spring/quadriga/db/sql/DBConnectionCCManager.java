@@ -6,6 +6,7 @@ package edu.asu.spring.quadriga.db.sql;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,8 +149,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 					conceptCollection.setId(resultSet.getString(3));
 					collectionsList.add(conceptCollection);*/
 					//concept.setDiscription(resultSet.getString(1));
-					concept.setName(resultSet.getString(1));
-					concept.setPos(resultSet.getString(2));
+					concept.setName(resultSet.getString(2));
+					concept.setPos(resultSet.getString(4));
 					concept.setDescription(resultSet.getString(3));
 				} while (resultSet.next());
 			}		
@@ -165,6 +166,53 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 		{
 			closeConnection();
 		}
+	}
+
+	@Override
+	public void saveItem(String lemma, String id, String pos, String desc,
+			String conceptId) {
+
+		String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_COLLECTION_ITEM  + "(?,?,?,?,?,?)";
+        
+        //get the connection
+        getConnection();
+        System.out.println("dbCommand : "+dbCommand);
+        //establish the connection with the database
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, id);
+        	sqlStatement.setString(2, lemma);
+        	sqlStatement.setString(3, pos);
+        	System.out.println(pos);
+        	sqlStatement.setString(4, desc);
+        	sqlStatement.setString(5, conceptId);
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(6);
+			System.out.println(errmsg);
+			
+			
+        }
+        catch(SQLException e)
+        {
+        	e.printStackTrace();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+
 	}
 
 	

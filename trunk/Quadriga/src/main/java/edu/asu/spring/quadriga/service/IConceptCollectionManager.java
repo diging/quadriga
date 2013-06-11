@@ -29,4 +29,6 @@ public interface IConceptCollectionManager {
 	public abstract int addConceptCollection(ConceptCollection newConcept);	
 	public ConceptpowerReply search(String item, String pos);
 	public abstract void getCollectionDetails(IConceptCollection concept);
+	
+	 public abstract void addItems(String lemmma, String id, String pos, String desc, String string);
 }

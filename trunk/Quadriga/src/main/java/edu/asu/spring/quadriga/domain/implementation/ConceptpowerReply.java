@@ -126,7 +126,32 @@ public class ConceptpowerReply {
     })
     public static class ConceptEntry {
 
-        @XmlElement(required = true, namespace="http://www.digitalhps.org/")
+        @Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ConceptEntry other = (ConceptEntry) obj;
+			if (id == null) {
+				if (other.id != null)
+					return false;
+			} else if (!id.equals(other.id))
+				return false;
+			return true;
+		}
+
+		@XmlElement(required = true, namespace="http://www.digitalhps.org/")
         protected String id;
         @XmlElement(required = true, namespace="http://www.digitalhps.org/")
         protected String lemma;

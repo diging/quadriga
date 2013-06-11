@@ -26,4 +26,6 @@ public interface IDBConnectionCCManager {
 		 */
 		public abstract List<IConceptCollection> getCollaboratedConceptsofUser(String userName);
 		public abstract void getCollectionDetails(IConceptCollection concept);
+		public abstract void saveItem(String lemmma, String id, String pos,
+				String desc, String conceptId);
 	}

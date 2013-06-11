@@ -124,6 +124,12 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		new ConceptCollectionManager().search("horse", "noun");
 	}
 
+	@Override
+	public void addItems(String lemmma, String id, String pos, String desc, String conceptId) {
+		// TODO Auto-generated method stub
+		dbConnect.saveItem(lemmma, id, pos, desc, conceptId);
+	}
+
 	
 
 }

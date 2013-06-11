@@ -12,10 +12,11 @@ Modified Date : 06/04/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_conceptcollections_items;
 
-CREATE VIEW vw_conceptcollections_items(id, item, pos, description)
+CREATE VIEW vw_conceptcollections_items(id, item, pos, description, lemma)
 AS
 SELECT id,
        item,
        pos,
-       description
+       description,
+       lemma
 FROM tbl_conceptcollections_items;
