@@ -6,7 +6,7 @@
 <h2>Project: ${project.name}</h2>
 <div>${project.description}</div>
 <hr>
-<b>Owned by: </b>${project.owner.name}<br>
+<div class="user">Owned by: ${project.owner.name}</div>
 <hr>
 
 

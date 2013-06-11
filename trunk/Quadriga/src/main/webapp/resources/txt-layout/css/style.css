@@ -188,6 +188,13 @@
 			width: auto;
 		}
 		
+	.user {
+		padding-left: 20px;
+		background: url('images/user.png') left no-repeat;
+	}
+	
+
+		
 	.button
 	{
 		display: inline-block;
@@ -449,7 +456,7 @@
 			left: 0;
 			top: 50%;
 			margin-top: -8px;
-			background: url('images/icons-meta.png');
+			background: url('images/user.png');
 		}
 	
 	ul.meta
