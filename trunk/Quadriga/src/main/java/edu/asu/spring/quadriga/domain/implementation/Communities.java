@@ -3,7 +3,12 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollection;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
+import edu.asu.spring.quadriga.domain.ICommunities;
 import edu.asu.spring.quadriga.domain.ICommunity;
 
 /**
@@ -12,19 +17,20 @@ import edu.asu.spring.quadriga.domain.ICommunity;
  * @author Ram Kumar Kumaresan
  * 
  */
-public class Communities{
+@XmlRootElement(name="communities_collection")
+public class Communities implements ICommunities{
 
 
-	private List<Community> communities;
+	private List<ICommunity> communities;
 
-	public List<Community> getCommunities() {
+	@XmlElementRefs({@XmlElementRef(type=Community.class)}) 
+	@Override
+	public List<ICommunity> getCommunities() {
 		return communities;
 	}
 
-	public void setCommunities(List<Community> communities) {
+	@Override
+	public void setCommunities(List<ICommunity> communities) {
 		this.communities = communities;
 	}
-	
-
-
 }

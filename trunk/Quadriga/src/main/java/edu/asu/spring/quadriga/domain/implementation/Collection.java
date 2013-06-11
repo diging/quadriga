@@ -2,7 +2,11 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 
 /**
@@ -10,46 +14,89 @@ import edu.asu.spring.quadriga.domain.IItem;
  * 
  * @author Ram Kumar Kumaresan
  */
+@XmlRootElement(name="collectionentityid")
 public class Collection implements ICollection{
 
-	private String title;
-	private String description;
-	private List<IItem> items;
+	private String id;
+	private String name;
+	private String shortDescription;
+	private String entityReference;
+	private String handle;
+	private String countItems;
 	
+	@Override
+	public String getId() {
+		return id;
+	}
 	
 	@Override
-	public String getDescription() {
-		return this.description;
+	public void setId(String id) {
+		this.id = id;
 	}
-
+	
 	@Override
-	public void setDescription(String description) {
-		this.description = description;
+	public String getName() {
+		return name;
 	}
-
+	
 	@Override
-	public String getTitle() {
-		return this.title;
+	public void setName(String name) {
+		this.name = name;
 	}
-
+	
 	@Override
-	public void setTitle(String title) {
-		this.title = title;
+	public String getShortDescription() {
+		return shortDescription;
 	}
-
+	
 	@Override
-	public List<IItem> getItems() {
-		return this.items;
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
 	}
-
+	
 	@Override
-	public void setItems(List<IItem> items) {
-		this.items = items;		
+	public String getEntityReference() {
+		return entityReference;
 	}
-
+	
 	@Override
-	public void addItem(IItem item) {
-		this.items.add(item);
+	public void setEntityReference(String entityReference) {
+		this.entityReference = entityReference;
 	}
+	
+	@Override
+	public String getHandle() {
+		return handle;
+	}
+	
+	@Override
+	public void setHandle(String handle) {
+		this.handle = handle;
+	}
+	
+	@Override
+	public String getCountItems() {
+		return countItems;
+	}
+	
+	@Override
+	public void setCountItems(String countItems) {
+		this.countItems = countItems;
+	}	
+	
+	public static class Adapter extends XmlAdapter<Collection, ICollection>
+	{
 
+		@Override
+		public ICollection unmarshal(Collection v) throws Exception {
+			return v;
+		}
+
+		@Override
+		public Collection marshal(ICollection v) throws Exception {
+			return (Collection)v;
+		}
+		
+	}
+	
 }

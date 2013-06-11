@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,8 +17,11 @@ import org.springframework.web.client.RestTemplate;
 
 
 import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.ICommunities;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Communities;
+import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.service.IDspaceManager;
 
 /**
@@ -32,9 +38,11 @@ public class DspaceManager implements IDspaceManager{
 	@Autowired
 	@Qualifier("dspaceURL")
 	private String url;
+	private String userName;
+	private String password;
 
-	@Autowired
-	@Qualifier("restTemplate")
+	@Inject
+	@Named("restTemplate")
 	RestTemplate restTemplate;
 
 	public String getUrl() {
@@ -44,46 +52,70 @@ public class DspaceManager implements IDspaceManager{
 		this.url = url;
 	}
 
-	@Override
-	public void checkRestConnection()
+	public DspaceManager() {
+		userName = "ramk@asu.edu";
+		password = "123456";
+	}
+
+	private String getCompleteUrlPath(String restPath)
 	{
-		System.out.println("----------------------------------"+url);
-		Communities communities = (Communities)restTemplate.getForObject("https://import.hps.ubio.org/rest/communities.xml?email=ramk@asu.edu&password=123456", Communities.class);
-		System.out.println(communities.getCommunities().size());
-		//		URL wp;
-		//		String result = "";
-		//		try {
-		//			wp = new URL("https://import.hps.ubio.org/rest/communities.xml");
-		//			InputStream xml = wp.openStream();
-		//			BufferedReader br = new BufferedReader(new InputStreamReader(xml));
-		//			String s;
-		//			while((s=br.readLine())!=null)
-		//			{
-		//				result +=s;
-		//			}
-		//		} catch (Exception e) {
-		//			System.out.println("Exception "+e.getMessage());
-		//		}
-		//
-		//		System.out.println(result);
-
-
+		return "https://"+url+restPath+"?email="+userName+"&password="+password;
+	}
+	@Override
+	public void checkRestConnection(String sUserName, String sPassword)
+	{
+		//TODO: Uncomment to user the correct username and password
+		//		this.userName = sUserName;
+		//		this.password = sPassword;
 	}
 
 	@Override
-	public List<ICommunity> getAllCommunities() {
-		//throw new NotImplementedException("getAllCommunities yet to be implemented");
-		return null;
+	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
+		//TODO: Uncomment to user the correct username and password
+		//		this.userName = sUserName;
+		//		this.password = sPassword;
+		String sRestServicePath = getCompleteUrlPath("/rest/communities.xml");
+		ICommunities communities = (Communities)restTemplate.getForObject(sRestServicePath, Communities.class);
+
+		for(ICommunity c:communities.getCommunities())
+		{
+			System.out.println(c.getId());			
+			System.out.println(c.getName());
+			System.out.println(c.getDescription());
+			System.out.println(c.getIntroductoryText());
+			System.out.println(c.getCountItems());
+			System.out.println(c.getEntityReference());
+			System.out.println(c.getHandle());
+			System.out.println(c.getEntityId());
+			System.out.println("Total Collections: "+c.getCollections().getCollections().size());
+			for(ICollection collection: c.getCollections().getCollections())
+			{
+//				System.out.print(collection.getId()+"-"+getCollectionName(sUserName, sPassword, collection.getId()));
+				System.out.print(collection.getId()+" ");
+			}
+			System.out.println("\n-----------------------------------------------------------");
+		}
+		return communities.getCommunities();
 	}
 
 	@Override
-	public List<ICollection> getAllCollections(String sCommunityTitle) {
+	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityTitle) {
 		//throw new NotImplementedException("getAllCollections yet to be implemented");
 		return null;
 	}
 
+	public String getCollectionName(String sUserName, String sPassword, String sCollectionId)
+	{
+		//TODO: Uncomment to user the correct username and password
+		//		this.userName = sUserName;
+		//		this.password = sPassword;
+		String sRestServicePath = getCompleteUrlPath("/rest/collections/"+sCollectionId+".xml");
+		ICollection collection = (Collection)restTemplate.getForObject(sRestServicePath, Collection.class);
+
+		return collection.getName();
+	}
 	/**
-	 * This method id user to load the Dspace server certificate during the start of the application.
+	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
 	 * 
 	 */

@@ -9,17 +9,28 @@ import java.util.List;
  */
 public interface ICollection {
 
-	public abstract String getTitle();
+	public abstract String getId();
+
+	public abstract void setId(String id);
+
+	public abstract String getName();
+
+	public abstract void setName(String name);
+
+	public abstract String getShortDescription();
+
+	public abstract void setShortDescription(String shortDescription);
+
+	public abstract String getEntityReference();
+
+	public abstract void setEntityReference(String entityReference);
+
+	public abstract String getHandle();
+
+	public abstract void setHandle(String handle);
+
+	public abstract String getCountItems();
+
+	public abstract void setCountItems(String countItems);
 	
-	public abstract void setTitle(String title);
-	
-	public abstract String getDescription();
-	
-	public abstract void setDescription(String description);
-	
-	public abstract List<IItem> getItems();
-	
-	public abstract void setItems(List<IItem> items);
-	
-	public abstract void addItem(IItem item);
 }
