@@ -85,7 +85,8 @@
 		form select,
 		form textarea
 		{
-			-webkit-appearance: none;
+			/*-webkit-appearance: none;*/
+			border: 1px solid rgb(182, 174, 127);
 		}
 			
 	br.clear
@@ -96,6 +97,10 @@
 	p, ul, ol, dl, table
 	{
 		margin-bottom: 3em;
+	}
+	
+	table, td {
+		padding: 5px;
 	}
 	
 	section,

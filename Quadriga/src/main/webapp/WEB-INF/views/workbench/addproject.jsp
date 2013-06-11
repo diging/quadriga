@@ -30,28 +30,34 @@
 	});
 </script>
 
+
+<header>
+		<h2>Create new Project</h2>
+		<span class="byline">Please fill in the following information:</span>
+	</header>
+
 <article class="is-page-content">
 
 	<form:form method="POST" action="/auth/workbench/addproject">
-		<table>
+		<table style="width:100%">
 			<tr>
-				<td>Name:</td>
-				<td><form:input path="name" size="30" id="name"/></td>
+				<td style="width: 170px">Name:</td>
+				<td><form:input path="name" size="80" id="name"/></td>
 			</tr>
 			<tr>
-				<td>Description:</td>
-				<td><form:textarea path="description" cols="23" rows="4"
+				<td style="vertical-align: top">Description:</td>
+				<td><form:textarea path="description" cols="60" rows="6"
 						id="description" /></td>
 			</tr>
 			<tr>
-				<td>Project Access:</td>
+				<td>Project Public Access:</td>
 				<td><form:select path="projectAccess">
 						<form:options />
 					</form:select>
 			</tr>
 			<tr>
-				<td>Project Id:</td>
-				<td><form:input path="id" size="30" id="projId"/></td>
+				<td>Unix name:</td>
+				<td><form:input path="id" size="80" id="projId"/></td>
 			</tr>
 		</table>
 		<input type="submit" value="Create Project">
