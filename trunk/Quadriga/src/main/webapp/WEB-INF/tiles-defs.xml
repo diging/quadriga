@@ -91,7 +91,7 @@
 			value="/WEB-INF/views/workbench/workbench.jsp" />
 	</definition>
 	<definition name="auth/workbench/project" extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga - Manage Users" />
+		<put-attribute name="title" value="Quadriga - Project Details" />
 		<put-attribute name="sub-navigation"
 			value="/WEB-INF/views/workbench/project-right.jsp" />
 		<put-attribute name="content"
