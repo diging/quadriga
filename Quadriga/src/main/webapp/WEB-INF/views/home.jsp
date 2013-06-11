@@ -11,10 +11,19 @@
 	<!-- Highlight -->
 	<section class="is-highlight">
 		<ul class="special">
+			<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li><a href="workbench" class="battery">Workbench</a></li>
+			</sec:authorize>
+			
+			<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li><a href="conceptcollections" class="tablet">Concept Collections</a></li>
+			</sec:authorize>
+			
 			<li><a href="#" class="flask">Networks</a></li>
+			
+			<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 			<li><a href="dictionaries" class="chart">Dictionaries</a></li>
+			</sec:authorize>
 		</ul>
 		<header>
 			<h2>${username}, welcome to Quadriga</h2>
