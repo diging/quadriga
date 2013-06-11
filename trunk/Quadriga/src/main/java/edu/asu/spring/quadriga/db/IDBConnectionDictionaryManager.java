@@ -18,5 +18,8 @@ public interface IDBConnectionDictionaryManager {
 	public abstract String addDictionary(IDictionary dictionary);
 	public abstract List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid);
 	public abstract String getDictionaryName(String dictionaryId);
-	public abstract String addDictionaryItems(String dictinaryId,String item,String owner);
+	public String addDictionaryItems(String dictinaryId, String item, String id,
+			String pos, String owner);
+	public abstract String  deleteDictionaryItems(String dictinaryId, String item);
+	public abstract String updateDictionaryItems(String dictinaryId,String item,String id);
 }

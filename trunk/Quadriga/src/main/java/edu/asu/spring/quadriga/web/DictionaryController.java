@@ -24,6 +24,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
@@ -51,7 +52,7 @@ public class DictionaryController {
 	IDictionaryFactory dictionaryFactory;
 	
 	@Autowired 
-	IDictionaryItemsFactory dictionaryItemsFactory;
+	DictionaryItemsFactory dictionaryItemsFactory;
 	
 	@RequestMapping(value="auth/dictionaries", method = RequestMethod.GET)
 	public String listDictionary(ModelMap model){
@@ -109,57 +110,90 @@ public class DictionaryController {
 		return "auth/dictionaries/addDictionaryStatus"; 
 	}
 	
-	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
-	public ModelAndView addDictionaryItemForm() {
+	@RequestMapping(value="auth/dictionaries/addDictionaryItems", method = RequestMethod.GET)
+	public ModelAndView addDictionaryItemForm(@PathVariable("dictionaryid") String dictionaryid) {
 		logger.info("came to addDictionaryItemForm get" );
-		return new ModelAndView("auth/dictionaries/addDictionaryItems/{dictionaryid}", "command",dictionaryItemsFactory.createDictionaryItemsObject());
+		return new ModelAndView("auth/dictionaries/addDictionaryItems", "command",dictionaryItemsFactory.createDictionaryItemsObject());
 	}
 	
 	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String addDictionaryItem(@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) {
+	public String addDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) {
 		logger.info("came to addDictionaryItemForm post");
-		System.out.println(" --------------"+dictionaryItems.getDescription()+" "+((dictionaryItems==null)?0:1));
-		System.out.println(" --------------"+dictionaryItems.getId()+" "+((dictionaryItems==null)?0:1));
-		System.out.println(" --------------"+dictionaryItems.getItems()+" "+((dictionaryItems==null)?0:1));
-		System.out.println(" --------------"+dictionaryItems.getPos()+" "+((dictionaryItems==null)?0:1));
-		System.out.println(" --------------"+dictionaryItems.getVocabulary()+" "+((dictionaryItems==null)?0:1));
-
-		return "auth/dictionaries/addDictionaryItems";
-	}
-	
-	@RequestMapping(value="auth/dictionaries/{dictionaryid}", method = RequestMethod.POST)
-	public String addDictionaryItemHandle(@RequestParam("itemName") String item,@PathVariable("dictionaryid") String dictionaryId, ModelMap model, Principal principal){
-		try{
-			logger.info("came to addDictionaryItemHandle post");
-			String owner = usermanager.getUserDetails(principal.getName()).getUserName();
-
-			String msg= dictonaryManager.addNewDictionariesItems(dictionaryId,item,owner);
-			if(msg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successmsg", "Item : "+item+ " added successfully");
+		String owner = usermanager.getUserDetails(principal.getName()).getUserName();
+		String msg= dictonaryManager.addNewDictionariesItems(dictionaryId,dictionaryItems.getItems(),dictionaryItems.getId(),
+				dictionaryItems.getPos(),owner);
+		if(msg.equals(""))
+		{
+			model.addAttribute("success", 1);
+			model.addAttribute("successmsg", "Item : "+dictionaryItems.getItems()+ " added successfully");
+		}else{
+			if(msg.equals("ItemExists")){
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", "Item : "+dictionaryItems.getItems()+" already exist for dictionary id :" +dictionaryId);
 			}else{
-				if(msg.equals("ItemExists")){
-					model.addAttribute("success", 0);
-					model.addAttribute("errormsg", "Item : "+item+" already exist for dictionary id :" +dictionaryId);
-				}else{
-					model.addAttribute("success", 0);
-					model.addAttribute("errormsg", msg);
-				}
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", msg);
 			}
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
-			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictID", dictionaryId);
-			
-		}catch(Exception e){
-			e.printStackTrace();
 		}
-		//return "auth/dictionaries/addDictionaryItemStatus";
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
+		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		model.addAttribute("dictName", dictionaryName);
+		model.addAttribute("dictID", dictionaryId);
 		return "auth/dictionary/dictionary";
 	}
 	
+	@RequestMapping(value="auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
+	public String deleteDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@RequestParam("item") String item,ModelMap model, Principal principal) {
+		String msg= dictonaryManager.deleteDictionariesItems(dictionaryId,item);
+		if(msg.equals(""))
+		{
+			model.addAttribute("delsuccess", 1);
+			model.addAttribute("delsuccessmsg", "Item : "+item+ " deleted successfully");
+		}else{
+			if(msg.equals("Item doesnot exists in this dictionary")){
+				model.addAttribute("delsuccess", 0);
+				model.addAttribute("delerrormsg", "Item : "+item+" doesn't exist for dictionary id :" +dictionaryId);
+			}else{
+				model.addAttribute("delsuccess", 0);
+				model.addAttribute("delerrormsg", msg);
+			}
+		}
+		logger.info("Item Returned "+item);
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
+		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		model.addAttribute("dictName", dictionaryName);
+		model.addAttribute("dictID", dictionaryId);
+		return "auth/dictionary/dictionary";
+	}
+	
+	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
+	public String updateDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@RequestParam("item") String item,@RequestParam("pos") String pos,ModelMap model, Principal principal) {
+		DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
+		
+		String msg= dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
+		if(msg.equals(""))
+		{
+			model.addAttribute("updatesuccess", 1);
+			model.addAttribute("updatesuccess", "Item : "+item+ " updated successfully");
+		}else{
+			if(msg.equals("Item doesnot exists in this dictionary")){
+				model.addAttribute("updatesuccess", 0);
+				model.addAttribute("updateerrormsg", "Item : "+item+" doesn't exist for dictionary id :" +dictionaryId);
+			}else{
+				model.addAttribute("updatesuccess", 0);
+				model.addAttribute("updateerrormsg", msg);
+			}
+		}
+		logger.info("Item Returned "+item);
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
+		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		model.addAttribute("dictName", dictionaryName);
+		model.addAttribute("dictID", dictionaryId);
+		return "auth/dictionary/dictionary";
+	}
 	
 	@RequestMapping(value="auth/dictionaries/dictionary/wordSearch/{dictionaryid}", method = RequestMethod.POST)
 	public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model){

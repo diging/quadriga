@@ -38,6 +38,8 @@ public interface DBConstants
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
 	public static final String GET_DICTIONARY_NAME = "sp_getDictionaryName";
 	public static final String ADD_DICTIONARY_ITEM = "sp_addDictionaryItems";
+	public static final String DELETE_DICTIONARY_ITEM = "sp_deleteDictionaryItems";
+	public static final String UPDATE_DICTIONARY_ITEM = "sp_updateDictionaryItems";
 	
 
 

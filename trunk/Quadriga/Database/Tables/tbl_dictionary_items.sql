@@ -16,11 +16,9 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary_items
   items    VARCHAR(50) NOT NULL,
   id    VARCHAR(50) NOT NULL,
   pos    VARCHAR(50) NOT NULL,
-  vocabulary    VARCHAR(50),
-  description   text NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(dictionaryid,items)
+  PRIMARY KEY(dictionaryid,items,pos)
 )

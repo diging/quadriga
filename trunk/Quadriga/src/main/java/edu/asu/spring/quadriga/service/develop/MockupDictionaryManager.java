@@ -83,15 +83,30 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		return null;
 	}
 
+
+
 	@Override
-	public String addNewDictionariesItems(String dictionaryId, String item,
-			String owner) {
+	public DictionaryEntry callRestUri(String url, String item, String pos) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DictionaryEntry callRestUri(String url, String item, String pos) {
+	public String addNewDictionariesItems(String dictionaryId, String item,
+			String id, String pos,			String owner) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String deleteDictionariesItems(String dictionaryId, String item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String updateDictionariesItems(String dictionaryId, String item,
+			String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

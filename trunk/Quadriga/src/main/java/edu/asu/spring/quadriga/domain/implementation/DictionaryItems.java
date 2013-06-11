@@ -4,8 +4,9 @@ import edu.asu.spring.quadriga.domain.IDictionaryItems;
 
 public class DictionaryItems implements IDictionaryItems {
 
-	private String dictionaryid;
+	
 	private String items;
+	private String dictionaryid;
 	private String id;
 	private String pos;
 	private String vocabulary;
@@ -58,12 +59,12 @@ public class DictionaryItems implements IDictionaryItems {
 	
 	@Override
 	public String getVocabulary() {
-		return id;
+		return vocabulary;
 	}
 
 	@Override
 	public void setVocabulary(String vocabulary) {
-		this.id=vocabulary;
+		this.vocabulary=vocabulary;
 		
 	}
 

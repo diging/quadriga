@@ -21,7 +21,7 @@ public interface IDictionaryManager {
 	
 	public abstract int deleteDictionariesItems(String dictionaryId);
 	
-	public abstract String addNewDictionariesItems(String dictionaryId,String item,String owner);
+	public abstract String addNewDictionariesItems(String dictionaryId,String item,String id,String pos,String owner);
 	
 	public abstract String addNewDictionary(Dictionary newDictionary);
 	
@@ -30,4 +30,8 @@ public interface IDictionaryManager {
 	public abstract String getDictionaryName(String dictionaryid);
 	
 	public abstract DictionaryEntry callRestUri(String url,String item,String pos);
+	
+	public abstract String deleteDictionariesItems(String dictionaryId,String item);
+	
+	public abstract String updateDictionariesItems(String dictionaryId,String item,String id);
 }
