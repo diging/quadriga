@@ -22,13 +22,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.service.IDspaceManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * @Description : this class will handle all workbench components for user projects like 
@@ -55,6 +60,9 @@ public class WorkbenchController {
 	@Autowired 
 	IProjectFactory projectFactory;
 	IUser user;
+	
+	@Autowired
+	private IDspaceManager dspaceManager;
 
 	/**
 	 * @description this method acts as a controller for handling all the activities on the workbench
@@ -122,7 +130,7 @@ public class WorkbenchController {
 	}
 
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
-	public String addStudent(@ModelAttribute("SpringWeb")Project project, 
+	public String addProject(@ModelAttribute("SpringWeb")Project project, 
 			ModelMap model, Principal principal) 
 	{
 		int success;
@@ -138,7 +146,42 @@ public class WorkbenchController {
 			}
 
 		}
-		return "auth/workbench/addProjectStatus";
+		return "redirect:auth/workbench/addProjectStatus";
+	}
+	
+	
+	/**
+	 * Simply selects the workspace communities view to render by returning its path.
+	 */
+	@RequestMapping(value = "/auth/workbench/workspace", method = RequestMethod.GET)
+	public String workspaceRequest(ModelMap model, Principal principal) {
+		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		dspaceManager.checkRestConnection(principal.getName(),sPassword);
+		return "redirect:/auth/workbench/workspace/communities";
+	}
+
+	@RequestMapping(value = "/auth/workbench/workspace/communities", method = RequestMethod.GET)
+	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
+		
+		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		
+		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
+
+		model.addAttribute("communityList", communities);
+
+		return "auth/workbench/workspace/communities";
+	}
+	
+	@RequestMapping(value = "/auth/workbench/workspace/community/{communityTitle}", method = RequestMethod.GET)
+	public String workspaceCommunityRequest(@PathVariable("communityTitle") String communityTitle, ModelMap model, Principal principal) {
+		
+		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		List<ICollection> collections = dspaceManager.getAllCollections(principal.getName(),sPassword, communityTitle);
+
+		model.addAttribute("communityTitle", communityTitle);
+		model.addAttribute("collectionList", collections);
+
+		return "auth/workbench/workspace/community/collection";
 	}
 }
 
