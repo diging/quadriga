@@ -7,7 +7,6 @@ import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
 /**
  * Interface that has methods to be implemented on the DictionaryManager class
  * 
@@ -16,11 +15,7 @@ import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
  */
 public interface IDictionaryManager {
 	public abstract List<IDictionary> getDictionariesList(String sUserId);
-	
-	public abstract String updateDictionariesItems(Dictionary existingDictionaryList);
-	
-	public abstract int deleteDictionariesItems(String dictionaryId);
-	
+		
 	public abstract String addNewDictionariesItems(String dictionaryId,String item,String id,String pos,String owner);
 	
 	public abstract String addNewDictionary(Dictionary newDictionary);

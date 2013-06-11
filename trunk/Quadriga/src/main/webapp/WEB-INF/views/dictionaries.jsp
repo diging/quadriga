@@ -10,6 +10,11 @@
 			$(document).ready(function(){
 				  $('#pagination1').dataTable();
 			});
+			$(document).ready(function() {
+				$("input[type=button]").button().click(function(event) {
+					event.preventDefault();
+				});
+			});
 		</script>
 	<style type="text/css">
 			table{
@@ -43,7 +48,7 @@
 			h1 {font-size:200%}
 			
 			.example4 a {font-family:Georgia, "Times New Roman", Times, serif;font-size:large;cursor: auto}
-				a:hover { text-decoration: none color: #ff9900; font-weight:bold;}
+				a:hover { text-decoration: black color: black; font-weight:bold;}
 				
 				
 			}

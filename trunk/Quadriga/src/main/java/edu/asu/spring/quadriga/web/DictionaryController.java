@@ -9,32 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.DictionaryManager;
+
 
 /**
- * @Description : this class will handle all dictionaries components  for the project 
+ * This class will handle all dictionaries components 
+ * 				  controller for the dictionary tab 
  * 
  * @author 		: Lohith Dwaraka
  * 
@@ -42,7 +40,10 @@ import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 @Controller
 public class DictionaryController {
-	@Autowired IDictionaryManager dictonaryManager;
+	@Autowired 
+	IDictionaryManager dictonaryManager;
+	
+
 	private static final Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
 	
 	@Autowired 
@@ -53,6 +54,12 @@ public class DictionaryController {
 	
 	@Autowired 
 	DictionaryItemsFactory dictionaryItemsFactory;
+	
+	/**
+	 * Admin can use this page to check the list of dictionary he is accessible to 
+	 * 
+	 * @return 	Return to the dictionary home page of the Quadriga
+	 */
 	
 	@RequestMapping(value="auth/dictionaries", method = RequestMethod.GET)
 	public String listDictionary(ModelMap model){
@@ -69,6 +76,14 @@ public class DictionaryController {
 		}
 		return "auth/dictionaries"; 
 	}
+	
+	/**
+	 *  Admin can use this page to check the list of dictionary items in a dictionary 
+	 *  and to search and add items from the word power  
+	 * 
+	 * @return 	Return to the list dictionary items page of the Quadriga
+	 */
+	
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
 
@@ -81,12 +96,32 @@ public class DictionaryController {
 		return "auth/dictionary/dictionary";
 	}
 	
+	/**
+	 *  Handles the bean mapping from form tag 
+	 *  
+	 * 
+	 * @return 	Used to handle the data from the form:form tag and map it to Dicitonary object
+	 */
+	
+//	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.GET)
+//	public ModelAndView addDictionaryForm() {
+//		logger.info("came to addDictionaryForm get");
+//		return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
+//	}
 	
 	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.GET)
-	public ModelAndView addDictionaryForm() {
+	public String addDictionaryForm(Model m) {
 		logger.info("came to addDictionaryForm get");
-		return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
+		m.addAttribute("dictionary",dictionaryFactory.createDictionaryObject());
+		return "auth/dictionaries/addDictionary";
+		//return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
 	}
+	
+	/**
+	 *  Admin can use this page to new dictionary to his list  
+	 * 
+	 * @return 	Return to the add dictionary status page
+	 */
 	
 	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.POST)
 	public String addDictionaryHandle(@ModelAttribute("SpringWeb")Dictionary dictionary,ModelMap model, Principal principal){
@@ -100,9 +135,12 @@ public class DictionaryController {
 			{
 				model.addAttribute("success", 1);
 				model.addAttribute("successMsg","Dictionary created successfully.");
+				return "auth/dictionaries/addDictionaryStatus"; 
 			}else{
+				model.addAttribute("dictionary", dictionary);
 				model.addAttribute("success", 0);
 				model.addAttribute("errormsg", msg);
+				return "auth/dictionaries/addDictionary"; 
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -110,11 +148,29 @@ public class DictionaryController {
 		return "auth/dictionaries/addDictionaryStatus"; 
 	}
 	
+	@RequestMapping(value="auth/dictionaries/addDictionaryAgain", method = RequestMethod.GET)
+	public ModelAndView addDictionaryFormAgain() {
+		logger.info("came to addDictionaryForm get");
+		return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
+	}
+	
+	/**
+	 *  Handles the form tag for add dictionary item to dictionary
+	 * 
+	 * @return 	Return to the POST part of add dictionary item in controller
+	 */
+	
 	@RequestMapping(value="auth/dictionaries/addDictionaryItems", method = RequestMethod.GET)
 	public ModelAndView addDictionaryItemForm(@PathVariable("dictionaryid") String dictionaryid) {
 		logger.info("came to addDictionaryItemForm get" );
 		return new ModelAndView("auth/dictionaries/addDictionaryItems", "command",dictionaryItemsFactory.createDictionaryItemsObject());
 	}
+	
+	/**
+	 *  Handles the form tag for add dictionary item to dictionary
+	 * 
+	 *  @return 	Return to list dictionary item page
+	 */
 	
 	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String addDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) {
@@ -143,6 +199,12 @@ public class DictionaryController {
 		return "auth/dictionary/dictionary";
 	}
 	
+	/**
+	 *  Admin can use this to delete a dictionary item to dictionary
+	 * 
+	 *  @return 	Return to list dictionary item page
+	 */
+	
 	@RequestMapping(value="auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
 	public String deleteDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@RequestParam("item") String item,ModelMap model, Principal principal) {
 		String msg= dictonaryManager.deleteDictionariesItems(dictionaryId,item);
@@ -167,6 +229,12 @@ public class DictionaryController {
 		model.addAttribute("dictID", dictionaryId);
 		return "auth/dictionary/dictionary";
 	}
+	
+	/**
+	 *  Admin can use this to update a dictionary item's item to dictionary
+	 * 
+	 *  @return 	Return to list dictionary item page
+	 */
 	
 	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
 	public String updateDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@RequestParam("item") String item,@RequestParam("pos") String pos,ModelMap model, Principal principal) {
@@ -195,11 +263,21 @@ public class DictionaryController {
 		return "auth/dictionary/dictionary";
 	}
 	
+	/**
+	 *  Admin can use this to search from term and pos from word power
+	 * 
+	 *  @return 	Return to list dictionary item page
+	 */
+	
 	@RequestMapping(value="auth/dictionaries/dictionary/wordSearch/{dictionaryid}", method = RequestMethod.POST)
 	public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model){
 		try{
 			logger.info("came to searchDictionaryItemRestHandle post");
-			DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
+			DictionaryEntry dictionaryEntry=null;
+			if(!item.equals("")){
+				logger.info("Query for Item :" +item+" and pos :"+ pos);
+				dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
+			}
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntry", dictionaryEntry);
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);

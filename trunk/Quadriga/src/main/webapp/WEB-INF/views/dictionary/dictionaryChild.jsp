@@ -8,26 +8,81 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
- 
-<!-- jQuery -->
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
- 
-<!-- DataTables -->
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript" charset="utf8">
 		
+
+
 			$(document).ready(function(){
 			  $('#pagination').dataTable();
 			});
 			$(document).ready(function(){
 				  $('#pagination1').dataTable();
 			});
+			$(document).ready(function() {
+				$("input[type=button]").button().click(function(event) {
+					event.preventDefault();
+				});
+			});
+			$(document).ready(function() {
+				$("input[type=a]").button().click(function(event) {
+					event.preventDefault();
+				});
+			});
+			
 		</script>
+		
+<script>
 
-        
+$(function() {
+    $( "#dialog-confirm" ).dialog({
+      resizable: false,
+      height:140,
+      modal: true,
+      buttons: {
+        "Delete all items": function() {
+          $( this ).dialog( "close" );
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
+  
+function deleteItem(item){
+	
+	$( "#dialog-message" ).dialog({
+	      resizable: false,
+	      height:180,
+	      modal: true,
+	      buttons: {
+	        "Delete": function() {
+	          $( this ).dialog( "close" );
+	          location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}?item=' + item;
+	        },
+	        Cancel: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+	
+    /*var checkstr =  confirm('are you sure you want to delete this?');
+    if(checkstr == true){
+    	location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}?item=' + item;
+    }else{
+    	alert("hello");
+    	return false;
+    }*/
+  }
+  
+  
+</script>
+
+			<div id="dialog-message" title="Confirm ?">   
+
+			</div>		
+       
 	<style type="text/css">
 	
 		 	 table, td, th, caption
@@ -110,7 +165,7 @@
 				</form>
 				<c:choose>
 				      <c:when test="${errorstatus=='1'}">
-					     <font color="blue"> <font color="red"> Word not found, please provide the correct input</font></font>
+					      <font color="red"> Word not found, please provide the correct input</font>
 				      </c:when>
 			     </c:choose>
 			     <c:choose>
@@ -139,18 +194,8 @@
 			      
 			      </c:otherwise>
 		     </c:choose>
+
 	
-	<c:choose>
-			      <c:when test="${updatesuccess=='1'}">
-				     <font color="blue"> <c:out value="${updatesuccessmsg}"></c:out></font>
-				      
-			      </c:when>
-			
-			      <c:otherwise>
-			     	 <font color="red"><c:out value="${updateerrormsg}"></c:out></font>
-			      
-			      </c:otherwise>
-		     </c:choose>
 		     <div class="container">
 	<c:choose>
 	      <c:when test="${status=='1'}">
@@ -227,6 +272,17 @@
     <br>
     <div class="container">
     <c:choose>
+			      <c:when test="${updatesuccess=='1'}">
+				     <font color="blue"> <c:out value="${updatesuccessmsg}"></c:out></font>
+				      
+			      </c:when>
+			
+			      <c:otherwise>
+			     	 <font color="red"><c:out value="${updateerrormsg}"></c:out></font>
+			      
+			      </c:otherwise>
+		     </c:choose>
+    <c:choose>
     <c:when test="${not empty dictionaryItemList}">
     
 	<table  class="dataTable" id="pagination1">
@@ -259,7 +315,9 @@
 					<c:out value="${dictionaryItem.description}"></c:out> 
 				</td>-->
 				<td align="center">
-					<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}?item=<c:out value="${dictionaryItem.items}"></c:out>'" value='Delete'>
+					<!--  <input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}?item=<c:out value="${dictionaryItem.items}"></c:out>'" value='Delete' id="deleteItem"/>-->
+					
+					<input type="button" onclick="deleteItem(this.id);" value="Delete" id="<c:out value="${dictionaryItem.items}"></c:out>"/>
 					<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updateDictionaryItems/${dictionaryid}?item=<c:out value="${dictionaryItem.items}"></c:out>&pos=<c:out value="${dictionaryItem.pos}"></c:out>'" value='Update'>
 					 
 				</td>

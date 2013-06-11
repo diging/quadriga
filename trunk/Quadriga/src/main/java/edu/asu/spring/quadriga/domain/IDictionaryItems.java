@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.domain;
 
 /**
- * @description   : interface to implement DictionaryItems class.
+ * Interface to implement DictionaryItems class.
  * 
  * @author        : Lohith Dwaraka
  *

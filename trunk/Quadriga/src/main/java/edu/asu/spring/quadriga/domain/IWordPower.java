@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * Interface to implement WordPower class.
+ * 
+ * @author        : Lohith Dwaraka
+ *
+ */
 public interface IWordPower {
 
 	public abstract String getId();
