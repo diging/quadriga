@@ -6,14 +6,6 @@
 
 	<script>
 	<!-- Script for UI validation of user requests -->
-		String.prototype.replaceAll = function(str1, str2, ignore) {
-			return this.replace(new RegExp(str1.replace(
-					/([\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,
-					function(c) {
-						return "\\" + c;
-					}), "g" + (ignore ? "i" : "")), str2);
-		};
-
 		$(document).ready(function() {
 			$("input[type=submit]").button().click(function(event) {
 				event.preventDefault();
@@ -66,8 +58,7 @@
 			}
 
 			//Create a path for the user to be passed to the Controller
-			var path = id + "," + selectedAccess + "," + checkedVals.join(",");
-			path = path.replaceAll(",", "-");
+			var path = id + "-" + selectedAccess + "-" + checkedVals.join("-");
 			location.href = '/quadriga/auth/users/access/' + path;
 		}
 	</script>
