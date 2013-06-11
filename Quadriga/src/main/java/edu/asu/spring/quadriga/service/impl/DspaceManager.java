@@ -3,7 +3,10 @@ package edu.asu.spring.quadriga.service.impl;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,9 +20,11 @@ import org.springframework.web.client.RestTemplate;
 
 
 import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.ICollections;
 import edu.asu.spring.quadriga.domain.ICommunities;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.implementation.Collection;
+import edu.asu.spring.quadriga.domain.implementation.Collections;
 import edu.asu.spring.quadriga.domain.implementation.Communities;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.service.IDspaceManager;
@@ -38,6 +43,11 @@ public class DspaceManager implements IDspaceManager{
 	@Autowired
 	@Qualifier("dspaceURL")
 	private String url;
+	
+	@Autowired
+	@Qualifier("dspaceFilePath")
+	private String filePath;
+	
 	private String userName;
 	private String password;
 
@@ -77,43 +87,42 @@ public class DspaceManager implements IDspaceManager{
 		String sRestServicePath = getCompleteUrlPath("/rest/communities.xml");
 		ICommunities communities = (Communities)restTemplate.getForObject(sRestServicePath, Communities.class);
 
-		for(ICommunity c:communities.getCommunities())
-		{
-			System.out.println(c.getId());			
-			System.out.println(c.getName());
-			System.out.println(c.getDescription());
-			System.out.println(c.getIntroductoryText());
-			System.out.println(c.getCountItems());
-			System.out.println(c.getEntityReference());
-			System.out.println(c.getHandle());
-			System.out.println(c.getEntityId());
-			System.out.println("Total Collections: "+c.getCollections().getCollections().size());
-			for(ICollection collection: c.getCollections().getCollections())
-			{
-//				System.out.print(collection.getId()+"-"+getCollectionName(sUserName, sPassword, collection.getId()));
-				System.out.print(collection.getId()+" ");
-			}
-			System.out.println("\n-----------------------------------------------------------");
-		}
+		//TODO Remove these code snippets after final development
+		//		for(ICommunity c:communities.getCommunities())
+		//		{
+		//			System.out.println(c.getId());			
+		//			System.out.println(c.getName());
+		//			System.out.println(c.getDescription());
+		//			System.out.println(c.getIntroductoryText());
+		//			System.out.println(c.getCountItems());
+		//			System.out.println(c.getEntityReference());
+		//			System.out.println(c.getHandle());
+		//			System.out.println(c.getEntityId());
+		//			System.out.println("Total Collections: "+c.getCollections().getCollections().size());
+		//			for(ICollection collection: c.getCollections().getCollections())
+		//			{
+		////				System.out.println(collection.getId()+"-"+getCollectionName(sUserName, sPassword, collection.getId()));
+		//				System.out.print(collection.getId()+" ");
+		//			}
+		//			System.out.println("\n-----------------------------------------------------------");
+		//		}
+
+
 		return communities.getCommunities();
 	}
 
 	@Override
 	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityTitle) {
-		//throw new NotImplementedException("getAllCollections yet to be implemented");
-		return null;
+		throw new NotImplementedException("getAllCollections yet to be implemented");
 	}
 
+	@Override
 	public String getCollectionName(String sUserName, String sPassword, String sCollectionId)
 	{
-		//TODO: Uncomment to user the correct username and password
-		//		this.userName = sUserName;
-		//		this.password = sPassword;
-		String sRestServicePath = getCompleteUrlPath("/rest/collections/"+sCollectionId+".xml");
-		ICollection collection = (Collection)restTemplate.getForObject(sRestServicePath, Collection.class);
-
-		return collection.getName();
+		throw new NotImplementedException("getAllCollectionName yet to be implemented");
 	}
+
+
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
@@ -121,9 +130,7 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	public void start()
 	{
-		//TODO: Change the path
-		System.setProperty("javax.net.ssl.trustStore", "C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts");
-		//		System.setProperty("javax.net.ssl.trustStore", "file:/Quadriga/src/main/resources/jssecacerts");
+		System.setProperty("javax.net.ssl.trustStore", filePath);
 
 		javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
 				new javax.net.ssl.HostnameVerifier(){

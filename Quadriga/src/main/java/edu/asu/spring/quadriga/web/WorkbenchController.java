@@ -3,9 +3,11 @@ package edu.asu.spring.quadriga.web;
 import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -183,5 +186,15 @@ public class WorkbenchController {
 
 		return "auth/workbench/workspace/community/collection";
 	}
+	
+	@RequestMapping(value = "/auth/workbench/workspace/ajaxtest", method = RequestMethod.GET)
+    public @ResponseBody String getTime() {
+ 
+        Random rand = new Random();
+        float r = rand.nextFloat() * 100;
+        String result = "<br>The Random # is <b>" + r + "</b>. Generated on <b>" + new Date().toString() + "</b>";
+        System.out.println("Debug Message from Spring-Ajax-JQuery Controller.." + new Date().toString());
+        return result;
+    }
 }
 

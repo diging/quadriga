@@ -10,4 +10,8 @@ public interface ICollections {
 
 	public abstract void setCollections(List<ICollection> collections);
 
+	public abstract String getName();
+
+	public abstract void setName(String name);
+
 }
