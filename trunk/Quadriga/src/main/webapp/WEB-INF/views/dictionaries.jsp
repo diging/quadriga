@@ -62,8 +62,14 @@
 	<H1>Manage dictionary list for User : <c:out value="${userId}"></c:out></H1>
     				<hr>
     				<br>
-    <div class="example4">				
-<a href="/quadriga/auth/dictionaries/addDictionary">Add Dictionary</a></div>
+    	
+    <ul>
+		<li>
+			<input type=button onClick="location.href='/quadriga/auth/dictionaries/addDictionary'" value='Add Dictionary'>
+		</li>
+	</ul>		
+<!-- 
+<div class="example4">	<a href="/quadriga/auth/dictionaries/addDictionary">Add Dictionary</a></div>-->
 	<c:choose>
     	<c:when test="${success=='1'}">
     		<span class="byline"><c:out value="${successMsg}"></c:out></span>
