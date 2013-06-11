@@ -65,22 +65,29 @@
 			value="/WEB-INF/views/users/requestAccountError.jsp" />
 	</definition>
 	<!-- ConceptCollection pages -->
-
-	<definition name="auth/conceptcollections" extends="base.definition">
+	<definition name="base.definition.conceptcollections" extends="base.definition">
+		<put-attribute name="currentPage" value="conceptcollections" />
+	</definition>
+	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollection.jsp" />
 	</definition>
-	<definition name="auth/conceptcollections/details" extends="base.definition">
+	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Collection Details" />
 		<put-attribute name="content" value="/WEB-INF/views/collectiondetails.jsp" />
 	</definition>
-	<definition name="auth/searchitems" extends="base.definition.empty">
+	<definition name="auth/searchitems" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Collection Details" />
 		<put-attribute name="content" value="/WEB-INF/views/searchconcept.jsp" />
 	</definition>
+	<definition name="auth/conceptcollections/addCollectionsForm" extends="base.definition.conceptcollections">
+		<put-attribute name="title" value="Quadriga - Collection Details" />
+		<put-attribute name="content" value="/WEB-INF/views/addConceptCollection.jsp" />
+	</definition>
 
 	<!-- Workbench pages -->
+	
 	<definition name="base.definition.workbench" extends="base.definition">
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>

@@ -26,9 +26,10 @@ public interface IConceptCollectionManager {
 	public abstract List<IConceptCollection> getUserCollaborations(String sUserId);
 	public abstract String updateConceptCollection(ConceptCollection conceptCollection);	
 	public abstract int deleteConceptCollection(String id);	
-	public abstract int addConceptCollection(ConceptCollection newConcept);	
+	
 	public ConceptpowerReply search(String item, String pos);
 	public abstract void getCollectionDetails(IConceptCollection concept);
 	
 	 public abstract void addItems(String lemmma, String id, String pos, String desc, String string);
+	public abstract  String addConceptCollection(IConceptCollection collection);
 }

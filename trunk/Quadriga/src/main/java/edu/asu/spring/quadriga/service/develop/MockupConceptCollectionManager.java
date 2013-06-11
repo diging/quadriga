@@ -58,12 +58,7 @@ public class MockupConceptCollectionManager implements
 		return 0;
 	}
 
-	@Override
-	public int addConceptCollection(ConceptCollection newConcept) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	
 	
 
 	@Override
@@ -91,6 +86,12 @@ public class MockupConceptCollectionManager implements
 			String string) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String addConceptCollection(IConceptCollection collection) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

@@ -4,19 +4,24 @@
 
 <!DOCTYPE html>
 <html>
-
+<style>
+form input.chk
+{-webkit-appearance: checkbox;}
+</style>
 <script type="text/javascript">
 $(document).ready(function() {
-			activeTable = $('#conceptSearch').dataTable({
-				"bJQueryUI" : true,
-				"sPaginationType" : "full_numbers",
-				"bAutoWidth": false
+				$('#conceptSearch').dataTable({
+					"bJQueryUI" : true,
+					"sPaginationType" : "full_numbers",
+					"bAutoWidth": false
+				});
+				
 			});
-		});
+
 
 </script>
 	
-<form action="${pageContext.servletContext.contextPath}/auth/searchitems">
+<form  action="${pageContext.servletContext.contextPath}/auth/searchitems">
 		<input type="text"  name="name" id ="name" placeholder="enter a word">
 		<select name="pos">
 						<option value="noun">Nouns</option>
@@ -30,7 +35,7 @@ $(document).ready(function() {
 
 <c:if test="${not empty result}">
 		<h3>Results Of the search</h3>
-		<form action="auth/addItems">
+		<form action="conceptcollections/addItems" >
 		<table cellpadding="0" cellspacing="0"	class="display dataTable"  id="conceptSearch">
 			<thead>
 				<tr>
@@ -41,14 +46,14 @@ $(document).ready(function() {
 					<th>Description</th>
 					<th>Type</th>
 					<th>ConceptList</th>
-					<th>Action</th>
+					
 				</tr>
 			</thead>
 			<tbody>
 			
 				<c:forEach var="concept" items="${result}">
 					<tr class="gradeX">
-						<td> <input type="checkbox" name = "selected" value='<c:out value="${concept.id}"></c:out>'>
+						<td> <input type="checkbox"  class="chk" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
 						<td  align="justify"><font size="2"><c:out
 									value="${concept.lemma}"></c:out></font></td>
 						<td width="25%" class="center" align="justify"><font size="2"><c:out
@@ -68,18 +73,7 @@ $(document).ready(function() {
 				</c:forEach>
 				
 			</tbody>
-			<tfoot>
-				<tr>
-					<th>Select</th>
-					<th>Lemma</th>
-					<th>ID</th>
-					<th>POS</th>
-					<th>Description</th>
-					<th>Type</th>
-					<th>ConceptList</th>
-					<th>Action</th>
-				</tr>
-			</tfoot>
+			
 		</table>
 		<input type="submit"  value="save" /> 
 				</form>

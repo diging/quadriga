@@ -12,9 +12,8 @@
 		<li ${currentPage == "conceptCollections" ? "class=\"current_page_item\"" : ""}>
 		<a href="${pageContext.servletContext.contextPath}/auth/conceptcollections">Concept Collections</a>
 		<ul>
-				<li><a href="#">Drop Menu 1</a></li>
-		        <li><a href="#">Drop Menu 2</a></li>
-		        <li><a href="#">Drop Menu 3</a></li>
+				<li><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm">Add Collection</a></li>
+		       
 		</ul>
 		</li>
 		</sec:authorize>

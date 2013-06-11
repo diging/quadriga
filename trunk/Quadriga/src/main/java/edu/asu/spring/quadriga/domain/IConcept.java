@@ -18,5 +18,8 @@ public interface IConcept {
 	public abstract void setDescription(String discription);
 	public abstract  String getDescription();
 	public abstract void setPos(String pos);
+	public abstract String getLemma() ;
+
+	public abstract void setLemma(String lemma);
 
 }

@@ -69,8 +69,9 @@ public class ConceptCollection implements IConceptCollection
 	}
 	@Override
 	public void addItem(IConcept concept) {
-		if(items.indexOf(concept)<0)
+		if(items.indexOf(concept)<0){
 		items.add(concept);
+		}
 	}
 	@Override
 	public int hashCode() {

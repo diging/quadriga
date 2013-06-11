@@ -5,13 +5,7 @@
 <!DOCTYPE html>
 <html>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script>
-$(function() { // when DOM is ready
-    $("#additems").click(function(){ // when #showhidecomment is clicked
-        $("#addsection").load("searchitems"); // load the sample.jsp page in the #chkcomments element
-    }); 
-});
-</script>
+
 <link rel="stylesheet"
 		href="/quadriga/resources/txt-layout/css/demo_table_jui.css" />
 		<style>
@@ -41,14 +35,14 @@ $(function() { // when DOM is ready
 	<c:out value="${concept.description }"></c:out>
 	</span>
 
-	<display:table  class="display" name="${concept.items}" keepStatus="true" uid="1" pagesize = "10" cellspacing="2" cellpadding="2">
-	<display:column property="name" sortable="false" title="name"/>
-	<display:column property="description" title="description"/>
-	<display:column property="pos" title="pos"/>
+	<display:table  class="display" name="${concept.items}" requestURI="/auth/conceptdetails"  keepStatus="true" uid="1" pagesize = "5" cellspacing="2" cellpadding="2">
+	<display:column property="lemma" sortable="false" title="Lemma"></display:column>
+	<display:column property="name" sortable="false" title="Id"/>
+	<display:column property="description" title="Description"/>
+	<display:column property="pos" title="Pos"/>
 	</display:table>
-	 <button id="additems">Add Items to List</button>
-	 <div id="addsection">
-	 </div>
+	
+	<a href='searchitems' > addItems</a>
 </div>
 
 	

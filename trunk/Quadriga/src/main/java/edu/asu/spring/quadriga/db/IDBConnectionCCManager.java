@@ -28,4 +28,6 @@ public interface IDBConnectionCCManager {
 		public abstract void getCollectionDetails(IConceptCollection concept);
 		public abstract void saveItem(String lemmma, String id, String pos,
 				String desc, String conceptId);
+		public abstract  String validateId(String collectionid);
+		public abstract  String addCollection(IConceptCollection con);
 	}
