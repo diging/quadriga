@@ -99,8 +99,6 @@
 	</definition>
 	<definition name="auth/workbench/addproject" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Add Project" />
-		<put-attribute name="sub-navigation"
-			value="/WEB-INF/views/workbench/project-right.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addproject.jsp" />
 	</definition>
