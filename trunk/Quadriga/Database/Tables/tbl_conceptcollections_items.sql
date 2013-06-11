@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections_items
 (
   id       INT   NOT NULL,
   lemma     	 VARCHAR(40)	NOT NULL,
-  item	 TEXT    NOT NULL,
+  item	 VARCHAR(255)    NOT NULL,
   
   pos			  VARCHAR(40) ,
   description     TEXT,			
@@ -22,5 +22,5 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections_items
   updateddate     TIMESTAMP     NOT NULL,
   
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id,lemma)
+  PRIMARY KEY(id,item)
 );
