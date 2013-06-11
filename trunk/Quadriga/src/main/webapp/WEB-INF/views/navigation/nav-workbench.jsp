@@ -7,7 +7,8 @@
 		<li>
 			<article class="is-post-summary">
 				<h3>
-					» <a href="/quadriga/auth/workbench/addproject">Add Project</a>
+					» <a href="/quadriga/auth/workbench/addproject">Add Project</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/communities">DSpace Communities</a>
 				</h3>
 			</article>
 		</li>
