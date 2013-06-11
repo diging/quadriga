@@ -21,6 +21,17 @@ import edu.asu.spring.quadriga.domain.ICollections;
 public class Collections implements ICollections{
 
 	private List<ICollection> collections;
+	private String name;
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	@XmlElementRefs({@XmlElementRef(type=Collection.class)})
 	@Override

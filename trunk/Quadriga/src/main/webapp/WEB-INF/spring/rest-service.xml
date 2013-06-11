@@ -8,6 +8,12 @@
 		tag in property classesToBeBound. Also make sure to annotate the corresponding 
 		classes with the @XMLRootElement tag -->
 
+<bean id="dspaceFilePath" class="java.lang.String">
+		<constructor-arg>
+<!-- 			<value>C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts</value> -->
+			<value>/home/tomcat/webapps/certificates/jssecacerts</value>
+		</constructor-arg>
+	</bean>
 
 	<bean id="DspaceManager" class="edu.asu.spring.quadriga.service.impl.DspaceManager"
 		init-method="start">
@@ -40,7 +46,7 @@
 			<list>
 				<value>edu.asu.spring.quadriga.domain.implementation.Communities
 				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.Collection
+				<value>edu.asu.spring.quadriga.domain.implementation.Collections
 				</value>
 			</list>
 		</property>
