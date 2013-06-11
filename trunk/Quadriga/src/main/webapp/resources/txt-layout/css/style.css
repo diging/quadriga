@@ -426,6 +426,32 @@
 						background-position: -384px 0px;
 					}
 
+	ul.collaborators {
+		font-size: 0.9em;
+		color: #a1aaa5;
+	}
+		ul.collaborators li
+		{
+			position: relative;
+			padding-left: 24px;
+			margin-left: 1em;
+			margin-top: 5px;
+			margin-bottm: 5px;
+		}
+		
+		ul.collaborators li:before
+		{
+			content: '';
+			display: block;
+			position: absolute;
+			width: 16px;
+			height: 16px;
+			left: 0;
+			top: 50%;
+			margin-top: -8px;
+			background: url('images/icons-meta.png');
+		}
+	
 	ul.meta
 	{
 		font-size: 0.85em;
