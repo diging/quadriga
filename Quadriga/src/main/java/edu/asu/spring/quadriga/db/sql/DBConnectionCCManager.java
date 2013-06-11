@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 
 /**
@@ -33,8 +35,10 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 
 	@Autowired
 	private IConceptCollectionFactory conceptCollectionFactory;
-	@Autowired
+	
 	private IConcept concept;
+	@Autowired
+	private IConceptFactory conceptFactory;
 	/**
 	 * {@inheritDoc}
 	 */
@@ -68,7 +72,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 			e.printStackTrace();
 		}
 		catch (Exception e) {
-			System.out.println(""+errmsg);
+			
 			e.printStackTrace();
 		}
 		finally
@@ -114,7 +118,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 			e.printStackTrace();
 		}
 		catch (Exception e) {
-			System.out.println(""+errmsg);
+			
 			e.printStackTrace();
 		}
 		finally
@@ -142,16 +146,19 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 			ResultSet resultSet = sqlStatement.getResultSet();
 			if(resultSet.next()) { 
 				do { 
-					collection.addItem(concept);
+					
 					/*conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
 					conceptCollection.setName(resultSet.getString(1));
 					conceptCollection.setDescription(resultSet.getString(2));
 					conceptCollection.setId(resultSet.getString(3));
 					collectionsList.add(conceptCollection);*/
 					//concept.setDiscription(resultSet.getString(1));
+					concept = conceptFactory.createConceptObject();
+					concept.setLemma(resultSet.getString(5));
 					concept.setName(resultSet.getString(2));
 					concept.setPos(resultSet.getString(4));
 					concept.setDescription(resultSet.getString(3));
+					collection.addItem(concept);
 				} while (resultSet.next());
 			}		
 		} 
@@ -159,7 +166,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 			e.printStackTrace();
 		}
 		catch (Exception e) {
-			System.out.println(""+errmsg);
+			
 			e.printStackTrace();
 		}
 		finally
@@ -180,7 +187,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
         
         //get the connection
         getConnection();
-        System.out.println("dbCommand : "+dbCommand);
+        
         //establish the connection with the database
         try
         {
@@ -190,7 +197,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
         	sqlStatement.setString(1, id);
         	sqlStatement.setString(2, lemma);
         	sqlStatement.setString(3, pos);
-        	System.out.println(pos);
+        	
         	sqlStatement.setString(4, desc);
         	sqlStatement.setString(5, conceptId);
         	
@@ -200,7 +207,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(6);
-			System.out.println(errmsg);
+			
 			
 			
         }
@@ -214,6 +221,100 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
         }
 
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String validateId(String collectionid) {
+		// TODO Auto-generated method stub
+		String dbCommand;
+		String errmsg=null;
+		getConnection();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.VALIDATE_COLLECTIONID + "(?,?)";
+		try {
+
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, collectionid);
+			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
+
+			sqlStatement.execute();
+			 errmsg = sqlStatement.getString(2);
+			return errmsg;
+		}
+		catch(SQLException sql)
+		{
+			
+		}
+		return errmsg;
+	}
+
+	@Override
+	public String addCollection(IConceptCollection con) {
+		// TODO Auto-generated method stub
+		
+		String name;
+		String description;
+		String id;
+        IUser owner = null;
+        String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+        //fetch the values from the project object
+        name = con.getName();
+        description = con.getDescription();        
+        id = con.getId();
+        owner = con.getOwner();
+        
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_CONCEPTCOLLECTION  + "(?,?,?,?,?,?)";
+        
+        //get the connection
+        getConnection();
+        
+        //establish the connection with the database
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, name);
+        	sqlStatement.setString(2, description);
+        	sqlStatement.setString(3,id);
+        	sqlStatement.setString(4,"0");
+        	sqlStatement.setString(5,owner.getUserName());
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(6);
+			
+			if(errmsg.isEmpty())
+			{
+				return errmsg;
+			}
+			else
+			{
+				return errmsg;
+			}
+			
+        }
+        catch(SQLException e)
+        {
+        	throw new RuntimeException(e.getMessage());
+        }
+        finally
+        {
+        	closeConnection();
+        }
+
+		
+	}
+	
+	
 
 	
 

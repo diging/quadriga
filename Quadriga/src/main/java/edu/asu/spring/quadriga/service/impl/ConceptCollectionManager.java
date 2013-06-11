@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -22,7 +20,6 @@ import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 
 /**
@@ -66,14 +63,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#addConceptCollection(edu.asu.spring.quadriga.domain.implementation.ConceptCollection)
-	 */
-	@Override
-	public int addConceptCollection(ConceptCollection newConcept) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	
 
@@ -111,8 +100,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		rep = restTemplate.getForObject(
 		  "http://chps.asu.edu/conceptpower/rest/ConceptLookup/{name}/{pos}", 
 		  ConceptpowerReply.class, vars);
-		for(ConceptEntry c : rep.getConceptEntry())
-		System.out.println(c.getLemma()+""+c.getId()+":"+c.getConceptList()+":"+c.getDescription()+":"+c.getPos()+c.getType());
 		
 		return rep;
 		}
@@ -130,6 +117,10 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		dbConnect.saveItem(lemmma, id, pos, desc, conceptId);
 	}
 
-	
+	@Override
+	public String addConceptCollection(IConceptCollection collection) {
+		// TODO Auto-generated method stub
+		return dbConnect.addCollection(collection);
+	}
 
 }

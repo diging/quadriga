@@ -33,6 +33,7 @@ public interface DBConstants
 
 	public static final String GET_CCOWNED_DETAILS = "sp_getConceptCollections";
 	public static final String GET_CCCOLLABORATIONS_DETAILS = "sp_getUserCollectionCollaborations";
+	public static final String VALIDATE_COLLECTIONID = "sp_validatecollectionid";
 	public static final String GET_COLLECTION_DETAILS = "sp_getConceptCollectionDetails";
 	public static final String ADD_COLLECTION_ITEM = "sp_addCollectionItems";
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
@@ -40,7 +41,7 @@ public interface DBConstants
 	public static final String ADD_DICTIONARY_ITEM = "sp_addDictionaryItems";
 	public static final String DELETE_DICTIONARY_ITEM = "sp_deleteDictionaryItems";
 	public static final String UPDATE_DICTIONARY_ITEM = "sp_updateDictionaryItems";
-	
+	public static final String ADD_CONCEPTCOLLECTION ="sp_addConceptCollections";
 
 
 }
