@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +14,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -36,7 +39,7 @@ public class ConceptcollectionController {
 	@Autowired
 	IConceptCollectionFactory collectionFactory;
 	List<IUser> collaboratorList;
-	
+	ConceptpowerReply c;
 	@Autowired IUserManager usermanager;
 	IUser user;
 	/**
@@ -54,7 +57,7 @@ public class ConceptcollectionController {
 	    model.addAttribute("conceptlist", list);
 	    collab_list = conceptControllerManager.getUserCollaborations(userId);
 	    model.addAttribute("collaborationlist", collab_list);
-	    list.addAll(collab_list);
+	    
 	    user =  usermanager.getUserDetails(userId);
 	    username = user.getUserName();
 	    model.addAttribute("username", username);	
@@ -72,7 +75,11 @@ public class ConceptcollectionController {
 	    String userId = principal.getUsername();*/
 		concept = collectionFactory.createConceptCollectionObject();
 	    concept.setName(req.getParameter("name"));
-	    concept = list.get(list.indexOf(concept));
+	    int index;
+	    if(( index = list.indexOf(concept))>=0)
+	    concept = list.get(index);
+	    else if((index = collab_list.indexOf(concept))>=0)
+	    concept = collab_list.get(index);	
 	    conceptControllerManager.getCollectionDetails(concept);
 	    model.addAttribute("concept", concept);
 	    return "auth/conceptcollections/details";
@@ -81,10 +88,25 @@ public class ConceptcollectionController {
 	public String conceptSearchHandler(HttpServletRequest req, ModelMap model) throws SQLException{
 		/*UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    String userId = principal.getUsername();*/
-		ConceptpowerReply c = conceptControllerManager.search(req.getParameter("name"), req.getParameter("pos"));
+		c = conceptControllerManager.search(req.getParameter("name"), req.getParameter("pos"));
 		if(c!=null)
 	    model.addAttribute("result", c.getConceptEntry());
+		
 	    return "auth/searchitems";
+	}
+	@RequestMapping(value = "auth/addItems", method = RequestMethod.GET)
+	public String saveItemsHandler(HttpServletRequest req, ModelMap model) throws SQLException{
+		/*UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    String userId = principal.getUsername();*/
+		String[] values= req.getParameterValues("selected");
+		for(String id : values)
+		{
+			ConceptEntry temp = new ConceptEntry();
+			temp.setId(id);
+			temp = c.getConceptEntry().get((c.getConceptEntry().indexOf(temp)));
+			conceptControllerManager.addItems(temp.getLemma(),id,temp.getPos(), temp.getDescription(),concept.getName());
+		}
+		return "auth/conceptcollections/details";
 	}
 	
 }

@@ -17,6 +17,7 @@ public class Concept implements IConcept {
 	private String name;
 	private String pos;
 	private String description;
+	private String id;
 	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.IConcept#getName()
@@ -65,6 +66,18 @@ public class Concept implements IConcept {
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
 		this.description=description;
+	}
+
+	@Override
+	public String getId() {
+		// TODO Auto-generated method stub
+		return id;
+	}
+
+	@Override
+	public void setID(String id) {
+		// TODO Auto-generated method stub
+		this.id = id;
 	}
 
 }

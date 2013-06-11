@@ -86,4 +86,13 @@ public class MockupConceptCollectionManager implements
 
 	
 
+	@Override
+	public void addItems(String lemmma, String id, String pos, String desc,
+			String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
 }

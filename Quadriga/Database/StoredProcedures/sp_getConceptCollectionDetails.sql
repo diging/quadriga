@@ -49,11 +49,11 @@ BEGIN
         WHERE collectionname = incollectionname; 
       
       -- retrieve the item details
-      SELECT incollectionname, item, description, pos
+      SELECT incollectionname, item, description, pos, lemma
            AS item
         FROM vw_conceptcollections_items
-	    WHERE id = varcollectionid
-      GROUP BY id;
+	    WHERE id = varcollectionid;
+      
      END IF;
 END$$
 DELIMITER ;
