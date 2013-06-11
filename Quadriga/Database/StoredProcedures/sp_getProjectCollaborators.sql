@@ -22,35 +22,38 @@ CREATE PROCEDURE sp_getProjectCollaborators
 )
 BEGIN
     -- declare local variables
-     DECLARE projid   INT DEFAULT 0;
+    DECLARE projid   INT DEFAULT 0;
 
 	-- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(inprojid IS NULL OR inprojid = "")
-     THEN SET errmsg = "Project id cannot be empty.";
-    END IF;
-    
-    IF NOT EXISTS (SELECT 1 FROM vw_project
-                     WHERE projectid = inprojid)
+ IF(inprojid IS NULL OR inprojid = "")
+    THEN SET errmsg = "Project id cannot be empty.";
+  END IF;
+   
+   IF NOT EXISTS (SELECT 1 FROM vw_project
+                   WHERE projectid = inprojid)
       THEN SET errmsg = "Project id is invalid.";
     END IF;
+   
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
       -- retrieve the projectid id of the project 
-      SELECT projectid INTO projid FROM vw_project
-        WHERE projectid = inprojid; 
+     SELECT projectid INTO projid FROM vw_project
+	 WHERE projectid = inprojid; 
       
       -- retrieve the collaborator details
       SELECT projectid,collaboratoruser, 
-         GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole',
-		 GROUP_CONCAT( collaboratorrolename SEPARATOR ',')  AS 'CollaboratorroleName'
+         GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole'
         FROM vw_project_collaborator
-	    WHERE projectid = projid
+	    WHERE projectid = inprojid
       GROUP BY collaboratoruser;
      END IF;
 END$$
 DELIMITER ;
+
+call sp_getProjectCollaborators('1',@err);
+select @err;
