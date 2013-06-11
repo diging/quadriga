@@ -156,7 +156,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				
 				while(resultset.next())
 		        {
-		        	System.out.println("-----------"+resultset.getString(1));
 					project = projectfactory.createProjectObject();
 		        	project.setName(resultset.getString(1));
 		        	project.setDescription(resultset.getString(2));
@@ -278,10 +277,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		
 			while(resultset1.next())
 			{		
-				    project.setId(resultset1.getString(1));
-				    
-					//project.setProjectCollaborator(collaboratorUser);
-					
+			    
+					project.setId(resultset1.getString(1));
+				    					
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					List<ICollaboratorRole> collaboratorRoles = splitAndCreateCollaboratorRoles(resultset1.getString(3));
 					collaborator.setCollaboratorRoles(collaboratorRoles);
@@ -289,7 +287,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 					IUser collaboratorUser = userFactory.createUserObject();
 					collaboratorUser.setName(resultset1.getString(2));
 					collaborator.setUserObj(collaboratorUser);
-					
 					project.getCollaborators().add(collaborator);
 			}
 		}
@@ -301,6 +298,98 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	
 		return project;
 	}
+	
+	@Override
+	public IProject showCollaboratorsRequest(String projectid) {
+
+		String dbCommand;
+		String outErrorValue;
+		CallableStatement sqlStatement ;
+		ICollaborator collaborator = null;
+
+		IProject project = projectfactory.createProjectObject();
+		project.setCollaborators(new ArrayList<ICollaborator>());
+
+		IUser collaboratorUser=null;
+
+		getConnection();
+
+	    dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_COLLABORATOR_REQUEST + "(?,?)";
+
+	    try {
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, projectid);
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.execute();
+
+			outErrorValue = sqlStatement.getString(2);
+
+			if(outErrorValue.equals(" "))
+			{
+				ResultSet resultset = sqlStatement.getResultSet();
+
+				while(resultset.next())
+				{
+					collaboratorUser = userFactory.createUserObject();
+					collaboratorUser.setName(resultset.getString(1));
+
+					collaborator = collaboratorFactory.createCollaborator();
+					collaborator.setUserObj(collaboratorUser);
+
+					project.getCollaborators().add(collaborator);
+					
+				}
+		     }
+			
+			else
+			{
+				throw new SQLException(outErrorValue);
+			} 
+		     
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	    
+	    finally{
+			 closeConnection();
+		 }
+		
+		return project;
+	}
+	
+	
+	public int addCollaboratorRequest(ICollaborator collaborator)
+	{
+		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		collaborator.getCollaboratorRoles();
+		IUser collboratoruser =	collaborator.getUserObj();
+		String userName = collboratoruser.getUserName();
+		System.out.println("-----username"+collboratoruser.getUserName());
+
+		String dbCommand;
+		String outErrorValue;
+		CallableStatement sqlStatement ;
+		
+		for(ICollaboratorRole collaboratorRole : collaboratorRoles)
+		{
+			System.out.println("---------roleDBid" + collaboratorRole.getRoleDBid());
+		}
+		
+		dbCommand =  DBConstants.SP_CALL+ " " + DBConstants.ADD_COLLABORATOR_REQUEST + "(?,?,?,?)" ;
+		
+		try {
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			//sqlStatement.setString(2,collaboratorUser);
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+		return 1;
+		
+	} 
 	
 		
 	/**
@@ -374,6 +463,8 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
         	closeConnection();
         }
 	}
+
+	
 
 	
 }

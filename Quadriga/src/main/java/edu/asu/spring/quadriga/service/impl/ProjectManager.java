@@ -16,7 +16,9 @@ import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
 import edu.asu.spring.quadriga.service.IProjectManager;
@@ -121,12 +123,9 @@ public class ProjectManager implements IProjectManager {
 				
 				for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
 				{
-					roleMapper.getCollaboratorRoles(collaboratorRole);
-					
-					System.out.println("------------"+collaboratorRole.getRoleid());
+					roleMapper.getCollaboratorRoles(collaboratorRole);	
 				}
-			}
-			
+			}	
 		}
 		
 		catch (SQLException e) {
@@ -136,5 +135,47 @@ public class ProjectManager implements IProjectManager {
 			
 		return project;
 	}
+
+
+	@Override
+	public int addCollaborators(ICollaborator collaborator) {
+		
+	   int success = dbConnect.addCollaboratorRequest(collaborator);
+				
+	   return success;
+	}
+
+	@Override
+	public IProject showNonExistingCollaborator(String projectid) {
+				
+		IProject project = dbConnect.showCollaboratorsRequest(projectid);
+		return project;
+	}
+	
+	@Override
+	public IProject showExistingCollaborator(String projectid) {
+				
+		IProject project = null;
+		try {
+			project = dbConnect.getProjectDetails(projectid);
+			
+			for (ICollaborator collaborator : project.getCollaborators()) {
+				
+				for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
+				{
+					roleMapper.getCollaboratorRoles(collaboratorRole);	
+				}
+			}	
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return project;
+	}
+	
+	
+	
+	
 
 }

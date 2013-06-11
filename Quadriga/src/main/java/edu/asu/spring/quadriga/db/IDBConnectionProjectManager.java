@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -44,6 +45,10 @@ public interface IDBConnectionProjectManager
 	public abstract void setDataSource(DataSource dataSource);
 
 	public abstract int addProjectRequest(IProject project);
+	
+	public abstract IProject showCollaboratorsRequest(String projectid);
+	
+	public abstract int addCollaboratorRequest(ICollaborator collaborator);
 	
 
 

@@ -27,6 +27,10 @@ public interface DBConstants
 	public static final String PROJECT_COLLABORATORS="sp_getProjectCollaborators";
 
 	public static final String ADD_PROJECT_REQUEST = "sp_addProjectDetails";
+	public static final String ADD_COLLABORATOR_REQUEST = "sp_addProjectCollaborators";
+	
+	public static final String SHOW_COLLABORATOR_REQUEST = "sp_showProjectCollaborators";
+
 	
 	public static final String ADD_DICTIONARY = "sp_addDictionaryDetails";
 	public static final String GET_DICTIONARY_DETAILS = "sp_getDictionaryDetails";

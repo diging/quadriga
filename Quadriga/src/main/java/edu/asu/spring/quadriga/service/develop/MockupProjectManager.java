@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
@@ -89,5 +90,24 @@ public class MockupProjectManager implements IProjectManager{
 		return project;
 	}
 
+	@Override
+	public int addCollaborators(ICollaborator collaborator) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
+	@Override
+	public IProject showNonExistingCollaborator(String projectid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IProject showExistingCollaborator(String projectid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }
