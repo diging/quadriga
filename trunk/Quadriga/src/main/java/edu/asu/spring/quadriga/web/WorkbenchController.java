@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,12 +26,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+
+import edu.asu.spring.quadriga.domain.ICollaborator;
+
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IDspaceManager;
@@ -63,6 +69,9 @@ public class WorkbenchController {
 	@Autowired 
 	IProjectFactory projectFactory;
 	IUser user;
+	
+	@Autowired
+	ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
 	private IDspaceManager dspaceManager;
@@ -122,8 +131,17 @@ public class WorkbenchController {
 	public String getProjectPage(@PathVariable("projectid") String projectid, ModelMap model) throws SQLException {
 
 		IProject project = projectmanager.getProject(projectid);
+		
 		model.addAttribute("project", project);
 
+		
+		ICollaborator collaborator = null;
+	/*	int success = projectmanager.addCollaborators(collaborator);
+		if(success == 1)
+		{
+			model.addAttribute("success", 1);
+		}*/
+		
 		return "auth/workbench/project";
 	}
 
@@ -186,6 +204,45 @@ public class WorkbenchController {
 
 		return "auth/workbench/workspace/community/collection";
 	}
+
+	
+	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.GET)
+	public ModelAndView addCollaboratorForm()
+	{
+		return new ModelAndView("auth/workbench/{projectid}/addcollaborator","command", collaboratorFactory.createCollaborator());
+	}
+	
+		
+	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
+	public String displayCollaborator(@PathVariable("projectid") String projectid, ModelMap model){
+		
+		IProject project = projectmanager.showNonExistingCollaborator(projectid);
+		model.addAttribute("project", project);
+
+		IProject project1 = projectmanager.showExistingCollaborator(projectid);
+		model.addAttribute("project1", project1);
+
+		
+		return "auth/workbench/showCollaborators";
+		
+	}
+	
+	
+	/*@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.POST)
+	public String addCollaborators( @ModelAttribute("ModelAndView")Collaborator collaborator, @PathVariable("projectid") String id,   Model model,
+			Principal principal)	
+	{
+		int success = projectmanager.addCollaborators(collaborator);
+		
+		if(success == 1)
+		{
+			model.addAttribute("success", 1);
+		}
+		model.addAttribute("projectid", id);
+		return "auth/workbench/addCollaborator";
+	}*/
+	
+
 	
 	@RequestMapping(value = "/auth/workbench/workspace/ajaxtest", method = RequestMethod.GET)
     public @ResponseBody String getTime() {
@@ -196,5 +253,6 @@ public class WorkbenchController {
         System.out.println("Debug Message from Spring-Ajax-JQuery Controller.." + new Date().toString());
         return result;
     }
+
 }
 
