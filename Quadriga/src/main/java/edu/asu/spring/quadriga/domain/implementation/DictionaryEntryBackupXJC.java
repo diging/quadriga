@@ -8,6 +8,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * This class is not in use for now, would use it if needed
+ * 
+ * @author  : Lohith Dwaraka
+ *
+ */
 
 /**
  * <p>Java class for anonymous complex type.

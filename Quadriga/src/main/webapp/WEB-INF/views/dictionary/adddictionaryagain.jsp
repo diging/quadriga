@@ -47,7 +47,7 @@
       <br />
       </c:otherwise>
 </c:choose>
-	<form:form modelAttribute="dictionary" method="POST" action="/auth/dictionaries/addDictionary">
+	<form:form method="POST" action="/auth/dictionaries/addDictionary">
 		<table>
 			<tr>
 				<td>Name:</td>
@@ -63,7 +63,7 @@
 				<td><form:input path="id" size="30" id="id"/></td>
 			</tr>
 		</table>
-		<input class="command" type="submit" value="Create Dictionary">
+		<input type="submit" value="Create Dictionary">
 	</form:form>
 
 </article>

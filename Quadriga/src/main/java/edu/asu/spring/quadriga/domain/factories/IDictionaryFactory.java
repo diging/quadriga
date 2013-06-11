@@ -1,8 +1,9 @@
 package edu.asu.spring.quadriga.domain.factories;
 import edu.asu.spring.quadriga.domain.IDictionary;
 
+
 /**
- * Creates a instance of IDictionary for autowired
+ * Factory interface for Dicitonary factories.
  * 
  */
 

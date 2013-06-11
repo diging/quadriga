@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.db.sql;
 
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,8 +24,17 @@ import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.web.WorkbenchController;
 
+/**
+ * Class implements {@link DBConnectionDictionaryManager} for all the DB connection necessary for dictionary functionality.
+ *                    
+ * @implements       IDBConnectionDictionaryManager interface.
+ *  
+ * @Called By        DictionaryManager.java
+ *                     
+ * @author           Lohith Dwaraka 
+ *
+ */
 public class DBConnectionDictionaryManager implements IDBConnectionDictionaryManager {
 
 	private Connection connection;
@@ -38,7 +48,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
-	private static final Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DBConnectionDictionaryManager.class);
 	
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
@@ -46,7 +56,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	@Autowired
 	private IDictionaryItemsFactory dictionaryItemsFactory;
 	/**
-	 *  @Description: Assigns the data source
+	 * Assigns the data source
 	 *  
 	 *  @param : dataSource
 	 */
@@ -56,7 +66,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	/**
-	 * @Description : Close the DB connection
+	 * Close the DB connection
 	 * 
 	 * @return : 0 on success
 	 *           -1 on failure
@@ -77,7 +87,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	/**
-	 * @Description : Establishes connection with the Quadriga DB
+	 * Establishes connection with the Quadriga DB
 	 * 
 	 * @return      : connection handle for the created connection
 	 * 
@@ -94,7 +104,13 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 	}
 
-
+	/**
+	 * Sets up the environment
+	 * 
+	 * @return      : int
+	 * 
+	 * @throws      : SQLException 
+	 */
 	public int setupTestEnvironment(String sQuery)
 	{
 		try
@@ -111,7 +127,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	/**
-	 * @Description     This method fetches the list of dictionary for current logged in user                    
+	 *  This method fetches the list of dictionary for current logged in user                    
 	 * 
 	 * @returns         List of Dictionary
 	 * 
@@ -225,7 +241,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	{
 		String dbCommand;
 		String dictionaryName="";
-        String errmsg;
         CallableStatement sqlStatement;
         //command to call the SP
         dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_NAME  + "(?,?)";
@@ -250,7 +265,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 					dictionaryName =resultSet.getString(1);
 				} 
 			}
-			errmsg = sqlStatement.getString(2);
+			//String errmsg = sqlStatement.getString(2);
 			
         }
         catch(SQLException e)
@@ -400,7 +415,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
         
         //get the connection
         getConnection();
-        System.out.println("dbCommand : "+dbCommand);
+        logger.info("dbCommand : "+dbCommand);
         //establish the connection with the database
         try
         {
@@ -452,7 +467,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
         
         //get the connection
         getConnection();
-        System.out.println("dbCommand : "+dbCommand);
+        logger.info("dbCommand : "+dbCommand);
         //establish the connection with the database
         try
         {

@@ -10,26 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
 
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 
 /**
- *   @Description : This class acts as a dummy Dictionary manager which adds list of Dictionary words
+ *  This class acts as a Dictionary manager which adds list of Dictionary words
  *   				and their descriptions on the dictionary page.
  *   
  *   @implements  : IDictionaryManager Interface
@@ -43,10 +42,17 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
 @Service
 public class DictionaryManager implements IDictionaryManager {
 
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryManager.class);
+	
 	@Autowired
 	@Qualifier("DBConnectionDictionaryManagerBean")
 	private IDBConnectionDictionaryManager dbConnect;
 
+	/**
+	 *  Gets all the dictionaries of the user
+	 * 
+	 *  @return 	Return to list dictionary to controller
+	 */
 	public List<IDictionary> getDictionariesList(String userId){
 
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();  
@@ -56,7 +62,12 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryList;
 	}
 
-
+	/**
+	 *  Adds a new dictionaries for the user
+	 * 
+	 *  @return 	Return to success or error msg to controller
+	 */
+	
 	public String addNewDictionary(Dictionary dictionary){
 
 		String msg = dbConnect.addDictionary(dictionary);
@@ -64,13 +75,11 @@ public class DictionaryManager implements IDictionaryManager {
 		return msg;
 	}
 
-	public String updateDictionariesItems(Dictionary existingDictionaryList){
-		return "";
-	}
-
-	public int deleteDictionariesItems(String dictionaryId){
-		return 1;
-	}
+	/**
+	 *  Add a new dictionary item to dictionary of the user
+	 * 
+	 *  @return 	Return to success or error message to controller
+	 */
 
 	public String addNewDictionariesItems(String dictionaryId,String item,String id,String pos,String owner){
 		String msg=null;
@@ -85,6 +94,12 @@ public class DictionaryManager implements IDictionaryManager {
 
 	}
 
+	/**
+	 *  Delete the dictionary item from the dictionary of the user
+	 * 
+	 *  @return 	Return success or error message to controller
+	 */
+	
 	public String deleteDictionariesItems(String dictionaryId,String item){
 		String msg=null;
 		try {
@@ -96,6 +111,12 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return msg;
 	}
+	
+	/**
+	 *  Update the dictionary item of the dictionary from the word power
+	 * 
+	 *  @return 	Return  error or success message to controller
+	 */
 	
 	public String updateDictionariesItems(String dictionaryId,String item,String id){
 		String msg=null;
@@ -109,6 +130,12 @@ public class DictionaryManager implements IDictionaryManager {
 		return msg;
 	}
 
+	/**
+	 *  Gets all the dictionary item of the dictionary of the user
+	 * 
+	 *  @return 	Return to list of dictionary item to controller
+	 */
+	
 	public List<IDictionaryItems> getDictionariesItems(String dictionaryid) {
 
 		List<IDictionaryItems> dictionaryItemList = null;
@@ -122,6 +149,12 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryItemList;
 	}
 
+	/**
+	 *  Gets dictionary name of the dictionary from dictionary ID
+	 * 
+	 *  @return 	Return the dictionary name to controller
+	 */
+	
 	public String getDictionaryName(String dictionaryid) {
 
 		String dictionaryName="";
@@ -135,6 +168,12 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryName;
 	}
 
+	/**
+	 *  Call the word power for a term and fetch the xml from word power rest
+	 * 
+	 *  @return 	Return the dictionaryEntry bean to controller
+	 */
+	
 	public DictionaryEntry  callRestUri(String url,String item,String pos){
 		//RestTemplate rest = new RestTemplate();
 		//ExtendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
@@ -144,7 +183,7 @@ public class DictionaryManager implements IDictionaryManager {
 			JAXBContext jaxbContext = JAXBContext.newInstance(WordpowerReply.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			String fullUrl=url+""+item+"/"+pos;
-			System.out.println(" URL : "+fullUrl);
+			logger.info(" URL : "+fullUrl);
 			URL wp = new URL(fullUrl);
 			InputStream xml = wp.openStream();
 
@@ -152,23 +191,16 @@ public class DictionaryManager implements IDictionaryManager {
 			String inputLine;
 			String append="";
 			while ((inputLine = in.readLine()) != null){
-				//System.out.println(inputLine);
 
 				append=append+inputLine;
 			}
 
 			append=append.replaceAll("digitalHPS:", "");
 			append=append.replaceAll("xmlns:digitalHPS=\"http://www.digitalhps.org/\"","");
-			System.out.println(" XML \n"+append);
 			in.close();
 			StringReader sr = new StringReader(append);
 			WordpowerReply wordpowerReply = (WordpowerReply) unmarshaller.unmarshal(sr);
 			dictionaryEntry=wordpowerReply.dictionaryEntry;
-			System.out.println("id "+dictionaryEntry.getId());
-			System.out.println("Lemma "+dictionaryEntry.getLemma());
-			System.out.println("Description "+dictionaryEntry.getDescription());
-			System.out.println(" item " + item);
-			System.out.println(" pos " + pos);
 
 			// Debug purpose
 			//	Marshaller marshaller = jaxbContext.createMarshaller();

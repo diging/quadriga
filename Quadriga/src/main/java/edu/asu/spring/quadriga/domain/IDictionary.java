@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 /**
- * @description   : interface to implement Dictionary.
+ * Interface to implement Dictionary.
  * 
  * @author        : Kiran Kumar Batna
  *
