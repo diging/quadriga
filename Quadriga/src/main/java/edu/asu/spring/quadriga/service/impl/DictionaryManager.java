@@ -72,10 +72,10 @@ public class DictionaryManager implements IDictionaryManager {
 		return 1;
 	}
 
-	public String addNewDictionariesItems(String dictionaryId,String item,String owner){
+	public String addNewDictionariesItems(String dictionaryId,String item,String id,String pos,String owner){
 		String msg=null;
 		try {
-			msg = dbConnect.addDictionaryItems(dictionaryId,item,owner);
+			msg = dbConnect.addDictionaryItems(dictionaryId,item,id,pos,owner);
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -85,7 +85,29 @@ public class DictionaryManager implements IDictionaryManager {
 
 	}
 
+	public String deleteDictionariesItems(String dictionaryId,String item){
+		String msg=null;
+		try {
+			msg = dbConnect.deleteDictionaryItems(dictionaryId,item);
+		} catch (Exception e) {
 
+			e.printStackTrace();
+		}
+
+		return msg;
+	}
+	
+	public String updateDictionariesItems(String dictionaryId,String item,String id){
+		String msg=null;
+		try {
+			msg = dbConnect.updateDictionaryItems(dictionaryId,item,id);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return msg;
+	}
 
 	public List<IDictionaryItems> getDictionariesItems(String dictionaryid) {
 

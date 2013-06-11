@@ -8,9 +8,28 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+ 
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+ 
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
 
+<script type="text/javascript" charset="utf8">
+		
+			$(document).ready(function(){
+			  $('#pagination').dataTable();
+			});
+			$(document).ready(function(){
+				  $('#pagination1').dataTable();
+			});
+		</script>
+
+        
 	<style type="text/css">
+	
 		 	 table, td, th, caption
 			{
 				border:1px solid black;
@@ -46,61 +65,26 @@
 	            -ms-grid-columns: 4;  
 	            -ms-grid-rows: 4;  
 	        } 
+	        h1 {font-size:200%}
 			
 			table {border-collapse:collapse; table-layout:fixed; width:310px;}
   			 table td { width:400px; word-wrap:break-word;}
 	</style>
-	<!-- <script>
-		function generatenew(){
-		    document.addItem.itemName.style.visibility="visible";
-		    document.addItem.submit1.style.visibility="visible";
-		}
-	</script> -->
 	
- 	<header>
-		<span class="byline">Manage Dictionary : <c:out value="${dictName}"></c:out></span>
-		<!-- 	<a href="/quadriga/auth/dictionaries/addDictionaryItems">Add Dictionary Items</a> -->
-		
-	</header>
-	
-	<c:choose>
-	      <c:when test="${success=='1'}">
-		     <font color="blue"> <c:out value="${successmsg}"></c:out></font>
-		      
-	      </c:when>
-	
-	      <c:otherwise>
-	     	 <font color="red"><c:out value="${errormsg}"></c:out></font>
-	      
-	      </c:otherwise>
-     </c:choose>
-     
-	<!-- The following code is not used, 
-		 kept for future reference along with generatenew()
-		 function declared above.
-	
-			<form name='addItem' method="post" action="">
-				<div id="div"></div>
-				<input type="button"  value="Add new Item" onclick="generatenew();">  
-				<input type="text" style="visibility:hidden"  name="itemName">
-				<input type="submit"  style="visibility:hidden" value="Add" name="submit1">  
-			</form>
-	  -->
+
+
 	
 	<ul>
 		<li>
-			<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'" value='List Dictionaries'>
+			<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'" value='Back'>
 		</li>
 	</ul>
 	
-<script>
-	$(function() {
-		$("input[type=submit]").button().click(function(event) {
+	
 
-		});
-	});
-</script>
-
+<H1>Word Search</H1>
+    				<hr>
+    				<br>
 
 	<div id="myGrid">  
  		<ul>
@@ -108,7 +92,7 @@
 				<form name='searchItem' method="POST" action="${pageContext.servletContext.contextPath}/auth/dictionaries/dictionary/wordSearch/${dictionaryid}">
 				<!-- <form name='searchItem' method="POST" action="dictionary/wordSearch/${dictionaryid}"> -->	
 					<font color="black">Word </font>&nbsp;&nbsp; <input type="text"  name="itemName" id ="itemname"><br>
-
+		
 		
 					<font color="black">Pos </font> 
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -129,18 +113,56 @@
 					     <font color="blue"> <font color="red"> Word not found, please provide the correct input</font></font>
 				      </c:when>
 			     </c:choose>
+			     <c:choose>
+			      <c:when test="${success=='1'}">
+				     <font color="blue"> <c:out value="${successmsg}"></c:out></font>
+				      
+			      </c:when>
+			
+			      <c:otherwise>
+			     	 <font color="red"><c:out value="${errormsg}"></c:out></font>
+			      
+			      </c:otherwise>
+		     </c:choose>
 			</li>
 		</ul>
     </div>
-    
-
-    <c:out value="${dictionaryid}"></c:out>
-
+    	
+			<c:choose>
+			      <c:when test="${delsuccess=='1'}">
+				     <font color="blue"> <c:out value="${delsuccessmsg}"></c:out></font>
+				      
+			      </c:when>
+			
+			      <c:otherwise>
+			     	 <font color="red"><c:out value="${delerrormsg}"></c:out></font>
+			      
+			      </c:otherwise>
+		     </c:choose>
+	
+	<c:choose>
+			      <c:when test="${updatesuccess=='1'}">
+				     <font color="blue"> <c:out value="${updatesuccessmsg}"></c:out></font>
+				      
+			      </c:when>
+			
+			      <c:otherwise>
+			     	 <font color="red"><c:out value="${updateerrormsg}"></c:out></font>
+			      
+			      </c:otherwise>
+		     </c:choose>
+		     <div class="container">
 	<c:choose>
 	      <c:when test="${status=='1'}">
 		      <c:choose>
     				<c:when test="${not empty dictionaryEntry}">
-					    <table>
+    				<H1>Results</H1>
+    				<hr>
+    				<br>
+    				<form method="POST" action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}">
+    			
+			<table  class="dataTable" id="pagination">
+					<thead>
 						   <tr>
 						    	<th width = "75" height = "20" align="center">Term </th>
 						    	<th width = "75" height = "20" align="center"> ID</th>
@@ -150,26 +172,28 @@
 						    	<th width = "75" height = "20" align="center"> Action</th>
 						    	
 						    </tr>
-						   
+					</thead>	
+					<tbody>   
 								<tr>
 								
 									<td align="center">
+										<input name="items" type="hidden" value="<c:out value="${dictionaryEntry.lemma}"></c:out>"/>
 										<c:out value="${dictionaryEntry.lemma}"></c:out>
 									</td>
 									<td align="center">
-									
+										<input name="id" type="hidden" value="<c:out value="${dictionaryEntry.id}"></c:out>"/>
 										<c:out value="${dictionaryEntry.id}"></c:out>
 									</td>
 									<td align="center">
-										
+										<input name="pos" type="hidden" value="<c:out value="${dictionaryEntry.pos}"></c:out>"/>
 										<c:out value="${dictionaryEntry.pos}"></c:out>
 									</td>
 									<td align="center">
-										
+										<input name="vocabulary" type="hidden" value="<c:out value="${dictionaryEntry.vocabulary}"></c:out>"/>
 										<c:out value="${dictionaryEntry.vocabulary}"></c:out>
 									</td>
-									<td align="center">
-										
+									<td align="left">
+										<input name="description" type="hidden" value="<c:out value="${dictionaryEntry.description}"></c:out>"/>
 										<c:out value="${dictionaryEntry.description}"></c:out>
 									</td>
 									<td align="center">
@@ -177,9 +201,10 @@
 									</td>
 								
 								</tr>	
-								
-						</table>
 
+								</tbody>
+							</table>
+						</form> 
 				</c:when>
 	
 				
@@ -192,53 +217,60 @@
 	
 		</c:otherwise>
      </c:choose>
-
+	</div>
      <br>
-     
-   <!-- <c:choose>
-    <c:when test="${not empty dictionaryItemList}">
-    <b>Dictionary Items of <c:out value="${dictName}"></c:out>:</b>
-    <c:forEach var="dictionaryItem" items="${dictionaryItemList}">
-	<li>
-	<c:out value="${dictionaryItem.items}"></c:out>   
-	</li>
-	</c:forEach>
-	</c:when>
-	<c:otherwise> No dictionary found</c:otherwise>
-	</c:choose>-->
 
-
+<br>
+	
+	<H1>Dictionary Items: <c:out value="${dictName}"></c:out></H1>
+    <hr>
+    <br>
+    <div class="container">
     <c:choose>
     <c:when test="${not empty dictionaryItemList}">
     
-	    <table>
-	    <caption align="top" >Dictionary Items of <c:out value="${dictName}"></c:out></caption>
+	<table  class="dataTable" id="pagination1">
+		<thead>
 		   <tr>
-		    	<th width = "300" height = "20" align="center">Items </th>
-		    	<th width = "300" height = "20" align="center"> Select Pos</th>
+		    	<th>Items </th>
+		    	<th> ID</th>
+		    	<th> Pos</th>
+		    	<th> Action</th>
 		    </tr>
-		    <c:forEach var="dictionaryItem" items="${dictionaryItemList}">
-				<tr>
-					<td align="center">
-					 <label for="item"><c:out value="${dictionaryItem.items}"></c:out> </label>
-					</td>
-					<td align="center">
-					<form name='wordpower' method="POST" action="/auth/dictionaries/dictionary/wordSearch">
-						<select name="posdropdown">
-							<option value="nouns">Nouns</option>
-							<option value="verb">Verb</option>
-							<option value="adverb">Adverb</option>
-							<option value="adjective">Adjective</option>
-							<option value="other">Other</option>
-						</select>
-						<input type="submit" name="Search">
-					</form>
-					</td>
-				</tr>	
-			</c:forEach>
-		</table>
+		</thead>
+		
+		<tbody>
+			<c:forEach var="dictionaryItem" items="${dictionaryItemList}">	
+			<tr>
+				<td align="center">
+				<input name="items" type="hidden" value="<c:out value="${dictionaryItem.items}"></c:out>"/>
+				 <c:out value="${dictionaryItem.items}"></c:out>
+				</td>
+				<td align="center">
+					<c:out value="${dictionaryItem.id}"></c:out> 
+				</td>
+				<td align="center">
+					<c:out value="${dictionaryItem.pos}"></c:out> 
+				</td>
+				<!--<td align="center">
+					<c:out value="${dictionaryItem.vocabulary}"></c:out> 
+				</td>
+				<td align="center">
+					<c:out value="${dictionaryItem.description}"></c:out> 
+				</td>-->
+				<td align="center">
+					<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}?item=<c:out value="${dictionaryItem.items}"></c:out>'" value='Delete'>
+					<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updateDictionaryItems/${dictionaryid}?item=<c:out value="${dictionaryItem.items}"></c:out>&pos=<c:out value="${dictionaryItem.pos}"></c:out>'" value='Update'>
+					 
+				</td>
+				
+			</tr>
+			</c:forEach>	
+		</tbody>
+			
+	</table>
 	</c:when>
-	
+
 	<c:otherwise> No dictionary items found</c:otherwise>
 	</c:choose>
-	
+	</div>

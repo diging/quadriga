@@ -1,8 +1,8 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 
 public interface IDictionaryItemsFactory {
-	public abstract IDictionaryItems  createDictionaryItemsObject();
+	public abstract DictionaryItems  createDictionaryItemsObject();
 
 }

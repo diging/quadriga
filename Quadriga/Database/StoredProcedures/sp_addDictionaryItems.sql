@@ -18,6 +18,8 @@ CREATE PROCEDURE sp_addDictionaryItems
 (
   IN  indictionaryid    VARCHAR(100),
   IN  initems    VARCHAR(50),
+  IN  inid    VARCHAR(50),
+  IN  inpos    VARCHAR(50),
   IN indictionaryowner VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
@@ -35,6 +37,15 @@ BEGIN
     IF (initems IS NULL OR initems = "")
 	 THEN SET errmsg = "Items cannot be empty";
 	END IF;
+	
+	IF (inid IS NULL OR inid = "")
+	 THEN SET errmsg = "Word power id cannot be empty";
+	END IF;
+	
+	IF (inpos IS NULL OR inpos = "")
+	 THEN SET errmsg = "Word power Pos cannot be empty";
+	END IF;
+	
 	  
 	IF (indictionaryowner IS NULL OR indictionaryowner = "")
 	 THEN SET errmsg = "dictionary owner cannot be empty";
@@ -46,7 +57,7 @@ BEGIN
     END IF; 
     
     IF EXISTS(SELECT 1 FROM vw_dictionary_items
-				   WHERE dictionaryid = indictionaryid and items =initems)
+				   WHERE dictionaryid = indictionaryid and items =initems and pos=inpos)
      
       THEN SET errmsg = "ItemExists";
     END IF; 
@@ -56,9 +67,9 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
             INSERT 
-              INTO tbl_dictionary_items(dictionaryid,items,
+              INTO tbl_dictionary_items(dictionaryid,items,id,pos,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (indictionaryid,initems,
+			 VALUES (indictionaryid,initems,inid,inpos,
                      indictionaryowner,NOW(),indictionaryowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;

@@ -12,8 +12,8 @@ Modified Date : 06/05/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_dictionary_items;
 
-CREATE VIEW vw_dictionary_items(dictionaryid, items,id,pos,vocabulary,description)
+CREATE VIEW vw_dictionary_items(dictionaryid, items,id,pos)
 AS
 SELECT dictionaryid,
-       items,id,pos,vocabulary,description
+       items,id,pos
 FROM tbl_dictionary_items;
