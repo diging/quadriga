@@ -13,8 +13,8 @@ Modified Date : 06/04/2013
 CREATE TABLE IF NOT EXISTS tbl_dictionary_items
 (
   dictionaryid       VARCHAR(100)  NOT NULL,
-  items    VARCHAR(50) NOT NULL,
-  id    VARCHAR(50) NOT NULL,
+  items    VARCHAR(200) NOT NULL,
+  id    VARCHAR(200) NOT NULL,
   pos    VARCHAR(50) NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
