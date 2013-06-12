@@ -14,10 +14,10 @@
 				<li>
 						<c:out value="${projectcollaborator.userObj.name}"></c:out>
 				</li>
-				 <li><ul><c:forEach var="roles"
+			  <%-- <li><ul><c:forEach var="roles"
 						items="${projectcollaborator.collaboratorRoles}">
 						<li><c:out value="${roles.roleid}"></c:out></li>
-					</c:forEach></ul></li> 
+					</c:forEach></ul></li> --%> 
 			</c:forEach>
 		</ul>
 		
