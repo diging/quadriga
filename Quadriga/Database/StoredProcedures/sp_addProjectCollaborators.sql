@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_addProjectCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_addProjectCollaborators
 (
-	IN inprojid	VARCHAR(10),
+	IN inprojid	INT,
 	IN incollaboratoruser	VARCHAR(10),
 	IN incollaboratorrole	VARCHAR(50),
 	OUT errmsg	VARCHAR(200)
@@ -28,7 +28,8 @@ BEGIN
 	END IF;
 
 	IF EXISTS(SELECT 1 FROM vw_project_collaborator 
-				WHERE projectid = inprojid AND collaboratoruser = incollaboratoruser)
+				WHERE projectid = inprojid AND collaboratoruser = incollaboratoruser
+				AND collaboratorrole = incollaboratorrole)
 		THEN SET errmsg = "collaborator already exists";
 	END IF;
 

@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS sp_getProjectDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectDetails
 (
-  IN  projid 	  VARCHAR(255),
+  IN  projid 	  INT,
   OUT errmsg      VARCHAR(255)
 )
 BEGIN
@@ -29,7 +29,7 @@ BEGIN
      THEN SET errmsg = "";
     END IF;
     
-    IF(projid IS NULL OR projid = " ")
+    IF(projid IS NULL)
     THEN 
     SET errmsg = "project id cannot be empty";
     END IF;
@@ -39,7 +39,7 @@ BEGIN
    THEN SET errmsg = "Invalid id.Please enter the correct value.";
    END IF; 
      -- retrieve the project details
-	 SELECT projectname,description,projectid,projectowner,accessibility
+	 SELECT projectname,description,unixname,projectid,projectowner,accessibility
        FROM vw_project
 	 WHERE projectid = projid;
 	

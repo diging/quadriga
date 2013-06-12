@@ -14,13 +14,13 @@ CREATE TABLE IF NOT EXISTS tbl_project
 (
   projectname     VARCHAR(50)   NOT NULL,
   description     TEXT          NULL,
-  projectid       VARCHAR(100)  NOT NULL,
-  id              INT           NOT NULL AUTO_INCREMENT,
+  unixname        VARCHAR(100)  NOT NULL,
+  projectid       INT           NOT NULL AUTO_INCREMENT,
   projectowner    VARCHAR(50)   NOT NULL,
   accessibility   VARCHAR(30)   NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id),UNIQUE KEY(projectname),UNIQUE KEY(projectid) 
+  PRIMARY KEY(projectid),UNIQUE KEY(projectname),UNIQUE KEY(unixname) 
 )
