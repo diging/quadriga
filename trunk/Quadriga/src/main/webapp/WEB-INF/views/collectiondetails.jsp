@@ -42,7 +42,7 @@
 	<display:column property="pos" title="Pos"/>
 	</display:table>
 	
-	<a href='searchitems' > addItems</a>
+	<a href='${pageContext.servletContext.contextPath}/auth/searchitems' > addItems</a>
 </div>
 
 	
