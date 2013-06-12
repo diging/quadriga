@@ -4,10 +4,20 @@
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 <!DOCTYPE html>
 <html>
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 
-<link rel="stylesheet"
-		href="/quadriga/resources/txt-layout/css/demo_table_jui.css" />
+<script type="text/javascript">
+$(document).ready(function() {
+				$('#conceptSearch').dataTable({
+					"bJQueryUI" : true,
+					"sPaginationType" : "full_numbers",
+					"bAutoWidth": false
+				});
+				
+			});
+
+
+</script>
+
 		<style>
 		table.display thead tr {
 	font-weight: 700;
@@ -31,17 +41,49 @@
 		
 </header>
 	 <h3>Description: </h3><wbr>
-	<span contenteditable="true" >
 	<c:out value="${concept.description }"></c:out>
-	</span>
-
+	<table style="width: 100%"	class="display dataTable"  id="conceptSearch">
+			<thead>
+				<tr>
+					
+					<th>Lemma</th>
+					<th>ID</th>
+					<th>POS</th>
+					<th>Description</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+			
+				<c:forEach var="conceptItem" items="${concept.items}">
+					<tr class="gradeX">
+						
+						<td  align="justify"><font size="2"><c:out
+									value="${conceptItem.lemma}"></c:out></font></td>
+						<td width="25%"  align="justify"><font size="2"><c:out
+									value="${conceptItem.name}"></c:out></font></td>
+						<td  class="center" align="justify"><font size="2"><c:out
+									value="${conceptItem.pos}"></c:out></font></td>
+						<td width="30%"  align="justify"><font size="2"><c:out
+									value="${conceptItem.description}"></c:out></font></td>
+						
+						
+								
+					</tr>
+				</c:forEach>
+				
+			</tbody>
+			
+		</table>
+	
+	<%-- 
 	<display:table  class="display" name="${concept.items}" requestURI="/auth/conceptdetails"  keepStatus="true" uid="1" pagesize = "5" cellspacing="2" cellpadding="2">
 	<display:column property="lemma" sortable="false" title="Lemma"></display:column>
 	<display:column property="name" sortable="false" title="Id"/>
 	<display:column property="description" title="Description"/>
 	<display:column property="pos" title="Pos"/>
 	</display:table>
-	
+	 --%>
 	<a href='${pageContext.servletContext.contextPath}/auth/searchitems' > addItems</a>
 </div>
 
