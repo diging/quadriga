@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
@@ -27,147 +26,132 @@ public class Project implements IProject
 	private String id;
 	private int internalid;
 	private List<ICollaborator> collaborators;
-	private List<ICollaboratorRole> collaboratorRoles;
     private EProjectAccessibility projectAccess;
     private ENetworkAccessibility networksDefaultAccess;
     private IUser owner;
-	private IUser projectcollaborator;
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getName()
-	 */
+    /**
+     * retrieves the name of the project
+     */
 	@Override
 	public String getName() {
 		return name;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setName(java.lang.String)
-	 */
+    /**
+     * assigns the name of the project to the supplied 
+     * variable.
+     */
 	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getDescription()
-	 */
+	
+    /**
+     * retrieves the description of the project
+     */
 	@Override
 	public String getDescription() {
 		return description;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setDescription(java.lang.String)
+	
+	/**
+	 * assigns the description of the project
 	 */
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getId()
-	 */
+
+    /**
+     * retrieves the Unix ID of the project
+     */
 	@Override
 	public String getId() {
 		return id;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setId(java.lang.String)
-	 */
+	
+    /**
+     * assigns the Unix ID of the project
+     */
 	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getInternalid()
-	 */
+
+    /**
+     * retrieves the internal id of the project
+     */
 	@Override
 	public int getInternalid() {
 		return internalid;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setInternalid(java.lang.String)
-	 */
+
+    /**
+     * assigns the internal id of the project
+     */
 	@Override
 	public void setInternalid(int internalid) {
 		this.internalid = internalid;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getOwner()
-	 */
+	 /**
+     * retrieves the owner of the project
+     */
 	@Override
 	public IUser getOwner() {
 		return owner;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setOwner(edu.asu.spring.quadriga.domain.IUser)
-	 */
+    
+	/**
+     * assigns the owner of the project
+     */
 	@Override
 	public void setOwner(IUser owner) {
 		this.owner = owner;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getCollaborators()
-	 */
+
+    /**
+     * retrieves the collaborators of the project
+     */
 	@Override
 	public List<ICollaborator> getCollaborators() {
 		return collaborators;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setCollaborators(java.util.List)
-	 */
-	
+
+    /**
+     * assigns the collaborators of the project
+     */
 	@Override
 	public void setCollaborators(List<ICollaborator> collaborators) {
 		this.collaborators = collaborators;
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getProjectAccess()
-	 */
+    /**
+     * retrieves the accessibility of the project
+     */
 	@Override
 	public EProjectAccessibility getProjectAccess() {
 		return projectAccess;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setProjectAccess(edu.asu.spring.quadriga.domain.enums.EProjectAccessibility)
-	 */
+	
+    /**
+     * assigns the accessibility of the project
+     */
 	@Override
 	public void setProjectAccess(EProjectAccessibility projectAccess) {
 		this.projectAccess = projectAccess;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#getNetworksDefaultAccess()
-	 */
+    /**
+     * retrieves the networks access of the project
+     */
 	@Override
 	public ENetworkAccessibility getNetworksDefaultAccess() {
 		return networksDefaultAccess;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.IProject#setNetworksDefaultAccess(edu.asu.spring.quadriga.domain.enums.EDefaultAccessibility)
-	 */
+    /**
+     * assigns the network access of the project
+     */
 	@Override
 	public void setNetworksDefaultAccess(ENetworkAccessibility networksDefaultAccess) {
 		this.networksDefaultAccess = networksDefaultAccess;
 	}
-	
-	@Override
-	public void setProjectCollaborator(IUser projectcollaborator) {
-		
-		this.projectcollaborator = projectcollaborator;
-	}
-	
-	@Override
-	public IUser getProjectCollaborator() {
-		
-		return projectcollaborator;
-	}
-	@Override
-	public List<ICollaboratorRole> getCollaboratorRoles() {
-		
-		return collaboratorRoles;
-	}
-	@Override
-	public void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles) {
-		
-		this.collaboratorRoles = collaboratorRoles;
-	}
-	
 }

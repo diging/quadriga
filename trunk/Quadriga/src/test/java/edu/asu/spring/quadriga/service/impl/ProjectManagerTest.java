@@ -5,15 +5,43 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
+import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.service.IProjectManager;
 
 import static org.junit.Assert.*;
 
 /**
- * Put Javadoc here.
+ * This class tests the {@link ProjectManager}
+ * 
+ * IMPORTANT: This test class will overwrite the data in 
+ * 			  tbl_project
+ * 
+ * @author Kiran Kumar Batna
+ * @author rohit sukleshwar pendbhaje
  *
  */
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
+		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ProjectManagerTest {
 
+	@Autowired
+	private IDBConnectionProjectManager dbConnection;
+	
+	@Autowired
+	private IProjectFactory projectFactory;
+	
+	@Autowired
+	private IProjectManager projectManager;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -46,8 +74,24 @@ public class ProjectManagerTest {
 	}
 	
 	@Test
-	public void testAddNewProject() {
-		fail("This method is not yet implemented :(");
+	public void testAddNewProject() 
+	{
+		String errmsg;
+		IProject testProject = projectFactory.createProjectObject();
+		
+		testProject.setName("testProject");
+		testProject.setId("projecttest");
+		testProject.setDescription("Testing add project method");
+		
+		errmsg = projectManager.addNewProject(testProject);
+		
+		assertEquals(errmsg,"");
+		
+		//insert duplicate project
+		errmsg = projectManager.addNewProject(testProject);
+		
+		assertNotSame(errmsg,"");
+		
 	}
 	
 	@Test

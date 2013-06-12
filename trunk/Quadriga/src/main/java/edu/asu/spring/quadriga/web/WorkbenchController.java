@@ -125,8 +125,6 @@ public class WorkbenchController {
 	 *
 	 * @author 		rohit sukleshwar pendbhaje
 	 */
-
-
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
 	public String getProjectPage(@PathVariable("projectid") String projectid, ModelMap model) throws SQLException {
 
@@ -145,6 +143,15 @@ public class WorkbenchController {
 		return "auth/workbench/project";
 	}
 
+	/**
+	 * @description  : This method is called during the load of add project
+	 *                 request form
+	 * @param        : m -  model object
+	 * 
+	 * @return       : String - the URL of the form
+	 * 
+	 * @author       : Kiran Kumar Batna
+	 */
 	@RequestMapping(value="auth/workbench/addproject", method=RequestMethod.GET)
 	public String addprojectform(Model m)
 	{
@@ -152,6 +159,15 @@ public class WorkbenchController {
 		return "auth/workbench/addproject"; 
 	}
 
+	/**
+	 * @description  : This method call the usermanager to insert the record in
+	 *                 the database on form submission
+	 * @param        : project - object containing the form details.
+	 * @param        : model
+	 * @param        : principal
+	 * @return       : String - the URL on success and failure
+	 * @author       : Kiran Kumar Batna
+	 */
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
 	public String addProject(@ModelAttribute("SpringWeb")Project project, 
 			ModelMap model, Principal principal) 
