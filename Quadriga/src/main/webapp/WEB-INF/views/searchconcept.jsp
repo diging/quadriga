@@ -56,11 +56,11 @@ $(document).ready(function() {
 						<td> <input type="checkbox"  class="chk" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
 						<td  align="justify"><font size="2"><c:out
 									value="${concept.lemma}"></c:out></font></td>
-						<td width="25%" class="center" align="justify"><font size="2"><c:out
+						<td width="25%"  align="justify"><font size="2"><c:out
 									value="${concept.id}"></c:out></font></td>
 						<td  class="center" align="justify"><font size="2"><c:out
 									value="${concept.pos}"></c:out></font></td>
-						<td width="30%" class="center" align="justify"><font size="2"><c:out
+						<td width="30%" align="justify"><font size="2"><c:out
 									value="${concept.description}"></c:out></font></td>
 						<td class="center" align="justify"><font size="2"><c:out
 									value="${concept.type}"></c:out></font></td>
