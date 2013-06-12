@@ -26,7 +26,7 @@
 		<li>
 			<article class="is-post-summary">
 				<h3>
-					» <a href="/quadriga/auth/workbench/${project.id}/showCollaborators">Manage Collaborators</a>
+					» <a href="/quadriga/auth/workbench/${project.internalid}/showCollaborators">Manage Collaborators</a>
 				</h3>
 			</article>
 		</li>	

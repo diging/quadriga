@@ -30,13 +30,13 @@ public interface IProjectManager {
 	 */
 	public abstract String addNewProject(IProject newProject);
 	
-	public abstract IProject getProject(String id);
+	public abstract IProject getProject(int id);
 
 	public abstract int addCollaborators(ICollaborator collaborator);
 	
-	public abstract IProject showNonExistingCollaborator(String projectid);
+	public abstract IProject showNonExistingCollaborator(int projectid);
 	
-	public abstract IProject showExistingCollaborator(String projectid);
+	public abstract IProject showExistingCollaborator(int projectid);
 
 
 }

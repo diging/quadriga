@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_showProjectCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showProjectCollaborators
 (
-	IN inprojid				VARCHAR(10),
+	IN inprojid				INT,
 	-- IN incollaboratoruser	VARCHAR(10),
 	OUT errmsg				VARCHAR(200)
 )
@@ -18,7 +18,7 @@ BEGIN
     END IF;
 
  -- validating the input variables
-	IF(inprojid IS NULL OR inprojid = "")
+	IF(inprojid IS NULL)
 		THEN SET errmsg = "projid cannot be empty";
 	END IF;
 

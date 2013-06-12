@@ -180,6 +180,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		        	project.setName(resultset.getString(1));
 		        	project.setDescription(resultset.getString(2));
 		        	project.setId(resultset.getString(3));
+		        	project.setInternalid(resultset.getInt(4));
 		        	projectList.add(project);
 		        
 		         }
@@ -241,9 +242,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
      */
 	@Override
-	public IProject getProjectDetails(String projectId) throws SQLException {
+	public IProject getProjectDetails(int projectId) throws SQLException {
 		
-		String dbCommand,dbCommand1;
+		String dbCommand;
 		String outErrorValue,outputValue;
 		CallableStatement sqlStatement ;
 		
@@ -256,7 +257,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 
 		try {		
         sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-        sqlStatement.setString(1, projectId);
+        sqlStatement.setString(1, Integer.toString(projectId));
 		sqlStatement.registerOutParameter(2, Types.VARCHAR);
 		sqlStatement.execute();
 		outErrorValue = sqlStatement.getString(2);
@@ -270,9 +271,10 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				
 				    project.setName(resultset.getString(1));
 		        	project.setDescription(resultset.getString(2));
-		        	project.setId("quadriga" + resultset.getString(3));
+		        	project.setId(resultset.getString(3));
+		        	project.setInternalid(resultset.getInt(4));
 		        	IUser owner = userFactory.createUserObject();
-		        	owner.setName(resultset.getString(4));
+		        	owner.setName(resultset.getString(5));
 		        	project.setOwner(owner);
 	        }
 		}
@@ -281,9 +283,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			throw new RuntimeException(outErrorValue);
 		}
 	
-	    dbCommand1 = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_COLLABORATORS + "(?,?)";
-		sqlStatement = connection.prepareCall("{"+dbCommand1+"}");
-		sqlStatement.setString(1,projectId);
+	    dbCommand = DBConstants.SP_CALL+ " " + DBConstants.PROJECT_COLLABORATORS + "(?,?)";
+		sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+		sqlStatement.setString(1,Integer.toString(projectId));
 		sqlStatement.registerOutParameter(2, Types.VARCHAR);
 
 		sqlStatement.execute();
@@ -295,15 +297,16 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		
 			while(resultset1.next())
 			{		
+				IUser collaboratorUser = userFactory.createUserObject();
 			    
-					project.setId(resultset1.getString(1));
+					project.setInternalid(resultset1.getInt(1));
+					
+					collaboratorUser.setName(resultset1.getString(2));
 				    					
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					List<ICollaboratorRole> collaboratorRoles = splitAndCreateCollaboratorRoles(resultset1.getString(3));
 					collaborator.setCollaboratorRoles(collaboratorRoles);
 					
-					IUser collaboratorUser = userFactory.createUserObject();
-					collaboratorUser.setName(resultset1.getString(2));
 					collaborator.setUserObj(collaboratorUser);
 					project.getCollaborators().add(collaborator);
 			}
@@ -328,7 +331,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 *  @author      : Rohit Sukelshwar Pendbhaje
 	 */
 	@Override
-	public IProject showCollaboratorsRequest(String projectid) {
+	public IProject showCollaboratorsRequest(int projectid) {
 
 		String dbCommand;
 		String outErrorValue;
@@ -346,7 +349,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 
 	    try {
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			sqlStatement.setString(1, projectid);
+			sqlStatement.setString(1, Integer.toString(projectid));
 			sqlStatement.registerOutParameter(2, Types.VARCHAR);
 			sqlStatement.execute();
 

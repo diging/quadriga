@@ -126,7 +126,7 @@ public class WorkbenchController {
 	 * @author 		rohit sukleshwar pendbhaje
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
-	public String getProjectPage(@PathVariable("projectid") String projectid, ModelMap model) throws SQLException {
+	public String getProjectPage(@PathVariable("projectid") int projectid, ModelMap model) throws SQLException {
 
 		IProject project = projectmanager.getProject(projectid);
 		
@@ -239,7 +239,7 @@ public class WorkbenchController {
 	
 		
 	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
-	public String displayCollaborator(@PathVariable("projectid") String projectid, ModelMap model){
+	public String displayCollaborator(@PathVariable("projectid") int projectid, ModelMap model){
 		
 		IProject project = projectmanager.showNonExistingCollaborator(projectid);
 		model.addAttribute("project", project);

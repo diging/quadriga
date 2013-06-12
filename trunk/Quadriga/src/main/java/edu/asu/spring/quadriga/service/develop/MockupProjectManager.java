@@ -80,10 +80,10 @@ public class MockupProjectManager implements IProjectManager{
 	}
 
 	@Override
-	public IProject getProject(String id) {
+	public IProject getProject(int id) {
 		IProject project = new Project();
 		
-		project.setId(id);
+		project.setInternalid(id);
 		
 		project.setName("quadriga" + id);
 		
@@ -98,13 +98,13 @@ public class MockupProjectManager implements IProjectManager{
 
 	
 	@Override
-	public IProject showNonExistingCollaborator(String projectid) {
+	public IProject showNonExistingCollaborator(int projectid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public IProject showExistingCollaborator(String projectid) {
+	public IProject showExistingCollaborator(int projectid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
