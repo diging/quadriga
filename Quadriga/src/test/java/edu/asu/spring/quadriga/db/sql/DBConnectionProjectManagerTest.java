@@ -98,6 +98,7 @@ public class DBConnectionProjectManagerTest {
 		testProject.setName("testProject");
 		testProject.setId("projecttest");
 		testProject.setDescription("Testing add project method");
+		testProject.setInternalid(99);
 		
 		//call the add project method
 		dbConnection.addProjectRequest(testProject);
@@ -105,7 +106,7 @@ public class DBConnectionProjectManagerTest {
 		try
 			{
 			//retrieve the added project and compare the objects
-			project = dbConnection.getProjectDetails(testProject.getId());
+			project = dbConnection.getProjectDetails(testProject.getInternalid());
 			
 			assertEquals(testProject,project);
 			}

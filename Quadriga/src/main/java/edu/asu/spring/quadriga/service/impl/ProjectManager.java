@@ -104,7 +104,7 @@ public class ProjectManager implements IProjectManager {
 	 * 
 	 */
 	@Override
-	public IProject getProject(String projectid) {
+	public IProject getProject(int projectid) {
 	    
 		IProject project = null;
 		//List<ICollaboratorRole> collaboratorRolesList = new ArrayList<ICollaboratorRole>();
@@ -139,14 +139,14 @@ public class ProjectManager implements IProjectManager {
 	}
 
 	@Override
-	public IProject showNonExistingCollaborator(String projectid) {
+	public IProject showNonExistingCollaborator(int projectid) {
 				
 		IProject project = dbConnect.showCollaboratorsRequest(projectid);
 		return project;
 	}
 	
 	@Override
-	public IProject showExistingCollaborator(String projectid) {
+	public IProject showExistingCollaborator(int projectid) {
 				
 		IProject project = null;
 		try {

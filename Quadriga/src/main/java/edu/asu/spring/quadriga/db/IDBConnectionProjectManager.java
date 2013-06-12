@@ -30,7 +30,7 @@ public interface IDBConnectionProjectManager
 	 * @throws SQLException 
 	 * 
 	 */
-	public abstract IProject getProjectDetails(String projectId) throws SQLException;
+	public abstract IProject getProjectDetails(int projectId) throws SQLException;
 
 	/**
 	 * interface to split the comma seperated collaborator roles and 
@@ -82,7 +82,7 @@ public interface IDBConnectionProjectManager
 	 *         for the supplied project id.
 	 * @author rohit pendbhaje        
 	 */
-	public abstract IProject showCollaboratorsRequest(String projectid);
+	public abstract IProject showCollaboratorsRequest(int projectid);
 	
 	/**
 	 * Interface to add a Collaborator.
