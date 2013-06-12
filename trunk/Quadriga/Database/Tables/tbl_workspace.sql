@@ -14,11 +14,11 @@ CREATE TABLE IF NOT EXISTS tbl_workspace
 (
   workspacename   VARCHAR(50)   NOT NULL,
   description     TEXT          NULL,
-  id              INT           NOT NULL AUTO_INCREMENT,
-  workspaceowner    VARCHAR(50) NOT NULL,
+  workspaceid     INT           NOT NULL AUTO_INCREMENT,
+  workspaceowner  VARCHAR(50) NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id),UNIQUE KEY(workspacename)
+  PRIMARY KEY(workspaceid),UNIQUE KEY(workspacename)
 )

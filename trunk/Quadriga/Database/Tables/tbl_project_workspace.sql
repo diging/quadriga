@@ -12,7 +12,7 @@ Modified Date : 05/30/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_project_workspace
 (
-  projectid       VARCHAR(100)  NOT NULL ,
+  projectid       INT           NOT NULL ,
   workspaceid     INT           NOT NULL ,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,

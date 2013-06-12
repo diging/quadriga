@@ -26,8 +26,8 @@ BEGIN
    END IF; 
     
     -- fetch the results of the user and return
-    SELECT  projectname,description,projectid,
-            id,projectowner,accessibility
+    SELECT  projectname,description,unixname,projectid,
+            projectowner,accessibility
       FROM  vw_project
       WHERE projectowner = projowner; 
      

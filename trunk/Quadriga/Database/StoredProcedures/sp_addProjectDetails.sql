@@ -18,7 +18,7 @@ CREATE PROCEDURE sp_addProjectDetails
 (
   IN  inprojectname    VARCHAR(50),
   IN  indescription    TEXT,
-  IN  inprojectid      VARCHAR(100),
+  IN  inunixname      VARCHAR(100),
   IN  inaccessibility  VARCHAR(30),
   IN  inprojectowner   VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
@@ -39,16 +39,16 @@ BEGIN
       THEN SET errmsg = "project name already exists.";
 	END IF;
 
-    IF(inprojectid IS NULL OR inprojectid = "")
-      THEN SET errmsg = "projectid cannot be empty.";
+    IF(inunixname IS NULL OR inunixname = "")
+      THEN SET errmsg = "Unix name cannot be empty.";
     END IF;
 
 	IF EXISTS(SELECT 1 FROM vw_project
-                WHERE projectid = inprojectid)
-      THEN SET errmsg = "projectid is already assigned to a project.";
+                WHERE unixname = inunixname)
+      THEN SET errmsg = "unix name is already assigned to a project.";
      END IF;
 
-    IF(inaccessibility IS NULL)
+    IF(inaccessibility IS NULL OR inaccessibility = "")
        THEN SET errmsg = "accessibility cannot be empty";
     END IF;
 
@@ -66,9 +66,9 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
             INSERT 
-              INTO tbl_project(projectname,description,projectid,projectowner,accessibility,
+              INTO tbl_project(projectname,description,unixname,projectowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (inprojectname,indescription,inprojectid,inprojectowner,inaccessibility,
+			 VALUES (inprojectname,indescription,inunixname,inprojectowner,inaccessibility,
                      inprojectowner,NOW(),inprojectowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;
