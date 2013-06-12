@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.catalina.connector.OutputBuffer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
