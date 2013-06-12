@@ -24,8 +24,13 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.Project;
 
+/**
+ * Contains all the database connections to the workbench component
+ * @author Kiran Kumar Batna
+ * @author Rohit Pendbhaje
+ *
+ */
 public class DBConnectionProjectManager implements IDBConnectionProjectManager 
 {
 	private Connection connection;
@@ -53,6 +58,8 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 *  @Description: Assigns the data source
 	 *  
 	 *  @param : dataSource
+	 *  
+	 *  @author Kiran Kumar Batna
 	 */
 	@Override
 	public void setDataSource(DataSource dataSource) 
@@ -66,7 +73,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * @return : 0 on success
 	 *           -1 on failure
 	 *           
-	 * @throws : SQL Exception          
+	 * @throws : SQL Exception
+	 *    
+	 * @author Kiran Kumar Batna       
 	 */
 	private int closeConnection() {
 		try {
@@ -87,6 +96,8 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * @return      : connection handle for the created connection
 	 * 
 	 * @throws      : SQLException 
+	 * 
+	 * @author      : Kiran Kumar Batna
 	 */
 	private void getConnection() {
 		try
@@ -99,6 +110,16 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		}
 	}
 	
+	/**
+	 * @Description : Executes the supplied query to set up the test
+	 *                environment
+	 *                
+	 * @return      : 1 on success.
+	 * 
+	 * @throws      : SQLException
+	 * 
+	 * @author      : Kiran Kumar Batna
+	 */
 	@Override
 	public int setupTestEnvironment(String sQuery)
 	{
@@ -125,7 +146,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * @author          Rohit Sukelshwar Pendbhaje
 	 * 
      */
-	
 	@Override
 	public List<IProject> getProjectOfUser(String sUserName) {
 
@@ -191,7 +211,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * @author          Rohit Sukelshwar Pendbhaje
 	 * 
      */
-
 	@Override
 	public List<ICollaboratorRole> splitAndCreateCollaboratorRoles(String role)
 	{
@@ -221,7 +240,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * @author          Rohit Sukelshwar Pendbhaje
 	 * 
      */
-	
 	@Override
 	public IProject getProjectDetails(String projectId) throws SQLException {
 		
@@ -299,6 +317,16 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		return project;
 	}
 	
+	/**
+	 *  @Description : Displays the collaborators for the 
+	 *                 supplied project
+	 *                 
+	 *  @param       : ProjectID
+	 *  
+	 *  @return      : IProject - object of Project class.
+	 *  
+	 *  @author      : Rohit Sukelshwar Pendbhaje
+	 */
 	@Override
 	public IProject showCollaboratorsRequest(String projectid) {
 
@@ -358,6 +386,15 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	}
 	
 	
+	/**
+	 *  @Description  : add the collaborator request
+	 *  
+	 *  @param        : collaborator
+	 *  
+	 *  @return       : 1 on success and 0 on failure
+	 *  
+	 *  @author       : Rohit Sukelshwar Pendbhaje
+	 */
 	public int addCollaboratorRequest(ICollaborator collaborator)
 	{
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
@@ -455,8 +492,4 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
         	closeConnection();
         }
 	}
-
-	
-
-	
 }

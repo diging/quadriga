@@ -33,22 +33,10 @@ public interface IProject {
 
 	public abstract void setOwner(IUser owner);
 	
-	//public abstract String getProjectOwner();
-
-	//public abstract void setProjectOwner(String owner);
-	
 	public abstract List<ICollaborator> getCollaborators();
 
 	public abstract void setCollaborators(List<ICollaborator> collaborators);
 	
-	public abstract List<ICollaboratorRole> getCollaboratorRoles();
-	
-	public abstract void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles);
-	
-	public abstract void setProjectCollaborator(IUser collaborators);
-	
-	public abstract IUser getProjectCollaborator();
-
 	public abstract EProjectAccessibility getProjectAccess();
 
 	public abstract void setProjectAccess(EProjectAccessibility projectAccess);
@@ -57,7 +45,5 @@ public interface IProject {
 
 	public abstract void setNetworksDefaultAccess(
 			ENetworkAccessibility networksDefaultAccess);
-
-	
 	
 }

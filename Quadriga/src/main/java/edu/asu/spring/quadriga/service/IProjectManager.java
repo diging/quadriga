@@ -8,8 +8,11 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 
 /**
- * Javadoc missing
+ * Interface class that places restraints on the ProductManager class to implement
+ * the required behaviors.
  * 
+ * @author : Kiran Kumar Batna
+ * @author : Rohit Pendbhaje
  */
 public interface IProjectManager {
 	
