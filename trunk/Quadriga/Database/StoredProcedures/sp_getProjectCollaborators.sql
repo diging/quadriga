@@ -55,5 +55,3 @@ BEGIN
 END$$
 DELIMITER ;
 
-call sp_getProjectCollaborators('1',@err);
-select @err;
