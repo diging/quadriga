@@ -3,7 +3,9 @@
 
 <!-- Content -->
 <script>
-	$(function() {
+
+	$(function() 
+			{
 		$("input[type=submit]").button().click(function(event) {
 			if (!$.trim($("#name").val())) {
 					$.alert("Please enter a project name","Oops !!!");
@@ -28,6 +30,7 @@
 			}
 		});
 	});
+	
 </script>
 
 
@@ -38,8 +41,15 @@
 
 <article class="is-page-content">
 
-	<form:form method="POST" action="/auth/workbench/addproject">
+	<form:form modelAttribute="project" method="POST"
+		action="/auth/workbench/addproject">
 		<table style="width:100%">
+			<c:choose>
+				<c:when test="${success=='0'}">
+					<span class="byline" style="color: #f00;"><c:out value="${errormsg}"></c:out></span>
+					<br />
+				</c:when>
+			</c:choose>
 			<tr>
 				<td style="width: 170px">Name:</td>
 				<td><form:input path="name" size="80" id="name"/></td>
@@ -60,7 +70,7 @@
 				<td><form:input path="id" size="80" id="projId"/></td>
 			</tr>
 		</table>
-		<input type="submit" value="Create Project">
+		<input class="command" type="submit" value="Create Project">
 	</form:form>
 
 </article>

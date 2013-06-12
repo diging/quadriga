@@ -74,9 +74,9 @@ public class MockupProjectManager implements IProjectManager{
 	}
 
 	@Override
-	public int addNewProject(IProject newProject) {
+	public String addNewProject(IProject newProject) {
 		
-		return 0;
+		throw new RuntimeException("Mockup manger add project not implemented");
 	}
 
 	@Override

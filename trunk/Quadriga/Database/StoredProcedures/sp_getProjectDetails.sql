@@ -40,7 +40,7 @@ BEGIN
    END IF; 
      -- retrieve the project details
 	 SELECT projectname,description,projectid,projectowner,accessibility
-       FROM vw_projectDetails
+       FROM vw_project
 	 WHERE projectid = projid;
 	
 END$$

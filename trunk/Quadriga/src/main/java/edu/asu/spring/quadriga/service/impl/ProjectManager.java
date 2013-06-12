@@ -79,26 +79,19 @@ public class ProjectManager implements IProjectManager {
 
 	/**
 	 * This is used to add the project details
-	 * @param Projecy object
-	 * @return 1 on success and 0 on failure
+	 * @param Project object
+	 * @return Error message on error else a blank string
 	 * @author Kiran Kumar Batna
 	 * 
 	 */
 	@Override
-	public int addNewProject(IProject newProject) 
+	public String addNewProject(IProject newProject) 
 	{
-		int success;
+		String errmsg;
 		
-		success = dbConnect.addProjectRequest(newProject);
+		errmsg = dbConnect.addProjectRequest(newProject);
 		
-		if(success == 1)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
+		return errmsg;
 	}
 
 	/**
