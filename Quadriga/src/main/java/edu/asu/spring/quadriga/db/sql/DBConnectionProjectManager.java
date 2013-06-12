@@ -395,13 +395,12 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	/**
 	 *  This method inserts a record for new project
 	 *  @param  project object
-	 *  @return 0 on success else exception
+	 *  @return error message on error else a balnk string
 	 *  @exception SQL Exception
 	 *  @author Kiran Kumar Batna 
 	 */
-	
 	@Override
-	public int addProjectRequest(IProject project)
+	public String addProjectRequest(IProject project)
 	{
 		String name;
 		String description;
@@ -444,14 +443,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 
 			errmsg = sqlStatement.getString(6);
 			
-			if(errmsg.isEmpty())
-			{
-				return 1;
-			}
-			else
-			{
-				throw new RuntimeException(errmsg);
-			}
+			return errmsg;
 			
         }
         catch(SQLException e)

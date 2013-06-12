@@ -19,7 +19,13 @@ public interface IProjectManager {
 	
 	public abstract int deleteProject(String projectId);
 	
-	public abstract int addNewProject(IProject newProject);
+	/**
+	 * Calls DBconnection manager to add the given project
+	 * @param newProject -- Project class object
+	 * @return Error message on any error else a blank string
+	 * @author Kiran Kumar Batna
+	 */
+	public abstract String addNewProject(IProject newProject);
 	
 	public abstract IProject getProject(String id);
 

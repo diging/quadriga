@@ -145,29 +145,38 @@ public class WorkbenchController {
 		return "auth/workbench/project";
 	}
 
-	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.GET)
-	public ModelAndView addprojectform() {
-		return new ModelAndView("auth/workbench/addproject", "command",projectFactory.createProjectObject());
+	@RequestMapping(value="auth/workbench/addproject", method=RequestMethod.GET)
+	public String addprojectform(Model m)
+	{
+		m.addAttribute("project",projectFactory.createProjectObject());
+		return "auth/workbench/addproject"; 
 	}
 
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
 	public String addProject(@ModelAttribute("SpringWeb")Project project, 
 			ModelMap model, Principal principal) 
 	{
-		int success;
+		String errmsg;
 		IUser user = usermanager.getUserDetails(principal.getName());
 		if(user!=null)
 		{
 			project.setOwner(user);
 
-			success = projectmanager.addNewProject(project);
-			if(success == 1)
+			errmsg = projectmanager.addNewProject(project);
+			
+			if(errmsg.equals(""))
 			{
 				model.addAttribute("success", 1);
+				model.addAttribute("successMsg","Project created successfully.");
+				return "auth/workbench/addProjectStatus";
+			}else{
+				model.addAttribute("project", project);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/addproject";
 			}
-
 		}
-		return "redirect:auth/workbench/addProjectStatus";
+		return "auth/workbench/addProjectStatus";
 	}
 	
 	

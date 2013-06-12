@@ -43,8 +43,13 @@ public interface IDBConnectionProjectManager
 	public abstract int setupTestEnvironment(String sQuery);
 
 	public abstract void setDataSource(DataSource dataSource);
-
-	public abstract int addProjectRequest(IProject project);
+	
+	/**
+	 * Interface to add a project 
+	 * @param project object
+	 * @return Error message if any error occurs else a blank string
+	 */
+	public abstract String addProjectRequest(IProject project);
 	
 	public abstract IProject showCollaboratorsRequest(String projectid);
 	
