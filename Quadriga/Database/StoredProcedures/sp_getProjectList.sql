@@ -1,48 +1,35 @@
-/*******************************************
-Name          : sp_getProjectDetails
-
-Description   : retrieves the project details
-				of a particular project
-
-Called By     : UI (DBConnectionManager.java)
-
-Create By     : Kiran Kumar Batna
-
-Modified Date : 05/30/2013
-
-********************************************/
-DROP PROCEDURE IF EXISTS sp_getProjectDetails;
-
+DROP PROCEDURE IF EXISTS sp_getProjectList;
 DELIMITER $$
-CREATE PROCEDURE sp_getProjectDetails
+CREATE PROCEDURE sp_getProjectList
 (
-  IN  projid 	  VARCHAR(10),
-  OUT errmsg      VARCHAR(255)
+    IN projowner VARCHAR(10),
+	OUT errmsg  VARCHAR(100)
 )
 BEGIN
-
-    -- the error handler for any sql exception
+	-- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-      SET errmsg = "SQL exception has occurred";
-    
-    IF (errmsg IS NULL)
-     THEN SET errmsg = "";
+      SET errmsg = 'SQL exception has occurred';
+
+	IF(errmsg IS NULL)
+    THEN
+    SET errmsg = "";
     END IF;
     
-    IF(projid IS NULL OR projid = " ")
+    IF(projowner IS NULL OR projowner = " ")
     THEN 
-    SET errmsg = "project id cannot be empty";
+    set errmsg = "project owner cannot be empty";
     END IF;
     
    IF NOT EXISTS(SELECT 1 FROM tbl_project
-				   WHERE projectid = projid)
-   THEN SET errmsg = "Invalid id.Please enter the correct value.";
+				   WHERE projectowner = projowner)
+   THEN SET errmsg = "Invalid owner.Please enter the correct value.";
    END IF; 
-     -- retrieve the project details
-	 SELECT projectname,description,projectid,projectowner,accessibility
-       FROM vw_projectDetails
-	 WHERE projectid = projid;
-	
+    
+    -- fetch the results of the user and return
+    SELECT  projectname,description,projectid,
+            id,projectowner,accessibility
+      FROM  vw_project
+      WHERE projectowner = projowner; 
+     
 END$$
 DELIMITER ;
-
