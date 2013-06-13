@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.web;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class DictionaryController {
 	IDictionaryManager dictonaryManager;
 	
 
-	private static final Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
 	
 	@Autowired 
 	IUserManager usermanager;
@@ -89,6 +91,9 @@ public class DictionaryController {
 
 		logger.info("came to getDictionaryPage");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);
+		if(dictionaryItemList == null){
+			logger.info("Dictionary ITem list is null");
+		}
 		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
@@ -148,10 +153,18 @@ public class DictionaryController {
 		return "auth/dictionaries/addDictionaryStatus"; 
 	}
 	
-	@RequestMapping(value="auth/dictionaries/addDictionaryAgain", method = RequestMethod.GET)
-	public ModelAndView addDictionaryFormAgain() {
-		logger.info("came to addDictionaryForm get");
-		return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
+	/**
+	 *  Handles the add dictionary item page 
+	 * 
+	 * @return 	Return to the adddictionaryitems JSP
+	 */
+	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
+	public String addDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
+
+		logger.info("came to addDictionaryPage");
+
+		model.addAttribute("dictionaryid", dictionaryid);
+		return "auth/dictionaries/addDictionaryItems";
 	}
 	
 	/**
@@ -176,8 +189,11 @@ public class DictionaryController {
 	public String addDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) {
 		logger.info("came to addDictionaryItemForm post");
 		String owner = usermanager.getUserDetails(principal.getName()).getUserName();
+		logger.info("items : "+dictionaryItems.getItems()+" , id: "+dictionaryItems.getId()+"pos"+
+				dictionaryItems.getPos());
 		String msg= dictonaryManager.addNewDictionariesItems(dictionaryId,dictionaryItems.getItems(),dictionaryItems.getId(),
 				dictionaryItems.getPos(),owner);
+		
 		if(msg.equals(""))
 		{
 			model.addAttribute("success", 1);
@@ -205,23 +221,32 @@ public class DictionaryController {
 	 *  @return 	Return to list dictionary item page
 	 */
 	
-	@RequestMapping(value="auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
-	public String deleteDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@RequestParam("item") String item,ModelMap model, Principal principal) {
-		String msg= dictonaryManager.deleteDictionariesItems(dictionaryId,item);
+	@RequestMapping(value="auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
+	public String deleteDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
+		
+		String[] values= req.getParameterValues("selected");
+		String msg [] = new String [values.length];
+		logger.info(" value len : "+values.length);
+		for(int i=0;i<values.length;i++){
+			logger.info("Deleting item for dictionary id: "+ dictionaryId+" and term id : "+i+" : "+values[i]);
+			msg[i]= dictonaryManager.deleteDictionariesItems(dictionaryId,values[i]);
+			
+		}
+		
 		if(msg.equals(""))
 		{
 			model.addAttribute("delsuccess", 1);
-			model.addAttribute("delsuccessmsg", "Item : "+item+ " deleted successfully");
+			model.addAttribute("delsuccessmsg", "Item :  deleted successfully");
 		}else{
 			if(msg.equals("Item doesnot exists in this dictionary")){
 				model.addAttribute("delsuccess", 0);
-				model.addAttribute("delerrormsg", "Item : "+item+" doesn't exist for dictionary id :" +dictionaryId);
+				model.addAttribute("delerrormsg", "Item :doesn't exist for dictionary id :" +dictionaryId);
 			}else{
 				model.addAttribute("delsuccess", 0);
 				model.addAttribute("delerrormsg", msg);
 			}
 		}
-		logger.info("Item Returned "+item);
+		logger.info("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
 		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -236,25 +261,35 @@ public class DictionaryController {
 	 *  @return 	Return to list dictionary item page
 	 */
 	
-	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
-	public String updateDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@RequestParam("item") String item,@RequestParam("pos") String pos,ModelMap model, Principal principal) {
-		DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
+	
+	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
+	public String updateDictionaryItem1(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
+		//DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
 		
-		String msg= dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
+		//String msg= dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
+		String[] values= req.getParameterValues("selected");
+		logger.info(" value len : "+values.length);
+		for(int i=0;i<values.length;i++){
+			logger.info("Value "+i+" : "+values[i]);
+			String id=values[i];
+			id=id.replaceAll("http://www.digitalhps.org/dictionary/", "");
+			
+		}
+		String msg="";
 		if(msg.equals(""))
 		{
 			model.addAttribute("updatesuccess", 1);
-			model.addAttribute("updatesuccess", "Item : "+item+ " updated successfully");
+			model.addAttribute("updatesuccess", "Item :  updated successfully");
 		}else{
 			if(msg.equals("Item doesnot exists in this dictionary")){
 				model.addAttribute("updatesuccess", 0);
-				model.addAttribute("updateerrormsg", "Item : "+item+" doesn't exist for dictionary id :" +dictionaryId);
+				model.addAttribute("updateerrormsg", "Item :  doesn't exist for dictionary id :" +dictionaryId);
 			}else{
 				model.addAttribute("updatesuccess", 0);
 				model.addAttribute("updateerrormsg", msg);
 			}
 		}
-		logger.info("Item Returned "+item);
+		logger.info("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
 		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -262,7 +297,6 @@ public class DictionaryController {
 		model.addAttribute("dictID", dictionaryId);
 		return "auth/dictionary/dictionary";
 	}
-	
 	/**
 	 *  Admin can use this to search from term and pos from word power
 	 * 
@@ -293,6 +327,7 @@ public class DictionaryController {
 			e.printStackTrace();
 		}
 		//return "auth/dictionaries/dictionary/wordSearch";
-		return "auth/dictionary/dictionary";
+		//return "auth/dictionary/dictionary";		
+		return "auth/dictionaries/addDictionaryItems";
 	}
 }

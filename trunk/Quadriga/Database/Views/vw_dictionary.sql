@@ -16,7 +16,6 @@ CREATE VIEW vw_dictionary
 AS
 SELECT dictionaryname,
        description,
-	   dictionaryid,
        id,
        dictionaryowner,
 	   accessibility

@@ -199,17 +199,16 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1, dictionaryid);
 			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
-
+			logger.info("Dictionary ID "+ dictionaryid);
 			sqlStatement.execute();
 
 			ResultSet resultSet = sqlStatement.getResultSet();
 			if(resultSet !=null){ 
 				while (resultSet.next()) { 
 					dictionaryItems = dictionaryItemsFactory.createDictionaryItemsObject();
-					dictionaryItems.setDictionaryId(resultSet.getString(1));
-					dictionaryItems.setItems(resultSet.getString(2));
-					dictionaryItems.setId(resultSet.getString(3));
-					dictionaryItems.setPos(resultSet.getString(4));
+					dictionaryItems.setId(resultSet.getString(1));
+					dictionaryItems.setItems(resultSet.getString(2));					
+					dictionaryItems.setPos(resultSet.getString(3));
 					dictionaryList.add(dictionaryItems);
 				} 
 			}
@@ -298,11 +297,10 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
         //fetch the values from the project object
         name = dictionary.getName();
         description = dictionary.getDescription();        
-        id = dictionary.getId();
         owner = dictionary.getOwner();
         
         //command to call the SP
-        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_DICTIONARY  + "(?,?,?,?,?,?)";
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_DICTIONARY  + "(?,?,?,?,?)";
         
         //get the connection
         getConnection();
@@ -314,17 +312,16 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
         	
         	//adding the input variables to the SP
         	sqlStatement.setString(1, name);
-        	sqlStatement.setString(2, description);
-        	sqlStatement.setString(3,id);
-        	sqlStatement.setString(4,"0");
-        	sqlStatement.setString(5,owner.getUserName());
+        	sqlStatement.setString(2, description);        	
+        	sqlStatement.setString(3,"0");
+        	sqlStatement.setString(4,owner.getUserName());
         	
         	//adding output variables to the SP
-			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(6);
+			errmsg = sqlStatement.getString(5);
 			
 			if(errmsg.isEmpty())
 			{
@@ -401,7 +398,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public String deleteDictionaryItems(String dictinaryId,String item)
+	public String deleteDictionaryItems(String dictinaryId,String itemid)
 	{
 
         String dbCommand;
@@ -423,7 +420,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
         	
         	//adding the input variables to the SP
         	sqlStatement.setString(1, dictinaryId);
-        	sqlStatement.setString(2, item);
+        	sqlStatement.setString(2, itemid);
         	
         	//adding output variables to the SP
 			sqlStatement.registerOutParameter(3,Types.VARCHAR);

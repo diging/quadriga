@@ -12,13 +12,13 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_dictionary_items
 (
-  dictionaryid       VARCHAR(100)  NOT NULL,
-  items    VARCHAR(200) NOT NULL,
-  id    VARCHAR(200) NOT NULL,
+  id       int(11)  NOT NULL,
+  term    VARCHAR(200) NOT NULL,
+  termid    VARCHAR(200) NOT NULL,
   pos    VARCHAR(50) NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(dictionaryid,items,pos)
+  PRIMARY KEY(id,termid,pos)
 )

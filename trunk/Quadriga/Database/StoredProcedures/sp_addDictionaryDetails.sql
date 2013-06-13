@@ -18,7 +18,6 @@ CREATE PROCEDURE sp_addDictionaryDetails
 (
   IN  indictionaryname    VARCHAR(50),
   IN  indescription    TEXT,
-  IN  indictionaryid      VARCHAR(100),
   IN  inaccessibility  TINYINT,
   IN  indictionaryowner   VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
@@ -38,15 +37,8 @@ BEGIN
                 WHERE dictionaryname = indictionaryname)
       THEN SET errmsg = "Dictionary name already exists.";
 	END IF;
-	
-    IF(indictionaryid IS NULL OR indictionaryid = "")
-      THEN SET errmsg = "Dictionary Id cannot be empty.";
-    END IF;
 
-	IF EXISTS(SELECT 1 FROM vw_dictionary
-                WHERE dictionaryid = indictionaryid)
-      THEN SET errmsg = "Dictionary Id is already assigned to a dictionary.";
-     END IF;
+
 
     IF(inaccessibility IS NULL)
        THEN SET errmsg = "accessibility cannot be empty";
@@ -66,9 +58,9 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
             INSERT 
-              INTO tbl_dictionary(dictionaryname,description,dictionaryid,dictionaryowner,accessibility,
+              INTO tbl_dictionary(dictionaryname,description,dictionaryowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (indictionaryname,indescription,indictionaryid,indictionaryowner,inaccessibility,
+			 VALUES (indictionaryname,indescription,indictionaryowner,inaccessibility,
                      indictionaryowner,NOW(),indictionaryowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;
