@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_validatecollectionid
 (
  
-  IN incollectionid VARCHAR(50),
+  IN incollectionname VARCHAR(50),
  
   OUT errmsg     VARCHAR(255)
 )
@@ -30,14 +30,14 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(incollectionid IS NULL OR incollectionid = "")
+    IF(incollectionname IS NULL OR incollectionname = "")
      THEN SET errmsg = "collection id cannot be empty.";
     END IF;
    
     
     
     IF EXISTS (SELECT 1 FROM vw_conceptcollections	
-                     WHERE collectionid = incollectionid)
+                     WHERE collectionname = incollectionname)
       THEN SET errmsg = "collection id is invalid.";
     END IF;
     

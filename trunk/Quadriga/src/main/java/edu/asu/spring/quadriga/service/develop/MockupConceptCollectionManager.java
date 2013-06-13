@@ -28,8 +28,7 @@ public class MockupConceptCollectionManager implements
 		IConceptCollection cc1  = new ConceptCollection();
 		IConceptCollection cc2  = new ConceptCollection();
 		
-		cc1.setId("id1");
-		cc2.setId("id2");
+		
 		
 		cc1.setName("quadriga 1");
 		cc2.setName("quadriga 2");

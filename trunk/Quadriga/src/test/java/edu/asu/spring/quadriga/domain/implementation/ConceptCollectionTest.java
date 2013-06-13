@@ -77,11 +77,11 @@ public class ConceptCollectionTest {
 	@Test
 	public void testGetId() {
 		
-		conceptcollection.setId(null);
-		assertEquals(conceptcollection.getId(), null);
+		conceptcollection.setName(null);
+		assertEquals(conceptcollection.getName(), null);
 		
-		conceptcollection.setId("3333");
-		assertEquals(conceptcollection.getId(), "3333");
+		conceptcollection.setName("3333");
+		assertEquals(conceptcollection.getName(), "3333");
 		
 	}
 

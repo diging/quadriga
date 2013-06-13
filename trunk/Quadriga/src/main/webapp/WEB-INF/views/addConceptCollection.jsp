@@ -23,14 +23,7 @@
 				event.preventDefault();
 				return;
 			}
-			
 
-			if (!$.trim($("#id").val())) {
-				$.alert("Please enter a conceptcollection ID","Oops !!!");
-				$("#id").val("");
-				event.preventDefault();
-				return;
-			}
 		});
 	});
 </script>
@@ -48,10 +41,7 @@
 				<td><form:textarea path="description" cols="23" rows="4"
 						id="description" /></td>
 			</tr>
-			<tr>
-				<td>conceptcollection Id:</td>
-				<td><form:input path="id" size="30" id="id"/></td>
-			</tr>
+			
 			<tr>
 				<td></td>
 				<td style="color: red;"><c:out value="${Error}"></c:out></td>

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -50,8 +51,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 */
 	@Override
 	public String updateConceptCollection(ConceptCollection conceptCollection) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
 	}
 
 	/* (non-Javadoc)
@@ -59,8 +59,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 */
 	@Override
 	public int deleteConceptCollection(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new NotImplementedException();
 	}
 
 

@@ -19,9 +19,7 @@ public interface IConceptCollection
 
 	public abstract IUser getOwner();
 
-	public abstract void setId(String id);
-
-	public abstract String getId();
+	
 
 	public abstract void setDescription(String description);
 

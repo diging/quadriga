@@ -155,7 +155,7 @@ public class ConceptcollectionController {
 	public ModelAndView addConceptCollection(@Validated @ModelAttribute("collection") ConceptCollection collection, BindingResult result,  Model model, Principal principal ){
 		 if (result.hasErrors()) {
 		      model.addAttribute("Error",
-		          "Error: " + collection.getId()+"already exists.");
+		          "Error: " + collection.getName()+"already exists.");
 		      return new ModelAndView("auth/conceptcollections/addCollectionsForm", "command",new ConceptCollectionFactory().createConceptCollectionObject());
 		    }
 		 IUser user = usermanager.getUserDetails(principal.getName());
