@@ -1,12 +1,12 @@
 package edu.asu.spring.quadriga.db.sql;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.core.IsNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,9 +22,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
-import edu.asu.spring.quadriga.domain.implementation.User;
-import edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -40,9 +38,8 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * 
  *
  */
-@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
-		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DBConnectionManagerTest {
 
@@ -53,7 +50,7 @@ public class DBConnectionManagerTest {
 	private IUserFactory userFactory;
 
 	@Autowired
-	private QuadrigaRoleManager rolemanager;
+	private IQuadrigaRoleManager rolemanager;
 
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;

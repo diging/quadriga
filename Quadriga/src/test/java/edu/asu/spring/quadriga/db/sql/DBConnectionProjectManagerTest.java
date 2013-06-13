@@ -29,9 +29,9 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
  * 
  *
  */
-@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-dbconnectionmanager.xml",
-		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+		"file:src/test/resources/root-context.xml",
+"file:src/test/resources/quadriga-roles.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DBConnectionProjectManagerTest {
 
