@@ -22,14 +22,67 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
  */
 public interface IConceptCollectionManager {
 
+	/**
+	 * Method is used to get list of concepts owned by the user. 
+	 * Input: UserId
+	 * Output: List of conceptcollections
+	 * 
+	 */
 	public abstract List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId);
+	
+	/**
+	 * Method is used to get list of concepts collaborated by the user. 
+	 * Input: UserId
+	 * Output: List of conceptcollections
+	 * 
+	 */
 	public abstract List<IConceptCollection> getUserCollaborations(String sUserId);
-	public abstract String updateConceptCollection(ConceptCollection conceptCollection);	
+	
+	/**
+	 * Method is used to update concept collections data and items list 
+	 * Input: ConceptCollection
+	 * Output: String - message of success or failure
+	 * 
+	 */
+	public abstract String updateConceptCollection(ConceptCollection conceptCollection);
+	
+	/**
+	 * Method is used to delete a item from the list. 
+	 * Input: ConceptcollecitonId
+	 * Output: Success/failure
+	 * 
+	 */
 	public abstract int deleteConceptCollection(String id);	
 	
+	/**
+	 * Method is used to search the concept power rest api
+	 * Input: item and pos of the word
+	 * Output: ConceptpowerReply which contains a list of items
+	 * 
+	 */
 	public ConceptpowerReply search(String item, String pos);
+	
+	/**
+	 * Method is used to get collection details like description and  items list
+	 * Input: IConceptCollection 
+	 * Output: void. We place the result in the same input object
+	 * 
+	 */
 	public abstract void getCollectionDetails(IConceptCollection concept);
 	
-	 public abstract void addItems(String lemmma, String id, String pos, String desc, String string);
+	/**
+	 * Method is used to add new items to items list of a conceptcollection
+	 * Input: lemma, id, pos, description, string
+	 * Result: We just update the backend
+	 * 
+	 */
+	public abstract void addItems(String lemmma, String id, String pos, String desc, String string);
+	
+	/**
+	 * Method is used to add new  conceptcollection
+	 * Input: Collection object
+	 * Result: We just update the backend and return the success/failure
+	 * 
+	 */
 	public abstract  String addConceptCollection(IConceptCollection collection);
 }

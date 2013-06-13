@@ -25,9 +25,26 @@ public interface IDBConnectionCCManager {
 		 * @return List containing user objects of all collections of the user
 		 */
 		public abstract List<IConceptCollection> getCollaboratedConceptsofUser(String userName);
+		/**
+		 * Queries the database with concept collection objects
+		 * 
+		 * @return Copies the data into the input object
+		 */
 		public abstract void getCollectionDetails(IConceptCollection concept);
+		/**
+		 * Updates the database by adding additional items to the List
+		 * 
+		 */
 		public abstract void saveItem(String lemmma, String id, String pos,
 				String desc, String conceptId);
+		/**
+		 * Validated the id for the collection
+		 */
 		public abstract  String validateId(String collectionid);
+		/**
+		 * 
+		 * @param con ConceptCollection Object
+		 * @return string having success or failure message
+		 */
 		public abstract  String addCollection(IConceptCollection con);
 	}

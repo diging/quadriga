@@ -18,24 +18,47 @@ $(document).ready(function() {
 				
 			});
 
+$(document).ready(function() {
+	$("input[type=submit]").button().click(function(event) {
+		
+	});
+});
 
 </script>
-	
+	<h3>
+			Concept Search
+		</h3><hr>
 <form  action="${pageContext.servletContext.contextPath}/auth/searchitems">
+<table>
+<tr>
+		<td>Word:</td>
+		<td>
 		<input type="text"  name="name" id ="name" placeholder="enter a word">
+		</td></tr>
+		<tr>
+		<td>
+		POS:
+		</td>
+		<td>
 		<select name="pos">
 						<option value="noun">Nouns</option>
 						<option value="verb">Verb</option>
 						<option value="adverb">Adverb</option>
 						<option value="adjective">Adjective</option>
 						<option value="other">Other</option>
-		</select> 
-		<input type="submit" value="Search Concepts" >
+		</select></td>
+		</tr>
+		<tr>
+		<td colspan="2">
+		<input type="submit" value="Search" >
+		</td></tr>
+</table>		
 </form>
 
 <c:if test="${not empty result}">
 		<h3>Results Of the search</h3>
 		<form action="conceptcollections/addItems" >
+		<input type="submit"  value="Select & Save" /><br><br>
 		<table cellpadding="0" cellspacing="0"	class="display dataTable"  id="conceptSearch">
 			<thead>
 				<tr>
@@ -75,7 +98,7 @@ $(document).ready(function() {
 			</tbody>
 			
 		</table>
-		<input type="submit"  value="save" /> 
+		
 				</form>
 	</c:if>
 

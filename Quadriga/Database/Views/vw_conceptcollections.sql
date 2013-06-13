@@ -16,7 +16,7 @@ CREATE VIEW vw_conceptcollections
 AS
 SELECT collectionname,
        description,
-	   collectionid,
+	   
        id,
        collectionowner,
 	   accessibility

@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections
 (
   collectionname  VARCHAR(50)   NOT NULL,
   description     TEXT          NULL,
-  collectionid    VARCHAR(100)  NOT NULL,
+  
   id              INT           NOT NULL AUTO_INCREMENT,
   collectionowner VARCHAR(50)   NOT NULL ,
   accessibility   TINYINT       NOT NULL,
@@ -22,5 +22,5 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id),UNIQUE KEY(collectionname),UNIQUE KEY(collectionid)
+  PRIMARY KEY(id),UNIQUE KEY(collectionname)
 )

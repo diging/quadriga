@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS sp_addCollectionItems;
 DELIMITER $$
 CREATE PROCEDURE sp_addCollectionItems	
 (
-  IN  	initem    TEXT,
+  IN  	initem    VARCHAR(255),
   IN  	 inlemma   VARCHAR(50),
   IN  	 inpos VARCHAR(50),
   IN 	 indescription TEXT,

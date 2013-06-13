@@ -19,7 +19,7 @@ public class ConceptCollection implements IConceptCollection
 {
 	private String name;
 	private String description;
-	private String id;
+	
 	private IUser owner;
 	private List<ICollaborator> collaborators;
 	private List<IConcept> items = new ArrayList<IConcept>();
@@ -39,14 +39,7 @@ public class ConceptCollection implements IConceptCollection
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@Override
-	public String getId() {
-		return id;
-	}
-	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 	@Override
 	public IUser getOwner() {
 		return owner;

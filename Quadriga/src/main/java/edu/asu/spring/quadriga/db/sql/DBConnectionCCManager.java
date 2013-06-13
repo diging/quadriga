@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import freemarker.log.Logger;
 
 /**
  * @author satyaswaroop
@@ -63,7 +64,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 					conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
 					conceptCollection.setName(resultSet.getString(1));
 					conceptCollection.setDescription(resultSet.getString(2));
-					conceptCollection.setId(resultSet.getString(3));
+					
 					collectionsList.add(conceptCollection);
 				} while (resultSet.next());
 			}		
@@ -109,7 +110,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 					conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
 					conceptCollection.setName(resultSet.getString(1));
 					conceptCollection.setDescription(resultSet.getString(2));
-					conceptCollection.setId(resultSet.getString(3));
+					
 					collectionsList.add(conceptCollection);
 				} while (resultSet.next());
 			}		
@@ -143,16 +144,12 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 
 			sqlStatement.execute();
 			 errmsg = sqlStatement.getString(2);
+			 System.out.println(errmsg);
 			ResultSet resultSet = sqlStatement.getResultSet();
 			if(resultSet.next()) { 
 				do { 
 					
-					/*conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
-					conceptCollection.setName(resultSet.getString(1));
-					conceptCollection.setDescription(resultSet.getString(2));
-					conceptCollection.setId(resultSet.getString(3));
-					collectionsList.add(conceptCollection);*/
-					//concept.setDiscription(resultSet.getString(1));
+					
 					concept = conceptFactory.createConceptObject();
 					concept.setLemma(resultSet.getString(5));
 					concept.setName(resultSet.getString(2));
@@ -226,7 +223,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String validateId(String collectionid) {
+	public String validateId(String collectionname) {
 		// TODO Auto-generated method stub
 		String dbCommand;
 		String errmsg=null;
@@ -235,7 +232,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 		try {
 
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			sqlStatement.setString(1, collectionid);
+			sqlStatement.setString(1, collectionname);
 			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
 
 			sqlStatement.execute();
@@ -255,8 +252,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 		
 		String name;
 		String description;
-		String id;
-        IUser owner = null;
+		IUser owner = null;
         String dbCommand;
         String errmsg;
         CallableStatement sqlStatement;
@@ -264,11 +260,11 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
         //fetch the values from the project object
         name = con.getName();
         description = con.getDescription();        
-        id = con.getId();
+        
         owner = con.getOwner();
         
         //command to call the SP
-        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_CONCEPTCOLLECTION  + "(?,?,?,?,?,?)";
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_CONCEPTCOLLECTION  + "(?,?,?,?,?)";
         
         //get the connection
         getConnection();
@@ -281,16 +277,16 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
         	//adding the input variables to the SP
         	sqlStatement.setString(1, name);
         	sqlStatement.setString(2, description);
-        	sqlStatement.setString(3,id);
-        	sqlStatement.setString(4,"0");
-        	sqlStatement.setString(5,owner.getUserName());
+        	
+        	sqlStatement.setString(3,"0");
+        	sqlStatement.setString(4,owner.getUserName());
         	
         	//adding output variables to the SP
-			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(6);
+			errmsg = sqlStatement.getString(5);
 			
 			if(errmsg.isEmpty())
 			{

@@ -18,7 +18,7 @@ CREATE PROCEDURE sp_addConceptCollections
 (
   IN  incollectionname    VARCHAR(50),
   IN  indescription    TEXT,
-  IN  incollectionid      VARCHAR(100),
+  
   IN  inaccessibility  TINYINT,
   IN  incollectionowner   VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
@@ -39,12 +39,10 @@ BEGIN
       THEN SET errmsg = "collection name already exists.";
 	END IF;
 
-    IF(incollectionid IS NULL OR incollectionid = "")
-      THEN SET errmsg = "collection cannot be empty.";
-    END IF;
+   
 
 	IF EXISTS(SELECT 1 FROM vw_conceptcollections
-                WHERE collectionid = incollectionid)
+                WHERE collectionname = incollectionname)
       THEN SET errmsg = "collectionid is already assigned to a project.";
      END IF;
 
@@ -66,9 +64,9 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
             INSERT 
-              INTO tbl_conceptcollections(collectionname,description,collectionid,collectionowner,accessibility,
+              INTO tbl_conceptcollections(collectionname,description,collectionowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (incollectionname,indescription,incollectionid,incollectionowner,inaccessibility,
+			 VALUES (incollectionname,indescription,incollectionowner,inaccessibility,
                      incollectionowner,NOW(),incollectionowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;

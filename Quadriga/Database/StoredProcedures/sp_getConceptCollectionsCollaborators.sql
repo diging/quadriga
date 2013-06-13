@@ -41,7 +41,7 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
       -- retrieve the collection id of the project 
-      SELECT collectionid INTO varcollectionid FROM vw_conceptcollections
+      SELECT id INTO varcollectionid FROM vw_conceptcollections
         WHERE collectionname = incollectionname; 
       
       -- retrieve the collaborator details
@@ -49,7 +49,7 @@ BEGIN
          GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole'
         FROM vw_conceptcollections_collaborator
 	    WHERE collectionid = varcollectionid
-      GROUP BY collaboratoruser;
+      
      END IF;
 END$$
 DELIMITER ;
