@@ -5,6 +5,7 @@ package edu.asu.spring.quadriga.db;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 
 /**
@@ -47,4 +48,21 @@ public interface IDBConnectionCCManager {
 		 * @return string having success or failure message
 		 */
 		public abstract  String addCollection(IConceptCollection con);
+		
+		/**
+		 * Method is used to call the delete item sp and delete the item called
+		 * @param id
+		 * @param collectionName
+		 * @return 
+		 * 
+		 */
+		public abstract String deleteItems(String id, String collectionName);
+		
+		/**
+		 * Method is used to update the fields in the database
+		 * @param concept
+		 * @param collectionName
+		 * @return
+		 */
+		public abstract String updateItem(IConcept concept, String collectionName);
 	}

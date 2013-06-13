@@ -8,17 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
@@ -33,7 +35,19 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	@Qualifier("DBConnectionCCManagerBean")
 	private IDBConnectionCCManager dbConnect;
+	@Autowired
+	private IConceptFactory conceptFactory;
+	@Inject
+	@Named("restTemplate")
+	RestTemplate restTemplate;
 	
+	@Autowired
+	@Qualifier("searchConceptPowerURL")
+	private String searchURL;
+	
+	@Autowired
+	@Qualifier("updateConceptPowerURL")
+	private String updateURL;
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getCollectionsOfUser(java.lang.String)
 	 */
@@ -82,44 +96,59 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	public ConceptpowerReply search(String item, String pos) {
 		
 		ConceptpowerReply rep;
-		Jaxb2Marshaller jm = new Jaxb2Marshaller();
-		jm.setClassesToBeBound(new Class[]{ConceptpowerReply.class});
 		
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("name", item);
 		vars.put("pos", pos);
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		
-
-		MarshallingHttpMessageConverter marsh=new MarshallingHttpMessageConverter(jm,jm);
-		messageConverters.add(marsh);
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.setMessageConverters(messageConverters);
 		if((item!=null && !item.isEmpty())  && (pos!=null && !pos.isEmpty())){
-		rep = restTemplate.getForObject(
-		  "http://chps.asu.edu/conceptpower/rest/ConceptLookup/{name}/{pos}", 
-		  ConceptpowerReply.class, vars);
-		
-		return rep;
+			rep = restTemplate.getForObject(searchURL+"{name}/{pos}", ConceptpowerReply.class, vars);
+			return rep;
 		}
 		else
 			return null;
 	}
-	public static void main(String args[])
-	{
-		new ConceptCollectionManager().search("horse", "noun");
+	
+	@Override
+	public void update(String id[],IConceptCollection collection) {
+		
+		IConcept concept;
+		ConceptpowerReply rep;
+		for(String i : id){
+		Map<String, String> vars = new HashMap<String, String>();
+		vars.put("name", i);
+		
+		if((i!=null && !i.isEmpty())){
+			rep = restTemplate.getForObject(updateURL+"{name}", ConceptpowerReply.class, vars);
+			concept = conceptFactory.createConceptObject();
+			concept.setName(i);
+			concept = collection.getItems().get((collection.getItems().indexOf(concept)));
+			concept.setDescription(rep.getConceptEntry().get(0).getDescription());
+			concept.setLemma(rep.getConceptEntry().get(0).getLemma());
+			concept.setPos(rep.getConceptEntry().get(0).getPos());
+			dbConnect.updateItem(concept,collection.getName());
+		}
+		}
 	}
+	
 
 	@Override
 	public void addItems(String lemmma, String id, String pos, String desc, String conceptId) {
-		// TODO Auto-generated method stub
+		
 		dbConnect.saveItem(lemmma, id, pos, desc, conceptId);
 	}
 
 	@Override
 	public String addConceptCollection(IConceptCollection collection) {
-		// TODO Auto-generated method stub
+		
 		return dbConnect.addCollection(collection);
+	}
+
+	@Override
+	public void deleteItem(String id, String collectionName) {
+		
+		dbConnect.deleteItems(id,collectionName);
+		
 	}
 
 }

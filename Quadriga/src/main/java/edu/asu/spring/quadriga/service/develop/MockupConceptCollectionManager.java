@@ -93,6 +93,18 @@ public class MockupConceptCollectionManager implements
 		return null;
 	}
 
+	@Override
+	public void deleteItem(String id, String collectionName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(String[] values, IConceptCollection concept) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }

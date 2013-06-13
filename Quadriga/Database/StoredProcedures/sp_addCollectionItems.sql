@@ -48,11 +48,7 @@ BEGIN
 
     
     
-    IF EXISTS(SELECT 1 FROM vw_conceptcollections_items
-				   WHERE id = inid and item =initem)
-     
-      THEN SET errmsg = "ItemExists";
-    END IF; 
+  
 	
     -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
@@ -60,12 +56,18 @@ BEGIN
          START TRANSACTION;
          SELECT id INTO varcollectionid FROM vw_conceptcollections
         WHERE collectionname = inid; 
-         
+           IF EXISTS(SELECT 1 FROM vw_conceptcollections_items
+				   WHERE id = varcollectionid and item =initem)
+     
+      		THEN SET errmsg = "ItemExists";
+    		END IF; 
+    		IF (errmsg = "")
             INSERT 
               INTO tbl_conceptcollections_items(id, item, lemma, pos, description,
                          updateddate,createddate)
 			 VALUES (varcollectionid, initem, inlemma, inpos, indescription
-                    ,NOW(),NOW());	
+                    ,NOW(),NOW());
+           END IF;          
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

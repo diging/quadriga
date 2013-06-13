@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.implementation.CollectionsValidator;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
@@ -51,6 +53,10 @@ public class ConceptcollectionController {
 	IConceptCollection concept;
 	@Autowired
 	IConceptCollectionFactory collectionFactory;
+	
+	IConcept con;
+	@Autowired
+	IConceptFactory conFact;
 	List<IUser> collaboratorList;
 	ConceptpowerReply c;
 	@Autowired IUserManager usermanager;
@@ -97,8 +103,12 @@ public class ConceptcollectionController {
 	public String conceptDetailsHandler(HttpServletRequest req, ModelMap model) throws SQLException{
 		/*UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    String userId = principal.getUsername();*/
-		concept = collectionFactory.createConceptCollectionObject();
-	    concept.setName(req.getParameter("name"));
+		
+		if(req.getParameter("name")!=null)
+		{
+			concept = collectionFactory.createConceptCollectionObject();
+			concept.setName(req.getParameter("name"));
+		}
 	    int index;
 	    if(( index = list.indexOf(concept))>=0)
 	    concept = list.get(index);
@@ -118,7 +128,7 @@ public class ConceptcollectionController {
 		
 	    return "auth/searchitems";
 	}
-	@RequestMapping(value = "auth/conceptcollections/addItems", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/conceptcollections/addItems", method = RequestMethod.POST)
 	public String saveItemsHandler(HttpServletRequest req, ModelMap model) throws SQLException{
 		/*UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    String userId = principal.getUsername();*/
@@ -160,10 +170,44 @@ public class ConceptcollectionController {
 		    }
 		 IUser user = usermanager.getUserDetails(principal.getName());
 			collection.setOwner(user);
-		String msg = conceptControllerManager.addConceptCollection(collection);
+		 conceptControllerManager.addConceptCollection(collection);
+		 concept = collection;
 		
 		 model.addAttribute("concept", collection);
 		return new ModelAndView("auth/conceptcollections/details");
 		
 	}
+	
+	
+	/**
+	 * Returns the list of concept collections of user to the view
+	 * 
+	 * 
+	 * */
+	@RequestMapping(value = "auth/conceptcollections/deleteitems", method = RequestMethod.POST)
+	public String deleteItems(HttpServletRequest req, ModelMap model){
+		
+		
+		String[] values= req.getParameterValues("selected");
+		for(String id : values)
+		{
+			conceptControllerManager.deleteItem(id,concept.getName());
+			con = conFact.createConceptObject();con.setName(id);
+			concept.getItems().remove(concept.getItems().indexOf(con));
+			
+		}
+		
+		conceptControllerManager.getCollectionDetails(concept);
+			
+		return "redirect:/auth/conceptdetails";
+		
+	}
+	@RequestMapping(value = "auth/conceptcollections/updateitems", method = RequestMethod.POST)
+	public String conceptUpdateHandler(HttpServletRequest req, ModelMap model) throws SQLException{
+		String[] values= req.getParameterValues("selected");
+		conceptControllerManager.update(values,concept);
+		
+		return "redirect:/auth/conceptdetails";
+	}
+	
 }

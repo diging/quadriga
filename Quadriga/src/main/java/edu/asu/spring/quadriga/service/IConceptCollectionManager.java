@@ -85,4 +85,17 @@ public interface IConceptCollectionManager {
 	 * 
 	 */
 	public abstract  String addConceptCollection(IConceptCollection collection);
+
+	/**
+	 * Method is used to delete items from the collection list of a particular user.
+	 * Input: collectionname and id of the concept to be deleted
+	 * 
+	 */
+	public abstract void deleteItem(String id, String collectionName);
+	/**
+	 * Method is used to update the items list with the latest values from the conceptpower
+	 * @param values 
+	 * @param concept
+	 */
+	public abstract void update(String[] values, IConceptCollection concept);
 }

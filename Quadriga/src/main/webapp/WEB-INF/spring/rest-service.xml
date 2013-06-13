@@ -32,9 +32,20 @@
 		</constructor-arg>
 	</bean>
 	
+	<bean id="searchConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/ConceptLookup/</value>
+		</constructor-arg>
+	</bean>
+	
 	<bean id="updateFromWordPowerURL" class="java.lang.String">
 		<constructor-arg>
 			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/</value>
+		</constructor-arg>
+	</bean>
+	<bean id="updateConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/Concept?id=</value>
 		</constructor-arg>
 	</bean>
 
@@ -61,6 +72,8 @@
 				<value>edu.asu.spring.quadriga.domain.implementation.Collections
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
+				</value>
+				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
 			</list>
 		</property>
