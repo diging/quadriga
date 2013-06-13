@@ -1,7 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("ul.pagination1").quickPagination({pageSize:"10"});
+	$("ul.pagination2").quickPagination({pageSize:"10"});
+	
+});
+</script>
 	<script type="text/javascript" charset="utf8">
 			$(document).ready(function() {
 				$("input[type=button]").button().click(function(event) {
@@ -33,7 +40,8 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<div class="container">
+	<div  style="float: left; width: 45%; border-radius:5px; border:2px solid #e3daa8; padding: 20px;">
+	<h4 align="center"> You own these Dictionaries</h4>
     <c:choose>
     <c:when test="${not empty dictinarylist}">
 			<ul class="pagination1">
@@ -53,3 +61,12 @@
 	<c:otherwise> No dictionary found</c:otherwise>
 	</c:choose>
 </div>
+
+<div  style="float: right; width: 45%; border-radius:5px; border:2px solid #e3daa8; padding: 20px;">	
+
+<h4 align="center"> You participate in these Dictionaries</h4>
+	<ul class="pagination2">
+<li>We have to complete the collaborator part</li>
+	</ul> 
+	
+	</div>

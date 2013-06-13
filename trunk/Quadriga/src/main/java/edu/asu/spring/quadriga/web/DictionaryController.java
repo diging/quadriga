@@ -284,7 +284,7 @@ public class DictionaryController {
 		for(int i=0;i<values.length;i++){
 			logger.info("Value "+i+" : "+values[i]);
 			String id=values[i];
-			DictionaryEntry dictionaryEntry=dictonaryManager.getUpdateFromWordPower("http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/",dictionaryId,values[i]);
+			DictionaryEntry dictionaryEntry=dictonaryManager.getUpdateFromWordPower(dictionaryId,values[i]);
 			msg= dictonaryManager.updateDictionariesItems(dictionaryId,values[i],dictionaryEntry.getLemma(),dictionaryEntry.getPos());
 			if(msg.equals("")){
 				
@@ -330,7 +330,7 @@ public class DictionaryController {
 			DictionaryEntry dictionaryEntry=null;
 			if(!item.equals("")){
 				logger.info("Query for Item :" +item+" and pos :"+ pos);
-				dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
+				dictionaryEntry=dictonaryManager.searchWordPower(item,pos);
 			}
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntry", dictionaryEntry);
