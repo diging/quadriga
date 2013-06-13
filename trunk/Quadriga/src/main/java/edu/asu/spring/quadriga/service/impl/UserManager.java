@@ -39,6 +39,14 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private IUserFactory userFactory;
 
+	public IUserFactory getUserFactory() {
+		return userFactory;
+	}
+
+	public void setUserFactory(IUserFactory userFactory) {
+		this.userFactory = userFactory;
+	}
+
 	/**
 	 * @description : retrieve the user details from DBConectionManager and
 	 *                retrieve the associate roles from the quadriga-roles.xml
