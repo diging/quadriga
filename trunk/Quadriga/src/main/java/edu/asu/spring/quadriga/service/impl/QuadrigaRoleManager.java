@@ -28,6 +28,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 * @param sQuadrigaRoleDBId		The role id fetched from the Quadriga database.
 	 * @return 						QuadrigaRole object corresponding to the role id.
 	 */
+	@Override
 	public IQuadrigaRole getQuadrigaRole(String sQuadrigaRoleDBId) {
 		for(IQuadrigaRole role: quadrigaRoles)
 		{
@@ -38,6 +39,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	}
 	
 	
+	@Override
 	public String getQuadrigaRoleDBId(String sQuadrigaRoleId)
 	{
 		for(IQuadrigaRole role:quadrigaRoles)
@@ -54,6 +56,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 * 
 	 * @return 			List of QuadrigaRoles
 	 */
+	@Override
 	public List<IQuadrigaRole> getQuadrigaRoles() {
 		return this.quadrigaRoles;
 	}
@@ -62,6 +65,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 *  
 	 * @param quadrigaRoles List of QuadrigaRoles
 	 */
+	@Override
 	public void setQuadrigaRoles(List<IQuadrigaRole> quadrigaRoles) {
 		this.quadrigaRoles = quadrigaRoles;
 	}
