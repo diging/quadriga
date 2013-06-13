@@ -24,10 +24,10 @@ public interface IDictionaryManager {
 	
 	public abstract String getDictionaryName(String dictionaryid);
 	
-	public abstract DictionaryEntry callRestUri(String url,String item,String pos);
+	public abstract DictionaryEntry searchWordPower(String item,String pos);
 	
 	public abstract String deleteDictionariesItems(String dictionaryId,String item);
 	
 	public abstract String updateDictionariesItems(String dictionaryId,String itemid,String term,String pos);
-	public abstract DictionaryEntry  getUpdateFromWordPower(String url,String dictionaryId,String itemid);
+	public abstract DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid);
 }

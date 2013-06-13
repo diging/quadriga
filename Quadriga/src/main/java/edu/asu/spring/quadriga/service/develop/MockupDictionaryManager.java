@@ -85,11 +85,7 @@ public class MockupDictionaryManager implements IDictionaryManager {
 
 
 
-	@Override
-	public DictionaryEntry callRestUri(String url, String item, String pos) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public String addNewDictionariesItems(String dictionaryId, String item,
@@ -113,9 +109,17 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		return null;
 	}
 
+
+
 	@Override
-	public DictionaryEntry getUpdateFromWordPower(String url,
-			String dictionaryId, String itemid) {
+	public DictionaryEntry searchWordPower(String item, String pos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DictionaryEntry getUpdateFromWordPower(String dictionaryId,
+			String itemid) {
 		// TODO Auto-generated method stub
 		return null;
 	}

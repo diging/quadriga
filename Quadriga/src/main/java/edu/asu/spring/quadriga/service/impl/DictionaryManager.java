@@ -41,13 +41,39 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
  */
 @Service
 public class DictionaryManager implements IDictionaryManager {
-
+	
+	@Autowired
+	@Qualifier("searchWordPowerURL")
+	private String searchWordPowerURL;
+	
+	@Autowired
+	@Qualifier("updateFromWordPowerURL")
+	private String updateFromWordPowerURL;
+	
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryManager.class);
 	
 	@Autowired
 	@Qualifier("DBConnectionDictionaryManagerBean")
 	private IDBConnectionDictionaryManager dbConnect;
 
+	/**
+	 *  Gets the searchWordPowerURL
+	 * 
+	 *  @return String URL
+	 */
+	public String getSearchWordPowerURL() {
+		return searchWordPowerURL;
+	}
+	
+	/**
+	 *  Gets the updateFromWordPowerURL
+	 * 
+	 *  @return String updateFromWordPowerURL
+	 */
+	public String getUpdateFromWordPowerURL() {
+		return updateFromWordPowerURL;
+	}
+	
 	/**
 	 *  Gets all the dictionaries of the user
 	 * 
@@ -174,7 +200,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return the dictionaryEntry bean to controller
 	 */
 	
-	public DictionaryEntry  callRestUri(String url,String item,String pos){
+	public DictionaryEntry  searchWordPower(String item,String pos){
 		//RestTemplate rest = new RestTemplate();
 		//ExtendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
 		//	edu.asu.spring.quadriga.domain.implementation.ExtendingThis.class);
@@ -182,7 +208,7 @@ public class DictionaryManager implements IDictionaryManager {
 		try{
 			JAXBContext jaxbContext = JAXBContext.newInstance(WordpowerReply.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			String fullUrl=url+""+item+"/"+pos;
+			String fullUrl=getSearchWordPowerURL()+""+item+"/"+pos;
 			logger.info(" URL : "+fullUrl);
 			URL wp = new URL(fullUrl);
 			InputStream xml = wp.openStream();
@@ -218,7 +244,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return the dictionaryEntry bean to controller
 	 */
 	
-	public DictionaryEntry  getUpdateFromWordPower(String url,String dictionaryId,String itemid){
+	public DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid){
 		//RestTemplate rest = new RestTemplate();
 		//ExtendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
 		//	edu.asu.spring.quadriga.domain.implementation.ExtendingThis.class);
@@ -227,7 +253,7 @@ public class DictionaryManager implements IDictionaryManager {
 			JAXBContext jaxbContext = JAXBContext.newInstance(WordpowerReply.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			itemid=itemid.substring(itemid.lastIndexOf("/")+1, itemid.length());
-			String fullUrl=url+""+itemid;
+			String fullUrl=getUpdateFromWordPowerURL()+""+itemid;
 			logger.info(" URL : "+fullUrl);
 			URL wp = new URL(fullUrl);
 			InputStream xml = wp.openStream();
