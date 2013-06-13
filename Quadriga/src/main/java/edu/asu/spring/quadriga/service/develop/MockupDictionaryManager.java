@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryEntryBackupXJC;
+import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.service.IDictionaryManager;;
 
 /**
@@ -112,13 +111,14 @@ public class MockupDictionaryManager implements IDictionaryManager {
 
 
 	@Override
-	public DictionaryEntry searchWordPower(String item, String pos) {
+	public WordpowerReply.DictionaryEntry searchWordPower(String item, String pos) {
 		// TODO Auto-generated method stub
-		return null;
+		WordpowerReply.DictionaryEntry diction=null;
+		return diction;
 	}
 
 	@Override
-	public DictionaryEntry getUpdateFromWordPower(String dictionaryId,
+	public WordpowerReply.DictionaryEntry getUpdateFromWordPower(String dictionaryId,
 			String itemid) {
 		// TODO Auto-generated method stub
 		return null;

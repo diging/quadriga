@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
@@ -17,12 +19,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.domain.ICommunities;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.Communities;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
 
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
@@ -41,6 +45,10 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
  */
 @Service
 public class DictionaryManager implements IDictionaryManager {
+	
+	@Inject
+	@Named("restTemplate")
+	RestTemplate restTemplate;
 	
 	@Autowired
 	@Qualifier("searchWordPowerURL")
@@ -200,38 +208,16 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return the dictionaryEntry bean to controller
 	 */
 	
-	public DictionaryEntry  searchWordPower(String item,String pos){
-		//RestTemplate rest = new RestTemplate();
-		//ExtendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
-		//	edu.asu.spring.quadriga.domain.implementation.ExtendingThis.class);
-		DictionaryEntry dictionaryEntry=null;
+	public WordpowerReply.DictionaryEntry  searchWordPower(String item,String pos){
+
+		WordpowerReply.DictionaryEntry dictionaryEntry=null;
 		try{
-			JAXBContext jaxbContext = JAXBContext.newInstance(WordpowerReply.class);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
 			String fullUrl=getSearchWordPowerURL()+""+item+"/"+pos;
-			logger.info(" URL : "+fullUrl);
-			URL wp = new URL(fullUrl);
-			InputStream xml = wp.openStream();
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(xml));
-			String inputLine;
-			String append="";
-			while ((inputLine = in.readLine()) != null){
-
-				append=append+inputLine;
-			}
-
-			append=append.replaceAll("digitalHPS:", "");
-			append=append.replaceAll("xmlns:digitalHPS=\"http://www.digitalhps.org/\"","");
-			in.close();
-			StringReader sr = new StringReader(append);
-			WordpowerReply wordpowerReply = (WordpowerReply) unmarshaller.unmarshal(sr);
-			dictionaryEntry=wordpowerReply.dictionaryEntry;
-
-			// Debug purpose
-			//	Marshaller marshaller = jaxbContext.createMarshaller();
-			//	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			//	marshaller.marshal(dictionaryEntry, System.out);
+			logger.info("Search Word Power URL : "+fullUrl);
+			WordpowerReply wordpowerReply = (WordpowerReply)restTemplate.getForObject(fullUrl, WordpowerReply.class);
+			dictionaryEntry = wordpowerReply.getDictionaryEntry();
+			logger.info("Lemma from rest template "+dictionaryEntry.getLemma());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -244,39 +230,17 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return the dictionaryEntry bean to controller
 	 */
 	
-	public DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid){
+	public WordpowerReply.DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid){
 		//RestTemplate rest = new RestTemplate();
 		//ExtendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
 		//	edu.asu.spring.quadriga.domain.implementation.ExtendingThis.class);
-		DictionaryEntry dictionaryEntry=null;
+		WordpowerReply.DictionaryEntry dictionaryEntry=null;
 		try{
-			JAXBContext jaxbContext = JAXBContext.newInstance(WordpowerReply.class);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			itemid=itemid.substring(itemid.lastIndexOf("/")+1, itemid.length());
 			String fullUrl=getUpdateFromWordPowerURL()+""+itemid;
-			logger.info(" URL : "+fullUrl);
-			URL wp = new URL(fullUrl);
-			InputStream xml = wp.openStream();
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(xml));
-			String inputLine;
-			String append="";
-			while ((inputLine = in.readLine()) != null){
-
-				append=append+inputLine;
-			}
-
-			append=append.replaceAll("digitalHPS:", "");
-			append=append.replaceAll("xmlns:digitalHPS=\"http://www.digitalhps.org/\"","");
-			in.close();
-			StringReader sr = new StringReader(append);
-			WordpowerReply wordpowerReply = (WordpowerReply) unmarshaller.unmarshal(sr);
-			dictionaryEntry=wordpowerReply.dictionaryEntry;
-
-			// Debug purpose
-			//	Marshaller marshaller = jaxbContext.createMarshaller();
-			//	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			//	marshaller.marshal(dictionaryEntry, System.out);
+			logger.info("Search Word Power URL : "+fullUrl);
+			WordpowerReply wordpowerReply = (WordpowerReply)restTemplate.getForObject(fullUrl, WordpowerReply.class);
+			dictionaryEntry = wordpowerReply.getDictionaryEntry();
+			logger.info("Lemma from rest template "+dictionaryEntry.getLemma());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
