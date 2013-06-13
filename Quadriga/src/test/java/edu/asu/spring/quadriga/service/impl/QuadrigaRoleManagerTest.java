@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
  * @author Ram Kumar Kumaresan
  *
  */
-@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+@ContextConfiguration(locations={"file:src/test/resources/quadriga-roles.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class QuadrigaRoleManagerTest {
 

@@ -17,6 +17,11 @@
 		class="edu.asu.spring.quadriga.service.develop.MockupUserManager">
 		<property name="userFactory" ref="userFactory"></property>
 	</bean>
+	
+	<bean id="UserManager"
+		class="edu.asu.spring.quadriga.service.impl.UserManager">
+		<property name="userFactory" ref="userFactory"></property>
+	</bean>
 
 	<bean id="userFactory"
 		class="edu.asu.spring.quadriga.domain.factories.impl.UserFactory">
@@ -37,8 +42,6 @@
 
 	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager" />
 
-	<bean class="edu.asu.spring.quadriga.db.sql.DBConnectionProjectManager" />
-
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory" />
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory" />
@@ -46,6 +49,7 @@
 		class="edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory" />
 	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleMapper" />
+	<bean class="edu.asu.spring.quadriga.service.impl.ProjectManager" />
 
 	<!-- Reference the rest settings -->
 	<import resource="collaborator-roles.xml" />

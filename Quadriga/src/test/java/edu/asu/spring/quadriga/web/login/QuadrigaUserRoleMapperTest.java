@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -28,13 +29,13 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @ContextConfiguration(locations = {
-		"file:src/test/resources/quadriga-roles.xml",
 		"file:src/test/resources/root-context.xml",
 		"file:src/test/resources/spring-security.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class QuadrigaUserRoleMapperTest {
 
 	@Autowired
+	@Qualifier("MockupUserManager")
 	private IUserManager userManager;
 	
 	@Autowired

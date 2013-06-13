@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.test.annotation.DirtiesContext;
@@ -30,15 +31,15 @@ import edu.asu.spring.quadriga.service.develop.MockupUserManager;
  * @author Ram Kumar Kumaresan
  *
  */
-@ContextConfiguration(locations={
-		"file:src/test/resources/root-context.xml",
-"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+"file:src/test/resources/root-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserControllerTest {
 
 	UserController userContoller;
 
-	@Autowired 
+	@Autowired
+	@Qualifier("MockupUserManager")
 	IUserManager usermanager;
 
 	Principal principal;	

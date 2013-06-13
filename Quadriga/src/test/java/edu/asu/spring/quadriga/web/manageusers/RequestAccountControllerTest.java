@@ -24,8 +24,8 @@ import edu.asu.spring.quadriga.web.LoginController;
  * @author Julia Damerow
  *
  */
-@ContextConfiguration(locations={
-		"file:src/test/resources/root-context.xml"})
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+"file:src/test/resources/root-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RequestAccountControllerTest {
 	

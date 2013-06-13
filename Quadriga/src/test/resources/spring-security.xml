@@ -35,7 +35,4 @@
 	<!--Reference to Quad Database connection file-->
 	<beans:import resource="spring-dbconnectionmanager.xml" />
 
-	<!-- Reference to Quadriga roles -->
-	<beans:import resource="quadriga-roles.xml" />
-
 </beans:beans>
