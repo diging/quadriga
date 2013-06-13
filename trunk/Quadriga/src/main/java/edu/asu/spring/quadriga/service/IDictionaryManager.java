@@ -28,5 +28,6 @@ public interface IDictionaryManager {
 	
 	public abstract String deleteDictionariesItems(String dictionaryId,String item);
 	
-	public abstract String updateDictionariesItems(String dictionaryId,String item,String id);
+	public abstract String updateDictionariesItems(String dictionaryId,String itemid,String term,String pos);
+	public abstract DictionaryEntry  getUpdateFromWordPower(String url,String dictionaryId,String itemid);
 }

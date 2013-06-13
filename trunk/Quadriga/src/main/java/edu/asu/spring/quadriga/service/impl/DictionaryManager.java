@@ -118,10 +118,10 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return  error or success message to controller
 	 */
 	
-	public String updateDictionariesItems(String dictionaryId,String item,String id){
+	public String updateDictionariesItems(String dictionaryId,String termid,String term,String pos){
 		String msg=null;
 		try {
-			msg = dbConnect.updateDictionaryItems(dictionaryId,item,id);
+			msg = dbConnect.updateDictionaryItems(dictionaryId,termid,term,pos);
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -183,6 +183,51 @@ public class DictionaryManager implements IDictionaryManager {
 			JAXBContext jaxbContext = JAXBContext.newInstance(WordpowerReply.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			String fullUrl=url+""+item+"/"+pos;
+			logger.info(" URL : "+fullUrl);
+			URL wp = new URL(fullUrl);
+			InputStream xml = wp.openStream();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(xml));
+			String inputLine;
+			String append="";
+			while ((inputLine = in.readLine()) != null){
+
+				append=append+inputLine;
+			}
+
+			append=append.replaceAll("digitalHPS:", "");
+			append=append.replaceAll("xmlns:digitalHPS=\"http://www.digitalhps.org/\"","");
+			in.close();
+			StringReader sr = new StringReader(append);
+			WordpowerReply wordpowerReply = (WordpowerReply) unmarshaller.unmarshal(sr);
+			dictionaryEntry=wordpowerReply.dictionaryEntry;
+
+			// Debug purpose
+			//	Marshaller marshaller = jaxbContext.createMarshaller();
+			//	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			//	marshaller.marshal(dictionaryEntry, System.out);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return dictionaryEntry;
+	}
+	
+	/**
+	 *  Call the word power for a term and fetch the xml from word power rest
+	 * 
+	 *  @return 	Return the dictionaryEntry bean to controller
+	 */
+	
+	public DictionaryEntry  getUpdateFromWordPower(String url,String dictionaryId,String itemid){
+		//RestTemplate rest = new RestTemplate();
+		//ExtendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
+		//	edu.asu.spring.quadriga.domain.implementation.ExtendingThis.class);
+		DictionaryEntry dictionaryEntry=null;
+		try{
+			JAXBContext jaxbContext = JAXBContext.newInstance(WordpowerReply.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			itemid=itemid.substring(itemid.lastIndexOf("/")+1, itemid.length());
+			String fullUrl=url+""+itemid;
 			logger.info(" URL : "+fullUrl);
 			URL wp = new URL(fullUrl);
 			InputStream xml = wp.openStream();

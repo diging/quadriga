@@ -225,25 +225,34 @@ public class DictionaryController {
 	public String deleteDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
 		
 		String[] values= req.getParameterValues("selected");
-		String msg [] = new String [values.length];
+		String msg ="";
+		String errormsg="";
+		int flag=0;
+		
 		logger.info(" value len : "+values.length);
 		for(int i=0;i<values.length;i++){
 			logger.info("Deleting item for dictionary id: "+ dictionaryId+" and term id : "+i+" : "+values[i]);
-			msg[i]= dictonaryManager.deleteDictionariesItems(dictionaryId,values[i]);
-			
+			msg= dictonaryManager.deleteDictionariesItems(dictionaryId,values[i]);
+			if(msg.equals("")){
+				
+			}else{
+				flag=1;
+				errormsg=msg;
+			}
+				
 		}
 		
-		if(msg.equals(""))
+		if(flag==0)
 		{
 			model.addAttribute("delsuccess", 1);
-			model.addAttribute("delsuccessmsg", "Item :  deleted successfully");
+			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
 		}else{
-			if(msg.equals("Item doesnot exists in this dictionary")){
+			if(errormsg.equals("Item doesnot exists in this dictionary")){
 				model.addAttribute("delsuccess", 0);
-				model.addAttribute("delerrormsg", "Item :doesn't exist for dictionary id :" +dictionaryId);
+				model.addAttribute("delerrormsg", "Items doesn't exist for dictionary id :" +dictionaryId);
 			}else{
 				model.addAttribute("delsuccess", 0);
-				model.addAttribute("delerrormsg", msg);
+				model.addAttribute("delerrormsg", errormsg);
 			}
 		}
 		logger.info("Item Returned ");
@@ -263,30 +272,41 @@ public class DictionaryController {
 	
 	
 	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String updateDictionaryItem1(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
-		//DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/",item,pos);
+	public String updateDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
+		//DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/",item,pos);
 		
 		//String msg= dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
 		String[] values= req.getParameterValues("selected");
+		String msg="";
+		String errormsg="";
+		int flag=0;
 		logger.info(" value len : "+values.length);
 		for(int i=0;i<values.length;i++){
 			logger.info("Value "+i+" : "+values[i]);
 			String id=values[i];
-			id=id.replaceAll("http://www.digitalhps.org/dictionary/", "");
-			
+			DictionaryEntry dictionaryEntry=dictonaryManager.getUpdateFromWordPower("http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/",dictionaryId,values[i]);
+			msg= dictonaryManager.updateDictionariesItems(dictionaryId,values[i],dictionaryEntry.getLemma(),dictionaryEntry.getPos());
+			if(msg.equals("")){
+				
+			}else{
+				flag=1;
+				errormsg=msg;
+			}
 		}
-		String msg="";
-		if(msg.equals(""))
+		
+		if(flag==0)
 		{
+			logger.info("Successfully updated");
 			model.addAttribute("updatesuccess", 1);
-			model.addAttribute("updatesuccess", "Item :  updated successfully");
+			model.addAttribute("updatesuccessmsg", "Items updated successfully");
 		}else{
-			if(msg.equals("Item doesnot exists in this dictionary")){
+			logger.info("Please check :  errormsg");
+			if(errormsg.equals("Item doesnot exists in this dictionary")){
 				model.addAttribute("updatesuccess", 0);
-				model.addAttribute("updateerrormsg", "Item :  doesn't exist for dictionary id :" +dictionaryId);
+				model.addAttribute("updateerrormsg", "Items doesn't exist for dictionary id :" +dictionaryId);
 			}else{
 				model.addAttribute("updatesuccess", 0);
-				model.addAttribute("updateerrormsg", msg);
+				model.addAttribute("updateerrormsg", errormsg);
 			}
 		}
 		logger.info("Item Returned ");

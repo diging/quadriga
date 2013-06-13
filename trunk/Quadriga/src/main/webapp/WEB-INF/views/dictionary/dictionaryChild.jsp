@@ -133,25 +133,13 @@ function deleteItem(item){
 	
 
     	
-			<c:choose>
-			      <c:when test="${delsuccess=='1'}">
-				     <font color="blue"> <c:out value="${delsuccessmsg}"></c:out></font>
-				      
-			      </c:when>
 			
-			      <c:otherwise>
-			     	 <font color="red"><c:out value="${delerrormsg}"></c:out></font>
-			      
-			      </c:otherwise>
-		     </c:choose>
 
 	
 	
 	<H3>Dictionary Items for <c:out value="${dictName}"></c:out></H3>
     <hr>
-    <ul>
-    	
-		<li>
+
 			<c:choose>
 			      <c:when test="${success=='1'}">
 				     <font color="blue"> <c:out value="${successmsg}"></c:out></font>
@@ -163,13 +151,21 @@ function deleteItem(item){
 			      
 			      </c:otherwise>
 		     </c:choose>
-		</li>
-	</ul>
-    
-			     
-		     
-    <div class="container">
+
     <c:choose>
+			      <c:when test="${delsuccess=='1'}">
+				     <font color="blue"> <c:out value="${delsuccessmsg}"></c:out></font>
+				      
+			      </c:when>
+			
+			      <c:otherwise>
+			     	 <font color="red"><c:out value="${delerrormsg}"></c:out></font>
+			      
+			      </c:otherwise>
+		     </c:choose>
+			         
+    
+    		<c:choose>
 			      <c:when test="${updatesuccess=='1'}">
 				     <font color="blue"> <c:out value="${updatesuccessmsg}"></c:out></font>
 				      
@@ -180,13 +176,14 @@ function deleteItem(item){
 			      
 			      </c:otherwise>
 		     </c:choose>
+    <div class="container">
     <c:choose>
     <c:when test="${not empty dictionaryItemList}">
     
     <form method="POST"  >
 
-	<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'" value='Add Items'>
-		
+	
+	<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'" value='Add Items'/>		
     <input type="submit" value="Delete Items" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}'"/>
     
     <input type="submit" value="Update Items" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/updateDictionaryItems/${dictionaryid}'"/>
@@ -239,7 +236,10 @@ function deleteItem(item){
 	</table>
 	</form>
 	</c:when>
-
-	<c:otherwise> No dictionary items found</c:otherwise>
+	
+	<c:otherwise> 
+		<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'" value='Add Items'/>
+		<br>No dictionary items found
+	</c:otherwise>
 	</c:choose>
 	</div>

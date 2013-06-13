@@ -55,5 +55,5 @@ public interface IDBConnectionDictionaryManager {
 	 * 
 	 * @return Status message
 	 */
-	public abstract String updateDictionaryItems(String dictinaryId,String item,String id);
+	public abstract String updateDictionaryItems(String dictinaryId,String termid,String term ,String pos);
 }
