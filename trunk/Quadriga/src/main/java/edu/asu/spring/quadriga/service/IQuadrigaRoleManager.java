@@ -31,5 +31,12 @@ public interface IQuadrigaRoleManager {
 	 * @return 			List of QuadrigaRoles
 	 */
 	public abstract List<IQuadrigaRole> getQuadrigaRoles();
+
+	/**
+	 * Returns the role id used in the database for the given user role.
+	 * @param sQuadrigaRoleId	The quadriga role id of the user
+	 * @return	The database role id corresponding to the quadriga role
+	 */
+	public abstract String getQuadrigaRoleDBId(String sQuadrigaRoleId);
 	
 }
