@@ -14,6 +14,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -33,7 +34,7 @@ public class UserManager implements IUserManager {
 	private IDBConnectionManager dbConnect;
 
 	@Autowired
-	private QuadrigaRoleManager rolemanager;
+	private IQuadrigaRoleManager rolemanager;
 
 	@Autowired
 	private IUserFactory userFactory;
