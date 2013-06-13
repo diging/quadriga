@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS sp_getDictionaryItems;
 DELIMITER $$
 CREATE PROCEDURE sp_getDictionaryItems
 (
-  IN indictionaryid  VARCHAR(20),
+  IN inid  VARCHAR(20),
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
@@ -26,12 +26,12 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(indictionaryid IS NULL OR indictionaryid = "")
+    IF(inid IS NULL OR inid = "")
      THEN SET errmsg = "Dicitonary id cannot be empty.";
     END IF;
     
     IF NOT EXISTS (SELECT 1 FROM vw_dictionary
-                     WHERE dictionaryid = indictionaryid)
+                     WHERE id = inid)
       THEN SET errmsg = "Dicitonary id is invalid.";
     END IF;
 
@@ -39,10 +39,10 @@ BEGIN
      THEN SET errmsg = "";
             
       -- retrieve the item details
-      SELECT dictionaryid , items ,id,pos
+      SELECT termid , term ,pos
         FROM vw_dictionary_items
-	    WHERE dictionaryid = indictionaryid
-      ORDER BY items;
+	    WHERE id = inid
+      ORDER BY term;
      END IF;
 END$$
 DELIMITER ;

@@ -16,8 +16,8 @@ DROP PROCEDURE IF EXISTS sp_deleteDictionaryItems;
 DELIMITER $$
 CREATE PROCEDURE sp_deleteDictionaryItems	
 (
-  IN  indictionaryid    VARCHAR(100),
-  IN  initems    VARCHAR(50),
+  IN  indictionaryid varchar(200),
+  IN  intermid		varchar(200),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -28,16 +28,16 @@ BEGIN
 	
     -- validating the input variables
     IF(indictionaryid IS NULL OR indictionaryid = "")
-      THEN SET errmsg = "dictionaryid cannot be empty.";
+      THEN SET errmsg = "dictionary id cannot be empty.";
     END IF;
 
-    IF (initems IS NULL OR initems = "")
-	 THEN SET errmsg = "Items cannot be empty";
+    IF (intermid IS NULL OR intermid = "")
+	 THEN SET errmsg = "Term cannot be empty";
 	END IF;
-	
+
     
     IF NOT EXISTS(SELECT 1 FROM vw_dictionary_items
-				   WHERE dictionaryid = indictionaryid and items =initems)
+				   WHERE id = indictionaryid and termid =intermid)
      
       THEN SET errmsg = "Item doesnot exists in this dictionary";
     END IF; 
@@ -47,7 +47,7 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
 			DELETE FROM
-			tbl_dictionary_items WHERE dictionaryid=indictionaryid and items =initems;
+			tbl_dictionary_items WHERE id=indictionaryid and termid =intermid;
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

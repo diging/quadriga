@@ -16,11 +16,11 @@ DROP PROCEDURE IF EXISTS sp_addDictionaryItems;
 DELIMITER $$
 CREATE PROCEDURE sp_addDictionaryItems	
 (
-  IN  indictionaryid    VARCHAR(100),
-  IN  initems    VARCHAR(200),
-  IN  inid    VARCHAR(200),
-  IN  inpos    VARCHAR(50),
-  IN indictionaryowner VARCHAR(50),
+  IN  inid VARCHAR(200),
+  IN  interm    VARCHAR(200),
+  IN  intermid    VARCHAR(200),
+  IN  inpos    VARCHAR(50) ,
+  IN indictionaryowner VARCHAR(50) ,
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -30,15 +30,15 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 	
     -- validating the input variables
-    IF(indictionaryid IS NULL OR indictionaryid = "")
-      THEN SET errmsg = "dictionaryid cannot be empty.";
-    END IF;
-
-    IF (initems IS NULL OR initems = "")
+	IF (inid IS NULL OR inid = "")
+	 THEN SET errmsg = "Dictionary ID cannot be empty";
+	END IF;
+      
+    IF (interm IS NULL OR interm = "")
 	 THEN SET errmsg = "Items cannot be empty";
 	END IF;
 	
-	IF (inid IS NULL OR inid = "")
+	IF (intermid IS NULL OR intermid = "")
 	 THEN SET errmsg = "Word power id cannot be empty";
 	END IF;
 	
@@ -50,14 +50,19 @@ BEGIN
 	IF (indictionaryowner IS NULL OR indictionaryowner = "")
 	 THEN SET errmsg = "dictionary owner cannot be empty";
 	END IF;
-
+	
+	IF NOT EXISTS(SELECT 1 FROM vw_dictionary
+				   WHERE id = inid)
+      THEN SET errmsg = "Dictionary ID is not present";
+    END IF; 
+    
     IF NOT EXISTS(SELECT 1 FROM vw_quadriga_user
 				   WHERE username = indictionaryowner)
       THEN SET errmsg = "Invalid owner.Please enter the correct value.";
     END IF; 
     
     IF EXISTS(SELECT 1 FROM vw_dictionary_items
-				   WHERE dictionaryid = indictionaryid and items =initems and pos=inpos)
+				   WHERE id = inid and term =interm and termid=intermid and pos=inpos)
      
       THEN SET errmsg = "ItemExists";
     END IF; 
@@ -67,9 +72,9 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
             INSERT 
-              INTO tbl_dictionary_items(dictionaryid,items,id,pos,
+              INTO tbl_dictionary_items(id,term,termid,pos,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (indictionaryid,initems,inid,inpos,
+			 VALUES (inid,interm,intermid,inpos,
                      indictionaryowner,NOW(),indictionaryowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;

@@ -24,13 +24,6 @@
 				return;
 			}
 			
-
-			if (!$.trim($("#id").val())) {
-				$.alert("Please enter a dictionary ID","Oops !!!");
-				$("#id").val("");
-				event.preventDefault();
-				return;
-			}
 		});
 	});
 </script>
@@ -57,10 +50,6 @@
 				<td>Description:</td>
 				<td><form:textarea path="description" cols="23" rows="4"
 						id="description" /></td>
-			</tr>
-			<tr>
-				<td>Dictionary Id:</td>
-				<td><form:input path="id" size="30" id="id"/></td>
 			</tr>
 		</table>
 		<input class="command" type="submit" value="Create Dictionary">

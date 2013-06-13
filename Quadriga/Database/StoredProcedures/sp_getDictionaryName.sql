@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getDictionaryName;
 DELIMITER $$
 CREATE PROCEDURE sp_getDictionaryName
 (
-  IN  indictionaryid  VARCHAR(20),
+  IN  inid  VARCHAR(20),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN
@@ -27,12 +27,12 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(indictionaryid IS NULL OR indictionaryid = "")
+    IF(inid IS NULL OR inid = "")
      THEN SET errmsg = "Dictionary owner name cannot be empty.";
     END IF;
     
     IF NOT EXISTS (SELECT 1 FROM vw_dictionary
-                     WHERE dictionaryid = indictionaryid)
+                     WHERE id = inid)
       THEN SET errmsg = "Dictionary id is invalid.";
     END IF;
 
@@ -41,7 +41,7 @@ BEGIN
      -- retrieve the dictionary details
 	 SELECT dictionaryname
        FROM vw_dictionary
-	   WHERE dictionaryid = indictionaryid;
+	   WHERE id = inid;
 	END IF;
 END$$
 DELIMITER ;
