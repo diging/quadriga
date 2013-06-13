@@ -104,9 +104,18 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		return null;
 	}
 
+
+
 	@Override
-	public String updateDictionariesItems(String dictionaryId, String item,
-			String id) {
+	public String updateDictionariesItems(String dictionaryId, String itemid,
+			String term, String pos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DictionaryEntry getUpdateFromWordPower(String url,
+			String dictionaryId, String itemid) {
 		// TODO Auto-generated method stub
 		return null;
 	}

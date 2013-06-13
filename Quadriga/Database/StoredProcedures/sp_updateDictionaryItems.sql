@@ -17,8 +17,9 @@ DELIMITER $$
 CREATE PROCEDURE sp_updateDictionaryItems	
 (
   IN  indictionaryid    VARCHAR(100),
-  IN  initems    VARCHAR(50),
-  IN  inid    VARCHAR(50),
+  IN  intermid    VARCHAR(200),
+  IN  interm    VARCHAR(50),
+  IN  inpos    VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -32,17 +33,20 @@ BEGIN
       THEN SET errmsg = "dictionaryid cannot be empty.";
     END IF;
 
-    IF (initems IS NULL OR initems = "")
+    IF (intermid IS NULL OR intermid = "")
 	 THEN SET errmsg = "Items cannot be empty";
 	END IF;
 	
-	IF (inid IS NULL OR inid = "")
+	IF (interm IS NULL OR interm = "")
 	 THEN SET errmsg = "id cannot be empty";
 	END IF;
 	
+	IF (inpos IS NULL OR inpos = "")
+	 THEN SET errmsg = "id cannot be empty";
+	END IF;
     
     IF NOT EXISTS(SELECT 1 FROM vw_dictionary_items
-				   WHERE dictionaryid = indictionaryid and items =initems)
+				   WHERE id = indictionaryid and termid =intermid)
      
       THEN SET errmsg = "Item doesnot exists in this dictionary";
     END IF; 
@@ -52,7 +56,7 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
 			UPDATE 
-			tbl_dictionary_items SET id=inid WHERE dictionaryid=indictionaryid and items =initems;
+			tbl_dictionary_items SET term=interm,pos=inpos WHERE id=indictionaryid and termid =intermid;
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

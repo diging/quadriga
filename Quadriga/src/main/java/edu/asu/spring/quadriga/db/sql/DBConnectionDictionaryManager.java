@@ -450,7 +450,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 	
 	@Override
-	public String updateDictionaryItems(String dictinaryId,String item,String id)
+	public String updateDictionaryItems(String dictinaryId,String termid,String term ,String pos)
 	{
 
         String dbCommand;
@@ -460,7 +460,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
         
         //command to call the SP
-        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.UPDATE_DICTIONARY_ITEM  + "(?,?,?,?)";
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.UPDATE_DICTIONARY_ITEM  + "(?,?,?,?,?)";
         
         //get the connection
         getConnection();
@@ -472,15 +472,16 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
         	
         	//adding the input variables to the SP
         	sqlStatement.setString(1, dictinaryId);
-        	sqlStatement.setString(2, item);
-        	sqlStatement.setString(3, id);
+        	sqlStatement.setString(2, termid);
+        	sqlStatement.setString(3, term);
+        	sqlStatement.setString(4, pos);
         	
         	//adding output variables to the SP
-			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(4);
+			errmsg = sqlStatement.getString(5);
 			
 			if(errmsg.isEmpty())
 			{
@@ -493,8 +494,9 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			
         }
         catch(SQLException e)
-        {
-        	throw new RuntimeException(e.getMessage());
+        {	
+        	logger.info("Please check the logs for null pointer ");
+        	throw new RuntimeException("Something wrong in the database");
         }
         finally
         {
