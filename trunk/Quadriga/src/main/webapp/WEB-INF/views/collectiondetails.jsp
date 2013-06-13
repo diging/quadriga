@@ -20,6 +20,11 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 });
+$(document).ready(function() {
+	$("input[type=submit]").button().click(function(event) {
+		
+	});
+});
 
 
 </script>
@@ -36,14 +41,18 @@ $(document).ready(function() {
 			Collection items for  <span contenteditable="true"> ${concept.name}</span>
 		</h3><hr>
 <br>
+<form method="post">
 	<input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/searchitems'"
 		value='Add Items'>
+	<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/deleteitems'" value='Delete Items'>
+		<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/updateitems'" value="Update Items">
 <br><br>
+
 	<table style="width: 100%" class="display dataTable" id="conceptSearch">
 		<thead>
 			<tr>
-
+				<th>Select Items</th>
 				<th>Lemma</th>
 				<th>ID</th>
 				<th>POS</th>
@@ -55,7 +64,7 @@ $(document).ready(function() {
 
 			<c:forEach var="conceptItem" items="${concept.items}">
 				<tr class="gradeX">
-
+					<td> <input type="checkbox" name="selected" value="${conceptItem.name}" /></td>
 					<td align="justify"><font size="2"><c:out
 								value="${conceptItem.lemma}"></c:out></font></td>
 					<td width="25%" align="justify"><font size="2"><c:out
@@ -73,6 +82,7 @@ $(document).ready(function() {
 		</tbody>
 
 	</table>
+	</form>
 </div>
 
 

@@ -28,7 +28,7 @@ $(document).ready(function() {
 	<h3>
 			Concept Search
 		</h3><hr>
-<form  action="${pageContext.servletContext.contextPath}/auth/searchitems">
+<form  action="${pageContext.servletContext.contextPath}/auth/searchitems" method="get">
 <table>
 <tr>
 		<td>Word:</td>
@@ -57,7 +57,7 @@ $(document).ready(function() {
 
 <c:if test="${not empty result}">
 		<h3>Results Of the search</h3>
-		<form action="conceptcollections/addItems" >
+		<form action="conceptcollections/addItems" method="post">
 		<input type="submit"  value="Select & Save" /><br><br>
 		<table cellpadding="0" cellspacing="0"	class="display dataTable"  id="conceptSearch">
 			<thead>

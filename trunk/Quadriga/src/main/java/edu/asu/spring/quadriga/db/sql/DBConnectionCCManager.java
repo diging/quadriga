@@ -19,7 +19,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import freemarker.log.Logger;
 
 /**
  * @author satyaswaroop
@@ -248,7 +247,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
 
 	@Override
 	public String addCollection(IConceptCollection con) {
-		// TODO Auto-generated method stub
+		
 		
 		String name;
 		String description;
@@ -308,6 +307,113 @@ public class DBConnectionCCManager extends ADBConnectionManager implements IDBCo
         }
 
 		
+	}
+
+	@Override
+	public String deleteItems(String id, String collectionName) {
+		
+		
+        String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+      
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_COLLECTION_ITEM  + "(?,?,?)";
+        
+        //get the connection
+        getConnection();
+        
+        //establish the connection with the database
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, id);
+        	sqlStatement.setString(2, collectionName);
+        	
+        	
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(3);
+			
+			if(errmsg.isEmpty())
+			{
+				return errmsg;
+			}
+			else
+			{
+				return errmsg;
+			}
+			
+        }
+        catch(SQLException e)
+        {
+        	throw new RuntimeException(e.getMessage());
+        }
+        finally
+        {
+        	closeConnection();
+        }
+		
+	}
+
+	@Override
+	public String updateItem(IConcept concept, String collectionName) {
+		
+        String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+     
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.UPDATE_COLLECTION_ITEM  + "(?,?,?,?,?,?)";
+        
+        //get the connection
+        getConnection();
+        
+        //establish the connection with the database
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, concept.getName());
+        	sqlStatement.setString(2, concept.getLemma());
+        	sqlStatement.setString(3, concept.getDescription());
+        	sqlStatement.setString(4, concept.getPos());
+        	sqlStatement.setString(5, collectionName);
+        	
+       
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(6);
+			
+			if(errmsg.isEmpty())
+			{
+				return errmsg;
+			}
+			else
+			{
+				return errmsg;
+			}
+			
+        }
+        catch(SQLException e)
+        {
+        	throw new RuntimeException(e.getMessage());
+        }
+        finally
+        {
+        	closeConnection();
+        }
 	}
 	
 	
