@@ -32,10 +32,10 @@ ALTER TABLE tbl_project_workspace
 ADD FOREIGN KEY(projectid) REFERENCES tbl_project(projectid);
 
 ALTER TABLE tbl_project_workspace
-ADD FOREIGN KEY(workspaceid)REFERENCES tbl_workspace(id);
+ADD FOREIGN KEY(workspaceid)REFERENCES tbl_workspace(workspaceid);
 
 ALTER TABLE tbl_project
-ADD FOREIGN KEY(projectowner)  REFERENCES tbl_quadriga_user(username);
+ADD FOREIGN KEY(projectowner)REFERENCES tbl_quadriga_user(username);
 
 ALTER TABLE tbl_quadriga_user_denied
 ADD FOREIGN KEY(deniedby) REFERENCES tbl_quadriga_user(username);
@@ -44,7 +44,7 @@ ALTER TABLE tbl_workspace_collaborator
 ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username);
 
 ALTER TABLE tbl_workspace_collaborator
-ADD FOREIGN KEY(id) REFERENCES tbl_workspace(id);
+ADD FOREIGN KEY(id) REFERENCES tbl_workspace(workspaceid);
 
 ALTER TABLE tbl_workspace
 ADD FOREIGN KEY(workspaceowner)  REFERENCES tbl_quadriga_user(username);  
