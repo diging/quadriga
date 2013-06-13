@@ -6,7 +6,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryEntry;
+import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 /**
  * Interface that has methods to be implemented on the DictionaryManager class
  * 
@@ -24,10 +24,10 @@ public interface IDictionaryManager {
 	
 	public abstract String getDictionaryName(String dictionaryid);
 	
-	public abstract DictionaryEntry searchWordPower(String item,String pos);
+	public abstract WordpowerReply.DictionaryEntry searchWordPower(String item,String pos);
 	
 	public abstract String deleteDictionariesItems(String dictionaryId,String item);
 	
 	public abstract String updateDictionariesItems(String dictionaryId,String itemid,String term,String pos);
-	public abstract DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid);
+	public abstract WordpowerReply.DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid);
 }
