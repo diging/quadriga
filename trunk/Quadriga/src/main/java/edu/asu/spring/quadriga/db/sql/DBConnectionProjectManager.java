@@ -12,6 +12,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
@@ -53,6 +55,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
 
+	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectManager.class);
 		
 	/**
 	 *  @Description: Assigns the data source
@@ -493,6 +496,51 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
         finally
         {
         	closeConnection();
+        }
+	}
+	
+	/**
+	 * @description     : This project deletes the projects form 
+	 *                    tbl_project_workspace,tbl_project_collaborator
+	 *                    tbl_project
+	 * @param           : projectIdList - Project internal id's in a comma 
+	 *                    separated string.
+	 * @return          : errmsg - blank identifies success and null identifies
+	 *                    error in deleting the records.
+	 * @author          : Kiran Kumar Batna
+	 */
+	@Override
+	public String deleteProjectRequest(String projectIdList)
+	{
+		String dbCommand;
+		CallableStatement sqlStatement;
+		String errmsg;
+		
+		//command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_REQUEST + "(?,?)";
+        
+        logger.info("Deleting project inernal ids : "+projectIdList);
+        //get the connection
+        getConnection();
+        
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	sqlStatement.setString(1,projectIdList);
+        	sqlStatement.registerOutParameter(2, Types.VARCHAR);
+        	
+        	sqlStatement.execute();
+        	
+        	errmsg = sqlStatement.getString(2);
+        	
+        	return errmsg;
+        }
+        catch(SQLException ex)
+        {
+        	logger.info("Deleting project inernal ids error : "+ex.getMessage());
+        	throw new RuntimeException(ex.getMessage());
+        	
         }
 	}
 }

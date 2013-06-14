@@ -20,7 +20,15 @@ public interface IProjectManager {
 	
 	public abstract String updateProjectDetails(Project existingProject);
 	
-	public abstract int deleteProject(String projectId);
+	/**
+	 * @description : Interface to delete the project rows from the 
+	 *                database.
+	 * @param       : projectIdList - String of comma(,) separated 
+	 *                project Ids. 
+	 * @return      : errmsg - blank on success and null on failure
+	 * @author      : Kiran Kumar Batna
+	 */
+	public abstract String deleteProject(String projectIdList);
 	
 	/**
 	 * Calls DBconnection manager to add the given project

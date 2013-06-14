@@ -16,9 +16,6 @@ import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
-import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
 import edu.asu.spring.quadriga.service.IProjectManager;
@@ -71,9 +68,22 @@ public class ProjectManager implements IProjectManager {
 		
 	}
 
+	/**
+	 *  @description : This calls dbConnectionProjectManger to 
+	 *                 delete the project records form the tables.
+	 *  @param       : projectIdList - String of comma(,) separated 
+	 *                 project Ids.
+	 *  @return      : errmsg - blank on success and null on failure
+	 *  @author      : Kiran Kumar Batna
+	 */
 	@Override
-	public int deleteProject(String projectId) {
-		throw new NotImplementedException("deleteProject() is not yet implemented");
+	public String deleteProject(String projectIdList) 
+	{
+		String errmsg;
+		
+		errmsg = dbConnect.deleteProjectRequest(projectIdList);
+		
+		return null;
 		
 	}
 

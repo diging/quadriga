@@ -68,9 +68,9 @@ public class MockupProjectManager implements IProjectManager{
 	}
 
 	@Override
-	public int deleteProject(String projectId) {
+	public String deleteProject(String projectId) {
 		
-		return 0;
+		throw new RuntimeException("Mockup manger delete project not implemented");
 	}
 
 	@Override

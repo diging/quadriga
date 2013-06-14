@@ -91,4 +91,13 @@ public interface IDBConnectionProjectManager
 	 * @author rohit pendbhaje
 	 */
 	public abstract int addCollaboratorRequest(ICollaborator collaborator);
+	
+	/**
+	 * @description    :Interface to delete projects.
+	 * @param          :projectIdList - Project internal id's in a comma(,) 
+	 *                  separated string.
+	 * @return         :errmsg - blank on success and null on failure.
+	 * @author         :Kiran Kumar Batna
+	 */
+	public abstract String deleteProjectRequest(String projectIdList);
 }

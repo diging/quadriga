@@ -57,7 +57,8 @@ public class WorkbenchController {
 
 	private static final Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
 
-	@Autowired IProjectManager projectmanager;
+	@Autowired 
+	IProjectManager projectmanager;
 	List<IProject> projectlist;
 	String username;
 	IProject project;
@@ -69,10 +70,10 @@ public class WorkbenchController {
 	@Autowired 
 	IProjectFactory projectFactory;
 	IUser user;
-	
+
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
-	
+
 	@Autowired
 	private IDspaceManager dspaceManager;
 
@@ -96,7 +97,7 @@ public class WorkbenchController {
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String userName = principal.getUsername();
-		
+
 		projectlist = projectmanager.getProjectsOfUser(userName);
 		model.addAttribute("projectlist", projectlist);
 
@@ -129,17 +130,17 @@ public class WorkbenchController {
 	public String getProjectPage(@PathVariable("projectid") int projectid, ModelMap model) throws SQLException {
 
 		IProject project = projectmanager.getProject(projectid);
-		
+
 		model.addAttribute("project", project);
 
-		
+
 		ICollaborator collaborator = null;
-	/*	int success = projectmanager.addCollaborators(collaborator);
+		/*	int success = projectmanager.addCollaborators(collaborator);
 		if(success == 1)
 		{
 			model.addAttribute("success", 1);
 		}*/
-		
+
 		return "auth/workbench/project";
 	}
 
@@ -153,9 +154,9 @@ public class WorkbenchController {
 	 * @author       : Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/addproject", method=RequestMethod.GET)
-	public String addprojectform(Model m)
+	public String addprojectform(Model model)
 	{
-		m.addAttribute("project",projectFactory.createProjectObject());
+		model.addAttribute("project",projectFactory.createProjectObject());
 		return "auth/workbench/addproject"; 
 	}
 
@@ -179,7 +180,7 @@ public class WorkbenchController {
 			project.setOwner(user);
 
 			errmsg = projectmanager.addNewProject(project);
-			
+
 			if(errmsg.equals(""))
 			{
 				model.addAttribute("success", 1);
@@ -194,7 +195,38 @@ public class WorkbenchController {
 		}
 		return "auth/workbench/addProjectStatus";
 	}
-	
+
+	/**
+	 * @description : This method calls usermanager to delete the projects.
+	 *                for deletion
+	 * @param       : model
+	 * @param       : principal
+	 * @return      : String - URL on success or failure.
+	 * @author      : Kiran Kumar Batna
+	 */
+	@RequestMapping(value="auth/workbench/deleteproject", method=RequestMethod.GET)
+	public String deleteProjectform(Model model,Principal principal)
+	{
+		String userName;
+
+		try
+		{
+			if(projectlist == null)
+			{
+				userName = principal.getName();
+				projectlist = projectmanager.getProjectsOfUser(userName);
+			}
+			
+			//adding the project details to the model
+			model.addAttribute("projectlist", projectlist);
+			
+		}
+		catch(SQLException ex)
+		{
+			throw new RuntimeException(ex.getMessage());
+		}
+		return "auth/workbench/deleteproject";
+	}
 	
 	/**
 	 * Simply selects the workspace communities view to render by returning its path.
@@ -208,19 +240,19 @@ public class WorkbenchController {
 
 	@RequestMapping(value = "/auth/workbench/workspace/communities", method = RequestMethod.GET)
 	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
-		
+
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		
+
 		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
 
 		model.addAttribute("communityList", communities);
 
 		return "auth/workbench/workspace/communities";
 	}
-	
+
 	@RequestMapping(value = "/auth/workbench/workspace/community/{communityTitle}", method = RequestMethod.GET)
 	public String workspaceCommunityRequest(@PathVariable("communityTitle") String communityTitle, ModelMap model, Principal principal) {
-		
+
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 		List<ICollection> collections = dspaceManager.getAllCollections(principal.getName(),sPassword, communityTitle);
 
@@ -230,35 +262,35 @@ public class WorkbenchController {
 		return "auth/workbench/workspace/community/collection";
 	}
 
-	
+
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.GET)
 	public ModelAndView addCollaboratorForm()
 	{
 		return new ModelAndView("auth/workbench/{projectid}/addcollaborator","command", collaboratorFactory.createCollaborator());
 	}
-	
-		
+
+
 	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
 	public String displayCollaborator(@PathVariable("projectid") int projectid, ModelMap model){
-		
+
 		IProject project = projectmanager.showNonExistingCollaborator(projectid);
 		model.addAttribute("project", project);
 
 		IProject project1 = projectmanager.showExistingCollaborator(projectid);
 		model.addAttribute("project1", project1);
 
-		
+
 		return "auth/workbench/showCollaborators";
-		
+
 	}
-	
-	
+
+
 	/*@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.POST)
 	public String addCollaborators( @ModelAttribute("ModelAndView")Collaborator collaborator, @PathVariable("projectid") String id,   Model model,
 			Principal principal)	
 	{
 		int success = projectmanager.addCollaborators(collaborator);
-		
+
 		if(success == 1)
 		{
 			model.addAttribute("success", 1);
@@ -266,18 +298,18 @@ public class WorkbenchController {
 		model.addAttribute("projectid", id);
 		return "auth/workbench/addCollaborator";
 	}*/
-	
 
-	
+
+
 	@RequestMapping(value = "/auth/workbench/workspace/ajaxtest", method = RequestMethod.GET)
-    public @ResponseBody String getTime() {
- 
-        Random rand = new Random();
-        float r = rand.nextFloat() * 100;
-        String result = "<br>The Random # is <b>" + r + "</b>. Generated on <b>" + new Date().toString() + "</b>";
-        System.out.println("Debug Message from Spring-Ajax-JQuery Controller.." + new Date().toString());
-        return result;
-    }
+	public @ResponseBody String getTime() {
+
+		Random rand = new Random();
+		float r = rand.nextFloat() * 100;
+		String result = "<br>The Random # is <b>" + r + "</b>. Generated on <b>" + new Date().toString() + "</b>";
+		System.out.println("Debug Message from Spring-Ajax-JQuery Controller.." + new Date().toString());
+		return result;
+	}
 
 }
 
