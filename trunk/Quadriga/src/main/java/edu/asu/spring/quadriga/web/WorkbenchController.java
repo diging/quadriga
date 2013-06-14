@@ -39,7 +39,7 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.domain.implementation.Project;
-import edu.asu.spring.quadriga.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -301,15 +301,15 @@ public class WorkbenchController {
 
 
 
-	@RequestMapping(value = "/auth/workbench/workspace/ajaxtest", method = RequestMethod.GET)
-	public @ResponseBody String getTime() {
-
-		Random rand = new Random();
-		float r = rand.nextFloat() * 100;
-		String result = "<br>The Random # is <b>" + r + "</b>. Generated on <b>" + new Date().toString() + "</b>";
-		System.out.println("Debug Message from Spring-Ajax-JQuery Controller.." + new Date().toString());
-		return result;
-	}
+//	@RequestMapping(value = "/auth/workbench/workspace/ajaxtest", method = RequestMethod.GET)
+//	public @ResponseBody String getTime() {
+//
+//		Random rand = new Random();
+//		float r = rand.nextFloat() * 100;
+//		String result = "<br>The Random # is <b>" + r + "</b>. Generated on <b>" + new Date().toString() + "</b>";
+//		System.out.println("Debug Message from Spring-Ajax-JQuery Controller.." + new Date().toString());
+//		return result;
+//	}
 
 }
 

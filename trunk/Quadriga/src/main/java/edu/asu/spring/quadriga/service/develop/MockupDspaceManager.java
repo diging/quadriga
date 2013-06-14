@@ -9,7 +9,7 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Community;
-import edu.asu.spring.quadriga.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 
 //@Service
 public class MockupDspaceManager {

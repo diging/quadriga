@@ -2,25 +2,6 @@
 
 <!-- Content -->
 
-<script type="text/javascript">
-    function randomNumberAjax() {
-        $.ajax({
-        	type: 'GET',
-            url : '/quadriga/auth/workbench/workspace/ajaxtest',
-            success : function(data) {
-                $('#result').html(data);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-            	$('#result').html("Sorry, Unable to connect to Dspace");
-            }
-
-        });
-    }
-    
-    var intervalId = 0;
-    intervalId = setInterval(randomNumberAjax, 3000);
-</script>
-
 <article class="is-page-content">
 	<c:choose>
 		<c:when test="${not empty communityList}">
