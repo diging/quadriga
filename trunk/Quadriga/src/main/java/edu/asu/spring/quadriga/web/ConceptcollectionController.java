@@ -189,12 +189,14 @@ public class ConceptcollectionController {
 		
 		
 		String[] values= req.getParameterValues("selected");
+		if(values!=null){
 		for(String id : values)
 		{
 			conceptControllerManager.deleteItem(id,concept.getName());
-			con = conFact.createConceptObject();con.setName(id);
+			con = conFact.createConceptObject();con.setId(id);
 			concept.getItems().remove(concept.getItems().indexOf(con));
 			
+		}
 		}
 		
 		conceptControllerManager.getCollectionDetails(concept);
@@ -205,6 +207,7 @@ public class ConceptcollectionController {
 	@RequestMapping(value = "auth/conceptcollections/updateitems", method = RequestMethod.POST)
 	public String conceptUpdateHandler(HttpServletRequest req, ModelMap model) throws SQLException{
 		String[] values= req.getParameterValues("selected");
+		if(values!=null)
 		conceptControllerManager.update(values,concept);
 		
 		return "redirect:/auth/conceptdetails";

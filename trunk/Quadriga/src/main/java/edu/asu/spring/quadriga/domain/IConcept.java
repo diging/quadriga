@@ -9,9 +9,9 @@ package edu.asu.spring.quadriga.domain;
  */
 public interface IConcept {
 	
-	public abstract String getName();
+	public abstract String getId();
 	public abstract String getPos();
-	public abstract void setName(String name);
+	public abstract void setId(String name);
 	
 	
 	

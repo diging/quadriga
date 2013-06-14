@@ -65,11 +65,11 @@ $(document).ready(function() {
 
 			<c:forEach var="conceptItem" items="${concept.items}">
 				<tr class="gradeX">
-					<td> <input type="checkbox" name="selected" value="${conceptItem.name}" /></td>
+					<td> <input type="checkbox" name="selected" value="${conceptItem.id}" /></td>
 					<td align="justify"><font size="2"><c:out
 								value="${conceptItem.lemma}"></c:out></font></td>
 					<td width="25%" align="justify"><font size="2"><c:out
-								value="${conceptItem.name}"></c:out></font></td>
+								value="${conceptItem.id}"></c:out></font></td>
 					<td class="center" align="justify"><font size="2"><c:out
 								value="${conceptItem.pos}"></c:out></font></td>
 					<td width="30%" align="justify"><font size="2"><c:out

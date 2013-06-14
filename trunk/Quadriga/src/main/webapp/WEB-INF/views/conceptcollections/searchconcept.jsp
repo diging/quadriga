@@ -2,8 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<!DOCTYPE html>
-<html>
+
 <style>
 form input.chk
 {-webkit-appearance: checkbox;}
@@ -102,10 +101,3 @@ $(document).ready(function() {
 				</form>
 	</c:if>
 
-
-
-
-
-
-
-</html>
