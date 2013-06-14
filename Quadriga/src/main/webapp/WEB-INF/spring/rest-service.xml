@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- This file contains the spring RestTemplate configuration details. To 
@@ -10,12 +11,12 @@
 
 <bean id="dspaceFilePath" class="java.lang.String">
 		<constructor-arg>
-<!-- 			<value>C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts</value> -->
-			<value>/home/tomcat/webapps/certificates/jssecacerts</value>
+			<value>C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts</value> 
+<!-- 			<value>/home/tomcat/webapps/certificates/jssecacerts</value> -->
 		</constructor-arg>
 	</bean>
 
-	<bean id="DspaceManager" class="edu.asu.spring.quadriga.service.impl.DspaceManager"
+	<bean id="DspaceManager" class="edu.asu.spring.quadriga.dspace.service.impl.DspaceManager"
 		init-method="start">
 	</bean>
 

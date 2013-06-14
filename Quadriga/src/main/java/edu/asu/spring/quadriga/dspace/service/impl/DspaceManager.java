@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl;
+package edu.asu.spring.quadriga.dspace.service.impl;
 
 
 import java.util.List;
@@ -9,6 +9,8 @@ import javax.inject.Named;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +23,8 @@ import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Collections;
 import edu.asu.spring.quadriga.domain.implementation.Communities;
 import edu.asu.spring.quadriga.domain.implementation.Community;
-import edu.asu.spring.quadriga.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 
 /**
  * The purpose of the class is to make rest service calls to dspace
@@ -42,13 +45,12 @@ public class DspaceManager implements IDspaceManager{
 	@Qualifier("dspaceFilePath")
 	private String filePath;
 	
-	private String userName;
-	private String password;
-
-	@Inject
-	@Named("restTemplate")
-	RestTemplate restTemplate;
-
+	//Handle to the proxy community manager class
+	@Autowired
+	@Qualifier("proxyCommunityManager")
+	ICommunityManager proxyCommunityManager;
+	
+	
 	public String getUrl() {
 		return url;
 	}
@@ -56,15 +58,6 @@ public class DspaceManager implements IDspaceManager{
 		this.url = url;
 	}
 
-	public DspaceManager() {
-		userName = "ramk@asu.edu";
-		password = "123456";
-	}
-
-	private String getCompleteUrlPath(String restPath)
-	{
-		return "https://"+url+restPath+"?email="+userName+"&password="+password;
-	}
 	@Override
 	public void checkRestConnection(String sUserName, String sPassword)
 	{
@@ -75,34 +68,8 @@ public class DspaceManager implements IDspaceManager{
 
 	@Override
 	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
-		//TODO: Uncomment to user the correct username and password
-		//		this.userName = sUserName;
-		//		this.password = sPassword;
-		String sRestServicePath = getCompleteUrlPath("/rest/communities.xml");
-		ICommunities communities = (Communities)restTemplate.getForObject(sRestServicePath, Communities.class);
-
-		//TODO Remove these code snippets after final development
-		//		for(ICommunity c:communities.getCommunities())
-		//		{
-		//			System.out.println(c.getId());			
-		//			System.out.println(c.getName());
-		//			System.out.println(c.getDescription());
-		//			System.out.println(c.getIntroductoryText());
-		//			System.out.println(c.getCountItems());
-		//			System.out.println(c.getEntityReference());
-		//			System.out.println(c.getHandle());
-		//			System.out.println(c.getEntityId());
-		//			System.out.println("Total Collections: "+c.getCollections().getCollections().size());
-		//			for(ICollection collection: c.getCollections().getCollections())
-		//			{
-		////				System.out.println(collection.getId()+"-"+getCollectionName(sUserName, sPassword, collection.getId()));
-		//				System.out.print(collection.getId()+" ");
-		//			}
-		//			System.out.println("\n-----------------------------------------------------------");
-		//		}
-
-
-		return communities.getCommunities();
+		
+		return proxyCommunityManager.getAllCommunities(sUserName, sPassword);
 	}
 
 	@Override
@@ -120,7 +87,7 @@ public class DspaceManager implements IDspaceManager{
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
-	 * 
+	 * It will be invoked only once.
 	 */
 	public void start()
 	{
