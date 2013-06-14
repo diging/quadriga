@@ -240,6 +240,7 @@ public class DictionaryManager implements IDictionaryManager {
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
 			logger.info("Lemma from rest template "+dictionaryEntry.getLemma());
 		}catch(Exception e){
+			
 			e.printStackTrace();
 		}
 		return dictionaryEntry;

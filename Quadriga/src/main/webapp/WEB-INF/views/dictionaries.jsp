@@ -31,15 +31,14 @@ $(document).ready(function() {
 	</ul>		
 <!-- 
 <div class="example4">	<a href="/quadriga/auth/dictionaries/addDictionary">Add Dictionary</a></div>-->
-	<c:choose>
-    	<c:when test="${success=='1'}">
-    		<span class="byline"><c:out value="${successMsg}"></c:out></span>
-    	</c:when>
-		<c:otherwise> 
-			<span class="byline"><c:out value="${errormsg}"></c:out></span>
-		</c:otherwise>
-	</c:choose>
+
 	
+	<c:choose>
+    	<c:when test="${adddicsuccess=='1'}">
+    		<font color="blue"><c:out value="${adddicsuccessMsg}"></c:out></font>
+    	</c:when>
+	</c:choose>
+	<br/>
 	<div  style="float: left; width: 45%; border-radius:5px; border:2px solid #e3daa8; padding: 20px;">
 	<h4 align="center"> You own these Dictionaries</h4>
     <c:choose>
