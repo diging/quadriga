@@ -65,8 +65,8 @@
 			value="/WEB-INF/views/users/requestAccountError.jsp" />
 	</definition>
 	<!-- ConceptCollection pages -->
-	<definition name="base.definition.conceptcollections" extends="base.definition">
-		<put-attribute name="currentPage" value="conceptcollections" />
+	<definition name="base.definition.conceptcollections" extends="base.definition.nonav">
+		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
