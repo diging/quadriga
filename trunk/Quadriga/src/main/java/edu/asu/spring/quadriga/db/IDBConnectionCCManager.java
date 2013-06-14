@@ -65,4 +65,13 @@ public interface IDBConnectionCCManager {
 		 * @return
 		 */
 		public abstract String updateItem(IConcept concept, String collectionName);
+		
+		/**
+		 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
+		 * 
+		 * @return Success - 1
+		 * @author satya swaroop boddu
+		 */
+		public abstract int setupTestEnvironment(String sQuery);
+		
 	}
