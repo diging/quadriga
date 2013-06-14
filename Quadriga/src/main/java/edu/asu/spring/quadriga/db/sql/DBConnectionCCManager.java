@@ -60,6 +60,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);
+			if(errmsg==null || errmsg.isEmpty()){
 			ResultSet resultSet = sqlStatement.getResultSet();
 			if (resultSet.next()) {
 				do {
@@ -69,6 +70,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					conceptCollection.setDescription(resultSet.getString(2));
 					collectionsList.add(conceptCollection);
 				} while (resultSet.next());
+			}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -103,6 +105,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);
+			if(errmsg==null || errmsg.isEmpty())
+			{
 			ResultSet resultSet = sqlStatement.getResultSet();
 			if (resultSet.next()) {
 				do {
@@ -113,6 +117,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 					collectionsList.add(conceptCollection);
 				} while (resultSet.next());
+			}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -142,19 +147,21 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);
-			System.out.println(errmsg);
-			ResultSet resultSet = sqlStatement.getResultSet();
-			if (resultSet.next()) {
+			if(errmsg==null || errmsg.isEmpty())
+			{
+				ResultSet resultSet = sqlStatement.getResultSet();
+				if (resultSet.next()) {
 				do {
 
 					concept = conceptFactory.createConceptObject();
 					concept.setLemma(resultSet.getString(5));
-					concept.setName(resultSet.getString(2));
+					concept.setId(resultSet.getString(2));
 					concept.setPos(resultSet.getString(4));
 					concept.setDescription(resultSet.getString(3));
 					collection.addItem(concept);
 				} while (resultSet.next());
 			}
+			}	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -296,7 +303,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setString(1, concept.getName());
+			sqlStatement.setString(1, concept.getId());
 			sqlStatement.setString(2, concept.getLemma());
 			sqlStatement.setString(3, concept.getDescription());
 			sqlStatement.setString(4, concept.getPos());
