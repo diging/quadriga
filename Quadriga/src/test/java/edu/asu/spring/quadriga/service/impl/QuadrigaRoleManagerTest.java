@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 /**
  * 
@@ -59,7 +60,7 @@ public class QuadrigaRoleManagerTest {
 
 	@Test
 	public void testSetQuadrigaRoles() {
-		QuadrigaRoleManager qrManager = new QuadrigaRoleManager();
+		IQuadrigaRoleManager qrManager = new QuadrigaRoleManager();
 		
 		//Assign null
 		qrManager.setQuadrigaRoles(null);

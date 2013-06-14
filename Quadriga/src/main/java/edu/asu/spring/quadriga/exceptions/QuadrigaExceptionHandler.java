@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.web.HomeController;
+import edu.asu.spring.quadriga.web.HomeControllerTest;
 
 /**
  * This class handles exceptions thrown in Controller classes.
