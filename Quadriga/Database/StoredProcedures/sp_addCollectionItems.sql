@@ -62,7 +62,7 @@ BEGIN
       		THEN SET errmsg = "ItemExists";
     		END IF; 
     		IF (errmsg = "")
-            INSERT 
+            THEN INSERT 
               INTO tbl_conceptcollections_items(id, item, lemma, pos, description,
                          updateddate,createddate)
 			 VALUES (varcollectionid, initem, inlemma, inpos, indescription

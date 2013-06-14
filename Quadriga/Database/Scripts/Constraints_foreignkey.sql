@@ -1,5 +1,5 @@
 ALTER TABLE tbl_conceptcollections_collaborator
-ADD FOREIGN KEY(collectionid) REFERENCES tbl_conceptcollections(collectionid);
+ADD FOREIGN KEY(collectionid) REFERENCES tbl_conceptcollections(id);
 
 ALTER TABLE tbl_conceptcollections_collaborator
 ADD FOREIGN KEY(collaboratoruser) REFERENCES tbl_quadriga_user(username);

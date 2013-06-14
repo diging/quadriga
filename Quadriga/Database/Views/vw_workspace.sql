@@ -12,8 +12,8 @@ Modified Date : 05/30/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_workspace;
 
-CREATE VIEW vw_workspace(workspacename,description,id,workspaceowner)
+CREATE VIEW vw_workspace(workspacename,description,workspaceid,workspaceowner)
 AS
-  SELECT workspacename,description,id,workspaceowner
+  SELECT workspacename,description,workspaceid,workspaceowner
     FROM tbl_workspace;
 

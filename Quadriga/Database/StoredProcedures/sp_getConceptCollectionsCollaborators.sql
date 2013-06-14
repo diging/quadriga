@@ -48,7 +48,7 @@ BEGIN
       SELECT collectionid,collaboratoruser, 
          GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole'
         FROM vw_conceptcollections_collaborator
-	    WHERE collectionid = varcollectionid
+	    WHERE collectionid = varcollectionid;
       
      END IF;
 END$$
