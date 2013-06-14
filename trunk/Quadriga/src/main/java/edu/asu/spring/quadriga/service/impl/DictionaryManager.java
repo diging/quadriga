@@ -229,13 +229,13 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	
 	public WordpowerReply.DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid){
-		//RestTemplate rest = new RestTemplate();
-		//ExtendingThis extendingthis = rest.getForObject("http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/dog/noun",
-		//	edu.asu.spring.quadriga.domain.implementation.ExtendingThis.class);
+
 		WordpowerReply.DictionaryEntry dictionaryEntry=null;
 		try{
+			logger.info("Update url from func : " +getUpdateFromWordPowerURL());
+			itemid=itemid.substring(itemid.lastIndexOf("/")+1,itemid.length());
 			String fullUrl=getUpdateFromWordPowerURL()+""+itemid;
-			logger.info("Search Word Power URL : "+fullUrl);
+			logger.info("Update Word Power URL : "+fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply)restTemplate.getForObject(fullUrl, WordpowerReply.class);
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
 			logger.info("Lemma from rest template "+dictionaryEntry.getLemma());
