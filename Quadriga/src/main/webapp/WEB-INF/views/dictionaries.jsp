@@ -53,8 +53,8 @@
 				<c:forEach var="dictionary" items="${dictinarylist}">
 
 
-					<li><a href="/quadriga/auth/dictionaries/${dictionary.id}"> <c:out
-								value="${dictionary.name}"></c:out>
+					<li><a href="/quadriga/auth/dictionaries/${dictionary.id}">
+							<c:out value="${dictionary.name}"></c:out>
 					</a> <br>&nbsp;<c:out value="${dictionary.description}"></c:out></li>
 				</c:forEach>
 			</ul>
