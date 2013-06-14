@@ -14,6 +14,12 @@ import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
  *
  */
 public interface IDictionaryManager {
+	
+	/**
+	 * there is a lot of javadoc missing here!
+	 * @param sUserId
+	 * @return
+	 */
 	public abstract List<IDictionary> getDictionariesList(String sUserId);
 		
 	public abstract String addNewDictionariesItems(String dictionaryId,String item,String id,String pos,String owner);

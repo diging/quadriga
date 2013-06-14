@@ -12,7 +12,7 @@ public class QuadrigaExceptionHandlerTest {
 	private Exception ex;
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp()  {
 		exceptionHandler = new QuadrigaExceptionHandler();
 		ex = new Exception();
 	}
