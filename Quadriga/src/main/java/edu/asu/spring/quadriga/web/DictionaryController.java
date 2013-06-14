@@ -44,25 +44,25 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class DictionaryController {
 	@Autowired 
 	IDictionaryManager dictonaryManager;
-	
+
 
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
-	
+
 	@Autowired 
 	IUserManager usermanager;
-	
+
 	@Autowired 
 	IDictionaryFactory dictionaryFactory;
-	
+
 	@Autowired 
 	DictionaryItemsFactory dictionaryItemsFactory;
-	
+
 	/**
 	 * Admin can use this page to check the list of dictionary he is accessible to 
 	 * 
 	 * @return 	Return to the dictionary home page of the Quadriga
 	 */
-	
+
 	@RequestMapping(value="auth/dictionaries", method = RequestMethod.GET)
 	public String listDictionary(ModelMap model){
 		try{
@@ -78,42 +78,45 @@ public class DictionaryController {
 		}
 		return "auth/dictionaries"; 
 	}
-	
+
 	/**
 	 *  Admin can use this page to check the list of dictionary items in a dictionary 
 	 *  and to search and add items from the word power  
 	 * 
 	 * @return 	Return to the list dictionary items page of the Quadriga
 	 */
-	
+
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
-
-		logger.info("came to getDictionaryPage");
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);
-		if(dictionaryItemList == null){
-			logger.info("Dictionary ITem list is null");
+		try{
+			logger.info("came to getDictionaryPage");
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);
+			if(dictionaryItemList == null){
+				logger.info("Dictionary ITem list is null");
+			}
+			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictionaryid", dictionaryid);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictName", dictionaryName);
-		model.addAttribute("dictionaryid", dictionaryid);
 		return "auth/dictionary/dictionary";
 	}
-	
+
 	/**
 	 *  Handles the bean mapping from form tag 
 	 *  
 	 * 
 	 * @return 	Used to handle the data from the form:form tag and map it to Dicitonary object
 	 */
-	
-//	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.GET)
-//	public ModelAndView addDictionaryForm() {
-//		logger.info("came to addDictionaryForm get");
-//		return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
-//	}
-	
+
+	//	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.GET)
+	//	public ModelAndView addDictionaryForm() {
+	//		logger.info("came to addDictionaryForm get");
+	//		return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
+	//	}
+
 	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.GET)
 	public String addDictionaryForm(Model m) {
 		logger.info("came to addDictionaryForm get");
@@ -121,20 +124,20 @@ public class DictionaryController {
 		return "auth/dictionaries/addDictionary";
 		//return new ModelAndView("auth/dictionaries/addDictionary", "command",dictionaryFactory.createDictionaryObject());
 	}
-	
+
 	/**
 	 *  Admin can use this page to new dictionary to his list  
 	 * 
 	 * @return 	Return to the add dictionary status page
 	 */
-	
+
 	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.POST)
 	public String addDictionaryHandle(@ModelAttribute("SpringWeb")Dictionary dictionary,ModelMap model, Principal principal){
 		try{
 			logger.info("came to addDictionaryHandle post");
 			IUser user = usermanager.getUserDetails(principal.getName());
 			dictionary.setOwner(user);
-			
+
 			String msg = dictonaryManager.addNewDictionary(dictionary);
 			if(msg.equals(""))
 			{
@@ -156,7 +159,7 @@ public class DictionaryController {
 		}
 		return "auth/dictionaries"; 
 	}
-	
+
 	/**
 	 *  Handles the add dictionary item page 
 	 * 
@@ -170,155 +173,174 @@ public class DictionaryController {
 		model.addAttribute("dictionaryid", dictionaryid);
 		return "auth/dictionaries/addDictionaryItems";
 	}
-	
+
 	/**
 	 *  Handles the form tag for add dictionary item to dictionary
 	 * 
 	 * @return 	Return to the POST part of add dictionary item in controller
 	 */
-	
+
 	@RequestMapping(value="auth/dictionaries/addDictionaryItems", method = RequestMethod.GET)
 	public ModelAndView addDictionaryItemForm(@PathVariable("dictionaryid") String dictionaryid) {
 		logger.info("came to addDictionaryItemForm get" );
 		return new ModelAndView("auth/dictionaries/addDictionaryItems", "command",dictionaryItemsFactory.createDictionaryItemsObject());
 	}
-	
+
 	/**
 	 *  Handles the form tag for add dictionary item to dictionary
 	 * 
 	 *  @return 	Return to list dictionary item page
 	 */
-	
+
 	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String addDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) {
-		logger.info("came to addDictionaryItemForm post");
-		String owner = usermanager.getUserDetails(principal.getName()).getUserName();
-		logger.info("items : "+dictionaryItems.getItems()+" , id: "+dictionaryItems.getId()+"pos"+
-				dictionaryItems.getPos());
-		String msg= dictonaryManager.addNewDictionariesItems(dictionaryId,dictionaryItems.getItems(),dictionaryItems.getId(),
-				dictionaryItems.getPos(),owner);
-		
-		if(msg.equals(""))
-		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successmsg", "Item : "+dictionaryItems.getItems()+ " added successfully");
-		}else{
-			if(msg.equals("ItemExists")){
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", "Item : "+dictionaryItems.getItems()+" already exist for dictionary id :" +dictionaryId);
+		try{
+			logger.info("came to addDictionaryItemForm post");
+			String owner = usermanager.getUserDetails(principal.getName()).getUserName();
+			logger.info("items : "+dictionaryItems.getItems()+" , id: "+dictionaryItems.getId()+"pos"+
+					dictionaryItems.getPos());
+			String msg= dictonaryManager.addNewDictionariesItems(dictionaryId,dictionaryItems.getItems(),dictionaryItems.getId(),
+					dictionaryItems.getPos(),owner);
+
+			if(msg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successmsg", "Item : "+dictionaryItems.getItems()+ " added successfully");
 			}else{
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", msg);
+				if(msg.equals("ItemExists")){
+					model.addAttribute("success", 0);
+					model.addAttribute("errormsg", "Item : "+dictionaryItems.getItems()+" already exist for dictionary id :" +dictionaryId);
+				}else{
+					model.addAttribute("success", 0);
+					model.addAttribute("errormsg", msg);
+				}
 			}
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
+			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictID", dictionaryId);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
-		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictName", dictionaryName);
-		model.addAttribute("dictID", dictionaryId);
 		return "auth/dictionary/dictionary";
 	}
-	
+
 	/**
 	 *  Admin can use this to delete a dictionary item to dictionary
 	 * 
 	 *  @return 	Return to list dictionary item page
 	 */
-	
+
 	@RequestMapping(value="auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String deleteDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
-		
-		String[] values= req.getParameterValues("selected");
-		String msg ="";
-		String errormsg="";
-		int flag=0;
-		
-		logger.info(" value len : "+values.length);
-		for(int i=0;i<values.length;i++){
-			logger.info("Deleting item for dictionary id: "+ dictionaryId+" and term id : "+i+" : "+values[i]);
-			msg= dictonaryManager.deleteDictionariesItems(dictionaryId,values[i]);
-			if(msg.equals("")){
-				
+		try{
+			String[] values= req.getParameterValues("selected");
+			String msg ="";
+			String errormsg="";
+			int flag=0;
+			if(values!=null){
+				for(int i=0;i<values.length;i++){
+					logger.info("Deleting item for dictionary id: "+ dictionaryId+" and term id : "+i+" : "+values[i]);
+					msg= dictonaryManager.deleteDictionariesItems(dictionaryId,values[i]);
+					if(msg.equals("")){
+
+					}else{
+						flag=1;
+						errormsg=msg;
+					}
+
+				}
 			}else{
-				flag=1;
-				errormsg=msg;
+				flag=2;
 			}
-				
-		}
-		
-		if(flag==0)
-		{
-			model.addAttribute("delsuccess", 1);
-			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
-		}else{
-			if(errormsg.equals("Item doesnot exists in this dictionary")){
-				model.addAttribute("delsuccess", 0);
-				model.addAttribute("delerrormsg", "Items doesn't exist for dictionary id :" +dictionaryId);
+
+			if(flag==0)
+			{
+				model.addAttribute("delsuccess", 1);
+				model.addAttribute("delsuccessmsg", "Items  deleted successfully");
+			}else if(flag==1){
+				if(errormsg.equals("Item doesnot exists in this dictionary")){
+					model.addAttribute("delsuccess", 0);
+					model.addAttribute("delerrormsg", "Items doesn't exist for dictionary id :" +dictionaryId);
+				}else{
+					model.addAttribute("delsuccess", 0);
+					model.addAttribute("delerrormsg", errormsg);
+				}
 			}else{
-				model.addAttribute("delsuccess", 0);
-				model.addAttribute("delerrormsg", errormsg);
+
 			}
+			logger.info("Item Returned ");
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
+			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictID", dictionaryId);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		logger.info("Item Returned ");
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
-		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictName", dictionaryName);
-		model.addAttribute("dictID", dictionaryId);
 		return "auth/dictionary/dictionary";
 	}
-	
+
 	/**
 	 *  Admin can use this to update a dictionary item's item to dictionary
 	 * 
 	 *  @return 	Return to list dictionary item page
 	 */
-	
-	
+
+
 	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String updateDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
 		//DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/",item,pos);
-		
-		//String msg= dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
-		String[] values= req.getParameterValues("selected");
-		String msg="";
-		String errormsg="";
-		int flag=0;
-		logger.info(" value len : "+values.length);
-		// Lohith : I need to fix this
-		for(int i=0;i<values.length;i++){
-			logger.info("Value "+i+" : "+values[i]);
-			DictionaryEntry dictionaryEntry=dictonaryManager.getUpdateFromWordPower(dictionaryId,values[i]);
-			msg= dictonaryManager.updateDictionariesItems(dictionaryId,values[i],dictionaryEntry.getLemma(),dictionaryEntry.getPos());
-			if(msg.equals("")){
-				
+		try{
+			//String msg= dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
+			String[] values= req.getParameterValues("selected");
+			String msg="";
+			String errormsg="";
+			int flag=0;
+			// Lohith : I need to fix this
+			if(values!=null){
+				for(int i=0;i<values.length;i++){
+					logger.info("Value "+i+" : "+values[i]);
+					DictionaryEntry dictionaryEntry=dictonaryManager.getUpdateFromWordPower(dictionaryId,values[i]);
+					msg= dictonaryManager.updateDictionariesItems(dictionaryId,values[i],dictionaryEntry.getLemma(),dictionaryEntry.getPos());
+					if(msg.equals("")){
+
+					}else{
+						flag=1;
+						errormsg=msg;
+					}
+				}
 			}else{
-				flag=1;
-				errormsg=msg;
+				flag=2;
 			}
-		}
-		
-		if(flag==0)
-		{
-			logger.info("Successfully updated");
-			model.addAttribute("updatesuccess", 1);
-			model.addAttribute("updatesuccessmsg", "Items updated successfully");
-		}else{
-			logger.info("Please check :  errormsg");
-			if(errormsg.equals("Item doesnot exists in this dictionary")){
-				model.addAttribute("updatesuccess", 0);
-				model.addAttribute("updateerrormsg", "Items doesn't exist for dictionary id :" +dictionaryId);
+
+			if(flag==0)
+			{
+				logger.info("Successfully updated");
+				model.addAttribute("updatesuccess", 1);
+				model.addAttribute("updatesuccessmsg", "Items updated successfully");
+			}else if(flag==1){
+				logger.info("Please check :  errormsg");
+				if(errormsg.equals("Item doesnot exists in this dictionary")){
+					model.addAttribute("updatesuccess", 0);
+					model.addAttribute("updateerrormsg", "Items doesn't exist for dictionary id :" +dictionaryId);
+				}else{
+					model.addAttribute("updatesuccess", 0);
+					model.addAttribute("updateerrormsg", errormsg);
+				}
 			}else{
-				model.addAttribute("updatesuccess", 0);
-				model.addAttribute("updateerrormsg", errormsg);
+
 			}
+			logger.info("Item Returned ");
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
+			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictID", dictionaryId);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		logger.info("Item Returned ");
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryId);
-		String dictionaryName=dictonaryManager.getDictionaryName(dictionaryId);
-		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictName", dictionaryName);
-		model.addAttribute("dictID", dictionaryId);
 		return "auth/dictionary/dictionary";
 	}
 	/**
@@ -326,7 +348,7 @@ public class DictionaryController {
 	 * 
 	 *  @return 	Return to list dictionary item page
 	 */
-	
+
 	@RequestMapping(value="auth/dictionaries/dictionary/wordSearch/{dictionaryid}", method = RequestMethod.POST)
 	public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model){
 		try{
@@ -346,7 +368,7 @@ public class DictionaryController {
 			if(dictionaryEntry == null){
 				model.addAttribute("errorstatus", 1);
 			}
-			
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
