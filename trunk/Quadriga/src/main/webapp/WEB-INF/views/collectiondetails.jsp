@@ -2,8 +2,6 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<!DOCTYPE html>
-<html>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -29,17 +27,20 @@ $(document).ready(function() {
 
 </script>
 
+<header>
+	<h2>Concept Collection: <span contenteditable="true"> ${concept.name}</span></h2>
+	<span class="byline">These are all the concepts in this collection.</span>
+</header>
 
 <div >
 	
 	<input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections'"
-		value='List Collections'>
+		value='Back to all collections'>
 		<br><br>
 		
-		<h3>
-			Collection items for  <span contenteditable="true"> ${concept.name}</span>
-		</h3><hr>
+	
+<hr>
 <br>
 <form method="post">
 	<input type="button"
@@ -84,6 +85,3 @@ $(document).ready(function() {
 	</table>
 	</form>
 </div>
-
-
-</html>
