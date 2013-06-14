@@ -143,7 +143,7 @@ public class DictionaryController {
 				List<IDictionary> dictionaryList;
 				dictionaryList = dictonaryManager.getDictionariesList(user.getUserName());
 				model.addAttribute("dictinarylist", dictionaryList);
-				model.addAttribute("userId", user);
+				model.addAttribute("userId", user.getUserName());
 				return "auth/dictionaries"; 
 			}else{
 				model.addAttribute("dictionary", dictionary);
