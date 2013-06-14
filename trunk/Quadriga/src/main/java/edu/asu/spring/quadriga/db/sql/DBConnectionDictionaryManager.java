@@ -327,14 +327,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 			errmsg = sqlStatement.getString(5);
 
-			if(errmsg.isEmpty())
-			{
-				return errmsg;
-			}
-			else
-			{
-				return errmsg;
-			}
+			return errmsg;
 
 		}
 		catch(SQLException e)
@@ -381,14 +374,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 			errmsg = sqlStatement.getString(6);
 
-			if(errmsg.isEmpty())
-			{
-				return errmsg;
-			}
-			else
-			{
-				return errmsg;
-			}
+			return errmsg;
 
 		}
 		catch(SQLException e)
@@ -433,14 +419,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 			errmsg = sqlStatement.getString(3);
 
-			if(errmsg.isEmpty())
-			{
-				return errmsg;
-			}
-			else
-			{
-				return errmsg;
-			}
+			return errmsg;
 
 		}
 		catch(SQLException e)

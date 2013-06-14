@@ -138,9 +138,13 @@ public class DictionaryController {
 			String msg = dictonaryManager.addNewDictionary(dictionary);
 			if(msg.equals(""))
 			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg","Dictionary created successfully.");
-				return "auth/dictionaries/addDictionaryStatus"; 
+				model.addAttribute("adddicsuccess", 1);
+				model.addAttribute("adddicsuccessMsg","Dictionary created successfully.");				
+				List<IDictionary> dictionaryList;
+				dictionaryList = dictonaryManager.getDictionariesList(user.getUserName());
+				model.addAttribute("dictinarylist", dictionaryList);
+				model.addAttribute("userId", user);
+				return "auth/dictionaries"; 
 			}else{
 				model.addAttribute("dictionary", dictionary);
 				model.addAttribute("success", 0);
@@ -150,7 +154,7 @@ public class DictionaryController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "auth/dictionaries/addDictionaryStatus"; 
+		return "auth/dictionaries"; 
 	}
 	
 	/**
@@ -281,9 +285,9 @@ public class DictionaryController {
 		String errormsg="";
 		int flag=0;
 		logger.info(" value len : "+values.length);
+		// Lohith : I need to fix this
 		for(int i=0;i<values.length;i++){
 			logger.info("Value "+i+" : "+values[i]);
-			String id=values[i];
 			DictionaryEntry dictionaryEntry=dictonaryManager.getUpdateFromWordPower(dictionaryId,values[i]);
 			msg= dictonaryManager.updateDictionariesItems(dictionaryId,values[i],dictionaryEntry.getLemma(),dictionaryEntry.getPos());
 			if(msg.equals("")){
