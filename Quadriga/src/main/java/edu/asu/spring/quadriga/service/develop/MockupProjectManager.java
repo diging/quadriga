@@ -92,8 +92,8 @@ public class MockupProjectManager implements IProjectManager{
 
 	@Override
 	public int addCollaborators(ICollaborator collaborator) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		throw new RuntimeException("addCollaborators is not yet implemented");		
 	}
 
 	

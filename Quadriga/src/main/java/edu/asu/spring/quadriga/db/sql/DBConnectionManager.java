@@ -612,11 +612,13 @@ public class DBConnectionManager implements IDBConnectionManager
 
 			if(sOutErrorValue == null)
 			{
+
 				//User request submitted successfully
 				return 1;
 			}			
 			else
 			{
+
 				//Error occurred in database.
 				throw new SQLException(sOutErrorValue);
 			}

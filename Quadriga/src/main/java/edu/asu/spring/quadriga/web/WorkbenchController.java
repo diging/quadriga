@@ -134,12 +134,14 @@ public class WorkbenchController {
 		model.addAttribute("project", project);
 
 
+
 		ICollaborator collaborator = null;
 		/*	int success = projectmanager.addCollaborators(collaborator);
 		if(success == 1)
 		{
 			model.addAttribute("success", 1);
 		}*/
+
 
 		return "auth/workbench/project";
 	}
@@ -263,11 +265,16 @@ public class WorkbenchController {
 	}
 
 
-	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.GET)
+	/*@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.GET)
 	public ModelAndView addCollaboratorForm()
 	{
 		return new ModelAndView("auth/workbench/{projectid}/addcollaborator","command", collaboratorFactory.createCollaborator());
-	}
+<<<<<<< .mine
+	}*/
+		
+
+	
+
 
 
 	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)

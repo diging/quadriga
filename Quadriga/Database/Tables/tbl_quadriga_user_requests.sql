@@ -12,6 +12,7 @@ Modified Date : 05/24/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_quadriga_user_requests
 (
+
   fullname      VARCHAR(50)  DEFAULT NULL,
   username      VARCHAR(10)  NOT NULL,
   passwd        VARCHAR(10)  DEFAULT NULL,
