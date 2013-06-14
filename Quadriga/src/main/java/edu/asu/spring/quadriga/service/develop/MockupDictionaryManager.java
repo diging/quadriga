@@ -65,7 +65,7 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		return 1;
 	}
 	
-	public String addNewDictionary(Dictionary newDictionary){
+	public String addNewDictionary(IDictionary newDictionary){
 		
 		return "";
 		

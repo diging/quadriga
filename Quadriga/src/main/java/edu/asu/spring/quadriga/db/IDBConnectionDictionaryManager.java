@@ -13,6 +13,8 @@ import edu.asu.spring.quadriga.domain.IDictionaryItems;
  */
 
 public interface IDBConnectionDictionaryManager {
+	
+	public abstract int setupTestEnvironment(String sQuery);
 	/**
 	 * Queries the database to get a list of dictionary objects list
 	 * 

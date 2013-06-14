@@ -18,7 +18,7 @@ public interface IDictionaryManager {
 		
 	public abstract String addNewDictionariesItems(String dictionaryId,String item,String id,String pos,String owner);
 	
-	public abstract String addNewDictionary(Dictionary newDictionary);
+	public abstract String addNewDictionary(IDictionary newDictionary);
 	
 	public abstract List<IDictionaryItems> getDictionariesItems(String dictionaryid);
 	

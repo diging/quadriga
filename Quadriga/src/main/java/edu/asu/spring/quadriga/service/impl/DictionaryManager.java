@@ -22,13 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.domain.ICommunities;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.implementation.Communities;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
+import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 
 /**
@@ -102,7 +100,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return to success or error msg to controller
 	 */
 	
-	public String addNewDictionary(Dictionary dictionary){
+	public String addNewDictionary(IDictionary dictionary){
 
 		String msg = dbConnect.addDictionary(dictionary);
 
