@@ -12,9 +12,12 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
@@ -35,6 +38,10 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
  * @author           Lohith Dwaraka 
  *
  */
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+"file:src/test/resources/root-context.xml" })
+
+@RunWith(SpringJUnit4ClassRunner.class)
 public class DBConnectionDictionaryManager implements IDBConnectionDictionaryManager {
 
 	private Connection connection;

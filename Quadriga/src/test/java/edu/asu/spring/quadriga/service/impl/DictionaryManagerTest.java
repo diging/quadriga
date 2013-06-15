@@ -35,6 +35,7 @@ import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -48,7 +49,7 @@ public class DictionaryManagerTest {
 
 	@Autowired
 	IDBConnectionDictionaryManager dbConnection;
-	
+
 	@Autowired
 	IDictionaryManager dictionaryManager;
 
@@ -77,7 +78,7 @@ public class DictionaryManagerTest {
 	private IDictionaryItemsFactory dictionaryItemsFactory;
 
 	private IUser user;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 
@@ -175,85 +176,325 @@ public class DictionaryManagerTest {
 		}
 		return id;
 	}
-	
+
 	@Test
 	public void getDictionariesListTest(){
 		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Getting dictionary for user :"+user.getUserName());
+				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				Iterator<IDictionary> I = dictionaryList.iterator();
+				String name=null;
+				String desc=null;
+				IUser userTest=null;
 
-		IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-		dictionary.setName("testDictionary");
-		dictionary.setDescription("description");
-		dictionary.setOwner(user);
-		String msg =dictionaryManager.addNewDictionary(dictionary);
-		logger.info(" message : "+msg);
-		if(msg.equals("")){
-			logger.info("Getting dictionary for user :"+user.getUserName());
-			List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
-			Iterator<IDictionary> I = dictionaryList.iterator();
-			String name=null;
-			String desc=null;
-			IUser userTest=null;
-
-			while(I.hasNext()){
-				IDictionary dictionaryTest = dictionaryFactory.createDictionaryObject();
-				dictionaryTest=I.next();
-				assertEquals((dictionaryTest!=null), true);
-				if(dictionaryTest!=null){
-					name =dictionaryTest.getName();
-					desc =dictionaryTest.getDescription();
-					userTest =dictionaryTest.getOwner();
+				while(I.hasNext()){
+					IDictionary dictionaryTest = dictionaryFactory.createDictionaryObject();
+					dictionaryTest=I.next();
+					assertEquals((dictionaryTest!=null), true);
+					if(dictionaryTest!=null){
+						name =dictionaryTest.getName();
+						desc =dictionaryTest.getDescription();
+						userTest =dictionaryTest.getOwner();
+					}
 				}
-			}
 
-			assertEquals(name.equals("testDictionary"),true);
-			assertEquals(desc.equals("description"),true);
-			dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-			dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
-			assertEquals((dictionaryList==null), true);
-		}else{
-			logger.info("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
-			fail("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
+				assertEquals(name.equals("testDictionary"),true);
+				assertEquals(desc.equals("description"),true);
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+				dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				assertEquals((dictionaryList==null), true);
+			}else{
+				logger.info("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
+				fail("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
+			}
 		}
 	}
-	
+
 	@Test
 	public void addNewDictionariesItemsTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Adding dictionary for user :"+user.getUserName());
+				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
+				assertEquals(I.hasNext(),true);
+				IDictionaryItems dictionaryItems = I.next();
+				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getPos(), "noun");
+				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+				fail("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
-	
+
 	@Test
 	public void addNewDictionaryTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Getting dictionary for user :"+user.getUserName());
+				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				Iterator<IDictionary> I = dictionaryList.iterator();
+				String name=null;
+				String desc=null;
+				IUser userTest=null;
+
+				while(I.hasNext()){
+					IDictionary dictionaryTest = dictionaryFactory.createDictionaryObject();
+					dictionaryTest=I.next();
+					assertEquals((dictionaryTest!=null), true);
+					if(dictionaryTest!=null){
+						name =dictionaryTest.getName();
+						desc =dictionaryTest.getDescription();
+						userTest =dictionaryTest.getOwner();
+					}
+				}
+
+				assertEquals(name.equals("testDictionary"),true);
+				assertEquals(desc.equals("description"),true);
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
+				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
-	
+
 	@Test
 	public void getDictionariesItemsTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Adding dictionary for user :"+user.getUserName());
+				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
+				assertEquals(I.hasNext(),true);
+				IDictionaryItems dictionaryItems = I.next();
+				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getPos(), "noun");
+				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+				fail("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
-	
+
 	@Test
 	public void getDictionaryNameTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Getting dictionary for user :"+user.getUserName());
+				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				Iterator<IDictionary> I = dictionaryList.iterator();
+				String id=null;
+
+				while(I.hasNext()){
+					IDictionary dictionaryTest = dictionaryFactory.createDictionaryObject();
+					dictionaryTest=I.next();
+					assertEquals((dictionaryTest!=null), true);
+					if(dictionaryTest!=null){
+						id =getDictionaryID(dictionaryTest.getName());
+						assertEquals(dictionaryManager.getDictionaryName(id), dictionaryTest.getName());
+					}
+				}
+
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("getDictionaryNameTest: Create Dictionary Failed ; message :"+msg);
+				fail("getDictionaryNameTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
-	
+
 	@Test
 	public void searchWordPowerTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Getting dictionary for user :"+user.getUserName());
+				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				Iterator<IDictionary> I = dictionaryList.iterator();
+				String name=null;
+				String desc=null;
+				IUser userTest=null;
+
+				while(I.hasNext()){
+					IDictionary dictionaryTest = dictionaryFactory.createDictionaryObject();
+					dictionaryTest=I.next();
+					assertEquals((dictionaryTest!=null), true);
+					if(dictionaryTest!=null){
+						name =dictionaryTest.getName();
+						desc =dictionaryTest.getDescription();
+						userTest =dictionaryTest.getOwner();
+					}
+				}
+
+				assertEquals(name.equals("testDictionary"),true);
+				assertEquals(desc.equals("description"),true);
+				WordpowerReply.DictionaryEntry dictionaryEntry=dictionaryManager.searchWordPower("dog", "noun");
+				assertEquals(dictionaryEntry.getLemma(), "dog");
+				assertEquals(dictionaryEntry.getPos(), "noun");
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
+				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
-	
+
 	@Test
 	public void deleteDictionariesItemsTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Adding dictionary for user :"+user.getUserName());
+				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
+				assertEquals(I.hasNext(),true);
+				IDictionaryItems dictionaryItems = I.next();
+				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getPos(), "noun");
+				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				dictionaryManager.deleteDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				I = dictionaryItemsList.iterator();
+				assertEquals(I.hasNext(),false);
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+				fail("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
-	
+
 	@Test
 	public void updateDictionariesItemsTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Adding dictionary for user :"+user.getUserName());
+				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "cat", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
+				assertEquals(I.hasNext(),true);
+				IDictionaryItems dictionaryItems = I.next();
+				assertEquals(dictionaryItems.getItems(), "cat");
+				assertEquals(dictionaryItems.getPos(), "noun");
+				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				WordpowerReply.DictionaryEntry dictionaryEntry=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryEntry.getLemma(),"dog");
+				assertEquals(dictionaryEntry.getPos(),"NOUN");
+				String msg1=dictionaryManager.updateDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n", dictionaryEntry.getLemma(), dictionaryEntry.getPos());
+				assertEquals(msg1.equals(""), true);
+				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				I = dictionaryItemsList.iterator();
+				assertEquals(I.hasNext(),true);
+				dictionaryItems = I.next();
+				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getPos(), "NOUN");
+				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+				fail("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
-	
+
 	@Test
 	public void  getUpdateFromWordPowerTest(){
-		fail("Not yet implemented");
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dictionaryManager.addNewDictionary(dictionary);
+			logger.info(" message : "+msg);
+			if(msg.equals("")){
+				logger.info("Adding dictionary for user :"+user.getUserName());
+				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "cat", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
+				assertEquals(I.hasNext(),true);
+				IDictionaryItems dictionaryItems = I.next();
+				assertEquals(dictionaryItems.getItems(), "cat");
+				assertEquals(dictionaryItems.getPos(), "noun");
+				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				WordpowerReply.DictionaryEntry dictionaryEntry=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryEntry.getLemma(),"dog");
+				assertEquals(dictionaryEntry.getPos(),"NOUN");
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			}else{
+				logger.info("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+				fail("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
+			}
+		}
 	}
 
 }

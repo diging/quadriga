@@ -25,8 +25,8 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/quadriga" />
 
-		<property name="username" value="root" />
-		<property name="password" value="root" />
+		<property name="username" value="dbadmin" />
+		<property name="password" value="dbadmin" />
 
 	</bean>
 

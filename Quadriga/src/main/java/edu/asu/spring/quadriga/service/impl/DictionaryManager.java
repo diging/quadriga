@@ -44,8 +44,8 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
 @Service
 public class DictionaryManager implements IDictionaryManager {
 	
-	@Inject
-	@Named("restTemplate")
+	@Autowired
+	@Qualifier("restTemplate")
 	RestTemplate restTemplate;
 	
 	@Autowired
@@ -132,10 +132,10 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return success or error message to controller
 	 */
 	
-	public String deleteDictionariesItems(String dictionaryId,String item){
+	public String deleteDictionariesItems(String dictionaryId,String itemid){
 		String msg=null;
 		try {
-			msg = dbConnect.deleteDictionaryItems(dictionaryId,item);
+			msg = dbConnect.deleteDictionaryItems(dictionaryId,itemid);
 		} catch (Exception e) {
 
 			e.printStackTrace();
