@@ -83,7 +83,7 @@ public class ProjectManager implements IProjectManager {
 		
 		errmsg = dbConnect.deleteProjectRequest(projectIdList);
 		
-		return null;
+		return errmsg;
 		
 	}
 
