@@ -25,7 +25,17 @@
 	
 	<bean id="DictionaryManager"
 		class="edu.asu.spring.quadriga.service.impl.DictionaryManager">
-		
+	</bean>
+	<bean id="ConceptCollectionManager"  class="edu.asu.spring.quadriga.service.impl.ConceptCollectionManager" />
+	<bean id="searchConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/ConceptLookup/</value>
+		</constructor-arg>
+	</bean>
+	<bean id="updateConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/Concept?id=</value>
+		</constructor-arg>
 	</bean>
 
 	<bean id="userFactory"
@@ -54,6 +64,7 @@
 		class="edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory" />
 	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleMapper" />
+	
 	<bean class="edu.asu.spring.quadriga.service.impl.ProjectManager" />
 
 <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
@@ -79,6 +90,8 @@
 				<value>edu.asu.spring.quadriga.domain.implementation.Collections
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
+				</value>
+				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
 			</list>
 		</property>

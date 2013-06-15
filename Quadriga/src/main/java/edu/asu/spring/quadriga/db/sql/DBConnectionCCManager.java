@@ -327,11 +327,12 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * @author satya swaroop boddu
 	 */
 	@Override
-	public int setupTestEnvironment(String sQuery) {
+	public int setupTestEnvironment(String[] sQuery) {
 		try {
 			getConnection();
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(sQuery);
+			for(String s : sQuery)
+			stmt.executeUpdate(s);
 			return 1;
 		} catch (SQLException ex) {
 			throw new RuntimeException(ex.getMessage());

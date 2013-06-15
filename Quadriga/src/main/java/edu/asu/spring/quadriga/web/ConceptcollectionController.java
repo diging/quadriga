@@ -133,6 +133,7 @@ public class ConceptcollectionController {
 		/*UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    String userId = principal.getUsername();*/
 		String[] values= req.getParameterValues("selected");
+		if(values!=null){
 		for(String id : values)
 		{
 			ConceptEntry temp = new ConceptEntry();
@@ -140,7 +141,7 @@ public class ConceptcollectionController {
 			temp = c.getConceptEntry().get((c.getConceptEntry().indexOf(temp)));
 			conceptControllerManager.addItems(temp.getLemma(),id,temp.getPos(), temp.getDescription(),concept.getName());
 		}
-		
+		}
 	    int index;
 	    if(( index = list.indexOf(concept))>=0)
 	    concept = list.get(index);
