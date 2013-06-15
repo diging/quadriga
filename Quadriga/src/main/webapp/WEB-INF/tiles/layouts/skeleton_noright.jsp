@@ -1,4 +1,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE HTML>
 <!--
 	TXT 2.0 by HTML5 UP
@@ -11,9 +14,12 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
-<link rel="stylesheet" href="/quadriga/resources/txt-layout/css/jquery-ui.css" />
-<link rel="stylesheet" href="/quadriga/resources/txt-layout/css/jquery.dataTables_themeroller.css" />
-<link rel="stylesheet" href="/quadriga/resources/txt-layout/css/demo_table_jui.css" />
+<link rel="stylesheet"
+	href="/quadriga/resources/txt-layout/css/jquery-ui.css" />
+<link rel="stylesheet"
+	href="/quadriga/resources/txt-layout/css/jquery.dataTables_themeroller.css" />
+<link rel="stylesheet"
+	href="/quadriga/resources/txt-layout/css/demo_table_jui.css" />
 <link
 	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"
 	rel="stylesheet" />
@@ -62,9 +68,19 @@
 	<!-- Main -->
 	<div id="main-wrapper">
 		<div id="main" class="container">
+			<sec:authorize access="isAuthenticated()">
+				<div>
+					<div class="loggedInMsg">
+						Welcome <span class="user" style="margin-left: 5px;"><sec:authentication property="principal.username" /></span>!
+					</div>
+					<div class="loggedOutLink">
+						<a href="<c:url value='/j_spring_security_logout' />">Logout</a>
+					</div>
+					<hr class="clearLoggedIn">
+				</div>
+			</sec:authorize>
 			<div class="row">
 				<div class="12u">
-
 
 					<!-- Content -->
 
@@ -91,7 +107,7 @@
 			<!-- Copyright -->
 			<div id="copyright">
 				&copy; 2013 Digital Innovation Group | Images: <a
-					href="http://fotogrph.com">fotogrph</a> + <a
+					href="http://flickr.com/people/freakyman/">freakyman</a> + <a
 					href="http://iconify.it">Iconify.it</a> | Design: <a
 					href="http://html5up.net/">HTML5 UP</a>
 			</div>

@@ -139,13 +139,16 @@
 		position: relative;
 		display: inline-block;
 		border-radius: 8px;
+		margin: 0 auto 2em auto;
 	}
 	
+		
 		.image img
 		{
 			display: block;
 			width: 100%;
 			border-radius: 8px;
+			margin: 0 auto 2em auto;
 		}
 		
 		/*
@@ -184,13 +187,24 @@
 	.image-centered
 	{
 		display: block;
-		margin: 0 0 2em 0;
+		margin: 0 auto 2em auto;
+		width: 80%;
 	}
 
 		.image-centered img
 		{
-			margin: 0 auto;
-			width: auto;
+			
+			margin: 0 auto 2em auto;
+			width: 100%;
+			
+		}
+		
+		.image-centered:before
+		{
+			text-align: center;
+			width: 100%;
+			opacity: 0.1;
+			display: block;
 		}
 		
 	.user {
@@ -198,6 +212,17 @@
 		background: url('images/user.png') left no-repeat;
 	}
 	
+	.loggedInMsg {
+		float: left;
+	}
+	
+	.loggedOutLink {
+		float: right;
+	}
+	
+	.clearLoggedIn {
+		clear: both;
+	}
 
 		
 	.button

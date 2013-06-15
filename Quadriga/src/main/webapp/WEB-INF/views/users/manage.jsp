@@ -2,6 +2,11 @@
 
 <!-- Content -->
 
+<header>
+	<h2>User Management</h2>
+	<span class="byline">Manage users and their permissions</span>
+</header>
+
 <article class="is-page-content">
 
 	<script>
@@ -16,7 +21,7 @@
 			activeTable = $('.dataTable').dataTable({
 				"bJQueryUI" : true,
 				"sPaginationType" : "full_numbers",
-				"bAutoWidth": false
+				"bAutoWidth" : false
 			});
 		});
 
