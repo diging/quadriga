@@ -1,20 +1,25 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import javax.swing.text.IconView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICollections;
+import edu.asu.spring.quadriga.domain.ICollectionEntityId;
+import edu.asu.spring.quadriga.domain.ICollectionsIdList;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.dspace.service.ICollectionManager;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 
 
@@ -30,57 +35,74 @@ import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 @Service("proxyCommunityManager")
 public class ProxyCommunityManager implements ICommunityManager {
 
-	List<ICommunity> communities;
-	List<ICollection> collection;
-	
+	private List<ICommunity> communities;
+	private List<ICollection> collections;
+
 	@Autowired
 	@Qualifier("communityManager")
-	ICommunityManager communityManager;
-	
+	private ICommunityManager communityManager;
+
+	//create a list to hold the Future object associated with Callable
+	private List<Future<ICollection>> futureList;
+
+
 	@Override
-	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
 		if(communities==null)
 		{
-			System.out.println("Proxy community manager making a rest call....");
-			communities = communityManager.getAllCommunities(sUserName, sPassword);
-			
+			communities = communityManager.getAllCommunities(restTemplate, url, sUserName, sPassword);
+
+			//Initialize collection specific objects
+			collections = new ArrayList<ICollection>();
+			futureList = new ArrayList<Future<ICollection>>();
+
+			//For each community get the collection names associated with it
 			for(ICommunity community: communities)
 			{
-				//Get the collections that store a list of collection
-				ICollections collections = community.getCollections();
-				
-				//Do this for each collection in the list
-				ExecutorService executor = Executors.newFixedThreadPool(collections.getCollections().size());
-				
-				System.out.println("Created "+collections.getCollections().size()+" Collection Threads.....");
+				ICollectionsIdList collectionIDList = community.getCollectionsIDList();
+
+				//Create a thread pool that equals the size of the collection
+				ExecutorService executor = Executors.newFixedThreadPool(collectionIDList.getCollectionid().size());
+
 				int iThreadCount=0;
-				for(ICollection collection: collections.getCollections())
-				{
-					System.out.print(collection.getId()+" ");
-					
-					//TODO: Create a proxy collections to get that collection name
-					//Pass the collection object as input and the thread should set the collection name
-					
-					Callable<ICollection> callable = new ProxyCollectionManager(collection.getId());
+				for(ICollectionEntityId collectionEntity :collectionIDList.getCollectionid()){
+					//Create a thread to retrieve the collection object from Dspace
+					Callable<ICollection> callable = new ProxyCollectionManager(restTemplate, url, sUserName, sPassword, collectionEntity.getId());
 					Future<ICollection> future = executor.submit(callable);
-					
-					try {
-						this.collection.add(future.get());
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					System.out.println("Started Thread - "+iThreadCount);
+					futureList.add(future);
 					iThreadCount++;
 				}
-				System.out.println();
 			}
 		}
+		else
+		{
+			//Communities are already fetched from Dspace			
+			//Get an iterator so that the list can be modified while iterating
+			Iterator<Future<ICollection>> iteratorFuture = futureList.iterator();
+			
+			//Iterate through each thread and check if the thread returned a collection object.
+			while(iteratorFuture.hasNext())
+			{
+				Future<ICollection> future = iteratorFuture.next();
+				if(future.isDone())
+				{
+					try {
+						this.collections.add(future.get());
+						iteratorFuture.remove();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			System.out.println("Collections retrieved so far: "+this.collections.size());
+		}
 		System.out.println("Proxy manager returning its list of communities....");
+
+
 		return communities;
 	}	
-	
+
 }

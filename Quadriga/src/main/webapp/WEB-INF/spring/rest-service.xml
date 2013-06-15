@@ -70,7 +70,7 @@
 			<list>
 				<value>edu.asu.spring.quadriga.domain.implementation.Communities
 				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.Collections
+				<value>edu.asu.spring.quadriga.domain.implementation.Collection
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
 				</value>

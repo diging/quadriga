@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICollections;
+import edu.asu.spring.quadriga.domain.ICollectionsIdList;
 import edu.asu.spring.quadriga.domain.ICommunity;
 
 /**
@@ -30,18 +30,35 @@ public class Community implements ICommunity{
 	private String handle;	
 	private String entityReference;
 	private String entityId;
-	private ICollections collections;
+	private ICollectionsIdList collectionsIDList;
+//	private List<ICollection> collections;
 	
-	@XmlElementRefs({@XmlElementRef(type=Collections.class)})
+
+	@XmlElementRefs({@XmlElementRef(type=CollectionsIdList.class)})
 	@Override
-	public ICollections getCollections() {
-		return collections;
+	public ICollectionsIdList getCollectionsIDList() {
+		return collectionsIDList;
 	}
 
 	@Override
-	public void setCollections(ICollections collections) {
-		this.collections = collections;
+	public void setCollectionsIDList(ICollectionsIdList collectionsIDList) {
+		this.collectionsIDList = collectionsIDList;
 	}
+	
+//	@Override
+//	public List<ICollection> getCollections() {
+//		return collections;
+//	}
+//
+//	@Override
+//	public void setCollections(List<ICollection> collections) {
+//		this.collections = collections;
+//	}
+//	
+//	@Override
+//	public void addCollections(ICollection collection) {
+//		this.collections.add(collection);
+//	}
 	
 	@Override
 	public String getEntityId() {
@@ -147,4 +164,6 @@ public class Community implements ICommunity{
 		}
 		
 	}
+	
+	
 }
