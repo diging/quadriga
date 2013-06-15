@@ -231,6 +231,64 @@ public class WorkbenchController {
 	}
 	
 	/**
+	 * @description :  This method calls the user manager to delete the projects.
+	 * @param       :  req
+	 * @param       :  model
+	 * @param       : principal
+	 * @return      : String - URL on success and failure.
+	 * @author      : Kiran Kumar Batna
+	 */
+	@RequestMapping(value = "auth/workbench/deleteproject", method = RequestMethod.POST)
+	public String deleteProject(HttpServletRequest req, ModelMap model,Principal principal)
+	{
+		String[] values;
+		String projIdList = "";
+		String errmsg;
+		String userName;
+		
+		// fetch the selected values
+		values = req.getParameterValues("projchecked");
+		
+		for(String projid : values)
+		{
+			projIdList = projIdList + "," + projid;
+		}
+		
+		//removing the first ',' value
+		projIdList = projIdList.substring(1,projIdList.length());
+		
+		errmsg = projectmanager.deleteProject(projIdList);
+		
+		if(errmsg.equals(""))
+		{
+			model.addAttribute("success", 1);
+			model.addAttribute("successMsg","Projects deleted successfully.");
+			return "auth/workbench/deleteProjectStatus";
+		}
+		else
+		{
+			try
+			{
+				if(projectlist == null)
+				{
+					userName = principal.getName();
+					projectlist = projectmanager.getProjectsOfUser(userName);
+				}
+				
+				//adding the project details to the model
+				model.addAttribute("projectlist", projectlist);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/deleteproject";
+			}
+			catch(SQLException ex)
+			{
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+	}
+	
+	/**
 	 * Simply selects the workspace communities view to render by returning its path.
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace", method = RequestMethod.GET)

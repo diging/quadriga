@@ -29,13 +29,27 @@ td {
 			"bAutoWidth" : false
 		});
 	});
-	$(document).ready(function() {
-		$("input[type=submit]").button().click(function(event) {
+	
+	$(function() {
+		
+		$("input[name='deleteproj']").button().click(function(event){
+			if(!$("input[name='projchecked']").is(":checked")) {
+				$.alert("Select record to delete", "Oops !!!");
+				event.preventDefault();
+				return;
+			}
 		});
-	});
-	$(document).ready(function() {
-		$("#deletechk").is(":checked")(function(event) {
-			$.alert("Select record to delete", "Oops !!!");
+		
+		$("input[name='selectall']").button().click(function(event){
+			$("input[name='projchecked']").prop("checked",true);
+			event.preventDefault();
+			return;
+		});
+		
+		$("input[name='deselectall']").button().click(function(event){
+			$("input[name='projchecked']").prop("checked",false);
+			event.preventDefault();
+			return;
 		});
 	});
 </script>
@@ -44,7 +58,16 @@ td {
 		action="/auth/workbench/deleteproject">
 		<c:if test="${not empty projectlist}">
 			<span class="byline">Select the projects to be deleted:</span>
-			<input class="command" type="submit" value='Delete'>
+			<c:choose>
+				<c:when test="${success=='0'}">
+					<span class="byline" style="color: #f00;"><c:out
+							value="${errormsg}"></c:out></span>
+					<br />
+				</c:when>
+			</c:choose>
+			<input class="command" type="submit" value='Delete' name="deleteproj">
+			<input type="button" value="Select All" name="selectall">
+			<input type="button" value="DeSelect All" name="deselectall">
 			<table style="width: 100%" class="display dataTable" id="projectlist">
 				<thead>
 					<tr>
@@ -56,8 +79,8 @@ td {
 				<tbody>
 					<c:forEach var="project" items="${projectlist}">
 						<tr>
-							<td><input type="checkbox" value="${project.internalid}" id="deletechk">
-							</td>
+							<td><input type="checkbox" name="projchecked"
+								value="${project.internalid}"></td>
 							<td><font size="3"> <c:out value="${project.name}"></c:out>
 							</font></td>
 							<td><font size="3"> <c:out
@@ -67,7 +90,9 @@ td {
 					</c:forEach>
 				</tbody>
 			</table>
-			<input class="command" type="submit" value='Delete'>
+			<input class="command" type="submit" value='Delete' name="deleteproj">
+			<input type="button" value="Select All" name="selectall">
+			<input type="button" value="DeSelect All" name="deselectall">
 		</c:if>
 		<c:if test="${empty projectlist}">
 			You don't have any projects to delete.
