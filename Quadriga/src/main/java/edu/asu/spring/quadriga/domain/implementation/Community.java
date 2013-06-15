@@ -31,7 +31,7 @@ public class Community implements ICommunity{
 	private String entityReference;
 	private String entityId;
 	private ICollectionsIdList collectionsIDList;
-//	private List<ICollection> collections;
+//	private List<ICollection> collectionsList;
 	
 
 	@XmlElementRefs({@XmlElementRef(type=CollectionsIdList.class)})
@@ -45,19 +45,20 @@ public class Community implements ICommunity{
 		this.collectionsIDList = collectionsIDList;
 	}
 	
+//	@XmlElementRefs({@XmlElementRef(type=Collection.class)})
 //	@Override
 //	public List<ICollection> getCollections() {
-//		return collections;
+//		return collectionsList;
 //	}
 //
 //	@Override
 //	public void setCollections(List<ICollection> collections) {
-//		this.collections = collections;
+//		this.collectionsList = collections;
 //	}
 //	
 //	@Override
 //	public void addCollections(ICollection collection) {
-//		this.collections.add(collection);
+//		this.collectionsList.add(collection);
 //	}
 	
 	@Override
