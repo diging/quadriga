@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.implementation.Collection;
-import edu.asu.spring.quadriga.domain.implementation.Collections;
+import edu.asu.spring.quadriga.domain.implementation.CollectionsIdList;
 
 /**
  * The interface that provides access to the class representation of the community got from Dspace repostiory.
@@ -50,7 +50,13 @@ public interface ICommunity {
 
 	public abstract void setEntityId(String entityId);
 
-	public abstract ICollections getCollections();
+	public abstract ICollectionsIdList getCollectionsIDList();
 
-	public abstract void setCollections(ICollections collections);
+	public abstract void setCollectionsIDList(ICollectionsIdList collections);
+
+//	public abstract List<ICollection> getCollections();
+//
+//	public abstract void setCollections(List<ICollection> collections);
+//
+//	public abstract void addCollections(ICollection collection);
 }

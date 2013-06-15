@@ -12,8 +12,6 @@ public interface IDspaceManager {
 
 	public abstract List<ICollection> getAllCollections(String sUserName, String sPassword,String sCommunityTitle);
 
-	public abstract void checkRestConnection(String sUserName, String sPassword);
-
 	public abstract String getCollectionName(String sUserName, String sPassword,String sCollectionId);
 
 }

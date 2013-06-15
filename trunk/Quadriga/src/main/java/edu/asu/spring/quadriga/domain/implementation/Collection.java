@@ -14,7 +14,8 @@ import edu.asu.spring.quadriga.domain.IItem;
  * 
  * @author Ram Kumar Kumaresan
  */
-@XmlRootElement(name="collectionentityid")
+
+@XmlRootElement(name="collections")
 public class Collection implements ICollection{
 
 	private String id;

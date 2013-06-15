@@ -235,8 +235,6 @@ public class WorkbenchController {
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace", method = RequestMethod.GET)
 	public String workspaceRequest(ModelMap model, Principal principal) {
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		dspaceManager.checkRestConnection(principal.getName(),sPassword);
 		return "redirect:/auth/workbench/workspace/communities";
 	}
 

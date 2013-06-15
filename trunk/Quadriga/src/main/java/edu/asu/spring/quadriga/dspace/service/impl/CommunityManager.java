@@ -27,34 +27,19 @@ import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 @Service("communityManager")
 public class CommunityManager implements ICommunityManager {
 
-	@Autowired
-	@Qualifier("dspaceURL")
-	private String url;
-
-	private String userName;
-	private String password;
-
-	@Inject
-	@Named("restTemplate")
-	RestTemplate restTemplate;
-
-	public CommunityManager() {
-		userName = "ramk@asu.edu";
-		password = "123456";
-	}
-
-	private String getCompleteUrlPath(String restPath)
+	private String getCompleteUrlPath(String restPath, String userName, String password)
 	{
-		return "https://"+url+restPath+"?email="+userName+"&password="+password;
+		return "https://"+restPath+"?email="+userName+"&password="+password;
 	}
 
 	@Override
-	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
 		//TODO: Uncomment to user the correct username and password
 		//		this.userName = sUserName;
 		//		this.password = sPassword;
+		
 		System.out.println("Community Manager connecting to Dspace....");
-		String sRestServicePath = getCompleteUrlPath("/rest/communities.xml");
+		String sRestServicePath = getCompleteUrlPath(url+"/rest/communities.xml", sUserName, sPassword);
 		ICommunities communities = (Communities)restTemplate.getForObject(sRestServicePath, Communities.class);
 
 		return communities.getCommunities();
