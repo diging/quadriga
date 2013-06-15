@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICollectionEntityId;
 import edu.asu.spring.quadriga.domain.ICollectionsIdList;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICollectionManager;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 
@@ -79,7 +80,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 			//Communities are already fetched from Dspace			
 			//Get an iterator so that the list can be modified while iterating
 			Iterator<Future<ICollection>> iteratorFuture = futureList.iterator();
-			
+
 			//Iterate through each thread and check if the thread returned a collection object.
 			while(iteratorFuture.hasNext())
 			{
@@ -97,6 +98,22 @@ public class ProxyCommunityManager implements ICommunityManager {
 				}
 			}			
 			System.out.println("Collections retrieved so far: "+this.collections.size());
+
+			//Add the collection to the corresponding community
+			for(ICollection collection: this.collections)
+			{
+				for(ICommunity community: this.communities)
+				{
+					ICollectionsIdList collectionIDList = community.getCollectionsIDList();
+					for(ICollectionEntityId collectionEntity :collectionIDList.getCollectionid()){
+						//The collection id is found in the list within the community
+						if(collectionEntity.getId().equals(collection.getId()))
+						{
+							//TODO: Add the collection to the community
+						}
+					}
+				}
+			}
 		}
 		System.out.println("Proxy manager returning its list of communities....");
 
