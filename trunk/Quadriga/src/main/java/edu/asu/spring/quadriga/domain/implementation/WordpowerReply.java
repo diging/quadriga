@@ -27,6 +27,9 @@ public class WordpowerReply {
      }
      return this.dictionaryEntry;
  }
+ public void SetDictionaryEntry(WordpowerReply.DictionaryEntry dictionaryEntry) {
+     this.dictionaryEntry=dictionaryEntry;
+ }
 
 
  

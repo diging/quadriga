@@ -127,7 +127,7 @@ function deleteItem(item){
 	
 	<ul>
 		<li>
-			<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'" value='List Dictionaries'>
+			<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'" value='Back to all Dictionaries'>
 		</li>
 	</ul>
 	
@@ -197,7 +197,7 @@ function deleteItem(item){
 		    	<th>Items </th>
 		    	<th> ID</th>
 		    	<th> Pos</th>
-		    	<th> Action </th>
+
 		    </tr>
 		</thead>
 		
@@ -221,13 +221,7 @@ function deleteItem(item){
 				<td align="center">
 					<c:out value="${dictionaryItem.description}"></c:out> 
 				</td>-->
-				<td align="center">
-					
-					<!--<input type="button" onclick="deleteItem(this.id);" value="Delete" id="<c:out value="${dictionaryItem.items}"></c:out>"/>-->
-					<!--  <input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updateDictionaryItems/${dictionaryid}?item=<c:out value="${dictionaryItem.items}"></c:out>&pos=<c:out value="${dictionaryItem.pos}"></c:out>'" value='Update'>
-					-->
-					 
-				</td>
+
 				
 			</tr>
 			</c:forEach>	

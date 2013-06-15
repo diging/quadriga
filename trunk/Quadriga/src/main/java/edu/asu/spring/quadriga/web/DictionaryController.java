@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -287,7 +289,16 @@ public class DictionaryController {
 	 * 
 	 *  @return 	Return to list dictionary item page
 	 */
-
+	@ExceptionHandler(NullPointerException.class)
+	public String handleNullException(NullPointerException ex, HttpServletRequest request,ModelMap model,Principal principal) {
+		logger.info("Handling exception");
+		String user = usermanager.getUserDetails(principal.getName()).getUserName();
+		List<IDictionary> dictionaryList;
+		dictionaryList = dictonaryManager.getDictionariesList(user);
+		model.addAttribute("dictinarylist", dictionaryList);
+		model.addAttribute("userId", user);
+		return "auth/dictionaries";
+	}
 
 	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String updateDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
@@ -298,7 +309,7 @@ public class DictionaryController {
 			String msg="";
 			String errormsg="";
 			int flag=0;
-			// Lohith : I need to fix this
+
 			if(values!=null){
 				for(int i=0;i<values.length;i++){
 					logger.info("Value "+i+" : "+values[i]);
@@ -376,4 +387,5 @@ public class DictionaryController {
 		//return "auth/dictionary/dictionary";		
 		return "auth/dictionaries/addDictionaryItems";
 	}
+
 }

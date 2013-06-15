@@ -47,6 +47,7 @@
 <div
 	style="float: left; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
 	<h4 align="center">You own these Dictionaries</h4>
+	<hr>
 	<c:choose>
 		<c:when test="${not empty dictinarylist}">
 			<ul class="pagination1">
@@ -67,6 +68,7 @@
 	style="float: right; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
 
 	<h4 align="center">You participate in these Dictionaries</h4>
+	<hr>
 	<ul class="pagination2">
 		<li>We have to complete the collaborator part</li>
 	</ul>

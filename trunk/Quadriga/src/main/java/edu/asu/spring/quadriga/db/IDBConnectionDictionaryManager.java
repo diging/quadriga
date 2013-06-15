@@ -51,7 +51,7 @@ public interface IDBConnectionDictionaryManager {
 	 * 
 	 * @return Status message
 	 */
-	public abstract String  deleteDictionaryItems(String dictinaryId, String item);
+	public abstract String  deleteDictionaryItems(String dictinaryId, String itemid);
 	/**
 	 * Updates the dictionary items in the dictionary in the database 
 	 * 

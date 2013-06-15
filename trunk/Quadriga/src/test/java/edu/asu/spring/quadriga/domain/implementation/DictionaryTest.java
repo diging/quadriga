@@ -10,9 +10,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
 
 /*
 * @Description 	: tests getters and setters for dictionary names, description, id, collaborators
@@ -21,12 +26,17 @@ import edu.asu.spring.quadriga.domain.IUser;
 * @author		: Rohit Pendbhaje
 * 
 */
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+"file:src/test/resources/root-context.xml" })
 
+@RunWith(SpringJUnit4ClassRunner.class)
 public class DictionaryTest {
 	
 	private Dictionary dictionary;
 	private List<ICollaborator> collaborators; 
 	private IUser owner;
+	@Autowired
+	DictionaryFactory dictionaryFactory;
 
 	
 
@@ -41,7 +51,7 @@ public class DictionaryTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		this.dictionary = new Dictionary();
+		this.dictionary = (Dictionary) dictionaryFactory.createDictionaryObject();
 		this.owner = new User();
 		
 		this.collaborators = new ArrayList<ICollaborator>();

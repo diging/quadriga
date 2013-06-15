@@ -32,7 +32,7 @@ public interface IDictionaryManager {
 	
 	public abstract WordpowerReply.DictionaryEntry searchWordPower(String item,String pos);
 	
-	public abstract String deleteDictionariesItems(String dictionaryId,String item);
+	public abstract String deleteDictionariesItems(String dictionaryId,String itemid);
 	
 	public abstract String updateDictionariesItems(String dictionaryId,String itemid,String term,String pos);
 	public abstract WordpowerReply.DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid);
