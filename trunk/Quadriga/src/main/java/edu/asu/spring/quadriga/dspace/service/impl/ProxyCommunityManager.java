@@ -95,8 +95,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 						e.printStackTrace();
 					}
 				}
-			}
-			
+			}			
 			System.out.println("Collections retrieved so far: "+this.collections.size());
 		}
 		System.out.println("Proxy manager returning its list of communities....");
