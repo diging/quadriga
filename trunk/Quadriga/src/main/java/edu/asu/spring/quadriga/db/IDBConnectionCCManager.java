@@ -72,6 +72,6 @@ public interface IDBConnectionCCManager {
 		 * @return Success - 1
 		 * @author satya swaroop boddu
 		 */
-		public abstract int setupTestEnvironment(String sQuery);
+		public abstract int setupTestEnvironment(String[] sQuery);
 		
 	}

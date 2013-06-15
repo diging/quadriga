@@ -1,14 +1,11 @@
 package edu.asu.spring.quadriga.db.sql;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tomcat.dbcp.dbcp.DelegatingConnection;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,13 +16,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
+import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -64,6 +64,18 @@ public class DBConnectionCCManagerTest {
 	IUser user;
 	String sDeactiveRoleDBId;
 	String sDatabaseSetup;
+
+
+	@Autowired
+	private IConceptCollectionFactory conceptcollectionFactory;
+
+
+	@Autowired
+	private IConceptCollectionManager collectionManager;
+
+
+	@Autowired
+	private IConceptFactory conceptFactory;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -93,7 +105,7 @@ public class DBConnectionCCManagerTest {
 		sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		//Setup the database with the proper data in the tables;
-		sDatabaseSetup = "delete from tbl_conceptcollections_items&delete from tbl_conceptcollections&delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_conceptcollections(collectionname,description,collectionowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES ('test','desc','jdoe',0,'jdoe',NOW(),'jdoe',NOW())&INSERT INTO tbl_conceptcollections_items(id, item, lemma, pos, description,updateddate,createddate) VALUES (1, 'test', 'testlemma', 'testpos', 'testdesc',NOW(),NOW())";
+		sDatabaseSetup = "delete from tbl_conceptcollections_items&delete from tbl_conceptcollections&delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())";
 	}
 	/**
 	 * Load the required data into the dependent tables
@@ -103,20 +115,21 @@ public class DBConnectionCCManagerTest {
 	public void testSetupTestEnvironment()
 	{
 		String[] sQuery = sDatabaseSetup.split("&");
-		for(String singleQuery: sQuery)
-		{
-			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
-		}
+		
+			assertEquals(1, dbConnection.setupTestEnvironment(sQuery));
+		
 	}
 	
 	@Test
 	public void getConceptsOwnedbyUserTest() {
-		testSetupTestEnvironment();
-		IConceptCollection collection = collectionFactory.createConceptCollectionObject();
-		collection.setName("test");
-		
-		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser("jdoe");
-		assertEquals(true,list.get(0).equals(collection));
+		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setDescription("Hello This is a test");
+		collection.setName("Collection Test");
+		collection.setOwner(user);
+		dbConnection.addCollection(collection);
+		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
+		assertEquals(collection,list.get(0));
 	}
 	
 	
@@ -128,7 +141,19 @@ public class DBConnectionCCManagerTest {
 	
 	@Test
 	public void getCollectionDetailsTest() {
-		fail("unimplemented");
+		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setDescription("Hello This is a test");
+		collection.setName("Collection Test");
+		collection.setOwner(user);
+		dbConnection.addCollection(collection);
+		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
+		assertEquals(collection.getName(),list.get(0).getName());
+		dbConnection.saveItem("lemma", "testid", "red", "hello", collection.getName());
+		dbConnection.getCollectionDetails(collection);
+		IConcept concept = conceptFactory.createConceptObject();
+		concept.setId("testid");
+		assertEquals(concept,collection.getItems().get(0));
 	}
 	
 	
@@ -148,8 +173,6 @@ public class DBConnectionCCManagerTest {
 		con.setOwner(user);
 		con.setDescription("sdads");
 		String result = dbConnection.addCollection(con);
-
-		
 		assertEquals("", result);
 	}
 }
