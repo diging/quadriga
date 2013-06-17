@@ -2,29 +2,16 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.implementation.Collection;
-import edu.asu.spring.quadriga.domain.implementation.CollectionsIdList;
-
-/**
- * The interface that provides access to the class representation of the community got from Dspace repostiory.
- * 
- * @author Ram Kumar Kumaresan
- * 
- */
 
 public interface ICommunity {
-
-	public abstract String getName();
-	
-	public abstract void setName(String name);
-	
-	public abstract String getDescription();
-	
-	public abstract void setDescription(String description);
 
 	public abstract String getId();
 
 	public abstract void setId(String id);
+
+	public abstract String getName();
+
+	public abstract void setName(String name);
 
 	public abstract String getShortDescription();
 
@@ -50,13 +37,10 @@ public interface ICommunity {
 
 	public abstract void setEntityId(String entityId);
 
-	public abstract ICollectionsIdList getCollectionsIDList();
+	public abstract List<ICollection> getCollections();
 
-	public abstract void setCollectionsIDList(ICollectionsIdList collections);
+	public abstract void setCollections(List<ICollection> collections);
+	
+	public abstract void addCollection(ICollection collection);
 
-//	public abstract List<ICollection> getCollections();
-//
-//	public abstract void setCollections(List<ICollection> collections);
-//
-//	public abstract void addCollections(ICollection collection);
 }

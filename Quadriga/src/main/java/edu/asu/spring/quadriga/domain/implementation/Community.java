@@ -3,23 +3,14 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementRefs;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
 import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICollectionsIdList;
 import edu.asu.spring.quadriga.domain.ICommunity;
-
 /**
  * The class representation of the community got from Dspace repostiory.
  * 
  * @author Ram Kumar Kumaresan
  * 
  */
-@XmlRootElement(name="communities")
 public class Community implements ICommunity{
 
 	private String id;
@@ -30,141 +21,137 @@ public class Community implements ICommunity{
 	private String handle;	
 	private String entityReference;
 	private String entityId;
-	private ICollectionsIdList collectionsIDList;
-//	private List<ICollection> collectionsList;
+	private List<ICollection> collections;
 	
-
-	@XmlElementRefs({@XmlElementRef(type=CollectionsIdList.class)})
-	@Override
-	public ICollectionsIdList getCollectionsIDList() {
-		return collectionsIDList;
-	}
-
-	@Override
-	public void setCollectionsIDList(ICollectionsIdList collectionsIDList) {
-		this.collectionsIDList = collectionsIDList;
-	}
-	
-//	@XmlElementRefs({@XmlElementRef(type=Collection.class)})
-//	@Override
-//	public List<ICollection> getCollections() {
-//		return collectionsList;
-//	}
-//
-//	@Override
-//	public void setCollections(List<ICollection> collections) {
-//		this.collectionsList = collections;
-//	}
-//	
-//	@Override
-//	public void addCollections(ICollection collection) {
-//		this.collectionsList.add(collection);
-//	}
-	
-	@Override
-	public String getEntityId() {
-		return entityId;
-	}
-
-	@Override
-	public void setEntityId(String entityId) {
-		this.entityId = entityId;
-	}
-
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getId()
+	 */
 	@Override
 	public String getId() {
 		return id;
 	}
-
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setId(java.lang.String)
+	 */
 	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	@Override
-	public String getShortDescription() {
-		return shortDescription;
-	}
-
-	@Override
-	public void setShortDescription(String shortDescription) {
-		this.shortDescription = shortDescription;
-	}
-
-	@Override
-	public String getIntroductoryText() {
-		return introductoryText;
-	}
-
-	@Override
-	public void setIntroductoryText(String introductoryText) {
-		this.introductoryText = introductoryText;
-	}
-
-	@Override
-	public String getCountItems() {
-		return countItems;
-	}
-
-	@Override
-	public void setCountItems(String countItems) {
-		this.countItems = countItems;
-	}
-
-	@Override
-	public String getHandle() {
-		return handle;
-	}
-
-	@Override
-	public void setHandle(String handle) {
-		this.handle = handle;
-	}
-
-	@Override
-	public String getEntityReference() {
-		return entityReference;
-	}
-
-	@Override
-	public void setEntityReference(String entityReference) {
-		this.entityReference = entityReference;
-	}
-
-	@Override
-	public String getDescription() {
-		return this.shortDescription;
-	}
-
-	@Override
-	public void setDescription(String shortDescription) {
-		this.shortDescription = shortDescription;
-	}
-
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getName()
+	 */
 	@Override
 	public String getName() {
-		return this.name;
+		return name;
 	}
-
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setName(java.lang.String)
+	 */
 	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public static class Adapter extends XmlAdapter<Community, ICommunity>
-	{
-
-		@Override
-		public ICommunity unmarshal(Community v) throws Exception {
-			return v;
-		}
-
-		@Override
-		public Community marshal(ICommunity v) throws Exception {
-			return (Community)v;
-		}
-		
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getShortDescription()
+	 */
+	@Override
+	public String getShortDescription() {
+		return shortDescription;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setShortDescription(java.lang.String)
+	 */
+	@Override
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getIntroductoryText()
+	 */
+	@Override
+	public String getIntroductoryText() {
+		return introductoryText;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setIntroductoryText(java.lang.String)
+	 */
+	@Override
+	public void setIntroductoryText(String introductoryText) {
+		this.introductoryText = introductoryText;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getCountItems()
+	 */
+	@Override
+	public String getCountItems() {
+		return countItems;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setCountItems(java.lang.String)
+	 */
+	@Override
+	public void setCountItems(String countItems) {
+		this.countItems = countItems;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getHandle()
+	 */
+	@Override
+	public String getHandle() {
+		return handle;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setHandle(java.lang.String)
+	 */
+	@Override
+	public void setHandle(String handle) {
+		this.handle = handle;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getEntityReference()
+	 */
+	@Override
+	public String getEntityReference() {
+		return entityReference;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setEntityReference(java.lang.String)
+	 */
+	@Override
+	public void setEntityReference(String entityReference) {
+		this.entityReference = entityReference;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getEntityId()
+	 */
+	@Override
+	public String getEntityId() {
+		return entityId;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setEntityId(java.lang.String)
+	 */
+	@Override
+	public void setEntityId(String entityId) {
+		this.entityId = entityId;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getCollections()
+	 */
+	@Override
+	public List<ICollection> getCollections() {
+		return collections;
+	}
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#setCollections(java.util.List)
+	 */
+	@Override
+	public void setCollections(List<ICollection> collections) {
+		this.collections = collections;
 	}
 	
-	
+	@Override
+	public void addCollection(ICollection collection) {
+		this.collections.add(collection);	
+	}
 }

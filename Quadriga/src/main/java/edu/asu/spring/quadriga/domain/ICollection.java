@@ -1,12 +1,5 @@
 package edu.asu.spring.quadriga.domain;
 
-import java.util.List;
-
-/**
- * The interface that provides access to the class representation of the Collection got from Dspace repostiory.
- * 
- * @author Ram Kumar Kumaresan
- */
 public interface ICollection {
 
 	public abstract String getId();
@@ -32,5 +25,9 @@ public interface ICollection {
 	public abstract String getCountItems();
 
 	public abstract void setCountItems(String countItems);
-	
+
+	public abstract boolean isLoaded();
+
+	public abstract void setLoaded(boolean isLoaded);
+
 }
