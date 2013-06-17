@@ -15,13 +15,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICollectionEntityId;
-import edu.asu.spring.quadriga.domain.ICollectionsIdList;
-import edu.asu.spring.quadriga.domain.ICommunity;
-import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICollectionManager;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionEntityId;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionsIdList;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 
 
 
@@ -36,40 +35,40 @@ import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 @Service("proxyCommunityManager")
 public class ProxyCommunityManager implements ICommunityManager {
 
-	private List<ICommunity> communities;
-	private List<ICollection> collections;
+	private List<IDspaceCommunity> communities;
+	private List<IDspaceCollection> collections;
 
 	@Autowired
 	@Qualifier("communityManager")
 	private ICommunityManager communityManager;
 
 	//create a list to hold the Future object associated with Callable
-	private List<Future<ICollection>> futureList;
+	private List<Future<IDspaceCollection>> futureList;
 
 
 	@Override
-	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
+	public List<IDspaceCommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
 		if(communities==null)
 		{
 			communities = communityManager.getAllCommunities(restTemplate, url, sUserName, sPassword);
 
 			//Initialize collection specific objects
-			collections = new ArrayList<ICollection>();
-			futureList = new ArrayList<Future<ICollection>>();
+			collections = new ArrayList<IDspaceCollection>();
+			futureList = new ArrayList<Future<IDspaceCollection>>();
 
 			//For each community get the collection names associated with it
-			for(ICommunity community: communities)
+			for(IDspaceCommunity community: communities)
 			{
-				ICollectionsIdList collectionIDList = community.getCollectionsIDList();
+				IDspaceCollectionsIdList collectionIDList = community.getCollectionsIDList();
 
 				//Create a thread pool that equals the size of the collection
 				ExecutorService executor = Executors.newFixedThreadPool(collectionIDList.getCollectionid().size());
 
 				int iThreadCount=0;
-				for(ICollectionEntityId collectionEntity :collectionIDList.getCollectionid()){
+				for(IDspaceCollectionEntityId collectionEntity :collectionIDList.getCollectionid()){
 					//Create a thread to retrieve the collection object from Dspace
-					Callable<ICollection> callable = new ProxyCollectionManager(restTemplate, url, sUserName, sPassword, collectionEntity.getId());
-					Future<ICollection> future = executor.submit(callable);
+					Callable<IDspaceCollection> callable = new ProxyCollectionManager(restTemplate, url, sUserName, sPassword, collectionEntity.getId());
+					Future<IDspaceCollection> future = executor.submit(callable);
 					futureList.add(future);
 					iThreadCount++;
 				}
@@ -79,15 +78,16 @@ public class ProxyCommunityManager implements ICommunityManager {
 		{
 			//Communities are already fetched from Dspace			
 			//Get an iterator so that the list can be modified while iterating
-			Iterator<Future<ICollection>> iteratorFuture = futureList.iterator();
+			Iterator<Future<IDspaceCollection>> iteratorFuture = futureList.iterator();
 
 			//Iterate through each thread and check if the thread returned a collection object.
 			while(iteratorFuture.hasNext())
 			{
-				Future<ICollection> future = iteratorFuture.next();
+				Future<IDspaceCollection> future = iteratorFuture.next();
 				if(future.isDone())
 				{
 					try {
+						//Add the collection object to the class variable and remove the thread reference from the list
 						this.collections.add(future.get());
 						iteratorFuture.remove();
 					} catch (InterruptedException e) {
@@ -100,12 +100,12 @@ public class ProxyCommunityManager implements ICommunityManager {
 			System.out.println("Collections retrieved so far: "+this.collections.size());
 
 			//Add the collection to the corresponding community
-			for(ICollection collection: this.collections)
+			for(IDspaceCollection collection: this.collections)
 			{
-				for(ICommunity community: this.communities)
+				for(IDspaceCommunity community: this.communities)
 				{
-					ICollectionsIdList collectionIDList = community.getCollectionsIDList();
-					for(ICollectionEntityId collectionEntity :collectionIDList.getCollectionid()){
+					IDspaceCollectionsIdList collectionIDList = community.getCollectionsIDList();
+					for(IDspaceCollectionEntityId collectionEntity :collectionIDList.getCollectionid()){
 						//The collection id is found in the list within the community
 						if(collectionEntity.getId().equals(collection.getId()))
 						{
