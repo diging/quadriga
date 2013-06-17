@@ -29,17 +29,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
-import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunity;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -298,21 +298,50 @@ public class WorkbenchController {
 
 	@RequestMapping(value = "/auth/workbench/workspace/communities", method = RequestMethod.GET)
 	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
-
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
-		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
+		List<IDspaceCommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
 
 		model.addAttribute("communityList", communities);
 
 		return "auth/workbench/workspace/communities";
 	}
+	
+	@RequestMapping(value = "/auth/workbench/workspace/communities-collections", method = RequestMethod.GET)
+	public @ResponseBody String getCommunitiesAndCollections() {
+		String sUserName = (String)SecurityContextHolder.getContext().getAuthentication().getName();
+		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		StringBuilder sResult = new StringBuilder();
+		List<IDspaceCommunity> communities = dspaceManager.getAllCommunities(sUserName,sPassword);
+		
+		if(communities.size()>0)
+		{
+			sResult.append("<h2>Communities in HPS Repository</h2>");
+			sResult.append("<span class=\"byline\">Select a community to browse its collections.</span>");
+			sResult.append("<span style=\"font-weight: bold\">");
+			for(IDspaceCommunity community: communities)
+			{
+				sResult.append("<a href='/quadriga/auth/workspace/community/"+community.getId()+"'>");
+				sResult.append(community.getName());
+				sResult.append("</a>");
+				sResult.append("<br />");
+			}
+			sResult.append("</span>");
+		}
+		else
+		{
+			sResult.append("<h2>No Communities in HPS Repository</h2>");
+		}
+		
+		return sResult.toString();
+	}
+	
 
 	@RequestMapping(value = "/auth/workbench/workspace/community/{communityTitle}", method = RequestMethod.GET)
 	public String workspaceCommunityRequest(@PathVariable("communityTitle") String communityTitle, ModelMap model, Principal principal) {
 
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		List<ICollection> collections = dspaceManager.getAllCollections(principal.getName(),sPassword, communityTitle);
+		List<IDspaceCollection> collections = dspaceManager.getAllCollections(principal.getName(),sPassword, communityTitle);
 
 		model.addAttribute("communityTitle", communityTitle);
 		model.addAttribute("collectionList", collections);
