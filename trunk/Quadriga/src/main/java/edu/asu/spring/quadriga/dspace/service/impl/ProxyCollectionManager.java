@@ -10,14 +10,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICollectionsIdList;
-import edu.asu.spring.quadriga.domain.implementation.Collection;
-import edu.asu.spring.quadriga.domain.implementation.CollectionsIdList;
 import edu.asu.spring.quadriga.dspace.service.ICollectionManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionsIdList;
 
 @Service
-public class ProxyCollectionManager implements Callable<ICollection>, ICollectionManager {
+public class ProxyCollectionManager implements Callable<IDspaceCollection>, ICollectionManager {
 
 	private String userName;
 	private String password;
@@ -47,10 +45,10 @@ public class ProxyCollectionManager implements Callable<ICollection>, ICollectio
 	}
 
 	@Override
-	public ICollection call() throws Exception {
+	public IDspaceCollection call() throws Exception {
 
 		String sRestServicePath = getCompleteUrlPath("/rest/collections/"+CollectionId+".xml");
-		ICollection collection = (Collection) restTemplate.getForObject(sRestServicePath, Collection.class);
+		IDspaceCollection collection = (DspaceCollection) restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
 
 		return collection;
 
@@ -62,10 +60,10 @@ public class ProxyCollectionManager implements Callable<ICollection>, ICollectio
 
 
 	@Override
-	public ICollection testRestGET(RestTemplate restTemplate, String url, String sUserName, String sPassword)
+	public IDspaceCollection testRestGET(RestTemplate restTemplate, String url, String sUserName, String sPassword)
 	{
 		String sRestServicePath = getCompleteUrlPath("/rest/collections/43.xml");
-		ICollection collection = (Collection) restTemplate.getForObject(sRestServicePath, Collection.class);
+		IDspaceCollection collection = (DspaceCollection) restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
 
 		return collection;
 	}

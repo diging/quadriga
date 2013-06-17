@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.domain.ICommunities;
-import edu.asu.spring.quadriga.domain.ICommunity;
-import edu.asu.spring.quadriga.domain.implementation.Communities;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
+import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
 
 
 
@@ -33,14 +32,14 @@ public class CommunityManager implements ICommunityManager {
 	}
 
 	@Override
-	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
+	public List<IDspaceCommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
 		//TODO: Uncomment to user the correct username and password
 		//		this.userName = sUserName;
 		//		this.password = sPassword;
 		
 		System.out.println("Community Manager connecting to Dspace....");
 		String sRestServicePath = getCompleteUrlPath(url+"/rest/communities.xml", sUserName, sPassword);
-		ICommunities communities = (Communities)restTemplate.getForObject(sRestServicePath, Communities.class);
+		IDspacecCommunities communities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
 
 		return communities.getCommunities();
 	}	

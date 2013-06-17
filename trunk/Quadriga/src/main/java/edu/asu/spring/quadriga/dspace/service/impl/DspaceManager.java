@@ -15,16 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICollectionsIdList;
-import edu.asu.spring.quadriga.domain.ICommunities;
-import edu.asu.spring.quadriga.domain.ICommunity;
-import edu.asu.spring.quadriga.domain.implementation.Collection;
-import edu.asu.spring.quadriga.domain.implementation.CollectionsIdList;
-import edu.asu.spring.quadriga.domain.implementation.Communities;
-import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionsIdList;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
 
 /**
  * The purpose of the class is to make rest service calls to dspace
@@ -58,7 +54,7 @@ public class DspaceManager implements IDspaceManager{
 	private ICommunityManager proxyCommunityManager;
 
 	@Override
-	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
+	public List<IDspaceCommunity> getAllCommunities(String sUserName, String sPassword) {
 		
 		//TODO: Remove this after actual user synchronization to Dspace
 		sUserName="ramk@asu.edu";
@@ -68,7 +64,7 @@ public class DspaceManager implements IDspaceManager{
 	}
 
 	@Override
-	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityTitle) {
+	public List<IDspaceCollection> getAllCollections(String sUserName, String sPassword, String sCommunityTitle) {
 		throw new NotImplementedException("getAllCollections yet to be implemented");
 	}
 
