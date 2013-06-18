@@ -28,15 +28,46 @@ td {
 			"sPaginationType" : "full_numbers",
 			"bAutoWidth" : false
 		});
+		
+		$("#dlgConfirm").hide();
 	});
 	
+	function submitClick(id){
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
+	}
+
 	$(function() {
+		
+		$("input[name='Back']").button().click(function(event) {
+			event.preventDefault();
+		});
 		
 		$("input[name='deleteproj']").button().click(function(event){
 			if(!$("input[name='projchecked']").is(":checked")) {
 				$.alert("Select record to delete", "Oops !!!");
 				event.preventDefault();
 				return;
+			}
+		});
+		
+		$("input[name='deleteproj']").button().click(function(event) {
+			if ($("input[name='projchecked']").is(":checked")) {
+				event.preventDefault();
+				$("#dlgConfirm").dialog({
+					resizable : false,
+					height : 'auto',
+					width : 350,
+					modal : true,
+					buttons : {
+						Submit : function() {
+							$(this).dialog("close");
+							$("#deleteprojform")[0].submit();
+						},
+						Cancel : function() {
+							$(this).dialog("close");
+						}
+					}
+				});
 			}
 		});
 		
@@ -55,7 +86,7 @@ td {
 </script>
 <article class="is-page-content">
 	<form:form modelAttribute="project" method="POST"
-		action="/auth/workbench/deleteproject">
+		action="/auth/workbench/deleteproject" id="deleteprojform">
 		<c:if test="${not empty projectlist}">
 			<span class="byline">Select the projects to be deleted:</span>
 			<c:choose>
@@ -95,7 +126,14 @@ td {
 			<input type="button" value="DeSelect All" name="deselectall">
 		</c:if>
 		<c:if test="${empty projectlist}">
+			<ul>
+				<li><input type="submit" onClick="submitClick(this.id);"
+					value='Back' name="Back"></li>
+			</ul>
 			You don't have any projects to delete.
 		</c:if>
+		<div id="dlgConfirm" title="Confirmation">
+			Are you sure?
+		</div>
 	</form:form>
 </article>

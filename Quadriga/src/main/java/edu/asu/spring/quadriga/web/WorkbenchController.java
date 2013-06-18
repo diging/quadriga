@@ -162,6 +162,7 @@ public class WorkbenchController {
 		}
 
 		model.addAttribute("project", project);
+		model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 
 		return "auth/workbench/modifyproject";
 	}
@@ -203,6 +204,7 @@ public class WorkbenchController {
 				model.addAttribute("project", project);
 				model.addAttribute("success", 0);
 				model.addAttribute("errormsg", errmsg);
+				model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 				return "auth/workbench/modifyproject";
 			}
 	}
@@ -222,6 +224,7 @@ public class WorkbenchController {
 	public String addprojectform(Model model)
 	{
 		model.addAttribute("project",projectFactory.createProjectObject());
+		model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 		return "auth/workbench/addproject"; 
 	}
 
@@ -262,6 +265,7 @@ public class WorkbenchController {
 				model.addAttribute("project", project);
 				model.addAttribute("success", 0);
 				model.addAttribute("errormsg", errmsg);
+				model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 				return "auth/workbench/addproject";
 			}
 		}
