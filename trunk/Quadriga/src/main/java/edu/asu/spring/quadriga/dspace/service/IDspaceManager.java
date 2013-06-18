@@ -2,11 +2,11 @@ package edu.asu.spring.quadriga.dspace.service;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunity;
+import edu.asu.spring.quadriga.domain.ICommunity;
 
 public interface IDspaceManager {
 
-	public abstract List<IDspaceCommunity> getAllCommunities(String sUserName, String sPassword);
+	public abstract List<ICommunity> getAllCommunities(String sUserName, String sPassword);
 
 	public abstract List<IDspaceCollection> getAllCollections(String sUserName, String sPassword,String sCommunityTitle);
 

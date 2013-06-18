@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain;
 
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+
 public interface ICollection {
 
 	public abstract String getId();
@@ -29,5 +31,7 @@ public interface ICollection {
 	public abstract boolean isLoaded();
 
 	public abstract void setLoaded(boolean isLoaded);
+
+	public abstract boolean copy(IDspaceCollection dspaceCollection);
 
 }

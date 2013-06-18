@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionEntityId;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 /**
  * The class representation of the community got from Dspace repostiory.
  * 
@@ -21,7 +24,9 @@ public class Community implements ICommunity{
 	private String handle;	
 	private String entityReference;
 	private String entityId;
+	private List<String> collectionIds;
 	private List<ICollection> collections;
+	
 	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICommunity#getId()
@@ -154,4 +159,93 @@ public class Community implements ICommunity{
 	public void addCollection(ICollection collection) {
 		this.collections.add(collection);	
 	}
+	
+	@Override
+	public List<String> getCollectionIds() {
+		return collectionIds;
+	}
+	
+	@Override
+	public void setCollectionIds(List<String> collectionIds) {
+		this.collectionIds = collectionIds;
+	}
+	
+	@Override
+	public boolean copy(IDspaceCommunity dspaceCommunity)
+	{
+		if(dspaceCommunity != null)
+		{
+			if(dspaceCommunity.getId() != null)
+			{
+				this.id =dspaceCommunity.getId();
+			}
+			
+			if(dspaceCommunity.getName() != null)
+			{
+				this.name =dspaceCommunity.getName();
+			}
+			
+			if(dspaceCommunity.getDescription() != null)
+			{
+				this.shortDescription = dspaceCommunity.getDescription();
+			}
+			
+			if(dspaceCommunity.getIntroductoryText() != null)
+			{
+				this.introductoryText = dspaceCommunity.getIntroductoryText();
+			}
+			
+			if(dspaceCommunity.getHandle() != null)
+			{
+				this.handle = dspaceCommunity.getHandle();
+			}
+			
+			//Add all the collection ids from the Dspace community object
+			if(dspaceCommunity.getCollectionsIDList().getCollectionid().size()>0)
+			{
+				this.collectionIds = new ArrayList<String>();
+				this.collections = new ArrayList<ICollection>();
+				
+				for(IDspaceCollectionEntityId collectionid : dspaceCommunity.getCollectionsIDList().getCollectionid())
+				{
+					this.collectionIds.add(collectionid.getId());
+				}
+			}
+			
+			if(dspaceCommunity.getEntityId() != null)
+			{
+				this.entityId = dspaceCommunity.getEntityId();
+			}
+			
+			if(dspaceCommunity.getEntityReference() != null)
+			{
+				this.entityReference = dspaceCommunity.getEntityReference();
+			}
+			
+			if(dspaceCommunity.getCountItems() != null )
+			{
+				this.countItems = dspaceCommunity.getCountItems();
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	@Override
+	public ICollection getCollectionById(String sCollectionId)
+	{
+		for(ICollection collection: this.collections)
+		{
+			if(collection.getId().equals(sCollectionId))
+			{
+				return collection;
+			}
+		}
+		
+		return null;
+	}
+	
 }

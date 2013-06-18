@@ -2,20 +2,17 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.dspace.service.ICollectionManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionsIdList;
 
 @Service
-public class ProxyCollectionManager implements Callable<IDspaceCollection>, ICollectionManager {
+public class ProxyCollectionManager implements Callable<ICollection>, ICollectionManager {
 
 	private String userName;
 	private String password;
@@ -45,25 +42,39 @@ public class ProxyCollectionManager implements Callable<IDspaceCollection>, ICol
 	}
 
 	@Override
-	public IDspaceCollection call() throws Exception {
+	public ICollection call() throws Exception {
 
 		String sRestServicePath = getCompleteUrlPath("/rest/collections/"+CollectionId+".xml");
-		IDspaceCollection collection = (DspaceCollection) restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
+		IDspaceCollection dspaceCollection = (DspaceCollection) restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
+		ICollection collection = null;
+
+		if(dspaceCollection != null)
+		{
+			collection = new Collection();
+			collection.copy(dspaceCollection);
+		}
 
 		return collection;
 
-//		ICollection collectionTest = new Collection();
-//		collectionTest.setId(CollectionId);
-//		collectionTest.setName(CollectionId+" Name");
-//		return collectionTest;
+		//		ICollection collectionTest = new Collection();
+		//		collectionTest.setId(CollectionId);
+		//		collectionTest.setName(CollectionId+" Name");
+		//		return collectionTest;
 	}
 
 
 	@Override
-	public IDspaceCollection testRestGET(RestTemplate restTemplate, String url, String sUserName, String sPassword)
+	public ICollection testRestGET(RestTemplate restTemplate, String url, String sUserName, String sPassword)
 	{
 		String sRestServicePath = getCompleteUrlPath("/rest/collections/43.xml");
-		IDspaceCollection collection = (DspaceCollection) restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
+		IDspaceCollection dspaceCollection = (DspaceCollection) restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
+
+		ICollection collection = null;
+
+		if(dspaceCollection != null)
+		{
+			collection.copy(dspaceCollection);
+		}
 
 		return collection;
 	}
