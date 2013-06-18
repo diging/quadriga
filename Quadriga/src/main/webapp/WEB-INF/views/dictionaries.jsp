@@ -52,11 +52,13 @@
 		<c:when test="${not empty dictinarylist}">
 			<ul class="pagination1">
 				<c:forEach var="dictionary" items="${dictinarylist}">
-
-
-					<li><a href="/quadriga/auth/dictionaries/${dictionary.id}">
-							<c:out value="${dictionary.name}"></c:out>
-					</a> <br>&nbsp;<c:out value="${dictionary.description}"></c:out></li>
+					<li><details>
+							<summary>
+								<a href="/quadriga/auth/dictionaries/${dictionary.id}"> <c:out
+										value="${dictionary.name}"></c:out></a>
+							</summary>
+							<c:out value="${dictionary.description}"></c:out>
+						</details></li>
 				</c:forEach>
 			</ul>
 		</c:when>

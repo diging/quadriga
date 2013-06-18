@@ -33,7 +33,7 @@ public class RestController {
 	@Autowired 
 	IDictionaryManager dictonaryManager;
 
-	private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RestController.class);
 
 	@Autowired 
 	IUserManager usermanager;
@@ -44,7 +44,7 @@ public class RestController {
 	@Autowired 
 	DictionaryItemsFactory dictionaryItemsFactory;
 
-	@RequestMapping(value="dictionaries/{userID}", method = RequestMethod.GET , produces = "application/xml")
+	@RequestMapping(value="api/dictionaries/{userID}", method = RequestMethod.GET , produces = "application/xml")
 	@ResponseBody
 	public String listDictionary(@PathVariable("userID") String userId, ModelMap model){
 		String result=null;

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,8 @@ import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.exceptions.QuadrigaExceptionHandler;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -49,6 +50,8 @@ public class DictionaryController {
 
 
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
+
+	QuadrigaExceptionHandler quadExcepHandler = new QuadrigaExceptionHandler();
 
 	@Autowired 
 	IUserManager usermanager;
@@ -71,8 +74,12 @@ public class DictionaryController {
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			logger.info("came to listDictionary");
 			String userId = user.getUsername();
-			List<IDictionary> dictionaryList;
-			dictionaryList = dictonaryManager.getDictionariesList(userId);
+			List<IDictionary> dictionaryList=null;
+			try{
+				dictionaryList = dictonaryManager.getDictionariesList(user.getUsername());
+			}catch(QuadrigaStorageException e){
+				throw new QuadrigaStorageException();
+			}
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("userId", userId);
 		}catch(Exception e){
@@ -86,20 +93,28 @@ public class DictionaryController {
 	 *  and to search and add items from the word power  
 	 * 
 	 * @return 	Return to the list dictionary items page of the Quadriga
+	 * @throws QuadrigaStorageException 
 	 */
 
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
-	public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
+	public String getDictionaryPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model) throws QuadrigaStorageException {
 		try{
 			logger.info("came to getDictionaryPage");
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);
 			if(dictionaryItemList == null){
 				logger.info("Dictionary ITem list is null");
 			}
-			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
+			String dictionaryName="";
+			try{
+				dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
+			}catch(QuadrigaStorageException e){
+				throw new QuadrigaStorageException();
+			}
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictionaryid", dictionaryid);
+		}catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -131,35 +146,43 @@ public class DictionaryController {
 	 *  Admin can use this page to new dictionary to his list  
 	 * 
 	 * @return 	Return to the add dictionary status page
+	 * @throws QuadrigaStorageException 
 	 */
 
 	@RequestMapping(value="auth/dictionaries/addDictionary", method = RequestMethod.POST)
-	public String addDictionaryHandle(@ModelAttribute("SpringWeb")Dictionary dictionary,ModelMap model, Principal principal){
-		try{
-			logger.info("came to addDictionaryHandle post");
-			IUser user = usermanager.getUserDetails(principal.getName());
-			dictionary.setOwner(user);
+	public String addDictionaryHandle(@ModelAttribute("SpringWeb")Dictionary dictionary,ModelMap model, Principal principal) throws QuadrigaStorageException{
+		logger.info("came to addDictionaryHandle post");
+		IUser user = usermanager.getUserDetails(principal.getName());
+		dictionary.setOwner(user);
 
-			String msg = dictonaryManager.addNewDictionary(dictionary);
-			if(msg.equals(""))
-			{
-				model.addAttribute("adddicsuccess", 1);
-				model.addAttribute("adddicsuccessMsg","Dictionary created successfully.");				
-				List<IDictionary> dictionaryList;
-				dictionaryList = dictonaryManager.getDictionariesList(user.getUserName());
-				model.addAttribute("dictinarylist", dictionaryList);
-				model.addAttribute("userId", user.getUserName());
-				return "auth/dictionaries"; 
-			}else{
-				model.addAttribute("dictionary", dictionary);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", msg);
-				return "auth/dictionaries/addDictionary"; 
-			}
-		}catch(Exception e){
-			e.printStackTrace();
+		String msg="";
+		try {
+			msg = dictonaryManager.addNewDictionary(dictionary);
+		} catch (QuadrigaStorageException e1) {
+			// TODO Auto-generated catch block
+			msg="DB Error";
+			e1.printStackTrace();
+
 		}
-		return "auth/dictionaries"; 
+		if(msg.equals(""))
+		{
+			model.addAttribute("adddicsuccess", 1);
+			model.addAttribute("adddicsuccessMsg","Dictionary created successfully.");				
+			List<IDictionary> dictionaryList=null;
+			try{
+				dictionaryList = dictonaryManager.getDictionariesList(user.getUserName());
+			}catch(QuadrigaStorageException e){
+				throw new QuadrigaStorageException();
+			}
+			model.addAttribute("dictinarylist", dictionaryList);
+			model.addAttribute("userId", user.getUserName());
+			return "auth/dictionaries"; 
+		}else{
+			model.addAttribute("dictionary", dictionary);
+			model.addAttribute("success", 0);
+			model.addAttribute("errormsg", msg);
+			return "auth/dictionaries/addDictionary"; 
+		} 
 	}
 
 	/**
@@ -195,15 +218,19 @@ public class DictionaryController {
 	 */
 
 	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String addDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) {
+	public String addDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) throws QuadrigaStorageException{
+		String msg="";
+		logger.info("came to addDictionaryItemForm post");
+		String owner = usermanager.getUserDetails(principal.getName()).getUserName();
+		logger.info("items : "+dictionaryItems.getItems()+" , id: "+dictionaryItems.getId()+"pos"+
+				dictionaryItems.getPos());
 		try{
-			logger.info("came to addDictionaryItemForm post");
-			String owner = usermanager.getUserDetails(principal.getName()).getUserName();
-			logger.info("items : "+dictionaryItems.getItems()+" , id: "+dictionaryItems.getId()+"pos"+
-					dictionaryItems.getPos());
-			String msg= dictonaryManager.addNewDictionariesItems(dictionaryId,dictionaryItems.getItems(),dictionaryItems.getId(),
+			msg= dictonaryManager.addNewDictionariesItems(dictionaryId,dictionaryItems.getItems(),dictionaryItems.getId(),
 					dictionaryItems.getPos(),owner);
-
+		}catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
+		}
+		try{
 			if(msg.equals(""))
 			{
 				model.addAttribute("success", 1);
@@ -222,6 +249,8 @@ public class DictionaryController {
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
+		}catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -232,10 +261,11 @@ public class DictionaryController {
 	 *  Admin can use this to delete a dictionary item to dictionary
 	 * 
 	 *  @return 	Return to list dictionary item page
+	 * @throws QuadrigaStorageException 
 	 */
 
 	@RequestMapping(value="auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String deleteDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
+	public String deleteDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) throws QuadrigaStorageException {
 		try{
 			String[] values= req.getParameterValues("selected");
 			String msg ="";
@@ -278,6 +308,8 @@ public class DictionaryController {
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
+		}catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -293,15 +325,20 @@ public class DictionaryController {
 	public String handleNullException(NullPointerException ex, HttpServletRequest request,ModelMap model,Principal principal) {
 		logger.info("Handling exception");
 		String user = usermanager.getUserDetails(principal.getName()).getUserName();
-		List<IDictionary> dictionaryList;
-		dictionaryList = dictonaryManager.getDictionariesList(user);
+		List<IDictionary> dictionaryList=null;
+		try {
+			dictionaryList = dictonaryManager.getDictionariesList(user);
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		model.addAttribute("dictinarylist", dictionaryList);
 		model.addAttribute("userId", user);
 		return "auth/dictionaries";
 	}
 
 	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String updateDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) {
+	public String updateDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) throws QuadrigaStorageException {
 		//DictionaryEntry dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/",item,pos);
 		try{
 			//String msg= dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
@@ -349,6 +386,8 @@ public class DictionaryController {
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
+		}catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -358,10 +397,11 @@ public class DictionaryController {
 	 *  Admin can use this to search from term and pos from word power
 	 * 
 	 *  @return 	Return to list dictionary item page
+	 * @throws QuadrigaStorageException 
 	 */
 
 	@RequestMapping(value="auth/dictionaries/dictionary/wordSearch/{dictionaryid}", method = RequestMethod.POST)
-	public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model){
+	public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model) throws QuadrigaStorageException{
 		try{
 			logger.info("came to searchDictionaryItemRestHandle post");
 			DictionaryEntry dictionaryEntry=null;
@@ -380,6 +420,8 @@ public class DictionaryController {
 				model.addAttribute("errorstatus", 1);
 			}
 
+		}catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
