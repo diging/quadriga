@@ -17,19 +17,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
-import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -154,7 +149,7 @@ public class WorkbenchController {
 	 * @author         : Kiran Kumar Batna
 	 * 
 	 */
-	@RequestMapping(value="auth/workbench/modifyproject/${projectid}", method = RequestMethod.GET)
+	@RequestMapping(value="auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
 	public String getEditProjectPage(@PathVariable("projectid") int projectid, ModelMap model,Principal principal) throws QuadrigaStorageException {
         
 		IProject project=null;
@@ -182,15 +177,17 @@ public class WorkbenchController {
 	 * @author         : Kiran Kumar Batna
 	 * 
 	 */
-	@RequestMapping(value = "auth/workbench/modifyproject/${projectid}", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
 	public String editProject(@PathVariable("projectid") int projectid,@ModelAttribute("SpringWeb")Project project, 
 			ModelMap model, Principal principal) throws QuadrigaStorageException 
 	{
 		String errmsg;
 		String user = principal.getName();
-
+		
 		    try
 		    {
+		      // assigning the internal id of the project
+		      project.setInternalid(projectid);
 			errmsg = projectmanager.updateProjectDetails(project, user);
 		    }
 		    catch(QuadrigaStorageException e){

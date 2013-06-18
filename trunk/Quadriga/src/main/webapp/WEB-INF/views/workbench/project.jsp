@@ -16,7 +16,7 @@ $(document).ready(function() {
 <hr>
 <div class="user">Owned by: ${project.owner.name}</div>
 <hr>
-<a href="workbench/modifyproject/${project.internalid}">
+<a href="modifyproject/${project.internalid}">
 <input type="button" name="Edit" value="Edit"/>
 </a>
 
