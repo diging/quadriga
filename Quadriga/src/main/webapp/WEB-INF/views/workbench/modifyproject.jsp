@@ -61,7 +61,7 @@ $(document).ready(function(){
 <article class="is-page-content">
 
 	<form:form modelAttribute="project" method="POST"
-		action="/auth/workbench/modifyproject">
+		action="/auth/workbench/modifyproject/${project.internalid}">
 		<table style="width: 100%">
 			<c:choose>
 				<c:when test="${success=='0'}">
