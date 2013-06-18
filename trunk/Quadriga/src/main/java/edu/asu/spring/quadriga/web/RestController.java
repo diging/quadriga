@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.web;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,11 +17,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
+import edu.asu.spring.quadriga.domain.rest.ProjectList;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
+import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Controller
@@ -34,7 +42,13 @@ public class RestController {
 
 	@Autowired 
 	IUserManager usermanager;
-
+	
+	@Autowired
+	IProject project;
+	
+	@Autowired
+	IProjectManager projectManager;
+	
 	@Autowired 
 	IDictionaryFactory dictionaryFactory;
 
@@ -60,5 +74,36 @@ public class RestController {
 			e1.printStackTrace();
 		}
 		return result; 
+	}
+	
+	
+	
+	@RequestMapping(value="api/projects/{userID}", method = RequestMethod.GET , produces = "application/xml")
+	@ResponseBody
+	public String listProjects(@PathVariable("userID") String userId, ModelMap model){
+		String result=null;		
+		List<IProject> projectList=null;
+		ProjectList projectListObj= new ProjectList();
+
+
+		
+		try {
+			projectList = projectManager.getProjectsOfUser(userId);
+			projectListObj.SetProjectList(projectList);
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(projectList.isEmpty()){
+			logger.info("ProjectList Is empty");
+		}
+		if(projectList.size()==0){
+			logger.info("ProjectList Is empty");
+		}
+		logger.info("ProjectList size = "+projectList.size());
+		return result;
+		
+				
+		
 	}
 }
