@@ -63,7 +63,7 @@
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory" />
-	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleMapper" />
+	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager" />
 	
 	<bean class="edu.asu.spring.quadriga.service.impl.ProjectManager" />
 
