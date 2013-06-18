@@ -40,7 +40,7 @@ BEGIN
     END IF;
     
     IF NOT EXISTS(SELECT 1 FROM vw_project
-                    WHERE id = inid)
+                    WHERE projectid = inid)
       THEN SET errmsg = "No such record exists.Please specify correct value";
     END IF;
 
@@ -51,11 +51,11 @@ BEGIN
            UPDATE tbl_project proj
               SET proj.projectname = IFNULL(inprojectname,proj.projectname),
                   proj.description = IFNULL(indescription,proj.description),
-                  proj.projectid   = IFNULL(inprojectid,proj.projectid),
+                  proj.unixname   = IFNULL(inprojectid,proj.projectid),
                   proj.accessibility = IFNULL(inaccessibility,proj.accessibility),
                   proj.updatedby     = inuser,
 				  proj.updateddate   = NOW()
-			WHERE proj.id = inid;
+			WHERE proj.projectid = inid;
           IF(errmsg = "")
              THEN COMMIT;
 		  ELSE 

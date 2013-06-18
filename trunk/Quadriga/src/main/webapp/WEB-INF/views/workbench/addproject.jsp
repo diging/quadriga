@@ -11,7 +11,7 @@ $(document).ready(function(){
 		var constant = "";
 		if($.trim($("#projId").val()))
 			{
-			   constant = "http://quadriga.asu.edu/sites/";
+			  constant = $("#unixnameurl").val();
 			}
 	    $("#UnixURL").text(constant+keyedInput);
 	  });
@@ -93,8 +93,12 @@ $(document).ready(function(){
 				<td></td>
 				<td><div id="UnixURL"></div></td>
 			</tr>
+			<tr>
+		    <td>  <input class="command" type="submit" value="Create Project"> </td>
+		    <td><input type="hidden" id="unixnameurl" value=<c:out value="${unixnameurl}"></c:out>/></td>
+		    </tr>
 		</table>
-		<input class="command" type="submit" value="Create Project">
+
 	</form:form>
 
 </article>

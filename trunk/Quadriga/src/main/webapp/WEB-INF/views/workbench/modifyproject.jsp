@@ -11,10 +11,20 @@ $(document).ready(function(){
 		var constant = "";
 		if($.trim($("#projId").val()))
 			{
-			   constant = "http://quadriga.asu.edu/sites/";
+			   constant = $("#unixnameurl").val();
 			}
 	    $("#UnixURL").text(constant+keyedInput);
 	  });
+	  
+	  if ($.trim($("#projId").val())) {
+			var keyedInput = $("#projId").val();
+			var constant = "";
+			if($.trim($("#projId").val()))
+				{
+				   constant = $("#unixnameurl").val();
+				}
+		    $("#UnixURL").text(constant+keyedInput);
+		}
 	});
 	
 	$(function() {
@@ -93,8 +103,11 @@ $(document).ready(function(){
 				<td></td>
 				<td><div id="UnixURL"></div></td>
 			</tr>
+			<tr>
+			<td><input class="command" type="submit" value="Modify Project"> </td>
+			<td><input type="hidden" id="unixnameurl" value=<c:out value="${unixnameurl}"></c:out>/></td>
+			</tr>
 		</table>
-		<input class="command" type="submit" value="Modify Project">
 	</form:form>
 
 </article>
