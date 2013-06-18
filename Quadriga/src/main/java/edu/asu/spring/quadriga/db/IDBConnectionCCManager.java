@@ -36,8 +36,8 @@ public interface IDBConnectionCCManager {
 		 * Updates the database by adding additional items to the List
 		 * 
 		 */
-		public abstract void saveItem(String lemmma, String id, String pos,
-				String desc, String conceptId);
+		public abstract void saveItem(String lemma, String id, String pos, String desc,
+				int conceptId);
 		/**
 		 * Validated the id for the collection
 		 */
@@ -52,11 +52,11 @@ public interface IDBConnectionCCManager {
 		/**
 		 * Method is used to call the delete item sp and delete the item called
 		 * @param id
-		 * @param collectionName
+		 * @param collectionId
 		 * @return 
 		 * 
 		 */
-		public abstract String deleteItems(String id, String collectionName);
+		public abstract String deleteItems(String id, int collectionId);
 		
 		/**
 		 * Method is used to update the fields in the database
@@ -73,5 +73,6 @@ public interface IDBConnectionCCManager {
 		 * @author satya swaroop boddu
 		 */
 		public abstract int setupTestEnvironment(String[] sQuery);
+		
 		
 	}

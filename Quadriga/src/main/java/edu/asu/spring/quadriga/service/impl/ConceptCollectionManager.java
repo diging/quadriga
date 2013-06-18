@@ -133,7 +133,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 
 	@Override
-	public void addItems(String lemmma, String id, String pos, String desc, String conceptId) {
+	public void addItems(String lemmma, String id, String pos, String desc, int conceptId) {
 		
 		dbConnect.saveItem(lemmma, id, pos, desc, conceptId);
 	}
@@ -145,9 +145,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public void deleteItem(String id, String collectionName) {
+	public void deleteItem(String id, int collectionId) {
 		
-		dbConnect.deleteItems(id,collectionName);
+		dbConnect.deleteItems(id,collectionId);
 		
 	}
 

@@ -66,8 +66,9 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				do {
 					conceptCollection = conceptCollectionFactory
 							.createConceptCollectionObject();
-					conceptCollection.setName(resultSet.getString(1));
-					conceptCollection.setDescription(resultSet.getString(2));
+					conceptCollection.setId(resultSet.getInt(1));
+					conceptCollection.setName(resultSet.getString(2));
+					conceptCollection.setDescription(resultSet.getString(3));
 					collectionsList.add(conceptCollection);
 				} while (resultSet.next());
 			}
@@ -112,8 +113,9 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				do {
 					conceptCollection = conceptCollectionFactory
 							.createConceptCollectionObject();
-					conceptCollection.setName(resultSet.getString(1));
-					conceptCollection.setDescription(resultSet.getString(2));
+					conceptCollection.setId(resultSet.getInt(1));
+					conceptCollection.setName(resultSet.getString(2));
+					conceptCollection.setDescription(resultSet.getString(3));
 
 					collectionsList.add(conceptCollection);
 				} while (resultSet.next());
@@ -142,7 +144,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 			CallableStatement sqlStatement = connection.prepareCall("{"
 					+ dbCommand + "}");
-			sqlStatement.setString(1, collection.getName());
+			sqlStatement.setInt(1, collection.getId());
 			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
 
 			sqlStatement.execute();
@@ -154,10 +156,10 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				do {
 
 					concept = conceptFactory.createConceptObject();
-					concept.setLemma(resultSet.getString(5));
-					concept.setId(resultSet.getString(2));
-					concept.setPos(resultSet.getString(4));
-					concept.setDescription(resultSet.getString(3));
+					concept.setLemma(resultSet.getString(4));
+					concept.setId(resultSet.getString(1));
+					concept.setPos(resultSet.getString(3));
+					concept.setDescription(resultSet.getString(2));
 					collection.addItem(concept);
 				} while (resultSet.next());
 			}
@@ -174,7 +176,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 	@Override
 	public void saveItem(String lemma, String id, String pos, String desc,
-			String conceptId) {
+			int conceptId) {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
@@ -187,7 +189,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.setString(2, lemma);
 			sqlStatement.setString(3, pos);
 			sqlStatement.setString(4, desc);
-			sqlStatement.setString(5, conceptId);
+			sqlStatement.setInt(5, conceptId);
 			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(6);
@@ -270,7 +272,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public String deleteItems(String id, String collectionName) {
+	public String deleteItems(String id, int collectionId) {
 
 		String dbCommand;
 		String errmsg;
@@ -281,7 +283,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, id);
-			sqlStatement.setString(2, collectionName);
+			sqlStatement.setInt(2, collectionId);
 			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(3);

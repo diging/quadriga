@@ -34,6 +34,10 @@ public interface IConceptCollection
 	public abstract void addItem(IConcept concept);
 
 	public abstract List<IConcept> getItems();
+
+	public abstract void setId(int id);
+
+	public abstract int getId();
 	
 
 }

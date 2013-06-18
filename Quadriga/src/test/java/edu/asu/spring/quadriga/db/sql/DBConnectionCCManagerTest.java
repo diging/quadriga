@@ -129,7 +129,7 @@ public class DBConnectionCCManagerTest {
 		collection.setOwner(user);
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
-		assertEquals(collection,list.get(0));
+		assertEquals(collection.getName(),list.get(0).getName());
 	}
 	
 	
@@ -149,7 +149,8 @@ public class DBConnectionCCManagerTest {
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
 		assertEquals(collection.getName(),list.get(0).getName());
-		dbConnection.saveItem("lemma", "testid", "red", "hello", collection.getName());
+		collection.setId(list.get(0).getId());
+		dbConnection.saveItem("lemma", "testid", "red", "hello", collection.getId());
 		dbConnection.getCollectionDetails(collection);
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setId("testid");

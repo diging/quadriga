@@ -76,7 +76,8 @@ public interface IConceptCollectionManager {
 	 * Result: We just update the backend
 	 * 
 	 */
-	public abstract void addItems(String lemmma, String id, String pos, String desc, String string);
+	void addItems(String lemmma, String id, String pos, String desc,
+			int conceptId);
 	
 	/**
 	 * Method is used to add new  conceptcollection
@@ -91,11 +92,13 @@ public interface IConceptCollectionManager {
 	 * Input: collectionname and id of the concept to be deleted
 	 * 
 	 */
-	public abstract void deleteItem(String id, String collectionName);
+	public abstract void deleteItem(String id, int i);
 	/**
 	 * Method is used to update the items list with the latest values from the conceptpower
 	 * @param values 
 	 * @param concept
 	 */
 	public abstract void update(String[] values, IConceptCollection concept);
+
+	
 }
