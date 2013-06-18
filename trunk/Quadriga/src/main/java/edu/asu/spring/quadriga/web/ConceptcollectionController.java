@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,7 +37,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
  * This class is the controller for the concept collection requests. 
- * @author SatyaSwaroop
+ * @author SatyaSwaroop Boddu
  *
  */
 
@@ -99,17 +100,12 @@ public class ConceptcollectionController {
 	 * 
 	 * 
 	 * */
-	@RequestMapping(value = "auth/conceptdetails", method = RequestMethod.GET)
-	public String conceptDetailsHandler(HttpServletRequest req, ModelMap model) throws SQLException{
-		/*UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	    String userId = principal.getUsername();*/
+	@RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
+	public String conceptDetailsHandler(@PathVariable("collection_id") int collection_id, ModelMap model) throws SQLException{
 		
-		if(req.getParameter("name")!=null)
-		{
-			concept = collectionFactory.createConceptCollectionObject();
-			concept.setName(req.getParameter("name"));
-		}
-	    int index;
+		concept = collectionFactory.createConceptCollectionObject();
+		concept.setId(collection_id);
+		int index;
 	    if(( index = list.indexOf(concept))>=0)
 	    concept = list.get(index);
 	    else if((index = collab_list.indexOf(concept))>=0)
@@ -139,7 +135,7 @@ public class ConceptcollectionController {
 			ConceptEntry temp = new ConceptEntry();
 			temp.setId(id);
 			temp = c.getConceptEntry().get((c.getConceptEntry().indexOf(temp)));
-			conceptControllerManager.addItems(temp.getLemma(),id,temp.getPos(), temp.getDescription(),concept.getName());
+			conceptControllerManager.addItems(temp.getLemma(),id,temp.getPos(), temp.getDescription(),concept.getId());
 		}
 		}
 	    int index;
@@ -149,7 +145,7 @@ public class ConceptcollectionController {
 	    concept = collab_list.get(index);	
 	    conceptControllerManager.getCollectionDetails(concept);
 	    model.addAttribute("concept", concept);
-		return "auth/conceptcollections/details";
+		return "redirect:/auth/conceptcollections/"+concept.getId()+"";
 	}
 	
 	@RequestMapping(value="auth/conceptcollections/addCollectionsForm", method = RequestMethod.GET)
@@ -171,11 +167,8 @@ public class ConceptcollectionController {
 		    }
 		 IUser user = usermanager.getUserDetails(principal.getName());
 			collection.setOwner(user);
-		 conceptControllerManager.addConceptCollection(collection);
-		 concept = collection;
-		
-		 model.addAttribute("concept", collection);
-		return new ModelAndView("auth/conceptcollections/details");
+		conceptControllerManager.addConceptCollection(collection);
+		return new ModelAndView("redirect:/auth/conceptcollections");
 		
 	}
 	
@@ -193,7 +186,8 @@ public class ConceptcollectionController {
 		if(values!=null){
 		for(String id : values)
 		{
-			conceptControllerManager.deleteItem(id,concept.getName());
+			
+			conceptControllerManager.deleteItem(id,concept.getId());
 			con = conFact.createConceptObject();con.setId(id);
 			concept.getItems().remove(concept.getItems().indexOf(con));
 			
@@ -202,7 +196,7 @@ public class ConceptcollectionController {
 		
 		conceptControllerManager.getCollectionDetails(concept);
 			
-		return "redirect:/auth/conceptdetails";
+		return "redirect:/auth/conceptcollections/"+concept.getId()+"";
 		
 	}
 	@RequestMapping(value = "auth/conceptcollections/updateitems", method = RequestMethod.POST)
@@ -211,7 +205,7 @@ public class ConceptcollectionController {
 		if(values!=null)
 		conceptControllerManager.update(values,concept);
 		
-		return "redirect:/auth/conceptdetails";
+		return "redirect:/auth/conceptcollections/"+concept.getId()+"";
 	}
 	
 }

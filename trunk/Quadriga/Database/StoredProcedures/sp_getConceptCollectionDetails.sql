@@ -17,42 +17,37 @@ DROP PROCEDURE IF EXISTS sp_getConceptCollectionDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getConceptCollectionDetails
 (
-  IN incollectionname  VARCHAR(20),
+  IN incollectionid  VARCHAR(20),
  
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
-    -- declare local variables
-     DECLARE varcollectionid   INT DEFAULT 0;
-
+    
 	-- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(incollectionname IS NULL OR incollectionname = "")
-     THEN SET errmsg = "collection name cannot be empty.";
+    IF(incollectionid IS NULL OR incollectionid = "")
+     THEN SET errmsg = "collection id cannot be empty.";
     END IF;
    
     
     IF NOT EXISTS (SELECT 1 FROM vw_conceptcollections	
-                     WHERE collectionname = incollectionname)
-      THEN SET errmsg = "collection name is invalid.";
+                     WHERE id = incollectionid)
+      THEN SET errmsg = "collection id is invalid.";
     END IF;
     
     
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
-      -- retrieve the projectid id of the project 
-      SELECT id INTO varcollectionid FROM vw_conceptcollections
-        WHERE collectionname = incollectionname; 
-      
+     
       -- retrieve the item details
-      SELECT incollectionname, item, description, pos, lemma
+      SELECT item, description, pos, lemma
            AS item
         FROM vw_conceptcollections_items
-	    WHERE id = varcollectionid;
+	    WHERE id = incollectionid;
       
      END IF;
 END$$

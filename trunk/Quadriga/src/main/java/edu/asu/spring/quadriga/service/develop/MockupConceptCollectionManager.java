@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
@@ -80,12 +79,7 @@ public class MockupConceptCollectionManager implements
 
 	
 
-	@Override
-	public void addItems(String lemmma, String id, String pos, String desc,
-			String string) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public String addConceptCollection(IConceptCollection collection) {
@@ -93,14 +87,23 @@ public class MockupConceptCollectionManager implements
 		return null;
 	}
 
+	
+
 	@Override
-	public void deleteItem(String id, String collectionName) {
+	public void update(String[] values, IConceptCollection concept) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update(String[] values, IConceptCollection concept) {
+	public void addItems(String lemmma, String id, String pos, String desc,
+			int conceptId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteItem(String id, int i) {
 		// TODO Auto-generated method stub
 		
 	}
