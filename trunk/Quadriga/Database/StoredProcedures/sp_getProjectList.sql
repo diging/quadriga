@@ -20,8 +20,8 @@ BEGIN
     set errmsg = "project owner cannot be empty";
     END IF;
     
-   IF NOT EXISTS(SELECT 1 FROM tbl_project
-				   WHERE projectowner = projowner)
+   IF NOT EXISTS(SELECT 1 FROM tbl_quadriga_user
+				   WHERE username = projowner)
    THEN SET errmsg = "Invalid owner.Please enter the correct value.";
    END IF; 
     

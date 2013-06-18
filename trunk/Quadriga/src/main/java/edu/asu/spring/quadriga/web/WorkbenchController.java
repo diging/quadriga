@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +30,7 @@ import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -72,21 +72,26 @@ public class WorkbenchController {
 	 * @param 		model maps projectlist to view (jsp page) 
 	 * 
 	 * @return 		string for workbench url 
-	 * 
-	 * @throws 		SQLException
+	 * @throws      QuadrigaStorageException
 	 * 
 	 * @author 		rohit sukleshwar pendbhaje
-	 *
 	 */
 
 	@RequestMapping(value="auth/workbench", method = RequestMethod.GET)
-	public String projectWorkbenchHandle(ModelMap model) throws SQLException {
+	public String projectWorkbenchHandle(ModelMap model) throws QuadrigaStorageException {
 
 		UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String userName = principal.getUsername();
 
-		List<IProject>  projectlist = projectmanager.getProjectsOfUser(userName);
+		List<IProject> projectlist = null;
+		try
+		{
+		  projectlist = projectmanager.getProjectsOfUser(userName);
+		}
+		catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
+		}
 		model.addAttribute("projectlist", projectlist);
 
 		IUser user =  usermanager.getUserDetails(userName);
@@ -111,14 +116,21 @@ public class WorkbenchController {
 	 * 
 	 * @return 		string of project details url
 	 * 
-	 * @throws 		SQLException
+	 * @throws 		QuadrigaStorageException
 	 *
 	 * @author 		rohit sukleshwar pendbhaje
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
-	public String getProjectPage(@PathVariable("projectid") int projectid, ModelMap model) throws SQLException {
+	public String getProjectPage(@PathVariable("projectid") int projectid, ModelMap model) throws QuadrigaStorageException {
 
-		IProject project = projectmanager.getProject(projectid);
+		IProject project = null;
+		try
+		{
+		  project = projectmanager.getProject(projectid);
+		}
+		catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
+		}
 
 		model.addAttribute("project", project);
 
@@ -132,6 +144,74 @@ public class WorkbenchController {
 
 		return "auth/workbench/project";
 	}
+	
+	
+	/**
+	 * @description    : This method is called during editing a project.
+	 * @param          : projectid - project internal id.
+	 * @param          : model 
+	 * @return         : String - URL for project editing page.
+	 * @throws         : QuadrigaStorageException 
+	 * @author         : Kiran Kumar Batna
+	 * 
+	 */
+	@RequestMapping(value="auth/workbench/modifyproject/${projectid}", method = RequestMethod.GET)
+	public String getEditProjectPage(@PathVariable("projectid") int projectid, ModelMap model,Principal principal) throws QuadrigaStorageException {
+        
+		IProject project=null;
+		try
+		{
+		   project = projectmanager.getProject(projectid);
+		}
+		catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
+		}
+
+		model.addAttribute("project", project);
+
+		return "auth/workbench/modifyproject";
+	}
+	
+	/**
+	 * @description    : This method is called during editing a project.
+	 * @param          : projectid - project internal id.
+	 * @param          : project - Spring Project object.
+	 * @param          : model 
+	 * @param          : principal
+	 * @return         : String - URL for project editing page.
+	 * @throws         : QuadrigaStorageException 
+	 * @author         : Kiran Kumar Batna
+	 * 
+	 */
+	@RequestMapping(value = "auth/workbench/modifyproject/${projectid}", method = RequestMethod.POST)
+	public String editProject(@PathVariable("projectid") int projectid,@ModelAttribute("SpringWeb")Project project, 
+			ModelMap model, Principal principal) throws QuadrigaStorageException 
+	{
+		String errmsg;
+		String user = principal.getName();
+
+		    try
+		    {
+			errmsg = projectmanager.updateProjectDetails(project, user);
+		    }
+		    catch(QuadrigaStorageException e){
+				throw new QuadrigaStorageException();
+			}
+
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg","Project created successfully.");
+				return "auth/workbench/modifyProjectStatus";
+			}else{
+				model.addAttribute("project", project);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/modifyproject";
+			}
+	}
+	
+	
 
 	/**
 	 * @description  : This method is called during the load of add project
@@ -156,11 +236,13 @@ public class WorkbenchController {
 	 * @param        : model
 	 * @param        : principal
 	 * @return       : String - the URL on success and failure
+	 * @throws       : QuadrigaStorageException 
 	 * @author       : Kiran Kumar Batna
+	 * 
 	 */
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
 	public String addProject(@ModelAttribute("SpringWeb")Project project, 
-			ModelMap model, Principal principal) 
+			ModelMap model, Principal principal) throws QuadrigaStorageException 
 	{
 		String errmsg;
 		IUser user = usermanager.getUserDetails(principal.getName());
@@ -168,8 +250,13 @@ public class WorkbenchController {
 		{
 			project.setOwner(user);
 
+			try
+			{
 			errmsg = projectmanager.addNewProject(project);
-
+			}
+			catch(QuadrigaStorageException e){
+				throw new QuadrigaStorageException();
+			}
 			if(errmsg.equals(""))
 			{
 				model.addAttribute("success", 1);
@@ -191,10 +278,12 @@ public class WorkbenchController {
 	 * @param       : model
 	 * @param       : principal
 	 * @return      : String - URL on success or failure.
+	 * @throws      : QuadrigaStorageException
 	 * @author      : Kiran Kumar Batna
+	  
 	 */
 	@RequestMapping(value="auth/workbench/deleteproject", method=RequestMethod.GET)
-	public String deleteProjectform(Model model,Principal principal)
+	public String deleteProjectform(Model model,Principal principal) throws QuadrigaStorageException
 	{
 		String userName;
 		List<IProject> projectlist =null;
@@ -208,9 +297,8 @@ public class WorkbenchController {
  			model.addAttribute("projectlist", projectlist);
 			
 		}
-		catch(SQLException ex)
-		{
-			throw new RuntimeException(ex.getMessage());
+		catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
 		}
 		return "auth/workbench/deleteproject";
 	}
@@ -221,10 +309,12 @@ public class WorkbenchController {
 	 * @param       :  model
 	 * @param       : principal
 	 * @return      : String - URL on success and failure.
+	 * @throws      : QuadrigaStorageException 
 	 * @author      : Kiran Kumar Batna
+	 * 
 	 */
 	@RequestMapping(value = "auth/workbench/deleteproject", method = RequestMethod.POST)
-	public String deleteProject(HttpServletRequest req, ModelMap model,Principal principal)
+	public String deleteProject(HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
 	{
 		String[] values;
 		String projIdList = "";
@@ -243,7 +333,13 @@ public class WorkbenchController {
 		//removing the first ',' value
 		projIdList = projIdList.substring(1,projIdList.length());
 		
+		try
+		{
 		errmsg = projectmanager.deleteProject(projIdList);
+		}
+		catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
+		}
 		
 		if(errmsg.equals(""))
 		{
@@ -264,9 +360,8 @@ public class WorkbenchController {
 				model.addAttribute("errormsg", errmsg);
 				return "auth/workbench/deleteproject";
 			}
-			catch(SQLException ex)
-			{
-				throw new RuntimeException(ex.getMessage());
+			catch(QuadrigaStorageException e){
+				throw new QuadrigaStorageException();
 			}
 		}
 	}

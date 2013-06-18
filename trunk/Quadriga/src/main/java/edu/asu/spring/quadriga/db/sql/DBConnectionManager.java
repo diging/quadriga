@@ -152,7 +152,7 @@ public class DBConnectionManager implements IDBConnectionManager
 
 			outputValue = sqlStatement.getString(2);
 
-			if(outputValue.isEmpty())
+			if(outputValue == "")
 			{
 				ResultSet result =  sqlStatement.getResultSet();
 

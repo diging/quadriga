@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.web.WorkbenchController;
@@ -44,28 +44,53 @@ public class ProjectManager implements IProjectManager {
 	 * @description: this method takes up userid as an argument of the logged in user and returns 
 	 * 				 list of projects for the user
 	 *
-	 * @throws		 SQLException
+	 * @throws		 QuadrigaStorageException
 	 * 
 	 * @author 		 rohit pendbhaje
 	 * 
 	 */
 	
 	@Override
-	public List<IProject> getProjectsOfUser(String userid) throws SQLException {
+	public List<IProject> getProjectsOfUser(String userid) throws QuadrigaStorageException {
 		
 		List<IProject> projectList = new ArrayList<IProject>();  
 		
+		try
+		{
 		projectList = dbConnect.getProjectOfUser(userid);
+		}
+		catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			throw new QuadrigaStorageException();
+		}
 				
 		return projectList;
 	} 
 	
 	
-
+	/**
+	 *  @description : This calls dbConnectionProjectManger to 
+	 *                 update the project details.
+	 *  @param       : existingProject - Project object
+	 *  @param       : userName - user who tries to update the details.
+	 *  @return      : errmsg - blank on success and null on failure
+	 *  @author      : Kiran Kumar Batna
+	 */
 	@Override
-	public String updateProjectDetails(Project existingProject) {
-		throw new NotImplementedException("updateProjectDetails() is not yet implemented");
-		
+	public String updateProjectDetails(Project existingProject,String userName)throws QuadrigaStorageException {
+        String errmsg;
+        
+        try
+        {
+        errmsg = dbConnect.editProjectRequest(existingProject, userName);
+        }
+        catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			throw new QuadrigaStorageException();
+		}
+			
+        
+        return errmsg;
 	}
 
 	/**
@@ -77,11 +102,19 @@ public class ProjectManager implements IProjectManager {
 	 *  @author      : Kiran Kumar Batna
 	 */
 	@Override
-	public String deleteProject(String projectIdList) 
+	public String deleteProject(String projectIdList) throws QuadrigaStorageException
 	{
 		String errmsg;
 		
+		try
+		{
 		errmsg = dbConnect.deleteProjectRequest(projectIdList);
+		}
+		catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			throw new QuadrigaStorageException();
+		}
+			
 		
 		return errmsg;
 		
@@ -95,11 +128,19 @@ public class ProjectManager implements IProjectManager {
 	 * 
 	 */
 	@Override
-	public String addNewProject(IProject newProject) 
+	public String addNewProject(IProject newProject) throws QuadrigaStorageException
 	{
 		String errmsg;
 		
+		try
+		{
 		errmsg = dbConnect.addProjectRequest(newProject);
+		}
+		catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			throw new QuadrigaStorageException();
+		}
+			
 		
 		return errmsg;
 	}
@@ -114,7 +155,7 @@ public class ProjectManager implements IProjectManager {
 	 * 
 	 */
 	@Override
-	public IProject getProject(int projectid) {
+	public IProject getProject(int projectid) throws QuadrigaStorageException {
 	    
 		IProject project = null;
 		//List<ICollaboratorRole> collaboratorRolesList = new ArrayList<ICollaboratorRole>();
@@ -130,11 +171,11 @@ public class ProjectManager implements IProjectManager {
 				}
 			}	
 		}
-		
-		catch (SQLException e) {
-			
+		catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
 			logger.error("sqlException thrown",e);
-			}
+			throw new QuadrigaStorageException();
+		}
 			
 		return project;
 	}
@@ -150,14 +191,22 @@ public class ProjectManager implements IProjectManager {
 	}
 
 	@Override
-	public List<IUser> getNotCollaboratingUsers(int projectid) {
-				
-		List<IUser> userList = dbConnect.nonCollaboratoringUsersRequest(projectid);
+	public List<IUser> getNotCollaboratingUsers(int projectid) throws QuadrigaStorageException {
+			
+		List<IUser> userList;
+		try
+		{
+		 userList = dbConnect.nonCollaboratoringUsersRequest(projectid);
+		}
+		catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			throw new QuadrigaStorageException();
+		}
 		return userList;
 	}
 	
 	@Override
-	public IProject showExistingCollaborator(int projectid) {
+	public IProject showExistingCollaborator(int projectid)throws QuadrigaStorageException{
 				
 		IProject project = null;
 		try {
@@ -171,15 +220,15 @@ public class ProjectManager implements IProjectManager {
 				}
 			}	
 			
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			throw new QuadrigaStorageException();
 		}
 		return project;
 	}
 
 	@Override
-	public List<ICollaborator> getProjectCollaborator(int projectid) {
+	public List<ICollaborator> getProjectCollaborator(int projectid) throws QuadrigaStorageException {
 		
 		IProject project = null;
 		List<ICollaborator> collaboratorList = null;
@@ -189,9 +238,9 @@ public class ProjectManager implements IProjectManager {
 				
 					collaboratorList = project.getCollaborators();
 				
-				} catch (SQLException e) {
-
-					e.printStackTrace();
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					throw new QuadrigaStorageException();
 				}
 		
 		return collaboratorList;

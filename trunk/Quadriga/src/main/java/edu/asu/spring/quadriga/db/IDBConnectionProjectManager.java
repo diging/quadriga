@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * Interface class for methods relating database connections to
@@ -27,10 +28,10 @@ public interface IDBConnectionProjectManager
 	 * @return list of projects
 	 * 
 	 * @author rohit pendbhaje
-	 * @throws SQLException 
+	 * @throws QuadrigaStorageException  
 	 * 
 	 */
-	public abstract IProject getProjectDetails(int projectId) throws SQLException;
+	public abstract IProject getProjectDetails(int projectId) throws QuadrigaStorageException ;
 
 	/**
 	 * interface to split the comma seperated collaborator roles and 
@@ -51,14 +52,14 @@ public interface IDBConnectionProjectManager
 	 * @author rohit pendbhaje
 	 * 
 	 */
-	public abstract List<IProject> getProjectOfUser(String sUserId);
+	public abstract List<IProject> getProjectOfUser(String sUserId) throws QuadrigaStorageException;
 
 	/**
 	 * Interface to execute the supplied query to use for the test cases.
 	 * @param sQuery - database query to be executed.
 	 * @return 1 on success.
 	 */
-	public abstract int setupTestEnvironment(String sQuery);
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
 	/**
 	 * Interface to set the datasource connection to the database
@@ -73,7 +74,7 @@ public interface IDBConnectionProjectManager
 	 * @return Error message if any error occurs else a blank string
 	 * @author Kiran Kumar Batna
 	 */
-	public abstract String addProjectRequest(IProject project);
+	public abstract String addProjectRequest(IProject project)throws QuadrigaStorageException;
 	
 	/**
 	 * Interface to show the Collaborator request.
@@ -82,9 +83,9 @@ public interface IDBConnectionProjectManager
 	 *         for the supplied project id.
 	 * @author rohit pendbhaje        
 	 */
-	public abstract IProject showCollaboratorsRequest(int projectid);
+	public abstract IProject showCollaboratorsRequest(int projectid)throws QuadrigaStorageException ;
 	
-	public abstract List<IUser> nonCollaboratoringUsersRequest(int projectid);
+	public abstract List<IUser> nonCollaboratoringUsersRequest(int projectid)throws QuadrigaStorageException ;
 	
 	/**
 	 * Interface to add a Collaborator.
@@ -101,5 +102,7 @@ public interface IDBConnectionProjectManager
 	 * @return         :errmsg - blank on success and null on failure.
 	 * @author         :Kiran Kumar Batna
 	 */
-	public abstract String deleteProjectRequest(String projectIdList);
+	public abstract String deleteProjectRequest(String projectIdList) throws QuadrigaStorageException;
+
+	public abstract String editProjectRequest(IProject project, String userName) throws QuadrigaStorageException;
 }

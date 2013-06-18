@@ -116,6 +116,23 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addprojectstatus.jsp" />
 	</definition>
+	<definition name="auth/workbench/modifyproject" extends="base.definition.workbench">
+	<put-attribute name="title" value="Quadriga Workbench - Modify Project" />
+	<put-attribute name="content"
+		value="/WEB-INF/views/workbench/modifyproject.jsp" />
+</definition>
+	<definition name="auth/workbench/modifyProjectStatus"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Modify Project" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workbench/modifyprojectstatus.jsp" />
+	</definition>
+
+	<definition name="auth/workbench/showCollaborators" extends="base.definition.workbench">
+		<put-attribute name="title" value="Non existing Collaborators" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workbench/showCollaborators.jsp" />
+	</definition>  
 		<definition name="auth/workbench/deleteproject" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Delete Project" />
 		<put-attribute name="content"
