@@ -56,7 +56,7 @@ function enableSubmit()
  <form:form modelAttribute="collaborator" method="POST" >
  
 	
-		<input type="checkbox" id="checkbox_1" onclick ="enableSubmit()" 
+		<!-- <input type="checkbox" id="checkbox_1" onclick ="enableSubmit()" 
 		name="roleitem" value="collaborator_role1" />
 		<label for="checkbox_1">ADMIN</label>
 		
@@ -70,12 +70,13 @@ function enableSubmit()
 		
 		<input type="checkbox" id="checkbox_4" onclick ="enableSubmit()" 
 		name="roleitem" value="collaborator_role4"  />
-		<label for="checkbox_4">EDITOR</label>
+		<label for="checkbox_4">EDITOR</label> -->
+		
+	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" />
 	
-	<form:select path="userObj.userName">
-	    <!--<c:forEach var="collab" items="${collaborators}">--> 
-	   <form:options items="${notCollaboratingUsers}" itemValue="userName" itemLabel="name" />  <%-- <c:out value="${collab.userObj.name}"></c:out></option> --%>
-	    <!--</c:forEach> -->
+	<form:select path="userObj" id="userName">
+	    <form:option value="NONE" label="--- Select ---"/>
+	   <form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
 
 <input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/addcollaborator'">

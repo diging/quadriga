@@ -29,7 +29,7 @@ public class CollaboratorRoleMapper implements ICollaboratorRoleMapper{
 	}
 	
 	@Override
-	public List<ICollaboratorRole> getCollaboratorRole() {
+	public List<ICollaboratorRole> getCollaboratorRoles() {
 		
 		return this.collaboratorRoles;
 	}

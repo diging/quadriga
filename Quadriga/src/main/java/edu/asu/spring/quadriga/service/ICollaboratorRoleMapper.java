@@ -8,7 +8,7 @@ public interface ICollaboratorRoleMapper {
 	
 	public abstract void setCollaboratorRole(List<ICollaboratorRole> collaboratorroles);
 	
-	public abstract List<ICollaboratorRole> getCollaboratorRole();
+	public abstract List<ICollaboratorRole> getCollaboratorRoles();
 	
 	public abstract void getCollaboratorRoles(ICollaboratorRole collaboratorRole);
 	

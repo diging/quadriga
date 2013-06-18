@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -12,8 +13,14 @@ import edu.asu.spring.quadriga.domain.IUser;
  * @author      : Kiran Kumar Batna
  * @author 		: Ram Kumar Kumaresan
  */
-public class User implements IUser 
+public class User implements IUser, Serializable 
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8936305356496585075L;
+	
+	
 	private String name;
 	private String userName;
 	private String password;
