@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 /**
  *@description: this class maps incoming database collaborator roles to the roles defined in the
  *				collaborators-roles.xml
@@ -16,7 +15,7 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
  *
  */
 @Service
-public class CollaboratorRoleMapper implements ICollaboratorRoleMapper{
+public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 
 	@Autowired 
 	private List<ICollaboratorRole> collaboratorRoles;
@@ -46,7 +45,7 @@ public class CollaboratorRoleMapper implements ICollaboratorRoleMapper{
  * 
  */
 	@Override
-	public void getCollaboratorRoles(ICollaboratorRole collaboratorRole) {
+	public void fillCollaboratorRole(ICollaboratorRole collaboratorRole) {
 		
 		
 		for(ICollaboratorRole role: collaboratorRoles)
@@ -54,6 +53,7 @@ public class CollaboratorRoleMapper implements ICollaboratorRoleMapper{
 			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
 				collaboratorRole.setRoleid(role.getRoleid());
+				// add rest of role information to collaboratorRole object
 			}
 		}
 		
@@ -70,7 +70,7 @@ public class CollaboratorRoleMapper implements ICollaboratorRoleMapper{
  * @return collaborator role object
  * 
  */
-public ICollaboratorRole getCollaboratorRoleId(String collaboratorRoleId) {
+public ICollaboratorRole getCollaboratorRoleById(String collaboratorRoleId) {
 		
 		
 		for(ICollaboratorRole role: collaboratorRoles)

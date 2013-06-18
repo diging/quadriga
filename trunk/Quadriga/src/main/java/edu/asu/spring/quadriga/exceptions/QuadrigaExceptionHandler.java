@@ -1,13 +1,10 @@
 package edu.asu.spring.quadriga.exceptions;
 
-import java.sql.SQLException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-
 
 /**
  * This class handles exceptions thrown in Controller classes.

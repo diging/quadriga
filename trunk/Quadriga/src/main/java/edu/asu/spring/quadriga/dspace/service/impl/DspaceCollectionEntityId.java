@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionEntityId;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionsIdList;
 
 @XmlRootElement(name="collectionentityid")
 public class DspaceCollectionEntityId implements IDspaceCollectionEntityId {

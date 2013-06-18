@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Project;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.web.WorkbenchController;
 
@@ -38,7 +38,7 @@ public class ProjectManager implements IProjectManager {
 	private IDBConnectionProjectManager dbConnect;
 	
 	@Autowired
-	private ICollaboratorRoleMapper roleMapper ;
+	private ICollaboratorRoleManager roleMapper ;
 
 	/**
 	 * @description: this method takes up userid as an argument of the logged in user and returns 
@@ -126,7 +126,7 @@ public class ProjectManager implements IProjectManager {
 				
 				for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
 				{
-					roleMapper.getCollaboratorRoles(collaboratorRole);	
+					roleMapper.fillCollaboratorRole(collaboratorRole);	
 				}
 			}	
 		}
@@ -167,7 +167,7 @@ public class ProjectManager implements IProjectManager {
 				
 				for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
 				{
-					roleMapper.getCollaboratorRoles(collaboratorRole);	
+					roleMapper.fillCollaboratorRole(collaboratorRole);	
 				}
 			}	
 			

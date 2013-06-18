@@ -6,29 +6,19 @@ import java.io.InputStreamReader;
 import java.security.KeyStore;
 import java.security.Principal;
 import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
-import javax.xml.transform.Source;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.client.RestTemplate;
-
-
-import org.apache.commons.httpclient.*;
-import org.apache.commons.httpclient.methods.*;
 
 /**
  * 

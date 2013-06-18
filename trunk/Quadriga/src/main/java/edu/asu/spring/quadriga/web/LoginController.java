@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
-import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

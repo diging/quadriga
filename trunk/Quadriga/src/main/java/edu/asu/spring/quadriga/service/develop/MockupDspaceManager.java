@@ -1,15 +1,4 @@
 package edu.asu.spring.quadriga.service.develop;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.NotImplementedException;
-import org.springframework.stereotype.Service;
-
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
-import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunity;
 
 //@Service
 public class MockupDspaceManager {

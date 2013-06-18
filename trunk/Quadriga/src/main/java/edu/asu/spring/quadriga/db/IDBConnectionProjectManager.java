@@ -5,11 +5,9 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.Project;
 
 /**
  * Interface class for methods relating database connections to
