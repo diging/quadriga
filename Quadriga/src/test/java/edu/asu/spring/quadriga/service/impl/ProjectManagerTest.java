@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IProjectManager;
 
 import static org.junit.Assert.*;
@@ -75,7 +76,7 @@ public class ProjectManagerTest {
 	}
 	
 	@Test
-	public void testAddNewProject() 
+	public void testAddNewProject() throws QuadrigaStorageException 
 	{
 		String errmsg;
 		IProject testProject = projectFactory.createProjectObject();
@@ -84,12 +85,24 @@ public class ProjectManagerTest {
 		testProject.setId("projecttest");
 		testProject.setDescription("Testing add project method");
 		
+		try
+		{
 		errmsg = projectManager.addNewProject(testProject);
+		}
+		catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
+		}
 		
 		assertEquals(errmsg,"");
 		
+		try
+		{
 		//insert duplicate project
 		errmsg = projectManager.addNewProject(testProject);
+		}
+		catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
+		}
 		
 		assertNotSame(errmsg,"");
 		

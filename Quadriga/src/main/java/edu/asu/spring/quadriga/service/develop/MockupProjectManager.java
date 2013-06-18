@@ -8,6 +8,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IProjectManager;
 
 /**
@@ -39,7 +40,7 @@ public class MockupProjectManager implements IProjectManager{
  */
 	
 	@Override
-	public List<IProject> getProjectsOfUser(String sUserId) throws SQLException {
+	public List<IProject> getProjectsOfUser(String sUserId) throws QuadrigaStorageException {
 		
 			
 		IProject project = new Project();
@@ -63,9 +64,9 @@ public class MockupProjectManager implements IProjectManager{
 	}
 
 	@Override
-	public String updateProjectDetails(Project existingProject) {
+	public String updateProjectDetails(Project existingProject,String userName) {
 		
-		return null;
+		throw new RuntimeException("Mockup manger update project not implemented");
 	}
 
 	@Override

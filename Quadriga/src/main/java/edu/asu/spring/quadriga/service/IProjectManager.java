@@ -1,12 +1,12 @@
 package edu.asu.spring.quadriga.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * Interface class that places restraints on the ProductManager class to implement
@@ -17,9 +17,9 @@ import edu.asu.spring.quadriga.domain.implementation.Project;
  */
 public interface IProjectManager {
 	
-	public abstract List<IProject> getProjectsOfUser(String sUserId) throws SQLException;
+	public abstract List<IProject> getProjectsOfUser(String sUserId) throws QuadrigaStorageException;
 	
-	public abstract String updateProjectDetails(Project existingProject);
+	public abstract String updateProjectDetails(Project existingProject,String userName) throws QuadrigaStorageException;
 	
 	/**
 	 * @description : Interface to delete the project rows from the 
@@ -29,7 +29,7 @@ public interface IProjectManager {
 	 * @return      : errmsg - blank on success and null on failure
 	 * @author      : Kiran Kumar Batna
 	 */
-	public abstract String deleteProject(String projectIdList);
+	public abstract String deleteProject(String projectIdList) throws QuadrigaStorageException;
 	
 	/**
 	 * Calls DBconnection manager to add the given project
@@ -37,17 +37,17 @@ public interface IProjectManager {
 	 * @return Error message on any error else a blank string
 	 * @author Kiran Kumar Batna
 	 */
-	public abstract String addNewProject(IProject newProject);
+	public abstract String addNewProject(IProject newProject) throws QuadrigaStorageException;
 	
-	public abstract IProject getProject(int id);
+	public abstract IProject getProject(int id) throws QuadrigaStorageException;
 
-	public abstract String addCollaborators(IProject project);
+	public abstract String addCollaborators(IProject project) throws QuadrigaStorageException;
 	
-	public abstract List<IUser> getNotCollaboratingUsers(int projectid);
+	public abstract List<IUser> getNotCollaboratingUsers(int projectid) throws QuadrigaStorageException;
 	
-	public abstract IProject showExistingCollaborator(int projectid);
+	public abstract IProject showExistingCollaborator(int projectid) throws QuadrigaStorageException;
 	
-	public abstract List<ICollaborator> getProjectCollaborator(int id);
+	public abstract List<ICollaborator> getProjectCollaborator(int id) throws QuadrigaStorageException;
 
 
 }

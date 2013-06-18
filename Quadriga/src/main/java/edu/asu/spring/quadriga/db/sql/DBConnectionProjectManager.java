@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * Contains all the database connections to the workbench component
@@ -97,18 +98,18 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
 	 * @return      : connection handle for the created connection
 	 * 
-	 * @throws      : SQLException 
+	 * @throws      : QuadrigaStorageException
 	 * 
 	 * @author      : Kiran Kumar Batna
 	 */
-	private void getConnection() {
+	private void getConnection() throws QuadrigaStorageException {
 		try
 		{
 			connection = dataSource.getConnection();
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 	}
 	
@@ -118,12 +119,12 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 *                
 	 * @return      : 1 on success.
 	 * 
-	 * @throws      : SQLException
+	 * @throws      : QuadrigaStorageException
 	 * 
 	 * @author      : Kiran Kumar Batna
 	 */
 	@Override
-	public int setupTestEnvironment(String sQuery)
+	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
 	{
 		try
 		{
@@ -134,7 +135,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		}
 		catch(SQLException ex)
 		{
-			throw new RuntimeException(ex.getMessage());
+			throw new QuadrigaStorageException();
 		}
 	}
 	
@@ -143,13 +144,13 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
 	 * @returns         List of projects
 	 * 
-	 * @throws			SQLException
+	 * @throws			QuadrigaStorageException 
 	 *                     
 	 * @author          Rohit Sukelshwar Pendbhaje
 	 * 
      */
 	@Override
-	public List<IProject> getProjectOfUser(String sUserName) {
+	public List<IProject> getProjectOfUser(String sUserName) throws QuadrigaStorageException {
 
 
 		String dbCommand;
@@ -195,7 +196,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		} 
 		catch (SQLException e) {
 
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
         finally
         {
@@ -244,7 +245,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
      */
 	@Override
-	public IProject getProjectDetails(int projectId) throws SQLException {
+	public IProject getProjectDetails(int projectId) throws QuadrigaStorageException  {
 		
 		String dbCommand;
 		String outErrorValue,outputValue;
@@ -314,6 +315,10 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		}
 		
 	} 
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException();
+		}
 		 finally{
 			 closeConnection();
 		 }
@@ -332,7 +337,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 *  @author      : Rohit Sukelshwar Pendbhaje
 	 */
 	@Override
-	public IProject showCollaboratorsRequest(int projectid) {
+	public IProject showCollaboratorsRequest(int projectid) throws QuadrigaStorageException  {
 
 		System.out.println("projectid showCollaboratorsRequest" + projectid );
 		String dbCommand;
@@ -380,7 +385,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			} 
 		     
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new QuadrigaStorageException(); 
 		}
 	   
 	    finally{
@@ -391,7 +396,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	}
 	
 	@Override
-	public List<IUser> nonCollaboratoringUsersRequest(int projectid) {
+	public List<IUser> nonCollaboratoringUsersRequest(int projectid) throws QuadrigaStorageException {
 		
 		System.out.println("projectid showNonCollaboratorsRequest" + projectid );
 
@@ -444,7 +449,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			} 
 		     
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new QuadrigaStorageException(); 
 		}
 	    
 	    finally{
@@ -507,16 +512,79 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		
 	} 
 	
+	/**
+	 * @description : This method edits the project
+	 * @param       : project - object
+	 * @param       : userName - user who modifies the project
+     *  @return error message on error else a balnk string
+	 *  @exception SQL Exception
+	 *  @author Kiran Kumar Batna 
+	 */
+	@Override
+	public String editProjectRequest(IProject project,String userName) throws QuadrigaStorageException
+	{
+		String name;
+		String description;
+		String unixname;
+		String projectAccess;
+        String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        int projectid;
+        
+      //fetch the values from the project object
+        name = project.getName();
+        description = project.getDescription();
+        unixname = project.getId();
+        projectAccess = project.getProjectAccess().name();
+        projectid = project.getInternalid();
+        
+        //command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.MODIFY_PROJECT_REQUEST + "(?,?,?,?,?,?,?)";
+       
+        //get the connection
+        getConnection();
+        
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding the input variables to the SP
+        	sqlStatement.setString(1, name);
+        	sqlStatement.setString(2, description);
+        	sqlStatement.setString(3,unixname);
+        	sqlStatement.setString(4,projectAccess);
+        	sqlStatement.setString(5,userName);
+        	sqlStatement.setString(6,Integer.toString(projectid));
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(7,Types.VARCHAR);
+			
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(7);
+			
+			return errmsg;
+        }
+        catch(SQLException e)
+        {
+        	throw new QuadrigaStorageException(); 
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
 		
 	/**
 	 *  This method inserts a record for new project
 	 *  @param  project object
 	 *  @return error message on error else a balnk string
-	 *  @exception SQL Exception
+	 *  @exception QuadrigaStorageException
 	 *  @author Kiran Kumar Batna 
 	 */
 	@Override
-	public String addProjectRequest(IProject project)
+	public String addProjectRequest(IProject project) throws QuadrigaStorageException
 	{
 		String name;
 		String description;
@@ -564,7 +632,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
         }
         catch(SQLException e)
         {
-        	throw new RuntimeException(e.getMessage());
+        	throw new QuadrigaStorageException();
         }
         finally
         {
@@ -583,7 +651,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * @author          : Kiran Kumar Batna
 	 */
 	@Override
-	public String deleteProjectRequest(String projectIdList)
+	public String deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		CallableStatement sqlStatement;
@@ -612,7 +680,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
         catch(SQLException ex)
         {
         	logger.info("Deleting project inernal ids error : "+ex.getMessage());
-        	throw new RuntimeException(ex.getMessage());
+        	throw new QuadrigaStorageException();
         	
         }
 	}

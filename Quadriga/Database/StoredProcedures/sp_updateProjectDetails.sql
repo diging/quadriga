@@ -18,7 +18,7 @@ CREATE PROCEDURE sp_updateProjectDetails
   IN   inprojectname    VARCHAR(50),
   IN   indescription    TEXT,
   IN   inprojectid      VARCHAR(100),
-  IN   inaccessibility  TINYINT,
+  IN   inaccessibility  VARCHAR(50),
   IN   inuser           VARCHAR(50),
   IN   inid             INT,
   OUT  errmsg           VARCHAR(255)
