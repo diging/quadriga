@@ -1,13 +1,9 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 
 /**
  * The class representation of the Collection got from Dspace repostiory.

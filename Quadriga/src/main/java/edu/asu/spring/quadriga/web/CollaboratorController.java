@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.catalina.mbeans.RoleMBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +23,7 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -44,7 +43,7 @@ public class CollaboratorController {
 	ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleMapper collaboratorRoleManager;
+	private ICollaboratorRoleManager collaboratorRoleManager;
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -63,7 +62,7 @@ public class CollaboratorController {
 				String[] roleIds = text.split(",");
 				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getCollaboratorRoleId(roleId.trim());
+					ICollaboratorRole role = collaboratorRoleManager.getCollaboratorRoleById(roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);

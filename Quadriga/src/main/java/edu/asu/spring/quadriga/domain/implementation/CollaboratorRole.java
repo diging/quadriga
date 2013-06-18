@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import java.util.List;
-
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 /**
  * @description : CollaboratorRole class describing the properties 

@@ -26,16 +26,11 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
-
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-
-import edu.asu.spring.quadriga.domain.implementation.Collaborator;
-
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunity;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 

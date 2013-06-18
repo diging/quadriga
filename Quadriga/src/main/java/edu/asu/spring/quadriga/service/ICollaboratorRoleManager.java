@@ -4,15 +4,15 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 
-public interface ICollaboratorRoleMapper {
+public interface ICollaboratorRoleManager {
 	
 	public abstract void setCollaboratorRole(List<ICollaboratorRole> collaboratorroles);
 	
 	public abstract List<ICollaboratorRole> getCollaboratorRoles();
 	
-	public abstract void getCollaboratorRoles(ICollaboratorRole collaboratorRole);
+	public abstract void fillCollaboratorRole(ICollaboratorRole collaboratorRole);
 	
-	public abstract ICollaboratorRole getCollaboratorRoleId(String collaboratorRoleId);
+	public abstract ICollaboratorRole getCollaboratorRoleById(String collaboratorRoleId);
 
 	
 

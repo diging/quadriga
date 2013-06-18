@@ -1,9 +1,5 @@
 package edu.asu.spring.quadriga.dspace.service;
 
-import java.util.List;
-
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollectionsIdList;
 
 /**
  * The interface that provides access to the class representation of the community got from Dspace repostiory.

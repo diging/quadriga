@@ -3,13 +3,11 @@ package edu.asu.spring.quadriga.service.develop;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
-import edu.asu.spring.quadriga.service.IDictionaryManager;;
+import edu.asu.spring.quadriga.service.IDictionaryManager;
 
 /**
  *   @Description : This class acts as a dummy Dictionary manager which adds list of Dictionary words
