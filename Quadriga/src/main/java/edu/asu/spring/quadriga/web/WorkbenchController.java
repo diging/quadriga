@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
@@ -287,7 +288,7 @@ public class WorkbenchController {
 	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 
-		List<IDspaceCommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
+		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
 
 		model.addAttribute("communityList", communities);
 
@@ -299,14 +300,14 @@ public class WorkbenchController {
 		String sUserName = (String)SecurityContextHolder.getContext().getAuthentication().getName();
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 		StringBuilder sResult = new StringBuilder();
-		List<IDspaceCommunity> communities = dspaceManager.getAllCommunities(sUserName,sPassword);
+		List<ICommunity> communities = dspaceManager.getAllCommunities(sUserName,sPassword);
 		
 		if(communities.size()>0)
 		{
 			sResult.append("<h2>Communities in HPS Repository</h2>");
 			sResult.append("<span class=\"byline\">Select a community to browse its collections.</span>");
 			sResult.append("<span style=\"font-weight: bold\">");
-			for(IDspaceCommunity community: communities)
+			for(ICommunity community: communities)
 			{
 				sResult.append("<a href='/quadriga/auth/workspace/community/"+community.getId()+"'>");
 				sResult.append(community.getName());

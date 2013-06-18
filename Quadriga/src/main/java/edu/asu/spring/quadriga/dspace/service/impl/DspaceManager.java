@@ -9,18 +9,14 @@ import javax.inject.Named;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
+import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionsIdList;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
-import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
 
 /**
  * The purpose of the class is to make rest service calls to dspace
@@ -50,11 +46,10 @@ public class DspaceManager implements IDspaceManager{
 	
 	//Handle to the proxy community manager class
 	@Autowired
-	@Qualifier("proxyCommunityManager")
 	private ICommunityManager proxyCommunityManager;
 
 	@Override
-	public List<IDspaceCommunity> getAllCommunities(String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
 		
 		//TODO: Remove this after actual user synchronization to Dspace
 		sUserName="ramk@asu.edu";

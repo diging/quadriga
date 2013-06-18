@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
+
 
 public interface ICommunity {
 
@@ -42,5 +44,13 @@ public interface ICommunity {
 	public abstract void setCollections(List<ICollection> collections);
 	
 	public abstract void addCollection(ICollection collection);
+
+	public abstract List<String> getCollectionIds();
+
+	public abstract void setCollectionIds(List<String> collectionIds);
+
+	public abstract boolean copy(IDspaceCommunity dspaceCommunity);
+
+	public abstract ICollection getCollectionById(String sCollectionId);
 
 }

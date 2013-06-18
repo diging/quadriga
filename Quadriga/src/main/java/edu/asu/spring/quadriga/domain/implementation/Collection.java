@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 
 /**
  * The class representation of the Collection got from Dspace repostiory.
@@ -135,4 +136,44 @@ public class Collection implements ICollection{
 		this.isLoaded = isLoaded;
 	}	
 	
+	@Override
+	public boolean copy(IDspaceCollection dspaceCollection)
+	{		
+		if(dspaceCollection != null)
+		{
+			if(dspaceCollection.getId() != null)
+			{
+				this.id = dspaceCollection.getId();
+			}
+			
+			if(dspaceCollection.getName() != null)
+			{
+				this.name = dspaceCollection.getName();
+				this.isLoaded = true;
+			}
+			
+			if(dspaceCollection.getShortDescription() != null)
+			{
+				this.shortDescription = dspaceCollection.getShortDescription();
+			}
+			
+			if(dspaceCollection.getEntityReference() != null)
+			{
+				this.entityReference = dspaceCollection.getEntityReference();
+			}
+			
+			if(dspaceCollection.getHandle() != null)
+			{
+				this.handle = dspaceCollection.getHandle();
+			}
+			
+			if(dspaceCollection.getCountItems() != null)
+			{
+				this.countItems = dspaceCollection.getCountItems();
+			}			
+			
+			return this.isLoaded;
+		}
+		return false;
+	}
 }
