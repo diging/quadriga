@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * Class implements {@link DBConnectionDictionaryManager} for all the DB connection necessary for dictionary functionality.
@@ -89,8 +90,9 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		catch(SQLException se)
 		{
-			return -1;
+			se.printStackTrace();
 		}
+		return 1;
 	}
 
 	/**
@@ -129,8 +131,11 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		catch(SQLException ex)
 		{
-			throw new RuntimeException(ex.getMessage());
+			ex.printStackTrace();
+		}finally{
+			closeConnection();
 		}
+		return 1;
 	}
 
 	/**
@@ -145,7 +150,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	 */
 
 	@Override
-	public List<IDictionary> getDictionaryOfUser(String userId) {
+	public List<IDictionary> getDictionaryOfUser(String userId) throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
 		getConnection();
@@ -182,7 +187,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			}
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -195,7 +200,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid){
+	public List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid)throws QuadrigaStorageException{
 		String dbCommand;
 		String errmsg="";
 		getConnection();
@@ -203,7 +208,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		List<IDictionaryItems> dictionaryList=new ArrayList<IDictionaryItems>();
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_ITEMS_DETAILS + "(?,?)";
 		try {
-
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1, dictionaryid);
 			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
@@ -231,7 +235,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			}
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -244,7 +248,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public String getDictionaryName(String dictionaryId)
+	public String getDictionaryName(String dictionaryId) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String dictionaryName="";
@@ -277,7 +281,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -292,30 +296,28 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public String addDictionary(IDictionary dictionary)
+	public String addDictionary(IDictionary dictionary)throws QuadrigaStorageException
 	{
-		String name;
-		String description;
-		String id;
-		IUser owner = null;
-		String dbCommand;
-		String errmsg;
-		CallableStatement sqlStatement;
-		if(dictionary!=null){
-			//fetch the values from the project object
-			name = dictionary.getName();
-			description = dictionary.getDescription();        
-			owner = dictionary.getOwner();
-
-
-			//command to call the SP
-			dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_DICTIONARY  + "(?,?,?,?,?)";
-
-			//get the connection
-			getConnection();
-		}else{
+		if(dictionary==null){
 			return "Dictionary object is null" ;
 		}
+		String name;
+		String description;
+		IUser owner = null;
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+		//fetch the values from the project object
+		name = dictionary.getName();
+		description = dictionary.getDescription();        
+		owner = dictionary.getOwner();
+
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_DICTIONARY  + "(?,?,?,?,?)";
+
+		//get the connection
+		getConnection();
 		//establish the connection with the database
 		try
 		{
@@ -339,21 +341,27 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			errmsg="DB Issue";
+			throw new QuadrigaStorageException();
+			
+		}catch(Exception e){
+			errmsg="DB Issue";
+			e.printStackTrace();
 		}
 		finally
 		{
 			closeConnection();
 		}
+		return errmsg;
 	}
 
 
 	@Override
-	public String addDictionaryItems(String dictinaryId,String item,String id,String pos,String owner)
+	public String addDictionaryItems(String dictinaryId,String item,String id,String pos,String owner) throws QuadrigaStorageException
 	{
 
 		String dbCommand;
-		String errmsg;
+		String errmsg="";
 		CallableStatement sqlStatement;
 
 		//command to call the SP
@@ -386,23 +394,26 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			errmsg="DB related issue";
+			throw new QuadrigaStorageException();
+			
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		finally
 		{
 			closeConnection();
 		}
+		return errmsg;
 	}
 
 	@Override
-	public String deleteDictionaryItems(String dictinaryId,String itemid)
+	public String deleteDictionaryItems(String dictinaryId,String itemid)throws QuadrigaStorageException
 	{
 
 		String dbCommand;
-		String errmsg;
+		String errmsg="";
 		CallableStatement sqlStatement;
-
-
 
 		//command to call the SP
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_DICTIONARY_ITEM  + "(?,?,?)";
@@ -431,20 +442,25 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			errmsg="DB related issue";
+			throw new QuadrigaStorageException();
+		}catch(Exception e){
+			errmsg="Exception outside DB";
+			e.printStackTrace();
 		}
 		finally
 		{
 			closeConnection();
 		}
+		return errmsg;
 	}
 
 	@Override
-	public String updateDictionaryItems(String dictinaryId,String termid,String term ,String pos)
+	public String updateDictionaryItems(String dictinaryId,String termid,String term ,String pos)throws QuadrigaStorageException
 	{
 
 		String dbCommand;
-		String errmsg;
+		String errmsg="";
 		CallableStatement sqlStatement;
 
 
@@ -472,25 +488,21 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(5);
-
-			if(errmsg.isEmpty())
-			{
-				return errmsg;
-			}
-			else
-			{
-				return errmsg;
-			}
+			return errmsg;
 
 		}
 		catch(SQLException e)
 		{	
-			logger.info("Please check the logs for null pointer ");
-			throw new RuntimeException("Something wrong in the database");
+			errmsg="DB related issue";
+			throw new QuadrigaStorageException();
+		}catch(Exception e){
+			errmsg="Exception outside DB";
+			e.printStackTrace();
 		}
 		finally
 		{
 			closeConnection();
 		}
+		return errmsg;
 	}
 }

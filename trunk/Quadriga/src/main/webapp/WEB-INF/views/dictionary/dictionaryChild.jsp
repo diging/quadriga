@@ -64,7 +64,7 @@
 	}
 
 	function deleteItem(item) {
-
+		$.alert("hello");
 		$("#dialog-message")
 				.dialog(
 						{
@@ -82,14 +82,6 @@
 								}
 							}
 						});
-
-		/*var checkstr =  confirm('are you sure you want to delete this?');
-		if(checkstr == true){
-			location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionaryItems/${dictionaryid}?item=' + item;
-		}else{
-			alert("hello");
-			return false;
-		}*/
 	}
 </script>
 
@@ -119,17 +111,8 @@
 </ul>
 
 
-
-
-
-
-
-<H3>
-	Dictionary Items for
-	<c:out value="${dictName}"></c:out>
-</H3>
 <hr>
-
+<br>
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"> <c:out value="${successmsg}"></c:out></font>
@@ -180,8 +163,7 @@
 
 				<input type="submit" value="Update Items"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/updateDictionaryItems/${dictionaryid}'" />
-				<br />
-				<br />
+				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">
 					<!-- <table  class="dataTable" id="pagination1"> -->

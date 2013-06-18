@@ -37,6 +37,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -178,7 +179,7 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void getDictionariesListTest(){
+	public void getDictionariesListTest() throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -189,7 +190,13 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
-				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				List<IDictionary> dictionaryList=null;
+				try {
+					dictionaryList = dbConnection.getDictionaryOfUser(user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Iterator<IDictionary> I = dictionaryList.iterator();
 				String name=null;
 				String desc=null;
@@ -209,7 +216,12 @@ public class DictionaryManagerTest {
 				assertEquals(name.equals("testDictionary"),true);
 				assertEquals(desc.equals("description"),true);
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-				dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				try {
+					dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				assertEquals((dictionaryList==null), true);
 			}else{
 				logger.info("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
@@ -219,7 +231,8 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void addNewDictionariesItemsTest(){
+	public void addNewDictionariesItemsTest()throws QuadrigaStorageException{
+		logger.info("addNewDictionariesItemsTest Test Started");
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -230,7 +243,13 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
-				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				logger.info("Dictionary ID :"+getDictionaryID("testDictionary"));
+				try {
+					dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
@@ -245,10 +264,11 @@ public class DictionaryManagerTest {
 				fail("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
+		logger.info("addNewDictionariesItemsTest Test ended");
 	}
 
 	@Test
-	public void addNewDictionaryTest(){
+	public void addNewDictionaryTest()throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -259,7 +279,13 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
-				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				List<IDictionary> dictionaryList=null;
+				try {
+					dictionaryList = dbConnection.getDictionaryOfUser(user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Iterator<IDictionary> I = dictionaryList.iterator();
 				String name=null;
 				String desc=null;
@@ -287,7 +313,7 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void getDictionariesItemsTest(){
+	public void getDictionariesItemsTest()throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -298,7 +324,12 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
-				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				try {
+					dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
@@ -316,7 +347,7 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void getDictionaryNameTest(){
+	public void getDictionaryNameTest()throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -327,7 +358,13 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
-				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				List<IDictionary> dictionaryList=null;
+				try {
+					dictionaryList = dbConnection.getDictionaryOfUser(user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Iterator<IDictionary> I = dictionaryList.iterator();
 				String id=null;
 
@@ -350,7 +387,7 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void searchWordPowerTest(){
+	public void searchWordPowerTest()throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -361,7 +398,13 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
-				List <IDictionary> dictionaryList=dbConnection.getDictionaryOfUser(user.getUserName());
+				List<IDictionary> dictionaryList=null;
+				try {
+					dictionaryList = dbConnection.getDictionaryOfUser(user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Iterator<IDictionary> I = dictionaryList.iterator();
 				String name=null;
 				String desc=null;
@@ -392,7 +435,7 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void deleteDictionariesItemsTest(){
+	public void deleteDictionariesItemsTest()throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -403,7 +446,12 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
-				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				try {
+					dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
@@ -424,7 +472,7 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void updateDictionariesItemsTest(){
+	public void updateDictionariesItemsTest()throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -435,7 +483,12 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
-				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "cat", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				try {
+					dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "cat", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
@@ -466,7 +519,7 @@ public class DictionaryManagerTest {
 	}
 
 	@Test
-	public void  getUpdateFromWordPowerTest(){
+	public void  getUpdateFromWordPowerTest()throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -477,7 +530,12 @@ public class DictionaryManagerTest {
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
-				dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "cat", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				try {
+					dictionaryManager.addNewDictionariesItems(getDictionaryID("testDictionary"), "cat", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun", user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
