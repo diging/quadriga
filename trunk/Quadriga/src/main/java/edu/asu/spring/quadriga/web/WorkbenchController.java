@@ -2,12 +2,7 @@ package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,17 +19,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+
+import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
@@ -42,7 +37,6 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunity;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * @Description : this class will handle all workbench components for user projects like 
@@ -59,17 +53,15 @@ public class WorkbenchController {
 
 	@Autowired 
 	IProjectManager projectmanager;
-	List<IProject> projectlist;
-	String username;
-	IProject project;
-	List<IUser> collaboratorList;
-
+	
 	@Autowired 
 	IUserManager usermanager;
 
 	@Autowired 
 	IProjectFactory projectFactory;
-	IUser user;
+	
+	@Autowired
+	private IUserFactory userFactory;
 
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
@@ -98,11 +90,12 @@ public class WorkbenchController {
 
 		String userName = principal.getUsername();
 
-		projectlist = projectmanager.getProjectsOfUser(userName);
+		List<IProject>  projectlist = projectmanager.getProjectsOfUser(userName);
 		model.addAttribute("projectlist", projectlist);
 
-		user =  usermanager.getUserDetails(userName);
-		username = user.getName();
+		IUser user =  usermanager.getUserDetails(userName);
+
+		String username = user.getName();
 		model.addAttribute("username", username);
 
 		// collaboratorList = project.getCollaborator();
@@ -132,8 +125,6 @@ public class WorkbenchController {
 		IProject project = projectmanager.getProject(projectid);
 
 		model.addAttribute("project", project);
-
-
 
 		ICollaborator collaborator = null;
 		/*	int success = projectmanager.addCollaborators(collaborator);
@@ -210,17 +201,15 @@ public class WorkbenchController {
 	public String deleteProjectform(Model model,Principal principal)
 	{
 		String userName;
+		List<IProject> projectlist =null;
 
 		try
 		{
-			if(projectlist == null)
-			{
 				userName = principal.getName();
 				projectlist = projectmanager.getProjectsOfUser(userName);
-			}
 			
 			//adding the project details to the model
-			model.addAttribute("projectlist", projectlist);
+ 			model.addAttribute("projectlist", projectlist);
 			
 		}
 		catch(SQLException ex)
@@ -245,6 +234,7 @@ public class WorkbenchController {
 		String projIdList = "";
 		String errmsg;
 		String userName;
+		List<IProject> projectlist =null;
 		
 		// fetch the selected values
 		values = req.getParameterValues("projchecked");
@@ -269,11 +259,8 @@ public class WorkbenchController {
 		{
 			try
 			{
-				if(projectlist == null)
-				{
 					userName = principal.getName();
 					projectlist = projectmanager.getProjectsOfUser(userName);
-				}
 				
 				//adding the project details to the model
 				model.addAttribute("projectlist", projectlist);
@@ -355,40 +342,6 @@ public class WorkbenchController {
 	{
 		return new ModelAndView("auth/workbench/{projectid}/addcollaborator","command", collaboratorFactory.createCollaborator());
 <<<<<<< .mine
-	}*/
-		
-
-	
-
-
-
-	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
-	public String displayCollaborator(@PathVariable("projectid") int projectid, ModelMap model){
-
-		IProject project = projectmanager.showNonExistingCollaborator(projectid);
-		model.addAttribute("project", project);
-
-		IProject project1 = projectmanager.showExistingCollaborator(projectid);
-		model.addAttribute("project1", project1);
-
-
-		return "auth/workbench/showCollaborators";
-
-	}
-
-
-	/*@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.POST)
-	public String addCollaborators( @ModelAttribute("ModelAndView")Collaborator collaborator, @PathVariable("projectid") String id,   Model model,
-			Principal principal)	
-	{
-		int success = projectmanager.addCollaborators(collaborator);
-
-		if(success == 1)
-		{
-			model.addAttribute("success", 1);
-		}
-		model.addAttribute("projectid", id);
-		return "auth/workbench/addCollaborator";
 	}*/
 
 

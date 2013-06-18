@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.impl;
 
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleMapper;
 import edu.asu.spring.quadriga.service.IProjectManager;
@@ -138,21 +138,22 @@ public class ProjectManager implements IProjectManager {
 			
 		return project;
 	}
+	
 
 
 	@Override
-	public int addCollaborators(ICollaborator collaborator) {
+	public String addCollaborators(IProject project) {
 		
-	   int success = dbConnect.addCollaboratorRequest(collaborator);
+	   String errmsg = dbConnect.addCollaboratorRequest(project);
 				
-	   return success;
+	   return errmsg;
 	}
 
 	@Override
-	public IProject showNonExistingCollaborator(int projectid) {
+	public List<IUser> getNotCollaboratingUsers(int projectid) {
 				
-		IProject project = dbConnect.showCollaboratorsRequest(projectid);
-		return project;
+		List<IUser> userList = dbConnect.nonCollaboratoringUsersRequest(projectid);
+		return userList;
 	}
 	
 	@Override
@@ -176,6 +177,26 @@ public class ProjectManager implements IProjectManager {
 		}
 		return project;
 	}
+
+	@Override
+	public List<ICollaborator> getProjectCollaborator(int projectid) {
+		
+		IProject project = null;
+		List<ICollaborator> collaboratorList = null;
+		
+				try {
+					project = dbConnect.getProjectDetails(projectid);
+				
+					collaboratorList = project.getCollaborators();
+				
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
+		
+		return collaboratorList;
+	}
+	
 	
 	
 	

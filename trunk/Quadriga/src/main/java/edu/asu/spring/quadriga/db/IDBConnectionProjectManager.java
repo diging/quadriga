@@ -8,6 +8,8 @@ import javax.sql.DataSource;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.implementation.Project;
 
 /**
  * Interface class for methods relating database connections to
@@ -84,13 +86,15 @@ public interface IDBConnectionProjectManager
 	 */
 	public abstract IProject showCollaboratorsRequest(int projectid);
 	
+	public abstract List<IUser> nonCollaboratoringUsersRequest(int projectid);
+	
 	/**
 	 * Interface to add a Collaborator.
 	 * @param collaborator
 	 * @return 1 on success and 0 on failure
 	 * @author rohit pendbhaje
 	 */
-	public abstract int addCollaboratorRequest(ICollaborator collaborator);
+	public abstract String addCollaboratorRequest(IProject project);
 	
 	/**
 	 * @description    :Interface to delete projects.
