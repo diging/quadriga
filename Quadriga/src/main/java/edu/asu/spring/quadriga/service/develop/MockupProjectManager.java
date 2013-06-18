@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.service.IProjectManager;
 
@@ -91,20 +92,26 @@ public class MockupProjectManager implements IProjectManager{
 	}
 
 	@Override
-	public int addCollaborators(ICollaborator collaborator) {
+	public String addCollaborators(IProject project) {
 		
 		throw new RuntimeException("addCollaborators is not yet implemented");		
 	}
 
 	
 	@Override
-	public IProject showNonExistingCollaborator(int projectid) {
+	public List<IUser> getNotCollaboratingUsers(int projectid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public IProject showExistingCollaborator(int projectid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ICollaborator> getProjectCollaborator(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

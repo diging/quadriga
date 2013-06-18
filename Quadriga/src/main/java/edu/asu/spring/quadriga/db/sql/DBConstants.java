@@ -30,7 +30,9 @@ public interface DBConstants
 	public static final String DELETE_PROJECT_REQUEST = "sp_deleteproject";
 	public static final String ADD_COLLABORATOR_REQUEST = "sp_addProjectCollaborators";
 	
+	
 	public static final String SHOW_COLLABORATOR_REQUEST = "sp_showProjectCollaborators";
+	public static final String SHOW_NONCOLLABORATOR_REQUEST = "sp_showProjectNonCollaborators";
 
 	
 	public static final String ADD_DICTIONARY = "sp_addDictionaryDetails";

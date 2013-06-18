@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 
 /**
@@ -40,11 +41,13 @@ public interface IProjectManager {
 	
 	public abstract IProject getProject(int id);
 
-	public abstract int addCollaborators(ICollaborator collaborator);
+	public abstract String addCollaborators(IProject project);
 	
-	public abstract IProject showNonExistingCollaborator(int projectid);
+	public abstract List<IUser> getNotCollaboratingUsers(int projectid);
 	
 	public abstract IProject showExistingCollaborator(int projectid);
+	
+	public abstract List<ICollaborator> getProjectCollaborator(int id);
 
 
 }
