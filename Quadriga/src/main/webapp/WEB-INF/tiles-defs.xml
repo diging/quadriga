@@ -165,8 +165,6 @@
 	<definition name="auth/dictionaries/addDictionary" extends="base.definition.dictionaries">
 		<put-attribute name="title"
 			value="Quadriga Dictionary - Add Dictionary" />
-		<put-attribute name="sub-navigation"
-			value="/WEB-INF/views/dictionary/project-right.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/adddictionary.jsp" />
 	</definition>
