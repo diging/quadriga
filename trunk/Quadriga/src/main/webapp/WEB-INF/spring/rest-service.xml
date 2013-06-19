@@ -10,8 +10,7 @@
 
 	<bean id="dspaceFilePath" class="java.lang.String">
 		<constructor-arg>
-			<value>C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts
-			</value>
+			<value>C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts</value>
 			<!-- <value>/home/tomcat/webapps/certificates/jssecacerts</value> -->
 		</constructor-arg>
 	</bean>
