@@ -82,7 +82,7 @@ function enableSubmit()
 
 </form:form> 
 
-<table style="width: 100%" cellpadding="0" cellspacing="0"
+<%-- <table style="width: 100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">
 <thead>					
 <tr>
@@ -93,11 +93,8 @@ function enableSubmit()
 
 <tbody>
 
-
-
-
-
 </tbody>
+</table>--%>
 
 
 
@@ -106,9 +103,6 @@ function enableSubmit()
 
 
 
-
-					
-					</table>
 <%-- <table>
 	<tr>
 	<th>Existing collaborators</th>
