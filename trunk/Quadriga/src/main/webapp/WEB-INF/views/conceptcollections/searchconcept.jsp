@@ -3,10 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<style>
-form input.chk
-{-webkit-appearance: checkbox;}
-</style>
+
 <script type="text/javascript">
 $(document).ready(function() {
 				$('#conceptSearch').dataTable({
@@ -22,6 +19,31 @@ $(document).ready(function() {
 		
 	});
 });
+
+$(document).ready(function () {
+    $('#selectall').click(function () {
+        $('.selected').prop('checked', isChecked('selectall'));
+    });
+});
+function isChecked(checkboxId) {
+    var id = '#' + checkboxId;
+    return $(id).is(":checked");
+}
+function resetSelectAll() {
+    // if all checkbox are selected, check the selectall checkbox
+    // and viceversa
+    if ($(".selected").length == $(".selected:checked").length) {
+        $("#selectall").attr("checked", "checked");
+    } else {
+        $("#selectall").removeAttr("checked");
+    }
+
+    if ($(".selected:checked").length > 0) {
+        $('#edit').attr("disabled", false);
+    } else {
+        $('#edit').attr("disabled", true);
+    }
+}
 
 </script>
 	<h3>
@@ -61,7 +83,7 @@ $(document).ready(function() {
 		<table cellpadding="0" cellspacing="0"	class="display dataTable"  id="conceptSearch">
 			<thead>
 				<tr>
-					<th>Select</th>
+					<th><input type="checkbox" id="selectall"></input></th>
 					<th>Lemma</th>
 					<th>ID</th>
 					<th>POS</th>
@@ -75,7 +97,7 @@ $(document).ready(function() {
 			
 				<c:forEach var="concept" items="${result}">
 					<tr class="gradeX">
-						<td> <input type="checkbox"  class="chk" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
+						<td> <input type="checkbox"  class="selected" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
 						<td  align="justify"><font size="2"><c:out
 									value="${concept.lemma}"></c:out></font></td>
 						<td width="25%"  align="justify"><font size="2"><c:out
