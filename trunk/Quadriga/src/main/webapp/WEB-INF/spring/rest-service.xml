@@ -29,8 +29,7 @@
 
 	<bean id="searchWordPowerURL" class="java.lang.String">
 		<constructor-arg>
-			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/
-			</value>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/</value>
 		</constructor-arg>
 	</bean>
 
@@ -42,8 +41,7 @@
 
 	<bean id="updateFromWordPowerURL" class="java.lang.String">
 		<constructor-arg>
-			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/
-			</value>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/</value>
 		</constructor-arg>
 	</bean>
 	<bean id="updateConceptPowerURL" class="java.lang.String">
