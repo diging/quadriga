@@ -1,6 +1,8 @@
 package edu.asu.spring.quadriga.db.sql;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
+import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -177,4 +180,111 @@ public class DBConnectionCCManagerTest {
 		String result = dbConnection.addCollection(con);
 		assertEquals("", result);
 	}
+
+	/**
+	 * Test method for save items
+	 *
+	 * @throws Exception
+	 *
+	 * 
+	 */
+	@Test
+	public void testSaveItem()
+	{
+		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setDescription("Hello This is a test");
+		collection.setName("Collection Test");
+		collection.setOwner(user);
+		dbConnection.addCollection(collection);
+		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
+		assertEquals(collection.getName(),list.get(0).getName());
+		collection.setId(list.get(0).getId());
+		ConceptpowerReply rep = collectionManager.search("dog", "noun");
+		IConcept concept = conceptFactory.createConceptObject();
+		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
+		concept.setId(rep.getConceptEntry().get(0).getId());
+		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
+		concept.setPos(rep.getConceptEntry().get(0).getPos());
+		
+		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
+		
+		dbConnection.getCollectionDetails(collection);
+		assertEquals(concept.getId(),collection.getItems().get(0).getId());
+	}
+	
+	@Test
+	public void testDeleteItem() {
+		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setDescription("Hello This is a test");
+		collection.setName("Collection Test");
+		collection.setOwner(user);
+		dbConnection.addCollection(collection);
+		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
+		assertEquals(collection.getName(),list.get(0).getName());
+		collection.setId(list.get(0).getId());
+		ConceptpowerReply rep = collectionManager.search("dog", "noun");
+		IConcept concept = conceptFactory.createConceptObject();
+		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
+		concept.setId(rep.getConceptEntry().get(0).getId());
+		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
+		concept.setPos(rep.getConceptEntry().get(0).getPos());
+		
+		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
+		dbConnection.getCollectionDetails(collection);
+		
+		assertEquals(concept.getId(),collection.getItems().get(0).getId());
+		dbConnection.deleteItems(concept.getId(), collection.getId());
+		List<IConceptCollection> clist = dbConnection.getConceptsOwnedbyUser(user.getUserName());
+		
+		assertEquals(collection.getName(),clist.get(0).getName());
+		collection.setId(clist.get(0).getId());
+		collection = clist.get(0);
+		dbConnection.getCollectionDetails(collection);
+		assertEquals(0,collection.getItems().size());
+		
+	}
+	
+	@Test
+	public void testUpdate() {
+		
+		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setDescription("Hello This is a test");
+		collection.setName("Collection Test");
+		collection.setOwner(user);
+		dbConnection.addCollection(collection);
+		ConceptpowerReply rep = collectionManager.search("dog", "noun");
+		IConcept concept = conceptFactory.createConceptObject();
+		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
+		concept.setId(rep.getConceptEntry().get(0).getId());
+		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
+		concept.setPos(rep.getConceptEntry().get(0).getPos());
+		collection.getItems().add(concept);
+		dbConnection.saveItem("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId());
+		concept.setLemma("updatedlemma");
+		dbConnection.updateItem(concept, collection.getName());
+		collectionManager.getCollectionDetails(collection);
+		assertEquals("updatedlemma",collection.getItems().get(0).getLemma());
+	}
+	
+	@Test
+	public void testValidateid()
+	{
+		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setDescription("Hello This is a test");
+		collection.setName("Collection Test");
+		collection.setOwner(user);
+		String ret = dbConnection.validateId("Collection Test");
+		assertNull(ret);
+		ret  = dbConnection.addCollection(collection);
+		assertNotNull(ret);
+		
+		
+	}
+	
+	
+	
 }

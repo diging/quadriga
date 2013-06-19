@@ -133,10 +133,11 @@ public class ConceptCollectionManagerTest {
 				user.setQuadrigaRoles(rolesList);
 
 				//Setup the database with the proper data in the tables;
-				sDatabaseSetup = new String[]{"delete from tbl_conceptcollections",
+				sDatabaseSetup = new String[]{
+						"delete from tbl_conceptcollections_items",
+						"delete from tbl_conceptcollections",						
 						"delete from tbl_quadriga_user",
 						"delete from tbl_quadriga_user_requests",
-						"delete from tbl_conceptcollections_items",
 						"delete from tbl_quadriga_user_denied",
 						"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 						"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
@@ -144,6 +145,7 @@ public class ConceptCollectionManagerTest {
 						"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 						"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 						"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
+						
 				};
 		
 	}
@@ -154,6 +156,7 @@ public class ConceptCollectionManagerTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		dbConnection.setupTestEnvironment(sDatabaseSetup);
 	}
 
 	/**
@@ -168,7 +171,7 @@ public class ConceptCollectionManagerTest {
 		collection.setOwner(user);
 		collectionManager.addConceptCollection(collection);
 		List<IConceptCollection> list = collectionManager.getCollectionsOwnedbyUser(user.getUserName());
-		assertEquals(collection,list.get(0));
+		assertEquals(collection.getName(),list.get(0).getName());
 	}
 
 	/**
@@ -207,7 +210,8 @@ public class ConceptCollectionManagerTest {
 		collection.setOwner(user);
 		collectionManager.addConceptCollection(collection);
 		List<IConceptCollection> list = collectionManager.getCollectionsOwnedbyUser(user.getUserName());
-		assertEquals(collection,list.get(0));
+		assertEquals(collection.getName(),list.get(0).getName());
+		collection.setId(list.get(0).getId());
 		collectionManager.addItems("lemma", "testid", "red", "hello", collection.getId());
 		collectionManager.getCollectionDetails(collection);
 		IConcept concept = conceptFactory.createConceptObject();
@@ -230,7 +234,6 @@ public class ConceptCollectionManagerTest {
 	 */
 	@Test
 	public void testUpdate() {
-		
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -245,7 +248,6 @@ public class ConceptCollectionManagerTest {
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		collection.getItems().add(concept);
 		collectionManager.addItems("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId());
-		
 		collectionManager.update(new String[]{rep.getConceptEntry().get(0).getId()}, collection);
 		collectionManager.getCollectionDetails(collection);
 		assertEquals(concept.getLemma(),collection.getItems().get(0).getLemma());
@@ -262,15 +264,16 @@ public class ConceptCollectionManagerTest {
 		collection.setName("Collection Test");
 		collection.setOwner(user);
 		collectionManager.addConceptCollection(collection);
+		List<IConceptCollection> list = collectionManager.getCollectionsOwnedbyUser(user.getUserName());
+		assertEquals(collection.getName(),list.get(0).getName());
+		collection.setId(list.get(0).getId());
 		ConceptpowerReply rep = collectionManager.search("dog", "noun");
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
 		concept.setId(rep.getConceptEntry().get(0).getId());
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
-		
 		collectionManager.addItems(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
-		
 		collectionManager.getCollectionDetails(collection);
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
 	}
@@ -286,7 +289,11 @@ public class ConceptCollectionManagerTest {
 		collection.setName("Collection Test");
 		collection.setOwner(user);
 		collectionManager.addConceptCollection(collection);
+		
 		List<IConceptCollection> list =  collectionManager.getCollectionsOwnedbyUser(user.getUserName());
+		
+		assertEquals(collection.getName(),list.get(0).getName());
+		collection.setId(list.get(0).getId());
 		assertEquals(collection,list.get(0));
 	}
 
@@ -301,18 +308,25 @@ public class ConceptCollectionManagerTest {
 		collection.setName("Collection Test");
 		collection.setOwner(user);
 		collectionManager.addConceptCollection(collection);
+		List<IConceptCollection> list = collectionManager.getCollectionsOwnedbyUser(user.getUserName());
+		assertEquals(collection.getName(),list.get(0).getName());
+		collection.setId(list.get(0).getId());
 		ConceptpowerReply rep = collectionManager.search("dog", "noun");
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
 		concept.setId(rep.getConceptEntry().get(0).getId());
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
-	
+		
 		collectionManager.addItems(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
 		collectionManager.getCollectionDetails(collection);
+		
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
 		collectionManager.deleteItem(concept.getId(), collection.getId());
 		List<IConceptCollection> clist = collectionManager.getCollectionsOwnedbyUser(user.getUserName());
+		
+		assertEquals(collection.getName(),clist.get(0).getName());
+		collection.setId(clist.get(0).getId());
 		collection = clist.get(0);
 		collectionManager.getCollectionDetails(collection);
 		assertEquals(0,collection.getItems().size());
