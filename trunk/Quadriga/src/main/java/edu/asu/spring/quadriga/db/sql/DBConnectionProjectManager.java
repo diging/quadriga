@@ -150,14 +150,21 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
      */
 	@Override
-	public List<IProject> getProjectOfUser(String sUserName) throws QuadrigaStorageException {
+
+	public List<IProject> getProjectOfUser(String sUserName) throws SQLException{
+
 
 
 		String dbCommand;
 		String outputErrorValue;
         IProject project;
         
-		getConnection();
+		try {
+			getConnection();
+		} catch (QuadrigaStorageException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		List<IProject> projectList = new ArrayList<IProject>();
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_LIST + "(?,?)";
 		try {
@@ -170,13 +177,10 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			
 			sqlStatement.execute();
 			
-			outputErrorValue = sqlStatement.getString(2);
+			ResultSet resultset = sqlStatement.getResultSet();
 			
-			if(outputErrorValue == "")
-			{
-
-				ResultSet resultset = sqlStatement.getResultSet();
-				
+			if(resultset!=null)
+			{	
 				while(resultset.next())
 		        {
 					project = projectfactory.createProjectObject();
@@ -185,24 +189,32 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		        	project.setId(resultset.getString(3));
 		        	project.setInternalid(resultset.getInt(4));
 		        	projectList.add(project);
-		        
 		         }
+				
+				outputErrorValue = sqlStatement.getString(2);
+				
+				if(outputErrorValue.isEmpty())
+				{
+	    			return projectList;
+				}
+				else
+				{
+					return null;
+				}
 			}
-			else
-			{
-					throw new SQLException(outputErrorValue);
-			}
-		
 		} 
-		catch (SQLException e) {
-
-			throw new QuadrigaStorageException();
+		
+		catch (Exception e)
+		{
+			throw new RuntimeException();
 		}
         finally
         {
         	closeConnection();
         }
+
 		return projectList;
+
 	}
 	/**
 	 * @Description     This method takes string from database and converts it into the owner 
@@ -245,13 +257,20 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
      */
 	@Override
-	public IProject getProjectDetails(int projectId) throws QuadrigaStorageException  {
+
+	public IProject getProjectDetails(int projectId) throws SQLException  {
+
 		
 		String dbCommand;
 		String outErrorValue,outputValue;
 		CallableStatement sqlStatement ;
 		
-		getConnection();
+		try {
+			getConnection();
+		} catch (QuadrigaStorageException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		IProject project = null;
 		project = projectfactory.createProjectObject();
@@ -317,7 +336,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	} 
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new RuntimeException();
 		}
 		 finally{
 			 closeConnection();
@@ -335,22 +354,28 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 *  @return      : IProject - object of Project class.
 	 *  
 	 *  @author      : Rohit Sukelshwar Pendbhaje
+	 * @throws SQLException 
 	 */
 	@Override
-	public IProject showCollaboratorsRequest(int projectid) throws QuadrigaStorageException  {
 
-		System.out.println("projectid showCollaboratorsRequest" + projectid );
+	public List<IUser> showCollaboratorsRequest(int projectid) throws SQLException {
+
+
 		String dbCommand;
 		String outErrorValue;
 		CallableStatement sqlStatement ;
 		ICollaborator collaborator = null;
 
-		IProject project = projectfactory.createProjectObject();
-		project.setCollaborators(new ArrayList<ICollaborator>());
+		List<IUser> collaboratingUsers = new ArrayList<IUser>();
 
 		IUser collaboratorUser=null;
 
-		getConnection();
+		try {
+			getConnection();
+		} catch (QuadrigaStorageException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 	    dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_COLLABORATOR_REQUEST + "(?,?)";
 
@@ -370,12 +395,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				{
 					collaboratorUser = userFactory.createUserObject();
 					collaboratorUser.setName(resultset.getString(1));
-
-					collaborator = collaboratorFactory.createCollaborator();
-					collaborator.setUserObj(collaboratorUser);
-
-					project.getCollaborators().add(collaborator);
-					
+					collaboratingUsers.add(collaboratorUser);	
 				}
 		     }
 			
@@ -385,34 +405,31 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			} 
 		     
 		} catch (SQLException e) {
-			throw new QuadrigaStorageException(); 
+			throw new RuntimeException(); 
 		}
 	   
 	    finally{
 			 closeConnection();
 		 }
 		
-		return project;
+		return collaboratingUsers;
 	}
 	
 	@Override
-	public List<IUser> nonCollaboratoringUsersRequest(int projectid) throws QuadrigaStorageException {
+	public List<IUser> nonCollaboratoringUsersRequest(int projectid) throws SQLException {
 		
-		System.out.println("projectid showNonCollaboratorsRequest" + projectid );
-
 		String dbCommand;
 		String outErrorValue;
 		CallableStatement sqlStatement ;
-		ICollaborator collaborator = null;
 		IUser collaboratorUser=null;
-		List<IUser> collaboratingUsers = new ArrayList<IUser>();
+		List<IUser> noncollaboratingUsers = new ArrayList<IUser>();
 
-		
-		//IProject project = projectfactory.createProjectObject();
-		//project.setCollaborators(new ArrayList<ICollaborator>());
-
-
-		getConnection();
+		try {
+			getConnection();
+		} catch (QuadrigaStorageException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_NONCOLLABORATOR_REQUEST + "(?,?)";
 
@@ -431,15 +448,8 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				while(resultset.next())
 				{
 					collaboratorUser = userFactory.createUserObject();
-					collaboratorUser.setName(resultset.getString(1));
-
-					//collaborator = collaboratorFactory.createCollaborator();
-					//collaborator.setUserObj(collaboratorUser);
-
-					//project.getCollaborators().add(collaborator);
-					collaboratingUsers.add(collaboratorUser);
-					
-					
+					collaboratorUser.setUserName(resultset.getString(1));
+					noncollaboratingUsers.add(collaboratorUser);
 				}
 		     }
 			
@@ -449,14 +459,14 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			} 
 		     
 		} catch (SQLException e) {
-			throw new QuadrigaStorageException(); 
+			throw new RuntimeException(); 
 		}
 	    
 	    finally{
 			 closeConnection();
 		 }
 		
-		return collaboratingUsers;
+		return noncollaboratingUsers;
 	    
 	}
 	
@@ -469,49 +479,50 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 *  
 	 *  @author       : Rohit Sukelshwar Pendbhaje
 	 */
-	public String addCollaboratorRequest(IProject project)
+	public String addCollaboratorRequest(ICollaborator collaborator, int projectid) throws QuadrigaStorageException
 	{
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-		List<ICollaborator> collaboratorList = project.getCollaborators();
-		
-		for(ICollaborator collaborator:collaboratorList)
-		{
-			IUser collabUser = collaborator.getUserObj();
-			System.out.println("----- DB username:"+collabUser.getUserName());
-			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
-			{
-				System.out.println("--------- DB roleDBid" + collaboratorRole.getRoleDBid());
-
-			}
-		}
-		
-		/*collaborator.getCollaboratorRoles();
-		IUser collboratoruser =	collaborator.getUserObj();
-		String userName = collboratoruser.getUserName();
-		System.out.println("-----username"+collboratoruser.getUserName());
 
 		String dbCommand;
-		String outErrorValue;
-		CallableStatement sqlStatement ;
-		
-		
-		
-		dbCommand =  DBConstants.SP_CALL+ " " + DBConstants.ADD_COLLABORATOR_REQUEST + "(?,?,?,?)" ;
-		
-		try {
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			
-			sqlStatement.setString(2,collaboratorUser);
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} */
+        String errmsg;
+        CallableStatement sqlStatement = null;
+        String role=null;
+        
+        String collaboratorUser = collaborator.getUserObj().getUserName();
+       
+        
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_COLLABORATOR_REQUEST + "(?,?,?,?)";
 
-		
-		return null;
-		
-	} 
-	
+		try {
+			getConnection();
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setInt(1, projectid);
+			sqlStatement.setString(2, collaboratorUser);
+			 
+			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
+				{
+		        	 role = collaboratorRole.getRoleDBid();
+		 			 sqlStatement.setString(3, role);
+				}
+			
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+			
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(4);
+			
+			return errmsg;
+    	
+    		} 
+    	
+    	catch (SQLException e) {
+    		throw new QuadrigaStorageException();
+        }
+        finally{
+        	closeConnection();
+        }
+	}
+    	
+ 
 	/**
 	 * @description : This method edits the project
 	 * @param       : project - object

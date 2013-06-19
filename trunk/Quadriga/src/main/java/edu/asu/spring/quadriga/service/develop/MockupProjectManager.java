@@ -92,11 +92,6 @@ public class MockupProjectManager implements IProjectManager{
 		return project;
 	}
 
-	@Override
-	public String addCollaborators(IProject project) {
-		
-		throw new RuntimeException("addCollaborators is not yet implemented");		
-	}
 
 	
 	@Override
@@ -107,14 +102,19 @@ public class MockupProjectManager implements IProjectManager{
 
 	@Override
 	public IProject showExistingCollaborator(int projectid) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<ICollaborator> getProjectCollaborator(int id) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public String addCollaborators(ICollaborator collaborator, int projectid)
+			throws QuadrigaStorageException {
+		throw new RuntimeException("addCollaborators is not yet implemented");		
 	}
 
 

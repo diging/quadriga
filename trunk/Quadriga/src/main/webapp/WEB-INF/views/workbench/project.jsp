@@ -20,9 +20,15 @@ $(document).ready(function() {
 <input type="button" name="Edit" value="Edit"/>
 </a>
 
-
-
-
+<section>
+<c:choose>
+	<c:when test="${success=='1'}">
+	<span class="byline" style="color: #f00;"><c:out
+		value="collaborator added successfully"></c:out></span>
+	<br />
+	</c:when>
+	</c:choose>
+</section>
 
 
 	

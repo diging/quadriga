@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -51,16 +53,17 @@ public class CollaboratorController {
 	    binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
 	    @Override
 	    public void setAsText(String text) {
+
 	        IUser user = usermanager.getUserDetails(text);
 	        setValue(user);
 	    }
 	    });
-	    
 	    binder.registerCustomEditor(List.class, "collaboratorRoles", new PropertyEditorSupport() {
 
 			@Override
 			public void setAsText(String text) {
-				String[] roleIds = text.split(",");
+
+			   String[] roleIds = text.split(",");
 				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
 				for (String roleId : roleIds) {
 					ICollaboratorRole role = collaboratorRoleManager.getCollaboratorRoleById(roleId.trim());
@@ -69,7 +72,7 @@ public class CollaboratorController {
 				setValue(roles);
 			}
 	    	
-	    });
+	    }); 
 	}
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
@@ -83,19 +86,18 @@ public class CollaboratorController {
 			throw new QuadrigaStorageException();
 		}
         
-		model.addAttribute("project", project);
+		model.addAttribute("project", project); 
 		
-
-		List<ICollaborator> collaborators = project.getCollaborators();	
-		model.addAttribute("collaborators", collaborators);
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
-		model.addAttribute("collaborator", collaborator);
+		model.addAttribute("collaborator", collaborator); 
 
-		List<IUser> notCollaboratingUsers = null;
 		try
 		{
-		  notCollaboratingUsers = projectmanager.getNotCollaboratingUsers(projectid);
+			List<IUser> notCollaboratingUsers = projectmanager.getNotCollaboratingUsers(projectid);
+			model.addAttribute("notCollaboratingUsers", notCollaboratingUsers);
+			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleManager.getCollaboratorRoles());
+			
 		}
 		catch(QuadrigaStorageException e){
 			throw new QuadrigaStorageException();
@@ -105,52 +107,46 @@ public class CollaboratorController {
 //		user.setUserName("testid");
 //		notCollaboratingUsers.add(user);
 		
-		model.addAttribute("notCollaboratingUsers", notCollaboratingUsers);
-		model.addAttribute("possibleCollaboratorRoles", collaboratorRoleManager.getCollaboratorRoles());
-		
-		
 		
 		return "auth/workbench/showCollaborators";
 
 	}
 	
 	@ModelAttribute
-	public ICollaborator createCollaborator() {
+	public ICollaborator getCollaborator() {
 		ICollaborator collaborator = collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
+		//model.addAttribute("collaborator", collaborator);
 		return collaborator;
-	}
+	} 
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.POST)
-	public String addCollaborators( @PathVariable("projectid") int id,   Model model,
-			@ModelAttribute ICollaborator collaborator)	
+	public String addCollaborators(
+			@PathVariable("projectid") int projectid, Model model, @ModelAttribute ICollaborator collaborator, RedirectAttributes redirectatt)
 	{
-			
-		/*List<ICollaborator> collaborators =  project.getCollaborators();
-		for(ICollaborator collaborator:collaborators)
-		{
-			IUser user = collaborator.getUserObj();
-			System.out.println("--------- workbench addCollaborators getname():"+user.getName());
-		}
-		String success = projectmanager.addCollaborators(project);
-
-		/*if(success == 1)
-		{
-			model.addAttribute("success", 1);
-		}
-		model.addAttribute("projectid", id);  */
-		System.out.println("user " + collaborator.getUserObj().getUserName());
-		System.out.println("roles " + collaborator.getCollaboratorRoles());
 		
-		return "redirect:/auth/workbench/{projectid}"; 
+		String errmsg = null;
+		try {
+			 errmsg = projectmanager.addCollaborators(collaborator,projectid);
+
+
+		} catch (QuadrigaStorageException e) {
+			e.printStackTrace();
+		}
+
+		if(errmsg.equals(""))
+		{
+
+			redirectatt.addFlashAttribute("success", "1");
+		//	redirectatt.addAttribute("successmsg", "collaborator added successfully");
+			return "redirect:/auth/workbench/{projectid}"; 
+		}	
+		else
+		{
+			model.addAttribute("errormsg", errmsg);
+			return "redirect:/auth/workbench/" + projectid + "/showCollaborators";
+		}
 	}
 	
-//	@RequestMapping(value="auth/workbench/{projectid}/addcollaborator", method = RequestMethod.GET)
-//	public String addCollaboratorForm(Model model)
-//	{
-//		model.addAttribute("project",projectFactory.createProjectObject());
-//		return "redirect:/auth/workbench/{projectid}";
-//		
-//	}
-
+	
 }

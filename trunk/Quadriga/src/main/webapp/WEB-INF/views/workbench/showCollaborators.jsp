@@ -55,7 +55,6 @@ function enableSubmit()
 
  <form:form modelAttribute="collaborator" method="POST" >
  
-	
 		<!-- <input type="checkbox" id="checkbox_1" onclick ="enableSubmit()" 
 		name="roleitem" value="collaborator_role1" />
 		<label for="checkbox_1">ADMIN</label>
@@ -72,17 +71,33 @@ function enableSubmit()
 		name="roleitem" value="collaborator_role4"  />
 		<label for="checkbox_4">EDITOR</label> -->
 		
-	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" />
-	
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
-	   <form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
+	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
 
-<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/addcollaborator'">
+	<br><br>
+	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
+	<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/addcollaborator'">
 
 </form:form> 
 
+<table style="width: 100%" cellpadding="0" cellspacing="0"
+					border="0" class="display dataTable">
+<thead>					
+<tr>
+	<th>Collaborators</th>
+	<th>Roles</th>	
+</tr>
+</thead>
+
+<tbody>
+
+
+
+
+
+</tbody>
 
 
 
@@ -92,19 +107,9 @@ function enableSubmit()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-<%-- 
-<table>
+					
+					</table>
+<%-- <table>
 	<tr>
 	<th>Existing collaborators</th>
 	<th>Roles</th>
