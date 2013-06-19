@@ -1,5 +1,10 @@
 package edu.asu.spring.quadriga.exceptions;
 
+/**
+ * This is an exception thrown when there is a storage problem.
+ * @author Julia Damerow
+ *
+ */
 public class QuadrigaStorageException extends Exception {
 
 	
