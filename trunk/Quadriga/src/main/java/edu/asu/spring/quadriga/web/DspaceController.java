@@ -8,20 +8,24 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 
 /**
+ * Controller to handle all the dspace requests for Quadriga.
  * @author Ram Kumar Kumaresan
  *
  */
+@Controller
 public class DspaceController {
 	
 	@Autowired
@@ -46,6 +50,20 @@ public class DspaceController {
 
 		return "auth/workbench/workspace/communities";
 	}
+	
+	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
+	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {
+		ICollection collection = dspaceManager.getCollection(collectionid);
+		if(collection != null)
+		{
+			return collection.getName();
+		}
+		else
+		{
+			return "Loading...";
+		}		
+	}
+	
 	
 	@RequestMapping(value = "/auth/workbench/workspace/communities-collections", method = RequestMethod.GET)
 	public @ResponseBody String getCommunitiesAndCollections() {

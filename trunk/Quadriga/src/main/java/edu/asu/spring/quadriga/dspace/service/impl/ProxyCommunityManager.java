@@ -29,11 +29,11 @@ import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
  *
  */
 @Service
-public class ProxyCommunityManager implements ICommunityManager {
+public class ProxyCommunityManager implements ICommunityManager, Runnable {
 
 	private List<ICommunity> communities;
 	private List<ICollection> collections;
-	
+
 	//create a list to hold the Future object associated with Callable
 	private List<Future<ICollection>> futureList;
 
@@ -49,19 +49,18 @@ public class ProxyCommunityManager implements ICommunityManager {
 		//		this.password = sPassword;
 		if(communities == null)
 		{
-			System.out.println("Proxy Community Manager connecting to Dspace....");
 			String sRestServicePath = getCompleteUrlPath(url+"/rest/communities.xml", sUserName, sPassword);
 			IDspacecCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
 
 			if(dsapceCommunities.getCommunities().size()>0)
 			{
 				communities = new ArrayList<ICommunity>();
-				
+
 				//Initialize collection specific objects
 				collections = new ArrayList<ICollection>();
-				futureList = new ArrayList<Future<ICollection>>();
-				
-				
+				this.futureList = new ArrayList<Future<ICollection>>();
+
+
 				ICommunity community = null;
 				for(IDspaceCommunity dspaceCommunity: dsapceCommunities.getCommunities())
 				{			
@@ -81,27 +80,54 @@ public class ProxyCommunityManager implements ICommunityManager {
 						communities.add(community);
 					}
 				}
+
+				//After creating all the collection threads, create a thread to check their status
+				Thread checkCollectionThread = new Thread(this);
+				checkCollectionThread.start();
 			}
 		}
-		else
+		return communities;
+	}
+
+	//TODO: Push Down to collection class and remove the list of collections in this class
+	@Override
+	public ICollection getCollection(String sCollectionId)
+	{
+		//Check if a request for collections has been made to Dspace
+		if(this.collections != null)
 		{
-			System.out.println("Proxy Community Manager already has the list of communities...");
-			
+			for(ICollection collection : this.collections)
+			{
+				if(collection.getId().equals(sCollectionId))
+					return collection;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void run() {
+		Iterator<Future<ICollection>> iteratorFuture;
+		Future<ICollection> future;
+		
+		//Do this until all collection threads end
+		while(this.futureList.size()>0)
+		{
 			//Communities are already fetched from Dspace			
 			//Get an iterator so that the list can be modified while iterating
-			Iterator<Future<ICollection>> iteratorFuture = futureList.iterator();
+			iteratorFuture = this.futureList.iterator();
 
 			//Iterate through each thread and check if the thread returned a collection object.
 			while(iteratorFuture.hasNext())
 			{
-				Future<ICollection> future = iteratorFuture.next();
+				future = iteratorFuture.next();
 				if(future.isDone())
 				{
 					try {
 						//Add the collection object to the class variable and remove the thread reference from the list
 						ICollection collection = future.get();
 						this.collections.add(collection);
-						
+
 						for(ICommunity community: communities)
 						{
 							if(community.getCollectionIds().contains(collection.getId()))
@@ -109,7 +135,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 								community.addCollection(collection);
 							}
 						}
-						
 						iteratorFuture.remove();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -118,9 +143,11 @@ public class ProxyCommunityManager implements ICommunityManager {
 					}
 				}
 			}			
-			System.out.println("Collections retrieved so far: "+this.collections.size());
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		return communities;
-	}	
-
+	}
 }

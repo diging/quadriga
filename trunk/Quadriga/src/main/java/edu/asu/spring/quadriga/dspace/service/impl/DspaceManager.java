@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
@@ -36,9 +37,6 @@ public class DspaceManager implements IDspaceManager{
 	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
-
-	private String userName;
-	private String password;
 	
 	//Handle to the proxy community manager class
 	@Autowired
@@ -60,9 +58,9 @@ public class DspaceManager implements IDspaceManager{
 	}
 
 	@Override
-	public String getCollectionName(String sUserName, String sPassword, String sCollectionId)
+	public ICollection getCollection(String sCollectionId)
 	{
-		throw new NotImplementedException("getAllCollectionName yet to be implemented");
+		return proxyCommunityManager.getCollection(sCollectionId);
 	}
 
 
