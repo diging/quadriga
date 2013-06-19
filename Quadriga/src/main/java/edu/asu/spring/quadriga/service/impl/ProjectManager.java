@@ -51,18 +51,17 @@ public class ProjectManager implements IProjectManager {
 	 */
 	
 	@Override
-	public List<IProject> getProjectsOfUser(String userid) throws QuadrigaStorageException {
+	public List<IProject> getProjectsOfUser(String userid)  {
 		
 		List<IProject> projectList = new ArrayList<IProject>();  
 		
-		try
-		{
-		projectList = dbConnect.getProjectOfUser(userid);
+		
+		try {
+			projectList = dbConnect.getProjectOfUser(userid);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			throw new QuadrigaStorageException();
-		}
+		
 				
 		return projectList;
 	} 
@@ -85,7 +84,6 @@ public class ProjectManager implements IProjectManager {
         errmsg = dbConnect.editProjectRequest(existingProject, userName);
         }
         catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			throw new QuadrigaStorageException();
 		}
 			
@@ -111,7 +109,6 @@ public class ProjectManager implements IProjectManager {
 		errmsg = dbConnect.deleteProjectRequest(projectIdList);
 		}
 		catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			throw new QuadrigaStorageException();
 		}
 			
@@ -137,7 +134,6 @@ public class ProjectManager implements IProjectManager {
 		errmsg = dbConnect.addProjectRequest(newProject);
 		}
 		catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			throw new QuadrigaStorageException();
 		}
 			
@@ -171,10 +167,9 @@ public class ProjectManager implements IProjectManager {
 				}
 			}	
 		}
-		catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
+		catch (SQLException e) {
 			logger.error("sqlException thrown",e);
-			throw new QuadrigaStorageException();
+			e.printStackTrace();
 		}
 			
 		return project;
@@ -183,72 +178,72 @@ public class ProjectManager implements IProjectManager {
 
 
 	@Override
-	public String addCollaborators(IProject project) {
-		
-	   String errmsg = dbConnect.addCollaboratorRequest(project);
+	public String addCollaborators(ICollaborator collaborator,int projectid) throws QuadrigaStorageException {
+
+	   String errmsg = null;
+	try {
+		errmsg = dbConnect.addCollaboratorRequest(collaborator, projectid);
+	} 
+	
+	catch (QuadrigaStorageException e) {
+		throw new QuadrigaStorageException();
+	}
 				
 	   return errmsg;
 	}
 
 	@Override
-	public List<IUser> getNotCollaboratingUsers(int projectid) throws QuadrigaStorageException {
+	public List<IUser> getNotCollaboratingUsers(int projectid)  {
 			
-		List<IUser> userList;
-		try
-		{
-		 userList = dbConnect.nonCollaboratoringUsersRequest(projectid);
+		List<IUser> userList = null;
+		
+		 try {
+			userList = dbConnect.nonCollaboratoringUsersRequest(projectid);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			throw new QuadrigaStorageException();
-		}
+		
+		
 		return userList;
 	}
 	
 	@Override
-	public IProject showExistingCollaborator(int projectid)throws QuadrigaStorageException{
+	public IProject showExistingCollaborator(int projectid){
 				
 		IProject project = null;
 		try {
 			project = dbConnect.getProjectDetails(projectid);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		for (ICollaborator collaborator : project.getCollaborators()) {
 			
-			for (ICollaborator collaborator : project.getCollaborators()) {
-				
-				for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
-				{
-					roleMapper.fillCollaboratorRole(collaboratorRole);	
-				}
-			}	
-			
-		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			throw new QuadrigaStorageException();
+			for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
+			{
+				roleMapper.fillCollaboratorRole(collaboratorRole);	
+			}
 		}
 		return project;
 	}
 
 	@Override
-	public List<ICollaborator> getProjectCollaborator(int projectid) throws QuadrigaStorageException {
+	public List<ICollaborator> getProjectCollaborator(int projectid)  {
 		
 		IProject project = null;
 		List<ICollaborator> collaboratorList = null;
 		
-				try {
-					project = dbConnect.getProjectDetails(projectid);
+		try {
+			project = dbConnect.getProjectDetails(projectid);
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
+	    collaboratorList = project.getCollaborators();
 				
-					collaboratorList = project.getCollaborators();
 				
-				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					throw new QuadrigaStorageException();
-				}
 		
 		return collaboratorList;
 	}
-	
-	
-	
-	
-	
-
 }

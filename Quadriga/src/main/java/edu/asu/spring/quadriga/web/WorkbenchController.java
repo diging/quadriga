@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -115,7 +116,7 @@ public class WorkbenchController {
 	 * @author 		rohit sukleshwar pendbhaje
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
-	public String getProjectPage(@PathVariable("projectid") int projectid, ModelMap model) throws QuadrigaStorageException {
+	public String getProjectPage(@PathVariable("projectid") int projectid, ModelMap model, RedirectAttributes redirectAtt) throws QuadrigaStorageException {
 
 		IProject project = null;
 		try
@@ -128,13 +129,10 @@ public class WorkbenchController {
 
 		model.addAttribute("project", project);
 
-		ICollaborator collaborator = null;
-		/*	int success = projectmanager.addCollaborators(collaborator);
-		if(success == 1)
-		{
-			model.addAttribute("success", 1);
-		}*/
-
+		System.out.println(redirectAtt.getFlashAttributes().get("success"));
+		
+		
+	model.addAttribute("success",redirectAtt.getFlashAttributes().get("success"));
 
 		return "auth/workbench/project";
 	}

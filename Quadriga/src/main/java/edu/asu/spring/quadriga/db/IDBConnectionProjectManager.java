@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -29,9 +30,10 @@ public interface IDBConnectionProjectManager
 	 * 
 	 * @author rohit pendbhaje
 	 * @throws QuadrigaStorageException  
+	 * @throws SQLException 
 	 * 
 	 */
-	public abstract IProject getProjectDetails(int projectId) throws QuadrigaStorageException ;
+	public abstract IProject getProjectDetails(int projectId) throws SQLException ;
 
 	/**
 	 * interface to split the comma seperated collaborator roles and 
@@ -50,9 +52,12 @@ public interface IDBConnectionProjectManager
 	 * @return list of projects
 	 * 
 	 * @author rohit pendbhaje
+	 * @throws SQLException 
 	 * 
 	 */
-	public abstract List<IProject> getProjectOfUser(String sUserId) throws QuadrigaStorageException;
+
+	public abstract List<IProject> getProjectOfUser(String sUserId) throws SQLException;
+
 
 	/**
 	 * Interface to execute the supplied query to use for the test cases.
@@ -82,18 +87,23 @@ public interface IDBConnectionProjectManager
 	 * @return Iproject - object containing the collaborators
 	 *         for the supplied project id.
 	 * @author rohit pendbhaje        
+	 * @throws SQLException 
 	 */
-	public abstract IProject showCollaboratorsRequest(int projectid)throws QuadrigaStorageException ;
+
+	public abstract List<IUser> showCollaboratorsRequest(int projectid) throws SQLException;
+
 	
-	public abstract List<IUser> nonCollaboratoringUsersRequest(int projectid)throws QuadrigaStorageException ;
+	public abstract List<IUser> nonCollaboratoringUsersRequest(int projectid)throws SQLException ;
 	
 	/**
 	 * Interface to add a Collaborator.
 	 * @param collaborator
+	 * @param projectid
 	 * @return 1 on success and 0 on failure
 	 * @author rohit pendbhaje
+	 * @throws QuadrigaStorageException 
 	 */
-	public abstract String addCollaboratorRequest(IProject project);
+	public abstract String addCollaboratorRequest(ICollaborator collaborator, int projectid) throws QuadrigaStorageException;
 	
 	/**
 	 * @description    :Interface to delete projects.
