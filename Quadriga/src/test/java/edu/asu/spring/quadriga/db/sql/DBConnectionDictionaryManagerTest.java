@@ -185,6 +185,7 @@ public class DBConnectionDictionaryManagerTest {
 		}
 		return id;
 	}
+	
 	@Test
 	public void getDictionaryOfUserTest() throws QuadrigaStorageException {
 		testSetupTestEnvironment();

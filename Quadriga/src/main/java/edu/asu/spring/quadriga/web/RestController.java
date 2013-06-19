@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
-import edu.asu.spring.quadriga.domain.rest.ProjectList;
+import edu.asu.spring.quadriga.domain.rest.RestProjectList;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
@@ -80,28 +80,19 @@ public class RestController {
 	
 	@RequestMapping(value="api/projects/{userID}", method = RequestMethod.GET , produces = "application/xml")
 	@ResponseBody
-	public String listProjects(@PathVariable("userID") String userId, ModelMap model){
-		String result=null;		
+	public ModelAndView listProjects(@PathVariable("userID") String userId, ModelMap model){	
 		List<IProject> projectList=null;
-		ProjectList projectListObj= new ProjectList();
-
-
-		
+		RestProjectList projectListObj= new RestProjectList();		
 		try {
 			projectList = projectManager.getProjectsOfUser(userId);
-			projectListObj.SetProjectList(projectList);
+			projectListObj.copyProjectList(projectList);
+			
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(projectList.isEmpty()){
-			logger.info("ProjectList Is empty");
-		}
-		if(projectList.size()==0){
-			logger.info("ProjectList Is empty");
-		}
-		logger.info("ProjectList size = "+projectList.size());
-		return result;
+		return new ModelAndView("projects","object",projectListObj);
+
 		
 				
 		

@@ -130,6 +130,7 @@ public class DBConnectionCCManagerTest {
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
 		assertEquals(collection.getName(),list.get(0).getName());
+	
 	}
 	
 	
