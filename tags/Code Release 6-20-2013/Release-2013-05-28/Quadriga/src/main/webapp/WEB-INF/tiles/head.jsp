@@ -1,1 +1,0 @@
-<title>Test title of Quadriga</title>
