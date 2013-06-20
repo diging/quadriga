@@ -11,5 +11,10 @@ public interface ICommunityManager {
 
 	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword);
 
+	public abstract List<ICollection> getAllCollections(RestTemplate restTemplate, String url,
+			String sUserName, String sPassword, String sCommunityId);
+
+	public abstract String getCommunityName(String sCommunityId);
+	
 	public abstract ICollection getCollection(String sCollectionId);
 }

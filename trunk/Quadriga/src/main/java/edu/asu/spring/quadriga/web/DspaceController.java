@@ -27,20 +27,11 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
  *
  */
 @Controller
-//@Scope("request")
 public class DspaceController {
 
 	@Autowired
 	private IDspaceManager dspaceManager;
 
-
-	/**
-	 * Simply selects the workspace communities view to render by returning its path.
-	 */
-	@RequestMapping(value = "/auth/workbench/workspace", method = RequestMethod.GET)
-	public String workspaceRequest(ModelMap model, Principal principal) {
-		return "redirect:/auth/workbench/workspace/communities";
-	}
 
 	@RequestMapping(value = "/auth/workbench/workspace/communities", method = RequestMethod.GET)
 	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
@@ -52,6 +43,29 @@ public class DspaceController {
 
 		return "auth/workbench/workspace/communities";
 	}
+	
+	
+	@RequestMapping(value = "/auth/workbench/workspace/community/{communityId}", method = RequestMethod.GET)
+	public String workspaceCommunityRequest(@PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
+
+		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		
+		String communityName = dspaceManager.getCommunityName(communityId);
+		
+		//No community has been fetched. The user is trying to access the collection page directly
+		//Redirect him to community list page
+		if(communityName == null)
+		{
+			return "redirect:/auth/workbench/workspace/communities";
+		}
+		List<ICollection> collections = dspaceManager.getAllCollections(principal.getName(),sPassword, communityId);
+
+		model.addAttribute("communityName", communityName);
+		model.addAttribute("collectionList", collections);
+
+		return "auth/workbench/workspace/community/collection";
+	}
+	
 
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
 	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {
@@ -65,16 +79,6 @@ public class DspaceController {
 	}
 
 
-	@RequestMapping(value = "/auth/workbench/workspace/community/{communityTitle}", method = RequestMethod.GET)
-	public String workspaceCommunityRequest(@PathVariable("communityTitle") String communityTitle, ModelMap model, Principal principal) {
-
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		List<IDspaceCollection> collections = dspaceManager.getAllCollections(principal.getName(),sPassword, communityTitle);
-
-		model.addAttribute("communityTitle", communityTitle);
-		model.addAttribute("collectionList", collections);
-
-		return "auth/workbench/workspace/community/collection";
-	}
+	
 
 }

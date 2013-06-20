@@ -61,28 +61,66 @@ public class ProxyCommunityManager implements ICommunityManager {
 				collections = new ArrayList<ICollection>();
 
 				ICommunity community = null;
-				ICollection collection = null;
 				for(IDspaceCommunity dspaceCommunity: dsapceCommunities.getCommunities())
 				{			
 					community = new Community();
-					
+
 					//If the data was successfully transferred from Dspace representation to the one used in Quadriga
 					if(community.copy(dspaceCommunity))
 					{						
-						for(String collectionId :community.getCollectionIds()){
-							collection = new Collection(collectionId,restTemplate,url,sUserName,sPassword);
-							Thread collectionThread = new Thread(collection);
-							collectionThread.start();
-							
-							this.collections.add(collection);
-							community.addCollection(collection);
-						}
 						communities.add(community);
 					}
 				}
 			}
 		}
 		return communities;
+	}
+
+
+	@Override
+	public String getCommunityName(String sCommunityId) 
+	{
+		if(communities!=null)
+		{
+			for(ICommunity community: communities)
+			{
+				if(community.getId().equals(sCommunityId))
+				{
+					return community.getName();
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<ICollection> getAllCollections(RestTemplate restTemplate, String url, String sUserName, String sPassword, String sCommunityId) {
+
+		if(communities != null)
+		{
+			ICollection collection = null;
+			for(ICommunity community: communities)
+			{
+				if(community.getId().equals(sCommunityId))
+				{
+					//This is the first time a request for collections has been made for this community
+					if(community.getCollections().size() == 0)
+					{
+						for(String collectionId :community.getCollectionIds()){
+							collection = new Collection(collectionId,restTemplate,url,sUserName,sPassword);
+							Thread collectionThread = new Thread(collection);
+							collectionThread.start();
+
+							this.collections.add(collection);
+							community.addCollection(collection);
+						}
+					}
+					return community.getCollections();
+				}
+			}
+		}
+
+		return null;
 	}
 
 	//TODO: Push Down to collection class and remove the list of collections in this class
@@ -95,11 +133,13 @@ public class ProxyCommunityManager implements ICommunityManager {
 			for(ICollection collection : this.collections)
 			{
 				if(collection.getId().equals(sCollectionId))
+				{
 					return collection;
+				}
 			}
 		}
 		return null;
 	}
 
-	
+
 }

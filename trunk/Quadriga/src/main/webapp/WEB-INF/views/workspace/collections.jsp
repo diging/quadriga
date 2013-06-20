@@ -3,6 +3,7 @@
 <!-- Content -->
 
 <article class="is-page-content">
+
 <script>
 		$(document).ready(function() {
 
@@ -16,14 +17,16 @@
 					return this.id;
 				}) // convert to set of IDs
 				.get();
-
+				
 				var i = 0
 				var IDs = [];
 				for (i = 0; i < divIDs.length; i++) {
 					if ($('#' + divIDs[i]).text() == 'Loading...') {
 						IDs.push(divIDs[i]);
 					}
-				}				
+				}			
+				
+				
 				
 				$.each(IDs, function() {
 					var collectionid = this.split("collection_");
@@ -85,30 +88,30 @@
 					});
 		}
 	</script>
-
-		<c:choose>
-			<c:when test="${not empty communityList}">
-				<h2>Communities in HPS Repository</h2>
-				<span class="byline">Select a community to browse its
-					collections.</span>
-				<c:forEach var="community" items="${communityList}">
-					<span style="font-weight: bold"><a
-						href='<c:out value="/quadriga/auth/workbench/workspace/community/${community.id}" />'>${community.name}</a></span>
-					<br />
-					<c:forEach var="collection" items="${community.collections}">
+	<c:choose>
+		<c:when test="${not empty communityName }">
+			<h3>
+				<a href="/quadriga/auth/workbench/workspace/communities">Home</a> »
+				<c:out value="${communityName }"></c:out>
+			</h3>
+			<c:choose>
+				<c:when test="${not empty collectionList}">
+					<span class="byline">Select a collection to browse its items</span>
+					<c:forEach var="collection" items="${collectionList}">
 						<span style="float: left; margin-left: 50px; font-weight: bold"><div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}">${collection.name}</c:when><c:otherwise>Loading...</c:otherwise></c:choose></div></span>
 						<br />
 					</c:forEach>
-				</c:forEach>
-			</c:when>
+				</c:when>
 
-			<c:otherwise>
-				<pre>
-				<h2>No Communities in HPS Repository</h2>
-			</pre>
-				<br>
-			</c:otherwise>
-		</c:choose>
+				<c:otherwise>
+					<span class="byline">No Collections found in the
+						${communityTitle} community</span>
+					<br>
+				</c:otherwise>
+			</c:choose>
+		</c:when>
+
+	</c:choose>
 
 </article>
 

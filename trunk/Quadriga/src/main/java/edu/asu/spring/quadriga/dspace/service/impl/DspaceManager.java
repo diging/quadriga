@@ -57,10 +57,21 @@ public class DspaceManager implements IDspaceManager{
 	}
 
 	@Override
-	public List<IDspaceCollection> getAllCollections(String sUserName, String sPassword, String sCommunityTitle) {
-		throw new NotImplementedException("getAllCollections yet to be implemented");
+	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityId) {
+		
+		//TODO: Remove this after actual user synchronization to Dspace
+				sUserName="ramk@asu.edu";
+				sPassword="123456";
+				
+		return proxyCommunityManager.getAllCollections(restTemplate, url, sUserName, sPassword, sCommunityId);
 	}
 
+	@Override
+	public String getCommunityName(String sCommunityId) 
+	{
+		return proxyCommunityManager.getCommunityName(sCommunityId);
+	}
+	
 	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
