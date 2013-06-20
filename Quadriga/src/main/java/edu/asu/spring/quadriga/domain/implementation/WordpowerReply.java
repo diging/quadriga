@@ -3,6 +3,9 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -18,16 +21,17 @@ import javax.xml.bind.annotation.XmlType;
 public class WordpowerReply {
 
  @XmlElement(required = true, namespace="http://www.digitalhps.org/")
- protected WordpowerReply.DictionaryEntry dictionaryEntry;
+ protected List<WordpowerReply.DictionaryEntry> dictionaryEntry;
 
 
- public WordpowerReply.DictionaryEntry getDictionaryEntry() {
+
+ public List<WordpowerReply.DictionaryEntry> getDictionaryEntry() {
      if (dictionaryEntry == null) {
-         dictionaryEntry = new WordpowerReply.DictionaryEntry();
+         dictionaryEntry = new ArrayList<WordpowerReply.DictionaryEntry>();
      }
      return this.dictionaryEntry;
  }
- public void SetDictionaryEntry(WordpowerReply.DictionaryEntry dictionaryEntry) {
+ public void SetDictionaryEntry(List<WordpowerReply.DictionaryEntry> dictionaryEntry) {
      this.dictionaryEntry=dictionaryEntry;
  }
 
