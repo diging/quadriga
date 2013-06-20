@@ -49,8 +49,8 @@ public class ProxyCollectionManager implements Callable<ICollection>, ICollectio
 
 		if(dspaceCollection != null)
 		{
-			collection = new Collection();
-			collection.copy(dspaceCollection);
+//			collection = new Collection();
+//			collection.copy(dspaceCollection);
 		}
 
 		return collection;

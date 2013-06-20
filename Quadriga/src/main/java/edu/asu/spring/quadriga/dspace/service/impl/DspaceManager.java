@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,12 +19,14 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 /**
  * The purpose of the class is to make rest service calls to dspace
  * and fetch the communities, collections and items.
- * 
+ * This class manages the rest template, url, username and password.
+ *  
  * @author Ram Kumar Kumaresan
  *
  */
 
 @Service
+//@Scope("request")
 public class DspaceManager implements IDspaceManager{
 
 	@Autowired
