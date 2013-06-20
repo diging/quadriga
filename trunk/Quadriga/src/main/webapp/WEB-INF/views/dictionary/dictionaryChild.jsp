@@ -1,3 +1,4 @@
+
 <!--  
 	Author Lohith Dwaraka  
 	Used to list the items in a dictionary
@@ -10,6 +11,31 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <script type="text/javascript" charset="utf8">
+	$(document).ready(function() {
+		$('#selectall').click(function() {
+			$('.selected').prop('checked', isChecked('selectall'));
+		});
+	});
+	function isChecked(checkboxId) {
+		var id = '#' + checkboxId;
+		return $(id).is(":checked");
+	}
+	function resetSelectAll() {
+		// if all checkbox are selected, check the selectall checkbox
+		// and viceversa
+		if ($(".selected").length == $(".selected:checked").length) {
+			$("#selectall").attr("checked", "checked");
+		} else {
+			$("#selectall").removeAttr("checked");
+		}
+
+		if ($(".selected:checked").length > 0) {
+			$('#edit').attr("disabled", false);
+		} else {
+			$('#edit').attr("disabled", true);
+		}
+	}
+
 	$(document).ready(function() {
 		activeTable = $('.dataTable').dataTable({
 			"bJQueryUI" : true,
@@ -36,6 +62,12 @@
 </script>
 
 <script>
+	$("input[name='selectall']").button().click(function(event) {
+		$.alert("help");
+		$("input[name='selected']").prop("checked", true);
+		event.preventDefault();
+		return;
+	});
 	$(function() {
 		$("#dialog-confirm").dialog({
 			resizable : false,
@@ -169,7 +201,8 @@
 					<!-- <table  class="dataTable" id="pagination1"> -->
 					<thead>
 						<tr>
-							<th>Select</th>
+							<th align="left"><input type="checkbox" id="selectall">Select
+								All</th>
 							<th>Items</th>
 							<th>ID</th>
 							<th>Pos</th>
@@ -180,7 +213,7 @@
 					<tbody>
 						<c:forEach var="dictionaryItem" items="${dictionaryItemList}">
 							<tr>
-								<td><input type="checkbox" class="chk" name="selected"
+								<td><input type="checkbox" class="selected" name="selected"
 									value='<c:out value="${dictionaryItem.id}"></c:out>' /></td>
 								<td width="25%" align="center"><input name="items"
 									type="hidden"
