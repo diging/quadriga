@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,7 +31,8 @@ import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
  * @author Ram Kumar Kumaresan
  *
  */
-@Service
+@Service("communityManager")
+@Scope(value="session", proxyMode= ScopedProxyMode.INTERFACES)
 public class ProxyCommunityManager implements ICommunityManager {
 
 	private List<ICommunity> communities;
