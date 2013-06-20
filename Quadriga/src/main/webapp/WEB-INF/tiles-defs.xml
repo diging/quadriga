@@ -214,7 +214,7 @@
 	</definition>
 	<definition name="auth/workbench/workspace/community/collection" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Collections in Community" />
-		<put-attribute name="content" value="/WEB-INF/views/workspace/communitycollection.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/workspace/collections.jsp" />
 	</definition>
 
 
