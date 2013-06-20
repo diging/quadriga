@@ -1,1 +1,0 @@
-<h2>this is the right side</h2>
