@@ -34,8 +34,6 @@ import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
@@ -423,7 +421,15 @@ public class DictionaryManagerTest {
 
 				assertEquals(name.equals("testDictionary"),true);
 				assertEquals(desc.equals("description"),true);
-				WordpowerReply.DictionaryEntry dictionaryEntry=dictionaryManager.searchWordPower("dog", "noun");
+				List<WordpowerReply.DictionaryEntry> dictionaryEntryList=dictionaryManager.searchWordPower("dog", "noun");
+				Iterator <WordpowerReply.DictionaryEntry> I1 =dictionaryEntryList.iterator();
+				WordpowerReply.DictionaryEntry dictionaryEntry=null;
+				while(I1.hasNext()){
+					WordpowerReply.DictionaryEntry temp=I1.next();
+					if(temp.getLemma().equals("dog")){
+						dictionaryEntry=temp;
+					}
+				}
 				assertEquals(dictionaryEntry.getLemma(), "dog");
 				assertEquals(dictionaryEntry.getPos(), "noun");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
@@ -496,9 +502,11 @@ public class DictionaryManagerTest {
 				assertEquals(dictionaryItems.getItems(), "cat");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
-				WordpowerReply.DictionaryEntry dictionaryEntry=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				List <WordpowerReply.DictionaryEntry> dictionaryEntryList=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				Iterator <WordpowerReply.DictionaryEntry> I1 =dictionaryEntryList.iterator(); 
+				WordpowerReply.DictionaryEntry dictionaryEntry=I1.next();
 				assertEquals(dictionaryEntry.getLemma(),"dog");
-				assertEquals(dictionaryEntry.getPos(),"NOUN");
+				assertEquals(dictionaryEntry.getPos(),"noun");
 				String msg1=dictionaryManager.updateDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n", dictionaryEntry.getLemma(), dictionaryEntry.getPos());
 				assertEquals(msg1.equals(""), true);
 				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
@@ -506,7 +514,7 @@ public class DictionaryManagerTest {
 				assertEquals(I.hasNext(),true);
 				dictionaryItems = I.next();
 				assertEquals(dictionaryItems.getItems(), "dog");
-				assertEquals(dictionaryItems.getPos(), "NOUN");
+				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
@@ -543,9 +551,11 @@ public class DictionaryManagerTest {
 				assertEquals(dictionaryItems.getItems(), "cat");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
-				WordpowerReply.DictionaryEntry dictionaryEntry=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				List<WordpowerReply.DictionaryEntry> dictionaryEntryList=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				Iterator <WordpowerReply.DictionaryEntry> I1 =dictionaryEntryList.iterator(); 
+				WordpowerReply.DictionaryEntry dictionaryEntry=I1.next();
 				assertEquals(dictionaryEntry.getLemma(),"dog");
-				assertEquals(dictionaryEntry.getPos(),"NOUN");
+				assertEquals(dictionaryEntry.getPos(),"noun");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
