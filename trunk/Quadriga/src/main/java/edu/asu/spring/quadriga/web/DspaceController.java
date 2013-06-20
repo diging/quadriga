@@ -7,6 +7,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,12 +27,13 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
  *
  */
 @Controller
+//@Scope("request")
 public class DspaceController {
-	
+
 	@Autowired
 	private IDspaceManager dspaceManager;
 
-	
+
 	/**
 	 * Simply selects the workspace communities view to render by returning its path.
 	 */
@@ -50,50 +52,18 @@ public class DspaceController {
 
 		return "auth/workbench/workspace/communities";
 	}
-	
+
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
 	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {
 		ICollection collection = dspaceManager.getCollection(collectionid);
 		if(collection != null)
 		{
-			return collection.getName();
+			if(collection.getName() != null)
+				return collection.getName();
 		}
-		else
-		{
-			return "Loading...";
-		}		
+		return "Loading...";		
 	}
-	
-	
-	@RequestMapping(value = "/auth/workbench/workspace/communities-collections", method = RequestMethod.GET)
-	public @ResponseBody String getCommunitiesAndCollections() {
-		String sUserName = (String)SecurityContextHolder.getContext().getAuthentication().getName();
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		StringBuilder sResult = new StringBuilder();
-		List<ICommunity> communities = dspaceManager.getAllCommunities(sUserName,sPassword);
-		
-		if(communities.size()>0)
-		{
-			sResult.append("<h2>Communities in HPS Repository</h2>");
-			sResult.append("<span class=\"byline\">Select a community to browse its collections.</span>");
-			sResult.append("<span style=\"font-weight: bold\">");
-			for(ICommunity community: communities)
-			{
-				sResult.append("<a href='/quadriga/auth/workspace/community/"+community.getId()+"'>");
-				sResult.append(community.getName());
-				sResult.append("</a>");
-				sResult.append("<br />");
-			}
-			sResult.append("</span>");
-		}
-		else
-		{
-			sResult.append("<h2>No Communities in HPS Repository</h2>");
-		}
-		
-		return sResult.toString();
-	}
-	
+
 
 	@RequestMapping(value = "/auth/workbench/workspace/community/{communityTitle}", method = RequestMethod.GET)
 	public String workspaceCommunityRequest(@PathVariable("communityTitle") String communityTitle, ModelMap model, Principal principal) {
@@ -106,14 +76,5 @@ public class DspaceController {
 
 		return "auth/workbench/workspace/community/collection";
 	}
-	
-//	@RequestMapping(value = "/auth/workbench/workspace/ajaxtest", method = RequestMethod.GET)
-//	public @ResponseBody String getTime() {
-//
-//		Random rand = new Random();
-//		float r = rand.nextFloat() * 100;
-//		String result = "<br>The Random # is <b>" + r + "</b>. Generated on <b>" + new Date().toString() + "</b>";
-//		System.out.println("Debug Message from Spring-Ajax-JQuery Controller.." + new Date().toString());
-//		return result;
-//	}
+
 }

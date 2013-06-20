@@ -9,11 +9,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
@@ -29,13 +31,10 @@ import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
  *
  */
 @Service
-public class ProxyCommunityManager implements ICommunityManager, Runnable {
+public class ProxyCommunityManager implements ICommunityManager {
 
 	private List<ICommunity> communities;
 	private List<ICollection> collections;
-
-	//create a list to hold the Future object associated with Callable
-	private List<Future<ICollection>> futureList;
 
 	private String getCompleteUrlPath(String restPath, String userName, String password)
 	{
@@ -58,32 +57,27 @@ public class ProxyCommunityManager implements ICommunityManager, Runnable {
 
 				//Initialize collection specific objects
 				collections = new ArrayList<ICollection>();
-				this.futureList = new ArrayList<Future<ICollection>>();
-
 
 				ICommunity community = null;
+				ICollection collection = null;
 				for(IDspaceCommunity dspaceCommunity: dsapceCommunities.getCommunities())
 				{			
 					community = new Community();
+					
+					//If the data was successfully transferred from Dspace representation to the one used in Quadriga
 					if(community.copy(dspaceCommunity))
-					{
-						//For each community get the collection names associated with it
-						//Create a thread pool that equals the size of the collection
-						ExecutorService executor = Executors.newFixedThreadPool(community.getCollectionIds().size());
-
+					{						
 						for(String collectionId :community.getCollectionIds()){
-							//Create a thread to retrieve the collection object from Dspace
-							Callable<ICollection> callable = new ProxyCollectionManager(restTemplate, url, sUserName, sPassword, collectionId);
-							Future<ICollection> future = executor.submit(callable);
-							futureList.add(future);
+							collection = new Collection(collectionId,restTemplate,url,sUserName,sPassword);
+							Thread collectionThread = new Thread(collection);
+							collectionThread.start();
+							
+							this.collections.add(collection);
+							community.addCollection(collection);
 						}
 						communities.add(community);
 					}
 				}
-
-				//After creating all the collection threads, create a thread to check their status
-				Thread checkCollectionThread = new Thread(this);
-				checkCollectionThread.start();
 			}
 		}
 		return communities;
@@ -105,49 +99,5 @@ public class ProxyCommunityManager implements ICommunityManager, Runnable {
 		return null;
 	}
 
-	@Override
-	public void run() {
-		Iterator<Future<ICollection>> iteratorFuture;
-		Future<ICollection> future;
-		
-		//Do this until all collection threads end
-		while(this.futureList.size()>0)
-		{
-			//Communities are already fetched from Dspace			
-			//Get an iterator so that the list can be modified while iterating
-			iteratorFuture = this.futureList.iterator();
-
-			//Iterate through each thread and check if the thread returned a collection object.
-			while(iteratorFuture.hasNext())
-			{
-				future = iteratorFuture.next();
-				if(future.isDone())
-				{
-					try {
-						//Add the collection object to the class variable and remove the thread reference from the list
-						ICollection collection = future.get();
-						this.collections.add(collection);
-
-						for(ICommunity community: communities)
-						{
-							if(community.getCollectionIds().contains(collection.getId()))
-							{
-								community.addCollection(collection);
-							}
-						}
-						iteratorFuture.remove();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						e.printStackTrace();
-					}
-				}
-			}			
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	
 }

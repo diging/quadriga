@@ -1,7 +1,11 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import org.apache.commons.lang.NotImplementedException;
+import org.springframework.web.client.RestTemplate;
+
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 
 /**
  * The class representation of the Collection got from Dspace repostiory.
@@ -19,9 +23,53 @@ public class Collection implements ICollection{
 	private String entityReference;
 	private String handle;
 	private String countItems;
+	
+	private RestTemplate restTemplate;
+	private String url;
+	private String userName;
+	private String password;
 	private boolean isLoaded;
 	
+	public Collection(String id, RestTemplate restTemplate, String url, String userName, String password)
+	{
+		this.url = url;
+		this.id = id;
+		this.isLoaded = false;
+		this.userName = userName;
+		this.password = password;
+		this.setRestTemplate(restTemplate);
+	}
 	
+	@Override
+	public RestTemplate getRestTemplate() {
+		return restTemplate;
+	}
+
+	@Override
+	public void setRestTemplate(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
+
+	@Override
+	public String getUserName() {
+		return userName;
+	}
+
+	@Override
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getId()
 	 */
@@ -134,16 +182,17 @@ public class Collection implements ICollection{
 	@Override
 	public void setLoaded(boolean isLoaded) {
 		this.isLoaded = isLoaded;
-	}	
+	}
+	
 	
 	@Override
 	public boolean copy(IDspaceCollection dspaceCollection)
 	{		
 		if(dspaceCollection != null)
 		{
-			if(dspaceCollection.getId() != null)
+			if(!dspaceCollection.getId().equals(this.id))
 			{
-				this.id = dspaceCollection.getId();
+				return false;
 			}
 			
 			if(dspaceCollection.getName() != null)
@@ -175,5 +224,21 @@ public class Collection implements ICollection{
 			return this.isLoaded;
 		}
 		return false;
+	}
+
+	private String getCompleteUrlPath(String restPath)
+	{
+		return "https://"+this.url+restPath+this.id+".xml?email="+this.userName+"&password="+this.password;
+	}
+
+	@Override
+	public void run() {
+		String sRestServicePath = getCompleteUrlPath("/rest/collections/");
+		IDspaceCollection dspaceCollection = (DspaceCollection) getRestTemplate().getForObject(sRestServicePath, DspaceCollection.class);
+
+		if(dspaceCollection != null)
+		{
+			this.copy(dspaceCollection);
+		}		
 	}
 }
