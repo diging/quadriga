@@ -87,8 +87,9 @@
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
-				<value>edu.asu.spring.quadriga.domain.rest.RestProjectList
+				<value>edu.asu.spring.quadriga.domain.rest.ProjectList
 				</value>
+
 			</list>
 		</property>
 	</bean>

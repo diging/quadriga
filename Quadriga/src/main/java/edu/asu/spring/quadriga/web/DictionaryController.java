@@ -330,21 +330,6 @@ public class DictionaryController {
 	 * 
 	 *  @return 	Return to list dictionary item page
 	 */
-	@ExceptionHandler(NullPointerException.class)
-	public String handleNullException(NullPointerException ex, HttpServletRequest request,ModelMap model,Principal principal) {
-		logger.info("Handling exception");
-		String user = usermanager.getUserDetails(principal.getName()).getUserName();
-		List<IDictionary> dictionaryList=null;
-		try {
-			dictionaryList = dictonaryManager.getDictionariesList(user);
-		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		model.addAttribute("dictinarylist", dictionaryList);
-		model.addAttribute("userId", user);
-		return "auth/dictionaries";
-	}
 
 	@RequestMapping(value="auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String updateDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,ModelMap model, Principal principal) throws QuadrigaStorageException {

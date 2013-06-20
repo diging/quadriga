@@ -250,6 +250,8 @@ public class DictionaryManager implements IDictionaryManager {
 		try{
 			logger.info("Update url from func : " +getUpdateFromWordPowerURL());
 			itemid=itemid.substring(itemid.lastIndexOf("/")+1,itemid.length());
+			logger.info("Update Item ID : "+itemid);
+			logger.info("URL From rest xml : --"+getUpdateFromWordPowerURL()+"--");
 			String fullUrl=getUpdateFromWordPowerURL()+""+itemid;
 			logger.info("Update Word Power URL : "+fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply)restTemplate.getForObject(fullUrl, WordpowerReply.class);

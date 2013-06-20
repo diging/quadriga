@@ -2,6 +2,14 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -9,6 +17,8 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 
 /**
  * @description : Project class describing the properties 
@@ -18,16 +28,30 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
  *
  */
 @Service
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", namespace="http://www.digitalhps.org/quadriga", propOrder = {
+	"name",
+	"description",
+	"id"
+})
+@XmlRootElement
 public class Project implements IProject 
 {
-	
+	@XmlElement(required = true, namespace="http://www.digitalhps.org/quadriga")
 	private String name;
+	@XmlElement(required = true, namespace="http://www.digitalhps.org/quadriga")
 	private String description;
+	@XmlElement(required = true, namespace="http://www.digitalhps.org/quadriga")
 	private String id;
+	@XmlTransient
 	private int internalid;
+	@XmlTransient
 	private List<ICollaborator> collaborators;
+	@XmlTransient
     private EProjectAccessibility projectAccess;
+	@XmlTransient
     private ENetworkAccessibility networksDefaultAccess;
+	@XmlTransient
     private IUser owner;
 
     /**
@@ -154,4 +178,5 @@ public class Project implements IProject
 	public void setNetworksDefaultAccess(ENetworkAccessibility networksDefaultAccess) {
 		this.networksDefaultAccess = networksDefaultAccess;
 	}
+	
 }
