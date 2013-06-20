@@ -182,6 +182,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			}
 		} 
 		catch (SQLException e) {
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 		}
 		catch (Exception e) {
@@ -230,6 +231,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			}
 		} 
 		catch (SQLException e) {
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 		}
 		catch (Exception e) {
@@ -276,6 +278,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		catch(SQLException e)
 		{
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 		}
 		catch(Exception e){
@@ -337,6 +340,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		catch(SQLException e)
 		{
 			errmsg="DB Issue";
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 			
 		}catch(Exception e){
@@ -390,6 +394,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		catch(SQLException e)
 		{
 			errmsg="DB related issue";
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 			
 		}catch(Exception e){
@@ -438,6 +443,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		catch(SQLException e)
 		{
 			errmsg="DB related issue";
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 		}catch(Exception e){
 			errmsg="Exception outside DB";
@@ -489,6 +495,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		catch(SQLException e)
 		{	
 			errmsg="DB related issue";
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 		}catch(Exception e){
 			errmsg="Exception outside DB";

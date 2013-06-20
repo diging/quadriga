@@ -57,27 +57,7 @@ public class RestController {
 	@Autowired 
 	DictionaryItemsFactory dictionaryItemsFactory;
 
-	@RequestMapping(value="api/dictionaries/{userID}", method = RequestMethod.GET , produces = "application/xml")
-	@ResponseBody
-	public String listDictionary(@PathVariable("userID") String userId, ModelMap model){
-		String result=null;
-		WordpowerReply.DictionaryEntry dictionaryEntry = dictonaryManager.searchWordPower("cat", "noun");
-		WordpowerReply wordPowerReply= new WordpowerReply();
-		wordPowerReply.SetDictionaryEntry(dictionaryEntry);
-		logger.info("came to Rest controller : "+userId);
-		try {
-			JAXBContext jaxbContext= JAXBContext.newInstance(WordpowerReply.class);
-			javax.xml.bind.Marshaller marshaller=  jaxbContext.createMarshaller();
-			Writer writer =new StringWriter();
-			marshaller.marshal(wordPowerReply, writer);
-			result = writer.toString();
-		} catch (JAXBException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return result; 
-	}
-
+	
 
 
 	@RequestMapping(value="api/projects/{userID}", method = RequestMethod.GET , produces = "application/xml")

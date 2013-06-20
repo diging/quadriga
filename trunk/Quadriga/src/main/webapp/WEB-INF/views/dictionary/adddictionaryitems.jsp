@@ -5,6 +5,30 @@
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
+		$('#selectall').click(function() {
+			$('.selected').prop('checked', isChecked('selectall'));
+		});
+	});
+	function isChecked(checkboxId) {
+		var id = '#' + checkboxId;
+		return $(id).is(":checked");
+	}
+	function resetSelectAll() {
+		// if all checkbox are selected, check the selectall checkbox
+		// and viceversa
+		if ($(".selected").length == $(".selected:checked").length) {
+			$("#selectall").attr("checked", "checked");
+		} else {
+			$("#selectall").removeAttr("checked");
+		}
+
+		if ($(".selected:checked").length > 0) {
+			$('#edit').attr("disabled", false);
+		} else {
+			$('#edit').attr("disabled", true);
+		}
+	}
+	$(document).ready(function() {
 		activeTable = $('.dataTable').dataTable({
 			"bJQueryUI" : true,
 			"sPaginationType" : "full_numbers",
@@ -80,63 +104,55 @@
 	<c:choose>
 		<c:when test="${status=='1'}">
 			<c:choose>
-				<c:when test="${not empty dictionaryEntry}">
-					<c:choose>
-						<c:when test="${not empty dictionaryEntry.lemma}">
-							<H3>Results</H3>
-							<hr>
-							<br>
-							<form method="POST"
-								action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}">
-								<table cellpadding="0" cellspacing="0" border="0"
-									class="display dataTable" width="70%">
-									<!-- <table  class="dataTable" id="pagination"> -->
-									<thead>
-										<tr>
-											<th width="75" height="20" align="center">Term</th>
-											<th width="75" height="20" align="center">ID</th>
-											<th width="75" height="20" align="center">POS</th>
-											<th width="90" height="20" align="center">Vocabulary</th>
-											<th width="500" height="20" align="center">Description</th>
-											<th width="75" height="20" align="center">Action</th>
+				<c:when test="${not empty dictionaryEntryList}">
 
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-
-											<td align="center"><input name="items" type="hidden"
-												value="<c:out value="${dictionaryEntry.lemma}"></c:out>" />
-												<c:out value="${dictionaryEntry.lemma}"></c:out></td>
-											<td align="center"><input name="id" type="hidden"
-												value="<c:out value="${dictionaryEntry.id}"></c:out>" /> <c:out
-													value="${dictionaryEntry.id}"></c:out></td>
-											<td align="center"><input name="pos" type="hidden"
-												value="<c:out value="${dictionaryEntry.pos}"></c:out>" /> <c:out
-													value="${dictionaryEntry.pos}"></c:out></td>
-											<td align="center"><input name="vocabulary"
-												type="hidden"
-												value="<c:out value="${dictionaryEntry.vocabulary}"></c:out>" />
-												<c:out value="${dictionaryEntry.vocabulary}"></c:out></td>
-											<td align="left"><input name="description" type="hidden"
-												value="<c:out value="${dictionaryEntry.description}"></c:out>" />
-												<c:out value="${dictionaryEntry.description}"></c:out></td>
-											<td align="center"><input type="submit" value="Add">
-											</td>
-
-										</tr>
-
-									</tbody>
-								</table>
-							</form>
-						</c:when>
-						<c:otherwise>
-							<font color="red">Word not found, please enter a different
-								word</font>
-
-						</c:otherwise>
-					</c:choose>
-
+					<H3>Results</H3>
+					<hr>
+					<br>
+					<form method="POST"
+						action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}">
+						
+						<input type="submit"  value="Select & Save" /><br><br>
+						<table cellpadding="0" cellspacing="0" border="0"
+							class="display dataTable" width="70%">
+							<!-- <table  class="dataTable" id="pagination"> -->
+							<thead>
+								<tr>
+									<th align="left"><input type="checkbox" id="selectall">
+										All</th>
+									<th width="75" height="20" align="center">Term</th>
+									<th width="75" height="20" align="center">ID</th>
+									<th width="75" height="20" align="center">POS</th>
+									<th width="90" height="20" align="center">Vocabulary</th>
+									<th width="500" height="20" align="center">Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach var="dictionaryEntry" items="${dictionaryEntryList}">
+									<tr>
+										<td><input type="checkbox" class="selected"
+											name="selected"
+											value='<c:out value="${dictionaryEntry.id}"></c:out>' /></td>
+										<td align="center"><input name="items" type="hidden"
+											value="<c:out value="${dictionaryEntry.lemma}"></c:out>" />
+											<c:out value="${dictionaryEntry.lemma}"></c:out></td>
+										<td align="center"><input name="id" type="hidden"
+											value="<c:out value="${dictionaryEntry.id}"></c:out>" /> <c:out
+												value="${dictionaryEntry.id}"></c:out></td>
+										<td align="center"><input name="pos" type="hidden"
+											value="<c:out value="${dictionaryEntry.pos}"></c:out>" /> <c:out
+												value="${dictionaryEntry.pos}"></c:out></td>
+										<td align="center"><input name="vocabulary" type="hidden"
+											value="<c:out value="${dictionaryEntry.vocabulary}"></c:out>" />
+											<c:out value="${dictionaryEntry.vocabulary}"></c:out></td>
+										<td align="left"><input name="description" type="hidden"
+											value="<c:out value="${dictionaryEntry.description}"></c:out>" />
+											<c:out value="${dictionaryEntry.description}"></c:out></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</form>
 				</c:when>
 
 			</c:choose>

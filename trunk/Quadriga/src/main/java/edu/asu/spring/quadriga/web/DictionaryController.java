@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaExceptionHandler;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 
 /**
@@ -64,7 +66,9 @@ public class DictionaryController {
 	public void setUsermanager(IUserManager usermanager) {
 		this.usermanager = usermanager;
 	}
-	
+
+	List<DictionaryEntry> dictionaryEntryList=null;
+
 	@Autowired 
 	IDictionaryFactory dictionaryFactory;
 
@@ -227,23 +231,30 @@ public class DictionaryController {
 	 */
 
 	@RequestMapping(value="auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
-	public String addDictionaryItem(@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems,ModelMap model, Principal principal) throws QuadrigaStorageException{
+	public String addDictionaryItem(HttpServletRequest req,@PathVariable("dictionaryid") String dictionaryId,@ModelAttribute("SpringWeb")DictionaryItems dictionaryItems, ModelMap model, Principal principal) throws QuadrigaStorageException{
 		String msg="";
 		logger.info("came to addDictionaryItemForm post");
+		String[] values= req.getParameterValues("selected");
 		String owner = usermanager.getUserDetails(principal.getName()).getUserName();
 		logger.info("items : "+dictionaryItems.getItems()+" , id: "+dictionaryItems.getId()+"pos"+
 				dictionaryItems.getPos());
-		try{
-			msg= dictonaryManager.addNewDictionariesItems(dictionaryId,dictionaryItems.getItems(),dictionaryItems.getId(),
-					dictionaryItems.getPos(),owner);
-		}catch(QuadrigaStorageException e){
-			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
+		
+		if(values!=null){
+			for(int i=0;i<values.length;i++){
+				try{
+					DictionaryItems di = dictonaryManager.getDictionaryItemIndex(values[i],dictionaryItems);
+					msg= dictonaryManager.addNewDictionariesItems(dictionaryId,di.getItems(),di.getId(),
+							di.getPos(),owner);
+				}catch(QuadrigaStorageException e){
+					throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
+				}
+			}
 		}
 		try{
 			if(msg.equals(""))
 			{
 				model.addAttribute("success", 1);
-				model.addAttribute("successmsg", "Item : "+dictionaryItems.getItems()+ " added successfully");
+				model.addAttribute("successmsg", "Items added successfully");
 			}else{
 				if(msg.equals("ItemExists")){
 					model.addAttribute("success", 0);
@@ -344,8 +355,16 @@ public class DictionaryController {
 			if(values!=null){
 				for(int i=0;i<values.length;i++){
 					logger.info("Value "+i+" : "+values[i]);
-					DictionaryEntry dictionaryEntry=dictonaryManager.getUpdateFromWordPower(dictionaryId,values[i]);
-					msg= dictonaryManager.updateDictionariesItems(dictionaryId,values[i],dictionaryEntry.getLemma(),dictionaryEntry.getPos());
+					List<DictionaryEntry> dictionaryEntryList=dictonaryManager.getUpdateFromWordPower(dictionaryId,values[i]);
+					Iterator <DictionaryEntry> I = dictionaryEntryList.iterator();
+					if(I.hasNext()){
+						DictionaryEntry dictionaryEntry = I.next();
+						msg= dictonaryManager.updateDictionariesItems(dictionaryId,values[i],dictionaryEntry.getLemma(),dictionaryEntry.getPos());
+					}else{
+						msg="Error getting data from Word Power";
+						flag=1;
+						errormsg=msg;
+					}
 					if(msg.equals("")){
 
 					}else{
@@ -398,19 +417,25 @@ public class DictionaryController {
 	public String searchDictionaryItemRestHandle(@PathVariable("dictionaryid") String dictionaryid,@RequestParam("itemName") String item,@RequestParam("posdropdown") String pos, ModelMap model) throws QuadrigaStorageException{
 		try{
 			logger.info("came to searchDictionaryItemRestHandle post");
-			DictionaryEntry dictionaryEntry=null;
+			dictionaryEntryList=null;
 			if(!item.equals("")){
 				logger.info("Query for Item :" +item+" and pos :"+ pos);
-				dictionaryEntry=dictonaryManager.searchWordPower(item,pos);
+				dictionaryEntryList=dictonaryManager.searchWordPower(item,pos);
 			}
 			model.addAttribute("status", 1);
-			model.addAttribute("dictionaryEntry", dictionaryEntry);
+			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
+
+			Iterator <DictionaryEntry> I = dictionaryEntryList.iterator();
+			while(I.hasNext()){
+				DictionaryEntry dictionaryEntry= I.next();
+				logger.info("Lemma :" +dictionaryEntry.getLemma());
+			}
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionariesItems(dictionaryid);
 			String dictionaryName=dictonaryManager.getDictionaryName(dictionaryid);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictionaryid", dictionaryid);
-			if(dictionaryEntry == null){
+			if(dictionaryEntryList == null){
 				model.addAttribute("errorstatus", 1);
 			}
 

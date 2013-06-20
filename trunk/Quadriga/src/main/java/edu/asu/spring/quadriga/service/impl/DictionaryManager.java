@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
@@ -33,24 +35,27 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
  */
 @Service
 public class DictionaryManager implements IDictionaryManager {
-	
+
 	@Autowired
 	@Qualifier("restTemplate")
 	RestTemplate restTemplate;
-	
+
 	@Autowired
 	@Qualifier("searchWordPowerURL")
 	private String searchWordPowerURL;
-	
+
 	@Autowired
 	@Qualifier("updateFromWordPowerURL")
 	private String updateFromWordPowerURL;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryManager.class);
-	
+
 	@Autowired
 	@Qualifier("DBConnectionDictionaryManagerBean")
 	private IDBConnectionDictionaryManager dbConnect;
+	
+	@Autowired
+	DictionaryItemsFactory dictionaryItemsFactory;
 
 	/**
 	 *  Gets the searchWordPowerURL
@@ -60,7 +65,7 @@ public class DictionaryManager implements IDictionaryManager {
 	public String getSearchWordPowerURL() {
 		return searchWordPowerURL;
 	}
-	
+
 	/**
 	 *  Gets the updateFromWordPowerURL
 	 * 
@@ -69,7 +74,7 @@ public class DictionaryManager implements IDictionaryManager {
 	public String getUpdateFromWordPowerURL() {
 		return updateFromWordPowerURL;
 	}
-	
+
 	/**
 	 *  Gets all the dictionaries of the user
 	 * 
@@ -95,7 +100,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 *  @return 	Return to success or error msg to controller
 	 */
-	
+
 	public String addNewDictionary(IDictionary dictionary) throws QuadrigaStorageException{
 
 		String msg="";
@@ -138,7 +143,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 *  @return 	Return success or error message to controller
 	 */
-	
+
 	public String deleteDictionariesItems(String dictionaryId,String itemid) throws QuadrigaStorageException{
 		String msg="";
 		try {
@@ -152,13 +157,13 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return msg;
 	}
-	
+
 	/**
 	 *  Update the dictionary item of the dictionary from the word power
 	 * 
 	 *  @return 	Return  error or success message to controller
 	 */
-	
+
 	public String updateDictionariesItems(String dictionaryId,String termid,String term,String pos)throws QuadrigaStorageException{
 		String msg="";
 		try {
@@ -178,7 +183,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 *  @return 	Return to list of dictionary item to controller
 	 */
-	
+
 	public List<IDictionaryItems> getDictionariesItems(String dictionaryid) throws QuadrigaStorageException {
 
 		List<IDictionaryItems> dictionaryItemList = null;
@@ -200,7 +205,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 *  @return 	Return the dictionary name to controller
 	 * @throws QuadrigaStorageException 
 	 */
-	
+
 	public String getDictionaryName(String dictionaryid) throws QuadrigaStorageException {
 
 		String dictionaryName="";
@@ -221,32 +226,31 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 *  @return 	Return the dictionaryEntry bean to controller
 	 */
-	
-	public WordpowerReply.DictionaryEntry  searchWordPower(String item,String pos){
 
-		WordpowerReply.DictionaryEntry dictionaryEntry=null;
+	public List<WordpowerReply.DictionaryEntry>  searchWordPower(String item,String pos){
+
+		List <WordpowerReply.DictionaryEntry> dictionaryEntry=null;
 		try{
 
 			String fullUrl=getSearchWordPowerURL()+""+item+"/"+pos;
 			logger.info("Search Word Power URL : "+fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply)restTemplate.getForObject(fullUrl, WordpowerReply.class);
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
-			logger.info("Lemma from rest template "+dictionaryEntry.getLemma());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return dictionaryEntry;
 	}
-	
+
 	/**
 	 *  Call the word power for a term and fetch the xml from word power rest
 	 * 
 	 *  @return 	Return the dictionaryEntry bean to controller
 	 */
-	
-	public WordpowerReply.DictionaryEntry  getUpdateFromWordPower(String dictionaryId,String itemid){
 
-		WordpowerReply.DictionaryEntry dictionaryEntry=null;
+	public List<WordpowerReply.DictionaryEntry>  getUpdateFromWordPower(String dictionaryId,String itemid){
+
+		List<WordpowerReply.DictionaryEntry> dictionaryEntry=null;
 		try{
 			logger.info("Update url from func : " +getUpdateFromWordPowerURL());
 			itemid=itemid.substring(itemid.lastIndexOf("/")+1,itemid.length());
@@ -255,15 +259,35 @@ public class DictionaryManager implements IDictionaryManager {
 			String fullUrl=getUpdateFromWordPowerURL()+""+itemid;
 			logger.info("Update Word Power URL : "+fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply)restTemplate.getForObject(fullUrl, WordpowerReply.class);
-			dictionaryEntry = wordpowerReply.getDictionaryEntry();
-			logger.info("Lemma from rest template "+dictionaryEntry.getLemma());
+			dictionaryEntry =wordpowerReply.getDictionaryEntry();
 		}catch(Exception e){
-			
+
 			e.printStackTrace();
 		}
 		return dictionaryEntry;
 	}
 
+	public DictionaryItems getDictionaryItemIndex(String termId, DictionaryItems dictionaryItems){
+
+		String terms[] = dictionaryItems.getItems().split(",");
+		String id[] = dictionaryItems.getId().split(",");
+		String pos[] = dictionaryItems.getPos().split(",");
+		int index=-1;
+		if(id.length>0){
+			for(int i=0;i<id.length;i++){
+				if(id[i].equals(termId)){
+					index=i;
+					i=id.length;
+				}
+			}
+		}
+		DictionaryItems di = dictionaryItemsFactory.createDictionaryItemsObject();
+		di.setId(id[index]);
+		di.setItems(terms[index]);
+		di.setPos(pos[index]);
+
+		return di;
+	}
 
 
 }

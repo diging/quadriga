@@ -6,7 +6,9 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
+import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 
 /**
@@ -109,15 +111,22 @@ public class MockupDictionaryManager implements IDictionaryManager {
 
 
 	@Override
-	public WordpowerReply.DictionaryEntry searchWordPower(String item, String pos) {
+	public List<DictionaryEntry> searchWordPower(String item, String pos) {
 		// TODO Auto-generated method stub
-		WordpowerReply.DictionaryEntry diction=null;
+		List <WordpowerReply.DictionaryEntry> diction=null;
 		return diction;
 	}
 
 	@Override
-	public WordpowerReply.DictionaryEntry getUpdateFromWordPower(String dictionaryId,
+	public List<DictionaryEntry> getUpdateFromWordPower(String dictionaryId,
 			String itemid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DictionaryItems getDictionaryItemIndex(String termId,
+			DictionaryItems dictionaryItems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
