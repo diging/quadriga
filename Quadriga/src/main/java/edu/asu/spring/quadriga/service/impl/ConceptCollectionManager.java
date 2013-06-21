@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 
 /**
@@ -52,7 +53,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getCollectionsOfUser(java.lang.String)
 	 */
 	@Override
-	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId)
+	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
 	{
 		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
@@ -80,7 +81,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 
 	@Override
-	public List<IConceptCollection> getUserCollaborations(String sUserId) {
+	public List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException {
 		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
 		conceptList = dbConnect.getCollaboratedConceptsofUser(sUserId);
@@ -88,7 +89,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public void getCollectionDetails(IConceptCollection concept) {
+	public void getCollectionDetails(IConceptCollection concept) throws QuadrigaStorageException {
 		dbConnect.getCollectionDetails(concept);
 		}
 
@@ -110,7 +111,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 	
 	@Override
-	public void update(String id[],IConceptCollection collection) {
+	public void update(String id[],IConceptCollection collection) throws QuadrigaStorageException {
 		
 		IConcept concept;
 		ConceptpowerReply rep;
@@ -133,19 +134,19 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 
 	@Override
-	public void addItems(String lemmma, String id, String pos, String desc, int conceptId) {
+	public void addItems(String lemmma, String id, String pos, String desc, int conceptId) throws QuadrigaStorageException {
 		
 		dbConnect.saveItem(lemmma, id, pos, desc, conceptId);
 	}
 
 	@Override
-	public String addConceptCollection(IConceptCollection collection) {
+	public String addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException {
 		
 		return dbConnect.addCollection(collection);
 	}
 
 	@Override
-	public void deleteItem(String id, int collectionId) {
+	public void deleteItem(String id, int collectionId) throws QuadrigaStorageException {
 		
 		dbConnect.deleteItems(id,collectionId);
 		

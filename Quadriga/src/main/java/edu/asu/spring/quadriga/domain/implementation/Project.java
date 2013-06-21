@@ -28,30 +28,23 @@ import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
  *
  */
 @Service
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", namespace="http://www.digitalhps.org/quadriga", propOrder = {
-	"name",
-	"description",
-	"id"
-})
-@XmlRootElement
 public class Project implements IProject 
 {
-	@XmlElement(required = true, namespace="http://www.digitalhps.org/quadriga")
+	
 	private String name;
-	@XmlElement(required = true, namespace="http://www.digitalhps.org/quadriga")
+	
 	private String description;
-	@XmlElement(required = true, namespace="http://www.digitalhps.org/quadriga")
+	
 	private String id;
-	@XmlTransient
+	
 	private int internalid;
-	@XmlTransient
+	
 	private List<ICollaborator> collaborators;
-	@XmlTransient
+	
     private EProjectAccessibility projectAccess;
-	@XmlTransient
+	
     private ENetworkAccessibility networksDefaultAccess;
-	@XmlTransient
+	
     private IUser owner;
 
     /**

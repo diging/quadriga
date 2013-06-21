@@ -8,9 +8,11 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.stream.StreamResult;
 
 
 
+import org.exolab.castor.xml.Marshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +71,7 @@ public class RestController {
 		try {
 			projectList = projectManager.getProjectsOfUser(userId);
 			projectListTest.SetProjectList(projectList);
-
+			
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -37,6 +37,7 @@ import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -161,9 +162,10 @@ public class ConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#getCollectionsOwnedbyUser(java.lang.String)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetCollectionsOwnedbyUser() {
+	public void testGetCollectionsOwnedbyUser() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -200,9 +202,10 @@ public class ConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#getCollectionDetails(edu.asu.spring.quadriga.domain.IConceptCollection)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetCollectionDetails() {
+	public void testGetCollectionDetails() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -231,9 +234,10 @@ public class ConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#update(java.lang.String[], edu.asu.spring.quadriga.domain.IConceptCollection)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testUpdate() {
+	public void testUpdate() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -255,9 +259,10 @@ public class ConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#addItems(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testAddItems() {
+	public void testAddItems() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -280,9 +285,10 @@ public class ConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#addConceptCollection(edu.asu.spring.quadriga.domain.IConceptCollection)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testAddConceptCollection() {
+	public void testAddConceptCollection() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -299,9 +305,10 @@ public class ConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#deleteItem(java.lang.String, java.lang.String)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testDeleteItem() {
+	public void testDeleteItem() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");

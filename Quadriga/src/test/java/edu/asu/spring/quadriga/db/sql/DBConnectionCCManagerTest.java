@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -113,9 +114,10 @@ public class DBConnectionCCManagerTest {
 	/**
 	 * Load the required data into the dependent tables
 	 * @author Satya Swaroop Boddu
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testSetupTestEnvironment()
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
 	{
 		String[] sQuery = sDatabaseSetup.split("&");
 		
@@ -124,7 +126,7 @@ public class DBConnectionCCManagerTest {
 	}
 	
 	@Test
-	public void getConceptsOwnedbyUserTest() {
+	public void getConceptsOwnedbyUserTest() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -144,7 +146,7 @@ public class DBConnectionCCManagerTest {
 	}
 	
 	@Test
-	public void getCollectionDetailsTest() {
+	public void getCollectionDetailsTest() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -183,13 +185,14 @@ public class DBConnectionCCManagerTest {
 
 	/**
 	 * Test method for save items
+	 * @throws QuadrigaStorageException 
 	 *
 	 * @throws Exception
 	 *
 	 * 
 	 */
 	@Test
-	public void testSaveItem()
+	public void testSaveItem() throws QuadrigaStorageException
 	{
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
@@ -214,7 +217,7 @@ public class DBConnectionCCManagerTest {
 	}
 	
 	@Test
-	public void testDeleteItem() {
+	public void testDeleteItem() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -247,7 +250,7 @@ public class DBConnectionCCManagerTest {
 	}
 	
 	@Test
-	public void testUpdate() {
+	public void testUpdate() throws QuadrigaStorageException {
 		
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
@@ -270,7 +273,7 @@ public class DBConnectionCCManagerTest {
 	}
 	
 	@Test
-	public void testValidateid()
+	public void testValidateid() throws QuadrigaStorageException
 	{
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
