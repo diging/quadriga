@@ -111,8 +111,9 @@
 					<br>
 					<form method="POST"
 						action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}">
-						
-						<input type="submit"  value="Select & Save" /><br><br>
+
+						<input type="submit" value="Select & Save" /><br>
+						<br>
 						<table cellpadding="0" cellspacing="0" border="0"
 							class="display dataTable" width="70%">
 							<!-- <table  class="dataTable" id="pagination"> -->

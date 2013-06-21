@@ -16,17 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
-import edu.asu.spring.quadriga.exceptions.QuadrigaExceptionHandler;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
- * This class will handle list dictionaries items controller for the
- * dictionary 
+ * This class will handle list dictionaries items controller for the dictionary
  * 
  * @author : Lohith Dwaraka
  * 
@@ -39,8 +35,6 @@ public class DictionaryItemController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryItemController.class);
 
-	QuadrigaExceptionHandler quadExcepHandler = new QuadrigaExceptionHandler();
-
 	@Autowired
 	IUserManager usermanager;
 
@@ -51,16 +45,6 @@ public class DictionaryItemController {
 	public void setUsermanager(IUserManager usermanager) {
 		this.usermanager = usermanager;
 	}
-
-	List<DictionaryEntry> dictionaryEntryList = null;
-
-	@Autowired
-	IDictionaryFactory dictionaryFactory;
-
-	@Autowired
-	DictionaryItemsFactory dictionaryItemsFactory;
-
-
 
 	/**
 	 * Admin can use this page to check the list of dictionary items in a
@@ -86,20 +70,18 @@ public class DictionaryItemController {
 				dictionaryName = dictonaryManager
 						.getDictionaryName(dictionaryid);
 			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException();
+				throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 			}
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictionaryid", dictionaryid);
 		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "auth/dictionary/dictionary";
 	}
-
-	
 
 	/**
 	 * Admin can use this to delete a dictionary item to dictionary
@@ -162,7 +144,7 @@ public class DictionaryItemController {
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
 		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -246,12 +228,11 @@ public class DictionaryItemController {
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
 		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "auth/dictionary/dictionary";
 	}
 
-	
 }

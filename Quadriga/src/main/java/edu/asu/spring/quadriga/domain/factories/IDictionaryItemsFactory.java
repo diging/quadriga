@@ -7,6 +7,10 @@ import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
  * 
  */
 public interface IDictionaryItemsFactory {
-	public abstract DictionaryItems  createDictionaryItemsObject();
+	/**
+	 * 
+	 * @return DictionaryItems
+	 */
+	public abstract DictionaryItems createDictionaryItemsObject();
 
 }

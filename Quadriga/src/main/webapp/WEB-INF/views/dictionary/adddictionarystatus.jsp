@@ -15,25 +15,25 @@
 </script>
 <!-- Content -->
 <ul>
-	<li>
-		<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'" value='back'>
-	</li>
+	<li><input type=button
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
+		value='back'></li>
 </ul>
 
 
 <article class="is-page-content">
 
 	<c:choose>
-      <c:when test="${success=='1'}">
-      <span class="byline">Dictionary created successfully.</span>
-      <br />
-      </c:when>
+		<c:when test="${success=='1'}">
+			<span class="byline">Dictionary created successfully.</span>
+			<br />
+		</c:when>
 
-      <c:otherwise>
-      <span class="byline"><c:out value="${errormsg}"></c:out></span>
-      <br />
-      </c:otherwise>
-</c:choose>
+		<c:otherwise>
+			<span class="byline"><c:out value="${errormsg}"></c:out></span>
+			<br />
+		</c:otherwise>
+	</c:choose>
 
 </article>
 
