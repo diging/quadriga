@@ -11,6 +11,11 @@
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionProjectManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+		<bean id="DBConnectionWorkspaceManagerBean"
+		class="edu.asu.spring.quadriga.db.sql.DBConnectionWorkspaceManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 	<bean id="DBConnectionDictionaryManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManager">
@@ -23,7 +28,7 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/quadriga" />
+		<property name="url" value="jdbc:mysql://localhost:3306/quad_test" />
 
 		<property name="username" value="dbadmin" />
 		<property name="password" value="dbadmin" />

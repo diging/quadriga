@@ -52,5 +52,8 @@ public interface DBConstants
 	public static final String ADD_CONCEPTCOLLECTION ="sp_addConceptCollections";
 	public static final String DELETE_COLLECTION_ITEM ="sp_deleteCollectionItem";
 	public static final String UPDATE_COLLECTION_ITEM ="sp_updateCollectionItem";
+	
+	// WorkSpace database objects
+	public static final String ADD_WORKSPACE_REQUEST = "sp_createworkspace";
 
 }
