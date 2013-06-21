@@ -31,7 +31,7 @@ BEGIN
 	 -- THEN SET errmsg = "collaborator already exists in project";
 	-- END IF;
 
-	SELECT username FROM tbl_quadriga_user WHERE
+	SELECT username,quadrigarole FROM tbl_quadriga_user WHERE
 	username NOT IN (SELECT collaboratoruser FROM tbl_project_collaborator
 	WHERE projectid = inprojid 
 	UNION
