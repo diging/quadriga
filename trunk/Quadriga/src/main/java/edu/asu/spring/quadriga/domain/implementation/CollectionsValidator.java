@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 @Service
 public class CollectionsValidator implements Validator {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CollectionsValidator.class);
@@ -24,13 +25,20 @@ public class CollectionsValidator implements Validator {
 	public void validate(Object obj, Errors errors) {
 		ConceptCollection c = (ConceptCollection) obj;
 		String id = c.getName();
-		validateId(id, errors);
+		
+			try {
+				validateId(id, errors);
+			} catch (QuadrigaStorageException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 	}
 
-	private void validateId(String id, Errors errors) {
+	private void validateId(String id, Errors errors) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		String ret=dbConnect.validateId(id);
-		logger.info(":::"+ret);
+		logger.info("After Validater:"+ret);
 		if(!( ret == null || ret.isEmpty()) )
 		{
 			errors.rejectValue("name", "CollectionsValidator.id.notValid",

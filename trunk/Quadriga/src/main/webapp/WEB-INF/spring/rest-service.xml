@@ -54,13 +54,12 @@
 	</bean>
 	<bean id="marshallingConverter"
 		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-		<constructor-arg ref="jaxbMarshaller" />
+		<constructor-arg ref="castorMarshaller" />
 		<property name="supportedMediaTypes" value="application/xml" />
 	</bean>
-
 	<bean id="projects"
 		class="org.springframework.web.servlet.view.xml.MarshallingView">
-		<constructor-arg ref="jaxbMarshaller" />
+		<constructor-arg ref="castorMarshaller" />
 	</bean>
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.BeanNameViewResolver" />
@@ -75,10 +74,21 @@
 				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
 				<bean
 					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				
 			</list>
 		</property>
 	</bean>
-
+ <bean  class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+        <list>
+        <bean id="castorMarshallingHttpMessageConverter"
+        class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+        <property name="marshaller" ref="castorMarshaller" />
+        <property name="unmarshaller" ref="castorMarshaller" />
+    </bean>
+			</list>
+        </property>
+        </bean>
 	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<list>
@@ -90,10 +100,14 @@
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
-				<value>edu.asu.spring.quadriga.domain.rest.ProjectList
-				</value>
+				
 
 			</list>
 		</property>
 	</bean>
+	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" >
+		<property name="mappingLocation" value="WEB-INF\spring\rest-binding.xml" />
+	</bean>
+	
+	
 </beans>
