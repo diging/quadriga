@@ -91,4 +91,5 @@ BEGIN
       -- drop the temp table created
        DROP TEMPORARY TABLE IF EXISTS temp_tbl_projectid;
        SET SQL_SAFE_UPDATES=1;
-END
+END$$
+DELIMITER ;
