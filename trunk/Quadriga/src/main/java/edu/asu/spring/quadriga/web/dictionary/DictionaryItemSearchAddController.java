@@ -16,17 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
-import edu.asu.spring.quadriga.exceptions.QuadrigaExceptionHandler;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-
 
 /**
  * This class will handle add and search dictionaries items controller for the
@@ -43,8 +38,6 @@ public class DictionaryItemSearchAddController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryItemSearchAddController.class);
 
-	QuadrigaExceptionHandler quadExcepHandler = new QuadrigaExceptionHandler();
-
 	@Autowired
 	IUserManager usermanager;
 
@@ -57,14 +50,6 @@ public class DictionaryItemSearchAddController {
 	}
 
 	List<DictionaryEntry> dictionaryEntryList = null;
-
-	@Autowired
-	IDictionaryFactory dictionaryFactory;
-
-	@Autowired
-	DictionaryItemsFactory dictionaryItemsFactory;
-
-
 
 	/**
 	 * Handles the add dictionary item page
@@ -80,20 +65,6 @@ public class DictionaryItemSearchAddController {
 		model.addAttribute("dictionaryid", dictionaryid);
 		return "auth/dictionaries/addDictionaryItems";
 	}
-
-	/**
-	 * Handles the form tag for add dictionary item to dictionary
-	 * 
-	 * @return Return to the POST part of add dictionary item in controller
-	 */
-
-//	@RequestMapping(value = "auth/dictionaries/addDictionaryItems", method = RequestMethod.GET)
-//	public ModelAndView addDictionaryItemForm(
-//			@PathVariable("dictionaryid") String dictionaryid) {
-//		logger.info("came to addDictionaryItemForm get");
-//		return new ModelAndView("auth/dictionaries/addDictionaryItems",
-//				"command", dictionaryItemsFactory.createDictionaryItemsObject());
-//	}
 
 	/**
 	 * Handles the form tag for add dictionary item to dictionary
@@ -152,16 +123,12 @@ public class DictionaryItemSearchAddController {
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
 		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "auth/dictionary/dictionary";
 	}
-	
-	
-	
-
 
 	/**
 	 * Admin can use this to search from term and pos from word power
@@ -204,7 +171,7 @@ public class DictionaryItemSearchAddController {
 			}
 
 		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

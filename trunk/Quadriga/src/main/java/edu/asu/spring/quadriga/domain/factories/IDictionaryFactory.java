@@ -1,14 +1,18 @@
 package edu.asu.spring.quadriga.domain.factories;
+
 import edu.asu.spring.quadriga.domain.IDictionary;
 
-
 /**
- * Factory interface for Dicitonary factories.
+ * Factory interface for Dictionary factories.
  * 
  */
 
 public interface IDictionaryFactory {
-	
-	public abstract IDictionary  createDictionaryObject();
-	
+
+	/**
+	 * Create Dictionary factory object
+	 * @return IDictionary
+	 */
+	public abstract IDictionary createDictionaryObject();
+
 }

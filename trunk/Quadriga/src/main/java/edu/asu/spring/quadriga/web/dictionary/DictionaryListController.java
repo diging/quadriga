@@ -18,19 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
-import edu.asu.spring.quadriga.exceptions.QuadrigaExceptionHandler;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-
-
 /**
- * This class will handle list dictionaries controller for the
- * dictionary 
+ * This class will handle list dictionaries controller for the dictionary
  * 
  * @author : Lohith Dwaraka
  * 
@@ -43,8 +37,6 @@ public class DictionaryListController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryListController.class);
 
-	QuadrigaExceptionHandler quadExcepHandler = new QuadrigaExceptionHandler();
-
 	@Autowired
 	IUserManager usermanager;
 
@@ -56,13 +48,8 @@ public class DictionaryListController {
 		this.usermanager = usermanager;
 	}
 
-	List<DictionaryEntry> dictionaryEntryList = null;
-
 	@Autowired
 	IDictionaryFactory dictionaryFactory;
-
-	@Autowired
-	DictionaryItemsFactory dictionaryItemsFactory;
 
 	/**
 	 * Admin can use this page to check the list of dictionary he is accessible
@@ -83,7 +70,7 @@ public class DictionaryListController {
 				dictionaryList = dictonaryManager.getDictionariesList(user
 						.getUsername());
 			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException();
+				throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("userId", userId);
@@ -92,8 +79,7 @@ public class DictionaryListController {
 		}
 		return "auth/dictionaries";
 	}
-	
-	
+
 	/**
 	 * Handles the bean mapping from form tag
 	 * 
@@ -101,7 +87,6 @@ public class DictionaryListController {
 	 * @return Used to handle the data from the form:form tag and map it to
 	 *         Dicitonary object
 	 */
-
 
 	@RequestMapping(value = "auth/dictionaries/addDictionary", method = RequestMethod.GET)
 	public String addDictionaryForm(Model m) {
@@ -111,8 +96,7 @@ public class DictionaryListController {
 		// return new ModelAndView("auth/dictionaries/addDictionary",
 		// "command",dictionaryFactory.createDictionaryObject());
 	}
-	
-	
+
 	/**
 	 * Admin can use this page to new dictionary to his list
 	 * 
@@ -132,7 +116,6 @@ public class DictionaryListController {
 		try {
 			msg = dictonaryManager.addNewDictionary(dictionary);
 		} catch (QuadrigaStorageException e1) {
-			// TODO Auto-generated catch block
 			msg = "DB Error";
 			e1.printStackTrace();
 
@@ -146,7 +129,7 @@ public class DictionaryListController {
 				dictionaryList = dictonaryManager.getDictionariesList(user
 						.getUserName());
 			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException();
+				throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("userId", user.getUserName());
@@ -158,6 +141,5 @@ public class DictionaryListController {
 			return "auth/dictionaries/addDictionary";
 		}
 	}
-	
-	
+
 }
