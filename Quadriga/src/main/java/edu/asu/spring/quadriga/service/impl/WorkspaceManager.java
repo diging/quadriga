@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionWorkspaceManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -12,6 +13,7 @@ import edu.asu.spring.quadriga.service.IWorkspaceManager;
  * @description  WorkspaceManager class implementing the workspace
  *               functionality
  */
+@Service
 public class WorkspaceManager implements IWorkspaceManager 
 {
 
