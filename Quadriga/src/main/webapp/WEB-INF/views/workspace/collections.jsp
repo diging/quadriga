@@ -35,6 +35,9 @@
 					//Do this once the data is available
 					ajaxCallback.success(function(data) {
 						//Load the new text in the corresponding div tag
+						if(data != 'Loading...'){
+							data = '<a href="/quadriga/auth/workbench/workspace/community/collection/'+collectionid[1]+'" style="color:#707070">'+data+'</a>';
+						}
 						$('#collection_' + collectionid[1]).html(data);
 						$('#collection_' + collectionid[1]).style('color', 'red');
 					});//End of ajax callback
@@ -92,20 +95,20 @@
 		<c:when test="${not empty communityName }">
 			<h3>
 				<a href="/quadriga/auth/workbench/workspace/communities">Home</a> »
-				<c:out value="${communityName }"></c:out>
+				<c:out value="${communityName}"></c:out>
 			</h3>
 			<c:choose>
 				<c:when test="${not empty collectionList}">
 					<span class="byline">Select a collection to browse its items</span>
 					<c:forEach var="collection" items="${collectionList}">
-						<span style="float: left; margin-left: 50px; font-weight: bold"><div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}">${collection.name}</c:when><c:otherwise>Loading...</c:otherwise></c:choose></div></span>
+						<span style="float: left; margin-left: 50px; font-weight: bold"><div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise>Loading...</c:otherwise></c:choose></div></span>
 						<br />
 					</c:forEach>
 				</c:when>
 
 				<c:otherwise>
 					<span class="byline">No Collections found in the
-						${communityTitle} community</span>
+						${communityName} community</span>
 					<br>
 				</c:otherwise>
 			</c:choose>

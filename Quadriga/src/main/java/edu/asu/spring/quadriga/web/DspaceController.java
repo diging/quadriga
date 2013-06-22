@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 
@@ -31,14 +32,12 @@ public class DspaceController {
 
 	@Autowired
 	private IDspaceManager dspaceManager;
-
-
+	
 	@RequestMapping(value = "/auth/workbench/workspace/communities", method = RequestMethod.GET)
 	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
+		
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-
 		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
-
 		model.addAttribute("communityList", communities);
 
 		return "auth/workbench/workspace/communities";
@@ -49,7 +48,6 @@ public class DspaceController {
 	public String workspaceCommunityRequest(@PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
 
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		
 		String communityName = dspaceManager.getCommunityName(communityId);
 		
 		//No community has been fetched. The user is trying to access the collection page directly
@@ -63,9 +61,28 @@ public class DspaceController {
 		model.addAttribute("communityName", communityName);
 		model.addAttribute("collectionList", collections);
 
-		return "auth/workbench/workspace/community/collection";
+		return "auth/workbench/workspace/community";
 	}
 	
+	
+	@RequestMapping(value = "/auth/workbench/workspace/community/collection/{collectionId}", method = RequestMethod.GET)
+	public String workspaceItemRequest(@PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
+	
+		String collectionName = dspaceManager.getCollectionName(collectionId);
+		
+		//No such collection has been fetched. The user is trying to access the item page directly
+		//Redirect him to community list page
+		if(collectionName == null)
+		{
+			return "redirect:/auth/workbench/workspace/communities";
+		}
+		
+		List<IItem> items = dspaceManager.getAllItems(collectionId);
+		model.addAttribute("collectionName", collectionName);
+		model.addAttribute("itemList", items);
+		
+		return "auth/workbench/workspace/community/collection";
+	}
 
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
 	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {
@@ -77,8 +94,5 @@ public class DspaceController {
 		}
 		return "Loading...";		
 	}
-
-
-	
 
 }

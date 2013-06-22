@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain;
 
+import java.util.List;
+
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
@@ -48,10 +50,8 @@ public interface ICollection extends Runnable{
 
 	public abstract RestTemplate getRestTemplate();
 
-	/**
-	 * Make a REST service call to Dspace and load this collection with data from Dspace
-	 * @param sCollectionId The collection id of the collection to be loaded
-	 */
-//	public abstract void loadCollectionObject(String sCollectionId);
+	public abstract List<IItem> getItems();
+
+	public abstract void setItems(List<IItem> items);
 
 }

@@ -2,10 +2,9 @@ package edu.asu.spring.quadriga.dspace.service;
 
 import java.util.List;
 
-import org.springframework.web.client.RestTemplate;
-
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.IItem;
 
 public interface IDspaceManager {
 
@@ -15,6 +14,10 @@ public interface IDspaceManager {
 
 	public abstract String getCommunityName(String sCommunityId);
 	
+	public abstract String getCollectionName(String sCollectionId);
+	
 	public abstract ICollection getCollection(String sCollectionId);
+	
+	public abstract List<IItem> getAllItems(String sCollectionId);
 
 }

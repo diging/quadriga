@@ -16,8 +16,10 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Community;
+import edu.asu.spring.quadriga.domain.implementation.Item;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
@@ -76,23 +78,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return communities;
 	}
 
-
-	@Override
-	public String getCommunityName(String sCommunityId) 
-	{
-		if(communities!=null)
-		{
-			for(ICommunity community: communities)
-			{
-				if(community.getId().equals(sCommunityId))
-				{
-					return community.getName();
-				}
-			}
-		}
-		return null;
-	}
-
 	@Override
 	public List<ICollection> getAllCollections(RestTemplate restTemplate, String url, String sUserName, String sPassword, String sCommunityId) {
 
@@ -119,9 +104,26 @@ public class ProxyCommunityManager implements ICommunityManager {
 				}
 			}
 		}
-
 		return null;
 	}
+
+	@Override
+	public List<IItem> getAllItems(String sCollectionId)
+	{
+		//Check if a request for collections has been made to Dspace
+		if(this.collections != null)
+		{
+			for(ICollection collection : this.collections)
+			{
+				if(collection.getId().equals(sCollectionId))
+				{
+					return collection.getItems();
+				}
+			}
+		}
+		return null;
+	}
+
 
 	//TODO: Push Down to collection class and remove the list of collections in this class
 	@Override
@@ -141,5 +143,38 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	@Override
+	public String getCommunityName(String sCommunityId) 
+	{
+		if(communities!=null)
+		{
+			for(ICommunity community: communities)
+			{
+				if(community.getId().equals(sCommunityId))
+				{
+					return community.getName();
+				}
+			}
+		}
+		return null;
+	}
+
+
+	@Override
+	public String getCollectionName(String sCollectionId) 
+	{
+		//Check if a request for collections has been made to Dspace
+		if(this.collections != null)
+		{
+			for(ICollection collection : this.collections)
+			{
+				if(collection.getId().equals(sCollectionId))
+				{
+					return collection.getName();
+				}
+			}
+		}
+		return null;
+	}
 
 }
