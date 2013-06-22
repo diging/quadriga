@@ -13,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.implementation.Item;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
@@ -73,12 +75,24 @@ public class DspaceManager implements IDspaceManager{
 	}
 	
 	@Override
+	public String getCollectionName(String sCollectionId) 
+	{
+		return proxyCommunityManager.getCollectionName(sCollectionId);
+	}
+	
+	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
 		return proxyCommunityManager.getCollection(sCollectionId);
 	}
 
 
+	@Override
+	public List<IItem> getAllItems(String sCollectionId) {
+		return  proxyCommunityManager.getAllItems(sCollectionId); 
+	}
+	
+	
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
@@ -100,4 +114,5 @@ public class DspaceManager implements IDspaceManager{
 					}
 				});
 	}
+
 }

@@ -1,10 +1,15 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
+import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 
 /**
@@ -23,13 +28,14 @@ public class Collection implements ICollection{
 	private String entityReference;
 	private String handle;
 	private String countItems;
-	
+	private List<IItem> items;
+
 	private RestTemplate restTemplate;
 	private String url;
 	private String userName;
 	private String password;
 	private boolean isLoaded;
-	
+
 	public Collection(String id, RestTemplate restTemplate, String url, String userName, String password)
 	{
 		this.url = url;
@@ -39,7 +45,7 @@ public class Collection implements ICollection{
 		this.password = password;
 		this.setRestTemplate(restTemplate);
 	}
-	
+
 	@Override
 	public RestTemplate getRestTemplate() {
 		return restTemplate;
@@ -77,8 +83,8 @@ public class Collection implements ICollection{
 	public String getId() {
 		return id;
 	}
-	
-	
+
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setId(java.lang.String)
 	 */
@@ -86,8 +92,8 @@ public class Collection implements ICollection{
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	
+
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getName()
 	 */
@@ -95,7 +101,7 @@ public class Collection implements ICollection{
 	public String getName() {
 		return name;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setName(java.lang.String)
 	 */
@@ -103,7 +109,7 @@ public class Collection implements ICollection{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getShortDescription()
 	 */
@@ -111,7 +117,7 @@ public class Collection implements ICollection{
 	public String getShortDescription() {
 		return shortDescription;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setShortDescription(java.lang.String)
 	 */
@@ -119,7 +125,7 @@ public class Collection implements ICollection{
 	public void setShortDescription(String shortDescription) {
 		this.shortDescription = shortDescription;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getEntityReference()
 	 */
@@ -127,7 +133,7 @@ public class Collection implements ICollection{
 	public String getEntityReference() {
 		return entityReference;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setEntityReference(java.lang.String)
 	 */
@@ -135,7 +141,7 @@ public class Collection implements ICollection{
 	public void setEntityReference(String entityReference) {
 		this.entityReference = entityReference;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getHandle()
 	 */
@@ -143,7 +149,7 @@ public class Collection implements ICollection{
 	public String getHandle() {
 		return handle;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setHandle(java.lang.String)
 	 */
@@ -151,7 +157,7 @@ public class Collection implements ICollection{
 	public void setHandle(String handle) {
 		this.handle = handle;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getCountItems()
 	 */
@@ -159,7 +165,7 @@ public class Collection implements ICollection{
 	public String getCountItems() {
 		return countItems;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setCountItems(java.lang.String)
 	 */
@@ -183,8 +189,8 @@ public class Collection implements ICollection{
 	public void setLoaded(boolean isLoaded) {
 		this.isLoaded = isLoaded;
 	}
-	
-	
+
+
 	@Override
 	public boolean copy(IDspaceCollection dspaceCollection)
 	{		
@@ -194,33 +200,44 @@ public class Collection implements ICollection{
 			{
 				return false;
 			}
-			
+
 			if(dspaceCollection.getName() != null)
 			{
 				this.name = dspaceCollection.getName();
 				this.isLoaded = true;
 			}
-			
+
 			if(dspaceCollection.getShortDescription() != null)
 			{
 				this.shortDescription = dspaceCollection.getShortDescription();
 			}
-			
+
 			if(dspaceCollection.getEntityReference() != null)
 			{
 				this.entityReference = dspaceCollection.getEntityReference();
 			}
-			
+
 			if(dspaceCollection.getHandle() != null)
 			{
 				this.handle = dspaceCollection.getHandle();
 			}
-			
+
 			if(dspaceCollection.getCountItems() != null)
 			{
 				this.countItems = dspaceCollection.getCountItems();
-			}			
-			
+			}
+
+			setItems(new ArrayList<IItem>());
+			IItem item = null;
+			if(dspaceCollection.getItemsEntity() != null)
+			{
+				for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
+					item = new Item();
+					if(item.copy(dspaceItem))
+						getItems().add(item);
+				}
+			}
+
 			return this.isLoaded;
 		}
 		return false;
@@ -240,5 +257,15 @@ public class Collection implements ICollection{
 		{
 			this.copy(dspaceCollection);
 		}		
+	}
+
+	@Override
+	public List<IItem> getItems() {
+		return items;
+	}
+
+	@Override
+	public void setItems(List<IItem> items) {
+		this.items = items;
 	}
 }

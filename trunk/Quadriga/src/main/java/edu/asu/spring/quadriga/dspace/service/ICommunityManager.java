@@ -5,6 +5,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.IItem;
 
 
 public interface ICommunityManager {
@@ -17,4 +18,8 @@ public interface ICommunityManager {
 	public abstract String getCommunityName(String sCommunityId);
 	
 	public abstract ICollection getCollection(String sCollectionId);
+
+	public abstract List<IItem> getAllItems(String sCollectionId);
+
+	public abstract String getCollectionName(String sCollectionId);
 }

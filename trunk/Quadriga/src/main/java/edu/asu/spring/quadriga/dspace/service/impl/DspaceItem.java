@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -12,7 +14,8 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
  * @author Ram Kumar Kumaresan
  */
 
-@XmlRootElement(name="")
+
+@XmlRootElement(name="itementity")
 public class DspaceItem implements IDspaceItem{
 
 	private String id;
