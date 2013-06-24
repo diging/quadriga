@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" >
+<Quadriga:conceptcollectionsList>
+
+#foreach ($conceptcollection in $list)
+<Quadriga:conceptcollection>
+	<Quadriga:name>$conceptcollection.name</Quadriga:name>
+	<Quadriga:description>$conceptcollection.description</Quadriga:description>
+	<Quadriga:uri>http://localhost:9090/quadriga/rest/conceptdetails/$conceptcollection.id</Quadriga:uri>
+</Quadriga:conceptcollection> 	
+#end
+</Quadriga:conceptcollectionsList>
+</QuadrigaReply>

@@ -20,13 +20,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+import edu.asu.spring.quadriga.domain.IConcept;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
+
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -58,6 +66,16 @@ public class RestController {
 	@Autowired
 	DictionaryItemsFactory dictionaryItemsFactory;
 
+	@Autowired IConceptCollectionManager conceptControllerManager;
+	
+	IConceptCollection collection;
+	@Autowired
+	IConceptCollectionFactory collectionFactory;
+	
+	IConcept concept;
+	@Autowired
+	IConceptFactory conFact;
+	
 	@Autowired
 	IRestVelocityFactory restVelocityFactory;
 
@@ -219,6 +237,83 @@ public class RestController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new QuadrigaStorageException();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	
+	@RequestMapping(value = "rest/conceptcollections/{userID}", method = RequestMethod.GET, produces = "application/xml")
+	@ResponseBody
+	public String listConceptCollections(@PathVariable("userID") String userId,
+			ModelMap model) {
+		List<IConceptCollection> collectionsList = null;
+		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		Template template = null;
+		StringWriter sw = new StringWriter();
+		try {
+			engine.init();
+			collectionsList = conceptControllerManager.getCollectionsOwnedbyUser(userId);
+			template = engine.getTemplate("velocitytemplates/conceptcollections.vm");
+			VelocityContext context = new VelocityContext();
+			context.put("list", collectionsList);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseErrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MethodInvocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	@RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
+	@ResponseBody
+	public String getConceptList(@PathVariable("collectionID") int collectionID,
+			ModelMap model) {
+		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		Template template = null;
+		StringWriter sw = new StringWriter();
+		collection = collectionFactory.createConceptCollectionObject();
+		collection.setId(collectionID);
+		try {
+			engine.init();
+			conceptControllerManager.getCollectionDetails(collection);
+			template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
+			VelocityContext context = new VelocityContext();
+			context.put("list", collection.getItems());
+			template.merge(context, sw);
+			return sw.toString();
+		} catch (ResourceNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseErrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MethodInvocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
