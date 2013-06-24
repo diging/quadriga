@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" >
+<Quadriga:dictionaryList>
+
+#foreach ($dictionary in $list)
+<Quadriga:dictionary>
+	<Quadriga:name>$dictionary.name</Quadriga:name>
+	<Quadriga:description>$dictionary.description</Quadriga:description>
+	<Quadriga:uri>http://localhost:9090/quadriga/rest/projects/$dictionary.id</Quadriga:uri>
+</Quadriga:dictionary> 	
+#end
+</Quadriga:dictionaryList>
+</QuadrigaReply>
