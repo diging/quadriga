@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.web;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -12,7 +13,15 @@ import javax.xml.transform.stream.StreamResult;
 
 
 
-import org.exolab.castor.xml.Marshaller;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,18 +73,47 @@ public class RestController {
 
 	@RequestMapping(value="api/projects/{userID}", method = RequestMethod.GET , produces = "application/xml")
 	@ResponseBody
-	public ModelAndView listProjects(@PathVariable("userID") String userId, ModelMap model){	
+	public String listProjects(@PathVariable("userID") String userId, ModelMap model){	
 		List<IProject> projectList=null;
+		VelocityEngine engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        
+		Template template = null;
 		//add
 		ProjectList projectListTest = new ProjectList();
+		StringWriter sw = new StringWriter();
 		try {
+			engine.init();
 			projectList = projectManager.getProjectsOfUser(userId);
 			projectListTest.SetProjectList(projectList);
+			template = engine.getTemplate("mytemplate.vm");
+		        VelocityContext context = new VelocityContext();
+		        context.put("list", projectList);
+		        
+		        StringWriter writer = new StringWriter();
+		        template.merge( context, writer );
+		        return writer.toString(); 
+			} catch (ResourceNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseErrorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MethodInvocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 			
-		} catch (QuadrigaStorageException e) {
+			
+			catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return new ModelAndView("projects","object",projectListTest);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		System.out.println(""+sw);
+		return "";
 	}
 }

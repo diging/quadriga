@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" >
+<Quadriga:projectList>
+
+#foreach ($project in $list)
+<Quadriga:project>
+	<Quadriga:name>$project.name</Quadriga:name>
+	<Quadriga:description>$project.description</Quadriga:description>
+	<Quadriga:id>$project.internalid</Quadriga:id>
+	<Quadriga:uri>http://localhost:9090/quadriga/rest/projects/$project.internalid</Quadriga:uri>
+</Quadriga:project> 	
+#end
+</Quadriga:projectList>
+</QuadrigaReply>
