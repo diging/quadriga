@@ -69,12 +69,13 @@ public class DictionaryListController {
 				dictionaryList = dictonaryManager.getDictionariesList(user
 						.getUsername());
 			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
+				throw new QuadrigaStorageException(
+						"Oops the DB is an hard hangover, please try later");
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return "auth/dictionaries";
 	}
@@ -89,7 +90,7 @@ public class DictionaryListController {
 
 	@RequestMapping(value = "auth/dictionaries/addDictionary", method = RequestMethod.GET)
 	public String addDictionaryForm(Model m) {
-		
+
 		m.addAttribute("dictionary", dictionaryFactory.createDictionaryObject());
 		return "auth/dictionaries/addDictionary";
 	}
@@ -102,7 +103,7 @@ public class DictionaryListController {
 	 */
 
 	@RequestMapping(value = "auth/dictionaries/addDictionary", method = RequestMethod.POST)
-	public String addDictionaryHandle (
+	public String addDictionaryHandle(
 			@ModelAttribute("SpringWeb") Dictionary dictionary, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = usermanager.getUserDetails(principal.getName());
@@ -113,19 +114,15 @@ public class DictionaryListController {
 			msg = dictonaryManager.addNewDictionary(dictionary);
 		} catch (QuadrigaStorageException e1) {
 			msg = "DB Error";
-			e1.printStackTrace();			
+			e1.printStackTrace();
 		}
 		if (msg.equals("")) {
 			model.addAttribute("adddicsuccess", 1);
 			model.addAttribute("adddicsuccessMsg",
 					"Dictionary created successfully.");
 			List<IDictionary> dictionaryList = null;
-			try {
-				dictionaryList = dictonaryManager.getDictionariesList(user
-						.getUserName());
-			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
-			}
+			dictionaryList = dictonaryManager.getDictionariesList(user
+					.getUserName());
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("userId", user.getUserName());
 			return "auth/dictionaries";

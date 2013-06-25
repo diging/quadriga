@@ -161,7 +161,7 @@ public class DictionaryItemSearchAddController {
 			throw new QuadrigaStorageException(
 					"Oops the DB is an hard hangover, please try later");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		// return "auth/dictionaries/dictionary/wordSearch";
 		// return "auth/dictionary/dictionary";

@@ -87,9 +87,9 @@ public class DictionaryManager implements IDictionaryManager {
 
 		try {
 			dictionaryList = dbConnect.getDictionaryOfUser(userId);
-		} catch (QuadrigaStorageException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			throw new QuadrigaStorageException();
+			logger.error(e.getMessage());
 		}
 
 		return dictionaryList;
@@ -107,12 +107,8 @@ public class DictionaryManager implements IDictionaryManager {
 		String msg = "";
 		try {
 			msg = dbConnect.addDictionary(dictionary);
-		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			msg = "DB Issue";
-			throw new QuadrigaStorageException();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 
 		return msg;
@@ -131,11 +127,8 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 			msg = dbConnect.addDictionaryItems(dictionaryId, item, id, pos,
 					owner);
-		} catch (QuadrigaStorageException e) {
-			msg = "Storage issue please try later";
-			throw new QuadrigaStorageException();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 
 		return msg;
@@ -153,11 +146,8 @@ public class DictionaryManager implements IDictionaryManager {
 		String msg = "";
 		try {
 			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid,ownerName);
-		} catch (QuadrigaStorageException e) {
-			msg = "Issue in the DB";
-			throw new QuadrigaStorageException();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return msg;
@@ -175,11 +165,8 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 			msg = dbConnect.updateDictionaryItems(dictionaryId, termid, term,
 					pos);
-		} catch (QuadrigaStorageException e) {
-			msg = "Issue in the DB";
-			throw new QuadrigaStorageException();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}  catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 
 		return msg;
@@ -198,11 +185,8 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 			dictionaryItemList = dbConnect
 					.getDictionaryItemsDetails(dictionaryid, ownerName);
-		} catch (QuadrigaStorageException e) {
-
-			throw new QuadrigaStorageException();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return dictionaryItemList;
@@ -221,11 +205,8 @@ public class DictionaryManager implements IDictionaryManager {
 		String dictionaryName = "";
 		try {
 			dictionaryName = dbConnect.getDictionaryName(dictionaryid);
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		}  catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 
 		return dictionaryName;
@@ -249,7 +230,7 @@ public class DictionaryManager implements IDictionaryManager {
 					.getForObject(fullUrl, WordpowerReply.class);
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return dictionaryEntry;
 	}
@@ -278,7 +259,7 @@ public class DictionaryManager implements IDictionaryManager {
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
 		} catch (Exception e) {
 
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return dictionaryEntry;
 	}
