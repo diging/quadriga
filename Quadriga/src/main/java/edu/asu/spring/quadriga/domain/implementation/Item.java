@@ -13,7 +13,16 @@ public class Item implements IItem{
 	private String name;
 	private String id;
 	private String handle;
+	private boolean isloaded;
 
+	@Override
+	public boolean isIsloaded() {
+		return isloaded;
+	}
+	@Override
+	public void setIsloaded(boolean isloaded) {
+		this.isloaded = isloaded;
+	}
 	@Override
 	public String getName() {
 		return name;
@@ -62,6 +71,8 @@ public class Item implements IItem{
 				this.id = dspaceItem.getId();
 				isCopied = true;
 			}
+			
+			this.isloaded = false;
 		}	
 		return isCopied;
 	}

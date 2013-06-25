@@ -32,6 +32,10 @@
 					//Do this once the data is available
 					ajaxCallback.success(function(data) {
 						//Load the new text in the corresponding div tag
+						if(data != 'Loading...'){
+							data = '<a href="/quadriga/auth/workbench/workspace/community/collection/'+collectionid[1]+'" style="color:#707070">'+data+'</a>';
+						}
+						//Load the new text in the corresponding div tag
 						$('#collection_' + collectionid[1]).html(data);
 						$('#collection_' + collectionid[1]).style('color', 'red');
 					});//End of ajax callback

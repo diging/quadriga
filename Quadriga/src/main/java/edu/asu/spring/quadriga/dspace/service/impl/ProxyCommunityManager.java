@@ -146,7 +146,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	@Override
 	public String getCommunityName(String sCommunityId) 
 	{
-		if(communities!=null)
+		if(this.communities!=null)
 		{
 			for(ICommunity community: communities)
 			{
@@ -172,6 +172,21 @@ public class ProxyCommunityManager implements ICommunityManager {
 				{
 					return collection.getName();
 				}
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public String getCommunityId(String sCollectionId) 
+	{
+		//Check if a request for communities has been made to Dspace
+		if(this.communities!=null)
+		{
+			for(ICommunity community: communities)
+			{
+				if(community.getCollectionIds().contains(sCollectionId))
+					return community.getId();
 			}
 		}
 		return null;

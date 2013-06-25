@@ -231,10 +231,13 @@ public class Collection implements ICollection{
 			IItem item = null;
 			if(dspaceCollection.getItemsEntity() != null)
 			{
-				for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
-					item = new Item();
-					if(item.copy(dspaceItem))
-						getItems().add(item);
+				if(dspaceCollection.getItemsEntity().getItems() != null)
+				{
+					for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
+						item = new Item();
+						if(item.copy(dspaceItem))
+							getItems().add(item);
+					}
 				}
 			}
 
