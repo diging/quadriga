@@ -5,6 +5,8 @@ import java.security.Principal;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -76,10 +78,10 @@ public class DictionaryRestController {
 	 */
 	@RequestMapping(value = "rest/dictionaries", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String listDictionaries(ModelMap model, Principal principal)
+	public String listDictionaries(ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
 		List<IDictionary> dictionaryList = null;
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
 		Template template = null;
 
@@ -100,8 +102,9 @@ public class DictionaryRestController {
 			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionarylist.vm");
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryList);
+			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
@@ -133,13 +136,13 @@ public class DictionaryRestController {
 	@RequestMapping(value = "rest/dictionaryDetails/{dictionaryId}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listDictionaryItems(
-			@PathVariable("dictionaryId") String dictionaryId, ModelMap model)
+			@PathVariable("dictionaryId") String dictionaryId, ModelMap model, HttpServletRequest req)
 			throws Exception {
 		
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		List<IDictionaryItems> dictionaryItemsList = null;
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
 		Template template = null;
 
@@ -162,9 +165,9 @@ public class DictionaryRestController {
 			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryItemsList);
-
+			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
