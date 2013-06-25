@@ -148,12 +148,40 @@
 		<put-attribute name="content" value="/WEB-INF/views/workbench/showCollaborators.jsp" />
 	</definition> 
 	
-		<definition name="auth/workspace/addworkspace" extends="base.definition.workbench">
+	
+		<!-- Workspace pages -->
+	<definition name="auth/workbench/workspace/communities"
+		extends="base.definition.nonav">
+		<put-attribute name="title" value="Quadriga - Communities" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/communities.jsp" />
+	</definition>
+	<definition name="auth/workbench/workspace/community"
+		extends="base.definition.nonav">
+		<put-attribute name="title"
+			value="Quadriga - Collections in Community" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/collections.jsp" />
+	</definition>
+	<definition name="auth/workbench/workspace/community/collection"
+		extends="base.definition.nonav">
+		<put-attribute name="title"
+			value="Quadriga - Collections in Community" />
+		<put-attribute name="content" value="/WEB-INF/views/workspace/items.jsp" />
+	</definition>
+		<definition name="auth/workbench/workspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench" />
+		<put-attribute name="sub-navigation" value="/WEB-INF/views/navigation/nav-workspace.jsp" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/workspace.jsp" />
+	</definition>
+	<definition name="auth/workbench/workspace/addworkspace" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Add Workspace" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/addworkspace.jsp" />
 	</definition>
-	<definition name="auth/workbench/addWorkspaceStatus" extends="base.definition.workbench">
+	<definition name="auth/workbench/workspace/addworkspacestatus"
+		extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Add Workspace" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/addworkspacestatus.jsp" />
@@ -216,21 +244,6 @@
 		<put-attribute name="content" value="/WEB-INF/views/users/manage.jsp" />
 		<put-attribute name="currentPage" value="admin" />
 	</definition>
-
-	<!-- Workspace pages -->
-	<definition name="auth/workbench/workspace/communities" extends="base.definition.nonav">
-		<put-attribute name="title" value="Quadriga - Communities" />
-		<put-attribute name="content" value="/WEB-INF/views/workspace/communities.jsp" />
-	</definition>
-	<definition name="auth/workbench/workspace/community" extends="base.definition.nonav">
-		<put-attribute name="title" value="Quadriga - Collections in Community" />
-		<put-attribute name="content" value="/WEB-INF/views/workspace/collections.jsp" />
-	</definition>
-	<definition name="auth/workbench/workspace/community/collection" extends="base.definition.nonav">
-		<put-attribute name="title" value="Quadriga - Collections in Community" />
-		<put-attribute name="content" value="/WEB-INF/views/workspace/items.jsp" />
-	</definition>
-
 
 	<!-- Error pages -->
 	<definition name="auth/notImplemented" extends="base.definition">

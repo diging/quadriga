@@ -54,6 +54,7 @@ public interface DBConstants
 	public static final String UPDATE_COLLECTION_ITEM ="sp_updateCollectionItem";
 	
 	// WorkSpace database objects
+	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
 	public static final String ADD_WORKSPACE_REQUEST = "sp_createworkspace";
 
 }
