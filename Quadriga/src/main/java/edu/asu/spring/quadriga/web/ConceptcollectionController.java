@@ -56,15 +56,15 @@ public class ConceptcollectionController {
 	@Autowired
 	private CollectionsValidator validator;
 
-	private IConceptCollection concept;
+	private IConceptCollection collection;
 
 	@Autowired
 	private IConceptCollectionFactory collectionFactory;
 
-	private IConcept con;
+	private IConcept concept;
 
 	@Autowired
-	private IConceptFactory conFact;
+	private IConceptFactory conceptFactory;
 
 	private List<IUser> collaboratorList;
 
@@ -115,15 +115,15 @@ public class ConceptcollectionController {
 			@PathVariable("collection_id") int collection_id, ModelMap model)
 			throws QuadrigaStorageException {
 
-		concept = collectionFactory.createConceptCollectionObject();
-		concept.setId(collection_id);
+		collection = collectionFactory.createConceptCollectionObject();
+		collection.setId(collection_id);
 		int index;
-		if ((index = list.indexOf(concept)) >= 0)
-			concept = list.get(index);
-		else if ((index = collab_list.indexOf(concept)) >= 0)
-			concept = collab_list.get(index);
-		conceptControllerManager.getCollectionDetails(concept);
-		model.addAttribute("concept", concept);
+		if ((index = list.indexOf(collection)) >= 0)
+			collection = list.get(index);
+		else if ((index = collab_list.indexOf(collection)) >= 0)
+			collection = collab_list.get(index);
+		conceptControllerManager.getCollectionDetails(collection);
+		model.addAttribute("concept", collection);
 		return "auth/conceptcollections/details";
 	}
 
@@ -161,17 +161,17 @@ public class ConceptcollectionController {
 				temp = c.getConceptEntry().get(
 						(c.getConceptEntry().indexOf(temp)));
 				conceptControllerManager.addItems(temp.getLemma(), id,
-						temp.getPos(), temp.getDescription(), concept.getId());
+						temp.getPos(), temp.getDescription(), collection.getId());
 			}
 		}
 		int index;
-		if ((index = list.indexOf(concept)) >= 0)
-			concept = list.get(index);
-		else if ((index = collab_list.indexOf(concept)) >= 0)
-			concept = collab_list.get(index);
-		conceptControllerManager.getCollectionDetails(concept);
-		model.addAttribute("concept", concept);
-		return "redirect:/auth/conceptcollections/" + concept.getId() + "";
+		if ((index = list.indexOf(collection)) >= 0)
+			collection = list.get(index);
+		else if ((index = collab_list.indexOf(collection)) >= 0)
+			collection = collab_list.get(index);
+		conceptControllerManager.getCollectionDetails(collection);
+		model.addAttribute("concept", collection);
+		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
 	}
 
 	@RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.GET)
@@ -226,17 +226,17 @@ public class ConceptcollectionController {
 		if (values != null) {
 			for (String id : values) {
 
-				conceptControllerManager.deleteItem(id, concept.getId());
-				con = conFact.createConceptObject();
-				con.setId(id);
-				concept.getItems().remove(concept.getItems().indexOf(con));
+				conceptControllerManager.deleteItem(id, collection.getId());
+				concept = conceptFactory.createConceptObject();
+				concept.setId(id);
+				collection.getItems().remove(collection.getItems().indexOf(concept));
 
 			}
 		}
 
-		conceptControllerManager.getCollectionDetails(concept);
+		conceptControllerManager.getCollectionDetails(collection);
 
-		return "redirect:/auth/conceptcollections/" + concept.getId() + "";
+		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
 
 	}
 
@@ -245,9 +245,9 @@ public class ConceptcollectionController {
 			throws QuadrigaStorageException {
 		String[] values = req.getParameterValues("selected");
 		if (values != null)
-			conceptControllerManager.update(values, concept);
+			conceptControllerManager.update(values, collection);
 
-		return "redirect:/auth/conceptcollections/" + concept.getId() + "";
+		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
 	}
 
 }
