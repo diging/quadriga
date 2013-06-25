@@ -39,6 +39,13 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
+/**
+ * Controller for all the rest apis exposed to other clients
+ * @author Sathya
+ * @author LohithDwaraka
+ *
+ */
+
 @Controller
 public class RestController {
 
@@ -84,11 +91,12 @@ public class RestController {
 	 * @param userId
 	 * @param model
 	 * @return
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value = "rest/projects/{userID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listProjects(@PathVariable("userID") String userId,
-			ModelMap model) {
+			ModelMap model) throws QuadrigaStorageException {
 		List<IProject> projectList = null;
 		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
 
@@ -118,6 +126,7 @@ public class RestController {
 		catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,6 +136,8 @@ public class RestController {
 
 	/**
 	 * Rest interface for the List Dictionary for the userId 
+	 * http://<<URL>:<PORT>>/quadriga/rest/dictionaries/{USERNAME}
+	 * http://localhost:8080/quadriga/rest/dictionaries/test
 	 * @author Lohith Dwaraka
 	 * @param userId
 	 * @param model
@@ -187,6 +198,8 @@ public class RestController {
 	
 	/**
 	 * Rest interface for the List Dictionary items for the dictionary Id 
+	 * http://<<URL>:<PORT>>/quadriga/rest/dictionaryDetails/{DictionaryID}
+	 * http://localhost:8080/quadriga/rest/dictionaryDetails/68
 	 * @author Lohith Dwaraka
 	 * @param dictionaryId
 	 * @param model
@@ -248,7 +261,7 @@ public class RestController {
 	@RequestMapping(value = "rest/conceptcollections/{userID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listConceptCollections(@PathVariable("userID") String userId,
-			ModelMap model) {
+			ModelMap model) throws QuadrigaStorageException {
 		List<IConceptCollection> collectionsList = null;
 		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
 		Template template = null;
@@ -276,6 +289,7 @@ public class RestController {
 		catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -286,7 +300,7 @@ public class RestController {
 	@RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String getConceptList(@PathVariable("collectionID") int collectionID,
-			ModelMap model) {
+			ModelMap model) throws QuadrigaStorageException {
 		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
 		Template template = null;
 		StringWriter sw = new StringWriter();
@@ -314,6 +328,7 @@ public class RestController {
 		catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

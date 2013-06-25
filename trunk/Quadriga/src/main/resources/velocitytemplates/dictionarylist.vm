@@ -6,7 +6,7 @@
 <Quadriga:dictionary>
 	<Quadriga:name>$dictionary.name</Quadriga:name>
 	<Quadriga:description>$dictionary.description</Quadriga:description>
-	<Quadriga:uri>http://localhost:9090/quadriga/rest/projects/$dictionary.id</Quadriga:uri>
+	<Quadriga:uri>http://localhost:8080/quadriga/rest/dictionaryDetails/$dictionary.id</Quadriga:uri>
 </Quadriga:dictionary> 	
 #end
 </Quadriga:dictionaryList>
