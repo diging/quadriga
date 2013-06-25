@@ -58,7 +58,7 @@ public class WorkSpaceController
 		  workspaceList = wsManager.listWorkspace(projectid);
 		  
 		  model.addAttribute("workspaceList", workspaceList);
-		//  model.addAttribute("wsprojectid", projectid);
+		  model.addAttribute("wsprojectid", projectid);
 		}
 		catch(QuadrigaStorageException e)
 		{
