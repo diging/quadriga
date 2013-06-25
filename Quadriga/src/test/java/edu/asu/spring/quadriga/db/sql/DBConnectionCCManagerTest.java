@@ -267,7 +267,7 @@ public class DBConnectionCCManagerTest {
 		collection.getItems().add(concept);
 		dbConnection.saveItem("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId());
 		concept.setLemma("updatedlemma");
-		dbConnection.updateItem(concept, collection.getName());
+		dbConnection.updateItem(concept, collection.getId());
 		collectionManager.getCollectionDetails(collection);
 		assertEquals("updatedlemma",collection.getItems().get(0).getLemma());
 	}

@@ -130,7 +130,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			concept.setDescription(rep.getConceptEntry().get(0).getDescription());
 			concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 			concept.setPos(rep.getConceptEntry().get(0).getPos());
-			dbConnect.updateItem(concept,collection.getName());
+			dbConnect.updateItem(concept,collection.getId());
 		}
 		}
 	}

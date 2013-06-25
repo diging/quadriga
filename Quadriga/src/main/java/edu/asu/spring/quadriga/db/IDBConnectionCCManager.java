@@ -73,7 +73,7 @@ public interface IDBConnectionCCManager {
 		 * @return
 		 * @throws QuadrigaStorageException 
 		 */
-		public abstract String updateItem(IConcept concept, String collectionName) throws QuadrigaStorageException;
+		public abstract String updateItem(IConcept concept, int collectionId) throws QuadrigaStorageException;
 		
 		/**
 		 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
@@ -83,6 +83,7 @@ public interface IDBConnectionCCManager {
 		 * @throws QuadrigaStorageException 
 		 */
 		public abstract int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException;
+		
 		
 		
 	}

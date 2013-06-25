@@ -24,18 +24,18 @@ import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-
 /**
- * @author satyaswaroop
- * 
+ * This class executes all the stored procedures related to the concept collections
+ * @author satyaswaroop 
  */
 public class DBConnectionCCManager extends ADBConnectionManager implements
 		IDBConnectionCCManager {
 
 	@Autowired
 	private IUserFactory userFactory;
-	
-	
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(DBConnectionCCManager.class);
 
 	private IConceptCollection conceptCollection;
 
@@ -84,13 +84,11 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				}
 			}
 		} catch (SQLException e) {
-			// this does not necessarily print to the log file
-			// user logger!
-			e.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
-			
-		}
-		finally {
+			logger.error("Exception", e);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
+
+		} finally {
 			closeConnection();
 		}
 		return collectionsList;
@@ -99,11 +97,13 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 	/**
 	 * {@inheritDoc}
-	 * @throws QuadrigaStorageException 
+	 * 
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public List<IConceptCollection> getCollaboratedConceptsofUser(String userId) throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
+	public List<IConceptCollection> getCollaboratedConceptsofUser(String userId)
+			throws QuadrigaStorageException {
+
 		String dbCommand;
 		String errmsg = null;
 		getConnection();
@@ -135,25 +135,27 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				}
 			}
 		} catch (SQLException e) {
-			// same here
-			e.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
+			logger.error("Exception", e);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
 		} finally {
 			closeConnection();
 		}
 		return collectionsList;
 	}
-	
-	
 
-	@Override
 	/**
-	 *  {@inheritDoc}
+	 * {@inheritDoc}
+	 * 
 	 */
-	public void getCollectionDetails(IConceptCollection collection) throws QuadrigaStorageException {
+	@Override
+	public void getCollectionDetails(IConceptCollection collection)
+			throws QuadrigaStorageException {
 
-		// what if collection == null?
-		
+		if (collection == null) {
+			logger.error("getCollectionDetails: input argument conceptcollection is NULL");
+			return;
+		}
 		String dbCommand;
 		String errmsg = null;
 		getConnection();
@@ -182,18 +184,23 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
+			logger.error("Exception", e);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
 		} finally {
 			closeConnection();
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	public void saveItem(String lemma, String id, String pos, String desc,
 			int conceptId) throws QuadrigaStorageException {
 		String dbCommand;
-		// do you use this error message?
 		String errmsg;
 		CallableStatement sqlStatement;
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_COLLECTION_ITEM
@@ -209,21 +216,25 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(6);
+			logger.error(errmsg);
+
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
+			logger.error("Exception:", e);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
 		} finally {
 			closeConnection();
 		}
-
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @throws QuadrigaStorageException 
+	 * 
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String validateId(String collectionname) throws QuadrigaStorageException {
+	public String validateId(String collectionname)
+			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		String dbCommand;
 		String errmsg = null;
@@ -239,41 +250,42 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);
-			
+
 		} catch (SQLException sql) {
-			sql.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
-		}
-		finally{
+			logger.error("Exception", sql);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
+		} finally {
 			closeConnection();
 		}
 		return errmsg;
 	}
 
 	@Override
-	public String addCollection(IConceptCollection con) throws QuadrigaStorageException {
+	/**
+	 * {@inheritDoc}
+	 * @throws QuadrigaStorageException
+	 */
+	public String addCollection(IConceptCollection con)
+			throws QuadrigaStorageException {
 
 		String name;
 		String description;
 		IUser owner = null;
 		String dbCommand;
-		String errmsg;
+		String errmsg = null;
 		CallableStatement sqlStatement;
 
-		// fetch the values from the project object
 		name = con.getName();
 		description = con.getDescription();
 
 		owner = con.getOwner();
 
-		// command to call the SP
 		dbCommand = DBConstants.SP_CALL + " "
 				+ DBConstants.ADD_CONCEPTCOLLECTION + "(?,?,?,?,?)";
 
-		// get the connection
 		getConnection();
 
-		// establish the connection with the database
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, name);
@@ -286,19 +298,26 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			return errmsg;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
+			logger.error("Exception", e);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
 		} finally {
 			closeConnection();
 		}
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
-	public String deleteItems(String id, int collectionId) throws QuadrigaStorageException {
+	public String deleteItems(String id, int collectionId)
+			throws QuadrigaStorageException {
 
 		String dbCommand;
-		String errmsg;
+		String errmsg = null;
 		CallableStatement sqlStatement;
 		dbCommand = DBConstants.SP_CALL + " "
 				+ DBConstants.DELETE_COLLECTION_ITEM + "(?,?,?)";
@@ -312,19 +331,24 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			errmsg = sqlStatement.getString(3);
 			return errmsg;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
+			logger.error("Exception", e);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
 		} finally {
 			closeConnection();
 		}
 	}
 
-	//never use the name of the collection to refer to it! It might change (e.g. if someone
-	// else updates the collection at the same moment someone wants to update an itme)
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
-	public String updateItem(IConcept concept, String collectionName) throws QuadrigaStorageException {
+	public String updateItem(IConcept concept, int collectionId)
+			throws QuadrigaStorageException {
 		String dbCommand;
-		String errmsg;
+		String errmsg = null;
 		CallableStatement sqlStatement;
 		dbCommand = DBConstants.SP_CALL + " "
 				+ DBConstants.UPDATE_COLLECTION_ITEM + "(?,?,?,?,?,?)";
@@ -335,14 +359,15 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.setString(2, concept.getLemma());
 			sqlStatement.setString(3, concept.getDescription());
 			sqlStatement.setString(4, concept.getPos());
-			sqlStatement.setString(5, collectionName);
+			sqlStatement.setInt(5, collectionId);
 			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(6);
 			return errmsg;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
+			logger.error("Exception", e);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
 		} finally {
 			closeConnection();
 		}
@@ -354,10 +379,11 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * 
 	 * @return Success - 1
 	 * @author satya swaroop boddu
-	 * @throws QuadrigaStorageException 
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException {
+	public int setupTestEnvironment(String[] sQuery)
+			throws QuadrigaStorageException {
 		try {
 			getConnection();
 			Statement stmt = connection.createStatement();
@@ -365,10 +391,10 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				stmt.executeUpdate(s);
 			return 1;
 		} catch (SQLException ex) {
-			ex.printStackTrace();
-			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
-		}
-		finally {
+			logger.error("Exception", ex);
+			throw new QuadrigaStorageException(
+					"Damn....Database guys are at work!!!!!!");
+		} finally {
 			closeConnection();
 		}
 	}
