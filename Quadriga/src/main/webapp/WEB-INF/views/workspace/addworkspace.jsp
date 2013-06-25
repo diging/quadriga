@@ -33,7 +33,7 @@ $(function() {
 <article class="is-page-content">
 
 	<form:form modelAttribute="workspace" method="POST"
-		action="/auth/workbench/workspace/addworkspace">
+		action="/auth/workbench/workspace/addworkspace/${wsprojectid}">
 		<table style="width: 100%">
 			<c:choose>
 				<c:when test="${success=='0'}">
@@ -53,6 +53,11 @@ $(function() {
 			</tr>
 			<tr>
 		    <td>  <input class="command" type="submit" value="Create Workspace"> </td>
+		    </tr>
+		    <tr>
+		    <td>
+		    <input type="text" id="wsprojectid" value=<c:out value="${wsprojectid}"></c:out> />
+		    </td>
 		    </tr>
 		</table>
 	</form:form>

@@ -203,8 +203,29 @@
 		<put-attribute name="title" value="Quadriga Workbench - Add Workspace" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/addworkspacestatus.jsp" />
+	</definition> 
+		<definition name="auth/workbench/workspace/archiveworkspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Archive Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/archiveworkspace.jsp" />
 	</definition>
-
+	<definition name="auth/workbench/workspace/archiveworkspaceStatus"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Archive Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/archiveworkspacestatus.jsp" />
+	</definition> 
+	<definition name="auth/workbench/workspace/deactivateworkspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Deactive Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/deactivateworkspace.jsp" />
+	</definition>
+	<definition name="auth/workbench/workspace/deactiveworkspaceStatus"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Deactive Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/deactivateworkspacestatus.jsp" />
+	</definition> 
 	<!-- dictionaries pages -->
 	<definition name="base.definition.dictionaries" extends="base.definition">
 		<put-attribute name="currentPage" value="dictionaries" />

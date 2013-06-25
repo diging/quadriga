@@ -234,6 +234,172 @@ public class DBConnectionWorkspaceManager implements
 		return errmsg;
 	}
 	
+	/**
+	 * @description   : This will archive the requested workspace.
+	 * @param         : workspaceIdList - Comma separated workspace Id's.
+	 * @param         : archive
+	 * @param         : wsUser
+	 * @return        : String - errmsg containing blank on success and error message on failure.
+	 * @throws        : QuadrigaStorageException
+	 * @author        : Kiran Kumar Batna
+	 */
+	@Override
+	public String archiveWorkspaceRequest(String workspaceIdList,int archive,String wsUser) throws QuadrigaStorageException
+	{
+		String errmsg;
+		String dbCommand;
+		CallableStatement sqlStatement;
+		
+		//command call to the Stored Procedure
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ARCHIVE_WORKSPACE_REQUEST + "(?,?,?,?)";
+		
+		//establish the connection
+		try
+		{
+		  getConnection();
+		}
+		catch(QuadrigaStorageException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		try
+		{
+			// prepare the SQL Statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			// add input parameters
+			sqlStatement.setString(1, workspaceIdList);
+			sqlStatement.setInt(2, archive);
+			sqlStatement.setString(3,wsUser);
+			
+			// add output parameter
+			sqlStatement.registerOutParameter(4, Types.VARCHAR);
+			
+			// execute the sql statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(4);
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return errmsg;
+	}
 	
+	/**
+	 * @description   : This will deactivate the requested workspace.
+	 * @param         : workspaceIdList - Comma separated workspace Id's.
+	 * @param         : deactivate
+	 * @param         : wsUser
+	 * @return        : String - errmsg containing blank on success and error message on failure.
+	 * @throws        : QuadrigaStorageException
+	 * @author        : Kiran Kumar Batna
+	 */
+	@Override
+	public String deactivateWorkspace(String workspaceIdList,int deactivate,String wsUser) throws QuadrigaStorageException
+	{
+		String errmsg;
+		String dbCommand;
+		CallableStatement sqlStatement;
+		
+		//command call to the Stored Procedure
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DEACTIVATE_WORKSPACE_REQUEST + "(?,?,?,?)";
+		
+		//establish the connection
+		try
+		{
+		  getConnection();
+		}
+		catch(QuadrigaStorageException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		try
+		{
+			// prepare the SQL Statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			// add input parameters
+			sqlStatement.setString(1, workspaceIdList);
+			sqlStatement.setInt(2, deactivate);
+			sqlStatement.setString(3,wsUser);
+			
+			// add output parameter
+			sqlStatement.registerOutParameter(4, Types.VARCHAR);
+			
+			// execute the sql statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(4);
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return errmsg;
+	}
+	
+	/**
+	 * @description   : This will delete the requested workspace.
+	 * @param         : workspaceIdList - Comma separated workspace Id's.
+	 * @return        : String - errmsg containing blank on success and error message on failure.
+	 * @throws        : QuadrigaStorageException
+	 * @author        : Kiran Kumar Batna
+	 */
+	@Override
+	public String deleteWorkspaceRequest(String workspaceIdList) throws QuadrigaStorageException
+	{
+		String errmsg;
+		String dbCommand;
+		CallableStatement sqlStatement;
+		
+		//command call to the Stored Procedure
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_WORKSPACE_REQUEST + "(?,?)";
+		
+		//establish the connection
+		try
+		{
+		  getConnection();
+		}
+		catch(QuadrigaStorageException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		try
+		{
+			// prepare the SQL Statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			// add input parameters
+			sqlStatement.setString(1, workspaceIdList);
+			
+			// add output parameter
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			
+			// execute the sql statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(2);
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return errmsg;
+	}
 
 }

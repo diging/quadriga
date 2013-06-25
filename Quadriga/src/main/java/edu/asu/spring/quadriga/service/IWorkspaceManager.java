@@ -21,4 +21,13 @@ public interface IWorkspaceManager
 	public abstract List<IWorkSpace> listWorkspace(int projectid)
 			throws QuadrigaStorageException;
 
+	public abstract String archiveWorkspace(String workspaceIdList, int archive,
+			String wsUser) throws QuadrigaStorageException;
+
+	public abstract String deactivateWorkspace(String workspaceIdList, int deactivate,
+			String wsUser) throws QuadrigaStorageException;
+
+	public abstract String deleteWorkspace(String workspaceIdList)
+			throws QuadrigaStorageException;
+
 }

@@ -1,7 +1,7 @@
 /*******************************************
-Name          : sp_archiveworkspace
+Name          : sp_deleteworkspace
 
-Description   : Archive the workspace
+Description   : Delete the workspace
 
 Called By     : UI (DBConnectionDictionaryManager.java)
 
@@ -10,14 +10,12 @@ Create By     : Kiran Kumar Batna
 Modified Date : 06/20/2013
 
 ********************************************/
-DROP PROCEDURE IF EXISTS sp_archiveworkspace;
+DROP PROCEDURE IF EXISTS sp_deleteworkspace;
 
 DELIMITER $$
-CREATE PROCEDURE sp_archiveworkspace
+CREATE PROCEDURE sp_deleteworkspace
 (
   IN inworkspaceid   TEXT,
-  IN inarchive       TINYINT,
-  IN inuser          VARCHAR(50),
   OUT errmsg         VARCHAR(255)
 )
 BEGIN
@@ -27,8 +25,8 @@ BEGIN
     DECLARE position   INT;
 
 	-- the error handler for any sql exception
-  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-   SET errmsg = "SQLException occurred";
+   DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    SET errmsg = "SQLException occurred";
 
     -- deleting the temp table
     DROP TEMPORARY TABLE IF EXISTS temp_tbl_workspaceid;
@@ -38,15 +36,7 @@ BEGIN
        THEN SET errmsg = "Workspaceid cannot be empty.";
     END IF;
 
-    IF(inarchive IS NULL)
-       THEN SET errmsg = "Archive parameter cannot be empty.";
-    END IF;
-
-    IF NOT EXISTS(SELECT 1 FROM vw_quadriga_user WHERE username = inuser)
-      THEN SET errmsg = "Invalid User.";
-    END IF;
-
-    -- inserting the input into a temp table
+   -- inserting the input into a temp table
     CREATE TEMPORARY TABLE temp_tbl_workspaceid
     (
          workspaceid BIGINT
@@ -76,12 +66,18 @@ BEGIN
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
 	   START TRANSACTION;
-          
-          UPDATE tbl_workspace
-             SET  isarchived = inarchive,
-                  updatedby = inuser,
-                  updateddate = NOW()
+          -- delete the associated project mapping
+          DELETE FROM tbl_project_workspace
            WHERE workspaceid IN (SELECT workspaceid FROM temp_tbl_workspaceid);
+          
+          -- delete the associated collaborators
+          DELETE FROM tbl_workspace_collaborator
+            WHERE id IN (SELECT workspaceid FROM temp_tbl_workspaceid);
+ 
+          -- delete the workspace
+          DELETE FROM tbl_workspace
+             WHERE workspaceid IN (SELECT workspaceid FROM temp_tbl_workspaceid);
+      
 	   IF(errmsg = "")
           THEN COMMIT;
        ELSE ROLLBACK;

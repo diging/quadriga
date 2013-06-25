@@ -70,4 +70,74 @@ public class WorkspaceManager implements IWorkspaceManager
 		}
 		return errmsg;
 	}
+	
+	/**
+	 * @description  : This method calls DBConnectionWorkspaceManager to archive 
+	 *                 requested workspace.
+	 * @param        : workspaceIdList
+	 * @param        : archive
+	 * @param        : wsUser
+	 * @return       : String - errmsg blank on success and error message on failure
+	 * @throws       : QuadrigaStorageException
+	 */
+	@Override
+	public String archiveWorkspace(String workspaceIdList,int archive,String wsUser) throws QuadrigaStorageException
+	{
+		String errmsg;
+		
+		try
+		{
+			errmsg = dbConnect.archiveWorkspaceRequest(workspaceIdList, archive, wsUser);
+		}
+		catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		return errmsg;
+	}
+	
+	/**
+	 * @description  : This method calls DBConnectionWorkspaceManager to deactivate 
+	 *                 requested workspace.
+	 * @param        : workspaceIdList
+	 * @param        : archive
+	 * @param        : wsUser
+	 * @return       : String - errmsg blank on success and error message on failure
+	 * @throws       : QuadrigaStorageException
+	 */
+	@Override
+	public String deactivateWorkspace(String workspaceIdList,int deactivate,String wsUser) throws QuadrigaStorageException
+	{
+		String errmsg;
+		
+		try
+		{
+			errmsg = dbConnect.deactivateWorkspace(workspaceIdList, deactivate, wsUser);
+		}
+		catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		return errmsg;
+	}
+	
+	/**
+	 * @description  : This method calls DBConnectionWorkspaceManager to delete 
+	 *                 requested workspace.
+	 * @param        : workspaceIdList
+	 * @return       : String - errmsg blank on success and error message on failure
+	 * @throws       : QuadrigaStorageException
+	 */
+	@Override
+	public String deleteWorkspace(String workspaceIdList) throws QuadrigaStorageException
+	{
+		String errmsg;
+		
+		try
+		{
+			errmsg = dbConnect.deleteWorkspaceRequest(workspaceIdList);
+		}
+		catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		return errmsg;
+	}
 }
