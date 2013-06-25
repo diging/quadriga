@@ -68,8 +68,23 @@ public class DspaceController {
 	@RequestMapping(value = "/auth/workbench/workspace/community/collection/{collectionId}", method = RequestMethod.GET)
 	public String workspaceItemRequest(@PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
 	
-		String collectionName = dspaceManager.getCollectionName(collectionId);
+		String communityId = dspaceManager.getCommunityId(collectionId);
+		//No such collection has been fetched. The user is trying to access the item page directly
+		//Redirect him to community list page
+		if(communityId == null)
+		{
+			return "redirect:/auth/workbench/workspace/communities";
+		}
 		
+		String communityName = dspaceManager.getCommunityName(communityId);
+		//No such collection has been fetched. The user is trying to access the item page directly
+		//Redirect him to community list page
+		if(communityName == null)
+		{
+			return "redirect:/auth/workbench/workspace/communities";
+		}
+		
+		String collectionName = dspaceManager.getCollectionName(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
 		if(collectionName == null)
@@ -78,7 +93,9 @@ public class DspaceController {
 		}
 		
 		List<IItem> items = dspaceManager.getAllItems(collectionId);
-		model.addAttribute("collectionName", collectionName);
+		model.addAttribute("communityId",communityId);
+		model.addAttribute("communityName",communityName);
+		model.addAttribute("collectionName", collectionName);		
 		model.addAttribute("itemList", items);
 		
 		return "auth/workbench/workspace/community/collection";

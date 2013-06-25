@@ -25,5 +25,9 @@ public interface IItem {
 	public abstract String getName();
 
 	public abstract boolean copy(IDspaceItem dspaceItem);
+
+	public abstract void setIsloaded(boolean isloaded);
+
+	public abstract boolean isIsloaded();
 	
 }

@@ -22,4 +22,6 @@ public interface ICommunityManager {
 	public abstract List<IItem> getAllItems(String sCollectionId);
 
 	public abstract String getCollectionName(String sCollectionId);
+
+	public abstract String getCommunityId(String sCollectionId);
 }

@@ -85,7 +85,12 @@ public class DspaceManager implements IDspaceManager{
 	{
 		return proxyCommunityManager.getCollection(sCollectionId);
 	}
-
+	
+	@Override
+	public String getCommunityId(String sCollectionId)
+	{
+		return proxyCommunityManager.getCommunityId(sCollectionId);
+	}
 
 	@Override
 	public List<IItem> getAllItems(String sCollectionId) {

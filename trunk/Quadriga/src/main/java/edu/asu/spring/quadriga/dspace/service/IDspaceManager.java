@@ -20,4 +20,6 @@ public interface IDspaceManager {
 	
 	public abstract List<IItem> getAllItems(String sCollectionId);
 
+	public abstract String getCommunityId(String sCollectionId);
+
 }
