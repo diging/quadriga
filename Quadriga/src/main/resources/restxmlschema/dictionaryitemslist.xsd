@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.digitalhps.org/Quadriga" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="dictionaryItemsList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="dictionaryItem" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="id"/>
+              <xs:element type="xs:string" name="term"/>
+              <xs:element type="xs:string" name="pos"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

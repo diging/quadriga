@@ -61,8 +61,6 @@ public class DictionaryItemSearchAddController {
 	public String addDictionaryPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
 
-		logger.info("came to addDictionaryPage");
-
 		model.addAttribute("dictionaryid", dictionaryid);
 		return "auth/dictionaries/addDictionaryItems";
 	}
@@ -80,13 +78,9 @@ public class DictionaryItemSearchAddController {
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException {
 		String msg = "";
-		logger.info("came to addDictionaryItemForm post");
 		String[] values = req.getParameterValues("selected");
 		String owner = usermanager.getUserDetails(principal.getName())
 				.getUserName();
-		logger.info("items : " + dictionaryItems.getItems() + " , id: "
-				+ dictionaryItems.getId() + "pos" + dictionaryItems.getPos());
-
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
 
@@ -137,21 +131,15 @@ public class DictionaryItemSearchAddController {
 			@RequestParam("posdropdown") String pos, ModelMap model)
 			throws QuadrigaStorageException {
 		try {
-			logger.info("came to searchDictionaryItemRestHandle post");
 			dictionaryEntryList = null;
 			if (!item.equals("")) {
-				logger.info("Query for Item :" + item + " and pos :" + pos);
+				logger.debug("Query for Item :" + item + " and pos :" + pos);
 				dictionaryEntryList = dictonaryManager.searchWordPower(item,
 						pos);
 			}
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
-			Iterator<DictionaryEntry> I = dictionaryEntryList.iterator();
-			while (I.hasNext()) {
-				DictionaryEntry dictionaryEntry = I.next();
-				logger.info("Lemma :" + dictionaryEntry.getLemma());
-			}
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryid);
 			String dictionaryName = dictonaryManager
