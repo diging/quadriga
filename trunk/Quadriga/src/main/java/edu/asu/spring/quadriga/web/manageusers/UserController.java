@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -24,7 +25,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class UserController {
 
 	@Autowired 
-	IUserManager usermanager;
+	private IUserManager usermanager;
 
 	public IUserManager getUsermanager() {
 		return usermanager;
@@ -40,7 +41,7 @@ public class UserController {
 	 * @return 	Return to the user management page of the quadriga
 	 */
 	@RequestMapping(value = "auth/users/manage", method = RequestMethod.GET)
-	public String manageUsers(ModelMap model, Principal principal)
+	public String manageUsers(ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		//Get all User Requests
 		List<IUser> userRequestsList = usermanager.getUserRequests();
@@ -81,7 +82,7 @@ public class UserController {
 	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal)
 	{
 		String[] sAccessSelected = sAccessRights.split("-");
-		int iResult;
+		
 		if(sAccessSelected[1].equalsIgnoreCase("approve"))
 		{
 			//User Request has been approved by the admin
@@ -98,12 +99,12 @@ public class UserController {
 					sRoles.append(sAccessSelected[i]);
 				}
 			}
-			iResult = usermanager.approveUserRequest(sAccessSelected[0], sRoles.toString(), principal.getName());
+			usermanager.approveUserRequest(sAccessSelected[0], sRoles.toString(), principal.getName());
 		}
 		else
 		{
 			//User Request denied by the admin
-			iResult = usermanager.denyUserRequest(sAccessSelected[0], principal.getName());
+			usermanager.denyUserRequest(sAccessSelected[0], principal.getName());
 		}
 
 		//TODO- Implement tabs or remove this
@@ -137,7 +138,7 @@ public class UserController {
 	 * @return	Return to the page that displays all inactive users
 	 */
 	@RequestMapping(value = "auth/users/inactivelist", method = RequestMethod.GET)
-	public String userInactiveList(ModelMap model, Principal principal)
+	public String userInactiveList(ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		List<IUser> inactiveUserList = usermanager.getAllInActiveUsers();
 		model.addAttribute("inactiveUserList", inactiveUserList);
@@ -156,7 +157,7 @@ public class UserController {
 	@RequestMapping(value="auth/users/deactivate/{userName}", method = RequestMethod.GET)
 	public String deactivateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
 
-		int iResult = usermanager.deactivateUser(sUserName, principal.getName());
+		usermanager.deactivateUser(sUserName, principal.getName());
 
 		//TODO- Implement tabs or remove this
 		//		//Reload the active user list
@@ -178,7 +179,7 @@ public class UserController {
 	public String activateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
 
 		//Deactivate the user account
-		int iResult = usermanager.activateUser(sUserName, principal.getName());
+		usermanager.activateUser(sUserName, principal.getName());
 
 		//TODO- Implement tabs or remove this
 		//		//Reload the inactive user list

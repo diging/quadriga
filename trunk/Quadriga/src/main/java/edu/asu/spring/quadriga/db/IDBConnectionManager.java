@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * Interface for the DBConnectionManager Class.
@@ -16,6 +17,9 @@ import edu.asu.spring.quadriga.domain.IUser;
  */
 public interface IDBConnectionManager 
 {
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
+	
 	public abstract List<IQuadrigaRole> UserRoles(String roles);
 
 	/**
@@ -30,7 +34,7 @@ public interface IDBConnectionManager
 	 * 
 	 * @return List containing user objects of all inactive users
 	 */
-	public abstract List<IUser> getAllInActiveUsers(String sInactiveRoleId);
+	public abstract List<IUser> getAllInActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException;
 
 	/**
 	 * Creates a user object for the given userid.

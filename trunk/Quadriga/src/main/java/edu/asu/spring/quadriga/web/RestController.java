@@ -98,7 +98,7 @@ public class RestController {
 	public String listProjects(@PathVariable("userID") String userId,
 			ModelMap model) throws QuadrigaStorageException {
 		List<IProject> projectList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 
 		Template template = null;
 
@@ -149,7 +149,7 @@ public class RestController {
 	public String listDictionaries(@PathVariable("userID") String userId,
 			ModelMap model) throws QuadrigaStorageException {
 		List<IDictionary> dictionaryList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 
 		Template template = null;
 
@@ -211,7 +211,7 @@ public class RestController {
 	public String listDictionaryItems(@PathVariable("dictionaryId") String dictionaryId,
 			ModelMap model) throws QuadrigaStorageException {
 		List<IDictionaryItems> dictionaryItemsList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 
 		Template template = null;
 
@@ -263,7 +263,7 @@ public class RestController {
 	public String listConceptCollections(@PathVariable("userID") String userId,
 			ModelMap model) throws QuadrigaStorageException {
 		List<IConceptCollection> collectionsList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 		Template template = null;
 		StringWriter sw = new StringWriter();
 		try {
@@ -301,7 +301,7 @@ public class RestController {
 	@ResponseBody
 	public String getConceptList(@PathVariable("collectionID") int collectionID,
 			ModelMap model) throws QuadrigaStorageException {
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 		Template template = null;
 		StringWriter sw = new StringWriter();
 		collection = collectionFactory.createConceptCollectionObject();

@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * Interface class that places restraints on the UserManager class to implement
@@ -45,7 +46,7 @@ public interface IUserManager {
 	 * 
 	 * @return List of all inactive user objects
 	 */
-	public abstract List<IUser> getAllInActiveUsers();
+	public abstract List<IUser> getAllInActiveUsers() throws QuadrigaStorageException;
 
 	/**
 	 * Activate an already existing user so that the user can access quadriga.

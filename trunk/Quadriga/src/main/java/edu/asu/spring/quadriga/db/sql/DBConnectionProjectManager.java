@@ -131,7 +131,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			getConnection();
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(sQuery);
-			return 1;
+			return SUCCESS;
 		}
 		catch(SQLException ex)
 		{
@@ -150,7 +150,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * 
      */
 	@Override
-
+	// this should not throw a SQLException but QuadrigaStorageException
 	public List<IProject> getProjectOfUser(String sUserName) throws SQLException{
 
 
@@ -258,20 +258,15 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
      */
 	@Override
 
-	public IProject getProjectDetails(int projectId) throws SQLException  {
+	public IProject getProjectDetails(int projectId) throws QuadrigaStorageException  {
 
 		
 		String dbCommand;
 		String outErrorValue,outputValue;
 		CallableStatement sqlStatement ;
 		
-		try {
-			getConnection();
-		} catch (QuadrigaStorageException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
+		getConnection();
+		
 		IProject project = null;
 		project = projectfactory.createProjectObject();
 		project.setCollaborators(new ArrayList<ICollaborator>());
@@ -357,25 +352,19 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	 * @throws SQLException 
 	 */
 	@Override
-
-	public List<IUser> showCollaboratorsRequest(int projectid) throws SQLException {
+	public List<IUser> showCollaboratorsRequest(int projectid) throws QuadrigaStorageException {
 
 
 		String dbCommand;
 		String outErrorValue;
 		CallableStatement sqlStatement ;
-		ICollaborator collaborator = null;
-
+		
 		List<IUser> collaboratingUsers = new ArrayList<IUser>();
 
-		IUser collaboratorUser=null;
+		IUser collaboratorUser = null;
 
-		try {
-			getConnection();
-		} catch (QuadrigaStorageException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		getConnection();
+		
 
 	    dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_COLLABORATOR_REQUEST + "(?,?)";
 
@@ -416,7 +405,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	}
 	
 	@Override
-	public List<IUser> nonCollaboratoringUsersRequest(int projectid) throws SQLException {
+	public List<IUser> nonCollaboratoringUsersRequest(int projectid) throws QuadrigaStorageException {
 		
 		String dbCommand;
 		String outErrorValue;
@@ -424,12 +413,8 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		IUser collaboratorUser=null;
 		List<IUser> noncollaboratingUsers = new ArrayList<IUser>();
 
-		try {
-			getConnection();
-		} catch (QuadrigaStorageException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		getConnection();
+		
 		
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_NONCOLLABORATOR_REQUEST + "(?,?)";
 
@@ -515,7 +500,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
     		} 
     	
     	catch (SQLException e) {
-    		throw new QuadrigaStorageException();
+    		throw new QuadrigaStorageException(e.getMessage(), e);
         }
         finally{
         	closeConnection();

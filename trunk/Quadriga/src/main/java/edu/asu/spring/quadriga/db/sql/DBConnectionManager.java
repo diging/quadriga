@@ -73,6 +73,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 *           
 	 * @throws : SQL Exception          
 	 */
+	// why is success/failure code different from all the others?
 	private int closeConnection() {
 		try {
 			if (connection != null) {
@@ -115,7 +116,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			getConnection();
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(sQuery);
-			return 1;
+			return SUCCESS;
 		}
 		catch(SQLException ex)
 		{
@@ -191,9 +192,13 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * 
 	 * @return List containing user objects of all active users
 	 * 
+	 * @param sInactiveRoleId This paramter should specify the id of the role
+	 * that is excluded from the active users list. 
+	 * 
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
+	// you might want to change this to a list of inactive role ids
 	public List<IUser> getAllActiveUsers(String sInactiveRoleId)
 	{
 		List<IUser> listUsers = null;
@@ -237,11 +242,13 @@ public class DBConnectionManager implements IDBConnectionManager
 			}
 			else
 			{
+				// that should throw a Quadriga exception
 				throw new SQLException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
+			// same here
 			throw new RuntimeException(e.getMessage());
 		}
 		finally
@@ -259,6 +266,9 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @author Ram Kumar Kumaresan
 	 */
 	@Override
+	// two things: throw QuadrigaStorageException
+	// and make this a general method to retrieve users that have 
+	// a certain role
 	public List<IUser> getAllInActiveUsers(String sInactiveRoleId)
 	{
 		List<IUser> listUsers = null;
@@ -350,12 +360,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			if(sOutErrorValue == null)
 			{
 				//User deactivated successfully
-				return 1;
+				return SUCCESS;
 			}			
 			else
 			{
 				//Error occurred in the database
-				return 0;
+				return FAILURE;
 			}
 		}
 		catch(SQLException e)
@@ -403,12 +413,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			if(sOutErrorValue == null)
 			{
 				//User roles updated successfully
-				return 1;
+				return SUCCESS;
 			}			
 			else
 			{
 				//Error occurred in the database
-				return 0;
+				return FAILURE;
 			}
 		}
 		catch(SQLException e)
@@ -506,12 +516,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			if(sOutErrorValue == null)
 			{
 				//User request approved successfully
-				return 1;
+				return SUCCESS;
 			}			
 			else
 			{
 				//Error occurred in the database
-				return 0;
+				return FAILURE;
 			}
 		}
 		catch(SQLException e)
@@ -643,6 +653,8 @@ public class DBConnectionManager implements IDBConnectionManager
 	 *   @return        : list of QuadrigaRoles.
 	 */
 	@Override
+	// this is a really bad method name! What does this method do?
+	// get/set/update/retrieve/... user roles?
 	public List<IQuadrigaRole> UserRoles(String roles)
 	{
 		String[] role;
