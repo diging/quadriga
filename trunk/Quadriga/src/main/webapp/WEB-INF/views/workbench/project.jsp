@@ -19,6 +19,9 @@ $(document).ready(function() {
 <a href="modifyproject/${project.internalid}">
 <input type="button" name="Edit" value="Edit"/>
 </a>
+<a href="workspace/${project.internalid}">
+<input type="button" name="Workspace" value="List Workspace"/>
+</a>
 
 <section>
 <c:choose>

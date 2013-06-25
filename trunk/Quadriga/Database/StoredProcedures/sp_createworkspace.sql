@@ -19,18 +19,22 @@ CREATE PROCEDURE sp_createworkspace
   IN inname         VARCHAR(50),
   IN indescription  VARCHAR(100),
   IN inowner        VARCHAR(20),
+  IN inprojectid    BIGINT,
   OUT errmsg        VARCHAR(255)
 )
 BEGIN
        
-	     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-      SET errmsg = "SQL exception has occurred";
+       -- Declare local variables
+       DECLARE workspaceId  BIGINT;
+
+	   DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+        SET errmsg = "SQL exception has occurred";
 
       -- validating the input parameters
        IF (inname IS NULL OR inname = "")
 	   THEN SET errmsg = "Workspace name cannot be empty.";
       END IF;
-      
+
       IF (indescription IS NULL OR indescription = "")
         THEN SET errmsg = "Workspace description cannot be empty.";
       END IF;
@@ -39,18 +43,39 @@ BEGIN
        THEN SET errmsg = "Workspace owner cannot be empty.";
 	  END IF;
 
-      -- checking if the project name already exists
-      IF EXISTS (SELECT 1 FROM tbl_workspace WHERE workspacename = inname)
-       THEN SET errmsg = 'Workspace name already exists.';
+      IF (inprojectid IS NULL)
+        THEN SET errmsg = "Project for workspace cannnot be empty.";
       END IF;
 
+      -- checking if the workspace name already exists
+      IF EXISTS (SELECT 1 FROM vw_workspace WHERE workspacename = inname)
+       THEN SET errmsg = "Workspace name already exists.";
+      END IF;
+
+      -- checking if the project id is valid
+      IF NOT EXISTS(SELECT 1 FROM vw_project WHERE projectid = inprojectid)
+        THEN SET errmsg = "Project mapping is invalid.";
+      END IF;
+
+      -- validating the owner
+      IF NOT EXISTS(SELECT 1 FROM vw_quadriga_user WHERE username = inowner)
+         THEN SET errmsg = "Invalid User.";
+      END IF;
+
+     
       -- insert the record into the workspace table
       IF (errmsg IS NULL)
        THEN SET errmsg = "";
        START TRANSACTION;
+		 SET workspaceId = UUID_SHORT();
+         -- insert into the workspace table
          INSERT INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,
                 isarchived,isdeactivated,updatedby,updateddate,createdby,createddate)
-         VALUES(inname,indescription,UUID_SHORT(),inowner,0,0,inowner,NOW(),inowner,NOW());
+         VALUES(inname,indescription,workspaceId,inowner,0,0,inowner,NOW(),inowner,NOW());
+
+         -- insert into the project workspace mapping table
+         INSERT INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate)
+         VALUES(inprojectid,workspaceId,inowner,NOW(),inowner,NOW());
 
        IF(errmsg = "")
         THEN COMMIT;
