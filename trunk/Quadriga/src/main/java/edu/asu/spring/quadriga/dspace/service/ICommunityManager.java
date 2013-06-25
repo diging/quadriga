@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.dspace.service;
 import java.util.List;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
@@ -24,4 +25,8 @@ public interface ICommunityManager {
 	public abstract String getCollectionName(String sCollectionId);
 
 	public abstract String getCommunityId(String sCollectionId);
+
+	public abstract List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId);
+
+	public abstract String getItemName(String sCollectionId, String sItemId);
 }

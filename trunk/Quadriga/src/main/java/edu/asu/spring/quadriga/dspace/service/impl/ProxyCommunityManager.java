@@ -14,9 +14,11 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.domain.implementation.Item;
@@ -176,7 +178,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String getCommunityId(String sCollectionId) 
 	{
@@ -192,4 +194,62 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	@Override
+	public String getItemName(String sCollectionId, String sItemId)
+	{
+		//Check if a request for communities has been made to Dspace
+		if(this.collections!=null)
+		{
+			for(ICollection collection: collections)
+			{
+				if(collection.getId().equals(sCollectionId))
+				{
+					for(IItem item: collection.getItems())
+					{
+						if(item.getId().equals(sItemId))
+						{
+							return item.getName();
+						}
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
+	@Override
+	public List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId)
+	{
+		//Check if a request for communities has been made to Dspace
+		if(this.collections!=null)
+		{
+			for(ICollection collection: collections)
+			{
+				if(collection.getId().equals(sCollectionId))
+				{
+					for(IItem item: collection.getItems())
+					{
+						if(item.getId().equals(sItemId))
+						{
+							//Found the item that user requested !
+							//This is the first time this item is accessed
+							if(item.getBitstreams().size() == 0)
+							{
+								IBitStream bitstream = null;
+								for(String bitid: item.getBitids())
+								{
+									bitstream = new BitStream();
+									//TODO: Implement threads to load the bitstreams associated with this item
+									item.addBitstream(bitstream);
+								}
+							}
+							return item.getBitstreams();
+						}
+					}
+				}
+			}
+		}
+
+		return null;
+	}
 }

@@ -240,7 +240,6 @@ public class Collection implements ICollection{
 					}
 				}
 			}
-
 			return this.isLoaded;
 		}
 		return false;

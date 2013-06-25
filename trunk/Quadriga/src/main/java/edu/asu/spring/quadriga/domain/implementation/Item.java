@@ -1,6 +1,11 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 
 /**
@@ -13,15 +18,29 @@ public class Item implements IItem{
 	private String name;
 	private String id;
 	private String handle;
-	private boolean isloaded;
-
+	private List<String> bitids;
+	private List<IBitStream> bitstreams;
+	
 	@Override
-	public boolean isIsloaded() {
-		return isloaded;
+	public List<IBitStream> getBitstreams() {
+		return bitstreams;
 	}
 	@Override
-	public void setIsloaded(boolean isloaded) {
-		this.isloaded = isloaded;
+	public void setBitstreams(List<IBitStream> bitstreams) {
+		this.bitstreams = bitstreams;
+	}
+	@Override
+	public void addBitstream(IBitStream bitstream)
+	{
+		this.bitstreams.add(bitstream);
+	}
+	@Override
+	public List<String> getBitids() {
+		return bitids;
+	}
+	@Override
+	public void setBitids(List<String> bitids) {
+		this.bitids = bitids;
 	}
 	@Override
 	public String getName() {
@@ -72,7 +91,19 @@ public class Item implements IItem{
 				isCopied = true;
 			}
 			
-			this.isloaded = false;
+			//Load all the bitids associated with the item.
+			this.bitids = new ArrayList<String>();
+			this.setBitstreams(new ArrayList<IBitStream>());
+			if(dspaceItem.getBitstreams() != null)
+			{
+				if(dspaceItem.getBitstreams().getBitstreams() != null)
+				{
+					for(IDspaceBitStreamEntityId bitstream: dspaceItem.getBitstreams().getBitstreams()){
+						this.bitids.add(bitstream.getId());
+					}
+				}
+			}
+			
 		}	
 		return isCopied;
 	}

@@ -1,13 +1,13 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import edu.asu.spring.quadriga.domain.IByteStream;
+import edu.asu.spring.quadriga.domain.IBitStream;
 
 /**
  * The class representation of the ByteStream got from Dspace repostiory.
  * 
  * @author Ram Kumar Kumaresan
  */
-public class ByteStream implements IByteStream{
+public class BitStream implements IBitStream{
 
 	private String name;
 	private String size;

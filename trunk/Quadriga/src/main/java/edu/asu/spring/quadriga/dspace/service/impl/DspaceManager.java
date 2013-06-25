@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
@@ -97,6 +98,17 @@ public class DspaceManager implements IDspaceManager{
 		return  proxyCommunityManager.getAllItems(sCollectionId); 
 	}
 	
+	@Override
+	public List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId)
+	{
+		return proxyCommunityManager.getAllBitStreams(sCollectionId, sItemId);
+	}
+	
+	@Override
+	public String getItemName(String sCollectionId, String sItemId)
+	{
+		return proxyCommunityManager.getItemName(sCollectionId, sItemId);
+	}
 	
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
