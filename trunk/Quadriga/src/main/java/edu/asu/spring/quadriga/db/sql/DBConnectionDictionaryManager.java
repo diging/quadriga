@@ -171,13 +171,13 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 				} 
 			}
 			errmsg = sqlStatement.getString(2);
-			logger.info("error message :"+errmsg);
 			if(errmsg.isEmpty())
 			{
 				return dictionaryList;
 			}
 			else
 			{
+				logger.info("error message :"+errmsg);
 				return null;
 			}
 		} 
