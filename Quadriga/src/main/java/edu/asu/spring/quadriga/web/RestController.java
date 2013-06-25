@@ -20,20 +20,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
+
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+
+/**
+ * Controller for all the rest apis exposed to other clients
+ * @author SatyaSwaroop Boddu
+ * @author LohithDwaraka
+ *
+ */
 
 @Controller
 public class RestController {
@@ -62,23 +73,21 @@ public class RestController {
 	@Autowired
 	DictionaryItemsFactory dictionaryItemsFactory;
 
-	@Autowired
-	IConceptCollectionManager conceptControllerManager;
-
+	@Autowired IConceptCollectionManager conceptControllerManager;
+	
 	IConceptCollection collection;
 	@Autowired
 	IConceptCollectionFactory collectionFactory;
-
+	
 	IConcept concept;
 	@Autowired
 	IConceptFactory conFact;
-
+	
 	@Autowired
 	IRestVelocityFactory restVelocityFactory;
 
 	/**
 	 * Rest interface to List projects for a @userId
-	 * 
 	 * @param userId
 	 * @param model
 	 * @return
@@ -89,9 +98,10 @@ public class RestController {
 	public String listProjects(@PathVariable("userID") String userId,
 			ModelMap model) throws Exception {
 		List<IProject> projectList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 
 		Template template = null;
+
 
 		try {
 			engine.init();
@@ -112,13 +122,15 @@ public class RestController {
 		} catch (MethodInvocationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
+		
 		return "";
 	}
 
 	/**
-	 * Rest interface for the List Dictionary for the userId
-	 * 
+	 * Rest interface for the List Dictionary for the userId 
+	 * http://<<URL>:<PORT>>/quadriga/rest/dictionaries/{USERNAME}
+	 * http://localhost:8080/quadriga/rest/dictionaries/test
 	 * @author Lohith Dwaraka
 	 * @param userId
 	 * @param model
@@ -130,26 +142,24 @@ public class RestController {
 	public String listDictionaries(@PathVariable("userID") String userId,
 			ModelMap model) throws Exception {
 		List<IDictionary> dictionaryList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 
 		Template template = null;
 
 		try {
 			engine.init();
-			logger.info("Getting dictionary list for user : " + userId);
+			logger.info("Getting dictionary list for user : "+userId);
 			dictionaryList = dictionaryManager.getDictionariesList(userId);
-			if (!(dictionaryList == null)) {
-				Iterator<IDictionary> I = dictionaryList.iterator();
-				while (I.hasNext()) {
-					IDictionary dictionary = I.next();
-					logger.info("Dictionary Name : " + dictionary.getName());
-					logger.info("Dictionary Description : "
-							+ dictionary.getDescription());
-					logger.info("Dictionary Id : " + dictionary.getId());
+			if(!(dictionaryList== null)){
+				Iterator <IDictionary> I = dictionaryList.iterator();
+				while(I.hasNext()){
+					IDictionary dictionary=I.next();
+					logger.info("Dictionary Name : "+dictionary.getName());
+					logger.info("Dictionary Description : "+dictionary.getDescription());
+					logger.info("Dictionary Id : "+dictionary.getId());
 				}
 			}
-			template = engine
-					.getTemplate("velocitytemplates/dictionarylist.vm");
+			template = engine.getTemplate("velocitytemplates/dictionarylist.vm");
 			VelocityContext context = new VelocityContext();
 			context.put("list", dictionaryList);
 
@@ -167,13 +177,14 @@ public class RestController {
 			e.printStackTrace();
 		}
 
-	
+		
 		return "";
 	}
-
+	
 	/**
-	 * Rest interface for the List Dictionary items for the dictionary Id
-	 * 
+	 * Rest interface for the List Dictionary items for the dictionary Id 
+	 * http://<<URL>:<PORT>>/quadriga/rest/dictionaryDetails/{DictionaryID}
+	 * http://localhost:8080/quadriga/rest/dictionaryDetails/68
 	 * @author Lohith Dwaraka
 	 * @param dictionaryId
 	 * @param model
@@ -182,33 +193,27 @@ public class RestController {
 	 */
 	@RequestMapping(value = "rest/dictionaryDetails/{dictionaryId}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String listDictionaryItems(
-			@PathVariable("dictionaryId") String dictionaryId, ModelMap model)
-			throws Exception {
+	public String listDictionaryItems(@PathVariable("dictionaryId") String dictionaryId,
+			ModelMap model) throws Exception {
 		List<IDictionaryItems> dictionaryItemsList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 
 		Template template = null;
 
 		try {
 			engine.init();
-			logger.info("Getting dictionary items list for dictionary id : "
-					+ dictionaryId);
-			dictionaryItemsList = dictionaryManager
-					.getDictionariesItems(dictionaryId);
-			if (!(dictionaryItemsList == null)) {
-				Iterator<IDictionaryItems> I = dictionaryItemsList.iterator();
-				while (I.hasNext()) {
-					IDictionaryItems dictionaryItems = I.next();
-					logger.info("Dictionary Item name : "
-							+ dictionaryItems.getItems());
-					logger.info("Dictionary Description : "
-							+ dictionaryItems.getDescription());
-					logger.info("Dictionary Pos : " + dictionaryItems.getPos());
+			logger.info("Getting dictionary items list for dictionary id : "+dictionaryId);
+			dictionaryItemsList = dictionaryManager.getDictionariesItems(dictionaryId);
+			if(!(dictionaryItemsList== null)){
+				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
+				while(I.hasNext()){
+					IDictionaryItems dictionaryItems=I.next();
+					logger.info("Dictionary Item name : "+dictionaryItems.getItems());
+					logger.info("Dictionary Description : "+dictionaryItems.getDescription());
+					logger.info("Dictionary Pos : "+dictionaryItems.getPos());
 				}
 			}
-			template = engine
-					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
+			template = engine.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext();
 			context.put("list", dictionaryItemsList);
 
@@ -226,36 +231,37 @@ public class RestController {
 			e.printStackTrace();
 		}
 
+		
 		return "";
 	}
-
+	
 	/**
-	 * Rest interface for the List conceptcollections of a user
-	 * 
+	 * Rest interface for the getting list of concept collections of a user
+	 * http://<<URL>:<PORT>>/quadriga/rest/conceptcollections/{userId}
+	 * http://localhost:8080/quadriga/rest/conceptcollections/test
 	 * @author SatyaSwaroop Boddu
 	 * @param userId
 	 * @param model
 	 * @return
-	 * @throws Exception
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "rest/conceptcollections/{userID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listConceptCollections(@PathVariable("userID") String userId,
 			ModelMap model) throws Exception {
 		List<IConceptCollection> collectionsList = null;
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 		Template template = null;
-		StringWriter sw = new StringWriter();
+		
 		try {
 			engine.init();
-			collectionsList = conceptControllerManager
-					.getCollectionsOwnedbyUser(userId);
-			template = engine
-					.getTemplate("velocitytemplates/conceptcollections.vm");
+			collectionsList = conceptControllerManager.getCollectionsOwnedbyUser(userId);
+			template = engine.getTemplate("velocitytemplates/conceptcollections.vm");
 			VelocityContext context = new VelocityContext();
 			context.put("list", collectionsList);
-			template.merge(context, sw);
-			return sw.toString();
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			return writer.toString();
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -266,23 +272,26 @@ public class RestController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		
 		return "";
 	}
-
+	
 	/**
-	 * Rest interface method for getting a collection items and details
-	 * 
+	 * Rest interface for the getting concept details i.e, list of items in the collection
+	 * http://<<URL>:<PORT>>/quadriga/rest/conceptdetails/{collectionID}
+	 * http://localhost:8080/quadriga/rest/conceptdetails/167
 	 * @author SatyaSwaroop Boddu
-	 * @param collectionId
-	 * @return String
-	 * @throws Exception
+	 * @param collectionID
+	 * @param model
+	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String getConceptList(
-			@PathVariable("collectionID") int collectionID, ModelMap model)
-			throws Exception {
-		VelocityEngine engine = restVelocityFactory.RestVelocityFactory();
+	public String getConceptList(@PathVariable("collectionID") int collectionID,
+			ModelMap model) throws Exception {
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 		Template template = null;
 		StringWriter sw = new StringWriter();
 		collection = collectionFactory.createConceptCollectionObject();
@@ -290,8 +299,7 @@ public class RestController {
 		try {
 			engine.init();
 			conceptControllerManager.getCollectionDetails(collection);
-			template = engine
-					.getTemplate("velocitytemplates/conceptdetails.vm");
+			template = engine.getTemplate("velocitytemplates/conceptdetails.vm");
 			VelocityContext context = new VelocityContext();
 			context.put("list", collection.getItems());
 			template.merge(context, sw);
@@ -306,6 +314,8 @@ public class RestController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		
 		return "";
 	}
 }
