@@ -1,0 +1,1 @@
+ERROR 1072 (42000) at line 14 in file: 'C:\Users\rohit\svn_workspace\Quadriga\Database\scripts\Constraints_foreignkey.sql': Key column 'dictionaryid' doesn't exist in table
