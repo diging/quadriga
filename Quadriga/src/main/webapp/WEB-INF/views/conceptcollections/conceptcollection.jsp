@@ -13,13 +13,23 @@
 
 	});
 </script>
-
+<script type="text/javascript" charset="utf8">
+	$(document).ready(function() {
+		$("input[type=button]").button().click(function(event) {
+			event.preventDefault();
+		});
+	});
+</script>
 
 <header>
 	<h2>Concept Collections</h2>
 	<span class="byline">Manage your concept collections here.</span>
 </header>
-
+<ul>
+	<li><input type=button
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm'"
+		value='Add ConceptCollection'></li>
+</ul>
 
 
 <div
