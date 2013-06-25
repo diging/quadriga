@@ -13,7 +13,7 @@
 				<span class="byline">Select an item to browse its
 					files.</span>
 				<c:forEach var="item" items="${itemList}">
-					<span style="font-weight: bold">${item.id}: ${item.name}</span>
+					<span style="float: left; margin-left: 50px; font-weight: bold"><a href="/quadriga/auth/workbench/workspace/community/collection/item/${item.id}" style="color:#707070">${item.name}</a></span>
 					<br />
 				</c:forEach>
 			</c:when>

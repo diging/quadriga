@@ -4,10 +4,10 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
+import javax.xml.bind.JAXBContext;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 
 /**
@@ -66,7 +65,7 @@ public class DspaceController {
 	
 	
 	@RequestMapping(value = "/auth/workbench/workspace/community/collection/{collectionId}", method = RequestMethod.GET)
-	public String workspaceItemRequest(@PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
+	public String workspaceItemListRequest(@PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
 	
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
@@ -100,6 +99,13 @@ public class DspaceController {
 		
 		return "auth/workbench/workspace/community/collection";
 	}
+	
+	@RequestMapping(value = "/auth/workbench/workspace/community/collection/item/{itemId}", method = RequestMethod.GET)
+	public String workspaceByteStreamListRequest(@PathVariable("itemId") String itemId, ModelMap model, Principal principal){
+			
+		model.addAttribute("itemId",itemId);
+		return "auth/workbench/workspace/community/collection/item";
+		}
 
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
 	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {

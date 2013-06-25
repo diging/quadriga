@@ -1,11 +1,10 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
-import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.*;
+
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 
 /**
@@ -16,11 +15,15 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 
 
 @XmlRootElement(name="itementity")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DspaceItem implements IDspaceItem{
 
 	private String id;
 	private String name;
 	private String handle;
+	
+//	@XmlPath("items/itementity/bitstreams/bitstreamentityid/id/text()")
+//    private List<String> byteids; 
 	
 	@Override
 	public String getId() {
