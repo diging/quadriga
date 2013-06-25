@@ -8,11 +8,10 @@
 		<li>
 			<article class="is-post-summary">
 				<h3>
-					» <a href="/quadriga/auth/workbench/workspace/addworkspace">Add Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/workspace/archiveworkspace">Archive Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/workspace/deactivateworkspace">Deactivate Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/workspace/deleteworkspace">Delete Workspace</a><br /><br />
-                   <input type="hidden" id="wsprojectid" value=<c:out value="${wsprojectid}"></c:out> />				    
+					» <a href="/quadriga/auth/workbench/workspace/addworkspace?projectid=${wsprojectid}">Add Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/archiveworkspace?projectid=${wsprojectid}">Archive Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/deactivateworkspace?projectid=${wsprojectid}">Deactivate Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/deleteworkspace?projectid=${wsprojectid}">Delete Workspace</a><br /><br />
 				</h3>
 			</article>
 		</li>

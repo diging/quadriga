@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.web;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -30,13 +33,13 @@ public class WorkSpaceController
 {
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
-	
+
 	@Autowired 
 	IUserManager userManager;
-	
+
 	@Autowired
 	IWorkspaceManager wsManager;
-	
+
 	/**
 	 * @description   : This will list all the workspaces associated with the 
 	 *                  project 
@@ -51,14 +54,14 @@ public class WorkSpaceController
 	public String listWorkspace(@PathVariable("projectid") int projectid, ModelMap model) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		
+
 		// retrieve the workspaces associated with the projects
 		try
 		{
-		  workspaceList = wsManager.listWorkspace(projectid);
-		  
-		  model.addAttribute("workspaceList", workspaceList);
-		  model.addAttribute("wsprojectid", projectid);
+			workspaceList = wsManager.listWorkspace(projectid);
+
+			model.addAttribute("workspaceList", workspaceList);
+			model.addAttribute("wsprojectid", projectid);
 		}
 		catch(QuadrigaStorageException e)
 		{
@@ -66,7 +69,7 @@ public class WorkSpaceController
 		}
 		return "auth/workbench/workspace";
 	}
-	
+
 	/**
 	 * @description   : This is called on the addworkspace form load.
 	 * @param         : model
@@ -74,12 +77,13 @@ public class WorkSpaceController
 	 * @author        : Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/workspace/addworkspace", method=RequestMethod.GET)
-	public String createWorkspaceForm(Model model)
+	public String createWorkspaceForm(Model model,@RequestParam("projectid")String projectid)
 	{
 		model.addAttribute("workspace", workspaceFactory.createWorkspaceObject());
+		model.addAttribute("wsprojectid", projectid);
 		return "auth/workbench/workspace/addworkspace";
 	}
-	
+
 	/**
 	 * @description    : This calls workspace manager to add workspace details 
 	 *                   into the database.
@@ -91,28 +95,23 @@ public class WorkSpaceController
 	 * @throws         : QuadrigaStorageException
 	 * @author         : Kiran Kumar Batna
 	 */
-	@RequestMapping(value = "auth/workbench/workspace/addworkspace", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/workspace/addworkspace/{projectid}", method = RequestMethod.POST)
 	public String createWorkspace(@ModelAttribute("SpringWeb")WorkSpace workspace,
-			ModelMap model, Principal principal) throws QuadrigaStorageException
-	{
+			ModelMap model, Principal principal,@PathVariable("projectid") int projectid) throws QuadrigaStorageException
+			{
 		String errmsg;
-		int projectId;
 		IUser wsOwner = null;
-		
+
 		wsOwner = userManager.getUserDetails(principal.getName());
-		
-        /////////////////////////
-		projectId = 1;
-		///////////////////////
-		
+
 		if(wsOwner!=null)
 		{
 			//set the workspace owner
 			workspace.setOwner(wsOwner);
-			
+
 			try
 			{
-			errmsg = wsManager.addNewWorkspace(workspace,projectId);
+				errmsg = wsManager.addNewWorkspace(workspace,projectid);
 			}
 			catch(QuadrigaStorageException ex)
 			{
@@ -121,7 +120,7 @@ public class WorkSpaceController
 			if(errmsg.equals(""))
 			{
 				model.addAttribute("success", 1);
-				model.addAttribute("successMsg","Workspace created successfully.");
+				model.addAttribute("successMsg",StringConstants.WORKSPACE_SUCCESS_MSG);
 				return "auth/workbench/workspace/addworkspacestatus";
 			}
 			else
@@ -135,8 +134,188 @@ public class WorkSpaceController
 		else
 		{
 			model.addAttribute("success", 0);
-			model.addAttribute("errormsg","Error occurred while retrieving user details.");
+			model.addAttribute("errormsg",StringConstants.FETCH_USER_ERROR);
 			return "auth/workbench/workspace/addworkspace";
+		}
+			}
+
+	/**
+	 * @description  : This calls workspaceManger to list the workspace
+	 *                 associated with a project for archival process.
+	 * @param        : model
+	 * @param        : projectid
+	 * @return       : String - URL of the form
+	 * @throws       : QuadrigaStorageException
+	 * @author       : Kiran Kumar Batna
+	 */
+	@RequestMapping(value="auth/workbench/workspace/archiveworkspace", method=RequestMethod.GET)
+	public String archiveWorkspaceForm(Model model,@RequestParam("projectid")String projectid) throws QuadrigaStorageException
+	{
+		List<IWorkSpace> workspaceList;
+
+		// retrieve the workspaces associated with the projects
+		try
+		{
+			workspaceList = wsManager.listWorkspace(Integer.parseInt(projectid));
+
+			model.addAttribute("workspaceList", workspaceList);
+			model.addAttribute("wsprojectid",projectid);
+		}
+		catch(QuadrigaStorageException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+
+		return "auth/workbench/workspace/archiveworkspace";
+	}
+
+	/**
+	 * @description   : This calls workspaceManager to archive the workspace
+	 *                  submitted.
+	 * @param         : projectid
+	 * @param         : req
+	 * @param         : model
+	 * @param         : principal
+	 * @return        : String - URL of the form
+	 * @throws        : QuadrigaStorageException
+	 * @author        : Kiran Kumar Batna
+	 */
+	@RequestMapping(value = "auth/workbench/workspace/archiveworkspace/{projectid}", method = RequestMethod.POST)
+	public String archiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	{
+		String[] values;
+		String wsIdList = "";
+		String errmsg;
+		String userName;
+		int isArchive;
+		List<IWorkSpace> workspaceList = null;
+
+		// fetch the selected values
+		values = req.getParameterValues("wschecked");
+
+		for(String workspaceid : values)
+		{
+			wsIdList = wsIdList + "," + workspaceid;
+		}
+
+		//removing the first ',' value
+		wsIdList = wsIdList.substring(1,wsIdList.length());
+
+		//fetch the user name
+		userName = principal.getName();
+
+		//fetch the archive value
+		isArchive = StringConstants.WORKSPACE_ARCHIVE_VALUE;
+
+		//archive the workspace
+		errmsg = wsManager.archiveWorkspace(wsIdList, isArchive, userName);
+
+		if(errmsg.equals(""))
+		{
+			model.addAttribute("success", 1);
+			model.addAttribute("successMsg",StringConstants.WORKSPACE_ARCHIVE_SUCCESS);
+			return "auth/workbench/workspace/archiveworkspaceStatus";
+		}
+		else
+		{
+			workspaceList = wsManager.listWorkspace(Integer.parseInt(projectid));
+
+			//adding the workspace details to the model
+			model.addAttribute("workspaceList", workspaceList);
+			model.addAttribute("wsprojectid", projectid);
+			model.addAttribute("success", 0);
+			model.addAttribute("errormsg", errmsg);
+			return "auth/workbench/workspace/archiveworkspace";
+		}
+	}
+
+	/**
+	 * @description  : This calls workspaceManger to list the workspace
+	 *                 associated with a project for archival process.
+	 * @param        : model
+	 * @param        : projectid
+	 * @return       : String - URL of the form
+	 * @throws       : QuadrigaStorageException
+	 * @author       : Kiran Kumar Batna
+	 */
+	@RequestMapping(value="auth/workbench/workspace/deactivateworkspace", method=RequestMethod.GET)
+	public String deactivateWorkspaceForm(Model model,@RequestParam("projectid")String projectid) throws QuadrigaStorageException
+	{
+		List<IWorkSpace> workspaceList;
+
+		// retrieve the workspaces associated with the projects
+		try
+		{
+			workspaceList = wsManager.listWorkspace(Integer.parseInt(projectid));
+
+			model.addAttribute("workspaceList", workspaceList);
+			model.addAttribute("wsprojectid", projectid);
+		}
+		catch(QuadrigaStorageException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+
+		return "auth/workbench/workspace/deactivateworkspace";
+	}
+
+	/**
+	 * @description   : This calls workspaceManager to archive the workspace
+	 *                  submitted.
+	 * @param         : projectid
+	 * @param         : req
+	 * @param         : model
+	 * @param         : principal
+	 * @return        : String - URL of the form
+	 * @throws        : QuadrigaStorageException
+	 * @author        : Kiran Kumar Batna
+	 */
+	@RequestMapping(value = "auth/workbench/workspace/deactivateworkspace/{projectid}", method = RequestMethod.POST)
+	public String deactivateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	{
+		String[] values;
+		String wsIdList = "";
+		String errmsg;
+		String userName;
+		int isDeActive;
+		List<IWorkSpace> workspaceList = null;
+
+		// fetch the selected values
+		values = req.getParameterValues("wschecked");
+
+		for(String workspaceid : values)
+		{
+			wsIdList = wsIdList + "," + workspaceid;
+		}
+
+		//removing the first ',' value
+		wsIdList = wsIdList.substring(1,wsIdList.length());
+
+		//fetch the user name
+		userName = principal.getName();
+
+		//fetch the archive value
+		isDeActive = StringConstants.WORKSPACE_DEACTIVATE_VALUE;
+
+		//deactivate the workspace'
+		errmsg = wsManager.deactivateWorkspace(wsIdList, isDeActive, userName);
+
+		if(errmsg.equals(""))
+		{
+			model.addAttribute("success", 1);
+			model.addAttribute("successMsg",StringConstants.WORKSPACE_DEACTIVE_SUCCESS);
+			return "auth/workbench/workspace/deactiveworkspaceStatus";
+		}
+		else
+		{
+			workspaceList = wsManager.listWorkspace(Integer.parseInt(projectid));
+
+			//adding the workspace details to the model
+			model.addAttribute("workspaceList", workspaceList);
+			model.addAttribute("wsprojectid", projectid);
+			model.addAttribute("success", 0);
+			model.addAttribute("errormsg", errmsg);
+			return "auth/workbench/workspace/deactiveworkspace";
 		}
 	}
 
