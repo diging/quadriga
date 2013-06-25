@@ -91,7 +91,7 @@ public class DBConnectionWorkspaceManager implements
 	 * @author        : Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listWorkspace(int projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listWorkspace(int projectid,int archive,int active) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -102,7 +102,7 @@ public class DBConnectionWorkspaceManager implements
 		IUser wsOwner = null;
 		
 		//command call to the Stored Procedure
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE + "(?,?,?,?)";
 		
 		//establish the connection
 		try
@@ -119,15 +119,17 @@ public class DBConnectionWorkspaceManager implements
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			
 			// add input parameters
-			sqlStatement.setString(1,Integer.toString(projectid));
+			sqlStatement.setInt(1, projectid);
+			sqlStatement.setInt(2, archive);
+			sqlStatement.setInt(3, active);
 			
 			// add output parameter
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.registerOutParameter(4, Types.VARCHAR);
 			
 			// execute the sql statement
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(4);
 			
 			if(errmsg == "")
 			{
@@ -400,6 +402,91 @@ public class DBConnectionWorkspaceManager implements
 			closeConnection();
 		}
 		return errmsg;
+	}
+	
+	/**
+	 * @description  : This method display the workspace details for the 
+	 *                 workspace submitted.
+	 * @param        : workspaceId
+	 * @return       : IWorkSpace - workspace object
+	 * @throws       : QuadrigaStorageException
+	 * @author       : Kiran Kumar Batna
+	 */
+	@Override
+	public IWorkSpace getWorkspaceDetails(long workspaceId) throws QuadrigaStorageException
+	{
+		String errmsg;
+		String dbCommand;
+		String wsOwnerName;
+		IWorkSpace workspace = null;
+		IUser wsOwner = null;
+		CallableStatement sqlStatement;
+		
+		//creating workspace object
+		workspace = workspaceFactory.createWorkspaceObject();
+		
+		//command call to the Stored Procedure
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.WORKSPACE_DETAILS + "(?,?)";
+		
+		//establish the connection
+		try
+		{
+		  getConnection();
+		}
+		catch(QuadrigaStorageException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		try
+		{
+			// prepare the SQL Statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			// add input parameters
+			sqlStatement.setLong(1,workspaceId);
+			
+			// add output parameter
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			
+			// execute the sql statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(2);
+			
+			if(errmsg == "")
+			{
+				ResultSet result =  sqlStatement.getResultSet();
+				
+				if(result.isBeforeFirst())
+				{
+					while(result.next())
+					{
+						workspace.setName(result.getString(1));
+						workspace.setDescription(result.getString(2));
+						wsOwnerName = result.getString(3);
+						workspace.setId(result.getString(4));
+						
+						// retrieve the user name details
+						wsOwner = userManger.getUserDetails(wsOwnerName);
+						workspace.setOwner(wsOwner);
+					}
+				}
+			}
+			else
+			{
+				throw new QuadrigaStorageException(errmsg);
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return workspace;
+		
 	}
 
 }

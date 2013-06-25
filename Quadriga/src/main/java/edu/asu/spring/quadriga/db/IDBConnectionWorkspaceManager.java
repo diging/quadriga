@@ -20,7 +20,7 @@ public interface IDBConnectionWorkspaceManager
 	public abstract String addWorkSpaceRequest(IWorkSpace workSpace,int projectId)
 			throws QuadrigaStorageException;
 
-	public abstract List<IWorkSpace> listWorkspace(int projectid)
+	public abstract List<IWorkSpace> listWorkspace(int projectid,int archive,int active)
 			throws QuadrigaStorageException;
 
 	public abstract String archiveWorkspaceRequest(String workspaceIdList, int archive,
@@ -30,6 +30,9 @@ public interface IDBConnectionWorkspaceManager
 			String wsUser) throws QuadrigaStorageException;
 
 	public abstract String deleteWorkspaceRequest(String workspaceIdList)
+			throws QuadrigaStorageException;
+
+	public abstract IWorkSpace getWorkspaceDetails(long workspaceId)
 			throws QuadrigaStorageException;
 
 }

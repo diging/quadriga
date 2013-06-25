@@ -59,5 +59,6 @@ public interface DBConstants
 	public static final String ARCHIVE_WORKSPACE_REQUEST = "sp_archiveworkspace";
 	public static final String DEACTIVATE_WORKSPACE_REQUEST = "sp_deactivateworkspace";
 	public static final String DELETE_WORKSPACE_REQUEST = "sp_deleteworkspace";
+	public static final String WORKSPACE_DETAILS = "sp_getWorkspaceDetails";
 
 }

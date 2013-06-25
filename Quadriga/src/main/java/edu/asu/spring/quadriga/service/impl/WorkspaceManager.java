@@ -33,13 +33,13 @@ public class WorkspaceManager implements IWorkspaceManager
 	 * @author        : Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listWorkspace(int projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listWorkspace(int projectid,int archive,int active) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
 		
 	    try
 	    {
-		workspaceList = dbConnect.listWorkspace(projectid);
+		workspaceList = dbConnect.listWorkspace(projectid,archive,active);
 	    }
 	    catch(QuadrigaStorageException e)
 	    {
@@ -139,5 +139,23 @@ public class WorkspaceManager implements IWorkspaceManager
 			throw new QuadrigaStorageException(e.getMessage());
 		}
 		return errmsg;
+	}
+	
+	/**
+	 * @description  : This method display the workspace details.
+	 * @param        : workspaceId
+	 * @return       : IWorkSpace - workspace object
+	 * @throws       : QuadrigaStorageException
+	 * @author       : Kiran Kumar Batna
+	 */
+	@Override
+	public IWorkSpace getWorkspaceDetails(long workspaceId) throws QuadrigaStorageException
+	{
+		IWorkSpace workspace ;
+		
+		workspace = dbConnect.getWorkspaceDetails(workspaceId);
+		
+		return workspace;
+		
 	}
 }
