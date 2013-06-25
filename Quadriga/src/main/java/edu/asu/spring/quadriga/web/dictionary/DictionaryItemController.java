@@ -58,28 +58,20 @@ public class DictionaryItemController {
 	public String getDictionaryPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
 			throws QuadrigaStorageException {
-		try {
-			logger.info("came to getDictionaryPage");
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryid);
-			if (dictionaryItemList == null) {
-				logger.info("Dictionary ITem list is null");
-			}
-			String dictionaryName = "";
-			try {
-				dictionaryName = dictonaryManager
-						.getDictionaryName(dictionaryid);
-			} catch (QuadrigaStorageException e) {
-				throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
-			}
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictionaryid", dictionaryid);
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		logger.info("came to getDictionaryPage");
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+				.getDictionariesItems(dictionaryid);
+		if (dictionaryItemList == null) {
+			logger.info("Dictionary ITem list is null");
 		}
+		String dictionaryName = "";
+		dictionaryName = dictonaryManager.getDictionaryName(dictionaryid);
+
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		model.addAttribute("dictName", dictionaryName);
+		model.addAttribute("dictionaryid", dictionaryid);
+
 		return "auth/dictionary/dictionary";
 	}
 
@@ -94,60 +86,55 @@ public class DictionaryItemController {
 	public String deleteDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
-		try {
-			String[] values = req.getParameterValues("selected");
-			String msg = "";
-			String errormsg = "";
-			int flag = 0;
-			if (values != null) {
-				for (int i = 0; i < values.length; i++) {
-					logger.info("Deleting item for dictionary id: "
-							+ dictionaryId + " and term id : " + i + " : "
-							+ values[i]);
-					msg = dictonaryManager.deleteDictionariesItems(
-							dictionaryId, values[i]);
-					if (msg.equals("")) {
 
-					} else {
-						flag = 1;
-						errormsg = msg;
-					}
+		String[] values = req.getParameterValues("selected");
+		String msg = "";
+		String errormsg = "";
+		int flag = 0;
 
-				}
-			} else {
-				flag = 2;
-			}
-
-			if (flag == 0) {
-				model.addAttribute("delsuccess", 1);
-				model.addAttribute("delsuccessmsg",
-						"Items  deleted successfully");
-			} else if (flag == 1) {
-				if (errormsg.equals("Item doesnot exists in this dictionary")) {
-					model.addAttribute("delsuccess", 0);
-					model.addAttribute("delerrormsg",
-							"Items doesn't exist for dictionary id :"
-									+ dictionaryId);
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				logger.info("Deleting item for dictionary id: " + dictionaryId
+						+ " and term id : " + i + " : " + values[i]);
+				msg = dictonaryManager.deleteDictionariesItems(dictionaryId,
+						values[i]);
+				if (msg.equals("")) {
+					// what happens here
 				} else {
-					model.addAttribute("delsuccess", 0);
-					model.addAttribute("delerrormsg", errormsg);
+					flag = 1;
+					errormsg = msg;
 				}
-			} else {
 
 			}
-			logger.info("Item Returned ");
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId);
-			String dictionaryName = dictonaryManager
-					.getDictionaryName(dictionaryId);
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictID", dictionaryId);
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			flag = 2;
 		}
+
+		if (flag == 0) {
+			model.addAttribute("delsuccess", 1);
+			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
+		} else if (flag == 1) {
+			if (errormsg.equals("Item doesnot exists in this dictionary")) {
+				model.addAttribute("delsuccess", 0);
+				model.addAttribute("delerrormsg",
+						"Items doesn't exist for dictionary id :"
+								+ dictionaryId);
+			} else {
+				model.addAttribute("delsuccess", 0);
+				model.addAttribute("delerrormsg", errormsg);
+			}
+		} else {
+			// what happens here?
+		}
+		logger.info("Item Returned ");
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+				.getDictionariesItems(dictionaryId);
+		String dictionaryName = dictonaryManager
+				.getDictionaryName(dictionaryId);
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		model.addAttribute("dictName", dictionaryName);
+		model.addAttribute("dictID", dictionaryId);
+
 		return "auth/dictionary/dictionary";
 	}
 
@@ -163,75 +150,71 @@ public class DictionaryItemController {
 			Principal principal) throws QuadrigaStorageException {
 		// DictionaryEntry
 		// dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/",item,pos);
-		try {
-			// String msg=
-			// dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
-			String[] values = req.getParameterValues("selected");
-			String msg = "";
-			String errormsg = "";
-			int flag = 0;
 
-			if (values != null) {
-				for (int i = 0; i < values.length; i++) {
-					logger.info("Value " + i + " : " + values[i]);
-					List<DictionaryEntry> dictionaryEntryList = dictonaryManager
-							.getUpdateFromWordPower(dictionaryId, values[i]);
-					Iterator<DictionaryEntry> I = dictionaryEntryList
-							.iterator();
-					if (I.hasNext()) {
-						DictionaryEntry dictionaryEntry = I.next();
-						msg = dictonaryManager.updateDictionariesItems(
-								dictionaryId, values[i],
-								dictionaryEntry.getLemma(),
-								dictionaryEntry.getPos());
-					} else {
-						msg = "Error getting data from Word Power";
-						flag = 1;
-						errormsg = msg;
-					}
-					if (msg.equals("")) {
+		// String msg=
+		// dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
+		String[] values = req.getParameterValues("selected");
+		String msg = "";
+		String errormsg = "";
+		int flag = 0;
 
-					} else {
-						flag = 1;
-						errormsg = msg;
-					}
-				}
-			} else {
-				flag = 2;
-			}
-
-			if (flag == 0) {
-				logger.info("Successfully updated");
-				model.addAttribute("updatesuccess", 1);
-				model.addAttribute("updatesuccessmsg",
-						"Items updated successfully");
-			} else if (flag == 1) {
-				logger.info("Please check :  errormsg");
-				if (errormsg.equals("Item doesnot exists in this dictionary")) {
-					model.addAttribute("updatesuccess", 0);
-					model.addAttribute("updateerrormsg",
-							"Items doesn't exist for dictionary id :"
-									+ dictionaryId);
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				logger.info("Value " + i + " : " + values[i]);
+				
+				List<DictionaryEntry> dictionaryEntryList = dictonaryManager
+						.getUpdateFromWordPower(dictionaryId, values[i]);
+				Iterator<DictionaryEntry> I = dictionaryEntryList.iterator();
+				if (I.hasNext()) {
+					DictionaryEntry dictionaryEntry = I.next();
+					msg = dictonaryManager.updateDictionariesItems(
+							dictionaryId, values[i],
+							dictionaryEntry.getLemma(),
+							dictionaryEntry.getPos());
 				} else {
-					model.addAttribute("updatesuccess", 0);
-					model.addAttribute("updateerrormsg", errormsg);
+					msg = "Error getting data from Word Power";
+					flag = 1;
+					errormsg = msg;
 				}
-			} else {
-
+				if (msg.equals("")) {
+					// what happens here?
+				} else {
+					flag = 1;
+					errormsg = msg;
+				}
 			}
-			logger.info("Item Returned ");
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId);
-			String dictionaryName = dictonaryManager
-					.getDictionaryName(dictionaryId);
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictID", dictionaryId);
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			flag = 2;
 		}
+
+		if (flag == 0) {
+			// these things don't need to be logged.
+			logger.info("Successfully updated");
+			model.addAttribute("updatesuccess", 1);
+			model.addAttribute("updatesuccessmsg", "Items updated successfully");
+		} else if (flag == 1) {
+			logger.info("Please check :  errormsg");
+			if (errormsg.equals("Item doesnot exists in this dictionary")) {
+				model.addAttribute("updatesuccess", 0);
+				model.addAttribute("updateerrormsg",
+						"Items doesn't exist for dictionary id :"
+								+ dictionaryId);
+			} else {
+				model.addAttribute("updatesuccess", 0);
+				model.addAttribute("updateerrormsg", errormsg);
+			}
+		} else {
+			// what happens here?
+		}
+		logger.info("Item Returned ");
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+				.getDictionariesItems(dictionaryId);
+		String dictionaryName = dictonaryManager
+				.getDictionaryName(dictionaryId);
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		model.addAttribute("dictName", dictionaryName);
+		model.addAttribute("dictID", dictionaryId);
+
 		return "auth/dictionary/dictionary";
 	}
 

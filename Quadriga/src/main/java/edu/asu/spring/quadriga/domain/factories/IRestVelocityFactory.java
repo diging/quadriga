@@ -4,7 +4,6 @@ import org.apache.velocity.app.VelocityEngine;
 
 public interface IRestVelocityFactory {
 
-	//@Override
-	public abstract VelocityEngine RestVelocityFactory();
+	public abstract VelocityEngine getVelocityEngine();
 
 }

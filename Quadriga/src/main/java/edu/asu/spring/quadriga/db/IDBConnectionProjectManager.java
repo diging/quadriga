@@ -20,6 +20,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface IDBConnectionProjectManager 
 {
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
 
 	/**
 	 * fetches details of projects
@@ -33,7 +35,7 @@ public interface IDBConnectionProjectManager
 	 * @throws SQLException 
 	 * 
 	 */
-	public abstract IProject getProjectDetails(int projectId) throws SQLException ;
+	public abstract IProject getProjectDetails(int projectId) throws QuadrigaStorageException ;
 
 	/**
 	 * interface to split the comma seperated collaborator roles and 
@@ -90,10 +92,10 @@ public interface IDBConnectionProjectManager
 	 * @throws SQLException 
 	 */
 
-	public abstract List<IUser> showCollaboratorsRequest(int projectid) throws SQLException;
+	public abstract List<IUser> showCollaboratorsRequest(int projectid) throws QuadrigaStorageException;
 
 	
-	public abstract List<IUser> nonCollaboratoringUsersRequest(int projectid)throws SQLException ;
+	public abstract List<IUser> nonCollaboratoringUsersRequest(int projectid)throws QuadrigaStorageException ;
 	
 	/**
 	 * Interface to add a Collaborator.

@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -82,6 +83,7 @@ public class UserManager implements IUserManager {
 					//If user account is deactivated remove other roles 
 					if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
 					{
+						// what if the deactivated role is not the last one in the list?
 						rolesList.clear();
 					}
 					rolesList.add(quadrigaRole);
@@ -118,6 +120,9 @@ public class UserManager implements IUserManager {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
+		// why is here a try/catch block? That should catch a
+		// QuadrigaStorageException and throw that up to the front end
+		// or handle it itself
 		try
 		{
 			listUsers = dbConnect.getAllActiveUsers(sDeactiveRoleDBId);
@@ -134,23 +139,17 @@ public class UserManager implements IUserManager {
 	 * 
 	 * @return List of all inactive user objects
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public List<IUser> getAllInActiveUsers()
+	public List<IUser> getAllInActiveUsers() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 		
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-		try
-		{
-			listUsers = dbConnect.getAllInActiveUsers(sDeactiveRoleDBId);
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException(e.getMessage());
-		}
+		listUsers = dbConnect.getAllInActiveUsers(sDeactiveRoleDBId);
 		return listUsers;		
 	}
 
@@ -169,6 +168,7 @@ public class UserManager implements IUserManager {
 		{
 			listUsers = dbConnect.getUserRequests();
 		}
+		// bad, bad, bad, it makes me sad ;)
 		catch(NullPointerException e)
 		{
 			throw new NullPointerException(e.getMessage());

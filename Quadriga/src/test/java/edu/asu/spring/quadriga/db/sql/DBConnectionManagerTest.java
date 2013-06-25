@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -148,9 +149,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether the correct number of inactive users are fetched from the database.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetAllInactiveUser() {
+	public void testGetAllInactiveUser() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -168,9 +170,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether a given account is deactivated and added to the inactive list.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testDeactivateUser() {
+	public void testDeactivateUser() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 

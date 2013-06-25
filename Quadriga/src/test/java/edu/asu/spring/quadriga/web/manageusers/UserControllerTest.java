@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.develop.MockupUserManager;
 
@@ -81,12 +82,13 @@ public class UserControllerTest {
 	/**
 	 * This method tests if the appropriate paths are returned. It also checks if the correct
 	 * number of users are returned for cases where the status are active, inactive and open requests.
+	 * @throws QuadrigaStorageException 
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	@DirtiesContext
-	public void testManageUsers() {
+	public void testManageUsers() throws QuadrigaStorageException {
 
 		
 		//Check the return value
@@ -153,11 +155,12 @@ public class UserControllerTest {
 
 	/**
 	 * This method tests if the correct number of inactive users are retrieved and if the appropriate path is also returned.
+	 * @throws QuadrigaStorageException 
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	@DirtiesContext
-	public void testUserInactiveList() {
+	public void testUserInactiveList() throws QuadrigaStorageException {
 		//Check the return value
 		assertEquals(userContoller.userInactiveList(model, principal),"auth/users/inactive");
 

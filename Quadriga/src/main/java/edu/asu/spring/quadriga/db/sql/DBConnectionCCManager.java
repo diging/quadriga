@@ -84,6 +84,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				}
 			}
 		} catch (SQLException e) {
+			// this does not necessarily print to the log file
+			// user logger!
 			e.printStackTrace();
 			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
 			
@@ -133,6 +135,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				}
 			}
 		} catch (SQLException e) {
+			// same here
 			e.printStackTrace();
 			throw new QuadrigaStorageException("Damn....Database guys are at work!!!!!!");
 		} finally {
@@ -149,6 +152,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 */
 	public void getCollectionDetails(IConceptCollection collection) throws QuadrigaStorageException {
 
+		// what if collection == null?
+		
 		String dbCommand;
 		String errmsg = null;
 		getConnection();
@@ -188,6 +193,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	public void saveItem(String lemma, String id, String pos, String desc,
 			int conceptId) throws QuadrigaStorageException {
 		String dbCommand;
+		// do you use this error message?
 		String errmsg;
 		CallableStatement sqlStatement;
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_COLLECTION_ITEM
@@ -313,6 +319,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		}
 	}
 
+	//never use the name of the collection to refer to it! It might change (e.g. if someone
+	// else updates the collection at the same moment someone wants to update an itme)
 	@Override
 	public String updateItem(IConcept concept, String collectionName) throws QuadrigaStorageException {
 		String dbCommand;

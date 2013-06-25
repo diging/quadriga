@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -166,9 +167,10 @@ public class UserManagerTest {
 	/**
 	 * Test the method in {@link UserManager} which creates a list of inactive users.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetAllInActiveUsers() {
+	public void testGetAllInActiveUsers() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -228,9 +230,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} can activate a user and handle invalid ids.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testDeactivateUser() {
+	public void testDeactivateUser() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 

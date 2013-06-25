@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
@@ -88,45 +89,37 @@ public class DictionaryItemSearchAddController {
 
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
-				try {
-					DictionaryItems di = dictonaryManager
-							.getDictionaryItemIndex(values[i], dictionaryItems);
-					msg = dictonaryManager.addNewDictionariesItems(
-							dictionaryId, di.getItems(), di.getId(),
-							di.getPos(), owner);
-				} catch (QuadrigaStorageException e) {
-					throw new QuadrigaStorageException(
-							"Oops the DB is an hard hangover, please try later");
-				}
+
+				DictionaryItems di = dictonaryManager.getDictionaryItemIndex(
+						values[i], dictionaryItems);
+				msg = dictonaryManager.addNewDictionariesItems(dictionaryId,
+						di.getItems(), di.getId(), di.getPos(), owner);
+
 			}
 		}
-		try {
-			if (msg.equals("")) {
-				model.addAttribute("success", 1);
-				model.addAttribute("successmsg", "Items added successfully");
+
+		if (msg.equals("")) {
+			model.addAttribute("success", 1);
+			model.addAttribute("successmsg", "Items added successfully");
+		} else {
+			if (msg.equals("ItemExists")) {
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg",
+						"Items already exist for dictionary id :"
+								+ dictionaryId);
 			} else {
-				if (msg.equals("ItemExists")) {
-					model.addAttribute("success", 0);
-					model.addAttribute("errormsg",
-							"Items already exist for dictionary id :"
-									+ dictionaryId);
-				} else {
-					model.addAttribute("success", 0);
-					model.addAttribute("errormsg", msg);
-				}
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", msg);
 			}
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId);
-			String dictionaryName = dictonaryManager
-					.getDictionaryName(dictionaryId);
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictID", dictionaryId);
-		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+				.getDictionariesItems(dictionaryId);
+		String dictionaryName = dictonaryManager
+				.getDictionaryName(dictionaryId);
+		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		model.addAttribute("dictName", dictionaryName);
+		model.addAttribute("dictID", dictionaryId);
+
 		return "auth/dictionary/dictionary";
 	}
 
@@ -171,7 +164,8 @@ public class DictionaryItemSearchAddController {
 			}
 
 		} catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException("Oops the DB is an hard hangover, please try later");
+			throw new QuadrigaStorageException(
+					"Oops the DB is an hard hangover, please try later");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

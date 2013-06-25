@@ -22,228 +22,190 @@ import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.web.WorkbenchController;
 
 /**
- * @description	 	this class manages the projects and acts as a bridge between 
- * 					controller and database 
+ * @description this class manages the projects and acts as a bridge between
+ *              controller and database
  * 
- * @author 			rohit pendbhaje
- *
+ * @author rohit pendbhaje
+ * 
  */
 @Service
 public class ProjectManager implements IProjectManager {
-	
-	private static final Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(WorkbenchController.class);
 
 	@Autowired
 	@Qualifier("DBConnectionProjectManagerBean")
 	private IDBConnectionProjectManager dbConnect;
-	
+
 	@Autowired
-	private ICollaboratorRoleManager roleMapper ;
+	private ICollaboratorRoleManager roleMapper;
 
 	/**
-	 * @description: this method takes up userid as an argument of the logged in user and returns 
-	 * 				 list of projects for the user
-	 *
-	 * @throws		 QuadrigaStorageException
+	 * @description: this method takes up userid as an argument of the logged in
+	 *               user and returns list of projects for the user
 	 * 
-	 * @author 		 rohit pendbhaje
+	 * @throws QuadrigaStorageException
+	 * 
+	 * @author rohit pendbhaje
 	 * 
 	 */
-	
+
 	@Override
-	public List<IProject> getProjectsOfUser(String userid)  {
-		
-		List<IProject> projectList = new ArrayList<IProject>();  
-		
-		
+	public List<IProject> getProjectsOfUser(String userid) {
+
+		List<IProject> projectList = new ArrayList<IProject>();
+
 		try {
 			projectList = dbConnect.getProjectOfUser(userid);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-				
+
 		return projectList;
-	} 
-	
-	
-	/**
-	 *  @description : This calls dbConnectionProjectManger to 
-	 *                 update the project details.
-	 *  @param       : existingProject - Project object
-	 *  @param       : userName - user who tries to update the details.
-	 *  @return      : errmsg - blank on success and null on failure
-	 *  @author      : Kiran Kumar Batna
-	 */
-	@Override
-	public String updateProjectDetails(Project existingProject,String userName)throws QuadrigaStorageException {
-        String errmsg;
-        
-        try
-        {
-        errmsg = dbConnect.editProjectRequest(existingProject, userName);
-        }
-        catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
-		}
-			
-        
-        return errmsg;
 	}
 
 	/**
-	 *  @description : This calls dbConnectionProjectManger to 
-	 *                 delete the project records form the tables.
-	 *  @param       : projectIdList - String of comma(,) separated 
-	 *                 project Ids.
-	 *  @return      : errmsg - blank on success and null on failure
-	 *  @author      : Kiran Kumar Batna
+	 * @description : This calls dbConnectionProjectManger to update the project
+	 *              details.
+	 * @param : existingProject - Project object
+	 * @param : userName - user who tries to update the details.
+	 * @return : errmsg - blank on success and null on failure
+	 * @author : Kiran Kumar Batna
 	 */
 	@Override
-	public String deleteProject(String projectIdList) throws QuadrigaStorageException
-	{
+	public String updateProjectDetails(Project existingProject, String userName)
+			throws QuadrigaStorageException {
 		String errmsg;
-		
-		try
-		{
-		errmsg = dbConnect.deleteProjectRequest(projectIdList);
-		}
-		catch (QuadrigaStorageException e) {
+
+		try {
+			errmsg = dbConnect.editProjectRequest(existingProject, userName);
+		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException();
 		}
-			
-		
+
 		return errmsg;
-		
+	}
+
+	/**
+	 * @description : This calls dbConnectionProjectManger to delete the project
+	 *              records form the tables.
+	 * @param : projectIdList - String of comma(,) separated project Ids.
+	 * @return : errmsg - blank on success and null on failure
+	 * @author : Kiran Kumar Batna
+	 */
+	@Override
+	public String deleteProject(String projectIdList)
+			throws QuadrigaStorageException {
+		String errmsg;
+
+		try {
+			errmsg = dbConnect.deleteProjectRequest(projectIdList);
+		} catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
+		}
+
+		return errmsg;
+
 	}
 
 	/**
 	 * This is used to add the project details
-	 * @param Project object
+	 * 
+	 * @param Project
+	 *            object
 	 * @return Error message on error else a blank string
 	 * @author Kiran Kumar Batna
 	 * 
 	 */
 	@Override
-	public String addNewProject(IProject newProject) throws QuadrigaStorageException
-	{
-		String errmsg;
-		
-		try
-		{
-		errmsg = dbConnect.addProjectRequest(newProject);
-		}
-		catch (QuadrigaStorageException e) {
-			throw new QuadrigaStorageException();
-		}
-			
-		
-		return errmsg;
+	public String addNewProject(IProject newProject)
+			throws QuadrigaStorageException {
+		return dbConnect.addProjectRequest(newProject);
 	}
 
 	/**
-	 * @description: this method takes up userid as an argument of the logged in user and returns 
-	 * 				 project object containing all project details
-	 *
-	 * @throws		 SQLException
+	 * @description: this method takes up userid as an argument of the logged in
+	 *               user and returns project object containing all project
+	 *               details
 	 * 
-	 * @author 		 rohit pendbhaje
+	 * @throws SQLException
+	 * 
+	 * @author rohit pendbhaje
 	 * 
 	 */
 	@Override
 	public IProject getProject(int projectid) throws QuadrigaStorageException {
-	    
+
 		IProject project = null;
-		//List<ICollaboratorRole> collaboratorRolesList = new ArrayList<ICollaboratorRole>();
+		// List<ICollaboratorRole> collaboratorRolesList = new
+		// ArrayList<ICollaboratorRole>();
+
+		project = dbConnect.getProjectDetails(projectid);
+
+		for (ICollaborator collaborator : project.getCollaborators()) {
+
+			for (ICollaboratorRole collaboratorRole : collaborator
+					.getCollaboratorRoles()) {
+				roleMapper.fillCollaboratorRole(collaboratorRole);
+			}
+		}
 		
-		try {
-			project = dbConnect.getProjectDetails(projectid);
-			
-			for (ICollaborator collaborator : project.getCollaborators()) {
-				
-				for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
-				{
-					roleMapper.fillCollaboratorRole(collaboratorRole);	
-				}
-			}	
-		}
-		catch (SQLException e) {
-			logger.error("sqlException thrown",e);
-			e.printStackTrace();
-		}
-			
 		return project;
 	}
-	
-
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator,int projectid) throws QuadrigaStorageException {
+	public String addCollaborators(ICollaborator collaborator, int projectid)
+			throws QuadrigaStorageException {
 
-	   String errmsg = null;
-	try {
-		errmsg = dbConnect.addCollaboratorRequest(collaborator, projectid);
-	} 
-	
-	catch (QuadrigaStorageException e) {
-		throw new QuadrigaStorageException();
-	}
-				
-	   return errmsg;
-	}
-
-	@Override
-	public List<IUser> getNotCollaboratingUsers(int projectid)  {
-			
-		List<IUser> userList = null;
-		
-		 try {
-			userList = dbConnect.nonCollaboratoringUsersRequest(projectid);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		String errmsg = null;
+		try {
+			errmsg = dbConnect.addCollaboratorRequest(collaborator, projectid);
 		}
-		
+
+		catch (QuadrigaStorageException e) {
+			throw new QuadrigaStorageException();
+		}
+
+		return errmsg;
+	}
+
+	@Override
+	public List<IUser> getNotCollaboratingUsers(int projectid) throws QuadrigaStorageException {
+
+		List<IUser> userList = null;
+
+		userList = dbConnect.nonCollaboratoringUsersRequest(projectid);
 		
 		return userList;
 	}
-	
+
 	@Override
-	public IProject showExistingCollaborator(int projectid){
-				
+	public IProject showExistingCollaborator(int projectid) throws QuadrigaStorageException {
+
 		IProject project = null;
-		try {
-			project = dbConnect.getProjectDetails(projectid);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		project = dbConnect.getProjectDetails(projectid);
 		
 		for (ICollaborator collaborator : project.getCollaborators()) {
-			
-			for(ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles())
-			{
-				roleMapper.fillCollaboratorRole(collaboratorRole);	
+
+			for (ICollaboratorRole collaboratorRole : collaborator
+					.getCollaboratorRoles()) {
+				roleMapper.fillCollaboratorRole(collaboratorRole);
 			}
 		}
 		return project;
 	}
 
 	@Override
-	public List<ICollaborator> getProjectCollaborator(int projectid)  {
-		
+	public List<ICollaborator> getProjectCollaborator(int projectid) throws QuadrigaStorageException {
+
 		IProject project = null;
 		List<ICollaborator> collaboratorList = null;
-		
-		try {
-			project = dbConnect.getProjectDetails(projectid);
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-			
-	    collaboratorList = project.getCollaborators();
-				
-				
-		
+
+		project = dbConnect.getProjectDetails(projectid);
+
+		collaboratorList = project.getCollaborators();
+
 		return collaboratorList;
 	}
 }

@@ -35,7 +35,7 @@ public interface IDBConnectionCCManager {
 		 * @return Copies the data into the input object
 		 * @throws QuadrigaStorageException 
 		 */
-		public abstract void getCollectionDetails(IConceptCollection concept) throws QuadrigaStorageException;
+		public abstract void getCollectionDetails(IConceptCollection collection) throws QuadrigaStorageException;
 		/**
 		 * Updates the database by adding additional items to the List
 		 * @throws QuadrigaStorageException 

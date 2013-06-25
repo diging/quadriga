@@ -36,8 +36,10 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	@Qualifier("DBConnectionCCManagerBean")
 	private IDBConnectionCCManager dbConnect;
+	
 	@Autowired
 	private IConceptFactory conceptFactory;
+	
 	@Inject
 	@Named("restTemplate")
 	RestTemplate restTemplate;
@@ -49,6 +51,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	@Qualifier("updateConceptPowerURL")
 	private String updateURL;
+	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getCollectionsOfUser(java.lang.String)
 	 */

@@ -18,7 +18,7 @@ public class RestVelocityFactory implements IRestVelocityFactory {
 	 * Creates the factory and sets the class resource paths
 	 */
 	@Override
-	public VelocityEngine RestVelocityFactory() {
+	public VelocityEngine getVelocityEngine() {
 		VelocityEngine engine = new VelocityEngine();
 		engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
 		engine.setProperty("classpath.resource.loader.class",
