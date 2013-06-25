@@ -5,7 +5,7 @@ package edu.asu.spring.quadriga.domain;
  * 
  * @author Ram Kumar Kumaresan
  */
-public interface IByteStream {
+public interface IBitStream {
 
 	public abstract String getName();
 

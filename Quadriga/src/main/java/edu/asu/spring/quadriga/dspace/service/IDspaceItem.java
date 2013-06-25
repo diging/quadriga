@@ -19,5 +19,9 @@ public interface IDspaceItem {
 	public abstract String getHandle();
 
 	public abstract void setHandle(String handle);
+
+	public abstract void setBitstreams(IDspaceBitStreams bitstreams);
+
+	public abstract IDspaceBitStreams getBitstreams();
 	
 }

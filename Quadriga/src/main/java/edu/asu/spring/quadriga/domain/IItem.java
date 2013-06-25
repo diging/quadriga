@@ -26,8 +26,14 @@ public interface IItem {
 
 	public abstract boolean copy(IDspaceItem dspaceItem);
 
-	public abstract void setIsloaded(boolean isloaded);
+	public abstract void setBitids(List<String> bitids);
 
-	public abstract boolean isIsloaded();
+	public abstract List<String> getBitids();
+
+	public abstract void setBitstreams(List<IBitStream> bitstreams);
+
+	public abstract List<IBitStream> getBitstreams();
+
+	public abstract void addBitstream(IBitStream bitstream);
 	
 }
