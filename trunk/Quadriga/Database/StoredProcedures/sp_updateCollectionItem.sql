@@ -20,12 +20,12 @@ CREATE PROCEDURE sp_updateCollectionItem
   IN  inlemma    VARCHAR(200),
   IN  indescription   TEXT,
   IN  inpos    VARCHAR(50),
-  IN  incollectionname VARCHAR(255),
+  IN  incollectionId INT,
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
 
-	DECLARE varcollectionid   INT DEFAULT 0;
+	
     -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
@@ -46,7 +46,7 @@ BEGIN
 	IF (inpos IS NULL OR inpos = "")
 	 THEN SET errmsg = "id cannot be empty";
 	END IF;
-	IF (incollectionname IS NULL OR incollectionname = "")
+	IF (incollectionId IS NULL OR incollectionId = "")
 	 THEN SET errmsg = "id cannot be empty";
 	END IF;
     
@@ -56,12 +56,12 @@ BEGIN
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
       START TRANSACTION;
-         SELECT id INTO varcollectionid FROM vw_conceptcollections  WHERE collectionname = incollectionname; 
-    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections_items WHERE item =inconceptname and id = varcollectionid)
+       
+    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections_items WHERE item =inconceptname and id = incollectionId)
      	 		THEN SET errmsg = "Item does not exists in this dictionary";
     		END IF;
     	IF (errmsg = "")	
-         	THEN UPDATE  tbl_conceptcollections_items SET lemma=inlemma, pos=inpos, description=indescription  WHERE id=varcollectionid and item =inconceptname;
+         	THEN UPDATE  tbl_conceptcollections_items SET lemma=inlemma, pos=inpos, description=indescription  WHERE id=incollectionId and item =inconceptname;
          END IF;	
 		 IF (errmsg = "")
            THEN COMMIT;

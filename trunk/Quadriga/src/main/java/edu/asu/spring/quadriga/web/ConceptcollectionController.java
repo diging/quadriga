@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
