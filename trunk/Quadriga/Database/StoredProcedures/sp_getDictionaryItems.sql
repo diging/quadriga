@@ -16,7 +16,8 @@ DROP PROCEDURE IF EXISTS sp_getDictionaryItems;
 DELIMITER $$
 CREATE PROCEDURE sp_getDictionaryItems
 (
-  IN inid  VARCHAR(20),
+  IN inid  VARCHAR(100),
+  IN inowner	VARCHAR(100),
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
@@ -30,8 +31,13 @@ BEGIN
      THEN SET errmsg = "Dicitonary id cannot be empty.";
     END IF;
     
+    IF (inowner IS NULL OR inowner = "")
+	 THEN SET errmsg = "Owner name cannot be empty";
+	END IF;
+    
     IF NOT EXISTS (SELECT 1 FROM vw_dictionary
-                     WHERE id = inid)
+                     WHERE id IN( select id from tbl_dictionary where id=inid 
+    and dictionaryowner = inowner))
       THEN SET errmsg = "Dicitonary id is invalid.";
     END IF;
 
@@ -41,7 +47,8 @@ BEGIN
       -- retrieve the item details
       SELECT termid , term ,pos
         FROM vw_dictionary_items
-	    WHERE id = inid
+	    WHERE id IN( select id from tbl_dictionary where id=inid 
+    and dictionaryowner = inowner)
       ORDER BY term;
      END IF;
 END$$

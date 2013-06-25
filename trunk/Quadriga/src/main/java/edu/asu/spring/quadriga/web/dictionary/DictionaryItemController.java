@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,10 +60,12 @@ public class DictionaryItemController {
 	public String getDictionaryPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
 			throws QuadrigaStorageException {
-
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		
 		logger.info("came to getDictionaryPage");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryid);
+				.getDictionariesItems(dictionaryid,user.getUsername());
 		if (dictionaryItemList == null) {
 			logger.info("Dictionary ITem list is null");
 		}
@@ -87,6 +91,8 @@ public class DictionaryItemController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -96,7 +102,7 @@ public class DictionaryItemController {
 			model.addAttribute("delsuccess", 0);
 			model.addAttribute("delerrormsg", "Items were not selected");
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId);
+					.getDictionariesItems(dictionaryId,user.getUsername());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -108,7 +114,7 @@ public class DictionaryItemController {
 				logger.info("Deleting item for dictionary id: " + dictionaryId
 						+ " and term id : " + i + " : " + values[i]);
 				msg = dictonaryManager.deleteDictionariesItems(dictionaryId,
-						values[i]);
+						values[i],user.getUsername());
 				if (msg.equals("")) {
 					// what happens here
 				} else {
@@ -134,7 +140,7 @@ public class DictionaryItemController {
 		}
 		logger.info("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId);
+				.getDictionariesItems(dictionaryId,user.getUsername());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -154,7 +160,9 @@ public class DictionaryItemController {
 	public String updateDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
-		
+
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -208,7 +216,7 @@ public class DictionaryItemController {
 		}
 		logger.debug("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId);
+				.getDictionariesItems(dictionaryId,user.getUsername());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);

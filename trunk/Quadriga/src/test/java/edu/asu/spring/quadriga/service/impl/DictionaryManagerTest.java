@@ -248,7 +248,7 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItems dictionaryItems = I.next();
@@ -328,7 +328,7 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItems dictionaryItems = I.next();
@@ -458,15 +458,15 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItems dictionaryItems = I.next();
 				assertEquals(dictionaryItems.getItems(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
-				dictionaryManager.deleteDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
-				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				dictionaryManager.deleteDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n","jdoe");
+				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),false);
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
@@ -495,7 +495,7 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItems dictionaryItems = I.next();
@@ -509,7 +509,7 @@ public class DictionaryManagerTest {
 				assertEquals(dictionaryEntry.getPos(),"noun");
 				String msg1=dictionaryManager.updateDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n", dictionaryEntry.getLemma(), dictionaryEntry.getPos());
 				assertEquals(msg1.equals(""), true);
-				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				dictionaryItems = I.next();
@@ -544,7 +544,7 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"));
+				List<IDictionaryItems> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				Iterator <IDictionaryItems> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItems dictionaryItems = I.next();

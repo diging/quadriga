@@ -18,6 +18,7 @@ CREATE PROCEDURE sp_deleteDictionaryItems
 (
   IN  indictionaryid varchar(200),
   IN  intermid		varchar(200),
+  IN  inowner 	varchar(200),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -34,10 +35,14 @@ BEGIN
     IF (intermid IS NULL OR intermid = "")
 	 THEN SET errmsg = "Term cannot be empty";
 	END IF;
+	
+	IF (inowner IS NULL OR inowner = "")
+	 THEN SET errmsg = "Owner name cannot be empty";
+	END IF;
 
     
-    IF NOT EXISTS(SELECT 1 FROM vw_dictionary_items
-				   WHERE id = indictionaryid and termid =intermid)
+    IF NOT EXISTS(SELECT 1 FROM vw_dictionary_items    WHERE id IN( select id from tbl_dictionary where id=indictionaryid 
+    and dictionaryowner = inowner) and termid =intermid) 
      
       THEN SET errmsg = "Item doesnot exists in this dictionary";
     END IF; 
@@ -47,7 +52,8 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
 			DELETE FROM
-			tbl_dictionary_items WHERE id=indictionaryid and termid =intermid;
+			tbl_dictionary_items WHERE id IN ( select id from tbl_dictionary where id=indictionaryid and dictionaryowner = inowner)
+				and termid =intermid;
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;
