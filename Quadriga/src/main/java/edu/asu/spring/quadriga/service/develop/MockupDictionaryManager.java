@@ -9,6 +9,7 @@ import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 
 /**
@@ -93,13 +94,6 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		return null;
 	}
 
-	@Override
-	public String deleteDictionariesItems(String dictionaryId, String item) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 
 	@Override
 	public String updateDictionariesItems(String dictionaryId, String itemid,
@@ -127,6 +121,20 @@ public class MockupDictionaryManager implements IDictionaryManager {
 	@Override
 	public DictionaryItems getDictionaryItemIndex(String termId,
 			DictionaryItems dictionaryItems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String deleteDictionariesItems(String dictionaryId, String itemid,
+			String ownerName) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
+			String ownerName) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		return null;
 	}

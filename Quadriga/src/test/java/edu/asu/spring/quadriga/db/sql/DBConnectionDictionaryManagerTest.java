@@ -282,7 +282,7 @@ public class DBConnectionDictionaryManagerTest {
 			}
 			assertEquals((msg.equals("")), true);
 			List <IDictionaryItems> dictionaryItemsList = null;
-			dictionaryItemsList=dbConnection.getDictionaryItemsDetails(id);
+			dictionaryItemsList=dbConnection.getDictionaryItemsDetails(id,"jdoe");
 			Iterator<IDictionaryItems> I = dictionaryItemsList.iterator();
 			assertEquals(I.hasNext(),true);
 			logger.info("Checking if Iterator has objects  : "+I.hasNext());

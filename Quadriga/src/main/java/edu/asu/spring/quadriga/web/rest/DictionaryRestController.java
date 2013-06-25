@@ -14,6 +14,8 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -133,6 +135,9 @@ public class DictionaryRestController {
 	public String listDictionaryItems(
 			@PathVariable("dictionaryId") String dictionaryId, ModelMap model)
 			throws Exception {
+		
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		List<IDictionaryItems> dictionaryItemsList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
 
@@ -143,7 +148,7 @@ public class DictionaryRestController {
 			logger.info("Getting dictionary items list for dictionary id : "
 					+ dictionaryId);
 			dictionaryItemsList = dictionaryManager
-					.getDictionariesItems(dictionaryId);
+					.getDictionariesItems(dictionaryId,user.getUsername());
 			if (!(dictionaryItemsList == null)) {
 				Iterator<IDictionaryItems> I = dictionaryItemsList.iterator();
 				while (I.hasNext()) {

@@ -48,7 +48,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract List<IDictionaryItems> getDictionaryItemsDetails(
-			String dictionaryid) throws QuadrigaStorageException;
+			String dictionaryid,String ownerName) throws QuadrigaStorageException;
 
 	/**
 	 * Queries the database to get dictionary name
@@ -76,7 +76,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String deleteDictionaryItems(String dictinaryId,
-			String itemid) throws QuadrigaStorageException;
+			String itemid, String ownerName) throws QuadrigaStorageException;
 
 	/**
 	 * Updates the dictionary items in the dictionary in the database

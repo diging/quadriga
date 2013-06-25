@@ -148,11 +148,11 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return success or error message to controller
 	 */
 
-	public String deleteDictionariesItems(String dictionaryId, String itemid)
+	public String deleteDictionariesItems(String dictionaryId, String itemid,String ownerName)
 			throws QuadrigaStorageException {
 		String msg = "";
 		try {
-			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid);
+			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid,ownerName);
 		} catch (QuadrigaStorageException e) {
 			msg = "Issue in the DB";
 			throw new QuadrigaStorageException();
@@ -191,13 +191,13 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to list of dictionary item to controller
 	 */
 
-	public List<IDictionaryItems> getDictionariesItems(String dictionaryid)
+	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,String ownerName)
 			throws QuadrigaStorageException {
 
 		List<IDictionaryItems> dictionaryItemList = null;
 		try {
 			dictionaryItemList = dbConnect
-					.getDictionaryItemsDetails(dictionaryid);
+					.getDictionaryItemsDetails(dictionaryid, ownerName);
 		} catch (QuadrigaStorageException e) {
 
 			throw new QuadrigaStorageException();

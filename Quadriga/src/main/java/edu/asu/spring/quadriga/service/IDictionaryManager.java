@@ -34,7 +34,7 @@ public interface IDictionaryManager {
 			throws QuadrigaStorageException;
 
 	public abstract List<IDictionaryItems> getDictionariesItems(
-			String dictionaryid) throws QuadrigaStorageException;
+			String dictionaryid,String ownerName) throws QuadrigaStorageException;
 
 	public abstract String getDictionaryName(String dictionaryid)
 			throws QuadrigaStorageException;
@@ -43,7 +43,7 @@ public interface IDictionaryManager {
 			String pos);
 
 	public abstract String deleteDictionariesItems(String dictionaryId,
-			String itemid) throws QuadrigaStorageException;
+			String itemid, String ownerName) throws QuadrigaStorageException;
 
 	public abstract String updateDictionariesItems(String dictionaryId,
 			String itemid, String term, String pos)

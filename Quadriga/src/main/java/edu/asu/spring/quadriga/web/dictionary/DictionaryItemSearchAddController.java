@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -77,6 +79,8 @@ public class DictionaryItemSearchAddController {
 			@ModelAttribute("SpringWeb") DictionaryItems dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
 		String owner = usermanager.getUserDetails(principal.getName())
@@ -107,7 +111,7 @@ public class DictionaryItemSearchAddController {
 			}
 		}
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId);
+				.getDictionariesItems(dictionaryId,user.getUsername());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -130,6 +134,8 @@ public class DictionaryItemSearchAddController {
 			@RequestParam("itemName") String item,
 			@RequestParam("posdropdown") String pos, ModelMap model)
 			throws QuadrigaStorageException {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		try {
 			dictionaryEntryList = null;
 			if (!item.equals("")) {
@@ -141,7 +147,7 @@ public class DictionaryItemSearchAddController {
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryid);
+					.getDictionariesItems(dictionaryid,user.getUsername());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryid);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
