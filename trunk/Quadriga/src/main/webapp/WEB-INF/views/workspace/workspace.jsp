@@ -17,7 +17,7 @@
     		<ul class="style2 pagination1">
    	 			<c:forEach var="workspace" items="${workspaceList}">
 					<li>
-						<a href="workspace/${workspace.id}"><c:out value="${workspace.name}"></c:out></a>
+						<a href="workspacedetails/${workspace.id}"><c:out value="${workspace.name}"></c:out></a>
 						<br><c:out value="${workspace.description}"></c:out>
 					</li>
 				</c:forEach>

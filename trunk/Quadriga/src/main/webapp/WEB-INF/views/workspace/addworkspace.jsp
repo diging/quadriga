@@ -56,7 +56,7 @@ $(function() {
 		    </tr>
 		    <tr>
 		    <td>
-		    <input type="text" id="wsprojectid" value=<c:out value="${wsprojectid}"></c:out> />
+		    <input type="hidden" id="wsprojectid" value=<c:out value="${wsprojectid}"></c:out> />
 		    </td>
 		    </tr>
 		</table>
