@@ -63,7 +63,6 @@ public class DictionaryListController {
 		try {
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
-			logger.info("came to listDictionary");
 			String userId = user.getUsername();
 			List<IDictionary> dictionaryList = null;
 			try {
@@ -90,11 +89,9 @@ public class DictionaryListController {
 
 	@RequestMapping(value = "auth/dictionaries/addDictionary", method = RequestMethod.GET)
 	public String addDictionaryForm(Model m) {
-		logger.info("came to addDictionaryForm get");
+		
 		m.addAttribute("dictionary", dictionaryFactory.createDictionaryObject());
 		return "auth/dictionaries/addDictionary";
-		// return new ModelAndView("auth/dictionaries/addDictionary",
-		// "command",dictionaryFactory.createDictionaryObject());
 	}
 
 	/**
@@ -105,10 +102,9 @@ public class DictionaryListController {
 	 */
 
 	@RequestMapping(value = "auth/dictionaries/addDictionary", method = RequestMethod.POST)
-	public String addDictionaryHandle(
+	public String addDictionaryHandle (
 			@ModelAttribute("SpringWeb") Dictionary dictionary, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
-		logger.info("came to addDictionaryHandle post");
 		IUser user = usermanager.getUserDetails(principal.getName());
 		dictionary.setOwner(user);
 
@@ -117,8 +113,7 @@ public class DictionaryListController {
 			msg = dictonaryManager.addNewDictionary(dictionary);
 		} catch (QuadrigaStorageException e1) {
 			msg = "DB Error";
-			e1.printStackTrace();
-
+			e1.printStackTrace();			
 		}
 		if (msg.equals("")) {
 			model.addAttribute("adddicsuccess", 1);

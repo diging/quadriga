@@ -92,7 +92,18 @@ public class DictionaryItemController {
 		String errormsg = "";
 		int flag = 0;
 
-		if (values != null) {
+		if(values == null){
+			model.addAttribute("delsuccess", 0);
+			model.addAttribute("delerrormsg", "Items were not selected");
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+					.getDictionariesItems(dictionaryId);
+			String dictionaryName = dictonaryManager
+					.getDictionaryName(dictionaryId);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictID", dictionaryId);
+			return "auth/dictionary/dictionary";
+		}else {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("Deleting item for dictionary id: " + dictionaryId
 						+ " and term id : " + i + " : " + values[i]);
@@ -106,10 +117,7 @@ public class DictionaryItemController {
 				}
 
 			}
-		} else {
-			flag = 2;
-		}
-
+		} 
 		if (flag == 0) {
 			model.addAttribute("delsuccess", 1);
 			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
@@ -123,8 +131,6 @@ public class DictionaryItemController {
 				model.addAttribute("delsuccess", 0);
 				model.addAttribute("delerrormsg", errormsg);
 			}
-		} else {
-			// what happens here?
 		}
 		logger.info("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
@@ -148,19 +154,17 @@ public class DictionaryItemController {
 	public String updateDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
-		// DictionaryEntry
-		// dictionaryEntry=dictonaryManager.callRestUri("http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/",item,pos);
-
-		// String msg=
-		// dictonaryManager.updateDictionariesItems(dictionaryId,item,dictionaryEntry.getId());
+		
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
 		int flag = 0;
-
-		if (values != null) {
+		if(values == null){
+			model.addAttribute("updatesuccess", 0);
+			model.addAttribute("updateerrormsg", "Items were not selected");
+			return "auth/dictionary/dictionary";
+		}else{
 			for (int i = 0; i < values.length; i++) {
-				logger.info("Value " + i + " : " + values[i]);
 				
 				List<DictionaryEntry> dictionaryEntryList = dictonaryManager
 						.getUpdateFromWordPower(dictionaryId, values[i]);
@@ -183,17 +187,15 @@ public class DictionaryItemController {
 					errormsg = msg;
 				}
 			}
-		} else {
-			flag = 2;
-		}
+		} 
 
 		if (flag == 0) {
 			// these things don't need to be logged.
-			logger.info("Successfully updated");
+			logger.debug("Successfully updated");
 			model.addAttribute("updatesuccess", 1);
 			model.addAttribute("updatesuccessmsg", "Items updated successfully");
 		} else if (flag == 1) {
-			logger.info("Please check :  errormsg");
+			logger.info("Please check errormsg : "+ errormsg);
 			if (errormsg.equals("Item doesnot exists in this dictionary")) {
 				model.addAttribute("updatesuccess", 0);
 				model.addAttribute("updateerrormsg",
@@ -203,10 +205,8 @@ public class DictionaryItemController {
 				model.addAttribute("updatesuccess", 0);
 				model.addAttribute("updateerrormsg", errormsg);
 			}
-		} else {
-			// what happens here?
 		}
-		logger.info("Item Returned ");
+		logger.debug("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryId);
 		String dictionaryName = dictonaryManager
