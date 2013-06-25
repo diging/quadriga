@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$uri/resources/restxmlschema/projectlist.xsd">
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/projectlist.xsd">
 <Quadriga:projectList>
 #foreach ($project in $list)
 <Quadriga:project>
 	<Quadriga:name>$project.name</Quadriga:name>
 	<Quadriga:description>$project.description</Quadriga:description>
 	<Quadriga:id>$project.internalid</Quadriga:id>
-	<Quadriga:uri>$uri/rest/projects/$project.internalid</Quadriga:uri>
+	<Quadriga:uri>$url/rest/projects/$project.internalid</Quadriga:uri>
 </Quadriga:project> 	
 #end
 </Quadriga:projectList>
