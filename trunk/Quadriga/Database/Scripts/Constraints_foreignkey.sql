@@ -12,7 +12,7 @@ ALTER TABLE tbl_conceptcollections
 ADD FOREIGN KEY(collectionowner) REFERENCES tbl_quadriga_user(username);
 
 ALTER TABLE tbl_dictionary_collaborator
-ADD FOREIGN KEY(id)  REFERENCES tbl_dictionary(id);
+ADD FOREIGN KEY(id) REFERENCES tbl_dictionary(id);
 
 ALTER TABLE tbl_dictionary_collaborator
 ADD FOREIGN KEY(collaboratoruser)  REFERENCES tbl_quadriga_user(username);
