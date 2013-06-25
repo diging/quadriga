@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <section>
 
 	<h2 class="major">
@@ -11,7 +12,7 @@
 					» <a href="/quadriga/auth/workbench/workspace/archiveworkspace">Archive Workspace</a><br /><br />
 					» <a href="/quadriga/auth/workbench/workspace/deactivateworkspace">Deactivate Workspace</a><br /><br />
 					» <a href="/quadriga/auth/workbench/workspace/deleteworkspace">Delete Workspace</a><br /><br />
-				<!--<input type="text" id="wsprojectid" value=<c:out value="${wsprojectid}"></c:out> />  -->
+                   <input type="hidden" id="wsprojectid" value=<c:out value="${wsprojectid}"></c:out> />				    
 				</h3>
 			</article>
 		</li>
