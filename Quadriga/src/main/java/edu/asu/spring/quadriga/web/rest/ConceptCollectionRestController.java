@@ -4,6 +4,8 @@ import java.io.StringWriter;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -75,12 +77,12 @@ public class ConceptCollectionRestController {
 	 */
 	@RequestMapping(value = "rest/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String listConceptCollections(ModelMap model, Principal principal)
+	public String listConceptCollections(ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
 		List<IConceptCollection> collectionsList = null;
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
-
+		  
 		try {
 			engine.init();
 			String userId = principal.getName();
@@ -88,8 +90,9 @@ public class ConceptCollectionRestController {
 					.getCollectionsOwnedbyUser(userId);
 			template = engine
 					.getTemplate("velocitytemplates/conceptcollections.vm");
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", collectionsList);
+			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
@@ -122,9 +125,9 @@ public class ConceptCollectionRestController {
 	@RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String getConceptList(
-			@PathVariable("collectionID") int collectionID, ModelMap model)
+			@PathVariable("collectionID") int collectionID, ModelMap model, HttpServletRequest req)
 			throws Exception {
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		StringWriter sw = new StringWriter();
 		collection = collectionFactory.createConceptCollectionObject();
@@ -134,8 +137,9 @@ public class ConceptCollectionRestController {
 			conceptControllerManager.getCollectionDetails(collection);
 			template = engine
 					.getTemplate("velocitytemplates/conceptdetails.vm");
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", collection.getItems());
+			
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {

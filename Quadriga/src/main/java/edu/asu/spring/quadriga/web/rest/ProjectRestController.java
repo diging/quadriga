@@ -4,6 +4,8 @@ import java.io.StringWriter;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -60,19 +62,19 @@ public class ProjectRestController {
 	 */
 	@RequestMapping(value = "rest/projects", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String listProjects(ModelMap model, Principal principal)
+	public String listProjects(ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
 		List<IProject> projectList = null;
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine();
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
 			engine.init();
 			String userId = principal.getName();
 			projectList = projectManager.getProjectsOfUser(userId);
 			template = engine.getTemplate("velocitytemplates/projectlist.vm");
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", projectList);
-
+			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
