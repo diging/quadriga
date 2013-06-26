@@ -80,4 +80,8 @@
 	
 	<!-- Reference the rest settings -->
 	<beans:import resource="rest-service.xml"/>
+	
+	<!-- Reference the rest settings -->
+	<beans:import resource="cc-collaborator-roles.xml"/>
+	
 </beans:beans>

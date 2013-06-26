@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="ccCollaborator" />
+		<property name="roleDBid" value="cc_role1"></property>
+		<property name="roleid" value="ADMIN"></property>
+		<property name="rolename" value="admin"></property>
+		<property name="roledescription"
+			value="Collaborator admin who has same rights as owner"></property>
+</bean>
+
+<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="ccCollaborator" />
+		<property name="roleDBid" value="cc_role2"></property>
+		<property name="roleid" value="CC_READ_ACCESS"></property>
+		<property name="rolename" value="cc_read_access"></property>
+		<property name="roledescription"
+			value="CC Collaborators that can read concept collection"></property>
+</bean>
+
+<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="ccCollaborator" />
+		<property name="roleDBid" value="cc_role3"></property>
+		<property name="roleid" value="CC_READ/WRITE_ACCESS"></property>
+		<property name="rolename" value="cc_read/write_access"></property>
+		<property name="roledescription"
+			value="CC Collaborators that can read, add, and delete the concepts in a concept
+collection"></property>
+</bean>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</beans>

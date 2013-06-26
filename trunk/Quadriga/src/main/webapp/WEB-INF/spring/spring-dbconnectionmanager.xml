@@ -28,11 +28,52 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/quadriga" />
 
-		<property name="username" value="dbadmin" />
-		<property name="password" value="dbadmin" />
+
+		<property name="url" value="jdbc:mysql://localhost:3306/quad_test" />
+
+		<property name="username" value="root" />
+		<property name="password" value="Oregon_1280" />
 
 	</bean>
+
+
+
+	<bean id="DspaceManager" class="edu.asu.spring.quadriga.dspace.service.impl.DspaceManager"
+		init-method="start">
+	</bean>
+
+	<bean id="dspaceURL" class="java.lang.String">
+		<constructor-arg>
+			<value>import.hps.ubio.org</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+					<property name="marshaller" ref="jaxbMarshaller" />
+					<property name="unmarshaller" ref="jaxbMarshaller" />
+				</bean>
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>edu.asu.spring.quadriga.domain.implementation.Community
+				</value>
+				<value>edu.asu.spring.quadriga.domain.implementation.Communities
+				</value>
+			</list>
+		</property>
+	</bean>
+
 
 </beans>

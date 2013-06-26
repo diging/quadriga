@@ -318,7 +318,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				IUser collaboratorUser = userFactory.createUserObject();
 			    
 					project.setInternalid(resultset1.getInt(1));
-					
 					collaboratorUser.setName(resultset1.getString(2));
 				    					
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
@@ -333,7 +332,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	} 
 		catch(SQLException e)
 		{
-			throw new RuntimeException();
+			throw new QuadrigaStorageException("Database is on hangout!!!!!!!");
 		}
 		 finally{
 			 closeConnection();
@@ -402,7 +401,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			} 
 		     
 		} catch (SQLException e) {
-			throw new RuntimeException(); 
+			throw new QuadrigaStorageException("Database is on hangout!!!!!!!"); 
 		}
 	   
 	    finally{
@@ -421,7 +420,6 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		IUser collaboratorUser=null;
 		List<IUser> noncollaboratingUsers = new ArrayList<IUser>();
 		List<IQuadrigaRole> quadrigaRoles = new ArrayList<IQuadrigaRole>();
-		//DBConnectionManager dbConnectionManager = new DBConnectionManager();
 
 
 		try {
@@ -464,7 +462,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			} 
 		     
 		} catch (SQLException e) {
-			throw new RuntimeException(); 
+			throw new QuadrigaStorageException("Database is on hangout!!!!!!!"); 
 		}
 	    
 	    finally{
@@ -521,7 +519,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
     		} 
     	
     	catch (SQLException e) {
-    		throw new QuadrigaStorageException(e.getMessage(), e);
+    		throw new QuadrigaStorageException("Database is on hangout!!!!!!!");
         }
         finally{
         	closeConnection();

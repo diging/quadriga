@@ -238,8 +238,14 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					IUser user = userFactory.createUserObject();
 					user.setName(resultSet.getString(2));
 					collaborator.setUserObj(user);
+					logger.info("role data :" +resultSet.getString(3) );
+					String role = resultSet.getString(3);
+					if(role == null)
+					{
+						role="";
+					}
+					collaboratorRoles = dbConnectionProjectManager.splitAndCreateCollaboratorRoles(role);
 					
-					collaboratorRoles = dbConnectionProjectManager.splitAndCreateCollaboratorRoles(resultSet.getString(3));
 					collaborator.setCollaboratorRoles(collaboratorRoles);
 					
 					collection.getCollaborators().add(collaborator);					
