@@ -28,19 +28,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	@Qualifier("ccCollaborator")
 	private List<ICollaboratorRole> ccCollabRoles;
 	
-	/*@Override
-	public void setCollaboratorRole(List<ICollaboratorRole> collaboratorroles) {
-		this.projectCollabRoles = collaboratorroles;
-		this.ccCollabRoles = collaboratorroles;
-		
-	}
-	
-	@Override
-	public List<ICollaboratorRole> getCollaboratorRoles() {
-		
-		return this.projectCollabRoles;
-	} */
-	
+
 	@Override
 	public void setProjectCollaboratorRole(List<ICollaboratorRole> collaboratorRoles) {
 		this.projectCollabRoles = collaboratorRoles;
@@ -59,7 +47,6 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 
 	@Override
 	public List<ICollaboratorRole> getCollectionCollaboratorRoles() {
-		// TODO Auto-generated method stub
 		return this.ccCollabRoles;
 	}
 
@@ -75,21 +62,6 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
  * 
  * 
  */
-	/*@Override
-	public void fillCollaboratorRole(ICollaboratorRole collaboratorRole) {
-		
-		for(ICollaboratorRole role: projectCollabRoles)
-		{
-			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
-			{
-				collaboratorRole.setRoleid(role.getRoleid());
-				System.out.println("-------------------"+role.getRoleid());
-				// add rest of role information to collaboratorRole object
-			}
-		}
-		
-			
-	} */
 	
 	@Override
 	public void fillProjectCollaboratorRole(ICollaboratorRole collaboratorRole) {
@@ -99,7 +71,6 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
 				collaboratorRole.setRoleid(role.getRoleid());
-				System.out.println("-------------------"+role.getRoleid());
 				// add rest of role information to collaboratorRole object
 			}
 		}
@@ -114,7 +85,6 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
 				collaboratorRole.setRoleid(role.getRoleid());
-				System.out.println("-------------------"+role.getRoleid());
 				// add rest of role information to collaboratorRole object
 			}
 		}

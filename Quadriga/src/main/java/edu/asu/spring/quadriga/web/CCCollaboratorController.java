@@ -111,7 +111,7 @@ public class CCCollaboratorController {
 					return "auth/conceptcollection/{collectionid}";
 				}
 			
-			return "redirect:auth/conceptcollection"+collectionid+"/displayCollaborators";
+			return "redirect:auth/conceptcollection/"+collectionid;
 		}
 		
 		

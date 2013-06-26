@@ -24,7 +24,7 @@ BEGIN
 		THEN SET errmsg = "collaborator role cannot be empty";
 	END IF;
 
-	IF EXISTS(SELECT 1 FROM vw_project_collaborator 
+	IF EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator 
 				WHERE collectionid = incollectionid AND collaboratoruser = incollaboratoruser)
 		THEN SET errmsg = "collaborator already exists";
 	END IF;

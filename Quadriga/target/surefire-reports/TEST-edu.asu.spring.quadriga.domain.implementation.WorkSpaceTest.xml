@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0" errors="0" skipped="0" tests="5" name="edu.asu.spring.quadriga.domain.implementation.UserTest">
+<testsuite failures="0" time="0.001" errors="0" skipped="0" tests="5" name="edu.asu.spring.quadriga.domain.implementation.WorkSpaceTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.7.0_07\jre\bin"/>
@@ -60,9 +60,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.UserTest" name="testGetName"/>
-  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.UserTest" name="testGetEmail"/>
-  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.UserTest" name="testGetUserName"/>
-  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.UserTest" name="testGetPassword"/>
-  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.UserTest" name="testGetQuadrigaRoles"/>
+  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.WorkSpaceTest" name="testGetName"/>
+  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.WorkSpaceTest" name="testGetId"/>
+  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.WorkSpaceTest" name="testGetOwner"/>
+  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.WorkSpaceTest" name="testGetCollaborators"/>
+  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.WorkSpaceTest" name="testGetDescription"/>
 </testsuite>

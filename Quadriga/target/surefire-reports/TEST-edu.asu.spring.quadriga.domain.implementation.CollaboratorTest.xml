@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.003" errors="0" skipped="0" tests="4" name="edu.asu.spring.quadriga.domain.implementation.CollaboratorTest">
+<testsuite failures="0" time="0" errors="0" skipped="0" tests="3" name="edu.asu.spring.quadriga.domain.implementation.CollaboratorTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.7.0_07\jre\bin"/>
@@ -26,7 +26,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 7"/>
-    <property name="classworlds.conf" value="C:\Users\rohit\svn_workspace\.metadata\.plugins\org.eclipse.m2e.core\launches\m2conf4462037323754395216.tmp"/>
+    <property name="classworlds.conf" value="C:\Users\rohit\svn_workspace\.metadata\.plugins\org.eclipse.m2e.core\launches\m2conf6990889254980939559.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk1.7.0_07\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\PC Connectivity Solution\;C:\Program Files (x86)\HP SimplePass\x64;C:\Program Files (x86)\HP SimplePass\;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\MATLAB\R2011b\runtime\win64;C:\Program Files\MATLAB\R2011b\bin;C:\Program Files (x86)\MiKTeX 2.9\miktex\bin\;C:\Program Files\nodejs\;C:\Program Files\Java\jdk1.7.0_07\bin;F:\undergrad project\apache-tomcat-7.0.35\bin;F:\undergrad project\apache-ant-1.8.4\bin;F:\undergrad project\axis2-1.6.2\bin;C:\Users\rohit\AppData\Roaming\npm;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -60,8 +60,7 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
+  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.CollaboratorTest" name="testGetUserObj"/>
   <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.CollaboratorTest" name="testGetCollaboratorRoles"/>
-  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.CollaboratorTest" name="testSetDescription"/>
-  <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.CollaboratorTest" name="testSetCollaboratorRoles"/>
   <testcase time="0" classname="edu.asu.spring.quadriga.domain.implementation.CollaboratorTest" name="testGetDescription"/>
 </testsuite>

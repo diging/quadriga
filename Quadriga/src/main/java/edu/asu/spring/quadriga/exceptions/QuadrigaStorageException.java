@@ -21,9 +21,17 @@ public class QuadrigaStorageException extends Exception {
 		super(customMsg);
 	}
 
+	
+	public QuadrigaStorageException(Exception e)
+	{
+		super(e);
+	}
+
+
 	public QuadrigaStorageException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 	}
 	
 	
+
 }
