@@ -31,7 +31,6 @@
 		value='Add ConceptCollection'></li>
 </ul>
 
-
 <div
 	style="float: left; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
 	<h3 align="center">You own these concept collections</h3>
@@ -52,6 +51,7 @@
 	</ul>
 
 </div>
+
 <div
 	style="float: right; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
 	<h3 align="center">You collaborate on these concept collections</h3>
@@ -72,3 +72,4 @@
 	</ul>
 
 </div>
+

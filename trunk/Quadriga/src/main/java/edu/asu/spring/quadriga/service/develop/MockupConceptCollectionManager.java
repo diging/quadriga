@@ -3,7 +3,9 @@ package edu.asu.spring.quadriga.service.develop;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
@@ -107,6 +109,26 @@ public class MockupConceptCollectionManager implements
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<IUser> showNonCollaboratingUsers(int collectionid) {
+		return null;
+	}
+
+	@Override
+	public List<IUser> showCollaboratingUsers(int collectionid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String addCollaborators(ICollaborator collaborator, int collectionid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	
 
 	
 

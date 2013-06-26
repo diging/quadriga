@@ -57,10 +57,10 @@ public class ProjectManager implements IProjectManager {
 		List<IProject> projectList = new ArrayList<IProject>();
 
 		try {
-			projectList = dbConnect.getProjectOfUser(userid);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+				projectList = dbConnect.getProjectOfUser(userid);
+			} catch (QuadrigaStorageException e) {
+				e.printStackTrace();
+			}
 
 		return projectList;
 	}
@@ -145,12 +145,10 @@ public class ProjectManager implements IProjectManager {
 
 		for (ICollaborator collaborator : project.getCollaborators()) {
 
-			for (ICollaboratorRole collaboratorRole : collaborator
-					.getCollaboratorRoles()) {
-				roleMapper.fillCollaboratorRole(collaboratorRole);
+			for (ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles()) {
+				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
 			}
 		}
-		
 		return project;
 	}
 
@@ -180,20 +178,20 @@ public class ProjectManager implements IProjectManager {
 		return userList;
 	}
 
+	
+	
 	@Override
-	public IProject showExistingCollaborator(int projectid) throws QuadrigaStorageException {
-
-		IProject project = null;
-		project = dbConnect.getProjectDetails(projectid);
-		
-		for (ICollaborator collaborator : project.getCollaborators()) {
-
-			for (ICollaboratorRole collaboratorRole : collaborator
-					.getCollaboratorRoles()) {
-				roleMapper.fillCollaboratorRole(collaboratorRole);
+	public List<IUser> showExistingCollaborator(int projectid){
+		List<IUser> userList = null;
+		try {
+				userList = dbConnect.showCollaboratorsRequest(projectid);
+			} 
+		catch (QuadrigaStorageException e) {
+				e.printStackTrace();
 			}
-		}
-		return project;
+
+		return userList;
+	
 	}
 
 	@Override

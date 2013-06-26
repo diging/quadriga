@@ -73,6 +73,8 @@
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/conceptcollection.jsp" />
+		<put-attribute name="sub-navigation"
+			value="/WEB-INF/views/conceptcollections/collection-right.jsp"/>
 	</definition>
 	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Collection Details" />
@@ -89,6 +91,10 @@
 		<put-attribute name="title" value="Quadriga - Collection Details" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/addConceptCollection.jsp" />
+	</definition>
+	<definition name="auth/conceptcollection/showCollaborators" extends="base.definition.conceptcollections">
+		<put-attribute name="title" value="Non existing Collaborators" />
+		<put-attribute name="content" value="/WEB-INF/views/conceptcollections/showCollaborators.jsp" />
 	</definition>
 
 	<!-- Workbench pages -->

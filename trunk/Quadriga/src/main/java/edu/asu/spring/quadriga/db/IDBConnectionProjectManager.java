@@ -55,10 +55,11 @@ public interface IDBConnectionProjectManager
 	 * 
 	 * @author rohit pendbhaje
 	 * @throws SQLException 
+	 * @throws QuadrigaStorageException 
 	 * 
 	 */
 
-	public abstract List<IProject> getProjectOfUser(String sUserId) throws SQLException;
+	public abstract List<IProject> getProjectOfUser(String sUserId) throws QuadrigaStorageException;
 
 
 	/**

@@ -101,7 +101,7 @@ public class MockupProjectManager implements IProjectManager{
 	}
 
 	@Override
-	public IProject showExistingCollaborator(int projectid) {
+	public List<IUser> showExistingCollaborator(int projectid) {
 		return null;
 	}
 

@@ -5,7 +5,10 @@ package edu.asu.spring.quadriga.service;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -107,6 +110,15 @@ public interface IConceptCollectionManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	public abstract void update(String[] values, IConceptCollection concept) throws QuadrigaStorageException;
+	
+	public abstract List<IUser> showNonCollaboratingUsers(int collectionid);
+	
+	public abstract List<IUser> showCollaboratingUsers(int collectionid);
+	
+	public abstract String addCollaborators(ICollaborator collaborator, int collectionid);
+
+	
+	
 
 	
 }
