@@ -5,8 +5,11 @@ package edu.asu.spring.quadriga.db;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -83,6 +86,15 @@ public interface IDBConnectionCCManager {
 		 * @throws QuadrigaStorageException 
 		 */
 		public abstract int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException;
+		
+		public abstract List<IUser> showCollaboratorRequest(int collectionid);
+		
+		public abstract List<IUser> showNonCollaboratorRequest(int collectionid);
+		
+		public abstract String addCollaboratorRequest(ICollaborator collaborator,int collectionid);
+		
+		public abstract List<IConceptCollection> getCollaborators(String userId);
+		
 		
 		
 		

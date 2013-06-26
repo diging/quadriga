@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.web;
 
 import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,18 +17,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IProjectManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Controller
@@ -47,6 +49,9 @@ public class CollaboratorController {
 	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
+	
+	@Autowired
+	private IQuadrigaRoleManager quadrigaRoleManager;
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -70,8 +75,7 @@ public class CollaboratorController {
 					roles.add(role);
 				}
 				setValue(roles);
-			}
-	    	
+			} 	
 	    }); 
 	}
 	
@@ -84,29 +88,57 @@ public class CollaboratorController {
         }
         catch(QuadrigaStorageException e){
 			throw new QuadrigaStorageException();
-		}
-        
+		} 
 		model.addAttribute("project", project); 
 		
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
 		model.addAttribute("collaborator", collaborator); 
 
+		// mapping collaborators which are not part of the project and restricting users which
+		// have user role as Restricted User
 		try
 		{
 			List<IUser> notCollaboratingUsers = projectmanager.getNotCollaboratingUsers(projectid);
+			Iterator<IUser> notCollaboratingUsersIterator = notCollaboratingUsers.iterator();
+						
+			while(notCollaboratingUsersIterator.hasNext())
+			{   IUser user = notCollaboratingUsersIterator.next();
+				List<IQuadrigaRole> nonCollabUserQuadrigaRole = user.getQuadrigaRoles();
+				Iterator<IQuadrigaRole> nonCollabUserRoleIterator = nonCollabUserQuadrigaRole.iterator();
+				
+				while(nonCollabUserRoleIterator.hasNext())
+				{
+					if((nonCollabUserRoleIterator.next().getDBid()).equals("role6"))
+					{
+						notCollaboratingUsersIterator.remove();
+					}   
+				}
+				
+			}
 			model.addAttribute("notCollaboratingUsers", notCollaboratingUsers);
-			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleManager.getCollaboratorRoles());
 			
+			// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
+						
+			List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+			collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+			Iterator<ICollaboratorRole> collaboratorRoleIterator = collaboratorRoles.iterator();
+			
+			while(collaboratorRoleIterator.hasNext())
+			{
+				if((collaboratorRoleIterator.next().getRoleid()).equals("ADMIN"))
+				{
+					collaboratorRoleIterator.remove();
+				}
+			}
+			model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);	
+		
+			List<IUser> existingCollaborators =  projectmanager.showExistingCollaborator(projectid);
+			model.addAttribute("existingCollaborators", existingCollaborators);	
 		}
 		catch(QuadrigaStorageException e){
 			throw new QuadrigaStorageException();
-		}
-//		IUser user = userFactory.createUserObject();
-//		user.setName("test name");
-//		user.setUserName("testid");
-//		notCollaboratingUsers.add(user);
-		
+		}		
 		
 		return "auth/workbench/showCollaborators";
 
@@ -116,7 +148,6 @@ public class CollaboratorController {
 	public ICollaborator getCollaborator() {
 		ICollaborator collaborator = collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
-		//model.addAttribute("collaborator", collaborator);
 		return collaborator;
 	} 
 	
@@ -136,7 +167,6 @@ public class CollaboratorController {
 
 		if(errmsg.equals(""))
 		{
-
 			redirectatt.addFlashAttribute("success", "1");
 		//	redirectatt.addAttribute("successmsg", "collaborator added successfully");
 			return "redirect:/auth/workbench/{projectid}"; 

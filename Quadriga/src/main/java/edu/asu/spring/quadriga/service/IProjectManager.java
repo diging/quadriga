@@ -45,7 +45,7 @@ public interface IProjectManager {
 	
 	public abstract List<IUser> getNotCollaboratingUsers(int projectid) throws QuadrigaStorageException;
 	
-	public abstract IProject showExistingCollaborator(int projectid) throws QuadrigaStorageException;
+	public abstract List<IUser> showExistingCollaborator(int projectid) throws QuadrigaStorageException;
 	
 	public abstract List<ICollaborator> getProjectCollaborator(int id) throws QuadrigaStorageException;
 

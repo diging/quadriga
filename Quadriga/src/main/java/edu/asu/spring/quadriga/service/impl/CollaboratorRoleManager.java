@@ -3,6 +3,9 @@ package edu.asu.spring.quadriga.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -18,20 +21,48 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 
 	@Autowired 
-	private List<ICollaboratorRole> collaboratorRoles;
-
+	@Qualifier("projectCollaborator")
+	private List<ICollaboratorRole> projectCollabRoles;
 	
-	@Override
+	@Autowired
+	@Qualifier("ccCollaborator")
+	private List<ICollaboratorRole> ccCollabRoles;
+	
+	/*@Override
 	public void setCollaboratorRole(List<ICollaboratorRole> collaboratorroles) {
-		this.collaboratorRoles = collaboratorroles;
+		this.projectCollabRoles = collaboratorroles;
+		this.ccCollabRoles = collaboratorroles;
 		
 	}
 	
 	@Override
 	public List<ICollaboratorRole> getCollaboratorRoles() {
 		
-		return this.collaboratorRoles;
+		return this.projectCollabRoles;
+	} */
+	
+	@Override
+	public void setProjectCollaboratorRole(List<ICollaboratorRole> collaboratorRoles) {
+		this.projectCollabRoles = collaboratorRoles;
 	}
+
+	@Override
+	public List<ICollaboratorRole> getProjectCollaboratorRoles() {
+		return this.projectCollabRoles;
+	}
+
+	@Override
+	public void setCollectionCollaboratorRole(List<ICollaboratorRole> collaboratorRoles) {
+		this.ccCollabRoles = collaboratorRoles;
+		
+	}
+
+	@Override
+	public List<ICollaboratorRole> getCollectionCollaboratorRoles() {
+		// TODO Auto-generated method stub
+		return this.ccCollabRoles;
+	}
+
 
 /**
  * @description: maps roleDBid of the collaborator roles from database to xml 
@@ -44,20 +75,50 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
  * 
  * 
  */
-	@Override
+	/*@Override
 	public void fillCollaboratorRole(ICollaboratorRole collaboratorRole) {
 		
-		
-		for(ICollaboratorRole role: collaboratorRoles)
+		for(ICollaboratorRole role: projectCollabRoles)
 		{
 			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
 				collaboratorRole.setRoleid(role.getRoleid());
+				System.out.println("-------------------"+role.getRoleid());
 				// add rest of role information to collaboratorRole object
 			}
 		}
 		
 			
+	} */
+	
+	@Override
+	public void fillProjectCollaboratorRole(ICollaboratorRole collaboratorRole) {
+		
+		for(ICollaboratorRole role: projectCollabRoles)
+		{
+			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
+			{
+				collaboratorRole.setRoleid(role.getRoleid());
+				System.out.println("-------------------"+role.getRoleid());
+				// add rest of role information to collaboratorRole object
+			}
+		}
+		
+	}
+
+	@Override
+	public void fillCollectionCollaboratorRole(ICollaboratorRole collaboratorRole) {
+		
+		for(ICollaboratorRole role: ccCollabRoles)
+		{
+			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
+			{
+				collaboratorRole.setRoleid(role.getRoleid());
+				System.out.println("-------------------"+role.getRoleid());
+				// add rest of role information to collaboratorRole object
+			}
+		}
+		
 	}
 
 /**
@@ -73,7 +134,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 public ICollaboratorRole getCollaboratorRoleById(String collaboratorRoleId) {
 		
 		
-		for(ICollaboratorRole role: collaboratorRoles)
+		for(ICollaboratorRole role: projectCollabRoles)
 		{
 			if(role.getRoleid().equals(collaboratorRoleId))
 			{
@@ -83,5 +144,8 @@ public ICollaboratorRole getCollaboratorRoleById(String collaboratorRoleId) {
 		
 		return null;	
 	}
+
+
+
 
 }

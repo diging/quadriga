@@ -14,7 +14,7 @@ import javax.inject.Named;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;	
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
@@ -25,6 +25,11 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
+
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
 /**
  * @author satyaswaroop
@@ -51,6 +56,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	@Qualifier("updateConceptPowerURL")
 	private String updateURL;
+	
+	@Autowired
+	private ICollaboratorRoleManager roleMapper ;
 	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getCollectionsOfUser(java.lang.String)
@@ -94,6 +102,14 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Override
 	public void getCollectionDetails(IConceptCollection concept) throws QuadrigaStorageException {
 		dbConnect.getCollectionDetails(concept);
+		List<ICollaborator> collaborators = concept.getCollaborators();
+		for(ICollaborator collaborator:collaborators)
+		{
+			for(ICollaboratorRole collaboratorRole: collaborator.getCollaboratorRoles())
+			{
+				roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
+			}
+		}
 		}
 
 	@Override
@@ -154,5 +170,25 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		dbConnect.deleteItems(id,collectionId);
 		
 	}
+	
+	@Override
+	public List<IUser> showNonCollaboratingUsers(int collectionid) {
+		List<IUser> nonCollaboratorList =  dbConnect.showNonCollaboratorRequest(collectionid);
+		return nonCollaboratorList;
+	}
+
+	@Override
+	public List<IUser> showCollaboratingUsers(int collectionid) {
+		List<IUser> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
+		return collaboratorList;
+	}
+
+	@Override
+	public String addCollaborators(ICollaborator collaborator, int collectionid) {
+		String errmsg = dbConnect.addCollaboratorRequest(collaborator, collectionid);
+		return errmsg;
+	}
+
+	
 
 }

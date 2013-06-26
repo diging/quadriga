@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
@@ -54,6 +55,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	private DBConnectionManager dbConnectionManager;
 
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectManager.class);
 		
@@ -151,7 +155,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
      */
 	@Override
 	// this should not throw a SQLException but QuadrigaStorageException
-	public List<IProject> getProjectOfUser(String sUserName) throws SQLException{
+	public List<IProject> getProjectOfUser(String sUserName) throws QuadrigaStorageException{
 
 
 
@@ -170,9 +174,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		try {
 			
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			
 			sqlStatement.setString(1, sUserName);
-			
 			sqlStatement.registerOutParameter(2, Types.VARCHAR);
 			
 			sqlStatement.execute();
@@ -206,7 +208,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		
 		catch (Exception e)
 		{
-			throw new RuntimeException();
+			throw new QuadrigaStorageException();
 		}
         finally
         {
@@ -354,15 +356,21 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 	@Override
 	public List<IUser> showCollaboratorsRequest(int projectid) throws QuadrigaStorageException {
 
-
 		String dbCommand;
 		String outErrorValue;
 		CallableStatement sqlStatement ;
+		//ICollaborator collaborator = null;
+
 		
 		List<IUser> collaboratingUsers = new ArrayList<IUser>();
 
 		IUser collaboratorUser = null;
 
+		try {
+			getConnection();
+		} catch (QuadrigaStorageException e1) {
+			e1.printStackTrace();
+		}
 		getConnection();
 		
 
@@ -383,7 +391,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				while(resultset.next())
 				{
 					collaboratorUser = userFactory.createUserObject();
-					collaboratorUser.setName(resultset.getString(1));
+					collaboratorUser.setUserName(resultset.getString(1));
 					collaboratingUsers.add(collaboratorUser);	
 				}
 		     }
@@ -412,6 +420,15 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 		CallableStatement sqlStatement ;
 		IUser collaboratorUser=null;
 		List<IUser> noncollaboratingUsers = new ArrayList<IUser>();
+		List<IQuadrigaRole> quadrigaRoles = new ArrayList<IQuadrigaRole>();
+		//DBConnectionManager dbConnectionManager = new DBConnectionManager();
+
+
+		try {
+			getConnection();
+		} catch (QuadrigaStorageException e1) {
+			e1.printStackTrace();
+		}
 
 		getConnection();
 		
@@ -434,6 +451,9 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 				{
 					collaboratorUser = userFactory.createUserObject();
 					collaboratorUser.setUserName(resultset.getString(1));
+
+					quadrigaRoles = dbConnectionManager.UserRoles(resultset.getString(2));
+					collaboratorUser.setQuadrigaRoles(quadrigaRoles);
 					noncollaboratingUsers.add(collaboratorUser);
 				}
 		     }
@@ -485,6 +505,7 @@ public class DBConnectionProjectManager implements IDBConnectionProjectManager
 			 
 			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
 				{
+				
 		        	 role = collaboratorRole.getRoleDBid();
 		 			 sqlStatement.setString(3, role);
 				}
