@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!-- This file contains the spring RestTemplate configuration details. To 
+		implement marshalling for any class simply add the class name under the value 
+		tag in property classesToBeBound. Also make sure to annotate the corresponding 
+		classes with the @XMLRootElement tag -->
+
+	<bean id="dspaceFilePath" class="java.lang.String">
+		<constructor-arg>
+			<value>C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts</value>
+			<!--<value>/home/tomcat/webapps/certificates/jssecacerts</value> -->
+		</constructor-arg>
+	</bean>
+	
+	<bean id="DspaceManager"
+		class="edu.asu.spring.quadriga.dspace.service.impl.DspaceManager"
+		init-method="start">
+	</bean>
+
+	<bean id="dspaceURL" class="java.lang.String">
+		<constructor-arg>
+			<value>import.hps.ubio.org</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="searchWordPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="searchConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/ConceptLookup/</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="updateFromWordPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="updateConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/Concept?id=</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+					<property name="marshaller" ref="jaxbMarshaller" />
+					<property name="unmarshaller" ref="jaxbMarshaller" />
+				</bean>
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				
+			</list>
+		</property>
+	</bean>
+ 
+			
+        
+    
+        
+	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunities
+				</value>
+				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection
+				</value>
+				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
+				</value>
+				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
+				</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	
+	
+</beans>
