@@ -3,6 +3,7 @@
 <!-- Content -->
 
 <article class="is-page-content">
+			
 <script>
 		$(document).ready(function() {
 
@@ -20,7 +21,7 @@
 				var i = 0
 				var IDs = [];
 				for (i = 0; i < divIDs.length; i++) {
-					if ($('#' + divIDs[i]).text() == 'Loading...') {
+					if ($('#' + divIDs[i]).text() == ' Loading...') {
 						IDs.push(divIDs[i]);
 					}
 				}				
@@ -34,6 +35,10 @@
 						//Load the new text in the corresponding div tag
 						if(data != 'Loading...'){
 							data = '<a href="/quadriga/auth/workbench/workspace/community/collection/'+collectionid[1]+'" style="color:#707070">'+data+'</a>';
+						}
+						else
+						{
+							data = '<img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> '+data;
 						}
 						//Load the new text in the corresponding div tag
 						$('#collection_' + collectionid[1]).html(data);
@@ -60,7 +65,7 @@
 				var i = 0
 				var IDs = [];
 				for (i = 0; i < divIDs.length; i++) {
-					if ($('#' + divIDs[i]).text() == 'Loading...') {
+					if ($('#' + divIDs[i]).text() == ' Loading...') {
 						IDs.push(divIDs[i]);
 					}
 				}
@@ -100,7 +105,7 @@
 						href='<c:out value="/quadriga/auth/workbench/workspace/community/${community.id}" />'>${community.name}</a></span>
 					<br />
 					<c:forEach var="collection" items="${community.collections}">
-						<span style="float: left; margin-left: 50px; font-weight: bold"><div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise>Loading...</c:otherwise></c:choose></div></span>
+						<span style="float: left; margin-left: 50px; font-weight: bold"><div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div></span>
 						<br />
 					</c:forEach>
 				</c:forEach>
