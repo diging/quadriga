@@ -23,7 +23,7 @@ public interface IDspaceManager {
 
 	public abstract String getCommunityId(String sCollectionId);
 
-	public abstract List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId);
+	public abstract List<IBitStream> getAllBitStreams(String sUserName, String sPassword, String sCollectionId, String sItemId);
 
 	public abstract String getItemName(String sCollectionId, String sItemId);
 

@@ -17,7 +17,7 @@ public interface ICommunityManager {
 			String sUserName, String sPassword, String sCommunityId);
 
 	public abstract String getCommunityName(String sCommunityId);
-	
+
 	public abstract ICollection getCollection(String sCollectionId);
 
 	public abstract List<IItem> getAllItems(String sCollectionId);
@@ -26,7 +26,9 @@ public interface ICommunityManager {
 
 	public abstract String getCommunityId(String sCollectionId);
 
-	public abstract List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId);
-
 	public abstract String getItemName(String sCollectionId, String sItemId);
+
+	public abstract List<IBitStream> getAllBitStreams(RestTemplate restTemplate, String url,
+			String sUserName, String sPassword, String sCollectionId,
+			String sItemId);
 }

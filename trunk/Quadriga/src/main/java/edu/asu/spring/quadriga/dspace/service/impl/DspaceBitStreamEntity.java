@@ -5,8 +5,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
 
-@XmlRootElement(name="bitstreamentityid")
-public class DspaceBitStreamEntityId implements IDspaceBitStreamEntityId {
+@XmlRootElement(name="bitstreamentity")
+public class DspaceBitStreamEntity implements IDspaceBitStreamEntityId {
 	
 	private String id;
 	private String name;
@@ -60,16 +60,16 @@ public class DspaceBitStreamEntityId implements IDspaceBitStreamEntityId {
 		this.id = id;
 	}
 	
-	public static class Adapter extends XmlAdapter<DspaceBitStreamEntityId, IDspaceBitStreamEntityId>
+	public static class Adapter extends XmlAdapter<DspaceBitStreamEntity, IDspaceBitStreamEntityId>
 	{
 		@Override
-		public IDspaceBitStreamEntityId unmarshal(DspaceBitStreamEntityId v) throws Exception {
+		public IDspaceBitStreamEntityId unmarshal(DspaceBitStreamEntity v) throws Exception {
 			return v;
 		}
 
 		@Override
-		public DspaceBitStreamEntityId marshal(IDspaceBitStreamEntityId v) throws Exception {
-			return (DspaceBitStreamEntityId)v;
+		public DspaceBitStreamEntity marshal(IDspaceBitStreamEntityId v) throws Exception {
+			return (DspaceBitStreamEntity)v;
 		}		
 	}
 

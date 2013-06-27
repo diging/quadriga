@@ -11,11 +11,11 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
 import edu.asu.spring.quadriga.dspace.service.IDspaceBitStream;
 
 @XmlRootElement(name="bitstreams")
-public class DspaceBitStreams implements IDspaceBitStream {
+public class DspaceBitStream implements IDspaceBitStream {
 
 	private List<IDspaceBitStreamEntityId> bitstreamentityid;
 
-	@XmlElementRefs({@XmlElementRef(type=DspaceBitStreamEntity.class)})
+	@XmlElementRefs({@XmlElementRef(type=DspaceBitStreamEntityId.class)})
 	@Override
 	public List<IDspaceBitStreamEntityId> getBitstreamentityid() {
 		return bitstreamentityid;
@@ -26,16 +26,16 @@ public class DspaceBitStreams implements IDspaceBitStream {
 		this.bitstreamentityid = bitstreamentityid;
 	}
 	
-	public static class Adapter extends XmlAdapter<DspaceBitStreams, IDspaceBitStream>
+	public static class Adapter extends XmlAdapter<DspaceBitStream, IDspaceBitStream>
 	{
 		@Override
-		public IDspaceBitStream unmarshal(DspaceBitStreams v) throws Exception {
+		public IDspaceBitStream unmarshal(DspaceBitStream v) throws Exception {
 			return v;
 		}
 
 		@Override
-		public DspaceBitStreams marshal(IDspaceBitStream v) throws Exception {
-			return (DspaceBitStreams)v;
+		public DspaceBitStream marshal(IDspaceBitStream v) throws Exception {
+			return (DspaceBitStream)v;
 		}		
 	}
 	

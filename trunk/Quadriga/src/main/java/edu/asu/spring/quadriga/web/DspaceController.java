@@ -137,7 +137,8 @@ public class DspaceController {
 			return "redirect:/auth/workbench/workspace/communities";
 		}
 
-		List<IBitStream> bitstreams = dspaceManager.getAllBitStreams(collectionId, itemId);
+		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		List<IBitStream> bitstreams = dspaceManager.getAllBitStreams(principal.getName(),sPassword,collectionId, itemId);
 		model.addAttribute("communityId",communityId);
 		model.addAttribute("communityName",communityName);
 		model.addAttribute("collectionId",collectionId);
