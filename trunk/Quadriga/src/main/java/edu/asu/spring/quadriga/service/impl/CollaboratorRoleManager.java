@@ -28,9 +28,9 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	@Qualifier("ccCollaborator")
 	private List<ICollaboratorRole> ccCollabRoles;
 	
-	@Autowired
+	/*@Autowired
 	@Qualifier("dictCollaborator")
-	private List<ICollaboratorRole> dictCollabRoles;
+	private List<ICollaboratorRole> dictCollabRoles; */
 	
 
 	@Override
@@ -54,15 +54,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return this.ccCollabRoles;
 	}
 	
-	@Override
+	/*@Override
 	public void setDictCollaboratorRole(List<ICollaboratorRole> collaboratorRoles) {
 		this.dictCollabRoles = collaboratorRoles;		
 	}
 
 	@Override
 	public List<ICollaboratorRole> getDictCollaboratorRoles() {
-		return this.dictCollabRoles;
-	}
+		return this.dictCollabRoles; 
+	} */
 
 
 
@@ -106,7 +106,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		
 	}
 	
-	@Override
+/*	@Override
 	public void fillDictCollaboratorRole(ICollaboratorRole collaboratorRole) {
 
 		for(ICollaboratorRole role: dictCollabRoles)
@@ -118,7 +118,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			}
 		}
 		
-	}
+	} */
 
 	
 /**
@@ -161,7 +161,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return null;	
 	}
 
-	@Override
+/*	@Override
 	public ICollaboratorRole getDictCollaboratorRoleById(String collaboratorRoleId) {
 		
 		for(ICollaboratorRole role: dictCollabRoles)
@@ -172,9 +172,6 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			}
 		}
 		return null;
-	}
-
-	
-	
+	} */
 
 }

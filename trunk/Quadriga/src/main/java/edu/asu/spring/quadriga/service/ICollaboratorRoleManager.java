@@ -10,15 +10,15 @@ public interface ICollaboratorRoleManager {
 	
 	public abstract ICollaboratorRole getCCCollaboratorRoleById(String collaboratorRoleId);
 	
-	public abstract ICollaboratorRole getDictCollaboratorRoleById(String collaboratorRoleId);
+	//public abstract ICollaboratorRole getDictCollaboratorRoleById(String collaboratorRoleId);
 
 	public abstract void setProjectCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
 	
 	public abstract List<ICollaboratorRole> getProjectCollaboratorRoles();
 	
-	public abstract void setDictCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
+	//public abstract void setDictCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
 	
-	public abstract List<ICollaboratorRole> getDictCollaboratorRoles();
+	//public abstract List<ICollaboratorRole> getDictCollaboratorRoles();
 	
 	public abstract void setCollectionCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
 	
@@ -28,6 +28,6 @@ public interface ICollaboratorRoleManager {
 
 	public abstract void fillCollectionCollaboratorRole(ICollaboratorRole collaboratorRole);
 	
-	public abstract void fillDictCollaboratorRole(ICollaboratorRole collaboratorRole);
+	//public abstract void fillDictCollaboratorRole(ICollaboratorRole collaboratorRole);
 
 }
