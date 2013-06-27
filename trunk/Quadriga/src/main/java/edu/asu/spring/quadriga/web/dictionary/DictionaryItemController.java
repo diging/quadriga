@@ -100,7 +100,7 @@ public class DictionaryItemController {
 
 		if(values == null){
 			model.addAttribute("delsuccess", 0);
-			model.addAttribute("delerrormsg", "Items were not selected");
+//			model.addAttribute("delerrormsg", "Items were not selected");
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryId,user.getUsername());
 			String dictionaryName = dictonaryManager
@@ -126,7 +126,7 @@ public class DictionaryItemController {
 		} 
 		if (flag == 0) {
 			model.addAttribute("delsuccess", 1);
-			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
+//			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
 		} else if (flag == 1) {
 			if (errormsg.equals("Item doesnot exists in this dictionary")) {
 				model.addAttribute("delsuccess", 0);
@@ -169,7 +169,14 @@ public class DictionaryItemController {
 		int flag = 0;
 		if(values == null){
 			model.addAttribute("updatesuccess", 0);
-			model.addAttribute("updateerrormsg", "Items were not selected");
+//			model.addAttribute("updateerrormsg", "Items were not selected");
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+					.getDictionariesItems(dictionaryId,user.getUsername());
+			String dictionaryName = dictonaryManager
+					.getDictionaryName(dictionaryId);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictID", dictionaryId);
 			return "auth/dictionary/dictionary";
 		}else{
 			for (int i = 0; i < values.length; i++) {
