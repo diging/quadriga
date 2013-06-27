@@ -16,6 +16,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -45,25 +46,29 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class DictionaryRestController {
 
 	@Autowired
-	IDictionaryManager dictonaryManager;
+	private IDictionaryManager dictonaryManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryRestController.class);
 
 	@Autowired
-	IUserManager usermanager;
+	private IUserManager usermanager;
 
 	@Autowired
-	IDictionaryManager dictionaryManager;
+	private IDictionaryManager dictionaryManager;
 
 	@Autowired
-	IDictionaryFactory dictionaryFactory;
+	private IDictionaryFactory dictionaryFactory;
 
 	@Autowired
-	DictionaryItemsFactory dictionaryItemsFactory;
+	private DictionaryItemsFactory dictionaryItemsFactory;
 
 	@Autowired
-	IRestVelocityFactory restVelocityFactory;
+	private IRestVelocityFactory restVelocityFactory;
+	
+	@Autowired
+	@Qualifier("updateFromWordPowerURL")
+	private String wordPowerURL;
 
 	/**
 	 * Rest interface for the List Dictionary for the userId
@@ -156,7 +161,7 @@ public class DictionaryRestController {
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryItemsList);
-			
+			context.put("wordPowerURL",wordPowerURL);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();

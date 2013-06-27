@@ -15,6 +15,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,28 +46,32 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class ConceptCollectionRestController {
 
 	@Autowired
-	IDictionaryManager dictonaryManager;
+	private IDictionaryManager dictonaryManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ConceptCollectionRestController.class);
 
 	@Autowired
-	IUserManager usermanager;
+	private IUserManager usermanager;
 
 	@Autowired
-	IConceptCollectionManager conceptControllerManager;
+	private IConceptCollectionManager conceptControllerManager;
 
-	IConceptCollection collection;
+	private IConceptCollection collection;
 	@Autowired
-	IConceptCollectionFactory collectionFactory;
+	private IConceptCollectionFactory collectionFactory;
 
-	IConcept concept;
+	private IConcept concept;
 	@Autowired
-	IConceptFactory conFact;
+	private IConceptFactory conFact;
 
 	@Autowired
-	IRestVelocityFactory restVelocityFactory;
+	private IRestVelocityFactory restVelocityFactory;
 
+	@Autowired
+	@Qualifier("updateConceptPowerURL")
+	private String conceptPowerURL;
+	
 	/**
 	 * Rest interface for the getting list of concept collections of a user
 	 * http://<<URL>:<PORT>>/quadriga/rest/conceptcollections
@@ -156,7 +161,7 @@ public class ConceptCollectionRestController {
 					.getTemplate("velocitytemplates/conceptdetails.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", collection.getItems());
-			
+			context.put("conceptPowerURL",conceptPowerURL);
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {
