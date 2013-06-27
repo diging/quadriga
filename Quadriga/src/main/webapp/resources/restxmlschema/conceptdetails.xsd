@@ -14,6 +14,7 @@
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+       <xs:attribute type="xs:anyURI" name="conceptPower-url"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>
