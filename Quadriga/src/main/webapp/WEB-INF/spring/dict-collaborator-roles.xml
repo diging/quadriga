@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="dictCollaborator" />
+		<property name="roleDBid" value="dict_role1"></property>
+		<property name="roleid" value="ADMIN"></property>
+		<property name="rolename" value="admin"></property>
+		<property name="roledescription"
+			value="Dict Admins have the same rights as the Dict Owner"></property>
+</bean>
+
+<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="dictCollaborator" />
+		<property name="roleDBid" value="dict_role2"></property>
+		<property name="roleid" value="DICT_READ_ACCESS"></property>
+		<property name="rolename" value="dict_read_access"></property>
+		<property name="roledescription"
+			value="Dict Collaborators that can read dictionaries"></property>
+</bean>
+
+<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="dictCollaborator" />
+		<property name="roleDBid" value="dict_role3"></property>
+		<property name="roleid" value="DICT_READ/WRITE_ACCESS"></property>
+		<property name="rolename" value="dict_read/write_access"></property>
+		<property name="roledescription"
+			value="Dict Collaborators that can read, add, and delete the terms in a dictionary."></property>
+</bean>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</beans>
