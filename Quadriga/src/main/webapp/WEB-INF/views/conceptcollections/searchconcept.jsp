@@ -49,7 +49,7 @@ function resetSelectAll() {
 	<h3>
 			Concept Search
 		</h3><hr>
-<form  action="${pageContext.servletContext.contextPath}/auth/searchitems" method="get">
+<form  action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/searchitems" method="get">
 <table>
 <tr>
 		<td>Word:</td>
@@ -78,7 +78,7 @@ function resetSelectAll() {
 
 <c:if test="${not empty result}">
 		<h3>Results Of the search</h3>
-		<form action="conceptcollections/addItems" method="post">
+		<form action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addItems" method="post">
 		<input type="submit"  value="Select & Save" /><br><br>
 		<table cellpadding="0" cellspacing="0"	class="display dataTable"  id="conceptSearch">
 			<thead>
