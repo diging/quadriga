@@ -20,8 +20,8 @@ public interface IDspaceItem {
 
 	public abstract void setHandle(String handle);
 
-	public abstract void setBitstreams(IDspaceBitStreams bitstreams);
+	public abstract void setBitstreams(IDspaceBitStream bitstreams);
 
-	public abstract IDspaceBitStreams getBitstreams();
+	public abstract IDspaceBitStream getBitstreams();
 	
 }

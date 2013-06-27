@@ -36,7 +36,7 @@ public class DspaceManager implements IDspaceManager{
 	@Autowired
 	@Qualifier("dspaceFilePath")
 	private String filePath;
-	
+
 	@Autowired
 	@Qualifier("dspaceURL")
 	private String url;
@@ -44,28 +44,28 @@ public class DspaceManager implements IDspaceManager{
 	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
-	
+
 	//Handle to the proxy community manager class
 	@Autowired
 	private ICommunityManager proxyCommunityManager;
 
 	@Override
 	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
-		
+
 		//TODO: Remove this after actual user synchronization to Dspace
 		sUserName="ramk@asu.edu";
 		sPassword="123456";
-		
+
 		return proxyCommunityManager.getAllCommunities(restTemplate, url, sUserName, sPassword);
 	}
 
 	@Override
 	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityId) {
-		
+
 		//TODO: Remove this after actual user synchronization to Dspace
-				sUserName="ramk@asu.edu";
-				sPassword="123456";
-				
+		sUserName="ramk@asu.edu";
+		sPassword="123456";
+
 		return proxyCommunityManager.getAllCollections(restTemplate, url, sUserName, sPassword, sCommunityId);
 	}
 
@@ -74,19 +74,19 @@ public class DspaceManager implements IDspaceManager{
 	{
 		return proxyCommunityManager.getCommunityName(sCommunityId);
 	}
-	
+
 	@Override
 	public String getCollectionName(String sCollectionId) 
 	{
 		return proxyCommunityManager.getCollectionName(sCollectionId);
 	}
-	
+
 	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
 		return proxyCommunityManager.getCollection(sCollectionId);
 	}
-	
+
 	@Override
 	public String getCommunityId(String sCollectionId)
 	{
@@ -97,19 +97,23 @@ public class DspaceManager implements IDspaceManager{
 	public List<IItem> getAllItems(String sCollectionId) {
 		return  proxyCommunityManager.getAllItems(sCollectionId); 
 	}
-	
+
 	@Override
-	public List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId)
+	public List<IBitStream> getAllBitStreams(String sUserName, String sPassword, String sCollectionId, String sItemId)
 	{
-		return proxyCommunityManager.getAllBitStreams(sCollectionId, sItemId);
+		//TODO: Remove this after actual user synchronization to Dspace
+		sUserName="ramk@asu.edu";
+		sPassword="123456";
+
+		return proxyCommunityManager.getAllBitStreams(restTemplate, url, sUserName, sPassword, sCollectionId, sItemId);
 	}
-	
+
 	@Override
 	public String getItemName(String sCollectionId, String sItemId)
 	{
 		return proxyCommunityManager.getItemName(sCollectionId, sItemId);
 	}
-	
+
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.

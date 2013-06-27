@@ -218,7 +218,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 	@Override
-	public List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId)
+	public List<IBitStream> getAllBitStreams(RestTemplate restTemplate, String url, String sUserName, String sPassword, String sCollectionId, String sItemId)
 	{
 		//Check if a request for communities has been made to Dspace
 		if(this.collections!=null)
@@ -239,9 +239,15 @@ public class ProxyCommunityManager implements ICommunityManager {
 								for(String bitid: item.getBitids())
 								{
 									bitstream = new BitStream();
-									//TODO: Implement threads to load the bitstreams associated with this item
+									bitstream.setId(bitid);
 									item.addBitstream(bitstream);
 								}
+								
+								//TODO: Make item load the associated bitstreams
+								item.setRestConnectionDetails(restTemplate, url, sUserName, sPassword);
+								Thread bitstreamThread = new Thread(item);
+								bitstreamThread.start();
+								
 							}
 							return item.getBitstreams();
 						}

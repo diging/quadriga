@@ -14,9 +14,13 @@ public interface IBitStream {
 	public abstract String getSize();
 	
 	public abstract void setSize(String size);
-	
-	public abstract String getFormat();
-	
-	public abstract void setFormat(String format);
+
+	public abstract void setMimeType(String mimeType);
+
+	public abstract String getMimeType();
+
+	public abstract void setId(String id);
+
+	public abstract String getId();
 
 }

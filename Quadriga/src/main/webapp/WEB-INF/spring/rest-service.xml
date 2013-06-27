@@ -84,6 +84,8 @@
 				</value>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection
 				</value>
+				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceItems
+				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply

@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.domain;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.client.RestTemplate;
+
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 
 /**
@@ -10,7 +12,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
  * 
  * @author Ram Kumar Kumaresan
  */
-public interface IItem {
+public interface IItem  extends Runnable{
 
 	public abstract void setHandle(String handle);
 
@@ -35,5 +37,24 @@ public interface IItem {
 	public abstract List<IBitStream> getBitstreams();
 
 	public abstract void addBitstream(IBitStream bitstream);
+
+	public abstract void setPassword(String password);
+
+	public abstract String getPassword();
+
+	public abstract void setUserName(String userName);
+
+	public abstract String getUserName();
+
+	public abstract void setUrl(String url);
+
+	public abstract String getUrl();
+
+	public abstract void setRestTemplate(RestTemplate restTemplate);
+
+	public abstract RestTemplate getRestTemplate();
+
+	public abstract void setRestConnectionDetails(RestTemplate restTemplate, String url,
+			String userName, String password);
 	
 }
