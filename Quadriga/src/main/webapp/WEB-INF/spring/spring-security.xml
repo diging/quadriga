@@ -69,6 +69,13 @@
 	</authentication-manager>
 	
 
+	<beans:bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<beans:property name="basename">
+			<beans:value>locale\messages</beans:value>
+		</beans:property>
+	</beans:bean>
+	
 	<!--Reference to Quad Database connection file-->
 	<beans:import resource="spring-dbconnectionmanager.xml" />
 

@@ -258,6 +258,7 @@ public class DBConnectionDictionaryManagerTest {
 			logger.info(" message : "+msg);
 			assertEquals((!msg.equals("")), true);
 		}
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -295,6 +296,8 @@ public class DBConnectionDictionaryManagerTest {
 			assertEquals(dictionaryItems.getId().equals("Dog id"),true);
 			assertEquals(dictionaryItems.getPos().equals("noun"),true);
 			assertEquals(dictionaryItems.getItems().equals("dog"),true);
+			dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+			dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 		}
 	}
 
@@ -312,6 +315,7 @@ public class DBConnectionDictionaryManagerTest {
 			String id= getDictionaryID("testDictionary");
 			String name=dbConnection.getDictionaryName(id);
 			assertEquals((name.equals("testDictionary")), true);
+			dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 		}
 	}
 
@@ -336,7 +340,7 @@ public class DBConnectionDictionaryManagerTest {
 				e.printStackTrace();
 			}
 			assertEquals((msg.equals("")), true);
-			
+			dbConnection.setupTestEnvironment("delete from tbl_dictionary");	
 		}
 	}
 }

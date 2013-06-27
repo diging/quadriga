@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -22,7 +23,6 @@
 </script>
 
 
-
 <header>
 	<h2>Dictionaries</h2>
 	<span class="byline">Manage your dictionaries here.</span>
@@ -40,7 +40,7 @@
 
 <c:choose>
 	<c:when test="${adddicsuccess=='1'}">
-		<font color="blue"><c:out value="${adddicsuccessMsg}"></c:out></font>
+		<font color="blue"><spring:message code="add.dictionary.success" /></font>
 	</c:when>
 </c:choose>
 <br />
@@ -62,7 +62,7 @@
 				</c:forEach>
 			</ul>
 		</c:when>
-		<c:otherwise> No dictionary found</c:otherwise>
+		<c:otherwise> <spring:message code="empty.dictionary" /></c:otherwise>
 	</c:choose>
 </div>
 
