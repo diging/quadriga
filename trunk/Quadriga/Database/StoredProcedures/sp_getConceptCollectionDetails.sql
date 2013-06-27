@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_getConceptCollectionDetails
 (
   IN incollectionid  VARCHAR(20),
- 
+  IN inusername	     VARCHAR(40),	
   OUT errmsg     VARCHAR(255)
 )
 BEGIN
@@ -31,11 +31,15 @@ BEGIN
     IF(incollectionid IS NULL OR incollectionid = "")
      THEN SET errmsg = "collection id cannot be empty.";
     END IF;
+   	
+    IF(inusername IS NULL OR inusername = "")
+     THEN SET errmsg = "username cannot be empty.";
+    END IF;
    
     
-    IF NOT EXISTS (SELECT 1 FROM vw_conceptcollections	
-                     WHERE id = incollectionid)
-      THEN SET errmsg = "collection id is invalid.";
+    IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
+                     WHERE id = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = incollectionid and  collaboratoruser = inusername)
+      THEN SET errmsg = "User dont have access to the collection"; 
     END IF;
     
     
@@ -44,10 +48,9 @@ BEGIN
      THEN SET errmsg = "";
      
       -- retrieve the item details
-      SELECT item, description, pos, lemma
-           AS item
-        FROM vw_conceptcollections_items
-	    WHERE id = incollectionid;
+      SELECT vw_conceptcollections_items.item, vw_conceptcollections_items.description, vw_conceptcollections_items.pos, vw_conceptcollections_items.lemma, vw_conceptcollections.id, vw_conceptcollections.collectionname, vw_conceptcollections.description  
+        FROM vw_conceptcollections LEFT JOIN vw_conceptcollections_items
+	    ON vw_conceptcollections_items.id = vw_conceptcollections.id WHERE vw_conceptcollections.id = incollectionid;
       
      END IF;
 END$$

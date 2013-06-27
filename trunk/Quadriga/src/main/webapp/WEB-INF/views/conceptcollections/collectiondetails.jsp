@@ -93,7 +93,7 @@ function resetSelectAll() {
 <br>
 <form method="post">
 	<input type="button"
-		onClick="location.href='${pageContext.servletContext.contextPath}/auth/searchitems'"
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.id}/searchitems'"
 		value='Add Items'>
 	<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/deleteitems'" value='Delete Items'>
 		<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/updateitems'" value="Update Items">

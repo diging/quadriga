@@ -2,6 +2,7 @@
 package edu.asu.spring.quadriga.web;
 
 import java.beans.PropertyEditorSupport;
+import java.security.Principal;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
@@ -63,7 +65,7 @@ public class CCCollaboratorController {
 	  }
 	 
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
-		public String displayCollaborator(@PathVariable("collection_id") int collectionid, ModelMap model)
+		public String displayCollaborator(@PathVariable("collection_id") int collectionid, ModelMap model, Principal principal) throws QuadrigaAcessException
 		{
 			List<ICollaboratorRole> collaboratorRoles = null;
 			List<IUser> noncollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
@@ -73,7 +75,7 @@ public class CCCollaboratorController {
 			concept.setId(collectionid);
 			
 			try {
-				conceptControllerManager.getCollectionDetails(concept);
+				conceptControllerManager.getCollectionDetails(concept,principal.getName());
 			} catch (QuadrigaStorageException e) {
 				e.printStackTrace();
 			}

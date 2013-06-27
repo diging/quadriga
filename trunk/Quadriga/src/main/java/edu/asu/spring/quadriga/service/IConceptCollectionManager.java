@@ -6,11 +6,11 @@ package edu.asu.spring.quadriga.service;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 
@@ -72,10 +72,13 @@ public interface IConceptCollectionManager {
 	 * Method is used to get collection details like description and  items list
 	 * Input: IConceptCollection 
 	 * Output: void. We place the result in the same input object
+	 * @param concept
+	 * @param username 
 	 * @throws QuadrigaStorageException 
+	 * @throws QuadrigaAcessException 
 	 * 
 	 */
-	public abstract void getCollectionDetails(IConceptCollection concept) throws QuadrigaStorageException;
+	public abstract void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAcessException;
 	
 	/**
 	 * Method is used to add new items to items list of a conceptcollection

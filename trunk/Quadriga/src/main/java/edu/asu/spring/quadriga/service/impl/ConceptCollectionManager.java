@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 
@@ -100,8 +101,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public void getCollectionDetails(IConceptCollection concept) throws QuadrigaStorageException {
-		dbConnect.getCollectionDetails(concept);
+	public void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAcessException {
+		dbConnect.getCollectionDetails(concept,username);
 		List<ICollaborator> collaborators = concept.getCollaborators();
 		for(ICollaborator collaborator:collaborators)
 		{

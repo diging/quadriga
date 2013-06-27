@@ -28,11 +28,12 @@ import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * This class executes all the stored procedures related to the concept collections
- * @author satyaswaroop 
+ * @author satyaswaroop boddu
  */
 public class DBConnectionCCManager extends ADBConnectionManager implements
 		IDBConnectionCCManager {
@@ -174,8 +175,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * 
 	 */
 	@Override
-	public void getCollectionDetails(IConceptCollection collection)
-			throws QuadrigaStorageException {
+	public void getCollectionDetails(IConceptCollection collection, String username)
+			throws QuadrigaStorageException, QuadrigaAcessException {
 
 		if (collection == null) {
 			logger.error("getCollectionDetails: input argument conceptcollection is NULL");
@@ -189,28 +190,39 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		
 		getConnection();
 		dbCommand = DBConstants.SP_CALL + " "
-				+ DBConstants.GET_COLLECTION_DETAILS + "(?,?)";
+				+ DBConstants.GET_COLLECTION_DETAILS + "(?,?,?)";
 		try {
 
 			 sqlStatement = connection.prepareCall("{"
 					+ dbCommand + "}");
 			sqlStatement.setInt(1, collection.getId());
-			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
-
+			sqlStatement.setString(2, username);
+			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
+			
 			if (errmsg == null || errmsg.isEmpty()) {
 				ResultSet resultSet = sqlStatement.getResultSet();
 				if (resultSet.next()) {
+					collection.setDescription(resultSet.getString(7));
+					collection.setName(resultSet.getString(6));
 					do {
+						if(resultSet.getString(1) != null){
 						concept = conceptFactory.createConceptObject();
 						concept.setLemma(resultSet.getString(4));
 						concept.setId(resultSet.getString(1));
 						concept.setPos(resultSet.getString(3));
 						concept.setDescription(resultSet.getString(2));
 						collection.addItem(concept);
+						}
 					} while (resultSet.next());
+					
 				}
+			}
+			else
+			{
+				logger.info("USER ACCESS ERROR:" +errmsg );
+				throw new QuadrigaAcessException("Hmmm!!  You dont have access to this page");
 			}
 		} catch (SQLException e) {
 			logger.error("Exception", e);
@@ -232,7 +244,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				ResultSet resultSet = sqlStatement.getResultSet();
 				while(resultSet.next())
 				{
-					collection.setId(resultSet.getInt(1));
+					//collection.setId(resultSet.getInt(1));
 
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					IUser user = userFactory.createUserObject();
