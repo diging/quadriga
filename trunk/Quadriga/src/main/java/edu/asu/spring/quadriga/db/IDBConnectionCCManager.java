@@ -95,7 +95,7 @@ public interface IDBConnectionCCManager {
 		
 		public abstract String addCollaboratorRequest(ICollaborator collaborator,int collectionid);
 		
-		public abstract List<IConceptCollection> getCollaborators(String userId);
+		public abstract void getCollaborators(IConceptCollection collection);
 		
 		
 		

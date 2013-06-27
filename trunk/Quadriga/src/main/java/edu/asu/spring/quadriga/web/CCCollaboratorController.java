@@ -2,7 +2,11 @@
 package edu.asu.spring.quadriga.web;
 
 import java.beans.PropertyEditorSupport;
+
+import java.util.ArrayList;
+
 import java.security.Principal;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -62,6 +66,20 @@ public class CCCollaboratorController {
 		        setValue(user);
 		    }
 		    });
+		    
+		    binder.registerCustomEditor(List.class, "collaboratorRoles", new PropertyEditorSupport() {
+		    @Override
+		    public void setAsText(String text){
+		    	String roleIds[] = text.split(",");
+		    	List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+		    	for(String roleId: roleIds)
+		    	{
+		    		ICollaboratorRole role = collaboratorRoleManager.getCCCollaboratorRoleById(roleId.trim());
+		    		roles.add(role);
+		    	}
+		    	setValue(roles);	
+		    }
+		    });
 	  }
 	 
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
@@ -102,18 +120,18 @@ public class CCCollaboratorController {
 			
 		}
 		
-		@RequestMapping(value="auth/conceptcollections/{collection_id}/addCollaborators", method=RequestMethod.POST)
+		@RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
 		public String addCollaborators(@PathVariable("collection_id") int collectionid, ModelMap model,
 				@ModelAttribute ICollaborator collaborator)
 		{
-				String errmsg = conceptControllerManager.addCollaborators(collaborator, collectionid);
+			String errmsg = conceptControllerManager.addCollaborators(collaborator, collectionid);
 			
-				if(errmsg.equals(""))
+				if(errmsg.equals("no errors"))
 				{
-					return "auth/conceptcollection/{collectionid}";
+					return "redirect:/auth/conceptcollections/{collection_id}";
 				}
 			
-			return "redirect:auth/conceptcollection/"+collectionid;
+			return "redirect:auth/conceptcollection/"+collectionid+"/displayCollaborators";
 		}
 		
 		

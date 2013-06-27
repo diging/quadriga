@@ -119,6 +119,8 @@ public interface IConceptCollectionManager {
 	public abstract List<IUser> showCollaboratingUsers(int collectionid);
 	
 	public abstract String addCollaborators(ICollaborator collaborator, int collectionid);
+	
+	public abstract void getCollaborators(IConceptCollection collection);
 
 	
 	

@@ -71,7 +71,7 @@ public class CollaboratorController {
 			   String[] roleIds = text.split(",");
 				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getCollaboratorRoleById(roleId.trim());
+					ICollaboratorRole role = collaboratorRoleManager.getProjectCollaboratorRoleById(roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);
