@@ -94,19 +94,30 @@ public class DictionaryItemSearchAddController {
 						di.getItems(), di.getId(), di.getPos(), owner);
 
 			}
+		}else{
+			model.addAttribute("additemsuccess", 2);
+			
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+					.getDictionariesItems(dictionaryId,user.getUsername());
+			String dictionaryName = dictonaryManager
+					.getDictionaryName(dictionaryId);
+			model.addAttribute("dictionaryItemList", dictionaryItemList);
+			model.addAttribute("dictName", dictionaryName);
+			model.addAttribute("dictID", dictionaryId);
+
+			return "auth/dictionary/dictionary";
 		}
 
 		if (msg.equals("")) {
-			model.addAttribute("success", 1);
-			model.addAttribute("successmsg", "Items added successfully");
+			model.addAttribute("additemsuccess", 1);			
 		} else {
 			if (msg.equals("ItemExists")) {
-				model.addAttribute("success", 0);
+				model.addAttribute("additemsuccess", 0);
 				model.addAttribute("errormsg",
 						"Items already exist for dictionary id :"
 								+ dictionaryId);
 			} else {
-				model.addAttribute("success", 0);
+				model.addAttribute("additemssuccess", 0);
 				model.addAttribute("errormsg", msg);
 			}
 		}

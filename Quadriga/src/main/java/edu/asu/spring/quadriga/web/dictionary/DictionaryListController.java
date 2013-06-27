@@ -130,8 +130,6 @@ public class DictionaryListController implements MessageSourceAware {
 		}
 		if (msg.equals("")) {
 			model.addAttribute("adddicsuccess", 1);
-			model.addAttribute("adddicsuccessMsg",
-					"Dictionary created successfully.");
 			List<IDictionary> dictionaryList = null;
 			dictionaryList = dictonaryManager.getDictionariesList(user
 					.getUserName());
