@@ -88,18 +88,7 @@ public class DictionaryRestController {
 		try {
 			engine.init();
 			String userId = principal.getName();
-			logger.debug("Getting dictionary list for user : " + userId);
 			dictionaryList = dictionaryManager.getDictionariesList(userId);
-			if (!(dictionaryList == null)) {
-				Iterator<IDictionary> I = dictionaryList.iterator();
-				while (I.hasNext()) {
-					IDictionary dictionary = I.next();
-					logger.debug("Dictionary Name : " + dictionary.getName());
-					logger.debug("Dictionary Description : "
-							+ dictionary.getDescription());
-					logger.debug("Dictionary Id : " + dictionary.getId());
-				}
-			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionarylist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
