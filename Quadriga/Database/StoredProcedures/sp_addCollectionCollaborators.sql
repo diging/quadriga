@@ -31,14 +31,14 @@ BEGIN
 
 	-- inserting record into the tbl_project_collaborator table
 	IF(errmsg IS NULL)
-	THEN SET errmsg = "";
+	THEN SET errmsg = "no errors";
 	START TRANSACTION;
 	INSERT INTO
 	tbl_conceptcollections_collaborator(collectionid,collaboratoruser,collaboratorrole,
 							 updatedby,updateddate,createdby,createddate)
 	VALUES(incollectionid,incollaboratoruser,incollaboratorrole,incollaboratoruser,
 		   NOW(),incollaboratoruser, NOW());
-		IF (errmsg = "")
+		IF (errmsg = "no errors")
            THEN COMMIT;
          ELSE ROLLBACK;
 		END IF;

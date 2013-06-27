@@ -230,7 +230,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					"Damn....Database guys are at work!!!!!!");
 		} 
 		
-		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.GET_COLLECTION_COLLABORATOR + "(?,?)";
+	/*	dbCommand = DBConstants.SP_CALL + " "+ DBConstants.GET_COLLECTION_COLLABORATOR + "(?,?)";
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
@@ -272,7 +272,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	
 		finally {
 			closeConnection();
-		}
+		} */
 
 	}
 
@@ -491,7 +491,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		CallableStatement sqlStatement;
 		String role;
 		String collabName = collaborator.getUserObj().getUserName();
-		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_CC_COLLABORATOR_REQUEST + "(?,?)";
+		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_CC_COLLABORATOR_REQUEST + "(?,?,?,?)";
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
@@ -511,6 +511,10 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		finally {
+			closeConnection();
 		}
 		
 		return errmsg;
@@ -549,6 +553,9 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			e.printStackTrace();
 		}
 		
+		finally {
+			closeConnection();
+		}
 		
 		return collaboratorList;
 	}
@@ -585,19 +592,22 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		finally {
+			closeConnection();
+		}
 	
 		return collaboratorList;
 	}
 
 	@Override
-	public List<IConceptCollection> getCollaborators(String collectionName) {
+	public void getCollaborators(IConceptCollection collection) {
 		
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
 		IConceptCollection conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
 		conceptCollection.setCollaborators(new ArrayList<ICollaborator>());
-		List<IConceptCollection> collectionList = new ArrayList<IConceptCollection>();
 
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		
@@ -605,32 +615,30 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setString(1, collectionName);
+			sqlStatement.setInt(1,collection.getId());
 			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);
-			
+
 			if(errmsg == "")
 			{
 				ResultSet resultSet = sqlStatement.getResultSet();
 				while(resultSet.next())
 				{
-					IConceptCollection collection = conceptCollectionFactory.createConceptCollectionObject();
-					collection.setId(resultSet.getInt(1));
-
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					IUser user = userFactory.createUserObject();
 					user.setName(resultSet.getString(2));
 					collaborator.setUserObj(user);
+					logger.info("role data :" +resultSet.getString(3) );
+					String role = resultSet.getString(3);
+					if(role == null)
+					{
+						role="";
+					}
+					collaboratorRoles = dbConnectionProjectManager.splitAndCreateCollaboratorRoles(role);
 					
-					collaboratorRoles = dbConnectionProjectManager.splitAndCreateCollaboratorRoles(resultSet.getString(3));
 					collaborator.setCollaboratorRoles(collaboratorRoles);
-					
-					conceptCollection.getCollaborators().add(collaborator);
-					collectionList.add(conceptCollection);
-					
-					
-					//collaborators.add(collaborator);
-					//collaborator.setUserObj(userObj)(resultSet.getString(1));
+					collection.getCollaborators().add(collaborator);							
 				}
 			}
 		
@@ -638,7 +646,11 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return collectionList;
+		
+		finally {
+			closeConnection();
+		}
+		
 	}
 	
 	

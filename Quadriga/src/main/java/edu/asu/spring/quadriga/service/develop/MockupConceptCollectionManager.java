@@ -125,11 +125,19 @@ public class MockupConceptCollectionManager implements
 	}
 
 	@Override
+	public void getCollaborators(IConceptCollection collection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
 	public void getCollectionDetails(IConceptCollection concept, String username)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 	
 	

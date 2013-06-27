@@ -121,6 +121,8 @@ public class ConceptcollectionController {
 		collection.setId(collection_id);
 		conceptControllerManager.getCollectionDetails(collection,principal.getName());
 		model.addAttribute("concept", collection);
+		conceptControllerManager.getCollaborators(collection);
+		
 		List<IUser>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
 		model.addAttribute("collaboratingUsers", collaboratingUsers);
 		return "auth/conceptcollections/details";

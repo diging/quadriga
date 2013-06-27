@@ -103,15 +103,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Override
 	public void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAcessException {
 		dbConnect.getCollectionDetails(concept,username);
-		List<ICollaborator> collaborators = concept.getCollaborators();
-		for(ICollaborator collaborator:collaborators)
-		{
-			for(ICollaboratorRole collaboratorRole: collaborator.getCollaboratorRoles())
-			{
-				roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
-			}
-		}
-		}
+		//dbConnect.getCollaborators(concept);
+		
+	}
 
 	@Override
 	public ConceptpowerReply search(String item, String pos) {
@@ -190,6 +184,18 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		return errmsg;
 	}
 
-	
+	@Override
+	public void getCollaborators(IConceptCollection collection) {
+		
+		dbConnect.getCollaborators(collection);
+		List<ICollaborator> collaborators = collection.getCollaborators();
+		for(ICollaborator collaborator:collaborators)
+		{
+			for(ICollaboratorRole collaboratorRole: collaborator.getCollaboratorRoles())
+			{
+				roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
+			}
+		}
+	}
 
 }

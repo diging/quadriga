@@ -28,6 +28,10 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	@Qualifier("ccCollaborator")
 	private List<ICollaboratorRole> ccCollabRoles;
 	
+	@Autowired
+	@Qualifier("dictCollaborator")
+	private List<ICollaboratorRole> dictCollabRoles;
+	
 
 	@Override
 	public void setProjectCollaboratorRole(List<ICollaboratorRole> collaboratorRoles) {
@@ -49,6 +53,17 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	public List<ICollaboratorRole> getCollectionCollaboratorRoles() {
 		return this.ccCollabRoles;
 	}
+	
+	@Override
+	public void setDictCollaboratorRole(List<ICollaboratorRole> collaboratorRoles) {
+		this.dictCollabRoles = collaboratorRoles;		
+	}
+
+	@Override
+	public List<ICollaboratorRole> getDictCollaboratorRoles() {
+		return this.dictCollabRoles;
+	}
+
 
 
 /**
@@ -90,7 +105,22 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		}
 		
 	}
+	
+	@Override
+	public void fillDictCollaboratorRole(ICollaboratorRole collaboratorRole) {
 
+		for(ICollaboratorRole role: dictCollabRoles)
+		{
+			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
+			{
+				collaboratorRole.setRoleid(role.getRoleid());
+				// add rest of role information to collaboratorRole object
+			}
+		}
+		
+	}
+
+	
 /**
  * @description  maps roleid of the collaborator roles from database to xml 
  * 
@@ -101,9 +131,11 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
  * @return collaborator role object
  * 
  */
-public ICollaboratorRole getCollaboratorRoleById(String collaboratorRoleId) {
-		
-		
+
+	@Override
+	public ICollaboratorRole getProjectCollaboratorRoleById(
+			String collaboratorRoleId) {
+
 		for(ICollaboratorRole role: projectCollabRoles)
 		{
 			if(role.getRoleid().equals(collaboratorRoleId))
@@ -115,7 +147,34 @@ public ICollaboratorRole getCollaboratorRoleById(String collaboratorRoleId) {
 		return null;	
 	}
 
+	@Override
+	public ICollaboratorRole getCCCollaboratorRoleById(String collaboratorRoleId) {
 
+		for(ICollaboratorRole role: ccCollabRoles)
+		{
+			if(role.getRoleid().equals(collaboratorRoleId))
+			{
+				return role;
+			}
+		}
+		
+		return null;	
+	}
 
+	@Override
+	public ICollaboratorRole getDictCollaboratorRoleById(String collaboratorRoleId) {
+		
+		for(ICollaboratorRole role: dictCollabRoles)
+		{
+			if(role.getRoleid().equals(collaboratorRoleId))
+			{
+				return role;
+			}
+		}
+		return null;
+	}
+
+	
+	
 
 }

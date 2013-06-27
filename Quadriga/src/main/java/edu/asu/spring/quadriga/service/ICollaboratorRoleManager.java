@@ -6,17 +6,19 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 
 public interface ICollaboratorRoleManager {
 	
-	//public abstract void setCollaboratorRole(List<ICollaboratorRole> collaboratorroles);
+	public abstract ICollaboratorRole getProjectCollaboratorRoleById(String collaboratorRoleId);
 	
-	//public abstract List<ICollaboratorRole> getCollaboratorRoles();
+	public abstract ICollaboratorRole getCCCollaboratorRoleById(String collaboratorRoleId);
 	
-	//public abstract void fillCollaboratorRole(ICollaboratorRole collaboratorRole);
-	
-	public abstract ICollaboratorRole getCollaboratorRoleById(String collaboratorRoleId);
+	public abstract ICollaboratorRole getDictCollaboratorRoleById(String collaboratorRoleId);
 
 	public abstract void setProjectCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
 	
 	public abstract List<ICollaboratorRole> getProjectCollaboratorRoles();
+	
+	public abstract void setDictCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
+	
+	public abstract List<ICollaboratorRole> getDictCollaboratorRoles();
 	
 	public abstract void setCollectionCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
 	
@@ -25,6 +27,7 @@ public interface ICollaboratorRoleManager {
 	public abstract void fillProjectCollaboratorRole(ICollaboratorRole collaboratorRole);
 
 	public abstract void fillCollectionCollaboratorRole(ICollaboratorRole collaboratorRole);
-
 	
+	public abstract void fillDictCollaboratorRole(ICollaboratorRole collaboratorRole);
+
 }
