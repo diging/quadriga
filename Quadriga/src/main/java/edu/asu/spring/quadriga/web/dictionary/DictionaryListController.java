@@ -2,13 +2,10 @@ package edu.asu.spring.quadriga.web.dictionary;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -33,7 +30,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
  * 
  */
 @Controller
-public class DictionaryListController implements MessageSourceAware {
+public class DictionaryListController {
 	@Autowired
 	IDictionaryManager dictonaryManager;
 
@@ -61,18 +58,10 @@ public class DictionaryListController implements MessageSourceAware {
 	 * @return Return to the dictionary home page of the Quadriga
 	 */
 
-	private MessageSource messageSource;
-	
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
 	
 	@RequestMapping(value = "auth/dictionaries", method = RequestMethod.GET)
 	public String listDictionary(ModelMap model) {
 		try {
-//			String name = messageSource.getMessage("customer.name", 
-//	    			new Object[] { 28, "http://www.mkyong.com" }, Locale.US);
-//			logger.info("Customer info "+ name);
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 			String userId = user.getUsername();

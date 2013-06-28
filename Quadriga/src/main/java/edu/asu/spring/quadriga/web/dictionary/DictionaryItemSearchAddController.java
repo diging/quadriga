@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web.dictionary;
 
 import java.security.Principal;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
