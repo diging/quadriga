@@ -104,8 +104,7 @@
 		<c:choose>
 			<c:when test="${not empty bitList}">
 				<c:forEach var="bitstream" items="${bitList}">
-				<span style="float: left; margin-left: 50px; font-weight: bold"><div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div></span>
-				<br />
+				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
