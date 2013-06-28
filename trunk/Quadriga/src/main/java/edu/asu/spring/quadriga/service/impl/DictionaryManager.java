@@ -263,7 +263,12 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 		return dictionaryEntry;
 	}
-
+	
+	/**
+	 * Get index of term from a list for update and deleting term from dictionary
+	 * 
+	 * @return Return the dictionaryEntry bean to controller
+	 */
 	public DictionaryItems getDictionaryItemIndex(String termId,
 			DictionaryItems dictionaryItems) {
 

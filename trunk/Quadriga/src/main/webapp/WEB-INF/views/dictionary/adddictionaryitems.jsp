@@ -4,6 +4,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
+
+<!--  
+	Author Lohith Dwaraka  
+	Used to add the items into a dictionary
+	and search for items from word power	
+-->
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
 		$('#selectall').click(function() {
