@@ -30,8 +30,7 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 @ControllerAdvice
 public class QuadrigaExceptionHandler {
 
-	@Autowired
-	private IRestVelocityFactory restVelocityFactory;
+	
 	private static final Logger logger = LoggerFactory.getLogger(QuadrigaExceptionHandler.class);
 	/**
 	 * For now this method handles all exceptions thrown in Controller classes. Eventually this method can be
@@ -40,7 +39,7 @@ public class QuadrigaExceptionHandler {
 	 * @param ex The exception thrown in a controller.
 	 * @return Information about the exception page.
 	 */
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(QuadrigaException.class)
 	public ModelAndView handleNotImplementedEx(Exception ex) {
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -60,40 +59,4 @@ public class QuadrigaExceptionHandler {
 		return modelAndView;
 	}
 	
-	@RequestMapping(produces="application/xml")
-	@ExceptionHandler(RestException.class)
-	@ResponseBody
-	public String handleRestException(RestException ex, HttpServletRequest req) {
-		logger.error("Exception:", ex);
-		VelocityEngine engine=null;
-		Template template = null;
-		StringWriter sw = new StringWriter();
-		
-		try {
-			engine = restVelocityFactory.getVelocityEngine(req);
-			engine.init();
-			
-			template = engine
-					.getTemplate("velocitytemplates/resterror.vm");
-			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("status", "ERROR");
-			context.put("message",ex.getMessage());
-			template.merge(context, sw);
-			return sw.toString();
-		} catch (ResourceNotFoundException e) {
-			logger.error("Exception:", e);
-			
-		} catch (ParseErrorException e) {
-			logger.error("Exception:", e);
-			
-		} catch (MethodInvocationException e) {
-			logger.error("Exception:", e);
-			
-		}  
-		catch (Exception e) {
-			logger.error("Exception:", e);
-			
-		}
-		return sw.toString();
 	}
-}

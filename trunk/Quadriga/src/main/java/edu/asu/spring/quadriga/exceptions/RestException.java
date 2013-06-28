@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.exceptions;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+
 /**
  * Exception to handle exceptions thrown in the REST interface.
  * @author Julia Damerow
