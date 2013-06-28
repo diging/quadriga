@@ -42,7 +42,6 @@
 						}
 						//Load the new text in the corresponding div tag
 						$('#collection_' + collectionid[1]).html(data);
-						$('#collection_' + collectionid[1]).style('color', 'red');
 					});//End of ajax callback
 				});//End of for-each for divs
 
@@ -105,8 +104,7 @@
 						href='<c:out value="/quadriga/auth/workbench/workspace/community/${community.id}" />'>${community.name}</a></span>
 					<br />
 					<c:forEach var="collection" items="${community.collections}">
-						<span style="float: left; margin-left: 50px; font-weight: bold"><div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div></span>
-						<br />
+						<div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
 					</c:forEach>
 				</c:forEach>
 			</c:when>
