@@ -31,6 +31,8 @@ import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -142,24 +144,18 @@ public class DictionaryRestController {
 
 		try {
 			engine.init();
-			logger.info("Getting dictionary items list for dictionary id : "
+			logger.debug("Getting dictionary items list for dictionary id : "
 					+ dictionaryId);
 			dictionaryItemsList = dictionaryManager
 					.getDictionariesItems(dictionaryId,user.getUsername());
-			if (!(dictionaryItemsList == null)) {
-				Iterator<IDictionaryItems> I = dictionaryItemsList.iterator();
-				while (I.hasNext()) {
-					IDictionaryItems dictionaryItems = I.next();
-					logger.info("Dictionary Item name : "
-							+ dictionaryItems.getItems());
-					logger.info("Dictionary Description : "
-							+ dictionaryItems.getDescription());
-					logger.info("Dictionary Pos : " + dictionaryItems.getPos());
-				}
+			if( dictionaryItemsList == null){
+				
+				throw new RestException("User does not have permission to access dictionary id :"+dictionaryId);
 			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			
 			context.put("list", dictionaryItemsList);
 			context.put("wordPowerURL",wordPowerURL);
 			StringWriter writer = new StringWriter();
