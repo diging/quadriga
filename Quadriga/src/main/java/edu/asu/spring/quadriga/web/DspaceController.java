@@ -163,4 +163,15 @@ public class DspaceController {
 		return "Loading...";		
 	}
 
+	
+	@RequestMapping(value = "/auth/workbench/workspace/bitstreamstatus", method = RequestMethod.GET)
+	public @ResponseBody String getBitStreamStatus(@RequestParam("bitstreamId") String bitstreamId, @RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId) {
+		IBitStream bitstream = dspaceManager.getBitStreamName(collectionId, itemId, bitstreamId);
+		if(bitstream != null)
+		{
+			if(bitstream.getName() != null)
+				return bitstream.getName()+",   Size:"+bitstream.getSize()+",   MimeType:"+bitstream.getMimeType();
+		}
+		return "Loading...";		
+	}
 }

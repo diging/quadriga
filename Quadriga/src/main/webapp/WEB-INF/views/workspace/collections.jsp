@@ -43,7 +43,6 @@
 							data = '<img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> '+data;
 						}
 						$('#collection_' + collectionid[1]).html(data);
-						$('#collection_' + collectionid[1]).style('color', 'red');
 					});//End of ajax callback
 				});//End of for-each for divs
 
