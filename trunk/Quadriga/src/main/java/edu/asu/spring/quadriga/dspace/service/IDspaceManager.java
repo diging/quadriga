@@ -27,4 +27,7 @@ public interface IDspaceManager {
 
 	public abstract String getItemName(String sCollectionId, String sItemId);
 
+	public abstract IBitStream getBitStreamName(String sCollectionId, String sItemId,
+			String sBitStreamId);
+
 }

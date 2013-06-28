@@ -31,4 +31,7 @@ public interface ICommunityManager {
 	public abstract List<IBitStream> getAllBitStreams(RestTemplate restTemplate, String url,
 			String sUserName, String sPassword, String sCollectionId,
 			String sItemId);
+
+	public abstract IBitStream getBitStreamName(String sCollectionId, String sItemId,
+			String sBitStreamId);
 }

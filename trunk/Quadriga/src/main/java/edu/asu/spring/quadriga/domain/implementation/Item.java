@@ -175,7 +175,6 @@ public class Item implements IItem{
 	@Override
 	public void run() {
 		String sRestServicePath = getCompleteUrlPath("/rest/items/");
-		System.out.println("Bitstream Thread started.................."+sRestServicePath);
 		IDspaceItems dspaceItems = (DspaceItems) getRestTemplate().getForObject(sRestServicePath, DspaceItems.class);
 		if(dspaceItems != null)
 		{
@@ -183,10 +182,17 @@ public class Item implements IItem{
 			{
 				for(IDspaceBitStreamEntityId dspaceBitStream: dspaceItems.getBitstreams().getBitstreamentityid())
 				{
-					//TODO: add each bit retrieved to item.
+					for(IBitStream bitstream: this.bitstreams){
+						if(bitstream.getId().equals(dspaceBitStream.getId()))
+						{
+							bitstream.setName(dspaceBitStream.getName());
+							bitstream.setSize(dspaceBitStream.getSize());
+							bitstream.setMimeType(dspaceBitStream.getMimeType());
+							break;
+						}
+					}
 				}
 			}
 		}
-		System.out.println("Bitstream Thread ended..................");
 	}	
 }

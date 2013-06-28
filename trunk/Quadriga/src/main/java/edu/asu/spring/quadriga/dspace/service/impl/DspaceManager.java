@@ -113,6 +113,12 @@ public class DspaceManager implements IDspaceManager{
 	{
 		return proxyCommunityManager.getItemName(sCollectionId, sItemId);
 	}
+	
+	@Override
+	public IBitStream getBitStreamName(String sCollectionId, String sItemId, String sBitStreamId)
+	{
+		return proxyCommunityManager.getBitStreamName(sCollectionId, sItemId, sBitStreamId);
+	}
 
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.

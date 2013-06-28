@@ -49,9 +49,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 	@Override
 	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
-		//TODO: Uncomment to use the correct username and password
-		//		this.userName = sUserName;
-		//		this.password = sPassword;
 		if(communities == null)
 		{
 			String sRestServicePath = getCompleteUrlPath(url+"/rest/communities.xml", sUserName, sPassword);
@@ -127,7 +124,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 	}
 
 
-	//TODO: Push Down to collection class and remove the list of collections in this class
 	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
@@ -195,6 +191,36 @@ public class ProxyCommunityManager implements ICommunityManager {
 	}
 
 	@Override
+	public IBitStream getBitStreamName(String sCollectionId, String sItemId, String sBitStreamId)
+	{
+		//Check if a request for communities has been made to Dspace
+				if(this.collections!=null)
+				{
+					for(ICollection collection: collections)
+					{
+						if(collection.getId().equals(sCollectionId))
+						{
+							for(IItem item: collection.getItems())
+							{
+								if(item.getId().equals(sItemId))
+								{
+									for(IBitStream bitstream: item.getBitstreams())
+									{
+										if(bitstream.getId().equals(sBitStreamId))
+										{
+											return bitstream;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				return null;
+	}
+	
+	@Override
 	public String getItemName(String sCollectionId, String sItemId)
 	{
 		//Check if a request for communities has been made to Dspace
@@ -243,7 +269,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 									item.addBitstream(bitstream);
 								}
 								
-								//TODO: Make item load the associated bitstreams
 								item.setRestConnectionDetails(restTemplate, url, sUserName, sPassword);
 								Thread bitstreamThread = new Thread(item);
 								bitstreamThread.start();
