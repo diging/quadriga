@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -81,8 +82,7 @@
 
 			</form> <c:choose>
 				<c:when test="${errorstatus=='1'}">
-					<font color="red"> Word not found, please provide the
-						correct input</font>
+					<font color="red"><spring:message code="term.not.found" /></font>
 				</c:when>
 			</c:choose> <c:choose>
 				<c:when test="${success=='1'}">
@@ -163,8 +163,7 @@
 		<c:otherwise>
 			<c:choose>
 				<c:when test="${status=='0'}">
-					<font color="red">Word not found, please enter a different
-						word</font>
+					<font color="red"><spring:message code="term.not.found" /></font>
 				</c:when>
 
 			</c:choose>
