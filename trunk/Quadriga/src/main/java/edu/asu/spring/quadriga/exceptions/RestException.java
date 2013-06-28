@@ -17,6 +17,10 @@ public class RestException extends Exception {
 	public RestException(Throwable arg0) {
 		super(arg0);
 	}
+	
+	public RestException(String message) {
+		super(message);
+	}
 
 	
 }
