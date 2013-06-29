@@ -31,7 +31,8 @@ import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.domain.implementation.Dictionary;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -67,7 +68,7 @@ public class DictionaryRestController {
 
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
-	
+
 	@Autowired
 	@Qualifier("updateFromWordPowerURL")
 	private String wordPowerURL;
@@ -87,6 +88,8 @@ public class DictionaryRestController {
 	@ResponseBody
 	public String listDictionaries(ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		List<IDictionary> dictionaryList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
@@ -94,13 +97,11 @@ public class DictionaryRestController {
 
 		try {
 			engine.init();
-			String userId = principal.getName();
-			dictionaryList = dictionaryManager.getDictionariesList(userId);
+			dictionaryList = dictionaryManager.getDictionariesList(user.getUsername());
 			template = engine
 					.getTemplate("velocitytemplates/dictionarylist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryList);
-			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
@@ -133,8 +134,8 @@ public class DictionaryRestController {
 	@ResponseBody
 	public String listDictionaryItems(
 			@PathVariable("dictionaryId") String dictionaryId, ModelMap model, HttpServletRequest req)
-			throws Exception {
-		
+					throws Exception {
+
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		List<IDictionaryItems> dictionaryItemsList = null;
@@ -149,13 +150,12 @@ public class DictionaryRestController {
 			dictionaryItemsList = dictionaryManager
 					.getDictionariesItems(dictionaryId,user.getUsername());
 			if( dictionaryItemsList == null){
-				
 				throw new RestException("User does not have permission to access dictionary id :"+dictionaryId);
 			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			
+
 			context.put("list", dictionaryItemsList);
 			context.put("wordPowerURL",wordPowerURL);
 			StringWriter writer = new StringWriter();
@@ -164,14 +164,16 @@ public class DictionaryRestController {
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
+			throw new RestException("Internal issue");
 		} catch (ParseErrorException e) {
 			// TODO Auto-generated catch block
+
 			logger.error("Exception:", e);
+			throw new RestException("Internal issue");
 		} catch (MethodInvocationException e) {
 			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
+			throw new RestException("Internal issue");
 		}
-
-		return "";
 	}
 }
