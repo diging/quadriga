@@ -69,10 +69,19 @@
 						IDs.push(divIDs[i]);
 					}
 				}
-				if (IDs.length > 0) {
+				
+				if(IDs.length < divIDs.length)
+					{
+					//Code to remove the extra loading div tags
+					for (i = 0; i < IDs.length; i++) {
+						$("#"+IDs[i]).remove();
+					}					
+					}
+				else{
+				//if (IDs.length > 0) 
 					setTimeout(makeAjaxCall, 5000);
 					setTimeout(checkDiv, 7000);
-				}
+					}
 			}
 			setTimeout(checkDiv, 1000);
 		});
