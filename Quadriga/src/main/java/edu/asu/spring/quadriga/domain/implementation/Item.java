@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.web.client.RestTemplate;
@@ -182,16 +183,37 @@ public class Item implements IItem{
 			{
 				for(IDspaceBitStreamEntityId dspaceBitStream: dspaceItems.getBitstreams().getBitstreamentityid())
 				{
-					for(IBitStream bitstream: this.bitstreams){
-						if(bitstream.getId().equals(dspaceBitStream.getId()))
-						{
-							bitstream.setName(dspaceBitStream.getName());
-							bitstream.setSize(dspaceBitStream.getSize());
-							bitstream.setMimeType(dspaceBitStream.getMimeType());
-							break;
+					//Check if the bitstream is already present
+					boolean ispresent = false;
+					for(IBitStream bit: this.bitstreams)
+					{
+						if(bit.getName()!=null)
+							if(dspaceBitStream.getName().contains(bit.getName()))
+								ispresent = true;
+					}
+
+					if(!ispresent)
+					{
+						for(IBitStream bitstream: this.bitstreams){
+							if(bitstream.getId().equals(dspaceBitStream.getId()))
+							{
+								bitstream.setName(dspaceBitStream.getName());
+								bitstream.setSize(dspaceBitStream.getSize());
+								bitstream.setMimeType(dspaceBitStream.getMimeType());
+								break;
+							}
 						}
 					}
 				}
+				
+				System.out.println("Size: "+this.bitstreams.size());
+				Iterator<IBitStream> bitstreamIterator = this.bitstreams.iterator();
+				while(bitstreamIterator.hasNext())
+				{
+					if(bitstreamIterator.next().getName() == null)
+						bitstreamIterator.remove();
+				}
+				System.out.println("Size: "+this.bitstreams.size());
 			}
 		}
 	}	
