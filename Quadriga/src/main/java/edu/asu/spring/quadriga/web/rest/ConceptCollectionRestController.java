@@ -32,7 +32,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -45,8 +44,6 @@ import edu.asu.spring.quadriga.service.IUserManager;
 @Controller
 public class ConceptCollectionRestController {
 
-	@Autowired
-	private IDictionaryManager dictonaryManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ConceptCollectionRestController.class);
