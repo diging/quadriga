@@ -1,9 +1,12 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.springframework.batch.retry.backoff.Sleeper;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -34,13 +37,11 @@ public class Collection implements ICollection{
 	private String url;
 	private String userName;
 	private String password;
-	private boolean isLoaded;
 
 	public Collection(String id, RestTemplate restTemplate, String url, String userName, String password)
 	{
 		this.url = url;
 		this.id = id;
-		this.isLoaded = false;
 		this.userName = userName;
 		this.password = password;
 		this.setRestTemplate(restTemplate);
@@ -174,22 +175,6 @@ public class Collection implements ICollection{
 		this.countItems = countItems;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#isLoaded()
-	 */
-	@Override
-	public boolean isLoaded() {
-		return isLoaded;
-	}
-
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setLoaded(boolean)
-	 */
-	@Override
-	public void setLoaded(boolean isLoaded) {
-		this.isLoaded = isLoaded;
-	}
-
 
 	@Override
 	public boolean copy(IDspaceCollection dspaceCollection)
@@ -204,7 +189,6 @@ public class Collection implements ICollection{
 			if(dspaceCollection.getName() != null)
 			{
 				this.name = dspaceCollection.getName();
-				this.isLoaded = true;
 			}
 
 			if(dspaceCollection.getShortDescription() != null)
@@ -227,7 +211,7 @@ public class Collection implements ICollection{
 				this.countItems = dspaceCollection.getCountItems();
 			}
 
-			setItems(new ArrayList<IItem>());
+			this.items = Collections.synchronizedList(new ArrayList<IItem>());
 			IItem item = null;
 			if(dspaceCollection.getItemsEntity() != null)
 			{
@@ -236,11 +220,11 @@ public class Collection implements ICollection{
 					for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
 						item = new Item();
 						if(item.copy(dspaceItem))
-							getItems().add(item);
+							this.items.add(item);
 					}
 				}
 			}
-			return this.isLoaded;
+			return true;
 		}
 		return false;
 	}
