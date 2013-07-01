@@ -72,7 +72,7 @@
 	<beans:bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<beans:property name="basename">
-			<beans:value>locale\messages</beans:value>
+			<beans:value>locale/messages</beans:value>
 		</beans:property>
 	</beans:bean>
 	
