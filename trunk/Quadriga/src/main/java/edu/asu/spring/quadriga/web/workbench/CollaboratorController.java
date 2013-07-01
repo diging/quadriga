@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web;
+package edu.asu.spring.quadriga.web.workbench;
 
 import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
@@ -28,15 +28,23 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Controller
 public class CollaboratorController {
 
-	@Autowired 
-	IProjectManager projectmanager;
+	@Autowired
+    IRetrieveProjectManager projectManager;
+	
+	@Autowired
+	IRetrieveProjCollabManager projectCollabManager;
+	
+	@Autowired
+	IModifyProjCollabManager modifyProjectCollabManager;
 	
 	@Autowired 
 	IUserManager usermanager;
@@ -80,11 +88,11 @@ public class CollaboratorController {
 	}
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
-	public String displayCollaborator(@PathVariable("projectid") int projectid, ModelMap model) throws QuadrigaStorageException{
+	public String displayCollaborator(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException{
         IProject project = null;
 		try
         {
-		 project = projectmanager.getProject(projectid);
+		 project = projectManager.getProjectDetails(projectid);
         }
         catch(QuadrigaStorageException e){
 			throw new QuadrigaStorageException();
@@ -99,7 +107,7 @@ public class CollaboratorController {
 		// have user role as Restricted User
 		try
 		{
-			List<IUser> notCollaboratingUsers = projectmanager.getNotCollaboratingUsers(projectid);
+			List<IUser> notCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
 			Iterator<IUser> notCollaboratingUsersIterator = notCollaboratingUsers.iterator();
 						
 			while(notCollaboratingUsersIterator.hasNext())
@@ -133,8 +141,8 @@ public class CollaboratorController {
 			}
 			model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);	
 		
-			List<IUser> existingCollaborators =  projectmanager.showExistingCollaborator(projectid);
-			model.addAttribute("existingCollaborators", existingCollaborators);	
+//			List<IUser> existingCollaborators =  projectmanager.showExistingCollaborator(projectid);
+//			model.addAttribute("existingCollaborators", existingCollaborators);	
 		}
 		catch(QuadrigaStorageException e){
 			throw new QuadrigaStorageException();
@@ -153,13 +161,12 @@ public class CollaboratorController {
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.POST)
 	public String addCollaborators(
-			@PathVariable("projectid") int projectid, Model model, @ModelAttribute ICollaborator collaborator, RedirectAttributes redirectatt)
+			@PathVariable("projectid") String projectid, Model model, @ModelAttribute ICollaborator collaborator, RedirectAttributes redirectatt)
 	{
 		
 		String errmsg = null;
 		try {
-			 errmsg = projectmanager.addCollaborators(collaborator,projectid);
-
+			errmsg = modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid);
 
 		} catch (QuadrigaStorageException e) {
 			e.printStackTrace();

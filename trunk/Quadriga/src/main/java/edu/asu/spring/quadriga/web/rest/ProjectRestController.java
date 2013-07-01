@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.service.IProjectManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
  * Controller for project related the rest apis exposed to other clients
@@ -47,7 +47,7 @@ public class ProjectRestController {
 	IProject project;
 
 	@Autowired
-	IProjectManager projectManager;
+	IRetrieveProjectManager projectManager;
 
 	@Autowired
 	IRestVelocityFactory restVelocityFactory;
@@ -70,7 +70,7 @@ public class ProjectRestController {
 		try {
 			engine.init();
 			String userId = principal.getName();
-			projectList = projectManager.getProjectsOfUser(userId);
+			projectList = projectManager.getProjectList(userId);
 			template = engine.getTemplate("velocitytemplates/projectlist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", projectList);

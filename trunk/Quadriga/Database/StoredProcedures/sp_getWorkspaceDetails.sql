@@ -15,7 +15,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceDetails
 (
-  IN  inworkspaceid  BIGINT,
+  IN  inworkspaceid  VARCHAR(50),
   OUT errmsg         VARCHAR(255)        
 )
 BEGIN
@@ -23,7 +23,7 @@ BEGIN
   DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
    SET errmsg = "SQLException occurred";
 
-   IF(inworkspaceid IS NULL)
+   IF(inworkspaceid IS NULL OR inworkspaceid = "")
      THEN SET errmsg = "Workspace id cannot be empty.";
    END IF;
 

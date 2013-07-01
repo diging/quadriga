@@ -25,6 +25,10 @@ CREATE PROCEDURE sp_addProjectDetails
 )
 BEGIN
 
+	   -- Declare local variables
+       DECLARE uniqueId  BIGINT;
+       DECLARE projectId VARCHAR(50);
+       
     -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
@@ -65,10 +69,12 @@ BEGIN
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
          START TRANSACTION;
+            SET uniqueId = UUID_SHORT();
+            SET projectId = CONCAT('PROJ_',CAST(uniqueId AS CHAR));
             INSERT 
-              INTO tbl_project(projectname,description,unixname,projectowner,accessibility,
+              INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (inprojectname,indescription,inunixname,inprojectowner,inaccessibility,
+			 VALUES (inprojectname,indescription,inunixname,projectId,inprojectowner,inaccessibility,
                      inprojectowner,NOW(),inprojectowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;

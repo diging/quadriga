@@ -2,13 +2,10 @@ DROP PROCEDURE IF EXISTS sp_showProjectCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showProjectCollaborators
 (
-	IN inprojid				INT,
-	-- IN incollaboratoruser	VARCHAR(10),
-	OUT errmsg				VARCHAR(200)
+	IN inprojid		VARCHAR(50),
+	OUT errmsg		VARCHAR(200)
 )
-
 BEGIN
-
  -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
@@ -18,18 +15,9 @@ BEGIN
     END IF;
 
  -- validating the input variables
-	IF(inprojid IS NULL)
+	IF(inprojid IS NULL OR inprojid = "")
 		THEN SET errmsg = "projid cannot be empty";
 	END IF;
-
-	-- IF(incollaboratoruser IS NULL OR incollaboratoruser = "")
-		-- THEN SET errmsg = "collaborator user cannot be empty";
-	-- END IF;
-
-	-- IF EXISTS(SELECT 1 FROM vw_project_collaborator 
-				-- WHERE projectid = inprojid AND collaboratoruser = incollaboratoruser)
-	 -- THEN SET errmsg = "collaborator already exists in project";
-	-- END IF;
 
 	SELECT collaboratoruser FROM tbl_project_collaborator 
 	WHERE projectid = inprojid;

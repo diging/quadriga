@@ -17,10 +17,10 @@ CREATE PROCEDURE sp_updateProjectDetails
 (
   IN   inprojectname    VARCHAR(50),
   IN   indescription    TEXT,
-  IN   inprojectid      VARCHAR(100),
+  IN   inunixname      VARCHAR(100),
   IN   inaccessibility  VARCHAR(50),
   IN   inuser           VARCHAR(50),
-  IN   inid             INT,
+  IN   inprojid         VARCHAR(50),
   OUT  errmsg           VARCHAR(255)
 )
 BEGIN
@@ -30,17 +30,17 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- validating the input paramters
-    IF(inprojectname IS NULL AND indescription IS NULL AND inprojectid IS NULL AND
-       inaccessibility IS NULL AND inid IS NULL)
+    IF(inprojectname IS NULL AND indescription IS NULL AND inunixname IS NULL AND
+       inaccessibility IS NULL AND inprojid IS NULL)
       THEN SET errmsg = "there is no value to update.Please specify a value to update.";
     END IF;
 
-    IF(inid IS NULL)
+    IF(inprojid IS NULL)
       THEN SET errmsg = "Invalid id value.Please specify correct value.";
     END IF;
     
     IF NOT EXISTS(SELECT 1 FROM vw_project
-                    WHERE projectid = inid)
+                    WHERE projectid = inprojid)
       THEN SET errmsg = "No such record exists.Please specify correct value";
     END IF;
 
@@ -51,11 +51,11 @@ BEGIN
            UPDATE tbl_project proj
               SET proj.projectname = IFNULL(inprojectname,proj.projectname),
                   proj.description = IFNULL(indescription,proj.description),
-                  proj.unixname   = IFNULL(inprojectid,proj.projectid),
+                  proj.unixname   = IFNULL(inunixname,proj.unixname),
                   proj.accessibility = IFNULL(inaccessibility,proj.accessibility),
                   proj.updatedby     = inuser,
 				  proj.updateddate   = NOW()
-			WHERE proj.projectid = inid;
+			WHERE proj.projectid = inprojid;
           IF(errmsg = "")
              THEN COMMIT;
 		  ELSE 

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS tbl_project
   projectname     VARCHAR(50)   NOT NULL,
   description     TEXT          NULL,
   unixname        VARCHAR(100)  NOT NULL,
-  projectid       INT           NOT NULL AUTO_INCREMENT,
+  projectid       VARCHAR(50)   NOT NULL,
   projectowner    VARCHAR(50)   NOT NULL,
   accessibility   VARCHAR(30)   NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,

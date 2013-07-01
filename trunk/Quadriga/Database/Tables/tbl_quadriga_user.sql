@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS tbl_quadriga_user
   username      VARCHAR(20)   NOT NULL,
   passwd        VARCHAR(15)   NULL,
   email         VARCHAR(50)   DEFAULT NULL,
-  quadrigarole  VARCHAR(100)  NOT NULL,
   updatedby     VARCHAR(10)   NOT NULL,
   updateddate   TIMESTAMP     NOT NULL,
   createdby     VARCHAR(10)   NOT NULL,

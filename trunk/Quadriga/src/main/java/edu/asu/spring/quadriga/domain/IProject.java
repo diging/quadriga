@@ -21,13 +21,9 @@ public interface IProject {
 
 	public abstract void setDescription(String description);
 
-	public abstract String getId();
+	public abstract String getUnixName();
 
-	public abstract void setId(String id);
-
-	public abstract int getInternalid();
-
-	public abstract void setInternalid(int internalid);
+	public abstract void setUnixName(String id);
 
 	public abstract IUser getOwner();
 
@@ -45,5 +41,9 @@ public interface IProject {
 
 	public abstract void setNetworksDefaultAccess(
 			ENetworkAccessibility networksDefaultAccess);
+
+	public abstract void setInternalid(String internalid);
+
+	public abstract String getInternalid();
 	
 }

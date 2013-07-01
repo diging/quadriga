@@ -2,9 +2,8 @@ DROP PROCEDURE IF EXISTS sp_showProjectNonCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showProjectNonCollaborators
 (
-	IN inprojid				INT,
-	-- IN incollaboratoruser	VARCHAR(10),
-	OUT errmsg				VARCHAR(200)
+	IN inprojid		VARCHAR(50),
+	OUT errmsg		VARCHAR(200)
 )
 
 BEGIN
@@ -18,20 +17,11 @@ BEGIN
     END IF;
 
  -- validating the input variables
-	IF(inprojid IS NULL)
+	IF(inprojid IS NULL OR inprojid = "")
 		THEN SET errmsg = "projid cannot be empty";
 	END IF;
 
-	-- IF(incollaboratoruser IS NULL OR incollaboratoruser = "")
-		-- THEN SET errmsg = "collaborator user cannot be empty";
-	-- END IF;
-
-	-- IF EXISTS(SELECT 1 FROM vw_project_collaborator 
-				-- WHERE projectid = inprojid AND collaboratoruser = incollaboratoruser)
-	 -- THEN SET errmsg = "collaborator already exists in project";
-	-- END IF;
-
-	SELECT username,quadrigarole FROM tbl_quadriga_user WHERE
+	SELECT username FROM tbl_quadriga_user WHERE
 	username NOT IN (SELECT collaboratoruser FROM tbl_project_collaborator
 	WHERE projectid = inprojid 
 	UNION
