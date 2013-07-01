@@ -96,10 +96,8 @@
 	</script>
 	<c:choose>
 		<c:when test="${not empty communityName }">
-			<h3>
-				<a href="/quadriga/auth/workbench/workspace/communities">Home</a> »
+				<a href="/quadriga/auth/workbench/workspace/communities"  style="text-decoration: underline;">Home</a> »
 				<c:out value="${communityName}"></c:out>
-			</h3>
 			<c:choose>
 				<c:when test="${not empty collectionList}">
 					<span class="byline">Select a collection to browse its items</span>

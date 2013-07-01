@@ -206,14 +206,12 @@ public class Item implements IItem{
 					}
 				}
 				
-				System.out.println("Size: "+this.bitstreams.size());
 				Iterator<IBitStream> bitstreamIterator = this.bitstreams.iterator();
 				while(bitstreamIterator.hasNext())
 				{
 					if(bitstreamIterator.next().getName() == null)
 						bitstreamIterator.remove();
 				}
-				System.out.println("Size: "+this.bitstreams.size());
 			}
 		}
 	}	

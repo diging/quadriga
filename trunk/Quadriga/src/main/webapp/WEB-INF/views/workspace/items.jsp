@@ -3,11 +3,9 @@
 <!-- Content -->
 
 <article class="is-page-content">
-		<h3>
-				<a href="/quadriga/auth/workbench/workspace/communities">Home</a> »
-				<a href="/quadriga/auth/workbench/workspace/community/${communityId}"><c:out value="${communityName}"></c:out></a> »
+				<a href="/quadriga/auth/workbench/workspace/communities" style="text-decoration: underline;">Home</a> »
+				<a href="/quadriga/auth/workbench/workspace/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
 				<c:out value="${collectionName}"></c:out>
-			</h3>
 		<c:choose>
 			<c:when test="${not empty itemList}">
 				<span class="byline">Select an item to browse its

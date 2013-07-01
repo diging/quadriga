@@ -104,14 +104,14 @@
 		}
 	</script>
 	
-		<h3>
-				<a href="/quadriga/auth/workbench/workspace/communities">Home</a> »
-				<a href="/quadriga/auth/workbench/workspace/community/${communityId}"><c:out value="${communityName}"></c:out></a> »
-				<a href="/quadriga/auth/workbench/workspace/community/collection/${collectionId}"><c:out value="${collectionName}"></c:out></a> »
-				<c:out value="${itemName}"></c:out>
-			</h3>
+				<a href="/quadriga/auth/workbench/workspace/communities" style="text-decoration: underline;">Home</a> »
+				<a href="/quadriga/auth/workbench/workspace/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
+				<a href="/quadriga/auth/workbench/workspace/community/collection/${collectionId}"  style="text-decoration: underline;"><c:out value="${collectionName}"></c:out></a> »
+				<c:out value="${itemName}"></c:out><br />			
+			
 		<c:choose>
 			<c:when test="${not empty bitList}">
+			<span class="byline">Select a file to download.</span>
 				<c:forEach var="bitstream" items="${bitList}">
 				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
 				</c:forEach>
