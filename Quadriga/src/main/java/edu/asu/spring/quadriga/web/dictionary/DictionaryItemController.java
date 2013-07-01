@@ -115,13 +115,10 @@ public class DictionaryItemController {
 						+ " and term id : " + i + " : " + values[i]);
 				msg = dictonaryManager.deleteDictionariesItems(dictionaryId,
 						values[i],user.getUsername());
-				if (msg.equals("")) {
-					// what happens here
-				} else {
+				if (!msg.equals("")) {
 					flag = 1;
 					errormsg = msg;
 				}
-
 			}
 		} 
 		if (flag == 0) {
@@ -195,9 +192,7 @@ public class DictionaryItemController {
 					flag = 1;
 					errormsg = msg;
 				}
-				if (msg.equals("")) {
-					// what happens here?
-				} else {
+				if (!msg.equals("")) {
 					flag = 1;
 					errormsg = msg;
 				}

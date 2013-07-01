@@ -118,4 +118,13 @@ public interface IDictionaryManager {
 	 */
 	public abstract DictionaryItems getDictionaryItemIndex(String termId,
 			DictionaryItems dictionaryItems);
+
+	/**
+	 * Delete a dictinary
+	 * @param user
+	 * @param dictionaryId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract String deleteDictionary(String user, String dictionaryId)throws QuadrigaStorageException;
 }

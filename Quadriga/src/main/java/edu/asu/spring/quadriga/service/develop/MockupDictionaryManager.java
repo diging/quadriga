@@ -138,5 +138,11 @@ public class MockupDictionaryManager implements IDictionaryManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String deleteDictionary(String user, String dictionaryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

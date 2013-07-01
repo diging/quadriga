@@ -87,4 +87,12 @@ public interface IDBConnectionDictionaryManager {
 	public abstract String updateDictionaryItems(String dictinaryId,
 			String termid, String term, String pos)
 			throws QuadrigaStorageException;
+
+	/**
+	 * Deletes the dictionary 
+	 * @param dictionaryId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract String deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException;
 }

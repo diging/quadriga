@@ -258,7 +258,7 @@
 	</definition>
 	<definition name="auth/dictionaries" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga Dictionary" />
-		<put-attribute name="content" value="/WEB-INF/views/dictionaries.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/dictionary/dictionaries.jsp" />
 	</definition>
 	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
@@ -270,6 +270,12 @@
 			value="Quadriga Dictionary - Add Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/adddictionary.jsp" />
+	</definition>
+	<definition name="auth/dictionaries/deleteDictionary" extends="base.definition.dictionaries">
+		<put-attribute name="title"
+			value="Quadriga Dictionary - Delete Dictionary" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionary/deletedictionary.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/addDictionaryStatus"
 		extends="base.definition.dictionaries">
