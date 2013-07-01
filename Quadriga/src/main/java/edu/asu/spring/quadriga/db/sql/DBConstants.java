@@ -59,6 +59,9 @@ public interface DBConstants
 	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
+	public static final String LIST_ACTIVE_WORKSPACE = "sp_getActiveWorkspaceList";
+	public static final String LIST_ARCHIVE_WORKSPACE = "sp_getArchiveWorkspaceList";
+	public static final String LIST_DEACTIVATED_WORKSPACE = "sp_getDeactivatedWorkspaceList";
 	public static final String ADD_WORKSPACE_REQUEST = "sp_createworkspace";
 	public static final String ARCHIVE_WORKSPACE_REQUEST = "sp_archiveworkspace";
 	public static final String DEACTIVATE_WORKSPACE_REQUEST = "sp_deactivateworkspace";

@@ -7,16 +7,6 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="DBConnectionProjectManagerBean"
-		class="edu.asu.spring.quadriga.db.sql.DBConnectionProjectManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
-		<bean id="DBConnectionWorkspaceManagerBean"
-		class="edu.asu.spring.quadriga.db.sql.DBConnectionWorkspaceManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
 	<bean id="DBConnectionDictionaryManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManager">
 		<property name="dataSource" ref="dataSource" />
@@ -24,6 +14,32 @@
 	<bean id="DBConnectionCCManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionCCManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<!-- Workbench projects bean -->
+		<bean id="DBConnectionModifyProjCollabManagerBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjCollabManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="DBConnectionModifyProjectManagerBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjectManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+		<bean id="DBConnectionRetrieveProjCollabManagerBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjCollabManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+		<bean id="DBConnectionRetrieveProjectManagerBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjectManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- Workbench workspace bean -->
+		<bean id="DBConnectionArchiveWSMangerBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionArchiveWSManger">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+			<bean id="DBConnectionListWSManagerBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionListWSManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+				<bean id="DBConnectionModifyWSManagerBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionModifyWSManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">

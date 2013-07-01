@@ -20,8 +20,8 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 public class Project implements IProject {
 	private String name;
 	private String description;
-	private String id;
-	private int internalid;
+	private String unixname;
+	private String internalid;
 	private List<ICollaborator> collaborators;
 	private EProjectAccessibility projectAccess;
 	private ENetworkAccessibility networksDefaultAccess;
@@ -63,23 +63,23 @@ public class Project implements IProject {
 	 * retrieves the Unix ID of the project
 	 */
 	@Override
-	public String getId() {
-		return id;
+	public String getUnixName() {
+		return unixname;
 	}
 
 	/**
 	 * assigns the Unix ID of the project
 	 */
 	@Override
-	public void setId(String id) {
-		this.id = id;
+	public void setUnixName(String unixname) {
+		this.unixname = unixname;
 	}
 
 	/**
 	 * retrieves the internal id of the project
 	 */
 	@Override
-	public int getInternalid() {
+	public String getInternalid() {
 		return internalid;
 	}
 
@@ -87,7 +87,7 @@ public class Project implements IProject {
 	 * assigns the internal id of the project
 	 */
 	@Override
-	public void setInternalid(int internalid) {
+	public void setInternalid(String internalid) {
 		this.internalid = internalid;
 	}
 

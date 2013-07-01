@@ -31,7 +31,7 @@ import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.IWorkspaceManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
  * @author satyaswaroop boddu
@@ -50,7 +50,7 @@ public class WorkspaceRestController {
 	IUserManager userManager;
 
 	@Autowired
-	IWorkspaceManager wsManager;
+	IListWSManager wsManager;
 	/**
 	 * Rest interface for the getting list of workspaces of a project
 	 * http://<<URL>:<PORT>>/quadriga/rest/projects/{project_id}/workspaces
@@ -78,7 +78,7 @@ public class WorkspaceRestController {
 					engine.init();
 					//will use in future list workspaces need to be modified
 					String userId = principal.getName();
-					workspaceList = wsManager.listWorkspace(Integer.parseInt(project_id),0,0);
+					workspaceList = wsManager.listActiveWorkspace(project_id);
 					template = engine.getTemplate("velocitytemplates/workspaces.vm");
 					VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 					context.put("list", workspaceList);
@@ -127,13 +127,12 @@ public class WorkspaceRestController {
 	public String workspaceDetails(@PathVariable("workspaces_id") String workspaces_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
 	 {
 		IWorkSpace workspace;
-		long wsId = Long.parseLong(workspaces_id);
 		
 			VelocityEngine engine = null;
 			Template template = null;
  
 			try {
-				workspace = wsManager.getWorkspaceDetails(wsId);
+				workspace = wsManager.getWorkspaceDetails(workspaces_id);
 					engine = restVelocityFactory.getVelocityEngine(req);
 					engine.init();
 					//will use in future list workspaces need to be modified

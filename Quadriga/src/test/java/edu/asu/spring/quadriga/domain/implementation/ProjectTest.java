@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 
 /*
@@ -24,7 +25,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 
 public class ProjectTest {
 	
-	private Project project;
+	private IProject project;
 	private List<ICollaborator> collaborators;
 	private IUser owner;
 	
@@ -78,11 +79,11 @@ public class ProjectTest {
 	@Test
 	public void testGetId() {
 		
-		project.setId(null);
-		assertEquals(project.getId(), null);
+		project.setUnixName(null);
+		assertEquals(project.getUnixName(), null);
 		
-		project.setId("1234");
-		assertEquals(project.getId(), "1234");
+		project.setUnixName("1234");
+		assertEquals(project.getUnixName(), "1234");
 	}
 
 	
@@ -93,8 +94,8 @@ public class ProjectTest {
 		//project.setInternalid(null);
 		//assertEquals(project.getInternalid(), null);
 		
-		project.setInternalid(44);
-		assertEquals(project.getInternalid(), 44);
+		project.setInternalid("44");
+		assertEquals(project.getInternalid(), "44");
 	}
 
 	

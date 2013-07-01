@@ -23,7 +23,7 @@ CREATE PROCEDURE sp_archiveworkspace
 BEGIN
 
     -- Declare local varaibles
-    DECLARE rowvalue   BIGINT;
+    DECLARE rowvalue   VARCHAR(50);
     DECLARE position   INT;
 
 	-- the error handler for any sql exception
@@ -49,7 +49,7 @@ BEGIN
     -- inserting the input into a temp table
     CREATE TEMPORARY TABLE temp_tbl_workspaceid
     (
-         workspaceid BIGINT
+         workspaceid VARCHAR(50)
     );
 
     SET position = LOCATE(',',inworkspaceid);

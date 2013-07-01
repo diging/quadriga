@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
@@ -61,7 +62,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	private DBConnectionManager dbConnectionManager;
 	
 	@Autowired
-	private DBConnectionProjectManager dbConnectionProjectManager;
+	private IDBConnectionRetrieveProjCollabManager dbConnectionProjectManager; 
 	
 	@Autowired
 	private ICollaboratorRoleFactory collaboratorRoleFactory;
@@ -635,8 +636,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					{
 						role="";
 					}
-					collaboratorRoles = dbConnectionProjectManager.splitAndCreateCollaboratorRoles(role);
-					
+					collaboratorRoles = dbConnectionProjectManager.getCollaboratorRolesList(role);
 					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collection.getCollaborators().add(collaborator);							
 				}

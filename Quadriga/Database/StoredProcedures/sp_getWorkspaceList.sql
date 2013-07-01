@@ -15,7 +15,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceList;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceList
 (
-   IN inprojectid   BIGINT,
+   IN inprojectid   VARCHAR(50),
    IN inarchive     INT,
    IN inactive      INT,
    OUT errmsg       VARCHAR(255)
@@ -25,7 +25,7 @@ BEGIN
        SET errmsg = "SQL exception has occurred";
 
 	  -- valdiate the input parameters
-      IF (inprojectid IS NULL)
+      IF (inprojectid IS NULL OR inprojectid = "")
        THEN SET errmsg = "Project id cannot be empty.";
       END IF;
 
