@@ -235,7 +235,8 @@ public class DBConnectionDictionaryManagerTest {
 			logger.info("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
 			fail("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
 		}
-
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -296,9 +297,11 @@ public class DBConnectionDictionaryManagerTest {
 			assertEquals(dictionaryItems.getId().equals("Dog id"),true);
 			assertEquals(dictionaryItems.getPos().equals("noun"),true);
 			assertEquals(dictionaryItems.getItems().equals("dog"),true);
-			dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-			dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+			
 		}
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+		
 	}
 
 	@Test
@@ -317,6 +320,8 @@ public class DBConnectionDictionaryManagerTest {
 			assertEquals((name.equals("testDictionary")), true);
 			dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 		}
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -342,5 +347,7 @@ public class DBConnectionDictionaryManagerTest {
 			assertEquals((msg.equals("")), true);
 			dbConnection.setupTestEnvironment("delete from tbl_dictionary");	
 		}
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 }
