@@ -194,7 +194,38 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		return dictionaryList;
 	}
+	
+	@Override
+	public String deleteDictionary(String userId, String dictionaryId) throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		getConnection();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.DELETE_DICTIONARY + "(?,?,?)";
+		logger.info("deleting from DB dictionary from user "+userId +" and dictionaryId" +dictionaryId);
+		try {
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, userId);
+			sqlStatement.setString(2, dictionaryId);
+			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
+			sqlStatement.execute();
 
+			errmsg = sqlStatement.getString(3);
+
+			return errmsg;
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return errmsg;
+	}
+	
 	@Override
 	public List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid, String ownerName)throws QuadrigaStorageException{
 		String dbCommand;

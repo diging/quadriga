@@ -107,7 +107,7 @@ public class DictionaryManager implements IDictionaryManager {
 		String msg = "";
 		try {
 			msg = dbConnect.addDictionary(dictionary);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -127,7 +127,7 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 			msg = dbConnect.addDictionaryItems(dictionaryId, item, id, pos,
 					owner);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -141,11 +141,12 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return success or error message to controller
 	 */
 
-	public String deleteDictionariesItems(String dictionaryId, String itemid,String ownerName)
-			throws QuadrigaStorageException {
+	public String deleteDictionariesItems(String dictionaryId, String itemid,
+			String ownerName) throws QuadrigaStorageException {
 		String msg = "";
 		try {
-			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid,ownerName);
+			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid,
+					ownerName);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -165,7 +166,7 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 			msg = dbConnect.updateDictionaryItems(dictionaryId, termid, term,
 					pos);
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -178,13 +179,13 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to list of dictionary item to controller
 	 */
 
-	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,String ownerName)
-			throws QuadrigaStorageException {
+	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
+			String ownerName) throws QuadrigaStorageException {
 
 		List<IDictionaryItems> dictionaryItemList = null;
 		try {
-			dictionaryItemList = dbConnect
-					.getDictionaryItemsDetails(dictionaryid, ownerName);
+			dictionaryItemList = dbConnect.getDictionaryItemsDetails(
+					dictionaryid, ownerName);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -205,7 +206,7 @@ public class DictionaryManager implements IDictionaryManager {
 		String dictionaryName = "";
 		try {
 			dictionaryName = dbConnect.getDictionaryName(dictionaryid);
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -233,6 +234,21 @@ public class DictionaryManager implements IDictionaryManager {
 			logger.error(e.getMessage());
 		}
 		return dictionaryEntry;
+	}
+
+	@Override
+	public String deleteDictionary(String user, String dictionaryId)
+			throws QuadrigaStorageException {
+
+		String msg = "";
+		try {
+			logger.info("deleting from dictionary manager");
+			msg = dbConnect.deleteDictionary(user, dictionaryId);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return msg;
 	}
 
 	/**
@@ -263,9 +279,10 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 		return dictionaryEntry;
 	}
-	
+
 	/**
-	 * Get index of term from a list for update and deleting term from dictionary
+	 * Get index of term from a list for update and deleting term from
+	 * dictionary
 	 * 
 	 * @return Return the dictionaryEntry bean to controller
 	 */

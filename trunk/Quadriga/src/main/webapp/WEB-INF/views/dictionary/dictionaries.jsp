@@ -39,16 +39,25 @@
 
 <ul>
 	<li><input type=button
-		onClick="location.href='/quadriga/auth/dictionaries/addDictionary'"
-		value='Add Dictionary'></li>
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary'"
+		value='Add Dictionary'> <input type=button
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/deleteDictionary'"
+		value='Delete Dictionary'></li>
 </ul>
-<!-- 
-<div class="example4">	<a href="/quadriga/auth/dictionaries/addDictionary">Add Dictionary</a></div>-->
 
 
 <c:choose>
 	<c:when test="${adddicsuccess=='1'}">
 		<font color="blue"><spring:message code="add.dictionary.success" /></font>
+	</c:when>
+	<c:when test="${deldicitonarysuccess=='1'}">
+		<font color="blue"><spring:message code="delete.dictionary.success" /></font>
+	</c:when>
+	<c:when test="${deldicitonarysuccess=='0'}">
+		<font color="red"><spring:message code="delete.dictionary.fail" /></font>
+	</c:when>
+	<c:when test="${dictionaryaccesserror=='0'}">
+		<font color="red"><spring:message code="delete.dictionary.access.fail" /></font>
 	</c:when>
 </c:choose>
 <br />
@@ -62,7 +71,7 @@
 				<c:forEach var="dictionary" items="${dictinarylist}">
 					<li><details>
 							<summary>
-								<a href="/quadriga/auth/dictionaries/${dictionary.id}"> <c:out
+								<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.id}"> <c:out
 										value="${dictionary.name}"></c:out></a>
 							</summary>
 							<c:out value="${dictionary.description}"></c:out>
