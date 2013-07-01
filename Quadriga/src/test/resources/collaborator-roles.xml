@@ -28,6 +28,7 @@
 	</bean>
 
 	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role4"></property>
 		<property name="roleid" value="EDITOR"></property>
 		<property name="rolename" value="editor"></property>
