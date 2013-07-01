@@ -1,4 +1,4 @@
-dbname=Quad_Test
+dbname=quadriga
 dbuser=root
 dbadmin=root
 mysqllocation='C:\Program Files\MySQL\MySQL Server 5.6\bin\mysql.exe'

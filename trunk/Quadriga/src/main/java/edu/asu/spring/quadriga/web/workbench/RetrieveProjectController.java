@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 
 @Controller
@@ -22,6 +24,9 @@ public class RetrieveProjectController
 	
 	@Autowired 
 	IRetrieveProjectManager projectManager;
+	
+	@Autowired
+	IListWSManager wsManager;
 	
 	/**
 	 *this method acts as a controller for handling all the activities on the workbench
@@ -50,10 +55,15 @@ public class RetrieveProjectController
 	public String getProjectDetails(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException
 	{
 		IProject project;
+		List<IWorkSpace> workspaceList;
 		
 		project = projectManager.getProjectDetails(projectid);
 		
+		//retrieve all the workspaces associated with the project
+		workspaceList = wsManager.listActiveWorkspace(projectid);
+		
 		model.addAttribute("project", project);
+		model.addAttribute("workspaceList",workspaceList);
 		
 		return "auth/workbench/project";
 	}

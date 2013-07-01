@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
@@ -63,7 +64,7 @@ public class ModifyProjectController
 	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
-	public String addProjectRequest(@ModelAttribute("SpringWeb")IProject project, 
+	public String addProjectRequest(@ModelAttribute("SpringWeb")Project project, 
 			ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		String errmsg;
@@ -123,7 +124,7 @@ public class ModifyProjectController
 	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
-	public String updateProjectRequest(@PathVariable("projectid") String projectid,@ModelAttribute("SpringWeb")IProject project, 
+	public String updateProjectRequest(@PathVariable("projectid") String projectid,@ModelAttribute("SpringWeb")Project project, 
 			ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		String errmsg;

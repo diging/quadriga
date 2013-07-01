@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 public class Project implements IProject {
 	private String name;
 	private String description;
-	private String unixname;
+	private String unixName;
 	private String internalid;
 	private List<ICollaborator> collaborators;
 	private EProjectAccessibility projectAccess;
@@ -64,7 +64,7 @@ public class Project implements IProject {
 	 */
 	@Override
 	public String getUnixName() {
-		return unixname;
+		return unixName;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class Project implements IProject {
 	 */
 	@Override
 	public void setUnixName(String unixname) {
-		this.unixname = unixname;
+		this.unixName = unixname;
 	}
 
 	/**
