@@ -32,10 +32,6 @@ public interface ICollection extends Runnable{
 
 	public abstract void setCountItems(String countItems);
 
-	public abstract boolean isLoaded();
-
-	public abstract void setLoaded(boolean isLoaded);
-
 	public abstract boolean copy(IDspaceCollection dspaceCollection);
 
 	public abstract void setPassword(String password);

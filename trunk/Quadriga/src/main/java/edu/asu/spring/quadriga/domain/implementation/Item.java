@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -154,7 +155,8 @@ public class Item implements IItem{
 
 			//Load all the bitids associated with the item.
 			this.bitids = new ArrayList<String>();
-			this.setBitstreams(new ArrayList<IBitStream>());
+			//this.setBitstreams(new ArrayList<IBitStream>());
+			this.bitstreams = Collections.synchronizedList(new ArrayList<IBitStream>());
 			if(dspaceItem.getBitstreams() != null)
 			{
 				if(dspaceItem.getBitstreams().getBitstreamentityid() != null)
