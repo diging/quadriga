@@ -2,8 +2,12 @@ package edu.asu.spring.quadriga.service;
 
 import java.util.List;
 
+import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
+
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -119,6 +123,18 @@ public interface IDictionaryManager {
 	public abstract DictionaryItems getDictionaryItemIndex(String termId,
 			DictionaryItems dictionaryItems);
 
+	
+	public abstract List<IUser> getCollaborators(String dictionaryid);
+	
+	public abstract List<IUser> showCollaboratingUsers(String collectionid);
+	
+	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
+	
+	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName);
+
+	
+
+
 	/**
 	 * Delete a dictinary
 	 * @param user
@@ -127,4 +143,5 @@ public interface IDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String deleteDictionary(String user, String dictionaryId)throws QuadrigaStorageException;
+
 }

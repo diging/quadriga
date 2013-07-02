@@ -137,6 +137,37 @@
 	<span class="byline">These are all the terms in your dictionary</span>
 </header>
 
+<%-----------------------------------------------------------------------%>
+<%-- Author:Rohit Pendbhaje --%>
+<div>
+<section>
+<h3 class="major"><span>Collaborators</span></h3>
+
+<ul class="collaborators">
+	<c:forEach var="existingcollab" items="${existingCollaborators}">
+	<li><c:out value="${existingcollab.userName}"></c:out></li>
+	</c:forEach>
+</ul>
+
+<section>
+<ul class="noStyle">
+		<li>
+			<article class="is-post-summary">
+				<h3>
+					» <a href="/quadriga/auth/dictionaries/${dictionaryid}/showCollaborators">Manage Collaborators</a>
+				</h3>
+			</article>
+		</li>	
+	</ul>
+
+
+</section>
+</section>
+</div>
+
+<%-----------------------------------------------------------------------%>
+
+
 <ul>
 	<li><input type=button
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"

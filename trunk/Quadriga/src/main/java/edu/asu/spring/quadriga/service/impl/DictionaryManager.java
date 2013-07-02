@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
@@ -312,6 +314,56 @@ public class DictionaryManager implements IDictionaryManager {
 		di.setPos(pos[index]);
 
 		return di;
+	}
+
+	@Override
+	public List<IUser> getCollaborators(String dictionaryid) {
+		
+		List<IUser> userList = dbConnect.getDictionaryCollaborators(dictionaryid);		
+		return userList;
+	}	
+	
+	@Override
+	public List<IUser> showNonCollaboratingUsers(String dictionaryid) {
+
+		List<IUser> nonCollabUsers = null;
+		try {
+			nonCollabUsers = dbConnect.showNonCollaboratingUsersRequest(dictionaryid);
+		} catch (QuadrigaStorageException e) {
+			e.printStackTrace();
+		}
+		return nonCollabUsers;
+	}
+
+	@Override
+	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) {
+		
+		String errmsg=null;
+		
+		try {
+			
+		 errmsg =	dbConnect.addCollaborators(collaborator, dictionaryid, userName);
+			
+		} catch (QuadrigaStorageException e) {
+			e.printStackTrace();
+		}
+		
+		return errmsg;
+	}
+
+	@Override
+	public List<IUser> showCollaboratingUsers(String dictionaryid) {
+		
+		List<IUser> collaborators = null;
+		try {
+			
+		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
+		
+		} catch (QuadrigaStorageException e) {
+			e.printStackTrace();
+		}
+	
+		return collaborators;
 	}
 
 }

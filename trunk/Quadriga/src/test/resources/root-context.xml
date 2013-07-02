@@ -58,15 +58,37 @@
 		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
 	</bean>
 
-	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager" />
+	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
+	<property name="dictCollabRoles" ref="CollaboratorRole"></property>
+	<!-- <qualifier value="dictCollaborator"></qualifier>  --> 
+	</bean>
+	
+	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
+	<property name="ccCollabRoles" ref="CollaboratorRole"></property>
+	<!--  <qualifier value="ccCollaborator"></qualifier>   --> 
+	</bean>
+	
+	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
+	<property name="projectCollabRoles" ref="CollaboratorRole"></property>
+	<!--  <qualifier value="projectCollaborator"></qualifier>  --> 
+	</bean>
+	
+	<bean id="CollaboratorRole" class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
+	
 
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory" />
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory" />
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory" />
+		
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory" />
-	<!-- <bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager" />-->
+
+	
+	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager" />
+
+	
+	
 	<bean class="edu.asu.spring.quadriga.domain.implementation.CollectionsValidator" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
@@ -118,4 +140,6 @@
 	<import resource="collaborator-roles.xml" />
 	<import resource="cc-collaborator-roles.xml" />
 	<import resource="quadriga-roles.xml" />
+	<import resource="cc-collaborator-roles.xml"/>
+	<import resource="dict-collaborator-roles.xml"/>
 </beans>
