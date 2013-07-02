@@ -158,7 +158,7 @@ public class DBConnectionCCManagerTest {
 		assertEquals(collection.getName(),list.get(0).getName());
 		collection.setId(list.get(0).getId());
 		dbConnection.saveItem("lemma", "testid", "red", "hello", collection.getId());
-		dbConnection.getCollectionDetails(collection, user.getName());
+		dbConnection.getCollectionDetails(collection, user.getUserName());
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setId("testid");
 		assertEquals(concept,collection.getItems().get(0));
@@ -214,7 +214,7 @@ public class DBConnectionCCManagerTest {
 		
 		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
 		
-		dbConnection.getCollectionDetails(collection,user.getName());
+		dbConnection.getCollectionDetails(collection,user.getUserName());
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
 	}
 	
@@ -225,6 +225,7 @@ public class DBConnectionCCManagerTest {
 		collection.setDescription("Hello This is a test");
 		collection.setName("Collection Test");
 		collection.setOwner(user);
+		
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
 		assertEquals(collection.getName(),list.get(0).getName());
@@ -237,7 +238,7 @@ public class DBConnectionCCManagerTest {
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		
 		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
-		dbConnection.getCollectionDetails(collection, user.getName());
+		dbConnection.getCollectionDetails(collection, user.getUserName());
 		
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
 		dbConnection.deleteItems(concept.getId(), collection.getId());
@@ -246,7 +247,7 @@ public class DBConnectionCCManagerTest {
 		assertEquals(collection.getName(),clist.get(0).getName());
 		collection.setId(clist.get(0).getId());
 		collection = clist.get(0);
-		dbConnection.getCollectionDetails(collection, user.getName());
+		dbConnection.getCollectionDetails(collection, user.getUserName());
 		assertEquals(0,collection.getItems().size());
 		
 	}
@@ -267,10 +268,15 @@ public class DBConnectionCCManagerTest {
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		collection.getItems().add(concept);
+		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
+		assertEquals(collection.getName(),list.get(0).getName());
+		collection.setId(list.get(0).getId());
 		dbConnection.saveItem("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId());
+		
 		concept.setLemma("updatedlemma");
 		dbConnection.updateItem(concept, collection.getId());
-		collectionManager.getCollectionDetails(collection, user.getName());
+		
+		collectionManager.getCollectionDetails(collection, user.getUserName());
 		assertEquals("updatedlemma",collection.getItems().get(0).getLemma());
 	}
 	
