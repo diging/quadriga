@@ -170,7 +170,7 @@ public class DspaceController {
 		if(bitstream != null)
 		{
 			if(bitstream.getName() != null)
-				return bitstream.getName()+",   Size:"+bitstream.getSize()+",   MimeType:"+bitstream.getMimeType();
+				return bitstream.getName();
 		}
 		return "Loading...";		
 	}
