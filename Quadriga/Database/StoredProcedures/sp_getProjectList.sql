@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_getProjectList;
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectList
 (
-    IN projowner VARCHAR(10),
+    IN projowner VARCHAR(20),
 	OUT errmsg  VARCHAR(100)
 )
 BEGIN
