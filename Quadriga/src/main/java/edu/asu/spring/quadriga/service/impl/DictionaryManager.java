@@ -41,6 +41,10 @@ public class DictionaryManager implements IDictionaryManager {
 	@Autowired
 	@Qualifier("searchWordPowerURL")
 	private String searchWordPowerURL;
+	
+	@Autowired
+	@Qualifier("searchWordPowerURLPath")
+	private String searchWordPowerURLPath;
 
 	@Autowired
 	@Qualifier("updateFromWordPowerURL")
@@ -62,7 +66,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return String URL
 	 */
 	public String getSearchWordPowerURL() {
-		return searchWordPowerURL;
+		return searchWordPowerURL+""+searchWordPowerURLPath;
 	}
 
 	/**
@@ -226,7 +230,7 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 
 			String fullUrl = getSearchWordPowerURL() + "" + item + "/" + pos;
-			logger.info("Search Word Power URL : " + fullUrl);
+			logger.debug("Search Word Power URL : " + fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply) restTemplate
 					.getForObject(fullUrl, WordpowerReply.class);
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
@@ -242,7 +246,7 @@ public class DictionaryManager implements IDictionaryManager {
 
 		String msg = "";
 		try {
-			logger.info("deleting from dictionary manager");
+			logger.debug("deleting from dictionary manager");
 			msg = dbConnect.deleteDictionary(user, dictionaryId);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -262,14 +266,14 @@ public class DictionaryManager implements IDictionaryManager {
 
 		List<WordpowerReply.DictionaryEntry> dictionaryEntry = null;
 		try {
-			logger.info("Update url from func : " + getUpdateFromWordPowerURL());
+			logger.debug("Update url from func : " + getUpdateFromWordPowerURL());
 			itemid = itemid.substring(itemid.lastIndexOf("/") + 1,
 					itemid.length());
-			logger.info("Update Item ID : " + itemid);
-			logger.info("URL From rest xml : --" + getUpdateFromWordPowerURL()
+			logger.debug("Update Item ID : " + itemid);
+			logger.debug("URL From rest xml : --" + getUpdateFromWordPowerURL()
 					+ "--");
 			String fullUrl = getUpdateFromWordPowerURL() + "" + itemid;
-			logger.info("Update Word Power URL : " + fullUrl);
+			logger.debug("Update Word Power URL : " + fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply) restTemplate
 					.getForObject(fullUrl, WordpowerReply.class);
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
