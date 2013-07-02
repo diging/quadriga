@@ -23,7 +23,7 @@
     	Project associates these workspaces:
     		<ul class="style2 pagination1">
 			<c:forEach var="workspace" items="${workspaceList}">
-				<li><a href="workspacedetails/${workspace.id}"><c:out
+				<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
 							value="${workspace.name}"></c:out></a> <br> <c:out
 						value="${workspace.description}"></c:out></li>
 			</c:forEach>
@@ -33,14 +33,13 @@
 			No workspaces are associated yet. You should create one!
 		</c:if>
 </div>
+<section>
 <hr>
 <a href="modifyproject/${project.internalid}"> <input type="button"
 	name="Edit" value="Edit" />
 </a>
-<a href="workspace/${project.internalid}"> <input type="button"
-	name="Workspace" value="List Workspace" />
-</a>
-
+</section>
+<!-- 
 <section>
 	<c:choose>
 		<c:when test="${success=='1'}">
@@ -50,6 +49,7 @@
 		</c:when>
 	</c:choose>
 </section>
+ -->
 
 
 

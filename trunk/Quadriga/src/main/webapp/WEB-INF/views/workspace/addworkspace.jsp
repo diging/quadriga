@@ -33,7 +33,7 @@ $(function() {
 <article class="is-page-content">
 
 	<form:form modelAttribute="workspace" method="POST"
-		action="/auth/workbench/workspace/addworkspace/${wsprojectid}">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/addworkspace">
 		<table style="width: 100%">
 			<c:choose>
 				<c:when test="${success=='0'}">

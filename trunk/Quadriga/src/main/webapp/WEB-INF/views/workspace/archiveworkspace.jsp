@@ -31,7 +31,7 @@ $(document).ready(function() {
 });
 
 function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}';
 }
 $(function() {
 	
@@ -62,7 +62,7 @@ $(function() {
 </script>
 <article class="is-page-content">
 	<form:form modelAttribute="workspace" method="POST"
-		action="archiveworkspace/${wsprojectid}" id="archivewsform">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/archiveworkspace" id="archivewsform">
 		<c:if test="${not empty workspaceList}">
 			<span class="byline">Select the workspace to be archived:</span>
 			<c:choose>

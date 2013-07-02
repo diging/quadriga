@@ -28,11 +28,11 @@ public class ModifyProjCollabManager implements IModifyProjCollabManager
 	 * @author rohit pendbhaje
 	 */
 	@Override
-	public String addCollaboratorRequest(ICollaborator collaborator, String projectid) throws QuadrigaStorageException
+	public String addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
 	{
 		String errmsg;
 		
-		errmsg = dbConnect.addCollaboratorRequest(collaborator, projectid);
+		errmsg = dbConnect.addCollaboratorRequest(collaborator, projectid,userName);
 		
 		return errmsg;
 	}

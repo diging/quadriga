@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.workbench;
 
 import java.beans.PropertyEditorSupport;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -90,14 +91,10 @@ public class CollaboratorController {
 	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
 	public String displayCollaborator(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException{
         IProject project = null;
-		try
-        {
-		 project = projectManager.getProjectDetails(projectid);
-        }
-        catch(QuadrigaStorageException e){
-			throw new QuadrigaStorageException();
-		} 
-		model.addAttribute("project", project); 
+		
+        project = projectManager.getProjectDetails(projectid);
+		
+        model.addAttribute("project", project); 
 		
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
@@ -108,6 +105,7 @@ public class CollaboratorController {
 		try
 		{
 			List<IUser> notCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
+			
 			Iterator<IUser> notCollaboratingUsersIterator = notCollaboratingUsers.iterator();
 						
 			while(notCollaboratingUsersIterator.hasNext())
@@ -145,7 +143,7 @@ public class CollaboratorController {
 //			model.addAttribute("existingCollaborators", existingCollaborators);	
 		}
 		catch(QuadrigaStorageException e){
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}		
 		
 		return "auth/workbench/showCollaborators";
@@ -161,16 +159,14 @@ public class CollaboratorController {
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborator", method = RequestMethod.POST)
 	public String addCollaborators(
-			@PathVariable("projectid") String projectid, Model model, @ModelAttribute ICollaborator collaborator, RedirectAttributes redirectatt)
+			@PathVariable("projectid") String projectid, Model model, @ModelAttribute ICollaborator collaborator,
+			RedirectAttributes redirectatt,Principal principal) throws QuadrigaStorageException
 	{
-		
-		String errmsg = null;
-		try {
-			errmsg = modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid);
+		String errmsg;
+		String userName;
+			userName = principal.getName();
+			errmsg = modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid,userName);
 
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-		}
 
 		if(errmsg.equals(""))
 		{

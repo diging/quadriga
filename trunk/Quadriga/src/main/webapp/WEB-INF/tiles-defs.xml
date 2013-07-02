@@ -11,6 +11,7 @@
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="sub-navigation" value="" />
+		<put-attribute name="right-sub-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
@@ -113,6 +114,8 @@
 		<put-attribute name="title" value="Quadriga - Project Details" />
 		<put-attribute name="sub-navigation"
 			value="/WEB-INF/views/workbench/project-right.jsp" />
+		<put-attribute name="right-sub-navigation"
+			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/project.jsp" />
 	</definition>
@@ -123,8 +126,6 @@
 	</definition>
 	<definition name="auth/workbench/addProjectStatus" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Add Project" />
-		<put-attribute name="sub-navigation"
-			value="/WEB-INF/views/workbench/project-right.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addprojectstatus.jsp" />
 	</definition>
