@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,34 @@ public class DBConnectionRetrieveProjectManager implements
 			logger.info("Close database Connection  :"+e.getMessage());
 			throw new QuadrigaStorageException("Oops!!Database hanged");
 		}
+	}
+	
+	/**
+	 * This is to set up the test environment data.
+	 * @param sQuery
+	 * @return 1 on success
+	 * @throws QuadrigaStorageException
+	 * @author Kiran Kumar Batna
+	 */
+	@Override
+	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
+	{
+			getConnection();
+			try
+			{
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate(sQuery);
+			return 1;
+			}
+			catch(SQLException e)
+			{
+				throw new QuadrigaStorageException(e.getMessage());
+			}
+			finally
+			{
+				closeConnection();
+			}
+			
 	}
 
 	/**
