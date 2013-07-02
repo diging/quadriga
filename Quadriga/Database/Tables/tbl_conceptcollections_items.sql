@@ -13,10 +13,10 @@ Modified Date : 06/04/2013
 CREATE TABLE IF NOT EXISTS tbl_conceptcollections_items
 (
   id       INT   NOT NULL,
-  lemma     	 VARCHAR(40)	NOT NULL,
+  lemma     	 VARCHAR(255)	NOT NULL,
   item	 VARCHAR(255)    NOT NULL,
   
-  pos			  VARCHAR(40) ,
+  pos			  VARCHAR(255) ,
   description     TEXT,			
  
   updateddate     TIMESTAMP     NOT NULL,

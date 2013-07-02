@@ -17,8 +17,8 @@ DELIMITER $$
 CREATE PROCEDURE sp_addCollectionItems	
 (
   IN  	initem    VARCHAR(255),
-  IN  	 inlemma   VARCHAR(50),
-  IN  	 inpos VARCHAR(50),
+  IN  	 inlemma   VARCHAR(255),
+  IN  	 inpos VARCHAR(255),
   IN 	 indescription TEXT,
   IN 	inid INT,
   OUT 	errmsg           VARCHAR(255)    
