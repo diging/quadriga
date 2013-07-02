@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
-		<property name="roleDBid" value="collaborator_role1"></property>
+		<property name="roleDBid" value="cc_role1"></property>
 		<property name="roleid" value="ADMIN"></property>
 		<property name="rolename" value="admin"></property>
 		<property name="roledescription"
@@ -13,7 +13,7 @@
 
 	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
 		<qualifier value="projectCollaborator" />
-		<property name="roleDBid" value="collaborator_role2"></property>
+		<property name="roleDBid" value="cc_role2"></property>
 		<property name="roleid" value="PROJECT_ADMIN"></property>
 		<property name="rolename" value="project admin"></property>
 		<property name="roledescription"
@@ -22,7 +22,7 @@
 
 	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
 		<qualifier value="projectCollaborator" />
-		<property name="roleDBid" value="collaborator_role3"></property>
+		<property name="roleDBid" value="cc_role3"></property>
 		<property name="roleid" value="CONTRIBUTOR"></property>
 		<property name="rolename" value="contributor"></property>
 		<property name="roledescription"
@@ -31,7 +31,7 @@
 
 	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
 		<qualifier value="projectCollaborator" />
-		<property name="roleDBid" value="collaborator_role4"></property>
+		<property name="roleDBid" value="cc_role4"></property>
 		<property name="roleid" value="EDITOR"></property>
 		<property name="rolename" value="editor"></property>
 		<property name="roledescription"

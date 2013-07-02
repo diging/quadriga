@@ -11,7 +11,9 @@
 				    » <a href="/quadriga/auth/workbench/${project.internalid}/showCollaborators">Manage Collaborators</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/addworkspace">Add Workspace</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/archiveworkspace">Archive Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/${project.internalid}/unarchiveworkspace">Activate Archived Workspace</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/deactivateworkspace">Deactivate Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/${project.internalid}/activateworkspace">Activate Workspace</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/deleteworkspace">Delete Workspace</a><br /><br />
 				</h3>
 			</article>

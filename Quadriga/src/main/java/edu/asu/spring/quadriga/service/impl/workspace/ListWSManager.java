@@ -26,6 +26,25 @@ public class ListWSManager implements IListWSManager
 	private IDBConnectionListWSManager dbConnect;
 	
 	/**
+	 * This will list all the workspaces associated
+	 * with the project.
+	 * @param    projectid
+	 * @return   List<IWorkSpace> - list of workspaces associated 
+	 *           with the project.
+	 * @throws   QuadrigaStorageException
+	 * @author   Kiran Kumar Batna
+	 */
+	@Override
+	public List<IWorkSpace> listWorkspace(String projectid) throws QuadrigaStorageException
+	{
+		List<IWorkSpace> workspaceList;
+		
+		workspaceList = dbConnect.listWorkspace(projectid);
+
+		return workspaceList;
+	}
+	
+	/**
 	 * This will list all the active workspaces associated
 	 * with the project.
 	 * @param    projectid
