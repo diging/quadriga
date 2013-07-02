@@ -30,7 +30,7 @@
 	</bean>
 
 
-	<bean id="searchWordPowerURL" class="java.lang.String">
+	<bean id="wordPowerURL" class="java.lang.String">
 		<constructor-arg>
 			<value>http://digitalhps-develop.asu.edu:8080/wordpower</value>
 		</constructor-arg>
@@ -48,9 +48,10 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="updateFromWordPowerURL" class="java.lang.String">
+	
+	<bean id="updateFromWordPowerURLPath" class="java.lang.String">
 		<constructor-arg>
-			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/</value>
+			<value>/rest/Word/</value>
 		</constructor-arg>
 	</bean>
 	
