@@ -15,9 +15,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceList;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceList
 (
-   IN inprojectid   VARCHAR(50),
-   IN inarchive     INT,
-   IN inactive      INT,
+   IN inprojectid   VARCHAR(255),
    OUT errmsg       VARCHAR(255)
 )
 BEGIN
@@ -34,14 +32,6 @@ BEGIN
         THEN SET errmsg = "Project id is invalid.";
       END IF;
 
-       IF(inarchive IS NULL)
-          THEN SET errmsg = "Archive parameter cannot be empty.";
-       END IF;
-
-       IF(inactive IS NULL)
-         THEN SET errmsg = "Active parameter cannot be empty.";
-	   END IF;
-
       IF (errmsg IS NULL)
         THEN SET errmsg = "";
           SELECT vsws.workspacename,
@@ -51,8 +41,6 @@ BEGIN
             FROM vw_workspace vsws
             JOIN vw_project_workspace vwprojws
               ON vsws.workspaceid = vwprojws.workspaceid
-             AND vsws.isarchived = inarchive
-             AND vsws.isdeactivated = inactive
             WHERE vwprojws.projectid = inprojectid;
       END IF;
 END $$

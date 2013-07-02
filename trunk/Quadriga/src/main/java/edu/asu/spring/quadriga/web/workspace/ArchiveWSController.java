@@ -100,5 +100,78 @@ public class ArchiveWSController
 			return "auth/workbench/workspace/archiveworkspace";
 		}
 	}
+	
+	/**
+	 * This calls workspaceManger to list the archived workspace associated with a project for unarchival process.
+	 * @param   model
+	 * @param   projectid
+	 * @return  String - URL of the form
+	 * @throws  QuadrigaStorageException
+	 * @author  Kiran Kumar Batna
+	 */
+	@RequestMapping(value="auth/workbench/{projectid}/unarchiveworkspace", method=RequestMethod.GET)
+	public String unarchiveWorkspaceForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	{
+		List<IWorkSpace> workspaceList;
+		// retrieve the workspaces associated with the projects
+		    workspaceList = wsManager.listArchivedWorkspace(projectid);
+			model.addAttribute("workspaceList", workspaceList);
+			model.addAttribute("wsprojectid",projectid);
+		return "auth/workbench/workspace/unarchiveworkspace";
+	}
+	
+	/**
+	 * This calls workspaceManager to unarchive the workspace submitted.
+	 * @param   projectid
+	 * @param   req
+	 * @param   model
+	 * @param   principal
+	 * @return  String - URL of the form
+	 * @throws  QuadrigaStorageException
+	 * @author  Kiran Kumar Batna
+	 */
+	@RequestMapping(value = "auth/workbench/{projectid}/unarchiveworkspace", method = RequestMethod.POST)
+	public String unarchiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	{
+		String[] values;
+		String wsIdList = "";
+		String errmsg;
+		String userName;
+		List<IWorkSpace> workspaceList = null;
+
+		// fetch the selected values
+		values = req.getParameterValues("wschecked");
+		for(String workspaceid : values)
+		{
+			wsIdList = wsIdList + "," + workspaceid;
+		}
+
+		//removing the first ',' value
+		wsIdList = wsIdList.substring(1,wsIdList.length());
+
+		//fetch the user name
+		userName = principal.getName();
+
+		//unarchive the workspace
+		errmsg = archiveWSManager.unArchiveWorkspace(wsIdList, userName);
+
+		if(errmsg.equals(""))
+		{
+			model.addAttribute("success", 1);
+			model.addAttribute("successMsg",StringConstants.WORKSPACE_UNARCHIVE_SUCCESS);
+			model.addAttribute("wsprojectid", projectid);
+			return "auth/workbench/workspace/unarchiveworkspaceStatus";
+		}
+		else
+		{
+			workspaceList = wsManager.listArchivedWorkspace(projectid);
+			//adding the workspace details to the model
+			model.addAttribute("workspaceList", workspaceList);
+			model.addAttribute("wsprojectid", projectid);
+			model.addAttribute("success", 0);
+			model.addAttribute("errormsg", errmsg);
+			return "auth/workbench/workspace/unarchiveworkspace";
+		}
+	}
 
 }

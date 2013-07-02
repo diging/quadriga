@@ -48,8 +48,8 @@
 
 		<property name="url" value="jdbc:mysql://localhost:3306/quadriga" />
 
-		<property name="username" value="root" />
-		<property name="password" value="root" />
+		<property name="username" value="dbamin" />
+		<property name="password" value="dbadmin" />
 
 	</bean>
 

@@ -222,6 +222,17 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/archiveworkspacestatus.jsp" />
 	</definition> 
+			<definition name="auth/workbench/workspace/unarchiveworkspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - UnArchive Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/unarchiveworkspace.jsp" />
+	</definition>
+	<definition name="auth/workbench/workspace/unarchiveworkspaceStatus"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - UnArchive Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/unarchiveworkspacestatus.jsp" />
+	</definition> 
 	<definition name="auth/workbench/workspace/deactivateworkspace" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Deactive Workspace" />
 		<put-attribute name="content"
@@ -232,6 +243,17 @@
 		<put-attribute name="title" value="Quadriga Workbench - Deactive Workspace" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deactivateworkspacestatus.jsp" />
+	</definition> 
+		<definition name="auth/workbench/workspace/activateworkspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Activate Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/activateworkspace.jsp" />
+	</definition>
+	<definition name="auth/workbench/workspace/activeworkspaceStatus"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Activate Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/activateworkspacestatus.jsp" />
 	</definition> 
 		<definition name="auth/workbench/workspace/deleteworkspace" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Delete Workspace" />

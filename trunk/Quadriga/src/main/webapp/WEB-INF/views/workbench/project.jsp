@@ -18,7 +18,7 @@
 <hr>
 <div class="user">Owned by: ${project.owner.name}</div>
 <hr>
-<div>
+<section>
 	<c:if test="${not empty workspaceList}">
     	Project associates these workspaces:
     		<ul class="style2 pagination1">
@@ -32,25 +32,13 @@
 	<c:if test="${empty workspaceList}">
 			No workspaces are associated yet. You should create one!
 		</c:if>
-</div>
-<section>
+</section>
+<div align="left">
 <hr>
 <a href="modifyproject/${project.internalid}"> <input type="button"
 	name="Edit" value="Edit" />
 </a>
-</section>
-<!-- 
-<section>
-	<c:choose>
-		<c:when test="${success=='1'}">
-			<span class="byline" style="color: #f00;"><c:out
-					value="collaborator added successfully"></c:out></span>
-			<br />
-		</c:when>
-	</c:choose>
-</section>
- -->
-
+</div>
 
 
 

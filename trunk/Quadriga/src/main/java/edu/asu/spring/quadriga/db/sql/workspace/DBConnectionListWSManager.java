@@ -99,6 +99,86 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
+	public List<IWorkSpace> listWorkspace(String projectid) throws QuadrigaStorageException
+	{
+		String errmsg;
+		String dbCommand;
+		String wsOwnerName;
+		CallableStatement sqlStatement;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
+		IWorkSpace workspace = null;
+		IUser wsOwner = null;
+		
+		//command call to the Stored Procedure
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE + "(?,?)";
+		
+		//establish the connection
+	    getConnection();
+		try
+		{
+			// prepare the SQL Statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			// add input parameters
+			sqlStatement.setString(1, projectid);
+			
+			// add output parameter
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			
+			// execute the sql statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(2);
+			
+			if(errmsg == "")
+			{
+				ResultSet result =  sqlStatement.getResultSet();
+				
+				if(result.isBeforeFirst())
+				{
+					while(result.next())
+					{
+						workspace = workspaceFactory.createWorkspaceObject();
+						workspace.setName(result.getString(1));
+						workspace.setDescription(result.getString(2));
+						workspace.setId(result.getString(3));
+						
+						// retrieve the user name details
+						wsOwnerName = result.getString(4);
+						wsOwner = userManger.getUserDetails(wsOwnerName);
+						workspace.setOwner(wsOwner);
+						
+						//adding the workspace to the list
+						workspaceList.add(workspace);
+					}
+				}
+			}
+			else
+			{
+				throw new QuadrigaStorageException(errmsg);
+			}
+		}
+		catch(SQLException e)
+		{
+			logger.info("List workspace method  :"+e.getMessage());
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return workspaceList;
+	}	
+	
+	/**
+	 * This will list all the active workspaces associated with the project.
+	 * @param    projectid
+	 * @return   List<IWorkSpace> - list of workspaces associated 
+	 *           with the project.
+	 * @throws   QuadrigaStorageException
+	 * @author   Kiran Kumar Batna
+	 */
+	@Override
 	public List<IWorkSpace> listActiveWorkspace(String projectid) throws QuadrigaStorageException
 	{
 		String errmsg;

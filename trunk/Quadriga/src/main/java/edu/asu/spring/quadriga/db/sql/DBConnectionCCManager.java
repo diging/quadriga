@@ -585,7 +585,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				{
 					IUser collaborator = userFactory.createUserObject();
 					collaborator.setUserName(resultset.getString(1));
-					quadrigaRoles=dbConnectionManager.UserRoles(resultset.getString(2));
+					quadrigaRoles=dbConnectionManager.listQuadrigaUserRoles(resultset.getString(2));
 					collaborator.setQuadrigaRoles(quadrigaRoles);
 					collaboratorList.add(collaborator);
 				}
