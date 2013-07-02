@@ -1,5 +1,11 @@
 package edu.asu.spring.quadriga.dspace.service;
 
+/**
+ * The interface that provides access to the class representation of the bitstream got from Dspace repostiory.
+ * 
+ * @author Ram Kumar Kumaresan
+ * 
+ */
 public interface IDspaceBitStreamEntityId {
 
 	public abstract String getId();

@@ -2,7 +2,13 @@ package edu.asu.spring.quadriga.dspace.service;
 
 import java.util.List;
 
-public interface IDspacecCommunities {
+/**
+ * The interface that represents the list of communities fetched from, Dspace
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
+public interface IDspaceCommunities {
 
 	public abstract List<IDspaceCommunity> getCommunities();
 

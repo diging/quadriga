@@ -1,13 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -21,12 +15,9 @@ import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Community;
-import edu.asu.spring.quadriga.domain.implementation.Item;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
-import edu.asu.spring.quadriga.dspace.service.IDspacecCommunities;
-
-
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
 
 /**
  * The purpose of the class is to implement proxy pattern for the community class
@@ -42,17 +33,25 @@ public class ProxyCommunityManager implements ICommunityManager {
 	private List<ICommunity> communities;
 	private List<ICollection> collections;
 
+	/**
+	 * Used to generate the corresponding url necessary to access the collection details
+	 * @param restPath The REST path required to access the collection in Dspace. This will be appended to the actual domain url.
+	 * @return			Return the complete REST service url along with all the authentication information
+	 */
 	private String getCompleteUrlPath(String restPath, String userName, String password)
 	{
 		return "https://"+restPath+"?email="+userName+"&password="+password;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
 		if(communities == null)
 		{
 			String sRestServicePath = getCompleteUrlPath(url+"/rest/communities.xml", sUserName, sPassword);
-			IDspacecCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
+			IDspaceCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
 
 			if(dsapceCommunities.getCommunities().size()>0)
 			{
@@ -77,6 +76,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return communities;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<ICollection> getAllCollections(RestTemplate restTemplate, String url, String sUserName, String sPassword, String sCommunityId) {
 
@@ -106,6 +108,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IItem> getAllItems(String sCollectionId)
 	{
@@ -124,6 +129,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
@@ -141,6 +149,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getCommunityName(String sCommunityId) 
 	{
@@ -158,6 +169,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getCollectionName(String sCollectionId) 
 	{
@@ -175,6 +189,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getCommunityId(String sCollectionId) 
 	{
@@ -190,6 +207,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IBitStream getBitStreamName(String sCollectionId, String sItemId, String sBitStreamId)
 	{
@@ -220,6 +240,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 				return null;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getItemName(String sCollectionId, String sItemId)
 	{
@@ -243,6 +266,10 @@ public class ProxyCommunityManager implements ICommunityManager {
 		
 		return null;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IBitStream> getAllBitStreams(RestTemplate restTemplate, String url, String sUserName, String sPassword, String sCollectionId, String sItemId)
 	{
