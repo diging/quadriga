@@ -121,4 +121,9 @@
 	<!-- Reference the rest settings -->
 	<beans:import resource="cc-collaborator-roles.xml"/>
 	
+	<!-- Reference the rest settings -->
+	<beans:import resource="dict-collaborator-roles.xml"/>
+	
+	
+	
 </beans:beans>

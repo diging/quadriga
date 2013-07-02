@@ -3,7 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role1"></property>
 		<property name="roleid" value="ADMIN"></property>
 		<property name="rolename" value="admin"></property>
@@ -11,7 +12,8 @@
 			value="Collaborator admin who has same rights as owner"></property>
 	</bean>
 
-	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role2"></property>
 		<property name="roleid" value="PROJECT_ADMIN"></property>
 		<property name="rolename" value="project admin"></property>
@@ -19,7 +21,8 @@
 			value="performs all administrative work on associated project"></property>
 	</bean>
 
-	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role3"></property>
 		<property name="roleid" value="CONTRIBUTOR"></property>
 		<property name="rolename" value="contributor"></property>
@@ -27,7 +30,7 @@
 			value="contributes to the project by managing workspaces and uploading networks"></property>
 	</bean>
 
-	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
 		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role4"></property>
 		<property name="roleid" value="EDITOR"></property>

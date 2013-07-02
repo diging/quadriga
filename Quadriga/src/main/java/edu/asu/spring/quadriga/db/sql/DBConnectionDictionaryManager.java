@@ -18,13 +18,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -58,6 +62,9 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 	@Autowired
 	private IDictionaryItemsFactory dictionaryItemsFactory;
+	
+	@Autowired
+	private ICollaboratorFactory collaboratorFactory;
 	/**
 	 * Assigns the data source
 	 *  
@@ -403,7 +410,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 
-			sqlStatement.execute();
+			System.out.println("-------sqlStatement.execute()"+sqlStatement.execute());
 
 			errmsg = sqlStatement.getString(5);
 
@@ -611,4 +618,171 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		return errmsg;
 	}
+
+	@Override
+	public List<IUser> showNonCollaboratingUsersRequest(String dictionaryid)throws QuadrigaStorageException {
+
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		List<IUser> nonCollabUsersList = new ArrayList<IUser>();
+		
+		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_NONCOLLABORATORS+"(?,?)";
+		getConnection();
+			try {
+				sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+				sqlStatement.setString(1, dictionaryid);
+				sqlStatement.registerOutParameter(2, Types.VARCHAR);
+				sqlStatement.execute();
+				errmsg = sqlStatement.getString(2);
+
+				if(errmsg=="")
+				{
+					ResultSet resultSet = sqlStatement.getResultSet();
+
+					while(resultSet.next())
+					{
+						IUser user = userFactory.createUserObject();
+						user.setUserName(resultSet.getString(1));
+						nonCollabUsersList.add(user);
+					}
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new QuadrigaStorageException();
+			}
+			
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		
+		return nonCollabUsersList;
+	}
+
+	@Override
+	public List<IUser> getDictionaryCollaborators(String dictionaryid) 
+	{
+		
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		List<IUser> collaboratoratingUsersList = new ArrayList<IUser>();
+		
+		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_COLLABORATORS+"(?,?)";
+		getConnection();
+		try {
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, dictionaryid);
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.execute();
+			errmsg = sqlStatement.getString(2);
+			if(errmsg=="")
+			{
+				ResultSet resultSet = sqlStatement.getResultSet();
+				while(resultSet.next())
+				{
+					IUser collaboratingUser = userFactory.createUserObject();
+					collaboratingUser.setUserName(resultSet.getString(1));
+				//	System.out.println("-------------DB resultSet.getString(1):"+resultSet.getString(1));
+					collaboratoratingUsersList.add(collaboratingUser);
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+		
+		return collaboratoratingUsersList;
+	}
+
+	@Override
+	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) {
+
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		String role ="" ;
+		
+		dbCommand = DBConstants.SP_CALL+" "+DBConstants.ADD_DICT_COLLABORATORS+"(?,?,?,?,?)";
+		
+		
+		for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
+		{
+				if((collaboratorRole.getRoleDBid())!=null)
+				{
+					role += collaboratorRole.getRoleDBid()+",";
+				}
+			
+		}
+		
+		role = role.substring(0,role.length()-1);	
+		getConnection();
+		
+		try {
+				sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+				sqlStatement.setString(1, dictionaryid);
+				sqlStatement.setString(2, collaborator.getUserObj().getUserName());
+				sqlStatement.setString(3, role);
+				sqlStatement.setString(4, userName);
+				sqlStatement.registerOutParameter(5, Types.VARCHAR);
+				sqlStatement.execute();
+
+				errmsg = sqlStatement.getString(5);
+						
+				if(errmsg=="")
+				{
+					return errmsg;
+				}	
+			}
+			
+			 catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		  
+		return null;
+	}
+
+	@Override
+	public List<IUser> showCollaboratingUsersRequest(String dictionaryid)
+			throws QuadrigaStorageException {
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		List<IUser> collabList = new ArrayList<IUser>();
+		
+		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_COLLABORATORS+"(?,?)";
+		getConnection();
+		
+		try {
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, dictionaryid);
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.execute();
+			errmsg = sqlStatement.getString(2);
+			
+			if(errmsg=="")
+			{
+				ResultSet resultSet = sqlStatement.getResultSet();
+				
+				while(resultSet.next())
+				{
+					IUser user = userFactory.createUserObject();
+					user.setUserName(resultSet.getString(1));
+					collabList.add(user);
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return collabList;
+	}
+	
+	
 }

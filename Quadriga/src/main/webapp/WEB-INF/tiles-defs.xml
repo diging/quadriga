@@ -325,6 +325,10 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
 	</definition>
+	<definition name="auth/dictionaries/showCollaborators" extends ="base.definition.dictionaries">
+	<put-attribute name="title" value="Non existing Collaborators" />
+	<put-attribute name="content" value="/WEB-INF/views/dictionary/showCollaborators.jsp" /> 
+	</definition>
 
 
 	<!-- Home pages -->
