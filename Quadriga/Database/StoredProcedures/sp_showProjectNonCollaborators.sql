@@ -13,7 +13,7 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
 	IF (errmsg IS NULL)
-		THEN SET errmsg = " ";
+		THEN SET errmsg = "";
     END IF;
 
  -- validating the input variables

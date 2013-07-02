@@ -12,7 +12,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -37,8 +36,8 @@ public class ActivateWSController
 	 * @throws   QuadrigaStorageException
 	 * @author   Kiran Kumar Batna
 	 */
-	@RequestMapping(value="auth/workbench/workspace/deactivateworkspace", method=RequestMethod.GET)
-	public String deactivateWorkspaceForm(Model model,@RequestParam("projectid")String projectid) throws QuadrigaStorageException
+	@RequestMapping(value="auth/workbench/{projectid}/deactivateworkspace", method=RequestMethod.GET)
+	public String deactivateWorkspaceForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
 		// retrieve the workspaces associated with the projects
@@ -58,7 +57,7 @@ public class ActivateWSController
 	 * @throws   QuadrigaStorageException
 	 * @author   Kiran Kumar Batna
 	 */
-	@RequestMapping(value = "auth/workbench/workspace/deactivateworkspace/{projectid}", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/{projectid}/deactivateworkspace", method = RequestMethod.POST)
 	public String deactivateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
 	{
 		String[] values;
@@ -88,6 +87,7 @@ public class ActivateWSController
 		{
 			model.addAttribute("success", 1);
 			model.addAttribute("successMsg",StringConstants.WORKSPACE_DEACTIVE_SUCCESS);
+			model.addAttribute("wsprojectid", projectid);
 			return "auth/workbench/workspace/deactiveworkspaceStatus";
 		}
 		else

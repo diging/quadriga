@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
@@ -38,8 +37,8 @@ public class AddWSController
 	 * @return    String - containing the path to addworkspace jsp page.
 	 * @author    Kiran Kumar Batna
 	 */
-	@RequestMapping(value="auth/workbench/workspace/addworkspace", method=RequestMethod.GET)
-	public String addWorkSpaceRequestForm(Model model,@RequestParam("projectid")String projectid)
+	@RequestMapping(value="auth/workbench/{projectid}/addworkspace", method=RequestMethod.GET)
+	public String addWorkSpaceRequestForm(Model model,@PathVariable("projectid") String projectid)
 	{
 		model.addAttribute("workspace", workspaceFactory.createWorkspaceObject());
 		model.addAttribute("wsprojectid", projectid);
@@ -56,7 +55,7 @@ public class AddWSController
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@RequestMapping(value = "auth/workbench/workspace/addworkspace/{projectid}", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
 	public String addWorkSpaceRequest(@ModelAttribute("SpringWeb")WorkSpace workspace,
 			ModelMap model, Principal principal,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
 			{
@@ -75,6 +74,7 @@ public class AddWSController
 			{
 				model.addAttribute("success", 1);
 				model.addAttribute("successMsg",StringConstants.WORKSPACE_SUCCESS_MSG);
+				model.addAttribute("wsprojectid", projectid);
 				return "auth/workbench/workspace/addworkspacestatus";
 			}
 			else

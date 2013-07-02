@@ -4,7 +4,7 @@
 <!-- Content -->
 <script>
 function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}';
 }
 
 $(document).ready(function() {

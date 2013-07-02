@@ -75,7 +75,7 @@ public class DBConnectionModifyProjCollabManager implements
 	}
 	
 	@Override
-	public String addCollaboratorRequest(ICollaborator collaborator, String projectid) throws QuadrigaStorageException
+	public String addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
 	{
 		String dbCommand;
         String errmsg;
@@ -84,7 +84,7 @@ public class DBConnectionModifyProjCollabManager implements
         CallableStatement sqlStatement;
         
         role = "";
-        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_COLLABORATOR_REQUEST + "(?,?,?,?)";
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_COLLABORATOR_REQUEST + "(?,?,?,?,?)";
         
         //retrieve collaborator user and role
         collaboratorUserName = collaborator.getUserObj().getUserName();
@@ -105,9 +105,10 @@ public class DBConnectionModifyProjCollabManager implements
     		sqlStatement.setString(1, projectid);
 			sqlStatement.setString(2, collaboratorUserName);
 			sqlStatement.setString(3, role);
-			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+			sqlStatement.setString(4, userName);
+			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(4);
+			errmsg = sqlStatement.getString(5);
     	}
         catch(SQLException e)
         {

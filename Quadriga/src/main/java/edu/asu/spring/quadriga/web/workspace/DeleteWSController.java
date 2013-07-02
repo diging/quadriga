@@ -12,7 +12,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -37,8 +36,8 @@ public class DeleteWSController
 	 * @throws   QuadrigaStorageException
 	 * @author   Kiran Kumar Batna
 	 */
-	@RequestMapping(value="auth/workbench/workspace/deleteworkspace", method=RequestMethod.GET)
-	public String deleteWorkspaceRequestForm(Model model,@RequestParam("projectid")String projectid) throws QuadrigaStorageException
+	@RequestMapping(value="auth/workbench/{projectid}/deleteworkspace", method=RequestMethod.GET)
+	public String deleteWorkspaceRequestForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
 		// retrieve the workspaces associated with the projects
@@ -59,7 +58,7 @@ public class DeleteWSController
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@RequestMapping(value = "auth/workbench/workspace/deleteworkspace/{projectid}", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/{projectid}/deleteworkspace", method = RequestMethod.POST)
 	public String deleteWorkspaceRequest(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
 	{
 		String[] values;
@@ -82,6 +81,7 @@ public class DeleteWSController
 		{
 			model.addAttribute("success", 1);
 			model.addAttribute("successMsg",StringConstants.WORKSPACE_DELETE_SUCCESS);
+			model.addAttribute("wsprojectid", projectid);
 			return "auth/workbench/workspace/deleteworkspaceStatus";
 		}
 		else
