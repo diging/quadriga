@@ -18,7 +18,7 @@ CREATE PROCEDURE sp_deleteDictionary
 (
   IN  inuser varchar(200),
   IN  indictionaryid varchar(200),
-  OUT errmsg           VARCHAR(255)    
+  OUT errmsg    VARCHAR(255)    
 )
 BEGIN
 

@@ -95,6 +95,7 @@ public class DBConnectionDictionaryManagerTest {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+
 	}
 
 	@Before
@@ -238,7 +239,93 @@ public class DBConnectionDictionaryManagerTest {
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
+	
+	@Test
+	public void deleteDictionaryTest() throws QuadrigaStorageException{
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dbConnection.addDictionary(dictionary);
+			logger.info(" message : "+msg);
+			assertEquals((msg.equals("")), true);
+			String id= getDictionaryID("testDictionary");
+			logger.info("Dictionary ID : "+id);
+			try {
+				msg= dbConnection.addDictionaryItems(id, 
+						"dog", "9999999999999999999999999999999999999999999999999999999999999999999", "noun", "jdoe");
+			} catch (QuadrigaStorageException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			assertEquals((msg.equals("")), true);
+			msg= dbConnection.deleteDictionary("jdoe", id);
+			assertEquals((msg.equals("")), true);
+		}
+//		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+//		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+//		fail("Not implemented");
+	}
+	
 
+	@Test
+	public void deleteDictionaryItemsTest() throws QuadrigaStorageException{
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dbConnection.addDictionary(dictionary);
+			logger.info(" message : "+msg);
+			assertEquals((msg.equals("")), true);
+			String id= getDictionaryID("testDictionary");
+			logger.info("Dictionary ID : "+id);
+			try {
+				msg= dbConnection.addDictionaryItems(id, 
+						"dog", "9999999999999999999999999999999999999999999999999999999999999999999", "noun", "jdoe");
+			} catch (QuadrigaStorageException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			assertEquals((msg.equals("")), true);
+			msg=dbConnection.deleteDictionaryItems(id, "9999999999999999999999999999999999999999999999999999999999999999999", "jdoe");
+			assertEquals((msg.equals("")), true);
+		}
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+	}
+	
+	@Test
+	public void updateDictionaryItemsTest() throws QuadrigaStorageException{
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			String msg =dbConnection.addDictionary(dictionary);
+			logger.info(" message : "+msg);
+			assertEquals((msg.equals("")), true);
+			String id= getDictionaryID("testDictionary");
+			logger.info("Dictionary ID : "+id);
+			try {
+				msg= dbConnection.addDictionaryItems(id, 
+						"dog", "9999999999999999999999999999999999999999999999999999999999999999999", "noun", "jdoe");
+			} catch (QuadrigaStorageException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			assertEquals((msg.equals("")), true);
+			msg=dbConnection.updateDictionaryItems(id, "9999999999999999999999999999999999999999999999999999999999999999999", "dog1", "noun");
+			assertEquals((msg.equals("")), true);
+		}
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+	}
+	
 	@Test
 	public void addDictionaryTest() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
