@@ -4,7 +4,14 @@
 
 <article class="is-page-content">
 <script>
+
 		$(document).ready(function() {
+			
+			$("input[type=submit]").button().click(function(event) {
+				event.preventDefault();
+			});
+			
+			
 
 			/**
 			* Function to load any collection name which was not loaded in the previous load.
@@ -35,8 +42,7 @@
 					ajaxCallback.success(function(data) {
 						//Load the new text in the corresponding div tag
 						if(data != 'Loading...'){
-							//data = '<a href="/quadriga/auth/workbench/workspace/community/collection/'+bitstream[1]+'" style="color:#707070">'+data+'</a>';
-							data = data;
+							data = '<input type="checkbox" class="checkbox" name="bitstreamid" value="'+bitstreamid[1]+'">'+ data;
 						}
 						else
 						{
@@ -76,9 +82,9 @@
 					for (i = 0; i < IDs.length; i++) {
 						$("#"+IDs[i]).remove();
 					}					
+					$('#buttonToggle').append('Toggle All').button().addClass("check");
 					}
 				else{
-				//if (IDs.length > 0) 
 					setTimeout(makeAjaxCall, 5000);
 					setTimeout(checkDiv, 7000);
 					}
@@ -102,8 +108,22 @@
 						}
 					});
 		}
+		
+
+		$(document).ready(function(){
+		    $('.check:button').toggle(function(){
+		    	alert('checked called');
+		        $('input:checkbox').attr('checked','checked');
+		        $(this).val('uncheck all')
+		    },function(){
+		    	alert('unchecked called');
+		        $('input:checkbox').removeAttr('checked');
+		        $(this).val('check all');        
+		    })
+		})
+
+
 	</script>
-	
 				<a href="/quadriga/auth/workbench/workspace/communities" style="text-decoration: underline;">Home</a> »
 				<a href="/quadriga/auth/workbench/workspace/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
 				<a href="/quadriga/auth/workbench/workspace/community/collection/${collectionId}"  style="text-decoration: underline;"><c:out value="${collectionName}"></c:out></a> »
@@ -113,8 +133,9 @@
 			<c:when test="${not empty bitList}">
 			<span class="byline">Select a file to download.</span>
 				<c:forEach var="bitstream" items="${bitList}">
-				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
-				</c:forEach>
+				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}"><input type="checkbox" class="checkbox" name="bitstreamid" value="${bitstream.id}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
+				</c:forEach><br>
+				<div id="buttonToggle"></div>
 			</c:when>
 			<c:otherwise>
 					<span class="byline">No BitStreams found in - 

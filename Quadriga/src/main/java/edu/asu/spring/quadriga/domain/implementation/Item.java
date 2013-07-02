@@ -155,7 +155,6 @@ public class Item implements IItem{
 
 			//Load all the bitids associated with the item.
 			this.bitids = new ArrayList<String>();
-			//this.setBitstreams(new ArrayList<IBitStream>());
 			this.bitstreams = Collections.synchronizedList(new ArrayList<IBitStream>());
 			if(dspaceItem.getBitstreams() != null)
 			{
