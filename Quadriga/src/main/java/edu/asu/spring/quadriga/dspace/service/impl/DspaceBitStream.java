@@ -7,9 +7,15 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
 import edu.asu.spring.quadriga.dspace.service.IDspaceBitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
 
+/**
+ * The class representation of the bitstream list got from the Dspace repository.
+ * This representation is used when making a REST service call to get the item and bitstream information.
+ * 
+ * @author Ram Kumar Kumaresan
+ */
 @XmlRootElement(name="bitstreams")
 public class DspaceBitStream implements IDspaceBitStream {
 

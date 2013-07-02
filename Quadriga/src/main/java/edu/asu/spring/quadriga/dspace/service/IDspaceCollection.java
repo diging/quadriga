@@ -1,10 +1,5 @@
 package edu.asu.spring.quadriga.dspace.service;
 
-import java.util.List;
-
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceItem;
-
-
 /**
  * The interface that provides access to the class representation of the Collection got from Dspace repostiory.
  * 

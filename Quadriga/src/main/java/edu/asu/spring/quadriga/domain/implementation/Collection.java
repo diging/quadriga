@@ -3,10 +3,7 @@ package edu.asu.spring.quadriga.domain.implementation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-import org.apache.commons.lang.NotImplementedException;
-import org.springframework.batch.retry.backoff.Sleeper;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -17,12 +14,10 @@ import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 
 /**
  * The class representation of the Collection got from Dspace repostiory.
- * This class will be used by Quadriga and its representation is independent of the Dspace Rest service output
+ * This class will be used by Quadriga and its representation is independent of the Dspace Rest service output.
  * 
  * @author Ram Kumar Kumaresan
  */
-
-
 public class Collection implements ICollection{
 
 	private String id;
@@ -38,6 +33,14 @@ public class Collection implements ICollection{
 	private String userName;
 	private String password;
 
+	/**
+	 * Initialize the required details to make a REST service call to Dspace
+	 * @param id			The id of the collection.
+	 * @param restTemplate	The RestTemplate object containing the details about the parser.
+	 * @param url			The REST service url/domain.
+	 * @param userName		The username of the authorized user.
+	 * @param password		The password of the authorized user.
+	 */
 	public Collection(String id, RestTemplate restTemplate, String url, String userName, String password)
 	{
 		this.url = url;
@@ -77,105 +80,69 @@ public class Collection implements ICollection{
 		this.password = password;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getId()
-	 */
 	@Override
 	public String getId() {
 		return id;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setId(java.lang.String)
-	 */
 	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getName()
-	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setName(java.lang.String)
-	 */
 	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getShortDescription()
-	 */
 	@Override
 	public String getShortDescription() {
 		return shortDescription;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setShortDescription(java.lang.String)
-	 */
 	@Override
 	public void setShortDescription(String shortDescription) {
 		this.shortDescription = shortDescription;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getEntityReference()
-	 */
 	@Override
 	public String getEntityReference() {
 		return entityReference;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setEntityReference(java.lang.String)
-	 */
 	@Override
 	public void setEntityReference(String entityReference) {
 		this.entityReference = entityReference;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getHandle()
-	 */
 	@Override
 	public String getHandle() {
 		return handle;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setHandle(java.lang.String)
-	 */
 	@Override
 	public void setHandle(String handle) {
 		this.handle = handle;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#getCountItems()
-	 */
 	@Override
 	public String getCountItems() {
 		return countItems;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ICollection#setCountItems(java.lang.String)
-	 */
 	@Override
 	public void setCountItems(String countItems) {
 		this.countItems = countItems;
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean copy(IDspaceCollection dspaceCollection)
 	{		
@@ -229,11 +196,20 @@ public class Collection implements ICollection{
 		return false;
 	}
 
+	/**
+	 * Used to generate the corresponding url necessary to access the collection details
+	 * @param restPath The REST path required to access the collection in Dspace. This will be appended to the actual domain url.
+	 * @return			Return the complete REST service url along with all the authentication information
+	 */
 	private String getCompleteUrlPath(String restPath)
 	{
 		return "https://"+this.url+restPath+this.id+".xml?email="+this.userName+"&password="+this.password;
 	}
 
+	/**
+	 * This thread will make a REST service call to load the collection details. This service call will load details about the collection
+	 * and all items in the collection. After the execution of this thread, the collection object will be populated with information. 
+	 */
 	@Override
 	public void run() {
 		String sRestServicePath = getCompleteUrlPath("/rest/collections/");

@@ -10,14 +10,13 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItems;
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceItems;
 
 /**
  * The class representation of the Item got from Dspace repostiory.
+ * This class will be used by Quadriga and its representation is independent of the Dspace Rest service output.
  * 
  * @author Ram Kumar Kumaresan
  */
@@ -34,6 +33,9 @@ public class Item implements IItem{
 	private String userName;
 	private String password;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setRestConnectionDetails(RestTemplate restTemplate, String url, String userName, String password)
 	{
@@ -129,6 +131,9 @@ public class Item implements IItem{
 		this.handle = handle;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean copy(IDspaceItem dspaceItem)
 	{	
@@ -154,7 +159,7 @@ public class Item implements IItem{
 			}
 
 			//Load all the bitids associated with the item.
-			this.bitids = new ArrayList<String>();
+			this.bitids = Collections.synchronizedList(new ArrayList<String>());
 			this.bitstreams = Collections.synchronizedList(new ArrayList<IBitStream>());
 			if(dspaceItem.getBitstreams() != null)
 			{
@@ -170,16 +175,27 @@ public class Item implements IItem{
 		return isCopied;
 	}
 
+	/**
+	 * Used to generate the corresponding url necessary to access the item details
+	 * @param restPath The REST path required to access the item in Dspace. This will be appended to the actual domain url.
+	 * @return			Return the complete REST service url along with all the authentication information
+	 */
 	private String getCompleteUrlPath(String restPath)
 	{
 		return "https://"+this.url+restPath+this.id+".xml?email="+this.userName+"&password="+this.password;
 	}
+	
+	/**
+	 * This thread will make a REST service call to load the bitstream details. This service call will load details about the bitstreams within this item. 
+	 * After the execution of this thread, the item object will be populated with relevant bitstream information. 
+	 */
 	@Override
 	public void run() {
 		String sRestServicePath = getCompleteUrlPath("/rest/items/");
 		IDspaceItems dspaceItems = (DspaceItems) getRestTemplate().getForObject(sRestServicePath, DspaceItems.class);
 		if(dspaceItems != null)
 		{
+			//For each bitstream id fetch the load the data into the corresponding bitstream object
 			if(dspaceItems.getBitstreams().getBitstreamentityid() != null)
 			{
 				for(IDspaceBitStreamEntityId dspaceBitStream: dspaceItems.getBitstreams().getBitstreamentityid())
@@ -193,6 +209,7 @@ public class Item implements IItem{
 								ispresent = true;
 					}
 
+					//Do not load the bitstream if already present
 					if(!ispresent)
 					{
 						for(IBitStream bitstream: this.bitstreams){
@@ -207,12 +224,15 @@ public class Item implements IItem{
 					}
 				}
 				
+				//Remove the bitstream objects of the metadata files
 				Iterator<IBitStream> bitstreamIterator = this.bitstreams.iterator();
 				while(bitstreamIterator.hasNext())
 				{
 					if(bitstreamIterator.next().getName() == null)
 						bitstreamIterator.remove();
 				}
+				
+				
 			}
 		}
 	}	
