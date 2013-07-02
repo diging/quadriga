@@ -70,8 +70,15 @@ public class DictionaryRestController {
 	private IRestVelocityFactory restVelocityFactory;
 
 	@Autowired
-	@Qualifier("updateFromWordPowerURL")
+	@Qualifier("updateFromWordPowerURLPath")
+	private String updateFromWordPowerURLPath;
+	
+	@Autowired
+	@Qualifier("wordPowerURL")
 	private String wordPowerURL;
+	
+	
+	
 
 	/**
 	 * Rest interface for the List Dictionary for the userId
@@ -155,9 +162,9 @@ public class DictionaryRestController {
 			template = engine
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-
+			String updateFromWordPowerURL=wordPowerURL+""+updateFromWordPowerURLPath;
 			context.put("list", dictionaryItemsList);
-			context.put("wordPowerURL",wordPowerURL);
+			context.put("wordPowerURL",updateFromWordPowerURLPath);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();

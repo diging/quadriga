@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary_items
 (
   id       int(11)  NOT NULL,
   term    VARCHAR(200) NOT NULL,
-  termid    VARCHAR(200) NOT NULL,
+  termid    VARCHAR(300) NOT NULL,
   pos    VARCHAR(50) NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,

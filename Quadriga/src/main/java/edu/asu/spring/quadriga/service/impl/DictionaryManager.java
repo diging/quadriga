@@ -39,17 +39,17 @@ public class DictionaryManager implements IDictionaryManager {
 	RestTemplate restTemplate;
 
 	@Autowired
-	@Qualifier("searchWordPowerURL")
-	private String searchWordPowerURL;
+	@Qualifier("wordPowerURL")
+	private String wordPowerURL;
 	
 	@Autowired
 	@Qualifier("searchWordPowerURLPath")
 	private String searchWordPowerURLPath;
 
 	@Autowired
-	@Qualifier("updateFromWordPowerURL")
-	private String updateFromWordPowerURL;
-
+	@Qualifier("updateFromWordPowerURLPath")
+	private String updateFromWordPowerURLPath;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryManager.class);
 
@@ -66,7 +66,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return String URL
 	 */
 	public String getSearchWordPowerURL() {
-		return searchWordPowerURL+""+searchWordPowerURLPath;
+		return wordPowerURL+""+searchWordPowerURLPath;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return String updateFromWordPowerURL
 	 */
 	public String getUpdateFromWordPowerURL() {
-		return updateFromWordPowerURL;
+		return wordPowerURL+""+updateFromWordPowerURLPath;
 	}
 
 	/**
