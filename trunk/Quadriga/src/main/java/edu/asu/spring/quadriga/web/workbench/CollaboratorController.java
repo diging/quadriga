@@ -38,7 +38,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class CollaboratorController {
 
 	@Autowired
-	IRetrieveProjectManager projectManager;
+	IRetrieveProjectManager retrieveprojectManager;
 
 	@Autowired
 	IRetrieveProjCollabManager projectCollabManager;
@@ -125,6 +125,10 @@ public class CollaboratorController {
 			}
 		}
 		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
+		
+		List<IUser> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
+		model.addAttribute("collaboratingUsers", collaboratingUsers);
+		
 
 		return "auth/workbench/showCollaborators";
 

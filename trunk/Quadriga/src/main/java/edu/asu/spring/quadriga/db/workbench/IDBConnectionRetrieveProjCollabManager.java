@@ -21,4 +21,7 @@ public interface IDBConnectionRetrieveProjCollabManager {
 
 	public abstract void setDataSource(DataSource dataSource);
 
+	public abstract List<IUser> getProjectCollaboratorsRequest(String projectid)
+			throws QuadrigaStorageException;
+
 }
