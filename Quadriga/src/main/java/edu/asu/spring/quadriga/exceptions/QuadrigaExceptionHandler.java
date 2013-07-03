@@ -1,25 +1,10 @@
 package edu.asu.spring.quadriga.exceptions;
 
-import java.io.StringWriter;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 
 /**
  * This class handles exceptions thrown in Controller classes.
@@ -30,7 +15,6 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 @ControllerAdvice
 public class QuadrigaExceptionHandler {
 
-	
 	private static final Logger logger = LoggerFactory.getLogger(QuadrigaExceptionHandler.class);
 	/**
 	 * For now this method handles all exceptions thrown in Controller classes. Eventually this method can be
@@ -39,7 +23,7 @@ public class QuadrigaExceptionHandler {
 	 * @param ex The exception thrown in a controller.
 	 * @return Information about the exception page.
 	 */
-	@ExceptionHandler(QuadrigaException.class)
+	@ExceptionHandler(Exception.class)
 	public ModelAndView handleNotImplementedEx(Exception ex) {
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -58,5 +42,6 @@ public class QuadrigaExceptionHandler {
 		logger.error(ex.getMessage(), ex);
 		return modelAndView;
 	}
+
 	
-	}
+}

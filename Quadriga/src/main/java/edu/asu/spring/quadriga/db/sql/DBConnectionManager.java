@@ -165,7 +165,7 @@ public class DBConnectionManager implements IDBConnectionManager
 						user.setName(result.getString(1));
 						user.setUserName(result.getString(2));
 						user.setEmail(result.getString(3));
-						userRole = listQuadrigaUserRoles(result.getString(4));
+						userRole = UserRoles(result.getString(4));
 						user.setQuadrigaRoles(userRole);
 					}
 				}
@@ -234,7 +234,7 @@ public class DBConnectionManager implements IDBConnectionManager
 					user.setName(rs.getString(1));
 					user.setUserName(rs.getString(2));
 					user.setEmail(rs.getString(3));
-					userRole = listQuadrigaUserRoles(rs.getString(4));
+					userRole = UserRoles(rs.getString(4));
 					user.setQuadrigaRoles(userRole);	
 
 					listUsers.add(user);
@@ -304,7 +304,7 @@ public class DBConnectionManager implements IDBConnectionManager
 					user.setName(rs.getString(1));
 					user.setUserName(rs.getString(2));
 					user.setEmail(rs.getString(3));
-					userRole = listQuadrigaUserRoles(rs.getString(4));
+					userRole = UserRoles(rs.getString(4));
 					user.setQuadrigaRoles(userRole);	
 
 					listUsers.add(user);
@@ -653,7 +653,9 @@ public class DBConnectionManager implements IDBConnectionManager
 	 *   @return        : list of QuadrigaRoles.
 	 */
 	@Override
-	public List<IQuadrigaRole> listQuadrigaUserRoles(String roles)
+	// this is a really bad method name! What does this method do?
+	// get/set/update/retrieve/... user roles?
+	public List<IQuadrigaRole> UserRoles(String roles)
 	{
 		String[] role;
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();

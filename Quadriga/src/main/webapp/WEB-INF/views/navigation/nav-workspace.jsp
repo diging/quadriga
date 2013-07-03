@@ -8,13 +8,10 @@
 		<li>
 			<article class="is-post-summary">
 				<h3>
-				    » <a href="/quadriga/auth/workbench/${project.internalid}/showCollaborators">Manage Collaborators</a><br /><br />
-					» <a href="/quadriga/auth/workbench/${project.internalid}/addworkspace">Add Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/${project.internalid}/archiveworkspace">Archive Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/${project.internalid}/unarchiveworkspace">Activate Archived Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/${project.internalid}/deactivateworkspace">Deactivate Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/${project.internalid}/activateworkspace">Activate Workspace</a><br /><br />
-					» <a href="/quadriga/auth/workbench/${project.internalid}/deleteworkspace">Delete Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/addworkspace?projectid=${wsprojectid}">Add Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/archiveworkspace?projectid=${wsprojectid}">Archive Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/deactivateworkspace?projectid=${wsprojectid}">Deactivate Workspace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/deleteworkspace?projectid=${wsprojectid}">Delete Workspace</a><br /><br />
 				</h3>
 			</article>
 		</li>

@@ -21,7 +21,7 @@ CREATE PROCEDURE sp_deleteworkspace
 BEGIN
 
     -- Declare local varaibles
-    DECLARE rowvalue   VARCHAR(50);
+    DECLARE rowvalue   BIGINT;
     DECLARE position   INT;
 
 	-- the error handler for any sql exception
@@ -39,7 +39,7 @@ BEGIN
    -- inserting the input into a temp table
     CREATE TEMPORARY TABLE temp_tbl_workspaceid
     (
-         workspaceid VARCHAR(50)
+         workspaceid BIGINT
     );
 
     SET position = LOCATE(',',inworkspaceid);

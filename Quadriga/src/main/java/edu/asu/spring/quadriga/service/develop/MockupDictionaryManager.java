@@ -3,10 +3,8 @@ package edu.asu.spring.quadriga.service.develop;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
@@ -28,7 +26,7 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
  */
 
 //@Service
-public abstract class MockupDictionaryManager implements IDictionaryManager {
+public class MockupDictionaryManager implements IDictionaryManager {
 
 	public List<IDictionary> getDictionariesList(String userId){
 		
@@ -140,31 +138,5 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public List<IUser> showNonCollaboratingUsers(String collectionid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<IUser> getCollaborators(String dictionaryid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public String deleteDictionary(String user, String dictionaryId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 }

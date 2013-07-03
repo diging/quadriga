@@ -32,7 +32,7 @@ $(document).ready(function() {
 });
 
 function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}';
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
 }
 $(function() {
 	
@@ -84,7 +84,7 @@ $(function() {
 </script>
 <article class="is-page-content">
 	<form:form modelAttribute="workspace" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/deleteworkspace" id="deletewsform">
+		action="deleteworkspace/${wsprojectid}" id="deletewsform">
 		<c:if test="${not empty workspaceList}">
 			<span class="byline">Select the workspace to be deleted:</span>
 			<c:choose>
@@ -128,7 +128,7 @@ $(function() {
 				<li><input type="submit" onClick="submitClick(this.id);"
 					value='Back' name="Back"></li>
 			</ul>
-			You don't have any deactivated workspace to delete.
+			You don't have any workspace to delete.
 		</c:if>
 				<div id="dlgConfirm" title="Confirmation">
 			Are you sure?

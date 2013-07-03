@@ -4,6 +4,7 @@
 package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
+import javax.xml.bind.JAXBContext;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,6 @@ public class DspaceController {
 	@Autowired
 	private IDspaceManager dspaceManager;
 
-	/**
-	 * Handle the request for the list of communities to be fetched from Dspace.
-	 * 
-	 * @return Return to the dspace communities page of Quadriga
-	 */
 	@RequestMapping(value = "/auth/workbench/workspace/communities", method = RequestMethod.GET)
 	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
 
@@ -49,12 +45,6 @@ public class DspaceController {
 	}
 
 
-	/**
-	 * Handle the request for the list of collections associated with a community.
-	 * 
-	 * @param communityId	The community id of the community whose collections are to be fetched.
-	 * @return				Return to the collections page of Quadriga
-	 */
 	@RequestMapping(value = "/auth/workbench/workspace/community/{communityId}", method = RequestMethod.GET)
 	public String workspaceCommunityRequest(@PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
 
@@ -76,12 +66,6 @@ public class DspaceController {
 	}
 
 
-	/**
-	 * Handle the request for the list of items associated with a collection.
-	 * 
-	 * @param collectionId		The collection id of the collection whose items are to be fetched.
-	 * @return					Return to the items page of Quadriga.
-	 */
 	@RequestMapping(value = "/auth/workbench/workspace/community/collection/{collectionId}", method = RequestMethod.GET)
 	public String workspaceItemListRequest(@PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
 
@@ -119,14 +103,6 @@ public class DspaceController {
 		return "auth/workbench/workspace/community/collection";
 	}
 
-	/**
-	 * Handle the request for the list of bitstreams associated with an item.
-	 * 
-	 * @param itemId		The id of the item whose bitstreams are to be listed.
-	 * @param collectionId	The id of the collection to which the item and bitstream belongs to.
-	 * 
-	 * @return			Return to the bitstream page of quadriga.
-	 */
 	@RequestMapping(value = "/auth/workbench/workspace/community/collection/item", method = RequestMethod.GET)
 	public String workspaceByteStreamListRequest(@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal){
 		String communityId = dspaceManager.getCommunityId(collectionId);
@@ -161,26 +137,20 @@ public class DspaceController {
 			return "redirect:/auth/workbench/workspace/communities";
 		}
 
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		List<IBitStream> bitstreams = dspaceManager.getAllBitStreams(principal.getName(),sPassword,collectionId, itemId);
+		List<IBitStream> bitstreams = dspaceManager.getAllBitStreams(collectionId, itemId);
 		model.addAttribute("communityId",communityId);
 		model.addAttribute("communityName",communityName);
 		model.addAttribute("collectionId",collectionId);
 		model.addAttribute("collectionName", collectionName);
 		model.addAttribute("itemId",itemId);
 		model.addAttribute("itemName",itemName);
-		model.addAttribute("bitList",bitstreams);	
-		
+
+		//TODO: add the item name to model
+
+		model.addAttribute("bitList",bitstreams);		
 		return "auth/workbench/workspace/community/collection/item";
 	}
 
-	
-	/**
-	 * Handle ajax requests to retrieve the collection name based on the collection id.
-	 * 
-	 * @param collectionid		The id of the collection whose name is to fetched.
-	 * @return					Returns the collection name if it is loaded from Dspace. Else returns 'Loading...'
-	 */
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
 	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {
 		ICollection collection = dspaceManager.getCollection(collectionid);
@@ -192,22 +162,4 @@ public class DspaceController {
 		return "Loading...";		
 	}
 
-	/**
-	 * Handle ajax requests to retrieve the bitstream name based on the bitstream id, item id and collection id
-	 * 
-	 * @param bitstreamId		The id of the bitstream whose name is to be retrieved.
-	 * @param itemId			The id of the item to which the bitstream belongs to.
-	 * @param collectionId		The id of the collection to which the item and the bitstream belongs to.
-	 * @return					Returns the bitstream name if it is loaded. Else returns 'Loading...' 
-	 */
-	@RequestMapping(value = "/auth/workbench/workspace/bitstreamstatus", method = RequestMethod.GET)
-	public @ResponseBody String getBitStreamStatus(@RequestParam("bitstreamId") String bitstreamId, @RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId) {
-		IBitStream bitstream = dspaceManager.getBitStreamName(collectionId, itemId, bitstreamId);
-		if(bitstream != null)
-		{
-			if(bitstream.getName() != null)
-				return bitstream.getName();
-		}
-		return "Loading...";		
-	}
 }

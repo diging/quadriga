@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_workspace
 (
   workspacename   VARCHAR(50)   NOT NULL,
   description     TEXT          NULL,
-  workspaceid     VARCHAR(50)   NOT NULL,
+  workspaceid     BIGINT        NOT NULL,
   workspaceowner  VARCHAR(50)   NOT NULL,
   isarchived      TINYINT       NOT NULL  DEFAULT 0,
   isdeactivated   TINYINT       NOT NULL  DEFAULT 0,

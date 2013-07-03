@@ -18,17 +18,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -62,9 +58,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 	@Autowired
 	private IDictionaryItemsFactory dictionaryItemsFactory;
-	
-	@Autowired
-	private ICollaboratorFactory collaboratorFactory;
 	/**
 	 * Assigns the data source
 	 *  
@@ -141,7 +134,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	/**
-	 *  Method fetches the list of dictionary for current logged in user                    
+	 *  This method fetches the list of dictionary for current logged in user                    
 	 * 
 	 * @returns         List of Dictionary
 	 * 
@@ -201,59 +194,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		return dictionaryList;
 	}
-	
-	/**
-	 *  Method deletes selected dictionary                    
-	 * 
-	 * @returns         return path
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Lohith Dwaraka
-	 * 
-	 */
-	@Override
-	public String deleteDictionary(String userId, String dictionaryId) throws QuadrigaStorageException{
-		String dbCommand;
-		String errmsg="";
-		getConnection();
-		dbCommand = DBConstants.SP_CALL + " " + DBConstants.DELETE_DICTIONARY + "(?,?,?)";
-		logger.debug("deleting from DB dictionary from user "+userId +" and dictionaryId" +dictionaryId);
-		try {
-			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			sqlStatement.setString(1, userId);
-			sqlStatement.setString(2, dictionaryId);
-			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
-			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(3);
-
-			return errmsg;
-		}catch(SQLException e){
-			e.printStackTrace();
-			throw new QuadrigaStorageException();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally
-		{
-			closeConnection();
-		}
-		return errmsg;
-	}
-	
-	/**
-	 *  Method return a list of dictionary items for a dictionary                   
-	 * 
-	 * @returns         list of dictionaryItems
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Lohith Dwaraka
-	 * 
-	 */
-	
 	@Override
 	public List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid, String ownerName)throws QuadrigaStorageException{
 		String dbCommand;
@@ -267,7 +208,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			sqlStatement.setString(1, dictionaryid);
 			sqlStatement.setString(2, ownerName);
 			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
-			logger.debug("Dictionary ID "+ dictionaryid);
+			logger.info("Dictionary ID "+ dictionaryid);
 			sqlStatement.execute();
 
 			ResultSet resultSet = sqlStatement.getResultSet();
@@ -304,16 +245,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return dictionaryList;
 	}
 
-	/**
-	 *  Method gets the dictionary name using dictionary id                    
-	 * 
-	 * @returns         return dictonary name
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Lohith Dwaraka
-	 * 
-	 */
 	@Override
 	public String getDictionaryName(String dictionaryId) throws QuadrigaStorageException
 	{
@@ -363,16 +294,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 	}
 
-	/**
-	 *  Method adds an dictionary                   
-	 * 
-	 * @returns         path of list Dicitonary page
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Lohith Dwaraka
-	 * 
-	 */
 	@Override
 	public String addDictionary(IDictionary dictionary)throws QuadrigaStorageException
 	{
@@ -410,7 +331,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 
-			System.out.println("-------sqlStatement.execute()"+sqlStatement.execute());
+			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(5);
 
@@ -434,16 +355,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return errmsg;
 	}
 
-	/**
-	 *  Method adds items into a dictionary                   
-	 * 
-	 * @returns         path of list dictionary items  page
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Lohith Dwaraka
-	 * 
-	 */
+
 	@Override
 	public String addDictionaryItems(String dictinaryId,String item,String id,String pos,String owner) throws QuadrigaStorageException
 	{
@@ -457,7 +369,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 		//get the connection
 		getConnection();
-		logger.debug("dbCommand : "+dbCommand);
+		logger.info("dbCommand : "+dbCommand);
 		//establish the connection with the database
 		try
 		{
@@ -496,16 +408,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return errmsg;
 	}
 
-	/**
-	 *  Method deletes items from a dictionary                   
-	 * 
-	 * @returns         path of list dictionary items  page
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Lohith Dwaraka
-	 * 
-	 */
 	@Override
 	public String deleteDictionaryItems(String dictinaryId,String itemid,String ownerName)throws QuadrigaStorageException
 	{
@@ -519,7 +421,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 		//get the connection
 		getConnection();
-		logger.debug("dbCommand : "+dbCommand);
+		logger.info("dbCommand : "+dbCommand);
 		//establish the connection with the database
 		try
 		{
@@ -556,17 +458,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return errmsg;
 	}
 
-	/**
-	 *  Method update items in a dictionary                   
-	 * 
-	 * @returns         path of list dictionary items  page
-	 * 
-	 * @throws			SQLException
-	 *                     
-	 * @author          Lohith Dwaraka
-	 * 
-	 */
-	
 	@Override
 	public String updateDictionaryItems(String dictinaryId,String termid,String term ,String pos)throws QuadrigaStorageException
 	{
@@ -582,7 +473,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 		//get the connection
 		getConnection();
-		logger.debug("dbCommand : "+dbCommand);
+		logger.info("dbCommand : "+dbCommand);
 		//establish the connection with the database
 		try
 		{
@@ -618,171 +509,4 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		return errmsg;
 	}
-
-	@Override
-	public List<IUser> showNonCollaboratingUsersRequest(String dictionaryid)throws QuadrigaStorageException {
-
-		String dbCommand;
-		String errmsg;
-		CallableStatement sqlStatement;
-		List<IUser> nonCollabUsersList = new ArrayList<IUser>();
-		
-		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_NONCOLLABORATORS+"(?,?)";
-		getConnection();
-			try {
-				sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-				sqlStatement.setString(1, dictionaryid);
-				sqlStatement.registerOutParameter(2, Types.VARCHAR);
-				sqlStatement.execute();
-				errmsg = sqlStatement.getString(2);
-
-				if(errmsg=="")
-				{
-					ResultSet resultSet = sqlStatement.getResultSet();
-
-					while(resultSet.next())
-					{
-						IUser user = userFactory.createUserObject();
-						user.setUserName(resultSet.getString(1));
-						nonCollabUsersList.add(user);
-					}
-				}
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new QuadrigaStorageException();
-			}
-			
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-		
-		return nonCollabUsersList;
-	}
-
-	@Override
-	public List<IUser> getDictionaryCollaborators(String dictionaryid) 
-	{
-		
-		String dbCommand;
-		String errmsg;
-		CallableStatement sqlStatement;
-		List<IUser> collaboratoratingUsersList = new ArrayList<IUser>();
-		
-		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_COLLABORATORS+"(?,?)";
-		getConnection();
-		try {
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			sqlStatement.setString(1, dictionaryid);
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
-			sqlStatement.execute();
-			errmsg = sqlStatement.getString(2);
-			if(errmsg=="")
-			{
-				ResultSet resultSet = sqlStatement.getResultSet();
-				while(resultSet.next())
-				{
-					IUser collaboratingUser = userFactory.createUserObject();
-					collaboratingUser.setUserName(resultSet.getString(1));
-				//	System.out.println("-------------DB resultSet.getString(1):"+resultSet.getString(1));
-					collaboratoratingUsersList.add(collaboratingUser);
-				}
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		
-		
-		return collaboratoratingUsersList;
-	}
-
-	@Override
-	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) {
-
-		String dbCommand;
-		String errmsg;
-		CallableStatement sqlStatement;
-		String role ="" ;
-		
-		dbCommand = DBConstants.SP_CALL+" "+DBConstants.ADD_DICT_COLLABORATORS+"(?,?,?,?,?)";
-		
-		
-		for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
-		{
-				if((collaboratorRole.getRoleDBid())!=null)
-				{
-					role += collaboratorRole.getRoleDBid()+",";
-				}
-			
-		}
-		
-		role = role.substring(0,role.length()-1);	
-		getConnection();
-		
-		try {
-				sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-				sqlStatement.setString(1, dictionaryid);
-				sqlStatement.setString(2, collaborator.getUserObj().getUserName());
-				sqlStatement.setString(3, role);
-				sqlStatement.setString(4, userName);
-				sqlStatement.registerOutParameter(5, Types.VARCHAR);
-				sqlStatement.execute();
-
-				errmsg = sqlStatement.getString(5);
-						
-				if(errmsg=="")
-				{
-					return errmsg;
-				}	
-			}
-			
-			 catch (SQLException e) {
-				
-				e.printStackTrace();
-			}
-		  
-		return null;
-	}
-
-	@Override
-	public List<IUser> showCollaboratingUsersRequest(String dictionaryid)
-			throws QuadrigaStorageException {
-		String dbCommand;
-		String errmsg;
-		CallableStatement sqlStatement;
-		List<IUser> collabList = new ArrayList<IUser>();
-		
-		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_COLLABORATORS+"(?,?)";
-		getConnection();
-		
-		try {
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			sqlStatement.setString(1, dictionaryid);
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
-			sqlStatement.execute();
-			errmsg = sqlStatement.getString(2);
-			
-			if(errmsg=="")
-			{
-				ResultSet resultSet = sqlStatement.getResultSet();
-				
-				while(resultSet.next())
-				{
-					IUser user = userFactory.createUserObject();
-					user.setUserName(resultSet.getString(1));
-					collabList.add(user);
-				}
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return collabList;
-	}
-	
-	
 }

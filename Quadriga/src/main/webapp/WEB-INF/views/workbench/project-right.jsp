@@ -6,7 +6,7 @@
 <%@ page import="java.io.*"%>
 
 	<section>
-	<c:if test="${not empty project.collaborators}">
+	
 	<h2 class="major"><span>Collaborators</span></h2>
 		
 		<ul class="collaborators">
@@ -14,10 +14,13 @@
 				<li>
 						<c:out value="${projectcollaborator.userObj.name}"></c:out>
 				</li>
+			  <%-- <li><ul><c:forEach var="roles"
+						items="${projectcollaborator.collaboratorRoles}">
+						<li><c:out value="${roles.roleid}"></c:out></li>
+					</c:forEach></ul></li> --%> 
 			</c:forEach>
 		</ul>
-		</c:if>
-<!--  
+		
 <section>
 	<ul class="noStyle">
 		<li>
@@ -28,6 +31,6 @@
 			</article>
 		</li>	
 	</ul>
-</section>   -->
+</section>
 </section>
 

@@ -16,13 +16,13 @@ DROP PROCEDURE IF EXISTS sp_deleteProject;
 DELIMITER $$
 CREATE PROCEDURE sp_deleteProject
 (
-  IN  inprojdbid     TEXT,
+  IN  inprojdbid     VARCHAR(100),
   OUT errmsg         VARCHAR(255)   
 )
 BEGIN
 
     -- Declare local varaibles
-    DECLARE rowvalue   VARCHAR(50);
+    DECLARE rowvalue   INT;
     DECLARE position   INT;
 
     -- the error handler for any sql exception
@@ -40,7 +40,7 @@ BEGIN
     -- inserting the input into a temp table
     CREATE TEMPORARY TABLE temp_tbl_projectid
     (
-         projid VARCHAR(50)
+         projid INT
     );
 
     SET position = LOCATE(',',inprojdbid);

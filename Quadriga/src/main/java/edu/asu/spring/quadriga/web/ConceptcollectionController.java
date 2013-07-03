@@ -31,7 +31,6 @@ import edu.asu.spring.quadriga.domain.implementation.CollectionsValidator;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -67,7 +66,7 @@ public class ConceptcollectionController {
 	@Autowired
 	private IConceptFactory conceptFactory;
 
-	
+	private List<IUser> collaboratorList;
 
 	private ConceptpowerReply c;
 
@@ -108,41 +107,52 @@ public class ConceptcollectionController {
 
 	/**
 	 * Returns the list of concept collections of user to the view
-	 * @throws QuadrigaAcessException 
 	 * 
 	 * 
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
 	public String conceptDetailsHandler(
-			@PathVariable("collection_id") int collection_id, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAcessException {
+			@PathVariable("collection_id") int collection_id, ModelMap model)
+			throws QuadrigaStorageException {
 
 		collection = collectionFactory.createConceptCollectionObject();
 		collection.setId(collection_id);
-		conceptControllerManager.getCollectionDetails(collection,principal.getName());
+		int index;
+		if ((index = list.indexOf(collection)) >= 0)
+			collection = list.get(index);
+		else if ((index = collab_list.indexOf(collection)) >= 0)
+			collection = collab_list.get(index);
+		conceptControllerManager.getCollectionDetails(collection);
 		model.addAttribute("concept", collection);
-		conceptControllerManager.getCollaborators(collection);
-		
-		List<IUser>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
-		model.addAttribute("collaboratingUsers", collaboratingUsers);
 		return "auth/conceptcollections/details";
 	}
 
-	@RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
-	public String conceptSearchHandler(@PathVariable("collection_id") int collection_id, HttpServletRequest req, ModelMap model)
+	@RequestMapping(value = "auth/searchitems", method = RequestMethod.GET)
+	public String conceptSearchHandler(HttpServletRequest req, ModelMap model)
 			throws QuadrigaStorageException {
-		
+		/*
+		 * UserDetails principal = (UserDetails)
+		 * SecurityContextHolder.getContext
+		 * ().getAuthentication().getPrincipal(); String userId =
+		 * principal.getUsername();
+		 */
 		c = conceptControllerManager.search(req.getParameter("name"),
 				req.getParameter("pos"));
 		if (c != null)
 			model.addAttribute("result", c.getConceptEntry());
-			model.addAttribute("collectionid", collection_id);
+
 		return "auth/searchitems";
 	}
 
-	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
-	public String saveItemsHandler(@PathVariable("collection_id") int collection_id, HttpServletRequest req, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAcessException {
+	@RequestMapping(value = "auth/conceptcollections/addItems", method = RequestMethod.POST)
+	public String saveItemsHandler(HttpServletRequest req, ModelMap model)
+			throws QuadrigaStorageException {
+		/*
+		 * UserDetails principal = (UserDetails)
+		 * SecurityContextHolder.getContext
+		 * ().getAuthentication().getPrincipal(); String userId =
+		 * principal.getUsername();
+		 */
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
 			for (String id : values) {
@@ -151,7 +161,7 @@ public class ConceptcollectionController {
 				temp = c.getConceptEntry().get(
 						(c.getConceptEntry().indexOf(temp)));
 				conceptControllerManager.addItems(temp.getLemma(), id,
-						temp.getPos(), temp.getDescription(), collection_id);
+						temp.getPos(), temp.getDescription(), collection.getId());
 			}
 		}
 		int index;
@@ -159,9 +169,9 @@ public class ConceptcollectionController {
 			collection = list.get(index);
 		else if ((index = collab_list.indexOf(collection)) >= 0)
 			collection = collab_list.get(index);
-		conceptControllerManager.getCollectionDetails(collection, principal.getName());
+		conceptControllerManager.getCollectionDetails(collection);
 		model.addAttribute("concept", collection);
-		return "redirect:/auth/conceptcollections/" + collection_id + "";
+		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
 	}
 
 	@RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.GET)
@@ -205,13 +215,12 @@ public class ConceptcollectionController {
 	 * Returns the list of concept collections of user to the view
 	 * 
 	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAcessException 
 	 * 
 	 * 
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/deleteitems", method = RequestMethod.POST)
-	public String deleteItems(HttpServletRequest req, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAcessException {
+	public String deleteItems(HttpServletRequest req, ModelMap model)
+			throws QuadrigaStorageException {
 
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
@@ -225,7 +234,7 @@ public class ConceptcollectionController {
 			}
 		}
 
-		conceptControllerManager.getCollectionDetails(collection,principal.getName());
+		conceptControllerManager.getCollectionDetails(collection);
 
 		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
 

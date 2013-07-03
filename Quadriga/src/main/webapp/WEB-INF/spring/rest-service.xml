@@ -30,15 +30,9 @@
 	</bean>
 
 
-	<bean id="wordPowerURL" class="java.lang.String">
+	<bean id="searchWordPowerURL" class="java.lang.String">
 		<constructor-arg>
-			<value>http://digitalhps-develop.asu.edu:8080/wordpower</value>
-		</constructor-arg>
-	</bean>
-	
-	<bean id="searchWordPowerURLPath" class="java.lang.String">
-		<constructor-arg>
-			<value>/rest/WordLookup/</value>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/</value>
 		</constructor-arg>
 	</bean>
 
@@ -48,10 +42,9 @@
 		</constructor-arg>
 	</bean>
 
-	
-	<bean id="updateFromWordPowerURLPath" class="java.lang.String">
+	<bean id="updateFromWordPowerURL" class="java.lang.String">
 		<constructor-arg>
-			<value>/rest/Word/</value>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/</value>
 		</constructor-arg>
 	</bean>
 	
@@ -90,8 +83,6 @@
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunities
 				</value>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection
-				</value>
-				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceItems
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
 				</value>

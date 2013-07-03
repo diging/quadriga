@@ -225,8 +225,6 @@ public class DictionaryManagerTest {
 				logger.info("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
 				fail("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
 			}
-			dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-			dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 		}
 	}
 
@@ -264,9 +262,6 @@ public class DictionaryManagerTest {
 				fail("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-		
 		logger.info("addNewDictionariesItemsTest Test ended");
 	}
 
@@ -313,8 +308,6 @@ public class DictionaryManagerTest {
 				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -349,8 +342,6 @@ public class DictionaryManagerTest {
 				fail("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -391,8 +382,6 @@ public class DictionaryManagerTest {
 				fail("getDictionaryNameTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -449,8 +438,6 @@ public class DictionaryManagerTest {
 				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -488,8 +475,6 @@ public class DictionaryManagerTest {
 				fail("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -539,8 +524,6 @@ public class DictionaryManagerTest {
 				fail("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
 
 	@Test
@@ -580,9 +563,6 @@ public class DictionaryManagerTest {
 				fail("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 	}
-	
 
 }

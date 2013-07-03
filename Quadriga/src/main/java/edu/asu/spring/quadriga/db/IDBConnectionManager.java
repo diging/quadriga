@@ -20,7 +20,7 @@ public interface IDBConnectionManager
 	public final static int SUCCESS = 1;
 	public final static int FAILURE = 0;
 	
-	public abstract List<IQuadrigaRole> listQuadrigaUserRoles(String roles);
+	public abstract List<IQuadrigaRole> UserRoles(String roles);
 
 	/**
 	 * Queries the database and builds a list of active user objects

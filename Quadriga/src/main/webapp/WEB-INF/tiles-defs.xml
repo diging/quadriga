@@ -11,7 +11,6 @@
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="sub-navigation" value="" />
-		<put-attribute name="right-sub-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
@@ -74,8 +73,6 @@
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/conceptcollection.jsp" />
-		<put-attribute name="sub-navigation"
-			value="/WEB-INF/views/conceptcollections/collection-right.jsp"/>
 	</definition>
 	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Collection Details" />
@@ -92,10 +89,6 @@
 		<put-attribute name="title" value="Quadriga - Collection Details" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/addConceptCollection.jsp" />
-	</definition>
-	<definition name="auth/conceptcollection/showCollaborators" extends="base.definition.conceptcollections">
-		<put-attribute name="title" value="Non existing Collaborators" />
-		<put-attribute name="content" value="/WEB-INF/views/conceptcollections/showCollaborators.jsp" />
 	</definition>
 
 	<!-- Workbench pages -->
@@ -114,8 +107,6 @@
 		<put-attribute name="title" value="Quadriga - Project Details" />
 		<put-attribute name="sub-navigation"
 			value="/WEB-INF/views/workbench/project-right.jsp" />
-		<put-attribute name="right-sub-navigation"
-			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/project.jsp" />
 	</definition>
@@ -126,6 +117,8 @@
 	</definition>
 	<definition name="auth/workbench/addProjectStatus" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Add Project" />
+		<put-attribute name="sub-navigation"
+			value="/WEB-INF/views/workbench/project-right.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addprojectstatus.jsp" />
 	</definition>
@@ -222,17 +215,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/archiveworkspacestatus.jsp" />
 	</definition> 
-			<definition name="auth/workbench/workspace/unarchiveworkspace" extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Workbench - UnArchive Workspace" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/unarchiveworkspace.jsp" />
-	</definition>
-	<definition name="auth/workbench/workspace/unarchiveworkspaceStatus"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Workbench - UnArchive Workspace" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/unarchiveworkspacestatus.jsp" />
-	</definition> 
 	<definition name="auth/workbench/workspace/deactivateworkspace" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Deactive Workspace" />
 		<put-attribute name="content"
@@ -244,17 +226,6 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deactivateworkspacestatus.jsp" />
 	</definition> 
-		<definition name="auth/workbench/workspace/activateworkspace" extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Workbench - Activate Workspace" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/activateworkspace.jsp" />
-	</definition>
-	<definition name="auth/workbench/workspace/activeworkspaceStatus"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Workbench - Activate Workspace" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/activateworkspacestatus.jsp" />
-	</definition> 
 		<definition name="auth/workbench/workspace/deleteworkspace" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench - Delete Workspace" />
 		<put-attribute name="content"
@@ -265,15 +236,13 @@
 		<put-attribute name="title" value="Quadriga Workbench - Delete Workspace" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deleteworkspacestatus.jsp" />
-	</definition> 	
-	<definition name="auth/workbench/workspace/workspacedetails" extends="base.definition.workbench">
+	</definition> 
+	
+		<definition name="auth/workbench/workspace/workspacedetails" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga - Workspace Details" />
-		<put-attribute name="sub-navigation"
-			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/workspacedetails.jsp" />
 	</definition>
-	
 	
 	<!-- dictionaries pages -->
 	<definition name="base.definition.dictionaries" extends="base.definition">
@@ -281,7 +250,7 @@
 	</definition>
 	<definition name="auth/dictionaries" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga Dictionary" />
-		<put-attribute name="content" value="/WEB-INF/views/dictionary/dictionaries.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/dictionaries.jsp" />
 	</definition>
 	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
@@ -293,12 +262,6 @@
 			value="Quadriga Dictionary - Add Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/adddictionary.jsp" />
-	</definition>
-	<definition name="auth/dictionaries/deleteDictionary" extends="base.definition.dictionaries">
-		<put-attribute name="title"
-			value="Quadriga Dictionary - Delete Dictionary" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/dictionary/deletedictionary.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/addDictionaryStatus"
 		extends="base.definition.dictionaries">
@@ -324,10 +287,6 @@
 			value="/WEB-INF/views/dictionary/project-right.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
-	</definition>
-	<definition name="auth/dictionaries/showCollaborators" extends ="base.definition.dictionaries">
-	<put-attribute name="title" value="Non existing Collaborators" />
-	<put-attribute name="content" value="/WEB-INF/views/dictionary/showCollaborators.jsp" /> 
 	</definition>
 
 

@@ -2,14 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
-
-<!--  
-	Author Lohith Dwaraka  
-	Used to add the items into a dictionary
-	and search for items from word power	
--->
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
 		$('#selectall').click(function() {
@@ -88,7 +81,8 @@
 
 			</form> <c:choose>
 				<c:when test="${errorstatus=='1'}">
-					<font color="red"><spring:message code="term.not.found" /></font>
+					<font color="red"> Word not found, please provide the
+						correct input</font>
 				</c:when>
 			</c:choose> <c:choose>
 				<c:when test="${success=='1'}">
@@ -169,7 +163,8 @@
 		<c:otherwise>
 			<c:choose>
 				<c:when test="${status=='0'}">
-					<font color="red"><spring:message code="term.not.found" /></font>
+					<font color="red">Word not found, please enter a different
+						word</font>
 				</c:when>
 
 			</c:choose>

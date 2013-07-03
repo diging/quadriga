@@ -2,19 +2,18 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItemEntity;
 
-/**
- * The class representation of the items list got from the Dspace repository
- * 
- * @author Ram Kumar Kumaresan
- */
+
 @XmlRootElement(name="items")
 public class DspaceItemEntity implements IDspaceItemEntity {
 

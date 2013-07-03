@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
@@ -41,17 +39,13 @@ public class DictionaryManager implements IDictionaryManager {
 	RestTemplate restTemplate;
 
 	@Autowired
-	@Qualifier("wordPowerURL")
-	private String wordPowerURL;
-	
-	@Autowired
-	@Qualifier("searchWordPowerURLPath")
-	private String searchWordPowerURLPath;
+	@Qualifier("searchWordPowerURL")
+	private String searchWordPowerURL;
 
 	@Autowired
-	@Qualifier("updateFromWordPowerURLPath")
-	private String updateFromWordPowerURLPath;
-	
+	@Qualifier("updateFromWordPowerURL")
+	private String updateFromWordPowerURL;
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryManager.class);
 
@@ -68,7 +62,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return String URL
 	 */
 	public String getSearchWordPowerURL() {
-		return wordPowerURL+""+searchWordPowerURLPath;
+		return searchWordPowerURL;
 	}
 
 	/**
@@ -77,7 +71,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return String updateFromWordPowerURL
 	 */
 	public String getUpdateFromWordPowerURL() {
-		return wordPowerURL+""+updateFromWordPowerURLPath;
+		return updateFromWordPowerURL;
 	}
 
 	/**
@@ -113,7 +107,7 @@ public class DictionaryManager implements IDictionaryManager {
 		String msg = "";
 		try {
 			msg = dbConnect.addDictionary(dictionary);
-		} catch (Exception e) {
+		}catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -133,7 +127,7 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 			msg = dbConnect.addDictionaryItems(dictionaryId, item, id, pos,
 					owner);
-		} catch (Exception e) {
+		}catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -147,12 +141,11 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return success or error message to controller
 	 */
 
-	public String deleteDictionariesItems(String dictionaryId, String itemid,
-			String ownerName) throws QuadrigaStorageException {
+	public String deleteDictionariesItems(String dictionaryId, String itemid,String ownerName)
+			throws QuadrigaStorageException {
 		String msg = "";
 		try {
-			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid,
-					ownerName);
+			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid,ownerName);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -172,7 +165,7 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 			msg = dbConnect.updateDictionaryItems(dictionaryId, termid, term,
 					pos);
-		} catch (Exception e) {
+		}  catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -185,13 +178,13 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to list of dictionary item to controller
 	 */
 
-	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
-			String ownerName) throws QuadrigaStorageException {
+	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,String ownerName)
+			throws QuadrigaStorageException {
 
 		List<IDictionaryItems> dictionaryItemList = null;
 		try {
-			dictionaryItemList = dbConnect.getDictionaryItemsDetails(
-					dictionaryid, ownerName);
+			dictionaryItemList = dbConnect
+					.getDictionaryItemsDetails(dictionaryid, ownerName);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -212,7 +205,7 @@ public class DictionaryManager implements IDictionaryManager {
 		String dictionaryName = "";
 		try {
 			dictionaryName = dbConnect.getDictionaryName(dictionaryid);
-		} catch (Exception e) {
+		}  catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 
@@ -232,7 +225,7 @@ public class DictionaryManager implements IDictionaryManager {
 		try {
 
 			String fullUrl = getSearchWordPowerURL() + "" + item + "/" + pos;
-			logger.debug("Search Word Power URL : " + fullUrl);
+			logger.info("Search Word Power URL : " + fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply) restTemplate
 					.getForObject(fullUrl, WordpowerReply.class);
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
@@ -240,21 +233,6 @@ public class DictionaryManager implements IDictionaryManager {
 			logger.error(e.getMessage());
 		}
 		return dictionaryEntry;
-	}
-
-	@Override
-	public String deleteDictionary(String user, String dictionaryId)
-			throws QuadrigaStorageException {
-
-		String msg = "";
-		try {
-			logger.debug("deleting from dictionary manager");
-			msg = dbConnect.deleteDictionary(user, dictionaryId);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-
-		return msg;
 	}
 
 	/**
@@ -268,14 +246,14 @@ public class DictionaryManager implements IDictionaryManager {
 
 		List<WordpowerReply.DictionaryEntry> dictionaryEntry = null;
 		try {
-			logger.debug("Update url from func : " + getUpdateFromWordPowerURL());
+			logger.info("Update url from func : " + getUpdateFromWordPowerURL());
 			itemid = itemid.substring(itemid.lastIndexOf("/") + 1,
 					itemid.length());
-			logger.debug("Update Item ID : " + itemid);
-			logger.debug("URL From rest xml : --" + getUpdateFromWordPowerURL()
+			logger.info("Update Item ID : " + itemid);
+			logger.info("URL From rest xml : --" + getUpdateFromWordPowerURL()
 					+ "--");
 			String fullUrl = getUpdateFromWordPowerURL() + "" + itemid;
-			logger.debug("Update Word Power URL : " + fullUrl);
+			logger.info("Update Word Power URL : " + fullUrl);
 			WordpowerReply wordpowerReply = (WordpowerReply) restTemplate
 					.getForObject(fullUrl, WordpowerReply.class);
 			dictionaryEntry = wordpowerReply.getDictionaryEntry();
@@ -286,12 +264,6 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryEntry;
 	}
 
-	/**
-	 * Get index of term from a list for update and deleting term from
-	 * dictionary
-	 * 
-	 * @return Return the dictionaryEntry bean to controller
-	 */
 	public DictionaryItems getDictionaryItemIndex(String termId,
 			DictionaryItems dictionaryItems) {
 
@@ -314,56 +286,6 @@ public class DictionaryManager implements IDictionaryManager {
 		di.setPos(pos[index]);
 
 		return di;
-	}
-
-	@Override
-	public List<IUser> getCollaborators(String dictionaryid) {
-		
-		List<IUser> userList = dbConnect.getDictionaryCollaborators(dictionaryid);		
-		return userList;
-	}	
-	
-	@Override
-	public List<IUser> showNonCollaboratingUsers(String dictionaryid) {
-
-		List<IUser> nonCollabUsers = null;
-		try {
-			nonCollabUsers = dbConnect.showNonCollaboratingUsersRequest(dictionaryid);
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-		}
-		return nonCollabUsers;
-	}
-
-	@Override
-	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) {
-		
-		String errmsg=null;
-		
-		try {
-			
-		 errmsg =	dbConnect.addCollaborators(collaborator, dictionaryid, userName);
-			
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-		}
-		
-		return errmsg;
-	}
-
-	@Override
-	public List<IUser> showCollaboratingUsers(String dictionaryid) {
-		
-		List<IUser> collaborators = null;
-		try {
-			
-		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
-		
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-		}
-	
-		return collaborators;
 	}
 
 }

@@ -16,7 +16,6 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -31,9 +30,6 @@ import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
-import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
-import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -49,36 +45,25 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class DictionaryRestController {
 
 	@Autowired
-	private IDictionaryManager dictonaryManager;
+	IDictionaryManager dictonaryManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryRestController.class);
 
 	@Autowired
-	private IUserManager usermanager;
+	IUserManager usermanager;
 
 	@Autowired
-	private IDictionaryManager dictionaryManager;
+	IDictionaryManager dictionaryManager;
 
 	@Autowired
-	private IDictionaryFactory dictionaryFactory;
+	IDictionaryFactory dictionaryFactory;
 
 	@Autowired
-	private DictionaryItemsFactory dictionaryItemsFactory;
+	DictionaryItemsFactory dictionaryItemsFactory;
 
 	@Autowired
-	private IRestVelocityFactory restVelocityFactory;
-
-	@Autowired
-	@Qualifier("updateFromWordPowerURLPath")
-	private String updateFromWordPowerURLPath;
-	
-	@Autowired
-	@Qualifier("wordPowerURL")
-	private String wordPowerURL;
-	
-	
-	
+	IRestVelocityFactory restVelocityFactory;
 
 	/**
 	 * Rest interface for the List Dictionary for the userId
@@ -95,8 +80,6 @@ public class DictionaryRestController {
 	@ResponseBody
 	public String listDictionaries(ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
 		List<IDictionary> dictionaryList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
@@ -104,11 +87,24 @@ public class DictionaryRestController {
 
 		try {
 			engine.init();
-			dictionaryList = dictionaryManager.getDictionariesList(user.getUsername());
+			String userId = principal.getName();
+			logger.debug("Getting dictionary list for user : " + userId);
+			dictionaryList = dictionaryManager.getDictionariesList(userId);
+			if (!(dictionaryList == null)) {
+				Iterator<IDictionary> I = dictionaryList.iterator();
+				while (I.hasNext()) {
+					IDictionary dictionary = I.next();
+					logger.debug("Dictionary Name : " + dictionary.getName());
+					logger.debug("Dictionary Description : "
+							+ dictionary.getDescription());
+					logger.debug("Dictionary Id : " + dictionary.getId());
+				}
+			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionarylist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", dictionaryList);
+			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
@@ -141,8 +137,8 @@ public class DictionaryRestController {
 	@ResponseBody
 	public String listDictionaryItems(
 			@PathVariable("dictionaryId") String dictionaryId, ModelMap model, HttpServletRequest req)
-					throws Exception {
-
+			throws Exception {
+		
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		List<IDictionaryItems> dictionaryItemsList = null;
@@ -152,35 +148,40 @@ public class DictionaryRestController {
 
 		try {
 			engine.init();
-			logger.debug("Getting dictionary items list for dictionary id : "
+			logger.info("Getting dictionary items list for dictionary id : "
 					+ dictionaryId);
 			dictionaryItemsList = dictionaryManager
 					.getDictionariesItems(dictionaryId,user.getUsername());
-			if( dictionaryItemsList == null){
-				throw new RestException("User does not have permission to access dictionary id :"+dictionaryId);
+			if (!(dictionaryItemsList == null)) {
+				Iterator<IDictionaryItems> I = dictionaryItemsList.iterator();
+				while (I.hasNext()) {
+					IDictionaryItems dictionaryItems = I.next();
+					logger.info("Dictionary Item name : "
+							+ dictionaryItems.getItems());
+					logger.info("Dictionary Description : "
+							+ dictionaryItems.getDescription());
+					logger.info("Dictionary Pos : " + dictionaryItems.getPos());
+				}
 			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			String updateFromWordPowerURL=wordPowerURL+""+updateFromWordPowerURLPath;
 			context.put("list", dictionaryItemsList);
-			context.put("wordPowerURL",updateFromWordPowerURLPath);
+			
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
-			throw new RestException("Internal issue");
 		} catch (ParseErrorException e) {
 			// TODO Auto-generated catch block
-
 			logger.error("Exception:", e);
-			throw new RestException("Internal issue");
 		} catch (MethodInvocationException e) {
 			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
-			throw new RestException("Internal issue");
 		}
+
+		return "";
 	}
 }

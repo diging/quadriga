@@ -13,7 +13,7 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
 	IF (errmsg IS NULL)
-		THEN SET errmsg = "";
+		THEN SET errmsg = " ";
     END IF;
 
  -- validating the input variables
@@ -21,7 +21,7 @@ BEGIN
 		THEN SET errmsg = "collectionid cannot be empty";
 	END IF;
 
-	SELECT collaboratoruser FROM tbl_conceptcollections_collaborator 
+	SELECT collaboratoruser FROM tbl_project_collaborator 
 	WHERE collectionid = incollectionid;
 END$$
 DELIMITER ;

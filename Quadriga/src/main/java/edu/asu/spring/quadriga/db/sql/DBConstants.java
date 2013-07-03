@@ -38,24 +38,15 @@ public interface DBConstants
 	
 	public static final String ADD_DICTIONARY = "sp_addDictionaryDetails";
 	public static final String GET_DICTIONARY_DETAILS = "sp_getDictionaryDetails";
-	public static final String SHOW_DICT_COLLABORATORS = "sp_showDictionaryCollaborators";
-	public static final String SHOW_DICT_NONCOLLABORATORS = "sp_showDictionaryNonCollaborators";
-	public static final String ADD_DICT_COLLABORATORS = "sp_addDictionaryCollaborators";
-	
 
 	public static final String GET_CCOWNED_DETAILS = "sp_getConceptCollections";
 	public static final String GET_CCCOLLABORATIONS_DETAILS = "sp_getUserCollectionCollaborations";
 	public static final String VALIDATE_COLLECTIONID = "sp_validatecollectionid";
 	public static final String GET_COLLECTION_DETAILS = "sp_getConceptCollectionDetails";
 	public static final String ADD_COLLECTION_ITEM = "sp_addCollectionItems";
-	public static final String GET_COLLECTION_COLLABORATOR = "sp_getConceptCollectionCollaborators";
-	public static final String ADD_CC_COLLABORATOR_REQUEST = "sp_addCollectionCollaborators";
-	public static final String SHOW_CC_COLLABORATOR_REQUEST = "sp_showCollectionCollaborators";
-	public static final String SHOW_CC_NONCOLLABORATOR_REQUEST = "sp_showCollectionNonCollaborators";
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
 	public static final String GET_DICTIONARY_NAME = "sp_getDictionaryName";
 	public static final String ADD_DICTIONARY_ITEM = "sp_addDictionaryItems";
-	public static final String DELETE_DICTIONARY ="sp_deleteDictionary";
 	public static final String DELETE_DICTIONARY_ITEM = "sp_deleteDictionaryItems";
 	public static final String UPDATE_DICTIONARY_ITEM = "sp_updateDictionaryItems";
 	public static final String ADD_CONCEPTCOLLECTION ="sp_addConceptCollections";
@@ -64,9 +55,6 @@ public interface DBConstants
 	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
-	public static final String LIST_ACTIVE_WORKSPACE = "sp_getActiveWorkspaceList";
-	public static final String LIST_ARCHIVE_WORKSPACE = "sp_getArchiveWorkspaceList";
-	public static final String LIST_DEACTIVATED_WORKSPACE = "sp_getDeactivatedWorkspaceList";
 	public static final String ADD_WORKSPACE_REQUEST = "sp_createworkspace";
 	public static final String ARCHIVE_WORKSPACE_REQUEST = "sp_archiveworkspace";
 	public static final String DEACTIVATE_WORKSPACE_REQUEST = "sp_deactivateworkspace";

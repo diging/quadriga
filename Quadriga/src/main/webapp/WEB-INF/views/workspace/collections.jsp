@@ -43,6 +43,7 @@
 							data = '<img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> '+data;
 						}
 						$('#collection_' + collectionid[1]).html(data);
+						$('#collection_' + collectionid[1]).style('color', 'red');
 					});//End of ajax callback
 				});//End of for-each for divs
 
@@ -96,13 +97,16 @@
 	</script>
 	<c:choose>
 		<c:when test="${not empty communityName }">
-				<a href="/quadriga/auth/workbench/workspace/communities"  style="text-decoration: underline;">Home</a> »
+			<h3>
+				<a href="/quadriga/auth/workbench/workspace/communities">Home</a> »
 				<c:out value="${communityName}"></c:out>
+			</h3>
 			<c:choose>
 				<c:when test="${not empty collectionList}">
 					<span class="byline">Select a collection to browse its items</span>
 					<c:forEach var="collection" items="${collectionList}">
-						<div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
+						<span style="float: left; margin-left: 50px; font-weight: bold"><div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div></span>
+						<br />
 					</c:forEach>
 				</c:when>
 

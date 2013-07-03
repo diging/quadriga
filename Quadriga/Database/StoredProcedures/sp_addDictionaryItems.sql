@@ -17,8 +17,8 @@ DELIMITER $$
 CREATE PROCEDURE sp_addDictionaryItems	
 (
   IN  inid VARCHAR(200),
-  IN  interm    VARCHAR(300),
-  IN  intermid    VARCHAR(300),
+  IN  interm    VARCHAR(200),
+  IN  intermid    VARCHAR(200),
   IN  inpos    VARCHAR(50) ,
   IN indictionaryowner VARCHAR(50) ,
   OUT errmsg           VARCHAR(255)    

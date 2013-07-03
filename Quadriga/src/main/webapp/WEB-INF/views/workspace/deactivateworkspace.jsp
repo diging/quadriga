@@ -31,7 +31,7 @@ $(document).ready(function() {
 });
 
 function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}';
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
 }
 $(function() {
 	
@@ -62,7 +62,7 @@ $(function() {
 </script>
 <article class="is-page-content">
 	<form:form modelAttribute="workspace" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/deactivateworkspace" id="deactivatewsform">
+		action="deactivateworkspace/${wsprojectid}" id="deactivatewsform">
 		<c:if test="${not empty workspaceList}">
 			<span class="byline">Select the workspace to be deactivated:</span>
 			<c:choose>

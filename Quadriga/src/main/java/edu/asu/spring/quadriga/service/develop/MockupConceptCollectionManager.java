@@ -3,12 +3,9 @@ package edu.asu.spring.quadriga.service.develop;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 /*	@Description : This class acts as a dummy Conceptcollection manager which adds list of concepts
 **   				and their descriptions on the concept collection.
@@ -68,7 +65,11 @@ public class MockupConceptCollectionManager implements
 		return null;
 	}
 
-	
+	@Override
+	public void getCollectionDetails(IConceptCollection concept) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public ConceptpowerReply search(String item, String pos) {
@@ -106,41 +107,6 @@ public class MockupConceptCollectionManager implements
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public List<IUser> showNonCollaboratingUsers(int collectionid) {
-		return null;
-	}
-
-	@Override
-	public List<IUser> showCollaboratingUsers(int collectionid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String addCollaborators(ICollaborator collaborator, int collectionid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void getCollaborators(IConceptCollection collection) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void getCollectionDetails(IConceptCollection concept, String username)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	
-	
 
 	
 

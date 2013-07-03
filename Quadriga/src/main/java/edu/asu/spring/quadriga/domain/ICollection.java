@@ -6,12 +6,6 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 
-/**
- * The collection interface used by Quadriga to provide access to collection information collected from Dspace.
- * Its representation is independent of the Dspace Rest service output.
- * 
- * @author Ram Kumar Kumaresan
- */
 public interface ICollection extends Runnable{
 
 	public abstract String getId();
@@ -38,13 +32,10 @@ public interface ICollection extends Runnable{
 
 	public abstract void setCountItems(String countItems);
 
-	/**
-	 * Copy the collection details from a DspaceCollection class to this object. This will also load all the dependent items in the collection.  
-	 * The dspaceCollection object should not be null.
-	 * 
-	 * @param dspaceCollection 		The object containing the data about the collection fetched from Dspace.
-	 * @return 						TRUE if the data was copied successfully. FALSE if the dspaceCollection is null or there was error in copying the data.
-	 */
+	public abstract boolean isLoaded();
+
+	public abstract void setLoaded(boolean isLoaded);
+
 	public abstract boolean copy(IDspaceCollection dspaceCollection);
 
 	public abstract void setPassword(String password);

@@ -9,32 +9,11 @@ import edu.asu.spring.quadriga.domain.IBitStream;
  */
 public class BitStream implements IBitStream{
 
-	private String id;
 	private String name;
 	private String size;
-	private String mimeType;
+	private String format;
 	
 	
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getMimeType() {
-		return mimeType;
-	}
-
-	@Override
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
-	}
-
 	@Override
 	public String getName() {
 		return this.name;
@@ -53,6 +32,16 @@ public class BitStream implements IBitStream{
 	@Override
 	public void setSize(String size) {
 		this.size = size;
+	}
+
+	@Override
+	public String getFormat() {
+		return this.format;
+	}
+
+	@Override
+	public void setFormat(String format) {
+		this.format = format;
 	}
 
 }

@@ -9,7 +9,6 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -137,37 +136,6 @@
 	<span class="byline">These are all the terms in your dictionary</span>
 </header>
 
-<%-----------------------------------------------------------------------%>
-<%-- Author:Rohit Pendbhaje --%>
-<div>
-<section>
-<h3 class="major"><span>Collaborators</span></h3>
-
-<ul class="collaborators">
-	<c:forEach var="existingcollab" items="${existingCollaborators}">
-	<li><c:out value="${existingcollab.userName}"></c:out></li>
-	</c:forEach>
-</ul>
-
-<section>
-<ul class="noStyle">
-		<li>
-			<article class="is-post-summary">
-				<h3>
-					» <a href="/quadriga/auth/dictionaries/${dictionaryid}/showCollaborators">Manage Collaborators</a>
-				</h3>
-			</article>
-		</li>	
-	</ul>
-
-
-</section>
-</section>
-</div>
-
-<%-----------------------------------------------------------------------%>
-
-
 <ul>
 	<li><input type=button
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
@@ -178,36 +146,25 @@
 <hr>
 <br>
 <c:choose>
-	<c:when test="${additemsuccess=='1'}">
-		<font color="blue"> <spring:message code="add.items.success" /></font>
+	<c:when test="${success=='1'}">
+		<font color="blue"> <c:out value="${successmsg}"></c:out></font>
 
 	</c:when>
-	<c:when test="${additemsuccess=='2'}">
-		<font color="red"><spring:message code="add.noitems.fail" /></font>
 
-	</c:when>
-	<c:when test="${additemsuccess=='0'}">
+	<c:otherwise>
 		<font color="red"><c:out value="${errormsg}"></c:out></font>
-
-	</c:when>
-
-	<c:otherwise>		
 
 	</c:otherwise>
 </c:choose>
 
 <c:choose>
 	<c:when test="${delsuccess=='1'}">
-		<font color="blue"> <spring:message code="delete.items.success" /></font>
+		<font color="blue"> <c:out value="${delsuccessmsg}"></c:out></font>
 
 	</c:when>
 
-	<c:when test="${delsuccess=='0'}">
-		<font color="red"><spring:message code="delete.items.fail" /></font>
-
-	</c:when>
 	<c:otherwise>
-		
+		<font color="red"><c:out value="${delerrormsg}"></c:out></font>
 
 	</c:otherwise>
 </c:choose>
@@ -215,16 +172,12 @@
 
 <c:choose>
 	<c:when test="${updatesuccess=='1'}">
-		<font color="blue"> <spring:message code="update.items.success" /></font>
+		<font color="blue"> <c:out value="${updatesuccessmsg}"></c:out></font>
 
 	</c:when>
 
-	<c:when test="${updatesuccess=='0'}">
-		<font color="red"><spring:message code="update.items.fail" /></font>
-
-	</c:when>
 	<c:otherwise>
-		
+		<font color="red"><c:out value="${updateerrormsg}"></c:out></font>
 
 	</c:otherwise>
 </c:choose>
@@ -290,7 +243,7 @@
 			<input type=button
 				onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
 				value='Add Items' />
-			<br><spring:message code="empty.dictionary.items" />
+			<br>No dictionary items found
 	</c:otherwise>
 	</c:choose>
 </div>

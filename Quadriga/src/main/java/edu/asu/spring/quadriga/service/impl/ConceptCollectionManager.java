@@ -14,7 +14,7 @@ import javax.inject.Named;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;	
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
@@ -23,14 +23,8 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
-
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
 /**
  * @author satyaswaroop
@@ -57,9 +51,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	@Qualifier("updateConceptPowerURL")
 	private String updateURL;
-	
-	@Autowired
-	private ICollaboratorRoleManager roleMapper ;
 	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getCollectionsOfUser(java.lang.String)
@@ -101,11 +92,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAcessException {
-		dbConnect.getCollectionDetails(concept,username);
-		//dbConnect.getCollaborators(concept);
-		
-	}
+	public void getCollectionDetails(IConceptCollection concept) throws QuadrigaStorageException {
+		dbConnect.getCollectionDetails(concept);
+		}
 
 	@Override
 	public ConceptpowerReply search(String item, String pos) {
@@ -164,38 +153,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		
 		dbConnect.deleteItems(id,collectionId);
 		
-	}
-	
-	@Override
-	public List<IUser> showNonCollaboratingUsers(int collectionid) {
-		List<IUser> nonCollaboratorList =  dbConnect.showNonCollaboratorRequest(collectionid);
-		return nonCollaboratorList;
-	}
-
-	@Override
-	public List<IUser> showCollaboratingUsers(int collectionid) {
-		List<IUser> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
-		return collaboratorList;
-	}
-
-	@Override
-	public String addCollaborators(ICollaborator collaborator, int collectionid) {
-		String errmsg = dbConnect.addCollaboratorRequest(collaborator, collectionid);
-		return errmsg;
-	}
-
-	@Override
-	public void getCollaborators(IConceptCollection collection) {
-		
-		dbConnect.getCollaborators(collection);
-		List<ICollaborator> collaborators = collection.getCollaborators();
-		for(ICollaborator collaborator:collaborators)
-		{
-			for(ICollaboratorRole collaboratorRole: collaborator.getCollaboratorRoles())
-			{
-				roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
-			}
-		}
 	}
 
 }

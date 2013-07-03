@@ -2,10 +2,8 @@ package edu.asu.spring.quadriga.db;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -89,21 +87,4 @@ public interface IDBConnectionDictionaryManager {
 	public abstract String updateDictionaryItems(String dictinaryId,
 			String termid, String term, String pos)
 			throws QuadrigaStorageException;
-	
-	public abstract List<IUser> showNonCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
-	
-	public abstract List<IUser> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
-	
-	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) throws QuadrigaStorageException;
-
-	public abstract List<IUser> getDictionaryCollaborators(String dictionaryid);
-
-	/**
-	 * Deletes the dictionary 
-	 * @param dictionaryId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract String deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException;
-
 }

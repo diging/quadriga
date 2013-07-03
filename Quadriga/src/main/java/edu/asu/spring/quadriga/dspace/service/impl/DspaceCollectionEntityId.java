@@ -5,12 +5,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionEntityId;
 
-/**
- * The class used to store the collection id associated with the community  
- * 
- * @author Ram Kumar Kumaresan
- * 
- */
 @XmlRootElement(name="collectionentityid")
 public class DspaceCollectionEntityId implements IDspaceCollectionEntityId {
 

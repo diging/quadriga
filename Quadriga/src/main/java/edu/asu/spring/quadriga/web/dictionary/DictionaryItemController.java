@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
@@ -76,9 +75,6 @@ public class DictionaryItemController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictionaryid", dictionaryid);
-		
-		List<IUser> existingCollaborators = dictonaryManager.getCollaborators(dictionaryid);
-		model.addAttribute("existingCollaborators", existingCollaborators);
 
 		return "auth/dictionary/dictionary";
 	}
@@ -104,7 +100,7 @@ public class DictionaryItemController {
 
 		if(values == null){
 			model.addAttribute("delsuccess", 0);
-//			model.addAttribute("delerrormsg", "Items were not selected");
+			model.addAttribute("delerrormsg", "Items were not selected");
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryId,user.getUsername());
 			String dictionaryName = dictonaryManager
@@ -119,15 +115,18 @@ public class DictionaryItemController {
 						+ " and term id : " + i + " : " + values[i]);
 				msg = dictonaryManager.deleteDictionariesItems(dictionaryId,
 						values[i],user.getUsername());
-				if (!msg.equals("")) {
+				if (msg.equals("")) {
+					// what happens here
+				} else {
 					flag = 1;
 					errormsg = msg;
 				}
+
 			}
 		} 
 		if (flag == 0) {
 			model.addAttribute("delsuccess", 1);
-//			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
+			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
 		} else if (flag == 1) {
 			if (errormsg.equals("Item doesnot exists in this dictionary")) {
 				model.addAttribute("delsuccess", 0);
@@ -170,14 +169,7 @@ public class DictionaryItemController {
 		int flag = 0;
 		if(values == null){
 			model.addAttribute("updatesuccess", 0);
-//			model.addAttribute("updateerrormsg", "Items were not selected");
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId,user.getUsername());
-			String dictionaryName = dictonaryManager
-					.getDictionaryName(dictionaryId);
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
-			model.addAttribute("dictName", dictionaryName);
-			model.addAttribute("dictID", dictionaryId);
+			model.addAttribute("updateerrormsg", "Items were not selected");
 			return "auth/dictionary/dictionary";
 		}else{
 			for (int i = 0; i < values.length; i++) {
@@ -196,7 +188,9 @@ public class DictionaryItemController {
 					flag = 1;
 					errormsg = msg;
 				}
-				if (!msg.equals("")) {
+				if (msg.equals("")) {
+					// what happens here?
+				} else {
 					flag = 1;
 					errormsg = msg;
 				}

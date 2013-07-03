@@ -13,6 +13,10 @@ public interface StringConstants
 	public final static String WORKSPACE_ARCHIVE_SUCCESS = "Workspace archived successfully.";
 	public final static String WORKSPACE_DEACTIVE_SUCCESS = "Workspace deactivated successfully.";
 	public final static String WORKSPACE_DELETE_SUCCESS = "Workspace deleted successfully";
-	public final static String WORKSPACE_ACTIVE_SUCCESS = "Workspace activated successfully.";
-	public final static String WORKSPACE_UNARCHIVE_SUCCESS = "Workspace unarchived successfully.";
+	public final static int WORKSPACE_ARCHIVE_VALUE = 1;
+	public final static int WORKSPACE_DEACTIVATE_VALUE = 1;
+	public final static int WORKSPACE_ACTIVE_ARCHIVE_VALUE = 0;
+	public final static int WORKSPACE_ACTIVATE_VALUE = 0;
+	
+
 }

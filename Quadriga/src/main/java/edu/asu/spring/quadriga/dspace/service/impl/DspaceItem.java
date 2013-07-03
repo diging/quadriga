@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import edu.asu.spring.quadriga.dspace.service.IDspaceBitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreams;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 
 /**
@@ -21,17 +21,17 @@ public class DspaceItem implements IDspaceItem{
 	private String id;
 	private String name;
 	private String handle;
-	private IDspaceBitStream bitstreams;
+	private IDspaceBitStreams bitstreams;
 	
 	
-	@XmlElementRefs({@XmlElementRef(type=DspaceBitStream.class)})
+	@XmlElementRefs({@XmlElementRef(type=DspaceBitStreams.class)})
 	@Override
-	public IDspaceBitStream getBitstreams() {
+	public IDspaceBitStreams getBitstreams() {
 		return bitstreams;
 	}
 
 	@Override
-	public void setBitstreams(IDspaceBitStream bitstreams) {
+	public void setBitstreams(IDspaceBitStreams bitstreams) {
 		this.bitstreams = bitstreams;
 	}
 

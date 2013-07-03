@@ -7,39 +7,34 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import edu.asu.spring.quadriga.dspace.service.IDspaceBitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
+import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreams;
 
-/**
- * The class representation of the bitstream list got from the Dspace repository
- * 
- * @author Ram Kumar Kumaresan
- */
 @XmlRootElement(name="bitstreams")
-public class DspaceBitStreams implements IDspaceBitStream {
+public class DspaceBitStreams implements IDspaceBitStreams {
 
-	private List<IDspaceBitStreamEntityId> bitstreamentityid;
+	private List<IDspaceBitStreamEntityId> bitstreams;
 
-	@XmlElementRefs({@XmlElementRef(type=DspaceBitStreamEntity.class)})
+	@XmlElementRefs({@XmlElementRef(type=DspaceBitStreamEntityId.class)})
 	@Override
-	public List<IDspaceBitStreamEntityId> getBitstreamentityid() {
-		return bitstreamentityid;
+	public List<IDspaceBitStreamEntityId> getBitstreams() {
+		return bitstreams;
 	}
 
 	@Override
-	public void setBitstreamentityid(List<IDspaceBitStreamEntityId> bitstreamentityid) {
-		this.bitstreamentityid = bitstreamentityid;
+	public void setBitstreams(List<IDspaceBitStreamEntityId> bitstreams) {
+		this.bitstreams = bitstreams;
 	}
 	
-	public static class Adapter extends XmlAdapter<DspaceBitStreams, IDspaceBitStream>
+	public static class Adapter extends XmlAdapter<DspaceBitStreams, IDspaceBitStreams>
 	{
 		@Override
-		public IDspaceBitStream unmarshal(DspaceBitStreams v) throws Exception {
+		public IDspaceBitStreams unmarshal(DspaceBitStreams v) throws Exception {
 			return v;
 		}
 
 		@Override
-		public DspaceBitStreams marshal(IDspaceBitStream v) throws Exception {
+		public DspaceBitStreams marshal(IDspaceBitStreams v) throws Exception {
 			return (DspaceBitStreams)v;
 		}		
 	}

@@ -28,7 +28,6 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -147,7 +146,7 @@ public class DBConnectionCCManagerTest {
 	}
 	
 	@Test
-	public void getCollectionDetailsTest() throws QuadrigaStorageException, QuadrigaAcessException {
+	public void getCollectionDetailsTest() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
@@ -158,7 +157,7 @@ public class DBConnectionCCManagerTest {
 		assertEquals(collection.getName(),list.get(0).getName());
 		collection.setId(list.get(0).getId());
 		dbConnection.saveItem("lemma", "testid", "red", "hello", collection.getId());
-		dbConnection.getCollectionDetails(collection, user.getUserName());
+		dbConnection.getCollectionDetails(collection);
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setId("testid");
 		assertEquals(concept,collection.getItems().get(0));
@@ -187,14 +186,13 @@ public class DBConnectionCCManagerTest {
 	/**
 	 * Test method for save items
 	 * @throws QuadrigaStorageException 
-	 * @throws QuadrigaAcessException 
 	 *
 	 * @throws Exception
 	 *
 	 * 
 	 */
 	@Test
-	public void testSaveItem() throws QuadrigaStorageException, QuadrigaAcessException
+	public void testSaveItem() throws QuadrigaStorageException
 	{
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
@@ -214,18 +212,17 @@ public class DBConnectionCCManagerTest {
 		
 		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
 		
-		dbConnection.getCollectionDetails(collection,user.getUserName());
+		dbConnection.getCollectionDetails(collection);
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
 	}
 	
 	@Test
-	public void testDeleteItem() throws QuadrigaStorageException, QuadrigaAcessException {
+	public void testDeleteItem() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
 		collection.setName("Collection Test");
 		collection.setOwner(user);
-		
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
 		assertEquals(collection.getName(),list.get(0).getName());
@@ -238,7 +235,7 @@ public class DBConnectionCCManagerTest {
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		
 		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
-		dbConnection.getCollectionDetails(collection, user.getUserName());
+		dbConnection.getCollectionDetails(collection);
 		
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
 		dbConnection.deleteItems(concept.getId(), collection.getId());
@@ -247,13 +244,13 @@ public class DBConnectionCCManagerTest {
 		assertEquals(collection.getName(),clist.get(0).getName());
 		collection.setId(clist.get(0).getId());
 		collection = clist.get(0);
-		dbConnection.getCollectionDetails(collection, user.getUserName());
+		dbConnection.getCollectionDetails(collection);
 		assertEquals(0,collection.getItems().size());
 		
 	}
 	
 	@Test
-	public void testUpdate() throws QuadrigaStorageException, QuadrigaAcessException {
+	public void testUpdate() throws QuadrigaStorageException {
 		
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
@@ -268,15 +265,10 @@ public class DBConnectionCCManagerTest {
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		collection.getItems().add(concept);
-		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
-		assertEquals(collection.getName(),list.get(0).getName());
-		collection.setId(list.get(0).getId());
 		dbConnection.saveItem("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId());
-		
 		concept.setLemma("updatedlemma");
 		dbConnection.updateItem(concept, collection.getId());
-		
-		collectionManager.getCollectionDetails(collection, user.getUserName());
+		collectionManager.getCollectionDetails(collection);
 		assertEquals("updatedlemma",collection.getItems().get(0).getLemma());
 	}
 	

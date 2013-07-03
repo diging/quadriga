@@ -55,32 +55,6 @@ function resetSelectAll() {
 	<span class="byline">These are all the concepts in this collection.</span>
 </header>
 
-
-<section>
-<h4 class="major"><span>Collaborators</span></h4>
-		<ul class="collaborators">
-			<c:forEach var="ccCollaborator" items="${collaboratingUsers}">
-				<li>
-						<c:out value="${ccCollaborator.userName}"></c:out>
-				</li>
-			</c:forEach>
-		</ul>
-</section>
-
-
-
-<section>
-	<ul class="noStyle">
-		<li>
-			<article class="is-post-summary">
-				<h3>
-					» <a href="/quadriga/auth/conceptcollections/${concept.id}/displayCollaborators">Manage Collaborators</a>
-				</h3>
-			</article>
-		</li>	
-	</ul>
-</section>  
-
 <div >
 	
 	<input type="button"
@@ -93,7 +67,7 @@ function resetSelectAll() {
 <br>
 <form method="post">
 	<input type="button"
-		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.id}/searchitems'"
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/searchitems'"
 		value='Add Items'>
 	<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/deleteitems'" value='Delete Items'>
 		<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/updateitems'" value="Update Items">

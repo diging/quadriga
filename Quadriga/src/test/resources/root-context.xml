@@ -10,15 +10,12 @@
 
 	<bean id="QuadrigaRoleMapper"
 		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">
-		<property name="userManager" ref="UserManager"></property>
+		<property name="userManager" ref="MockupUserManager"></property>
 	</bean>
 
-	<!-- <bean id="MockupUserManager"
+	<bean id="MockupUserManager"
 		class="edu.asu.spring.quadriga.service.develop.MockupUserManager">
 		<property name="userFactory" ref="userFactory"></property>
-	</bean>-->
-	<bean id="CollaboratorRoleManager"
-		class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
 	</bean>
 	
 	<bean id="UserManager"
@@ -58,41 +55,17 @@
 		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
 	</bean>
 
-	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
-	<property name="dictCollabRoles" ref="CollaboratorRole"></property>
-	<!-- <qualifier value="dictCollaborator"></qualifier>  --> 
-	</bean>
-	
-	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
-	<property name="ccCollabRoles" ref="CollaboratorRole"></property>
-	<!--  <qualifier value="ccCollaborator"></qualifier>   --> 
-	</bean>
-	
-	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
-	<property name="projectCollabRoles" ref="CollaboratorRole"></property>
-	<!--  <qualifier value="projectCollaborator"></qualifier>  --> 
-	</bean>
-	
-	<bean id="CollaboratorRole" class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
-	
+	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager" />
 
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory" />
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory" />
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory" />
-		
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory" />
-
-	
 	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager" />
-
-	
-	
 	<bean class="edu.asu.spring.quadriga.domain.implementation.CollectionsValidator" />
-	<bean class="edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFactory" />
-	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
-	<!--  <bean class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjCollabManager"/> -->
+	<bean class="edu.asu.spring.quadriga.service.impl.ProjectManager" />
 
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
@@ -124,28 +97,19 @@
 		</property>
 	</bean>
 	
-	<bean id="wordPowerURL" class="java.lang.String">
+	<bean id="searchWordPowerURL" class="java.lang.String">
 		<constructor-arg>
-			<value>http://digitalhps-develop.asu.edu:8080/wordpower</value>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/WordLookup/</value>
 		</constructor-arg>
 	</bean>
 	
-	<bean id="searchWordPowerURLPath" class="java.lang.String">
+	<bean id="updateFromWordPowerURL" class="java.lang.String">
 		<constructor-arg>
-			<value>/rest/WordLookup/</value>
-		</constructor-arg>
-	</bean>
-	
-	<bean id="updateFromWordPowerURLPath" class="java.lang.String">
-		<constructor-arg>
-			<value>/rest/Word/</value>
+			<value>http://digitalhps-develop.asu.edu:8080/wordpower/rest/Word/</value>
 		</constructor-arg>
 	</bean>
 	
 	<!-- Reference the rest settings -->
 	<import resource="collaborator-roles.xml" />
-	<import resource="cc-collaborator-roles.xml" />
 	<import resource="quadriga-roles.xml" />
-	<import resource="cc-collaborator-roles.xml"/>
-	<import resource="dict-collaborator-roles.xml"/>
 </beans>

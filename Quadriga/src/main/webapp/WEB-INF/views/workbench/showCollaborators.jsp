@@ -23,20 +23,9 @@ function enableSubmit()
 			}
 }
 
-$(document).ready(function() {
-    activeTable = $('.dataTable').dataTable({
-    	"bJQueryUI" : true,
-		"sPaginationType" : "full_numbers",
-		"bAutoWidth" : false
-    	
-    	
-    	
-    });
-} );
-
 </script> 
 
-<%-- 
+
 <head>
 	<style>
 		table
@@ -61,7 +50,7 @@ $(document).ready(function() {
 		}
   }	
 	</style>
-</head> --%>
+</head>
 
 
  <form:form modelAttribute="collaborator" method="POST" >
@@ -89,7 +78,7 @@ $(document).ready(function() {
 
 	<br><br>
 	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
-	<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborator'">
+	<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/addcollaborator'">
 
 </form:form> 
 
@@ -98,23 +87,14 @@ $(document).ready(function() {
 <thead>					
 <tr>
 	<th>Collaborators</th>
-	<th>ADMIN</th>
-	<th>PROJECT_ADMIN</th>	
-	<th>CONTRIBUTOR</th>
-	<th>EDITOR</th>
-	<th>action</th>
+	<th>Roles</th>	
 </tr>
 </thead>
+
 <tbody>
-	<tr>
-		<c:if test="${not empty existingCollaborators}">
-		<c:forEach var="existcollab" items="${existingCollaborators}">
-		<td><c:out value="${existcollab.userName}"></c:out></td>
-		</c:forEach>
-		</c:if>
-	</tr>
+
 </tbody>
-</table>  --%>
+</table>--%>
 
 
 

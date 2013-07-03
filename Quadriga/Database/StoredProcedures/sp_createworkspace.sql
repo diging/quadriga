@@ -19,14 +19,13 @@ CREATE PROCEDURE sp_createworkspace
   IN inname         VARCHAR(50),
   IN indescription  VARCHAR(100),
   IN inowner        VARCHAR(20),
-  IN inprojectid    VARCHAR(50),
+  IN inprojectid    BIGINT,
   OUT errmsg        VARCHAR(255)
 )
 BEGIN
        
        -- Declare local variables
-       DECLARE uniqueId  BIGINT;
-       DECLARE workspaceId VARCHAR(50);
+       DECLARE workspaceId  BIGINT;
 
 	   DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
         SET errmsg = "SQL exception has occurred";
@@ -68,8 +67,7 @@ BEGIN
       IF (errmsg IS NULL)
        THEN SET errmsg = "";
        START TRANSACTION;
-		 SET uniqueId = UUID_SHORT();
-		 SET workspaceId = CONCAT('WS_',CAST(uniqueId AS CHAR));
+		 SET workspaceId = UUID_SHORT();
          -- insert into the workspace table
          INSERT INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,
                 isarchived,isdeactivated,updatedby,updateddate,createdby,createddate)

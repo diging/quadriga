@@ -20,7 +20,6 @@ public class ConceptCollection implements IConceptCollection
 	private String name;
 	private String description;
 	private int id;
-	
 	@Override
 	public int getId() {
 		return id;

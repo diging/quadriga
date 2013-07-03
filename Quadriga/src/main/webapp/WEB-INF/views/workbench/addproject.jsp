@@ -5,11 +5,11 @@
 <script>
 
 $(document).ready(function(){
-	  $("#unixName").keyup(function(event)
+	  $("#projId").keyup(function(event)
 	  {
-		var keyedInput = $("#unixName").val();
+		var keyedInput = $("#projId").val();
 		var constant = "";
-		if($.trim($("#unixName").val()))
+		if($.trim($("#projId").val()))
 			{
 			  constant = $("#unixnameurl").val();
 			}
@@ -33,16 +33,16 @@ $(document).ready(function(){
 				return;
 			}
 
-			if (!$.trim($("#unixName").val())) {
+			if (!$.trim($("#projId").val())) {
 				$.alert("Please enter Unix name", "Oops !!!");
-				$("#unixName").val("");
+				$("#projId").val("");
 				event.preventDefault();
 				return;
 			}
 			
-			if ($.trim($("#unixName").val())) {
+			if ($.trim($("#projId").val())) {
 				var regex = /[^a-zA-Z0-9-_.+!*'()$]/;
-				if(regex.test($('#unixName').val()))
+				if(regex.test($('#projId').val()))
 				{ 
 					$.alert("Unix name allows only -_.+!*()$ special characters", "Oops !!!");
 					event.preventDefault();
@@ -87,7 +87,7 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<td>Unix name:</td>
-				<td><form:input path="unixName" size="80" id="unixName" /></td>
+				<td><form:input path="id" size="80" id="projId" /></td>
 			</tr>
 			<tr>
 				<td></td>

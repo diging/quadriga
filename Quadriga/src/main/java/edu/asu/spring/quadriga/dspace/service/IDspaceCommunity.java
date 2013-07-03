@@ -7,6 +7,7 @@ package edu.asu.spring.quadriga.dspace.service;
  * @author Ram Kumar Kumaresan
  * 
  */
+
 public interface IDspaceCommunity {
 
 	public abstract String getName();
@@ -48,4 +49,10 @@ public interface IDspaceCommunity {
 	public abstract IDspaceCollectionsIdList getCollectionsIDList();
 
 	public abstract void setCollectionsIDList(IDspaceCollectionsIdList collections);
+
+//	public abstract List<IDspaceCollection> getCollections();
+//
+//	public abstract void setCollections(List<IDspaceCollection> collections);
+//
+//	public abstract void addCollections(IDspaceCollection collection);
 }
