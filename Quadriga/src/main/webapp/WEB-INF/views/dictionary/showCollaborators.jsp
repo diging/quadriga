@@ -64,7 +64,7 @@ function alertbox(){
     
 </form:form>
 <br><br>
-<table style="width: 50%" cellpadding="0" cellspacing="50"
+<table style="width: 100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">					
 	<thead>
 		<tr>

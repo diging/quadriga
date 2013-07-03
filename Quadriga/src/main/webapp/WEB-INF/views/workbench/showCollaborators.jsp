@@ -93,66 +93,31 @@ $(document).ready(function() {
 
 </form:form> 
 
-<%-- <table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
-<thead>					
-<tr>
-	<th>Collaborators</th>
-	<th>ADMIN</th>
-	<th>PROJECT_ADMIN</th>	
-	<th>CONTRIBUTOR</th>
-	<th>EDITOR</th>
-	<th>action</th>
-</tr>
-</thead>
-<tbody>
-	<tr>
-		<c:if test="${not empty existingCollaborators}">
-		<c:forEach var="existcollab" items="${existingCollaborators}">
-		<td><c:out value="${existcollab.userName}"></c:out></td>
-		</c:forEach>
-		</c:if>
-	</tr>
-</tbody>
-</table>  --%>
-
-
-
-
-
-
-
-
-<%-- <table>
-	<tr>
-	<th>Existing collaborators</th>
-	<th>Roles</th>
-	</tr>
-
-		<c:forEach var="collab" items="${project1.collaborators}">
-
-	<tr>
-		<td>
-			<c:out value="${collab.userObj.name}"></c:out>
-			<c:forEach var="roles"  items="${collab.collaboratorRoles}">
-				<td><c:out value="${roles.roleid}"></c:out></td>
-			</c:forEach>
-		</td> 
-	</tr>
-			</c:forEach>
-	
-
+<br><br>
+<table style="width: 100%" cellpadding="0" cellspacing="0"
+					border="0" class="display dataTable">					
+	<thead>
+		<tr>
+			<th>collaborator</th>	
+		</tr>
+	</thead>
+	<tbody>
+	<c:forEach var="collab" items="${collaboratingUsers}">
+		<tr>
+		  <td><c:out value="${collab.userName}"></c:out> </td>
+		</tr>
+	</c:forEach>
+	</tbody>
 </table>
 
-<h1> non existing collaborators </h1>
 
-<ul>
-  <c:forEach var="collab" items="${project.collaborators}">
-     <li> 
-    	<c:out value="${collab.userObj.name}"></c:out>
-     </li>
-  </c:forEach>
-</ul>
---%>
+
+
+
+
+
+
+
+
 
 
