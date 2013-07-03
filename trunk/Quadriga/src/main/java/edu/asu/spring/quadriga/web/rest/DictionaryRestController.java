@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.web.rest;
 
 import java.io.StringWriter;
 import java.security.Principal;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +30,6 @@ import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
-import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -164,7 +161,7 @@ public class DictionaryRestController {
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			String updateFromWordPowerURL=wordPowerURL+""+updateFromWordPowerURLPath;
 			context.put("list", dictionaryItemsList);
-			context.put("wordPowerURL",updateFromWordPowerURLPath);
+			context.put("wordPowerURL", updateFromWordPowerURL);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
