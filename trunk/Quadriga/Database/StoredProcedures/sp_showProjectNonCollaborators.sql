@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS sp_showProjectNonCollaborators;
 DELIMITER $$
-CREATE PROCEDURE c
+CREATE PROCEDURE sp_showProjectNonCollaborators
 (
 	IN inprojid		VARCHAR(50),
 	OUT errmsg		VARCHAR(200)

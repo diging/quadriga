@@ -21,7 +21,7 @@ BEGIN
 		THEN SET errmsg = "collectionid cannot be empty";
 	END IF;
 
-	SELECT collaboratoruser FROM tbl_conceptcollections_collaborator 
+	SELECT DISTINCT collaboratoruser FROM tbl_conceptcollections_collaborator 
 	WHERE collectionid = incollectionid;
 END$$
 DELIMITER ;
