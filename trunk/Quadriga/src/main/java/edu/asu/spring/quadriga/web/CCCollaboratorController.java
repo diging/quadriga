@@ -35,6 +35,11 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
+/**
+ * javadoc missing
+ * @author who wrote this?
+ *
+ */
 @Controller
 public class CCCollaboratorController {
 	
@@ -95,6 +100,7 @@ public class CCCollaboratorController {
 			try {
 				conceptControllerManager.getCollectionDetails(concept,principal.getName());
 			} catch (QuadrigaStorageException e) {
+				// throw that so that it can be handled
 				e.printStackTrace();
 			}
 			model.addAttribute("conceptcollection", concept);
