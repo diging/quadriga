@@ -162,7 +162,7 @@ public class DBConnectionRetrieveProjCollabManager implements
 			closeConnection();
 		}
 		return  collaborators;
-	}
+	} 
 
 	/**
 	 * This method converts the comma(,) separated collaborator roles into a list.
@@ -239,13 +239,66 @@ public class DBConnectionRetrieveProjCollabManager implements
 		}
 		catch(SQLException e)
 		{
-			logger.info("Retrieve project collaborators method :"+e.getMessage());
+			logger.info("Retrieve project noncollaborators method :"+e.getMessage());
 			throw new QuadrigaStorageException();
 		}
 		finally
 		{
 			closeConnection();
 		}
+		return nonCollaboratorUser;
+	}
+
+	@Override
+	public List<IUser> getProjectCollaboratorsRequest(String projectid)throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		String collabUserName;
+		CallableStatement sqlStatement = null ;
+		IUser user;
+		List<IUser> nonCollaboratorUser = new ArrayList<IUser>();
+		
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_COLLABORATOR_REQUEST + "(?,?)";
+		getConnection();
+		try {
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+		 
+		sqlStatement.setString(1, projectid);
+		sqlStatement.registerOutParameter(2, Types.VARCHAR);
+		sqlStatement.execute();
+		errmsg = sqlStatement.getString(2);
+		
+		if(errmsg == "")
+		{
+			ResultSet resultset = sqlStatement.getResultSet();
+			if(resultset.isBeforeFirst())
+			{
+				while(resultset.next())
+		        {
+					collabUserName = resultset.getString(1);
+					//retrieve the user details
+					user = userManager.getUserDetails(collabUserName);
+					nonCollaboratorUser.add(user);
+
+		        }
+		    }
+		}
+		
+		else{
+			throw new QuadrigaStorageException(errmsg);
+		}
+		}
+		catch (SQLException e) {
+			logger.info("Retrieve project collaborators method :"+e.getMessage());
+			throw new QuadrigaStorageException();
+		}
+		
+		finally
+		{
+			closeConnection();
+		}
+		
 		return nonCollaboratorUser;
 	}
 

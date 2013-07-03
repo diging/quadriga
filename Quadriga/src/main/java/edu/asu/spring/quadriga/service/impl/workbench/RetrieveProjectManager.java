@@ -11,6 +11,7 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -77,6 +78,14 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		project.setCollaborators(collaboratorList);
 		
 		return project;
+	}
+
+	@Override
+	public List<IUser> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
+		
+			List<IUser> collaboratingUsersList = databaseConnect.getProjectCollaboratorsRequest(projectId);
+		
+		return collaboratingUsersList;
 	}
 
 }
