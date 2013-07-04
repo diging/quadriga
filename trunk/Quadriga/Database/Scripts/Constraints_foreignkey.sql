@@ -48,4 +48,21 @@ ALTER TABLE tbl_workspace_collaborator
 ADD FOREIGN KEY(id) REFERENCES tbl_workspace(workspaceid);
 
 ALTER TABLE tbl_workspace
-ADD FOREIGN KEY(workspaceowner)  REFERENCES tbl_quadriga_user(username);  
+ADD FOREIGN KEY(workspaceowner)  REFERENCES tbl_quadriga_user(username); 
+
+/* Begin - Foreign key dependencies for Dspace data */
+ALTER TABLE tbl_dspace_collection
+ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid);
+
+ALTER TABLE tbl_dspace_item
+ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid);
+ALTER TABLE tbl_dspace_item
+ADD FOREIGN KEY(collectionid) REFERENCES tbl_dspace_collection(collectionid);
+
+ALTER TABLE tbl_dspace_bitstream
+ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid);
+ALTER TABLE tbl_dspace_bitstream
+ADD FOREIGN KEY(collectionid) REFERENCES tbl_dspace_collection(collectionid);
+ALTER TABLE tbl_dspace_bitstream
+ADD FOREIGN KEY(itemid) REFERENCES tbl_dspace_item(itemid);
+/* End - Foreign key dependencies for Dspace data */
