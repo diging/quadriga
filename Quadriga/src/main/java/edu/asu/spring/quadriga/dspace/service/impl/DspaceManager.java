@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +18,7 @@ import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 /**
  * The purpose of the class is to make rest service calls to dspace
@@ -45,6 +48,9 @@ public class DspaceManager implements IDspaceManager{
 	//Handle to the proxy community manager class
 	@Autowired
 	private ICommunityManager proxyCommunityManager;
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(DspaceManager.class);
 
 	/**
 	 * {@inheritDoc}
@@ -154,7 +160,9 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	public void start()
 	{
+		logger.info("The filepath used is: "+filePath);
 		System.setProperty("javax.net.ssl.trustStore", filePath);
+		
 
 		javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
 				new javax.net.ssl.HostnameVerifier(){
