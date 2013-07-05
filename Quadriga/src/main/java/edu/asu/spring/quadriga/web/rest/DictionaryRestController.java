@@ -110,17 +110,19 @@ public class DictionaryRestController {
 			template.merge(context, writer);
 			return writer.toString();
 		} catch (ResourceNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			logger.error("Exception:", e);
+			throw new RestException(404);
 		} catch (ParseErrorException e) {
-			// TODO Auto-generated catch block
+			
 			logger.error("Exception:", e);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
-			// TODO Auto-generated catch block
+			
 			logger.error("Exception:", e);
+			throw new RestException(404);
 		}
-
-		return "";
+	
 	}
 
 	/**
@@ -154,7 +156,7 @@ public class DictionaryRestController {
 			dictionaryItemsList = dictionaryManager
 					.getDictionariesItems(dictionaryId,user.getUsername());
 			if( dictionaryItemsList == null){
-				throw new RestException("User does not have permission to access dictionary id :"+dictionaryId);
+				throw new RestException(404);
 			}
 			template = engine
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
@@ -168,16 +170,16 @@ public class DictionaryRestController {
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
-			throw new RestException("Internal issue");
+			throw new RestException(404);
 		} catch (ParseErrorException e) {
 			// TODO Auto-generated catch block
 
 			logger.error("Exception:", e);
-			throw new RestException("Internal issue");
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
-			throw new RestException("Internal issue");
+			throw new RestException(404);
 		}
 	}
 }

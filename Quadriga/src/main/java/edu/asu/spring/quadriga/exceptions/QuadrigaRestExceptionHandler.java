@@ -38,17 +38,19 @@ public class QuadrigaRestExceptionHandler {
 		VelocityEngine engine=null;
 		Template template = null;
 		StringWriter sw = new StringWriter();
-		
+		int errorcode= ex.getErrorcode();
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
-			res.setStatus(ex.getErrorcode());
+			if(errorcode==0)
+				errorcode=406;
+			res.setStatus(errorcode);
 			template = engine
 					.getTemplate("velocitytemplates/resterror.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("status", "ERROR");
-			context.put("ErrorCode",ex.getErrorcode());
-			context.put("message",errorProperties.getProperty("error_message_"+ex.getErrorcode()));
+			context.put("ErrorCode",errorcode);
+			context.put("message",errorProperties.getProperty("error_message_"+errorcode));
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {
