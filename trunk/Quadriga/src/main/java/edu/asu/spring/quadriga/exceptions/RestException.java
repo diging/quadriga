@@ -1,8 +1,5 @@
 package edu.asu.spring.quadriga.exceptions;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 
 /**
  * Exception to handle exceptions thrown in the REST interface.
@@ -11,7 +8,14 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
  */
 public class RestException extends Exception {
 
-	
+	private int errorcode;
+	public int getErrorcode() {
+		return errorcode;
+	}
+
+	public void setErrorcode(int errorcode) {
+		this.errorcode = errorcode;
+	}
 	private static final long serialVersionUID = 8092941011459848011L;
 
 	public RestException(String arg0, Throwable arg1) {
@@ -24,6 +28,16 @@ public class RestException extends Exception {
 	
 	public RestException(String message) {
 		super(message);
+	}
+	public RestException(int errorno) {
+		super();
+		errorcode = errorno;
+		
+	}
+	public RestException(int errorno, String message) {
+		super();
+		errorcode = errorno;
+		
 	}
 
 	
