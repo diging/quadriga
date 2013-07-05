@@ -36,6 +36,9 @@ BEGIN
      THEN SET errmsg = "username cannot be empty.";
     END IF;
    
+	IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections WHERE id = incollectionid)
+      THEN SET errmsg = "No such conceptcollection"; 
+    END IF;
     
     IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
                      WHERE id = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = incollectionid and  collaboratoruser = inusername)

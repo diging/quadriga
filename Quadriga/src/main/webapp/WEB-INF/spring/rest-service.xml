@@ -101,7 +101,10 @@
 		</property>
 	</bean>
 	
-	
+	<bean id="errorMessages"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/errormessages.properties" />
+	</bean>
 	
 	
 </beans>
