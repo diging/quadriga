@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
@@ -79,16 +80,14 @@ public class ProjectRestController {
 			template.merge(context, writer);
 			return writer.toString();
 		} catch (ResourceNotFoundException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
+			throw new RestException(404);
 		} catch (ParseErrorException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
+			throw new RestException(404);
 		}
-
-		return "";
 	}
 }

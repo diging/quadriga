@@ -92,19 +92,19 @@ public class WorkspaceRestController {
 					} catch (ParseErrorException e) {
 						
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(403);
 					} catch (MethodInvocationException e) {
 						
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(403);
 					} catch (QuadrigaStorageException e) {
 						// TODO Auto-generated catch block
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(404);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(403);
 					}
 
 
@@ -147,23 +147,23 @@ public class WorkspaceRestController {
 					return writer.toString();
 					} catch (ResourceNotFoundException e) {
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(404);
 					} catch (ParseErrorException e) {
 						
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(404);
 					} catch (MethodInvocationException e) {
 						
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(403);
 					} catch (QuadrigaStorageException e) {
 						// TODO Auto-generated catch block
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(403);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						logger.error("Exception:", e);
-						throw new RestException(e);
+						throw new RestException(404);
 					}
 
 
