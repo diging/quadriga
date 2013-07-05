@@ -163,23 +163,23 @@ public class ConceptCollectionRestController {
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {
 			logger.error("Exception:", e);
-			throw new RestException(e);
+			throw new RestException(404);
 		} catch (ParseErrorException e) {
 			logger.error("Exception:", e);
-			throw new RestException(e);
+			throw new RestException(404);
 		} catch (MethodInvocationException e) {
 			logger.error("Exception:", e);
-			throw new RestException(e);
+			throw new RestException(404);
 		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-			throw new RestException(e);
+			logger.error("Exception:", e);
+			throw new RestException(405);
 		} catch (QuadrigaAcessException e) {
-			e.printStackTrace();
-			throw new RestException(e);
+			logger.error("Exception:", e);
+			throw new RestException(403);
 		} 
 		catch (Exception e) {
-			e.printStackTrace();
-			throw new RestException(e);
+			logger.error("Exception:", e);
+			throw new RestException(405);
 		}
 		
 	}
