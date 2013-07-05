@@ -1,8 +1,11 @@
 package edu.asu.spring.quadriga.exceptions;
 
 import java.io.StringWriter;
+import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -25,11 +28,12 @@ public class QuadrigaRestExceptionHandler {
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 	private static final Logger logger = LoggerFactory.getLogger(QuadrigaRestExceptionHandler.class);
-	
+	@Resource(name = "errorMessages")
+	private Properties errorProperties;
 	@RequestMapping(produces="application/xml")
 	@ExceptionHandler(RestException.class)
 	@ResponseBody
-	public String handleRestException(RestException ex, HttpServletRequest req) {
+	public String handleRestException(RestException ex, HttpServletRequest req, HttpServletResponse res) {
 		
 		VelocityEngine engine=null;
 		Template template = null;
@@ -38,27 +42,24 @@ public class QuadrigaRestExceptionHandler {
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
-			
+			res.setStatus(ex.getErrorcode());
 			template = engine
 					.getTemplate("velocitytemplates/resterror.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("status", "ERROR");
-			context.put("message",ex.getMessage());
+			context.put("ErrorCode",ex.getErrorcode());
+			context.put("message",errorProperties.getProperty("error_message_"+ex.getErrorcode()));
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {
 			logger.error("Exception:", e);
-			
 		} catch (ParseErrorException e) {
 			logger.error("Exception:", e);
-			
 		} catch (MethodInvocationException e) {
 			logger.error("Exception:", e);
-			
 		}  
 		catch (Exception e) {
 			logger.error("Exception:", e);
-			
 		}
 		return sw.toString();
 	}
