@@ -410,7 +410,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 
-			System.out.println("-------sqlStatement.execute()"+sqlStatement.execute());
+			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(5);
 

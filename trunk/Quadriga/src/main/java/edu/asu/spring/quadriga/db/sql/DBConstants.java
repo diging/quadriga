@@ -72,5 +72,6 @@ public interface DBConstants
 	public static final String DEACTIVATE_WORKSPACE_REQUEST = "sp_deactivateworkspace";
 	public static final String DELETE_WORKSPACE_REQUEST = "sp_deleteworkspace";
 	public static final String WORKSPACE_DETAILS = "sp_getWorkspaceDetails";
+	public static final String ADD_PROJECT_DICTIONARY = "sp_addDictionaryToProject";
 
 }
