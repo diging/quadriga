@@ -39,5 +39,6 @@
         </beans:property>
 	</beans:bean>
 	
-
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
 </beans:beans>
