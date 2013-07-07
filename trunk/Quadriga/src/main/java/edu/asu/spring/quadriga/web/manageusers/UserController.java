@@ -63,9 +63,10 @@ public class UserController {
 	 * Not used now. To be used when tabs are implemented in user management 
 	 * 
 	 * @return	Return to the page that displays all the open user requests
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value = "auth/users/requestslist", method = RequestMethod.GET)
-	public String userRequestList(ModelMap model, Principal principal)
+	public String userRequestList(ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		List<IUser> userRequestsList = usermanager.getUserRequests();
 		model.addAttribute("userRequestsList", userRequestsList);
@@ -77,9 +78,10 @@ public class UserController {
 	 * @param sAccessRights		Contains the access option selected by an admin for a particular user
 	 * 
 	 * @return	Return to the user management page of the quadriga	
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value = "auth/users/access/{accessRights}", method = RequestMethod.GET)
-	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal)
+	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		String[] sAccessSelected = sAccessRights.split("-");
 		
@@ -122,9 +124,10 @@ public class UserController {
 	 * Not used now. To be used when tabs are implemented in user management 
 	 * 
 	 * @return	Return to the page that displays all active users
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value = "auth/users/activelist", method = RequestMethod.GET)
-	public String userActiveList(ModelMap model, Principal principal)
+	public String userActiveList(ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		List<IUser> activeUserList = usermanager.getAllActiveUsers();
 		model.addAttribute("activeUserList", activeUserList);
@@ -153,9 +156,10 @@ public class UserController {
 	 * @param sUserName	The userid of the user whose account is to be deactivated
 	 * 
 	 * @return	Return to the user management page of the quadriga
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value="auth/users/deactivate/{userName}", method = RequestMethod.GET)
-	public String deactivateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
+	public String deactivateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) throws QuadrigaStorageException {
 
 		usermanager.deactivateUser(sUserName, principal.getName());
 
@@ -174,9 +178,10 @@ public class UserController {
 	 * @param sUserName	The userid of the user whose account is to be activated
 	 * 
 	 * @return	Return to the user management page of the quadriga
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value="auth/users/activate/{userName}", method = RequestMethod.GET)
-	public String activateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) {
+	public String activateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) throws QuadrigaStorageException {
 
 		//Deactivate the user account
 		usermanager.activateUser(sUserName, principal.getName());

@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -66,61 +67,60 @@ public class DBConnectionManager implements IDBConnectionManager
 	}
 
 	/**
-	 * @Description : Close the DB connection
-	 * 
-	 * @return : 0 on success
-	 *           -1 on failure
-	 *           
-	 * @throws : SQL Exception          
+	 * Close the DB connection
+	 * @throws QuadrigaStorageException
+	 * @author Kiran Kumar Batna
 	 */
-	// why is success/failure code different from all the others?
-	private int closeConnection() {
+	private void closeConnection() throws QuadrigaStorageException {
 		try {
 			if (connection != null) {
 				connection.close();
 			}
-			return 0;
 		}
-		catch(SQLException se)
+		catch(SQLException e)
 		{
-			return -1;
+			throw new QuadrigaStorageException();
 		}
 	}
 
 	/**
-	 * @Description : Establishes connection with the Quadriga DB
-	 * 
-	 * @return      : connection handle for the created connection
-	 * 
-	 * @throws      : SQLException 
+	 * Establishes connection with the Quadriga DB
+	 * @return      connection handle for the created connection
+	 * @throws      QuadrigaStorageException
+	 * @author      Kiran Kumar Batna
 	 */
-	private void getConnection() {
+	private void getConnection() throws QuadrigaStorageException {
 		try
 		{
 			connection = dataSource.getConnection();
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int setupTestEnvironment(String sQuery)
+	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
 	{
+		getConnection();
 		try
 		{
-			getConnection();
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(sQuery);
 			return SUCCESS;
 		}
 		catch(SQLException ex)
 		{
-			throw new RuntimeException(ex.getMessage());
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
 		}
 	}
 
@@ -131,19 +131,20 @@ public class DBConnectionManager implements IDBConnectionManager
 	 *  
 	 *  @return      : null - if the user is not present in the quadriga DB
 	 *                 IUser - User object containing the user details.
+	 * @throws QuadrigaStorageException 
 	 *                 
 	 *  @throws      : SQL Exception
 	 */
 	@Override
-	public IUser getUserDetails(String userid)
+	public IUser getUserDetails(String userid) throws QuadrigaStorageException
 	{
 		List<IQuadrigaRole> userRole = null;
 		String outputValue;
 		String dbCommand;
 		IUser user = null;
+		getConnection();
 		try
 		{
-			getConnection();
 			dbCommand = DBConstants.SP_CALL + " " + DBConstants.USER_DETAILS + "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1,userid);
@@ -177,7 +178,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -199,15 +200,14 @@ public class DBConnectionManager implements IDBConnectionManager
 	 */
 	@Override
 	// you might want to change this to a list of inactive role ids
-	public List<IUser> getAllActiveUsers(String sInactiveRoleId)
+	public List<IUser> getAllActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ACTIVE_USER_DETAILS + "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sInactiveRoleId);
@@ -242,14 +242,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			}
 			else
 			{
-				// that should throw a Quadriga exception
-				throw new SQLException(sOutErrorValue);
+				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			// same here
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -264,20 +262,20 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return List containing user objects of all inactive users
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
 	// two things: throw QuadrigaStorageException
 	// and make this a general method to retrieve users that have 
 	// a certain role
-	public List<IUser> getAllInActiveUsers(String sInactiveRoleId)
+	public List<IUser> getAllInActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.INACTIVE_USER_DETAILS + "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");	
 			sqlStatement.setString(1, sInactiveRoleId);
@@ -312,12 +310,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			}
 			else
 			{
-				throw new SQLException(sOutErrorValue);
+				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -335,16 +333,16 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int deactivateUser(String sUserId,String sDeactiveRoleDBId,String sAdminId)
+	public int deactivateUser(String sUserId,String sDeactiveRoleDBId,String sAdminId) throws QuadrigaStorageException
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DEACTIVATE_USER+ "(?,?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
@@ -370,7 +368,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -388,16 +386,16 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int updateUserRoles(String sUserId,String sRoles,String sAdminId)
+	public int updateUserRoles(String sUserId,String sRoles,String sAdminId) throws QuadrigaStorageException
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_USER_ROLES+ "(?,?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
@@ -423,7 +421,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -441,16 +439,16 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int approveUserRequest(String sUserId, String sRoles, String sAdminId)
+	public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.APPROVE_USER_REQUEST+ "(?,?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
@@ -476,7 +474,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -493,16 +491,16 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int denyUserRequest(String sUserId,String sAdminId)
+	public int denyUserRequest(String sUserId,String sAdminId) throws QuadrigaStorageException
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DENY_USER_REQUEST+ "(?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
@@ -526,7 +524,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -541,17 +539,17 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return Returns the list of user objects whose request are to be approved/denied.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */	
 	@Override
-	public List<IUser> getUserRequests()
+	public List<IUser> getUserRequests() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_USER_REQUESTS+ "(?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.registerOutParameter(1,Types.VARCHAR);
@@ -577,12 +575,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			}			
 			else
 			{
-				throw new SQLException(sOutErrorValue);
+				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
@@ -599,17 +597,17 @@ public class DBConnectionManager implements IDBConnectionManager
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 
 	@Override
-	public int addAccountRequest(String sUserId)
+	public int addAccountRequest(String sUserId) throws QuadrigaStorageException
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-
+		getConnection();
 		try
 		{
-			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_USER_REQUEST+ "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);;
@@ -627,14 +625,12 @@ public class DBConnectionManager implements IDBConnectionManager
 			}			
 			else
 			{
-
-				//Error occurred in database.
-				throw new SQLException(sOutErrorValue);
+				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException(e.getMessage());
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{

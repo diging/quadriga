@@ -20,14 +20,14 @@ public interface IDBConnectionManager
 	public final static int SUCCESS = 1;
 	public final static int FAILURE = 0;
 	
-	public abstract List<IQuadrigaRole> listQuadrigaUserRoles(String roles);
+	public abstract List<IQuadrigaRole> listQuadrigaUserRoles(String roles) throws QuadrigaStorageException;
 
 	/**
 	 * Queries the database and builds a list of active user objects
 	 * 
 	 * @return List containing user objects of all active users
 	 */
-	public abstract List<IUser> getAllActiveUsers(String sInactiveRoleId);
+	public abstract List<IUser> getAllActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException;
 
 	/**
 	 * Queries the database and builds a list of inactive user objects
@@ -41,7 +41,7 @@ public interface IDBConnectionManager
 	 * @param userid	The unique userid of the user based on which a user object will be created
 	 * @return			User object for the corresponding userid
 	 */
-	public abstract IUser getUserDetails(String userid);
+	public abstract IUser getUserDetails(String userid) throws QuadrigaStorageException;
 
 	/**
 	 * Assign the dataSource object to the class state.
@@ -59,7 +59,7 @@ public interface IDBConnectionManager
 	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 */
-	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId,String sAdminId);
+	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId,String sAdminId) throws QuadrigaStorageException;
 
 	/**
 	 * Overwrite the existing userroles with the new user roles.
@@ -70,7 +70,7 @@ public interface IDBConnectionManager
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 */
-	public abstract int updateUserRoles(String sUserId, String sRoles,String sAdminId);
+	public abstract int updateUserRoles(String sUserId, String sRoles,String sAdminId) throws QuadrigaStorageException;
 
 	/**
 	 * Returns all open user requests to quadriga.
@@ -78,7 +78,7 @@ public interface IDBConnectionManager
 	 * @return Returns the list of user objects whose request are to be approved/denied.
 	 * 
 	 */	
-	public abstract List<IUser> getUserRequests();
+	public abstract List<IUser> getUserRequests() throws QuadrigaStorageException;
 
 	/**
 	 * Approve the user request to access Quadriga and also assign new roles set by the admin.
@@ -90,7 +90,7 @@ public interface IDBConnectionManager
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 * 
 	 */
-	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId);
+	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException;
 
 	/**
 	 * A user has been denied the access to Quadriga.
@@ -100,7 +100,7 @@ public interface IDBConnectionManager
 	 * 
 	 * Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
 	 */
-	public abstract int denyUserRequest(String sUserId, String sAdminId);
+	public abstract int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException;
 
 	/**
 	 * Add a new account request to the quadriga.
@@ -110,7 +110,7 @@ public interface IDBConnectionManager
 	 * 
 	 * @author Ram Kumar Kumaresan 
 	 */
-	public abstract int addAccountRequest(String sUserId);
+	public abstract int addAccountRequest(String sUserId) throws QuadrigaStorageException;
 
 	/**
 	 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
@@ -118,6 +118,6 @@ public interface IDBConnectionManager
 	 * @return Success - 1
 	 * @author Ram Kumar Kumaresan
 	 */
-	public abstract int setupTestEnvironment(String sQuery);
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
 }

@@ -57,10 +57,11 @@ public class UserManager implements IUserManager {
 	 *                      - User object assigned to 'No Account' role' if he 
 	 *                        is not present in Quadriga DB. 
 	 * @author      : Kiran
+	 * @throws QuadrigaStorageException 
 	 *
 	 */
 	@Override
-	public IUser getUserDetails(String sUserId)
+	public IUser getUserDetails(String sUserId) throws QuadrigaStorageException
 	{
 		int i = 0;
 		IUser user = null;
@@ -69,9 +70,6 @@ public class UserManager implements IUserManager {
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
 
 		user = dbConnect.getUserDetails(sUserId);
-
-		try
-		{
 			if(user!=null)
 			{
 				userRole = user.getQuadrigaRoles();
@@ -83,8 +81,9 @@ public class UserManager implements IUserManager {
 					//If user account is deactivated remove other roles 
 					if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
 					{
-						// what if the deactivated role is not the last one in the list?
 						rolesList.clear();
+						rolesList.add(quadrigaRole);
+						break;
 					}
 					rolesList.add(quadrigaRole);
 				}
@@ -97,11 +96,6 @@ public class UserManager implements IUserManager {
 				rolesList.add(quadrigaRole);
 				user.setQuadrigaRoles(rolesList);
 			}
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException("Error occurred in associating roles to User");
-		}		
 
 		return user;	
 	}
@@ -111,26 +105,17 @@ public class UserManager implements IUserManager {
 	 * 
 	 * @return List of all active user objects
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public List<IUser> getAllActiveUsers()
+	public List<IUser> getAllActiveUsers() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 		
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-		// why is here a try/catch block? That should catch a
-		// QuadrigaStorageException and throw that up to the front end
-		// or handle it itself
-		try
-		{
-			listUsers = dbConnect.getAllActiveUsers(sDeactiveRoleDBId);
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException(e.getMessage());
-		}
+		listUsers = dbConnect.getAllActiveUsers(sDeactiveRoleDBId);
 		return listUsers;		
 	}
 
@@ -158,25 +143,14 @@ public class UserManager implements IUserManager {
 	 * 
 	 * @return List all open user requests
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public List<IUser> getUserRequests()
+	public List<IUser> getUserRequests() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 
-		try
-		{
-			listUsers = dbConnect.getUserRequests();
-		}
-		// bad, bad, bad, it makes me sad ;)
-		catch(NullPointerException e)
-		{
-			throw new NullPointerException(e.getMessage());
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException(e.getMessage());
-		}
+     	listUsers = dbConnect.getUserRequests();
 		return listUsers;		
 	}
 
@@ -189,9 +163,10 @@ public class UserManager implements IUserManager {
 	 *  @return Return the status of the operation. 1- Success and 0 - Failure.
 	 *  
 	 *  @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int deactivateUser(String sUserId,String sAdminId) {
+	public int deactivateUser(String sUserId,String sAdminId) throws QuadrigaStorageException {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
@@ -209,9 +184,10 @@ public class UserManager implements IUserManager {
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int approveUserRequest(String sUserId,String sRoles,String sAdminId) {
+	public int approveUserRequest(String sUserId,String sRoles,String sAdminId) throws QuadrigaStorageException {
 
 		int iResult = dbConnect.approveUserRequest(sUserId, sRoles, sAdminId);
 		return iResult;
@@ -225,9 +201,10 @@ public class UserManager implements IUserManager {
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int denyUserRequest(String sUserId,String sAdminId) {
+	public int denyUserRequest(String sUserId,String sAdminId) throws QuadrigaStorageException {
 
 		int iResult = dbConnect.denyUserRequest(sUserId, sAdminId);
 		return iResult;
@@ -241,9 +218,10 @@ public class UserManager implements IUserManager {
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int activateUser(String sUserId,String sAdminId) {
+	public int activateUser(String sUserId,String sAdminId) throws QuadrigaStorageException {
 
 		int iResult=0;
 		
@@ -285,9 +263,10 @@ public class UserManager implements IUserManager {
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - An open request is already placed for the userid.
 	 * 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public int addAccountRequest(String userId) {
+	public int addAccountRequest(String userId) throws QuadrigaStorageException {
 		int iUserStatus;
 		
 		//Get all open user requests

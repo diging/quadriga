@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -51,8 +52,15 @@ public class DictionaryCollaboratorController {
 	    @Override
 	    public void setAsText(String text) {
 
-	        IUser user = userManager.getUserDetails(text);
-	        setValue(user);
+	        IUser user;
+			try {
+				user = userManager.getUserDetails(text);
+				setValue(user);
+			} catch (QuadrigaStorageException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
 	    }
 	    });
 	    

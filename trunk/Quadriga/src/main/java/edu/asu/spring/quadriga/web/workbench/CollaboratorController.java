@@ -67,8 +67,15 @@ public class CollaboratorController {
 			@Override
 			public void setAsText(String text) {
 
-				IUser user = usermanager.getUserDetails(text);
-				setValue(user);
+				IUser user;
+				try {
+					user = usermanager.getUserDetails(text);
+					setValue(user);
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		});
 		binder.registerCustomEditor(List.class, "collaboratorRoles", new PropertyEditorSupport() {
