@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -35,9 +36,10 @@ public class RequestAccountController {
 	 * @param model Model for jsp page.
 	 * @param principal Information about logged in user.
 	 * @return result page 
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value = "requests/submitAccountRequest", method = RequestMethod.POST)
-	public String submitAccountRequest(Model model, Principal principal) {
+	public String submitAccountRequest(Model model, Principal principal) throws QuadrigaStorageException {
 		String userId = principal.getName();
 		
 		if (userId == null || userId.trim().isEmpty())

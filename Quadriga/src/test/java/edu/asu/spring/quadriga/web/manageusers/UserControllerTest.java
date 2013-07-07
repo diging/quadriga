@@ -110,11 +110,12 @@ public class UserControllerTest {
 	/**
 	 * This method tests if the appropriate path is returned and also evaluates the number of 
 	 * open requests and also checks if the correct path is returned.
+	 * @throws QuadrigaStorageException 
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	@DirtiesContext
-	public void testUserRequestList() {
+	public void testUserRequestList() throws QuadrigaStorageException {
 		//Check the return value
 		assertEquals(userContoller.userRequestList(model, principal),"auth/users/requests");
 
@@ -126,10 +127,11 @@ public class UserControllerTest {
 
 	/**
 	 * This method tests if a user is approved/denied access to quadriga and also checks if the correct path is returned.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
 	@DirtiesContext
-	public void testUserAccessHandler() {
+	public void testUserAccessHandler() throws QuadrigaStorageException {
 		//Deny a user
 		assertEquals(userContoller.userAccessHandler("charlie-denied", model, principal),"redirect:/auth/users/manage");
 
@@ -140,11 +142,12 @@ public class UserControllerTest {
 
 	/**
 	 * This method tests if the correct number of active users are retrieved and if the appropriate path is also returned.
+	 * @throws QuadrigaStorageException 
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	@DirtiesContext
-	public void testUserActiveList() {
+	public void testUserActiveList() throws QuadrigaStorageException {
 		//Check the return value
 		assertEquals(userContoller.userActiveList(model, principal),"auth/users/active");
 
@@ -171,20 +174,22 @@ public class UserControllerTest {
 
 	/**
 	 * This method tests if a user is deactivated and returns the appropriate path.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
 	@DirtiesContext
-	public void testDeactivateUser() {
+	public void testDeactivateUser() throws QuadrigaStorageException {
 		//Check the return value
 		assertEquals(userContoller.deactivateUser("jdoe",model, principal),"redirect:/auth/users/manage");
 	}
 	
 	/**
 	 * This method tests if a user is activated and returns the appropriate path. 
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
 	@DirtiesContext
-	public void testActivateUser() {
+	public void testActivateUser() throws QuadrigaStorageException {
 		//Check the return value
 		assertEquals(userContoller.activateUser("jdoe",model, principal),"redirect:/auth/users/manage");
 	}

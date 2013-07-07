@@ -107,8 +107,9 @@ public class UserManagerTest {
 	/**
 	 * Load the required data into the dependent tables
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
-	public void testSetupTestEnvironment()
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
 	{
 		String[] sQuery = sDatabaseSetup.split("&");
 		for(String singleQuery: sQuery)
@@ -124,9 +125,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} fetches the correct user object and if it handles invalid userid.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetUserDetails() {
+	public void testGetUserDetails() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -147,9 +149,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} fetches all the active users
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetAllActiveUsers() {
+	public void testGetAllActiveUsers() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -187,9 +190,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} fetches all the open user requests
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetUserRequests() {
+	public void testGetUserRequests() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -206,9 +210,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} can activate a valid user and can handle invalid user ids.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testActivateUser() {
+	public void testActivateUser() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -255,9 +260,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} can approve a user request and can handle invalid id.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testApproveUserRequest() {
+	public void testApproveUserRequest() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -283,9 +289,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} can deny a user request and can handle invalid user id.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testDenyUserRequest() {
+	public void testDenyUserRequest() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -306,9 +313,10 @@ public class UserManagerTest {
 	/**
 	 * Test if the method in {@link UserManager} can handle new account requests. 
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testAddAccountRequest() {
+	public void testAddAccountRequest() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 

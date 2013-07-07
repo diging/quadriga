@@ -11,6 +11,7 @@ import org.springframework.security.ldap.userdetails.PersonContextMapper;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -45,7 +46,12 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		List<GrantedAuthority> authorityList = new ArrayList<GrantedAuthority>();
 		authorityList.addAll(authorities);
 
-		fillAuthorityList(authorityList, username);
+		try {
+			fillAuthorityList(authorityList, username);
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		UserDetails details = super.mapUserFromContext(ctx, username,
 				authorityList);
@@ -54,7 +60,7 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 	}
 
 	public void fillAuthorityList(List<GrantedAuthority> authorities,
-			String username) {
+			String username) throws QuadrigaStorageException {
 		// Check the status of the user in the Quadriga DB
 		IUser user = null;
 		user = userManager.getUserDetails(username);

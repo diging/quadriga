@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.LoginController;
 
@@ -78,7 +79,7 @@ public class RequestAccountControllerTest {
 	}
 	
 	@Test
-	public void testSubmitAccountRequest() {	
+	public void testSubmitAccountRequest() throws QuadrigaStorageException {	
 		
 		String result = requestAccountController.submitAccountRequest(model, principleNoUsername);
 		assertEquals(result, "requests/error");

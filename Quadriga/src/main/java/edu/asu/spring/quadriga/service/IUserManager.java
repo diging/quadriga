@@ -20,7 +20,7 @@ public interface IUserManager {
 	 * @param sUserId			The unique userid of the user
 	 * @return					User object created based on the userId
 	 */
-	public abstract IUser getUserDetails(String sUserId);
+	public abstract IUser getUserDetails(String sUserId) throws QuadrigaStorageException;
 
 	
 	/**
@@ -30,7 +30,7 @@ public interface IUserManager {
 	 *  @param sAdminId  The userid of the admin who is changing the user setting.
 	 *  @return Return the status of the operation. 1- Success and 0 - Failure.
 	 */
-	public abstract int deactivateUser(String sUserId,String sAdminId);
+	public abstract int deactivateUser(String sUserId,String sAdminId) throws QuadrigaStorageException;
 	
 
 	/**
@@ -39,7 +39,7 @@ public interface IUserManager {
 	 * @return List of all active user objects
 	 * 
 	 */
-	public abstract List<IUser> getAllActiveUsers();
+	public abstract List<IUser> getAllActiveUsers() throws QuadrigaStorageException;
 
 	/**
 	 * List all inactive users in the quadriga database
@@ -55,14 +55,14 @@ public interface IUserManager {
 	 * @param sAdminId  The userid of the admin who is changing the user setting.
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
 	 */
-	public abstract int activateUser(String sUserId,String sAdminId);
+	public abstract int activateUser(String sUserId,String sAdminId) throws QuadrigaStorageException;
 
 	/**
 	 * List all the open user requests available in the quadriga database
 	 * 
 	 * @return List all open user requests
 	 */
-	public List<IUser> getUserRequests();
+	public List<IUser> getUserRequests() throws QuadrigaStorageException;
 
 	/**
 	 * Approve a user request to access quadriga.
@@ -72,7 +72,7 @@ public interface IUserManager {
 	 * @param sAdminId  The userid of the admin who is changing the user setting
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
 	 */
-	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId);
+	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException;
 
 	/**
 	 * Deny a user request to access the quadriga.
@@ -81,7 +81,7 @@ public interface IUserManager {
 	 * @param sAdminId  The userid of the admin who is changing the user setting.
 	 * @return Return the status of the operation. 1- Success and 0 - Failure.
 	 */
-	public abstract int denyUserRequest(String sUserId, String sAdminId);
+	public abstract int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException;
 	
 	/**
 	 * Add a new user request to access quadriga.
@@ -89,5 +89,5 @@ public interface IUserManager {
 	 * @param userId The user id of the user who needs access to quadriga 
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - An open request is already placed for the userid.
 	 */
-	public abstract int addAccountRequest(String userId);
+	public abstract int addAccountRequest(String userId) throws QuadrigaStorageException;
 }

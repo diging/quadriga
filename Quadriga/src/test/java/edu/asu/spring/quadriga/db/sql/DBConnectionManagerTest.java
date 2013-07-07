@@ -98,9 +98,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Load the required data into the dependent tables
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testSetupTestEnvironment()
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
 	{
 		String[] sQuery = sDatabaseSetup.split("&");
 		for(String singleQuery: sQuery)
@@ -112,9 +113,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether the correct user details are fetched from the database.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetUserDetails() {
+	public void testGetUserDetails() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -129,9 +131,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether the correct number of active users are fetched from the database.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetAllActiveUsers() {
+	public void testGetAllActiveUsers() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -190,9 +193,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether a given account is activated and added to the active list.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testUpdateUserRoles() {
+	public void testUpdateUserRoles() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -235,9 +239,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether a give open request is approved and added to the active user list.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testApproveUserRequest() {
+	public void testApproveUserRequest() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -260,9 +265,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether a give open request is denied and the user requests are updated.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testDenyUserRequest() {
+	public void testDenyUserRequest() throws QuadrigaStorageException {
 
 		testSetupTestEnvironment();
 
@@ -280,9 +286,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether all the open user requests are fetched.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testGetUserRequests() {
+	public void testGetUserRequests() throws QuadrigaStorageException {
 		
 		testSetupTestEnvironment();
 		
@@ -299,9 +306,10 @@ public class DBConnectionManagerTest {
 	/**
 	 * Test whether a new account request is added to already existing user requests.
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testAddAccountRequest() {
+	public void testAddAccountRequest() throws QuadrigaStorageException {
 		
 		testSetupTestEnvironment();
 		
