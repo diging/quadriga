@@ -20,17 +20,26 @@ public class ExceptionInterceptor {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ExceptionInterceptor.class);
 
-	@AfterThrowing(pointcut = "within(edu.asu.spring.quadriga.web.*)", throwing = "t")
-	public void toRuntimeException(Throwable t) {
-		logger.info("In Exeception Interpreter");
-		/*
-		 * if (t instanceof QuadrigaAcessException) { throw
-		 * (QuadrigaAcessException) t; } else if(t instanceof
-		 * QuadrigaStorageException) { throw (QuadrigaStorageException) t; }
-		 * else if(t instanceof RestException) { throw (RestException) t; } else
-		 * { QuadrigaException se = new QuadrigaException(t.getMessage());
-		 * se.setStackTrace(t.getStackTrace()); throw se; }
-		 */
+	@AfterThrowing(pointcut = "within(edu.asu.spring.quadriga.web..*)", throwing = "t")
+	public void toRuntimeException(Throwable t)
+			throws QuadrigaStorageException, RestException,
+			QuadrigaAcessException, QuadrigaException {
+		if (t instanceof QuadrigaAcessException) {
+			logger.error(t.getMessage(), t);
+			throw (QuadrigaAcessException) t;
+		} else if (t instanceof QuadrigaStorageException) {
+			logger.error(t.getMessage(), t);
+			throw (QuadrigaStorageException) t;
+		} else if (t instanceof RestException) {
+			logger.error(t.getMessage(), t);
+			throw (RestException) t;
+		} else {
+			logger.error(t.getMessage(), t);
+			QuadrigaException se = new QuadrigaException(t.getMessage());
+			se.setStackTrace(t.getStackTrace());
+			throw se;
+		}
+
 	}
 
 }
