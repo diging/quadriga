@@ -1,12 +1,14 @@
 package edu.asu.spring.quadriga.db.workspace;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionWSDictionary {
+public interface IDBConnectionProjectDictionary {
 
 	/**
 	 *  Assigns the data source
@@ -26,7 +28,10 @@ public interface IDBConnectionWSDictionary {
 	 * @author          Lohith Dwaraka
 	 * 
 	 */
-	public abstract String addWSDictionary(String projectId,
+	public abstract String addProjectDictionary(String projectId,
 			String dictionaryId, String userId) throws QuadrigaStorageException;
+
+	public abstract List<IDictionary> listProjectDictionary(String projectId, String userId)
+			throws QuadrigaStorageException;
 
 }

@@ -276,7 +276,7 @@
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Project - Show Dictionary" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/workspace/dictionary.jsp" />
+			value="/WEB-INF/views/workspace/dictionaries.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/workspacedetails" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga - Workspace Details" />

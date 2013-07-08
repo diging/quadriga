@@ -82,15 +82,13 @@
 </script>
 
 
-
 <div class="container">
 	<c:choose>
-		<c:when test="${not empty dictinarylist}">
-
+		<c:when test="${not empty dicitonaryList}">
 			<form method="POST">
 
 
-				 <input type="submit" value="Add Dictionary"
+				 <input type="submit" value="Delete Dictionary"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/adddictionaries'" />
 
 				<br /> <br />
@@ -107,7 +105,7 @@
 					</thead>
 
 					<tbody>
-						<c:forEach var="dictionary" items="${dictinarylist}">
+						<c:forEach var="dictionary" items="${dicitonaryList}">
 							<tr>
 								<td width="10%"><input type="checkbox" class="selected" name="selected"
 									value='<c:out value="${dictionary.id}"></c:out>' /></td>
@@ -126,6 +124,7 @@
 		</c:when>
 
 		<c:otherwise>
+		
 			<br><spring:message code="empty.dictionary" />
 	</c:otherwise>
 	</c:choose>

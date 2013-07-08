@@ -1,5 +1,5 @@
 /*******************************************
-Name          : sp_getWSDictionaryList
+Name          : sp_getProjectDictionaryList
 
 Description   : retrieves the dictionary details
 				of a particular dictionary
@@ -12,10 +12,10 @@ Modified Date : 06/04/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getWSDictionaryList;
+DROP PROCEDURE IF EXISTS sp_getProjectDictionaryList;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getWSDictionaryList
+CREATE PROCEDURE sp_getProjectDictionaryList
 (
   IN  inprojectid  VARCHAR(50),
   IN inuserid VARCHAR(50),
