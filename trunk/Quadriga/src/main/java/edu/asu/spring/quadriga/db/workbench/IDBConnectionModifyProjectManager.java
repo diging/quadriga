@@ -18,4 +18,7 @@ public interface IDBConnectionModifyProjectManager {
 
 	public abstract void setDataSource(DataSource dataSource);
 
+	public abstract void setupTestEnvironment(String sQuery)
+			throws QuadrigaStorageException;
+
 }
