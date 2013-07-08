@@ -17,9 +17,6 @@
 		class="edu.asu.spring.quadriga.service.develop.MockupUserManager">
 		<property name="userFactory" ref="userFactory"></property>
 	</bean>-->
-	<bean id="CollaboratorRoleManager"
-		class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
-	</bean>
 	
 	<bean id="UserManager"
 		class="edu.asu.spring.quadriga.service.impl.UserManager">
@@ -60,21 +57,6 @@
 	
 	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager"></bean>
 
-	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
-	<property name="dictCollabRoles" ref="CollaboratorRole"></property>
-	<!-- <qualifier value="dictCollaborator"></qualifier>  --> 
-	</bean>
-	
-	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
-	<property name="ccCollabRoles" ref="CollaboratorRole"></property>
-	<!--  <qualifier value="ccCollaborator"></qualifier>   --> 
-	</bean>
-	
-	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
-	<property name="projectCollabRoles" ref="CollaboratorRole"></property>
-	<!--  <qualifier value="projectCollaborator"></qualifier>  --> 
-	</bean>
-	
 	<bean id="CollaboratorRole" class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
 	
 
