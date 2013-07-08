@@ -86,7 +86,9 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
 				collaboratorRole.setRoleid(role.getRoleid());
-				// add rest of role information to collaboratorRole object
+				collaboratorRole.setRoleDBid(role.getRoleDBid());
+				collaboratorRole.setRolename(role.getRolename());
+				collaboratorRole.setRoledescription(role.getRoledescription());
 			}
 		}
 		
@@ -100,7 +102,9 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
 				collaboratorRole.setRoleid(role.getRoleid());
-				// add rest of role information to collaboratorRole object
+				collaboratorRole.setRoleDBid(role.getRoleDBid());
+				collaboratorRole.setRolename(role.getRolename());
+				collaboratorRole.setRoledescription(role.getRoledescription());
 			}
 		}
 		
@@ -114,7 +118,9 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			if(role.getRoleDBid().equals(collaboratorRole.getRoleDBid()))
 			{
 				collaboratorRole.setRoleid(role.getRoleid());
-				// add rest of role information to collaboratorRole object
+				collaboratorRole.setRoleDBid(role.getRoleDBid());
+				collaboratorRole.setRolename(role.getRolename());
+				collaboratorRole.setRoledescription(role.getRoledescription());
 			}
 		}
 		
