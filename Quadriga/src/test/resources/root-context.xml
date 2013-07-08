@@ -58,17 +58,17 @@
 		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
 	</bean>
 
-	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
+	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
 	<property name="dictCollabRoles" ref="CollaboratorRole"></property>
 	<!-- <qualifier value="dictCollaborator"></qualifier>  --> 
 	</bean>
 	
-	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
+	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
 	<property name="ccCollabRoles" ref="CollaboratorRole"></property>
 	<!--  <qualifier value="ccCollaborator"></qualifier>   --> 
 	</bean>
 	
-	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager">
+	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager">
 	<property name="projectCollabRoles" ref="CollaboratorRole"></property>
 	<!--  <qualifier value="projectCollaborator"></qualifier>  --> 
 	</bean>
@@ -92,7 +92,7 @@
 	<bean class="edu.asu.spring.quadriga.domain.implementation.CollectionsValidator" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
-	<!--  <bean class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjCollabManager"/> -->
+	<!-- <bean class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjCollabManager"/>  -->
 
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
