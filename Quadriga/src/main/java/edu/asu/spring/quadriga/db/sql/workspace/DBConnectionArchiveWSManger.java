@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.db.sql.workspace;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 
 import javax.sql.DataSource;
@@ -74,6 +75,31 @@ public class DBConnectionArchiveWSManger implements
 		{
 			logger.info("Open database connection :"+e.getMessage());
 			throw new QuadrigaStorageException("Oops!!Database hanged");
+		}
+	}
+	
+	/**
+	 * Establishes the test environment
+	 * @param sQuery
+	 * @throws QuadrigaStorageException
+	 * @author Kiran Kumar Batna
+	 */
+	@Override
+	public void setupTestEnvironment(String sQuery) throws QuadrigaStorageException
+	{
+		getConnection();
+		try
+		{
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate(sQuery);
+		}
+		catch(SQLException ex)
+		{
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
 		}
 	}
 

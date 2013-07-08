@@ -26,4 +26,7 @@ public interface IDBConnectionListWSManager {
 	public abstract List<IWorkSpace> listWorkspace(String projectid)
 			throws QuadrigaStorageException;
 
+	public abstract void setupTestEnvironment(String sQuery)
+			throws QuadrigaStorageException;
+
 }

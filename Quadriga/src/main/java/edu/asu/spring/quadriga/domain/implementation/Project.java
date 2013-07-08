@@ -156,4 +156,67 @@ public class Project implements IProject {
 		this.networksDefaultAccess = networksDefaultAccess;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((collaborators == null) ? 0 : collaborators.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result
+				+ ((internalid == null) ? 0 : internalid.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime
+				* result
+				+ ((networksDefaultAccess == null) ? 0 : networksDefaultAccess
+						.hashCode());
+		result = prime * result
+				+ ((projectAccess == null) ? 0 : projectAccess.hashCode());
+		result = prime * result
+				+ ((unixName == null) ? 0 : unixName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Project other = (Project) obj;
+		if (collaborators == null) {
+			if (other.collaborators != null)
+				return false;
+		} else if (!collaborators.equals(other.collaborators))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (internalid == null) {
+			if (other.internalid != null)
+				return false;
+		} else if (!internalid.equals(other.internalid))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (networksDefaultAccess != other.networksDefaultAccess)
+			return false;
+		if (projectAccess != other.projectAccess)
+			return false;
+		if (unixName == null) {
+			if (other.unixName != null)
+				return false;
+		} else if (!unixName.equals(other.unixName))
+			return false;
+		return true;
+	}
+
 }

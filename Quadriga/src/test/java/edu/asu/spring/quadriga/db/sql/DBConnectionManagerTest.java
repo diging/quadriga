@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.db.sql;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -323,7 +322,20 @@ public class DBConnectionManagerTest {
 	}
 
 	@Test
-	public void testUserRoles() {
-		fail("Who spelled that with an upper case U? And no test implementation as well!");
+	public void testListQuadrigaUserRoles() throws QuadrigaStorageException 
+	{
+		List<IQuadrigaRole> rolesList;
+		List<IQuadrigaRole> testRolesList = new ArrayList<IQuadrigaRole>();
+		IQuadrigaRole userRole = null;
+		rolesList = dbConnection.listQuadrigaUserRoles("role1,role3");
+		//forming the list of quadriga roles
+		userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
+		userRole.setDBid("role1");
+		testRolesList.add(userRole);
+		userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
+		userRole.setDBid("role3");
+		testRolesList.add(userRole);
+		assertEquals(testRolesList.get(0),rolesList.get(0));
+		assertEquals(testRolesList.get(1),rolesList.get(1));
 	}
 }
