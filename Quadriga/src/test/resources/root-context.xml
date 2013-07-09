@@ -27,6 +27,9 @@
 		class="edu.asu.spring.quadriga.service.impl.DictionaryManager">
 	</bean>
 	
+	<bean id="ProjectDictionaryManager"
+		class="edu.asu.spring.quadriga.service.impl.workbench.ProjectDictionaryManager">
+	</bean>
 		<bean id="ModifyProjectManager"
 		class="edu.asu.spring.quadriga.service.impl.workbench.ModifyProjectManager">
 	</bean>

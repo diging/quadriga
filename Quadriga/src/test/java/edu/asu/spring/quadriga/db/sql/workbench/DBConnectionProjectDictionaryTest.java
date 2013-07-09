@@ -1,7 +1,6 @@
-package edu.asu.spring.quadriga.service.impl.workbench;
+package edu.asu.spring.quadriga.db.sql.workbench;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -26,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -37,6 +37,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.impl.workbench.ProjectDictionaryManagerTest;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -46,11 +47,14 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ProjectDictionaryManagerTest {
+public class DBConnectionProjectDictionaryTest {
 
 	@Autowired
 	private IProjectDictionaryManager projectDictionaryManager;
 
+	@Autowired
+	private IDBConnectionProjectDictionary dbConnectionProjectDictionary;
+	
 	@Autowired
 	IDBConnectionDictionaryManager dbConnection;
 
@@ -75,7 +79,7 @@ public class ProjectDictionaryManagerTest {
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(ProjectDictionaryManagerTest.class);
+			.getLogger(DBConnectionProjectDictionaryTest.class);
 
 	private Connection connection;
 
@@ -89,7 +93,7 @@ public class ProjectDictionaryManagerTest {
 
 	@Autowired
 	private IDictionaryItemsFactory dictionaryItemsFactory;
-
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -101,7 +105,7 @@ public class ProjectDictionaryManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		// Setup a user object to compare with the object produced from
-		// usermanager
+				// usermanager
 		try {
 			user = userFactory.createUserObject();
 			user.setUserName("jdoe");
@@ -181,7 +185,7 @@ public class ProjectDictionaryManagerTest {
 		}
 		return id;
 	}
-
+	
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -192,6 +196,7 @@ public class ProjectDictionaryManagerTest {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
 	}
+	
 
 	@Test
 	public void testAddProjectDictionary() {
@@ -263,7 +268,7 @@ public class ProjectDictionaryManagerTest {
 
 		{
 			try {
-				projectDictionaryManager.addProjectDictionary("1",
+				dbConnectionProjectDictionary.addProjectDictionary("1",
 						getDictionaryID("testDictionary"), "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
@@ -290,6 +295,7 @@ public class ProjectDictionaryManagerTest {
 		dbConnection.setupTestEnvironment("delete from tbl_project");
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+
 	}
 
 	@Test
@@ -371,7 +377,7 @@ public class ProjectDictionaryManagerTest {
 
 			List<IDictionary> dictList = null;
 			try {
-				dictList = projectDictionaryManager.listProjectDictionary("1",
+				dictList = dbConnectionProjectDictionary.listProjectDictionary("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
@@ -485,7 +491,7 @@ public class ProjectDictionaryManagerTest {
 			}
 			
 			try {
-				projectDictionaryManager.deleteProjectDictionary("1", "jdoe", getDictionaryID("testDictionary"));
+				dbConnectionProjectDictionary.deleteProjectDictionary("1", "jdoe", getDictionaryID("testDictionary"));
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
