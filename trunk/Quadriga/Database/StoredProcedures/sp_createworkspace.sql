@@ -48,11 +48,6 @@ BEGIN
         THEN SET errmsg = "Project for workspace cannnot be empty.";
       END IF;
 
-      -- checking if the workspace name already exists
-      IF EXISTS (SELECT 1 FROM vw_workspace WHERE workspacename = inname)
-       THEN SET errmsg = "Workspace name already exists.";
-      END IF;
-
       -- checking if the project id is valid
       IF NOT EXISTS(SELECT 1 FROM vw_project WHERE projectid = inprojectid)
         THEN SET errmsg = "Project mapping is invalid.";
