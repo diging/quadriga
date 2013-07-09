@@ -50,14 +50,14 @@
 	h2.major
 	{
 		position: relative;
-		border-top: solid 5px #e7eae8;
+		border-top: solid 5px #e7eae8; 
 	}
 
 		h2.major span
 		{
 			background: #fff;
 			position: relative;
-			display: inline-block;
+			display: block;
 		}
 
 		#footer h2.major span
@@ -565,6 +565,12 @@
 	.is-post-summary
 	{
 	}
+	
+		.is-post-summary h3 a:hover
+			{
+				color: inherit;
+				text-decoration:underline;
+			}
 
 	.is-page-content
 	{
