@@ -65,4 +65,9 @@ ALTER TABLE tbl_dspace_bitstream
 ADD FOREIGN KEY(collectionid) REFERENCES tbl_dspace_collection(collectionid);
 ALTER TABLE tbl_dspace_bitstream
 ADD FOREIGN KEY(itemid) REFERENCES tbl_dspace_item(itemid);
+
+ALTER TABLE tbl_workspace_dspace
+ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid);
+ALTER TABLE tbl_workspace_dspace
+ADD FOREIGN KEY(bitstreamid) REFERENCES tbl_dspace_bitstream(bitstreamid);
 /* End - Foreign key dependencies for Dspace data */

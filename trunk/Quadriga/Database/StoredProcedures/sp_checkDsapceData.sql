@@ -8,7 +8,7 @@ Called By     : UI (DBConnectionDspaceManager.java)
 
 Create By     : Ram Kumar Kumaresan
 
-Modified Date : 07/08/2013
+Modified Date : 07/09/2013
 
 ********************************************/
 
@@ -18,9 +18,10 @@ DELIMITER $$
 CREATE PROCEDURE sp_checkDsapceData
 (
   IN  inCommunityid     VARCHAR(20),
-  IN  inCollectionid     VARCHAR(20),
-  IN  inItemid     VARCHAR(20),
-  OUT dataStatus         VARCHAR(255)   
+  IN  inCollectionid    VARCHAR(20),
+  IN  inItemid     		VARCHAR(20),
+  IN  inBitstreamid		VARCHAR(20),
+  OUT dataStatus        VARCHAR(50)   
 )
 BEGIN
 
@@ -38,10 +39,14 @@ BEGIN
 						WHERE itemid = inItemid)
 					THEN 
 						SET dataStatus = "item exists";
+						
+						IF EXISTS(SELECT 1 FROM tbl_dspace_bitstream
+								WHERE bitstreamid = inBitstreamid)
+							THEN 
+								SET dataStatus = "bitstream exists";
+						END IF;
 				END IF;
-
 		END IF;
-	
 	END IF;
 
 END$$
