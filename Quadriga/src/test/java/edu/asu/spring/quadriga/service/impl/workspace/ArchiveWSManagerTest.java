@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.db.sql.workspace;
+package edu.asu.spring.quadriga.service.impl.workspace;
 
 import static org.junit.Assert.*;
 
@@ -14,14 +14,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManger;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DBConnectionArchiveWSMangerTest {
+public class ArchiveWSManagerTest {
 
 	@Autowired
 	IDBConnectionArchiveWSManger  dbConnect;
+	
+	@Autowired
+	IArchiveWSManager wsManager;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -60,34 +64,30 @@ public class DBConnectionArchiveWSMangerTest {
 	}
 
 	@Test
-	public void testArchiveWorkspace() throws QuadrigaStorageException 
-	{
+	public void testArchiveWorkspace() throws QuadrigaStorageException {
 		String errmsg;
-		errmsg = dbConnect.archiveWorkspace("WS_1", 1, "projuser");
+		errmsg = wsManager.archiveWorkspace("WS_1", "projuser");
 		assertEquals("",errmsg);
 	}
-	
+
 	@Test
-	public void testArchiveActivate() throws QuadrigaStorageException
-	{
+	public void testUnArchiveWorkspace() throws QuadrigaStorageException {
 		String errmsg;
-		errmsg = dbConnect.archiveWorkspace("WS_1", 0, "projuser");
+		errmsg = wsManager.unArchiveWorkspace("WS_1", "projuser");
 		assertEquals("",errmsg);
 	}
-	
+
 	@Test
-	public void testDeactivateWorkspace() throws QuadrigaStorageException
-	{
+	public void testDeactivateWorkspace() throws QuadrigaStorageException {
 		String errmsg;
-		errmsg = dbConnect.deactivateWorkspace("WS_2", 1, "projuser");
+		errmsg = wsManager.deactivateWorkspace("WS_2","projuser");
 		assertEquals("",errmsg);
 	}
-	
+
 	@Test
-	public void testActivateWorkspace() throws QuadrigaStorageException
-	{
+	public void testActivateWorkspace() throws QuadrigaStorageException {
 		String errmsg;
-		errmsg = dbConnect.deactivateWorkspace("WS_2", 0, "projuser");
+		errmsg = wsManager.activateWorkspace("WS_2","projuser");
 		assertEquals("",errmsg);
 	}
 

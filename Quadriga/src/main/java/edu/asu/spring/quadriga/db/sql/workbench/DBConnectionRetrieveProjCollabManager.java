@@ -257,7 +257,7 @@ public class DBConnectionRetrieveProjCollabManager implements
 		String collabUserName;
 		CallableStatement sqlStatement = null ;
 		IUser user;
-		List<IUser> nonCollaboratorUser = new ArrayList<IUser>();
+		List<IUser> CollaboratorUser = new ArrayList<IUser>();
 		
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_COLLABORATOR_REQUEST + "(?,?)";
 		getConnection();
@@ -279,7 +279,7 @@ public class DBConnectionRetrieveProjCollabManager implements
 					collabUserName = resultset.getString(1);
 					//retrieve the user details
 					user = userManager.getUserDetails(collabUserName);
-					nonCollaboratorUser.add(user);
+					CollaboratorUser.add(user);
 
 		        }
 		    }
@@ -299,7 +299,7 @@ public class DBConnectionRetrieveProjCollabManager implements
 			closeConnection();
 		}
 		
-		return nonCollaboratorUser;
+		return CollaboratorUser;
 	}
 
 }

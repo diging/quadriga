@@ -26,6 +26,27 @@
 	<bean id="DictionaryManager"
 		class="edu.asu.spring.quadriga.service.impl.DictionaryManager">
 	</bean>
+	
+		<bean id="ModifyProjectManager"
+		class="edu.asu.spring.quadriga.service.impl.workbench.ModifyProjectManager">
+	</bean>
+	
+	<bean id="RetrieveProjectManager"
+		class="edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjectManager">
+	</bean>
+	
+	<bean id="ArchiveWSManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.ArchiveWSManager">
+	</bean>
+	
+		<bean id="ListWSManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.ListWSManager">
+	</bean>
+	
+		<bean id="ModifyWSManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSManager">
+	</bean>
+	
 	<bean id="ConceptCollectionManager"  class="edu.asu.spring.quadriga.service.impl.ConceptCollectionManager" />
 	<bean id="searchConceptPowerURL" class="java.lang.String">
 		<constructor-arg>

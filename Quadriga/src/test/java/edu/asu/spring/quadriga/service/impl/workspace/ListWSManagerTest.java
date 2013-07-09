@@ -1,7 +1,6 @@
-package edu.asu.spring.quadriga.db.sql.workspace;
+package edu.asu.spring.quadriga.service.impl.workspace;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,12 @@ import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DBConnectionListWSManagerTest {
+public class ListWSManagerTest {
 
 	@Autowired
 	IDBConnectionListWSManager dbConnect;
@@ -35,6 +36,9 @@ public class DBConnectionListWSManagerTest {
 	
 	@Autowired
 	IUserManager userManager;
+	
+	@Autowired
+	IListWSManager wsManager;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -77,14 +81,13 @@ public class DBConnectionListWSManagerTest {
 	}
 
 	@Test
-	public void testListWorkspace() throws QuadrigaStorageException 
-	{
+	public void testListWorkspace() throws QuadrigaStorageException {
 		IWorkSpace workspace;
 		IUser user;
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listWorkspace("PROJ_2");
+		workspaceList = wsManager.listWorkspace("PROJ_2");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -126,16 +129,15 @@ public class DBConnectionListWSManagerTest {
 			assertTrue(workspaceList.contains(testworkspace));
 		}
 	}
-	
+
 	@Test
-	public void testListActiveWorkspace() throws QuadrigaStorageException
-	{
+	public void testListActiveWorkspace() throws QuadrigaStorageException {
 		IWorkSpace workspace;
 		IUser user;
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listActiveWorkspace("PROJ_2");
+		workspaceList = wsManager.listActiveWorkspace("PROJ_2");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -162,18 +164,16 @@ public class DBConnectionListWSManagerTest {
 		{
 			assertTrue(workspaceList.contains(testworkspace));
 		}
-		
 	}
-	
+
 	@Test
-	public void testListArchivedWorkspace() throws QuadrigaStorageException
-	{
+	public void testListArchivedWorkspace() throws QuadrigaStorageException {
 		IWorkSpace workspace;
 		IUser user;
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listArchivedWorkspace("PROJ_2");
+		workspaceList = wsManager.listArchivedWorkspace("PROJ_2");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -193,18 +193,16 @@ public class DBConnectionListWSManagerTest {
 		{
 			assertTrue(workspaceList.contains(testworkspace));
 		}
-		
 	}
-	
+
 	@Test
-	public void testlistDeactivatedWorkspace() throws QuadrigaStorageException
-	{
+	public void testListDeactivatedWorkspace() throws QuadrigaStorageException {
 		IWorkSpace workspace;
 		IUser user;
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listDeactivatedWorkspace("PROJ_2");
+		workspaceList = wsManager.listDeactivatedWorkspace("PROJ_2");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -224,17 +222,15 @@ public class DBConnectionListWSManagerTest {
 		{
 			assertTrue(workspaceList.contains(testworkspace));
 		}
-		
 	}
-	
+
 	@Test
-	public void testgetWorkspaceDetails() throws QuadrigaStorageException
-	{
+	public void testGetWorkspaceDetails() throws QuadrigaStorageException {
 		IWorkSpace workspace;
 		IWorkSpace testWorkspace;
 		IUser user;
 		
-		workspace = dbConnect.getWorkspaceDetails("WS_1");
+		workspace = wsManager.getWorkspaceDetails("WS_1");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -250,7 +246,6 @@ public class DBConnectionListWSManagerTest {
 			fail();
 		}
 		assertTrue(workspace.equals(testWorkspace));
-		
 	}
 
 }
