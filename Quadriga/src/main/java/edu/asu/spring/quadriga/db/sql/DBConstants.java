@@ -74,5 +74,5 @@ public interface DBConstants
 	public static final String WORKSPACE_DETAILS = "sp_getWorkspaceDetails";
 	public static final String ADD_PROJECT_DICTIONARY = "sp_addDictionaryToProject";
 	public static final String LIST_PROJECT_DICTIONARY = "sp_getProjectDictionaryList";
-
+	public static final String DELETE_PROJECT_DICTIONARY = "sp_deleteProjectDictionary";
 }

@@ -34,4 +34,7 @@ public interface IDBConnectionProjectDictionary {
 	public abstract List<IDictionary> listProjectDictionary(String projectId, String userId)
 			throws QuadrigaStorageException;
 
+	public abstract  String deleteProjectDictionary(String projectId, String userId,
+			String dictioanaryId) throws QuadrigaStorageException;
+
 }

@@ -47,4 +47,17 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 		return dictionaryList;
 	}
 
+	/**
+	 * Delete the dictionary in a project for a user - userId
+	 * @param projectId
+	 * @param userId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@Override
+	public String deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException{
+		
+		String msg=dbConnect.deleteProjectDictionary(projectId, userId, dictioanaryId);
+		return msg;
+	}
 }

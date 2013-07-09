@@ -92,6 +92,7 @@ public class DBConnectionModifyProjectManager implements
 		}
 		catch(SQLException ex)
 		{
+			ex.printStackTrace();
 			throw new QuadrigaStorageException();
 		}
 		finally
