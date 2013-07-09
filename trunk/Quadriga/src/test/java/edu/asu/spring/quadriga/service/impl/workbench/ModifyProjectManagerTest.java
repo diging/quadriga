@@ -1,6 +1,6 @@
-package edu.asu.spring.quadriga.db.sql.workbench;
+package edu.asu.spring.quadriga.service.impl.workbench;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,11 +19,12 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DBConnectionModifyProjectManagerTest {
+public class ModifyProjectManagerTest {
 
 	@Autowired
 	IDBConnectionModifyProjectManager dbConnect;
@@ -34,9 +35,11 @@ public class DBConnectionModifyProjectManagerTest {
 	@Autowired
 	IUserFactory userFactory;
 	
+	@Autowired
+	IModifyProjectManager projectManager;
+	
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception 
-	{
+	public static void setUpBeforeClass() throws Exception {
 	}
 
 	@AfterClass
@@ -58,7 +61,6 @@ public class DBConnectionModifyProjectManagerTest {
 
 	@After
 	public void tearDown() throws Exception {
-		
 		String[] databaseQuery = new String[3];
 		databaseQuery[0] = "DELETE FROM tbl_project WHERE projectid IN ('PROJ_2','PROJ_3','PROJ_4')";
 		databaseQuery[1] = "DELETE FROM tbl_project WHERE projectowner = 'projuser'";
@@ -66,12 +68,11 @@ public class DBConnectionModifyProjectManagerTest {
 		for(String query : databaseQuery)
 		{
 			dbConnect.setupTestEnvironment(query);
-		}	
+		}
 	}
 
 	@Test
-	public void testAddProject() throws QuadrigaStorageException
-	{
+	public void testAddProjectRequest() throws QuadrigaStorageException {
 		IProject project;
 		IUser owner;
 		String errmsg;
@@ -86,15 +87,13 @@ public class DBConnectionModifyProjectManagerTest {
 		project.setOwner(owner);
 		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 		
-		errmsg = dbConnect.addProjectRequest(project);
+		errmsg = projectManager.addProjectRequest(project);
 		
 		assertEquals("",errmsg);
-
 	}
-	
+
 	@Test
-	public void testUpdateProject() throws QuadrigaStorageException
-	{
+	public void testUpdateProjectRequest() throws QuadrigaStorageException {
 		IProject project;
 		String owner;
 		String errmsg;
@@ -107,19 +106,16 @@ public class DBConnectionModifyProjectManagerTest {
 		project.setInternalid("PROJ_2");
 		
 		owner = "projuser";
-        errmsg = dbConnect.updateProjectRequest(project, owner);
-        
+        errmsg = projectManager.updateProjectRequest(project, owner);
         assertEquals("",errmsg);
-		
 	}
-	
+
 	@Test
-	public void testDeleteProject() throws QuadrigaStorageException
-	{
+	public void testDeleteProjectRequest() throws QuadrigaStorageException {
 		String projectIdList;
 		String errmsg;
 		projectIdList = "PROJ_3,PROJ_4";
-		errmsg = dbConnect.deleteProjectRequest(projectIdList);
+		errmsg = projectManager.deleteProjectRequest(projectIdList);
 		assertEquals("",errmsg);
 	}
 

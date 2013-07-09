@@ -48,9 +48,9 @@ public class DBConnectionRetrieveProjectManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		String[] databaseQuery = new String[3];
-		databaseQuery[0] = "INSERT INTO tbl_quadriga_user VALUES('test project user','testprojuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[1] = "INSERT INTO tbl_project VALUES('testproject1','test case data','testproject1','PROJ_1','testprojuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[2] = "INSERT INTO tbl_project VALUES('testproject2','test case data','testproject2','PROJ_2','testprojuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[0] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[1] = "INSERT INTO tbl_project VALUES('testproject1','test case data','testproject1','PROJ_1','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[2] = "INSERT INTO tbl_project VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
 		for(String query : databaseQuery)
 		{
 			dbConnect.setupTestEnvironment(query);
@@ -61,7 +61,7 @@ public class DBConnectionRetrieveProjectManagerTest {
 	public void tearDown() throws Exception {
 		String[] databaseQuery = new String[2];
 		databaseQuery[0] = "DELETE FROM tbl_project WHERE projectid IN ('PROJ_1','PROJ_2')";
-		databaseQuery[1] = "DELETE FROM tbl_quadriga_user WHERE username = 'testprojuser'";
+		databaseQuery[1] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
 			dbConnect.setupTestEnvironment(query);
@@ -75,7 +75,7 @@ public class DBConnectionRetrieveProjectManagerTest {
 		List<IProject> testProjectList = new ArrayList<IProject>();
 		IProject project;
 		
-		projectList = dbConnect.getProjectList("testprojuser");
+		projectList = dbConnect.getProjectList("projuser");
 		
 		//create project object with the test data
 		project = projectFactory.createProjectObject();
@@ -116,7 +116,7 @@ public class DBConnectionRetrieveProjectManagerTest {
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
 		project.setInternalid("PROJ_1");
-		user = userManager.getUserDetails("testprojuser");
+		user = userManager.getUserDetails("projuser");
 		project.setOwner(user);
 		
 		testProject = dbConnect.getProjectDetails("PROJ_1");

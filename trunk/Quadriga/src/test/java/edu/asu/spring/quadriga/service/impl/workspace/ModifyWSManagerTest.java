@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.db.sql.workspace;
+package edu.asu.spring.quadriga.service.impl.workspace;
 
 import static org.junit.Assert.*;
 
@@ -18,11 +18,12 @@ import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DBConnectionModifyWSManagerTest {
+public class ModifyWSManagerTest {
 
 	@Autowired
 	IDBConnectionModifyWSManger dbConnect;
@@ -32,6 +33,9 @@ public class DBConnectionModifyWSManagerTest {
 	
 	@Autowired
 	IWorkspaceFactory workspaceFactory;
+	
+	@Autowired
+	IModifyWSManager wsManager;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -73,7 +77,7 @@ public class DBConnectionModifyWSManagerTest {
 	}
 
 	@Test
-	public void testAddWorkSpace() throws QuadrigaStorageException {
+	public void testAddWorkSpaceRequest() throws QuadrigaStorageException {
 		IUser user;
 		IWorkSpace workspace;
 		String errmsg;
@@ -86,19 +90,17 @@ public class DBConnectionModifyWSManagerTest {
 		workspace.setDescription("test workspace");
 		workspace.setOwner(user);
 		
-		errmsg = dbConnect.addWorkSpaceRequest(workspace, "PROJ_2");
+		errmsg = wsManager.addWorkSpaceRequest(workspace, "PROJ_2");
 		
 		assertEquals("",errmsg);
 	}
-	
+
 	@Test
-	public void testDeleteWorkspace() throws QuadrigaStorageException
-	{
+	public void testDeleteWorkspaceRequest() throws QuadrigaStorageException {
 		String errmsg;
 		
-		errmsg = dbConnect.deleteWorkspaceRequest("WS_3,WS_4");
+		errmsg = wsManager.deleteWorkspaceRequest("WS_3,WS_4");
 		assertEquals("",errmsg);
-		
 	}
 
 }
