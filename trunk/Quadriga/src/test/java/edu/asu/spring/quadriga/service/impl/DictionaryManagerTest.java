@@ -68,7 +68,7 @@ public class DictionaryManagerTest {
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
-	private static final Logger logger = LoggerFactory.getLogger(DBConnectionDictionaryManagerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryManagerTest.class);
 
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
