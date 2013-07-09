@@ -192,4 +192,44 @@ public class DBConnectionProjectDictionary implements IDBConnectionProjectDictio
 		}
 		return dictionaryList;
 	}
+	
+	@Override
+	public String deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException
+	{
+		
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;		
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_DICTIONARY  + "(?,?,?,?)";
+
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, userId);
+			sqlStatement.setString(2, dictioanaryId);        	
+			sqlStatement.setString(3, projectId);  
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+
+			sqlStatement.execute();
+			errmsg = sqlStatement.getString(4);
+			return errmsg;
+		}catch(SQLException e){
+			logger.info(e.getMessage());
+			throw new QuadrigaStorageException();
+		}catch(Exception e){
+			logger.info(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return "";
+	}
 }

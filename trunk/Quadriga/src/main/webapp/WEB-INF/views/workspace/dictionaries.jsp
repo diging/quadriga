@@ -80,7 +80,25 @@
 
 
 </script>
-
+<input type=button
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+		value='Back to Project'>
+<br>
+<br>
+<c:choose>
+	<c:when test="${success=='1'}">
+		<font color="blue"><spring:message code="project.dictionary.add.success" /></font>
+	</c:when>
+	<c:when test="${success=='0'}">
+		<font color="red"><spring:message code="project.dictionary.add.fail" /></font>
+	</c:when>
+	<c:when test="${deletesuccess=='1'}">
+		<font color="blue"><spring:message code="project.dictionary.delete.success" /></font>
+	</c:when>
+	<c:when test="${deletesuccess=='0'}">
+		<font color="red"><spring:message code="project.dictionary.delete.fail" /></font>
+	</c:when>
+</c:choose>
 
 <div class="container">
 	<c:choose>
@@ -89,7 +107,7 @@
 
 
 				 <input type="submit" value="Delete Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/adddictionaries'" />
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deletedictionaries'" />
 
 				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"

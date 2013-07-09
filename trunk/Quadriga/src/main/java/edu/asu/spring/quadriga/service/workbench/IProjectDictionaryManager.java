@@ -25,4 +25,14 @@ public interface IProjectDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public List<IDictionary> listProjectDictionary(String projectId,String userId)throws QuadrigaStorageException;
+
+	/**
+	 * Delete the dictionary in a project for a user - userId
+	 * @param projectId
+	 * @param userId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public String deleteProjectDictionary(String projectId, String userId,
+			String dictioanaryId) throws QuadrigaStorageException;
 }
