@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
@@ -33,6 +34,7 @@ public class DBConnectionRetrieveProjCollabManager implements
 	private DataSource dataSource;
 	
 	@Autowired
+	//@Qualifier("UserManager")
     private IUserManager userManager;
 	
 	@Autowired

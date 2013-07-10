@@ -89,11 +89,11 @@ public interface IDBConnectionCCManager {
 		 */
 		public abstract int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException;
 		
-		public abstract List<IUser> showCollaboratorRequest(int collectionid);
+		public abstract List<ICollaborator> showCollaboratorRequest(int collectionid);
 		
 		public abstract List<IUser> showNonCollaboratorRequest(int collectionid);
 		
-		public abstract String addCollaboratorRequest(ICollaborator collaborator,int collectionid);
+		public abstract String addCollaboratorRequest(ICollaborator collaborator,int collectionid, String userName);
 		
 		public abstract void getCollaborators(IConceptCollection collection);
 		

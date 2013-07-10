@@ -22,7 +22,7 @@ $(document).ready(function() {
 	</form:select> 
 
 	 <br><br>
-	 <form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
+	 <form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
 	<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptcollection.id}/addcollaborators'"/> 
 
 </form:form>  
@@ -38,6 +38,9 @@ $(document).ready(function() {
 	<c:forEach var="collab" items="${collaboratingUsers}">
 		<tr>
 		  <td><c:out value="${collab.userName}"></c:out> </td>
+		  <c:forEach var="roles" items="collaboratingUsers">
+		  <td><c:out value="${roles.roleDBid}"></c:out></td>
+		  </c:forEach>
 		</tr>
 	</c:forEach>
 	</tbody>

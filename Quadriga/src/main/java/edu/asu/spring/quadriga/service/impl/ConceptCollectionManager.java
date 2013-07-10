@@ -26,7 +26,6 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
-
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -173,14 +172,15 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public List<IUser> showCollaboratingUsers(int collectionid) {
-		List<IUser> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
+	public List<ICollaborator> showCollaboratingUsers(int collectionid) {
+		List<ICollaborator> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
 		return collaboratorList;
 	}
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator, int collectionid) {
-		String errmsg = dbConnect.addCollaboratorRequest(collaborator, collectionid);
+	public String addCollaborators(ICollaborator collaborator, int collectionid, String userName) {
+
+		String errmsg = dbConnect.addCollaboratorRequest(collaborator, collectionid, userName);
 		return errmsg;
 	}
 
