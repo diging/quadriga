@@ -38,13 +38,14 @@ public class DspaceController {
 	 * 
 	 * @return Return to the dspace communities page of Quadriga
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspacedId}/communities", method = RequestMethod.GET)
-	public String workspaceCommunityListRequest(@PathVariable("workspacedId") String workspacedId,ModelMap model, Principal principal) {
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/communities", method = RequestMethod.GET)
+	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspacedId,ModelMap model, Principal principal) {
 
-		System.out.println(workspacedId);
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
+		
 		model.addAttribute("communityList", communities);
+		model.addAttribute("workspaceId",workspacedId);
 
 		return "auth/workbench/workspace/communities";
 	}
@@ -56,8 +57,8 @@ public class DspaceController {
 	 * @param communityId	The community id of the community whose collections are to be fetched.
 	 * @return				Return to the collections page of Quadriga
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/community/{communityId}", method = RequestMethod.GET)
-	public String workspaceCommunityRequest(@PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
+	@RequestMapping(value = "/auth/workbench/workspace/{workspacedId}/community/{communityId}", method = RequestMethod.GET)
+	public String workspaceCommunityRequest(@PathVariable("workspacedId") String workspacedId, @PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
 
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 		String communityName = dspaceManager.getCommunityName(communityId);
@@ -72,6 +73,7 @@ public class DspaceController {
 
 		model.addAttribute("communityName", communityName);
 		model.addAttribute("collectionList", collections);
+		model.addAttribute("workspaceId",workspacedId);
 
 		return "auth/workbench/workspace/community";
 	}
@@ -83,8 +85,8 @@ public class DspaceController {
 	 * @param collectionId		The collection id of the collection whose items are to be fetched.
 	 * @return					Return to the items page of Quadriga.
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/community/collection/{collectionId}", method = RequestMethod.GET)
-	public String workspaceItemListRequest(@PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
+	@RequestMapping(value = "/auth/workbench/workspace/{workspacedId}/community/collection/{collectionId}", method = RequestMethod.GET)
+	public String workspaceItemListRequest(@PathVariable("workspacedId") String workspacedId, @PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
 
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
@@ -116,6 +118,7 @@ public class DspaceController {
 		model.addAttribute("collectionId",collectionId);
 		model.addAttribute("collectionName", collectionName);		
 		model.addAttribute("itemList", items);
+		model.addAttribute("workspaceId",workspacedId);
 
 		return "auth/workbench/workspace/community/collection";
 	}
@@ -128,8 +131,8 @@ public class DspaceController {
 	 * 
 	 * @return			Return to the bitstream page of quadriga.
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/community/collection/item", method = RequestMethod.GET)
-	public String workspaceByteStreamListRequest(@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal){
+	@RequestMapping(value = "/auth/workbench/workspace/{workspacedId}/community/collection/item", method = RequestMethod.GET)
+	public String workspaceBitStreamListRequest(@PathVariable("workspacedId") String workspacedId,@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal){
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
@@ -171,6 +174,7 @@ public class DspaceController {
 		model.addAttribute("itemId",itemId);
 		model.addAttribute("itemName",itemName);
 		model.addAttribute("bitList",bitstreams);	
+		model.addAttribute("workspaceId",workspacedId);
 		
 		return "auth/workbench/workspace/community/collection/item";
 	}
@@ -213,13 +217,13 @@ public class DspaceController {
 	}
 	
 	
-	@RequestMapping(value = "/auth/workbench/workspace/addbitstreams", method = RequestMethod.POST)
-	public String addBitStreamsToWorkspace(@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal){
-		System.out.println("Controller received request......................."+bitstreamids.length);
+	@RequestMapping(value = "/auth/workbench/workspace/{workspacedId}/addbitstreams", method = RequestMethod.POST)
+	public String addBitStreamsToWorkspace(@PathVariable("workspacedId") String workspacedId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal){
+		System.out.println(workspacedId+" Controller received request......................."+bitstreamids.length);
 		
 		
 		
 		
-		return "redirect:/auth/workbench/workspace/communities";
+		return "redirect:/auth/workbench/workspace/"+workspacedId+"/communities";
 	}
 }
