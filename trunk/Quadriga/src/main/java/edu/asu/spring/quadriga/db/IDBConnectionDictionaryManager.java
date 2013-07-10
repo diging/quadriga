@@ -106,4 +106,14 @@ public interface IDBConnectionDictionaryManager {
 	 */
 	public abstract String deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException;
 
+	/**
+	 * Checks if user has permission to dictionary
+	 * @param dictionaryId
+	 * @param userId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract boolean userDictionaryPerm(String userId, String dictionaryId)
+			throws QuadrigaStorageException;
+
 }

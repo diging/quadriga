@@ -20,5 +20,5 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary_items
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(id,termid,pos)
+  PRIMARY KEY(id,termid)
 )

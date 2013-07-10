@@ -202,6 +202,51 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return dictionaryList;
 	}
 	
+	@Override
+	public boolean userDictionaryPerm(String userId, String dictionaryId) throws QuadrigaStorageException{
+		String dbCommand;
+		String id="";
+		String errmsg="";
+		getConnection();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_PERM + "(?,?,?)";
+		try {
+
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, userId);
+			sqlStatement.setString(2, dictionaryId);
+			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					id= resultSet.getString(1);
+				} 
+			}
+			if(id.isEmpty())
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return false;
+		
+	}
 	/**
 	 *  Method deletes selected dictionary                    
 	 * 

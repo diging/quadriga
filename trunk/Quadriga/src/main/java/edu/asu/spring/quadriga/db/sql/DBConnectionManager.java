@@ -96,6 +96,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 		}
 	}

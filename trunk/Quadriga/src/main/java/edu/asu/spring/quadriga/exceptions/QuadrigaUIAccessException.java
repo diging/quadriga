@@ -2,21 +2,21 @@ package edu.asu.spring.quadriga.exceptions;
 
 /**
  * This is an exception thrown when there is a storage problem.
- * @author Julia Damerow
  * @author Lohith Dwaraka
+ *
  */
-public class QuadrigaStorageException extends Exception {
+public class QuadrigaUIAccessException extends Exception {
 
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3850218568287768164L;
+	private static final long serialVersionUID = -3850218568287788164L;
 	
 	/**
 	 * default storage exception
 	 */
-	public QuadrigaStorageException() {
+	public QuadrigaUIAccessException() {
 		super();
 	}
 	
@@ -24,19 +24,19 @@ public class QuadrigaStorageException extends Exception {
 	 * Custom message in the exception
 	 * @param customMsg
 	 */
-	public QuadrigaStorageException(String customMsg) {
+	public QuadrigaUIAccessException(String customMsg) {
 		super(customMsg);
 	}
 
 
 	
-	public QuadrigaStorageException(Exception e)
+	public QuadrigaUIAccessException(Exception e)
 	{
 		super(e);
 	}
 
 
-	public QuadrigaStorageException(String arg0, Throwable arg1) {
+	public QuadrigaUIAccessException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 	}
 	
