@@ -277,6 +277,12 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/adddictionary.jsp" />
 	</definition>
+	<definition name="auth/workbench/deletedictionaries"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/deletedictionaries.jsp" />
+	</definition>
 	<definition name="auth/workbench/workspace/dictionaries"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Project - Show Dictionary" />
