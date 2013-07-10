@@ -38,9 +38,10 @@ public class DspaceController {
 	 * 
 	 * @return Return to the dspace communities page of Quadriga
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/communities", method = RequestMethod.GET)
-	public String workspaceCommunityListRequest(ModelMap model, Principal principal) {
+	@RequestMapping(value = "/auth/workbench/workspace/{workspacedId}/communities", method = RequestMethod.GET)
+	public String workspaceCommunityListRequest(@PathVariable("workspacedId") String workspacedId,ModelMap model, Principal principal) {
 
+		System.out.println(workspacedId);
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
 		model.addAttribute("communityList", communities);
