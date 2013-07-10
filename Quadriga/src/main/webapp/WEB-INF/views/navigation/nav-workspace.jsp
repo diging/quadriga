@@ -17,6 +17,7 @@
 					» <a href="/quadriga/auth/workbench/${project.internalid}/deleteworkspace">Delete Workspace</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/adddictionary">Add Dictionary</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/dictionaries">List Dictionary</a><br /><br />
+					» <a href="/quadriga/auth/workbench/${project.internalid}/deletedictionary">Delete Dictionary</a><br /><br />
 				</h3>
 			</article>
 		</li>

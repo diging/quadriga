@@ -130,6 +130,28 @@ public class DictionaryProjectController {
 		return "auth/workbench/workspace/dictionaries";
 	}
 	
+	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
+	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		String userId = user.getUsername();
+		
+		List<IDictionary> dicitonaryList = null;
+		try {
+			dicitonaryList = projectDictionaryManager.listProjectDictionary(
+					projectid, userId);
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(dicitonaryList == null){
+			logger.info("Dictionar list is empty buddy");
+		}
+		model.addAttribute("dicitonaryList", dicitonaryList);
+		model.addAttribute("projectid", projectid);
+		return "auth/workbench/deletedictionaries";
+	}
+	
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionaries", method = RequestMethod.POST)
 	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()

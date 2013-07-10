@@ -105,15 +105,42 @@
 <div class="container">
 	<c:choose>
 		<c:when test="${not empty dicitonaryList}">
-				
-				<ul class="style2 pagination1">
-					<c:forEach var="dictionary" items="${dicitonaryList}">
-						<li><a
-							href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.id}"><c:out
-									value="${dictionary.name}"></c:out></a> <br> <c:out
-								value="${dictionary.description}"></c:out></li>
-					</c:forEach>
-				</ul>
+			<form method="POST">
+
+
+				<input type="submit" value="Delete Dictionary"
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deletedictionaries'" />
+
+				<br /> <br />
+				<table style="width: 100%" cellpadding="0" cellspacing="0"
+					border="0" class="display dataTable">
+					<!-- <table  class="dataTable" id="pagination1"> -->
+					<thead>
+						<tr>
+							<th align="left"><input type="checkbox" id="selectall">Select
+								All</th>
+							<th>Dictionary Name</th>
+							<th>Dictionary Description</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<c:forEach var="dictionary" items="${dicitonaryList}">
+							<tr>
+								<td width="10%"><input type="checkbox" class="selected"
+									name="selected"
+									value='<c:out value="${dictionary.id}"></c:out>' /></td>
+								<td align="center"><input name="items" type="hidden"
+									value="<c:out value="${dictionary.name}"></c:out>" /> <c:out
+										value="${dictionary.name}"></c:out></td>
+								<td align="justify"><c:out
+										value="${dictionary.description}"></c:out></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+
+				</table>
+			</form>
 		</c:when>
 
 		<c:otherwise>
