@@ -75,10 +75,12 @@ public interface DBConstants
 	public static final String ADD_PROJECT_DICTIONARY = "sp_addDictionaryToProject";
 	public static final String LIST_PROJECT_DICTIONARY = "sp_getProjectDictionaryList";
 	public static final String DELETE_PROJECT_DICTIONARY = "sp_deleteProjectDictionary";
+	
 	// Dspace database objects
 	public static final String CHECK_DSPACEDATA_STATUS="sp_checkDsapceData";
 	public static final String ADD_DSPACE_COMMUNITY = "sp_insertDspaceCommunity";
 	public static final String ADD_DSPACE_COLLECTION = "sp_insertDspaceCollection";
 	public static final String ADD_DSPACE_ITEM = "sp_insertDspaceItem";
 	public static final String ADD_DSPACE_BITSTREAM = "sp_insertDspaceBitStream";
+	public static final String ADD_WORKSPACE_BITSTREAM = "sp_addBitstreamToWorkspace";
 }

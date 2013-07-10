@@ -42,7 +42,7 @@
 					ajaxCallback.success(function(data) {
 						//Load the new text in the corresponding div tag
 						if(data != 'Loading...'){
-							data = '<input type="checkbox" class="checkbox" name="bitstreamid" value="'+bitstreamid[1]+'">'+ data;
+							data = '<input type="checkbox" class="checkbox" name="bitstreamids" value="'+bitstreamid[1]+'">'+ data;
 						}
 						else
 						{
@@ -82,7 +82,7 @@
 					for (i = 0; i < IDs.length; i++) {
 						$("#"+IDs[i]).remove();
 					}					
-					$('#buttonToggle').append('Toggle All').button().addClass("check");
+					//$('#buttonToggle').append('Toggle All').button().addClass("check");
 					}
 				else{
 					setTimeout(makeAjaxCall, 5000);
@@ -110,19 +110,34 @@
 		}
 		
 
+		function submitClick()
+		{
+			if($('input:checkbox').is(':checked'))
+				{
+					$('#bitstream').submit();
+				}
+			else
+				{
+					$.alert("Please select atleast one file", "Oops !!!");
+					return;
+				}
+			
+		}
+		
 		$(document).ready(function(){
-		    $('.check:button').toggle(function(){
-		    	alert('checked called');
-		        $('input:checkbox').attr('checked','checked');
-		        $(this).val('uncheck all')
-		    },function(){
-		    	alert('unchecked called');
-		        $('input:checkbox').removeAttr('checked');
-		        $(this).val('check all');        
+		    $('.checkall').click(function(){
+		    	if($(this).val() == 'check all')
+		    		{
+		    			$('input:checkbox').prop("checked", true);
+		    			$(this).val("uncheck all");
+		    		}
+		    	else
+		    		{
+		            	$('input:checkbox').attr('checked',false);
+		    			$(this).val("check all");
+		    		}
 		    })
 		})
-
-
 	</script>
 				<a href="/quadriga/auth/workbench/workspace/communities" style="text-decoration: underline;">Home</a> »
 				<a href="/quadriga/auth/workbench/workspace/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
@@ -131,11 +146,14 @@
 			
 		<c:choose>
 			<c:when test="${not empty bitList}">
-			<span class="byline">Select a file to download.</span>
+			<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/addbitstreams">
+			<span class="byline">Select files to add to workspace.</span>
 				<c:forEach var="bitstream" items="${bitList}">
-				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}"><input type="checkbox" class="checkbox" name="bitstreamid" value="${bitstream.id}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
+				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
 				</c:forEach><br>
-				<div id="buttonToggle"></div>
+				<input type="submit" onclick="submitClick();" value="Add to Workspace" />
+				<input type="submit" class="checkall" value="check all" />
+				</form>
 			</c:when>
 			<c:otherwise>
 					<span class="byline">No BitStreams found in - 

@@ -324,14 +324,14 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String checkDspaceStatus(String communityid, String collectionid, String itemid) throws QuadrigaStorageException
+	public String checkDspaceStatus(String communityid, String collectionid, String itemid, String bitstreamid) throws QuadrigaStorageException
 	{		
 		String sDBCommand;
 		String sDspaceDataStatus;
 
 		getConnection();
 
-		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.CHECK_DSPACEDATA_STATUS + "(?,?,?,?)";
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.CHECK_DSPACEDATA_STATUS + "(?,?,?,?,?)";
 
 		try
 		{
@@ -340,14 +340,58 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 			sqlStatement.setString(1, communityid);
 			sqlStatement.setString(2, collectionid);
 			sqlStatement.setString(3, itemid);
+			sqlStatement.setString(4, bitstreamid);
+			sqlStatement.registerOutParameter(5,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sDspaceDataStatus = sqlStatement.getString(5);
+
+			return sDspaceDataStatus;
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}		
+	}
+	
+	@Override
+	public int addBitstreamToWorkspace(String workspaceid, String bitstreamid, String username) throws QuadrigaStorageException
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_WORKSPACE_BITSTREAM + "(?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, workspaceid);
+			sqlStatement.setString(2, bitstreamid);
+			sqlStatement.setString(3, username);
 			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
 			//Execute the stored procedure
 			sqlStatement.execute();
 
-			sDspaceDataStatus = sqlStatement.getString(4);
+			sOutErrorValue = sqlStatement.getString(4);
 
-			return sDspaceDataStatus;
+			if(sOutErrorValue == null)
+			{
+				return SUCCESS;
+			}
+			else
+			{
+				return FAILURE;
+			}
 		}
 		catch(SQLException e)
 		{

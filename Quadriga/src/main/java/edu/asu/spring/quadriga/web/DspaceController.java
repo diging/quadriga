@@ -210,4 +210,15 @@ public class DspaceController {
 		}
 		return "Loading...";		
 	}
+	
+	
+	@RequestMapping(value = "/auth/workbench/workspace/addbitstreams", method = RequestMethod.POST)
+	public String addBitStreamsToWorkspace(@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal){
+		System.out.println("Controller received request......................."+bitstreamids.length);
+		
+		
+		
+		
+		return "redirect:/auth/workbench/workspace/communities";
+	}
 }
