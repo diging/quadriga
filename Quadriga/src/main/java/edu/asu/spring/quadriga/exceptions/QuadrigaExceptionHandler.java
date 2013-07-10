@@ -59,4 +59,13 @@ public class QuadrigaExceptionHandler {
 		return modelAndView;
 	}
 	
+	@ExceptionHandler(QuadrigaUIAccessException.class)
+	public ModelAndView handleUserAccessException(QuadrigaUIAccessException ex) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("auth/accessissue");
+		logger.error(ex.getMessage(), ex);
+		return modelAndView;
+	}
+	
 	}

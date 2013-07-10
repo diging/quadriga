@@ -11,6 +11,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaUIAccessException;
 
 /**
  * Interface that has methods to be implemented on the DictionaryManager class
@@ -143,5 +144,16 @@ public interface IDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String deleteDictionary(String user, String dictionaryId)throws QuadrigaStorageException;
+
+	/**
+	 * Check for user permission on the dictionary
+	 * @param userId
+	 * @param dicitonaryId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaUIAccessException 
+	 */
+	public abstract boolean userDictionaryPerm(String userId, String dicitonaryId)
+			throws QuadrigaStorageException, QuadrigaUIAccessException;
 
 }

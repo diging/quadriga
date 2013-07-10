@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaUIAccessException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -55,15 +57,18 @@ public class DictionaryItemController {
 	 * 
 	 * @return Return to the list dictionary items page of the Quadriga
 	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAcessException 
 	 */
 
 	@RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
-			throws QuadrigaStorageException {
+			throws QuadrigaStorageException, QuadrigaUIAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		
+		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryid);
+
+		logger.info("User permission on this dicitonary : "+result);
 		logger.info("came to getDictionaryPage");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryid,user.getUsername());
