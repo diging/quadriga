@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: edu.asu.spring.quadriga.web.ConceptcollectionControllerTest
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 9, Skipped: 0, Time elapsed: 0.077 sec <<< FAILURE!
-testAddConceptCollection(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0 sec  <<< ERROR!
+Tests run: 9, Failures: 0, Errors: 9, Skipped: 0, Time elapsed: 0.028 sec <<< FAILURE!
+testAddConceptCollection(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.006 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -50,7 +50,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testInitBinder(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.001 sec  <<< ERROR!
+testInitBinder(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.002 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -98,7 +98,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testConceptCollectionHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.001 sec  <<< ERROR!
+testConceptCollectionHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.002 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -146,7 +146,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testConceptDetailsHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.004 sec  <<< ERROR!
+testConceptDetailsHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.003 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -194,7 +194,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testConceptSearchHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.005 sec  <<< ERROR!
+testConceptSearchHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.002 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -242,7 +242,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testSaveItemsHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.005 sec  <<< ERROR!
+testSaveItemsHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.003 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -290,7 +290,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testAddCollectionsForm(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.005 sec  <<< ERROR!
+testAddCollectionsForm(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.002 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -338,7 +338,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testDeleteItems(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.004 sec  <<< ERROR!
+testDeleteItems(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.002 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)
@@ -386,7 +386,7 @@ Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No q
 	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:768)
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:486)
 	... 36 more
-testConceptUpdateHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.05 sec  <<< ERROR!
+testConceptUpdateHandler(edu.asu.spring.quadriga.web.ConceptcollectionControllerTest)  Time elapsed: 0.002 sec  <<< ERROR!
 org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'edu.asu.spring.quadriga.web.ConceptcollectionControllerTest': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: edu.asu.spring.quadriga.web.ConceptcollectionController edu.asu.spring.quadriga.web.ConceptcollectionControllerTest.collectionContoller; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [edu.asu.spring.quadriga.web.ConceptcollectionController] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
 	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:288)
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1122)

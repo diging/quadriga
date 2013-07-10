@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 Test set: edu.asu.spring.quadriga.web.WorkbenchControllerTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec <<< FAILURE!
+Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0 sec <<< FAILURE!
 testProjectWorkbenchHandle(edu.asu.spring.quadriga.web.WorkbenchControllerTest)  Time elapsed: 0 sec  <<< FAILURE!
 java.lang.AssertionError: No implementation.
 	at org.junit.Assert.fail(Assert.java:91)

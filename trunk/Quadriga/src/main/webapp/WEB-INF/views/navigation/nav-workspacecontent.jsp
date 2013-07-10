@@ -8,7 +8,7 @@
 		<li>
 			<article class="is-post-summary">
 				<h3>
-					» <a href="/quadriga/auth/workbench/workspace/communities">Add Text from DSpace</a><br /><br />
+					» <a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities">Add Text from DSpace</a><br /><br />
 					» Menu item 2<br /><br />
 					» Menu item 3<br /><br />
 					» Menu item 4<br /><br />
