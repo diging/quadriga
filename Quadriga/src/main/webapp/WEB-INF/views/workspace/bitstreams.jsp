@@ -139,14 +139,15 @@
 		    })
 		})
 	</script>
-				<a href="/quadriga/auth/workbench/workspace/communities" style="text-decoration: underline;">Home</a> »
-				<a href="/quadriga/auth/workbench/workspace/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
-				<a href="/quadriga/auth/workbench/workspace/community/collection/${collectionId}"  style="text-decoration: underline;"><c:out value="${collectionName}"></c:out></a> »
+				<a href="/quadriga/auth/workbench/workspace/workspacedetails/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
+				<a href="/quadriga/auth/workbench/workspace/${workspaceId}/communities" style="text-decoration: underline;">Communities</a> »
+				<a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
+				<a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/collection/${collectionId}"  style="text-decoration: underline;"><c:out value="${collectionName}"></c:out></a> »
 				<c:out value="${itemName}"></c:out><br />			
 			
 		<c:choose>
 			<c:when test="${not empty bitList}">
-			<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/addbitstreams">
+			<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspaceId}/addbitstreams">
 			<span class="byline">Select files to add to workspace.</span>
 				<c:forEach var="bitstream" items="${bitList}">
 				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>

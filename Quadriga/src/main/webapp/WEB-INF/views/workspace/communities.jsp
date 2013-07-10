@@ -34,7 +34,7 @@
 					ajaxCallback.success(function(data) {
 						//Load the new text in the corresponding div tag
 						if(data != 'Loading...'){
-							data = '<a href="/quadriga/auth/workbench/workspace/community/collection/'+collectionid[1]+'" style="color:#707070">'+data+'</a>';
+							data = '<a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/collection/'+collectionid[1]+'" style="color:#707070">'+data+'</a>';
 						}
 						else
 						{
@@ -96,15 +96,16 @@
 
 		<c:choose>
 			<c:when test="${not empty communityList}">
-				<h2>Communities in HPS Repository</h2>
+				<a href="/quadriga/auth/workbench/workspace/workspacedetails/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
+				Communities
 				<span class="byline">Select a community to browse its
 					collections.</span>
 				<c:forEach var="community" items="${communityList}">
 					<span style="font-weight: bold"><a
-						href='<c:out value="/quadriga/auth/workbench/workspace/community/${community.id}" />'>${community.name}</a></span>
+						href='<c:out value="/quadriga/auth/workbench/workspace/${workspaceId}/community/${community.id}" />'>${community.name}</a></span>
 					<br />
 					<c:forEach var="collection" items="${community.collections}">
-						<div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
+						<div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
 					</c:forEach>
 				</c:forEach>
 			</c:when>

@@ -36,7 +36,7 @@
 					ajaxCallback.success(function(data) {
 						//Load the new text in the corresponding div tag
 						if(data != 'Loading...'){
-							data = '<a href="/quadriga/auth/workbench/workspace/community/collection/'+collectionid[1]+'" style="color:#707070">'+data+'</a>';
+							data = '<a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/collection/'+collectionid[1]+'" style="color:#707070">'+data+'</a>';
 						}
 						else
 						{
@@ -96,13 +96,14 @@
 	</script>
 	<c:choose>
 		<c:when test="${not empty communityName }">
-				<a href="/quadriga/auth/workbench/workspace/communities"  style="text-decoration: underline;">Home</a> »
+		<a href="/quadriga/auth/workbench/workspace/workspacedetails/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
+				<a href="/quadriga/auth/workbench/workspace/${workspaceId}/communities"  style="text-decoration: underline;">Communities</a> »
 				<c:out value="${communityName}"></c:out>
 			<c:choose>
 				<c:when test="${not empty collectionList}">
 					<span class="byline">Select a collection to browse its items</span>
 					<c:forEach var="collection" items="${collectionList}">
-						<div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
+						<div id='collection_<c:out value="${collection.id}" />'><c:choose><c:when test="${not empty collection.name}"><a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/collection/${collection.id}" style="color:#707070">${collection.name}</a></c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
 					</c:forEach>
 				</c:when>
 
