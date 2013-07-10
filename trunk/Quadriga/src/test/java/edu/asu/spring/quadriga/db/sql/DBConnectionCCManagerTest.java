@@ -136,7 +136,7 @@ public class DBConnectionCCManagerTest {
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
 		assertEquals(collection.getName(),list.get(0).getName());
-	
+		testSetupTestEnvironment();
 	}
 	
 	
@@ -162,6 +162,7 @@ public class DBConnectionCCManagerTest {
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setId("testid");
 		assertEquals(concept,collection.getItems().get(0));
+		testSetupTestEnvironment();
 	}
 	
 	
@@ -182,6 +183,7 @@ public class DBConnectionCCManagerTest {
 		con.setDescription("sdads");
 		String result = dbConnection.addCollection(con);
 		assertEquals("", result);
+		testSetupTestEnvironment();
 	}
 
 	/**
@@ -216,6 +218,7 @@ public class DBConnectionCCManagerTest {
 		
 		dbConnection.getCollectionDetails(collection,user.getUserName());
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
+		testSetupTestEnvironment();
 	}
 	
 	@Test
@@ -249,7 +252,7 @@ public class DBConnectionCCManagerTest {
 		collection = clist.get(0);
 		dbConnection.getCollectionDetails(collection, user.getUserName());
 		assertEquals(0,collection.getItems().size());
-		
+		testSetupTestEnvironment();
 	}
 	
 	@Test
@@ -278,6 +281,7 @@ public class DBConnectionCCManagerTest {
 		
 		collectionManager.getCollectionDetails(collection, user.getUserName());
 		assertEquals("updatedlemma",collection.getItems().get(0).getLemma());
+		testSetupTestEnvironment();
 	}
 	
 	@Test
@@ -292,7 +296,7 @@ public class DBConnectionCCManagerTest {
 		assertNull(ret);
 		ret  = dbConnection.addCollection(collection);
 		assertNotNull(ret);
-		
+		testSetupTestEnvironment();
 		
 	}
 	
