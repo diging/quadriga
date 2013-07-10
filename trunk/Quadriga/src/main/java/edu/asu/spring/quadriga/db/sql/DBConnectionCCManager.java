@@ -187,7 +187,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		String errmsg = null;
 		CallableStatement sqlStatement;
 		collection.setCollaborators(new ArrayList<ICollaborator>());
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		
 		getConnection();
 		dbCommand = DBConstants.SP_CALL + " "
@@ -230,50 +229,10 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} 
-		
-	/*	dbCommand = DBConstants.SP_CALL + " "+ DBConstants.GET_COLLECTION_COLLABORATOR + "(?,?)";
-		getConnection();
-		try {
-			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setInt(1,collection.getId());
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
-			sqlStatement.execute();
-			errmsg = sqlStatement.getString(2);
-
-			if(errmsg == "")
-			{
-				ResultSet resultSet = sqlStatement.getResultSet();
-				while(resultSet.next())
-				{
-					//collection.setId(resultSet.getInt(1));
-
-					ICollaborator collaborator = collaboratorFactory.createCollaborator();
-					IUser user = userFactory.createUserObject();
-					user.setName(resultSet.getString(2));
-					collaborator.setUserObj(user);
-					logger.info("role data :" +resultSet.getString(3) );
-					String role = resultSet.getString(3);
-					if(role == null)
-					{
-						role="";
-					}
-					collaboratorRoles = dbConnectionProjectManager.splitAndCreateCollaboratorRoles(role);
-					
-					collaborator.setCollaboratorRoles(collaboratorRoles);
-					
-					collection.getCollaborators().add(collaborator);					
-					
-				}
-			}
-		
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
 		finally {
 			closeConnection();
-		} */
+		} 
 
 	}
 
@@ -486,28 +445,50 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 	
 	@Override
-	public String addCollaboratorRequest(ICollaborator collaborator, int collectionid) {
+	public String addCollaboratorRequest(ICollaborator collaborator, int collectionid, String userName) {
 		String dbCommand;
 		String errmsg = null;
+		String role = "";
 		CallableStatement sqlStatement;
-		String role;
+		
 		String collabName = collaborator.getUserObj().getUserName();
-		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_CC_COLLABORATOR_REQUEST + "(?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_CC_COLLABORATOR_REQUEST + "(?,?,?,?,?)";
+	//	System.out.println("------------------DB1");
+
 		getConnection();
+	//	System.out.println("------------------DB2");
+
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
+		//	System.out.println("------------------DB3");
+
 			sqlStatement.setInt(1,collectionid);
+		//	System.out.println("------------------DB4");
+
 			sqlStatement.setString(2, collabName);
-			
+		//	System.out.println("------------------DB5");
+
 			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
 			{
-				role = collaboratorRole.getRoleDBid();
-				sqlStatement.setString(3,role);
+				if(collaboratorRole.getRoleDBid()!=null)
+				{
+					role += collaboratorRole.getRoleDBid()+",";
+				}
+				
 			}
-			
-			sqlStatement.registerOutParameter(4, Types.VARCHAR);
+		//	System.out.println("------------------DB6");
+
+			role = role.substring(0, role.length()-1);
+			sqlStatement.setString(3,role);
+			sqlStatement.setString(4, userName);
+			sqlStatement.registerOutParameter(5, Types.VARCHAR);
+		//	System.out.println("------------------DB7");
+
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(4);
+		//	System.out.println("------------------DB8");
+
+			errmsg = sqlStatement.getString(5);
+		//	System.out.println("-------------errmsg:"+errmsg);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -522,11 +503,11 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public List<IUser> showCollaboratorRequest(int collectionid) {
+	public List<ICollaborator> showCollaboratorRequest(int collectionid) {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
-		List<IUser> collaboratorList = new ArrayList<IUser>();
+		List<ICollaborator> collaboratorList = new ArrayList<ICollaborator>();
 		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.SHOW_CC_COLLABORATOR_REQUEST + "(?,?)";
 		getConnection();
 		try {
@@ -543,12 +524,17 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				ResultSet resultset = sqlStatement.getResultSet();
 				while(resultset.next())
 				{
-					IUser collaborator = userFactory.createUserObject();
-					collaborator.setUserName(resultset.getString(1));
+					ICollaborator collaborator = collaboratorFactory.createCollaborator();
+					IUser user = userFactory.createUserObject();
+					user.setUserName(resultset.getString(1));
+					collaborator.setUserObj(user);
+					List<ICollaboratorRole> collaboratorRoles =  dbConnectionProjectManager.getCollaboratorRolesList(resultset.getString(2));
+					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collaboratorList.add(collaborator);
 				}			
 			
 		   }
+			
 		}
 			catch (SQLException e) {
 			e.printStackTrace();

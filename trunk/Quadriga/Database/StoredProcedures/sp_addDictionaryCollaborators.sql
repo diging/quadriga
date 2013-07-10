@@ -66,6 +66,9 @@ BEGIN
          ELSE ROLLBACK;
 		END IF;
 	END IF;
+
+	DROP TEMPORARY TABLE IF EXISTS temp_tbl_role;
+
 END$$
 DELIMITER ;
 

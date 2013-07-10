@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -123,8 +124,8 @@ public class ConceptcollectionController {
 		model.addAttribute("concept", collection);
 		conceptControllerManager.getCollaborators(collection);
 		
-		List<IUser>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
-		model.addAttribute("collaboratingUsers", collaboratingUsers);
+		List<ICollaborator>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
+		//model.addAttribute("collaboratingUsers", collaboratingUsers);
 		return "auth/conceptcollections/details";
 	}
 

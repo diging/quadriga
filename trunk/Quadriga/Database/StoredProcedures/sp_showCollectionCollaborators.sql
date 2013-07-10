@@ -21,8 +21,11 @@ BEGIN
 		THEN SET errmsg = "collectionid cannot be empty";
 	END IF;
 
-	SELECT DISTINCT collaboratoruser FROM tbl_conceptcollections_collaborator 
-	WHERE collectionid = incollectionid;
+	SELECT collaboratoruser,GROUP_CONCAT(collaboratorrole SEPARATOR ',') 
+	FROM tbl_conceptcollections_collaborator 
+	WHERE collectionid = incollectionid
+	GROUP BY collaboratoruser;
+
 END$$
 DELIMITER ;
 

@@ -14,6 +14,15 @@ public class CollaboratorRole implements ICollaboratorRole
 	private String roleid;
 	private String rolename;
 	private String roledescription;
+	private String displayName;
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
 
 	@Override
 	public String getRoleDBid() 

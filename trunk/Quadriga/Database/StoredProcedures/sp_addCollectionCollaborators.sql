@@ -5,14 +5,18 @@ CREATE PROCEDURE sp_addCollectionCollaborators
 	IN incollectionid 			INT,
 	IN incollaboratoruser	VARCHAR(10),
 	IN incollaboratorrole	VARCHAR(50),
+	IN inuser				VARCHAR(50),
 	OUT errmsg				VARCHAR(200)
 )
 
 BEGIN
 
+	DECLARE rowvalue   VARCHAR(30);
+    DECLARE position   INT;
+
 	 -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-      SET errmsg = "SQL exception has occurred";
+     SET errmsg = "SQL exception has occurred";
 
 	-- validating the input variables
 	
@@ -29,6 +33,23 @@ BEGIN
 		THEN SET errmsg = "collaborator already exists";
 	END IF;
 
+	DROP TEMPORARY TABLE IF EXISTS temp_tbl_role;
+	CREATE TEMPORARY TABLE temp_tbl_role
+	(
+		role 	VARCHAR(255)
+	);
+
+	SET position = LOCATE(',',incollaboratorrole);
+	
+	WHILE (position>0) DO
+	SET rowvalue = SUBSTRING_INDEX(incollaboratorrole,',',1);
+	INSERT INTO temp_tbl_role(role) values(rowvalue);
+	SET incollaboratorrole = SUBSTRING(incollaboratorrole FROM position+1);
+	SET position = LOCATE(',',incollaboratorrole);
+	END WHILE;
+
+	INSERT INTO temp_tbl_role(role) values (incollaboratorrole);
+
 	-- inserting record into the tbl_project_collaborator table
 	IF(errmsg IS NULL)
 	THEN SET errmsg = "no errors";
@@ -36,13 +57,17 @@ BEGIN
 	INSERT INTO
 	tbl_conceptcollections_collaborator(collectionid,collaboratoruser,collaboratorrole,
 							 updatedby,updateddate,createdby,createddate)
-	VALUES(incollectionid,incollaboratoruser,incollaboratorrole,incollaboratoruser,
-		   NOW(),incollaboratoruser, NOW());
+	SELECT incollectionid,incollaboratoruser,role,inuser,NOW(),inuser,NOW()
+	FROM temp_tbl_role;
+
 		IF (errmsg = "no errors")
            THEN COMMIT;
          ELSE ROLLBACK;
 		END IF;
 	END IF;
+
+	DROP TEMPORARY TABLE IF EXISTS temp_tbl_role;
+
 END$$
 DELIMITER ;
 

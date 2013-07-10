@@ -2,11 +2,8 @@
 package edu.asu.spring.quadriga.web;
 
 import java.beans.PropertyEditorSupport;
-
 import java.util.ArrayList;
-
 import java.security.Principal;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -126,25 +123,36 @@ public class CCCollaboratorController {
 						iterator.remove();
 					}
 				}
-			
-		
 			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
+			
+			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
+			
+			
+			
+			//model.addAttribute("collaboratingUsers", collaboratingUsers);
+			
 			return "auth/conceptcollection/showCollaborators";
 			
 		}
 		
 		@RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
 		public String addCollaborators(@PathVariable("collection_id") int collectionid, ModelMap model,
-				@ModelAttribute ICollaborator collaborator)
+				@ModelAttribute ICollaborator collaborator, Principal principal)
 		{
-			String errmsg = conceptControllerManager.addCollaborators(collaborator, collectionid);
-			
+			String username = principal.getName();
+		
+			String errmsg = conceptControllerManager.addCollaborators(collaborator, collectionid, username);
+		
+
 				if(errmsg.equals("no errors"))
 				{
+					//System.out.println("------------------WB1");
 					return "redirect:/auth/conceptcollections/{collection_id}";
 				}
-			
-			return "redirect:auth/conceptcollection/"+collectionid+"/displayCollaborators";
+				
+				//System.out.println("------------------WB2");
+
+			return "redirect:/auth/conceptcollection/"+collectionid+"/displayCollaborators";
 		}
 		
 		

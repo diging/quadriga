@@ -113,13 +113,13 @@ public class MockupConceptCollectionManager implements
 	}
 
 	@Override
-	public List<IUser> showCollaboratingUsers(int collectionid) {
+	public List<ICollaborator> showCollaboratingUsers(int collectionid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator, int collectionid) {
+	public String addCollaborators(ICollaborator collaborator, int collectionid, String userName) {
 		// TODO Auto-generated method stub
 		return null;
 	}

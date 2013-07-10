@@ -48,7 +48,7 @@ function alertbox(){
 	</form:select> 
 	
 	<br><br>
-	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
+	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
 	
 	<%-- <c:choose> --%>
 	<%-- 	<c:when test="${not empty nonCollaboratingUsers}">

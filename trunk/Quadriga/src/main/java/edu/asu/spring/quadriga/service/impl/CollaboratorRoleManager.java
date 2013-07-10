@@ -105,6 +105,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 				collaboratorRole.setRoleDBid(role.getRoleDBid());
 				collaboratorRole.setRolename(role.getRolename());
 				collaboratorRole.setRoledescription(role.getRoledescription());
+				collaboratorRole.setDisplayName(role.getDisplayName());
 			}
 		}
 		
@@ -121,6 +122,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 				collaboratorRole.setRoleDBid(role.getRoleDBid());
 				collaboratorRole.setRolename(role.getRolename());
 				collaboratorRole.setRoledescription(role.getRoledescription());
+				collaboratorRole.setDisplayName(role.getDisplayName());
 			}
 		}
 		
