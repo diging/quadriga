@@ -1,5 +1,5 @@
 /*******************************************
-Name          : sp_checkDsapceData
+Name          : sp_checkDsapceNodes
 
 Description   : Check whether the community, collection and
 				item data are already existing in Quadriga
@@ -8,19 +8,18 @@ Called By     : UI (DBConnectionDspaceManager.java)
 
 Create By     : Ram Kumar Kumaresan
 
-Modified Date : 07/09/2013
+Modified Date : 07/10/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_checkDsapceData;
+DROP PROCEDURE IF EXISTS sp_checkDsapceNodes;
 
 DELIMITER $$
-CREATE PROCEDURE sp_checkDsapceData
+CREATE PROCEDURE sp_checkDsapceNodes
 (
   IN  inCommunityid     VARCHAR(20),
   IN  inCollectionid    VARCHAR(20),
   IN  inItemid     		VARCHAR(20),
-  IN  inBitstreamid		VARCHAR(20),
   OUT dataStatus        VARCHAR(50)   
 )
 BEGIN
@@ -39,12 +38,6 @@ BEGIN
 						WHERE itemid = inItemid)
 					THEN 
 						SET dataStatus = "item exists";
-						
-						IF EXISTS(SELECT 1 FROM tbl_dspace_bitstream
-								WHERE bitstreamid = inBitstreamid)
-							THEN 
-								SET dataStatus = "bitstream exists";
-						END IF;
 				END IF;
 		END IF;
 	END IF;

@@ -8,6 +8,7 @@ import java.sql.Types;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -23,7 +24,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Ram Kumar Kumaresan
  * 
  */
-
 public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 
 	private Connection connection;
@@ -324,14 +324,14 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String checkDspaceStatus(String communityid, String collectionid, String itemid, String bitstreamid) throws QuadrigaStorageException
+	public String checkDspaceNodes(String communityid, String collectionid, String itemid) throws QuadrigaStorageException
 	{		
 		String sDBCommand;
 		String sDspaceDataStatus;
 
 		getConnection();
 
-		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.CHECK_DSPACEDATA_STATUS + "(?,?,?,?,?)";
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.CHECK_DSPACEDATA_NODES + "(?,?,?,?)";
 
 		try
 		{
@@ -340,13 +340,46 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 			sqlStatement.setString(1, communityid);
 			sqlStatement.setString(2, collectionid);
 			sqlStatement.setString(3, itemid);
-			sqlStatement.setString(4, bitstreamid);
-			sqlStatement.registerOutParameter(5,Types.VARCHAR);
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
 			//Execute the stored procedure
 			sqlStatement.execute();
 
-			sDspaceDataStatus = sqlStatement.getString(5);
+			sDspaceDataStatus = sqlStatement.getString(4);
+
+			return sDspaceDataStatus;
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}		
+	}
+	
+	@Override
+	public String checkDspaceBitStream(String bitstreamid) throws QuadrigaStorageException
+	{		
+		String sDBCommand;
+		String sDspaceDataStatus;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.CHECK_DSPACEDATA_BITSTREAM + "(?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, bitstreamid);
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sDspaceDataStatus = sqlStatement.getString(2);
 
 			return sDspaceDataStatus;
 		}

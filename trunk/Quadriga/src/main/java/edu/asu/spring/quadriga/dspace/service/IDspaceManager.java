@@ -6,6 +6,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * The interface to the DspaceManger which handles the url, RestTemplate required to make the REST service call.
@@ -104,5 +105,9 @@ public interface IDspaceManager {
 	 */
 	public abstract IBitStream getBitStreamName(String sCollectionId, String sItemId,
 			String sBitStreamId);
+
+	public abstract int addBitStreamsToWorkspace(String workspaceId, String communityId,
+			String collectionId, String itemId, String[] bitstreamIds,
+			String username) throws QuadrigaStorageException;
 
 }
