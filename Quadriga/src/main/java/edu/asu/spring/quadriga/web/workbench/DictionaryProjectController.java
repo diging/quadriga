@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.workspace;
+package edu.asu.spring.quadriga.web.workbench;
 
 import java.util.List;
 
@@ -72,7 +72,21 @@ public class DictionaryProjectController {
 
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
-
+			model.addAttribute("deletesuccess", 0);
+			List<IDictionary> dicitonaryList = null;
+			try {
+				dicitonaryList = projectDictionaryManager.listProjectDictionary(
+						projectid, userId);
+			} catch (QuadrigaStorageException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(dicitonaryList == null){
+				logger.info("Dictionary list is empty buddy");
+			}
+			model.addAttribute("dicitonaryList", dicitonaryList);
+			model.addAttribute("projectid", projectid);
+			return "auth/workbench/workspace/dictionaries";
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("values " + values[i]);

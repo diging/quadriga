@@ -63,8 +63,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	@Autowired
 	private IDictionaryItemsFactory dictionaryItemsFactory;
 	
-	@Autowired
-	private ICollaboratorFactory collaboratorFactory;
+
 	/**
 	 * Assigns the data source
 	 *  
