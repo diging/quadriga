@@ -289,6 +289,26 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/dictionaries.jsp" />
 	</definition>
+	
+	<definition name="auth/workbench/workspace/conceptcollections"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Project - Show Concept Collection" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/conceptcollections.jsp" />
+	</definition>
+	<definition name="auth/workbench/workspace/addconceptcollections"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Project - Add Concept Collection" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/addconceptcollection.jsp" />
+	</definition>
+	<definition name="auth/workbench/deleteconceptcollections"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Project - Add Concept Collection" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/deleteconceptcollection.jsp" />
+	</definition>
+	
 		<!-- changing the skeleton to have left and right navigation -->
 	<definition name="auth/workbench/workspace/workspacedetails" extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga - Workspace Details" />

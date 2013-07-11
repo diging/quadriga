@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 public class ProjectDictionaryManager implements IProjectDictionaryManager {
 
 	@Autowired
-	@Qualifier("DBConnectionProjectDictionary")
+	@Qualifier("DBConnectionProjectDictionaryBean")
 	private IDBConnectionProjectDictionary dbConnect;
 	
 	/**

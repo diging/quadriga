@@ -15,27 +15,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.sql.DBConstants;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionProjectDictionary;
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionProjectConceptColleciton;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public class DBConnectionProjectDictionary implements IDBConnectionProjectDictionary {
+public class DBConnectionProjectConceptColleciton implements
+		IDBConnectionProjectConceptColleciton {
 
 	private Connection connection;
-
-	@Autowired
-	private IDictionaryFactory dictionaryFactory;
 	
 	@Autowired
 	private DataSource dataSource;
-	
-	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectDictionary.class);
-	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.db.sql.workspace.IDBConnectionWSDictionary#setDataSource(javax.sql.DataSource)
-	 */
-	//@Override
+
+	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectConceptColleciton.class);
+
+	@Autowired
+	private IConceptCollectionFactory conceptCollectionFactory;
+
 	@Override
 	public void setDataSource(DataSource dataSource) 
 	{
@@ -77,71 +74,63 @@ public class DBConnectionProjectDictionary implements IDBConnectionProjectDictio
 			throw new QuadrigaStorageException("Oops!!Database hanged");
 		}
 	}
-	
-	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.db.sql.workspace.IDBConnectionWSDictionary#addWSDictionary(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
-	public String addProjectDictionary(String projectId, String dictionaryId, String userId)throws QuadrigaStorageException
-	{
-
+	public String addProjectConceptCollection(String projectId,
+			String conceptCollectionId, String userId)
+			throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
 		CallableStatement sqlStatement;
 
-
-
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_PROJECT_DICTIONARY  + "(?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_PROJECT_CONCEPT_COLLECTION  + "(?,?,?,?)";
 
 		//get the connection
 		getConnection();
 		//establish the connection with the database
-		try
-		{
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+				try
+				{
+					sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 
-			//adding the input variables to the SP
-			sqlStatement.setString(1, projectId);
-			sqlStatement.setString(2, dictionaryId);        	
-			sqlStatement.setString(3,userId);
+					//adding the input variables to the SP
+					sqlStatement.setString(1, projectId);
+					sqlStatement.setString(2, conceptCollectionId);        	
+					sqlStatement.setString(3,userId);
 
-			//adding output variables to the SP
-			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+					//adding output variables to the SP
+					sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
-			sqlStatement.execute();
+					sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(4);
+					errmsg = sqlStatement.getString(4);
 
-			return errmsg;
+					return errmsg;
 
-		}
-		catch(SQLException e)
-		{
-			errmsg="DB Issue";
-			e.printStackTrace();
-			throw new QuadrigaStorageException();
-			
-		}catch(Exception e){
-			errmsg="DB Issue";
-			e.printStackTrace();
-		}
-		finally
-		{
-			closeConnection();
-		}
-		return errmsg;
+				}
+				catch(SQLException e)
+				{
+					errmsg="DB Issue";
+					e.printStackTrace();
+					throw new QuadrigaStorageException();
+					
+				}catch(Exception e){
+					errmsg="DB Issue";
+					e.printStackTrace();
+				}
+				finally
+				{
+					closeConnection();
+				}
+		return null;
 	}
-	
+
 	@Override
-	public List<IDictionary> listProjectDictionary(String projectId,String userId)throws QuadrigaStorageException
-	{
-		
+	public List<IConceptCollection> listProjectConceptCollection(String projectId,
+			String userId) throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
 		CallableStatement sqlStatement;
-		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+		List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
 
 		//command to call the SP
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_PROJECT_CONCEPT_COLLECTION  + "(?,?,?)";
@@ -149,6 +138,7 @@ public class DBConnectionProjectDictionary implements IDBConnectionProjectDictio
 		//get the connection
 		getConnection();
 		//establish the connection with the database
+		
 		try{
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 
@@ -163,23 +153,24 @@ public class DBConnectionProjectDictionary implements IDBConnectionProjectDictio
 			ResultSet resultSet = sqlStatement.getResultSet();
 			if(resultSet !=null){ 
 				while (resultSet.next()) { 
-					IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-					dictionary.setName(resultSet.getString(1));
-					dictionary.setDescription(resultSet.getString(2));
-					dictionary.setId(resultSet.getString(3));
-					dictionaryList.add(dictionary);
+					IConceptCollection conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
+					conceptCollection.setName(resultSet.getString(1));
+					conceptCollection.setDescription(resultSet.getString(2));
+					conceptCollection.setId(Integer.parseInt(resultSet.getString(3)));
+					conceptCollectionList.add(conceptCollection);
 				} 
 			}
 			errmsg = sqlStatement.getString(3);
 			if(errmsg.isEmpty())
 			{
-				return dictionaryList;
+				return conceptCollectionList;
 			}
 			else
 			{
-				logger.info("No dictionaries in the project :"+errmsg);
+				logger.info("No concept collection in the project :"+errmsg);
 				return null;
 			}
+			
 		}catch(SQLException e){
 			logger.info(e.getMessage());
 			throw new QuadrigaStorageException();
@@ -190,19 +181,22 @@ public class DBConnectionProjectDictionary implements IDBConnectionProjectDictio
 		{
 			closeConnection();
 		}
-		return dictionaryList;
+		
+		
+		return conceptCollectionList;
 	}
 	
+
 	@Override
-	public String deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException
-	{
-		
+	public String deleteProjectConceptCollection(String projectId,
+			String userId, String conceptCollectionId)
+			throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
 		CallableStatement sqlStatement;		
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_DICTIONARY  + "(?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_CONCEPT_COLLECTION  + "(?,?,?,?)";
 
 		//get the connection
 		getConnection();
@@ -212,7 +206,7 @@ public class DBConnectionProjectDictionary implements IDBConnectionProjectDictio
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, userId);
-			sqlStatement.setString(2, dictioanaryId);        	
+			sqlStatement.setString(2, conceptCollectionId);        	
 			sqlStatement.setString(3, projectId);  
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(4,Types.VARCHAR);
@@ -232,4 +226,5 @@ public class DBConnectionProjectDictionary implements IDBConnectionProjectDictio
 		}
 		return "";
 	}
+	
 }

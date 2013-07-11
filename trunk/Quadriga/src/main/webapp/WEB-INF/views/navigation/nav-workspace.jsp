@@ -18,6 +18,9 @@
 					» <a href="/quadriga/auth/workbench/${project.internalid}/adddictionary">Add Dictionary</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/dictionaries">List Dictionary</a><br /><br />
 					» <a href="/quadriga/auth/workbench/${project.internalid}/deletedictionary">Delete Dictionary</a><br /><br />
+					» <a href="/quadriga/auth/workbench/${project.internalid}/addconceptcollection">Add Collection Concept</a><br /><br />
+					» <a href="/quadriga/auth/workbench/${project.internalid}/conceptcollections">List Collection Concept</a><br /><br />
+					» <a href="/quadriga/auth/workbench/${project.internalid}/deleteconceptcollections">Delete Collection Concept</a><br /><br />
 				</h3>
 			</article>
 		</li>

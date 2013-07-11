@@ -89,13 +89,13 @@
 
 <div class="container">
 	<c:choose>
-		<c:when test="${not empty dictinarylist}">
+		<c:when test="${not empty conceptCollectionList}">
 
 			<form method="POST">
 
 
-				 <input type="submit" value="Add Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/adddictionaries'" />
+				 <input type="submit" value="Add Concept Collection"
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addconceptcollection'" />
 
 				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"
@@ -105,22 +105,22 @@
 						<tr>
 							<th align="left"><input type="checkbox" id="selectall">Select
 								All</th>
-							<th>Dictionary Name</th>
-							<th>Dictionary Description</th>
+							<th>Concept Collection Name</th>
+							<th>Concept Collection Description</th>
 						</tr>
 					</thead>
 
 					<tbody>
-						<c:forEach var="dictionary" items="${dictinarylist}">
+						<c:forEach var="conceptCollection" items="${conceptCollectionList}">
 							<tr>
 								<td width="10%"><input type="checkbox" class="selected" name="selected"
-									value='<c:out value="${dictionary.id}"></c:out>' /></td>
+									value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
 								<td align="center"><input name="items"
 									type="hidden"
-									value="<c:out value="${dictionary.name}"></c:out>" /> 
-									<c:out value="${dictionary.name}"></c:out></td>
+									value="<c:out value="${conceptCollection.name}"></c:out>" /> 
+									<c:out value="${conceptCollection.name}"></c:out></td>
 								<td  align="justify">
-								<c:out	value="${dictionary.description}"></c:out></td>
+								<c:out	value="${conceptCollection.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -130,7 +130,7 @@
 		</c:when>
 
 		<c:otherwise>
-			<br><spring:message code="empty.dictionary" />
+			<br><spring:message code="empty.CC" />
 	</c:otherwise>
 	</c:choose>
 </div>
