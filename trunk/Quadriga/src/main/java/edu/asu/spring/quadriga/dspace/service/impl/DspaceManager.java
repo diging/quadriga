@@ -168,11 +168,21 @@ public class DspaceManager implements IDspaceManager{
 		String status = dbconnectionManager.checkDspaceNodes(communityId, collectionId, itemId);
 		if(status == null)
 		{
+			//No community metadata is found in the database
 			System.out.println("No community found: "+communityId);
 		}
 		else
 		{
+			//Community metadata is found in the database
 			System.out.println(status);
+			switch (status) {
+			case "":
+				
+				break;
+
+			default:
+				break;
+			}
 		}
 		
 		for(String bitstreamId: bitstreamIds)
