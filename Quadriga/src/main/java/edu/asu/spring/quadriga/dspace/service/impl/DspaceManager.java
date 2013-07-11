@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,14 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
-import edu.asu.spring.quadriga.service.impl.DictionaryManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * The purpose of the class is to make rest service calls to dspace
@@ -48,6 +50,11 @@ public class DspaceManager implements IDspaceManager{
 	//Handle to the proxy community manager class
 	@Autowired
 	private ICommunityManager proxyCommunityManager;
+	
+	
+	@Autowired
+	private IDBConnectionDspaceManager dbconnectionManager;
+	
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
@@ -152,7 +159,35 @@ public class DspaceManager implements IDspaceManager{
 	{
 		return proxyCommunityManager.getBitStreamName(sCollectionId, sItemId, sBitStreamId);
 	}
+	
+	
+	@Override
+	public int addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException
+	{
+		//Check the status of community, collection and item in the database
+		String status = dbconnectionManager.checkDspaceNodes(communityId, collectionId, itemId);
+		if(status == null)
+		{
+			System.out.println("No community found: "+communityId);
+		}
+		else
+		{
+			System.out.println(status);
+		}
+		
+		for(String bitstreamId: bitstreamIds)
+		{
+			//Check if each bitstream is already present in database
+			
+			//Insert bitstream details as it is not present
+			
+			//Add bitstream to workspace
 
+		}
+		
+		return 0;
+	}
+	
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
@@ -160,7 +195,7 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	public void start()
 	{
-		logger.info("The filepath used is: "+filePath);
+		logger.info("The certificate filepath used is: "+filePath);
 		System.setProperty("javax.net.ssl.trustStore", filePath);
 		
 

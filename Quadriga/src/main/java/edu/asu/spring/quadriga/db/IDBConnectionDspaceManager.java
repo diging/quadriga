@@ -22,9 +22,12 @@ public interface IDBConnectionDspaceManager {
 			String itemid, String bitstreamid, String name, String size,
 			String mimeType, String username) throws QuadrigaStorageException;
 
-	public abstract String checkDspaceStatus(String communityid, String collectionid,
-			String itemid, String bitstreamid) throws QuadrigaStorageException;
+	public abstract String checkDspaceNodes(String communityid, String collectionid,
+			String itemid) throws QuadrigaStorageException;
 
+	public abstract String checkDspaceBitStream(String bitstreamid)
+			throws QuadrigaStorageException;
+	
 	public abstract int addBitstreamToWorkspace(String workspaceid, String bitstreamid,
 			String username) throws QuadrigaStorageException;
 
