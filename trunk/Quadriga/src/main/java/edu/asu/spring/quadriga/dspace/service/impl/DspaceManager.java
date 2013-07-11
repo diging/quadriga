@@ -175,14 +175,6 @@ public class DspaceManager implements IDspaceManager{
 		{
 			//Community metadata is found in the database
 			System.out.println(status);
-			switch (status) {
-			case "":
-				
-				break;
-
-			default:
-				break;
-			}
 		}
 		
 		for(String bitstreamId: bitstreamIds)
