@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -225,12 +226,12 @@ public class ListWSManagerTest {
 	}
 
 	@Test
-	public void testGetWorkspaceDetails() throws QuadrigaStorageException {
+	public void testGetWorkspaceDetails() throws QuadrigaStorageException, QuadrigaAccessException {
 		IWorkSpace workspace;
 		IWorkSpace testWorkspace;
 		IUser user;
 		
-		workspace = wsManager.getWorkspaceDetails("WS_1");
+		workspace = wsManager.getWorkspaceDetails("WS_1","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");

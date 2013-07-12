@@ -221,14 +221,9 @@ public class DspaceController {
 	
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/addbitstreams", method = RequestMethod.POST)
 	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
-		System.out.println(workspaceId+" Controller received request......................."+bitstreamids.length);
-		System.out.println(communityId+" "+collectionId+" "+itemId);
-		
 		
 		dspaceManager.addBitStreamsToWorkspace(workspaceId, communityId, collectionId, itemId, bitstreamids, principal.getName());
-		
-		
-		
-		return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
+		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
+	
 }

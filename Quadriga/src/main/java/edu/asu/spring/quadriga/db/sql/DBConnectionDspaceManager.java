@@ -2,15 +2,22 @@ package edu.asu.spring.quadriga.db.sql;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
+import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.implementation.BitStream;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -30,6 +37,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 
 	@Autowired
 	private DataSource dataSource;
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(IDBConnectionDspaceManager.class);
 
 	/**
 	 * @Description: Assigns the data source used by this class
