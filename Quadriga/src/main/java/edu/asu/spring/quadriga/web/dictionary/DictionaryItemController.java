@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaUIAccessException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
@@ -57,7 +57,7 @@ public class DictionaryItemController {
 	 * 
 	 * @return Return to the list dictionary items page of the Quadriga
 	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAcessException 
+	 * @throws QuadrigaAccessException 
 	 */
 
 	@RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)

@@ -32,7 +32,7 @@ import edu.asu.spring.quadriga.domain.implementation.CollectionsValidator;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -109,14 +109,14 @@ public class ConceptcollectionController {
 
 	/**
 	 * Returns the list of concept collections of user to the view
-	 * @throws QuadrigaAcessException 
+	 * @throws QuadrigaAccessException 
 	 * 
 	 * 
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
 	public String conceptDetailsHandler(
 			@PathVariable("collection_id") int collection_id, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAcessException {
+			throws QuadrigaStorageException, QuadrigaAccessException {
 
 		collection = collectionFactory.createConceptCollectionObject();
 		collection.setId(collection_id);
@@ -143,7 +143,7 @@ public class ConceptcollectionController {
 
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
 	public String saveItemsHandler(@PathVariable("collection_id") int collection_id, HttpServletRequest req, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAcessException {
+			throws QuadrigaStorageException, QuadrigaAccessException {
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
 			for (String id : values) {
@@ -206,13 +206,13 @@ public class ConceptcollectionController {
 	 * Returns the list of concept collections of user to the view
 	 * 
 	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAcessException 
+	 * @throws QuadrigaAccessException 
 	 * 
 	 * 
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/deleteitems", method = RequestMethod.POST)
 	public String deleteItems(HttpServletRequest req, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAcessException {
+			throws QuadrigaStorageException, QuadrigaAccessException {
 
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {

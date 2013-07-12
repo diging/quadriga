@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -177,7 +177,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 */
 	@Override
 	public void getCollectionDetails(IConceptCollection collection, String username)
-			throws QuadrigaStorageException, QuadrigaAcessException {
+			throws QuadrigaStorageException, QuadrigaAccessException {
 
 		if (collection == null) {
 			logger.error("getCollectionDetails: input argument conceptcollection is NULL");
@@ -222,7 +222,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			else
 			{
 				logger.info("USER ACCESS ERROR:" +errmsg );
-				throw new QuadrigaAcessException("Hmmm!!  You dont have access to this page");
+				throw new QuadrigaAccessException("Hmmm!!  You dont have access to this page");
 			}
 		} catch (SQLException e) {
 			logger.error("Exception", e);

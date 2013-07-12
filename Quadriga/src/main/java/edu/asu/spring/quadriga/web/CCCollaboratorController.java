@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
@@ -92,7 +92,7 @@ public class CCCollaboratorController {
 	  }
 	 
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
-		public String displayCollaborator(@PathVariable("collection_id") int collectionid, ModelMap model, Principal principal) throws QuadrigaAcessException
+		public String displayCollaborator(@PathVariable("collection_id") int collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException
 		{
 			List<ICollaboratorRole> collaboratorRoles = null;
 			List<IUser> noncollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	

@@ -23,10 +23,10 @@ public class ExceptionInterceptor {
 	@AfterThrowing(pointcut = "within(edu.asu.spring.quadriga.web..*)", throwing = "t")
 	public void toRuntimeException(Throwable t)
 			throws QuadrigaStorageException, RestException,
-			QuadrigaAcessException, QuadrigaException, QuadrigaUIAccessException {
-		if (t instanceof QuadrigaAcessException) {
+			QuadrigaAccessException, QuadrigaException, QuadrigaUIAccessException {
+		if (t instanceof QuadrigaAccessException) {
 			logger.error(t.getMessage(), t);
-			throw (QuadrigaAcessException) t;
+			throw (QuadrigaAccessException) t;
 		} else if (t instanceof QuadrigaStorageException) {
 			logger.error(t.getMessage(), t);
 			throw (QuadrigaStorageException) t;

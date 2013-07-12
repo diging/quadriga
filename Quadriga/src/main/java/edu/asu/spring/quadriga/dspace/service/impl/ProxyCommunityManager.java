@@ -211,35 +211,35 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IBitStream getBitStreamName(String sCollectionId, String sItemId, String sBitStreamId)
+	public IBitStream getBitStream(String sCollectionId, String sItemId, String sBitStreamId)
 	{
 		//Check if a request for communities has been made to Dspace
-				if(this.collections!=null)
+		if(this.collections!=null)
+		{
+			for(ICollection collection: collections)
+			{
+				if(collection.getId().equals(sCollectionId))
 				{
-					for(ICollection collection: collections)
+					for(IItem item: collection.getItems())
 					{
-						if(collection.getId().equals(sCollectionId))
+						if(item.getId().equals(sItemId))
 						{
-							for(IItem item: collection.getItems())
+							for(IBitStream bitstream: item.getBitstreams())
 							{
-								if(item.getId().equals(sItemId))
+								if(bitstream.getId().equals(sBitStreamId))
 								{
-									for(IBitStream bitstream: item.getBitstreams())
-									{
-										if(bitstream.getId().equals(sBitStreamId))
-										{
-											return bitstream;
-										}
-									}
+									return bitstream;
 								}
 							}
 						}
 					}
 				}
-				
-				return null;
+			}
+		}
+
+		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -263,10 +263,10 @@ public class ProxyCommunityManager implements ICommunityManager {
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -295,11 +295,11 @@ public class ProxyCommunityManager implements ICommunityManager {
 									bitstream.setId(bitid);
 									item.addBitstream(bitstream);
 								}
-								
+
 								item.setRestConnectionDetails(restTemplate, url, sUserName, sPassword);
 								Thread bitstreamThread = new Thread(item);
 								bitstreamThread.start();
-								
+
 							}
 							return item.getBitstreams();
 						}
@@ -307,7 +307,43 @@ public class ProxyCommunityManager implements ICommunityManager {
 				}
 			}
 		}
+		return null;
+	}
 
+	@Override
+	public ICommunity getCommunity(String communityId)
+	{
+		if(this.communities != null)
+		{
+			for(ICommunity community: this.communities)
+			{
+				if(community.getId().equals(communityId))
+					return community;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public IItem getItem(String collectionId, String itemId)
+	{
+		//Check if a request for communities has been made to Dspace
+		if(this.collections!=null)
+		{
+			for(ICollection collection: collections)
+			{
+				if(collection.getId().equals(collectionId))
+				{
+					for(IItem item: collection.getItems())
+					{
+						if(item.getId().equals(itemId))
+						{
+							return item;
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 }

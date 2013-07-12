@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 
@@ -75,10 +75,10 @@ public interface IConceptCollectionManager {
 	 * @param concept
 	 * @param username 
 	 * @throws QuadrigaStorageException 
-	 * @throws QuadrigaAcessException 
+	 * @throws QuadrigaAccessException 
 	 * 
 	 */
-	public abstract void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAcessException;
+	public abstract void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAccessException;
 	
 	/**
 	 * Method is used to add new items to items list of a conceptcollection

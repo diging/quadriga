@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAcessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
@@ -173,7 +173,7 @@ public class ConceptCollectionRestController {
 		} catch (QuadrigaStorageException e) {
 			logger.error("Exception:", e);
 			throw new RestException(405);
-		} catch (QuadrigaAcessException e) {
+		} catch (QuadrigaAccessException e) {
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} 
