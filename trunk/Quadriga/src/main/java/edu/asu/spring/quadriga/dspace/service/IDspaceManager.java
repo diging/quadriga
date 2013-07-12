@@ -6,6 +6,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -103,11 +104,11 @@ public interface IDspaceManager {
 	 * @param sBitStreamId	The bitstream id for which the name is requested.
 	 * @return				The bitstream name of the bitstream.
 	 */
-	public abstract IBitStream getBitStreamName(String sCollectionId, String sItemId,
+	public abstract IBitStream getBitStream(String sCollectionId, String sItemId,
 			String sBitStreamId);
 
 	public abstract int addBitStreamsToWorkspace(String workspaceId, String communityId,
 			String collectionId, String itemId, String[] bitstreamIds,
-			String username) throws QuadrigaStorageException;
+			String username)throws QuadrigaStorageException, QuadrigaAccessException;
 
 }

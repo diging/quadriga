@@ -4,26 +4,26 @@ package edu.asu.spring.quadriga.exceptions;
  * @author satyaswaroop Boddu
  *
  */
-public class QuadrigaAcessException extends Exception {
+public class QuadrigaAccessException extends Exception {
 
 	private static final long serialVersionUID = -6019469278891056730L;
 
-	public QuadrigaAcessException() {
+	public QuadrigaAccessException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public QuadrigaAcessException(String arg0, Throwable arg1) {
+	public QuadrigaAccessException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
 	}
 
-	public QuadrigaAcessException(String arg0) {
+	public QuadrigaAccessException(String arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public QuadrigaAcessException(Throwable arg0) {
+	public QuadrigaAccessException(Throwable arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}

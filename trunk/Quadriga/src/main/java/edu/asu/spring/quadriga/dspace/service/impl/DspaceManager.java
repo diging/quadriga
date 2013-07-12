@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -50,12 +50,12 @@ public class DspaceManager implements IDspaceManager{
 	//Handle to the proxy community manager class
 	@Autowired
 	private ICommunityManager proxyCommunityManager;
-	
-	
+
+
 	@Autowired
 	private IDBConnectionDspaceManager dbconnectionManager;
-	
-	
+
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
 
@@ -150,46 +150,95 @@ public class DspaceManager implements IDspaceManager{
 	{
 		return proxyCommunityManager.getItemName(sCollectionId, sItemId);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IBitStream getBitStreamName(String sCollectionId, String sItemId, String sBitStreamId)
+	public IBitStream getBitStream(String sCollectionId, String sItemId, String sBitStreamId)
 	{
-		return proxyCommunityManager.getBitStreamName(sCollectionId, sItemId, sBitStreamId);
+		return proxyCommunityManager.getBitStream(sCollectionId, sItemId, sBitStreamId);
 	}
-	
-	
+
+
 	@Override
-	public int addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException
+	public int addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
+		ICommunity community = proxyCommunityManager.getCommunity(communityId);
+		ICollection collection = proxyCommunityManager.getCollection(collectionId);
+		IItem item = proxyCommunityManager.getItem(collectionId, itemId);
+
+		//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
+		if(community == null || collection == null || item == null)
+		{
+			logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+			logger.info("Community id: "+communityId);
+			logger.info("Collection id: "+collectionId);
+			logger.info("Item id: "+itemId);
+			logger.info("Bitstreams selected: "+bitstreamIds.length);
+			throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
+		}
+
 		//Check the status of community, collection and item in the database
 		String status = dbconnectionManager.checkDspaceNodes(communityId, collectionId, itemId);
 		if(status == null)
 		{
-			//No community metadata is found in the database
-			System.out.println("No community found: "+communityId);
+			//Community, Collection and Item metadata does not exist	
+			dbconnectionManager.addCommunity(communityId, community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), username);
+			dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username);
+			dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username);
+
 		}
 		else
 		{
 			//Community metadata is found in the database
-			System.out.println(status);
-		}
-		
-		for(String bitstreamId: bitstreamIds)
-		{
-			//Check if each bitstream is already present in database
-			
-			//Insert bitstream details as it is not present
-			
-			//Add bitstream to workspace
+			if(status.equalsIgnoreCase("community exists"))
+			{
+				//Collection and Item metadata does not exist. Add the metadata to the database.				
+				dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username);
+				dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username);
 
+			}
+			//Collection metadata is found in the database
+			else if(status.equalsIgnoreCase("collection exists"))
+			{
+				//Item metadata does not exist. Add the metadata to the database.
+				dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username);
+			}
 		}
-		
+
+		/**The metadata about community, collections and items are added
+		 * Now check if each bitstream is already present in the database.
+		 * If yes, then just add the bitstreamid to the workspace.
+		 * If no, then add the bitstream metadata and then add the bitstreamid to workspace.
+		 */
+		for(String bitstreamId: bitstreamIds)
+		{			
+			IBitStream bitstream;
+			if(dbconnectionManager.checkDspaceBitStream(bitstreamId)==null)
+			{
+				bitstream = proxyCommunityManager.getBitStream(collectionId, itemId, bitstreamId);
+				//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
+				if(bitstream == null)
+				{
+					logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+					logger.info("Community id: "+communityId);
+					logger.info("Collection id: "+collectionId);
+					logger.info("Item id: "+itemId);
+					logger.info("Bitstreams selected: "+bitstreamIds.length);
+					logger.info("Bitstream id: "+bitstreamId);
+					throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
+				}
+				dbconnectionManager.addBitStream(communityId, collectionId, itemId, bitstreamId, bitstream.getName(), bitstream.getSize(), bitstream.getMimeType(), username);
+			}
+
+			//Add bitstream to workspace
+			dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
+		}
+
 		return 0;
 	}
-	
+
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
@@ -199,7 +248,7 @@ public class DspaceManager implements IDspaceManager{
 	{
 		logger.info("The certificate filepath used is: "+filePath);
 		System.setProperty("javax.net.ssl.trustStore", filePath);
-		
+
 
 		javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
 				new javax.net.ssl.HostnameVerifier(){

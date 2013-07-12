@@ -112,6 +112,10 @@ public interface ICommunityManager {
 	 * @param sBitStreamId	The bitstream id for which the name is requested.
 	 * @return				The bitstream name of the bitstream.
 	 */
-	public abstract IBitStream getBitStreamName(String sCollectionId, String sItemId,
+	public abstract IBitStream getBitStream(String sCollectionId, String sItemId,
 			String sBitStreamId);
+
+	public abstract ICommunity getCommunity(String communityId);
+
+	public abstract IItem getItem(String collectionId, String itemId);
 }
