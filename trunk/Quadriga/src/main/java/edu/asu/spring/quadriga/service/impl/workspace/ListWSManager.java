@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -107,12 +108,14 @@ public class ListWSManager implements IListWSManager
 	 * @return  IWorkSpace - workspace object
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@Override
-	public IWorkSpace getWorkspaceDetails(String workspaceId) throws QuadrigaStorageException
+	public IWorkSpace getWorkspaceDetails(String workspaceId, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		IWorkSpace workspace;
 		workspace = dbConnect.getWorkspaceDetails(workspaceId);
+		workspace.setBitstreams(dbConnect.getBitStreams(workspaceId, username));
 		return workspace;
 	}
 }

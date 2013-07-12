@@ -172,6 +172,8 @@ public class DspaceManager implements IDspaceManager{
 		if(community == null || collection == null || item == null)
 		{
 			logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+			logger.info("Class Name: DspaceManager");
+			logger.info("Method Name: addBitStreamsToWorkspace");
 			logger.info("Community id: "+communityId);
 			logger.info("Collection id: "+collectionId);
 			logger.info("Item id: "+itemId);
@@ -222,6 +224,8 @@ public class DspaceManager implements IDspaceManager{
 				if(bitstream == null)
 				{
 					logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+					logger.info("Class Name: DspaceManager");
+					logger.info("Method Name: addBitStreamsToWorkspace");
 					logger.info("Community id: "+communityId);
 					logger.info("Collection id: "+collectionId);
 					logger.info("Item id: "+itemId);
@@ -238,7 +242,9 @@ public class DspaceManager implements IDspaceManager{
 
 		return 0;
 	}
-
+	
+	
+	
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.

@@ -23,4 +23,16 @@ public interface IBitStream {
 
 	public abstract String getId();
 
+	public abstract void setItemName(String itemName);
+
+	public abstract String getItemName();
+
+	public abstract void setCollectionName(String collectionName);
+
+	public abstract String getCollectionName();
+
+	public abstract void setCommunityName(String communityName);
+
+	public abstract String getCommunityName();
+
 }

@@ -31,4 +31,10 @@ public interface IWorkSpace
 
 	public abstract String getId();
 
+	public abstract void addBitstream(IBitStream bitstream);
+
+	public abstract void setBitstreams(List<IBitStream> bitstreams);
+
+	public abstract List<IBitStream> getBitstreams();
+
 }

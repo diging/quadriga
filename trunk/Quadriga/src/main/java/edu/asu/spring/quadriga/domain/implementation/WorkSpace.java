@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -20,6 +21,7 @@ public class WorkSpace implements IWorkSpace
 	private String id;
 	private IUser owner;
 	private List<ICollaborator> collaborators;
+	private List<IBitStream> bitstreams;
 	
 	@Override
 	public String getName() {
@@ -103,6 +105,21 @@ public class WorkSpace implements IWorkSpace
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public List<IBitStream> getBitstreams() {
+		return bitstreams;
+	}
+	@Override
+	public void setBitstreams(List<IBitStream> bitstreams) {
+		this.bitstreams = bitstreams;
+	}
+	
+	@Override
+	public void addBitstream(IBitStream bitstream)
+	{
+		this.bitstreams.add(bitstream);
 	}
 
 }

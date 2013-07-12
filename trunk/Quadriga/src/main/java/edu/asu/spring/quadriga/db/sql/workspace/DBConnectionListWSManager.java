@@ -17,9 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
+import edu.asu.spring.quadriga.domain.implementation.BitStream;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -509,5 +512,71 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 			closeConnection();
 		}
 		return workspace;
+	}
+	
+	@Override
+	public List<IBitStream> getBitStreams(String workspaceId, String username) throws QuadrigaAccessException, QuadrigaStorageException
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.LIST_WORKSPACE_BITSTREAM + "(?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, workspaceId);
+			sqlStatement.setString(2, username);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(3);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully retrieved the bitstreams associated with the workspace
+				List<IBitStream> bitstreamList = new ArrayList<IBitStream>();
+				ResultSet result = sqlStatement.getResultSet();
+				
+				BitStream bitstream = null;
+				while(result.next())
+				{
+					bitstream = new BitStream();
+					bitstream.setCommunityName(result.getString(1));
+					bitstream.setCollectionName(result.getString(2));
+					bitstream.setItemName(result.getString(3));
+					bitstream.setName(result.getString(4));
+					bitstream.setId(result.getString(5));
+					bitstreamList.add(bitstream);
+				}
+				
+				return bitstreamList;
+			}
+			else
+			{
+				logger.info("The user "+username+" tried to hack into the bitstream list with the following values:");
+				logger.info("Class Name: DBConnectionDspaceManager");
+				logger.info("Method Name: getBitStreams");
+				logger.info("Workspace id: "+workspaceId);
+				throw new QuadrigaAccessException(sOutErrorValue);
+			}
+		}
+		catch(SQLException e)
+		{
+			logger.info("The user "+username+" tried to hack into the bitstream list with the following values:");
+			logger.info("Class Name: DBConnectionDspaceManager");
+			logger.info("Method Name: getBitStreams");
+			logger.info("Workspace id: "+workspaceId);
+			throw new QuadrigaAccessException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}			
 	}
 }

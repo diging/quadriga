@@ -13,8 +13,40 @@ public class BitStream implements IBitStream{
 	private String name;
 	private String size;
 	private String mimeType;
+	private String communityName;
+	private String collectionName;
+	private String itemName;
 	
-	
+	@Override
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	@Override
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
+
+	@Override
+	public String getCollectionName() {
+		return collectionName;
+	}
+
+	@Override
+	public void setCollectionName(String collectionName) {
+		this.collectionName = collectionName;
+	}
+
+	@Override
+	public String getItemName() {
+		return itemName;
+	}
+
+	@Override
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
 	@Override
 	public String getId() {
 		return id;

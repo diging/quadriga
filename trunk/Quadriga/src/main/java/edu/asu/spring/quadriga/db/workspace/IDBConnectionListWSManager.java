@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionListWSManager {
@@ -28,5 +30,8 @@ public interface IDBConnectionListWSManager {
 
 	public abstract void setupTestEnvironment(String sQuery)
 			throws QuadrigaStorageException;
+
+	public abstract List<IBitStream> getBitStreams(String workspaceId, String username)
+			throws QuadrigaStorageException, QuadrigaAccessException;
 
 }
