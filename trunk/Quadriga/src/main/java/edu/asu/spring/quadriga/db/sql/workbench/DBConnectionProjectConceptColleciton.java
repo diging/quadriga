@@ -156,7 +156,7 @@ public class DBConnectionProjectConceptColleciton implements
 					IConceptCollection conceptCollection = conceptCollectionFactory.createConceptCollectionObject();
 					conceptCollection.setName(resultSet.getString(1));
 					conceptCollection.setDescription(resultSet.getString(2));
-					conceptCollection.setId(Integer.parseInt(resultSet.getString(3)));
+					conceptCollection.setId(resultSet.getString(3));
 					conceptCollectionList.add(conceptCollection);
 				} 
 			}

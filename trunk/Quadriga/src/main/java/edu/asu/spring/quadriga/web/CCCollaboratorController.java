@@ -92,7 +92,7 @@ public class CCCollaboratorController {
 	  }
 	 
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
-		public String displayCollaborator(@PathVariable("collection_id") int collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException
+		public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException
 		{
 			List<ICollaboratorRole> collaboratorRoles = null;
 			List<IUser> noncollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
@@ -136,7 +136,7 @@ public class CCCollaboratorController {
 		}
 		
 		@RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
-		public String addCollaborators(@PathVariable("collection_id") int collectionid, ModelMap model,
+		public String addCollaborators(@PathVariable("collection_id") String collectionid, ModelMap model,
 				@ModelAttribute ICollaborator collaborator, Principal principal)
 		{
 			String username = principal.getName();

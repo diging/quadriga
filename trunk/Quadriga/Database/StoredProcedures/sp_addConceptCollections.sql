@@ -25,6 +25,8 @@ CREATE PROCEDURE sp_addConceptCollections
 )
 BEGIN
 
+	 DECLARE uniqueId  BIGINT;
+     DECLARE collectionId VARCHAR(100);
     -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
@@ -41,10 +43,6 @@ BEGIN
 
    
 
-	IF EXISTS(SELECT 1 FROM vw_conceptcollections
-                WHERE collectionname = incollectionname)
-      THEN SET errmsg = "collectionid is already assigned to a project.";
-     END IF;
 
     IF(inaccessibility IS NULL)
        THEN SET errmsg = "accessibility cannot be empty";
@@ -63,10 +61,12 @@ BEGIN
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
          START TRANSACTION;
+         	SET uniqueId = UUID_SHORT();
+            SET collectionId = CONCAT('CC_',CAST(uniqueId AS CHAR));
             INSERT 
-              INTO tbl_conceptcollections(collectionname,description,collectionowner,accessibility,
+              INTO tbl_conceptcollections(id, collectionname,description,collectionowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (incollectionname,indescription,incollectionowner,inaccessibility,
+			 VALUES (collectionId, incollectionname,indescription,incollectionowner,inaccessibility,
                      incollectionowner,NOW(),incollectionowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;

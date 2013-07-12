@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_deleteCollectionItem	
 (
   IN  initemid	 			varchar(255),
-  IN  incollectionid		INT,
+  IN  incollectionid		VARCHAR(100),
   OUT errmsg           		VARCHAR(255)    
 )
 BEGIN

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS tbl_conceptcollections
   collectionname  VARCHAR(50)   NOT NULL,
   description     TEXT          NULL,
   
-  id              INT           NOT NULL AUTO_INCREMENT,
+  id              VARCHAR(100)           NOT NULL ,
   collectionowner VARCHAR(50)   NOT NULL ,
   accessibility   TINYINT       NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,

@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_addCollectionCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_addCollectionCollaborators
 (
-	IN incollectionid 			INT,
+	IN incollectionid 			VARCHAR(100),
 	IN incollaboratoruser	VARCHAR(10),
 	IN incollaboratorrole	VARCHAR(50),
 	IN inuser				VARCHAR(50),

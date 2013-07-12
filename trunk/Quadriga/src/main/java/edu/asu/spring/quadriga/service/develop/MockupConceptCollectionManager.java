@@ -94,35 +94,7 @@ public class MockupConceptCollectionManager implements
 		
 	}
 
-	@Override
-	public void addItems(String lemmma, String id, String pos, String desc,
-			int conceptId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteItem(String id, int i) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<IUser> showNonCollaboratingUsers(int collectionid) {
-		return null;
-	}
-
-	@Override
-	public List<ICollaborator> showCollaboratingUsers(int collectionid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String addCollaborators(ICollaborator collaborator, int collectionid, String userName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public void getCollaborators(IConceptCollection collection) {
@@ -136,6 +108,39 @@ public class MockupConceptCollectionManager implements
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void addItems(String lemmma, String id, String pos, String desc,
+			String conceptcollectionId) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteItem(String id, String collectionid)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<IUser> showNonCollaboratingUsers(String collectionid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ICollaborator> showCollaboratingUsers(String collectionid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String addCollaborators(ICollaborator collaborator,
+			String collectionid, String userName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

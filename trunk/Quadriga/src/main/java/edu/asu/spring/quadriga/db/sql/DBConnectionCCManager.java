@@ -100,7 +100,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					do {
 						conceptCollection = conceptCollectionFactory
 								.createConceptCollectionObject();
-						conceptCollection.setId(resultSet.getInt(1));
+						conceptCollection.setId(resultSet.getString(1));
 						conceptCollection.setName(resultSet.getString(2));
 						conceptCollection
 								.setDescription(resultSet.getString(3));
@@ -152,7 +152,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					do {
 						conceptCollection = conceptCollectionFactory
 								.createConceptCollectionObject();
-						conceptCollection.setId(resultSet.getInt(1));
+						conceptCollection.setId(resultSet.getString(1));
 						conceptCollection.setName(resultSet.getString(2));
 						conceptCollection
 								.setDescription(resultSet.getString(3));
@@ -195,7 +195,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 			 sqlStatement = connection.prepareCall("{"
 					+ dbCommand + "}");
-			sqlStatement.setInt(1, collection.getId());
+			sqlStatement.setString(1, collection.getId());
 			sqlStatement.setString(2, username);
 			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
 			sqlStatement.execute();
@@ -243,7 +243,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 */
 	@Override
 	public void saveItem(String lemma, String id, String pos, String desc,
-			int conceptId) throws QuadrigaStorageException {
+			String conceptId) throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
@@ -256,7 +256,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.setString(2, lemma);
 			sqlStatement.setString(3, pos);
 			sqlStatement.setString(4, desc);
-			sqlStatement.setInt(5, conceptId);
+			sqlStatement.setString(5, conceptId);
 			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(6);
@@ -357,7 +357,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String deleteItems(String id, int collectionId)
+	public String deleteItems(String id, String collectionId)
 			throws QuadrigaStorageException {
 
 		String dbCommand;
@@ -369,7 +369,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, id);
-			sqlStatement.setInt(2, collectionId);
+			sqlStatement.setString(2, collectionId);
 			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(3);
@@ -389,7 +389,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String updateItem(IConcept concept, int collectionId)
+	public String updateItem(IConcept concept, String collectionId)
 			throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg = null;
@@ -403,7 +403,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.setString(2, concept.getLemma());
 			sqlStatement.setString(3, concept.getDescription());
 			sqlStatement.setString(4, concept.getPos());
-			sqlStatement.setInt(5, collectionId);
+			sqlStatement.setString(5, collectionId);
 			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(6);
@@ -445,7 +445,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 	
 	@Override
-	public String addCollaboratorRequest(ICollaborator collaborator, int collectionid, String userName) {
+	public String addCollaboratorRequest(ICollaborator collaborator, String collectionid, String userName) {
 		String dbCommand;
 		String errmsg = null;
 		String role = "";
@@ -462,7 +462,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 		//	System.out.println("------------------DB3");
 
-			sqlStatement.setInt(1,collectionid);
+			sqlStatement.setString(1,collectionid);
 		//	System.out.println("------------------DB4");
 
 			sqlStatement.setString(2, collabName);
@@ -503,7 +503,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public List<ICollaborator> showCollaboratorRequest(int collectionid) {
+	public List<ICollaborator> showCollaboratorRequest(String collectionid) {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
@@ -513,7 +513,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 
-			sqlStatement.setInt(1, collectionid);
+			sqlStatement.setString(1, collectionid);
 			sqlStatement.registerOutParameter(2, Types.VARCHAR);
 			sqlStatement.execute();
 
@@ -548,7 +548,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public List<IUser> showNonCollaboratorRequest(int collectionid) {
+	public List<IUser> showNonCollaboratorRequest(String collectionid) {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
@@ -559,7 +559,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setInt(1, collectionid);
+			sqlStatement.setString(1, collectionid);
 			sqlStatement.registerOutParameter(2, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);
@@ -602,7 +602,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setInt(1,collection.getId());
+			sqlStatement.setString(1,collection.getId());
 			sqlStatement.registerOutParameter(2, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);

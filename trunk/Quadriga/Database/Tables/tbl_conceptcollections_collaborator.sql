@@ -12,7 +12,7 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_conceptcollections_collaborator
 (
-  collectionid       INT,
+  collectionid       VARCHAR(100),
   collaboratoruser	 VARCHAR(20),
   collaboratorrole	 VARCHAR(20),
   updatedby       	 VARCHAR(10)   NOT NULL,

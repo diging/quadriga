@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getConceptCollectionCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_getConceptCollectionCollaborators
 (
-  IN incollectionid  INT,
+  IN incollectionid  VARCHAR(100),
   OUT errmsg     VARCHAR(255)
 )
 BEGIN

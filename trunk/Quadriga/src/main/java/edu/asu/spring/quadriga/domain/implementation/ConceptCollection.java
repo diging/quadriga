@@ -19,14 +19,14 @@ public class ConceptCollection implements IConceptCollection
 {
 	private String name;
 	private String description;
-	private int id;
+	private String id;
 	
 	@Override
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	@Override
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	private IUser owner;
@@ -79,7 +79,7 @@ public class ConceptCollection implements IConceptCollection
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	@Override
@@ -91,7 +91,10 @@ public class ConceptCollection implements IConceptCollection
 		if (getClass() != obj.getClass())
 			return false;
 		ConceptCollection other = (ConceptCollection) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	} 
