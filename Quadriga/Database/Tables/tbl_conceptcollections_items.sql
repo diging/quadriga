@@ -12,7 +12,7 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_conceptcollections_items
 (
-  id       INT   NOT NULL,
+  id       VARCHAR(100)   NOT NULL,
   lemma     	 VARCHAR(255)	NOT NULL,
   item	 VARCHAR(255)    NOT NULL,
   

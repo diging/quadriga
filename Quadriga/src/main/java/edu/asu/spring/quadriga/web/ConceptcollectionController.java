@@ -115,7 +115,7 @@ public class ConceptcollectionController {
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
 	public String conceptDetailsHandler(
-			@PathVariable("collection_id") int collection_id, ModelMap model, Principal principal)
+			@PathVariable("collection_id") String collection_id, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 
 		collection = collectionFactory.createConceptCollectionObject();
@@ -130,7 +130,7 @@ public class ConceptcollectionController {
 	}
 
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
-	public String conceptSearchHandler(@PathVariable("collection_id") int collection_id, HttpServletRequest req, ModelMap model)
+	public String conceptSearchHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model)
 			throws QuadrigaStorageException {
 		
 		c = conceptControllerManager.search(req.getParameter("name"),
@@ -142,7 +142,7 @@ public class ConceptcollectionController {
 	}
 
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
-	public String saveItemsHandler(@PathVariable("collection_id") int collection_id, HttpServletRequest req, ModelMap model, Principal principal)
+	public String saveItemsHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {

@@ -20,7 +20,7 @@ CREATE PROCEDURE sp_updateCollectionItem
   IN  inlemma    VARCHAR(200),
   IN  indescription   TEXT,
   IN  inpos    VARCHAR(50),
-  IN  incollectionId INT,
+  IN  incollectionId VARCHAR(100),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN

@@ -143,7 +143,7 @@ public class ConceptCollectionRestController {
 	@RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String getConceptList(
-			@PathVariable("collectionID") int collectionID, ModelMap model, HttpServletRequest req, Principal principal) throws RestException
+			@PathVariable("collectionID") String collectionID, ModelMap model, HttpServletRequest req, Principal principal) throws RestException
 			{
 		VelocityEngine engine=null;
 		Template template = null;

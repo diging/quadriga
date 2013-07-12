@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_showCollectionCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showCollectionCollaborators
 (
-	IN incollectionid				INT,
+	IN incollectionid				VARCHAR(100),
 	OUT errmsg				VARCHAR(200)
 )
 

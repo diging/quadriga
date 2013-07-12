@@ -20,7 +20,7 @@ CREATE PROCEDURE sp_addCollectionItems
   IN  	 inlemma   VARCHAR(255),
   IN  	 inpos VARCHAR(255),
   IN 	 indescription TEXT,
-  IN 	inid INT,
+  IN 	inid VARCHAR(100),
   OUT 	errmsg           VARCHAR(255)    
 )
 BEGIN

@@ -36,9 +36,9 @@ public interface IConceptCollection
 	public abstract List<IConcept> getItems();
 
 	// id should be a string
-	public abstract void setId(int id);
+	public abstract  void setId(String id);
 
-	public abstract int getId();
+	public abstract String getId();
 	
 
 }

@@ -13,7 +13,7 @@ Modified Date : 07/11/2013
 CREATE TABLE IF NOT EXISTS tbl_project_conceptcollection
 (
   projectid       VARCHAR(50)   NOT NULL,
-  conceptcollectionid   int   NOT NULL,
+  conceptcollectionid   VARCHAR(50)   NOT NULL,
   updatedby       VARCHAR(20)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(20)   NOT NULL,

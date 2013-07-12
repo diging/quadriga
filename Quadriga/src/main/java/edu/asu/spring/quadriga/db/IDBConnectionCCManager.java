@@ -47,7 +47,7 @@ public interface IDBConnectionCCManager {
 		 * 
 		 */
 		public abstract void saveItem(String lemma, String id, String pos, String desc,
-				int conceptId) throws QuadrigaStorageException;
+				String conceptId) throws QuadrigaStorageException;
 		/**
 		 * Validated the id for the collection
 		 * @throws QuadrigaStorageException 
@@ -69,7 +69,7 @@ public interface IDBConnectionCCManager {
 		 * @throws QuadrigaStorageException 
 		 * 
 		 */
-		public abstract String deleteItems(String id, int collectionId) throws QuadrigaStorageException;
+		public abstract String deleteItems(String id, String collectionId) throws QuadrigaStorageException;
 		
 		/**
 		 * Method is used to update the fields in the database
@@ -78,7 +78,7 @@ public interface IDBConnectionCCManager {
 		 * @return
 		 * @throws QuadrigaStorageException 
 		 */
-		public abstract String updateItem(IConcept concept, int collectionId) throws QuadrigaStorageException;
+		public abstract String updateItem(IConcept concept, String collectionId) throws QuadrigaStorageException;
 		
 		/**
 		 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
@@ -89,11 +89,11 @@ public interface IDBConnectionCCManager {
 		 */
 		public abstract int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException;
 		
-		public abstract List<ICollaborator> showCollaboratorRequest(int collectionid);
+		public abstract List<ICollaborator> showCollaboratorRequest(String collectionid);
 		
-		public abstract List<IUser> showNonCollaboratorRequest(int collectionid);
+		public abstract List<IUser> showNonCollaboratorRequest(String collectionid);
 		
-		public abstract String addCollaboratorRequest(ICollaborator collaborator,int collectionid, String userName);
+		public abstract String addCollaboratorRequest(ICollaborator collaborator,String collectionid, String userName);
 		
 		public abstract void getCollaborators(IConceptCollection collection);
 		

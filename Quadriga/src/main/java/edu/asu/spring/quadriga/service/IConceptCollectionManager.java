@@ -88,7 +88,7 @@ public interface IConceptCollectionManager {
 	 * 
 	 */
 	void addItems(String lemmma, String id, String pos, String desc,
-			int conceptId) throws QuadrigaStorageException;
+			String conceptcollectionId) throws QuadrigaStorageException;
 	
 	/**
 	 * Method is used to add new  conceptcollection
@@ -105,7 +105,7 @@ public interface IConceptCollectionManager {
 	 * @throws QuadrigaStorageException 
 	 * 
 	 */
-	public abstract void deleteItem(String id, int i) throws QuadrigaStorageException;
+	public abstract void deleteItem(String id, String collectionid) throws QuadrigaStorageException;
 	/**
 	 * Method is used to update the items list with the latest values from the conceptpower
 	 * @param values 
@@ -114,11 +114,11 @@ public interface IConceptCollectionManager {
 	 */
 	public abstract void update(String[] values, IConceptCollection concept) throws QuadrigaStorageException;
 	
-	public abstract List<IUser> showNonCollaboratingUsers(int collectionid);
+	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
 	
-	public abstract List<ICollaborator> showCollaboratingUsers(int collectionid);
+	public abstract List<ICollaborator> showCollaboratingUsers(String collectionid);
 	
-	public abstract String addCollaborators(ICollaborator collaborator, int collectionid, String userName);
+	public abstract String addCollaborators(ICollaborator collaborator, String collectionid, String userName);
 	
 	public abstract void getCollaborators(IConceptCollection collection);
 

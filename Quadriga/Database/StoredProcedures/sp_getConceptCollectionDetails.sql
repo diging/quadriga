@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getConceptCollectionDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getConceptCollectionDetails
 (
-  IN incollectionid  VARCHAR(20),
+  IN incollectionid  VARCHAR(100),
   IN inusername	     VARCHAR(40),	
   OUT errmsg     VARCHAR(255)
 )
