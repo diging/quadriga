@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 
 //add
@@ -19,6 +21,12 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Autowired
 	@Qualifier("DBConnectionModifyProjectManagerBean")
 	private IDBConnectionModifyProjectManager dbConnect;
+	
+	@Autowired
+	private IDBConnectionProjectAccessManager dbConnectionProj;
+	
+	@Autowired
+	private IUserManager userManager;
 	
 	/**
 	 * This method adds a project into the database.
@@ -70,5 +78,4 @@ public class ModifyProjectManager implements IModifyProjectManager
 		
 		return errmsg;
 	}
-	
 }

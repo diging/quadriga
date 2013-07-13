@@ -16,6 +16,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceDetails
 (
   IN  inworkspaceid  VARCHAR(50),
+  IN  inuser         VARCHAR(30),
   OUT errmsg         VARCHAR(255)        
 )
 BEGIN
@@ -31,10 +32,26 @@ BEGIN
      THEN SET errmsg = "Workspace id is invalid.";
    END IF;
 
-   IF(errmsg IS NULL)
-     THEN SET errmsg = "";
-     SELECT workspacename,description,workspaceowner,workspaceid FROM vw_workspace
+  IF (inuser IS NULL OR inuser = "")
+   THEN SET errmsg = "User name is invalid";
+  END IF;
+
+  IF NOT EXISTS(SELECT 1 FROM vw_quadriga_user WHERE username = inuser)
+    THEN SET errmsg = "User name is invalid";
+  END IF;
+ 
+  IF(errmsg IS NULL)
+   THEN SET errmsg = "";
+  END IF;
+
+  IF EXISTS(SELECT 1 FROM vw_project WHERE projectowner = inuser)
+   THEN 
+      SELECT workspacename,description,workspaceowner,workspaceid FROM vw_workspace
        WHERE workspaceid = inworkspaceid;
-    END IF;
+    ELSE
+        SELECT workspacename,description,workspaceowner,workspaceid FROM vw_workspace
+       WHERE workspaceid = inworkspaceid
+         AND workspaceowner = inuser;
+  END IF;
 END$$
 DELIMITER ;

@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.StringConstants;
@@ -35,6 +36,9 @@ public class ModifyProjectController
 	
 	@Autowired 
 	IProjectFactory projectFactory;
+	
+	@Autowired
+	ICheckProjectSecurity projectSecurity;
 	
 	@Autowired 
 	IUserManager userManager;
@@ -103,14 +107,27 @@ public class ModifyProjectController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
-	public String updateProjectRequestForm(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException
+	public String updateProjectRequestForm(@PathVariable("projectid") String projectid, ModelMap model,Principal principal) throws QuadrigaStorageException
 	{
 		IProject project;
-		project = retrieveProjectManager.getProjectDetails(projectid);
-		model.addAttribute("project", project);
-		model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
+		boolean chkAccess;
+		String userName = principal.getName();
+		
+		//Check if the user has access to update the project details
+		chkAccess = projectSecurity.checkProjectAccess(userName,projectid);
+		
+		if(chkAccess)
+		{
+			project = retrieveProjectManager.getProjectDetails(projectid);
+			model.addAttribute("project", project);
+			model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 
-		return "auth/workbench/modifyproject";
+			return "auth/workbench/modifyproject";
+		}
+		else
+		{
+			throw new QuadrigaStorageException();
+		}
 	}
 	
 	/**
@@ -128,22 +145,37 @@ public class ModifyProjectController
 			ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		String errmsg;
-		String user = principal.getName();
+		boolean chkAccess;
 		
-		project.setInternalid(projectid);
-		errmsg = projectManager.updateProjectRequest(project, user);
-		if(errmsg.equals(""))
+		
+		String userName = principal.getName();
+		
+		//Check if the user has access to update the project details
+		chkAccess = projectSecurity.checkProjectAccess(userName, projectid);
+		
+		if(chkAccess)
 		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successMsg","Project created successfully.");
-			return "auth/workbench/modifyProjectStatus";
-		}else{
-			model.addAttribute("project", project);
-			model.addAttribute("success", 0);
-			model.addAttribute("errormsg", errmsg);
-			model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
-			return "auth/workbench/modifyproject";
+			project.setInternalid(projectid);
+			errmsg = projectManager.updateProjectRequest(project, userName);
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg","Project created successfully.");
+				return "auth/workbench/modifyProjectStatus";
+			}else{
+				model.addAttribute("project", project);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
+				return "auth/workbench/modifyproject";
+			}
 		}
+		else
+		{
+			throw new QuadrigaStorageException();
+		}
+		
+
 	}
 	
 	/**
@@ -161,11 +193,12 @@ public class ModifyProjectController
 		List<IProject> projectlist;
 		
 		userName = principal.getName();
+		
 		projectlist = retrieveProjectManager.getProjectList(userName); 
-	
-	    //adding the project details to the model
-		model.addAttribute("projectlist", projectlist);
-		return "auth/workbench/deleteproject";
+		
+		    //adding the project details to the model
+			model.addAttribute("projectlist", projectlist);
+			return "auth/workbench/deleteproject";
 	}
 	
 	/**
@@ -184,6 +217,7 @@ public class ModifyProjectController
 		String projIdList = "";
 		String errmsg;
 		String userName;
+		boolean chkAccess;
 		List<IProject> projectlist;
 		
 		// fetch the selected values
@@ -195,25 +229,39 @@ public class ModifyProjectController
 		//removing the first ',' value
 		projIdList = projIdList.substring(1,projIdList.length());
 		
-		errmsg = projectManager.deleteProjectRequest(projIdList);
+		//check if the user has access to delete the rows
+		userName = principal.getName();
 		
-		if(errmsg.equals(""))
+		chkAccess = projectSecurity.checkProjectAccess(userName, projIdList);
+		
+		if(chkAccess)
 		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successMsg","Projects deleted successfully.");
-			return "auth/workbench/deleteProjectStatus";
+			errmsg = projectManager.deleteProjectRequest(projIdList);
+			
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg","Projects deleted successfully.");
+				return "auth/workbench/deleteProjectStatus";
+			}
+			else
+			{
+				
+				projectlist = retrieveProjectManager.getProjectList(userName); 
+			
+			    //adding the project details to the model
+			    model.addAttribute("projectlist", projectlist);
+			    model.addAttribute("success", 0);
+			    model.addAttribute("errormsg", errmsg);
+			    return "auth/workbench/deleteproject";
+			}
 		}
 		else
 		{
-			userName = principal.getName();
-			projectlist = retrieveProjectManager.getProjectList(userName); 
-		
-		    //adding the project details to the model
-		    model.addAttribute("projectlist", projectlist);
-		    model.addAttribute("success", 0);
-		    model.addAttribute("errormsg", errmsg);
-		    return "auth/workbench/deleteproject";
+			throw new QuadrigaStorageException();
 		}
+		
+
 	}
 
 }

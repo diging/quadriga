@@ -24,8 +24,8 @@
 <hr>
 <div class="user">Owned by: ${workspacedetails.owner.name}</div>
 <hr>
-<a href="modifyworkspace/${workspacedetails.id}"> <input
-	type="button" name="Edit" value="Edit" />
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
+<input type="button" name="Edit" value="Edit"/>
 </a>
 <br><br>
 <c:choose>

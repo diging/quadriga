@@ -52,7 +52,7 @@ public class DBConnectionModifyProjectManagerTest {
 		databaseQuery[3] = "INSERT INTO tbl_project VALUES('testproject4','test case data','testproject4','PROJ_4','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class DBConnectionModifyProjectManagerTest {
 		databaseQuery[2] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
 		}	
 	}
 

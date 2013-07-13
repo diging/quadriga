@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionProjectConceptColleciton;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectConceptColleciton;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;

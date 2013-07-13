@@ -1,20 +1,17 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -23,14 +20,9 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-public class DBConnectionRetrieveProjectManager implements
+public class DBConnectionRetrieveProjectManager extends ADBConnectionManager implements
 		IDBConnectionRetrieveProjectManager 
 {
-	private Connection connection;
-
-	@Autowired
-	private DataSource dataSource;
-	
 	@Autowired
 	private IProjectFactory projectFactory;
 	
@@ -39,89 +31,16 @@ public class DBConnectionRetrieveProjectManager implements
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionRetrieveProjectManager.class);
 
-	/**
-	 *  Assigns the data source
-	 *  @param  dataSource
-	 *  @author Kiran Kumar Batna
-	 */
-	@Override
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
 
 	/**
-	 * Close the DB connection
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	private void closeConnection() throws QuadrigaStorageException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			logger.info("Close database Connection  :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
-	
-	/**
-	 * This is to set up the test environment data.
-	 * @param sQuery
-	 * @return 1 on success
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	@Override
-	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
-	{
-			getConnection();
-			try
-			{
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(sQuery);
-			return 1;
-			}
-			catch(SQLException e)
-			{
-				throw new QuadrigaStorageException(e.getMessage());
-			}
-			finally
-			{
-				closeConnection();
-			}
-			
-	}
-
-	/**
-	 * Establishes connection with the Quadriga DB
-	 * @return      connection handle for the created connection
-	 * @throws      QuadrigaStorageException
-	 * @author      Kiran Kumar Batna
-	 */
-	private void getConnection() throws QuadrigaStorageException {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			logger.info("Open database connection :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
-	
-	/**
-	 * This method fetches the list of projects for current logged in user                    
+	 * This method fetches the list of projects for current logged in user.
+	 * If the logged in user is quadriga admin all the projects are retrieved.                
 	 * @returns  List of projects
 	 * @throws	 QuadrigaStorageException 
 	 * @author   Rohit Sukelshwar Pendbhaje
      */
 	@Override
-	public List<IProject> getProjectList(String sUserName) throws QuadrigaStorageException
+	public List<IProject> getProjectList(String sUserName,boolean quadAdmin) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String errmsg;
@@ -132,16 +51,17 @@ public class DBConnectionRetrieveProjectManager implements
         //establish the connection
 		getConnection();
 		
-		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_LIST + "(?,?)";
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_LIST + "(?,?,?)";
 		try {
 			
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1, sUserName);
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.setBoolean(2, quadAdmin);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
 			
 			if(errmsg == "")
 			{

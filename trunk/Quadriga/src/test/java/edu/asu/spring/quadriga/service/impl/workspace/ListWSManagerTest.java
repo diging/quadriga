@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.db.sql.workspace.DBConnectionListWSManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
@@ -64,7 +65,7 @@ public class ListWSManagerTest {
 		databaseQuery[9] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -77,7 +78,7 @@ public class ListWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -88,7 +89,7 @@ public class ListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = wsManager.listWorkspace("PROJ_2");
+		workspaceList = wsManager.listWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -138,7 +139,7 @@ public class ListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = wsManager.listActiveWorkspace("PROJ_2");
+		workspaceList = wsManager.listActiveWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -174,7 +175,7 @@ public class ListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = wsManager.listArchivedWorkspace("PROJ_2");
+		workspaceList = wsManager.listArchivedWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -203,7 +204,7 @@ public class ListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = wsManager.listDeactivatedWorkspace("PROJ_2");
+		workspaceList = wsManager.listDeactivatedWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");

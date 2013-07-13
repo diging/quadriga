@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManger;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 
@@ -20,7 +20,7 @@ public class ArchiveWSManager implements IArchiveWSManager
 
 	@Autowired
 	@Qualifier("DBConnectionArchiveWSMangerBean")
-	private IDBConnectionArchiveWSManger dbConnect;
+	private IDBConnectionArchiveWSManager dbConnect;
 	
 	/**
 	 * This will archive the requested workspace.[archive = 1 is supplied to database]

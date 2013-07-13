@@ -8,19 +8,19 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IListWSManager {
 
-	public abstract List<IWorkSpace> listDeactivatedWorkspace(String projectid)
+	public abstract List<IWorkSpace> listDeactivatedWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
 
-	public abstract List<IWorkSpace> listArchivedWorkspace(String projectid)
+	public abstract List<IWorkSpace> listArchivedWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
 
-	public abstract List<IWorkSpace> listActiveWorkspace(String projectid)
+	public abstract List<IWorkSpace> listActiveWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
 
 	public abstract IWorkSpace getWorkspaceDetails(String workspaceId, String username)
 			throws QuadrigaStorageException, QuadrigaAccessException;
 
-	public abstract List<IWorkSpace> listWorkspace(String projectid)
+	public abstract List<IWorkSpace> listWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
 
 }

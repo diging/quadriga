@@ -32,8 +32,10 @@ public class ListWSController
 	@RequestMapping(value="auth/workbench/workspace/workspacedetails/{workspaceid}", method = RequestMethod.GET)
 	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException
 	{
+		String userName;
 		IWorkSpace workspace;
-		workspace = wsManager.getWorkspaceDetails(workspaceid,principal.getName());
+		userName = principal.getName();
+		workspace = wsManager.getWorkspaceDetails(workspaceid,userName);
 		model.addAttribute("workspacedetails", workspace);
 		return "auth/workbench/workspace/workspacedetails";
 	}

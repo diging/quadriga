@@ -52,15 +52,17 @@ public class RetrieveProjectController
 	}
 	
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
-	public String getProjectDetails(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException
+	public String getProjectDetails(@PathVariable("projectid") String projectid, ModelMap model,Principal principal) throws QuadrigaStorageException
 	{
+		String userName;
 		IProject project;
 		List<IWorkSpace> workspaceList;
 		
+		userName = principal.getName();
 		project = projectManager.getProjectDetails(projectid);
 		
 		//retrieve all the workspaces associated with the project
-		workspaceList = wsManager.listActiveWorkspace(projectid);
+		workspaceList = wsManager.listActiveWorkspace(projectid,userName);
 		
 		model.addAttribute("project", project);
 		model.addAttribute("workspaceList",workspaceList);

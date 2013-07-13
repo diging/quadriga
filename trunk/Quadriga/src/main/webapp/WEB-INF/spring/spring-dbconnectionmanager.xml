@@ -36,6 +36,9 @@
 		<bean id="DBConnectionRetrieveProjectManagerBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjectManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+		<bean id="DBConnectionProjectAccessManagerBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectAccessManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 	
 	<!-- Workbench workspace bean -->
 		<bean id="DBConnectionArchiveWSMangerBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionArchiveWSManger">
@@ -45,6 +48,9 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 				<bean id="DBConnectionModifyWSManagerBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionModifyWSManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+					<bean id="DBConnectionWSAccessManagerBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionWSAccessManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	

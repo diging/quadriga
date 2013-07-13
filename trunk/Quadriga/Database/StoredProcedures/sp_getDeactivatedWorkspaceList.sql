@@ -16,6 +16,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_getDeactivatedWorkspaceList
 (
   IN  inprojectid    VARCHAR(50),
+  IN  inusername     VARCHAR(30),
   OUT errmsg         VARCHAR(255)
 )
 BEGIN
@@ -32,9 +33,21 @@ BEGIN
         THEN SET errmsg = "Project id is invalid.";
       END IF;
 
+      IF (inusername IS NULL OR inusername = "")
+        THEN SET errmsg = "Username cannot be empty";
+      END IF;
+
+      IF NOT EXISTS(SELECT 1 FROM vw_quadriga_user WHERE username = inusername)
+        THEN SET errmsg = "Username is invalid";
+	  END IF;
+
       IF (errmsg IS NULL)
         THEN SET errmsg = "";
-          SELECT vsws.workspacename,
+      END IF;
+
+      IF EXISTS(SELECT 1 FROM vw_project WHERE projectid = inprojectid 
+                    AND projectowner = inusername)
+        THEN SELECT vsws.workspacename,
                  vsws.description,
                  vsws.workspaceid,
                  vsws.workspaceowner
@@ -43,6 +56,16 @@ BEGIN
               ON vsws.workspaceid = vwprojws.workspaceid
              AND vsws.isdeactivated = 1
             WHERE vwprojws.projectid = inprojectid;
+       ELSE SELECT vsws.workspacename,
+                 vsws.description,
+                 vsws.workspaceid,
+                 vsws.workspaceowner
+            FROM vw_workspace vsws
+            JOIN vw_project_workspace vwprojws
+              ON vsws.workspaceid = vwprojws.workspaceid
+             AND vsws.isdeactivated = 1
+            WHERE vwprojws.projectid = inprojectid
+             AND vsws.workspaceowner = inusername;
       END IF;
 END$$
 DELIMITER ;

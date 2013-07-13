@@ -73,6 +73,7 @@ public interface DBConstants
 	public static final String ARCHIVE_WORKSPACE_REQUEST = "sp_archiveworkspace";
 	public static final String DEACTIVATE_WORKSPACE_REQUEST = "sp_deactivateworkspace";
 	public static final String DELETE_WORKSPACE_REQUEST = "sp_deleteworkspace";
+	public static final String UPDATE_WORKSPACE_REQUEST = "sp_updateWorkspaceDetails";
 	public static final String WORKSPACE_DETAILS = "sp_getWorkspaceDetails";
 	public static final String ADD_PROJECT_DICTIONARY = "sp_addDictionaryToProject";
 	public static final String LIST_PROJECT_DICTIONARY = "sp_getProjectDictionaryList";
@@ -89,5 +90,11 @@ public interface DBConstants
 	public static final String ADD_DSPACE_ITEM = "sp_insertDspaceItem";
 	public static final String ADD_DSPACE_BITSTREAM = "sp_insertDspaceBitStream";
 	public static final String ADD_WORKSPACE_BITSTREAM = "sp_addBitstreamToWorkspace";
+	
+	//project Access objects
+	public static final String CHECK_PROJECT_OWNER = "fn_checkProjectOwner";
+	
+	//workspace access objects
+	public static final String CHECK_WORKSPACE_OWNER = "fn_checkWorkspaceOwner";
 	public static final String LIST_WORKSPACE_BITSTREAM = "sp_getAllBitStreams";
 }

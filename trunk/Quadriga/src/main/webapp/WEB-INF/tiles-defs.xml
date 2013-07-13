@@ -271,6 +271,18 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deleteworkspacestatus.jsp" />
 	</definition> 	
+		<definition name="auth/workbench/workspace/updateworkspace"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Update Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/updateworkspacedetails.jsp" />
+	</definition> 
+		<definition name="auth/workbench/workspace/updateworkspacestatus"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Quadriga Workbench - Update Workspace" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/updateworkspacedetailsstatus.jsp" />
+	</definition> 
 	<definition name="auth/workbench/workspace/adddictionaries"
 		extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />

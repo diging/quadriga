@@ -7,14 +7,14 @@
 $(function() {
 	$("input[type=submit]").button().click(function(event){
 		if (!$.trim($("#name").val())) {
-			$.alert("Please enter a project name", "Oops !!!");
+			$.alert("Please enter a workspace name", "Oops !!!");
 			$("#name").val("");
 			event.preventDefault();
 			return;
 		}
 
 		if (!$.trim($("#description").val())) {
-			$.alert("Please enter a project description", "Oops !!!");
+			$.alert("Please enter a workspace description", "Oops !!!");
 			$("#description").val("");
 			event.preventDefault();
 			return;

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.StringConstants;
 
@@ -28,6 +29,9 @@ public class ActivateWSController
 	@Autowired
 	IArchiveWSManager archiveWSManager;
 	
+	@Autowired
+	ICheckWSSecurity wsSecurityManager;
+	
 	/**
 	 *This calls workspaceManger to list all the workspace associated with a project to deactivate.
 	 * @param    model
@@ -37,14 +41,20 @@ public class ActivateWSController
 	 * @author   Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/deactivateworkspace", method=RequestMethod.GET)
-	public String deactivateWorkspaceForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	public String deactivateWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		String userName;
 		List<IWorkSpace> workspaceList;
+		
+		//check if the user has access
+		userName = principal.getName();
+		
 		// retrieve the workspaces associated with the projects
-			workspaceList = wsManager.listWorkspace(projectid);
+		workspaceList = wsManager.listWorkspace(projectid,userName);
+			
 			model.addAttribute("workspaceList", workspaceList);
 			model.addAttribute("wsprojectid", projectid);
-		return "auth/workbench/workspace/deactivateworkspace";
+		    return "auth/workbench/workspace/deactivateworkspace";
 	}
 	
 	/**
@@ -64,6 +74,7 @@ public class ActivateWSController
 		String wsIdList = "";
 		String errmsg;
 		String userName;
+		boolean chkAccess;
 		List<IWorkSpace> workspaceList = null;
 
 		// fetch the selected values
@@ -79,27 +90,39 @@ public class ActivateWSController
 
 		//fetch the user name
 		userName = principal.getName();
-
-		//deactivate the workspace'
-		errmsg = archiveWSManager.deactivateWorkspace(wsIdList, userName);
-
-		if(errmsg.equals(""))
+		
+		//check if the user has access
+		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		
+		if(chkAccess)
 		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successMsg",StringConstants.WORKSPACE_DEACTIVE_SUCCESS);
-			model.addAttribute("wsprojectid", projectid);
-			return "auth/workbench/workspace/deactiveworkspaceStatus";
+			//deactivate the workspace'
+			errmsg = archiveWSManager.deactivateWorkspace(wsIdList, userName);
+
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg",StringConstants.WORKSPACE_DEACTIVE_SUCCESS);
+				model.addAttribute("wsprojectid", projectid);
+				return "auth/workbench/workspace/deactiveworkspaceStatus";
+			}
+			else
+			{
+				workspaceList = wsManager.listActiveWorkspace(projectid,userName);
+				//adding the workspace details to the model
+				model.addAttribute("workspaceList", workspaceList);
+				model.addAttribute("wsprojectid", projectid);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/workspace/deactiveworkspace";
+			}
 		}
 		else
 		{
-			workspaceList = wsManager.listActiveWorkspace(projectid);
-			//adding the workspace details to the model
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-			model.addAttribute("success", 0);
-			model.addAttribute("errormsg", errmsg);
-			return "auth/workbench/workspace/deactiveworkspace";
+			throw new QuadrigaStorageException();
 		}
+
+
 	}
 	
 	/**
@@ -111,11 +134,14 @@ public class ActivateWSController
 	 * @author   Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/activateworkspace", method=RequestMethod.GET)
-	public String activateWorkspaceForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	public String activateWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		String userName;
 		List<IWorkSpace> workspaceList;
+		
+		userName = principal.getName();
 		// retrieve the workspaces associated with the projects
-			workspaceList = wsManager.listDeactivatedWorkspace(projectid);
+			workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
 			model.addAttribute("workspaceList", workspaceList);
 			model.addAttribute("wsprojectid", projectid);
 		return "auth/workbench/workspace/activateworkspace";
@@ -138,6 +164,7 @@ public class ActivateWSController
 		String wsIdList = "";
 		String errmsg;
 		String userName;
+		boolean chkAccess;
 		List<IWorkSpace> workspaceList = null;
 
 		// fetch the selected values
@@ -153,26 +180,36 @@ public class ActivateWSController
 
 		//fetch the user name
 		userName = principal.getName();
-
-		//activate the workspace'
-		errmsg = archiveWSManager.activateWorkspace(wsIdList, userName);
-
-		if(errmsg.equals(""))
+		
+		//check if the user has access
+		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		
+		if(chkAccess)
 		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successMsg",StringConstants.WORKSPACE_ACTIVE_SUCCESS);
-			model.addAttribute("wsprojectid", projectid);
-			return "auth/workbench/workspace/activeworkspaceStatus";
+			//activate the workspace'
+			errmsg = archiveWSManager.activateWorkspace(wsIdList, userName);
+
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg",StringConstants.WORKSPACE_ACTIVE_SUCCESS);
+				model.addAttribute("wsprojectid", projectid);
+				return "auth/workbench/workspace/activeworkspaceStatus";
+			}
+			else
+			{
+				workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
+				//adding the workspace details to the model
+				model.addAttribute("workspaceList", workspaceList);
+				model.addAttribute("wsprojectid", projectid);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/workspace/deactiveworkspace";
+			}
 		}
 		else
 		{
-			workspaceList = wsManager.listDeactivatedWorkspace(projectid);
-			//adding the workspace details to the model
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-			model.addAttribute("success", 0);
-			model.addAttribute("errormsg", errmsg);
-			return "auth/workbench/workspace/deactiveworkspace";
+			throw new QuadrigaStorageException();
 		}
 	}
 

@@ -36,11 +36,11 @@ public class ListWSManager implements IListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
 		
-		workspaceList = dbConnect.listWorkspace(projectid);
+		workspaceList = dbConnect.listWorkspace(projectid,user);
 
 		return workspaceList;
 	}
@@ -55,11 +55,11 @@ public class ListWSManager implements IListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listActiveWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
 		
-		workspaceList = dbConnect.listActiveWorkspace(projectid);
+		workspaceList = dbConnect.listActiveWorkspace(projectid,user);
 
 		return workspaceList;
 	}
@@ -74,11 +74,11 @@ public class ListWSManager implements IListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listArchivedWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listArchivedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
 		
-		workspaceList = dbConnect.listArchivedWorkspace(projectid);
+		workspaceList = dbConnect.listArchivedWorkspace(projectid,user);
 
 		return workspaceList;
 	}
@@ -93,11 +93,11 @@ public class ListWSManager implements IListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listDeactivatedWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listDeactivatedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
 		
-		workspaceList = dbConnect.listDeactivatedWorkspace(projectid);
+		workspaceList = dbConnect.listDeactivatedWorkspace(projectid,user);
 
 		return workspaceList;
 	}
@@ -114,7 +114,7 @@ public class ListWSManager implements IListWSManager
 	public IWorkSpace getWorkspaceDetails(String workspaceId, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		IWorkSpace workspace;
-		workspace = dbConnect.getWorkspaceDetails(workspaceId);
+		workspace = dbConnect.getWorkspaceDetails(workspaceId,username);
 		workspace.setBitstreams(dbConnect.getBitStreams(workspaceId, username));
 		return workspace;
 	}

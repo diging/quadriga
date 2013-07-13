@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.web.StringConstants;
 
@@ -24,27 +25,45 @@ public class AddWSController
 {
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
-	
+
 	@Autowired 
 	IUserManager userManager;
-	
+
 	@Autowired
 	IModifyWSManager modifyWSManger;
+
+	@Autowired
+	ICheckWSSecurity workspaceSecurity;
 	
 	/**
 	 * This is called on the addworkspace form load.
 	 * @param     model
 	 * @return    String - containing the path to addworkspace jsp page.
+	 * @throws QuadrigaStorageException 
 	 * @author    Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/addworkspace", method=RequestMethod.GET)
-	public String addWorkSpaceRequestForm(Model model,@PathVariable("projectid") String projectid)
+	public String addWorkSpaceRequestForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
-		model.addAttribute("workspace", workspaceFactory.createWorkspaceObject());
-		model.addAttribute("wsprojectid", projectid);
-		return "auth/workbench/workspace/addworkspace";
+		boolean chkAccess;
+		String userName = principal.getName();
+
+		//check if the user has access create a workspace
+		chkAccess = workspaceSecurity.chkCreateWSAccess(userName, projectid);
+
+		if(chkAccess)
+		{
+			model.addAttribute("workspace", workspaceFactory.createWorkspaceObject());
+			model.addAttribute("wsprojectid", projectid);
+			return "auth/workbench/workspace/addworkspace";
+		}
+		else
+		{
+			throw new QuadrigaStorageException();
+		}
+
 	}
-	
+
 	/**
 	 * This calls workspace manager to add workspace details into the database.
 	 * @param    workspace
@@ -59,18 +78,23 @@ public class AddWSController
 	public String addWorkSpaceRequest(@ModelAttribute("SpringWeb")IWorkSpace workspace,
 			ModelMap model, Principal principal,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
 			{
+		boolean chkAccess;
 		String errmsg;
 		IUser wsOwner = null;
+		String userName = principal.getName();
 
-		wsOwner = userManager.getUserDetails(principal.getName());
+		//check if the user has access to create a workspace
+		chkAccess = workspaceSecurity.chkCreateWSAccess(userName, projectid);
 
-		if(wsOwner!=null)
+		if(chkAccess)
 		{
+			wsOwner = userManager.getUserDetails(userName);
+
 			//set the workspace owner
 			workspace.setOwner(wsOwner);
-            errmsg = modifyWSManger.addWorkSpaceRequest(workspace, projectid);
 
-            if(errmsg.equals(""))
+			errmsg = modifyWSManger.addWorkSpaceRequest(workspace, projectid);
+			if(errmsg.equals(""))
 			{
 				model.addAttribute("success", 1);
 				model.addAttribute("successMsg",StringConstants.WORKSPACE_SUCCESS_MSG);
@@ -88,10 +112,8 @@ public class AddWSController
 		}
 		else
 		{
-			model.addAttribute("success", 0);
-			model.addAttribute("errormsg",StringConstants.FETCH_USER_ERROR);
-			return "auth/workbench/workspace/addworkspace";
+			throw new QuadrigaStorageException();
 		}
-	}
+			}
 
 }
