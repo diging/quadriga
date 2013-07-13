@@ -39,4 +39,23 @@
 		<property name="roledescription"
 			value="associates the users who can approve and publish networks"></property>
 	</bean>
+	
+		<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="workspaceCollaborator" />
+		<property name="roleDBid" value="wscollab_role1"></property>
+		<property name="roleid" value="SINGLE_WORKSPACE_ADMIN"></property>
+		<property name="rolename" value="single workspace admin"></property>
+		<property name="roledescription"
+			value="workspace collaborator admin who has the same rights as the owner"></property>
+	</bean>
+	
+			<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="workspaceCollaborator" />
+		<property name="roleDBid" value="wscollab_role2"></property>
+		<property name="roleid" value="SINGLE_WORKSPACE_CONTRIBUTOR"></property>
+		<property name="rolename" value="workspace contributor"></property>
+		<property name="roledescription"
+			value="contributors who can add texts and create/upload networks"></property>
+	</bean>
+	
 </beans>

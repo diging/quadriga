@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManger;
+import edu.asu.spring.quadriga.db.sql.workspace.DBConnectionArchiveWSManger;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 
@@ -22,7 +23,7 @@ import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 public class ArchiveWSManagerTest {
 
 	@Autowired
-	IDBConnectionArchiveWSManger  dbConnect;
+	IDBConnectionArchiveWSManager  dbConnect;
 	
 	@Autowired
 	IArchiveWSManager wsManager;
@@ -46,7 +47,7 @@ public class ArchiveWSManagerTest {
 		databaseQuery[5] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_2','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionArchiveWSManger)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -59,7 +60,7 @@ public class ArchiveWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionArchiveWSManger)dbConnect).setupTestEnvironment(query);
 		}
 	}
 

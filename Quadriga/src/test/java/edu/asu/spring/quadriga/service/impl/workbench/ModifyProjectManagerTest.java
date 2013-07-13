@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -55,7 +56,7 @@ public class ModifyProjectManagerTest {
 		databaseQuery[3] = "INSERT INTO tbl_project VALUES('testproject4','test case data','testproject4','PROJ_4','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -67,7 +68,7 @@ public class ModifyProjectManagerTest {
 		databaseQuery[2] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 

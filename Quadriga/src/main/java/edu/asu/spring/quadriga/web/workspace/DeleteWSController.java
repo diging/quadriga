@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.web.StringConstants;
@@ -28,6 +29,9 @@ public class DeleteWSController
 	@Autowired
 	IModifyWSManager modifyWSManger;
 	
+	@Autowired
+	ICheckWSSecurity wsSecurityManager;
+	
 	/**
 	 * This calls workspaceManger to list the deactivated workspace associated with a project for deletion.
 	 * @param    model
@@ -37,11 +41,14 @@ public class DeleteWSController
 	 * @author   Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/deleteworkspace", method=RequestMethod.GET)
-	public String deleteWorkspaceRequestForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	public String deleteWorkspaceRequestForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		String userName;
 		List<IWorkSpace> workspaceList;
+		
+		userName = principal.getName();
 		// retrieve the workspaces associated with the projects
-		workspaceList = wsManager.listDeactivatedWorkspace(projectid);
+		workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
 			model.addAttribute("workspaceList", workspaceList);
 			model.addAttribute("wsprojectid", projectid);
 
@@ -64,8 +71,11 @@ public class DeleteWSController
 		String[] values;
 		String wsIdList = "";
 		String errmsg;
+		String userName;
+		boolean chkAccess;
 		List<IWorkSpace> workspaceList = null;
 
+		userName = principal.getName();
 		// fetch the selected values
 		values = req.getParameterValues("wschecked");
 		for(String workspaceid : values)
@@ -74,26 +84,35 @@ public class DeleteWSController
 		}
 		//removing the first ',' value
 		wsIdList = wsIdList.substring(1,wsIdList.length());
-
-		errmsg = modifyWSManger.deleteWorkspaceRequest(wsIdList);
-
-		if(errmsg.equals(""))
+		
+		//check if user has access
+		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		
+		if(chkAccess)
 		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successMsg",StringConstants.WORKSPACE_DELETE_SUCCESS);
-			model.addAttribute("wsprojectid", projectid);
-			return "auth/workbench/workspace/deleteworkspaceStatus";
+			errmsg = modifyWSManger.deleteWorkspaceRequest(wsIdList);
+
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg",StringConstants.WORKSPACE_DELETE_SUCCESS);
+				model.addAttribute("wsprojectid", projectid);
+				return "auth/workbench/workspace/deleteworkspaceStatus";
+			}
+			else
+			{
+	            workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
+				//adding the workspace details to the model
+				model.addAttribute("workspaceList", workspaceList);
+				model.addAttribute("wsprojectid", projectid);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/workspace/deleteworkspace";
+			}
 		}
 		else
 		{
-            workspaceList = wsManager.listDeactivatedWorkspace(projectid);
-			//adding the workspace details to the model
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-			model.addAttribute("success", 0);
-			model.addAttribute("errormsg", errmsg);
-			return "auth/workbench/workspace/deleteworkspace";
+			throw new QuadrigaStorageException();
 		}
 	}
-
 }

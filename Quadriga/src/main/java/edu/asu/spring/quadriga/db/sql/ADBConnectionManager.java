@@ -5,10 +5,13 @@ package edu.asu.spring.quadriga.db.sql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * @author satyaswaroop
@@ -65,6 +68,31 @@ public abstract  class ADBConnectionManager {
 		catch(SQLException e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Establishes the test environment
+	 * @param sQuery
+	 * @throws QuadrigaStorageException
+	 * @author Kiran Kumar Batna
+	 */
+	public void setupTestEnvironment(String sQuery) throws QuadrigaStorageException
+	{
+		getConnection();
+		try
+		{
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate(sQuery);
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
 		}
 	}
 

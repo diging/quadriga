@@ -1,78 +1,24 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public class DBConnectionModifyProjCollabManager implements
+public class DBConnectionModifyProjCollabManager extends ADBConnectionManager implements
 		IDBConnectionModifyProjCollabManager
 {
-	private Connection connection;
-
-	@Autowired
-	private DataSource dataSource;
-	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionModifyProjCollabManager.class);
-
-	/**
-	 *  Assigns the data source
-	 *  @param  dataSource
-	 *  @author Kiran Kumar Batna
-	 */
-	@Override
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-
-	/**
-	 * Close the DB connection
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	private void closeConnection() throws QuadrigaStorageException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			logger.info("Close database Connection  :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
-
-	/**
-	 * Establishes connection with the Quadriga DB
-	 * @return      connection handle for the created connection
-	 * @throws      QuadrigaStorageException
-	 * @author      Kiran Kumar Batna
-	 */
-	private void getConnection() throws QuadrigaStorageException {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			logger.info("Open database connection :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
 	
 	@Override
 	public String addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException

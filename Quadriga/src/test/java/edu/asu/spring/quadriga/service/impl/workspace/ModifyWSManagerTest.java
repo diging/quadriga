@@ -12,13 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManger;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
+import edu.asu.spring.quadriga.db.sql.workspace.DBConnectionModifyWSManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
@@ -26,7 +27,7 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 public class ModifyWSManagerTest {
 
 	@Autowired
-	IDBConnectionModifyWSManger dbConnect;
+	IDBConnectionModifyWSManager dbConnect;
 	
 	@Autowired
 	IUserManager userManager;
@@ -58,7 +59,7 @@ public class ModifyWSManagerTest {
 		databaseQuery[7] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionModifyWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -72,7 +73,7 @@ public class ModifyWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionModifyWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 

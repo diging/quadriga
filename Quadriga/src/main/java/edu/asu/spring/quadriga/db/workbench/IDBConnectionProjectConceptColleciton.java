@@ -1,22 +1,12 @@
-package edu.asu.spring.quadriga.db.workspace;
+package edu.asu.spring.quadriga.db.workbench;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionProjectConceptColleciton {
-
-	/**
-	 *  Assigns the data source
-	 *  @param  dataSource
-	 *  @author Lohith Dwaraka
-	 */
-
-	public abstract void setDataSource(DataSource dataSource);
 
 	/**
 	 *  Method add a dictionary to a project                   

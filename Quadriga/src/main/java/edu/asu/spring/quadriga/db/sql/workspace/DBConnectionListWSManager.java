@@ -1,20 +1,18 @@
 package edu.asu.spring.quadriga.db.sql.workspace;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
@@ -32,13 +30,8 @@ import edu.asu.spring.quadriga.service.IUserManager;
  * @implements IDBConnectionListWSManager
  * @author Kiran Kumar Batna
  */
-public class DBConnectionListWSManager implements IDBConnectionListWSManager 
+public class DBConnectionListWSManager extends ADBConnectionManager implements IDBConnectionListWSManager 
 {
-	private Connection connection;
-
-	@Autowired
-	private DataSource dataSource;
-	
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
 	
@@ -48,77 +41,6 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionListWSManager.class);
 	
 	/**
-	 *  Assigns the data source
-	 *  @param  dataSource
-	 *  @author Kiran Kumar Batna
-	 */
-	@Override
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-
-	/**
-	 * Close the DB connection
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	private void closeConnection() throws QuadrigaStorageException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			logger.info("Close database Connection  :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
-
-	/**
-	 * Establishes connection with the Quadriga DB
-	 * @return      connection handle for the created connection
-	 * @throws      QuadrigaStorageException
-	 * @author      Kiran Kumar Batna
-	 */
-	private void getConnection() throws QuadrigaStorageException {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			logger.info("Open database connection :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
-	
-	/**
-	 * Establishes the test environment
-	 * @param sQuery
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	@Override
-	public void setupTestEnvironment(String sQuery) throws QuadrigaStorageException
-	{
-		getConnection();
-		try
-		{
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(sQuery);
-		}
-		catch(SQLException ex)
-		{
-			throw new QuadrigaStorageException();
-		}
-		finally
-		{
-			closeConnection();
-		}
-	}
-	/**
 	 * This will list all the active workspaces associated with the project.
 	 * @param    projectid
 	 * @return   List<IWorkSpace> - list of workspaces associated 
@@ -127,7 +49,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -138,7 +60,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 		IUser wsOwner = null;
 		
 		//command call to the Stored Procedure
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE + "(?,?,?)";
 		
 		//establish the connection
 	    getConnection();
@@ -149,14 +71,15 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 			
 			// add input parameters
 			sqlStatement.setString(1, projectid);
+			sqlStatement.setString(2, user);
 			
 			// add output parameter
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			
 			// execute the sql statement
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
 			
 			if(errmsg == "")
 			{
@@ -207,7 +130,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listActiveWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -218,7 +141,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 		IUser wsOwner = null;
 		
 		//command call to the Stored Procedure
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_ACTIVE_WORKSPACE + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_ACTIVE_WORKSPACE + "(?,?,?)";
 		
 		//establish the connection
 	    getConnection();
@@ -229,14 +152,15 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 			
 			// add input parameters
 			sqlStatement.setString(1, projectid);
+			sqlStatement.setString(2, user);
 			
 			// add output parameter
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			
 			// execute the sql statement
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
 			
 			if(errmsg == "")
 			{
@@ -287,7 +211,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listArchivedWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listArchivedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -298,7 +222,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 		IUser wsOwner = null;
 		
 		//command call to the Stored Procedure
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_ARCHIVE_WORKSPACE + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_ARCHIVE_WORKSPACE + "(?,?,?)";
 		
 		//establish the connection
 	    getConnection();
@@ -309,14 +233,15 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 			
 			// add input parameters
 			sqlStatement.setString(1, projectid);
+			sqlStatement.setString(2, user);
 			
 			// add output parameter
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			
 			// execute the sql statement
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
 			
 			if(errmsg == "")
 			{
@@ -367,7 +292,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listDeactivatedWorkspace(String projectid) throws QuadrigaStorageException
+	public List<IWorkSpace> listDeactivatedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -378,7 +303,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 		IUser wsOwner = null;
 		
 		//command call to the Stored Procedure
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_DEACTIVATED_WORKSPACE + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_DEACTIVATED_WORKSPACE + "(?,?,?)";
 		
 		//establish the connection
 	    getConnection();
@@ -389,14 +314,15 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 			
 			// add input parameters
 			sqlStatement.setString(1, projectid);
+			sqlStatement.setString(2, user);
 			
 			// add output parameter
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			
 			// execute the sql statement
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
 			
 			if(errmsg == "")
 			{
@@ -446,7 +372,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public IWorkSpace getWorkspaceDetails(String workspaceId) throws QuadrigaStorageException
+	public IWorkSpace getWorkspaceDetails(String workspaceId,String user) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -459,7 +385,7 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 		workspace = workspaceFactory.createWorkspaceObject();
 		
 		//command call to the Stored Procedure
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.WORKSPACE_DETAILS + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.WORKSPACE_DETAILS + "(?,?,?)";
 		
 		//establish the connection
 		  getConnection();
@@ -470,14 +396,15 @@ public class DBConnectionListWSManager implements IDBConnectionListWSManager
 			
 			// add input parameters
 			sqlStatement.setString(1, workspaceId);
+			sqlStatement.setString(2, user);
 			
 			// add output parameter
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			
 			// execute the sql statement
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
 			
 			if(errmsg == "")
 			{

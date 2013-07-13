@@ -59,7 +59,7 @@ public class DBConnectionListWSManagerTest {
 		databaseQuery[9] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class DBConnectionListWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			dbConnect.setupTestEnvironment(query);
+			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -84,7 +84,7 @@ public class DBConnectionListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listWorkspace("PROJ_2");
+		workspaceList = dbConnect.listWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -135,7 +135,7 @@ public class DBConnectionListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listActiveWorkspace("PROJ_2");
+		workspaceList = dbConnect.listActiveWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -173,7 +173,7 @@ public class DBConnectionListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listArchivedWorkspace("PROJ_2");
+		workspaceList = dbConnect.listArchivedWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -204,7 +204,7 @@ public class DBConnectionListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listDeactivatedWorkspace("PROJ_2");
+		workspaceList = dbConnect.listDeactivatedWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -234,7 +234,7 @@ public class DBConnectionListWSManagerTest {
 		IWorkSpace testWorkspace;
 		IUser user;
 		
-		workspace = dbConnect.getWorkspaceDetails("WS_1");
+		workspace = dbConnect.getWorkspaceDetails("WS_1","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");

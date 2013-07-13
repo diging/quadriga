@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManger;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
@@ -20,7 +20,7 @@ public class ModifyWSManager implements IModifyWSManager
 {
 	@Autowired
 	@Qualifier("DBConnectionModifyWSManagerBean")
-	private IDBConnectionModifyWSManger dbConnect;
+	private IDBConnectionModifyWSManager dbConnect;
 	
 	/**
 	 * This inserts a workspace for a project into database.
@@ -28,6 +28,7 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @param     projectId
 	 * @return    String errmsg - blank on success and error message on failure
 	 * @throws    QuadrigaStorageException
+	 * @author    kiranbatna
 	 */
 	@Override
 	public String addWorkSpaceRequest(IWorkSpace workspace,String projectId) throws QuadrigaStorageException
@@ -44,6 +45,7 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @param   workspaceIdList
 	 * @return  String - errmsg blank on success and error message on failure
 	 * @throws  QuadrigaStorageException
+	 * @author  kiranbatna
 	 */
 	@Override
 	public String deleteWorkspaceRequest(String workspaceIdList) throws QuadrigaStorageException
@@ -54,5 +56,21 @@ public class ModifyWSManager implements IModifyWSManager
 		return errmsg;
 	}
 	
+	/**
+	 * This method updates the workspace
+	 * @param workspace
+	 * @return String - errmsg blank on success and error message on failure
+	 * @throws QuadrigaStorageException
+	 * @author kiranbatna
+	 */
+	@Override
+	public String updateWorkspaceRequest(IWorkSpace workspace ) throws QuadrigaStorageException 
+	{
+		String errmsg;
+		
+		errmsg = dbConnect.updateWorkspaceRequest(workspace);
+		
+		return errmsg;
+	}
 
 }

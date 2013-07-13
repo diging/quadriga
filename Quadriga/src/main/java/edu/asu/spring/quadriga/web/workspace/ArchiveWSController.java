@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.StringConstants;
 
@@ -28,6 +29,9 @@ public class ArchiveWSController
 	@Autowired
 	IListWSManager wsManager;
 	
+	@Autowired
+	ICheckWSSecurity wsSecurityManager;
+	
 	/**
 	 * This calls workspaceManger to list the workspace associated with a project for archival process.
 	 * @param   model
@@ -37,11 +41,14 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/archiveworkspace", method=RequestMethod.GET)
-	public String archiveWorkspaceForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	public String archiveWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		String userName;
 		List<IWorkSpace> workspaceList;
+		 
+		userName = principal.getName();
 		// retrieve the workspaces associated with the projects
-		    workspaceList = wsManager.listActiveWorkspace(projectid);
+		    workspaceList = wsManager.listActiveWorkspace(projectid,userName);
 			model.addAttribute("workspaceList", workspaceList);
 			model.addAttribute("wsprojectid",projectid);
 		return "auth/workbench/workspace/archiveworkspace";
@@ -64,6 +71,7 @@ public class ArchiveWSController
 		String wsIdList = "";
 		String errmsg;
 		String userName;
+		boolean chkAccess;
 		List<IWorkSpace> workspaceList = null;
 
 		// fetch the selected values
@@ -79,26 +87,37 @@ public class ArchiveWSController
 		//fetch the user name
 		userName = principal.getName();
 
-		//archive the workspace
-		errmsg = archiveWSManager.archiveWorkspace(wsIdList, userName);
-
-		if(errmsg.equals(""))
+		//check if the user has access to archive the workspace
+		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		
+		if(chkAccess)
 		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successMsg",StringConstants.WORKSPACE_ARCHIVE_SUCCESS);
-			model.addAttribute("wsprojectid", projectid);
-			return "auth/workbench/workspace/archiveworkspaceStatus";
+			//archive the workspace
+			errmsg = archiveWSManager.archiveWorkspace(wsIdList, userName);
+
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg",StringConstants.WORKSPACE_ARCHIVE_SUCCESS);
+				model.addAttribute("wsprojectid", projectid);
+				return "auth/workbench/workspace/archiveworkspaceStatus";
+			}
+			else
+			{
+				workspaceList = wsManager.listActiveWorkspace(projectid,userName);
+				//adding the workspace details to the model
+				model.addAttribute("workspaceList", workspaceList);
+				model.addAttribute("wsprojectid", projectid);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/workspace/archiveworkspace";
+			}
 		}
 		else
 		{
-			workspaceList = wsManager.listActiveWorkspace(projectid);
-			//adding the workspace details to the model
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-			model.addAttribute("success", 0);
-			model.addAttribute("errormsg", errmsg);
-			return "auth/workbench/workspace/archiveworkspace";
+			throw new QuadrigaStorageException();
 		}
+
 	}
 	
 	/**
@@ -110,11 +129,14 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/unarchiveworkspace", method=RequestMethod.GET)
-	public String unarchiveWorkspaceForm(Model model,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	public String unarchiveWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		String userName;
 		List<IWorkSpace> workspaceList;
+		
+		userName = principal.getName();
 		// retrieve the workspaces associated with the projects
-		    workspaceList = wsManager.listArchivedWorkspace(projectid);
+		    workspaceList = wsManager.listArchivedWorkspace(projectid,userName);
 			model.addAttribute("workspaceList", workspaceList);
 			model.addAttribute("wsprojectid",projectid);
 		return "auth/workbench/workspace/unarchiveworkspace";
@@ -137,6 +159,7 @@ public class ArchiveWSController
 		String wsIdList = "";
 		String errmsg;
 		String userName;
+		boolean chkAccess;
 		List<IWorkSpace> workspaceList = null;
 
 		// fetch the selected values
@@ -151,26 +174,36 @@ public class ArchiveWSController
 
 		//fetch the user name
 		userName = principal.getName();
-
-		//unarchive the workspace
-		errmsg = archiveWSManager.unArchiveWorkspace(wsIdList, userName);
-
-		if(errmsg.equals(""))
+		
+		//check the user access
+		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		
+		if(chkAccess)
 		{
-			model.addAttribute("success", 1);
-			model.addAttribute("successMsg",StringConstants.WORKSPACE_UNARCHIVE_SUCCESS);
-			model.addAttribute("wsprojectid", projectid);
-			return "auth/workbench/workspace/unarchiveworkspaceStatus";
+			//unarchive the workspace
+			errmsg = archiveWSManager.unArchiveWorkspace(wsIdList, userName);
+
+			if(errmsg.equals(""))
+			{
+				model.addAttribute("success", 1);
+				model.addAttribute("successMsg",StringConstants.WORKSPACE_UNARCHIVE_SUCCESS);
+				model.addAttribute("wsprojectid", projectid);
+				return "auth/workbench/workspace/unarchiveworkspaceStatus";
+			}
+			else
+			{
+				workspaceList = wsManager.listArchivedWorkspace(projectid,userName);
+				//adding the workspace details to the model
+				model.addAttribute("workspaceList", workspaceList);
+				model.addAttribute("wsprojectid", projectid);
+				model.addAttribute("success", 0);
+				model.addAttribute("errormsg", errmsg);
+				return "auth/workbench/workspace/unarchiveworkspace";
+			}
 		}
 		else
 		{
-			workspaceList = wsManager.listArchivedWorkspace(projectid);
-			//adding the workspace details to the model
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-			model.addAttribute("success", 0);
-			model.addAttribute("errormsg", errmsg);
-			return "auth/workbench/workspace/unarchiveworkspace";
+			throw new QuadrigaStorageException();
 		}
 	}
 

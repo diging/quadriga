@@ -1,83 +1,29 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionProjectDictionary;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public class DBConnectionProjectDictionary implements IDBConnectionProjectDictionary {
-
-	private Connection connection;
+public class DBConnectionProjectDictionary extends ADBConnectionManager implements IDBConnectionProjectDictionary {
 
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
 	
-	@Autowired
-	private DataSource dataSource;
-	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectDictionary.class);
-	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.db.sql.workspace.IDBConnectionWSDictionary#setDataSource(javax.sql.DataSource)
-	 */
-	//@Override
-	@Override
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-
-	/**
-	 * Close the DB connection
-	 * @throws QuadrigaStorageException
-	 * @author Lohith Dwaraka
-	 */
-	private void closeConnection() throws QuadrigaStorageException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			logger.info("Close database connection :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
-
-	/**
-	 * Establishes connection with the Quadriga DB
-	 * @return      connection handle for the created connection
-	 * @throws      QuadrigaStorageException
-	 * @author      Lohith Dwaraka
-	 */
-	private void getConnection() throws QuadrigaStorageException {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			logger.info("Establish database connection  :"+e.getMessage());
-			throw new QuadrigaStorageException("Oops!!Database hanged");
-		}
-	}
-	
 	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.db.sql.workspace.IDBConnectionWSDictionary#addWSDictionary(java.lang.String, java.lang.String, java.lang.String)
