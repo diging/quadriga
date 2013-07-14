@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_dictionary
 (
   dictionaryname     VARCHAR(50)   NOT NULL,
   description     TEXT          NULL,  
-  id              INT           NOT NULL AUTO_INCREMENT,
+  id              varchar(50)           NOT NULL ,
   dictionaryowner    VARCHAR(50)   NOT NULL ,
   accessibility   TINYINT       NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
