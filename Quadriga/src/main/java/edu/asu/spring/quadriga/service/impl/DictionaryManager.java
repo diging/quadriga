@@ -18,8 +18,8 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaUIAccessException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 
 /**
@@ -108,13 +108,14 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @param dicitonaryId
 	 * @return
 	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaUIAccessException 
+	 * @throws QuadrigaAccessException 
 	 */
 	@Override
-	public boolean userDictionaryPerm(String userId, String dicitonaryId) throws QuadrigaStorageException, QuadrigaUIAccessException{
+	public boolean userDictionaryPerm(String userId, String dicitonaryId) throws QuadrigaStorageException, QuadrigaAccessException{
 		boolean result=dbConnect.userDictionaryPerm(userId,dicitonaryId);
+		logger.info("result of perfmission "+result);
 		if(result == false){
-			throw new QuadrigaUIAccessException();
+			throw new QuadrigaAccessException();
 		}
 		return result;
 	}

@@ -90,7 +90,7 @@ public class DBConnectionProjectDictionary extends ADBConnectionManager implemen
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_PROJECT_CONCEPT_COLLECTION  + "(?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_PROJECT_DICTIONARY  + "(?,?,?)";
 
 		//get the connection
 		getConnection();

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -70,6 +71,7 @@ public class DictionaryItemSearchAddController {
 	 * Handles the form tag for add dictionary item to dictionary
 	 * 
 	 * @return Return to list dictionary item page
+	 * @throws QuadrigaUIAccessException 
 	 */
 
 	@RequestMapping(value = "auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
@@ -77,9 +79,11 @@ public class DictionaryItemSearchAddController {
 			@PathVariable("dictionaryid") String dictionaryId,
 			@ModelAttribute("SpringWeb") DictionaryItems dictionaryItems,
 			ModelMap model, Principal principal)
-			throws QuadrigaStorageException {
+			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
+		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryId);
+		logger.info("Came here "+ result);
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
 		String owner = usermanager.getUserDetails(principal.getName())
@@ -136,6 +140,7 @@ public class DictionaryItemSearchAddController {
 	 * 
 	 * @return Return to list dictionary item page
 	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaUIAccessException 
 	 */
 
 	@RequestMapping(value = "auth/dictionaries/dictionary/wordSearch/{dictionaryid}", method = RequestMethod.POST)
@@ -143,9 +148,10 @@ public class DictionaryItemSearchAddController {
 			@PathVariable("dictionaryid") String dictionaryid,
 			@RequestParam("itemName") String item,
 			@RequestParam("posdropdown") String pos, ModelMap model)
-			throws QuadrigaStorageException {
+			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
+		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryid);
 		try {
 			dictionaryEntryList = null;
 			if (!item.equals("")) {
