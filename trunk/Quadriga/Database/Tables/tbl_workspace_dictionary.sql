@@ -1,7 +1,7 @@
 /*******************************************
-Name          : tbl_project_dictionary
+Name          : tbl_workspace_dictionary
 
-Description   : Adds dictionary to the project details.
+Description   : Adds dictionary to the workspace details.
 
 Called By     : 
 
@@ -10,13 +10,13 @@ Create By     : Lohith Dwaraka
 Modified Date : 07/11/2013
 
 ********************************************/
-CREATE TABLE IF NOT EXISTS tbl_project_dictionary
+CREATE TABLE IF NOT EXISTS tbl_workspace_dictionary
 (
-  projectid       VARCHAR(50)   NOT NULL,
+  workspaceid       VARCHAR(50)   NOT NULL,
   dictionaryid   varchar(50)   NOT NULL,
   updatedby       VARCHAR(20)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(20)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(projectid,dictionaryid)
+  PRIMARY KEY(workspaceid,dictionaryid)
 )

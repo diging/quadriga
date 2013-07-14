@@ -1,8 +1,8 @@
 /*******************************************
-Name          : sp_getProjectDictionaryList
+Name          : sp_getWorkspaceCCList
 
-Description   : retrieves the dictionary details
-				of a particular dictionary
+Description   : retrieves the concept collection
+				of a particular workspace
 
 Called By     : UI (DBConnectionDictionaryManager.java)
 
@@ -12,12 +12,12 @@ Modified Date : 06/04/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getProjectDictionaryList;
+DROP PROCEDURE IF EXISTS sp_getWorkspaceCCList;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getProjectDictionaryList
+CREATE PROCEDURE sp_getWorkspaceCCList
 (
-  IN  inprojectid  VARCHAR(50),
+  IN  inworkspaceid  VARCHAR(50),
   IN inuserid VARCHAR(50),
  OUT errmsg    VARCHAR(255)
 )
@@ -32,12 +32,12 @@ BEGIN
      THEN SET errmsg = "Project owner name cannot be empty.";
     END IF;
     
-    IF(inprojectid IS NULL OR inprojectid = "")
-     THEN SET errmsg = "Project id cannot be empty.";
+    IF(inworkspaceid IS NULL OR inworkspaceid = "")
+     THEN SET errmsg = "workspace id cannot be empty.";
     END IF;
     
-    IF NOT EXISTS (SELECT 1 FROM vw_project
-                     WHERE projectowner = inuserid)
+    IF NOT EXISTS (SELECT 1 FROM vw_workspace
+                     WHERE workspaceowner = inuserid)
       THEN SET errmsg = "Project owner name is invalid.";
     END IF;
 
@@ -49,9 +49,9 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 SELECT dictionaryname,description,id,dictionaryowner,accessibility
-       FROM vw_dictionary
-	   WHERE id IN ( select dictionaryid from tbl_project_dictionary where projectid=inprojectid );
+	 SELECT collectionname,description,id,collectionowner
+       FROM vw_conceptcollections
+	   WHERE id IN ( select conceptcollectionid from tbl_workspace_conceptcollection where workspaceid=inworkspaceid );
 	END IF;
 END$$
 DELIMITER ;

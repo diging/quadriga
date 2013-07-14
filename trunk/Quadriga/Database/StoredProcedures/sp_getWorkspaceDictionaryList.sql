@@ -1,8 +1,8 @@
 /*******************************************
-Name          : sp_getProjectDictionaryList
+Name          : sp_getWorkspaceDictionaryList
 
 Description   : retrieves the dictionary details
-				of a particular dictionary
+				in a workspace
 
 Called By     : UI (DBConnectionDictionaryManager.java)
 
@@ -12,12 +12,12 @@ Modified Date : 06/04/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getProjectDictionaryList;
+DROP PROCEDURE IF EXISTS sp_getWorkspaceDictionaryList;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getProjectDictionaryList
+CREATE PROCEDURE sp_getWorkspaceDictionaryList
 (
-  IN  inprojectid  VARCHAR(50),
+  IN  inworkspaceid  VARCHAR(50),
   IN inuserid VARCHAR(50),
  OUT errmsg    VARCHAR(255)
 )
@@ -28,17 +28,17 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
+    IF(inworkspaceid IS NULL OR inworkspaceid = "")
+     THEN SET errmsg = "Workspace id cannot be empty.";
+    END IF;
+    
     IF(inuserid IS NULL OR inuserid = "")
-     THEN SET errmsg = "Project owner name cannot be empty.";
+     THEN SET errmsg = "Workspace owner name cannot be empty.";
     END IF;
     
-    IF(inprojectid IS NULL OR inprojectid = "")
-     THEN SET errmsg = "Project id cannot be empty.";
-    END IF;
-    
-    IF NOT EXISTS (SELECT 1 FROM vw_project
-                     WHERE projectowner = inuserid)
-      THEN SET errmsg = "Project owner name is invalid.";
+    IF NOT EXISTS (SELECT 1 FROM vw_workspace
+                     WHERE workspaceowner = inuserid)
+      THEN SET errmsg = "Workspace owner name is invalid.";
     END IF;
 
     IF NOT EXISTS(SELECT 1 FROM vw_quadriga_user
@@ -51,7 +51,7 @@ BEGIN
      -- retrieve the dictionary details
 	 SELECT dictionaryname,description,id,dictionaryowner,accessibility
        FROM vw_dictionary
-	   WHERE id IN ( select dictionaryid from tbl_project_dictionary where projectid=inprojectid );
+	   WHERE id IN ( select dictionaryid from tbl_workspace_dictionary where workspaceid=inworkspaceid );
 	END IF;
 END$$
 DELIMITER ;
