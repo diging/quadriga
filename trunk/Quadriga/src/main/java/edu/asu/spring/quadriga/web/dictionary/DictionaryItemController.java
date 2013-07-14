@@ -22,7 +22,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaUIAccessException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -63,7 +62,7 @@ public class DictionaryItemController {
 	@RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
-			throws QuadrigaStorageException, QuadrigaUIAccessException {
+			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryid);

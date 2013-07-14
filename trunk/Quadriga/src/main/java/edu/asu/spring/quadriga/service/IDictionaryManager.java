@@ -2,16 +2,14 @@ package edu.asu.spring.quadriga.service;
 
 import java.util.List;
 
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
-
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaUIAccessException;
 
 /**
  * Interface that has methods to be implemented on the DictionaryManager class
@@ -151,9 +149,9 @@ public interface IDictionaryManager {
 	 * @param dicitonaryId
 	 * @return
 	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaUIAccessException 
+	 * @throws QuadrigaAccessException 
 	 */
 	public abstract boolean userDictionaryPerm(String userId, String dicitonaryId)
-			throws QuadrigaStorageException, QuadrigaUIAccessException;
+			throws QuadrigaStorageException, QuadrigaAccessException;
 
 }
