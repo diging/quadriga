@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_getDictionaryPerm
 (
   IN  indictionaryowner  VARCHAR(20),
-  IN  indictionaryid  VARCHAR(20),
+  IN  indictionaryid  VARCHAR(50),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN

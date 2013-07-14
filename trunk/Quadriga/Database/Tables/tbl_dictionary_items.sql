@@ -12,7 +12,7 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_dictionary_items
 (
-  id       int(11)  NOT NULL,
+  id       varchar(50)  NOT NULL,
   term    VARCHAR(200) NOT NULL,
   termid    VARCHAR(300) NOT NULL,
   pos    VARCHAR(50) NOT NULL,

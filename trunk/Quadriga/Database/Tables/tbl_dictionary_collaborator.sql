@@ -12,7 +12,7 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_dictionary_collaborator
 (
-   id   int(11) not null,
+   id   varchar(50) not null,
    collaboratoruser    VARCHAR(20),
    collaboratorrole    VARCHAR(100),
    updatedby           VARCHAR(10)   NOT NULL,

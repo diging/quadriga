@@ -24,6 +24,8 @@ CREATE PROCEDURE sp_addDictionaryDetails
 )
 BEGIN
 
+	DECLARE uniqueId  BIGINT;
+    DECLARE dictionaryId VARCHAR(100);
     -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
@@ -57,10 +59,12 @@ BEGIN
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
          START TRANSACTION;
+         SET uniqueId = UUID_SHORT();
+         SET dictionaryId = CONCAT('DICT_',CAST(uniqueId AS CHAR));
             INSERT 
-              INTO tbl_dictionary(dictionaryname,description,dictionaryowner,accessibility,
+              INTO tbl_dictionary(id,dictionaryname,description,dictionaryowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (indictionaryname,indescription,indictionaryowner,inaccessibility,
+			 VALUES (dictionaryId,indictionaryname,indescription,indictionaryowner,inaccessibility,
                      indictionaryowner,NOW(),indictionaryowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;
