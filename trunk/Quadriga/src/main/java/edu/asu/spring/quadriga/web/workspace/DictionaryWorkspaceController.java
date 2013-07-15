@@ -129,6 +129,7 @@ public class DictionaryWorkspaceController {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
+		
 		List<IDictionary> dicitonaryList = null;
 		try {
 			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/workspaces.xsd">
+
+<Quadriga:workspaceDetails>
+<Quadriga:dictionaryList>
+	#foreach ($dictionary in $dictlist)
+	<Quadriga:dictionary>
+		<Quadriga:name>$dictionary.name</Quadriga:name>
+		<Quadriga:description>$dictionary.description</Quadriga:description>
+		<Quadriga:uri>$url/rest/dictionaryDetails/$dictionary.id</Quadriga:uri>
+	</Quadriga:dictionary>
+	#end
+	</Quadriga:dictionaryList>
+	<Quadriga:conceptcollectionsList>
+	#foreach ($conceptcollection in $cclist)
+	<Quadriga:conceptcollection>
+		<Quadriga:name>$conceptcollection.name</Quadriga:name>
+		<Quadriga:description>$conceptcollection.description</Quadriga:description>
+		<Quadriga:uri>$url/rest/conceptdetails/$conceptcollection.id</Quadriga:uri>
+	</Quadriga:conceptcollection> 
+	#end
+	</Quadriga:conceptcollectionsList>
+</Quadriga:workspaceDetails> 	
+</Quadriga:QuadrigaReply>

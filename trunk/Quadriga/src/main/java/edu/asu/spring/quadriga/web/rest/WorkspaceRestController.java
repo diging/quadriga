@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
@@ -32,6 +34,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 /**
  * @author satyaswaroop boddu
@@ -46,6 +50,12 @@ public class WorkspaceRestController {
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
 
+	@Autowired
+	private IWorkspaceDictionaryManager workspaceDictionaryManager;
+	
+	@Autowired
+	private IWorkspaceCCManager workspaceCCManager;
+	
 	@Autowired 
 	IUserManager userManager;
 
@@ -68,45 +78,46 @@ public class WorkspaceRestController {
 	@RequestMapping(value = "rest/projects/{project_id}/workspaces", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listWorkspaces(@PathVariable("project_id") String project_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
-	 {
-			List<IWorkSpace> workspaceList = null;
-			VelocityEngine engine = null;
-			Template template = null;
-			
- 
-			try {
-					engine = restVelocityFactory.getVelocityEngine(req);
-					engine.init();
-					//will use in future list workspaces need to be modified
-					String userId = principal.getName();
-					workspaceList = wsManager.listActiveWorkspace(project_id,userId);
-					template = engine.getTemplate("velocitytemplates/workspaces.vm");
-					VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-					context.put("list", workspaceList);
-	
-					StringWriter writer = new StringWriter();
-					template.merge(context, writer);
-					return writer.toString();
-					} catch (ResourceNotFoundException e) {
-						logger.error("Exception:", e);
-						throw new RestException(e);
-					} catch (ParseErrorException e) {
-						
-						logger.error("Exception:", e);
-						throw new RestException(403);
-					} catch (MethodInvocationException e) {
-						
-						logger.error("Exception:", e);
-						throw new RestException(403);
-					} catch (QuadrigaStorageException e) {
-						// TODO Auto-generated catch block
-						logger.error("Exception:", e);
-						throw new RestException(404);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						logger.error("Exception:", e);
-						throw new RestException(403);
-					}
+	{
+		List<IWorkSpace> workspaceList = null;
+		VelocityEngine engine = null;
+		Template template = null;
+
+
+		try {
+			engine = restVelocityFactory.getVelocityEngine(req);
+			engine.init();
+			//will use in future list workspaces need to be modified
+			String userId = principal.getName();
+			workspaceList = wsManager.listActiveWorkspace(project_id,userId);
+
+			template = engine.getTemplate("velocitytemplates/workspaces.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("list", workspaceList);
+
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+			logger.error("Exception:", e);
+			throw new RestException(e);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(403);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(403);
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error("Exception:", e);
+			throw new RestException(403);
+		}
 	}
 	/**
 	 * Rest interface for the getting list of workspaces of a project
@@ -121,49 +132,51 @@ public class WorkspaceRestController {
 	 * @return
 	 * @throws RestException
 	 */
-	@RequestMapping(value = "rest/workspaces/workspaces_id", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/workspaces/{workspaces_id}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String workspaceDetails(@PathVariable("workspaces_id") String workspaces_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
 	{
 		IWorkSpace workspace;
-			VelocityEngine engine = null;
-			Template template = null;
- 
-			try {
-				//will use in future list workspaces need to be modified
-				String userId = principal.getName();
-				
-				workspace = wsManager.getWorkspaceDetails(workspaces_id,userId);
-					engine = restVelocityFactory.getVelocityEngine(req);
-					engine.init();
+		VelocityEngine engine = null;
+		Template template = null;
 
-					
-					template = engine.getTemplate("velocitytemplates/workspaces.vm");
-					VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-					context.put("workspace", workspace);
-	
-					StringWriter writer = new StringWriter();
-					template.merge(context, writer);
-					return writer.toString();
-					} catch (ResourceNotFoundException e) {
-						logger.error("Exception:", e);
-						throw new RestException(404);
-					} catch (ParseErrorException e) {
-						
-						logger.error("Exception:", e);
-						throw new RestException(404);
-					} catch (MethodInvocationException e) {
-						
-						logger.error("Exception:", e);
-						throw new RestException(403);
-					} catch (QuadrigaStorageException e) {
-						// TODO Auto-generated catch block
-						logger.error("Exception:", e);
-						throw new RestException(403);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						logger.error("Exception:", e);
-						throw new RestException(404);
-					}
+		try {
+			//will use in future list workspaces need to be modified
+			String userId = principal.getName();
+			List<IDictionary> dictionaryList =workspaceDictionaryManager.listWorkspaceDictionary(workspaces_id, userId);
+			List<IConceptCollection> ccList = workspaceCCManager.listWorkspaceCC(workspaces_id, userId);
+			workspace = wsManager.getWorkspaceDetails(workspaces_id,userId);
+			engine = restVelocityFactory.getVelocityEngine(req);
+			engine.init();
+
+
+			template = engine.getTemplate("velocitytemplates/workspacesdetails.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("workspace", workspace);
+			context.put("dictlist", dictionaryList);
+			context.put("cclist", ccList);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(403);
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			logger.error("Exception:", e);
+			throw new RestException(403);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		}
 	}
 }

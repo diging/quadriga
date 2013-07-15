@@ -33,6 +33,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 
 /**
  * Controller for conception collection rest apis exposed to other clients
@@ -51,6 +52,9 @@ public class ConceptCollectionRestController {
 	@Autowired
 	private IUserManager usermanager;
 
+	@Autowired
+	private IWorkspaceCCManager workspaceCCManager;
+	
 	@Autowired
 	private IConceptCollectionManager conceptControllerManager;
 
@@ -127,6 +131,64 @@ public class ConceptCollectionRestController {
 		
 	}
 
+	
+	/**
+	 * Rest interface for the getting list of concept collections of a user
+	 * http://<<URL>:<PORT>>/quadriga/rest/conceptcollections
+	 * http://localhost:8080/quadriga/rest/conceptcollections
+	 * 
+	 * @author Lohith Dwaraka
+	 * @param userId
+	 * @param model
+	 * @return
+	 * @throws RestException 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "rest/workspace/{workspaceId}/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
+	@ResponseBody
+	public String listWorkspaceConceptCollections(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
+			 {
+		List<IConceptCollection> collectionsList = null;
+		VelocityEngine engine = null;
+		Template template = null;
+		  
+		try {
+			engine = restVelocityFactory.getVelocityEngine(req);
+			engine.init();
+			String userId = principal.getName();
+			collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+			template = engine
+					.getTemplate("velocitytemplates/conceptcollections.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("list", collectionsList);
+			
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+			
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+			
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (QuadrigaStorageException e) {
+			// TODO Auto-generated catch block
+			logger.error("Exception:", e);
+			throw new RestException(405);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error("Exception:", e);
+			throw new RestException(403);
+		}
+
+		
+	}
+	
 	/**
 	 * Rest interface for the getting concept details i.e, list of items in the
 	 * collection

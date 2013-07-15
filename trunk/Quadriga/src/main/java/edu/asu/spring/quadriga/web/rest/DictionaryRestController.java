@@ -33,6 +33,7 @@ import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 /**
  * Controller for dictionary related rest apis exposed to other clients
@@ -51,6 +52,9 @@ public class DictionaryRestController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryRestController.class);
 
+	@Autowired
+	private IWorkspaceDictionaryManager workspaceDictionaryManager;
+	
 	@Autowired
 	private IUserManager usermanager;
 
@@ -125,6 +129,56 @@ public class DictionaryRestController {
 	
 	}
 
+	
+	/**
+	 * Rest interface for the List Dictionary for the userId
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceID>/dictionaries
+	 * hhttp://localhost:8080/quadriga/rest/workspace/WS_23048829469196290/dictionaries
+	 * 
+	 * @author Lohith Dwaraka
+	 * @param userId
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "rest/workspace/{workspaceId}/dictionaries", method = RequestMethod.GET, produces = "application/xml")
+	@ResponseBody
+	public String listWorkspaceDictionaries(@PathVariable("workspaceId") String workspaceId,ModelMap model, Principal principal, HttpServletRequest req)
+			throws Exception {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		List<IDictionary> dictionaryList = null;
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+
+		Template template = null;
+
+		try {
+			engine.init();
+			dictionaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, user.getUsername());
+			template = engine
+					.getTemplate("velocitytemplates/dictionarylist.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("list", dictionaryList);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+			
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+			
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+			
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		}
+	
+	}
+	
+	
 	/**
 	 * Rest interface for the List Dictionary items for the dictionary Id
 	 * http://<<URL>:<PORT>>/quadriga/rest/dictionaryDetails/{DictionaryID}

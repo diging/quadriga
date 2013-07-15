@@ -28,6 +28,10 @@
 		<bean id="ModifyProjectManager"
 		class="edu.asu.spring.quadriga.service.impl.workbench.ModifyProjectManager">
 	</bean>
+
+	<bean id="ConceptcollectionController"
+		class="edu.asu.spring.quadriga.web.ConceptcollectionController">
+	</bean>
 	
 	<bean id="RetrieveProjectManager"
 		class="edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjectManager">

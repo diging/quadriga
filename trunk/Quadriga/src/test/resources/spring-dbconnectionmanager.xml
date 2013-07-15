@@ -14,7 +14,7 @@
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionCCManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	<bean id="DBConnectionProjectDictionary" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionary">
+	<bean id="DBConnectionProjectDictionaryBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionary">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<!-- Workbench projects bean -->
