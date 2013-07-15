@@ -64,6 +64,15 @@ foreach $file (@files) {
 }
 close(OUTFILE);
 
+#	Creates a file for creating sfunctions
+open (OUTFILE, '>>createDBSchema.txt');
+@files = <./Functions/*>;
+
+foreach $file (@files) {
+  print  OUTFILE "source ".$loc."/".$file . "\n";
+}
+close(OUTFILE);
+
 print "Creating Database : $dbName schema\n";
 system("sudo mysql < ./createDB.txt >> dbCreation.log 2>&1");
 print "Creating tables on the database : $dbName\n";
