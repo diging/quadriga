@@ -45,10 +45,9 @@ BEGIN
      --   WHERE id = incollectionid; 
       
       -- retrieve the collaborator details
-      SELECT collectionid,collaboratoruser, 
-         GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole'
+     SELECT  collectionid, collaboratoruser,  GROUP_CONCAT(collaboratorrole SEPARATOR ',')  AS 'Collaboratorrole'      
         FROM vw_conceptcollections_collaborator
-	    WHERE collectionid = incollectionid;
+	    WHERE collectionid = incollectionid GROUP BY collaboratoruser;
       
      END IF;
 END$$

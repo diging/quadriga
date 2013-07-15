@@ -21,6 +21,7 @@ CREATE PROCEDURE sp_updateCollectionItem
   IN  indescription   TEXT,
   IN  inpos    VARCHAR(50),
   IN  incollectionId VARCHAR(100),
+  IN  inusername  VARCHAR(100),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -60,6 +61,10 @@ BEGIN
     		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections_items WHERE item =inconceptname and id = incollectionId)
      	 		THEN SET errmsg = "Item does not exists in this dictionary";
     		END IF;
+    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
+                     WHERE id = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = incollectionid and  collaboratoruser = inusername)
+      THEN SET errmsg = "User dont have access to the collection"; 
+    END IF;
     	IF (errmsg = "")	
          	THEN UPDATE  tbl_conceptcollections_items SET lemma=inlemma, pos=inpos, description=indescription  WHERE id=incollectionId and item =inconceptname;
          END IF;	

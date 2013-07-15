@@ -42,7 +42,7 @@ BEGIN
      
       -- retrieve the collaboration details
      
-      select id, collectionname, description, collectionid from vw_conceptcollections where collectionid IN (select collectionid from vw_conceptcollections_collaborator where collaboratoruser = inusername);
+      select id, collectionname, description from vw_conceptcollections where id IN (select collectionid from vw_conceptcollections_collaborator where collaboratoruser = inusername);
      END IF;
      
 END$$

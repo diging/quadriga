@@ -84,11 +84,18 @@ public interface IConceptCollectionManager {
 	 * Method is used to add new items to items list of a conceptcollection
 	 * Input: lemma, id, pos, description, string
 	 * Result: We just update the backend
+	 * @param string 
+	 * @param string 
+	 * @param string 
+	 * @param string 
+	 * @param string 
+	 * @param string 
 	 * @throws QuadrigaStorageException 
+	 * @throws QuadrigaAccessException 
 	 * 
 	 */
 	void addItems(String lemmma, String id, String pos, String desc,
-			String conceptcollectionId) throws QuadrigaStorageException;
+			String conceptcollectionId, String string) throws QuadrigaStorageException, QuadrigaAccessException;
 	
 	/**
 	 * Method is used to add new  conceptcollection
@@ -99,20 +106,23 @@ public interface IConceptCollectionManager {
 	 */
 	public abstract  String addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException;
 
+	
 	/**
 	 * Method is used to delete items from the collection list of a particular user.
 	 * Input: collectionname and id of the concept to be deleted
-	 * @throws QuadrigaStorageException 
-	 * 
+	 * @param id
+	 * @param collectionid
+	 * @param username
+	 * @throws QuadrigaStorageException
 	 */
-	public abstract void deleteItem(String id, String collectionid) throws QuadrigaStorageException;
+	public abstract void deleteItem(String id, String collectionid, String username) throws QuadrigaStorageException;
 	/**
 	 * Method is used to update the items list with the latest values from the conceptpower
 	 * @param values 
 	 * @param concept
 	 * @throws QuadrigaStorageException 
 	 */
-	public abstract void update(String[] values, IConceptCollection concept) throws QuadrigaStorageException;
+	public abstract void update(String[] values, IConceptCollection concept,String username) throws QuadrigaStorageException;
 	
 	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
 	

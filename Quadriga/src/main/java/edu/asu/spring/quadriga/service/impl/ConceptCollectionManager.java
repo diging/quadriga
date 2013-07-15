@@ -124,7 +124,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 	
 	@Override
-	public void update(String id[],IConceptCollection collection) throws QuadrigaStorageException {
+	public void update(String id[],IConceptCollection collection, String username) throws QuadrigaStorageException {
 		
 		IConcept concept;
 		ConceptpowerReply rep;
@@ -140,16 +140,16 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			concept.setDescription(rep.getConceptEntry().get(0).getDescription());
 			concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 			concept.setPos(rep.getConceptEntry().get(0).getPos());
-			dbConnect.updateItem(concept,collection.getId());
+			dbConnect.updateItem(concept,collection.getId(),username);
 		}
 		}
 	}
 	
-
+	
 	@Override
-	public void addItems(String lemmma, String id, String pos, String desc, String conceptcollectionId) throws QuadrigaStorageException {
+	public void addItems(String lemmma, String id, String pos, String desc, String conceptcollectionId, String username) throws QuadrigaStorageException, QuadrigaAccessException {
 		
-		dbConnect.saveItem(lemmma, id, pos, desc, conceptcollectionId);
+		dbConnect.saveItem(lemmma, id, pos, desc, conceptcollectionId,username);
 	}
 
 	@Override
@@ -159,9 +159,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public void deleteItem(String id, String collectionId) throws QuadrigaStorageException {
+	public void deleteItem(String id, String collectionId, String username) throws QuadrigaStorageException {
 		
-		dbConnect.deleteItems(id,collectionId);
+		dbConnect.deleteItems(id,collectionId,username);
 		
 	}
 	

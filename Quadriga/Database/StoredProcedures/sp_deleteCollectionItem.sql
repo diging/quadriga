@@ -19,6 +19,7 @@ CREATE PROCEDURE sp_deleteCollectionItem
 (
   IN  initemid	 			varchar(255),
   IN  incollectionid		VARCHAR(100),
+  IN  inusername            VARCHAR(100),
   OUT errmsg           		VARCHAR(255)    
 )
 BEGIN
@@ -46,6 +47,12 @@ BEGIN
     		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections_items WHERE item =initemid and id = incollectionid)
      	 		THEN SET errmsg = "Item does not exists in this dictionary";
     		END IF;
+    		
+    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
+                     WHERE id = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = incollectionid and  collaboratoruser = inusername)
+      THEN SET errmsg = "User dont have access to the collection"; 
+    END IF;
+    
           	IF (errmsg = "")
 				THEN DELETE FROM tbl_conceptcollections_items WHERE id = incollectionid AND item = initemid;
 			END IF;

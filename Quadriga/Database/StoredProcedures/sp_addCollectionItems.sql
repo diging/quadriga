@@ -21,6 +21,7 @@ CREATE PROCEDURE sp_addCollectionItems
   IN  	 inpos VARCHAR(255),
   IN 	 indescription TEXT,
   IN 	inid VARCHAR(100),
+  IN    inusername VARCHAR(100),
   OUT 	errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -58,7 +59,12 @@ BEGIN
            IF EXISTS(SELECT 1 FROM vw_conceptcollections_items
 				   WHERE id = inid and item =initem)
       		THEN SET errmsg = "ItemExists";
-    		END IF; 
+    		END IF;
+    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
+                     WHERE id = inid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = inid and  collaboratoruser = inusername)
+      THEN SET errmsg = "User dont have access to the collection"; 
+    END IF;
+    
     		IF (errmsg = "")
             THEN INSERT 
               INTO tbl_conceptcollections_items(id, item, lemma, pos, description,
