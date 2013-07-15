@@ -12,11 +12,6 @@
 		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">
 		<property name="userManager" ref="UserManager"></property>
 	</bean>
-
-	<!-- <bean id="MockupUserManager"
-		class="edu.asu.spring.quadriga.service.develop.MockupUserManager">
-		<property name="userFactory" ref="userFactory"></property>
-	</bean>-->
 	
 	<bean id="UserManager"
 		class="edu.asu.spring.quadriga.service.impl.UserManager">
