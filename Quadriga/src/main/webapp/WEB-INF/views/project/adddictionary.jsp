@@ -82,8 +82,8 @@
 </script>
 
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}'"
-	value='Back to Workspace'>
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+	value='Back to Project'>
 <br>
 <br>
 
@@ -95,7 +95,7 @@
 
 
 				 <input type="submit" value="Add Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/adddictionaries'" />
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/adddictionaries'" />
 
 				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"

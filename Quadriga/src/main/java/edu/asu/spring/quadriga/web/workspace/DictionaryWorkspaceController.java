@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.workbench;
+package edu.asu.spring.quadriga.web.workspace;
 
 import java.util.List;
 
@@ -19,22 +19,23 @@ import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 @Controller
-public class DictionaryProjectController {
+public class DictionaryWorkspaceController {
 
 	@Autowired
 	IDictionaryManager dictonaryManager;
 
 	@Autowired
-	private IProjectDictionaryManager projectDictionaryManager;
+	private IWorkspaceDictionaryManager workspaceDictionaryManager;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(DictionaryProjectController.class);
+			.getLogger(DictionaryWorkspaceController.class);
 
-	@RequestMapping(value = "auth/workbench/{projectid}/adddictionary", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionary", method = RequestMethod.GET)
 	public String addProjectDictionary(
-			@PathVariable("projectid") String projectid, Model model) {
+			@PathVariable("workspaceid") String workspaceId, Model model) {
 		try {
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
@@ -53,17 +54,17 @@ public class DictionaryProjectController {
 				logger.info("Dictionary list is empty");
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
-			model.addAttribute("projectid", projectid);
+			model.addAttribute("workspaceId", workspaceId);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
 			logger.error(" ----" + e.getMessage());
 		}
-		return "auth/workbench/project/adddictionaries";
+		return "auth/workbench/workspace/adddictionaries";
 	}
 
-	@RequestMapping(value = "auth/workbench/{projectid}/adddictionaries", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionaries", method = RequestMethod.POST)
 	public String addProjectDictionary(HttpServletRequest req,
-			@PathVariable("projectid") String projectid, Model model) {
+			@PathVariable("workspaceid") String workspaceId, Model model) {
 		String msg = "";
 		int flag=0;
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -75,8 +76,8 @@ public class DictionaryProjectController {
 			model.addAttribute("deletesuccess", 0);
 			List<IDictionary> dicitonaryList = null;
 			try {
-				dicitonaryList = projectDictionaryManager.listProjectDictionary(
-						projectid, userId);
+				dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
+						workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,13 +86,13 @@ public class DictionaryProjectController {
 				logger.info("Dictionary list is empty buddy");
 			}
 			model.addAttribute("dicitonaryList", dicitonaryList);
-			model.addAttribute("projectid", projectid);
+			model.addAttribute("workspaceId", workspaceId);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("values " + values[i]);
 				try {
-					msg=projectDictionaryManager.addProjectDictionary(projectid,
+					msg=workspaceDictionaryManager.addWorkspaceDictionary(workspaceId,
 							values[i], userId);
 					if(!msg.equals("")){
 						flag=1;
@@ -109,8 +110,8 @@ public class DictionaryProjectController {
 		}
 		List<IDictionary> dicitonaryList = null;
 		try {
-			dicitonaryList = projectDictionaryManager.listProjectDictionary(
-					projectid, userId);
+			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
+					workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,19 +120,18 @@ public class DictionaryProjectController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/dictionaries";
+		model.addAttribute("workspaceId", workspaceId);
+		return "auth/workbench/workspace/dictionaries";
 	}
 
-	@RequestMapping(value = "auth/workbench/{projectid}/dictionaries", method = RequestMethod.GET)
-	public String listProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) {
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/dictionaries", method = RequestMethod.GET)
+	public String listWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		List<IDictionary> dicitonaryList = null;
 		try {
-			dicitonaryList = projectDictionaryManager.listProjectDictionary(
-					projectid, userId);
+			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,20 +140,19 @@ public class DictionaryProjectController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/dictionaries";
+		model.addAttribute("workspaceId", workspaceId);
+		return "auth/workbench/workspace/dictionaries";
 	}
 	
-	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) {
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionary", method = RequestMethod.GET)
+	public String deleteProjectDictionary(@PathVariable("workspaceid") String workspaceId, Model model) {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		
 		List<IDictionary> dicitonaryList = null;
 		try {
-			dicitonaryList = projectDictionaryManager.listProjectDictionary(
-					projectid, userId);
+			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,12 +161,12 @@ public class DictionaryProjectController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/deletedictionaries";
+		model.addAttribute("workspaceId", workspaceId);
+		return "auth/workbench/workspace/deletedictionaries";
 	}
 	
-	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionaries", method = RequestMethod.POST)
-	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) {
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionaries", method = RequestMethod.POST)
+	public String deleteWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -179,8 +178,8 @@ public class DictionaryProjectController {
 			model.addAttribute("deletesuccess", 0);
 			List<IDictionary> dicitonaryList = null;
 			try {
-				dicitonaryList = projectDictionaryManager.listProjectDictionary(
-						projectid, userId);
+				dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
+						workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -189,12 +188,12 @@ public class DictionaryProjectController {
 				logger.info("Dictionary list is empty buddy");
 			}
 			model.addAttribute("dicitonaryList", dicitonaryList);
-			model.addAttribute("projectid", projectid);
+			model.addAttribute("workspaceId", workspaceId);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				try {
-					msg=projectDictionaryManager.deleteProjectDictionary(projectid, userId, values[i]);
+					msg=workspaceDictionaryManager.deleteWorkspaceDictionary(workspaceId, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -211,8 +210,8 @@ public class DictionaryProjectController {
 		}
 		List<IDictionary> dicitonaryList = null;
 		try {
-			dicitonaryList = projectDictionaryManager.listProjectDictionary(
-					projectid, userId);
+			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
+					workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -221,7 +220,7 @@ public class DictionaryProjectController {
 			logger.info("Dictionary list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/dictionaries";
+		model.addAttribute("workspaceId", workspaceId);
+		return "auth/workbench/workspace/dictionaries";
 	}
 }

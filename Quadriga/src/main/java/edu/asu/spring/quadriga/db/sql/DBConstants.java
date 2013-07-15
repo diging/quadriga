@@ -81,6 +81,12 @@ public interface DBConstants
 	public static final String ADD_PROJECT_CONCEPT_COLLECTION = "sp_addCCToProject";
 	public static final String LIST_PROJECT_CONCEPT_COLLECTION = "sp_getProjectCCList";
 	public static final String DELETE_PROJECT_CONCEPT_COLLECTION = "sp_deleteProjectCC";
+	public static final String ADD_WORKSPACE_DICTIONARY = "sp_addDictionaryToWorkspace";
+	public static final String LIST_WORKSPACE_DICTIONARY = "sp_getWorkspaceDictionaryList";
+	public static final String DELETE_WORKSPACE_DICTIONARY = "sp_deleteWorkspaceDictionary";
+	public static final String ADD_WORKSPACE_CONCEPT_COLLECTION = "sp_addCCToWorkspace";
+	public static final String LIST_WORKSPACE_CONCEPT_COLLECTION = "sp_getWorkspaceCCList";
+	public static final String DELETE_WORKSPACE_CONCEPT_COLLECTION = "sp_deleteWorkspaceCC";
 	
 	// Dspace database objects
 	public static final String CHECK_DSPACEDATA_NODES="sp_checkDsapceNodes";

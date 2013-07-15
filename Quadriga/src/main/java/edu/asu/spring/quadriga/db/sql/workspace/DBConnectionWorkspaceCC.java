@@ -1,4 +1,7 @@
-package edu.asu.spring.quadriga.db.sql.workbench;
+/**
+ * 
+ */
+package edu.asu.spring.quadriga.db.sql.workspace;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -14,26 +17,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectConceptColleciton;
+import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectConceptColleciton;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public class DBConnectionProjectConceptColleciton extends ADBConnectionManager implements
-		IDBConnectionProjectConceptColleciton {
+/** 
+ * DB connection class to add, list, delete concept collection in workspace
+ * @author Lohith Dwaraka
+ *
+ */
+public class DBConnectionWorkspaceCC implements IDBConnectionWorkspaceCC {
 
 	protected Connection connection;
 	
-	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectConceptColleciton.class);
-
-	@Autowired
-	private DataSource dataSource;
-	
 	@Autowired
 	private IConceptCollectionFactory conceptCollectionFactory;
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(DBConnectionWorkspaceCC.class);
+	
+	@Autowired
+	private DataSource dataSource;
 	/**
 	 * Assigns the data source
 	 *  
@@ -43,7 +49,6 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 	{
 		this.dataSource = dataSource;
 	}
-	
 	/**
 	 * @Description : Close the DB connection
 	 * 
@@ -83,16 +88,23 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 *  Method add a Concept collection to a workspace                   
+	 * @returns         path of list workspace Concept collection page
+	 * @throws			SQLException
+	 * @author          Lohith Dwaraka
+	 */
 	@Override
-	public String addProjectConceptCollection(String projectId,
-			String conceptCollectionId, String userId)
+	public String addWorkspaceCC(String workspaceId, String CCId, String userId)
 			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
 		String dbCommand;
 		String errmsg="";
 		CallableStatement sqlStatement;
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_PROJECT_CONCEPT_COLLECTION  + "(?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_WORKSPACE_CONCEPT_COLLECTION  + "(?,?,?,?)";
 
 		//get the connection
 		getConnection();
@@ -102,8 +114,8 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 					sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 
 					//adding the input variables to the SP
-					sqlStatement.setString(1, projectId);
-					sqlStatement.setString(2, conceptCollectionId);        	
+					sqlStatement.setString(1, workspaceId);
+					sqlStatement.setString(2, CCId);        	
 					sqlStatement.setString(3,userId);
 
 					//adding output variables to the SP
@@ -133,16 +145,24 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 		return null;
 	}
 
+	/**
+	 * Method to list the Concept collection in workspace
+	 * @param workspaceId
+	 * @param userId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
-	public List<IConceptCollection> listProjectConceptCollection(String projectId,
+	public List<IConceptCollection> listWorkspaceCC(String workspaceId,
 			String userId) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
 		String dbCommand;
 		String errmsg="";
 		CallableStatement sqlStatement;
 		List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_PROJECT_CONCEPT_COLLECTION  + "(?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE_CONCEPT_COLLECTION  + "(?,?,?)";
 
 		//get the connection
 		getConnection();
@@ -152,7 +172,7 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 
 			//adding the input variables to the SP
-			sqlStatement.setString(1, projectId);
+			sqlStatement.setString(1, workspaceId);
 			sqlStatement.setString(2, userId);        	
 
 			//adding output variables to the SP
@@ -194,18 +214,25 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 		
 		return conceptCollectionList;
 	}
-	
 
+	/**
+	 * Method to delete the concept collection from workspace
+	 * @param workspaceId
+	 * @param userId
+	 * @param dictioanaryId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
-	public String deleteProjectConceptCollection(String projectId,
-			String userId, String conceptCollectionId)
-			throws QuadrigaStorageException {
+	public String deleteWorkspaceCC(String workspaceId, String userId,
+			String CCId) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
 		String dbCommand;
 		String errmsg="";
 		CallableStatement sqlStatement;		
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_CONCEPT_COLLECTION  + "(?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_WORKSPACE_CONCEPT_COLLECTION  + "(?,?,?,?)";
 
 		//get the connection
 		getConnection();
@@ -215,8 +242,8 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, userId);
-			sqlStatement.setString(2, conceptCollectionId);        	
-			sqlStatement.setString(3, projectId);  
+			sqlStatement.setString(2, CCId);        	
+			sqlStatement.setString(3, workspaceId);  
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
@@ -235,5 +262,5 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 		}
 		return "";
 	}
-	
+
 }

@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -77,25 +77,39 @@
 			}
 		});
 	});
-
-
 </script>
-
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}'"
-	value='Back to Workspace'>
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+	value='Back to Project'>
 <br>
 <br>
+<c:choose>
+	<c:when test="${success=='1'}">
+		<font color="blue"><spring:message
+				code="project.CC.add.success" /></font>
+	</c:when>
+	<c:when test="${success=='0'}">
+		<font color="red"><spring:message
+				code="project.CC.add.fail" /></font>
+	</c:when>
+	<c:when test="${deletesuccess=='1'}">
+		<font color="blue"><spring:message
+				code="project.CC.delete.success" /></font>
+	</c:when>
+	<c:when test="${deletesuccess=='0'}">
+		<font color="red"><spring:message
+				code="project.CC.delete.fail" /></font>
+	</c:when>
+</c:choose>
 
 <div class="container">
 	<c:choose>
-		<c:when test="${not empty dictinarylist}">
-
+		<c:when test="${not empty conceptCollectionList}">
 			<form method="POST">
 
 
-				 <input type="submit" value="Add Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/adddictionaries'" />
+				<input type="submit" value="Delete Concept Collections"
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deleteconceptcollections'" />
 
 				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"
@@ -105,22 +119,22 @@
 						<tr>
 							<th align="left"><input type="checkbox" id="selectall">Select
 								All</th>
-							<th>Dictionary Name</th>
-							<th>Dictionary Description</th>
+							<th>Concept Collection Name</th>
+							<th>Concept Collection Description</th>
 						</tr>
 					</thead>
 
 					<tbody>
-						<c:forEach var="dictionary" items="${dictinarylist}">
+						<c:forEach var="conceptCollection" items="${conceptCollectionList}">
 							<tr>
-								<td width="10%"><input type="checkbox" class="selected" name="selected"
-									value='<c:out value="${dictionary.id}"></c:out>' /></td>
-								<td align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${dictionary.name}"></c:out>" /> 
-									<c:out value="${dictionary.name}"></c:out></td>
-								<td  align="justify">
-								<c:out	value="${dictionary.description}"></c:out></td>
+								<td width="10%"><input type="checkbox" class="selected"
+									name="selected"
+									value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
+								<td align="center"><input name="items" type="hidden"
+									value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
+										value="${conceptCollection.name}"></c:out></td>
+								<td align="justify"><c:out
+										value="${conceptCollection.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -130,7 +144,9 @@
 		</c:when>
 
 		<c:otherwise>
-			<br><spring:message code="empty.dictionary" />
-	</c:otherwise>
+
+			<br>
+			<spring:message code="empty.CC" />
+		</c:otherwise>
 	</c:choose>
 </div>
