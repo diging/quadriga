@@ -41,13 +41,20 @@ public interface IDBConnectionCCManager {
 		 * @throws QuadrigaAccessException 
 		 */
 		public abstract void getCollectionDetails(IConceptCollection collection, String username) throws QuadrigaStorageException, QuadrigaAccessException;
+		
 		/**
 		 * Updates the database by adding additional items to the List
-		 * @throws QuadrigaStorageException 
-		 * 
+		 * @param lemma
+		 * @param id
+		 * @param pos
+		 * @param desc
+		 * @param conceptId
+		 * @param username
+		 * @throws QuadrigaStorageException
+		 * @throws QuadrigaAccessException 
 		 */
 		public abstract void saveItem(String lemma, String id, String pos, String desc,
-				String conceptId) throws QuadrigaStorageException;
+				String conceptId, String username) throws QuadrigaStorageException, QuadrigaAccessException;
 		/**
 		 * Validated the id for the collection
 		 * @throws QuadrigaStorageException 
@@ -61,24 +68,27 @@ public interface IDBConnectionCCManager {
 		 */
 		public abstract  String addCollection(IConceptCollection con) throws QuadrigaStorageException;
 		
+		
 		/**
 		 * Method is used to call the delete item sp and delete the item called
 		 * @param id
 		 * @param collectionId
-		 * @return 
-		 * @throws QuadrigaStorageException 
-		 * 
+		 * @param username
+		 * @return
+		 * @throws QuadrigaStorageException
 		 */
-		public abstract String deleteItems(String id, String collectionId) throws QuadrigaStorageException;
+		public abstract String deleteItems(String id, String collectionId, String username) throws QuadrigaStorageException;
+		
 		
 		/**
 		 * Method is used to update the fields in the database
 		 * @param concept
-		 * @param collectionName
+		 * @param collectionId
+		 * @param username
 		 * @return
-		 * @throws QuadrigaStorageException 
+		 * @throws QuadrigaStorageException
 		 */
-		public abstract String updateItem(IConcept concept, String collectionId) throws QuadrigaStorageException;
+		public abstract String updateItem(IConcept concept, String collectionId, String username) throws QuadrigaStorageException;
 		
 		/**
 		 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
@@ -89,14 +99,40 @@ public interface IDBConnectionCCManager {
 		 */
 		public abstract int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException;
 		
+		/**
+		 * 
+		 * 
+		 * @author rohit
+		 * 
+		 */
 		public abstract List<ICollaborator> showCollaboratorRequest(String collectionid);
 		
+		/**
+		 * 
+		 * 
+		 * @return 
+		 * @author rohit
+		 * 
+		 */
 		public abstract List<IUser> showNonCollaboratorRequest(String collectionid);
 		
+		/**
+		 * Method add colloborators to the concept collections.
+		 * 
+		 * @return String
+		 * @author rohit
+		 *  
+		 */
 		public abstract String addCollaboratorRequest(ICollaborator collaborator,String collectionid, String userName);
 		
+		/**
+		 * Method used to  get colloborators of a particular collection.
+		 * 
+		 * 
+		 * @author Rohit
+		 * 
+		 */
 		public abstract void getCollaborators(IConceptCollection collection);
-		
 		
 		
 		

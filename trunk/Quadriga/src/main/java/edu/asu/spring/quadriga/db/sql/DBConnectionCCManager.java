@@ -240,15 +240,16 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * {@inheritDoc}
 	 * 
 	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException 
 	 */
 	@Override
 	public void saveItem(String lemma, String id, String pos, String desc,
-			String conceptId) throws QuadrigaStorageException {
+			String conceptId,String username) throws QuadrigaStorageException, QuadrigaAccessException {
 		String dbCommand;
-		String errmsg;
+		String errmsg="";
 		CallableStatement sqlStatement;
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_COLLECTION_ITEM
-				+ "(?,?,?,?,?,?)";
+				+ "(?,?,?,?,?,?,?)";
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
@@ -257,11 +258,17 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.setString(3, pos);
 			sqlStatement.setString(4, desc);
 			sqlStatement.setString(5, conceptId);
-			sqlStatement.registerOutParameter(6, Types.VARCHAR);
+			sqlStatement.setString(6, username);
+			sqlStatement.registerOutParameter(7, Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(6);
+			
+			errmsg = sqlStatement.getString(7);
+			
+			if(errmsg!="")
+			{
 			logger.error(errmsg);
-
+			throw new QuadrigaAccessException("Hmmm!!  Need to try much more hard to get into this");
+			}
 		} catch (SQLException e) {
 			logger.error("Exception:", e);
 			throw new QuadrigaStorageException(
@@ -357,22 +364,23 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String deleteItems(String id, String collectionId)
+	public String deleteItems(String id, String collectionId, String username)
 			throws QuadrigaStorageException {
 
 		String dbCommand;
 		String errmsg = null;
 		CallableStatement sqlStatement;
 		dbCommand = DBConstants.SP_CALL + " "
-				+ DBConstants.DELETE_COLLECTION_ITEM + "(?,?,?)";
+				+ DBConstants.DELETE_COLLECTION_ITEM + "(?,?,?,?)";
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, id);
 			sqlStatement.setString(2, collectionId);
-			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			sqlStatement.setString(3, username);
+			sqlStatement.registerOutParameter(4, Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(3);
+			errmsg = sqlStatement.getString(4);
 			return errmsg;
 		} catch (SQLException e) {
 			logger.error("Exception", e);
@@ -389,13 +397,13 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String updateItem(IConcept concept, String collectionId)
+	public String updateItem(IConcept concept, String collectionId, String username)
 			throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg = null;
 		CallableStatement sqlStatement;
 		dbCommand = DBConstants.SP_CALL + " "
-				+ DBConstants.UPDATE_COLLECTION_ITEM + "(?,?,?,?,?,?)";
+				+ DBConstants.UPDATE_COLLECTION_ITEM + "(?,?,?,?,?,?,?)";
 		getConnection();
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
@@ -404,9 +412,10 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.setString(3, concept.getDescription());
 			sqlStatement.setString(4, concept.getPos());
 			sqlStatement.setString(5, collectionId);
-			sqlStatement.registerOutParameter(6, Types.VARCHAR);
+			sqlStatement.setString(6, username);
+			sqlStatement.registerOutParameter(7, Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(6);
+			errmsg = sqlStatement.getString(7);
 			return errmsg;
 		} catch (SQLException e) {
 			logger.error("Exception", e);
@@ -637,9 +646,5 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			closeConnection();
 		}
 		
-	}
-	
-	
-
-	
+	}	
 }

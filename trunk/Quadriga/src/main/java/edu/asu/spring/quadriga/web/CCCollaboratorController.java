@@ -129,7 +129,7 @@ public class CCCollaboratorController {
 			
 			
 			
-			//model.addAttribute("collaboratingUsers", collaboratingUsers);
+			model.addAttribute("collaboratingUsers", collaborators);
 			
 			return "auth/conceptcollection/showCollaborators";
 			

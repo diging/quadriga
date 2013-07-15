@@ -57,11 +57,11 @@
 	<h3 align="center">You collaborate on these concept collections</h3>
 	<hr>
 	<ul class="pagination2">
-		<c:if test="${not empty conceptlist}">
+		<c:if test="${not empty collaborationlist}">
 			<c:forEach var="concept" items="${collaborationlist}">
 				<li><details>
 						<summary>
-							<a href="conceptcollections/${concept.name}"> <c:out
+							<a href="conceptcollections/${concept.id}"> <c:out
 									value="${concept.name}"></c:out>
 							</a>
 						</summary>

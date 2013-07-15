@@ -217,7 +217,7 @@ public class ConceptCollectionManagerTest {
 		List<IConceptCollection> list = collectionManager.getCollectionsOwnedbyUser(user.getUserName());
 		assertEquals(collection.getName(),list.get(0).getName());
 		collection.setId(list.get(0).getId());
-		collectionManager.addItems("lemma", "testid", "red", "hello", collection.getId());
+		collectionManager.addItems("lemma", "testid", "red", "hello", collection.getId(),user.getName());
 		collectionManager.getCollectionDetails(collection, user.getUserName());
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setId("testid");
@@ -257,8 +257,8 @@ public class ConceptCollectionManagerTest {
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		collection.getItems().add(concept);
-		collectionManager.addItems("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId());
-		collectionManager.update(new String[]{rep.getConceptEntry().get(0).getId()}, collection);
+		collectionManager.addItems("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId(),user.getName());
+		collectionManager.update(new String[]{rep.getConceptEntry().get(0).getId()}, collection,user.getUserName());
 		collectionManager.getCollectionDetails(collection, user.getUserName());
 		assertEquals(concept.getLemma(),collection.getItems().get(0).getLemma());
 	}
@@ -285,7 +285,7 @@ public class ConceptCollectionManagerTest {
 		concept.setId(rep.getConceptEntry().get(0).getId());
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
-		collectionManager.addItems(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
+		collectionManager.addItems(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId(),user.getName());
 		collectionManager.getCollectionDetails(collection, user.getUserName());
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
 	}
@@ -333,11 +333,11 @@ public class ConceptCollectionManagerTest {
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		
-		collectionManager.addItems(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId());
+		collectionManager.addItems(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId(), user.getName());
 		collectionManager.getCollectionDetails(collection, user.getUserName());
 		
 		assertEquals(concept.getId(),collection.getItems().get(0).getId());
-		collectionManager.deleteItem(concept.getId(), collection.getId());
+		collectionManager.deleteItem(concept.getId(), collection.getId(),user.getUserName());
 		List<IConceptCollection> clist = collectionManager.getCollectionsOwnedbyUser(user.getUserName());
 		
 		assertEquals(collection.getName(),clist.get(0).getName());

@@ -32,15 +32,17 @@ $(document).ready(function() {
 	<thead>
 		<tr>
 			<th>collaborator</th>	
+			<th>roles</th>	
 		</tr>
+		
 	</thead>
 	<tbody>
 	<c:forEach var="collab" items="${collaboratingUsers}">
 		<tr>
-		  <td><c:out value="${collab.userName}"></c:out> </td>
-		  <c:forEach var="roles" items="collaboratingUsers">
-		  <td><c:out value="${roles.roleDBid}"></c:out></td>
-		  </c:forEach>
+		  <td><c:out value="${collab.userObj.userName}"></c:out> </td><td>
+		  <c:forEach var="roles" items="${collab.collaboratorRoles}">
+		  <c:out value="${roles.roleDBid}"></c:out>
+		  </c:forEach></td>
 		</tr>
 	</c:forEach>
 	</tbody>

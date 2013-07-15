@@ -152,7 +152,7 @@ public class ConceptcollectionController {
 				temp = c.getConceptEntry().get(
 						(c.getConceptEntry().indexOf(temp)));
 				conceptControllerManager.addItems(temp.getLemma(), id,
-						temp.getPos(), temp.getDescription(), collection_id);
+						temp.getPos(), temp.getDescription(), collection_id,principal.getName());
 			}
 		}
 		int index;
@@ -218,7 +218,7 @@ public class ConceptcollectionController {
 		if (values != null) {
 			for (String id : values) {
 
-				conceptControllerManager.deleteItem(id, collection.getId());
+				conceptControllerManager.deleteItem(id, collection.getId(),principal.getName());
 				concept = conceptFactory.createConceptObject();
 				concept.setId(id);
 				collection.getItems().remove(collection.getItems().indexOf(concept));
@@ -233,11 +233,11 @@ public class ConceptcollectionController {
 	}
 
 	@RequestMapping(value = "auth/conceptcollections/updateitems", method = RequestMethod.POST)
-	public String conceptUpdateHandler(HttpServletRequest req, ModelMap model)
+	public String conceptUpdateHandler(HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException {
 		String[] values = req.getParameterValues("selected");
 		if (values != null)
-			conceptControllerManager.update(values, collection);
+			conceptControllerManager.update(values, collection,principal.getName() );
 
 		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
 	}
