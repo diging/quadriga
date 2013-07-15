@@ -6,17 +6,13 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
-	
+
 	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
 	});
-	$(document).ready(function() {
-		$("input[type=a]").button().click(function(event) {
-			event.preventDefault();
-		});
-	});
+
 
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
@@ -26,39 +22,39 @@
 </script>
 
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Back to Workspace'>
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+	value='Back to Project'>
 <br>
 <br>
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"><spring:message
-				code="workspace.dictionary.add.success" /></font>
+				code="project.CC.add.success" /></font>
 	</c:when>
 	<c:when test="${success=='0'}">
 		<font color="red"><spring:message
-				code="workspace.dictionary.add.fail" /></font>
+				code="project.CC.add.fail" /></font>
 	</c:when>
 	<c:when test="${deletesuccess=='1'}">
 		<font color="blue"><spring:message
-				code="workspace.dictionary.delete.success" /></font>
+				code="project.CC.delete.success" /></font>
 	</c:when>
 	<c:when test="${deletesuccess=='0'}">
 		<font color="red"><spring:message
-				code="workspace.dictionary.delete.fail" /></font>
+				code="project.CC.delete.fail" /></font>
 	</c:when>
 </c:choose>
 
 <div class="container">
 	<c:choose>
-		<c:when test="${not empty dicitonaryList}">
+		<c:when test="${not empty conceptCollectionList}">
 				
 				<ul class="style2 pagination1">
-					<c:forEach var="dictionary" items="${dicitonaryList}">
+					<c:forEach var="conceptCollection" items="${conceptCollectionList}">
 						<li><a
-							href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.id}"><c:out
-									value="${dictionary.name}"></c:out></a> <br> <c:out
-								value="${dictionary.description}"></c:out></li>
+							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptCollection.id}"><c:out
+									value="${conceptCollection.name}"></c:out></a> <br> <c:out
+								value="${conceptCollection.description}"></c:out></li>
 					</c:forEach>
 				</ul>
 		</c:when>
@@ -66,7 +62,7 @@
 		<c:otherwise>
 
 			<br>
-			<spring:message code="empty.dictionary" />
+			<spring:message code="empty.CC" />
 		</c:otherwise>
 	</c:choose>
 </div>

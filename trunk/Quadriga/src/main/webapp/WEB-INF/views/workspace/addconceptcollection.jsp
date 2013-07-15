@@ -82,8 +82,8 @@
 </script>
 
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
-	value='Back to Project'>
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
+	value='Back to Workspace'>
 <br>
 <br>
 
@@ -95,7 +95,7 @@
 
 
 				 <input type="submit" value="Add Concept Collection"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addconceptcollection'" />
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/addconceptcollection'" />
 
 				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"

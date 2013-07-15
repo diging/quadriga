@@ -79,26 +79,26 @@
 	});
 </script>
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
-	value='Back to Project'>
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
+	value='Back to Workspace'>
 <br>
 <br>
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"><spring:message
-				code="project.CC.add.success" /></font>
+				code="workspace.CC.add.success" /></font>
 	</c:when>
 	<c:when test="${success=='0'}">
 		<font color="red"><spring:message
-				code="project.CC.add.fail" /></font>
+				code="workspace.CC.add.fail" /></font>
 	</c:when>
 	<c:when test="${deletesuccess=='1'}">
 		<font color="blue"><spring:message
-				code="project.CC.delete.success" /></font>
+				code="workspace.CC.delete.success" /></font>
 	</c:when>
 	<c:when test="${deletesuccess=='0'}">
 		<font color="red"><spring:message
-				code="project.CC.delete.fail" /></font>
+				code="workspace.CC.delete.fail" /></font>
 	</c:when>
 </c:choose>
 
@@ -109,7 +109,7 @@
 
 
 				<input type="submit" value="Delete Concept Collections"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deleteconceptcollections'" />
+					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deleteconceptcollections'" />
 
 				<br /> <br />
 				<table style="width: 100%" cellpadding="0" cellspacing="0"

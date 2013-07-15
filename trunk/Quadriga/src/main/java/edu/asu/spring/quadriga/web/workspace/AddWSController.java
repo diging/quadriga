@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
+import edu.asu.spring.quadriga.domain.implementation.WorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -75,7 +76,7 @@ public class AddWSController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
-	public String addWorkSpaceRequest(@ModelAttribute("SpringWeb")IWorkSpace workspace,
+	public String addWorkSpaceRequest(@ModelAttribute("SpringWeb")WorkSpace workspace,
 			ModelMap model, Principal principal,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
 			{
 		boolean chkAccess;

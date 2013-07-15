@@ -12,6 +12,13 @@
 	<bean id="DBConnectionDictionaryManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>	
+	<bean id="DBConnectionWorkspaceDictionaryBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionWorkspaceDictionary">
+		<property name="dataSource" ref="dataSource" />
+	</bean>	
+	<bean id="DBConnectionWorkspaceCCBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionWorkspaceCC">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 	<bean id="DBConnectionProjectDictionaryBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionary">
 		<property name="dataSource" ref="dataSource" />
 	</bean>

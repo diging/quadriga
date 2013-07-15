@@ -26,26 +26,26 @@
 </script>
 
 <input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Back to Workspace'>
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+	value='Back to Project'>
 <br>
 <br>
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"><spring:message
-				code="workspace.dictionary.add.success" /></font>
+				code="project.dictionary.add.success" /></font>
 	</c:when>
 	<c:when test="${success=='0'}">
 		<font color="red"><spring:message
-				code="workspace.dictionary.add.fail" /></font>
+				code="project.dictionary.add.fail" /></font>
 	</c:when>
 	<c:when test="${deletesuccess=='1'}">
 		<font color="blue"><spring:message
-				code="workspace.dictionary.delete.success" /></font>
+				code="project.dictionary.delete.success" /></font>
 	</c:when>
 	<c:when test="${deletesuccess=='0'}">
 		<font color="red"><spring:message
-				code="workspace.dictionary.delete.fail" /></font>
+				code="project.dictionary.delete.fail" /></font>
 	</c:when>
 </c:choose>
 

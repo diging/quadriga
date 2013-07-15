@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_showDictionaryCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showDictionaryCollaborators
 (
-	IN indictionaryid				INT,
+	IN indictionaryid				varchar(50),
 	OUT errmsg				VARCHAR(200)
 )
 

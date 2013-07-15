@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.workbench;
+package edu.asu.spring.quadriga.web.workspace;
 
 import java.util.Iterator;
 import java.util.List;
@@ -17,36 +17,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.IDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 
 @Controller
-public class ConceptCollectionProjectController {
+public class ConceptCollectionWorkspaceController {
 
 	@Autowired
 	IConceptCollectionManager conceptCollectionManager;
 
 	@Autowired
-	private IProjectConceptCollectionManager projectConceptCollectionManager;
+	private IWorkspaceCCManager workspaceCCManager;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(ConceptCollectionProjectController.class);
+			.getLogger(ConceptCollectionWorkspaceController.class);
 
 	
 
-	@RequestMapping(value = "auth/workbench/{projectid}/conceptcollections", method = RequestMethod.GET)
-	public String listProjectConceptCollection(@PathVariable("projectid") String projectid, Model model) {
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/conceptcollections", method = RequestMethod.GET)
+	public String listProjectConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		logger.info("Concept collection list is empty buddy");
 		List<IConceptCollection> conceptCollectionList = null;
 		try {
-			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,14 +57,14 @@ public class ConceptCollectionProjectController {
 			logger.info(" "+con.getName());
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/conceptcollections";
+		model.addAttribute("workspaceId", workspaceId);
+		return "auth/workbench/workspace/conceptcollections";
 	}
 	
 	
-	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.GET)
 	public String addProjectConceptCollection(
-			@PathVariable("projectid") String projectid, Model model) {
+			@PathVariable("workspaceid") String workspaceId, Model model) {
 		try {
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
@@ -89,17 +86,17 @@ public class ConceptCollectionProjectController {
 				logger.info(" "+con.getName());
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
-			model.addAttribute("projectid", projectid);
+			model.addAttribute("workspaceId", workspaceId);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
 			logger.error(" ----" + e.getMessage());
 		}
-		return "auth/workbench/project/addconceptcollections";
+		return "auth/workbench/workspace/addconceptcollections";
 	}
 	
-	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.POST)
 	public String addProjectConceptCollection(HttpServletRequest req,
-			@PathVariable("projectid") String projectid, Model model) {
+			@PathVariable("workspaceid") String workspaceId, Model model) {
 		String msg = "";
 		int flag=0;
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -111,7 +108,7 @@ public class ConceptCollectionProjectController {
 			model.addAttribute("deletesuccess", 0);
 			List<IConceptCollection> conceptCollectionList = null;
 			try {
-				conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+				conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -120,14 +117,13 @@ public class ConceptCollectionProjectController {
 				logger.info("Concept Collection list is empty buddy");
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
-			model.addAttribute("projectid", projectid);
-			return "auth/workbench/project/conceptcollections";
+			model.addAttribute("workspaceId", workspaceId);
+			return "auth/workbench/workspace/conceptcollections";
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("values " + values[i]);
 				try {
-					msg=projectConceptCollectionManager.addProjectConceptCollection(projectid,
-							values[i], userId);
+					msg=workspaceCCManager.addWorkspaceCC(workspaceId, values[i], userId);
 					if(!msg.equals("")){
 						flag=1;
 					}
@@ -153,20 +149,20 @@ public class ConceptCollectionProjectController {
 			logger.info("conceptCollectionList list is empty buddy");
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/conceptcollections";
+		model.addAttribute("workspaceId", workspaceId);
+		return "auth/workbench/workspace/conceptcollections";
 	}
 
 	
-	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) {
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.GET)
+	public String deleteProjectDictionary(@PathVariable("workspaceid") String workspaceId, Model model) {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		
 		List<IConceptCollection> conceptCollectionList = null;
 		try {
-			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -175,12 +171,12 @@ public class ConceptCollectionProjectController {
 			logger.info("conceptCollectionList list is empty buddy");
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/deleteconceptcollections";
+		model.addAttribute("projectid", workspaceId);
+		return "auth/workbench/workspace/deleteconceptcollections";
 	}
 	
-	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
-	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) {
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.POST)
+	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -192,7 +188,7 @@ public class ConceptCollectionProjectController {
 			model.addAttribute("deletesuccess", 0);
 			List<IConceptCollection> conceptCollectionList = null;
 			try {
-				conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+				conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -201,12 +197,12 @@ public class ConceptCollectionProjectController {
 				logger.info("Concept Collection list is empty buddy");
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
-			model.addAttribute("projectid", projectid);
-			return "auth/workbench/project/conceptcollections";
+			model.addAttribute("projectid", workspaceId);
+			return "auth/workbench/workspace/conceptcollections";
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				try {
-					msg=projectConceptCollectionManager.deleteProjectConceptCollection(projectid, userId, values[i]);
+					msg=workspaceCCManager.deleteWorkspaceCC(workspaceId, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -223,7 +219,7 @@ public class ConceptCollectionProjectController {
 		}
 		List<IConceptCollection> conceptCollectionList = null;
 		try {
-			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -232,7 +228,7 @@ public class ConceptCollectionProjectController {
 			logger.info("Dictionary list is empty buddy");
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
-		model.addAttribute("projectid", projectid);
-		return "auth/workbench/project/conceptcollections";
+		model.addAttribute("projectid", workspaceId);
+		return "auth/workbench/workspace/conceptcollections";
 	}
 }
