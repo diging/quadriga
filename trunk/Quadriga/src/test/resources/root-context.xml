@@ -38,6 +38,7 @@
 		class="edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjectManager">
 	</bean>
 	
+	
 	<bean id="ArchiveWSManager"
 		class="edu.asu.spring.quadriga.service.impl.workspace.ArchiveWSManager">
 	</bean>
@@ -75,6 +76,19 @@
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory"></bean>
 
+	<bean id="DBConnectionProjectDictionaryBean"
+		class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionary">
+	</bean>
+	
+	<bean id="DBConnectionProjectAccessManagerBean"
+	class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectAccessManager">
+	</bean>
+	<bean id="RetrieveProjCollabManagerBean" class = "edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjCollabManager">
+	
+	</bean>
+	<bean 
+	class="edu.asu.spring.quadriga.service.impl.workbench.CheckProjectSecurity">
+	</bean>
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
 	</bean>
