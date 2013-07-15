@@ -35,7 +35,6 @@ import edu.asu.spring.quadriga.service.IUserManager;
 public class QuadrigaUserRoleMapperTest {
 
 	@Autowired
-	@Qualifier("MockupUserManager")
 	private IUserManager userManager;
 	
 	@Autowired

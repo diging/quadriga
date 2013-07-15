@@ -36,7 +36,6 @@ public class RequestAccountControllerTest {
 	private RequestAccountController requestAccountController;
 	
 	@Autowired
-	@Qualifier("MockupUserManager")
 	private IUserManager userManager;
 
 	@BeforeClass

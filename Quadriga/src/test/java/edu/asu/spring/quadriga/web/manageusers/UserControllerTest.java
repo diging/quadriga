@@ -20,14 +20,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.develop.MockupUserManager;
 
 /**
- * This class tests the {@link UserController}
- * For test this class uses the {@link MockupUserManager}
+ * This class tests the {@link UserController}.
+ * 
+ * IMPORTANT: This test class will overwrite the data in 
+ * 			  tbl_quadriga_user
+ * 			  tbl_quadriga_user_denied
+ * 			  tbl_quadriga_user_requests
  * 
  * @author Ram Kumar Kumaresan
  *
@@ -40,7 +45,10 @@ public class UserControllerTest {
 	UserController userContoller;
 
 	@Autowired
-	@Qualifier("MockupUserManager")
+	IDBConnectionManager dbConnection;
+	String sDatabaseSetup;
+	
+	@Autowired
 	IUserManager usermanager;
 
 	Principal principal;	
@@ -69,14 +77,31 @@ public class UserControllerTest {
 		principal = new Principal() {			
 			@Override
 			public String getName() {
-				return "jdoe";
+				return "test";
 			}
 		};
 		authentication = new UsernamePasswordAuthenticationToken(principal, credentials);
+		//Setup the database with the proper data in the tables;
+				sDatabaseSetup = "delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())";
 	}
 
 	@After
 	public void tearDown() throws Exception {
+	}
+	
+	/**
+	 * Load the required data into the dependent tables
+	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
+	 */
+	@Test
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
+	{
+		String[] sQuery = sDatabaseSetup.split("&");
+		for(String singleQuery: sQuery)
+		{
+			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
+		}
 	}
 
 	/**
@@ -90,21 +115,21 @@ public class UserControllerTest {
 	@DirtiesContext
 	public void testManageUsers() throws QuadrigaStorageException {
 
-		
+		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.manageUsers(model, principal),"auth/users/manage");
 
 		//User Requests
 		List<IUser> userRequestsList = (List<IUser>) model.get("userRequestsList");
-		assertEquals(2, userRequestsList.size());
+		assertEquals(3, userRequestsList.size());
 
 		//Active Users
 		List<IUser> activeList = (List<IUser>) model.get("activeUserList");
-		assertEquals(1,activeList.size());
+		assertEquals(2,activeList.size());
 
 		//Inactive Users
 		List<IUser> inactiveList = (List<IUser>) model.get("inactiveUserList");
-		assertEquals(2,inactiveList.size());
+		assertEquals(1,inactiveList.size());
 	}
 
 	/**
@@ -116,12 +141,14 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserRequestList() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
+		
 		//Check the return value
 		assertEquals(userContoller.userRequestList(model, principal),"auth/users/requests");
 
 		//Open Requests
 		List<IUser> userRequestsList = (List<IUser>) model.get("userRequestsList");
-		assertEquals(2,userRequestsList.size());
+		assertEquals(3,userRequestsList.size());
 
 	}
 
@@ -132,11 +159,12 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserAccessHandler() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
 		//Deny a user
-		assertEquals(userContoller.userAccessHandler("charlie-denied", model, principal),"redirect:/auth/users/manage");
+		assertEquals(userContoller.userAccessHandler("deb-denied", model, principal),"redirect:/auth/users/manage");
 
 		//Approve a user
-		assertEquals(userContoller.userAccessHandler("charlie-approve-admin", model, principal),"redirect:/auth/users/manage");
+		assertEquals(userContoller.userAccessHandler("dexter-approve-admin", model, principal),"redirect:/auth/users/manage");
 
 	}
 
@@ -148,12 +176,13 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserActiveList() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.userActiveList(model, principal),"auth/users/active");
 
 		//Active Users
 		List<IUser> activeList = (List<IUser>) model.get("activeUserList");
-		assertEquals(1,activeList.size());
+		assertEquals(2,activeList.size());
 	}
 
 	/**
@@ -164,12 +193,13 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserInactiveList() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.userInactiveList(model, principal),"auth/users/inactive");
 
 		//Inactive Users
 		List<IUser> inactiveList = (List<IUser>) model.get("inactiveUserList");
-		assertEquals(2,inactiveList.size());
+		assertEquals(1,inactiveList.size());
 	}
 
 	/**
@@ -179,6 +209,7 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testDeactivateUser() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.deactivateUser("jdoe",model, principal),"redirect:/auth/users/manage");
 	}
@@ -190,6 +221,7 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testActivateUser() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.activateUser("jdoe",model, principal),"redirect:/auth/users/manage");
 	}
