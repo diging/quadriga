@@ -1,9 +1,8 @@
 package edu.asu.spring.quadriga.web;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.security.Principal;
-import java.sql.SQLException;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,17 +11,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
-import org.springframework.web.bind.WebDataBinder;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.web.manageusers.UserController;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml"})
@@ -66,8 +61,7 @@ public class ConceptcollectionControllerTest {
 
 	@Test
 	public void testConceptCollectionHandler() throws  QuadrigaStorageException {
-		
-		assertEquals(collectionContoller.conceptCollectionHandler(model),"auth/conceptcollections");
+		fail("Not yet implemented"); // TODO
 	}
 
 	@Test

@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getDictionaryName;
 DELIMITER $$
 CREATE PROCEDURE sp_getDictionaryName
 (
-  IN  inid  VARCHAR(20),
+  IN  inid  VARCHAR(50),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN
