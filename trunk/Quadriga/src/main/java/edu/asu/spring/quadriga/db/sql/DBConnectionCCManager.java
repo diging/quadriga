@@ -458,7 +458,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public String addCollaboratorRequest(ICollaborator collaborator, String collectionid, String userName) {
+	public String addCollaboratorRequest(ICollaborator collaborator, String collectionid, String userName)throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg = null;
 		String role = "";
@@ -495,8 +495,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			errmsg = sqlStatement.getString(5);
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+				throw new QuadrigaStorageException();
+			}
 		
 		finally {
 			closeConnection();
@@ -506,7 +506,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public List<ICollaborator> showCollaboratorRequest(String collectionid) {
+	public List<ICollaborator> showCollaboratorRequest(String collectionid)throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
@@ -540,8 +540,9 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			
 		}
 			catch (SQLException e) {
-			e.printStackTrace();
-		}
+				throw new QuadrigaStorageException();	
+			}
+		
 		
 		finally {
 			closeConnection();
@@ -551,7 +552,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public List<IUser> showNonCollaboratorRequest(String collectionid) {
+	public List<IUser> showNonCollaboratorRequest(String collectionid)throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
@@ -580,7 +581,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new QuadrigaStorageException();	
 		}
 		
 		finally {
@@ -643,7 +644,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	@Override
-	public String deleteCollaboratorRequest(String userName, String collectionid) {
+	public String deleteCollaboratorRequest(String userName, String collectionid)throws QuadrigaStorageException {
 		
 		String dbCommand;
         String errmsg;
@@ -669,8 +670,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			throw new QuadrigaStorageException();
+			}
 
 		return null;
 	}

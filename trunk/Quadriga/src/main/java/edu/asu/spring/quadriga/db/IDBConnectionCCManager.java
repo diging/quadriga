@@ -103,27 +103,30 @@ public interface IDBConnectionCCManager {
 		 * 
 		 * 
 		 * @author rohit
+		 * @throws QuadrigaStorageException 
 		 * 
 		 */
-		public abstract List<ICollaborator> showCollaboratorRequest(String collectionid);
+		public abstract List<ICollaborator> showCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
 		
 		/**
 		 * 
 		 * 
 		 * @return 
 		 * @author rohit
+		 * @throws QuadrigaStorageException 
 		 * 
 		 */
-		public abstract List<IUser> showNonCollaboratorRequest(String collectionid);
+		public abstract List<IUser> showNonCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
 		
 		/**
 		 * Method add colloborators to the concept collections.
 		 * 
 		 * @return String
 		 * @author rohit
+		 * @throws QuadrigaStorageException 
 		 *  
 		 */
-		public abstract String addCollaboratorRequest(ICollaborator collaborator,String collectionid, String userName);
+		public abstract String addCollaboratorRequest(ICollaborator collaborator,String collectionid, String userName) throws QuadrigaStorageException;
 		
 		/**
 		 * Method used to  get colloborators of a particular collection.
@@ -132,9 +135,9 @@ public interface IDBConnectionCCManager {
 		 * @author Rohit
 		 * 
 		 */
-		public abstract void getCollaborators(IConceptCollection collection);
+		public abstract void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException;
 		
-		public abstract String deleteCollaboratorRequest(String userName, String collectionid);
+		public abstract String deleteCollaboratorRequest(String userName, String collectionid) throws QuadrigaStorageException;
 		
 		
 		

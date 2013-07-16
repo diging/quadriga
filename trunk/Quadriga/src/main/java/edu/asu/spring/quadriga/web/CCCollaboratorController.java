@@ -92,7 +92,7 @@ public class CCCollaboratorController {
 	  }
 	 
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
-		public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException
+		public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
 			List<IUser> noncollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
 			
@@ -104,7 +104,8 @@ public class CCCollaboratorController {
 				conceptControllerManager.getCollectionDetails(concept,principal.getName());
 			} catch (QuadrigaStorageException e) {
 				// throw that so that it can be handled
-				e.printStackTrace();
+				throw new QuadrigaStorageException();
+
 			}
 			model.addAttribute("conceptcollection", concept);
 			
@@ -133,12 +134,8 @@ public class CCCollaboratorController {
 		
 		@RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
 		public String addCollaborators(@PathVariable("collection_id") String collectionid, ModelMap model,
-				@ModelAttribute ICollaborator collaborator, Principal principal)
+				@ModelAttribute ICollaborator collaborator, Principal principal)throws QuadrigaStorageException
 		{
-			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
-			{
-				System.out.println("-----------CCcontroller"+collaboratorRole.getRoleDBid());
-			}
 			
 			String username = principal.getName();
 		
@@ -161,16 +158,21 @@ public class CCCollaboratorController {
 		} 
 		
 		@RequestMapping(value="auth/conceptcollections/{collection_id}/deleteCollaborator", method = RequestMethod.POST)
-		public String deleteCollaborators(@PathVariable("collection_id") String collectionid,Model model,HttpServletRequest req)
+		public String deleteCollaborators(@PathVariable("collection_id") String collectionid,Model model,HttpServletRequest req)throws QuadrigaStorageException
 		{
 			String[] collaborators = req.getParameterValues("selected");
 			
 			String errmsg = null;
 			
-			for(int i=0;i<collaborators.length;i++)
-			{
-				errmsg = conceptControllerManager.deleteCollaborators(collaborators[i], collectionid);
-			}
+			try {
+				for(int i=0;i<collaborators.length;i++)
+				{
+					errmsg = conceptControllerManager.deleteCollaborators(collaborators[i], collectionid);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw new QuadrigaStorageException();	
+				}
 			
 
 			if(errmsg.equals("no errors"))
