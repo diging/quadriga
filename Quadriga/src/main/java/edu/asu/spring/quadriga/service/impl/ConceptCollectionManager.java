@@ -166,26 +166,26 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 	
 	@Override
-	public List<IUser> showNonCollaboratingUsers(String collectionid) {
+	public List<IUser> showNonCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
 		List<IUser> nonCollaboratorList =  dbConnect.showNonCollaboratorRequest(collectionid);
 		return nonCollaboratorList;
 	}
 
 	@Override
-	public List<ICollaborator> showCollaboratingUsers(String collectionid) {
+	public List<ICollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
 		List<ICollaborator> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
 		return collaboratorList;
 	}
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator, String collectionid, String userName) {
+	public String addCollaborators(ICollaborator collaborator, String collectionid, String userName)throws QuadrigaStorageException {
 
 		String errmsg = dbConnect.addCollaboratorRequest(collaborator, collectionid, userName);
 		return errmsg;
 	}
 
 	@Override
-	public void getCollaborators(IConceptCollection collection) {
+	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
 		
 		dbConnect.getCollaborators(collection);
 		List<ICollaborator> collaborators = collection.getCollaborators();
@@ -199,7 +199,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public String deleteCollaborators(String userName, String collectionid) {
+	public String deleteCollaborators(String userName, String collectionid) throws QuadrigaStorageException {
 		
 		String errmsg = dbConnect.deleteCollaboratorRequest(userName, collectionid);
 		

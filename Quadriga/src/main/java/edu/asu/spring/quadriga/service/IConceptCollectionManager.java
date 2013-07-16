@@ -124,15 +124,15 @@ public interface IConceptCollectionManager {
 	 */
 	public abstract void update(String[] values, IConceptCollection concept,String username) throws QuadrigaStorageException;
 	
-	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
+	public abstract List<IUser> showNonCollaboratingUsers(String collectionid) throws QuadrigaStorageException;
 	
-	public abstract List<ICollaborator> showCollaboratingUsers(String collectionid);
+	public abstract List<ICollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException;
 	
-	public abstract String addCollaborators(ICollaborator collaborator, String collectionid, String userName);
+	public abstract String addCollaborators(ICollaborator collaborator, String collectionid, String userName) throws QuadrigaStorageException;
 	
-	public abstract void getCollaborators(IConceptCollection collection);
+	public abstract void getCollaborators(IConceptCollection collection)throws QuadrigaStorageException;
 	
-	public abstract String deleteCollaborators(String userName, String collectionid);
+	public abstract String deleteCollaborators(String userName, String collectionid)throws QuadrigaStorageException;
 
 	
 	
