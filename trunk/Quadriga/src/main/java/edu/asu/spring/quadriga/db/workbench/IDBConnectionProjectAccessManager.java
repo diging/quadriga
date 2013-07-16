@@ -7,4 +7,7 @@ public interface IDBConnectionProjectAccessManager {
 	public abstract boolean chkProjectOwner(String userName,String projectId)
 			throws QuadrigaStorageException;
 
+	public abstract boolean chkDuplicateProjUnixName(String unixName)
+			throws QuadrigaStorageException;
+
 }

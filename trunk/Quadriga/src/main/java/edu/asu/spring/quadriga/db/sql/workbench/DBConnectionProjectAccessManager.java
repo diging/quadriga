@@ -63,5 +63,52 @@ public class DBConnectionProjectAccessManager extends ADBConnectionManager imple
         }
         
 	}
+	
+	/**
+	 *  This method verifies if the Unix name is already present
+	 *  @param  unixName
+	 *  @return Booelan TRUE- if unixName is already present else FALSE
+	 *  @exception QuadrigaStorageException
+	 *  @author Kiran Kumar Batna 
+	 */
+	@Override
+	public boolean chkDuplicateProjUnixName(String unixName) throws QuadrigaStorageException
+	{
+		String dbCommand;
+	    CallableStatement sqlStatement;
+	    boolean isDuplicate;
+	    
+	    //command to call the SP
+	    dbCommand = "? = "+" "+ DBConstants.SP_CALL+ " " + DBConstants.CHECK_PROJECT_UNIX_NAME + "(?)";
+	    
+	    //get the connection
+	    getConnection();
+	    
+	    //establish the connection to the database
+	    try
+	    {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//adding output variables to the SP
+			sqlStatement.registerOutParameter(1,Types.BOOLEAN);
+			
+			//adding the input parameter
+			sqlStatement.setString(2,unixName);
+			
+			sqlStatement.execute();
+
+			isDuplicate = sqlStatement.getBoolean(1);
+			
+			return isDuplicate;
+	    }
+	    catch(SQLException e)
+        {
+        	throw new QuadrigaStorageException();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
 
 }

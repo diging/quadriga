@@ -100,8 +100,10 @@ public interface DBConstants
 	
 	//project Access objects
 	public static final String CHECK_PROJECT_OWNER = "fn_checkProjectOwner";
+	public static final String CHECK_PROJECT_UNIX_NAME = "fn_checkDuplicateUnixName";
 	
 	//workspace access objects
 	public static final String CHECK_WORKSPACE_OWNER = "fn_checkWorkspaceOwner";
 	public static final String LIST_WORKSPACE_BITSTREAM = "sp_getAllBitStreams";
+	
 }
