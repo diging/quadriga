@@ -131,6 +131,8 @@ public interface IConceptCollectionManager {
 	public abstract String addCollaborators(ICollaborator collaborator, String collectionid, String userName);
 	
 	public abstract void getCollaborators(IConceptCollection collection);
+	
+	public abstract String deleteCollaborators(String userName, String collectionid);
 
 	
 	

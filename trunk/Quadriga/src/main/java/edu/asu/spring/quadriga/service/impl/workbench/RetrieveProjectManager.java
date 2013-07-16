@@ -88,9 +88,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	}
 
 	@Override
-	public List<IUser> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
+	public List<ICollaborator> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
 		
-			List<IUser> collaboratingUsersList = databaseConnect.getProjectCollaboratorsRequest(projectId);
+		List<ICollaborator> collaboratingUsersList = databaseConnect.getProjectCollaboratorsRequest(projectId);
 		
 		return collaboratingUsersList;
 	}

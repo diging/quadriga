@@ -61,7 +61,7 @@ function resetSelectAll() {
 		<ul class="collaborators">
 			<c:forEach var="ccCollaborator" items="${collaboratingUsers}">
 				<li>
-						<c:out value="${ccCollaborator.userName}"></c:out>
+						<c:out value="${ccCollaborator.userObj.userName}"></c:out>
 				</li>
 			</c:forEach>
 		</ul>

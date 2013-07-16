@@ -75,7 +75,7 @@
 	</definition>
 	<!-- ConceptCollection pages -->
 	<definition name="base.definition.conceptcollections"
-		extends="base.definition.nonav">
+		extends="base.definition">
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections">
@@ -102,7 +102,7 @@
 			value="/WEB-INF/views/conceptcollections/addConceptCollection.jsp" />
 	</definition>
 	<definition name="auth/conceptcollection/showCollaborators" extends="base.definition.conceptcollections">
-		<put-attribute name="title" value="Non existing Collaborators" />
+		<put-attribute name="sub-navigation" value="Non existing Collaborators" />
 		<put-attribute name="content" value="/WEB-INF/views/conceptcollections/showCollaborators.jsp" />
 	</definition>
 
@@ -160,6 +160,17 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/showCollaborators.jsp" />
 	</definition>
+	<definition name="auth/workbench/showAddCollaborators" extends="base.definition.workbench">
+		<put-attribute name="title" value="Non existing Collaborators" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workbench/showAddCollaborators.jsp" />
+	</definition>
+	<definition name="auth/workbench/showDeleteCollaborators" extends="base.definition.workbench">
+		<put-attribute name="title" value="Non existing Collaborators" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workbench/showDeleteCollaborators.jsp" />
+	</definition>
+	
 	<definition name="auth/workbench/deleteproject" extends="base.definition.workbench">
 		<put-attribute name="title"
 			value="Quadriga Workbench - Delete Project" />

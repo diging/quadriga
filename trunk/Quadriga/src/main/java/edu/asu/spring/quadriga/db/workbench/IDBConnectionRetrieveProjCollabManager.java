@@ -12,12 +12,12 @@ public interface IDBConnectionRetrieveProjCollabManager {
 	public abstract List<IUser> getProjectNonCollaborators(String projectid)
 			throws QuadrigaStorageException;
 
-	public abstract List<ICollaboratorRole> getCollaboratorRolesList(String role);
+	public abstract List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role);
 
 	public abstract List<ICollaborator> getProjectCollaborators(String projectId)
 			throws QuadrigaStorageException;
 
-	public abstract List<IUser> getProjectCollaboratorsRequest(String projectid)
+	public abstract List<ICollaborator> getProjectCollaboratorsRequest(String projectid)
 			throws QuadrigaStorageException;
 
 }

@@ -198,4 +198,14 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		}
 	}
 
+	@Override
+	public String deleteCollaborators(String userName, String collectionid) {
+		
+		String errmsg = dbConnect.deleteCollaboratorRequest(userName, collectionid);
+		
+		return errmsg;
+	}
+	
+	
+
 }

@@ -11,6 +11,31 @@ $(document).ready(function() {
 		"bAutoWidth" : false
 	});
 });
+
+
+$(document).ready(function(){
+	$(".selectAll").click(function(){
+	if($(this).val() == "check all")
+		{
+			$('input:checkbox').prop("checked",true);
+			$(this).val("uncheck all");
+		}
+	else
+		{
+			$('input:checkbox').prop("checked",false);
+			$(this).val("check all");	
+		}
+	});
+});	
+
+
+$(document).ready(function() {
+		$("input[type=submit]").button().click(function(event) {
+
+		});
+	});
+
+
 </script>
 
  <form:form modelAttribute="collaborator" method="POST"> 
@@ -27,23 +52,35 @@ $(document).ready(function() {
 
 </form:form>  
 <br></br>
-<table style="width: 100%" cellpadding="0" cellspacing="0"
+
+<form method="POST">
+<input type="submit" value="Delete Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptcollection.id}/deleteCollaborator'" >
+<br><br>
+<table style="width:100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">					
 	<thead>
 		<tr>
-			<th>collaborator</th>	
+			<th align="left"><input type="checkbox" class="selectAll" name="selected" value="check all"/>select All</th>	
+			<th align="left">collaborator</th>
 			<th>roles</th>	
 		</tr>
 		
 	</thead>
+	
 	<tbody>
-	<c:forEach var="collab" items="${collaboratingUsers}">
+	<c:forEach var="collab" items="${collaborators}">
 		<tr>
-		  <td><c:out value="${collab.userObj.userName}"></c:out> </td><td>
-		  <c:forEach var="roles" items="${collab.collaboratorRoles}">
-		  <c:out value="${roles.roleDBid}"></c:out>
-		  </c:forEach></td>
+
+		  <td><input type="checkbox" name="selected" value='<c:out value="${collab.userObj.userName}"></c:out>'/></td>
+		  <td><c:out value="${collab.userObj.userName}"></c:out> </td>
+		  <td>
+		  	<c:forEach var="roles" items="${collab.collaboratorRoles}">
+		  	<c:out value="${roles.displayName}"></c:out>|
+		  	</c:forEach>
+		  </td>
+
 		</tr>
 	</c:forEach>
 	</tbody>
 </table>
+</form>

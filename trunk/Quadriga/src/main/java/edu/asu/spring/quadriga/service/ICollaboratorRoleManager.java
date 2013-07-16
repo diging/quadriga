@@ -11,6 +11,12 @@ public interface ICollaboratorRoleManager {
 	public abstract ICollaboratorRole getCCCollaboratorRoleById(String collaboratorRoleId);
 	
 	public abstract ICollaboratorRole getDictCollaboratorRoleById(String collaboratorRoleId);
+	
+	public abstract String getProjectCollaboratorRoleByDBId(String collaboratorRoleDBId);
+	
+	public abstract String getDictCollaboratorRoleByDBId(String collaboratorRoleDBId);
+
+	public abstract String getCollectionCollabRoleByDBId(String collaboratorRoleDBId);
 
 	public abstract void setProjectCollaboratorRole(List<ICollaboratorRole> collaboratorRoles);
 	

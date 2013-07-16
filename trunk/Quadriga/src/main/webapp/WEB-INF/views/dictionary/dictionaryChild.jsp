@@ -253,7 +253,6 @@
 							<th>Items</th>
 							<th>ID</th>
 							<th>Pos</th>
-
 						</tr>
 					</thead>
 
