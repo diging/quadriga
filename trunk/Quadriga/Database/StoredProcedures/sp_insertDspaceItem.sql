@@ -35,7 +35,7 @@ BEGIN
 	ELSEIF NOT EXISTS(SELECT 1 FROM tbl_dspace_collection
 				WHERE collectionid = inCollectionid)
 	  THEN SET errorMessage = "collection data is not present";
-	ELSEIF (SELECT 1 FROM tbl_dspace_item
+	ELSEIF EXISTS(SELECT 1 FROM tbl_dspace_item
                 WHERE itemid = inItemid)
       THEN SET errorMessage = "item already exists";
 	ELSE 

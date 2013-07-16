@@ -1,20 +1,20 @@
 /*******************************************
-Name          : sp_insertDspaceCollection
+Name          : sp_updateDspaceCollection
 
-Description   : Insert a new Dspace collection data
+Description   : Update an existing Dspace collection data
 
 Called By     : UI (DBConnectionDspaceManager.java)
 
 Create By     : Ram Kumar Kumaresan
 
-Modified Date : 07/08/2013
+Modified Date : 07/16/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_insertDspaceCollection;
+DROP PROCEDURE IF EXISTS sp_updateDspaceCollection;
 
 DELIMITER $$
-CREATE PROCEDURE sp_insertDspaceCollection
+CREATE PROCEDURE sp_updateDspaceCollection
 (
   IN  inCommunityid     	VARCHAR(20),
   IN  inCollectionid     	VARCHAR(20),
@@ -33,12 +33,14 @@ BEGIN
 	IF NOT EXISTS(SELECT 1 FROM tbl_dspace_community
                 WHERE communityid = inCommunityid)
       THEN SET errorMessage = "community data is not present";
-	ELSEIF EXISTS(SELECT 1 FROM tbl_dspace_collection
+	ELSEIF NOT EXISTS(SELECT 1 FROM tbl_dspace_collection
                 WHERE collectionid = inCollectionid)
-      THEN SET errorMessage = "collection already exists";
+      THEN SET errorMessage = "collection data is not present";
 	ELSE 
 		START TRANSACTION;
-		INSERT INTO tbl_dspace_collection VALUES(inCommunityid, inCollectionid, inName, inShortDescription, inEntityReference, inHandle, inUserName, NOW(), inUserName, NOW());
+		UPDATE tbl_dspace_collection 
+		SET  communityid = inCommunityid, name =inName, shortDescription = inShortDescription, entityReference = inEntityReference, handle = inHandle, updatedby = inUserName, updateddate = NOW()
+		WHERE collectionid = inCollectionid;
 		COMMIT;
 	END IF;
 
