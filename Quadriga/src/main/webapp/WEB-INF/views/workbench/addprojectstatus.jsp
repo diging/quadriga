@@ -15,12 +15,6 @@ $(document).ready(function() {
 
 </script>
 <article class="is-page-content">
-	<ul>
-		<li><input type="submit"
-			onClick="submitClick(this.id);"
-			value='Back'></li>
-	</ul>
-
 	<c:choose>
 		<c:when test="${success=='1'}">
 			<span class="byline">Project created successfully.</span>
@@ -32,6 +26,11 @@ $(document).ready(function() {
 			<br />
 		</c:otherwise>
 	</c:choose>
+		<ul>
+		<li><input type="submit"
+			onClick="submitClick(this.id);"
+			value='Back'></li>
+	</ul>
 
 </article>
 
