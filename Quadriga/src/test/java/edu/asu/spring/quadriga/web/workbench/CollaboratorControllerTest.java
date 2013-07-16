@@ -40,6 +40,7 @@ public class CollaboratorControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testAddCollaborators() {
 		fail("Not yet implemented");
 	}

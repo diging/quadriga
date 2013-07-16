@@ -40,21 +40,25 @@ public class ModifyProjectControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testUpdateProjectRequestForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testUpdateProjectRequest() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testDeleteProjectRequestForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testDeleteProjectRequest() {
 		fail("Not yet implemented");
 	}
