@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.web.workbench;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +74,6 @@ public class CollaboratorController {
 					user = usermanager.getUserDetails(text);
 					setValue(user);
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -120,23 +121,26 @@ public class CollaboratorController {
 		}
 		
 		model.addAttribute("notCollaboratingUsers", nonCollaboratingUsers);
-
-		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
-		List<ICollaboratorRole> collaboratorRoles;
-		collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
-		for(ICollaboratorRole role : collaboratorRoles)
-		{
-			if(role.equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
-			{
-				collaboratorRoles.remove(role);
-			}
-		}
-		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
 		
-		List<IUser> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
+		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
+
+		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
 		model.addAttribute("collaboratingUsers", collaboratingUsers);
 		
-
+		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+		
+		Iterator<ICollaboratorRole> rolesIterator = collaboratorRoles.iterator();
+		
+		while(rolesIterator.hasNext())
+		{
+			if(rolesIterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			{
+				rolesIterator.remove();
+			}		
+		}
+		
+		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
+		
 		return "auth/workbench/showCollaborators";
 
 	}
@@ -161,14 +165,136 @@ public class CollaboratorController {
 		if(errmsg.equals(""))
 		{
 			redirectatt.addFlashAttribute("success", "1");
-			return "redirect:/auth/workbench/{projectid}"; 
+			
+			return "redirect:/auth/workbench/" + projectid + "/showAddCollaborators";
 		}	
 		else
 		{
 			model.addAttribute("errormsg", errmsg);
-			return "redirect:/auth/workbench/" + projectid + "/showCollaborators";
+			return "redirect:/auth/workbench/{projectid}"; 
 		}
 			}
+	
+	@RequestMapping(value = "auth/workbench/{projectid}/deletecollaborator", method = RequestMethod.POST)
+	public String deleteCollaborators(@PathVariable("projectid") String projectid,Model model,HttpServletRequest req) throws QuadrigaStorageException
+	{
+		String[] collaborators = req.getParameterValues("selected");
+		
+		String errmsg = null;
+		for(int i=0;i<collaborators.length;i++)
+		{
+		
+			errmsg = modifyProjectCollabManager.deleteCollaboratorRequest(collaborators[i], projectid);
+			
+		} 
+		
+		if(errmsg.equals("no errors"))
+		{
+			return "redirect:/auth/workbench/"+projectid+"/showDeleteCollaborators";
+		}
+		
+		return "redirect:/auth/workbench/{projectid}";
+		
+	}
+	
+	@RequestMapping(value = "auth/workbench/{projectid}/showAddCollaborators", method = RequestMethod.GET)
+	public String displayAddCollaborator(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException{
+		
+		
+		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
+		collaborator.setUserObj(userFactory.createUserObject());
+		model.addAttribute("collaborator", collaborator);
+		
+		model.addAttribute("projectid", projectid);
+		// retrieve the collaborators who are not associated with project
+		List<IUser> nonCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
+
+		for(IUser user : nonCollaboratingUsers)
+		{
+			//fetch the quadriga roles and eliminate the restricted user
+			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+			for(IQuadrigaRole role : userQuadrigaRole)
+			{
+				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+				{
+					nonCollaboratingUsers.remove(user);
+				}
+			}
+		}
+		
+		model.addAttribute("notCollaboratingUsers", nonCollaboratingUsers);
+
+		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
+		
+		model.addAttribute("collaboratingUsers", collaboratingUsers);
+		
+		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
+		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+		
+		Iterator<ICollaboratorRole> rolesIterator = collaboratorRoles.iterator();
+		
+		while(rolesIterator.hasNext())
+		{
+			if(rolesIterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			{
+				rolesIterator.remove();
+			}		
+		}
+		
+		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
+		
+		return "auth/workbench/showAddCollaborators";
+	}
+	
+	@RequestMapping(value = "auth/workbench/{projectid}/showDeleteCollaborators", method = RequestMethod.GET)
+	public String displayDeleteCollaborator(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException{
+		
+		
+		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
+		collaborator.setUserObj(userFactory.createUserObject());
+		model.addAttribute("collaborator", collaborator);
+		
+		model.addAttribute("projectid", projectid);
+		// retrieve the collaborators who are not associated with project
+		List<IUser> nonCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
+
+		for(IUser user : nonCollaboratingUsers)
+		{
+			//fetch the quadriga roles and eliminate the restricted user
+			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+			for(IQuadrigaRole role : userQuadrigaRole)
+			{
+				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+				{
+					nonCollaboratingUsers.remove(user);
+				}
+			}
+		}
+		
+		model.addAttribute("notCollaboratingUsers", nonCollaboratingUsers);
+		
+		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
+		model.addAttribute("collaboratingUsers", collaboratingUsers);
+		
+		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
+
+		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+		Iterator<ICollaboratorRole> rolesIterator = collaboratorRoles.iterator();
+		
+		while(rolesIterator.hasNext())
+		{
+			if(rolesIterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			{
+				rolesIterator.remove();
+			}		
+		}
+		
+		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
+		
+		return "auth/workbench/showDeleteCollaborators";
+	}
+
+
 }
 
  

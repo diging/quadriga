@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -69,7 +70,6 @@ public class CCCollaboratorController {
 					user = usermanager.getUserDetails(text);
 					 setValue(user);
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		       
@@ -94,7 +94,6 @@ public class CCCollaboratorController {
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
 		public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException
 		{
-			List<ICollaboratorRole> collaboratorRoles = null;
 			List<IUser> noncollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
 			
 			model.addAttribute("noncollaboratorList", noncollaboratorList);
@@ -126,10 +125,7 @@ public class CCCollaboratorController {
 			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
 			
 			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
-			
-			
-			
-			model.addAttribute("collaboratingUsers", collaborators);
+			model.addAttribute("collaborators", collaborators);
 			
 			return "auth/conceptcollection/showCollaborators";
 			
@@ -139,6 +135,11 @@ public class CCCollaboratorController {
 		public String addCollaborators(@PathVariable("collection_id") String collectionid, ModelMap model,
 				@ModelAttribute ICollaborator collaborator, Principal principal)
 		{
+			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
+			{
+				System.out.println("-----------CCcontroller"+collaboratorRole.getRoleDBid());
+			}
+			
 			String username = principal.getName();
 		
 			String errmsg = conceptControllerManager.addCollaborators(collaborator, collectionid, username);
@@ -146,16 +147,11 @@ public class CCCollaboratorController {
 
 				if(errmsg.equals("no errors"))
 				{
-					//System.out.println("------------------WB1");
 					return "redirect:/auth/conceptcollections/{collection_id}";
 				}
 				
-				//System.out.println("------------------WB2");
-
-			return "redirect:/auth/conceptcollection/"+collectionid+"/displayCollaborators";
+			return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
 		}
-		
-		
 		
 		@ModelAttribute
 		public ICollaborator getCollaborator() {
@@ -163,5 +159,27 @@ public class CCCollaboratorController {
 			collaborator.setUserObj(userFactory.createUserObject());
 			return collaborator;
 		} 
+		
+		@RequestMapping(value="auth/conceptcollections/{collection_id}/deleteCollaborator", method = RequestMethod.POST)
+		public String deleteCollaborators(@PathVariable("collection_id") String collectionid,Model model,HttpServletRequest req)
+		{
+			String[] collaborators = req.getParameterValues("selected");
+			
+			String errmsg = null;
+			
+			for(int i=0;i<collaborators.length;i++)
+			{
+				errmsg = conceptControllerManager.deleteCollaborators(collaborators[i], collectionid);
+			}
+			
+
+			if(errmsg.equals("no errors"))
+			{
+				return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
+			}
+			
+			
+			return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
+		}
 
 }

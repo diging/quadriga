@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
 import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -37,11 +38,11 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
         //retrieve the associated roles and form a comma(,) separated string.
     	for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
 		{
-		     role = collaboratorRole.getRoleDBid() + ",";
+		     role += collaboratorRole.getRoleDBid() + ",";
 		}
     	//remove the ending comma from the string
-    	role = role.substring(1,role.length()-1);
-    	
+    	role = role.substring(0,role.length()-1);
+    	    	
     	//establish the connection
     	getConnection();
     	
@@ -66,5 +67,38 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
         	closeConnection();
         }
     	return errmsg;
+	}
+
+	@Override
+	public String deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException {
+		
+		String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_COLLAB_REQUEST + "(?,?,?)";
+
+        getConnection();
+        
+		try {
+			
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, projectid);
+			sqlStatement.setString(2, userName);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(3);
+			
+			if(errmsg.equals("no errors"))
+			{
+				return errmsg;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 }

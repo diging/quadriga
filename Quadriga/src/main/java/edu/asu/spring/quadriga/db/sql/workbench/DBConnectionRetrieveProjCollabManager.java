@@ -19,21 +19,28 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager implements
 		IDBConnectionRetrieveProjCollabManager 
 {
 	@Autowired
-	//@Qualifier("UserManager")
     private IUserManager userManager;
+	
+	@Autowired
+	private IUserFactory userFactory;
 	
 	@Autowired
 	private ICollaboratorRoleFactory collaboratorRoleFactory;
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	private ICollaboratorRoleManager collaboratorRoleManager;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionRetrieveProjectManager.class);
 	
@@ -83,7 +90,7 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 						//retrieve the user details
 						user = userManager.getUserDetails(username);
 						//storing the collaborator roles in a comma(,) separated list
-						userCollaboratorRole = getCollaboratorRolesList(collabroles);
+						userCollaboratorRole = splitAndgetCollaboratorRolesList(collabroles);
 						//add the user and his collaborator roles to a object
 						collaborator = collaboratorFactory.createCollaborator();
 						collaborator.setUserObj(user);
@@ -117,7 +124,7 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 	 * @author Rohit Sukelshwar Pendbhaje 
 	 */
 	@Override
-	public List<ICollaboratorRole> getCollaboratorRolesList(String role)
+	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role)
 	{
         String[] collabroles;
 		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
@@ -129,8 +136,10 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 		{
 			collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
 			collaboratorRole.setRoleDBid(collabroles[i]);
+			collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(collabroles[i]));
 			collaboratorRoleList.add(collaboratorRole);
 		}
+		
 		return collaboratorRoleList;
 	}
 	
@@ -196,14 +205,14 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 	}
 
 	@Override
-	public List<IUser> getProjectCollaboratorsRequest(String projectid)throws QuadrigaStorageException
+	public List<ICollaborator> getProjectCollaboratorsRequest(String projectid)throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String errmsg;
 		String collabUserName;
 		CallableStatement sqlStatement = null ;
-		IUser user;
-		List<IUser> CollaboratorUser = new ArrayList<IUser>();
+		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		List<ICollaborator> collaborators = new ArrayList<ICollaborator>();
 		
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.SHOW_COLLABORATOR_REQUEST + "(?,?)";
 		getConnection();
@@ -222,11 +231,20 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 			{
 				while(resultset.next())
 		        {
-					collabUserName = resultset.getString(1);
 					//retrieve the user details
-					user = userManager.getUserDetails(collabUserName);
-					CollaboratorUser.add(user);
+					ICollaborator collaborator = collaboratorFactory.createCollaborator();
+					IUser user = userFactory.createUserObject() ;
 
+					collabUserName = resultset.getString(1);
+					user.setUserName(collabUserName);
+					user = userManager.getUserDetails(collabUserName);
+					collaborator.setUserObj(user);
+					
+					collaboratorRoles = splitAndgetCollaboratorRolesList(resultset.getString(2));
+					collaborator.setCollaboratorRoles(collaboratorRoles);
+					
+					collaborators.add(collaborator);
+					
 		        }
 		    }
 		}
@@ -244,8 +262,8 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 		{
 			closeConnection();
 		}
-		
-		return CollaboratorUser;
+
+		return collaborators;
 	}
 
 }

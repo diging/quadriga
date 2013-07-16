@@ -71,4 +71,13 @@
 				href="/quadriga/auth/workbench/${project.internalid}/deleteconceptcollections">Delete
 					Collection Concept</a></li>
 		</ul></li>
+		
+		<li><a href="#">Collaborators</a>
+		<ul>
+			<li><a href="/quadriga/auth/workbench/${project.internalid}/showAddCollaborators">
+			Add Collaborators</a></li>
+			
+			<li><a href="/quadriga/auth/workbench/${project.internalid}/showDeleteCollaborators">
+			Delete Collaborators</a></li>
+		</ul></li>
 </ul>

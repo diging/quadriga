@@ -19,8 +19,11 @@ BEGIN
 		THEN SET errmsg = "projid cannot be empty";
 	END IF;
 
-	SELECT DISTINCT collaboratoruser FROM tbl_project_collaborator 
-	WHERE projectid = inprojid;
+	SELECT collaboratoruser,GROUP_CONCAT(collaboratorrole SEPARATOR ',') 
+	FROM tbl_project_collaborator 
+	WHERE projectid = inprojid
+	GROUP BY collaboratoruser;
+
 END$$
 DELIMITER ;
 

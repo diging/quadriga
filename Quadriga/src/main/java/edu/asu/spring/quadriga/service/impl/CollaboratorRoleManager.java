@@ -180,6 +180,39 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public String getProjectCollaboratorRoleByDBId(String collaboratorRoleDBId) {
+		
+	for(ICollaboratorRole collaboratorRole:projectCollabRoles)
+	{
+		if(collaboratorRole.getRoleDBid().equals(collaboratorRoleDBId))
+		{
+			return collaboratorRole.getDisplayName();
+		}
+	}
+		
+		return null;
+	}
+
+	@Override
+	public String getDictCollaboratorRoleByDBId(String collaboratorRoleDBId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCollectionCollabRoleByDBId(String collaboratorRoleDBId) {
+
+		for(ICollaboratorRole role:ccCollabRoles)
+		{
+			if(role.getRoleDBid().equals(collaboratorRoleDBId))
+			{
+				return role.getDisplayName();
+			}	
+		}
+		return null;
 	} 
 
 }

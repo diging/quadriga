@@ -134,6 +134,8 @@ public interface IDBConnectionCCManager {
 		 */
 		public abstract void getCollaborators(IConceptCollection collection);
 		
+		public abstract String deleteCollaboratorRequest(String userName, String collectionid);
+		
 		
 		
 	}

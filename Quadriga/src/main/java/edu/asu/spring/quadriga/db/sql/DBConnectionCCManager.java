@@ -457,7 +457,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		}
 	}
 
-	
 	@Override
 	public String addCollaboratorRequest(ICollaborator collaborator, String collectionid, String userName) {
 		String dbCommand;
@@ -467,20 +466,16 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		
 		String collabName = collaborator.getUserObj().getUserName();
 		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_CC_COLLABORATOR_REQUEST + "(?,?,?,?,?)";
-	//	System.out.println("------------------DB1");
-
+	
 		getConnection();
-	//	System.out.println("------------------DB2");
+	
 
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-		//	System.out.println("------------------DB3");
 
 			sqlStatement.setString(1,collectionid);
-		//	System.out.println("------------------DB4");
 
 			sqlStatement.setString(2, collabName);
-		//	System.out.println("------------------DB5");
 
 			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
 			{
@@ -490,22 +485,16 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				}
 				
 			}
-		//	System.out.println("------------------DB6");
 
 			role = role.substring(0, role.length()-1);
 			sqlStatement.setString(3,role);
 			sqlStatement.setString(4, userName);
 			sqlStatement.registerOutParameter(5, Types.VARCHAR);
-		//	System.out.println("------------------DB7");
-
 			sqlStatement.execute();
-		//	System.out.println("------------------DB8");
 
 			errmsg = sqlStatement.getString(5);
-		//	System.out.println("-------------errmsg:"+errmsg);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -542,7 +531,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					IUser user = userFactory.createUserObject();
 					user.setUserName(resultset.getString(1));
 					collaborator.setUserObj(user);
-					List<ICollaboratorRole> collaboratorRoles =  dbConnectionProjectManager.getCollaboratorRolesList(resultset.getString(2));
+					List<ICollaboratorRole> collaboratorRoles =  dbConnectionProjectManager.splitAndgetCollaboratorRolesList(resultset.getString(2));
 					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collaboratorList.add(collaborator);
 				}			
@@ -636,7 +625,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					{
 						role="";
 					}
-					collaboratorRoles = dbConnectionProjectManager.getCollaboratorRolesList(role);
+					collaboratorRoles = dbConnectionProjectManager.splitAndgetCollaboratorRolesList(role);
 					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collection.getCollaborators().add(collaborator);							
 				}
@@ -651,6 +640,41 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			closeConnection();
 		}
 		
-	}	
+	}
+
+	@Override
+	public String deleteCollaboratorRequest(String userName, String collectionid) {
+		
+		String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_CC_COLLABORATOR_REQUEST + "(?,?,?)";
+
+        getConnection();
+        
+		try {
+			
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, collectionid);
+			sqlStatement.setString(2, userName);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(3);
+			
+			if(errmsg.equals("no errors"))
+			{
+				return errmsg;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+}	
 	
-}
+

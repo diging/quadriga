@@ -31,11 +31,10 @@ public interface DBConstants
 	public static final String MODIFY_PROJECT_REQUEST = "sp_updateProjectDetails";
 	public static final String ADD_COLLABORATOR_REQUEST = "sp_addProjectCollaborators";
 	
-	
 	public static final String SHOW_COLLABORATOR_REQUEST = "sp_showProjectCollaborators";
 	public static final String SHOW_NONCOLLABORATOR_REQUEST = "sp_showProjectNonCollaborators";
+	public static final String DELETE_PROJECT_COLLAB_REQUEST = "sp_deleteProjectCollaborators";
 
-	
 	public static final String ADD_DICTIONARY = "sp_addDictionaryDetails";
 	public static final String GET_DICTIONARY_DETAILS = "sp_getDictionaryDetails";
 	public static final String GET_DICTIONARY_PERM = "sp_getDictionaryPerm";
@@ -54,6 +53,7 @@ public interface DBConstants
 	public static final String ADD_CC_COLLABORATOR_REQUEST = "sp_addCollectionCollaborators";
 	public static final String SHOW_CC_COLLABORATOR_REQUEST = "sp_showCollectionCollaborators";
 	public static final String SHOW_CC_NONCOLLABORATOR_REQUEST = "sp_showCollectionNonCollaborators";
+	public static final String DELETE_CC_COLLABORATOR_REQUEST = "sp_deleteCollectionCollaborators";
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
 	public static final String GET_DICTIONARY_NAME = "sp_getDictionaryName";
 	public static final String ADD_DICTIONARY_ITEM = "sp_addDictionaryItems";

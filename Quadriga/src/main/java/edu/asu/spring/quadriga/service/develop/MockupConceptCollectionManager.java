@@ -130,6 +130,13 @@ public class MockupConceptCollectionManager implements
 		return null;
 	}
 
+
+	@Override
+	public String deleteCollaborators(String userName, String collectionid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	public void addItems(String lemmma, String id, String pos, String desc,
 			String conceptcollectionId, String string)
@@ -137,6 +144,10 @@ public class MockupConceptCollectionManager implements
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+
 
 	@Override
 	public void deleteItem(String id, String collectionid, String username)
@@ -151,6 +162,7 @@ public class MockupConceptCollectionManager implements
 		// TODO Auto-generated method stub
 		
 	}
+
 
 
 	
