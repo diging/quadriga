@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ArchiveWSControllerTest {
@@ -27,21 +28,25 @@ public class ArchiveWSControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testArchiveWorkspaceForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testArchiveWorkspace() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testUnarchiveWorkspaceForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testUnarchiveWorkspace() {
 		fail("Not yet implemented");
 	}

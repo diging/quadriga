@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ActivateWSControllerTest {
@@ -27,11 +28,13 @@ public class ActivateWSControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testDeactivateWorkspaceForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testDeactivateWorkspace() {
 		fail("Not yet implemented");
 	}
