@@ -136,15 +136,13 @@ public class DBConnectionProjectDictionaryTest {
 
 			// Setup the database with the proper data in the tables;
 			sDatabaseSetup = new String[] {
-					"delete from tbl_quadriga_user_denied",
-					"delete from tbl_quadriga_user",
-					"delete from tbl_quadriga_user_requests",
 					"delete from tbl_dictionary_items",
 					"delete from tbl_dictionary",
 					"delete from tbl_project_dictionary",
 					"delete from tbl_project",
-					"delete from tbl_dictionary_items",
-					"delete from tbl_dictionary",
+					"delete from tbl_quadriga_user_denied",
+					"delete from tbl_quadriga_user",
+					"delete from tbl_quadriga_user_requests",
 					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
