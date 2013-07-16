@@ -251,6 +251,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_COLLECTION_ITEM
 				+ "(?,?,?,?,?,?,?)";
 		getConnection();
+		logger.info("---"+username);
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, id);
@@ -264,13 +265,15 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			
 			errmsg = sqlStatement.getString(7);
 			
-			if(errmsg!="")
+			if(!errmsg.equals(""))
 			{
 			logger.error(errmsg);
+			
 			throw new QuadrigaAccessException("Hmmm!!  Need to try much more hard to get into this");
 			}
 		} catch (SQLException e) {
 			logger.error("Exception:", e);
+			e.printStackTrace();
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} finally {
@@ -384,6 +387,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			return errmsg;
 		} catch (SQLException e) {
 			logger.error("Exception", e);
+			e.printStackTrace();
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} finally {
@@ -419,6 +423,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			return errmsg;
 		} catch (SQLException e) {
 			logger.error("Exception", e);
+			e.printStackTrace();
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} finally {
@@ -647,4 +652,5 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		}
 		
 	}	
+	
 }
