@@ -118,11 +118,13 @@ public class DictionaryManagerTest {
 		user.setQuadrigaRoles(rolesList);
 
 		//Setup the database with the proper data in the tables;
-		sDatabaseSetup = new String[]{"delete from tbl_quadriga_user_denied",
-				"delete from tbl_quadriga_user",
-				"delete from tbl_quadriga_user_requests",
+		sDatabaseSetup = new String[]{
 				"delete from tbl_dictionary_items",
 				"delete from tbl_dictionary",
+				"delete from tbl_quadriga_user_denied",
+				"delete from tbl_quadriga_user",
+				"delete from tbl_quadriga_user_requests",
+				
 				"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 				"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 				"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
@@ -307,6 +309,7 @@ public class DictionaryManagerTest {
 
 				assertEquals(name.equals("testDictionary"),true);
 				assertEquals(desc.equals("description"),true);
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
@@ -384,7 +387,7 @@ public class DictionaryManagerTest {
 						assertEquals(dictionaryManager.getDictionaryName(id), dictionaryTest.getName());
 					}
 				}
-
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("getDictionaryNameTest: Create Dictionary Failed ; message :"+msg);
@@ -443,6 +446,7 @@ public class DictionaryManagerTest {
 				}
 				assertEquals(dictionaryEntry.getLemma(), "dog");
 				assertEquals(dictionaryEntry.getPos(), "noun");
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"+msg);
@@ -482,6 +486,7 @@ public class DictionaryManagerTest {
 				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),false);
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
