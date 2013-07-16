@@ -2,11 +2,8 @@ package edu.asu.spring.quadriga.db.sql;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -15,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
-import edu.asu.spring.quadriga.domain.IBitStream;
-import edu.asu.spring.quadriga.domain.implementation.BitStream;
-import edu.asu.spring.quadriga.dspace.service.impl.DspaceManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -439,6 +434,45 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		catch(SQLException e)
 		{
 			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}		
+	}
+	
+	@Override
+	public void deleteBitstreamFromWorkspace(String workspaceid, String bitstreamids, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DELETE_WORKSPACE_BITSTREAM + "(?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, workspaceid);
+			sqlStatement.setString(2, bitstreamids);
+			sqlStatement.setString(3, username);
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(4);
+
+			if(sOutErrorValue != null)
+			{
+				throw new QuadrigaAccessException(sOutErrorValue);
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{

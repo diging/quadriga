@@ -7,6 +7,10 @@
 		$("input[type=button]").button().click(function(event) {
 			return;
 		});
+		
+		$("input[type=submit]").button().click(function(event) {
+			event.preventDefault();
+		});
 	});
 	
 	$(document).ready(function() {
@@ -17,6 +21,20 @@
 			"iDisplayLength": 3
 		});
 	});
+	
+	function submitClick()
+	{
+		if($('input:checkbox').is(':checked'))
+			{
+				$('#bitstream').submit();
+			}
+		else
+			{
+				$.alert("Please select atleast one file", "Oops !!!");
+				return;
+			}
+		
+	}
 </script>
 
 <h2>Workspace: ${workspacedetails.name}</h2>
@@ -30,10 +48,12 @@
 <br><br>
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
+	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 		<table cellpadding="0" cellspacing="0" border="0"
 			class="display dataTable" width="100%">
 			<thead>
 				<tr>
+					<th></th>
 					<th>Community</th>
 					<th>Collection</th>
 					<th>Item</th>
@@ -43,6 +63,7 @@
 			<tbody>
 				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
 					<tr>
+						<td><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}"></td>
 						<td><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></td>
 						<td><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></td>
 						<td><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></td>
@@ -52,6 +73,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
+					<th></th>
 					<th>Community</th>
 					<th>Collection</th>
 					<th>Item</th>
@@ -59,6 +81,8 @@
 				</tr>
 			</tfoot>
 		</table>
+		<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font>
+		</form>
 	</c:when>
 	<c:otherwise>
 					Workspace does not contain any files from dspace !
