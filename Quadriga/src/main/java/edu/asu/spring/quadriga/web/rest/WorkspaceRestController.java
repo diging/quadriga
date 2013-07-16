@@ -143,18 +143,18 @@ public class WorkspaceRestController {
 		try {
 			//will use in future list workspaces need to be modified
 			String userId = principal.getName();
-			List<IDictionary> dictionaryList =workspaceDictionaryManager.listWorkspaceDictionary(workspaces_id, userId);
-			List<IConceptCollection> ccList = workspaceCCManager.listWorkspaceCC(workspaces_id, userId);
-			workspace = wsManager.getWorkspaceDetails(workspaces_id,userId);
+			//List<IDictionary> dictionaryList =workspaceDictionaryManager.listWorkspaceDictionary(workspaces_id, userId);
+			//List<IConceptCollection> ccList = workspaceCCManager.listWorkspaceCC(workspaces_id, userId);
+			//workspace = wsManager.getWorkspaceDetails(workspaces_id,userId);
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 
 
 			template = engine.getTemplate("velocitytemplates/workspacesdetails.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("workspace", workspace);
-			context.put("dictlist", dictionaryList);
-			context.put("cclist", ccList);
+			
+			context.put("workspaceid", workspaces_id);
+			//context.put("cclist", ccList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
