@@ -257,7 +257,7 @@ public class DictionaryManagerTest {
 				assertEquals(dictionaryItems.getItems(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
-				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = '"+getDictionaryID("testDictionary")+"'");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
@@ -342,7 +342,7 @@ public class DictionaryManagerTest {
 				assertEquals(dictionaryItems.getItems(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
-				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = '"+getDictionaryID("testDictionary")+"'");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("getDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
@@ -532,7 +532,7 @@ public class DictionaryManagerTest {
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				
-				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = '"+getDictionaryID("testDictionary")+"'");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);
@@ -573,7 +573,7 @@ public class DictionaryManagerTest {
 				WordpowerReply.DictionaryEntry dictionaryEntry=I1.next();
 				assertEquals(dictionaryEntry.getLemma(),"dog");
 				assertEquals(dictionaryEntry.getPos(),"noun");
-				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = "+getDictionaryID("testDictionary"));
+				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = '"+getDictionaryID("testDictionary")+"'");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
 				logger.info("addNewDictionariesItemsTest: Create Dictionary Failed ; message :"+msg);

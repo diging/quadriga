@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -181,6 +182,7 @@ public class ConceptCollectionManagerTest {
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#updateConceptCollection(edu.asu.spring.quadriga.domain.implementation.ConceptCollection)}.
 	 */
 	@Test
+	@Ignore
 	public void testUpdateConceptCollection() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -189,6 +191,7 @@ public class ConceptCollectionManagerTest {
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#deleteConceptCollection(java.lang.String)}.
 	 */
 	@Test
+	@Ignore
 	public void testDeleteConceptCollection() {
 		fail("Not yet implemented"); // TODO
 	}
@@ -197,6 +200,7 @@ public class ConceptCollectionManagerTest {
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#getUserCollaborations(java.lang.String)}.
 	 */
 	@Test
+	@Ignore
 	public void testGetUserCollaborations() {
 		fail("Not yet implemented"); // TODO
 	}

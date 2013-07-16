@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,7 +38,6 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.impl.workbench.ProjectDictionaryManagerTest;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
