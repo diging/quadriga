@@ -40,11 +40,13 @@ public class ActivateWSControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testActivateWorkspaceForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testActivateWorkspace() {
 		fail("Not yet implemented");
 	}
