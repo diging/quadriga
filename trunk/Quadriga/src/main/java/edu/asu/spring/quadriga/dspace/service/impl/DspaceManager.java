@@ -162,89 +162,147 @@ public class DspaceManager implements IDspaceManager{
 
 
 	@Override
-	public int addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		ICommunity community = proxyCommunityManager.getCommunity(communityId);
-		ICollection collection = proxyCommunityManager.getCollection(collectionId);
-		IItem item = proxyCommunityManager.getItem(collectionId, itemId);
-
-		//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
-		if(community == null || collection == null || item == null)
+		try
 		{
-			logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+			ICommunity community = proxyCommunityManager.getCommunity(communityId);
+			ICollection collection = proxyCommunityManager.getCollection(collectionId);
+			IItem item = proxyCommunityManager.getItem(collectionId, itemId);
+
+			//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
+			if(community == null || collection == null || item == null)
+			{
+				logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+				throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
+			}
+
+			//Check the status of community, collection and item in the database
+			String status = dbconnectionManager.checkDspaceNodes(communityId, collectionId, itemId);
+			if(status == null)
+			{
+				//Community, Collection and Item metadata does not exist. So add them to the database
+				if(dbconnectionManager.addCommunity(communityId, community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), username) == FAILURE)
+				{
+					logger.info("The user "+username+" got this exception when trying to insert dspace community metadata with the following values:");
+					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
+				}
+				if(dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
+				{
+					logger.info("The user "+username+" got this exception when trying to insert dspace collection metadata with the following values:");
+					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
+				}
+				if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
+				{
+					logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
+					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
+				}
+
+			}
+			else
+			{
+				//Community metadata is found in the database
+				if(status.equalsIgnoreCase(COMMUNITY_EXISTS))
+				{
+					//Collection and Item metadata does not exist. Add the metadata to the database.				
+					if(dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
+					{
+						logger.info("The user "+username+" got this exception when trying to insert dspace collection metadata with the following values:");
+						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
+					}
+					if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
+					{
+						logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
+						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
+					}
+
+				}
+				//Collection metadata is found in the database
+				else if(status.equalsIgnoreCase(COLLECTON_EXISTS))
+				{
+					//Item metadata does not exist. Add the metadata to the database.
+					if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
+					{
+						logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
+						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
+					}
+				}
+			}
+
+			/**The metadata about community, collections and items are added
+			 * Now check if each bitstream is already present in the database.
+			 * If yes, then just add the bitstreamid to the workspace.
+			 * If no, then add the bitstream metadata and then add the bitstreamid to workspace.
+			 */
+			for(String bitstreamId: bitstreamIds)
+			{			
+				IBitStream bitstream;
+
+				//Bitstream is not present in the database
+				if(dbconnectionManager.checkDspaceBitStream(bitstreamId)==null)
+				{
+					bitstream = proxyCommunityManager.getBitStream(collectionId, itemId, bitstreamId);
+					//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
+					if(bitstream == null)
+					{
+						logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+						logger.info("Bitstream id: "+bitstreamId);
+						throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
+					}
+					if(dbconnectionManager.addBitStream(communityId, collectionId, itemId, bitstreamId, bitstream.getName(), bitstream.getSize(), bitstream.getMimeType(), username)==FAILURE)
+					{
+						logger.info("The user "+username+" got this exception when trying to insert dspace bitstream metadata with the following values:");
+						logger.info("Bitstream id: "+bitstreamId);
+						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
+					}
+				}
+
+				//Add bitstream to workspace
+				dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
+			}
+		}
+		catch(QuadrigaStorageException e)
+		{
 			logger.info("Class Name: DspaceManager");
 			logger.info("Method Name: addBitStreamsToWorkspace");
 			logger.info("Community id: "+communityId);
 			logger.info("Collection id: "+collectionId);
 			logger.info("Item id: "+itemId);
 			logger.info("Bitstreams selected: "+bitstreamIds.length);
-			throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
+			throw e;
 		}
-
-		//Check the status of community, collection and item in the database
-		String status = dbconnectionManager.checkDspaceNodes(communityId, collectionId, itemId);
-		if(status == null)
+		catch(QuadrigaAccessException e)
 		{
-			//Community, Collection and Item metadata does not exist	
-			dbconnectionManager.addCommunity(communityId, community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), username);
-			dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username);
-			dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username);
-
+			logger.info("Class Name: DspaceManager");
+			logger.info("Method Name: addBitStreamsToWorkspace");
+			logger.info("Community id: "+communityId);
+			logger.info("Collection id: "+collectionId);
+			logger.info("Item id: "+itemId);
+			logger.info("Bitstreams selected: "+bitstreamIds.length);
+			throw e;
 		}
-		else
-		{
-			//Community metadata is found in the database
-			if(status.equalsIgnoreCase("community exists"))
-			{
-				//Collection and Item metadata does not exist. Add the metadata to the database.				
-				dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username);
-				dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username);
-
-			}
-			//Collection metadata is found in the database
-			else if(status.equalsIgnoreCase("collection exists"))
-			{
-				//Item metadata does not exist. Add the metadata to the database.
-				dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username);
-			}
-		}
-
-		/**The metadata about community, collections and items are added
-		 * Now check if each bitstream is already present in the database.
-		 * If yes, then just add the bitstreamid to the workspace.
-		 * If no, then add the bitstream metadata and then add the bitstreamid to workspace.
-		 */
-		for(String bitstreamId: bitstreamIds)
-		{			
-			IBitStream bitstream;
-			if(dbconnectionManager.checkDspaceBitStream(bitstreamId)==null)
-			{
-				bitstream = proxyCommunityManager.getBitStream(collectionId, itemId, bitstreamId);
-				//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
-				if(bitstream == null)
-				{
-					logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
-					logger.info("Class Name: DspaceManager");
-					logger.info("Method Name: addBitStreamsToWorkspace");
-					logger.info("Community id: "+communityId);
-					logger.info("Collection id: "+collectionId);
-					logger.info("Item id: "+itemId);
-					logger.info("Bitstreams selected: "+bitstreamIds.length);
-					logger.info("Bitstream id: "+bitstreamId);
-					throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
-				}
-				dbconnectionManager.addBitStream(communityId, collectionId, itemId, bitstreamId, bitstream.getName(), bitstream.getSize(), bitstream.getMimeType(), username);
-			}
-
-			//Add bitstream to workspace
-			dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
-		}
-
-		return 0;
 	}
-	
-	
-	
+
+
+	@Override
+	public void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		try
+		{
+			for(String bitstreamid: bitstreamids)
+			dbconnectionManager.deleteBitstreamFromWorkspace(workspaceid, bitstreamid, username);
+		}
+		catch(QuadrigaAccessException e)
+		{
+			logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+			logger.info("Class Name: DspaceManager");
+			logger.info("Method Name: deleteBitstreamFromWorkspace");
+			logger.info("Workspace id: "+workspaceid);
+			logger.info("Bitstream selected: "+bitstreamids.length);
+			throw e;
+		}
+	}
+
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.

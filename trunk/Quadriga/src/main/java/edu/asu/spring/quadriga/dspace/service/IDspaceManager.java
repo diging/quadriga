@@ -16,6 +16,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface IDspaceManager {
 
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
+	
+	public final static String COMMUNITY_EXISTS = "community exists";
+	public final static String COLLECTON_EXISTS = "collection exists";
+	
 	/**
 	 * Get all the communities available for the given user
 	 * 
@@ -107,8 +113,12 @@ public interface IDspaceManager {
 	public abstract IBitStream getBitStream(String sCollectionId, String sItemId,
 			String sBitStreamId);
 
-	public abstract int addBitStreamsToWorkspace(String workspaceId, String communityId,
+	public abstract void addBitStreamsToWorkspace(String workspaceId, String communityId,
 			String collectionId, String itemId, String[] bitstreamIds,
 			String username)throws QuadrigaStorageException, QuadrigaAccessException;
+
+	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids,
+			String username) throws QuadrigaStorageException,
+			QuadrigaAccessException;
 
 }

@@ -96,6 +96,7 @@ public interface DBConstants
 	public static final String ADD_DSPACE_ITEM = "sp_insertDspaceItem";
 	public static final String ADD_DSPACE_BITSTREAM = "sp_insertDspaceBitStream";
 	public static final String ADD_WORKSPACE_BITSTREAM = "sp_addBitstreamToWorkspace";
+	public static final String DELETE_WORKSPACE_BITSTREAM = "sp_deleteBitstreamFromWorkspace";	
 	
 	//project Access objects
 	public static final String CHECK_PROJECT_OWNER = "fn_checkProjectOwner";

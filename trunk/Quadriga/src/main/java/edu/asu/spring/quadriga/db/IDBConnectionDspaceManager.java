@@ -1,8 +1,6 @@
 package edu.asu.spring.quadriga.db;
 
-import java.util.List;
-
-import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionDspaceManager {
@@ -33,4 +31,7 @@ public interface IDBConnectionDspaceManager {
 	
 	public abstract int addBitstreamToWorkspace(String workspaceid, String bitstreamid,
 			String username) throws QuadrigaStorageException;
+
+	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String bitstreamids,
+			String username) throws QuadrigaStorageException, QuadrigaAccessException;
 }
