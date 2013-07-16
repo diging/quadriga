@@ -87,7 +87,7 @@ REM Loop through all the stored procedures and write it to a file
  
  REM Loop through all the functions and write it to a file 
  FOR /F %%G IN ('dir .\%DB_FUNC% /b /a-d') DO (
-  ECHO SOURCE %CURRENT_DIR%%DB_PROC%\%%G >> %DB_OBJECTS_FILE%
+  ECHO SOURCE %CURRENT_DIR%%DB_FUNC%\%%G >> %DB_OBJECTS_FILE%
  )
  
 REM Writing the foreign key constrain script to file
