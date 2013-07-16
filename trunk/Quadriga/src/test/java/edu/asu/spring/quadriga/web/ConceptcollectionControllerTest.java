@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class ConceptcollectionControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testInitBinder() {
 		
 		fail("Not yet implemented"); // TODO
@@ -60,41 +62,49 @@ public class ConceptcollectionControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testConceptCollectionHandler() throws  QuadrigaStorageException {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
+	@Ignore
 	public void testConceptDetailsHandler() {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
+	@Ignore
 	public void testConceptSearchHandler() {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
+	@Ignore
 	public void testSaveItemsHandler() {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
+	@Ignore
 	public void testAddCollectionsForm() {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
+	@Ignore
 	public void testAddConceptCollection() {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
+	@Ignore
 	public void testDeleteItems() {
 		fail("Not yet implemented"); // TODO
 	}
 
 	@Test
+	@Ignore
 	public void testConceptUpdateHandler() {
 		fail("Not yet implemented"); // TODO
 	}

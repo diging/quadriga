@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ModifyProjectControllerTest {
@@ -27,11 +28,13 @@ public class ModifyProjectControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testAddProjectRequestForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testAddProjectRequest() {
 		fail("Not yet implemented");
 	}

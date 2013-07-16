@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AddWSControllerTest {
@@ -27,11 +28,13 @@ public class AddWSControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testAddWorkSpaceRequestForm() {
 		fail("Not yet implemented");
 	}
 
 	@Test
+	@Ignore
 	public void testAddWorkSpaceRequest() {
 		fail("Not yet implemented");
 	}
