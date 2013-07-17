@@ -269,6 +269,7 @@ public class DspaceManager implements IDspaceManager{
 			logger.info("Collection id: "+collectionId);
 			logger.info("Item id: "+itemId);
 			logger.info("Bitstreams selected: "+bitstreamIds.length);
+			logger.error("The logged exception is: ",e);
 			throw e;
 		}
 		catch(QuadrigaAccessException e)
@@ -279,6 +280,7 @@ public class DspaceManager implements IDspaceManager{
 			logger.info("Collection id: "+collectionId);
 			logger.info("Item id: "+itemId);
 			logger.info("Bitstreams selected: "+bitstreamIds.length);
+			logger.error("The logged exception is: ",e);
 			throw e;
 		}
 	}
@@ -299,6 +301,7 @@ public class DspaceManager implements IDspaceManager{
 			logger.info("Method Name: deleteBitstreamFromWorkspace");
 			logger.info("Workspace id: "+workspaceid);
 			logger.info("Bitstream selected: "+bitstreamids.length);
+			logger.error("The logged exception is: ",e);
 			throw e;
 		}
 	}

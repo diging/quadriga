@@ -33,9 +33,6 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	@Autowired
 	private DataSource dataSource;
 	
-	private static final Logger logger = LoggerFactory
-			.getLogger(IDBConnectionDspaceManager.class);
-
 	/**
 	 * @Description: Assigns the data source used by this class
 	 * 
@@ -72,7 +69,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		try {
 			connection = dataSource.getConnection();
 		} catch (SQLException e) {
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e);
 		}
 	}
 
@@ -129,7 +126,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -192,7 +189,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -254,7 +251,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -317,7 +314,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -356,7 +353,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -390,7 +387,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -433,7 +430,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -472,7 +469,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -529,7 +526,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -588,7 +585,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -646,7 +643,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -705,7 +702,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
