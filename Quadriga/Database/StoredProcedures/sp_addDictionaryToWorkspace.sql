@@ -17,7 +17,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_addDictionaryToWorkspace
 (
 	IN  inworkspaceid    VARCHAR(50),  
-	IN  indictionaryid    VARCHAR(50),
+	IN  indictionaryid    VARCHAR(100),
   	IN  inuserid    VARCHAR(50) ,
   	OUT errmsg           VARCHAR(255)    
 )

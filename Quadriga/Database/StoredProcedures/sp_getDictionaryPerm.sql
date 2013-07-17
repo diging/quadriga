@@ -17,8 +17,8 @@ DROP PROCEDURE IF EXISTS sp_getDictionaryPerm;
 DELIMITER $$
 CREATE PROCEDURE sp_getDictionaryPerm
 (
-  IN  indictionaryowner  VARCHAR(20),
-  IN  indictionaryid  VARCHAR(50),
+  IN  indictionaryowner  VARCHAR(50),
+  IN  indictionaryid  VARCHAR(100),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN

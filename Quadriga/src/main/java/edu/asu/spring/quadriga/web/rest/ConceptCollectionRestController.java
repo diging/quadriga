@@ -134,8 +134,8 @@ public class ConceptCollectionRestController {
 	
 	/**
 	 * Rest interface for the getting list of concept collections of a user
-	 * http://<<URL>:<PORT>>/quadriga/rest/conceptcollections
-	 * http://localhost:8080/quadriga/rest/conceptcollections
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/conceptcollections
+	 * http://localhost:8080/quadriga//rest/workspace/WS_22992652874022949/conceptcollections
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param userId
