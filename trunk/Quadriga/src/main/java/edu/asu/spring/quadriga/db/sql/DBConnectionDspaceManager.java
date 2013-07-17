@@ -129,7 +129,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
@@ -192,7 +192,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
@@ -254,7 +254,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
@@ -317,7 +317,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
@@ -356,7 +356,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
@@ -390,7 +390,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
@@ -433,7 +433,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
@@ -478,5 +478,238 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		{
 			closeConnection();
 		}		
+	}
+	
+	public int updateCommunity(String communityid, String name, String shortDescription, String introductoryText, String handle, String username) throws QuadrigaStorageException
+	{
+		if(communityid == null || handle == null || username == null)
+		{
+			return FAILURE;
+		}
+		
+		if(communityid.equals("") || handle.equals("") || username.equals(""))
+		{
+			return FAILURE;
+		}
+		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_DSPACE_COMMUNITY+ "(?,?,?,?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, communityid);
+			sqlStatement.setString(2, name);
+			sqlStatement.setString(3, shortDescription);
+			sqlStatement.setString(4, introductoryText);
+			sqlStatement.setString(5, handle);
+			sqlStatement.setString(6, username);
+			sqlStatement.registerOutParameter(7,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(7);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully inserted the community details into the database
+				return SUCCESS;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return FAILURE;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	public int updateCollection(String communityid, String collectionid, String name, String shortDescription, String entityReference, String handle, String username) throws QuadrigaStorageException
+	{
+		if(communityid == null || collectionid == null || handle == null || username == null)
+		{
+			return FAILURE;
+		}
+		
+		if(communityid.equals("") || collectionid.equals("") || handle.equals("") || username.equals(""))
+		{
+			return FAILURE;
+		}
+		
+		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_DSPACE_COLLECTION+ "(?,?,?,?,?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, communityid);
+			sqlStatement.setString(2, collectionid);
+			sqlStatement.setString(3, name);
+			sqlStatement.setString(4, shortDescription);
+			sqlStatement.setString(5, entityReference);
+			sqlStatement.setString(6, handle);
+			sqlStatement.setString(7, username);
+			sqlStatement.registerOutParameter(8,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(8);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully inserted the collection details into the database
+				return SUCCESS;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return FAILURE;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	public int updateItem(String communityid, String collectionid, String itemid, String name, String handle, String username) throws QuadrigaStorageException
+	{
+		if(communityid == null || collectionid == null || itemid == null || handle == null || username == null)
+		{
+			return FAILURE;
+		}
+		
+		if(communityid.equals("") || collectionid.equals("") || itemid.equals("") || handle.equals("") || username.equals(""))
+		{
+			return FAILURE;
+		}
+		
+		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_DSPACE_ITEM+ "(?,?,?,?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, communityid);
+			sqlStatement.setString(2, collectionid);
+			sqlStatement.setString(3, itemid);
+			sqlStatement.setString(4, name);
+			sqlStatement.setString(5, handle);
+			sqlStatement.setString(6, username);
+			sqlStatement.registerOutParameter(7,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(7);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully inserted the item details into the database
+				return SUCCESS;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return FAILURE;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	public int updateBitStream(String communityid, String collectionid, String itemid, String bitstreamid, String name, String size, String mimeType, String username) throws QuadrigaStorageException
+	{
+		if(communityid == null || collectionid == null || itemid == null || bitstreamid == null || name == null || username == null)
+		{
+			return FAILURE;
+		}
+		
+		if(communityid.equals("") || collectionid.equals("") || itemid.equals("") || bitstreamid.equals("") || name.equals("") || username.equals(""))
+		{
+			return FAILURE;
+		}
+		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_DSPACE_BITSTREAM+ "(?,?,?,?,?,?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, communityid);
+			sqlStatement.setString(2, collectionid);
+			sqlStatement.setString(3, itemid);
+			sqlStatement.setString(4, bitstreamid);
+			sqlStatement.setString(5, name);
+			sqlStatement.setString(6, size);
+			sqlStatement.setString(7, mimeType);
+			sqlStatement.setString(8, username);
+			sqlStatement.registerOutParameter(9,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(9);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully inserted the item details into the database
+				return SUCCESS;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return FAILURE;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
 	}
 }
