@@ -255,6 +255,7 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 		}
 		catch (SQLException e) {
 			logger.info("Retrieve project collaborators method :"+e.getMessage());
+			e.printStackTrace();
 			throw new QuadrigaStorageException();
 		}
 		

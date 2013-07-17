@@ -123,9 +123,17 @@ public class CCCollaboratorController {
 						iterator.remove();
 					}
 				}
+			
 			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
 			
 			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
+			for(ICollaborator collaborator2:collaborators)
+			{
+				for(ICollaboratorRole collaboratorRole:collaborator2.getCollaboratorRoles())
+				{
+					System.out.println("------------CC:"+collaboratorRole.getDisplayName());
+				}
+			}
 			model.addAttribute("collaborators", collaborators);
 			
 			return "auth/conceptcollection/showCollaborators";

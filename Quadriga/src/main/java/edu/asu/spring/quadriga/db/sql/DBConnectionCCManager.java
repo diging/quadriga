@@ -31,6 +31,7 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
 /**
  * This class executes all the stored procedures related to the concept collections
@@ -69,6 +70,9 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	private ICollaboratorRoleManager collaboratorRoleManager;
 	
 
 	/**
@@ -511,6 +515,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		String errmsg;
 		CallableStatement sqlStatement;
 		List<ICollaborator> collaboratorList = new ArrayList<ICollaborator>();
+		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.SHOW_CC_COLLABORATOR_REQUEST + "(?,?)";
 		getConnection();
 		try {
@@ -531,7 +536,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					IUser user = userFactory.createUserObject();
 					user.setUserName(resultset.getString(1));
 					collaborator.setUserObj(user);
-					List<ICollaboratorRole> collaboratorRoles =  dbConnectionProjectManager.splitAndgetCollaboratorRolesList(resultset.getString(2));
+					collaboratorRoles =  splitAndgetCollaboratorRolesList(resultset.getString(2));
+					
 					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collaboratorList.add(collaborator);
 				}			
@@ -674,6 +680,27 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			}
 
 		return null;
+	}
+	
+	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role)
+	{
+        String[] collabroles;
+		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+		ICollaboratorRole collaboratorRole = null;
+		
+		collabroles = role.split(",");
+		
+		for(int i=0;i<collabroles.length;i++)
+		{
+			collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+			collaboratorRole.setRoleDBid(collabroles[i]);
+			collaboratorRole.setDisplayName(collaboratorRoleManager.getCollectionCollabRoleByDBId(collabroles[i]));
+			collaboratorRoleList.add(collaboratorRole);
+		}
+		
+		
+		
+		return collaboratorRoleList;
 	}
 
 }	
