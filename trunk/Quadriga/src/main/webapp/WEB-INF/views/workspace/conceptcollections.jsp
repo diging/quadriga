@@ -20,7 +20,8 @@
 		});
 	});
 </script>
-
+<h2>Workspace: ${workspacedetails.name}</h2>
+<hr />
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
 	value='Back to Workspace'>

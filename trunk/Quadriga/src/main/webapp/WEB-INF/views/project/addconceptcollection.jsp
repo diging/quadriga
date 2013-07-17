@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -77,60 +77,56 @@
 			}
 		});
 	});
-
-
 </script>
-
-<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
-	value='Back to Project'>
-<br>
-<br>
-
-<div class="container">
-	<c:choose>
-		<c:when test="${not empty conceptCollectionList}">
-
-			<form method="POST">
+<h2>Project: ${project.name}</h2>
+<hr />
 
 
-				 <input type="submit" value="Add Concept Collection"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addconceptcollection'" />
+<c:choose>
+	<c:when test="${not empty conceptCollectionList}">
 
-				<br /> <br />
-				<table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
-					<!-- <table  class="dataTable" id="pagination1"> -->
-					<thead>
+		<form method="POST">
+			<input type=button
+				onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+				value='Back to Project'> <input type="submit"
+				value="Add Concept Collection"
+				onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addconceptcollection'" />
+
+			<br /> <br />
+			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
+				class="display dataTable">
+				<!-- <table  class="dataTable" id="pagination1"> -->
+				<thead>
+					<tr>
+						<th align="left"><input type="checkbox" id="selectall">
+							All</th>
+						<th>Concept Collection Name</th>
+						<th>Concept Collection Description</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<c:forEach var="conceptCollection" items="${conceptCollectionList}">
 						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
-								All</th>
-							<th>Concept Collection Name</th>
-							<th>Concept Collection Description</th>
+							<td width="10%"><input type="checkbox" class="selected"
+								name="selected"
+								value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
+							<td width="30%" align="center"><input name="items"
+								type="hidden"
+								value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
+									value="${conceptCollection.name}"></c:out></td>
+							<td width="60%" align="justify"><c:out
+									value="${conceptCollection.description}"></c:out></td>
 						</tr>
-					</thead>
+					</c:forEach>
+				</tbody>
 
-					<tbody>
-						<c:forEach var="conceptCollection" items="${conceptCollectionList}">
-							<tr>
-								<td width="10%"><input type="checkbox" class="selected" name="selected"
-									value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
-								<td align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${conceptCollection.name}"></c:out>" /> 
-									<c:out value="${conceptCollection.name}"></c:out></td>
-								<td  align="justify">
-								<c:out	value="${conceptCollection.description}"></c:out></td>
-							</tr>
-						</c:forEach>
-					</tbody>
+			</table>
+		</form>
+	</c:when>
 
-				</table>
-			</form>
-		</c:when>
-
-		<c:otherwise>
-			<br><spring:message code="empty.CC" />
+	<c:otherwise>
+		<br>
+		<spring:message code="empty.CC" />
 	</c:otherwise>
-	</c:choose>
-</div>
+</c:choose>

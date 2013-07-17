@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -77,60 +77,56 @@
 			}
 		});
 	});
-
-
 </script>
-
-<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}'"
-	value='Back to Workspace'>
-<br>
-<br>
-
-<div class="container">
-	<c:choose>
-		<c:when test="${not empty dictinarylist}">
-
-			<form method="POST">
+<h2>Workspace: ${workspacedetails.name}</h2>
+<hr />
 
 
-				 <input type="submit" value="Add Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/adddictionaries'" />
 
-				<br /> <br />
-				<table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
-					<!-- <table  class="dataTable" id="pagination1"> -->
-					<thead>
+<c:choose>
+	<c:when test="${not empty dictinarylist}">
+
+		<form method="POST">
+
+			<input type=button
+				onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}'"
+				value='Back to Workspace'> <input type="submit"
+				value="Add Dictionary"
+				onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/adddictionaries'" />
+
+			<br /> <br />
+			<table cellpadding="0" cellspacing="0" border="0"
+				class="display dataTable" width="100%">
+				<!-- <table  class="dataTable" id="pagination1"> -->
+				<thead>
+					<tr>
+						<th align="left"><input type="checkbox" id="selectall">Select
+							All</th>
+						<th>Dictionary Name</th>
+						<th>Dictionary Description</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<c:forEach var="dictionary" items="${dictinarylist}">
 						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
-								All</th>
-							<th>Dictionary Name</th>
-							<th>Dictionary Description</th>
+							<td width="20%"><input type="checkbox" class="selected"
+								name="selected" value='<c:out value="${dictionary.id}"></c:out>' /></td>
+							<td width="30%" align="center"><input name="items"
+								type="hidden" value="<c:out value="${dictionary.name}"></c:out>" />
+								<c:out value="${dictionary.name}"></c:out></td>
+							<td width="45%" align="justify"><c:out
+									value="${dictionary.description}"></c:out></td>
 						</tr>
-					</thead>
+					</c:forEach>
+				</tbody>
 
-					<tbody>
-						<c:forEach var="dictionary" items="${dictinarylist}">
-							<tr>
-								<td width="10%"><input type="checkbox" class="selected" name="selected"
-									value='<c:out value="${dictionary.id}"></c:out>' /></td>
-								<td align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${dictionary.name}"></c:out>" /> 
-									<c:out value="${dictionary.name}"></c:out></td>
-								<td  align="justify">
-								<c:out	value="${dictionary.description}"></c:out></td>
-							</tr>
-						</c:forEach>
-					</tbody>
+			</table>
+		</form>
+	</c:when>
 
-				</table>
-			</form>
-		</c:when>
-
-		<c:otherwise>
-			<br><spring:message code="empty.dictionary" />
+	<c:otherwise>
+		<br>
+		<spring:message code="empty.dictionary" />
 	</c:otherwise>
-	</c:choose>
-</div>
+</c:choose>

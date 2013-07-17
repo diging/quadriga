@@ -78,11 +78,9 @@
 		});
 	});
 </script>
-<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Back to Workspace'>
-<br>
-<br>
+<h2>Workspace: ${workspacedetails.name}</h2>
+<hr />
+
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"><spring:message
@@ -102,51 +100,50 @@
 	</c:when>
 </c:choose>
 
-<div class="container">
-	<c:choose>
-		<c:when test="${not empty dicitonaryList}">
-			<form method="POST">
+<c:choose>
+	<c:when test="${not empty dicitonaryList}">
+		<form method="POST">
 
+			<input type=button
+				onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
+				value='Back to Workspace'> <input type="submit"
+				value="Delete Dictionary"
+				onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deletedictionaries'" />
 
-				<input type="submit" value="Delete Dictionary"
-					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deletedictionaries'" />
+			<br /> <br />
+			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
+				class="display dataTable">
+				<!-- <table  class="dataTable" id="pagination1"> -->
+				<thead>
+					<tr>
+						<th align="left"><input type="checkbox" id="selectall">Select
+							All</th>
+						<th>Dictionary Name</th>
+						<th>Dictionary Description</th>
+					</tr>
+				</thead>
 
-				<br /> <br />
-				<table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
-					<!-- <table  class="dataTable" id="pagination1"> -->
-					<thead>
+				<tbody>
+					<c:forEach var="dictionary" items="${dicitonaryList}">
 						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
-								All</th>
-							<th>Dictionary Name</th>
-							<th>Dictionary Description</th>
+							<td width="10%"><input type="checkbox" class="selected"
+								name="selected" value='<c:out value="${dictionary.id}"></c:out>' /></td>
+							<td width="30%" align="center"><input name="items"
+								type="hidden" value="<c:out value="${dictionary.name}"></c:out>" />
+								<c:out value="${dictionary.name}"></c:out></td>
+							<td width="45%" align="justify"><c:out
+									value="${dictionary.description}"></c:out></td>
 						</tr>
-					</thead>
+					</c:forEach>
+				</tbody>
 
-					<tbody>
-						<c:forEach var="dictionary" items="${dicitonaryList}">
-							<tr>
-								<td width="10%"><input type="checkbox" class="selected"
-									name="selected"
-									value='<c:out value="${dictionary.id}"></c:out>' /></td>
-								<td align="center"><input name="items" type="hidden"
-									value="<c:out value="${dictionary.name}"></c:out>" /> <c:out
-										value="${dictionary.name}"></c:out></td>
-								<td align="justify"><c:out
-										value="${dictionary.description}"></c:out></td>
-							</tr>
-						</c:forEach>
-					</tbody>
+			</table>
+		</form>
+	</c:when>
 
-				</table>
-			</form>
-		</c:when>
+	<c:otherwise>
 
-		<c:otherwise>
-
-			<br>
-			<spring:message code="empty.dictionary" />
-		</c:otherwise>
-	</c:choose>
-</div>
+		<br>
+		<spring:message code="empty.dictionary" />
+	</c:otherwise>
+</c:choose>

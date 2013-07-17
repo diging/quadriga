@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 @Controller
@@ -26,6 +29,9 @@ public class DictionaryWorkspaceController {
 	@Autowired
 	IDictionaryManager dictonaryManager;
 
+	@Autowired
+	IListWSManager wsManager;
+	
 	@Autowired
 	private IWorkspaceDictionaryManager workspaceDictionaryManager;
 
@@ -54,6 +60,8 @@ public class DictionaryWorkspaceController {
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("workspaceId", workspaceId);
+			IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+			model.addAttribute("workspacedetails", workspace);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
 			logger.error(" ----" + e.getMessage());
@@ -63,7 +71,7 @@ public class DictionaryWorkspaceController {
 
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionaries", method = RequestMethod.POST)
 	public String addProjectDictionary(HttpServletRequest req,
-			@PathVariable("workspaceid") String workspaceId, Model model) {
+			@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		String msg = "";
 		int flag=0;
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -85,6 +93,8 @@ public class DictionaryWorkspaceController {
 				logger.info("Dictionary list is empty buddy");
 			}
 			model.addAttribute("dicitonaryList", dicitonaryList);
+			IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+			model.addAttribute("workspacedetails", workspace);
 			model.addAttribute("workspaceId", workspaceId);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
@@ -124,7 +134,7 @@ public class DictionaryWorkspaceController {
 	}
 
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/dictionaries", method = RequestMethod.GET)
-	public String listWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) {
+	public String listWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -140,12 +150,14 @@ public class DictionaryWorkspaceController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+		model.addAttribute("workspacedetails", workspace);
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/dictionaries";
 	}
 	
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionary", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("workspaceid") String workspaceId, Model model) {
+	public String deleteProjectDictionary(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -161,12 +173,14 @@ public class DictionaryWorkspaceController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+		model.addAttribute("workspacedetails", workspace);
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/deletedictionaries";
 	}
 	
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionaries", method = RequestMethod.POST)
-	public String deleteWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) {
+	public String deleteWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -188,6 +202,8 @@ public class DictionaryWorkspaceController {
 				logger.info("Dictionary list is empty buddy");
 			}
 			model.addAttribute("dicitonaryList", dicitonaryList);
+			IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+			model.addAttribute("workspacedetails", workspace);
 			model.addAttribute("workspaceId", workspaceId);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
@@ -220,6 +236,8 @@ public class DictionaryWorkspaceController {
 			logger.info("Dictionary list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+		model.addAttribute("workspacedetails", workspace);
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/dictionaries";
 	}

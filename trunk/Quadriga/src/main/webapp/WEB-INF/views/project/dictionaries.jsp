@@ -24,12 +24,12 @@
 		});
 	});
 </script>
-
+<h2>Project: ${project.name}</h2>
+<hr />
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
 	value='Back to Project'>
-<br>
-<br>
+
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"><spring:message
