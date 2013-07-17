@@ -295,77 +295,101 @@
 			value="/WEB-INF/views/workspace/updateworkspacedetailsstatus.jsp" />
 	</definition> 
 	<definition name="auth/workbench/project/adddictionaries"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/adddictionary.jsp" />
 	</definition>
 	<definition name="auth/workbench/project/deletedictionaries"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/deletedictionaries.jsp" />
 	</definition>
 	<definition name="auth/workbench/project/dictionaries"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga Project - Show Dictionary" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/dictionaries.jsp" />
 	</definition>
 	
 	<definition name="auth/workbench/project/conceptcollections"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga Project - Show Concept Collection" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/conceptcollections.jsp" />
 	</definition>
 	<definition name="auth/workbench/project/addconceptcollections"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga Project - Add Concept Collection" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/addconceptcollection.jsp" />
 	</definition>
 	<definition name="auth/workbench/project/deleteconceptcollections"
-		extends="base.definition.workbench">
+		extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga Project - Add Concept Collection" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/deleteconceptcollection.jsp" />
 	</definition>
 	
 	<definition name="auth/workbench/workspace/adddictionaries"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workspace - Add Dictionary" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/adddictionary.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/deletedictionaries"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Project - Add Dictionary" />
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workspace - Delete Dictionary" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deletedictionaries.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/dictionaries"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Project - Show Dictionary" />
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workspace - Show Dictionary" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/dictionaries.jsp" />
 	</definition>
 	
 	<definition name="auth/workbench/workspace/conceptcollections"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Project - Show Concept Collection" />
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workspace - Show Concept Collection" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/conceptcollections.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/addconceptcollections"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Project - Add Concept Collection" />
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workspace - Add Concept Collection" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/addconceptcollection.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/deleteconceptcollections"
-		extends="base.definition.workbench">
-		<put-attribute name="title" value="Quadriga Project - Add Concept Collection" />
+		extends="base.definition.workbench.nav">
+		<put-attribute name="title" value="Quadriga Workspace - Delete Concept Collection" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deleteconceptcollection.jsp" />
 	</definition>

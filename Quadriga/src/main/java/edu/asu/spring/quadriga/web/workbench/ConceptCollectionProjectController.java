@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Controller
 public class ConceptCollectionProjectController {
@@ -30,6 +32,9 @@ public class ConceptCollectionProjectController {
 	@Autowired
 	IConceptCollectionManager conceptCollectionManager;
 
+	@Autowired 
+	IRetrieveProjectManager projectManager;
+	
 	@Autowired
 	private IProjectConceptCollectionManager projectConceptCollectionManager;
 
@@ -39,7 +44,7 @@ public class ConceptCollectionProjectController {
 	
 
 	@RequestMapping(value = "auth/workbench/{projectid}/conceptcollections", method = RequestMethod.GET)
-	public String listProjectConceptCollection(@PathVariable("projectid") String projectid, Model model) {
+	public String listProjectConceptCollection(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -60,6 +65,8 @@ public class ConceptCollectionProjectController {
 			logger.info(" "+con.getName());
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/conceptcollections";
 	}
@@ -89,6 +96,8 @@ public class ConceptCollectionProjectController {
 				logger.info(" "+con.getName());
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
+			IProject project = projectManager.getProjectDetails(projectid);
+			model.addAttribute("project", project);
 			model.addAttribute("projectid", projectid);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
@@ -99,7 +108,7 @@ public class ConceptCollectionProjectController {
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.POST)
 	public String addProjectConceptCollection(HttpServletRequest req,
-			@PathVariable("projectid") String projectid, Model model) {
+			@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		String msg = "";
 		int flag=0;
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -120,6 +129,8 @@ public class ConceptCollectionProjectController {
 				logger.info("Concept Collection list is empty buddy");
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
+			IProject project = projectManager.getProjectDetails(projectid);
+			model.addAttribute("project", project);
 			model.addAttribute("projectid", projectid);
 			return "auth/workbench/project/conceptcollections";
 		} else {
@@ -159,7 +170,7 @@ public class ConceptCollectionProjectController {
 
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) {
+	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -175,12 +186,14 @@ public class ConceptCollectionProjectController {
 			logger.info("conceptCollectionList list is empty buddy");
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/deleteconceptcollections";
 	}
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
-	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) {
+	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -201,6 +214,8 @@ public class ConceptCollectionProjectController {
 				logger.info("Concept Collection list is empty buddy");
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
+			IProject project = projectManager.getProjectDetails(projectid);
+			model.addAttribute("project", project);
 			model.addAttribute("projectid", projectid);
 			return "auth/workbench/project/conceptcollections";
 		} else {
@@ -232,6 +247,8 @@ public class ConceptCollectionProjectController {
 			logger.info("Dictionary list is empty buddy");
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/conceptcollections";
 	}

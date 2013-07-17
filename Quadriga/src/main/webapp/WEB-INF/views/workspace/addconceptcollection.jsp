@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
@@ -77,15 +77,10 @@
 			}
 		});
 	});
-
-
 </script>
+<h2>Workspace: ${workspacedetails.name}</h2>
+<hr />
 
-<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Back to Workspace'>
-<br>
-<br>
 
 <div class="container">
 	<c:choose>
@@ -93,8 +88,10 @@
 
 			<form method="POST">
 
-
-				 <input type="submit" value="Add Concept Collection"
+				<input type=button
+					onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
+					value='Back to Workspace'> <input type="submit"
+					value="Add Concept Collection"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/addconceptcollection'" />
 
 				<br /> <br />
@@ -111,16 +108,17 @@
 					</thead>
 
 					<tbody>
-						<c:forEach var="conceptCollection" items="${conceptCollectionList}">
+						<c:forEach var="conceptCollection"
+							items="${conceptCollectionList}">
 							<tr>
-								<td width="10%"><input type="checkbox" class="selected" name="selected"
+								<td width="10%"><input type="checkbox" class="selected"
+									name="selected"
 									value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
-								<td align="center"><input name="items"
-									type="hidden"
-									value="<c:out value="${conceptCollection.name}"></c:out>" /> 
-									<c:out value="${conceptCollection.name}"></c:out></td>
-								<td  align="justify">
-								<c:out	value="${conceptCollection.description}"></c:out></td>
+								<td align="center"><input name="items" type="hidden"
+									value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
+										value="${conceptCollection.name}"></c:out></td>
+								<td align="justify"><c:out
+										value="${conceptCollection.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -130,7 +128,8 @@
 		</c:when>
 
 		<c:otherwise>
-			<br><spring:message code="empty.CC" />
-	</c:otherwise>
+			<br>
+			<spring:message code="empty.CC" />
+		</c:otherwise>
 	</c:choose>
 </div>

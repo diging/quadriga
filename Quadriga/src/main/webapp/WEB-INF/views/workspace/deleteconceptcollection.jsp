@@ -6,6 +6,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <script type="text/javascript" charset="utf8">
+	
+
 	$(document).ready(function() {
 		$('#selectall').click(function() {
 			$('.selected').prop('checked', isChecked('selectall'));
@@ -78,11 +80,8 @@
 		});
 	});
 </script>
-<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Back to Workspace'>
-<br>
-<br>
+<h2>Workspace: ${workspacedetails.name}</h2>
+<hr/>
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"><spring:message
@@ -102,18 +101,20 @@
 	</c:when>
 </c:choose>
 
-<div class="container">
+
 	<c:choose>
 		<c:when test="${not empty conceptCollectionList}">
 			<form method="POST">
 
-
+				<input type=button
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
+	value='Back to Workspace'>
 				<input type="submit" value="Delete Concept Collections"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deleteconceptcollections'" />
 
 				<br /> <br />
-				<table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
+				<table cellpadding="0" cellspacing="0" border="0"
+			class="display dataTable" width="100%">
 					<!-- <table  class="dataTable" id="pagination1"> -->
 					<thead>
 						<tr>
@@ -127,13 +128,13 @@
 					<tbody>
 						<c:forEach var="conceptCollection" items="${conceptCollectionList}">
 							<tr>
-								<td width="10%"><input type="checkbox" class="selected"
+								<td width="15%"><input type="checkbox" class="selected"
 									name="selected"
 									value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
-								<td align="center"><input name="items" type="hidden"
+								<td width="30%" align="center"><input name="items" type="hidden"
 									value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
 										value="${conceptCollection.name}"></c:out></td>
-								<td align="justify"><c:out
+								<td width="45%" align="justify"><c:out
 										value="${conceptCollection.description}"></c:out></td>
 							</tr>
 						</c:forEach>
@@ -149,4 +150,3 @@
 			<spring:message code="empty.CC" />
 		</c:otherwise>
 	</c:choose>
-</div>

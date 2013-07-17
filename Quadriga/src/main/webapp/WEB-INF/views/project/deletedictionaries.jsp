@@ -78,11 +78,11 @@
 		});
 	});
 </script>
-<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
-	value='Back to Project'>
-<br>
-<br>
+
+<h2>Project: ${project.name}</h2>
+<hr />
+
+
 <c:choose>
 	<c:when test="${success=='1'}">
 		<font color="blue"><spring:message
@@ -102,12 +102,13 @@
 	</c:when>
 </c:choose>
 
-<div class="container">
 	<c:choose>
 		<c:when test="${not empty dicitonaryList}">
 			<form method="POST">
 
-
+				<input type=button
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
+	value='Back to Project'/>
 				<input type="submit" value="Delete Dictionary"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deletedictionaries'" />
 
@@ -127,13 +128,13 @@
 					<tbody>
 						<c:forEach var="dictionary" items="${dicitonaryList}">
 							<tr>
-								<td width="10%"><input type="checkbox" class="selected"
+								<td width="20%"><input type="checkbox" class="selected"
 									name="selected"
 									value='<c:out value="${dictionary.id}"></c:out>' /></td>
-								<td align="center"><input name="items" type="hidden"
+								<td width="30%" align="center"><input name="items" type="hidden"
 									value="<c:out value="${dictionary.name}"></c:out>" /> <c:out
 										value="${dictionary.name}"></c:out></td>
-								<td align="justify"><c:out
+								<td width="45%" align="justify"><c:out
 										value="${dictionary.description}"></c:out></td>
 							</tr>
 						</c:forEach>
@@ -149,4 +150,3 @@
 			<spring:message code="empty.dictionary" />
 		</c:otherwise>
 	</c:choose>
-</div>

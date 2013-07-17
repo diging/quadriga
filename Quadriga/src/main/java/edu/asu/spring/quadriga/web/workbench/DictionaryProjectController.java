@@ -16,13 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Controller
 public class DictionaryProjectController {
 
+	@Autowired 
+	IRetrieveProjectManager projectManager;
+	
 	@Autowired
 	IDictionaryManager dictonaryManager;
 
@@ -53,6 +58,8 @@ public class DictionaryProjectController {
 				logger.info("Dictionary list is empty");
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
+			IProject project = projectManager.getProjectDetails(projectid);
+			model.addAttribute("project", project);
 			model.addAttribute("projectid", projectid);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
@@ -63,7 +70,7 @@ public class DictionaryProjectController {
 
 	@RequestMapping(value = "auth/workbench/{projectid}/adddictionaries", method = RequestMethod.POST)
 	public String addProjectDictionary(HttpServletRequest req,
-			@PathVariable("projectid") String projectid, Model model) {
+			@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		String msg = "";
 		int flag=0;
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -85,6 +92,8 @@ public class DictionaryProjectController {
 				logger.info("Dictionary list is empty buddy");
 			}
 			model.addAttribute("dicitonaryList", dicitonaryList);
+			IProject project = projectManager.getProjectDetails(projectid);
+			model.addAttribute("project", project);
 			model.addAttribute("projectid", projectid);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
@@ -119,12 +128,14 @@ public class DictionaryProjectController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
 
 	@RequestMapping(value = "auth/workbench/{projectid}/dictionaries", method = RequestMethod.GET)
-	public String listProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) {
+	public String listProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -140,12 +151,14 @@ public class DictionaryProjectController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) {
+	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -162,12 +175,14 @@ public class DictionaryProjectController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/deletedictionaries";
 	}
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionaries", method = RequestMethod.POST)
-	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) {
+	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -189,6 +204,8 @@ public class DictionaryProjectController {
 				logger.info("Dictionary list is empty buddy");
 			}
 			model.addAttribute("dicitonaryList", dicitonaryList);
+			IProject project = projectManager.getProjectDetails(projectid);
+			model.addAttribute("project", project);
 			model.addAttribute("projectid", projectid);
 			return "auth/workbench/workspace/dictionaries";
 		} else {
@@ -221,6 +238,8 @@ public class DictionaryProjectController {
 			logger.info("Dictionary list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/dictionaries";
 	}
