@@ -116,7 +116,7 @@
 				<!-- <table  class="dataTable" id="pagination1"> -->
 				<thead>
 					<tr>
-						<th align="left"><input type="checkbox" id="selectall">Select
+						<th align="left"><input type="checkbox" id="selectall">
 							All</th>
 						<th>Dictionary Name</th>
 						<th>Dictionary Description</th>
@@ -126,7 +126,7 @@
 				<tbody>
 					<c:forEach var="dictionary" items="${dicitonaryList}">
 						<tr>
-							<td width="10%"><input type="checkbox" class="selected"
+							<td width="15%"><input type="checkbox" class="selected"
 								name="selected" value='<c:out value="${dictionary.id}"></c:out>' /></td>
 							<td width="30%" align="center"><input name="items"
 								type="hidden" value="<c:out value="${dictionary.name}"></c:out>" />

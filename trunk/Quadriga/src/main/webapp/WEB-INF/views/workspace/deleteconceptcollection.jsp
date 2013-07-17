@@ -118,7 +118,7 @@
 					<!-- <table  class="dataTable" id="pagination1"> -->
 					<thead>
 						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
+							<th align="left"><input type="checkbox" id="selectall">
 								All</th>
 							<th>Concept Collection Name</th>
 							<th>Concept Collection Description</th>

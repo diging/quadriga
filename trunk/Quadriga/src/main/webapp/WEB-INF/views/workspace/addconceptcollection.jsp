@@ -82,7 +82,6 @@
 <hr />
 
 
-<div class="container">
 	<c:choose>
 		<c:when test="${not empty conceptCollectionList}">
 
@@ -100,7 +99,7 @@
 					<!-- <table  class="dataTable" id="pagination1"> -->
 					<thead>
 						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
+							<th align="left"><input type="checkbox" id="selectall">
 								All</th>
 							<th>Concept Collection Name</th>
 							<th>Concept Collection Description</th>
@@ -111,13 +110,13 @@
 						<c:forEach var="conceptCollection"
 							items="${conceptCollectionList}">
 							<tr>
-								<td width="10%"><input type="checkbox" class="selected"
+								<td width="15%"><input type="checkbox" class="selected"
 									name="selected"
 									value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
-								<td align="center"><input name="items" type="hidden"
+								<td width="40%"align="center"><input name="items" type="hidden"
 									value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
 										value="${conceptCollection.name}"></c:out></td>
-								<td align="justify"><c:out
+								<td width="50%"align="justify"><c:out
 										value="${conceptCollection.description}"></c:out></td>
 							</tr>
 						</c:forEach>
@@ -132,4 +131,3 @@
 			<spring:message code="empty.CC" />
 		</c:otherwise>
 	</c:choose>
-</div>
