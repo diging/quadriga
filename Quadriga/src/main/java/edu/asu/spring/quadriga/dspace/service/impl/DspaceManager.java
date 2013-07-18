@@ -305,6 +305,25 @@ public class DspaceManager implements IDspaceManager{
 			throw e;
 		}
 	}
+	
+	
+	
+	@Override
+	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException
+	{
+		//TODO: Remove this after actual user synchronization to Dspace
+		dspaceUsername="ramk@asu.edu";
+		password="123456";
+		
+		for(IBitStream bitstream : dbconnectionManager.getBitStreamReferences(workspaceid, quadrigaUsername))
+		{
+			IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(proxyCommunityManager, dbconnectionManager, restTemplate, url, quadrigaUsername, dspaceUsername, password, bitstream);
+			Thread bitstreamUpdateThread = new Thread(dspaceUpdateManager);
+			System.out.println("Starting thread for: "+bitstream.getId());
+			bitstreamUpdateThread.start();
+			System.out.println("Next item in for each loop");
+		}
+	}
 
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.

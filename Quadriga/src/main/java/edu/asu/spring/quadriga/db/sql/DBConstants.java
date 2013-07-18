@@ -102,6 +102,7 @@ public interface DBConstants
 	public static final String UPDATE_DSPACE_COLLECTION = "sp_updateDspaceCollection";
 	public static final String UPDATE_DSPACE_ITEM = "sp_updateDspaceItem";
 	public static final String UPDATE_DSPACE_BITSTREAM = "sp_updateDspaceBitStream";
+	public static final String GET_DSPACE_REFERENCES = "sp_getAllBitStreamReferences";
 	
 	//project Access objects
 	public static final String CHECK_PROJECT_OWNER = "fn_checkProjectOwner";

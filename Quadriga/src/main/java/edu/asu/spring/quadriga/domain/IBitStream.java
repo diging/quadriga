@@ -35,4 +35,16 @@ public interface IBitStream {
 
 	public abstract String getCommunityName();
 
+	public abstract void setItemid(String itemid);
+
+	public abstract String getItemid();
+
+	public abstract void setCollectionid(String collectionid);
+
+	public abstract String getCollectionid();
+
+	public abstract void setCommunityid(String communityid);
+
+	public abstract String getCommunityid();
+
 }

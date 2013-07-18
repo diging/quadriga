@@ -470,7 +470,7 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 				List<IBitStream> bitstreamList = new ArrayList<IBitStream>();
 				ResultSet result = sqlStatement.getResultSet();
 				
-				BitStream bitstream = null;
+				IBitStream bitstream = null;
 				while(result.next())
 				{
 					bitstream = new BitStream();
@@ -499,7 +499,7 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 			logger.info("Class Name: DBConnectionDspaceManager");
 			logger.info("Method Name: getBitStreams");
 			logger.info("Workspace id: "+workspaceId);
-			throw new QuadrigaAccessException(e.getMessage());
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
