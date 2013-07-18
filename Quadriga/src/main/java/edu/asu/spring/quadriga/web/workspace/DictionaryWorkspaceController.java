@@ -129,6 +129,8 @@ public class DictionaryWorkspaceController {
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+		model.addAttribute("workspacedetails", workspace);
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/dictionaries";
 	}
