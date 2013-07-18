@@ -109,6 +109,7 @@
 				<input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
 	value='Back to Project'/>
+	<br />
 				<input type="submit" value="Delete Dictionary"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deletedictionaries'" />
 

@@ -161,6 +161,8 @@ public class ConceptCollectionWorkspaceController {
 			logger.info("conceptCollectionList list is empty buddy");
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
+		model.addAttribute("workspacedetails", workspace);
 		model.addAttribute("workspaceId", workspaceId);
 		return "auth/workbench/workspace/conceptcollections";
 	}

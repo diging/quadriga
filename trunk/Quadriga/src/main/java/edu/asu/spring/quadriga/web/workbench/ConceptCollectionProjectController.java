@@ -164,6 +164,8 @@ public class ConceptCollectionProjectController {
 			logger.info("conceptCollectionList list is empty buddy");
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
+		IProject project = projectManager.getProjectDetails(projectid);
+		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/conceptcollections";
 	}
