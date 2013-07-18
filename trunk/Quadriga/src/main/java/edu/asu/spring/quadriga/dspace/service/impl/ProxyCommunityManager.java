@@ -40,6 +40,8 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 */
 	private String getCompleteUrlPath(String restPath, String userName, String password)
 	{
+		// these String values should go into a property file (in which you
+		// replace variables with restPath,username, etc.
 		return "https://"+restPath+"?email="+userName+"&password="+password;
 	}
 
@@ -50,6 +52,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
 		if(communities == null)
 		{
+			// same here, string should not be hardcoded it might change
+			// and you don't want to have to recompile the webapp just because
+			// of that
 			String sRestServicePath = getCompleteUrlPath(url+"/rest/communities.xml", sUserName, sPassword);
 			IDspaceCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
 
