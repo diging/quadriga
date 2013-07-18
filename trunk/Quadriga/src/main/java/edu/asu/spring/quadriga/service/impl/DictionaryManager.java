@@ -384,4 +384,14 @@ public class DictionaryManager implements IDictionaryManager {
 		return collaborators;
 	}
 
+	@Override
+	public String deleteCollaborator(String dictionaryid, String userName) {
+		
+		String errmsg = dbConnect.deleteCollaborators(dictionaryid, userName);
+		
+		return errmsg;
+	}
+	
+	
+
 }

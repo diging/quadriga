@@ -1,8 +1,11 @@
+use quadriga;
 DROP PROCEDURE IF EXISTS sp_showDictionaryCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showDictionaryCollaborators
 (
+
 	IN indictionaryid		VARCHAR(100),
+
 	OUT errmsg				VARCHAR(200)
 )
 

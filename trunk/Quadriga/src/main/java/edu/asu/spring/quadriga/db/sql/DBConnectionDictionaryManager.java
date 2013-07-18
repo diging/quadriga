@@ -13,6 +13,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -376,6 +377,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, dictionaryId);
+			logger.info("dictionary id:"+dictionaryId);
 
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
@@ -827,6 +829,39 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		
 		return collabList;
 	}
+
+	@Override
+	public String deleteCollaborators(String dictionaryid, String userName) {
+
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		
+		dbCommand = DBConstants.SP_CALL+" "+DBConstants.DELETE_DICT_COLLABORATORS+"(?,?,?)";
+		getConnection();
+		
+		try {
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, dictionaryid);
+			sqlStatement.setString(2, userName);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			sqlStatement.execute();
+			errmsg = sqlStatement.getString(3);
+			
+			if(errmsg.equals(""))
+			{
+				return errmsg;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return null;
+	}
+	
+	
 	
 	
 }

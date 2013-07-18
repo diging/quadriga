@@ -130,6 +130,8 @@ public interface IDictionaryManager {
 	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
 	
 	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName);
+	
+	public abstract String deleteCollaborator(String dictionaryid, String userName);
 
 	
 

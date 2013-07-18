@@ -42,8 +42,9 @@ public interface DBConstants
 	public static final String SHOW_DICT_COLLABORATORS = "sp_showDictionaryCollaborators";
 	public static final String SHOW_DICT_NONCOLLABORATORS = "sp_showDictionaryNonCollaborators";
 	public static final String ADD_DICT_COLLABORATORS = "sp_addDictionaryCollaborators";
-	
+	public static final String DELETE_DICT_COLLABORATORS = "sp_deleteDictionaryCollaborators";
 
+	
 	public static final String GET_CCOWNED_DETAILS = "sp_getConceptCollections";
 	public static final String GET_CCCOLLABORATIONS_DETAILS = "sp_getUserCollectionCollaborations";
 	public static final String VALIDATE_COLLECTIONID = "sp_validatecollectionid";
