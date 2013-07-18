@@ -40,8 +40,9 @@ public class ModifyProjCollabManager implements IModifyProjCollabManager
 	@Override
 	public String deleteCollaboratorRequest(String userName, String projectid) throws QuadrigaStorageException {
 		
+		System.out.println("---------------DM1");
 		String errmsg = dbConnect.deleteColloratorRequest(userName, projectid);
-		
+		System.out.println("---------------DM2");
 		return errmsg;
 	}
 }

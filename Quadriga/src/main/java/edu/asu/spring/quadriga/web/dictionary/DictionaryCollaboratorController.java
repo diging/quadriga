@@ -136,4 +136,28 @@ public class DictionaryCollaboratorController {
 		
 	}
 	
+	@RequestMapping(value="auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
+	public String deleteCollaborators(@PathVariable("dictionaryid") String dictionaryid, HttpServletRequest req, ModelMap model)
+	{
+		String[] collaborators = req.getParameterValues("selected");
+		
+		String errmsg = null;
+		System.out.println("--------------dc1");
+		
+		for(int i=0; i<collaborators.length; i++)
+		{
+			System.out.println("--------------collab:"+collaborators[i]);
+			errmsg = dictionaryManager.deleteCollaborator(dictionaryid, collaborators[i]);
+		}
+		System.out.println("--------------dc2");
+
+		
+		if(errmsg.equals(""))
+		{
+			return "redirect:/auth/dictionaries/"+dictionaryid+"/showCollaborators";
+		}
+		return "redirect:/auth/dictionaries/{dictionaryid}";
+			
+	}
+	
 }
