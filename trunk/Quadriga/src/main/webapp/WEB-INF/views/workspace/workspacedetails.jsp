@@ -48,6 +48,7 @@
 <br><br>
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
+	<input type="submit" value="Update Values" onclick="location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams'"> 
 	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 		<table cellpadding="0" cellspacing="0" border="0"
 			class="display dataTable" width="100%">

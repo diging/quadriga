@@ -13,10 +13,43 @@ public class BitStream implements IBitStream{
 	private String name;
 	private String size;
 	private String mimeType;
+	private String communityid;
+	private String collectionid;
+	private String itemid;
 	private String communityName;
 	private String collectionName;
 	private String itemName;
 	
+	@Override
+	public String getCommunityid() {
+		return communityid;
+	}
+
+	@Override
+	public void setCommunityid(String communityid) {
+		this.communityid = communityid;
+	}
+
+	@Override
+	public String getCollectionid() {
+		return collectionid;
+	}
+
+	@Override
+	public void setCollectionid(String collectionid) {
+		this.collectionid = collectionid;
+	}
+
+	@Override
+	public String getItemid() {
+		return itemid;
+	}
+
+	@Override
+	public void setItemid(String itemid) {
+		this.itemid = itemid;
+	}
+
 	@Override
 	public String getCommunityName() {
 		return communityName;

@@ -2,8 +2,11 @@ package edu.asu.spring.quadriga.db.sql;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -12,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
+import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -477,6 +482,8 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}		
 	}
 	
+	
+	@Override
 	public int updateCommunity(String communityid, String name, String shortDescription, String introductoryText, String handle, String username) throws QuadrigaStorageException
 	{
 		if(communityid == null || handle == null || username == null)
@@ -534,6 +541,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	@Override
 	public int updateCollection(String communityid, String collectionid, String name, String shortDescription, String entityReference, String handle, String username) throws QuadrigaStorageException
 	{
 		if(communityid == null || collectionid == null || handle == null || username == null)
@@ -593,6 +601,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	@Override
 	public int updateItem(String communityid, String collectionid, String itemid, String name, String handle, String username) throws QuadrigaStorageException
 	{
 		if(communityid == null || collectionid == null || itemid == null || handle == null || username == null)
@@ -651,6 +660,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	@Override
 	public int updateBitStream(String communityid, String collectionid, String itemid, String bitstreamid, String name, String size, String mimeType, String username) throws QuadrigaStorageException
 	{
 		if(communityid == null || collectionid == null || itemid == null || bitstreamid == null || name == null || username == null)
@@ -708,5 +718,62 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		{
 			closeConnection();
 		}
+	}
+	
+	@Override
+	public List<IBitStream> getBitStreamReferences(String workspaceId, String username) throws QuadrigaAccessException, QuadrigaStorageException
+	{
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DSPACE_REFERENCES + "(?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, workspaceId);
+			sqlStatement.setString(2, username);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(3);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully retrieved the bitstreams associated with the workspace
+				List<IBitStream> bitstreamList = new ArrayList<IBitStream>();
+				ResultSet result = sqlStatement.getResultSet();
+				
+				IBitStream bitstream = null;
+				while(result.next())
+				{
+					bitstream = new BitStream();
+					bitstream.setCommunityid(result.getString(1));
+					bitstream.setCollectionid(result.getString(2));
+					bitstream.setItemid(result.getString(3));
+					bitstream.setId(result.getString(4));
+					bitstreamList.add(bitstream);
+				}
+				
+				return bitstreamList;
+			}
+			else
+			{
+				throw new QuadrigaAccessException(sOutErrorValue);
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e);
+		}
+		finally
+		{
+			closeConnection();
+		}			
 	}
 }

@@ -6,7 +6,6 @@ package edu.asu.spring.quadriga.web;
 import java.security.Principal;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -231,6 +230,14 @@ public class DspaceController {
 	public String deleteBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
 		
 		dspaceManager.deleteBitstreamFromWorkspace(workspaceId, bitstreamids, principal.getName());
+		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+	}
+	
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
+	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
+		System.out.println("Inside controller..............................."+workspaceId);
+		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		dspaceManager.updateDspaceMetadata(workspaceId, principal.getName(), null, sPassword);
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }

@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * 
  * @author Ram Kumar Kumaresan
  */
-public interface IDspaceManager {
+public interface IDspaceManager{
 
 	public final static int SUCCESS = 1;
 	public final static int FAILURE = 0;
@@ -120,5 +120,9 @@ public interface IDspaceManager {
 	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids,
 			String username) throws QuadrigaStorageException,
 			QuadrigaAccessException;
+
+	public abstract void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername,
+			String password) throws QuadrigaAccessException,
+			QuadrigaStorageException;
 
 }
