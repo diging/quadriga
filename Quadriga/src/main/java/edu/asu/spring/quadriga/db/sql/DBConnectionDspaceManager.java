@@ -10,8 +10,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
@@ -31,6 +29,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Ram Kumar Kumaresan
  * 
  */
+
 public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 
 	private Connection connection;
@@ -38,11 +37,17 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	@Autowired
 	private DataSource dataSource;
 	
+	@Override
+	public DataSource getDataSource() {
+		return dataSource;
+	}
+
 	/**
 	 * @Description: Assigns the data source used by this class
 	 * 
 	 * @param : dataSource
 	 */
+	@Override
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}

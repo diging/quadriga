@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -138,19 +139,53 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId)
+	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, String url, String sUserName, String sPassword, String communityid)
 	{
-		//Check if a request for collections has been made to Dspace
-		if(this.collections != null)
+		if(fromCache)
 		{
-			for(ICollection collection : this.collections)
+			//Check if a request for collections has been made to Dspace
+			if(this.collections != null)
 			{
-				if(collection.getId().equals(sCollectionId))
+				for(ICollection collection : this.collections)
 				{
-					return collection;
+					if(collection.getId().equals(sCollectionId))
+					{
+						return collection;
+					}
 				}
 			}
+			else
+			{
+				this.getAllCollections(restTemplate, url, sUserName, sPassword, communityid);
+			}
 		}
+		else
+		{
+			//Reload the collections data associated with this community
+			ICommunity community = this.getCommunity(communityid, true, null, null, null, null);
+
+			//Remove the collection metadata from the cache
+			for(String collectionid: community.getCollectionIds()){
+				Iterator<ICollection> iterator = this.collections.iterator();
+				while(iterator.hasNext())
+				{
+					if(iterator.next().getId().equals(collectionid))
+						iterator.remove();
+				}
+			}
+			
+			//Load the collection metadata associated with the community
+			this.getAllCollections(restTemplate, url, sUserName, sPassword, communityid);
+		}
+		
+		for(ICollection collection : this.collections)
+		{
+			if(collection.getId().equals(sCollectionId))
+			{
+				return collection;
+			}
+		}
+		
 		return null;
 	}
 
@@ -212,6 +247,35 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getItemName(String sCollectionId, String sItemId)
+	{
+		//Check if a request for communities has been made to Dspace
+		if(this.collections!=null)
+		{
+			for(ICollection collection: collections)
+			{
+				if(collection.getId().equals(sCollectionId))
+				{
+					for(IItem item: collection.getItems())
+					{
+						if(item.getId().equals(sItemId))
+						{
+							return item.getName();
+						}
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -236,33 +300,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 									return bitstream;
 								}
 							}
-						}
-					}
-				}
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getItemName(String sCollectionId, String sItemId)
-	{
-		//Check if a request for communities has been made to Dspace
-		if(this.collections!=null)
-		{
-			for(ICollection collection: collections)
-			{
-				if(collection.getId().equals(sCollectionId))
-				{
-					for(IItem item: collection.getItems())
-					{
-						if(item.getId().equals(sItemId))
-						{
-							return item.getName();
 						}
 					}
 				}
@@ -316,16 +353,38 @@ public class ProxyCommunityManager implements ICommunityManager {
 	}
 
 	@Override
-	public ICommunity getCommunity(String communityId)
-	{
-		if(this.communities != null)
+	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, String url, String sUserName, String sPassword)
+	{		
+		//Get the community data from the cache
+		if(fromCache)
 		{
-			for(ICommunity community: this.communities)
+			if(this.communities != null)
 			{
-				if(community.getId().equals(communityId))
-					return community;
+				for(ICommunity community: this.communities)
+				{
+					if(community.getId().equals(communityId))
+						return community;
+				}
+			}
+			else
+			{
+				//Load all the communities
+				this.getAllCommunities(restTemplate, url, sUserName, sPassword);
 			}
 		}
+		else
+		{
+			//Reload the community data from dspace
+			this.communities = null;
+			this.getAllCommunities(restTemplate, url, sUserName, sPassword);
+		}
+
+		for(ICommunity community: this.communities)
+		{
+			if(community.getId().equals(communityId))
+				return community;
+		}
+
 		return null;
 	}
 

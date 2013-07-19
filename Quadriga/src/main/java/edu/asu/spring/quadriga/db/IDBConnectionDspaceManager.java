@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.db;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -56,4 +58,9 @@ public interface IDBConnectionDspaceManager {
 	public abstract int updateCommunity(String communityid, String name,
 			String shortDescription, String introductoryText, String handle, String username)
 			throws QuadrigaStorageException;
+
+	public abstract void setDataSource(DataSource dataSource);
+
+	public abstract DataSource getDataSource();
+
 }
