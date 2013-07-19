@@ -14,7 +14,7 @@
 		<put-attribute name="right-sub-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
-		<definition name="base.definition.leftrightnav" template="/WEB-INF/tiles/layouts/skeleton_leftright.jsp">
+	<definition name="base.definition.leftrightnav" template="/WEB-INF/tiles/layouts/skeleton_leftright.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
@@ -23,8 +23,16 @@
 		<put-attribute name="right-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
+	<definition name="base.definition.leftnav" template="/WEB-INF/tiles/layouts/skeleton_left.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation"
+			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
+		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="left-navigation" value="" />
+		<put-attribute name="currentPage" value="home" />
+	</definition>
 	<definition name="base.definition.nonav"
-		template="/WEB-INF/tiles/layouts/skeleton_noright.jsp">
+		template="/WEB-INF/tiles/layouts/skeleton_nomenu.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
@@ -395,8 +403,8 @@
 	</definition>
 	
 	
-		<!-- changing the skeleton to have left and right navigation -->
-	<definition name="auth/workbench/workspace/workspacedetails" extends="base.definition.workbench.nav">
+		<!-- Workspace will have only left navigation -->
+	<definition name="auth/workbench/workspace/workspacedetails" extends="base.definition.leftnav">
 		<put-attribute name="title" value="Quadriga - Workspace Details" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />
