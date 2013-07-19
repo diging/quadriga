@@ -1,67 +1,78 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
+import edu.asu.spring.quadriga.db.sql.DBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
-import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public class DspaceUpdateManager implements IDspaceUpdateManager {
 
+	ICommunity community;
+	ICollection collection;
+	IItem item;
 	IBitStream bitstream;
-	String dspaceUsername;
-	String quadrigaUsername;
-	String password;
-	RestTemplate restTemplate;
-	String url;
+
+	private String username;
+
+	private IDBConnectionDspaceManager dbconnectionManager;
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceUpdateManager.class);
-	
-	private ICommunityManager proxyCommunityManager;
-	private IDBConnectionDspaceManager dbconnectionManager;
-	
-	public DspaceUpdateManager(ICommunityManager proxyCommunityManager, IDBConnectionDspaceManager dbconnectionManager, RestTemplate restTemplate, String url, String quadrigaUsername, String dspaceUsername, String password,IBitStream bitstream)
+
+
+	public DspaceUpdateManager(DataSource dataSource, ICommunity community, ICollection collection, IItem item, IBitStream bitstream, String username)
 	{
-		this.proxyCommunityManager = proxyCommunityManager;
-		this.dbconnectionManager = dbconnectionManager;
-		this.restTemplate = restTemplate;
-		this.url = url;
-		this.quadrigaUsername = quadrigaUsername;
-		this.dspaceUsername = dspaceUsername;
-		this.password = password;
-		this.bitstream = bitstream;		
+		this.community = community;
+		this.collection = collection;
+		this.item = item;
+		this.bitstream = bitstream;
+		this.dbconnectionManager = new DBConnectionDspaceManager();
+		this.dbconnectionManager.setDataSource(dataSource);
+		this.username = username;
 	}
-	
+
 	@Override
 	public void run() {
-		ICommunity community;
-		ICollection collection;
-		IItem item;
-		
-		System.out.println("Inside thread for: "+bitstream.getId());
-		//Retrieve the new community metadata fetched from Dspace
-		community = proxyCommunityManager.getCommunity(bitstream.getCommunityid());
-		if(community == null)
-		{
-			//The values from Dspace are to be fetched for the first time.
-			proxyCommunityManager.getAllCommunities(restTemplate, url, dspaceUsername, password);
-			community = proxyCommunityManager.getCommunity(bitstream.getCommunityid());
-		}
-		
-		//Update the community metadata in Quadriga database
+
 		try {
-			dbconnectionManager.updateCommunity(bitstream.getCommunityid(), community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), quadrigaUsername);
+			//Update the community metadata in Quadriga database
+			dbconnectionManager.updateCommunity(bitstream.getCommunityid(), community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), this.username);
+
+			while(collection.getName() == null)
+			{
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
+			//Update the collection metadata in Quadriga database
+			dbconnectionManager.updateCollection(bitstream.getCommunityid(), collection.getId(), collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), this.username);
+			IItem item = null;
+			for(IItem collectionItem : collection.getItems())
+			{
+				if(collectionItem.getId().equals(bitstream.getItemid()))
+				{
+					item = collectionItem;
+					break;
+				}
+			}
+			dbconnectionManager.updateItem(bitstream.getCommunityid(), bitstream.getCollectionid(), bitstream.getItemid(), item.getName(), item.getHandle(), username);
+
 		} catch (QuadrigaStorageException e) {
 			logger.error("Exception occurred while trying to update Dspace Metadata",e);
 		}
-		
-//		collection = proxyCommunityManager.getCollection(bitstream.getCollectionid());
-//		item = proxyCommunityManager.getItem(bitstream.getCollectionid(), bitstream.getItemid());
+
+		//		collection = proxyCommunityManager.getCollection(bitstream.getCollectionid());
+		//		item = proxyCommunityManager.getItem(bitstream.getCollectionid(), bitstream.getItemid());
 	}
 }

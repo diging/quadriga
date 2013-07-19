@@ -54,7 +54,7 @@ public interface ICommunityManager {
 	 * @param sCollectionId	The collection id whose collection object is to be fetched.
 	 * @return				The collection object for the given collection id. Will be null of there is no such collection with the id.
 	 */
-	public abstract ICollection getCollection(String sCollectionId);
+	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, String url, String sUserName, String sPassword,String communityid);
 
 	/**
 	 * Get all items within a collection.
@@ -115,7 +115,7 @@ public interface ICommunityManager {
 	public abstract IBitStream getBitStream(String sCollectionId, String sItemId,
 			String sBitStreamId);
 
-	public abstract ICommunity getCommunity(String communityId);
+	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, String url, String sUserName, String sPassword);
 
 	public abstract IItem getItem(String collectionId, String itemId);
 }

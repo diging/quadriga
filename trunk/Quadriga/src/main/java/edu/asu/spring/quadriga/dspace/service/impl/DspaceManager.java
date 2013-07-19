@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -109,7 +110,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
-		return proxyCommunityManager.getCollection(sCollectionId);
+		return proxyCommunityManager.getCollection(sCollectionId,true,null,null,null,null,null);
 	}
 
 	/**
@@ -166,8 +167,9 @@ public class DspaceManager implements IDspaceManager{
 	{
 		try
 		{
-			ICommunity community = proxyCommunityManager.getCommunity(communityId);
-			ICollection collection = proxyCommunityManager.getCollection(collectionId);
+			//Passing null values for other arguments because the community details must have already been fetched from dspace
+			ICommunity community = proxyCommunityManager.getCommunity(communityId,true,null,null,null,null);
+			ICollection collection = proxyCommunityManager.getCollection(collectionId,true,null,null,null,null,null);
 			IItem item = proxyCommunityManager.getItem(collectionId, itemId);
 
 			//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
@@ -292,7 +294,7 @@ public class DspaceManager implements IDspaceManager{
 		try
 		{
 			for(String bitstreamid: bitstreamids)
-			dbconnectionManager.deleteBitstreamFromWorkspace(workspaceid, bitstreamid, username);
+				dbconnectionManager.deleteBitstreamFromWorkspace(workspaceid, bitstreamid, username);
 		}
 		catch(QuadrigaAccessException e)
 		{
@@ -305,23 +307,40 @@ public class DspaceManager implements IDspaceManager{
 			throw e;
 		}
 	}
-	
-	
-	
+
+
+
 	@Override
 	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException
 	{
 		//TODO: Remove this after actual user synchronization to Dspace
 		dspaceUsername="ramk@asu.edu";
 		password="123456";
-		
+
+		HashSet<String> reloadedCollectionIds = new HashSet<String>();
+
+		//Reload all the communities by making only one call to dspace
+		proxyCommunityManager.getCommunity(null, false, restTemplate, url, dspaceUsername, password);
 		for(IBitStream bitstream : dbconnectionManager.getBitStreamReferences(workspaceid, quadrigaUsername))
 		{
-			IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(proxyCommunityManager, dbconnectionManager, restTemplate, url, quadrigaUsername, dspaceUsername, password, bitstream);
+			ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, null, null, null,null);
+			ICollection collection = null;
+
+			if(reloadedCollectionIds.contains(bitstream.getCollectionid()))
+			{
+				//Collection has been reloaded already
+				collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, null, null, null, null, null);
+			}
+			else
+			{
+				//This is the first call to reload the collection
+				collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), false, restTemplate, url, dspaceUsername, password, bitstream.getCommunityid());
+				reloadedCollectionIds.add(bitstream.getCollectionid());
+			}
+
+			IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(this.dbconnectionManager.getDataSource(), community, collection, null, bitstream, quadrigaUsername);
 			Thread bitstreamUpdateThread = new Thread(dspaceUpdateManager);
-			System.out.println("Starting thread for: "+bitstream.getId());
 			bitstreamUpdateThread.start();
-			System.out.println("Next item in for each loop");
 		}
 	}
 
