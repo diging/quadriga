@@ -50,11 +50,15 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	RestTemplate restTemplate;
 	
 	@Autowired
-	@Qualifier("searchConceptPowerURL")
+	@Qualifier("conceptPowerURL")
+	private String conceptURL;
+	
+	@Autowired
+	@Qualifier("searchConceptPowerURLPath")
 	private String searchURL;
 	
 	@Autowired
-	@Qualifier("updateConceptPowerURL")
+	@Qualifier("updateConceptPowerURLPath")
 	private String updateURL;
 	
 	@Autowired
@@ -116,7 +120,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		vars.put("pos", pos);
 		
 		if((item!=null && !item.isEmpty())  && (pos!=null && !pos.isEmpty())){
-			rep = restTemplate.getForObject(searchURL+"{name}/{pos}", ConceptpowerReply.class, vars);
+			rep = restTemplate.getForObject(conceptURL+searchURL+"{name}/{pos}", ConceptpowerReply.class, vars);
 			return rep;
 		}
 		else
@@ -133,7 +137,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		vars.put("name", i);
 		
 		if((i!=null && !i.isEmpty())){
-			rep = restTemplate.getForObject(updateURL+"{name}", ConceptpowerReply.class, vars);
+			rep = restTemplate.getForObject(conceptURL+updateURL+"{name}", ConceptpowerReply.class, vars);
 			concept = conceptFactory.createConceptObject();
 			concept.setId(i);
 			concept = collection.getItems().get((collection.getItems().indexOf(concept)));

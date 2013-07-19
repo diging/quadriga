@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd 
 	http://www.springframework.org/schema/aop
@@ -41,12 +42,20 @@
 			<value>/rest/WordLookup/</value>
 		</constructor-arg>
 	</bean>
-
-	<bean id="searchConceptPowerURL" class="java.lang.String">
+	
+	<bean id="conceptPowerURL" class="java.lang.String">
 		<constructor-arg>
-			<value>http://chps.asu.edu/conceptpower/rest/ConceptLookup/</value>
+		<value>http://chps.asu.edu/conceptpower</value>
 		</constructor-arg>
 	</bean>
+	
+	<bean id="searchConceptPowerURLPath" class="java.lang.String">
+		<constructor-arg>
+			<value>/rest/ConceptLookup/</value>
+		</constructor-arg>
+	</bean>
+	
+	
 
 	
 	<bean id="updateFromWordPowerURLPath" class="java.lang.String">
@@ -55,9 +64,9 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="updateConceptPowerURL" class="java.lang.String">
+	<bean id="updateConceptPowerURLPath" class="java.lang.String">
 		<constructor-arg>
-			<value>http://chps.asu.edu/conceptpower/rest/Concept?id=</value>
+			<value>/rest/Concept?id=</value>
 		</constructor-arg>
 	</bean>
 	
@@ -105,6 +114,7 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/errormessages.properties" />
 	</bean>
+	
 	
 	
 </beans>
