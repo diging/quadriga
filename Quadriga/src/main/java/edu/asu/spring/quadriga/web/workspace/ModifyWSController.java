@@ -4,12 +4,15 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -20,67 +23,96 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.web.StringConstants;
+import edu.asu.spring.quadriga.validator.WorkspaceValidator;
 
 @Controller
 public class ModifyWSController 
 {
-	
+
 	@Autowired
 	ICheckWSSecurity workspaceSecurity;
-	
+
 	@Autowired
 	IUserManager userManager;
-	
+
 	@Autowired
 	IModifyWSManager modifyWSManager;
-	
+
 	@Autowired
 	IListWSManager wsManager;
-	
-	@RequestMapping(value="auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method=RequestMethod.GET)
-	public String addWorkSpaceRequestForm(Model model,@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
-	{
-		    IWorkSpace workspace;
-		    String userName;
-		    
-		    //fetch the workspace details
-		    userName = principal.getName();
-		    workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
-		    
-			model.addAttribute("workspace", workspace);
-			return "auth/workbench/workspace/updateworkspace";
+
+	@Autowired
+	WorkspaceValidator validator;
+
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+
+		binder.setValidator(validator);
 	}
-	
+
+	/**
+	 * This is called on the modifyworkspace on load.
+	 * @param     model
+	 * @return   ModelAndView
+	 * @throws QuadrigaStorageException 
+	 * @author    Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
+	 */
+	@RequestMapping(value="auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method=RequestMethod.GET)
+	public ModelAndView updateWorkSpaceRequestForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		ModelAndView model;
+		IWorkSpace workspace;
+		String userName;
+
+		//fetch the workspace details
+		userName = principal.getName();
+		workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+		model = new ModelAndView("auth/workbench/workspace/updateworkspace");
+		model.getModelMap().put("workspace", workspace);
+		return model;
+	}
+
+	/**
+	 * This is called on the modifyworkspace on form submission.
+	 * @param     model
+	 * @return    ModelAndView
+	 * @throws QuadrigaStorageException 
+	 * @author    Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
+	 */
 	@RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.POST)
-	public String addWorkSpaceRequest(@ModelAttribute("SpringWeb")WorkSpace workspace,
-			ModelMap model, Principal principal,@PathVariable("workspaceid") String workspaceid) throws QuadrigaStorageException
+	public ModelAndView updateWorkSpaceRequest(@Validated @ModelAttribute("workspace")WorkSpace workspace,
+			@PathVariable("workspaceid") String workspaceid,BindingResult result,Principal principal) throws QuadrigaStorageException
 			{
-		String errmsg;
+		ModelAndView model;
 		IUser wsOwner = null;
 		String userName = principal.getName();
 
-			wsOwner = userManager.getUserDetails(userName);
+		wsOwner = userManager.getUserDetails(userName);
 
-			//set the workspace owner
-			workspace.setOwner(wsOwner);
-			
-			//set the workspace id
-			workspace.setId(workspaceid);
+		//set the workspace owner
+		workspace.setOwner(wsOwner);
 
-			errmsg = modifyWSManager.updateWorkspaceRequest(workspace);
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg",StringConstants.WORKSPACE_SUCCESS_MSG);
-				return "auth/workbench/workspace/updateworkspacestatus";
-			}
-			else
-			{
-				model.addAttribute("workspace", workspace);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				return "auth/workbench/workspace/updateworkspace";
-			}
+		//set the workspace id
+		workspace.setId(workspaceid);
+
+
+		if(result.hasErrors())
+		{
+			model = new ModelAndView("auth/workbench/workspace/updateworkspace");
+			model.getModelMap().put("workspace", workspace);
+			return model;
 		}
+		else
+		{
+			modifyWSManager.updateWorkspaceRequest(workspace);
+			model = new ModelAndView("auth/workbench/workspace/updateworkspacestatus");
+			model.getModelMap().put("success", 1);
+			return model;
+		}
+			}
 }
