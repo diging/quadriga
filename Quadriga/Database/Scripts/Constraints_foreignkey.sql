@@ -45,7 +45,7 @@ ALTER TABLE tbl_workspace_collaborator
 ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username);
 
 ALTER TABLE tbl_workspace_collaborator
-ADD FOREIGN KEY(id) REFERENCES tbl_workspace(workspaceid);
+ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid);
 
 ALTER TABLE tbl_workspace
 ADD FOREIGN KEY(workspaceowner)  REFERENCES tbl_quadriga_user(username); 

@@ -1,14 +1,11 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,65 +21,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class DBConnectionProjectConceptColleciton extends ADBConnectionManager implements
 		IDBConnectionProjectConceptColleciton {
 
-	protected Connection connection;
-	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectConceptColleciton.class);
 
 	@Autowired
-	private DataSource dataSource;
-	
-	@Autowired
 	private IConceptCollectionFactory conceptCollectionFactory;
 
-	/**
-	 * Assigns the data source
-	 *  
-	 *  @param : dataSource
-	 */
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-	
-	/**
-	 * @Description : Close the DB connection
-	 * 
-	 * @return : 0 on success
-	 *           -1 on failure
-	 *           
-	 * @throws : SQL Exception          
-	 */
-	
-	protected int closeConnection() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-			return 0;
-		}
-		catch(SQLException se)
-		{
-			return -1;
-		}
-	}
-
-	/**
-	 * @Description : Establishes connection with the Quadriga DB
-	 * 
-	 * @return      : connection handle for the created connection
-	 * 
-	 * @throws      : SQLException 
-	 */
-	protected void getConnection() {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-	}
 	@Override
 	public String addProjectConceptCollection(String projectId,
 			String conceptCollectionId, String userId)

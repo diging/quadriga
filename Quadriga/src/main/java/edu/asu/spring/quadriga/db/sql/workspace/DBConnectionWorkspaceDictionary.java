@@ -8,12 +8,11 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
@@ -26,66 +25,16 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Lohith Dwaraka
  *
  */
-public class DBConnectionWorkspaceDictionary implements
+public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implements
 		IDBConnectionWorkspaceDictionary {
 
 	protected Connection connection;
 	
 	@Autowired
-	private DataSource dataSource;
-	
-	@Autowired
 	private IDictionaryFactory dictionaryFactory;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionWorkspaceDictionary.class);
-	/**
-	 * Assigns the data source
-	 *  
-	 *  @param : dataSource
-	 */
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-	
-	/**
-	 * @Description : Close the DB connection
-	 * 
-	 * @return : 0 on success
-	 *           -1 on failure
-	 *           
-	 * @throws : SQL Exception          
-	 */
-	protected int closeConnection() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-			return 0;
-		}
-		catch(SQLException se)
-		{
-			return -1;
-		}
-	}
 
-	/**
-	 * @Description : Establishes connection with the Quadriga DB
-	 * 
-	 * @return      : connection handle for the created connection
-	 * 
-	 * @throws      : SQLException 
-	 */
-	protected void getConnection() {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-	}
 	/**
 	 *  Method add a Concept collection to a workspace                   
 	 * @returns         path of list workspace Concept collection page

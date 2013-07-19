@@ -10,4 +10,10 @@ public interface ICheckWSSecurity {
 	public abstract boolean chkCreateWSAccess(String userName, String projectId)
 			throws QuadrigaStorageException;
 
+	public abstract boolean chkCollabWorkspaceAccess(String userName, String workspaceId,
+			String collaboratorRole) throws QuadrigaStorageException;
+
+	public abstract boolean chkModifyWorkspaceAccess(String userName, String workspaceId)
+			throws QuadrigaStorageException;
+
 }

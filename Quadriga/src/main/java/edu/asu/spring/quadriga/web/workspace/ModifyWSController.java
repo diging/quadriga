@@ -67,13 +67,23 @@ public class ModifyWSController
 		ModelAndView model;
 		IWorkSpace workspace;
 		String userName;
-
+        boolean chkAccess;
+        
 		//fetch the workspace details
 		userName = principal.getName();
-		workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
-		model = new ModelAndView("auth/workbench/workspace/updateworkspace");
-		model.getModelMap().put("workspace", workspace);
-		return model;
+		//check if the user has access to modify the workspace
+		chkAccess = workspaceSecurity.chkModifyWorkspaceAccess(userName, workspaceid);
+		if(chkAccess)
+		{
+			workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+			model = new ModelAndView("auth/workbench/workspace/updateworkspace");
+			model.getModelMap().put("workspace", workspace);
+			return model;
+		}
+		else
+		{
+			throw new QuadrigaAccessException();
+		}
 	}
 
 	/**
@@ -85,34 +95,45 @@ public class ModifyWSController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.POST)
-	public ModelAndView updateWorkSpaceRequest(@Validated @ModelAttribute("workspace")WorkSpace workspace,
-			@PathVariable("workspaceid") String workspaceid,BindingResult result,Principal principal) throws QuadrigaStorageException
+	public ModelAndView updateWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
+			@PathVariable("workspaceid") String workspaceid,BindingResult result,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 			{
 		ModelAndView model;
 		IUser wsOwner = null;
 		String userName = principal.getName();
-
-		wsOwner = userManager.getUserDetails(userName);
-
-		//set the workspace owner
-		workspace.setOwner(wsOwner);
-
-		//set the workspace id
-		workspace.setId(workspaceid);
-
-
-		if(result.hasErrors())
+		boolean chkAccess;
+		
+		//check if the user has access to modify the workspace
+		chkAccess = workspaceSecurity.chkModifyWorkspaceAccess(userName, workspaceid);
+		
+		if(chkAccess)
 		{
-			model = new ModelAndView("auth/workbench/workspace/updateworkspace");
-			model.getModelMap().put("workspace", workspace);
-			return model;
+			wsOwner = userManager.getUserDetails(userName);
+
+			//set the workspace owner
+			workspace.setOwner(wsOwner);
+
+			//set the workspace id
+			workspace.setId(workspaceid);
+
+
+			if(result.hasErrors())
+			{
+				model = new ModelAndView("auth/workbench/workspace/updateworkspace");
+				model.getModelMap().put("workspace", workspace);
+				return model;
+			}
+			else
+			{
+				modifyWSManager.updateWorkspaceRequest(workspace);
+				model = new ModelAndView("auth/workbench/workspace/updateworkspacestatus");
+				model.getModelMap().put("success", 1);
+				return model;
+			}
 		}
 		else
 		{
-			modifyWSManager.updateWorkspaceRequest(workspace);
-			model = new ModelAndView("auth/workbench/workspace/updateworkspacestatus");
-			model.getModelMap().put("success", 1);
-			return model;
+			throw new QuadrigaAccessException();
 		}
 			}
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -66,9 +67,10 @@ public class ActivateWSController
 	 * @return   String - URL of the form
 	 * @throws   QuadrigaStorageException
 	 * @author   Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/deactivateworkspace", method = RequestMethod.POST)
-	public String deactivateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public String deactivateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String[] values;
 		String wsIdList = "";
@@ -119,7 +121,7 @@ public class ActivateWSController
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaAccessException();
 		}
 
 
@@ -156,9 +158,10 @@ public class ActivateWSController
 	 * @return   String - URL of the form
 	 * @throws   QuadrigaStorageException
 	 * @author   Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/activateworkspace", method = RequestMethod.POST)
-	public String activateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public String activateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String[] values;
 		String wsIdList = "";
@@ -209,8 +212,7 @@ public class ActivateWSController
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaAccessException();
 		}
 	}
-
 }

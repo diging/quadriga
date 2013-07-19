@@ -12,9 +12,9 @@ Modified Date : 05/30/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_workspace_collaborator;
 
-CREATE VIEW vw_workspace_collaborator(id,username,collaboratorrole)
+CREATE VIEW vw_workspace_collaborator(workspaceid,username,collaboratorrole)
 AS
-  SELECT id,username,collaboratorrole
+  SELECT workspaceid,username,collaboratorrole
     FROM tbl_workspace_collaborator;
 
  
