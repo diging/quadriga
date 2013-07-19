@@ -289,10 +289,11 @@ public class DBConnectionProjectDictionaryTest {
 				assertEquals(dict.getName().equals("testDictionary"), true);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_project_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_project");
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
+		dbConnection.setupTestEnvironment("delete from tbl_project_dictionary");
+		dbConnection.setupTestEnvironment("delete from tbl_project");
+		
 
 	}
 

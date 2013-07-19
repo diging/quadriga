@@ -21,6 +21,13 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
+	<bean id="DBConnectionWorkspaceDictionaryBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionWorkspaceDictionary">
+		<property name="dataSource" ref="dataSource" />
+	</bean>	
+	<bean id="DBConnectionWorkspaceCCBean" class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionWorkspaceCC">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 	<!-- Workbench projects bean -->
 		<bean id="DBConnectionModifyProjCollabManagerBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjCollabManager">
 		<property name="dataSource" ref="dataSource" />

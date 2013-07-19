@@ -21,12 +21,17 @@
 	<bean id="DictionaryManager"
 		class="edu.asu.spring.quadriga.service.impl.DictionaryManager">
 	</bean>
-	
+	<bean id="WorkspaceDictionaryManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.WorkspaceDictionaryManager">
+	</bean>
 	<bean id="ProjectDictionaryManager"
 		class="edu.asu.spring.quadriga.service.impl.workbench.ProjectDictionaryManager">
 	</bean>
 	<bean id="ProjectConceptCollectionManager"
 		class="edu.asu.spring.quadriga.service.impl.workbench.ProjectConceptCollectionManager">
+	</bean>
+	<bean id="WorkspaceConceptCollectionManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.WorkspaceCCManager">
 	</bean>
 		<bean id="ModifyProjectManager"
 		class="edu.asu.spring.quadriga.service.impl.workbench.ModifyProjectManager">
