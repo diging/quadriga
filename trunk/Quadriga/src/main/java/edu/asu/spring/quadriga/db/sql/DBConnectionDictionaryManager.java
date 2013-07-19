@@ -754,7 +754,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		String role ="" ;
 		
 		dbCommand = DBConstants.SP_CALL+" "+DBConstants.ADD_DICT_COLLABORATORS+"(?,?,?,?,?)";
-		
+		if(collaborator !=null){
 		
 		for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
 		{
@@ -764,7 +764,9 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 				}
 			
 		}
-		
+		}else{
+			//try to put some message
+		}
 		role = role.substring(0,role.length()-1);	
 		getConnection();
 		
