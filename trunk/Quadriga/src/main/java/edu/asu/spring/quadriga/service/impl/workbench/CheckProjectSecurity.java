@@ -145,17 +145,13 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		//initialize chkAccess variable
 		chkAccess = false;
 		
-		//check if the user is quadriga admin
-		chkAccess = this.checkQudrigaAdmin(userName);
+		//check if the user is project owner
+		chkAccess = this.checkProjectOwner(userName,projectId);
 		
 		if(!chkAccess)
 		{
-			//check if the user is project owner
-			chkAccess = this.checkProjectOwner(userName,projectId);
+			chkAccess = this.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
 		}
-		
 		return chkAccess;
-		
 	}
-
 }

@@ -30,7 +30,7 @@ BEGIN
     END WHILE;
 
     -- inserting the row when the input has a single value
-    INSERT INTO temp_tbl_workspaceid(projid) VALUES(inworkspaceid);
+    INSERT INTO temp_tbl_workspaceid(workspaceid) VALUES(inworkspaceid);
     
     IF ((SELECT COUNT(DISTINCT workspaceowner) FROM vw_workspace WHERE workspaceid IN (SELECT workspaceid FROM temp_tbl_workspaceid))>1)
     THEN RETURN FALSE;

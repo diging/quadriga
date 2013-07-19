@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
@@ -117,18 +118,31 @@ public class ModifyProjectController
 	 * @return  String - URL for project editing page.
 	 * @throws  QuadrigaStorageException 
 	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value="auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
-	public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		IProject project;
+		String userName = principal.getName();
+		boolean chkAccess;
 		
-		model = new ModelAndView("auth/workbench/modifyproject");
-		project = retrieveProjectManager.getProjectDetails(projectid);
-		model.getModelMap().put("project", project);
-		model.getModelMap().put("unixnameurl","project_unix_name.url");
-		return model;
+		//check if the user has access to update the project
+		chkAccess = projectSecurity.checkProjectAccess(userName, projectid);
+		
+		if(chkAccess)
+		{
+			model = new ModelAndView("auth/workbench/modifyproject");
+			project = retrieveProjectManager.getProjectDetails(projectid);
+			model.getModelMap().put("project", project);
+			model.getModelMap().put("unixnameurl","project_unix_name.url");
+			return model;
+		}
+		else
+		{
+			throw new QuadrigaAccessException();
+		}
 	}
 	
 	/**
@@ -140,28 +154,40 @@ public class ModifyProjectController
 	 * @return String - URL for project editing page.
 	 * @throws QuadrigaStorageException 
 	 * @author Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
 	public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project")Project project,
-			@PathVariable("projectid") String projectid,Principal principal,BindingResult result) throws QuadrigaStorageException
+			@PathVariable("projectid") String projectid,Principal principal,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		String userName = principal.getName();
+		boolean chkAccess;
 		
-		if(result.hasErrors())
+		//check if the user has access to update the project
+		chkAccess = projectSecurity.checkProjectAccess(userName, projectid);
+		
+		if(chkAccess)
 		{
-			model = new ModelAndView("auth/workbench/modifyproject");
-			model.getModelMap().put("project", project);
-			model.getModelMap().put("unixnameurl","project_unix_name.url");
-			return model;
+			if(result.hasErrors())
+			{
+				model = new ModelAndView("auth/workbench/modifyproject");
+				model.getModelMap().put("project", project);
+				model.getModelMap().put("unixnameurl","project_unix_name.url");
+				return model;
+			}
+			else
+			{
+				project.setInternalid(projectid);
+				projectManager.updateProjectRequest(project, userName);
+				model = new ModelAndView("auth/workbench/modifyProjectStatus");
+				model.getModelMap().put("success", 1);
+				return model;
+			}
 		}
 		else
 		{
-			project.setInternalid(projectid);
-			projectManager.updateProjectRequest(project, userName);
-			model = new ModelAndView("auth/workbench/modifyProjectStatus");
-			model.getModelMap().put("success", 1);
-			return model;
+			throw new QuadrigaAccessException();
 		}
 	}
 	
@@ -196,9 +222,10 @@ public class ModifyProjectController
 	 * @return   String - URL on success and failure.
 	 * @throws   QuadrigaStorageException 
 	 * @author   Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/deleteproject", method = RequestMethod.POST)
-	public String deleteProjectRequest(HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public String deleteProjectRequest(HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String[] values;
 		String projIdList = "";
@@ -245,7 +272,7 @@ public class ModifyProjectController
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaAccessException();
 		}
 		
 

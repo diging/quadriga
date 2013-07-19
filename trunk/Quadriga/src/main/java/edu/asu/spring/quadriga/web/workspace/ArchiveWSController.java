@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -45,8 +46,9 @@ public class ArchiveWSController
 	{
 		String userName;
 		List<IWorkSpace> workspaceList;
-		 
+		
 		userName = principal.getName();
+		
 		// retrieve the workspaces associated with the projects
 		    workspaceList = wsManager.listActiveWorkspace(projectid,userName);
 			model.addAttribute("workspaceList", workspaceList);
@@ -63,9 +65,10 @@ public class ArchiveWSController
 	 * @return  String - URL of the form
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/archiveworkspace", method = RequestMethod.POST)
-	public String archiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public String archiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String[] values;
 		String wsIdList = "";
@@ -115,7 +118,7 @@ public class ArchiveWSController
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaAccessException();
 		}
 
 	}
@@ -151,9 +154,10 @@ public class ArchiveWSController
 	 * @return  String - URL of the form
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/unarchiveworkspace", method = RequestMethod.POST)
-	public String unarchiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public String unarchiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String[] values;
 		String wsIdList = "";
@@ -203,7 +207,7 @@ public class ArchiveWSController
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaAccessException();
 		}
 	}
 

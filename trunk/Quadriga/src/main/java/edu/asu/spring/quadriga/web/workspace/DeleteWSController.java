@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -64,9 +65,10 @@ public class DeleteWSController
 	 * @return  String - URL of the form
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteworkspace", method = RequestMethod.POST)
-	public String deleteWorkspaceRequest(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public String deleteWorkspaceRequest(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String[] values;
 		String wsIdList = "";
@@ -112,7 +114,7 @@ public class DeleteWSController
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaAccessException();
 		}
 	}
 }
