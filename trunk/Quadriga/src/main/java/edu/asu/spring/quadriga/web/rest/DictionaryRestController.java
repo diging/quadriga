@@ -215,9 +215,10 @@ public class DictionaryRestController {
 			template = engine
 					.getTemplate("velocitytemplates/dictionaryitemslist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			String updateFromWordPowerURL=wordPowerURL+""+updateFromWordPowerURLPath;
+			String updateFromWordPowerURL=wordPowerURL;
 			context.put("list", dictionaryItemsList);
 			context.put("wordPowerURL", updateFromWordPowerURL);
+			context.put("path", updateFromWordPowerURLPath);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();

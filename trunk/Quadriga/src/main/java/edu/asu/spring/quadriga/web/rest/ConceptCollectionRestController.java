@@ -70,8 +70,12 @@ public class ConceptCollectionRestController {
 	private IRestVelocityFactory restVelocityFactory;
 
 	@Autowired
-	@Qualifier("updateConceptPowerURL")
+	@Qualifier("conceptPowerURL")
 	private String conceptPowerURL;
+	
+	@Autowired
+	@Qualifier("updateConceptPowerURLPath")
+	private String updateConceptPowerURLPath;
 	
 	/**
 	 * Rest interface for the getting list of concept collections of a user
@@ -221,6 +225,7 @@ public class ConceptCollectionRestController {
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", collection.getItems());
 			context.put("conceptPowerURL",conceptPowerURL);
+			context.put("path",updateConceptPowerURLPath);
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {
