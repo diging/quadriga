@@ -1,15 +1,19 @@
 package edu.asu.spring.quadriga.web.workspace;
 
+
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
@@ -18,7 +22,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.web.StringConstants;
+import edu.asu.spring.quadriga.validator.WorkspaceValidator;
 
 @Controller
 public class AddWSController
@@ -35,6 +39,18 @@ public class AddWSController
 	@Autowired
 	ICheckWSSecurity workspaceSecurity;
 	
+	@Autowired
+	WorkspaceValidator validator;
+	
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+
+		binder.setValidator(validator);
+	}
+	
 	/**
 	 * This is called on the addworkspace form load.
 	 * @param     model
@@ -43,25 +59,16 @@ public class AddWSController
 	 * @author    Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/addworkspace", method=RequestMethod.GET)
-	public String addWorkSpaceRequestForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid)
 	{
-		boolean chkAccess;
-		String userName = principal.getName();
-
-		//check if the user has access create a workspace
-		chkAccess = workspaceSecurity.chkCreateWSAccess(userName, projectid);
-
-		if(chkAccess)
-		{
-			model.addAttribute("workspace", workspaceFactory.createWorkspaceObject());
-			model.addAttribute("wsprojectid", projectid);
-			return "auth/workbench/workspace/addworkspace";
-		}
-		else
-		{
-			throw new QuadrigaStorageException();
-		}
-
+		ModelAndView model;
+		
+		model = new ModelAndView("auth/workbench/workspace/addworkspace");
+		
+		model.getModelMap().put("workspace", workspaceFactory.createWorkspaceObject());
+		model.getModelMap().put("wsprojectid", projectid);
+		
+		return model;
 	}
 
 	/**
@@ -75,45 +82,28 @@ public class AddWSController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
-	public String addWorkSpaceRequest(@ModelAttribute("SpringWeb")WorkSpace workspace,
-			ModelMap model, Principal principal,@PathVariable("projectid") String projectid) throws QuadrigaStorageException
-			{
-		boolean chkAccess;
-		String errmsg;
-		IUser wsOwner = null;
+	public ModelAndView addWorkSpaceRequest(@Validated @ModelAttribute("workspace")WorkSpace workspace,BindingResult result,
+			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	{
+		ModelAndView model;
 		String userName = principal.getName();
-
-		//check if the user has access to create a workspace
-		chkAccess = workspaceSecurity.chkCreateWSAccess(userName, projectid);
-
-		if(chkAccess)
+		IUser user;
+		if(result.hasErrors())
 		{
-			wsOwner = userManager.getUserDetails(userName);
-
-			//set the workspace owner
-			workspace.setOwner(wsOwner);
-
-			errmsg = modifyWSManger.addWorkSpaceRequest(workspace, projectid);
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg",StringConstants.WORKSPACE_SUCCESS_MSG);
-				model.addAttribute("wsprojectid", projectid);
-				return "auth/workbench/workspace/addworkspacestatus";
-			}
-			else
-			{
-				model.addAttribute("workspace", workspace);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				model.addAttribute("wsprojectid", projectid);
-				return "auth/workbench/workspace/addworkspace";
-			}
+			model = new ModelAndView("auth/workbench/workspace/addworkspace");
+			model.getModelMap().put("workspace", workspace);
+			model.getModelMap().put("wsprojectid", projectid);
+			return model;
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+		user = userManager.getUserDetails(userName);
+		workspace.setOwner(user);
+		model = new ModelAndView("auth/workbench/workspace/addworkspacestatus");
+		modifyWSManger.addWorkSpaceRequest(workspace, projectid);
+		model.getModelMap().put("success", 1);
+		model.getModelMap().put("wsprojectid", projectid);
+		return model;
 		}
-			}
-
+	}
 }

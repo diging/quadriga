@@ -3,28 +3,17 @@
 
 <!-- Content -->
 <script>
-
 $(function() {
 	$("input[type=submit]").button().click(function(event){
-		if (!$.trim($("#name").val())) {
-			$.alert("Please enter a workspace name", "Oops !!!");
-			$("#name").val("");
-			event.preventDefault();
-			return;
-		}
-
-		if (!$.trim($("#description").val())) {
-			$.alert("Please enter a workspace description", "Oops !!!");
-			$("#description").val("");
-			event.preventDefault();
-			return;
-		}
 	});
 });
-
 </script>
-
-
+<style>
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
+</style>
 <header>
 	<h2>Create new Workspace</h2>
 	<span class="byline">Please fill in the following information:</span>
@@ -32,33 +21,27 @@ $(function() {
 
 <article class="is-page-content">
 
-	<form:form modelAttribute="workspace" method="POST"
+	<form:form commandName="workspace" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/addworkspace">
 		<table style="width: 100%">
-			<c:choose>
-				<c:when test="${success=='0'}">
-					<span class="byline" style="color: #f00;"><c:out
-							value="${errormsg}"></c:out></span>
-					<br />
-				</c:when>
-			</c:choose>
 			<tr>
 				<td style="width: 170px">Name:</td>
-				<td><form:input path="name" size="80" id="name" /></td>
+				<td><form:input path="name" size="60" id="name" /></td>
+				<td><form:errors path="name" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description:</td>
-				<td><form:textarea path="description" cols="60" rows="6"
+				<td><form:textarea path="description" cols="44" rows="6"
 						id="description" /></td>
+				<td><form:errors path="description" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
-		    <td>  <input class="command" type="submit" value="Create Workspace"> </td>
-		    </tr>
-		    <tr>
-		    <td>
-		    <input type="hidden" id="wsprojectid" value=<c:out value="${wsprojectid}"></c:out> />
-		    </td>
-		    </tr>
+				<td><input type="submit" value="Create Workspace"></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" id="wsprojectid"
+					value=<c:out value="${wsprojectid}"></c:out> /></td>
+			</tr>
 		</table>
 	</form:form>
 

@@ -17,7 +17,7 @@
     		<ul class="style2 pagination1">
    	 			<c:forEach var="project" items="${projectlist}">
 					<li>
-						<a href="workbench/${project.internalid}"><c:out value="${project.name}"></c:out></a>
+						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out value="${project.name}"></c:out></a>
 						<br><c:out value="${project.description}"></c:out>
 					</li>
 				</c:forEach>

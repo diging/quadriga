@@ -19,40 +19,15 @@ $(document).ready(function(){
 	
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
-			if (!$.trim($("#name").val())) {
-				$.alert("Please enter a project name", "Oops !!!");
-				$("#name").val("");
-				event.preventDefault();
-				return;
-			}
-
-			if (!$.trim($("#description").val())) {
-				$.alert("Please enter a project description", "Oops !!!");
-				$("#description").val("");
-				event.preventDefault();
-				return;
-			}
-
-			if (!$.trim($("#unixName").val())) {
-				$.alert("Please enter Unix name", "Oops !!!");
-				$("#unixName").val("");
-				event.preventDefault();
-				return;
-			}
-			
-			if ($.trim($("#unixName").val())) {
-				var regex = /[^a-zA-Z0-9-_.+!*'()$]/;
-				if(regex.test($('#unixName').val()))
-				{ 
-					$.alert("Unix name allows only -_.+!*()$ special characters", "Oops !!!");
-					event.preventDefault();
-					return;
-				}
-			}
 		});
 	});
 </script>
-
+<style>
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
+</style>
 <header>
 	<h2>Create new Project</h2>
 	<span class="byline">Please fill in the following information:</span>
@@ -60,41 +35,38 @@ $(document).ready(function(){
 
 <article class="is-page-content">
 
-	<form:form modelAttribute="project" method="POST"
+	<form:form commandName="project" method="POST"
 		action="/auth/workbench/addproject">
 		<table style="width: 100%">
-			<c:choose>
-				<c:when test="${success=='0'}">
-					<span class="byline" style="color: #f00;"><c:out
-							value="${errormsg}"></c:out></span>
-					<br />
-				</c:when>
-			</c:choose>
 			<tr>
 				<td style="width: 170px">Name:</td>
-				<td><form:input path="name" size="80" id="name" /></td>
+				<td><form:input path="name" size="60" id="name" /></td>
+				<td><form:errors path="name" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description:</td>
-				<td><form:textarea path="description" cols="60" rows="6"
+				<td><form:textarea path="description" cols="44" rows="6"
 						id="description" /></td>
+				<td><form:errors path="description" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
 				<td>Project Public Access:</td>
 				<td><form:select path="projectAccess">
 						<form:options />
 					</form:select>
+					<td><form:errors path="projectAccess" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
 				<td>Unix name:</td>
-				<td><form:input path="unixName" size="80" id="unixName" /></td>
+				<td><form:input path="unixName" size="60" id="unixName" /></td>
+				<td><form:errors path="unixName" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
 				<td></td>
 				<td><div id="UnixURL"></div></td>
 			</tr>
 			<tr>
-		    <td>  <input class="command" type="submit" value="Create Project"> </td>
+		    <td>  <input type="submit" value="Create Project"> </td>
 		    <td><input type="hidden" id="unixnameurl" value=<c:out value="${unixnameurl}"></c:out>/></td>
 		    </tr>
 		</table>

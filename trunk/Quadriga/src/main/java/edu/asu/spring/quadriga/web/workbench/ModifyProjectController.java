@@ -9,10 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -23,6 +28,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.validator.ProjectValidator;
 import edu.asu.spring.quadriga.web.StringConstants;
 
 @Controller
@@ -42,7 +48,19 @@ public class ModifyProjectController
 	
 	@Autowired 
 	IUserManager userManager;
+	
+	@Autowired
+	ProjectValidator validator;
 
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+
+		binder.setValidator(validator);
+	}
+	
 	/**
 	 * This method is called during the load of add project request form
 	 * @param  model -  model object
@@ -50,13 +68,14 @@ public class ModifyProjectController
 	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/addproject", method=RequestMethod.GET)
-	public String addProjectRequestForm(Model model)
+	public ModelAndView addProjectRequestForm()
 	{
-		model.addAttribute("project",projectFactory.createProjectObject());
-		model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
-		return "auth/workbench/addproject";
+		ModelAndView model = new ModelAndView("auth/workbench/addproject");
+		model.getModelMap().put("project",projectFactory.createProjectObject());
+		model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
+		return model;
 	}
-	
+
 	/**
 	 * This method call the usermanager to insert the record in
 	 * the database on form submission
@@ -68,36 +87,29 @@ public class ModifyProjectController
 	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
-	public String addProjectRequest(@ModelAttribute("SpringWeb")Project project, 
-			ModelMap model, Principal principal) throws QuadrigaStorageException
+	public ModelAndView addProjectRequest(@Validated @ModelAttribute("project")Project project, 
+			BindingResult result,Principal principal) throws QuadrigaStorageException
 	{
-		String errmsg;
-		IUser user = userManager.getUserDetails(principal.getName());
-		if(user!=null)
+		ModelAndView model;
+		if(result.hasErrors())
 		{
-			project.setOwner(user);
-			
-			errmsg = projectManager.addProjectRequest(project);
-			//On success
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg","Project created successfully.");
-				return "auth/workbench/addProjectStatus";
-			}
-			else
-			{
-				//on failure
-				model.addAttribute("project", project);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
-				return "auth/workbench/addproject";
-			}
+			model = new ModelAndView("auth/workbench/addproject");
+			model.getModelMap().put("project",project);
+			model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
+			return model;
 		}
-		return "auth/workbench/addProjectStatus";
+		else
+		{
+			model = new ModelAndView("auth/workbench/addProjectStatus");
+			IUser user = userManager.getUserDetails(principal.getName());
+            project.setOwner(user);
+			
+			projectManager.addProjectRequest(project);
+			model.getModelMap().put("success", 1);
+			return model;
+		}
 	}
-	
+
 	/**
 	 *This method is called during editing a project.
 	 * @param   projectid - project internal id.
@@ -107,27 +119,16 @@ public class ModifyProjectController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
-	public String updateProjectRequestForm(@PathVariable("projectid") String projectid, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException
 	{
+		ModelAndView model;
 		IProject project;
-		boolean chkAccess;
-		String userName = principal.getName();
 		
-		//Check if the user has access to update the project details
-		chkAccess = projectSecurity.checkProjectAccess(userName,projectid);
-		
-		if(chkAccess)
-		{
-			project = retrieveProjectManager.getProjectDetails(projectid);
-			model.addAttribute("project", project);
-			model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
-
-			return "auth/workbench/modifyproject";
-		}
-		else
-		{
-			throw new QuadrigaStorageException();
-		}
+		model = new ModelAndView("auth/workbench/modifyproject");
+		project = retrieveProjectManager.getProjectDetails(projectid);
+		model.getModelMap().put("project", project);
+		model.getModelMap().put("unixnameurl","project_unix_name.url");
+		return model;
 	}
 	
 	/**
@@ -141,41 +142,27 @@ public class ModifyProjectController
 	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
-	public String updateProjectRequest(@PathVariable("projectid") String projectid,@ModelAttribute("SpringWeb")Project project, 
-			ModelMap model, Principal principal) throws QuadrigaStorageException
+	public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project")Project project,
+			@PathVariable("projectid") String projectid,Principal principal,BindingResult result) throws QuadrigaStorageException
 	{
-		String errmsg;
-		boolean chkAccess;
-		
-		
+		ModelAndView model;
 		String userName = principal.getName();
 		
-		//Check if the user has access to update the project details
-		chkAccess = projectSecurity.checkProjectAccess(userName, projectid);
-		
-		if(chkAccess)
+		if(result.hasErrors())
 		{
-			project.setInternalid(projectid);
-			errmsg = projectManager.updateProjectRequest(project, userName);
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg","Project created successfully.");
-				return "auth/workbench/modifyProjectStatus";
-			}else{
-				model.addAttribute("project", project);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				model.addAttribute("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
-				return "auth/workbench/modifyproject";
-			}
+			model = new ModelAndView("auth/workbench/modifyproject");
+			model.getModelMap().put("project", project);
+			model.getModelMap().put("unixnameurl","project_unix_name.url");
+			return model;
 		}
 		else
 		{
-			throw new QuadrigaStorageException();
+			project.setInternalid(projectid);
+			projectManager.updateProjectRequest(project, userName);
+			model = new ModelAndView("auth/workbench/modifyProjectStatus");
+			model.getModelMap().put("success", 1);
+			return model;
 		}
-		
-
 	}
 	
 	/**
