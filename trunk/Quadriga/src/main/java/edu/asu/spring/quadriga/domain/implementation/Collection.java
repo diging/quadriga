@@ -186,6 +186,7 @@ public class Collection implements ICollection{
 				{
 					for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
 						item = new Item();
+						item.setRestConnectionDetails(restTemplate, url, userName, password);
 						if(item.copy(dspaceItem))
 							this.items.add(item);
 					}

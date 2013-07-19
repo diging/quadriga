@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -66,13 +68,39 @@ public class DspaceUpdateManager implements IDspaceUpdateManager {
 					break;
 				}
 			}
+
+			//Update the item metadata in Quadriga database
 			dbconnectionManager.updateItem(bitstream.getCommunityid(), bitstream.getCollectionid(), bitstream.getItemid(), item.getName(), item.getHandle(), username);
+
+			//Get all the bitstreams within this item
+			List<IBitStream> bitstreams = item.getBitstreams();
+			IBitStream updatedBitstream = null;
+			for(IBitStream stream : bitstreams)
+			{
+				if(stream.getId().equals(bitstream.getId()))
+				{
+					//Found the required bitstream
+					updatedBitstream = stream;
+					break;
+				}
+			}
+			
+			//Wait for the bitstream to load
+			while(updatedBitstream.getName() == null)
+			{
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			//Update the bitstream metadata in Quadriga database
+			dbconnectionManager.updateBitStream(bitstream.getCommunityid(), bitstream.getCollectionid(), bitstream.getItemid(), bitstream.getId(), updatedBitstream.getName(), updatedBitstream.getSize(), updatedBitstream.getMimeType(), username);
+			
 
 		} catch (QuadrigaStorageException e) {
 			logger.error("Exception occurred while trying to update Dspace Metadata",e);
 		}
-
-		//		collection = proxyCommunityManager.getCollection(bitstream.getCollectionid());
-		//		item = proxyCommunityManager.getItem(bitstream.getCollectionid(), bitstream.getItemid());
 	}
 }

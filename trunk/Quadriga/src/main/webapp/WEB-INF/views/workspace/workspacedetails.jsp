@@ -2,6 +2,44 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
+<c:choose>
+	<c:when test="${not empty workspacedetails.bitstreams}">
+	<script>
+	$(document).ready(function() {
+		$('#dspaceSync').click(function dspaceSync() {
+		    $( "#dialog-message" ).dialog({
+		    		resizable: false,
+		        	modal: true,
+		        	width:'auto',
+			      	open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+			      	buttons: {
+			        	Ok: function() {
+			          		$( this ).dialog( "close" );
+			          		location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams';
+			        			}
+			      			}
+			    });
+			});
+		});
+
+
+	function submitClick()
+	{
+		if($('input:checkbox').is(':checked'))
+			{
+				$('#bitstream').submit();
+			}
+		else
+			{
+				$.alert("Please select atleast one file", "Oops !!!");
+				return;
+			}
+		
+	}
+	</script>
+	</c:when>
+</c:choose>
 <script>
 	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
@@ -21,21 +59,8 @@
 			"iDisplayLength": 3
 		});
 	});
-	
-	function submitClick()
-	{
-		if($('input:checkbox').is(':checked'))
-			{
-				$('#bitstream').submit();
-			}
-		else
-			{
-				$.alert("Please select atleast one file", "Oops !!!");
-				return;
-			}
-		
-	}
 </script>
+
 
 <h2>Workspace: ${workspacedetails.name}</h2>
 <div>${workspacedetails.description}</div>
@@ -48,7 +73,11 @@
 <br><br>
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
-	<input type="submit" value="Update Values" onclick="location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams'"> 
+	<div id="dialog-message" title="Synchronization" style="display:none">
+    Please check after few minutes. Data will be synced with Dspace.
+</div>
+	<font size="2"><input type="submit" value="Sync with Dspace" id="dspaceSync">
+	<input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font> 
 	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 		<table cellpadding="0" cellspacing="0" border="0"
 			class="display dataTable" width="100%">
@@ -82,7 +111,6 @@
 				</tr>
 			</tfoot>
 		</table>
-		<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font>
 		</form>
 	</c:when>
 	<c:otherwise>
