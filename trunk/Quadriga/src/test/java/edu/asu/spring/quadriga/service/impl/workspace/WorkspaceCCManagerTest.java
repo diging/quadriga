@@ -1,7 +1,6 @@
-package edu.asu.spring.quadriga.db.sql.workspace;
+package edu.asu.spring.quadriga.service.impl.workspace;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,52 +24,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionaryTest;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
-import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectConceptCollectionTest;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IDictionaryManager;
+import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @ContextConfiguration(locations = {
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DBConnectionWorkspaceDictionaryTest {
+public class WorkspaceCCManagerTest {
 
-
+	@Autowired
+	private IWorkspaceCCManager workspaceConceptCollectionManager;
 	
 	@Autowired
-	private IWorkspaceDictionaryManager workspaceDictionaryManager;
-
-
-
-	@Autowired
-	private IDBConnectionWorkspaceDictionary dbConnectionWorkspaceDictionary;
+	private IDBConnectionWorkspaceCC dbConnectionWorkspaceConceptColleciton;
 	
 	@Autowired
-	IDBConnectionDictionaryManager dbConnection;
+	IDBConnectionCCManager dbConnect;
 
 	@Autowired
-	private IDictionaryManager dictionaryManager;
-
+	private IConceptCollectionManager conceptCollectionManager;
+	
 	@Autowired
 	private DataSource dataSource;
 
@@ -80,79 +73,34 @@ public class DBConnectionWorkspaceDictionaryTest {
 	String sDatabaseSetup[];
 
 	@Autowired
+	IDBConnectionDictionaryManager dbConnection;
+	
+	@Autowired
 	private IUserFactory userFactory;
 
 	@Autowired
 	private IQuadrigaRoleManager rolemanager;
 
 	@Autowired
+	private IListWSManager wsManager;
+	
+	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(DBConnectionProjectDictionaryTest.class);
-	
-	
+			.getLogger(DBConnectionProjectConceptCollectionTest.class);
+
 	private Connection connection;
 
 	@Autowired
 	private IRetrieveProjectManager retrieveProjectManager;
-	
-	@Autowired
-	private IListWSManager wsManager;
 
 	private IUser user;
 
+	
 	@Autowired
-	private IDictionaryFactory dictionaryFactory;
-
-	@Autowired
-	private IDictionaryItemsFactory dictionaryItemsFactory;
-
-	protected int closeConnection() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-			return 0;
-		} catch (SQLException se) {
-			return -1;
-		}
-	}
-
-	/**
-	 * @Description : Establishes connection with the Quadriga DB
-	 * 
-	 * @return : connection handle for the created connection
-	 * 
-	 * @throws : SQLException
-	 */
-	protected void getConnection() {
-		try {
-			connection = dataSource.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public String getDictionaryID(String name) {
-		getConnection();
-		String id = null;
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.execute("select id from tbl_dictionary where dictionaryName='"
-					+ name + "'");
-			ResultSet rs = stmt.getResultSet();
-			if (rs != null) {
-				while (rs.next()) {
-					id = rs.getString(1);
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return id;
-	}
+	private IConceptCollectionFactory conceptCollectionFactory;
+	
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -164,8 +112,6 @@ public class DBConnectionWorkspaceDictionaryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		// Setup a user object to compare with the object produced from
-		// usermanager
 		try {
 			user = userFactory.createUserObject();
 			user.setUserName("jdoe");
@@ -196,9 +142,11 @@ public class DBConnectionWorkspaceDictionaryTest {
 
 			// Setup the database with the proper data in the tables;
 			sDatabaseSetup = new String[] {
-					"delete from tbl_dictionary_items",
-					"delete from tbl_dictionary",
-					"delete from tbl_workspace_dictionary",
+					"delete from tbl_conceptcollections_items",
+					"delete from tbl_conceptcollections",
+					"delete from tbl_workspace_conceptcollection",
+					"delete from tbl_project_workspace",
+					"delete from tbl_project",
 					"delete from tbl_workspace",
 					"delete from tbl_quadriga_user_denied",
 					"delete from tbl_quadriga_user",
@@ -209,12 +157,39 @@ public class DBConnectionWorkspaceDictionaryTest {
 					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())", };
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void getConnection() {
+		try {
+			connection = dataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getCCID(String name) {
+		getConnection();
+		String id = null;
+		try {
+			Statement stmt = connection.createStatement();
+			stmt.execute("select id from tbl_conceptcollections where collectionname='"
+					+ name + "'");
+			ResultSet rs = stmt.getResultSet();
+			if (rs != null) {
+				while (rs.next()) {
+					id = rs.getString(1);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -225,9 +200,8 @@ public class DBConnectionWorkspaceDictionaryTest {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
 	}
-
 	@Test
-	public void testAddWorkspaceDictionary() throws QuadrigaAccessException {
+	public void testAddWorkspaceCC() throws QuadrigaAccessException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -248,11 +222,9 @@ public class DBConnectionWorkspaceDictionaryTest {
 		{
 			dbConnection
 					.setupTestEnvironment("INSERT  INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,isarchived,isdeactivated,updatedby,updateddate,createdby,createddate) VALUES('workDict','description','1','jdoe','1','1','jdoe',NOW(),'jdoe',NOW());");
+			dbConnection
+			.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
 			IWorkSpace workspace1 = null;
-			{
-				dbConnection
-				.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
-			}
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
@@ -262,93 +234,92 @@ public class DBConnectionWorkspaceDictionaryTest {
 			assertEquals(workspace1.getDescription().equals("description"), true);
 			assertEquals(workspace1.getName().equals("workDict"), true);
 		}
-		
 		{
-			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
-			dictionary.setDescription("description");
-			dictionary.setOwner(user);
+			IConceptCollection conceptColleciton=conceptCollectionFactory.createConceptCollectionObject();			
+			conceptColleciton.setName("Test CC");
+			conceptColleciton.setDescription("description");
+			conceptColleciton.setOwner(user);
 			String msg = "";
 			try {
-				msg = dictionaryManager.addNewDictionary(dictionary);
+				msg = conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
 			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
+				logger.info("Getting concept collection for user :"
 						+ user.getUserName());
-				List<IDictionary> dictionaryList = null;
+				List<IConceptCollection> ccList=null;
 				try {
-					dictionaryList = dbConnection.getDictionaryOfUser(user
+					ccList = dbConnect.getConceptsOwnedbyUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Iterator<IDictionary> I = dictionaryList.iterator();
+				
+				Iterator<IConceptCollection> I=ccList.iterator();
+				
 				String name = null;
 				String desc = null;
 				IUser userTest = null;
 
 				while (I.hasNext()) {
-					IDictionary dictionaryTest = dictionaryFactory
-							.createDictionaryObject();
-					dictionaryTest = I.next();
-					assertEquals((dictionaryTest != null), true);
-					if (dictionaryTest != null) {
-						name = dictionaryTest.getName();
-						desc = dictionaryTest.getDescription();
-						userTest = dictionaryTest.getOwner();
+					IConceptCollection conceptCollection = conceptCollectionFactory
+							.createConceptCollectionObject();
+					conceptCollection = I.next();
+					assertEquals((conceptCollection != null), true);
+					if (conceptCollection != null) {
+						name = conceptCollection.getName();
+						desc = conceptCollection.getDescription();
+						userTest = conceptCollection.getOwner();
 					}
 				}
 
-				assertEquals(name.equals("testDictionary"), true);
+				assertEquals(name.equals("Test CC"), true);
 				assertEquals(desc.equals("description"), true);
 			} else {
-				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"
+				logger.info("testAddProjectConceptCollection: Create Concept collection Failed ; message :"
 						+ msg);
-				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"
+				fail("testAddProjectConceptCollection: Create Concept collection Failed ; message :"
 						+ msg);
 			}
 		}
 
 		{
 			try {
-				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
-						getDictionaryID("testDictionary"), "jdoe");
+				workspaceConceptCollectionManager.addWorkspaceCC("1", getCCID("Test CC"), "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			List<IDictionary> dictList = null;
+			List<IConceptCollection> ccList1 = null;
 			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
+				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Iterator<IDictionary> I = dictList.iterator();
-			assertEquals(dictList.size() > 0, true);
+			Iterator<IConceptCollection> I = ccList1.iterator();
+			assertEquals(ccList1.size() > 0, true);
 			while (I.hasNext()) {
-				IDictionary dict = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(dict.getName().equals("testDictionary"), true);
+				IConceptCollection cc = I.next();
+				logger.info("Verifying the concept collection addition to project");
+				assertEquals(cc.getName().equals("Test CC"), true);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
+		dbConnection.setupTestEnvironment("delete from tbl_workspace_conceptcollection");
+		dbConnection.setupTestEnvironment("delete from tbl_project_workspace");
+		dbConnection.setupTestEnvironment("delete from tbl_project");
 		dbConnection.setupTestEnvironment("delete from tbl_workspace");
-		
-
+		dbConnection.setupTestEnvironment("delete from tbl_conceptcollections");
 	}
 
 	@Test
-	public void testListWorkspaceDictionary() throws QuadrigaAccessException {
+	public void testListWorkspaceCC() throws QuadrigaAccessException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -369,11 +340,9 @@ public class DBConnectionWorkspaceDictionaryTest {
 		{
 			dbConnection
 					.setupTestEnvironment("INSERT  INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,isarchived,isdeactivated,updatedby,updateddate,createdby,createddate) VALUES('workDict','description','1','jdoe','1','1','jdoe',NOW(),'jdoe',NOW());");
+			dbConnection
+			.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
 			IWorkSpace workspace1 = null;
-			{
-				dbConnection
-				.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
-			}
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
@@ -383,93 +352,92 @@ public class DBConnectionWorkspaceDictionaryTest {
 			assertEquals(workspace1.getDescription().equals("description"), true);
 			assertEquals(workspace1.getName().equals("workDict"), true);
 		}
-		
 		{
-			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
-			dictionary.setDescription("description");
-			dictionary.setOwner(user);
+			IConceptCollection conceptColleciton=conceptCollectionFactory.createConceptCollectionObject();			
+			conceptColleciton.setName("Test CC");
+			conceptColleciton.setDescription("description");
+			conceptColleciton.setOwner(user);
 			String msg = "";
 			try {
-				msg = dictionaryManager.addNewDictionary(dictionary);
+				msg = conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
 			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
+				logger.info("Getting concept collection for user :"
 						+ user.getUserName());
-				List<IDictionary> dictionaryList = null;
+				List<IConceptCollection> ccList=null;
 				try {
-					dictionaryList = dbConnection.getDictionaryOfUser(user
+					ccList = dbConnect.getConceptsOwnedbyUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Iterator<IDictionary> I = dictionaryList.iterator();
+				
+				Iterator<IConceptCollection> I=ccList.iterator();
+				
 				String name = null;
 				String desc = null;
 				IUser userTest = null;
 
 				while (I.hasNext()) {
-					IDictionary dictionaryTest = dictionaryFactory
-							.createDictionaryObject();
-					dictionaryTest = I.next();
-					assertEquals((dictionaryTest != null), true);
-					if (dictionaryTest != null) {
-						name = dictionaryTest.getName();
-						desc = dictionaryTest.getDescription();
-						userTest = dictionaryTest.getOwner();
+					IConceptCollection conceptCollection = conceptCollectionFactory
+							.createConceptCollectionObject();
+					conceptCollection = I.next();
+					assertEquals((conceptCollection != null), true);
+					if (conceptCollection != null) {
+						name = conceptCollection.getName();
+						desc = conceptCollection.getDescription();
+						userTest = conceptCollection.getOwner();
 					}
 				}
 
-				assertEquals(name.equals("testDictionary"), true);
+				assertEquals(name.equals("Test CC"), true);
 				assertEquals(desc.equals("description"), true);
 			} else {
-				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"
+				logger.info("testAddProjectConceptCollection: Create Concept collection Failed ; message :"
 						+ msg);
-				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"
+				fail("testAddProjectConceptCollection: Create Concept collection Failed ; message :"
 						+ msg);
 			}
 		}
 
 		{
 			try {
-				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
-						getDictionaryID("testDictionary"), "jdoe");
+				workspaceConceptCollectionManager.addWorkspaceCC("1", getCCID("Test CC"), "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			List<IDictionary> dictList = null;
+			List<IConceptCollection> ccList1 = null;
 			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
+				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Iterator<IDictionary> I = dictList.iterator();
-			assertEquals(dictList.size() > 0, true);
+			Iterator<IConceptCollection> I = ccList1.iterator();
+			assertEquals(ccList1.size() > 0, true);
 			while (I.hasNext()) {
-				IDictionary dict = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(dict.getName().equals("testDictionary"), true);
+				IConceptCollection cc = I.next();
+				logger.info("Verifying the concept collection addition to project");
+				assertEquals(cc.getName().equals("Test CC"), true);
 			}
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
+		dbConnection.setupTestEnvironment("delete from tbl_workspace_conceptcollection");
+		dbConnection.setupTestEnvironment("delete from tbl_project_workspace");
+		dbConnection.setupTestEnvironment("delete from tbl_project");
 		dbConnection.setupTestEnvironment("delete from tbl_workspace");
-		
-
+		dbConnection.setupTestEnvironment("delete from tbl_conceptcollections");
 	}
 
 	@Test
-	public void testDeleteWorkspaceDictionary() throws QuadrigaStorageException, QuadrigaAccessException {
+	public void testDeleteWorkspaceCC() throws QuadrigaAccessException, QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -490,11 +458,9 @@ public class DBConnectionWorkspaceDictionaryTest {
 		{
 			dbConnection
 					.setupTestEnvironment("INSERT  INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,isarchived,isdeactivated,updatedby,updateddate,createdby,createddate) VALUES('workDict','description','1','jdoe','1','1','jdoe',NOW(),'jdoe',NOW());");
+			dbConnection
+			.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
 			IWorkSpace workspace1 = null;
-			{
-				dbConnection
-				.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
-			}
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
@@ -504,102 +470,99 @@ public class DBConnectionWorkspaceDictionaryTest {
 			assertEquals(workspace1.getDescription().equals("description"), true);
 			assertEquals(workspace1.getName().equals("workDict"), true);
 		}
-		
 		{
-			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
-			dictionary.setDescription("description");
-			dictionary.setOwner(user);
+			IConceptCollection conceptColleciton=conceptCollectionFactory.createConceptCollectionObject();			
+			conceptColleciton.setName("Test CC");
+			conceptColleciton.setDescription("description");
+			conceptColleciton.setOwner(user);
 			String msg = "";
 			try {
-				msg = dictionaryManager.addNewDictionary(dictionary);
+				msg = conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
 			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
+				logger.info("Getting concept collection for user :"
 						+ user.getUserName());
-				List<IDictionary> dictionaryList = null;
+				List<IConceptCollection> ccList=null;
 				try {
-					dictionaryList = dbConnection.getDictionaryOfUser(user
+					ccList = dbConnect.getConceptsOwnedbyUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Iterator<IDictionary> I = dictionaryList.iterator();
+				
+				Iterator<IConceptCollection> I=ccList.iterator();
+				
 				String name = null;
 				String desc = null;
 				IUser userTest = null;
 
 				while (I.hasNext()) {
-					IDictionary dictionaryTest = dictionaryFactory
-							.createDictionaryObject();
-					dictionaryTest = I.next();
-					assertEquals((dictionaryTest != null), true);
-					if (dictionaryTest != null) {
-						name = dictionaryTest.getName();
-						desc = dictionaryTest.getDescription();
-						userTest = dictionaryTest.getOwner();
+					IConceptCollection conceptCollection = conceptCollectionFactory
+							.createConceptCollectionObject();
+					conceptCollection = I.next();
+					assertEquals((conceptCollection != null), true);
+					if (conceptCollection != null) {
+						name = conceptCollection.getName();
+						desc = conceptCollection.getDescription();
+						userTest = conceptCollection.getOwner();
 					}
 				}
 
-				assertEquals(name.equals("testDictionary"), true);
+				assertEquals(name.equals("Test CC"), true);
 				assertEquals(desc.equals("description"), true);
 			} else {
-				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"
+				logger.info("testAddProjectConceptCollection: Create Concept collection Failed ; message :"
 						+ msg);
-				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"
+				fail("testAddProjectConceptCollection: Create Concept collection Failed ; message :"
 						+ msg);
 			}
 		}
 
 		{
 			try {
-				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
-						getDictionaryID("testDictionary"), "jdoe");
+				workspaceConceptCollectionManager.addWorkspaceCC("1", getCCID("Test CC"), "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			List<IDictionary> dictList = null;
+			List<IConceptCollection> ccList1 = null;
 			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
+				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Iterator<IDictionary> I = dictList.iterator();
-			assertEquals(dictList.size() > 0, true);
+			Iterator<IConceptCollection> I = ccList1.iterator();
+			assertEquals(ccList1.size() > 0, true);
 			while (I.hasNext()) {
-				IDictionary dict = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(dict.getName().equals("testDictionary"), true);
+				IConceptCollection cc = I.next();
+				logger.info("Verifying the concept collection addition to project");
+				assertEquals(cc.getName().equals("Test CC"), true);
 			}
-			
-			dbConnectionWorkspaceDictionary.deleteWorkspaceDictionary("1", "jdoe", getDictionaryID("testDictionary"));
-			
-			dictList = null;
+			workspaceConceptCollectionManager.deleteWorkspaceCC("1", "jdoe", getCCID("Test CC"));
+			ccList1 = null;
 			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
+				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			I = dictList.iterator();
-			assertEquals(dictList.size() > 0, false);
+			I = ccList1.iterator();
+			assertEquals(ccList1.size() > 0, false);
 		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
+		dbConnection.setupTestEnvironment("delete from tbl_workspace_conceptcollection");
+		dbConnection.setupTestEnvironment("delete from tbl_project_workspace");
+		dbConnection.setupTestEnvironment("delete from tbl_project");
 		dbConnection.setupTestEnvironment("delete from tbl_workspace");
-		
-
+		dbConnection.setupTestEnvironment("delete from tbl_conceptcollections");
 	}
 
 }

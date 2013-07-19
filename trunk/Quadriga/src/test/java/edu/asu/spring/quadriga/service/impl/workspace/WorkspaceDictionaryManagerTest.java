@@ -1,7 +1,6 @@
-package edu.asu.spring.quadriga.db.sql.workspace;
+package edu.asu.spring.quadriga.service.impl.workspace;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -27,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionaryTest;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -43,7 +41,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
@@ -53,10 +50,8 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class DBConnectionWorkspaceDictionaryTest {
+public class WorkspaceDictionaryManagerTest {
 
-
-	
 	@Autowired
 	private IWorkspaceDictionaryManager workspaceDictionaryManager;
 
@@ -165,54 +160,54 @@ public class DBConnectionWorkspaceDictionaryTest {
 	@Before
 	public void setUp() throws Exception {
 		// Setup a user object to compare with the object produced from
-		// usermanager
-		try {
-			user = userFactory.createUserObject();
-			user.setUserName("jdoe");
-			user.setName("John Doe");
+				// usermanager
+				try {
+					user = userFactory.createUserObject();
+					user.setUserName("jdoe");
+					user.setName("John Doe");
 
-			List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-			IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
-			role.setDBid("role3");
-			roles.add(role);
-			role = quadrigaRoleFactory.createQuadrigaRoleObject();
-			role.setDBid("role4");
-			roles.add(role);
+					List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
+					IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
+					role.setDBid("role3");
+					roles.add(role);
+					role = quadrigaRoleFactory.createQuadrigaRoleObject();
+					role.setDBid("role4");
+					roles.add(role);
 
-			IQuadrigaRole quadrigaRole = null;
-			List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-			for (int i = 0; i < roles.size(); i++) {
-				quadrigaRole = rolemanager.getQuadrigaRole(roles.get(i)
-						.getDBid());
+					IQuadrigaRole quadrigaRole = null;
+					List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
+					for (int i = 0; i < roles.size(); i++) {
+						quadrigaRole = rolemanager.getQuadrigaRole(roles.get(i)
+								.getDBid());
 
-				// If user account is deactivated remove other roles
-				if (quadrigaRole.getId().equals(
-						RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
-					rolesList.clear();
+						// If user account is deactivated remove other roles
+						if (quadrigaRole.getId().equals(
+								RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
+							rolesList.clear();
+						}
+						rolesList.add(quadrigaRole);
+					}
+					user.setQuadrigaRoles(rolesList);
+
+					// Setup the database with the proper data in the tables;
+					sDatabaseSetup = new String[] {
+							"delete from tbl_dictionary_items",
+							"delete from tbl_dictionary",
+							"delete from tbl_workspace_dictionary",
+							"delete from tbl_workspace",
+							"delete from tbl_quadriga_user_denied",
+							"delete from tbl_quadriga_user",
+							"delete from tbl_quadriga_user_requests",
+							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
+							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
+							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
+							"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
+							"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
+							"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())", };
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				rolesList.add(quadrigaRole);
-			}
-			user.setQuadrigaRoles(rolesList);
-
-			// Setup the database with the proper data in the tables;
-			sDatabaseSetup = new String[] {
-					"delete from tbl_dictionary_items",
-					"delete from tbl_dictionary",
-					"delete from tbl_workspace_dictionary",
-					"delete from tbl_workspace",
-					"delete from tbl_quadriga_user_denied",
-					"delete from tbl_quadriga_user",
-					"delete from tbl_quadriga_user_requests",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())", };
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	@After
@@ -225,7 +220,7 @@ public class DBConnectionWorkspaceDictionaryTest {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
 	}
-
+	
 	@Test
 	public void testAddWorkspaceDictionary() throws QuadrigaAccessException {
 		testSetupTestEnvironment();
@@ -344,7 +339,6 @@ public class DBConnectionWorkspaceDictionaryTest {
 		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
 		dbConnection.setupTestEnvironment("delete from tbl_workspace");
 		
-
 	}
 
 	@Test
@@ -465,11 +459,10 @@ public class DBConnectionWorkspaceDictionaryTest {
 		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
 		dbConnection.setupTestEnvironment("delete from tbl_workspace");
 		
-
 	}
 
 	@Test
-	public void testDeleteWorkspaceDictionary() throws QuadrigaStorageException, QuadrigaAccessException {
+	public void testDeleteWorkspaceDictionary() throws QuadrigaAccessException, QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -581,7 +574,7 @@ public class DBConnectionWorkspaceDictionaryTest {
 				assertEquals(dict.getName().equals("testDictionary"), true);
 			}
 			
-			dbConnectionWorkspaceDictionary.deleteWorkspaceDictionary("1", "jdoe", getDictionaryID("testDictionary"));
+			workspaceDictionaryManager.deleteWorkspaceDictionary("1", "jdoe", getDictionaryID("testDictionary"));
 			
 			dictList = null;
 			try {
@@ -598,8 +591,6 @@ public class DBConnectionWorkspaceDictionaryTest {
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
 		dbConnection.setupTestEnvironment("delete from tbl_workspace");
-		
-
 	}
 
 }
