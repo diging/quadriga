@@ -13,12 +13,11 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
-import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.domain.implementation.Collection;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
-import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
+import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 
 /**
  * The purpose of the class is to implement proxy pattern for the community class
@@ -326,23 +325,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 					{
 						if(item.getId().equals(sItemId))
 						{
-							//Found the item that user requested !
-							//This is the first time this item is accessed
-							if(item.getBitstreams().size() == 0)
-							{
-								IBitStream bitstream = null;
-								for(String bitid: item.getBitids())
-								{
-									bitstream = new BitStream();
-									bitstream.setId(bitid);
-									item.addBitstream(bitstream);
-								}
-
-								item.setRestConnectionDetails(restTemplate, url, sUserName, sPassword);
-								Thread bitstreamThread = new Thread(item);
-								bitstreamThread.start();
-
-							}
 							return item.getBitstreams();
 						}
 					}

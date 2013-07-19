@@ -87,6 +87,25 @@ public class Item implements IItem{
 
 	@Override
 	public List<IBitStream> getBitstreams() {
+		//Found the item that user requested !
+		//This is the first time this item is accessed for bitstreams
+		if(this.bitstreams.size() == 0)
+		{
+			//Create bitstream objects for each bitstream id
+			IBitStream bitstream = null;
+			for(String bitid: this.bitids)
+			{
+				bitstream = new BitStream();
+				bitstream.setId(bitid);
+				this.bitstreams.add(bitstream);
+			}
+
+			//Start thread to load the bitstream objects from dspace
+			Thread bitstreamThread = new Thread(this);
+			bitstreamThread.start();
+		}
+		
+		//Return the bitstream objects
 		return bitstreams;
 	}
 	@Override
@@ -188,6 +207,8 @@ public class Item implements IItem{
 	/**
 	 * This thread will make a REST service call to load the bitstream details. This service call will load details about the bitstreams within this item. 
 	 * After the execution of this thread, the item object will be populated with relevant bitstream information. 
+	 * 
+	 * NOTE: Bitstreams with metadata are found to be returned by dspace. This function ignores those bitstreams.
 	 */
 	@Override
 	public void run() {
@@ -195,7 +216,7 @@ public class Item implements IItem{
 		IDspaceItems dspaceItems = (DspaceItems) getRestTemplate().getForObject(sRestServicePath, DspaceItems.class);
 		if(dspaceItems != null)
 		{
-			//For each bitstream id fetch the load the data into the corresponding bitstream object
+			//For each bitstream id load the data into the corresponding bitstream object
 			if(dspaceItems.getBitstreams().getBitstreamentityid() != null)
 			{
 				for(IDspaceBitStreamEntityId dspaceBitStream: dspaceItems.getBitstreams().getBitstreamentityid())
@@ -230,9 +251,7 @@ public class Item implements IItem{
 				{
 					if(bitstreamIterator.next().getName() == null)
 						bitstreamIterator.remove();
-				}
-				
-				
+				}				
 			}
 		}
 	}	

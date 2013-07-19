@@ -235,7 +235,6 @@ public class DspaceController {
 	
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
 	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
-		System.out.println("Inside controller..............................."+workspaceId);
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
 		dspaceManager.updateDspaceMetadata(workspaceId, principal.getName(), null, sPassword);
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
