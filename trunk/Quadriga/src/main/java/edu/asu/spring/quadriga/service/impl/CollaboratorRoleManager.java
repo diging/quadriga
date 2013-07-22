@@ -198,7 +198,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 
 	@Override
 	public String getDictCollaboratorRoleByDBId(String collaboratorRoleDBId) {
-		// TODO Auto-generated method stub
+		
+		for(ICollaboratorRole collaboratorRole:dictCollabRoles)
+		{
+			if(collaboratorRole.getRoleDBid().equals(collaboratorRoleDBId))
+			{
+				return collaboratorRole.getDisplayName();
+			}
+		}	
+		
 		return null;
 	}
 
