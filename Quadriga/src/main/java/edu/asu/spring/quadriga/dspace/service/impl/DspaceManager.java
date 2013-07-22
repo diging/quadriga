@@ -3,6 +3,9 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +23,7 @@ import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceUpdateManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -41,10 +45,6 @@ public class DspaceManager implements IDspaceManager{
 	private String filePath;
 
 	@Autowired
-	@Qualifier("dspaceURL")
-	private String url;
-
-	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
 
@@ -52,9 +52,11 @@ public class DspaceManager implements IDspaceManager{
 	@Autowired
 	private ICommunityManager proxyCommunityManager;
 
-
 	@Autowired
 	private IDBConnectionDspaceManager dbconnectionManager;
+	
+	@Resource(name = "dspaceStrings")
+	private Properties dspaceProperties;
 
 
 	private static final Logger logger = LoggerFactory
@@ -70,7 +72,7 @@ public class DspaceManager implements IDspaceManager{
 		sUserName="ramk@asu.edu";
 		sPassword="123456";
 
-		return proxyCommunityManager.getAllCommunities(restTemplate, url, sUserName, sPassword);
+		return proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, sUserName, sPassword);
 	}
 
 	/**
@@ -83,7 +85,7 @@ public class DspaceManager implements IDspaceManager{
 		sUserName="ramk@asu.edu";
 		sPassword="123456";
 
-		return proxyCommunityManager.getAllCollections(restTemplate, url, sUserName, sPassword, sCommunityId);
+		return proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, sUserName, sPassword, sCommunityId);
 	}
 
 	/**
@@ -140,7 +142,7 @@ public class DspaceManager implements IDspaceManager{
 		sUserName="ramk@asu.edu";
 		sPassword="123456";
 
-		return proxyCommunityManager.getAllBitStreams(restTemplate, url, sUserName, sPassword, sCollectionId, sItemId);
+		return proxyCommunityManager.getAllBitStreams(sCollectionId, sItemId);
 	}
 
 	/**
@@ -158,10 +160,14 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public IBitStream getBitStream(String sCollectionId, String sItemId, String sBitStreamId)
 	{
+		
 		return proxyCommunityManager.getBitStream(sCollectionId, sItemId, sBitStreamId);
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -288,6 +294,9 @@ public class DspaceManager implements IDspaceManager{
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -310,6 +319,9 @@ public class DspaceManager implements IDspaceManager{
 
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException
 	{
@@ -320,7 +332,7 @@ public class DspaceManager implements IDspaceManager{
 		HashSet<String> reloadedCollectionIds = new HashSet<String>();
 
 		//Reload all the communities by making only one call to dspace
-		proxyCommunityManager.getCommunity(null, false, restTemplate, url, dspaceUsername, password);
+		proxyCommunityManager.getCommunity(null, false, restTemplate, dspaceProperties, dspaceUsername, password);
 		for(IBitStream bitstream : dbconnectionManager.getBitStreamReferences(workspaceid, quadrigaUsername))
 		{
 			ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, null, null, null,null);
@@ -334,7 +346,7 @@ public class DspaceManager implements IDspaceManager{
 			else
 			{
 				//This is the first call to reload the collection
-				collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), false, restTemplate, url, dspaceUsername, password, bitstream.getCommunityid());
+				collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), false, restTemplate, dspaceProperties, dspaceUsername, password, bitstream.getCommunityid());
 				reloadedCollectionIds.add(bitstream.getCollectionid());
 			}
 
@@ -360,7 +372,7 @@ public class DspaceManager implements IDspaceManager{
 
 					public boolean verify(String hostname,
 							javax.net.ssl.SSLSession sslSession) {
-						if (hostname.equals(url)) {
+						if (hostname.equals(dspaceProperties.getProperty("dspace_url"))) {
 							return true;
 						}
 						return false;

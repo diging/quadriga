@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -21,7 +22,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 
 /**
  * The purpose of the class is to implement proxy pattern for the community class
- * that is to be fetched from dspace
+ * that is to be fetched from dspace. This class is responsbile for the  load of Dspace communities and collections.
  * 
  * @author Ram Kumar Kumaresan
  *
@@ -34,28 +35,25 @@ public class ProxyCommunityManager implements ICommunityManager {
 	private List<ICollection> collections;
 
 	/**
-	 * Used to generate the corresponding url necessary to access the collection details
-	 * @param restPath The REST path required to access the collection in Dspace. This will be appended to the actual domain url.
+	 * Used to generate the corresponding url necessary to access the community details
 	 * @return			Return the complete REST service url along with all the authentication information
 	 */
-	private String getCompleteUrlPath(String restPath, String userName, String password)
+	private String getCompleteUrlPath( Properties dspaceProperties, String userName, String password)
 	{
-		// these String values should go into a property file (in which you
-		// replace variables with restPath,username, etc.
-		return "https://"+restPath+"?email="+userName+"&password="+password;
+		return dspaceProperties.getProperty("https")+dspaceProperties.getProperty("dspace_url")+
+				dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
+				dspaceProperties.getProperty("email")+userName+
+				dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, String url, String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword) {
 		if(communities == null)
 		{
-			// same here, string should not be hardcoded it might change
-			// and you don't want to have to recompile the webapp just because
-			// of that
-			String sRestServicePath = getCompleteUrlPath(url+"/rest/communities.xml", sUserName, sPassword);
+			String sRestServicePath = getCompleteUrlPath(dspaceProperties, sUserName, sPassword);
 			IDspaceCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
 
 			if(dsapceCommunities.getCommunities().size()>0)
@@ -85,7 +83,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICollection> getAllCollections(RestTemplate restTemplate, String url, String sUserName, String sPassword, String sCommunityId) {
+	public List<ICollection> getAllCollections(RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword, String sCommunityId) {
 
 		if(communities != null)
 		{
@@ -98,7 +96,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 					if(community.getCollections().size() == 0)
 					{
 						for(String collectionId :community.getCollectionIds()){
-							collection = new Collection(collectionId,restTemplate,url,sUserName,sPassword);
+							collection = new Collection(collectionId,restTemplate,dspaceProperties,sUserName,sPassword);
 							Thread collectionThread = new Thread(collection);
 							collectionThread.start();
 
@@ -138,7 +136,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, String url, String sUserName, String sPassword, String communityid)
+	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword, String communityid)
 	{
 		if(fromCache)
 		{
@@ -155,7 +153,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 			}
 			else
 			{
-				this.getAllCollections(restTemplate, url, sUserName, sPassword, communityid);
+				this.getAllCollections(restTemplate, dspaceProperties, sUserName, sPassword, communityid);
 			}
 		}
 		else
@@ -174,7 +172,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 			}
 			
 			//Load the collection metadata associated with the community
-			this.getAllCollections(restTemplate, url, sUserName, sPassword, communityid);
+			this.getAllCollections(restTemplate, dspaceProperties, sUserName, sPassword, communityid);
 		}
 		
 		for(ICollection collection : this.collections)
@@ -312,7 +310,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<IBitStream> getAllBitStreams(RestTemplate restTemplate, String url, String sUserName, String sPassword, String sCollectionId, String sItemId)
+	public List<IBitStream> getAllBitStreams(String sCollectionId, String sItemId)
 	{
 		//Check if a request for communities has been made to Dspace
 		if(this.collections!=null)
@@ -334,8 +332,11 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, String url, String sUserName, String sPassword)
+	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword)
 	{		
 		//Get the community data from the cache
 		if(fromCache)
@@ -351,14 +352,14 @@ public class ProxyCommunityManager implements ICommunityManager {
 			else
 			{
 				//Load all the communities
-				this.getAllCommunities(restTemplate, url, sUserName, sPassword);
+				this.getAllCommunities(restTemplate, dspaceProperties, sUserName, sPassword);
 			}
 		}
 		else
 		{
 			//Reload the community data from dspace
 			this.communities = null;
-			this.getAllCommunities(restTemplate, url, sUserName, sPassword);
+			this.getAllCommunities(restTemplate, dspaceProperties, sUserName, sPassword);
 		}
 
 		for(ICommunity community: this.communities)
@@ -370,6 +371,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IItem getItem(String collectionId, String itemId)
 	{

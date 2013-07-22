@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -15,7 +16,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItems;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceItems;
 
 /**
- * The class representation of the Item got from Dspace repostiory.
+ * The class representation of the Item got from Dspace repostiory. When needed it also loads the bitstreams from dspace.
  * This class will be used by Quadriga and its representation is independent of the Dspace Rest service output.
  * 
  * @author Ram Kumar Kumaresan
@@ -29,7 +30,7 @@ public class Item implements IItem{
 	private List<IBitStream> bitstreams;
 
 	private RestTemplate restTemplate;
-	private String url;
+	private Properties dspaceProperties;
 	private String userName;
 	private String password;
 
@@ -37,54 +38,17 @@ public class Item implements IItem{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setRestConnectionDetails(RestTemplate restTemplate, String url, String userName, String password)
+	public void setRestConnectionDetails(RestTemplate restTemplate, Properties dspaceProperties, String userName, String password)
 	{
 		this.restTemplate = restTemplate;
-		this.url = url;
+		this.dspaceProperties = dspaceProperties;
 		this.userName = userName;
 		this.password = password;
 	}
 
-	@Override
-	public RestTemplate getRestTemplate() {
-		return restTemplate;
-	}
-
-	@Override
-	public void setRestTemplate(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-	}
-
-	@Override
-	public String getUrl() {
-		return url;
-	}
-
-	@Override
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	@Override
-	public String getUserName() {
-		return userName;
-	}
-
-	@Override
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	@Override
-	public String getPassword() {
-		return password;
-	}
-
-	@Override
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IBitStream> getBitstreams() {
 		//Found the item that user requested !
@@ -196,12 +160,14 @@ public class Item implements IItem{
 
 	/**
 	 * Used to generate the corresponding url necessary to access the item details
-	 * @param restPath The REST path required to access the item in Dspace. This will be appended to the actual domain url.
 	 * @return			Return the complete REST service url along with all the authentication information
 	 */
-	private String getCompleteUrlPath(String restPath)
+	private String getCompleteUrlPath()
 	{
-		return "https://"+this.url+restPath+this.id+".xml?email="+this.userName+"&password="+this.password;
+		return dspaceProperties.getProperty("https")+dspaceProperties.getProperty("dspace_url")+
+		dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
+		dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+this.userName+
+		dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
 	}
 	
 	/**
@@ -212,8 +178,8 @@ public class Item implements IItem{
 	 */
 	@Override
 	public void run() {
-		String sRestServicePath = getCompleteUrlPath("/rest/items/");
-		IDspaceItems dspaceItems = (DspaceItems) getRestTemplate().getForObject(sRestServicePath, DspaceItems.class);
+		String sRestServicePath = getCompleteUrlPath();
+		IDspaceItems dspaceItems = (DspaceItems) this.restTemplate.getForObject(sRestServicePath, DspaceItems.class);
 		if(dspaceItems != null)
 		{
 			//For each bitstream id load the data into the corresponding bitstream object
