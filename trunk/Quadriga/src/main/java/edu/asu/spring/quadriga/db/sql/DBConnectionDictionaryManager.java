@@ -155,6 +155,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	public List<IDictionary> getDictionaryOfUser(String userId) throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
+		String errmsg1="";
 		getConnection();
 		IDictionary dictionary;
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
@@ -177,16 +178,8 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 					dictionaryList.add(dictionary);
 				} 
 			}
+			
 			errmsg = sqlStatement.getString(2);
-			if(errmsg.isEmpty())
-			{
-				return dictionaryList;
-			}
-			else
-			{
-				logger.info("error message :"+errmsg);
-				return null;
-			}
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -201,6 +194,84 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		return dictionaryList;
 	}
+	
+	@Override
+	public String getDictionaryCollabPerm(String userId,String dicitonaryId) throws QuadrigaStorageException {
+		String dbCommand;
+		String errmsg="";
+		String role="";
+		getConnection();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_COLLAB_PERM + "(?,?,?)";
+		try {
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, userId);
+			sqlStatement.setString(2, dicitonaryId);
+			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					role=(resultSet.getString(1));
+				} 
+			}
+			errmsg = sqlStatement.getString(3);
+		}catch (SQLException e) {
+			logger.error("StackTrace : ",e);
+			throw new QuadrigaStorageException();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return role;
+	}
+	
+	@Override
+	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
+		String dbCommand;
+		String errmsg="";
+		getConnection();
+		IDictionary dictionary;
+		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_COLLAB + "(?,?)";
+		try {
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, userId);
+			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					dictionary = dictionaryFactory.createDictionaryObject();
+					dictionary.setName(resultSet.getString(1));
+					dictionary.setDescription(resultSet.getString(2));
+					dictionary.setId(resultSet.getString(3));
+					dictionaryList.add(dictionary);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return dictionaryList;
+	}
+	
 	
 	@Override
 	public boolean userDictionaryPerm(String userId, String dictionaryId) throws QuadrigaStorageException{
@@ -349,6 +420,57 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return dictionaryList;
 	}
 
+	
+	@Override
+	public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid)throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		getConnection();
+		IDictionaryItems dictionaryItems;
+		List<IDictionaryItems> dictionaryList=new ArrayList<IDictionaryItems>();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_ITEMS_DETAILS_COLLAB + "(?,?)";
+		try {
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, dictionaryid);
+			sqlStatement.registerOutParameter(2, java.sql.Types.VARCHAR);
+			logger.debug("Dictionary ID "+ dictionaryid);
+			sqlStatement.execute();
+
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					dictionaryItems = dictionaryItemsFactory.createDictionaryItemsObject();
+					dictionaryItems.setId(resultSet.getString(1));
+					dictionaryItems.setItems(resultSet.getString(2));					
+					dictionaryItems.setPos(resultSet.getString(3));
+					dictionaryList.add(dictionaryItems);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty())
+			{
+				return dictionaryList;
+			}
+			else
+			{
+				return null;
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return dictionaryList;
+	}
+	
+	
 	/**
 	 *  Method gets the dictionary name using dictionary id                    
 	 * 
@@ -602,6 +724,57 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return errmsg;
 	}
 
+	
+	@Override
+	public String deleteDictionaryItemsCollab(String dictinaryId,String itemid)throws QuadrigaStorageException
+	{
+
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_DICTIONARY_ITEM_COLLAB  + "(?,?,?)";
+
+		//get the connection
+		getConnection();
+		logger.debug("dbCommand : "+dbCommand);
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, dictinaryId);
+			sqlStatement.setString(2, itemid);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(3);
+
+			return errmsg;
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB related issue";
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}catch(Exception e){
+			errmsg="Exception outside DB";
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return errmsg;
+	}
+
+	
 	/**
 	 *  Method update items in a dictionary                   
 	 * 

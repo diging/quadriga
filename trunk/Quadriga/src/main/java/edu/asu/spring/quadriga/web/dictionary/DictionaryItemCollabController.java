@@ -18,23 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 /**
- * This class will handle list dictionaries items controller for the dictionary
+ * This class will handle list dictionaries items controller for the dictionary (collaborators)
  * 
  * @author : Lohith Dwaraka
  * 
  */
 @Controller
-public class DictionaryItemController {
+public class DictionaryItemCollabController {
+
 	@Autowired
 	IDictionaryManager dictonaryManager;
 
@@ -54,46 +53,31 @@ public class DictionaryItemController {
 	public void setUsermanager(IUserManager usermanager) {
 		this.usermanager = usermanager;
 	}
-
-	/**
-	 * Admin can use this page to check the list of dictionary items in a
-	 * dictionary and to search and add items from the word power
-	 * 
-	 * @return Return to the list dictionary items page of the Quadriga
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException 
-	 */
-
-	@RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
-	public String getDictionaryPage(
-			@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
-					throws QuadrigaStorageException, QuadrigaAccessException {
+	
+	@RequestMapping(value = "auth/dictionaries/collab/{dictionaryid}", method = RequestMethod.GET)
+	public String getDictionaryCollabPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
+			throws QuadrigaStorageException, QuadrigaAccessException{
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryid);
-
-		logger.info("User permission on this dicitonary : "+result);
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryid,user.getUsername());
-
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItemsDetailsCollab(dictionaryid);
 		if (dictionaryItemList == null) {
 			logger.info("Dictionary ITem list is null");
 		}
 		String dictionaryName = "";
 		dictionaryName = dictonaryManager.getDictionaryName(dictionaryid);
-
+		String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryid);
+		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
+		logger.info("Role :"+role+"  role type : "+roleType);
+		if(roleType.equals("READ/WRITE_ACCESS")){
+			model.addAttribute("roleAccess", 1);
+		}
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictionaryid", dictionaryid);
 
-		List<IUser> existingCollaborators = dictonaryManager.getCollaborators(dictionaryid);
-		model.addAttribute("existingCollaborators", existingCollaborators);
-
-		return "auth/dictionary/dictionary";
+		return  "auth/dictionary/dictionarycollab";
 	}
-
 	
-
 	/**
 	 * Admin can use this to delete a dictionary item to dictionary
 	 * 
@@ -101,7 +85,7 @@ public class DictionaryItemController {
 	 * @throws QuadrigaStorageException
 	 */
 
-	@RequestMapping(value = "auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/dictionaries/deleteDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
 	public String deleteDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
@@ -114,6 +98,7 @@ public class DictionaryItemController {
 		int flag = 0;
 
 		if(values == null){
+			
 			model.addAttribute("delsuccess", 0);
 			//			model.addAttribute("delerrormsg", "Items were not selected");
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
@@ -122,14 +107,20 @@ public class DictionaryItemController {
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
+			String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+			String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
+			logger.info("Role :"+role+"  role type : "+roleType);
+			if(roleType.equals("READ/WRITE_ACCESS")){
+				model.addAttribute("roleAccess", 1);
+			}
 			model.addAttribute("dictID", dictionaryId);
-			return "auth/dictionary/dictionary";
+			return "auth/dictionary/dictionarycollab";
 		}else {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("Deleting item for dictionary id: " + dictionaryId
 						+ " and term id : " + i + " : " + values[i]);
-				msg = dictonaryManager.deleteDictionariesItems(dictionaryId,
-						values[i],user.getUsername());
+				msg = dictonaryManager.deleteDictionaryItemsCollab(dictionaryId,
+						values[i]);
 				if (!msg.equals("")) {
 					flag = 1;
 					errormsg = msg;
@@ -140,6 +131,7 @@ public class DictionaryItemController {
 			model.addAttribute("delsuccess", 1);
 			//			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
 		} else if (flag == 1) {
+			logger.info(" Errormsg " +errormsg);
 			if (errormsg.equals("Item doesnot exists in this dictionary")) {
 				model.addAttribute("delsuccess", 0);
 				model.addAttribute("delerrormsg",
@@ -152,14 +144,20 @@ public class DictionaryItemController {
 		}
 		logger.info("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId,user.getUsername());
+				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
+		String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
+		logger.info("Role :"+role+"  role type : "+roleType);
+		if(roleType.equals("READ/WRITE_ACCESS")){
+			model.addAttribute("roleAccess", 1);
+		}
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
 
-		return "auth/dictionary/dictionary";
+		return "auth/dictionary/dictionarycollab";
 	}
 
 	/**
@@ -168,7 +166,7 @@ public class DictionaryItemController {
 	 * @return Return to list dictionary item page
 	 */
 
-	@RequestMapping(value = "auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/dictionaries/updateDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
 	public String updateDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
@@ -233,14 +231,19 @@ public class DictionaryItemController {
 		}
 		logger.debug("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId,user.getUsername());
+				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
+		String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
+		logger.info("Role :"+role+"  role type : "+roleType);
+		if(roleType.equals("READ/WRITE_ACCESS")){
+			model.addAttribute("roleAccess", 1);
+		}
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
 
-		return "auth/dictionary/dictionary";
+		return "auth/dictionary/dictionarycollab";
 	}
-
 }

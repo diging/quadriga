@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -37,6 +38,10 @@ public class DictionaryListController {
 	@Autowired
 	IDictionaryManager dictonaryManager;
 
+	@Autowired
+	ICollaboratorRoleManager collabRoleManager;
+	
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryListController.class);
 
@@ -68,14 +73,18 @@ public class DictionaryListController {
 					.getAuthentication().getPrincipal();
 			String userId = user.getUsername();
 			List<IDictionary> dictionaryList = null;
+			List<IDictionary> dictionaryCollabList = null;
 			try {
 				dictionaryList = dictonaryManager.getDictionariesList(user
+						.getUsername());
+				dictionaryCollabList=dictonaryManager.getDictionaryCollabOfUser(user
 						.getUsername());
 			} catch (QuadrigaStorageException e) {
 				throw new QuadrigaStorageException(
 						"Oops the DB is an hard hangover, please try later");
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
+			model.addAttribute("dictionaryCollabList", dictionaryCollabList);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
 			logger.error(" ----" + e.getMessage());

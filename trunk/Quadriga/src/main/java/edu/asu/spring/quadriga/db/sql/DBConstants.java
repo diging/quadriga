@@ -43,7 +43,7 @@ public interface DBConstants
 	public static final String SHOW_DICT_NONCOLLABORATORS = "sp_showDictionaryNonCollaborators";
 	public static final String ADD_DICT_COLLABORATORS = "sp_addDictionaryCollaborators";
 	public static final String DELETE_DICT_COLLABORATORS = "sp_deleteDictionaryCollaborators";
-
+	
 	
 	public static final String GET_CCOWNED_DETAILS = "sp_getConceptCollections";
 	public static final String GET_CCCOLLABORATIONS_DETAILS = "sp_getUserCollectionCollaborations";
@@ -56,10 +56,14 @@ public interface DBConstants
 	public static final String SHOW_CC_NONCOLLABORATOR_REQUEST = "sp_showCollectionNonCollaborators";
 	public static final String DELETE_CC_COLLABORATOR_REQUEST = "sp_deleteCollectionCollaborators";
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
+	public static final String GET_DICTIONARY_ITEMS_DETAILS_COLLAB = "sp_getDictionaryItems_collab";
 	public static final String GET_DICTIONARY_NAME = "sp_getDictionaryName";
 	public static final String ADD_DICTIONARY_ITEM = "sp_addDictionaryItems";
+	public static final String GET_DICTIONARY_COLLAB = "sp_getDictionaryCollab";
+	public static final String GET_DICTIONARY_COLLAB_PERM = "sp_getDictionaryCollabPerm";
 	public static final String DELETE_DICTIONARY ="sp_deleteDictionary";
 	public static final String DELETE_DICTIONARY_ITEM = "sp_deleteDictionaryItems";
+	public static final String DELETE_DICTIONARY_ITEM_COLLAB= "sp_deleteDictionaryItemsCollab";
 	public static final String UPDATE_DICTIONARY_ITEM = "sp_updateDictionaryItems";
 	public static final String ADD_CONCEPTCOLLECTION ="sp_addConceptCollections";
 	public static final String DELETE_COLLECTION_ITEM ="sp_deleteCollectionItem";

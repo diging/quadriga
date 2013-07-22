@@ -88,8 +88,21 @@
 
 	<h4 align="center">You participate in these Dictionaries</h4>
 	<hr>
-	<ul class="pagination2">
-		<li>We have to complete the collaborator part</li>
-	</ul>
+	<c:choose>
+		<c:when test="${not empty dictionaryCollabList}">
+			<ul class="pagination1">
+				<c:forEach var="dictionary" items="${dictionaryCollabList}">
+					<li><details>
+							<summary>
+								<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.id}"> <c:out
+										value="${dictionary.name}"></c:out></a>
+							</summary>
+							<c:out value="${dictionary.description}"></c:out>
+						</details></li>
+				</c:forEach>
+			</ul>
+		</c:when>
+		<c:otherwise> <spring:message code="empty.dictionary" /></c:otherwise>
+	</c:choose>
 
 </div>
