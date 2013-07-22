@@ -1,8 +1,8 @@
 /*******************************************
-Name          : sp_getDictionaryDetails
+Name          : sp_getDictionaryCollabPerm.sql
 
 Description   : retrieves the dictionary details
-				of a particular dictionary
+				of a particular dictionary w.r.t collaborator permission
 
 Called By     : UI (DBConnectionDictionaryManager.java)
 
@@ -12,12 +12,13 @@ Modified Date : 06/04/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getDictionaryDetails;
+DROP PROCEDURE IF EXISTS sp_getDictionaryCollabPerm;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getDictionaryDetails
+CREATE PROCEDURE sp_getDictionaryCollabPerm
 (
-  IN  indictionaryowner  VARCHAR(20),
+  IN  incollabuser  VARCHAR(20),
+  IN  indictionaryid  VARCHAR(100),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN
@@ -27,17 +28,20 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
     -- check input variables
-    IF(indictionaryowner IS NULL OR indictionaryowner = "")
+    IF(incollabuser IS NULL OR incollabuser = "")
      THEN SET errmsg = "Dictionary owner name cannot be empty.";
     END IF;
-
+    
+    IF(indictionaryid IS NULL OR indictionaryid = "")
+     THEN SET errmsg = "Dictionary ID cannot be empty.";
+    END IF;
+   
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 SELECT dictionaryname,description,id,dictionaryowner,accessibility
-       FROM vw_dictionary
-	   WHERE dictionaryowner = indictionaryowner;
+	select collaboratorrole from tbl_dictionary_collaborator 
+	where id =indictionaryid and collaboratoruser=incollabuser;
 	END IF;
 END$$
 DELIMITER ;

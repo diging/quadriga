@@ -119,12 +119,33 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 		return result;
 	}
+	
+	/**
+	 * Checks for user permission on dictionary
+	 * @param userId
+	 * @param dicitonaryId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException 
+	 */
+	@Override
+	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException, QuadrigaAccessException{
+		List<IDictionary> dictionaryList=dbConnect.getDictionaryCollabOfUser(userId);
+		return dictionaryList;
+	}
+	
+	@Override
+	public String getDictionaryCollabPerm(String userId,String dicitonaryId) throws QuadrigaStorageException {
+		String role=dbConnect.getDictionaryCollabPerm(userId, dicitonaryId);
+		return role;
+	}
 	/**
 	 * Adds a new dictionaries for the user
 	 * 
 	 * @return Return to success or error msg to controller
 	 */
 
+	@Override
 	public String addNewDictionary(IDictionary dictionary)
 			throws QuadrigaStorageException {
 
@@ -144,6 +165,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to success or error message to controller
 	 */
 
+	@Override
 	public String addNewDictionariesItems(String dictionaryId, String item,
 			String id, String pos, String owner)
 			throws QuadrigaStorageException {
@@ -164,7 +186,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 * @return Return success or error message to controller
 	 */
-
+	@Override
 	public String deleteDictionariesItems(String dictionaryId, String itemid,
 			String ownerName) throws QuadrigaStorageException {
 		String msg = "";
@@ -177,13 +199,25 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return msg;
 	}
+	
+	@Override
+	public String deleteDictionaryItemsCollab(String dictionaryId, String itemid) throws QuadrigaStorageException {
+		String msg = "";
+		try {
+			msg = dbConnect.deleteDictionaryItemsCollab(dictionaryId, itemid);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 
+		return msg;
+	}
+	
 	/**
 	 * Update the dictionary item of the dictionary from the word power
 	 * 
 	 * @return Return error or success message to controller
 	 */
-
+	@Override
 	public String updateDictionariesItems(String dictionaryId, String termid,
 			String term, String pos) throws QuadrigaStorageException {
 		String msg = "";
@@ -202,7 +236,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 * @return Return to list of dictionary item to controller
 	 */
-
+	@Override
 	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
 			String ownerName) throws QuadrigaStorageException {
 
@@ -216,14 +250,27 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryItemList;
 	}
+	@Override
+	public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
 
+		List<IDictionaryItems> dictionaryItemList = null;
+		try {
+			dictionaryItemList = dbConnect.getDictionaryItemsDetailsCollab(
+					dictionaryid);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return dictionaryItemList;
+	}
+	
 	/**
 	 * Gets dictionary name of the dictionary from dictionary ID
 	 * 
 	 * @return Return the dictionary name to controller
 	 * @throws QuadrigaStorageException
 	 */
-
+	@Override
 	public String getDictionaryName(String dictionaryid)
 			throws QuadrigaStorageException {
 
@@ -242,7 +289,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 * @return Return the dictionaryEntry bean to controller
 	 */
-
+	@Override
 	public List<WordpowerReply.DictionaryEntry> searchWordPower(String item,
 			String pos) {
 
@@ -280,7 +327,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 * @return Return the dictionaryEntry bean to controller
 	 */
-
+	
 	public List<WordpowerReply.DictionaryEntry> getUpdateFromWordPower(
 			String dictionaryId, String itemid) {
 

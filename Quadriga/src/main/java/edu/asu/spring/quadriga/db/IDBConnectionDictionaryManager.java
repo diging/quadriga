@@ -118,4 +118,16 @@ public interface IDBConnectionDictionaryManager {
 	public abstract boolean userDictionaryPerm(String userId, String dictionaryId)
 			throws QuadrigaStorageException;
 
+	public abstract List<IDictionary> getDictionaryCollabOfUser(String userId)
+			throws QuadrigaStorageException;
+
+	public abstract String getDictionaryCollabPerm(String userId, String dicitonaryId)
+			throws QuadrigaStorageException;
+
+	public abstract List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid)
+			throws QuadrigaStorageException;
+
+	public abstract String deleteDictionaryItemsCollab(String dictinaryId, String itemid)
+			throws QuadrigaStorageException;
+
 }

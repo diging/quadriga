@@ -35,11 +35,7 @@ BEGIN
     IF(indictionaryid IS NULL OR indictionaryid = "")
      THEN SET errmsg = "Dictionary ID  cannot be empty.";
     END IF;
-    
-    IF NOT EXISTS (SELECT 1 FROM vw_dictionary
-                     WHERE dictionaryowner = indictionaryowner)
-      THEN SET errmsg = "Dictionary name is invalid.";
-    END IF;
+
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
