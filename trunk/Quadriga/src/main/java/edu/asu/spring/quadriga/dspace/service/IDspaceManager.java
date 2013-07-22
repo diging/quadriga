@@ -113,14 +113,46 @@ public interface IDspaceManager{
 	public abstract IBitStream getBitStream(String sCollectionId, String sItemId,
 			String sBitStreamId);
 
+	/**
+	 * Add a list of bitstreams to a workspace. The user must have access to the workspace.
+	 * All the fields are required.
+	 * 
+	 * @param workspaceId					The id of the workspace to which the bitstream(s) are to be added.
+	 * @param communityId					The id of the community to which the bitstream(s) belong to.
+	 * @param collectionId					The id of the collection to which the bitstream(s) belong to.
+	 * @param itemId						The id of the item to which the bitstream(s) belong to.
+	 * @param bitstreamIds					An array of bitstream ids which are to be added to the workspace.
+	 * @param username						The userid of the user who is trying to add the bitstream(s) to the workspace.
+	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
+	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 */
 	public abstract void addBitStreamsToWorkspace(String workspaceId, String communityId,
 			String collectionId, String itemId, String[] bitstreamIds,
 			String username)throws QuadrigaStorageException, QuadrigaAccessException;
 
+	/**
+	 * Delete a list of bitstreams from the workspace. The user must have access to the workspace.
+	 * 
+	 * @param workspaceid					The id of the workspace from which the bitstream(s) are to be deleted.
+	 * @param bitstreamids					An array of bitstream ids which are to be deleted from the workspace.
+	 * @param username						The userid of the user who is trying to delete the bitstream(s) to the workspace.
+	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
+	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 */
 	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids,
 			String username) throws QuadrigaStorageException,
 			QuadrigaAccessException;
 
+	/**
+	 * Update the existing metadata of the bitstreams present in the workspace. The user must have access to the workspace.
+	 * 
+	 * @param workspaceid					The id of the workspace to which the bitstream(s) belong to.
+	 * @param quadrigaUsername				The quadriga userid of the user who is trying to update the bitstream references.
+	 * @param dspaceUsername				The dspace username supplied by the user. This username will be used to connect to the dspace server.
+	 * @param password						The dspace password supplied by the user. This password will be used to authenticate the user with the dspace server.
+	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
+	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 */
 	public abstract void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername,
 			String password) throws QuadrigaAccessException,
 			QuadrigaStorageException;

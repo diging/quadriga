@@ -24,12 +24,6 @@
 		init-method="start">
 	</bean>
 
-	<bean id="dspaceURL" class="java.lang.String">
-		<constructor-arg>
-			<value>import.hps.ubio.org</value>
-		</constructor-arg>
-	</bean>
-
 
 	<bean id="wordPowerURL" class="java.lang.String">
 		<constructor-arg>
@@ -115,6 +109,10 @@
 		<property name="location" value="classpath:locale/errormessages.properties" />
 	</bean>
 	
+	<bean id="dspaceStrings"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/dspacestrings.properties" />
+	</bean>
 	
 	
 </beans>

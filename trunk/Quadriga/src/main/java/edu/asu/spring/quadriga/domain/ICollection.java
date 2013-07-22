@@ -2,8 +2,6 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
-import org.springframework.web.client.RestTemplate;
-
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 
 /**
@@ -46,18 +44,6 @@ public interface ICollection extends Runnable{
 	 * @return 						TRUE if the data was copied successfully. FALSE if the dspaceCollection is null or there was error in copying the data.
 	 */
 	public abstract boolean copy(IDspaceCollection dspaceCollection);
-
-	public abstract void setPassword(String password);
-
-	public abstract String getPassword();
-
-	public abstract void setUserName(String userName);
-
-	public abstract String getUserName();
-
-	public abstract void setRestTemplate(RestTemplate restTemplate);
-
-	public abstract RestTemplate getRestTemplate();
 
 	public abstract List<IItem> getItems();
 

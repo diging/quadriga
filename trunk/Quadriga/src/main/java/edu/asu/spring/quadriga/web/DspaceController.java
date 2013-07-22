@@ -219,6 +219,19 @@ public class DspaceController {
 	}
 	
 	
+	/**
+	 * Handle the request to add one or more bitstreams to a workspace. The user must have access to the project that the workspace belongs to.
+	 * If not, this method will throw an QuadrigaACcessException.
+	 * 
+	 * @param workspaceId					The id of the workspace to which the bitstream(s) are to be added.
+	 * @param communityId					The id of the community to which the bitstream(s) belong to.
+	 * @param collectionId					The id of the colletion to which the bitstream(s) belong to.
+	 * @param itemId						The id of the item to which the bitstream(s) belong to.
+	 * @param bitstreamids					The id(s) of the bitstream(s) which are to be added to the workspace.
+	 * @return								Return to the workspace page
+	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
+//	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/addbitstreams", method = RequestMethod.POST)
 	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
 		
@@ -226,6 +239,15 @@ public class DspaceController {
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 	
+	/**
+	 * Handle the request to delete bitstream(s) from a workspace.
+	 * 
+	 * @param workspaceId					The id of the workspace from which the bitstream(s) are to deleted. 
+	 * @param bitstreamids					The id(s) of the bitstream(s) which are to deleted from the workspace.
+	 * @return								Return to the workspace page.
+	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
+	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/deletebitstreams", method = RequestMethod.POST)
 	public String deleteBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
 		
@@ -233,6 +255,15 @@ public class DspaceController {
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 	
+	/**
+	 * Handle the request to update the bitstreams of a workspace. The bitstreams and its related metadata are updated by sending a request to dspace.
+	 * The user must have access to the project that the workspace belongs to. If not, this method will throw a QuadrigaAccessException.
+	 * 
+	 * @param workspaceId					The id of the workspace whose bitstream(s) are to be updated.
+	 * @return								Return to the workspace page.
+	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
+	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
 	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
 		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();

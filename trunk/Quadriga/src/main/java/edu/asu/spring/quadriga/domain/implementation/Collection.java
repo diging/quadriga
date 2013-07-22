@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.domain.implementation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -13,8 +14,9 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 
 /**
- * The class representation of the Collection got from Dspace repostiory.
+ * The class representation of the Collection got from Dspace repostiory. It also loads the dependent items within this collection.
  * This class will be used by Quadriga and its representation is independent of the Dspace Rest service output.
+ * 
  * 
  * @author Ram Kumar Kumaresan
  */
@@ -29,56 +31,28 @@ public class Collection implements ICollection{
 	private List<IItem> items;
 
 	private RestTemplate restTemplate;
-	private String url;
+	private Properties dspaceProperties;
 	private String userName;
 	private String password;
 
 	/**
 	 * Initialize the required details to make a REST service call to Dspace
-	 * @param id			The id of the collection.
-	 * @param restTemplate	The RestTemplate object containing the details about the parser.
-	 * @param url			The REST service url/domain.
-	 * @param userName		The username of the authorized user.
-	 * @param password		The password of the authorized user.
+	 * @param id				The id of the collection.
+	 * @param restTemplate		The RestTemplate object containing the details about the parser.
+	 * @param dspaceProperties	TThe property strings related to dspace REST service connection.
+	 * @param userName			The username of the authorized user.
+	 * @param password			The password of the authorized user.
 	 */
-	public Collection(String id, RestTemplate restTemplate, String url, String userName, String password)
+	public Collection(String id, RestTemplate restTemplate, Properties dspaceProperties, String userName, String password)
 	{
-		this.url = url;
+		this.dspaceProperties = dspaceProperties;
 		this.id = id;
 		this.userName = userName;
 		this.password = password;
-		this.setRestTemplate(restTemplate);
-	}
-
-	@Override
-	public RestTemplate getRestTemplate() {
-		return restTemplate;
-	}
-
-	@Override
-	public void setRestTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
+		this.dspaceProperties = dspaceProperties;
 	}
 
-	@Override
-	public String getUserName() {
-		return userName;
-	}
-
-	@Override
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	@Override
-	public String getPassword() {
-		return password;
-	}
-
-	@Override
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
 	@Override
 	public String getId() {
@@ -186,7 +160,7 @@ public class Collection implements ICollection{
 				{
 					for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
 						item = new Item();
-						item.setRestConnectionDetails(restTemplate, url, userName, password);
+						item.setRestConnectionDetails(restTemplate, dspaceProperties, userName, password);
 						if(item.copy(dspaceItem))
 							this.items.add(item);
 					}
@@ -199,12 +173,14 @@ public class Collection implements ICollection{
 
 	/**
 	 * Used to generate the corresponding url necessary to access the collection details
-	 * @param restPath The REST path required to access the collection in Dspace. This will be appended to the actual domain url.
 	 * @return			Return the complete REST service url along with all the authentication information
 	 */
-	private String getCompleteUrlPath(String restPath)
+	private String getCompleteUrlPath()
 	{
-		return "https://"+this.url+restPath+this.id+".xml?email="+this.userName+"&password="+this.password;
+		return dspaceProperties.getProperty("https")+dspaceProperties.getProperty("dspace_url")+
+				dspaceProperties.getProperty("collection_url")+	this.id+
+				dspaceProperties.getProperty("xml")+dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+
+				this.userName +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
 	}
 
 	/**
@@ -213,8 +189,8 @@ public class Collection implements ICollection{
 	 */
 	@Override
 	public void run() {
-		String sRestServicePath = getCompleteUrlPath("/rest/collections/");
-		IDspaceCollection dspaceCollection = (DspaceCollection) getRestTemplate().getForObject(sRestServicePath, DspaceCollection.class);
+		String sRestServicePath = getCompleteUrlPath();
+		IDspaceCollection dspaceCollection = (DspaceCollection) this.restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
 
 		if(dspaceCollection != null)
 		{
