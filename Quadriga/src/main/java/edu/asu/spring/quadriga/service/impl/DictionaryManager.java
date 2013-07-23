@@ -283,7 +283,22 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryName;
 	}
+	
+	@Override
+	public String getDictionaryOwner(String dictionaryid)
+			throws QuadrigaStorageException {
 
+		String dictionaryOwner = "";
+		try {
+			dictionaryOwner = dbConnect.getDictionaryName(dictionaryid);
+			logger.info(" checking --- "+dictionaryOwner);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return dictionaryOwner;
+	}
+	
 	/**
 	 * Call the word power for a term and fetch the xml from word power rest
 	 * 

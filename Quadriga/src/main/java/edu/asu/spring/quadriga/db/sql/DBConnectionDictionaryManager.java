@@ -488,7 +488,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		String dictionaryName="";
 		CallableStatement sqlStatement;
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_NAME  + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_OWNER  + "(?,?)";
 
 		//get the connection
 		getConnection();
@@ -531,6 +531,57 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 	}
 
+	
+	@Override
+	public String getDictionaryOwner(String dictionaryId) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String dictionaryOwner="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_OWNER  + "(?,?)";
+
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, dictionaryId);
+			logger.info("dictionary id:"+dictionaryId);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					dictionaryOwner =resultSet.getString(1);
+				} 
+			}
+			//String errmsg = sqlStatement.getString(2);
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+		return dictionaryOwner;
+
+	}
+	
 	/**
 	 *  Method adds an dictionary                   
 	 * 
@@ -627,10 +678,11 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		getConnection();
 		logger.debug("dbCommand : "+dbCommand);
 		//establish the connection with the database
+		logger.info(dictinaryId +" , "+item+" , "+id +" , "+pos+" , "+ owner);
 		try
 		{
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-
+			
 			//adding the input variables to the SP
 			sqlStatement.setString(1, dictinaryId);
 			sqlStatement.setString(2, item);

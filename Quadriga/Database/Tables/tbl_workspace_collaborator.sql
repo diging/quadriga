@@ -19,5 +19,5 @@ CREATE TABLE IF NOT EXISTS tbl_workspace_collaborator
   updateddate       TIMESTAMP     NOT NULL,
   createdby         VARCHAR(20)   NOT NULL,
   createddate       DATETIME      NOT NULL,
-  PRIMARY KEY(id,username,collaboratorrole) 
+  PRIMARY KEY(workspaceid,username,collaboratorrole) 
 )

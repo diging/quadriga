@@ -105,7 +105,7 @@ public class ConceptCollectionWorkspaceController {
 	}
 	
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.POST)
-	public String addProjectConceptCollection(HttpServletRequest req,
+	public String addWorkspaceConceptCollection(HttpServletRequest req,
 			@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		String msg = "";
 		int flag=0;
@@ -139,9 +139,9 @@ public class ConceptCollectionWorkspaceController {
 					if(!msg.equals("")){
 						flag=1;
 					}
-				} catch (QuadrigaStorageException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error(" ",e);
 				}
 			}
 		}
