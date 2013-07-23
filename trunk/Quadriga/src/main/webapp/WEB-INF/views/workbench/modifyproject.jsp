@@ -20,6 +20,16 @@ $(document).ready(function(){
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
+		
+		 if ($.trim($("#unixName").val())) {
+				var keyedInput = $("#unixName").val();
+				var constant = "";
+				if($.trim($("#unixName").val()))
+					{
+					   constant = $("#unixnameurl").val();
+					}
+			    $("#UnixURL").text(constant+keyedInput);
+			}
 	});
 </script>
 <style>

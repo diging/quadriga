@@ -136,7 +136,7 @@ public class ModifyProjectController
 			model = new ModelAndView("auth/workbench/modifyproject");
 			project = retrieveProjectManager.getProjectDetails(projectid);
 			model.getModelMap().put("project", project);
-			model.getModelMap().put("unixnameurl","project_unix_name.url");
+			model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 			return model;
 		}
 		else
@@ -173,7 +173,7 @@ public class ModifyProjectController
 			{
 				model = new ModelAndView("auth/workbench/modifyproject");
 				model.getModelMap().put("project", project);
-				model.getModelMap().put("unixnameurl","project_unix_name.url");
+				model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 				return model;
 			}
 			else

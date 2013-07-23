@@ -106,7 +106,7 @@ public class AddWSCollabController
 		ModelAndView model;
 		List<IUser> nonCollaboratingUser;
 		ICollaborator collaborator;
-		List<ICollaborator> collaboratingUser;
+		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
 		
 		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
 		
@@ -160,13 +160,16 @@ public class AddWSCollabController
 		String userName;
 		String collabUser;
 		String roleIDList = "";
+		List<IUser> nonCollaboratingUser;
+		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
 		
 		//create the model view
-		model = new ModelAndView("redirect:/auth/workbench/workspace/" + workspaceid + "/addcollaborators");
+		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
 		
 		if(result.hasErrors())
 		{
-			return model;
+			model.getModelMap().put("collaborator", collaborator);
+
 		}
 		else
 		{
@@ -183,9 +186,46 @@ public class AddWSCollabController
 			
 			//call the method to insert the collaborator
 			wsManager.addWorkspaceCollaborator(collabUser, roleIDList, workspaceid, userName);
+			
+			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 
-			return model;
 		}
+		
+		//adding the workspace id
+		model.getModelMap().put("workspaceid", workspaceid);
+		
+		
+		//fetch the users who are not collaborators to the workspace
+		nonCollaboratingUser = wsCollabManager.getWorkspaceNonCollaborators(workspaceid);
+		
+		//remove the restricted user from the list
+		for(IUser user : nonCollaboratingUser)
+		{
+			//fetch the quadriga roles and eliminate the restricted user
+			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+			for(IQuadrigaRole role : userQuadrigaRole)
+			{
+				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+				{
+					nonCollaboratingUser.remove(user);
+				}
+			}
+		}
+		
+		//add the users list to the model
+		model.getModelMap().put("noncollabusers", nonCollaboratingUser);
+		
+		//fetch the roles that can be associated to the workspace collaborator
+		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
+		
+        //add the collaborator roles to the model
+		model.getModelMap().put("wscollabroles", collaboratorRoles);
+		
+		//fetch all the collaborating users and their roles
+		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
+		
+		model.getModelMap().put("collaboratingusers", collaboratingUser);
+		return model;
 		
 
 	}
