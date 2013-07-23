@@ -202,7 +202,6 @@
 <div class="container">
 	<c:choose>
 		<c:when test="${not empty dictionaryItemList}">
-
 			<form method="POST">
 				<c:choose>
 					<c:when test="${roleAccess=='1'}">
