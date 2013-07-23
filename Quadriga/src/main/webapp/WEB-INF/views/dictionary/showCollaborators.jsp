@@ -92,7 +92,6 @@ function validation()
 	
 	var chkboxArray = document.getElementById("chkboxDivision").getElementsByTagName("input");
 
-	var boolean = false;
 	var flag = 0;
 	for(var i=0;i<chkboxArray.length;i++)
 		{
@@ -101,14 +100,13 @@ function validation()
 			 alert("please select collaborator !!!");
 			 break;
 			}
-			else if(chkboxArray[i].checked == false)
+			else if(chkboxArray[i].checked == true)
 			{
-			  alert(chkboxArray[i].checked);
 				flag = 1;
 			}
 	    }
 	
-	if(flag == 1)
+	if(flag == 0)
 		{
 			alert("please select role !!!");
 		}
