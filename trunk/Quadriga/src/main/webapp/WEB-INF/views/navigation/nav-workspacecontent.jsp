@@ -36,4 +36,10 @@
 			<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/conceptcollections">List Concept Collection</a></li>
 			<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deleteconceptcollections">Delete Concept Collection</a></li>
 		</ul></li>
+		<li><a href="#">Collaborators</a>
+		<ul> 
+		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/addCollaborators">Add Collaborator</a></li>
+		</ul>
+		</li>
 </ul>
+

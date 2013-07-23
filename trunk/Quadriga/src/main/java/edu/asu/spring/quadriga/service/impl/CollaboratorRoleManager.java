@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -32,6 +30,20 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	@Qualifier("dictCollaborator")
 	private List<ICollaboratorRole> dictCollabRoles; 
 	
+	@Autowired
+	@Qualifier("workspaceCollaborator")
+	private List<ICollaboratorRole> wsCollabRoles;
+	
+
+	@Override
+	public List<ICollaboratorRole> getWsCollabRoles() {
+		return wsCollabRoles;
+	}
+
+	@Override
+	public void setWsCollabRoles(List<ICollaboratorRole> wsCollabRoles) {
+		this.wsCollabRoles = wsCollabRoles;
+	}
 
 	@Override
 	public void setProjectCollaboratorRole(List<ICollaboratorRole> collaboratorRoles) {
@@ -127,7 +139,6 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		}
 		
 	} 
-
 	
 /**
  * @description  maps roleid of the collaborator roles from database to xml 
@@ -139,6 +150,19 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
  * @return collaborator role object
  * 
  */
+	
+	@Override
+	public ICollaboratorRole getWSCollaboratorRoleByDBId(String collaboratorRoleDBId)
+	{
+		for(ICollaboratorRole role:wsCollabRoles)
+		{
+			if(role.getRoleDBid().equals(collaboratorRoleDBId))
+			{
+				return role;
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public ICollaboratorRole getProjectCollaboratorRoleById(

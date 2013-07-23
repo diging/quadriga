@@ -79,6 +79,10 @@
 		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionRetrieveWSCollabManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+		<bean id="DBConnectionModifyWSCollabManagerBean"
+		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionModifyWSCollabManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 
 	<bean id="dataSource"

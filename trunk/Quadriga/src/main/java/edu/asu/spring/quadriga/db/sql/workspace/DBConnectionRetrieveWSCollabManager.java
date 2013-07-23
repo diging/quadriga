@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -37,8 +36,6 @@ public class DBConnectionRetrieveWSCollabManager extends ADBConnectionManager im
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
-	
-	private DBConnectionRetrieveProjCollabManager projCollabManager;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionRetrieveWSCollabManager.class);
 	
@@ -88,8 +85,10 @@ public class DBConnectionRetrieveWSCollabManager extends ADBConnectionManager im
 						collabroles = resultset.getString(2);
 						//retrieve the user details
 						user = userManager.getUserDetails(username);
+						
 						//storing the collaborator roles in a comma(,) separated list
-						userCollaboratorRole = projCollabManager.splitAndgetCollaboratorRolesList(collabroles);
+						userCollaboratorRole = this.getCollaboratorDBRoleIdList(collabroles);
+						
 						//add the user and his collaborator roles to a object
 						collaborator = collaboratorFactory.createCollaborator();
 						collaborator.setUserObj(user);
@@ -114,6 +113,32 @@ public class DBConnectionRetrieveWSCollabManager extends ADBConnectionManager im
 			closeConnection();
 		}
 		return  collaborators;
+	}
+	
+	/**
+	 * This method converts the comma separated(,) collaborator role DB id's to a list
+	 * @param collabRoles - String of comma separated collab roles.
+	 * @return List<ICollaboratorRole>
+	 * @author kiranbatna
+	 */
+	@Override
+	public List<ICollaboratorRole> getCollaboratorDBRoleIdList(String collabRoles)
+	{
+		//storing the collaborator roles in a comma(,) separated list
+		String[] roleList;
+		List<ICollaboratorRole> collaboratorRole;
+		ICollaboratorRole role;
+		
+		collaboratorRole = new ArrayList<ICollaboratorRole>();
+		roleList = collabRoles.split(",");
+		
+		for(String dbRoleId : roleList)
+		{
+			role = collaboratorRoleFactory.createCollaboratorRoleObject();
+			role.setRoleDBid(dbRoleId);
+			collaboratorRole.add(role);
+		}
+		return collaboratorRole;
 	}
 	
 	/**
@@ -176,7 +201,7 @@ public class DBConnectionRetrieveWSCollabManager extends ADBConnectionManager im
 		{
 			closeConnection();
 		}
-		return null;
+		return nonCollaboratorUser;
 	}
 
 }

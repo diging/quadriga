@@ -94,6 +94,7 @@ public interface DBConstants
 	public static final String DELETE_WORKSPACE_CONCEPT_COLLECTION = "sp_deleteWorkspaceCC";
 	public static final String GET_WORKSPACE_COLLABORATOR = "sp_getWorkspaceCollaborators";
 	public static final String GET_WORKSPACE_NON_COLLABORATOR ="sp_getWorkspaceNonCollaborators";
+	public static final String ADD_WORKSPACE_COLLABORATOR = "sp_addworkspacecollaborators";
 	
 	// Dspace database objects
 	public static final String CHECK_DSPACEDATA_NODES="sp_checkDsapceNodes";

@@ -86,7 +86,6 @@ public class ProjectValidator implements Validator {
 		
 		//Verifying if the Unix name already exists
 		isDuplicate = dbConnect.chkDuplicateProjUnixName(unixName);
-		System.out.println("Checking duplicate :"+isDuplicate);
 		if(isDuplicate)
 		{
 			err.rejectValue("unixName","projectUnixName.unique");
