@@ -40,7 +40,7 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 	 * @author   Rohit Sukelshwar Pendbhaje
      */
 	@Override
-	public List<IProject> getProjectList(String sUserName,boolean quadAdmin) throws QuadrigaStorageException
+	public List<IProject> getProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String errmsg;
@@ -51,17 +51,16 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
         //establish the connection
 		getConnection();
 		
-		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_LIST + "(?,?,?)";
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_LIST + "(?,?)";
 		try {
 			
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1, sUserName);
-			sqlStatement.setBoolean(2, quadAdmin);
-			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
 			
 			sqlStatement.execute();
 			
-			errmsg = sqlStatement.getString(3);
+			errmsg = sqlStatement.getString(2);
 			
 			if(errmsg == "")
 			{

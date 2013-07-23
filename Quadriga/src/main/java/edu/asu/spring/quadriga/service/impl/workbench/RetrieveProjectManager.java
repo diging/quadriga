@@ -48,15 +48,8 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		boolean isQuadAdmin;
 		
-		//initialize the variables
-		isQuadAdmin = false;
-		
-		//verify if the user is a quadriga admin
-		isQuadAdmin = projectSecurity.checkQudrigaAdmin(sUserName);
-		
-		projectList = dbConnect.getProjectList(sUserName,isQuadAdmin);
+		projectList = dbConnect.getProjectList(sUserName);
 		
 		return projectList;
 	}

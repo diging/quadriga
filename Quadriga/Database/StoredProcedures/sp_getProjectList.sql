@@ -3,7 +3,6 @@ DELIMITER $$
 CREATE PROCEDURE sp_getProjectList
 (
     IN projowner VARCHAR(20),
-    IN quadadmin boolean,
 	OUT errmsg  VARCHAR(100)
 )
 BEGIN
@@ -26,23 +25,11 @@ BEGIN
    THEN SET errmsg = "Invalid owner.Please enter the correct value.";
    END IF; 
    
-   IF(quadadmin IS NULL)
-   THEN SET errmsg = "Invalid input parameter.Please specify correct value.";
-   END IF;
-    
-   if(quadadmin)
-    THEN 
-     -- fetch the results of the user and return
-     SELECT  projectname,description,unixname,projectid,
-            projectowner,accessibility
-      FROM  vw_project;
-    ELSE
-          -- fetch the results of the user and return
+    -- fetch the results of the user and return
     SELECT  projectname,description,unixname,projectid,
             projectowner,accessibility
       FROM  vw_project
       WHERE projectowner = projowner; 
-    END IF;
      
 END$$
 DELIMITER ;

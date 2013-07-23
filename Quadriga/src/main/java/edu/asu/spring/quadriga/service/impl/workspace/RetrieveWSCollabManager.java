@@ -42,12 +42,13 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 		List<ICollaboratorRole> roleList;
 		
 		//retrieve the collaborators associated with project
-		roleList = new ArrayList<ICollaboratorRole>();
 		collaboratorList = dbConnect.getWorkspaceCollaborators(workspaceId);
 		
 		//map the collaborators to UI XML values
 		for (ICollaborator collaborator : collaboratorList) 
 		{
+			roleList = new ArrayList<ICollaboratorRole>();
+			
 			for (ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles()) {
 				role = roleMapper.getWSCollaboratorRoleByDBId(collaboratorRole.getRoleDBid());
 				roleList.add(role);

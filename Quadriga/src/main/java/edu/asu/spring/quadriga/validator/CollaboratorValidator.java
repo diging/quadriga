@@ -39,7 +39,7 @@ public class CollaboratorValidator implements Validator {
 	
 	public void validateUserName(String UserName,Errors err)
 	{
-		if(UserName == "None")
+		if(UserName == null)
 			err.rejectValue("userObj", "collaborator_user_selection.required");
 	}
 	
