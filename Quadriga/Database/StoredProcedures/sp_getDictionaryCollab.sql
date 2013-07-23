@@ -35,8 +35,8 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 select dictionaryname,description,dict.id,accessibility,dict.dictionaryowner,
-	 collab.collaboratoruser,collab.collaboratorrole 
+	 select DISTINCT dictionaryname,description,dict.id,accessibility,dict.dictionaryowner,
+	 collab.collaboratoruser
 	 from tbl_dictionary dict ,tbl_dictionary_collaborator collab where
 	(dict.id = collab.id and collaboratoruser = incollabuser);
 	END IF;
