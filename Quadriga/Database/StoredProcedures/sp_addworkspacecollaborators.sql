@@ -27,8 +27,8 @@ BEGIN
     DECLARE position   INT;
 
    	 -- the error handler for any sql exception
-   -- DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-    --  SET errmsg = "SQL exception has occurred";
+     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+     SET errmsg = "SQL exception has occurred";
 
     -- deleting the temp table
     DROP TEMPORARY TABLE IF EXISTS temp_tbl_collaboratorrole;
@@ -93,6 +93,5 @@ BEGIN
 	 ELSE ROLLBACK;
      END IF;
    END IF;
-END
-$$
+END $$
 DELIMITER ;

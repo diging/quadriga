@@ -157,8 +157,8 @@ public class ModifyProjectController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
-	public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project")Project project,
-			@PathVariable("projectid") String projectid,Principal principal,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project")Project project,BindingResult result,
+			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		String userName = principal.getName();
