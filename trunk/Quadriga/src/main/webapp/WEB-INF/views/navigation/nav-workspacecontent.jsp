@@ -38,7 +38,7 @@
 		</ul></li>
 		<li><a href="#">Collaborators</a>
 		<ul> 
-		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/addCollaborators">Add Collaborator</a></li>
+		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/addcollaborators">Add Collaborator</a></li>
 		</ul>
 		</li>
 </ul>

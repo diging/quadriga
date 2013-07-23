@@ -95,8 +95,8 @@ public class ModifyWSController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.POST)
-	public ModelAndView updateWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,
-			@PathVariable("workspaceid") String workspaceid,BindingResult result,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView updateWorkSpaceRequest(@Validated @ModelAttribute("workspace") WorkSpace workspace,BindingResult result,
+			@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 			{
 		ModelAndView model;
 		IUser wsOwner = null;
