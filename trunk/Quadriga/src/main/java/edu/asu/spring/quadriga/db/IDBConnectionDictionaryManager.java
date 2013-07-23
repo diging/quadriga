@@ -130,4 +130,7 @@ public interface IDBConnectionDictionaryManager {
 	public abstract String deleteDictionaryItemsCollab(String dictinaryId, String itemid)
 			throws QuadrigaStorageException;
 
+	public abstract String getDictionaryOwner(String dictionaryId)
+			throws QuadrigaStorageException;
+
 }

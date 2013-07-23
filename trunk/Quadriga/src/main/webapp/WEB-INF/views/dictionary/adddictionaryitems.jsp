@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 
 <!--  
@@ -70,8 +70,7 @@
 <div id="myGrid">
 	<ul>
 		<li>
-			<form name='searchItem' method="POST"
-				action="${pageContext.servletContext.contextPath}/auth/dictionaries/dictionary/wordSearch/${dictionaryid}">
+			<form name='searchItem' method="POST">
 				<!-- <form name='searchItem' method="POST" action="dictionary/wordSearch/${dictionaryid}"> -->
 				<font color="black">Word: </font>&nbsp;&nbsp; <input type="text"
 					name="itemName" id="itemname" placeholder=" Enter a word"><br>
@@ -84,8 +83,19 @@
 					<option value="adverb">Adverb</option>
 					<option value="adjective">Adjective</option>
 					<option value="other">Other</option>
-				</select> <br> <input type="submit" value="Search">
+				</select> <br>
+				
+				<c:choose>
+					<c:when test="${collab=='1'}">
+						<input type="submit" value="Search"
+							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/dictionarycollab/wordSearch/${dictionaryid}'">
+					</c:when>
+					<c:otherwise>
 
+						<input type="submit" value="Search"
+							onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/dictionary/wordSearch/${dictionaryid}'">
+					</c:otherwise>
+				</c:choose>
 			</form> <c:choose>
 				<c:when test="${errorstatus=='1'}">
 					<font color="red"><spring:message code="term.not.found" /></font>
@@ -115,11 +125,19 @@
 					<H3>Results</H3>
 					<hr>
 					<br>
-					<form method="POST"
-						action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}">
+					<form method="POST">
+						<c:choose>
+							<c:when test="${collab=='1'}">
+								<input type="submit" value="Select & Save"
+									onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItemsCollab/${dictionaryid}'" />
+							</c:when>
+							<c:otherwise>
 
-						<input type="submit" value="Select & Save" /><br>
-						<br>
+								<input type="submit" value="Select & Save"
+									onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'">
+							</c:otherwise>
+						</c:choose>
+						<br> <br>
 						<table cellpadding="0" cellspacing="0" border="0"
 							class="display dataTable" width="70%">
 							<!-- <table  class="dataTable" id="pagination"> -->

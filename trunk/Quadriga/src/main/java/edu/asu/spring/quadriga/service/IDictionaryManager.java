@@ -168,4 +168,7 @@ public interface IDictionaryManager {
 	public abstract String deleteDictionaryItemsCollab(String dictionaryId, String itemid)
 			throws QuadrigaStorageException;
 
+	public abstract String getDictionaryOwner(String dictionaryid)
+			throws QuadrigaStorageException;
+
 }

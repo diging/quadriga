@@ -11,6 +11,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /** 
@@ -28,7 +31,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Lohith Dwaraka
  *
  */
-public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDBConnectionWorkspaceCC {
+public class DBConnectionWorkspaceCC  implements IDBConnectionWorkspaceCC {
 
 	protected Connection connection;
 	
@@ -37,7 +40,50 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionWorkspaceCC.class);
 	
+	@Autowired
+	protected DataSource dataSource;
+	
 
+	/**
+	 *  @Description: Assigns the data source
+	 *  
+	 *  @param : dataSource
+	 */
+	public void setDataSource(DataSource dataSource) 
+	{
+		this.dataSource = dataSource;
+	}
+	/**
+	 * @Description : Close the DB connection
+	 * 
+	 * @return : 0 on success
+	 *           -1 on failure
+	 *           
+	 * @throws : SQL Exception          
+	 */
+	protected int closeConnection() {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+			return 0;
+		}
+		catch(SQLException se)
+		{
+			return -1;
+		}
+	}
+	
+	protected void getConnection() {
+		try
+		{
+			connection = dataSource.getConnection();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
 	/**
 	 *  Method add a Concept collection to a workspace                   
 	 * @returns         path of list workspace Concept collection page
@@ -55,6 +101,7 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 		//command to call the SP
 		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_WORKSPACE_CONCEPT_COLLECTION  + "(?,?,?,?)";
 
+		logger.info(" DB command "+dbCommand);
 		//get the connection
 		getConnection();
 		//establish the connection with the database
@@ -80,7 +127,7 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 				catch(SQLException e)
 				{
 					errmsg="DB Issue";
-					e.printStackTrace();
+					logger.error("",e);
 					throw new QuadrigaStorageException();
 					
 				}catch(Exception e){
@@ -91,7 +138,7 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 				{
 					closeConnection();
 				}
-		return null;
+		return errmsg;
 	}
 
 	/**

@@ -8,6 +8,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +27,60 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Lohith Dwaraka
  *
  */
-public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implements
+public class DBConnectionWorkspaceDictionary  implements
 		IDBConnectionWorkspaceDictionary {
 
 	protected Connection connection;
+	
+	@Autowired
+	protected DataSource dataSource;
 	
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionWorkspaceDictionary.class);
 
+	/**
+	 *  @Description: Assigns the data source
+	 *  
+	 *  @param : dataSource
+	 */
+	public void setDataSource(DataSource dataSource) 
+	{
+		this.dataSource = dataSource;
+	}
+	/**
+	 * @Description : Close the DB connection
+	 * 
+	 * @return : 0 on success
+	 *           -1 on failure
+	 *           
+	 * @throws : SQL Exception          
+	 */
+	protected int closeConnection() {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+			return 0;
+		}
+		catch(SQLException se)
+		{
+			return -1;
+		}
+	}
+	
+	protected void getConnection() {
+		try
+		{
+			connection = dataSource.getConnection();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 *  Method add a Concept collection to a workspace                   
 	 * @returns         path of list workspace Concept collection page

@@ -467,6 +467,13 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/adddictionaryitems.jsp" />
 	</definition>
+	<definition name="auth/dictionaries/addDictionaryItemsCollab"
+		extends="base.definition.dictionaries">
+		<put-attribute name="title"
+			value="Quadriga Dictionary - Add Dictionary Item" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/dictionary/adddictionaryitems.jsp" />
+	</definition>
 	<definition name="auth/dictionaries/dictionary/wordSearch"
 		extends="base.definition.dictionaries">
 		<put-attribute name="title"
