@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,6 +29,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 @Controller
 public class DictionaryCollaboratorController {
@@ -36,7 +39,8 @@ public class DictionaryCollaboratorController {
 	
 	@Autowired
 	IUserManager userManager;
-	
+	private static final Logger logger = LoggerFactory
+			.getLogger(DictionaryCollaboratorController.class);
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
 	
@@ -83,6 +87,7 @@ public class DictionaryCollaboratorController {
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showCollaborators" , method = RequestMethod.GET)
 	public String displayCollaborators(@PathVariable("dictionaryid") String dictionary_id, ModelMap model){
 		
+		logger.info("coming to this page");
 		model.addAttribute("dictionaryid", dictionary_id);
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
@@ -102,11 +107,11 @@ public class DictionaryCollaboratorController {
 				iterator.remove();
 			}
 		}
-		
 		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
 		
-		List<IUser> collaboratingUsers = dictionaryManager.showCollaboratingUsers(dictionary_id);
-		model.addAttribute("collaboratingUsers", collaboratingUsers);
+		
+		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionary_id);
+		model.addAttribute("collaboratingUsers", collaborators);
 		
 		return "auth/dictionaries/showCollaborators";
 	}
@@ -119,22 +124,97 @@ public class DictionaryCollaboratorController {
 		return collaborator;
 	} 
 	
+	
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
+	public String addDictCollaborators(HttpServletRequest req,@PathVariable("dictionaryid") String dictionary_id, 
+			 ModelMap model, Principal principal)
+	{
+		
+		String [] values = req.getParameterValues("roleselected");
+		String username = req.getParameter("userName");
+		String errmsg = "";
+		
+		String sessionUser = principal.getName();
+		logger.info("Username selected in the jsp "+ username);
+		
+		if(values != null && username != null){
+			
+			errmsg = dictionaryManager.addCollaborators(values, dictionary_id, username, sessionUser);
+			
+			logger.info("Checkbox data is null");	
+			
+		}
+		
+		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
+		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
+
+		while(iterator.hasNext())
+		{
+			if(iterator.next().getRoleid().equals("ADMIN"))
+			{
+				iterator.remove();
+			}
+		}
+		
+		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
+
+		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionary_id);
+		model.addAttribute("nonCollaboratingUsers", nonCollaboratingUsers);
+		
+		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionary_id);
+		model.addAttribute("collaboratingUsers", collaborators);
+
+		return "auth/dictionaries/showCollaborators";
+	
+	}
+	
+/*	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addeCollaborators" , method = RequestMethod.POST)
 	public String addCollaborators(@PathVariable("dictionaryid") String dictionary_id, 
 			@ModelAttribute ICollaborator collaborator, ModelMap model, Principal principal)
 	{
-		String username = principal.getName();
-		String errmsg = null;
-		errmsg = dictionaryManager.addCollaborators(collaborator, dictionary_id,username);
+		int flag = 0;
+		String errmsg = "";
+		String collaboratorUser = collaborator.getUserObj().getUserName();
+		List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
 		
-		if(errmsg=="")
+		System.out.println("--------collaborator:"+collaboratorUser);
+		
+		if(collaboratorUser != null && roles != null)
 		{
-			return "redirect:/auth/dictionaries/{dictionaryid}";
+			System.out.println("---------in condition");
+			//return "auth/dictionaries/showCollaborators";
+     		String username = principal.getName();
+			
+			errmsg = dictionaryManager.addCollaborators(collaborator, dictionary_id,username);
+			System.out.println("-------------errmsg:"+errmsg);
+		
+			if(errmsg.equals("no errors"))
+			{
+				flag = 1;
+				return "redirect:/auth/dictionaries/{dictionaryid}";
+			}
+		}
+		else
+		{
+			System.out.println("---------in else");
+			String collaboratorUser1 = collaborator.getUserObj().getUserName();
+			System.out.println("--------collaboratorUser1:"+collaboratorUser1);
+
+
+			//model.addAttribute("addunsuccess", 0);
+			
+			//return "auth/dictionaries/showCollaborators";
 		}
 		
-		return "redirect:/auth/dictionaries"+dictionary_id+"/showcollaborators";
-		
-	}
+	/*	if(flag==0)
+		{
+			model.addAttribute("errmsg", errmsg);
+		} 
+		logger.info("coming to this page-----");
+		return "redirect:auth/dictionaries/{dictionaryid}/showCollaborators";
+	
+	} */
 	
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
 	public String deleteCollaborators(@PathVariable("dictionaryid") String dictionaryid, HttpServletRequest req, ModelMap model)
@@ -142,14 +222,11 @@ public class DictionaryCollaboratorController {
 		String[] collaborators = req.getParameterValues("selected");
 		
 		String errmsg = null;
-		System.out.println("--------------dc1");
 		
 		for(int i=0; i<collaborators.length; i++)
 		{
-			System.out.println("--------------collab:"+collaborators[i]);
 			errmsg = dictionaryManager.deleteCollaborator(dictionaryid, collaborators[i]);
 		}
-		System.out.println("--------------dc2");
 
 		
 		if(errmsg.equals(""))

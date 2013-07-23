@@ -14,6 +14,9 @@ import javax.sql.DataSource;
 
 
 
+
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +28,14 @@ import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
 /**
  * Class implements {@link DBConnectionDictionaryManager} for all the DB connection necessary for dictionary functionality.
@@ -52,7 +57,8 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 	@Autowired
 	private IUserFactory userFactory;
-
+	
+	
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
@@ -64,6 +70,14 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	@Autowired
 	private IDictionaryItemsFactory dictionaryItemsFactory;
 	
+	@Autowired
+	private ICollaboratorFactory collaboratorFactory;
+
+	@Autowired
+	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	
+	@Autowired
+	private ICollaboratorRoleManager collaboratorRoleManager;
 
 	/**
 	 * Assigns the data source
@@ -889,6 +903,26 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		}
 		return errmsg;
 	}
+	
+	
+	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role)
+	{
+        String[] collabroles;
+		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+		ICollaboratorRole collaboratorRole = null;
+		
+		collabroles = role.split(",");
+		
+		for(int i=0;i<collabroles.length;i++)
+		{
+			collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+			collaboratorRole.setRoleDBid(collabroles[i]);
+			collaboratorRole.setDisplayName(collaboratorRoleManager.getDictCollaboratorRoleByDBId(collabroles[i]));
+			collaboratorRoleList.add(collaboratorRole);
+		}
+		
+		return collaboratorRoleList;
+	}
 
 	@Override
 	public List<IUser> showNonCollaboratingUsersRequest(String dictionaryid)throws QuadrigaStorageException {
@@ -956,7 +990,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 				{
 					IUser collaboratingUser = userFactory.createUserObject();
 					collaboratingUser.setUserName(resultSet.getString(1));
-				//	System.out.println("-------------DB resultSet.getString(1):"+resultSet.getString(1));
 					collaboratoratingUsersList.add(collaboratingUser);
 				}
 			}
@@ -971,7 +1004,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) {
+	public String addCollaborators(String[] collaboratorRoles, String dictionaryid, String userName, String sessionUser) {
 
 		String dbCommand;
 		String errmsg;
@@ -979,34 +1012,33 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		String role ="" ;
 		
 		dbCommand = DBConstants.SP_CALL+" "+DBConstants.ADD_DICT_COLLABORATORS+"(?,?,?,?,?)";
-		if(collaborator !=null){
 		
-		for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
+		
+		for(String collaboratorRole:collaboratorRoles)
 		{
-				if((collaboratorRole.getRoleDBid())!=null)
+				if(collaboratorRole!=null)
 				{
-					role += collaboratorRole.getRoleDBid()+",";
+					role += collaboratorRole + ",";
 				}
 			
 		}
-		}else{
-			//try to put some message
-		}
-		role = role.substring(0,role.length()-1);	
+		
+		role = role.substring(0,role.length()-1);
+		
 		getConnection();
 		
 		try {
 				sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 				sqlStatement.setString(1, dictionaryid);
-				sqlStatement.setString(2, collaborator.getUserObj().getUserName());
+				sqlStatement.setString(2, userName);
 				sqlStatement.setString(3, role);
-				sqlStatement.setString(4, userName);
+				sqlStatement.setString(4, sessionUser);
 				sqlStatement.registerOutParameter(5, Types.VARCHAR);
 				sqlStatement.execute();
 
 				errmsg = sqlStatement.getString(5);
 						
-				if(errmsg=="")
+				if(errmsg.equals("no errors"))
 				{
 					return errmsg;
 				}	
@@ -1021,12 +1053,14 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public List<IUser> showCollaboratingUsersRequest(String dictionaryid)
+	public List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid)
 			throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
-		List<IUser> collabList = new ArrayList<IUser>();
+		List<ICollaborator> collaborators = new ArrayList<ICollaborator>();
+		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		//List<IUser> collabList = new ArrayList<IUser>();
 		
 		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_COLLABORATORS+"(?,?)";
 		getConnection();
@@ -1038,15 +1072,22 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(2);
 			
-			if(errmsg=="")
+			if(errmsg.equals(""))
 			{
 				ResultSet resultSet = sqlStatement.getResultSet();
 				
 				while(resultSet.next())
 				{
+					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					IUser user = userFactory.createUserObject();
 					user.setUserName(resultSet.getString(1));
-					collabList.add(user);
+					System.out.println("-----------------resultSet.getString(1):"+resultSet.getString(1));
+					collaborator.setUserObj(user);
+					
+					collaboratorRoles = splitAndgetCollaboratorRolesList(resultSet.getString(2));
+					collaborator.setCollaboratorRoles(collaboratorRoles);
+					
+					collaborators.add(collaborator);
 				}
 			}
 			
@@ -1054,7 +1095,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			e.printStackTrace();
 		}
 		
-		return collabList;
+		return collaborators;
 	}
 
 	@Override
