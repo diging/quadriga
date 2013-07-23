@@ -47,6 +47,7 @@ BEGIN
          START TRANSACTION;
 			DELETE FROM
 			tbl_dictionary_items WHERE id = indictionaryid;
+			DELETE FROM tbl_dictionary_Collaborator WHERE id = indictionaryid;
 			DELETE FROM
 			tbl_dictionary WHERE id = indictionaryid and dictionaryowner = inuser;
 		 IF (errmsg = "")
