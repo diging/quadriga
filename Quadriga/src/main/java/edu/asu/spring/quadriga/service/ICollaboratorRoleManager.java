@@ -36,4 +36,9 @@ public interface ICollaboratorRoleManager {
 	
 	public abstract void fillDictCollaboratorRole(ICollaboratorRole collaboratorRole);
 
+	public abstract void setWsCollabRoles(List<ICollaboratorRole> wsCollabRoles);
+
+	public abstract List<ICollaboratorRole> getWsCollabRoles();
+
+	public abstract ICollaboratorRole getWSCollaboratorRoleByDBId(String collaboratorRoleDBId);
 }

@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +38,22 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 	public List<ICollaborator> getWorkspaceCollaborators(String workspaceId) throws QuadrigaStorageException
 	{
 		List<ICollaborator> collaboratorList;
+		ICollaboratorRole role;
+		List<ICollaboratorRole> roleList;
 		
 		//retrieve the collaborators associated with project
+		roleList = new ArrayList<ICollaboratorRole>();
 		collaboratorList = dbConnect.getWorkspaceCollaborators(workspaceId);
 		
 		//map the collaborators to UI XML values
 		for (ICollaborator collaborator : collaboratorList) 
 		{
 			for (ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles()) {
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				role = roleMapper.getWSCollaboratorRoleByDBId(collaboratorRole.getRoleDBid());
+				roleList.add(role);
 			}
+			collaborator.setCollaboratorRoles(roleList);
 		}
-		
 		return collaboratorList;
 	}
 	

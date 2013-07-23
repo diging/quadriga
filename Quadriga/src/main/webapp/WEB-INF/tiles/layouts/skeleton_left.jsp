@@ -79,10 +79,8 @@
 					<hr class="clearLoggedIn">
 				</div>
 			</sec:authorize>
-			<div class="row flush">
-				<div class="12u">
 					<div class="row">
-						<div class="2u">
+						<div class="3u">
 							<div class="sidebar">
 								<!-- Sidebar -->
 								<!-- Recent Posts -->
@@ -91,7 +89,7 @@
 								<!-- /Sidebar -->
 							</div>
 						</div>
-						<div class="10u skel-cell-mainContent">
+						<div class="9u skel-cell-mainContent">
 							<div class="content content-left">
 								<!-- Content -->
 								<article class="is-page-content">
@@ -103,8 +101,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
 	<!-- /Main -->
 
 	<!-- Footer -->

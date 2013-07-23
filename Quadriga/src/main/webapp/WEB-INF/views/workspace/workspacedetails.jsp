@@ -58,11 +58,15 @@
 			"bAutoWidth" : false,
 			"iDisplayLength": 3
 		});
+		
+		
 	});
 </script>
-
-
-<h2>Workspace: ${workspacedetails.name}</h2>
+<table style="width:100%">
+  <tr>
+    <!-- Display workspace details -->
+    <td style="width:90%">
+    <h2>Workspace: ${workspacedetails.name}</h2>
 <div>${workspacedetails.description}</div>
 <hr>
 <div class="user">Owned by: ${workspacedetails.owner.name}</div>
@@ -79,7 +83,7 @@
 	<font size="2"><input type="submit" value="Sync with Dspace" id="dspaceSync">
 	<input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font> 
 	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
-		<table cellpadding="0" cellspacing="0" border="0"
+		<table  cellpadding="0" cellspacing="0" border="0"
 			class="display dataTable" width="100%">
 			<thead>
 				<tr>
@@ -117,3 +121,22 @@
 					Workspace does not contain any files from dspace !
 				</c:otherwise>
 </c:choose>
+    </td>
+    <!-- Display collaborators -->
+    <td style="width:10%"> 
+    <c:if test="${not empty workspacedetails.collaborators}">
+   <h3 class="major"><span>Collaborators</span></h3>
+    <ul class="collaborators">
+			<c:forEach var="wscollaborator" items="${workspacedetails.collaborators}">
+				<li>
+					<c:out value="${wscollaborator.userObj.userName}"></c:out>
+				</li>
+			</c:forEach>
+		</ul>
+    </c:if>
+    </td>
+  </tr>
+</table>
+
+
+

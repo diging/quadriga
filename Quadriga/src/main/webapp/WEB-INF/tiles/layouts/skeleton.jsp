@@ -104,10 +104,6 @@
 						<!-- Recent Posts -->
 						<tiles:insertAttribute name="sub-navigation" />
 						<!-- /Recent Posts -->
-              			<!-- Recent Posts -->
-						<tiles:insertAttribute name="right-sub-navigation" />
-						<!-- /Recent Posts -->
-
 						<!-- /Sidebar -->
 
 					</div>
