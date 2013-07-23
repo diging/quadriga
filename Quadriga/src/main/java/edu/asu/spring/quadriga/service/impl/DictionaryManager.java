@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -416,13 +417,13 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) {
+	public String addCollaborators(String[] collaboratorRole, String dictionaryid, String userName, String sessionUser) {
 		
 		String errmsg=null;
 		
 		try {
 			
-		 errmsg =	dbConnect.addCollaborators(collaborator, dictionaryid, userName);
+		 errmsg =	dbConnect.addCollaborators(collaboratorRole, dictionaryid, userName, sessionUser);
 			
 		} catch (QuadrigaStorageException e) {
 			e.printStackTrace();
@@ -432,9 +433,9 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public List<IUser> showCollaboratingUsers(String dictionaryid) {
+	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
 		
-		List<IUser> collaborators = null;
+		List<ICollaborator> collaborators = null;
 		try {
 			
 		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);

@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -125,11 +126,11 @@ public interface IDictionaryManager {
 	
 	public abstract List<IUser> getCollaborators(String dictionaryid);
 	
-	public abstract List<IUser> showCollaboratingUsers(String collectionid);
+	public abstract List<ICollaborator> showCollaboratingUsers(String collectionid);
 	
 	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
 	
-	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName);
+	public abstract String addCollaborators(String[] collaboratorRole, String dictionaryid, String userName, String sessionUser);
 	
 	public abstract String deleteCollaborator(String dictionaryid, String userName);
 

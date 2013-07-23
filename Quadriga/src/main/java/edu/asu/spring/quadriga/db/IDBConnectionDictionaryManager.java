@@ -92,9 +92,9 @@ public interface IDBConnectionDictionaryManager {
 	
 	public abstract List<IUser> showNonCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
 	
-	public abstract List<IUser> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
+	public abstract List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
 	
-	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName) throws QuadrigaStorageException;
+	public abstract String addCollaborators(String[] collaboratorRoles, String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException;
 
 	public abstract String deleteCollaborators(String dictionaryid, String userName);
 	
@@ -118,6 +118,7 @@ public interface IDBConnectionDictionaryManager {
 	public abstract boolean userDictionaryPerm(String userId, String dictionaryId)
 			throws QuadrigaStorageException;
 
+
 	public abstract List<IDictionary> getDictionaryCollabOfUser(String userId)
 			throws QuadrigaStorageException;
 
@@ -132,5 +133,6 @@ public interface IDBConnectionDictionaryManager {
 
 	public abstract String getDictionaryOwner(String dictionaryId)
 			throws QuadrigaStorageException;
+
 
 }
