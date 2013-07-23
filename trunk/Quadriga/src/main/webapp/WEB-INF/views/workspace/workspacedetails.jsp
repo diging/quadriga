@@ -73,7 +73,54 @@
 <hr>
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
 <input type="button" name="Edit" value="Edit"/>
-</a>
+</a> 
+
+<!-- Dspace Login popup -->
+<script>
+$(document).ready(function() {
+	$('a.login-window').click(function() {
+	    
+		
+		//Getting the variable's value from a link 
+	    var loginBox = $(this).attr('href');
+
+	 	// Add the mask to body
+	    //$('body').append('<div id="mask"></div>');
+	    //$('#mask').fadeIn(300);
+	    
+	    //Fade in the Popup
+	    $(loginBox).fadeIn(300);
+	    
+	    return false;
+	});
+
+	// When clicking on the button close or the mask layer the popup closed
+	$('a.close, #mask').live('click', function() { 
+	  $('#mask , .login-popup').fadeOut(300 , function() {
+	    $('#mask').remove();  
+	}); 
+	return false;
+	});
+});
+</script>
+<a href="#login-box" class="login-window">Dspace Login</a>
+<div id="login-box" class="login-popup">
+<a href="#" class="close"><img src="/quadriga/resources/txt-layout/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
+  <form method="post" class="signin" action="#">
+        <fieldset class="textbox">
+        <label class="username">
+        <span>Dspace Username:</span>
+        <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username">
+        </label>
+        <label class="password">
+        <span>Dspace Password:</span>
+        <input id="password" name="password" value="" type="password" placeholder="Password">
+        </label>
+        <button class="submit button" type="button">Sign in</button>
+        </fieldset>
+  </form>
+</div>
+
 <br><br>
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
