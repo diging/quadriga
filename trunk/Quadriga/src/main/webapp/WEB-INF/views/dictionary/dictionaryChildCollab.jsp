@@ -275,7 +275,7 @@
 
 		<c:otherwise>
 			<input type=button
-				onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
+				onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItemsCollab/${dictionaryid}'"
 				value='Add Items' />
 			<br>
 			<spring:message code="empty.dictionary.items" />
