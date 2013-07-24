@@ -74,9 +74,8 @@ public class DBConnectionRetrieveProjectManagerTest {
 		List<IProject> projectList;
 		List<IProject> testProjectList = new ArrayList<IProject>();
 		IProject project;
-		boolean isQuadAdmin = false;
 		
-		projectList = dbConnect.getProjectList("projuser",isQuadAdmin);
+		projectList = dbConnect.getProjectList("projuser");
 		
 		//create project object with the test data
 		project = projectFactory.createProjectObject();
