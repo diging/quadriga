@@ -86,7 +86,7 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 		} 
 		catch (SQLException e)
 		{
-			logger.info("Retrieve projects list method :"+e.getMessage());
+			logger.error("Retrieve projects list method :",e);
 			throw new QuadrigaStorageException();
 		}
         finally
