@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.validator;
 
+import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +42,12 @@ public class ProjectValidator implements Validator {
 
 		String projUnixName = project.getUnixName();
 
-		/*****************
-		 *  This regular expression should be modified 
-		 */
-		/*
 		if(err.getFieldError("unixName")==null)
 		{
 		//validate the regular expression
 		validateUnixNameExp(projUnixName,err);
 		}
-		*/
+		
 		
 		if(err.getFieldError("unixName")==null)
 		{
@@ -66,15 +64,12 @@ public class ProjectValidator implements Validator {
 		
 	}
 	
-	/*********
-	 * This regular expression should be modified
-	 */
 	public void validateUnixNameExp(String unixName,Errors err)
 	{
-		String regex = "/[^a-zA-Z0-9-_.+!*'()$]/";
-		System.out.println("Validating the regular expression : " +unixName.matches(regex));
+		String regex = "^[a-zA-Z0-9-_.+!*'()]$";
+		Pattern pattern = Pattern.compile(regex);
 		
-		if(!unixName.matches(regex))
+		if(!pattern.matcher(unixName).matches())
 		{
 			err.rejectValue("unixName","project_UnixName.expression");
 		}
