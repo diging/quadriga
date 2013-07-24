@@ -32,9 +32,15 @@ public class CollaboratorValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "userObj", "collaborator_user.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "collaboratorRoles", "collaborator_roles.required");
 		
-		validateUserName(userName,err);
+		if(err.getFieldError("userObj")==null)
+		{
+		   validateUserName(userName,err);
+		}
 		
+		if(err.getFieldError("collaboratorRoles")==null)
+		{
 		validateCollaboratorRoles(role,err);
+		}
 	}
 	
 	public void validateUserName(String UserName,Errors err)
