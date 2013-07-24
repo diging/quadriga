@@ -401,6 +401,7 @@ public class DBConnectionDictionaryManagerTest {
 			assertEquals((msg.equals("")), true);
 			String id= getDictionaryID("testDictionary");
 			String name=dbConnection.getDictionaryName(id);
+			logger.info("name : "+name);
 			assertEquals((name.equals("testDictionary")), true);
 			dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 		}
