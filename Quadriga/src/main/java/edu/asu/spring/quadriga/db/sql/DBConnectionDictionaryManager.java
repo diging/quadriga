@@ -1081,7 +1081,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					IUser user = userFactory.createUserObject();
 					user.setUserName(resultSet.getString(1));
-					System.out.println("-----------------resultSet.getString(1):"+resultSet.getString(1));
 					collaborator.setUserObj(user);
 					
 					collaboratorRoles = splitAndgetCollaboratorRolesList(resultSet.getString(2));

@@ -34,8 +34,8 @@ import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
- * javadoc missing
- * @author who wrote this?
+ * @description this class will handle all the collaborators controls in conceptcollection
+ * @author rohit pendbhaje
  *
  */
 @Controller
@@ -72,7 +72,6 @@ public class CCCollaboratorController {
 				} catch (QuadrigaStorageException e) {
 					e.printStackTrace();
 				}
-		       
 		    }
 		    });
 		    
@@ -91,6 +90,16 @@ public class CCCollaboratorController {
 		    });
 	  }
 	 
+	 /**
+	  * @description maps non-collaborating users, collaborating users and their roles for current conceptcollection and   
+	  * @param collectionid  id of the collection
+	  * @param model  
+	  * @param principal
+	  * @return String having path for showcollaborators jsp page.
+	  * @throws QuadrigaAccessException
+	  * @throws QuadrigaStorageException
+	  */
+	 
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
 		public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
@@ -99,14 +108,8 @@ public class CCCollaboratorController {
 			model.addAttribute("noncollaboratorList", noncollaboratorList);
 			concept = collectionFactory.createConceptCollectionObject();
 			concept.setId(collectionid);
-			
-			try {
-				conceptControllerManager.getCollectionDetails(concept,principal.getName());
-			} catch (QuadrigaStorageException e) {
-				// throw that so that it can be handled
-				throw new QuadrigaStorageException();
-
-			}
+					
+			conceptControllerManager.getCollectionDetails(concept,principal.getName());
 			model.addAttribute("conceptcollection", concept);
 			
 			ICollaborator collaborator =  collaboratorFactory.createCollaborator();
@@ -127,20 +130,22 @@ public class CCCollaboratorController {
 			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
 			
 			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
-			for(ICollaborator collaborator2:collaborators)
-			{
-				for(ICollaboratorRole collaboratorRole:collaborator2.getCollaboratorRoles())
-				{
-					System.out.println("------------CC:"+collaboratorRole.getDisplayName());
-				}
-			}
 			model.addAttribute("collaborators", collaborators);
 			
 			return "auth/conceptcollection/showCollaborators";
 			
 		}
 		
-		@RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
+		/**
+		 * @description this method will add collaborators for current conceptcollection
+		 * @param collectionid   id of the collection
+		 * @param model
+		 * @param collaborator  object returned by jsp to controller
+		 * @param principal
+		 * @return String having path for showcollaborators jsp page.
+		 * @throws QuadrigaStorageException
+		 */
+	   @RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
 		public String addCollaborators(@PathVariable("collection_id") String collectionid, ModelMap model,
 				@ModelAttribute ICollaborator collaborator, Principal principal)throws QuadrigaStorageException
 		{
@@ -157,14 +162,22 @@ public class CCCollaboratorController {
 				
 			return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
 		}
-		
-		@ModelAttribute
+			
+	   @ModelAttribute
 		public ICollaborator getCollaborator() {
 			ICollaborator collaborator = collaboratorFactory.createCollaborator();
 			collaborator.setUserObj(userFactory.createUserObject());
 			return collaborator;
 		} 
 		
+		/**
+		 * @description deletes the collaborator from current conceptcollection
+		 * @param collectionid   id of the conceptcollection
+		 * @param model
+		 * @param req	contains string array returned by jsp
+		 * @return String having path for showcollaborators jsp page
+		 * @throws QuadrigaStorageException
+		 */
 		@RequestMapping(value="auth/conceptcollections/{collection_id}/deleteCollaborator", method = RequestMethod.POST)
 		public String deleteCollaborators(@PathVariable("collection_id") String collectionid,Model model,HttpServletRequest req)throws QuadrigaStorageException
 		{
@@ -172,21 +185,15 @@ public class CCCollaboratorController {
 			
 			String errmsg = null;
 			
-			try {
 				for(int i=0;i<collaborators.length;i++)
 				{
 					errmsg = conceptControllerManager.deleteCollaborators(collaborators[i], collectionid);
 				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				throw new QuadrigaStorageException();	
-				}
 			
-
-			if(errmsg.equals("no errors"))
-			{
-				return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
-			}
+				if(errmsg.equals("no errors"))
+				{
+					return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
+				}
 			
 			
 			return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";

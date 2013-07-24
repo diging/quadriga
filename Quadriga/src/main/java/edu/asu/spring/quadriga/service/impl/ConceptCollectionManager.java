@@ -169,18 +169,39 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		
 	}
 	
+	/**
+	 * @description	  retrieves non collaborating users from database
+	 * @param  collectionid
+	 * @throws QuadrigaStorageException
+	 * @return list of non collaborating users
+	 * @author rohit pendbhaje
+	 */
 	@Override
 	public List<IUser> showNonCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
 		List<IUser> nonCollaboratorList =  dbConnect.showNonCollaboratorRequest(collectionid);
 		return nonCollaboratorList;
 	}
 
+	/**
+	 * @description	  retrieves collaborating users from database
+	 * @param  collectionid
+	 * @throws QuadrigaStorageException
+	 * @return list of collaborator objects
+	 * @author rohit pendbhaje
+	 */
 	@Override
 	public List<ICollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
 		List<ICollaborator> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
 		return collaboratorList;
 	}
 
+	/**
+	 * @description	  retrieves collaborators for adding in the conceptcollection from database
+	 * @param  collectionid
+ 	 * @throws QuadrigaStorageException
+	 * @return String error message
+	 * @author rohit pendbhaje
+	 */
 	@Override
 	public String addCollaborators(ICollaborator collaborator, String collectionid, String userName)throws QuadrigaStorageException {
 
@@ -188,6 +209,12 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		return errmsg;
 	}
 
+	/**
+	 * @description	  retrieves collaborating users from database
+	 * @param  collectionid
+	 * @throws QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 */
 	@Override
 	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
 		
@@ -202,6 +229,14 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		}
 	}
 
+	/**
+	 * @description	  retrieves collaborators for adding in the conceptcollection from database
+	 * @param  collectionid
+	 * @param  userName
+	 * @throws QuadrigaStorageException
+	 * @return String error message
+	 * @author rohit pendbhaje
+	 */
 	@Override
 	public String deleteCollaborators(String userName, String collectionid) throws QuadrigaStorageException {
 		
@@ -209,7 +244,5 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		
 		return errmsg;
 	}
-	
-	
 
 }
