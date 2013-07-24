@@ -90,29 +90,36 @@ function validation()
 	
 	var selectedUser = elt.options[elt.selectedIndex].value;
 	
-	var chkboxArray = document.getElementById("chkboxAddDivision").getElementsByTagName("input");
+	var chkboxArray = document.getElementById("chkboxDivision").getElementsByTagName("input");
 
 	var flag = 0;
-	for(var i=0;i<chkboxArray.length;i++)
+	
+	if(selectedUser == "NONE")
+	{    
+	 alert("please select collaborator !!!");
+	 flag=1;
+	}
+	
+	else
 		{
-			if(selectedUser == "NONE")
-			{    
-			 alert("please select collaborator !!!");
-			 break;
-			}
-			else if(chkboxArray[i].checked == true)
+		for(var i=0;i<chkboxArray.length;i++)
+		 {
+			if(chkboxArray[i].checked == true)
 			{
 				flag = 1;
-			}
-	    }
+			}	
+	     }
+		}
 	
 	if(flag == 0)
-		{
-			alert("please select role !!!");
-		}
+	{
+		alert("please select role !!!");
+	}
+	
+	
 }
 
-function deleteValidate()
+/*function deleteValidate()
 {
 	var chkboxArray = document.getElementId("chkboxDeleteDivision").getElementByTagName("input");
 	alert("1111111111111");
@@ -130,7 +137,7 @@ function deleteValidate()
 		{
 			alert("please select user to delete !!!");
 		}
-}
+}*/
 
 </script>
 
@@ -146,7 +153,7 @@ function deleteValidate()
       
 	<br><br>
 	
-	<div id="chkboxAddDivision">
+	<div id="chkboxDivision">
 	<c:forEach var="roles" items="${possibleCollaboratorRoles}">
 	<input type="checkbox" id="chkboxid" class="'<c:out value = "${users.userName}"></c:out>'" name="roleselected" id="roleselected"
 		   value='<c:out value="${roles.roleDBid}"></c:out>'  disabled="disabled" />
