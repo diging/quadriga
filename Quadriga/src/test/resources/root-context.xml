@@ -21,6 +21,8 @@
 	<bean id="DictionaryManager"
 		class="edu.asu.spring.quadriga.service.impl.DictionaryManager">
 	</bean>
+
+	
 	<bean id="WorkspaceDictionaryManager"
 		class="edu.asu.spring.quadriga.service.impl.workspace.WorkspaceDictionaryManager">
 	</bean>
@@ -156,6 +158,24 @@
 	<bean id="wordPowerURL" class="java.lang.String">
 		<constructor-arg>
 			<value>http://digitalhps-develop.asu.edu:8080/wordpower</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="conceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+		<value>http://chps.asu.edu/conceptpower</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchConceptPowerURLPath" class="java.lang.String">
+		<constructor-arg>
+			<value>/rest/ConceptLookup/</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="updateConceptPowerURLPath" class="java.lang.String">
+		<constructor-arg>
+			<value>/rest/Concept?id=</value>
 		</constructor-arg>
 	</bean>
 	

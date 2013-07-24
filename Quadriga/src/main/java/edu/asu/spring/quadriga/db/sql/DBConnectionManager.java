@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
@@ -21,6 +23,7 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -38,6 +41,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class DBConnectionManager implements IDBConnectionManager
 {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(DBConnectionManager.class);
+	
 	private Connection connection;
 
 	@Autowired
@@ -423,6 +429,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
+			logger.info("",e);
 			throw new QuadrigaStorageException();
 		}
 		finally
