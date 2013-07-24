@@ -227,8 +227,16 @@
 					<!-- <table  class="dataTable" id="pagination1"> -->
 					<thead>
 						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
-								All</th>
+							<c:choose>
+								<c:when test="${roleAccess=='1'}">
+									<th align="left"><input type="checkbox" id="selectall">Select
+										All</th>
+								</c:when>
+								<c:otherwise>
+
+
+								</c:otherwise>
+							</c:choose>
 							<th>Items</th>
 							<th>ID</th>
 							<th>Pos</th>
@@ -238,16 +246,17 @@
 					<tbody>
 						<c:forEach var="dictionaryItem" items="${dictionaryItemList}">
 							<tr>
-								<td><c:choose>
-										<c:when test="${roleAccess=='1'}">
-											<input type="checkbox" class="selected" name="selected"
-												value='<c:out value="${dictionaryItem.id}"></c:out>' />
-										</c:when>
-										<c:otherwise>
+								<c:choose>
+									<c:when test="${roleAccess=='1'}">
+										<td><input type="checkbox" class="selected"
+											name="selected"
+											value='<c:out value="${dictionaryItem.id}"></c:out>' /></td>
+									</c:when>
+									<c:otherwise>
 
 
-										</c:otherwise>
-									</c:choose></td>
+									</c:otherwise>
+								</c:choose>
 								<td width="25%" align="center"><input name="items"
 									type="hidden"
 									value="<c:out value="${dictionaryItem.items}"></c:out>" /> <c:out
@@ -273,9 +282,17 @@
 		</c:when>
 
 		<c:otherwise>
-			<input type=button
-				onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItemsCollab/${dictionaryid}'"
-				value='Add Items' />
+			<c:choose>
+				<c:when test="${roleAccess=='1'}">
+					<input type=button
+						onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItemsCollab/${dictionaryid}'"
+						value='Add Items' />
+				</c:when>
+				<c:otherwise>
+
+
+				</c:otherwise>
+			</c:choose>
 			<br>
 			<spring:message code="empty.dictionary.items" />
 		</c:otherwise>
