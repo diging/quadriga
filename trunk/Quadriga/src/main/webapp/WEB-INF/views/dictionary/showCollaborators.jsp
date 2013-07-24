@@ -90,7 +90,7 @@ function validation()
 	
 	var selectedUser = elt.options[elt.selectedIndex].value;
 	
-	var chkboxArray = document.getElementById("chkboxDivision").getElementsByTagName("input");
+	var chkboxArray = document.getElementById("chkboxAddDivision").getElementsByTagName("input");
 
 	var flag = 0;
 	for(var i=0;i<chkboxArray.length;i++)
@@ -112,6 +112,26 @@ function validation()
 		}
 }
 
+function deleteValidate()
+{
+	var chkboxArray = document.getElementId("chkboxDeleteDivision").getElementByTagName("input");
+	alert("1111111111111");
+	var flag = 0;
+	
+	for(var i=0;i<chkboxArray.length;i++)
+		{
+			if(chkboxArray[i].checked == true)
+				{
+					flag = 1;
+				}
+		}
+	
+	if(flag == 0)
+		{
+			alert("please select user to delete !!!");
+		}
+}
+
 </script>
 
 
@@ -122,26 +142,28 @@ function validation()
 		   		<option value="${users.userName}" label="${users.userName}" onclick="enableCheckboxes('<c:out value = "${users.userName}"></c:out>', 1);" />
 		   	</c:forEach>
 	</select>
-	
+	<input type="submit" id="submit_btn"  value="Add Collaborator" onclick="validation();this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators'">
+      
 	<br><br>
 	
-	<div id="chkboxDivision">
+	<div id="chkboxAddDivision">
 	<c:forEach var="roles" items="${possibleCollaboratorRoles}">
-	<input type="checkbox" class="'<c:out value = "${users.userName}"></c:out>'" name="roleselected" id="roleselected"
+	<input type="checkbox" id="chkboxid" class="'<c:out value = "${users.userName}"></c:out>'" name="roleselected" id="roleselected"
 		   value='<c:out value="${roles.roleDBid}"></c:out>'  disabled="disabled" />
 	<label><c:out value="${roles.displayName}"></c:out></label> 
 	</c:forEach>
-    </div><br><input type="submit" id="submit_btn"  value="Add Collaborator" onclick="validation();this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators'">
-      
-	<br><br><br>
+    </div><br>
+	<br><br>
 
     <input type="submit" value="Delete Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/deleteCollaborators'">
 
 	<br><br>
 	
+<div id="chkboxDeleteDivision">
 <table style="width:100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">	
 	<thead>
+	
 		<tr>
 			<th align="left"><input type="checkbox" class="selectAll" value="check all" name="selected">Select All</th>
 			<th align="left">collaborator</th>
@@ -162,7 +184,7 @@ function validation()
 	</c:forEach>
 	</tbody>
 </table>
-
+</div>
 </form>
 
 

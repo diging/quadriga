@@ -461,6 +461,15 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		}
 	}
 
+	/**
+	 * retrieves data from database to add collaborators
+	 * @param	collaborator
+	 * @param	collectionid
+	 * @param 	userName
+	 * @throws  QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public String addCollaboratorRequest(ICollaborator collaborator, String collectionid, String userName)throws QuadrigaStorageException {
 		String dbCommand;
@@ -476,9 +485,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-
 			sqlStatement.setString(1,collectionid);
-
 			sqlStatement.setString(2, collabName);
 
 			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
@@ -486,8 +493,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				if(collaboratorRole.getRoleDBid()!=null)
 				{
 					role += collaboratorRole.getRoleDBid()+",";
-				}
-				
+				}	
 			}
 
 			role = role.substring(0, role.length()-1);
@@ -499,7 +505,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			errmsg = sqlStatement.getString(5);
 			
 		} catch (SQLException e) {
-				throw new QuadrigaStorageException();
+				throw new QuadrigaStorageException(e);
 			}
 		
 		finally {
@@ -509,6 +515,13 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		return errmsg;
 	}
 
+	/**
+	 * retrieves data from database to retrieve collaborators
+	 * @param	collectionid
+	 * @throws  QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public List<ICollaborator> showCollaboratorRequest(String collectionid)throws QuadrigaStorageException {
 		String dbCommand;
@@ -546,7 +559,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			
 		}
 			catch (SQLException e) {
-				throw new QuadrigaStorageException();	
+				throw new QuadrigaStorageException(e);	
 			}
 		
 		
@@ -557,6 +570,13 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		return collaboratorList;
 	}
 
+	/**
+	 * retrieves data from database to show non collaborators
+	 * @param	collectionid
+	 * @throws  QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public List<IUser> showNonCollaboratorRequest(String collectionid)throws QuadrigaStorageException {
 		String dbCommand;
@@ -597,6 +617,13 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		return collaboratorList;
 	}
 
+	/**
+	 * retrieves data from database to show collaborators
+	 * @param	collection
+	 * @throws  QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public void getCollaborators(IConceptCollection collection) {
 		
@@ -649,6 +676,14 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		
 	}
 
+	/**
+	 * retrieves data from database to delete collaborators
+	 * @param	collectionid
+	 * @param 	userName
+	 * @throws  QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public String deleteCollaboratorRequest(String userName, String collectionid)throws QuadrigaStorageException {
 		
@@ -682,6 +717,13 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		return null;
 	}
 	
+	/**
+	 * splits the comma seperated roles string coming from database and converts into list of roles
+	 * @param	role
+	 * @throws  QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role)
 	{
         String[] collabroles;
@@ -697,8 +739,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			collaboratorRole.setDisplayName(collaboratorRoleManager.getCollectionCollabRoleByDBId(collabroles[i]));
 			collaboratorRoleList.add(collaboratorRole);
 		}
-		
-		
 		
 		return collaboratorRoleList;
 	}
