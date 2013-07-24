@@ -502,7 +502,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		String dictionaryName="";
 		CallableStatement sqlStatement;
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_OWNER  + "(?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_NAME  + "(?,?)";
 
 		//get the connection
 		getConnection();
