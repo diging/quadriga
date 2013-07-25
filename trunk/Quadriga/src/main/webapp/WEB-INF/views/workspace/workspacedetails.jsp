@@ -91,9 +91,9 @@
 </a> 
 
 <!-- Dspace Login popup -->
-<a href="#login-box" class="login-window">Login / Sign In</a>
+<a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
-<form id="dspaceLogin" method="post" class="signin" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities">
+<form id="dspaceLogin" method="post" class="signin" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/dspacelogin">
 <fieldset class="textbox">
     <label class="username"><span>Dspace UserName:</span>
         <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username" />
