@@ -66,13 +66,14 @@
 	        open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
 	        buttons: {
 	            Login: function () {
-	                $(this).dialog("close");
+	                //$(this).dialog("close");
+	            	$('#dspaceLogin').submit();
 	            }
 	        }
 	    });
 	    
 	    $('a.login-window').click(function() {
-	        $( "#login-box" ).dialog( "open" );
+	        $( "#login-box" ).dialog( "open" );	        
 	    });
 	});
 </script>
@@ -92,7 +93,7 @@
 <!-- Dspace Login popup -->
 <a href="#login-box" class="login-window">Login / Sign In</a>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
-<form method="post" class="signin" action="#">
+<form id="dspaceLogin" method="post" class="signin" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities">
 <fieldset class="textbox">
     <label class="username"><span>Dspace UserName:</span>
         <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username" />
