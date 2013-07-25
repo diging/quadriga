@@ -37,16 +37,27 @@ public class DspaceController {
 	private String dspaceUsername;
 	private String dspacePassword;
 
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/dspacelogin", method = RequestMethod.POST)
+	public String dspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {
+		
+		this.dspaceUsername = dspaceUsername;
+		this.dspacePassword = dspacePassword;
+		
+		return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
+	}
 	/**
 	 * Handle the request for the list of communities to be fetched from Dspace.
 	 * 
 	 * @return Return to the dspace communities page of Quadriga
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/communities", method = RequestMethod.POST)
-	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/communities", method = RequestMethod.GET)
+	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) {
 
-		this.dspaceUsername = dspaceUsername;
-		this.dspacePassword = dspacePassword;
+		if(this.dspaceUsername == null || this.dspacePassword == null)
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
+		
 		List<ICommunity> communities = dspaceManager.getAllCommunities(this.dspaceUsername,this.dspacePassword);
 		
 		model.addAttribute("communityList", communities);
@@ -249,7 +260,7 @@ public class DspaceController {
 	 * @param bitstreamids					The id(s) of the bitstream(s) which are to be added to the workspace.
 	 * @return								Return to the workspace page
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
-//	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/addbitstreams", method = RequestMethod.POST)
 	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
