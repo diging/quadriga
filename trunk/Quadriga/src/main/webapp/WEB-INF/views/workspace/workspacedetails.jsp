@@ -59,7 +59,19 @@
 			"iDisplayLength": 3
 		});
 		
-		
+		$("#login-box").dialog({
+	        autoOpen: false,
+	        modal: false,
+	        buttons: {
+	            Login: function () {
+	                $(this).dialog("close");
+	            }
+	        }
+	    });
+	    
+	    $('a.login-window').click(function() {
+	        $( "#login-box" ).dialog( "open" );
+	    });
 	});
 </script>
 <table style="width:100%">
@@ -76,50 +88,20 @@
 </a> 
 
 <!-- Dspace Login popup -->
-<script>
-$(document).ready(function() {
-	$('a.login-window').click(function() {
-	    
-		
-		//Getting the variable's value from a link 
-	    var loginBox = $(this).attr('href');
-
-	 	// Add the mask to body
-	    //$('body').append('<div id="mask"></div>');
-	    //$('#mask').fadeIn(300);
-	    
-	    //Fade in the Popup
-	    $(loginBox).fadeIn(300);
-	    
-	    return false;
-	});
-
-	// When clicking on the button close or the mask layer the popup closed
-	$('a.close, #mask').live('click', function() { 
-	  $('#mask , .login-popup').fadeOut(300 , function() {
-	    $('#mask').remove();  
-	}); 
-	return false;
-	});
-});
-</script>
-<a href="#login-box" class="login-window">Dspace Login</a>
-<div id="login-box" class="login-popup">
-<a href="#" class="close"><img src="/quadriga/resources/txt-layout/images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
-  <form method="post" class="signin" action="#">
-        <fieldset class="textbox">
-        <label class="username">
-        <span>Dspace Username:</span>
-        <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username">
-        </label>
-        <label class="password">
-        <span>Dspace Password:</span>
-        <input id="password" name="password" value="" type="password" placeholder="Password">
-        </label>
-        <button class="submit button" type="button">Sign in</button>
-        </fieldset>
-  </form>
+<a href="#login-box" class="login-window">Login / Sign In</a>
+<div id="login-box" class="login-popup" title="Dspace Authentication">
+<form method="post" class="signin" action="#">
+<fieldset class="textbox">
+    <label class="username"><span>Dspace UserName:</span>
+        <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username" />
+    </label>
+    <label class="password"><span>Dspace Password: </span>
+        <input id="password" name="password" value="" type="password" placeholder="Password" />
+    </label>
+    </fieldset>
+</form>
 </div>
+
 
 <br><br>
 <c:choose>

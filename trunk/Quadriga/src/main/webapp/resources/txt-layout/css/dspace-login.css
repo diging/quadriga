@@ -11,7 +11,6 @@
     z-index: 1;
 }
 
-/* You can customize to your needs  */
 .login-popup {
     display: none;
     background: #333;
@@ -20,20 +19,6 @@
     float: left;
     font-size: 1.2em;
     position: fixed;
-    top: 25%;
-    left: 40%;
-    z-index: 99;
-    box-shadow: 0px 0px 20px #999;
-    /* CSS3 */
-        -moz-box-shadow: 0px 0px 20px #999;
-    /* Firefox */
-        -webkit-box-shadow: 0px 0px 20px #999;
-    /* Safari, Chrome */
-	border-radius: 3px 3px 3px 3px;
-    -moz-border-radius: 3px;
-    /* Firefox */
-        -webkit-border-radius: 3px;
-    /* Safari, Chrome */;
 }
 
 img.btn_close {
