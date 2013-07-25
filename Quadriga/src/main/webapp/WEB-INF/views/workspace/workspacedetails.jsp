@@ -62,6 +62,8 @@
 		$("#login-box").dialog({
 	        autoOpen: false,
 	        modal: false,
+	        resizable: false,
+	        open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
 	        buttons: {
 	            Login: function () {
 	                $(this).dialog("close");
