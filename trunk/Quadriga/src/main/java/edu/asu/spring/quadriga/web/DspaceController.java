@@ -7,7 +7,6 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,17 +33,21 @@ public class DspaceController {
 
 	@Autowired
 	private IDspaceManager dspaceManager;
+	
+	private String dspaceUsername;
+	private String dspacePassword;
 
 	/**
 	 * Handle the request for the list of communities to be fetched from Dspace.
 	 * 
 	 * @return Return to the dspace communities page of Quadriga
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/communities", method = RequestMethod.GET)
-	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId,ModelMap model, Principal principal) {
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/communities", method = RequestMethod.POST)
+	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {
 
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		List<ICommunity> communities = dspaceManager.getAllCommunities(principal.getName(),sPassword);
+		this.dspaceUsername = dspaceUsername;
+		this.dspacePassword = dspacePassword;
+		List<ICommunity> communities = dspaceManager.getAllCommunities(this.dspaceUsername,this.dspacePassword);
 		
 		model.addAttribute("communityList", communities);
 		model.addAttribute("workspaceId",workspaceId);
@@ -62,7 +65,11 @@ public class DspaceController {
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/{communityId}", method = RequestMethod.GET)
 	public String workspaceCommunityRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
 
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		if(this.dspaceUsername == null || this.dspacePassword == null)
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
+		
 		String communityName = dspaceManager.getCommunityName(communityId);
 
 		//No community has been fetched. The user is trying to access the collection page directly
@@ -71,7 +78,7 @@ public class DspaceController {
 		{
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
-		List<ICollection> collections = dspaceManager.getAllCollections(principal.getName(),sPassword, communityId);
+		List<ICollection> collections = dspaceManager.getAllCollections(this.dspaceUsername,this.dspacePassword, communityId);
 
 		model.addAttribute("communityName", communityName);
 		model.addAttribute("collectionList", collections);
@@ -90,6 +97,11 @@ public class DspaceController {
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/{collectionId}", method = RequestMethod.GET)
 	public String workspaceItemListRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
 
+		if(this.dspaceUsername == null || this.dspacePassword == null)
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
+		
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
@@ -135,6 +147,13 @@ public class DspaceController {
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/item", method = RequestMethod.GET)
 	public String workspaceBitStreamListRequest(@PathVariable("workspaceId") String workspaceId,@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal){
+		
+		if(this.dspaceUsername == null || this.dspacePassword == null)
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
+		
+		
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
@@ -167,8 +186,8 @@ public class DspaceController {
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
 
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		List<IBitStream> bitstreams = dspaceManager.getAllBitStreams(principal.getName(),sPassword,collectionId, itemId);
+		
+		List<IBitStream> bitstreams = dspaceManager.getAllBitStreams(this.dspaceUsername,this.dspacePassword,collectionId, itemId);
 		model.addAttribute("communityId",communityId);
 		model.addAttribute("communityName",communityName);
 		model.addAttribute("collectionId",collectionId);
@@ -234,6 +253,10 @@ public class DspaceController {
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/addbitstreams", method = RequestMethod.POST)
 	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
+		if(this.dspaceUsername == null || this.dspacePassword == null)
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
 		
 		dspaceManager.addBitStreamsToWorkspace(workspaceId, communityId, collectionId, itemId, bitstreamids, principal.getName());
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
@@ -266,8 +289,11 @@ public class DspaceController {
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
 	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
-		String sPassword = (String)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		dspaceManager.updateDspaceMetadata(workspaceId, principal.getName(), null, sPassword);
+		if(this.dspaceUsername == null || this.dspacePassword == null)
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
+		dspaceManager.updateDspaceMetadata(workspaceId, this.dspaceUsername, null, this.dspacePassword);
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }

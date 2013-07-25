@@ -68,10 +68,6 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
 
-		//TODO: Remove this after actual user synchronization to Dspace
-		sUserName="ramk@asu.edu";
-		sPassword="123456";
-
 		return proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, sUserName, sPassword);
 	}
 
@@ -80,10 +76,6 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityId) {
-
-		//TODO: Remove this after actual user synchronization to Dspace
-		sUserName="ramk@asu.edu";
-		sPassword="123456";
 
 		return proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, sUserName, sPassword, sCommunityId);
 	}
@@ -138,10 +130,6 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public List<IBitStream> getAllBitStreams(String sUserName, String sPassword, String sCollectionId, String sItemId)
 	{
-		//TODO: Remove this after actual user synchronization to Dspace
-		sUserName="ramk@asu.edu";
-		sPassword="123456";
-
 		return proxyCommunityManager.getAllBitStreams(sCollectionId, sItemId);
 	}
 
@@ -325,9 +313,6 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException
 	{
-		//TODO: Remove this after actual user synchronization to Dspace
-		dspaceUsername="ramk@asu.edu";
-		password="123456";
 
 		HashSet<String> reloadedCollectionIds = new HashSet<String>();
 

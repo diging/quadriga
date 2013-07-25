@@ -15,6 +15,7 @@ fieldset {
 form.signin .textbox label {
     display: block;
     padding-bottom: 7px;
+    font-size: 14px;
 }
 
 form.signin .textbox span {
