@@ -86,11 +86,14 @@ public class ConceptcollectionController {
 		binder.setValidator(validator);
 	}
 
+	
 	/**
-	 * Returns the list of concept collections of user to the view
-	 * 
-	 * 
-	 * */
+	 * This is used to fetch the user related conceptcollections from database.
+	 * @param model
+	 * @return
+	 * 				Returns the list of concept collections of user to the view
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/conceptcollections", method = RequestMethod.GET)
 	public String conceptCollectionHandler(ModelMap model)
 			throws QuadrigaStorageException {
@@ -107,12 +110,17 @@ public class ConceptcollectionController {
 		return "auth/conceptcollections";
 	}
 
+	
 	/**
-	 * Returns the list of concept collections of user to the view
-	 * @throws QuadrigaAccessException 
-	 * 
-	 * 
-	 * */
+	 * This is used to fetch the details of a concept from database and display
+	 * @param collection_id
+	 * @param model
+	 * @param principal
+	 * @return
+	 * 				Returns the list of concept collections of user to the view
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
 	public String conceptDetailsHandler(
 			@PathVariable("collection_id") String collection_id, ModelMap model, Principal principal)
@@ -129,6 +137,15 @@ public class ConceptcollectionController {
 		return "auth/conceptcollections/details";
 	}
 
+	/**
+	 * This method is used to search the conceptpower for items and will also give options to add it. 
+	 * @param collection_id
+	 * @param req
+	 * 				HttpRequest must have pos and search name as parameters to hit the conceptpower rest service
+	 * @param model
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
 	public String conceptSearchHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model)
 			throws QuadrigaStorageException {
@@ -141,6 +158,18 @@ public class ConceptcollectionController {
 		return "auth/searchitems";
 	}
 
+	
+	/**
+	 * This method is used to save items into a conceptcollection by searching and choosing from the conceptpower
+	 * @param collection_id
+	 * @param req
+	 * 				HttpRequest must have all the selected concept items ids. 
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
 	public String saveItemsHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
@@ -164,7 +193,10 @@ public class ConceptcollectionController {
 		model.addAttribute("concept", collection);
 		return "redirect:/auth/conceptcollections/" + collection_id + "";
 	}
-
+	/**
+	 * This method handles the addcollections.jsp form which is used to add a new conceptcollection to quadriga
+	 * @return
+	 */
 	@RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.GET)
 	public ModelAndView addCollectionsForm() {
 		return new ModelAndView("auth/conceptcollections/addCollectionsForm",
@@ -173,11 +205,16 @@ public class ConceptcollectionController {
 	}
 
 	/**
-	 * Returns the list of concept collections of user to the view
+	 * This method is used to save the form data submitted for adding a conceptcollection
 	 * 
+	 * @param collection
+	 * @param result
+	 * @param model
+	 * @param principal
+	 * @return
+	 * 			Returns the list of concept collections of user to the view
 	 * @throws QuadrigaStorageException
-	 * 
-	 * 
+	 *  
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.POST)
 	public ModelAndView addConceptCollection(
@@ -205,10 +242,14 @@ public class ConceptcollectionController {
 	/**
 	 * Returns the list of concept collections of user to the view
 	 * 
+	 * @param req
+	 * 				HttpReqest must have selected items ids as parameters
+	 * @param model
+	 * @param principal
+	 * @return
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException 
-	 * 
-	 * 
+	 *  
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/deleteitems", method = RequestMethod.POST)
 	public String deleteItems(HttpServletRequest req, ModelMap model, Principal principal)
@@ -231,7 +272,16 @@ public class ConceptcollectionController {
 		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
 
 	}
-
+	/**
+	 * This method is used to update the concept/item from concept power
+	 * @param req 
+	 * 				HttpReqest must have selected items ids as parameters
+	 * @param model
+	 * @param principal
+	 * @return 
+	 * 			This functions returns to details page
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/conceptcollections/updateitems", method = RequestMethod.POST)
 	public String conceptUpdateHandler(HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException {

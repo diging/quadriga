@@ -26,45 +26,56 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface IConceptCollectionManager {
 
+	
 	/**
 	 * Method is used to get list of concepts owned by the user. 
 	 * Input: UserId
 	 * Output: List of conceptcollections
-	 * @throws QuadrigaStorageException 
-	 * 
+	 * @param sUserId
+	 * @return
+	 * @throws QuadrigaStorageException
 	 */
 	public abstract List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException;
+	
 	
 	/**
 	 * Method is used to get list of concepts collaborated by the user. 
 	 * Input: UserId
 	 * Output: List of conceptcollections
-	 * @throws QuadrigaStorageException 
-	 * 
+	 * @param sUserId
+	 * @return
+	 * @throws QuadrigaStorageException
 	 */
 	public abstract List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException;
+	
 	
 	/**
 	 * Method is used to update concept collections data and items list 
 	 * Input: ConceptCollection
 	 * Output: String - message of success or failure
-	 * 
+	 * @param conceptCollection
+	 * @return
 	 */
 	public abstract String updateConceptCollection(ConceptCollection conceptCollection);
+	
 	
 	/**
 	 * Method is used to delete a item from the list. 
 	 * Input: ConceptcollecitonId
 	 * Output: Success/failure
-	 * 
+	 * @param id
+	 * @return
 	 */
 	public abstract int deleteConceptCollection(String id);	
+	
 	
 	/**
 	 * Method is used to search the concept power rest api
 	 * Input: item and pos of the word
 	 * Output: ConceptpowerReply which contains a list of items
-	 * 
+	 * @param item
+	 * @param pos
+	 * @return
 	 */
 	public ConceptpowerReply search(String item, String pos);
 	
@@ -80,29 +91,30 @@ public interface IConceptCollectionManager {
 	 */
 	public abstract void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAccessException;
 	
+	
 	/**
 	 * Method is used to add new items to items list of a conceptcollection
-	 * Input: lemma, id, pos, description, string
-	 * Result: We just update the backend
-	 * @param string 
-	 * @param string 
-	 * @param string 
-	 * @param string 
-	 * @param string 
-	 * @param string 
-	 * @throws QuadrigaStorageException 
-	 * @throws QuadrigaAccessException 
 	 * 
+	 * Result: We just update the backend
+	 * @param lemmma
+	 * @param id
+	 * @param pos
+	 * @param desc
+	 * @param conceptcollectionId
+	 * @param string
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
 	 */
 	void addItems(String lemmma, String id, String pos, String desc,
 			String conceptcollectionId, String string) throws QuadrigaStorageException, QuadrigaAccessException;
 	
+	
 	/**
 	 * Method is used to add new  conceptcollection
-	 * Input: Collection object
 	 * Result: We just update the backend and return the success/failure
-	 * @throws QuadrigaStorageException 
-	 * 
+	 * @param collection
+	 * @return
+	 * @throws QuadrigaStorageException
 	 */
 	public abstract  String addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException;
 
