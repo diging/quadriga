@@ -8,18 +8,23 @@
 	<script>
 	$(document).ready(function() {
 		$('#dspaceSync').click(function dspaceSync() {
-		    $( "#dialog-message" ).dialog({
+			if($('#dspaceLogin').length){
+				$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/syncdspacelogin');
+				$( "#login-box" ).dialog( "open" );					
+			}
+			else{
+			$( "#dialog-message" ).dialog({
 		    		resizable: false,
 		        	modal: true,
 		        	width:'auto',
 			      	open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
 			      	buttons: {
 			        	Ok: function() {
-			          		$( this ).dialog( "close" );
-			          		location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams';
+			          				location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams';
 			        			}
 			      			}
 			    });
+			}
 			});
 		});
 
@@ -81,7 +86,7 @@
 $(document).ready(function() {
 
 $('a.login-window').click(function() {
-    location.href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities"	        
+    location.href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities";        
 });
 
 });
@@ -98,19 +103,21 @@ $("#login-box").dialog({
     buttons: {
         Login: function () {
             //$(this).dialog("close");
-        	$('#dspaceLogin').submit();
+            $('#dspaceLogin').submit();
+        	
         }
     }
 });
 
 $('a.login-window').click(function() {
+	$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/adddspacelogin');
     $( "#login-box" ).dialog( "open" );	        
 });
 
 });
 </script>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
-<form id="dspaceLogin" method="post" class="signin" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/dspacelogin">
+<form id="dspaceLogin" method="post" class="signin">
 <fieldset class="textbox">
     <label class="username"><span>Dspace UserName:</span>
         <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username" />

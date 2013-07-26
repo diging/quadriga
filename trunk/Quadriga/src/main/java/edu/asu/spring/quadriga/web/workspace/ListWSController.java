@@ -82,16 +82,47 @@ public class ListWSController
 	
 	/**
 	 * Following methods are responsible for the Dspace part of the workspace
-	 * @author Ram Kumar Kumaresan
 	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/dspacelogin", method = RequestMethod.POST)
-	public String dspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {
+	
+	
+	/**
+	 * This method is responsible for the handle of dspace Username and password.
+	 * After the assignment of dspace variables, this redirects to the dspace communities controller.
+	 * 
+	 * @param workspaceId		The workspace id from which the add request is raised.
+	 * @param dspaceUsername	The dspace username provided by the user.
+	 * @param dspacePassword	The dspace password provided by the user.
+	 * @return					Redirect to the dspace communities page.
+	 */
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/adddspacelogin", method = RequestMethod.POST)
+	public String addFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {
 		
 		this.dspaceUsername = dspaceUsername;
 		this.dspacePassword = dspacePassword;
 		
 		return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 	}
+	
+
+	/**
+	 * This method is responsible for the handle of dspace Username and password.
+	 * After the assignment of dspace variables, this redirects to the {@link #updateBitStreamsFromWorkspace(String, ModelMap, Principal)} controller
+	 * for updating the bitstreams in this workspace
+	 * 
+	 * @param workspaceId		The workspace id from which the update request is raised.
+	 * @param dspaceUsername	The dspace username provided by the user.
+	 * @param dspacePassword	The dspace password provided by the user.
+	 * @return					Redirect to the dspace update page.
+	 */
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/syncdspacelogin", method = RequestMethod.POST)
+	public String syncFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {
+
+		this.dspaceUsername = dspaceUsername;
+		this.dspacePassword = dspacePassword;
+		
+		return "redirect:/auth/workbench/workspace/"+workspaceId+"/updatebitstreams";
+	}
+	
 	/**
 	 * Handle the request for the list of communities to be fetched from Dspace.
 	 * 
@@ -356,13 +387,14 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
 	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
+		System.out.println("inside update.............");
 		if(this.dspaceUsername == null || this.dspacePassword == null)
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
-		System.out.println("..........."+this.dspaceUsername);
-		System.out.println("..........."+this.dspacePassword);
+		System.out.println("after if.............");
 		dspaceManager.updateDspaceMetadata(workspaceId, principal.getName(), this.dspaceUsername, this.dspacePassword);
+		System.out.println("after update.............");
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }
