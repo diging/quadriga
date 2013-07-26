@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
@@ -62,7 +61,7 @@ public class ConceptCollectionRestController {
 	@Autowired
 	private IConceptCollectionFactory collectionFactory;
 
-	private IConcept concept;
+	
 	@Autowired
 	private IConceptFactory conFact;
 

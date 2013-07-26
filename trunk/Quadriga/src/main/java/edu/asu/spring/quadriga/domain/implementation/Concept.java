@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IConcept;
 
 /**
- * @author satyaswaroop
+ * uses to create a concept and also fill in a object upon downloading from the concept power
+ * @author satyaswaroop boddu
  *
  */
 @Service
 public class Concept implements IConcept {
 
+	/**
+	 * Created equals and hashcode methods to compare two concepts based on URI i.e is id.
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -58,7 +62,6 @@ public class Concept implements IConcept {
 	 */
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
 		return id;
 	}
 
@@ -67,7 +70,6 @@ public class Concept implements IConcept {
 	 */
 	@Override
 	public String getPos() {
-		// TODO Auto-generated method stub
 		return pos;
 	}
 
@@ -79,26 +81,22 @@ public class Concept implements IConcept {
 	 */
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
 		return description;
 	}
 
 	
 	@Override
 	public void setId(String name) {
-		// TODO Auto-generated method stub
 		this.id=name;
 	}
 
 	@Override
 	public void setPos(String pos) {
-		// TODO Auto-generated method stub
 		this.pos=pos;
 	}
 
 	@Override
 	public void setDescription(String description) {
-		// TODO Auto-generated method stub
 		this.description=description;
 	}
 

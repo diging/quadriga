@@ -4,7 +4,8 @@
 package edu.asu.spring.quadriga.domain;
 
 /**
- * @author satyaswaroop
+ * This is interface is used to refer to concepts downloaded from the conceptpower. 
+ * @author satyaswaroop boddu
  *
  */
 public interface IConcept {

@@ -7,7 +7,9 @@
 
 
 package edu.asu.spring.quadriga.domain.implementation;
-
+/**
+ * This is used to get the response from conceptpower
+ */
 import java.util.ArrayList;
 import java.util.List;
 

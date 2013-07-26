@@ -7,7 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-
+/**
+ * Creates {@link VelocityEngine} objects with predefined settings.
+ * @author satyaswaroop boddu
+ *
+ */
 public interface IRestVelocityFactory {
 
 	public abstract VelocityEngine getVelocityEngine(HttpServletRequest req) throws FileNotFoundException, IOException;
