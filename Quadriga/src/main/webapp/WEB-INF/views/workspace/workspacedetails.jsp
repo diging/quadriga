@@ -58,23 +58,6 @@
 			"bAutoWidth" : false,
 			"iDisplayLength": 3
 		});
-		
-		$("#login-box").dialog({
-	        autoOpen: false,
-	        modal: false,
-	        resizable: false,
-	        open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-	        buttons: {
-	            Login: function () {
-	                //$(this).dialog("close");
-	            	$('#dspaceLogin').submit();
-	            }
-	        }
-	    });
-	    
-	    $('a.login-window').click(function() {
-	        $( "#login-box" ).dialog( "open" );	        
-	    });
 	});
 </script>
 <table style="width:100%">
@@ -92,6 +75,40 @@
 
 <!-- Dspace Login popup -->
 <a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
+<c:choose>
+<c:when test="${not empty dspaceLogin}">
+<script>
+$(document).ready(function() {
+
+$('a.login-window').click(function() {
+    location.href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities"	        
+});
+
+});
+</script>
+</c:when>
+<c:otherwise>
+<script>
+$(document).ready(function() {
+$("#login-box").dialog({
+    autoOpen: false,
+    modal: false,
+    resizable: false,
+    open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+    buttons: {
+        Login: function () {
+            //$(this).dialog("close");
+        	$('#dspaceLogin').submit();
+        }
+    }
+});
+
+$('a.login-window').click(function() {
+    $( "#login-box" ).dialog( "open" );	        
+});
+
+});
+</script>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
 <form id="dspaceLogin" method="post" class="signin" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/dspacelogin">
 <fieldset class="textbox">
@@ -104,6 +121,8 @@
     </fieldset>
 </form>
 </div>
+</c:otherwise>
+</c:choose>
 
 
 <br><br>
