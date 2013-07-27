@@ -52,6 +52,15 @@ public class DictionaryItemSearchAddController {
 		this.usermanager = usermanager;
 	}
 
+	public IDictionaryManager getDictonaryManager() {
+		return dictonaryManager;
+	}
+
+	public void setDictonaryManager(IDictionaryManager dictonaryManager) {
+		this.dictonaryManager = dictonaryManager;
+	}
+
+	
 	List<DictionaryEntry> dictionaryEntryList = null;
 
 	/**
