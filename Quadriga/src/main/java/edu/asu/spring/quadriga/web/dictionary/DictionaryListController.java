@@ -204,6 +204,7 @@ public class DictionaryListController {
 		if (values == null) {
 			model.addAttribute("selection", 0);
 			List<IDictionary> dictionaryList = null;
+			logger.info("value null");
 			try {
 				dictionaryList = dictonaryManager.getDictionariesList(user
 						.getUserName());

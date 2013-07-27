@@ -81,15 +81,14 @@ public class DictionaryItemController {
 
 	@RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryPage(
-			@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
+			@PathVariable("dictionaryid") String dictionaryid, ModelMap model, Principal principal)
 					throws QuadrigaStorageException, QuadrigaAccessException {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryid);
+		IUser user = usermanager.getUserDetails(principal.getName());
+		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
 
 		logger.info("User permission on this dicitonary : "+result);
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryid,user.getUsername());
+				.getDictionariesItems(dictionaryid,user.getUserName());
 
 		if (dictionaryItemList == null) {
 			logger.info("Dictionary ITem list is null");
@@ -121,8 +120,7 @@ public class DictionaryItemController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		IUser user = usermanager.getUserDetails(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -132,9 +130,10 @@ public class DictionaryItemController {
 			model.addAttribute("delsuccess", 0);
 			//			model.addAttribute("delerrormsg", "Items were not selected");
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId,user.getUsername());
+					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
+			logger.info(" value null");
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
@@ -144,15 +143,17 @@ public class DictionaryItemController {
 				logger.info("Deleting item for dictionary id: " + dictionaryId
 						+ " and term id : " + i + " : " + values[i]);
 				msg = dictonaryManager.deleteDictionariesItems(dictionaryId,
-						values[i],user.getUsername());
+						values[i],user.getUserName());
 				if (!msg.equals("")) {
 					flag = 1;
 					errormsg = msg;
+					logger.info(" message : "+errormsg);
 				}
 			}
 		} 
 		if (flag == 0) {
 			model.addAttribute("delsuccess", 1);
+			logger.info(" message success ");
 			//			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
 		} else if (flag == 1) {
 			if (errormsg.equals("Item doesnot exists in this dictionary")) {
@@ -167,7 +168,7 @@ public class DictionaryItemController {
 		}
 		logger.info("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId,user.getUsername());
+				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -188,8 +189,7 @@ public class DictionaryItemController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		IUser user = usermanager.getUserDetails(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -198,7 +198,7 @@ public class DictionaryItemController {
 			model.addAttribute("updatesuccess", 0);
 			//			model.addAttribute("updateerrormsg", "Items were not selected");
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId,user.getUsername());
+					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -248,7 +248,7 @@ public class DictionaryItemController {
 		}
 		logger.debug("Item Returned ");
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId,user.getUsername());
+				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);

@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.test.annotation.DirtiesContext;
@@ -91,7 +92,7 @@ public class DictionaryListControllerTest {
 	@Autowired
 	IUserManager usermanager;
 
-	HttpServletRequest mock;
+	MockHttpServletRequest mock;
 	
 	Principal principal;	
 	UsernamePasswordAuthenticationToken authentication;
@@ -105,7 +106,7 @@ public class DictionaryListControllerTest {
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
-	private static final Logger logger = LoggerFactory.getLogger(DictionaryManagerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryListControllerTest.class);
 
 
 	@Autowired
@@ -130,9 +131,8 @@ public class DictionaryListControllerTest {
 		dictionaryListController.setCollabRoleManager(collabRoleManager);
 		dictionaryListController.setUsermanager(usermanager);
 		model =  new BindingAwareModelMap();	
-		
+		mock = new MockHttpServletRequest();
 
-		
 		principal = new Principal() {			
 			@Override
 			public String getName() {
@@ -315,21 +315,20 @@ public class DictionaryListControllerTest {
 			Iterator<IDictionary> I = dictionaryList.iterator();
 			assertEquals(I.hasNext(),true);
 			assertEquals(userId,"jdoe");
-			String values[] ={getDictionaryID("testDictionary")};
+			String values =getDictionaryID("testDictionary");
 			try{
-			req.setAttribute("selected", values);
+				mock.setParameter("selected", values);
 			}catch(Exception e){
 				logger.error("",e);
 			}
 
-			
+			assertEquals(dictionaryListController.deleteDictionary(mock, model, principal),"auth/dictionaries");
 			dictionaryList = (List<IDictionary>) model.get("dictinarylist");
 			userId = (String) model.get("userId");
 			I = dictionaryList.iterator();
-			assertEquals(I.hasNext(),true);
+			assertEquals(I.hasNext(),false);
 			assertEquals(userId,"jdoe");
 			
-			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
 		}
 	}
 

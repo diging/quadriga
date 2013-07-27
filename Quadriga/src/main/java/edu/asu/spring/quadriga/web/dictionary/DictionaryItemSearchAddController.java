@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -69,7 +70,7 @@ public class DictionaryItemSearchAddController {
 	 * @return Return to the adddictionaryitems JSP
 	 */
 	@RequestMapping(value = "auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.GET)
-	public String addDictionaryPage(
+	public String addDictionaryItemPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model) {
 
 		model.addAttribute("dictionaryid", dictionaryid);
@@ -89,9 +90,8 @@ public class DictionaryItemSearchAddController {
 			@ModelAttribute("SpringWeb") DictionaryItems dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryId);
+		IUser user = usermanager.getUserDetails(principal.getName());
+		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryId);
 		logger.info("Came here "+ result);
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
@@ -110,7 +110,7 @@ public class DictionaryItemSearchAddController {
 			model.addAttribute("additemsuccess", 2);
 			
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryId,user.getUsername());
+					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -134,7 +134,7 @@ public class DictionaryItemSearchAddController {
 			}
 		}
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryId,user.getUsername());
+				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -156,11 +156,10 @@ public class DictionaryItemSearchAddController {
 	public String searchDictionaryItemRestHandle(
 			@PathVariable("dictionaryid") String dictionaryid,
 			@RequestParam("itemName") String item,
-			@RequestParam("posdropdown") String pos, ModelMap model)
+			@RequestParam("posdropdown") String pos,Principal principal, ModelMap model)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		boolean result=dictonaryManager.userDictionaryPerm(user.getUsername(),dictionaryid);
+		IUser user = usermanager.getUserDetails(principal.getName());
+		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
 		try {
 			dictionaryEntryList = null;
 			if (!item.equals("")) {
@@ -172,7 +171,7 @@ public class DictionaryItemSearchAddController {
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryid,user.getUsername());
+					.getDictionariesItems(dictionaryid,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryid);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
