@@ -192,15 +192,14 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 					dictionaryList.add(dictionary);
 				} 
 			}
-			
 			errmsg = sqlStatement.getString(2);
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("",e);
 			throw new QuadrigaStorageException();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		finally
 		{

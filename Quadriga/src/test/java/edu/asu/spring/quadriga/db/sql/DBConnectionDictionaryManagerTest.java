@@ -228,7 +228,9 @@ public class DBConnectionDictionaryManagerTest {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			assertEquals((dictionaryList==null), true);
+			Iterator <IDictionary> I1 = dictionaryList.iterator();
+			
+			assertEquals((I1.hasNext()), false);
 		}else{
 			logger.info("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);
 			fail("getDictionaryOfUserTest: Create Dictionary Failed ; message :"+msg);

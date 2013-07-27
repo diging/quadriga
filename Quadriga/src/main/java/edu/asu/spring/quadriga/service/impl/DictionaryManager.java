@@ -97,7 +97,7 @@ public class DictionaryManager implements IDictionaryManager {
 			dictionaryList = dbConnect.getDictionaryOfUser(userId);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error(e.getMessage());
+			logger.error("",e);
 		}
 
 		return dictionaryList;
