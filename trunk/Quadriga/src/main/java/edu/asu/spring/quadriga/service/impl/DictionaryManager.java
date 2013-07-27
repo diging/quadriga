@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -53,6 +54,7 @@ public class DictionaryManager implements IDictionaryManager {
 	@Autowired
 	@Qualifier("updateFromWordPowerURLPath")
 	private String updateFromWordPowerURLPath;
+	
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryManager.class);
