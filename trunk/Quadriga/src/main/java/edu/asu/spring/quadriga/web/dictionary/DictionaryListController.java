@@ -48,12 +48,36 @@ public class DictionaryListController {
 	@Autowired
 	IUserManager usermanager;
 
+	public ICollaboratorRoleManager getCollabRoleManager() {
+		return collabRoleManager;
+	}
+
+	public void setCollabRoleManager(ICollaboratorRoleManager collabRoleManager) {
+		this.collabRoleManager = collabRoleManager;
+	}
+	
+	public IDictionaryManager getDictonaryManager() {
+		return dictonaryManager;
+	}
+
+	public void setDictonaryManager(IDictionaryManager dictonaryManager) {
+		this.dictonaryManager = dictonaryManager;
+	}
+	
 	public IUserManager getUsermanager() {
 		return usermanager;
 	}
 
 	public void setUsermanager(IUserManager usermanager) {
 		this.usermanager = usermanager;
+	}
+	
+	public IDictionaryFactory getDictionaryFactory() {
+		return dictionaryFactory;
+	}
+
+	public void setDictionaryFactory(IDictionaryFactory dictionaryFactory) {
+		this.dictionaryFactory = dictionaryFactory;
 	}
 
 	@Autowired
@@ -67,27 +91,27 @@ public class DictionaryListController {
 	 */
 
 	@RequestMapping(value = "auth/dictionaries", method = RequestMethod.GET)
-	public String listDictionary(ModelMap model) {
+	public String listDictionary(ModelMap model, Principal principal) {
 		try {
-			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
-			String userId = user.getUsername();
+			String userId= principal.getName();
 			List<IDictionary> dictionaryList = null;
 			List<IDictionary> dictionaryCollabList = null;
+			logger.info("Username "+userId);
 			try {
-				dictionaryList = dictonaryManager.getDictionariesList(user
-						.getUsername());
-				dictionaryCollabList=dictonaryManager.getDictionaryCollabOfUser(user
-						.getUsername());
+;				dictionaryList = dictonaryManager.getDictionariesList(userId);
+				dictionaryCollabList=dictonaryManager.getDictionaryCollabOfUser(userId);
 			} catch (QuadrigaStorageException e) {
+				logger.error("2Stack trace", e);
 				throw new QuadrigaStorageException(
 						"Oops the DB is an hard hangover, please try later");
+			}catch(Exception e){
+				logger.error("Stack trace", e);
 			}
 			model.addAttribute("dictinarylist", dictionaryList);
 			model.addAttribute("dictionaryCollabList", dictionaryCollabList);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
-			logger.error(" ----" + e.getMessage());
+			logger.error("1Stack trace", e);
 		}
 		return "auth/dictionaries";
 	}
@@ -145,13 +169,14 @@ public class DictionaryListController {
 	}
 
 	@RequestMapping(value = "auth/dictionaries/deleteDictionary", method = RequestMethod.GET)
-	public String deleteDictionary(Model model) {
+	public String deleteDictionaryGet(Model model) {
 		try {
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 			String userId = user.getUsername();
 			List<IDictionary> dictionaryList = null;
 			try {
+				
 				dictionaryList = dictonaryManager.getDictionariesList(user
 						.getUsername());
 			} catch (QuadrigaStorageException e) {
