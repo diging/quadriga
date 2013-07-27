@@ -53,6 +53,22 @@ public class DictionaryItemController {
 	public void setUsermanager(IUserManager usermanager) {
 		this.usermanager = usermanager;
 	}
+	
+	public ICollaboratorRoleManager getCollaboratorRoleManager() {
+		return collaboratorRoleManager;
+	}
+
+	public void setCollaboratorRoleManager(ICollaboratorRoleManager collaboratorRoleManager) {
+		this.collaboratorRoleManager = collaboratorRoleManager;
+	}
+	
+	public IDictionaryManager getDictonaryManager() {
+		return dictonaryManager;
+	}
+
+	public void setDictonaryManager(IDictionaryManager dictonaryManager) {
+		this.dictonaryManager = dictonaryManager;
+	}
 
 	/**
 	 * Admin can use this page to check the list of dictionary items in a
