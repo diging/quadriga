@@ -40,7 +40,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 */
 	private String getCompleteUrlPath( Properties dspaceProperties, String userName, String password)
 	{
-		return dspaceProperties.getProperty("https")+dspaceProperties.getProperty("dspace_url")+
+		return dspaceProperties.getProperty("dspace_url")+
 				dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
 				dspaceProperties.getProperty("email")+userName+
 				dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;

@@ -164,7 +164,7 @@ public class Item implements IItem{
 	 */
 	private String getCompleteUrlPath()
 	{
-		return dspaceProperties.getProperty("https")+dspaceProperties.getProperty("dspace_url")+
+		return dspaceProperties.getProperty("dspace_url")+
 		dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
 		dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+this.userName+
 		dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
