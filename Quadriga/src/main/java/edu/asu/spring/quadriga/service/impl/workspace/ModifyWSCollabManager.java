@@ -30,5 +30,17 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
 	{
 		dbConnect.addWorkspaceCollaborator(collaborator, collabRoleList, workspaceid, userName);
 	}
-
+	
+	/**
+	 * This method deletes the collaborator associated to a workspace
+	 * @param collaborator - collaborator user name
+	 * @param workspaceid - associate workspace
+	 * @throws QuadrigaStorageException
+	 * @author kiranbatna
+	 */
+	@Override
+	public void deleteWorkspaceCollaborator(String collaborator,String workspaceid) throws QuadrigaStorageException
+	{
+		dbConnect.deleteWorkspaceCollaborator(collaborator, workspaceid);
+	}
 }
