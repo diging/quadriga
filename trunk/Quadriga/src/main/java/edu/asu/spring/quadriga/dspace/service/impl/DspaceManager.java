@@ -357,7 +357,7 @@ public class DspaceManager implements IDspaceManager{
 
 					public boolean verify(String hostname,
 							javax.net.ssl.SSLSession sslSession) {
-						if (hostname.equals(dspaceProperties.getProperty("dspace_url"))) {
+						if (hostname.equals(dspaceProperties.getProperty("dspace_url").split("//")[1])) {
 							return true;
 						}
 						return false;
