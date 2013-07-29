@@ -23,7 +23,6 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -85,7 +84,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e);
 		}
 	}
 
@@ -102,8 +101,8 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
-			throw new QuadrigaStorageException();
+			logger.error("Exception in getConnection():",e);
+			throw new QuadrigaStorageException(e);
 		}
 	}
 
@@ -123,8 +122,8 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException ex)
 		{
-			ex.printStackTrace();
-			throw new QuadrigaStorageException();
+			logger.error("Exception in setupTestEnvironment():",ex);
+			throw new QuadrigaStorageException(ex);
 		}
 		finally
 		{
@@ -181,12 +180,14 @@ public class DBConnectionManager implements IDBConnectionManager
 			}
 			else
 			{
-				throw new SQLException(outputValue);
+				logger.error("Exception in getUserGetails():");
+				throw new QuadrigaStorageException(outputValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			logger.error("Exception in getUserDetails():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -250,12 +251,14 @@ public class DBConnectionManager implements IDBConnectionManager
 			}
 			else
 			{
+				logger.error("Exception in getAllActiveUsers():");
 				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			logger.error("Exception in getAllActiveUsers():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -318,12 +321,14 @@ public class DBConnectionManager implements IDBConnectionManager
 			}
 			else
 			{
+				logger.error("Exception in getAllInActiveUsers():");
 				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			logger.error("Exception in getAllInActiveUsers():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -376,7 +381,8 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			logger.error("Exception in deactiveUser():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -429,8 +435,8 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			logger.info("",e);
-			throw new QuadrigaStorageException();
+			logger.info("Exception in updateUserRoles():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -483,7 +489,8 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			logger.error("Exception in approveUserRequest():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -533,7 +540,8 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			logger.error("Exception in denyUserRequest():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -589,7 +597,7 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
@@ -634,12 +642,14 @@ public class DBConnectionManager implements IDBConnectionManager
 			}			
 			else
 			{
+				logger.error("Exception in addAccountRequest():");
 				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException();
+			logger.error("Exception in addAccountRequest():",e);
+			throw new QuadrigaStorageException(e);
 		}
 		finally
 		{
