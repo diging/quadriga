@@ -25,6 +25,22 @@
 	</bean>
 
 
+	<bean id="qStoreURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://diging.asu.edu:8080/QStore4S</value>
+		</constructor-arg>
+	</bean>
+	<bean id="qStoreURL_Add" class="java.lang.String">
+		<constructor-arg>
+			<value>/add</value>
+		</constructor-arg>
+	</bean>
+	<bean id="qStoreURL_Get" class="java.lang.String">
+		<constructor-arg>
+			<value>/get?id=</value>
+		</constructor-arg>
+	</bean>
+	
 	<bean id="wordPowerURL" class="java.lang.String">
 		<constructor-arg>
 			<value>http://digitalhps-develop.asu.edu:8080/wordpower</value>
@@ -113,6 +129,7 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/dspacestrings.properties" />
 	</bean>
+	
 	
 	
 </beans>

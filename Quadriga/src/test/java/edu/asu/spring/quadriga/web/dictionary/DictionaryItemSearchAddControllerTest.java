@@ -249,8 +249,8 @@ public class DictionaryItemSearchAddControllerTest {
 			assertEquals(dictionaryId, getDictionaryID("testDictionary"));
 			String dictionaryName = (String) model.get("dictName");
 			assertEquals(dictionaryName,"testDictionary");
-			logger.info("**"+model.containsAttribute("dictionaryItemList"));
-			List<WordpowerReply.DictionaryEntry> dictionaryItemList = (List<WordpowerReply.DictionaryEntry> )model.get("dictionaryItemList");
+			logger.info("**"+model.containsAttribute("dictionaryEntryList"));
+			List<WordpowerReply.DictionaryEntry> dictionaryItemList = (List<WordpowerReply.DictionaryEntry> )model.get("dictionaryEntryList");
 			Iterator<WordpowerReply.DictionaryEntry> I = dictionaryItemList.iterator();
 			assertEquals(I.hasNext(), true);
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
