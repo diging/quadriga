@@ -102,9 +102,26 @@ $("#login-box").dialog({
     open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
     buttons: {
         Login: function () {
-            //$(this).dialog("close");
-            $('#dspaceLogin').submit();
+        	var bValid = true;
+        	var $username = $('#username');
+        	var $password = $('#password');
         	
+            if ($.trim($username.val()) === '') {
+            	$username.effect( "shake", { times:1 }, 300);
+            	$username.focus();
+            	bValid = false;
+            }
+            if($.trim($password.val()) === '') {
+            	$password.effect( "shake", { times:1 }, 300);
+            	if(bValid)
+            	$password.focus();
+            	bValid = false;
+            }
+            
+            if(bValid)
+            	{
+            		$('#dspaceLogin').submit();
+            	}
         }
     }
 });
