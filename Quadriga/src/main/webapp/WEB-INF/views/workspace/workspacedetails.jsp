@@ -5,14 +5,21 @@
 
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
+	<c:choose>
+	<c:when test="${empty dspaceLogin}">
 	<script>
 	$(document).ready(function() {
 		$('#dspaceSync').click(function dspaceSync() {
-			if($('#dspaceLogin').length){
 				$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/syncdspacelogin');
 				$( "#login-box" ).dialog( "open" );					
-			}
-			else{
+			});
+		});
+	</script>
+	</c:when>
+	<c:otherwise>
+	<script>
+	$(document).ready(function() {
+		$('#dspaceSync').click(function dspaceSync() {
 			$( "#dialog-message" ).dialog({
 		    		resizable: false,
 		        	modal: true,
@@ -21,14 +28,16 @@
 			      	buttons: {
 			        	Ok: function() {
 			          				location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams';
+			          				$( this ).dialog( "close" );
 			        			}
 			      			}
 			    });
-			}
 			});
 		});
-
-
+	</script>
+	</c:otherwise>
+	</c:choose>
+	<script>
 	function submitClick()
 	{
 		if($('input:checkbox').is(':checked'))
