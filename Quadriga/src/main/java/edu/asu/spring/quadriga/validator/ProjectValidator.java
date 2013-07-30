@@ -42,11 +42,11 @@ public class ProjectValidator implements Validator {
 
 		String projUnixName = project.getUnixName();
 
-//		if(err.getFieldError("unixName")==null)
-//		{
-//		//validate the regular expression
-//		validateUnixNameExp(projUnixName,err);
-//		}
+		if(err.getFieldError("unixName")==null)
+		{
+		//validate the regular expression
+		validateUnixNameExp(projUnixName,err);
+		}
 		
 		
 		if(err.getFieldError("unixName")==null)
@@ -66,7 +66,7 @@ public class ProjectValidator implements Validator {
 	
 	public void validateUnixNameExp(String unixName,Errors err)
 	{
-		String regex = "^[a-zA-Z0-9-_.+!*'()]$";
+		String regex = "^[a-zA-Z0-9-_.+!*'()]*$";
 		Pattern pattern = Pattern.compile(regex);
 		
 		if(!pattern.matcher(unixName).matches())
