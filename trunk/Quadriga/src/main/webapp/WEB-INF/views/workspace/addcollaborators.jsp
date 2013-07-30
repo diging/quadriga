@@ -43,17 +43,18 @@ $(document).ready(function() {
 		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/addcollaborators">
 		
 		<c:if test="${not empty noncollabusers}">
-		   <form:select path="userObj" id="userName">
-	    <form:option value="NONE" label="--- Select ---"/>
-	   	<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="userName" /> 
-	</form:select>
-	<form:errors path="userObj" cssClass="error"></form:errors>
-	<br>
-	<form:checkboxes path="collaboratorRoles" class="roles" items="${wscollabroles}" itemValue="roleDBid" itemLabel="displayName" />
-	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
-	<br>
+		<form:select path="userObj" id="userName">
+	    	<form:option value="NONE" label="--- Select ---"/>
+	   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="userName" /> 
+		</form:select>
+		<form:errors path="userObj" cssClass="error"></form:errors>
+		<br>
+		<form:checkboxes path="collaboratorRoles" class="roles" items="${wscollabroles}" itemValue="roleDBid" itemLabel="displayName" />
+		<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+		<br>
 	<td><input type="submit" value="Add"></td>
 		</c:if>
+		
 		<c:if test="${empty noncollabusers}">
           All active users are collaborators to the workspace.		   
 		</c:if>

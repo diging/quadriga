@@ -1003,7 +1003,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public String addCollaborators(String[] collaboratorRoles, String dictionaryid, String userName, String sessionUser) {
+	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 
 		String dbCommand;
 		String errmsg;
@@ -1013,11 +1013,11 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		dbCommand = DBConstants.SP_CALL+" "+DBConstants.ADD_DICT_COLLABORATORS+"(?,?,?,?,?)";
 		
 		
-		for(String collaboratorRole:collaboratorRoles)
+		for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
 		{
-				if(collaboratorRole!=null)
+				if(collaboratorRole.getRoleDBid()!=null)
 				{
-					role += collaboratorRole + ",";
+					role += collaboratorRole.getRoleDBid() + ",";
 				}
 			
 		}

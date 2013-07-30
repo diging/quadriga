@@ -148,7 +148,7 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public String addCollaborators(String[] collaborator, String dictionaryid, String userName, String sessionUser) {
+	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 		// TODO Auto-generated method stub
 		return null;
 	}

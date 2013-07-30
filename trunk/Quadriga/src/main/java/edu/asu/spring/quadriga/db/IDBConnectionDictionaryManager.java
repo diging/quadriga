@@ -94,7 +94,7 @@ public interface IDBConnectionDictionaryManager {
 	
 	public abstract List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
 	
-	public abstract String addCollaborators(String[] collaboratorRoles, String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException;
+	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException;
 
 	public abstract String deleteCollaborators(String dictionaryid, String userName);
 	

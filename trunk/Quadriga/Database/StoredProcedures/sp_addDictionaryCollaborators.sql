@@ -1,10 +1,11 @@
+use quadriga;
 DROP PROCEDURE IF EXISTS sp_addDictionaryCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_addDictionaryCollaborators
 (
 	IN indictionaryid 		VARCHAR(200),
 	IN incollaboratoruser	VARCHAR(200),
-	IN incollaboratorrole	VARCHAR(50),
+	IN incollaboratorrole	VARCHAR(255),
 	IN inuser               VARCHAR(10),
 	OUT errmsg				VARCHAR(200)
 )

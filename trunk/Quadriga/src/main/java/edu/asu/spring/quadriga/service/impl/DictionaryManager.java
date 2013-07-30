@@ -419,13 +419,13 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public String addCollaborators(String[] collaboratorRole, String dictionaryid, String userName, String sessionUser) {
+	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 		
 		String errmsg=null;
 		
 		try {
 			
-		 errmsg =	dbConnect.addCollaborators(collaboratorRole, dictionaryid, userName, sessionUser);
+		 errmsg =	dbConnect.addCollaborators(collaborator, dictionaryid, userName, sessionUser);
 			
 		} catch (QuadrigaStorageException e) {
 			e.printStackTrace();
