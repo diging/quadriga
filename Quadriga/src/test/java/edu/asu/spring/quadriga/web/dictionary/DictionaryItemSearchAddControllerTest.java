@@ -231,8 +231,8 @@ public class DictionaryItemSearchAddControllerTest {
 	}
 	
 	@Test
-	public void testAddDictionaryItem() {
-		fail("Not yet implemented"); // TODO
+	public void testAddDictionaryItem() throws QuadrigaStorageException, QuadrigaAccessException {
+		
 	}
 	
 	@Test

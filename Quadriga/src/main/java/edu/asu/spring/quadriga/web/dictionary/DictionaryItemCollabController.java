@@ -65,6 +65,14 @@ public class DictionaryItemCollabController {
 		this.dictonaryManager = dictonaryManager;
 	}
 	
+	public ICollaboratorRoleManager getCollaboratorRoleManager() {
+		return collaboratorRoleManager;
+	}
+
+	public void setCollaboratorRoleManager(ICollaboratorRoleManager collaboratorRoleManager) {
+		this.collaboratorRoleManager = collaboratorRoleManager;
+	}
+	
 	@RequestMapping(value = "auth/dictionaries/collab/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryCollabPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model)
 			throws QuadrigaStorageException, QuadrigaAccessException{
