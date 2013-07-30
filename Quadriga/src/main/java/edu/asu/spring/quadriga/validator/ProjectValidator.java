@@ -42,11 +42,11 @@ public class ProjectValidator implements Validator {
 
 		String projUnixName = project.getUnixName();
 
-		if(err.getFieldError("unixName")==null)
-		{
-		//validate the regular expression
-		validateUnixNameExp(projUnixName,err);
-		}
+//		if(err.getFieldError("unixName")==null)
+//		{
+//		//validate the regular expression
+//		validateUnixNameExp(projUnixName,err);
+//		}
 		
 		
 		if(err.getFieldError("unixName")==null)
