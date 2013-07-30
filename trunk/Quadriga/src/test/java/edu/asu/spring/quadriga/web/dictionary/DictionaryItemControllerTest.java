@@ -264,6 +264,8 @@ public class DictionaryItemControllerTest {
 		}
 	}
 
+	
+	
 	@Test
 	public void testUpdateDictionaryItem() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
