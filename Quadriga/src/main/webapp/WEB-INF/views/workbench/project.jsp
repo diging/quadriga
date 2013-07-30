@@ -13,35 +13,52 @@
 		});
 	});
 </script>
-<h2>Project: ${project.name}</h2>
-<div>${project.description}</div>
-<hr>
-<div class="user">Owned by: ${project.owner.name}</div>
-<hr>
-<section>
-	<c:if test="${not empty workspaceList}">
+<table style="width: 100%">
+	<tr>
+		<!-- Display project details -->
+		<td style="width:90%">
+			<h2>Project: ${project.name}</h2>
+			<div>${project.description}</div>
+			<hr>
+			<div class="user">Owned by: ${project.owner.name}</div>
+			<hr> <!--  Display associated workspace -->
+			<section>
+				<c:if test="${not empty workspaceList}">
     	Project associates these workspaces:
     		<ul class="style2 pagination1">
-			<c:forEach var="workspace" items="${workspaceList}">
-				<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
-							value="${workspace.name}"></c:out></a> <br> <c:out
-						value="${workspace.description}"></c:out></li>
-			</c:forEach>
-		</ul>
-	</c:if>
-	<c:if test="${empty workspaceList}">
+						<c:forEach var="workspace" items="${workspaceList}">
+							<li><a
+								href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
+										value="${workspace.name}"></c:out></a> <br> <c:out
+									value="${workspace.description}"></c:out></li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				<c:if test="${empty workspaceList}">
 			No workspaces are associated yet. You should create one!
 		</c:if>
-</section>
-<div align="left">
-<hr>
-<a href="modifyproject/${project.internalid}"> <input type="button"
-	name="Edit" value="Edit" />
-</a>
-</div>
-
-
-
-
-
-
+			</section>
+			<div align="left">
+				<hr>
+				<a href="modifyproject/${project.internalid}"> <input
+					type="button" name="Edit" value="Edit" />
+				</a>
+			</div>
+		</td>
+		<!-- Display collaborators -->
+		<td style="width:10%">
+			<section>
+				<c:if test="${not empty project.collaborators}">
+					<h3 class="major"><span>Collaborators</span></h3>
+					<ul class="collaborators">
+						<c:forEach var="projectcollaborator"
+							items="${project.collaborators}">
+							<li><c:out value="${projectcollaborator.userObj.name}"></c:out>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+			</section>
+		</td>
+	</tr>
+</table>
