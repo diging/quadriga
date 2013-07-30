@@ -7,10 +7,16 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionRetrieveProjectManager {
 
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
+	
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;
 
 	public abstract List<IProject> getProjectList(String sUserName)
 			throws QuadrigaStorageException;
+
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
+
 
 }

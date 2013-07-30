@@ -28,6 +28,16 @@ public class RetrieveProjectController
 	@Autowired
 	IListWSManager wsManager;
 	
+	public IRetrieveProjectManager getProjectManager(){
+		return projectManager;
+		
+	}
+	
+	public void setProjectManager(IRetrieveProjectManager projectManager){
+		
+		this.projectManager = projectManager;
+	}
+	
 	/**
 	 *this method acts as a controller for handling all the activities on the workbench
 	 *home page 

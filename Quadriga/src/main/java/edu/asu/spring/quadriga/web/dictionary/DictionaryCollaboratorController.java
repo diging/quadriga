@@ -13,23 +13,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.DictionaryManager;
+import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 
 @Controller
 public class DictionaryCollaboratorController {
@@ -50,9 +56,15 @@ public class DictionaryCollaboratorController {
 	@Autowired
 	ICollaboratorRoleManager collaboratorRoleManager;
 	
+	@Autowired
+	CollaboratorValidator collaboratorValidator;
+	
 	@InitBinder
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-	    binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
+	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) throws Exception {
+	    
+		validateBinder.setValidator(collaboratorValidator);
+		
+		binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
 	    @Override
 	    public void setAsText(String text) {
 
@@ -89,6 +101,7 @@ public class DictionaryCollaboratorController {
 		
 		logger.info("coming to this page");
 		model.addAttribute("dictionaryid", dictionary_id);
+		
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
 		model.addAttribute("collaborator", collaborator); 
@@ -117,15 +130,15 @@ public class DictionaryCollaboratorController {
 	}
 
 
-	@ModelAttribute
+	/*@ModelAttribute
 	public ICollaborator getCollaborator() {
 		ICollaborator collaborator = collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
 		return collaborator;
-	} 
+	} */
 	
 	
-	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
+	/*@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
 	public String addDictCollaborators(HttpServletRequest req,@PathVariable("dictionaryid") String dictionary_id, 
 			 ModelMap model, Principal principal)
 	{
@@ -167,54 +180,57 @@ public class DictionaryCollaboratorController {
 
 		return "auth/dictionaries/showCollaborators";
 	
-	}
+	} */
 	
-/*	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addeCollaborators" , method = RequestMethod.POST)
-	public String addCollaborators(@PathVariable("dictionaryid") String dictionary_id, 
-			@ModelAttribute ICollaborator collaborator, ModelMap model, Principal principal)
+	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
+	public ModelAndView addCollaborators( @PathVariable("dictionaryid") String dictionary_id, 
+			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
+			Principal principal	)
 	{
-		int flag = 0;
+		ModelAndView model = null;
 		String errmsg = "";
 		String collaboratorUser = collaborator.getUserObj().getUserName();
 		List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
-		
-		System.out.println("--------collaborator:"+collaboratorUser);
-		
-		if(collaboratorUser != null && roles != null)
+		model = new ModelAndView("auth/dictionaries/showCollaborators");
+
+		if(result.hasErrors())
 		{
-			System.out.println("---------in condition");
-			//return "auth/dictionaries/showCollaborators";
-     		String username = principal.getName();
-			
-			errmsg = dictionaryManager.addCollaborators(collaborator, dictionary_id,username);
-			System.out.println("-------------errmsg:"+errmsg);
-		
-			if(errmsg.equals("no errors"))
-			{
-				flag = 1;
-				return "redirect:/auth/dictionaries/{dictionaryid}";
-			}
+			model.getModelMap().put("collaborator", collaborator);
 		}
+		
 		else
 		{
-			System.out.println("---------in else");
-			String collaboratorUser1 = collaborator.getUserObj().getUserName();
-			System.out.println("--------collaboratorUser1:"+collaboratorUser1);
-
-
-			//model.addAttribute("addunsuccess", 0);
+		String username = principal.getName();
 			
-			//return "auth/dictionaries/showCollaborators";
-		}
+		errmsg = dictionaryManager.addCollaborators(collaborator, dictionary_id,collaboratorUser,username);		
 		
-	/*	if(flag==0)
+		model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
+
+		}
+				
+		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionary_id);
+		model.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
+		
+		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
+		
+		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
+		while(iterator.hasNext())
 		{
-			model.addAttribute("errmsg", errmsg);
-		} 
-		logger.info("coming to this page-----");
-		return "redirect:auth/dictionaries/{dictionaryid}/showCollaborators";
+			if(iterator.next().getRoleid().equals("ADMIN"))
+			{
+				iterator.remove();
+			}
+		}
+		model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
+		
+		
+		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionary_id);
+		model.getModelMap().put("collaboratingUsers", collaborators);
+
+		return model;
 	
-	} */
+	} 
 	
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
 	public String deleteCollaborators(@PathVariable("dictionaryid") String dictionaryid, HttpServletRequest req, ModelMap model)
@@ -227,7 +243,6 @@ public class DictionaryCollaboratorController {
 		{
 			errmsg = dictionaryManager.deleteCollaborator(dictionaryid, collaborators[i]);
 		}
-
 		
 		if(errmsg.equals(""))
 		{

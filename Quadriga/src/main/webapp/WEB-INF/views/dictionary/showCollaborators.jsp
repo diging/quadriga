@@ -4,6 +4,12 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
+<style>
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
+</style>
 
 <script>
 $(document).ready(function() {
@@ -96,8 +102,8 @@ function validation()
 	
 	if(selectedUser == "NONE")
 	{    
-	 alert("please select collaborator !!!");
-	 flag=1;
+	 $.alert("please select collaborator !!!");
+	 return;
 	}
 	
 	else
@@ -113,17 +119,17 @@ function validation()
 	
 	if(flag == 0)
 	{
-		alert("please select role !!!");
+		$.alert("please select role !!!");
 	}
 	
 	
 }
 
-/*function deleteValidate()
+function deleteValidate()
 {
-	var chkboxArray = document.getElementId("chkboxDeleteDivision").getElementByTagName("input");
-	alert("1111111111111");
-	var flag = 0;
+	//var chkboxArray = document.getElementId("chkboxDeleteDivision").getElementByTagName("input");
+	//$.alert("1111111111111");
+	/*var flag = 0;
 	
 	for(var i=0;i<chkboxArray.length;i++)
 		{
@@ -136,37 +142,36 @@ function validation()
 	if(flag == 0)
 		{
 			alert("please select user to delete !!!");
-		}
-}*/
+		}*/
+}
 
 </script>
 
 
-<form method="POST" name="myForm">
-	<select  id="selectbox" name="userName" onchange="enableDisable()" >
-		    <option value="NONE" label="--- Select ---"/>
-		    <c:forEach var="users" items="${nonCollaboratingUsers}">
-		   		<option value="${users.userName}" label="${users.userName}" onclick="enableCheckboxes('<c:out value = "${users.userName}"></c:out>', 1);" />
-		   	</c:forEach>
-	</select>
-	<input type="submit" id="submit_btn"  value="Add Collaborator" onclick="validation();this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators'">
-      
+<form:form method="POST" name="myForm" commandName="collaborator"
+ action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators">
+	
+	<c:if test="${not empty nonCollaboratingUsers}">
+	<form:select path="userObj" id="selectbox" name="userName" onchange="enableDisable()" >
+	  	<form:option value="NONE" label="--- Select ---"/>
+		<form:options items="${nonCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
+	</form:select> 
+	<form:errors path="userObj" cssClass="error"></form:errors>  
+	<br><br>
+	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
+	<td><input type="submit" value="Add"></td>
+	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+	&nbsp;
+<!-- 	<input type="submit" id="submit_btn" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators'"> -->
+	</c:if>
+	
+	<br><br><br>
+    
+    <input type="submit" value="Delete Collaborator" onclick="deleteValidate();this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/deleteCollaborators'">
+
 	<br><br>
 	
-	<div id="chkboxDivision">
-	<c:forEach var="roles" items="${possibleCollaboratorRoles}">
-	<input type="checkbox" id="chkboxid" class="'<c:out value = "${users.userName}"></c:out>'" name="roleselected" id="roleselected"
-		   value='<c:out value="${roles.roleDBid}"></c:out>'  disabled="disabled" />
-	<label><c:out value="${roles.displayName}"></c:out></label> 
-	</c:forEach>
-    </div><br>
-	<br><br>
-
-    <input type="submit" value="Delete Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/deleteCollaborators'">
-
-	<br><br>
-	
-<div id="chkboxDeleteDivision">
+<!-- <div id="chkboxDeleteDivision">  -->
 <table style="width:100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">	
 	<thead>
@@ -191,8 +196,8 @@ function validation()
 	</c:forEach>
 	</tbody>
 </table>
-</div>
-</form>
+<!-- </div>  -->
+</form:form>
 
 
 

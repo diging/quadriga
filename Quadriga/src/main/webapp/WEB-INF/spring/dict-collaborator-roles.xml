@@ -8,7 +8,7 @@
 		<property name="roleDBid" value="dict_role1"></property>
 		<property name="roleid" value="ADMIN"></property>
 		<property name="rolename" value="admin"></property>
-		<property name="displayName" value="admin"></property>
+		<property name="displayName" value="Admin"></property>
 		<property name="roledescription"
 			value="Dict Admins have the same rights as the Dict Owner"></property>
 </bean>
@@ -18,7 +18,7 @@
 		<property name="roleDBid" value="dict_role2"></property>
 		<property name="roleid" value="DICT_READ_ACCESS"></property>
 		<property name="rolename" value="dict_read_access"></property>
-		<property name="displayName" value="READ"></property>
+		<property name="displayName" value="Read"></property>
 		<property name="roledescription"
 			value="Dict Collaborators that can read dictionaries"></property>
 </bean>
@@ -28,7 +28,7 @@
 		<property name="roleDBid" value="dict_role3"></property>
 		<property name="roleid" value="DICT_READ/WRITE_ACCESS"></property>
 		<property name="rolename" value="dict_read/write_access"></property>
-		<property name="displayName" value="READ/WRITE"></property>
+		<property name="displayName" value="Read/Write"></property>
 		<property name="roledescription"
 			value="Dict Collaborators that can read, add, and delete the terms in a dictionary."></property>
 </bean>
