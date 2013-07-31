@@ -39,17 +39,7 @@
 		<logout logout-success-url="/logout" invalidate-session="true" />
 	</http>
 	
-	<!-- <beans:bean id="digestFilter" class=
-	 "org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
-	   <beans:property name="userDetailsService" ref="userService" />
-	   <beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
-	</beans:bean>
-	   
-	<beans:bean id="digestEntryPoint" class=
-	 "org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
-	   <beans:property name="realmName" value="Contacts Realm via Digest Authentication"/>
-	   <beans:property name="key" value="acegi" />
-	</beans:bean> -->
+
 	
 
 	<ldap-server url="ldap://diging.asu.edu:10389" manager-dn="uid=admin,ou=system"
