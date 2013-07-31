@@ -37,6 +37,15 @@ public class DBConnectionRetrieveProjectManager implements IDBConnectionRetrieve
 	@Autowired
     private IUserManager userManager;
 	
+	
+	public DataSource getDataSource(){
+		
+		return this.dataSource;
+	}
+	
+	public void setDataSource(DataSource dataSource){
+		this.dataSource=dataSource;
+	}
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionRetrieveProjectManager.class);
 
 	private void getConnection() throws QuadrigaStorageException {
