@@ -153,4 +153,9 @@ public interface ICommunityManager {
 	 * @return					The item object matching the id provided.  Will be NULL if there no matching collection/item id was found.
 	 */
 	public abstract IItem getItem(String collectionId, String itemId);
+
+	/**
+	 * Clear all the cached dspace information
+	 */
+	public abstract void clearCompleteCache();
 }

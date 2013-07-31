@@ -157,4 +157,9 @@ public interface IDspaceManager{
 			String password) throws QuadrigaAccessException,
 			QuadrigaStorageException;
 
+	/**
+	 * Clear all the cached dspace information
+	 */
+	public abstract void clearCompleteCache();
+
 }

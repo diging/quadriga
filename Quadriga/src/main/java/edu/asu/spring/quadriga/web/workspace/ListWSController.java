@@ -142,6 +142,35 @@ public class ListWSController
 	}
 
 	/**
+	 * This method is responsible for the assignment/change of dspace Username and password.
+	 * When the user changes the dspace authentication. All the cached dspace data is cleared.
+	 * After the assignment of dspace variables, this redirects to the workspace page.
+	 * 
+	 * @param workspaceId		The workspace id from which the add request is raised.
+	 * @param dspaceUsername	The dspace username provided by the user.
+	 * @param dspacePassword	The dspace password provided by the user.
+	 * @return					Redirect to the workspace page.
+	 * @author 					Ram Kumar Kumaresan
+	 */
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/changedspacelogin", method = RequestMethod.POST)
+	public String changeDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {		
+		if(dspaceUsername == null || dspacePassword == null)
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
+		else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+		{
+			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+		}
+
+		dspaceManager.clearCompleteCache();
+		this.dspaceUsername = dspaceUsername;
+		this.dspacePassword = dspacePassword;
+		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+	}
+	
+	
+	/**
 	 * Handle the request for the list of communities to be fetched from Dspace.
 	 * 
 	 * @return Return to the dspace communities page of Quadriga
@@ -405,14 +434,11 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
 	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
-		System.out.println("inside update.............");
 		if(this.dspaceUsername == null || this.dspacePassword == null)
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
-		System.out.println("after if.............");
 		dspaceManager.updateDspaceMetadata(workspaceId, principal.getName(), this.dspaceUsername, this.dspacePassword);
-		System.out.println("after update.............");
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }
