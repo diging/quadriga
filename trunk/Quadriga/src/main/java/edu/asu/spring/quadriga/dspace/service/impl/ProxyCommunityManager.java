@@ -396,4 +396,14 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 		return null;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearCompleteCache()
+	{
+		this.communities = null;
+		this.collections = null;		
+	}
 }

@@ -63,6 +63,7 @@
 		$("input[type=submit]").button().click(function(event) {
 			event.preventDefault();
 		});
+		
 	});
 	
 	$(document).ready(function() {
@@ -88,7 +89,6 @@
 </a> 
 
 <!-- Dspace Login popup -->
-<a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
 <c:choose>
 <c:when test="${not empty dspaceLogin}">
 <script>
@@ -104,36 +104,6 @@ $('a.login-window').click(function() {
 <c:otherwise>
 <script>
 $(document).ready(function() {
-$("#login-box").dialog({
-    autoOpen: false,
-    modal: false,
-    resizable: false,
-    open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
-    buttons: {
-        Login: function () {
-        	var bValid = true;
-        	var $username = $('#username');
-        	var $password = $('#password');
-        	
-            if ($.trim($username.val()) === '') {
-            	$username.effect( "shake", { times:1 }, 300);
-            	$username.focus();
-            	bValid = false;
-            }
-            if($.trim($password.val()) === '') {
-            	$password.effect( "shake", { times:1 }, 300);
-            	if(bValid)
-            	$password.focus();
-            	bValid = false;
-            }
-            
-            if(bValid)
-            	{
-            		$('#dspaceLogin').submit();
-            	}
-        }
-    }
-});
 
 $('a.login-window').click(function() {
 	$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/adddspacelogin');
@@ -142,6 +112,10 @@ $('a.login-window').click(function() {
 
 });
 </script>
+</c:otherwise>
+</c:choose>
+
+<a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a><a href="#change-login" class="change-login">Change Dspace Login</a>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
 <form id="dspaceLogin" method="post" class="signin">
 <fieldset class="textbox">
@@ -154,9 +128,46 @@ $('a.login-window').click(function() {
     </fieldset>
 </form>
 </div>
-</c:otherwise>
-</c:choose>
-
+<script>
+$(document).ready(function(){
+	$("#login-box").dialog({
+	    autoOpen: false,
+	    modal: false,
+	    resizable: false,
+	    open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+	    buttons: {
+	        Login: function () {
+	        	var bValid = true;
+	        	var $username = $('#username');
+	        	var $password = $('#password');
+	        	
+	            if ($.trim($username.val()) === '') {
+	            	$username.effect( "shake", { times:1 }, 300);
+	            	$username.focus();
+	            	bValid = false;
+	            }
+	            if($.trim($password.val()) === '') {
+	            	$password.effect( "shake", { times:1 }, 300);
+	            	if(bValid)
+	            	$password.focus();
+	            	bValid = false;
+	            }
+	            
+	            if(bValid)
+	            	{
+	            		$('#dspaceLogin').submit();
+	            	}
+	        }
+	    }
+	});
+	
+	
+	$('a.change-login').click(function() {
+		$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/changedspacelogin');
+	    $( "#login-box" ).dialog( "open" );
+	});
+})
+</script>
 
 <br><br>
 <c:choose>

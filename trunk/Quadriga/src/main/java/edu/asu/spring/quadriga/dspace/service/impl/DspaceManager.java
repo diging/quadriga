@@ -342,6 +342,16 @@ public class DspaceManager implements IDspaceManager{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearCompleteCache()
+	{
+		proxyCommunityManager.clearCompleteCache();
+	}
+	
+	
+	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
 	 * It will be invoked only once.
