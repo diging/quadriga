@@ -115,7 +115,13 @@ $('a.login-window').click(function() {
 </c:otherwise>
 </c:choose>
 
-<a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a><a href="#change-login" class="change-login">Change Dspace Login</a>
+<a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
+<c:choose>
+<c:when test="${not empty dspaceLogin}">
+<!-- Allow the user to change the dspace login credentials -->
+<a href="#change-login" class="change-login">Change Dspace Login</a>
+</c:when>
+</c:choose>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
 <form id="dspaceLogin" method="post" class="signin">
 <fieldset class="textbox">
