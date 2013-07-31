@@ -64,7 +64,7 @@ public class NetworkRestController {
 	}
 	
 	/**
-	 * Rest interface for uploading XML
+	 * Rest interface for uploading XML for networks
 	 * http://<<URL>:<PORT>>/quadriga/rest/uploadnetworks
 	 * hhttp://localhost:8080/quadriga/rest/uploadnetworks
 	 * 

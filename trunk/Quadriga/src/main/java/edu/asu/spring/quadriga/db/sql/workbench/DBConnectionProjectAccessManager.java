@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
-import edu.asu.spring.quadriga.db.sql.workspace.DBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 

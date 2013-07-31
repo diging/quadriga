@@ -227,6 +227,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			if(resultSet !=null){ 
 				while (resultSet.next()) { 
 					role=(resultSet.getString(1));
+					logger.info("role : "+role);
 				} 
 			}
 			errmsg = sqlStatement.getString(3);
