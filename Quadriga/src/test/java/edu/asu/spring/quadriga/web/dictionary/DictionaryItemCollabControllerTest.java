@@ -30,12 +30,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+import edu.asu.spring.quadriga.domain.implementation.CollaboratorRole;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
@@ -61,6 +67,7 @@ public class DictionaryItemCollabControllerTest {
 	private IDictionaryFactory dictionaryFactory;
 
 	private IUser user;
+	private IUser userCollab;
 
 	@Autowired
 	IDictionaryManager dictonaryManager;
@@ -159,6 +166,10 @@ public class DictionaryItemCollabControllerTest {
 		user.setUserName("jdoe");
 		user.setName("John Doe");
 
+		userCollab = userFactory.createUserObject();
+		userCollab.setUserName("test");
+		userCollab.setName("Test User");
+		
 		List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 		IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
 		role.setDBid("role3");
@@ -181,6 +192,7 @@ public class DictionaryItemCollabControllerTest {
 			rolesList.add(quadrigaRole);
 		}
 		user.setQuadrigaRoles(rolesList);
+		userCollab.setQuadrigaRoles(rolesList);
 
 		//Setup the database with the proper data in the tables;
 		sDatabaseSetup = new String[]{
@@ -213,7 +225,7 @@ public class DictionaryItemCollabControllerTest {
 	}
 
 	@Test
-	public void testGetDictionaryCollabPage() throws QuadrigaStorageException {
+	public void testGetDictionaryCollabPage() throws QuadrigaStorageException, QuadrigaAccessException {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
@@ -221,6 +233,31 @@ public class DictionaryItemCollabControllerTest {
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
+			ICollaborator collaborator = new Collaborator();
+			collaborator.setUserObj(userCollab);
+			ICollaboratorRole collabRole = new CollaboratorRole();
+			collabRole.setRoleDBid("dict_role3");
+			List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+			roles.add(collabRole);
+			collaborator.setCollaboratorRoles(roles);
+			dbConnection.addCollaborators(collaborator, getDictionaryID("testDictionary"), userCollab.getUserName(), user.getUserName());
+			principal = new Principal() {			
+				@Override
+				public String getName() {
+					return "test";
+				}
+			};
+			assertEquals(dictionaryItemCollabController.getDictionaryCollabPage(getDictionaryID("testDictionary"), model,principal),"auth/dictionary/dictionarycollab");
+			int roleAccess = (Integer) model.get("roleAccess");
+			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryItemList");
+			String dictName =(String) model.get("dictName");
+			String dictionaryid =(String) model.get("dictionaryid");
+			
+			assertEquals(roleAccess,1);
+			assertEquals(dictName,"testDictionary");
+			assertEquals(dictionaryid,getDictionaryID("testDictionary"));
+			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
+			
 		}
 	}
 

@@ -2,12 +2,15 @@ package edu.asu.spring.quadriga.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.web.dictionary.DictionaryCollaboratorController;
 /**
  *@description: this class maps incoming database collaborator roles to the roles defined in the
  *				collaborators-roles.xml
@@ -21,6 +24,9 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	@Autowired 
 	@Qualifier("projectCollaborator")
 	private List<ICollaboratorRole> projectCollabRoles;
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(CollaboratorRoleManager.class);
 	
 	@Autowired
 	@Qualifier("ccCollaborator")
@@ -231,7 +237,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			}
 		}	
 		
-		return null;
+		return "";
 	}
 
 	@Override
