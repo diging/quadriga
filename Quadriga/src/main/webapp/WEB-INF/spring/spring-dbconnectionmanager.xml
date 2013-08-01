@@ -95,20 +95,6 @@
 
 	</bean>
 
-
-
-	<bean id="DspaceManager"
-		class="edu.asu.spring.quadriga.dspace.service.impl.DspaceManager"
-		init-method="start">
-	</bean>
-
-	<bean id="dspaceURL" class="java.lang.String">
-		<constructor-arg>
-			<value>import.hps.ubio.org</value>
-		</constructor-arg>
-	</bean>
-
-
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
 			<list>

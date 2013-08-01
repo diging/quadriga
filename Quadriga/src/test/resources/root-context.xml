@@ -6,8 +6,12 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<!-- Root Context: defines shared resources visible to all other web components -->
-
-
+	
+	
+	<bean class="edu.asu.spring.quadriga.service.impl.workspace.RetrieveWSCollabManager"></bean>
+	<bean class="edu.asu.spring.quadriga.dspace.service.impl.ProxyCommunityManager"></bean>
+	
+	
 	<bean id="QuadrigaRoleMapper"
 		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">
 		<property name="userManager" ref="UserManager"></property>

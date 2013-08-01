@@ -9,7 +9,10 @@
 	<bean id="DBConnectionDictionaryManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-		
+	<bean id="DBConnectionDspaceManagerBean"
+		class="edu.asu.spring.quadriga.db.sql.DBConnectionDspaceManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 	<bean id="DBConnectionCCManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionCCManager">
 		<property name="dataSource" ref="dataSource" />
@@ -53,6 +56,12 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
  
+ 	<bean id="DBConnectionRetrieveWSCollabManagerBean"
+		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionRetrieveWSCollabManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	
  <bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 
