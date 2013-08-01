@@ -110,8 +110,7 @@ public class DictionaryItemCollabController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		IUser user = usermanager.getUserDetails(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -127,7 +126,7 @@ public class DictionaryItemCollabController {
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
-			String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 			logger.info("Role :"+role+"  role type : "+roleType);
 			if(roleType.equals("Read/Write")){
@@ -167,7 +166,7 @@ public class DictionaryItemCollabController {
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
-		String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 		logger.info("Role :"+role+"  role type : "+roleType);
 		if(roleType.equals("Read/Write")){
@@ -191,8 +190,7 @@ public class DictionaryItemCollabController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		IUser user = usermanager.getUserDetails(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -204,7 +202,7 @@ public class DictionaryItemCollabController {
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
-			String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 			logger.info("Role :"+role+"  role type : "+roleType);
 			if(roleType.equals("Read/Write")){
@@ -263,7 +261,7 @@ public class DictionaryItemCollabController {
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 		logger.info("Role :"+role+"  role type : "+roleType);
 		if(roleType.equals("Read/Write")){
