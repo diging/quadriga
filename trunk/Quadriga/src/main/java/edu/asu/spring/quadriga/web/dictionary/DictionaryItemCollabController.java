@@ -370,10 +370,9 @@ public class DictionaryItemCollabController {
 	public String searchDictionaryItemRestHandle(
 			@PathVariable("dictionaryid") String dictionaryid,
 			@RequestParam("itemName") String item,
-			@RequestParam("posdropdown") String pos, ModelMap model)
+			@RequestParam("posdropdown") String pos, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		IUser user = usermanager.getUserDetails(principal.getName());
 		try {
 			List<DictionaryEntry> dictionaryEntryList = null;
 			if (!item.equals("")) {
@@ -385,7 +384,7 @@ public class DictionaryItemCollabController {
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryid,user.getUsername());
+					.getDictionariesItems(dictionaryid,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryid);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);

@@ -42,6 +42,7 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.implementation.CollaboratorRole;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -73,6 +74,7 @@ public class DictionaryItemCollabControllerTest {
 	@Autowired
 	IDictionaryManager dictonaryManager;
 
+	
 	@Autowired
 	ICollaboratorRoleManager collabRoleManager;
 	
@@ -264,9 +266,134 @@ public class DictionaryItemCollabControllerTest {
 	}
 	
 	@Test
-	public void testDeleteDictionaryItems(){
+	public void testDeleteDictionaryItems() throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			dbConnection.addDictionary(dictionary);
+			dbConnection.addDictionaryItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun","jdoe");
+			String values ="http://www.digitalhps.org/dictionary/XID-dog-n";
+			try{
+				mock.setParameter("selected", values);
+			}catch(Exception e){
+				logger.error("",e);
+			}
+			ICollaborator collaborator = new Collaborator();
+			collaborator.setUserObj(userCollab);
+			ICollaboratorRole collabRole = new CollaboratorRole();
+			collabRole.setRoleDBid("dict_role3");
+			List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+			roles.add(collabRole);
+			collaborator.setCollaboratorRoles(roles);
+			dbConnection.addCollaborators(collaborator, getDictionaryID("testDictionary"), userCollab.getUserName(), user.getUserName());
+			principal = new Principal() {			
+				@Override
+				public String getName() {
+					return "test";
+				}
+			};
+			assertEquals(dictionaryItemCollabController.deleteDictionaryItem(mock, getDictionaryID("testDictionary"), model, principal), "auth/dictionary/dictionarycollab");
+			int roleAccess = (Integer) model.get("roleAccess");
+			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryItemList");
+			String dictName =(String) model.get("dictName");
+			String dictionaryid =(String) model.get("dictID");
+			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			assertEquals(I.hasNext(),false);
+			assertEquals(roleAccess,1);
+			assertEquals(dictName,"testDictionary");
+			assertEquals(dictionaryid,getDictionaryID("testDictionary"));
+			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
+			
+		}
+	}
+	
+	@Test
+	public void testUpdateDictionaryItem() throws QuadrigaStorageException{
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			dbConnection.addDictionary(dictionary);
+			dbConnection.addDictionaryItems(getDictionaryID("testDictionary"), "dog", "http://www.digitalhps.org/dictionary/XID-dog-n", "noun","jdoe");
+			String values ="http://www.digitalhps.org/dictionary/XID-dog-n";
+			try{
+				mock.setParameter("selected", values);
+			}catch(Exception e){
+				logger.error("",e);
+			}
+			ICollaborator collaborator = new Collaborator();
+			collaborator.setUserObj(userCollab);
+			ICollaboratorRole collabRole = new CollaboratorRole();
+			collabRole.setRoleDBid("dict_role3");
+			List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+			roles.add(collabRole);
+			collaborator.setCollaboratorRoles(roles);
+			dbConnection.addCollaborators(collaborator, getDictionaryID("testDictionary"), userCollab.getUserName(), user.getUserName());
+			principal = new Principal() {			
+				@Override
+				public String getName() {
+					return "test";
+				}
+			};
+			assertEquals(dictionaryItemCollabController.updateDictionaryItem(mock, getDictionaryID("testDictionary"), model, principal), "auth/dictionary/dictionarycollab");
+			int roleAccess = (Integer) model.get("roleAccess");
+			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryItemList");
+			String dictName =(String) model.get("dictName");
+			String dictionaryid =(String) model.get("dictID");
+			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			assertEquals(I.hasNext(),true);
+			IDictionaryItems dictionaryItems = I.next();
+			
+			assertEquals(roleAccess,1);
+			assertEquals(dictName,"testDictionary");
+			assertEquals(dictionaryid,getDictionaryID("testDictionary"));
+			dbConnection.deleteDictionaryItems(getDictionaryID("testDictionary"), dictionaryItems.getId(), "jdoe");
+			//dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
+			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
+			
+		}
+	}
+	
+	@Test
+	public void testSearchDictionaryItemRestHandle() throws QuadrigaStorageException, QuadrigaAccessException{
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			dbConnection.addDictionary(dictionary);
+			ICollaborator collaborator = new Collaborator();
+			collaborator.setUserObj(userCollab);
+			ICollaboratorRole collabRole = new CollaboratorRole();
+			collabRole.setRoleDBid("dict_role3");
+			List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+			roles.add(collabRole);
+			collaborator.setCollaboratorRoles(roles);
+			dbConnection.addCollaborators(collaborator, getDictionaryID("testDictionary"), userCollab.getUserName(), user.getUserName());
+			principal = new Principal() {			
+				@Override
+				public String getName() {
+					return "test";
+				}
+			};
+			assertEquals(dictionaryItemCollabController.searchDictionaryItemRestHandle(getDictionaryID("testDictionary"), "dog", "noun", model,principal), "auth/dictionaries/addDictionaryItemsCollab");
+			int collab = (Integer) model.get("collab");
+			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryEntryList");
+			String dictName =(String) model.get("dictName");
+			String dictionaryid =(String) model.get("dictionaryid");
+			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			assertEquals(I.hasNext(),true);
+			
+			assertEquals(collab,1);
+			assertEquals(dictName,"testDictionary");
+			assertEquals(dictionaryid,getDictionaryID("testDictionary"));
+			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
 			
 		}
 	}

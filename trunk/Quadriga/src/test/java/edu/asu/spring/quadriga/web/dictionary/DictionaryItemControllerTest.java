@@ -226,7 +226,7 @@ public class DictionaryItemControllerTest {
 			dbConnection.addDictionary(dictionary);
 			assertEquals(dictionaryItemController.getDictionaryPage(getDictionaryID("testDictionary"), model,principal),"auth/dictionary/dictionary");
 			
-			String dictionaryName = (String) model.get("dictionaryName");
+			String dictionaryName = (String) model.get("dictName");
 			String dictionaryId = (String) model.get("dictionaryid");
 			assertEquals(dictionaryId,getDictionaryID("testDictionary"));
 			assertEquals(dictionaryName,"testDictionary");
