@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -252,11 +253,20 @@ public class DictionaryItemCollabControllerTest {
 			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryItemList");
 			String dictName =(String) model.get("dictName");
 			String dictionaryid =(String) model.get("dictionaryid");
-			
+			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			assertEquals(I.hasNext(),false);
 			assertEquals(roleAccess,1);
 			assertEquals(dictName,"testDictionary");
 			assertEquals(dictionaryid,getDictionaryID("testDictionary"));
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
+			
+		}
+	}
+	
+	@Test
+	public void testDeleteDictionaryItems(){
+		testSetupTestEnvironment();
+		{
 			
 		}
 	}
