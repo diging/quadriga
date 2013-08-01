@@ -97,6 +97,7 @@ public interface DBConstants
 	public static final String GET_WORKSPACE_NON_COLLABORATOR ="sp_getWorkspaceNonCollaborators";
 	public static final String ADD_WORKSPACE_COLLABORATOR = "sp_addworkspacecollaborators";
 	public static final String DELETE_WORKSPACE_COLLABORATOR = "sp_deletewscollaborators";
+	public static final String TRANSFER_WORKSPACE_OWNERSHIP = "sp_changeworkspaceowner";
 	
 	// Dspace database objects
 	public static final String CHECK_DSPACEDATA_NODES="sp_checkDsapceNodes";

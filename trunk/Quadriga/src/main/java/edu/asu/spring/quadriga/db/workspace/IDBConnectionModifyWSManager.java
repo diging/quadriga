@@ -13,4 +13,7 @@ public interface IDBConnectionModifyWSManager {
 
 	public abstract String updateWorkspaceRequest(IWorkSpace workspace)
 			throws QuadrigaStorageException;
+
+	public abstract void transferWSOwnerRequest(String projectId, String oldOwner,
+			String newOwner, String collabRole) throws QuadrigaStorageException;
 }

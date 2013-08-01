@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,5 +197,63 @@ public class DBConnectionModifyWSManager extends ADBConnectionManager implements
 			closeConnection();
 		}
 		return errmsg;
+	}
+	
+	/**
+	 * This method assigns new owner to the workspace submitted
+	 * @param projectId
+	 * @param oldOwner
+	 * @param newOwner
+	 * @param collabRole
+	 * @throws QuadrigaStorageException
+	 * @author kiranbatna
+	 */
+	@Override
+	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException 
+	{
+		String dbCommand;
+		CallableStatement sqlStatement;
+		String errmsg;
+		
+		//command to call the stored procedure
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.TRANSFER_WORKSPACE_OWNERSHIP + "(?,?,?,?,?)";
+		
+		//establish the connection
+		getConnection();
+		
+		try
+		{
+			//prepare SQL statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			//add input parameters
+			sqlStatement.setString(1, workspaceId);
+			sqlStatement.setString(2, oldOwner);
+			sqlStatement.setString(3, newOwner);
+			sqlStatement.setString(4, collabRole);
+			
+			//add out parameters
+			sqlStatement.registerOutParameter(5, Types.VARCHAR);
+			
+			//execute the statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(5);
+			
+			if(!errmsg.equals(""))
+			{
+				logger.info("Transfer workspace ownership request method :"+errmsg);
+				throw new QuadrigaStorageException(errmsg);
+			}
+		}
+		catch(SQLException ex)
+		{
+			logger.error("Transfer workspace ownership request method :"+ex);
+			throw new QuadrigaStorageException(ex.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
 	}
 }

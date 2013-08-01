@@ -23,15 +23,14 @@
 		});
 	});
 </script>
-
 <form:form commandName="collaborator" method="POST"
-	action="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${projectid}">
+	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/transferworkspaceowner">
 	<c:choose>
 		<c:when test="${success=='0'}">
 			<c:if test="${not empty collaboratinguser}">
-			   <h2>Project: ${projectname}</h2>
+			   <h2>Workspace: ${wsname}</h2>
 			   <hr>
-			   <div class="user">Owned by: ${projectowner}</div>
+			   <div class="user">Owned by: ${wsowner}</div>
 			   <hr>
 			   <div>Select owner of the project</div>
 				<form:select path="userObj" id="userName">
@@ -44,7 +43,7 @@
 				<hr>
 				 <div>Select a role</div>
 				<form:checkboxes path="collaboratorRoles" class="roles"
-					items="${projcollabroles}" itemValue="roleid"
+					items="${wscollabroles}" itemValue="roleDBid"
 					itemLabel="displayName" />
 				<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
 				<br>
