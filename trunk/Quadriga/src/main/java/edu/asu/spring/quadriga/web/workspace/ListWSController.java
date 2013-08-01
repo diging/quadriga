@@ -36,16 +36,46 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 public class ListWSController 
 {
 	@Autowired
-	IListWSManager wsManager;
+	private	IListWSManager wsManager;
 
 	@Autowired
-	IRetrieveWSCollabManager wsCollabManager;
+	private	IRetrieveWSCollabManager wsCollabManager;
 
 	@Autowired
 	private IDspaceManager dspaceManager;
 
 	private String dspaceUsername;
 	private String dspacePassword;
+
+	public IDspaceManager getDspaceManager() {
+		return dspaceManager;
+	}
+
+
+	public void setDspaceManager(IDspaceManager dspaceManager) {
+		this.dspaceManager = dspaceManager;
+	}
+
+
+	public IRetrieveWSCollabManager getWsCollabManager() {
+		return wsCollabManager;
+	}
+
+
+	public void setWsCollabManager(IRetrieveWSCollabManager wsCollabManager) {
+		this.wsCollabManager = wsCollabManager;
+	}
+
+
+	public IListWSManager getWsManager() {
+		return wsManager;
+	}
+
+
+	public void setWsManager(IListWSManager wsManager) {
+		this.wsManager = wsManager;
+	}
+
 
 	/**
 	 * This will list the details of workspaces 
@@ -64,10 +94,10 @@ public class ListWSController
 		List<ICollaborator> collaboratorList;
 
 		userName = principal.getName();
-		workspace = wsManager.getWorkspaceDetails(workspaceid,userName);
+		workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
 
 		//retrieve the collaborators associated with the workspace
-		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceid);
+		collaboratorList = getWsCollabManager().getWorkspaceCollaborators(workspaceid);
 
 		workspace.setCollaborators(collaboratorList);
 
@@ -163,7 +193,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
 
-		dspaceManager.clearCompleteCache();
+		getDspaceManager().clearCompleteCache();
 		this.dspaceUsername = dspaceUsername;
 		this.dspacePassword = dspacePassword;
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
@@ -184,7 +214,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
 
-		List<ICommunity> communities = dspaceManager.getAllCommunities(this.dspaceUsername,this.dspacePassword);
+		List<ICommunity> communities = getDspaceManager().getAllCommunities(this.dspaceUsername,this.dspacePassword);
 
 		model.addAttribute("communityList", communities);
 		model.addAttribute("workspaceId",workspaceId);
@@ -208,7 +238,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
 
-		String communityName = dspaceManager.getCommunityName(communityId);
+		String communityName = getDspaceManager().getCommunityName(communityId);
 
 		//No community has been fetched. The user is trying to access the collection page directly
 		//Redirect him to community list page
@@ -216,7 +246,7 @@ public class ListWSController
 		{
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
-		List<ICollection> collections = dspaceManager.getAllCollections(this.dspaceUsername,this.dspacePassword, communityId);
+		List<ICollection> collections = getDspaceManager().getAllCollections(this.dspaceUsername,this.dspacePassword, communityId);
 
 		model.addAttribute("communityName", communityName);
 		model.addAttribute("collectionList", collections);
@@ -241,7 +271,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
 
-		String communityId = dspaceManager.getCommunityId(collectionId);
+		String communityId = getDspaceManager().getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
 		if(communityId == null)
@@ -249,7 +279,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
 
-		String communityName = dspaceManager.getCommunityName(communityId);
+		String communityName = getDspaceManager().getCommunityName(communityId);
 		//No such community has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
 		if(communityName == null)
@@ -257,7 +287,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
 
-		String collectionName = dspaceManager.getCollectionName(collectionId);
+		String collectionName = getDspaceManager().getCollectionName(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
 		if(collectionName == null)
@@ -265,7 +295,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
 
-		List<IItem> items = dspaceManager.getAllItems(collectionId);
+		List<IItem> items = getDspaceManager().getAllItems(collectionId);
 		model.addAttribute("communityId",communityId);
 		model.addAttribute("communityName",communityName);
 		model.addAttribute("collectionId",collectionId);
@@ -294,7 +324,7 @@ public class ListWSController
 		}
 
 
-		String communityId = dspaceManager.getCommunityId(collectionId);
+		String communityId = getDspaceManager().getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
 		if(communityId == null)
@@ -302,7 +332,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
 
-		String communityName = dspaceManager.getCommunityName(communityId);
+		String communityName = getDspaceManager().getCommunityName(communityId);
 		//No such community has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
 		if(communityName == null)
@@ -310,7 +340,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
 
-		String collectionName = dspaceManager.getCollectionName(collectionId);
+		String collectionName = getDspaceManager().getCollectionName(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
 		//Redirect him to community list page
 		if(collectionName == null)
@@ -318,7 +348,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
 
-		String itemName = dspaceManager.getItemName(collectionId, itemId);
+		String itemName = getDspaceManager().getItemName(collectionId, itemId);
 		//No such item has been fetched. The user is trying to access the bitstream page directly
 		//Redirect him to community list page
 		if(itemName == null)
@@ -327,7 +357,7 @@ public class ListWSController
 		}
 
 
-		List<IBitStream> bitstreams = dspaceManager.getAllBitStreams(this.dspaceUsername,this.dspacePassword,collectionId, itemId);
+		List<IBitStream> bitstreams = getDspaceManager().getAllBitStreams(this.dspaceUsername,this.dspacePassword,collectionId, itemId);
 		model.addAttribute("communityId",communityId);
 		model.addAttribute("communityName",communityName);
 		model.addAttribute("collectionId",collectionId);
@@ -350,7 +380,7 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
 	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {
-		ICollection collection = dspaceManager.getCollection(collectionid);
+		ICollection collection = getDspaceManager().getCollection(collectionid);
 		if(collection != null)
 		{
 			if(collection.getName() != null)
@@ -370,7 +400,7 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamstatus", method = RequestMethod.GET)
 	public @ResponseBody String getBitStreamStatus(@RequestParam("bitstreamId") String bitstreamId, @RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId) {
-		IBitStream bitstream = dspaceManager.getBitStream(collectionId, itemId, bitstreamId);
+		IBitStream bitstream = getDspaceManager().getBitStream(collectionId, itemId, bitstreamId);
 		if(bitstream != null)
 		{
 			if(bitstream.getName() != null)
@@ -401,7 +431,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
 
-		dspaceManager.addBitStreamsToWorkspace(workspaceId, communityId, collectionId, itemId, bitstreamids, principal.getName());
+		getDspaceManager().addBitStreamsToWorkspace(workspaceId, communityId, collectionId, itemId, bitstreamids, principal.getName());
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 
@@ -418,7 +448,7 @@ public class ListWSController
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/deletebitstreams", method = RequestMethod.POST)
 	public String deleteBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
 
-		dspaceManager.deleteBitstreamFromWorkspace(workspaceId, bitstreamids, principal.getName());
+		getDspaceManager().deleteBitstreamFromWorkspace(workspaceId, bitstreamids, principal.getName());
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 
@@ -438,7 +468,7 @@ public class ListWSController
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
-		dspaceManager.updateDspaceMetadata(workspaceId, principal.getName(), this.dspaceUsername, this.dspacePassword);
+		getDspaceManager().updateDspaceMetadata(workspaceId, principal.getName(), this.dspaceUsername, this.dspacePassword);
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }
