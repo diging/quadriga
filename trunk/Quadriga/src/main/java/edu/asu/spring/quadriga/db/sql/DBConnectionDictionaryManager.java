@@ -12,11 +12,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-
-
-
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +28,6 @@ import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
@@ -169,7 +163,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	public List<IDictionary> getDictionaryOfUser(String userId) throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
-		String errmsg1="";
 		getConnection();
 		IDictionary dictionary;
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -21,9 +20,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Autowired
 	@Qualifier("DBConnectionModifyProjectManagerBean")
 	private IDBConnectionModifyProjectManager dbConnect;
-	
-	@Autowired
-	private IDBConnectionProjectAccessManager dbConnectionProj;
 	
 	@Autowired
 	private IUserManager userManager;
@@ -77,5 +73,21 @@ public class ModifyProjectManager implements IModifyProjectManager
 		errmsg = dbConnect.deleteProjectRequest(projectIdList);
 		
 		return errmsg;
+	}
+	
+	/**
+	 * This method transfers the project ownership to another user
+	 * @param projectId
+	 * @param oldOwner
+	 * @param newOwner
+	 * @param collabRole
+	 * @throws QuadrigaStorageException
+	 * @author kiranbatna
+	 */
+	@Override
+	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
+	{
+		dbConnect.transferProjectOwnerRequest(projectId, oldOwner, newOwner, collabRole);
+		
 	}
 }

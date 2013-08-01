@@ -22,18 +22,18 @@ public interface DBConstants
 	public final static String DENY_USER_REQUEST="sp_denyUserRequest";
 	public final static String ADD_USER_REQUEST="sp_addUserRequest";
 	
+	//project related objects
 	public static final String PROJECT_LIST="sp_getProjectList";
 	public static final String PROJECT_DETAILS="sp_getProjectDetails";
 	public static final String PROJECT_COLLABORATORS="sp_getProjectCollaborators";
-
 	public static final String ADD_PROJECT_REQUEST = "sp_addProjectDetails";
 	public static final String DELETE_PROJECT_REQUEST = "sp_deleteproject";
 	public static final String MODIFY_PROJECT_REQUEST = "sp_updateProjectDetails";
 	public static final String ADD_COLLABORATOR_REQUEST = "sp_addProjectCollaborators";
-	
 	public static final String SHOW_COLLABORATOR_REQUEST = "sp_showProjectCollaborators";
 	public static final String SHOW_NONCOLLABORATOR_REQUEST = "sp_showProjectNonCollaborators";
 	public static final String DELETE_PROJECT_COLLAB_REQUEST = "sp_deleteProjectCollaborators";
+	public static final String TRANSFER_PROJECT_OWNERSHIP = "sp_changeprojectowner";
 
 	public static final String ADD_DICTIONARY = "sp_addDictionaryDetails";
 	public static final String GET_DICTIONARY_DETAILS = "sp_getDictionaryDetails";
