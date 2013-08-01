@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.workbench;
+package edu.asu.spring.quadriga.web.workspace;
 
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
@@ -24,27 +24,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
+import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 
 @Controller
-public class TransferProjOwnerController 
+public class TransferWSOwnerController 
 {
-	@Autowired
-	IModifyProjectManager projectManager;
-	
-	@Autowired
-	IRetrieveProjectManager retrieveProjectManager;
-	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
 	
@@ -55,9 +50,18 @@ public class TransferProjOwnerController
 	private IUserManager userManager;
 	
 	@Autowired
-	ICollaboratorFactory collaboratorFactory;
+	private ICollaboratorFactory collaboratorFactory;
 	
-	private static final Logger logger = LoggerFactory.getLogger(TransferProjOwnerController.class);
+	@Autowired
+	private IModifyWSManager workspaceManager;
+	
+	@Autowired
+	private IListWSManager retrieveWSManager;
+	
+	@Autowired
+	IRetrieveWSCollabManager wsCollabManager;
+	
+	private static final Logger logger = LoggerFactory.getLogger(TransferWSOwnerController.class);
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
@@ -73,7 +77,7 @@ public class TransferProjOwnerController
 					user = userManager.getUserDetails(text);
 					setValue(user);
 				} catch (QuadrigaStorageException e) {
-					logger.error("In TransferProjOwnerController class :"+e);
+					logger.error("In TransferWSOwnerController class :"+e);
 				}
 				
 			}
@@ -86,7 +90,7 @@ public class TransferProjOwnerController
 				String[] roleIds = text.split(",");
 				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getProjectCollaboratorRoleById(roleId);
+					ICollaboratorRole role = collaboratorRoleManager.getWSCollaboratorRoleByDBId(roleId);
 					roles.add(role);
 				}
 				setValue(roles);
@@ -94,47 +98,42 @@ public class TransferProjOwnerController
 		}); 
 	}
 	
-	/**
-	 * This method is used to load the project ownership transfer form
-	 * @param projectid
-	 * @param principal
-	 * @return ModelAndView object
-	 * @throws QuadrigaStorageException
-	 * @throws QuadrigaAccessException
-	 * @author kiranbatna
-	 */
-	@RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.GET)
-	public ModelAndView transferProjectOwnerRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.GET)
+	public ModelAndView transferWSOwnerRequestForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
-		IProject project;
+		IWorkSpace workspace;
 		List<ICollaboratorRole> collaboratorRoles;
 		String owner;
 		ICollaborator collaborator;
 		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
+		List<ICollaborator> collaboratorList;
 		
 		//create a view
-		model = new ModelAndView("auth/workbench/transferprojectowner");
+		model = new ModelAndView("auth/workbench/workspace/transferworkspaceowner");
 		
-		//retrieve the project details
-		project = retrieveProjectManager.getProjectDetails(projectid);
-		owner = project.getOwner().getUserName();
+		owner = principal.getName();
 		
-		//check if the user has access logged in user is project owner
-		if(owner.equals(principal.getName()))
+		workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, owner);
+		
+		//retrieve the collaborators associated with the workspace
+		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceid);
+
+		workspace.setCollaborators(collaboratorList);
+		
+		if(workspace.getOwner().getUserName().equals(owner))
 		{
 			//adding the collaborator model
 			collaborator =  collaboratorFactory.createCollaborator();
 			model.getModelMap().put("collaborator", collaborator);
 			
-			//create a model
-			model.getModelMap().put("projectname", project.getName());
-			model.getModelMap().put("projectowner", project.getOwner().getUserName());
-			model.getModelMap().put("projectid", projectid);
+			model.getModelMap().put("wsname", workspace.getName());
+			model.getModelMap().put("wsowner", workspace.getOwner().getUserName());
+			model.getModelMap().put("workspaceid", workspace.getId());
 			
 			//fetch the collaborators
-			collaboratingUser = project.getCollaborators();
+			collaboratingUser = workspace.getCollaborators();
 			
 			for(ICollaborator collabuser : collaboratingUser)
 			{
@@ -144,10 +143,10 @@ public class TransferProjOwnerController
 			model.getModelMap().put("collaboratinguser", userList);
 			
 			//get all the project collaborator roles
-			collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+			collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
 			
 	        //add the collaborator roles to the model
-			model.getModelMap().put("projcollabroles", collaboratorRoles);
+			model.getModelMap().put("wscollabroles", collaboratorRoles);
 			
 			//create model attribute
 			model.getModelMap().put("success", 0);
@@ -156,55 +155,48 @@ public class TransferProjOwnerController
 		{
 			throw new QuadrigaAccessException();
 		}
-		
 		return model;
 	}
 	
-    /**
-     * This method submits the transfer request form
-     * @param projectid
-     * @param principal
-     * @param collaborator
-     * @param result
-     * @return ModelAndView object
-     * @throws QuadrigaStorageException
-     * @throws QuadrigaAccessException
-     */
-	@RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.POST)
-	public ModelAndView transferProjectOwnerRequest(@PathVariable("projectid") String projectid,Principal principal,
+	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.POST)
+	public ModelAndView transferWSOwnerRequest(@PathVariable("workspaceid") String workspaceid,Principal principal,
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		String userName;
 		String newOwner;
-		IProject project;
+		IWorkSpace workspace;
 		String roleIDList = "";
 		List<ICollaboratorRole> collaboratorRoles;
 		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
+		List<ICollaborator> collaboratorList;
 		
 		//create a view
-		model = new ModelAndView("auth/workbench/transferprojectowner");
+		model = new ModelAndView("auth/workbench/workspace/transferworkspaceowner");
 		userName = principal.getName();
 		
-		//retrieve the project details
-		project = retrieveProjectManager.getProjectDetails(projectid);
+		//retrieve the workspace details
+		workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
 		
-		model.getModelMap().put("projectid", projectid);
+		//retrieve the collaborators associated with the workspace
+		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceid);
+
+		workspace.setCollaborators(collaboratorList);
 		
-		if(project.getOwner().getUserName().equals(userName))
+		model.getModelMap().put("workspaceid", workspace.getId());
+		
+		if(workspace.getOwner().getUserName().equals(userName))
 		{
 			if(result.hasErrors())
 			{
 				model.getModelMap().put("collaborator", collaborator);
 				
-				//create a model
-				model.getModelMap().put("projectname", project.getName());
-				model.getModelMap().put("projectowner", project.getOwner().getUserName());
-				
+				model.getModelMap().put("wsname", workspace.getName());
+				model.getModelMap().put("wsowner", workspace.getOwner().getUserName());
 				
 				//fetch the collaborators
-				collaboratingUser = project.getCollaborators();
+				collaboratingUser = workspace.getCollaborators();
 				
 				for(ICollaborator collabuser : collaboratingUser)
 				{
@@ -214,22 +206,23 @@ public class TransferProjOwnerController
 				model.getModelMap().put("collaboratinguser", userList);
 				
 				//get all the project collaborator roles
-				collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+				collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
 				
 		        //add the collaborator roles to the model
-				model.getModelMap().put("projcollabroles", collaboratorRoles);
+				model.getModelMap().put("wscollabroles", collaboratorRoles);
 				
+				//create model attribute
 				model.getModelMap().put("success", 0);
+				
 			}
 			else
 			{
-	        	//fetch the new owner
 	        	newOwner = collaborator.getUserObj().getUserName();
 	        	
 	        	//if the collaborators are null
 	        	if(collaborator.getCollaboratorRoles().equals(null))
 	        	{
-	        		logger.info("In TransferProjOwnerController class collaborator object is NULL");
+	        		logger.info("In TransferWSOwnerController class collaborator object is NULL");
 	        		throw new QuadrigaStorageException();
 	        	}
 	        	//fetch the roles to the existing owner
@@ -242,14 +235,13 @@ public class TransferProjOwnerController
 				roleIDList = roleIDList.substring(1);
 				
 				//call the method to transfer the ownership
-				projectManager.transferProjectOwnerRequest(projectid, userName, newOwner, roleIDList);
+				workspaceManager.transferWSOwnerRequest(workspaceid, userName, newOwner, roleIDList);
 				
 				model.getModelMap().put("success", 1);
-				model.getModelMap().put("successmsg", "Project Ownership transferred successfully.");
+				model.getModelMap().put("successmsg", "Workspace Ownership transferred successfully.");
 				
 				model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 			}
-			
 		}
 		else
 		{
@@ -257,5 +249,4 @@ public class TransferProjOwnerController
 		}
 		return model;
 	}
-
 }

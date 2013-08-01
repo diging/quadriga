@@ -1,27 +1,26 @@
 /*******************************************
-Name          : sp_changeprojectowner
+Name          : sp_changeworkspaceowner
 
-Description   : Chagne the ownership of the project
+Description   : Chagne the ownership of the workspace
 
 Called By     : UI (DBConnectionDictionaryManager.java)
 
 Create By     : Kiran Kumar Batna
 
-Modified Date : 06/12/2013
+Modified Date : 08/01/2013
 
 ********************************************/
-DROP PROCEDURE IF EXISTS sp_changeprojectowner;
+DROP PROCEDURE IF EXISTS sp_changeworkspaceowner;
 DELIMITER $$
-CREATE PROCEDURE sp_changeprojectowner
+CREATE PROCEDURE sp_changeworkspaceowner
 (
-  IN  inprojectid       VARCHAR(100),
+  IN  inworkspaceid     VARCHAR(100),
   IN  inoldowner        VARCHAR(50),
   IN  innewowner        VARCHAR(50),
   IN  incollabrole      TEXT,
   OUT errmsg            VARCHAR(255)
 )
 BEGIN
-
 	 -- declare local variables
     DECLARE rowvalue   VARCHAR(30);
     DECLARE position   INT;
@@ -31,11 +30,11 @@ BEGIN
       SET errmsg = "SQL exception has occurred";
 
    -- Validating the input parameters
-   IF (inprojectid IS NULL OR inprojectid ="")
-   THEN SET errmsg = "Project id cannot be empty.";
+   IF (inworkspaceid IS NULL OR inworkspaceid ="")
+   THEN SET errmsg = "Workspace id cannot be empty.";
    END IF;
 
-   IF (inoldowner IS NULL OR inoldowner = "")
+     IF (inoldowner IS NULL OR inoldowner = "")
    THEN SET errmsg = "Username cannot be empty.";
    END IF;
 
@@ -47,8 +46,8 @@ BEGIN
    THEN SET errmsg = "Collaborator role cannot be empty.";
    END IF;
 
-   IF NOT EXISTS (SELECT 1 FROM vw_project WHERE projectid = inprojectid)
-   THEN SET errmsg = "Project id is invalid.";
+   IF NOT EXISTS(SELECT 1 FROM vw_workspace WHERE workspaceid = inworkspaceid)
+   THEN SET errmsg = "Workspace id is invalid.";
    END IF;
 
    IF NOT EXISTS (SELECT 1 FROM vw_quadriga_user WHERE username = inoldowner)
@@ -59,17 +58,15 @@ BEGIN
    THEN SET errmsg = "Username is invalid.";
    END IF;
 
-   IF NOT EXISTS (SELECT 1 FROM vw_project WHERE projectowner = inoldowner
-                  AND projectid = inprojectid)
-   THEN SET errmsg = "User does not have privileges to transfer ownership.";
+   IF NOT EXISTS(SELECT 1 FROM vw_workspace WHERE workspaceowner = inoldowner AND workspaceid = inworkspaceid)
+   THEN SET errmsg = "User does not have privileges to transfer ownership. ";
    END IF;
 
-   IF NOT EXISTS (SELECT 1 FROM vw_project_collaborator WHERE collaboratoruser = innewowner
-                 AND projectid = inprojectid)
+   IF NOT EXISTS(SELECT 1 FROM vw_workspace_collaborator WHERE workspaceid = inworkspaceid AND username = innewowner)
    THEN SET errmsg = "Invalid user.";
    END IF;
 
-    -- split the comma seperated string into a table
+   -- split the comma seperated string into a table
     DROP TEMPORARY TABLE IF EXISTS temp_tbl_collabrole;
 
 	CREATE TEMPORARY TABLE temp_tbl_collabrole
@@ -88,34 +85,38 @@ BEGIN
 
     INSERT INTO temp_tbl_collabrole(role) VALUES(incollabrole);
 
-   -- disable safe update
+      -- disable safe update
    SET sql_safe_updates=0;
    
    IF (errmsg IS NULL)
    THEN SET errmsg = "";
    START TRANSACTION;
-      -- delete the new user as a project collaborator
-      DELETE FROM tbl_project_collaborator WHERE collaboratoruser = innewowner AND projectid = inprojectid;
-   
-      -- Assign the new owner to the project
-      UPDATE tbl_project 
-      SET projectowner = innewowner
-         ,updatedby = inoldowner
-         ,updateddate = NOW()
-      WHERE projectid = inprojectid;
+     -- delete from the collaborators list
+     DELETE FROM tbl_workspace_collaborator WHERE workspaceid = inworkspaceid 
+     AND username = innewowner;
 
-      -- Assign the old owner as collaborator to the project
-      INSERT INTO tbl_project_collaborator(projectid,collaboratoruser,collaboratorrole,updatedby,updateddate,
+     -- update the workspace owner
+     UPDATE tbl_workspace
+     SET workspaceowner = innewowner,
+         updatedby = inoldowner,
+         updateddate = NOW()
+     WHERE workspaceid = inworkspaceid;
+
+    -- Add the old owner as a collaborator
+    INSERT INTO tbl_workspace_collaborator(workspaceid,username,collaboratorrole,updatedby,updateddate,
        createdby,createddate)
-     SELECT inprojectid,inoldowner,role,inoldowner,NOW(),inoldowner,NOW() FROM temp_tbl_collabrole;
+    SELECT inworkspaceid,inoldowner,role,inoldowner,NOW(),inoldowner,NOW() FROM temp_tbl_collabrole;
 
    IF (errmsg = "")
-   THEN COMMIT;
+     THEN COMMIT;
    ELSE ROLLBACK;
-   END IF;
   END IF;
-  -- enable safe update
-  SET sql_safe_updates=1;
+  END IF;
+
+  -- delete the temporary table
   DROP TEMPORARY TABLE IF EXISTS temp_tbl_collabrole;
+
+  -- enable safe update
+  SET sql_safe_updates=0;
 END$$
 DELIMITER ;

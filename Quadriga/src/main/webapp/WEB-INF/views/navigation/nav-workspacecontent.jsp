@@ -41,5 +41,7 @@
 		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletecollaborators">Delete Collaborator</a></li>
 		</ul>
 		</li>
+		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/transferworkspaceowner">
+			Change Owner</a></li>
 </ul>
 

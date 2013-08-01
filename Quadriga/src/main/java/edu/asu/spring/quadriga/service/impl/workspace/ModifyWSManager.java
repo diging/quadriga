@@ -72,5 +72,20 @@ public class ModifyWSManager implements IModifyWSManager
 		
 		return errmsg;
 	}
+	
+	/**
+	 * This method assigns a new owner to the workspace
+	 * @param projectId
+	 * @param oldOwner
+	 * @param newOwner
+	 * @param collabRole
+	 * @throws QuadrigaStorageException
+	 * @author kiranbatna
+	 */
+	@Override
+	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
+	{
+		dbConnect.transferWSOwnerRequest(workspaceId, oldOwner, newOwner, collabRole);
+	}
 
 }
