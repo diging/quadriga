@@ -2,6 +2,9 @@ package edu.asu.spring.quadriga.web.workspace;
 
 import static org.junit.Assert.*;
 
+import java.security.Principal;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,7 +15,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
@@ -31,6 +36,9 @@ public class ListWSControllerTest {
 	@Autowired
 	private IDspaceManager dspaceManager;
 	
+	private Principal principal;
+	private BindingAwareModelMap model;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -45,6 +53,14 @@ public class ListWSControllerTest {
 		listWSController.setWsManager(wsManager);
 		listWSController.setWsCollabManager(wsCollabManager);
 		listWSController.setDspaceManager(dspaceManager);
+		
+		model =  new BindingAwareModelMap();		
+		principal = new Principal() {			
+			@Override
+			public String getName() {
+				return "test";
+			}
+		};
 	}
 
 	@After
@@ -71,22 +87,46 @@ public class ListWSControllerTest {
 		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.addFilesDspaceAuthentication("w1", "test", "pass123", null, null));
 	}
 
-	@Ignore
 	@Test
 	public void testSyncFilesDspaceAuthentication() {
-		fail("Not yet implemented");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", null, null, null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "test", null, null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", null, "pass123", null, null));
+		
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "", "", null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "test", "", null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "", "pass123", null, null));
+		
+		assertEquals("redirect:/auth/workbench/workspace/w1/updatebitstreams", listWSController.syncFilesDspaceAuthentication("w1", "test", "pass123", null, null));
 	}
 
-	@Ignore
+	
 	@Test
 	public void testChangeDspaceAuthentication() {
-		fail("Not yet implemented");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", null, null, null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", null, null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", null, "pass123", null, null));
+		
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "", "", null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", "", null, null));
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "", "pass123", null, null));
+		
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", "pass123", null, null));
 	}
 	
-	@Ignore
+	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testWorkspaceCommunityListRequest() {
-		fail("Not yet implemented");
+		//Setup username and password
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", "pass123", null, null));
+		
+		//Load the list of communities
+		assertEquals("auth/workbench/workspace/communities",listWSController.workspaceCommunityListRequest(null, model, principal));
+		
+		//Check if the list of communities are not null
+		List<ICommunity> communities = (List<ICommunity>) model.get("communityList");
+		assertNotNull(communities);
 	}
 
 	@Ignore
