@@ -135,11 +135,19 @@ td {
 			<input type="button" value="DeSelect All" name="deselectall">
 		</c:if>
 		<c:if test="${empty collaboratingusers}">
+		<c:choose>
+				<c:when test="${success=='1'}">
+					<div id="msg" title="msg">
+						<c:out value="${successmsg}"></c:out>
+					</div>
+					<br />
+				</c:when>
+			</c:choose>
+			You don't have any more collaborators associated to the workspace to delete.
 			<ul>
 				<li><input type="submit" onClick="submitClick(this.id);"
 					value='Back' name="Back"></li>
 			</ul>
-			You don't have any collaborators associated to the workspace to delete.
 		</c:if>
 		<div id="dlgConfirm" title="Confirmation">Are you sure?</div>
 	</form:form>

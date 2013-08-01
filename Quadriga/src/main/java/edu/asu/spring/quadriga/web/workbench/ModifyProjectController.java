@@ -21,10 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
@@ -52,10 +54,17 @@ public class ModifyProjectController
 	
 	@Autowired
 	ProjectValidator validator;
+	
+	@Autowired
+	ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	private ICollaboratorRoleManager collaboratorRoleManager;
 
 	/**
 	 * Attach the custom validator to the Spring context
 	 */
+	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 
@@ -274,8 +283,5 @@ public class ModifyProjectController
 		{
 			throw new QuadrigaAccessException();
 		}
-		
-
 	}
-
 }

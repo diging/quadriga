@@ -184,4 +184,59 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         }
         return errmsg;
 	}
+	
+	/**
+	 * This method transfers the ownership of project form one person to another
+	 * @param projectId - project id for which the ownership is transfered.
+	 * @param oldOwner - existing owner of the project
+	 * @param newOwner - new owner of the owner
+	 * @param collabRole - collaborator role of the existing owner
+	 * @throws QuadrigaStorageException
+	 * @author kiranbatna
+	 */
+	@Override
+	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		
+		//command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.TRANSFER_PROJECT_OWNERSHIP + "(?,?,?,?,?)";
+        
+        //get the connection
+        getConnection();
+        
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//add input parameters
+        	sqlStatement.setString(1,projectId);
+        	sqlStatement.setString(2, oldOwner);
+        	sqlStatement.setString(3, newOwner);
+        	sqlStatement.setString(4, collabRole);
+        	
+        	//add output parameter
+        	sqlStatement.registerOutParameter(5, Types.VARCHAR);
+        	
+           	sqlStatement.execute();
+        	errmsg = sqlStatement.getString(5);
+        	
+        	if(!errmsg.equals(""))
+        	{
+        		logger.info("Transfer project request method :"+errmsg);
+        		throw new QuadrigaStorageException(errmsg);
+        	}
+        }
+        catch(SQLException e)
+        {
+        	logger.error("Transfer project request method :"+e);
+        	throw new QuadrigaStorageException();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
 }

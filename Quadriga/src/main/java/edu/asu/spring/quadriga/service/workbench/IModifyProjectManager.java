@@ -14,4 +14,8 @@ public interface IModifyProjectManager {
 	public abstract String addProjectRequest(IProject project)
 			throws QuadrigaStorageException;
 
+	public abstract void transferProjectOwnerRequest(String projectId,
+			String oldOwner, String newOwner, String collabRole)
+			throws QuadrigaStorageException;
+
 }
