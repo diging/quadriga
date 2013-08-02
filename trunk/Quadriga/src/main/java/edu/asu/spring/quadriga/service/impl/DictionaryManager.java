@@ -293,7 +293,7 @@ public class DictionaryManager implements IDictionaryManager {
 
 		String dictionaryOwner = "";
 		try {
-			dictionaryOwner = dbConnect.getDictionaryName(dictionaryid);
+			dictionaryOwner = dbConnect.getDictionaryOwner(dictionaryid);
 			logger.info(" checking --- "+dictionaryOwner);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
