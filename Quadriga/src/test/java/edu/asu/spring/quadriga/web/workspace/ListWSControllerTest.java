@@ -17,28 +17,31 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-"file:src/test/resources/root-context.xml","file:src/test/resources/rest-service.xml"})
+		"file:src/test/resources/root-context.xml","file:src/test/resources/rest-service.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ListWSControllerTest {
 
 	ListWSController listWSController;
-	
+
 	@Autowired
 	private	IListWSManager wsManager;
 	@Autowired
 	private	IRetrieveWSCollabManager wsCollabManager;
 	@Autowired
 	private IDspaceManager dspaceManager;
-	
+
 	private Principal principal;
 	private BindingAwareModelMap model;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -53,7 +56,7 @@ public class ListWSControllerTest {
 		listWSController.setWsManager(wsManager);
 		listWSController.setWsCollabManager(wsCollabManager);
 		listWSController.setDspaceManager(dspaceManager);
-		
+
 		model =  new BindingAwareModelMap();		
 		principal = new Principal() {			
 			@Override
@@ -73,17 +76,17 @@ public class ListWSControllerTest {
 		fail("Not yet implemented");
 	}
 
-	
+
 	@Test
 	public void testAddFilesDspaceAuthentication() {
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", null, null, null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", "test", null, null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", null, "pass123", null, null));
-		
+
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", "", "", null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", "test", "", null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", "", "pass123", null, null));
-		
+
 		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.addFilesDspaceAuthentication("w1", "test", "pass123", null, null));
 	}
 
@@ -92,71 +95,130 @@ public class ListWSControllerTest {
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", null, null, null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "test", null, null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", null, "pass123", null, null));
-		
+
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "", "", null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "test", "", null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", "", "pass123", null, null));
-		
+
 		assertEquals("redirect:/auth/workbench/workspace/w1/updatebitstreams", listWSController.syncFilesDspaceAuthentication("w1", "test", "pass123", null, null));
 	}
 
-	
+
 	@Test
 	public void testChangeDspaceAuthentication() {
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", null, null, null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", null, null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", null, "pass123", null, null));
-		
+
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "", "", null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", "", null, null));
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "", "pass123", null, null));
-		
+
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", "pass123", null, null));
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testWorkspaceCommunityListRequest() {
 		//Setup username and password
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", "test", "pass123", null, null));
-		
+
 		//Load the list of communities
 		assertEquals("auth/workbench/workspace/communities",listWSController.workspaceCommunityListRequest(null, model, principal));
-		
+
 		//Check if the list of communities are not null
 		List<ICommunity> communities = (List<ICommunity>) model.get("communityList");
 		assertNotNull(communities);
 	}
 
-	@Ignore
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testWorkspaceCommunityRequest() {
-		fail("Not yet implemented");
+
+		//Setup username and password
+		listWSController.changeDspaceAuthentication("w1", "test", "test", model, principal);
+		//Load the community list
+		listWSController.workspaceCommunityListRequest(null, model, principal);
+
+		//Check if redirected to community page
+		assertEquals("auth/workbench/workspace/community", listWSController.workspaceCommunityRequest("w1", "18", model, principal));
+		assertNotNull(model.get("communityName"));
+		List<ICollection> collections = (List<ICollection>)model.get("collectionList");
+		assertNotNull(collections.size());
 	}
 
-	@Ignore
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testWorkspaceItemListRequest() {
-		fail("Not yet implemented");
+		//Setup username and password
+		listWSController.changeDspaceAuthentication("w1", "test", "test", model, principal);
+		//Load the community list
+		listWSController.workspaceCommunityListRequest(null, model, principal);
+		assertEquals("auth/workbench/workspace/community", listWSController.workspaceCommunityRequest("w1", "18", model, principal));
+
+		//Wait for the collection to load
+		while(listWSController.getCollectionStatus("55").equals("Loading..."));
+
+		//Check if redirected to community page
+		assertEquals("auth/workbench/workspace/community/collection", listWSController.workspaceItemListRequest("w1", "55", model, principal));
+
+		List<IItem> items = (List<IItem>) model.get("itemList");
+		assertNotNull(items.size());
 	}
 
-	@Ignore
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testWorkspaceBitStreamListRequest() {
-		fail("Not yet implemented");
+		//Setup username and password
+		listWSController.changeDspaceAuthentication("w1", "test", "test", model, principal);
+		//Load the community list
+		listWSController.workspaceCommunityListRequest(null, model, principal);
+		assertEquals("auth/workbench/workspace/community", listWSController.workspaceCommunityRequest("w1", "18", model, principal));
+
+		//Wait for the collection to load
+		while(listWSController.getCollectionStatus("55").equals("Loading..."));
+
+		assertEquals("auth/workbench/workspace/community/collection/item", listWSController.workspaceBitStreamListRequest(null, "9595", "55", model, principal));
+
+		//Wait for the bitstream to load
+		//while(listWSController.getBitStreamStatus("19490", "9595", "55").equals("Loading..."));
+
+		List<IBitStream> bitstreams = (List<IBitStream>)model.get("bitList");
+		assertNotNull(bitstreams.size());
 	}
 
-	@Ignore
 	@Test
 	public void testGetCollectionStatus() {
-		fail("Not yet implemented");
+		//Setup username and password
+		listWSController.changeDspaceAuthentication("w1", "test", "test", model, principal);
+		//Load the community list
+		listWSController.workspaceCommunityListRequest(null, model, principal);
+		assertEquals("auth/workbench/workspace/community", listWSController.workspaceCommunityRequest("w1", "18", model, principal));
+
+		//Wait for the collection to load
+		while(listWSController.getCollectionStatus("55").equals("Loading..."));
+		
+		assertNotSame("Loading...",listWSController.getCollectionStatus("55"));
 	}
 
-	@Ignore
 	@Test
 	public void testGetBitStreamStatus() {
-		fail("Not yet implemented");
+		//Setup username and password
+		listWSController.changeDspaceAuthentication("w1", "test", "test", model, principal);
+		//Load the community list
+		listWSController.workspaceCommunityListRequest(null, model, principal);
+		assertEquals("auth/workbench/workspace/community", listWSController.workspaceCommunityRequest("w1", "18", model, principal));
+
+		//Wait for the collection to load
+		while(listWSController.getCollectionStatus("55").equals("Loading..."));
+
+		assertEquals("auth/workbench/workspace/community/collection/item", listWSController.workspaceBitStreamListRequest(null, "9595", "55", model, principal));
+
+		//Wait for the bitstream to load
+		while(listWSController.getBitStreamStatus("19490", "9595", "55").equals("Loading..."));
+		
+		assertNotSame("Loading...", listWSController.getBitStreamStatus("19490", "9595", "55"));
 	}
 
 	@Ignore
