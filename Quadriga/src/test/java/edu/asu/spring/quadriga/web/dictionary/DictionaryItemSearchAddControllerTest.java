@@ -32,11 +32,13 @@ import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -232,7 +234,37 @@ public class DictionaryItemSearchAddControllerTest {
 	
 	@Test
 	public void testAddDictionaryItem() throws QuadrigaStorageException, QuadrigaAccessException {
-		
+		testSetupTestEnvironment();
+		{
+			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+			dictionary.setName("testDictionary");
+			dictionary.setDescription("description");
+			dictionary.setOwner(user);
+			dbConnection.addDictionary(dictionary);
+			String values ="http://www.digitalhps.org/dictionary/XID-dog-n";
+			try{
+				mock.setParameter("selected", values);
+			}catch(Exception e){
+				logger.error("",e);
+			}
+			DictionaryItems dictionaryItems = new DictionaryItems();
+			dictionaryItems.setId(values);
+			dictionaryItems.setItems("dog");
+			dictionaryItems.setPos("noun");
+			dictionaryItems.setDescription("something");
+			assertEquals(dictionaryItemSearchAddController.addDictionaryItem(mock, getDictionaryID("testDictionary"), dictionaryItems, model, principal), "auth/dictionary/dictionary");
+			String dictionaryId=(String) model.get("dictID");
+			String dictionaryName=(String) model.get("dictName");
+			assertEquals(dictionaryId, getDictionaryID("testDictionary"));
+			assertEquals(dictionaryName, "testDictionary");
+			List<IDictionaryItems> dictionaryItemList = (List<IDictionaryItems> )model.get("dictionaryItemList");
+			Iterator <IDictionaryItems> I =dictionaryItemList.iterator();
+			assertEquals(I.hasNext(),true);
+			IDictionaryItems di = I.next();
+			assertEquals(di.getItems(),"dog");
+			assertEquals(di.getPos(),"noun");
+			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
+		}
 	}
 	
 	@Test

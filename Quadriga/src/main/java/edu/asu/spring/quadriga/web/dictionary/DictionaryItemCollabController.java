@@ -279,8 +279,7 @@ public class DictionaryItemCollabController {
 			@ModelAttribute("SpringWeb") DictionaryItems dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		IUser user = usermanager.getUserDetails(principal.getName());
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
 		String owner = usermanager.getUserDetails(principal.getName())
@@ -292,7 +291,6 @@ public class DictionaryItemCollabController {
 						values[i], dictionaryItems);
 				msg = dictonaryManager.addNewDictionariesItems(dictionaryId,
 						di.getItems(), di.getId(), di.getPos(), dictonaryManager.getDictionaryOwner(dictionaryId));
-
 			}
 		}else{
 			model.addAttribute("additemsuccess", 2);
@@ -301,7 +299,7 @@ public class DictionaryItemCollabController {
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
-			String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 			logger.info("Role :"+role+"  role type : "+roleType);
 			if(roleType.equals("Read/Write")){
@@ -332,7 +330,7 @@ public class DictionaryItemCollabController {
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
-		String role =dictonaryManager.getDictionaryCollabPerm(user.getUsername(),dictionaryId);
+		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 		logger.info("Role :"+role+"  role type : "+roleType);
 		if(roleType.equals("Read/Write")){
