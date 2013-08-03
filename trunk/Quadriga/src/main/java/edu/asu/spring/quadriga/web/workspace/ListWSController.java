@@ -27,6 +27,14 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
 /**
  * Controller to handle all the workspace requests for Quadriga.
+ * 
+ *  The (Dspace) design flow is to load the list of all communities accessible to the user
+ *  and then load all collections within the community selected by the user. This 
+ *  second call for collection loads all the collections and the items within them.
+ *  The last call is to load the set of bitstreams within a selected item. Any deviation 
+ *  from the above flow is handled by the concerned classes.
+ *  
+ *  
  * @author Kiran Kumar Batna
  * @author Ram Kumar Kumaresan
  */

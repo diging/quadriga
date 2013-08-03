@@ -28,11 +28,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
- * The purpose of the class is to make rest service calls to dspace
- * and fetch the communities, collections, items and bitstreams
- * This class manages the rest template, url, username and password.
+ *	The purpose of the class is to make rest service calls to dspace
+ * 	and fetch the communities, collections, items and bitstreams
+ * 	This class manages the rest template, url, username and password.
  *  
- * @author Ram Kumar Kumaresan
+ * 	@author Ram Kumar Kumaresan
  *
  */
 
@@ -62,13 +62,63 @@ public class DspaceManager implements IDspaceManager{
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
 
+	@Override
+	public Properties getDspaceProperties() {
+		return dspaceProperties;
+	}
+
+	@Override
+	public void setDspaceProperties(Properties dspaceProperties) {
+		this.dspaceProperties = dspaceProperties;
+	}
+
+	@Override
+	public IDBConnectionDspaceManager getDbconnectionManager() {
+		return dbconnectionManager;
+	}
+
+	@Override
+	public void setDbconnectionManager(IDBConnectionDspaceManager dbconnectionManager) {
+		this.dbconnectionManager = dbconnectionManager;
+	}
+
+	@Override
+	public ICommunityManager getProxyCommunityManager() {
+		return proxyCommunityManager;
+	}
+
+	@Override
+	public void setProxyCommunityManager(ICommunityManager proxyCommunityManager) {
+		this.proxyCommunityManager = proxyCommunityManager;
+	}
+
+	@Override
+	public RestTemplate getRestTemplate() {
+		return restTemplate;
+	}
+
+	@Override
+	public void setRestTemplate(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
+
+	@Override
+	public String getFilePath() {
+		return filePath;
+	}
+
+	@Override
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
 
-		return proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, sUserName, sPassword);
+		return getProxyCommunityManager().getAllCommunities(getRestTemplate(), getDspaceProperties(), sUserName, sPassword);
 	}
 
 	/**
@@ -77,7 +127,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityId) {
 
-		return proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, sUserName, sPassword, sCommunityId);
+		return getProxyCommunityManager().getAllCollections(getRestTemplate(), getDspaceProperties(), sUserName, sPassword, sCommunityId);
 	}
 
 	/**
@@ -86,7 +136,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public String getCommunityName(String sCommunityId) 
 	{
-		return proxyCommunityManager.getCommunityName(sCommunityId);
+		return getProxyCommunityManager().getCommunityName(sCommunityId);
 	}
 
 	/**
@@ -95,7 +145,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public String getCollectionName(String sCollectionId) 
 	{
-		return proxyCommunityManager.getCollectionName(sCollectionId);
+		return getProxyCommunityManager().getCollectionName(sCollectionId);
 	}
 
 	/**
@@ -104,7 +154,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
-		return proxyCommunityManager.getCollection(sCollectionId,true,null,null,null,null,null);
+		return getProxyCommunityManager().getCollection(sCollectionId,true,null,null,null,null,null);
 	}
 
 	/**
@@ -113,7 +163,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public String getCommunityId(String sCollectionId)
 	{
-		return proxyCommunityManager.getCommunityId(sCollectionId);
+		return getProxyCommunityManager().getCommunityId(sCollectionId);
 	}
 
 	/**
@@ -121,7 +171,7 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	public List<IItem> getAllItems(String sCollectionId) {
-		return  proxyCommunityManager.getAllItems(sCollectionId); 
+		return  getProxyCommunityManager().getAllItems(sCollectionId); 
 	}
 
 	/**
@@ -130,7 +180,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public List<IBitStream> getAllBitStreams(String sUserName, String sPassword, String sCollectionId, String sItemId)
 	{
-		return proxyCommunityManager.getAllBitStreams(sCollectionId, sItemId);
+		return getProxyCommunityManager().getAllBitStreams(sCollectionId, sItemId);
 	}
 
 	/**
@@ -139,7 +189,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public String getItemName(String sCollectionId, String sItemId)
 	{
-		return proxyCommunityManager.getItemName(sCollectionId, sItemId);
+		return getProxyCommunityManager().getItemName(sCollectionId, sItemId);
 	}
 
 	/**
@@ -149,7 +199,7 @@ public class DspaceManager implements IDspaceManager{
 	public IBitStream getBitStream(String sCollectionId, String sItemId, String sBitStreamId)
 	{
 		
-		return proxyCommunityManager.getBitStream(sCollectionId, sItemId, sBitStreamId);
+		return getProxyCommunityManager().getBitStream(sCollectionId, sItemId, sBitStreamId);
 	}
 
 
@@ -162,9 +212,9 @@ public class DspaceManager implements IDspaceManager{
 		try
 		{
 			//Passing null values for other arguments because the community details must have already been fetched from dspace
-			ICommunity community = proxyCommunityManager.getCommunity(communityId,true,null,null,null,null);
-			ICollection collection = proxyCommunityManager.getCollection(collectionId,true,null,null,null,null,null);
-			IItem item = proxyCommunityManager.getItem(collectionId, itemId);
+			ICommunity community = getProxyCommunityManager().getCommunity(communityId,true,null,null,null,null);
+			ICollection collection = getProxyCommunityManager().getCollection(collectionId,true,null,null,null,null,null);
+			IItem item = getProxyCommunityManager().getItem(collectionId, itemId);
 
 			//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
 			if(community == null || collection == null || item == null)
@@ -174,21 +224,21 @@ public class DspaceManager implements IDspaceManager{
 			}
 
 			//Check the status of community, collection and item in the database
-			String status = dbconnectionManager.checkDspaceNodes(communityId, collectionId, itemId);
+			String status = getDbconnectionManager().checkDspaceNodes(communityId, collectionId, itemId);
 			if(status == null)
 			{
 				//Community, Collection and Item metadata does not exist. So add them to the database
-				if(dbconnectionManager.addCommunity(communityId, community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), username) == FAILURE)
+				if(getDbconnectionManager().addCommunity(communityId, community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), username) == FAILURE)
 				{
 					logger.info("The user "+username+" got this exception when trying to insert dspace community metadata with the following values:");
 					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
 				}
-				if(dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
+				if(getDbconnectionManager().addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
 				{
 					logger.info("The user "+username+" got this exception when trying to insert dspace collection metadata with the following values:");
 					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
 				}
-				if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
+				if(getDbconnectionManager().addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
 				{
 					logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
 					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
@@ -201,12 +251,12 @@ public class DspaceManager implements IDspaceManager{
 				if(status.equalsIgnoreCase(COMMUNITY_EXISTS))
 				{
 					//Collection and Item metadata does not exist. Add the metadata to the database.				
-					if(dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
+					if(getDbconnectionManager().addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
 					{
 						logger.info("The user "+username+" got this exception when trying to insert dspace collection metadata with the following values:");
 						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
 					}
-					if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
+					if(getDbconnectionManager().addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
 					{
 						logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
 						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
@@ -217,7 +267,7 @@ public class DspaceManager implements IDspaceManager{
 				else if(status.equalsIgnoreCase(COLLECTON_EXISTS))
 				{
 					//Item metadata does not exist. Add the metadata to the database.
-					if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
+					if(getDbconnectionManager().addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
 					{
 						logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
 						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
@@ -235,9 +285,9 @@ public class DspaceManager implements IDspaceManager{
 				IBitStream bitstream;
 
 				//Bitstream is not present in the database
-				if(dbconnectionManager.checkDspaceBitStream(bitstreamId)==null)
+				if(getDbconnectionManager().checkDspaceBitStream(bitstreamId)==null)
 				{
-					bitstream = proxyCommunityManager.getBitStream(collectionId, itemId, bitstreamId);
+					bitstream = getProxyCommunityManager().getBitStream(collectionId, itemId, bitstreamId);
 					//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
 					if(bitstream == null)
 					{
@@ -245,7 +295,7 @@ public class DspaceManager implements IDspaceManager{
 						logger.info("Bitstream id: "+bitstreamId);
 						throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
 					}
-					if(dbconnectionManager.addBitStream(communityId, collectionId, itemId, bitstreamId, bitstream.getName(), bitstream.getSize(), bitstream.getMimeType(), username)==FAILURE)
+					if(getDbconnectionManager().addBitStream(communityId, collectionId, itemId, bitstreamId, bitstream.getName(), bitstream.getSize(), bitstream.getMimeType(), username)==FAILURE)
 					{
 						logger.info("The user "+username+" got this exception when trying to insert dspace bitstream metadata with the following values:");
 						logger.info("Bitstream id: "+bitstreamId);
@@ -254,7 +304,7 @@ public class DspaceManager implements IDspaceManager{
 				}
 
 				//Add bitstream to workspace
-				dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
+				getDbconnectionManager().addBitstreamToWorkspace(workspaceId, bitstreamId, username);
 			}
 		}
 		catch(QuadrigaStorageException e)
@@ -291,7 +341,7 @@ public class DspaceManager implements IDspaceManager{
 		try
 		{
 			for(String bitstreamid: bitstreamids)
-				dbconnectionManager.deleteBitstreamFromWorkspace(workspaceid, bitstreamid, username);
+				getDbconnectionManager().deleteBitstreamFromWorkspace(workspaceid, bitstreamid, username);
 		}
 		catch(QuadrigaAccessException e)
 		{
@@ -317,25 +367,25 @@ public class DspaceManager implements IDspaceManager{
 		HashSet<String> reloadedCollectionIds = new HashSet<String>();
 
 		//Reload all the communities by making only one call to dspace
-		proxyCommunityManager.getCommunity(null, false, restTemplate, dspaceProperties, dspaceUsername, password);
-		for(IBitStream bitstream : dbconnectionManager.getBitStreamReferences(workspaceid, quadrigaUsername))
+		getProxyCommunityManager().getCommunity(null, false, getRestTemplate(), getDspaceProperties(), dspaceUsername, password);
+		for(IBitStream bitstream : getDbconnectionManager().getBitStreamReferences(workspaceid, quadrigaUsername))
 		{
-			ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, null, null, null,null);
+			ICommunity community = getProxyCommunityManager().getCommunity(bitstream.getCommunityid(), true, null, null, null,null);
 			ICollection collection = null;
 
 			if(reloadedCollectionIds.contains(bitstream.getCollectionid()))
 			{
 				//Collection has been reloaded already
-				collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, null, null, null, null, null);
+				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), true, null, null, null, null, null);
 			}
 			else
 			{
 				//This is the first call to reload the collection
-				collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), false, restTemplate, dspaceProperties, dspaceUsername, password, bitstream.getCommunityid());
+				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), dspaceUsername, password, bitstream.getCommunityid());
 				reloadedCollectionIds.add(bitstream.getCollectionid());
 			}
 
-			IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(this.dbconnectionManager.getDataSource(), community, collection, null, bitstream, quadrigaUsername);
+			IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(this.getDbconnectionManager().getDataSource(), community, collection, null, bitstream, quadrigaUsername);
 			Thread bitstreamUpdateThread = new Thread(dspaceUpdateManager);
 			bitstreamUpdateThread.start();
 		}
@@ -347,7 +397,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public void clearCompleteCache()
 	{
-		proxyCommunityManager.clearCompleteCache();
+		getProxyCommunityManager().clearCompleteCache();
 	}
 	
 	
@@ -358,8 +408,8 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	public void start()
 	{
-		logger.info("The certificate filepath used is: "+filePath);
-		System.setProperty("javax.net.ssl.trustStore", filePath);
+		logger.info("The certificate filepath used is: "+getFilePath());
+		System.setProperty("javax.net.ssl.trustStore", getFilePath());
 
 
 		javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
@@ -367,7 +417,7 @@ public class DspaceManager implements IDspaceManager{
 
 					public boolean verify(String hostname,
 							javax.net.ssl.SSLSession sslSession) {
-						if (hostname.equals(dspaceProperties.getProperty("dspace_url").split("//")[1])) {
+						if (hostname.equals(getDspaceProperties().getProperty("dspace_url").split("//")[1])) {
 							return true;
 						}
 						return false;
