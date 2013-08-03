@@ -1,12 +1,19 @@
 package edu.asu.spring.quadriga.web.rest;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
@@ -45,15 +53,15 @@ public class NetworkRestController {
 	@Autowired
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
-	
+
 	@Autowired
 	@Qualifier("qStoreURL_Add")
 	private String qStoreURL_Add;
-	
+
 	@Autowired
 	@Qualifier("qStoreURL_Get")
 	private String qStoreURL_Get;
-	
+
 	/**
 	 * Gets the QStrore Add URL
 	 * 
@@ -62,7 +70,7 @@ public class NetworkRestController {
 	public String getQStoreAddURL() {
 		return qStoreURL+""+qStoreURL_Add;
 	}
-	
+
 	/**
 	 * Rest interface for uploading XML for networks
 	 * http://<<URL>:<PORT>>/quadriga/rest/uploadnetworks
@@ -78,12 +86,13 @@ public class NetworkRestController {
 	 * @throws IOException 
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
+	 * @throws JAXBException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
 	public String getXMLFromVogon(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException {
+			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException {
 
 		if (xml.equals("")) {
 			response.setStatus(500);
@@ -94,13 +103,25 @@ public class NetworkRestController {
 			}
 			String res=storeXMLQStore(xml);
 			logger.info(" " + res);
+			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			ElementEventsType e = new ElementEventsType();
+			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+
+			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(res), ElementEventsType.class);
+			Marshaller marshaller = context.createMarshaller();
+			//Result writer = null;
+			ByteArrayOutputStream os=new ByteArrayOutputStream();
+			marshaller.marshal(response1, os);
+			
+			logger.info(os.toString());
 			response.setStatus(200);
 			response.setContentType(accept);
 			return "";
 		}
 	}
-	
-	
+
+
 	/**
 	 * Stores XML from Vogon into Q-Store
 	 * @author Lohith Dwaraka
@@ -125,12 +146,12 @@ public class NetworkRestController {
 		HttpEntity request = new HttpEntity(XML,headers);
 
 		try{
-			 res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
+			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
 		}catch(Exception e){
 			logger.error("",e);
 		}
 		return res;
 
 	}
-	
+
 }
