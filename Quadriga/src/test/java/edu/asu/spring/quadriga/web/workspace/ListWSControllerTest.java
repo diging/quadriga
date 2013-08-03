@@ -25,6 +25,13 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
+/**
+ * This class tests {@link ListWSController}
+ * It makes REST service calls to dspace.
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml","file:src/test/resources/rest-service.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)

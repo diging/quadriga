@@ -1,7 +1,11 @@
 package edu.asu.spring.quadriga.dspace.service;
 
 import java.util.List;
+import java.util.Properties;
 
+import org.springframework.web.client.RestTemplate;
+
+import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
@@ -161,5 +165,25 @@ public interface IDspaceManager{
 	 * Clear all the cached dspace information
 	 */
 	public abstract void clearCompleteCache();
+
+	public abstract void setFilePath(String filePath);
+
+	public abstract String getFilePath();
+
+	public abstract void setRestTemplate(RestTemplate restTemplate);
+
+	public abstract RestTemplate getRestTemplate();
+
+	public abstract void setProxyCommunityManager(ICommunityManager proxyCommunityManager);
+
+	public abstract ICommunityManager getProxyCommunityManager();
+
+	public abstract void setDbconnectionManager(IDBConnectionDspaceManager dbconnectionManager);
+
+	public abstract IDBConnectionDspaceManager getDbconnectionManager();
+
+	public abstract void setDspaceProperties(Properties dspaceProperties);
+
+	public abstract Properties getDspaceProperties();
 
 }
