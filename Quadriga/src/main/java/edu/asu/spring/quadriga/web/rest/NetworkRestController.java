@@ -1,9 +1,15 @@
 package edu.asu.spring.quadriga.web.rest;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +19,13 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
@@ -35,6 +48,7 @@ import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.implementation.networks.ObjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.service.impl.DictionaryManager;
 
@@ -87,12 +101,13 @@ public class NetworkRestController {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 * @throws JAXBException 
+	 * @throws TransformerException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
 	public String getXMLFromVogon(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException {
+			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException {
 
 		if (xml.equals("")) {
 			response.setStatus(500);
@@ -102,25 +117,48 @@ public class NetworkRestController {
 			if (accept != null && accept.equals("application/xml")) {
 			}
 			String res=storeXMLQStore(xml);
-			logger.info(" " + res);
 			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			ElementEventsType e = new ElementEventsType();
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-
-			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(res), ElementEventsType.class);
+			InputStream is = new ByteArrayInputStream(res.getBytes());
+			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
 			Marshaller marshaller = context.createMarshaller();
-			//Result writer = null;
 			ByteArrayOutputStream os=new ByteArrayOutputStream();
 			marshaller.marshal(response1, os);
+
+			String s = os.toString();
+			String r=prettyFormat(s,2);
+			logger.info("checking this "+r);
 			
-			logger.info(os.toString());
 			response.setStatus(200);
 			response.setContentType(accept);
 			return "";
 		}
+		
+		
+		
+		
+	}
+	
+	public String prettyFormat(String input, int indent) {
+		String result="";
+		try{
+			Source xmlInput = new StreamSource(new StringReader(input));
+			StringWriter stringWriter = new StringWriter();
+			StreamResult xmlOutput = new StreamResult(stringWriter);
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			transformerFactory.setAttribute("indent-number", indent);
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.transform(xmlInput, xmlOutput);
+			result= xmlOutput.getWriter().toString();
+		}catch(Exception e){
+			
+		}
+		return result;
 	}
 
+	
 
 	/**
 	 * Stores XML from Vogon into Q-Store
