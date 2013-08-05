@@ -158,10 +158,10 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 		else
 		{
-			//Reload the collections data associated with this community
+			//Get the communit object to which this collection is associated
 			ICommunity community = this.getCommunity(communityid, true, null, null, null, null);
 
-			//Remove the collection metadata from the cache
+			//Remove all the collection metadata from the cache
 			for(String collectionid: community.getCollectionIds()){
 				Iterator<ICollection> iterator = this.collections.iterator();
 				while(iterator.hasNext())
