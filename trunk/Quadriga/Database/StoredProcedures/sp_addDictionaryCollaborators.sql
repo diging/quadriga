@@ -1,4 +1,4 @@
-use quadriga;
+
 DROP PROCEDURE IF EXISTS sp_addDictionaryCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_addDictionaryCollaborators

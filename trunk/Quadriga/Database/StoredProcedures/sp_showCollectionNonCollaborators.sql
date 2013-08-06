@@ -1,3 +1,4 @@
+
 DROP PROCEDURE IF EXISTS sp_showCollectionNonCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showCollectionNonCollaborators
