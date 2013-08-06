@@ -115,7 +115,7 @@ public class UserManager implements IUserManager {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-		listUsers = dbConnect.getAllActiveUsers(sDeactiveRoleDBId);
+		listUsers = dbConnect.getUsersNotInRole(sDeactiveRoleDBId);
 		return listUsers;		
 	}
 
@@ -134,7 +134,7 @@ public class UserManager implements IUserManager {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-		listUsers = dbConnect.getAllInActiveUsers(sDeactiveRoleDBId);
+		listUsers = dbConnect.getUsers(sDeactiveRoleDBId);
 		return listUsers;		
 	}
 

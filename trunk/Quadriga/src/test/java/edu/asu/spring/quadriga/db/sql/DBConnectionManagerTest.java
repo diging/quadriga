@@ -40,7 +40,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  *
  */
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-		"file:src/test/resources/root-context.xml" })
+"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DBConnectionManagerTest {
 
@@ -139,12 +139,12 @@ public class DBConnectionManagerTest {
 		testSetupTestEnvironment();
 
 		//Check the number of active users
-		List<IUser> activeUsersList = dbConnection.getAllActiveUsers(sDeactiveRoleDBId);
+		List<IUser> activeUsersList = dbConnection.getUsersNotInRole(sDeactiveRoleDBId);
 		assertEquals(activeUsersList.size(), 2);
 
 		//Check if no user is retrieved
 		dbConnection.setupTestEnvironment("delete from tbl_quadriga_user");
-		activeUsersList = dbConnection.getAllActiveUsers(sDeactiveRoleDBId);
+		activeUsersList = dbConnection.getUsersNotInRole(sDeactiveRoleDBId);
 		assertEquals(activeUsersList.size(), 0);
 
 	}
@@ -160,12 +160,12 @@ public class DBConnectionManagerTest {
 		testSetupTestEnvironment();
 
 		//Check the number of inactive users
-		List<IUser> inactiveUsersList = dbConnection.getAllInActiveUsers(sDeactiveRoleDBId);
+		List<IUser> inactiveUsersList = dbConnection.getUsers(sDeactiveRoleDBId);
 		assertEquals(inactiveUsersList.size(), 1);
 
 		//Check if no user is retrieved
 		dbConnection.setupTestEnvironment("delete from tbl_quadriga_user");
-		inactiveUsersList = dbConnection.getAllInActiveUsers(sDeactiveRoleDBId);
+		inactiveUsersList = dbConnection.getUsers(sDeactiveRoleDBId);
 		assertEquals(inactiveUsersList.size(), 0);
 
 	}
@@ -182,7 +182,7 @@ public class DBConnectionManagerTest {
 
 		//Check if the user is deactivated
 		assertEquals(1,dbConnection.deactivateUser("jdoe", sDeactiveRoleDBId, "test"));
-		List<IUser> inactiveUsersList = dbConnection.getAllInActiveUsers(sDeactiveRoleDBId);
+		List<IUser> inactiveUsersList = dbConnection.getUsers(sDeactiveRoleDBId);
 		assertEquals(inactiveUsersList.size(), 2);
 
 		//Check if no user is present
@@ -228,7 +228,7 @@ public class DBConnectionManagerTest {
 		assertEquals(1, dbConnection.updateUserRoles("bob", user.getQuadrigaRolesDBId(),"test"));
 
 		//Check the number of active users
-		List<IUser> activeUsersList = dbConnection.getAllActiveUsers(sDeactiveRoleDBId);
+		List<IUser> activeUsersList = dbConnection.getUsersNotInRole(sDeactiveRoleDBId);
 		assertEquals(activeUsersList.size(), 3);
 
 		//Remove all users from the database
@@ -254,7 +254,7 @@ public class DBConnectionManagerTest {
 		assertEquals(2, userRequests.size());
 
 		//Check the number of active users
-		List<IUser> activeUsersList = dbConnection.getAllActiveUsers(sDeactiveRoleDBId);
+		List<IUser> activeUsersList = dbConnection.getUsersNotInRole(sDeactiveRoleDBId);
 		assertEquals(activeUsersList.size(), 3);
 
 		//Remove all user requests from the database
@@ -290,9 +290,9 @@ public class DBConnectionManagerTest {
 	 */
 	@Test
 	public void testGetUserRequests() throws QuadrigaStorageException {
-		
+
 		testSetupTestEnvironment();
-		
+
 		//Check if all user requests are fetched
 		List<IUser> userRequests = dbConnection.getUserRequests();
 		assertEquals(3, userRequests.size());
@@ -310,9 +310,9 @@ public class DBConnectionManagerTest {
 	 */
 	@Test
 	public void testAddAccountRequest() throws QuadrigaStorageException {
-		
+
 		testSetupTestEnvironment();
-		
+
 		IUser testUser = userFactory.createUserObject();
 		testUser.setUserName("jack");
 		dbConnection.addAccountRequest("jack");
@@ -320,6 +320,42 @@ public class DBConnectionManagerTest {
 		//Check if all user requests are fetched
 		List<IUser> userRequests = dbConnection.getUserRequests();
 		assertEquals(4, userRequests.size());
+	}
+
+	/**
+	 * Test whether users of a particular role are fetched.
+	 * 
+	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
+	 */
+	@Test
+	public void testGetUsers() throws QuadrigaStorageException{
+
+		testSetupTestEnvironment();
+
+		List<IUser> users = dbConnection.getUsers("role1");
+		assertEquals(1, users.size());
+
+		users = dbConnection.getUsers(null);
+		assertEquals(0, users.size());
+	}
+
+	/**
+	 * Test whether users of a particular role are not fetched.
+	 * 
+	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
+	 */
+	@Test
+	public void testGetUsersNotInRole() throws QuadrigaStorageException{
+
+		testSetupTestEnvironment();
+
+		List<IUser> users = dbConnection.getUsersNotInRole("role3");
+		assertEquals(1, users.size());
+
+		users = dbConnection.getUsersNotInRole(null);
+		assertEquals(0, users.size());
 	}
 
 	@Test

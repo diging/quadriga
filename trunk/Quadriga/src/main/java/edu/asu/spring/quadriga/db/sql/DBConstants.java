@@ -21,6 +21,8 @@ public interface DBConstants
 	public final static String APPROVE_USER_REQUEST="sp_approveUserRequest";
 	public final static String DENY_USER_REQUEST="sp_denyUserRequest";
 	public final static String ADD_USER_REQUEST="sp_addUserRequest";
+	public final static String GET_USERS="sp_getUsers";
+	public final static String GET_USERS_NOT_IN_ROLE="sp_getUsersNotInRole";
 	
 	//project related objects
 	public static final String PROJECT_LIST="sp_getProjectList";
