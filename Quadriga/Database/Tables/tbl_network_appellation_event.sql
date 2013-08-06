@@ -13,7 +13,7 @@ Modified Date : 08/06/2013
 CREATE TABLE IF NOT EXISTS tbl_network_appellation_event
 (
   networkid       varchar(100)           NOT NULL ,
-  appellatioevent	  varchar(100)           NOT NULL, 
+  appellationevent	  varchar(100)           NOT NULL, 
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
