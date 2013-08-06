@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 
 /**
- * This class test {@link DspaceManager}
+ * This class tests {@link DspaceManager}
  * 
  * @author Ram Kumar Kumaresan
  *
@@ -161,13 +161,16 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
 		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
 
-		//Check null case
-		assertNull(dspaceManager.getAllItems(null)); 
-
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("55") == null);
+		ICollection collection = dspaceManager.getCollection("55");
+		while(dspaceManager.getCollectionName("55")==null);
+		while(collection.getItems() == null);
+		while(collection.getItems().size() != Integer.parseInt(collection.getCountItems()));
 
 		assertNotNull(dspaceManager.getAllItems("55"));
+
+		//Check null case
+		assertNull(dspaceManager.getAllItems(null)); 
 	}
 
 	@Test
@@ -217,10 +220,10 @@ public class DspaceManagerTest {
 
 		//Wait for the collection to load
 		while(dspaceManager.getCollection("55") == null);
-		assertNotNull(dspaceManager.getAllItems("55"));
+		while(dspaceManager.getAllItems("55") == null);
 
 		//Bitstreams are loaded from dspace
-		assertNotNull(dspaceManager.getAllBitStreams("test", "test", "55", "9595"));
+		while(dspaceManager.getAllBitStreams("test", "test", "55", "9595") == null);
 
 		//Check null cases
 		assertNull(dspaceManager.getBitStream("55", "9595", null));
