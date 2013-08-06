@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web.rest;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -9,14 +8,11 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -24,7 +20,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -48,9 +43,8 @@ import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
-import edu.asu.spring.quadriga.domain.implementation.networks.ObjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
-import edu.asu.spring.quadriga.service.impl.DictionaryManager;
+import edu.asu.spring.quadriga.service.impl.NetworkManager;
 
 /**
  * Controller for networks related rest api's exposed to other clients
@@ -64,6 +58,9 @@ public class NetworkRestController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkRestController.class);
 
+	@Autowired
+	private NetworkManager networkManager;
+	
 	@Autowired
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
@@ -122,24 +119,33 @@ public class NetworkRestController {
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(res.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-			Marshaller marshaller = context.createMarshaller();
-			ByteArrayOutputStream os=new ByteArrayOutputStream();
-			marshaller.marshal(response1, os);
-
-			String s = os.toString();
-			String r=prettyFormat(s,2);
-			logger.info("checking this "+r);
+			networkManager.receiveNetworkSubmitRequest(response1);
 			
+//			Below code would help in printing XML from qstore
+//			Marshaller marshaller = context.createMarshaller();
+//			ByteArrayOutputStream os=new ByteArrayOutputStream();
+//			marshaller.marshal(response1, os);
+//			
+//			String s = os.toString();
+//			String r=prettyFormat(s,2);
+//			logger.info("checking this "+r);
+
 			response.setStatus(200);
 			response.setContentType(accept);
 			return "";
 		}
-		
-		
-		
-		
+
+
+
+
 	}
-	
+
+	/**
+	 * Formats a unformatted XML to formatted XML
+	 * @param input
+	 * @param indent
+	 * @return
+	 */
 	public String prettyFormat(String input, int indent) {
 		String result="";
 		try{
@@ -153,12 +159,12 @@ public class NetworkRestController {
 			transformer.transform(xmlInput, xmlOutput);
 			result= xmlOutput.getWriter().toString();
 		}catch(Exception e){
-			
+
 		}
 		return result;
 	}
 
-	
+
 
 	/**
 	 * Stores XML from Vogon into Q-Store

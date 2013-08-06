@@ -153,8 +153,6 @@ public class DictionaryItemController {
 		} 
 		if (flag == 0) {
 			model.addAttribute("delsuccess", 1);
-			logger.info(" message success ");
-			//			model.addAttribute("delsuccessmsg", "Items  deleted successfully");
 		} else if (flag == 1) {
 			if (errormsg.equals("Item doesnot exists in this dictionary")) {
 				model.addAttribute("delsuccess", 0);
