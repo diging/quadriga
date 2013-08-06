@@ -28,6 +28,14 @@ public class RetrieveProjectController
 	@Autowired
 	IListWSManager wsManager;
 	
+	public IListWSManager getWsManager() {
+		return wsManager;
+	}
+
+	public void setWsManager(IListWSManager wsManager) {
+		this.wsManager = wsManager;
+	}
+
 	public IRetrieveProjectManager getProjectManager(){
 		return projectManager;
 		
