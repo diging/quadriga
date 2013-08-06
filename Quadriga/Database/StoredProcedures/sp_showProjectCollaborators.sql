@@ -1,3 +1,4 @@
+
 DROP PROCEDURE IF EXISTS sp_showProjectCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_showProjectCollaborators

@@ -16,8 +16,8 @@ BEGIN
     DECLARE position   INT;
 
 	 -- the error handler for any sql exception
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-      SET errmsg = "SQL exception has occurred";
+  --  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+  --    SET errmsg = "SQL exception has occurred";
 
 	-- validating the input variables
 	IF(inprojid IS NULL OR inprojid = "")

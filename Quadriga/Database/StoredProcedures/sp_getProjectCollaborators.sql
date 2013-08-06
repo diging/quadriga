@@ -11,7 +11,6 @@ Create By     : Kiran Kumar Batna
 Modified Date : 05/30/2013
 
 ********************************************/
-
 DROP PROCEDURE IF EXISTS sp_getProjectCollaborators;
 
 DELIMITER $$

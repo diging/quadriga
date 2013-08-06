@@ -3,10 +3,16 @@
  */
 package edu.asu.spring.quadriga.service.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import java.security.Principal;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -24,24 +30,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.mysql.jdbc.Statement;
+
 import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
-import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -86,8 +95,19 @@ public class ConceptCollectionManagerTest {
 
 	@Autowired
 	private IConceptFactory conceptFactory;
+	
+	@Autowired
+	private ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	private ICollaboratorRoleFactory collaboratorRoleFactory;
 
-	private IUser user;
+	private IUser user,user1; 
+	Principal principal;	
+	List<ICollaborator> collaboratorList;
+	ICollaborator collaborator;
+	ICollaborator collaborator1;
+
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -111,6 +131,10 @@ public class ConceptCollectionManagerTest {
 				user = userFactory.createUserObject();
 				user.setUserName("jdoe");
 				user.setName("John Doe");
+				
+				user1 = userFactory.createUserObject();
+				user1.setUserName("bob");
+				user1.setName("bob");
 
 				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
@@ -134,9 +158,40 @@ public class ConceptCollectionManagerTest {
 					rolesList.add(quadrigaRole);
 				}
 				user.setQuadrigaRoles(rolesList);
+				
+				//setting roles for collaborator
+				List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+				collaboratorRole.setRoleDBid("cc_role1");
+				collaboratorRoles.add(collaboratorRole);
+				
+				collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+				collaboratorRole.setRoleDBid("cc_role2");
+				collaboratorRoles.add(collaboratorRole);
+				
+				//setting collaborator object
+			    collaborator = collaboratorFactory.createCollaborator();
+				collaborator.setCollaboratorRoles(collaboratorRoles);
+				collaborator.setUserObj(user);
+				
+				//setting roles for collaborator
+				List<ICollaboratorRole> collaboratorRoles1 = new ArrayList<ICollaboratorRole>();
+				ICollaboratorRole collaboratorRole1 = collaboratorRoleFactory.createCollaboratorRoleObject();
+				collaboratorRole1.setRoleDBid("cc_role2");
+				collaboratorRoles1.add(collaboratorRole);
+				
+				//setting collaborator object
+				collaborator1 = collaboratorFactory.createCollaborator();
+				collaborator1.setCollaboratorRoles(collaboratorRoles1);
+				collaborator1.setUserObj(user1);
+				
+				collaboratorList = new ArrayList<ICollaborator>(); 
+				collaboratorList.add(collaborator);
+				collaboratorList.add(collaborator1);
 
 				//Setup the database with the proper data in the tables;
 				sDatabaseSetup = new String[]{
+						"delete from tbl_conceptcollections_collaborator",
 						"delete from tbl_conceptcollections_items",
 						"delete from tbl_conceptcollections",						
 						"delete from tbl_quadriga_user",
@@ -148,20 +203,38 @@ public class ConceptCollectionManagerTest {
 						"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 						"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 						"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-						
+					
+				};
+				
+				
+				principal = new Principal() {
+					@Override
+					public String getName() {
+					return "test";
+					}					
 				};
 		
 	}
 	
-
+	public void getConnection(){
+		try
+		{
+			connection = dataSource.getConnection();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@After
 	public void tearDown() throws Exception {
-		dbConnection.setupTestEnvironment(sDatabaseSetup);
+		//dbConnection.setupTestEnvironment(sDatabaseSetup);
 	}
-
+	
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#getCollectionsOwnedbyUser(java.lang.String)}.
 	 * @throws QuadrigaStorageException 
@@ -299,7 +372,8 @@ public class ConceptCollectionManagerTest {
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#addConceptCollection(edu.asu.spring.quadriga.domain.IConceptCollection)}.
 	 * @throws QuadrigaStorageException 
 	 */
-	@Test
+	/*@Test
+	@Ignore
 	public void testAddConceptCollection() throws QuadrigaStorageException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup);
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
@@ -313,7 +387,7 @@ public class ConceptCollectionManagerTest {
 		assertEquals(collection.getName(),list.get(0).getName());
 		collection.setId(list.get(0).getId());
 		assertEquals(collection,list.get(0));
-	}
+	}*/
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.ConceptCollectionManager#deleteItem(java.lang.String, java.lang.String)}.
@@ -336,7 +410,8 @@ public class ConceptCollectionManagerTest {
 		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
 		concept.setId(rep.getConceptEntry().get(0).getId());
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
-		concept.setPos(rep.getConceptEntry().get(0).getPos());
+		concept.setPos(rep.getConceptEntry().
+				get(0).getPos());
 		
 		collectionManager.addItems(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId(), user.getUserName());
 		collectionManager.getCollectionDetails(collection, user.getUserName());
@@ -352,5 +427,82 @@ public class ConceptCollectionManagerTest {
 		assertEquals(0,collection.getItems().size());
 		
 	}
+	
+	@Test
+	public void showNonCollaboratingUsersTest() throws QuadrigaStorageException{
+	    dbConnection.setupTestEnvironment(sDatabaseSetup);
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setName("testcollection1");
+		collection.setDescription("abcde");
+		IUser owner = userFactory.createUserObject();
+		owner.setUserName("test");
+		collection.setOwner(owner);
+		dbConnection.addCollection(collection);
+		List<IConceptCollection> ccList= dbConnection.getConceptsOwnedbyUser(owner.getUserName());
+		Iterator<IConceptCollection> I = ccList.iterator();
+		logger.info("---i.hasnext "+I.hasNext());
+		
+		List<IConceptCollection> list =  collectionManager.getCollectionsOwnedbyUser(owner.getUserName());
+		collection.setId(list.get(0).getId());
+		dbConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
+		
+		List<IUser> collaborators = collectionManager.showNonCollaboratingUsers(collection.getId());
+		assertEquals(1, collaborators.size());
+		
+		dbConnection.deleteCollaboratorRequest(collaborator.getUserObj().getUserName(), collection.getId());
+	}
+	
+	
+	@Test
+	public void  showCollaboratingUsersTest() throws QuadrigaStorageException{
+		
+		dbConnection.setupTestEnvironment(sDatabaseSetup);
+		
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setCollaborators(collaboratorList);
+		collection.setName("mytestcollection");
+		collection.setDescription("description");
+		IUser owner = userFactory.createUserObject();
+		owner.setUserName("test");
+		collection.setOwner(owner);		
+		dbConnection.addCollection(collection);
+		
+		List<IConceptCollection>list = collectionManager.getCollectionsOwnedbyUser(owner.getUserName());
+		collection.setId(list.get(0).getId());
+		dbConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
+		
+		List<ICollaborator> collabUsers = collectionManager.showCollaboratingUsers(collection.getId());
+		assertEquals(1, collabUsers.size());
+		
+		collectionManager.deleteCollaborators(collaborator.getUserObj().getUserName(), collection.getId());	
+	}
+	
+	@Test
+	public void deleteCollaboratorsTest() throws QuadrigaStorageException{
+		
+		dbConnection.setupTestEnvironment(sDatabaseSetup);
+
+		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
+		collection.setCollaborators(collaboratorList);
+		collection.setName("mytestcollection");
+		collection.setDescription("description");
+		IUser owner = userFactory.createUserObject();
+		owner.setUserName("test");
+		collection.setOwner(owner);		
+		dbConnection.addCollection(collection);
+		
+		List<IConceptCollection>list = collectionManager.getCollectionsOwnedbyUser(owner.getUserName());
+		collection.setId(list.get(0).getId());
+		dbConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
+		
+		List<ICollaborator> collabUsers = collectionManager.showCollaboratingUsers(collection.getId());
+		assertEquals(1, collabUsers.size());
+		
+		collectionManager.deleteCollaborators(collaborator.getUserObj().getUserName(), collection.getId());	
+
+		List<ICollaborator> collabUsers1 = collectionManager.showCollaboratingUsers(collection.getId());
+		assertEquals(0, collabUsers1.size());	
+	}
+	
 
 }

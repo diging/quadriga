@@ -10,5 +10,6 @@ public interface IDBConnectionModifyProjCollabManager {
 	
 	public abstract String deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException;
 
+	public abstract void setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
 }
