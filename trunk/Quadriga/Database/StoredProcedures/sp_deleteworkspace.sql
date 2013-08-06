@@ -26,7 +26,7 @@ BEGIN
 
 	-- the error handler for any sql exception
    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-    SET errmsg = "SQLException occurred";
+     SET errmsg = "SQLException occurred";
 
     -- deleting the temp table
     DROP TEMPORARY TABLE IF EXISTS temp_tbl_workspaceid;
@@ -72,7 +72,7 @@ BEGIN
           
           -- delete the associated collaborators
           DELETE FROM tbl_workspace_collaborator
-            WHERE id IN (SELECT workspaceid FROM temp_tbl_workspaceid);
+            WHERE workspaceid IN (SELECT workspaceid FROM temp_tbl_workspaceid);
  
           -- delete the workspace
           DELETE FROM tbl_workspace
