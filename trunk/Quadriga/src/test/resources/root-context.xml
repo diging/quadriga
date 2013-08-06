@@ -96,9 +96,9 @@
 	<bean id="DBConnectionProjectAccessManagerBean"
 	class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectAccessManager">
 	</bean>
-	<bean id="RetrieveProjCollabManagerBean" class = "edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjCollabManager">
+	<bean id="RetrieveProjCollabManagerBean" class = "edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjCollabManager"></bean>
+	<bean id="ModifyProjCollabManagerBean" class = "edu.asu.spring.quadriga.service.impl.workbench.ModifyProjCollabManager"></bean>
 	
-	</bean>
 	<bean 
 	class="edu.asu.spring.quadriga.service.impl.workbench.CheckProjectSecurity">
 	</bean>

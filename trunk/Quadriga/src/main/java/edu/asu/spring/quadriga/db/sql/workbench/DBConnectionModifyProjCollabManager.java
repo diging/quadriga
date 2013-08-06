@@ -4,8 +4,6 @@ import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +54,7 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
 			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(5);
+			logger.info("errmsg "+errmsg);
     	}
         catch(SQLException e)
         {
@@ -75,23 +74,16 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
 		String dbCommand;
         String errmsg;
         CallableStatement sqlStatement;
-        System.out.println("---------------Db1");
         dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_COLLAB_REQUEST + "(?,?,?)";
-        System.out.println("---------------DM1");
         getConnection();
         
 		try {
-			System.out.println("---------------Db2");
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1, projectid);
 			sqlStatement.setString(2, userName);
-			System.out.println("---------------Db3");
 			sqlStatement.registerOutParameter(3, Types.VARCHAR);
-			System.out.println("---------------Db4");
 			sqlStatement.execute();
-			System.out.println("---------------Db5");
 			errmsg = sqlStatement.getString(3);
-			System.out.println("---------------Db6");
 			if(errmsg.equals("no errors"))
 			{
 				return errmsg;

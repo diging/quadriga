@@ -4,6 +4,9 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionModifyProjectManager {
+	
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
 
 	public abstract String deleteProjectRequest(String projectIdList)
 			throws QuadrigaStorageException;

@@ -18,6 +18,8 @@ public class ModifyProjCollabManager implements IModifyProjCollabManager
 	@Autowired
 	@Qualifier("DBConnectionModifyProjCollabManagerBean")
 	private IDBConnectionModifyProjCollabManager dbConnect;
+	
+	
 
 	/**
 	 * This method adds a collaborator for the project supplied.

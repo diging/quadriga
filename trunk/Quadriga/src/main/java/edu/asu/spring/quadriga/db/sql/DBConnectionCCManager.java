@@ -355,9 +355,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 		name = con.getName();
 		description = con.getDescription();
-
 		owner = con.getOwner();
-
+		
 		dbCommand = DBConstants.SP_CALL + " "
 				+ DBConstants.ADD_CONCEPTCOLLECTION + "(?,?,?,?,?)";
 
@@ -365,6 +364,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
+			logger.info("db command " +dbCommand);
 			sqlStatement.setString(1, name);
 			sqlStatement.setString(2, description);
 			sqlStatement.setString(3, "0");
@@ -379,6 +379,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} finally {
+			logger.info("closing");
 			closeConnection();
 		}
 
@@ -538,7 +539,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(5);
-
+			
 		} catch (SQLException e) {
 			throw new QuadrigaStorageException(e);
 		}
