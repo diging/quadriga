@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.web.dictionary.DictionaryCollaboratorController;
 /**
  *@description: this class maps incoming database collaborator roles to the roles defined in the
  *				collaborators-roles.xml
