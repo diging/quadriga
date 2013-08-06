@@ -1,3 +1,4 @@
+
 DROP PROCEDURE IF EXISTS sp_deleteCollectionCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_deleteCollectionCollaborators
