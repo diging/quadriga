@@ -347,6 +347,7 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/project/dictionaries.jsp" />
 	</definition>
+
 	
 	<definition name="auth/workbench/project/conceptcollections"
 		extends="base.definition.workbench.nav">
@@ -533,6 +534,15 @@
 		<put-attribute name="title" value="Quadriga - SQL Stoarage issue" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/exceptions/accessissue.jsp" />
+	</definition>
+	
+	<!-- Networks -->
+	<definition name="base.definition.networks" extends="base.definition">
+		<put-attribute name="currentPage" value="networks" />
+	</definition>
+	<definition name="auth/networks" extends="base.definition.networks">
+		<put-attribute name="title" value="Quadriga Networks" />
+		<put-attribute name="content" value="/WEB-INF/views/networks/networks.jsp" />
 	</definition>
 
 </tiles-definitions>
