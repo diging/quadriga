@@ -73,4 +73,6 @@ public interface ICommunity {
 	 */
 	public abstract ICollection getCollectionById(String sCollectionId);
 
+	public abstract void clearCollections();
+
 }

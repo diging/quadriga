@@ -118,6 +118,12 @@ public class Community implements ICommunity{
 		this.collections = collections;
 	}
 	
+	@Override
+	public void clearCollections()
+	{
+		this.collections.clear();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

@@ -162,6 +162,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 			ICommunity community = this.getCommunity(communityid, true, null, null, null, null);
 
 			//Remove all the collection metadata from the cache
+			community.clearCollections();
 			for(String collectionid: community.getCollectionIds()){
 				Iterator<ICollection> iterator = this.collections.iterator();
 				while(iterator.hasNext())
