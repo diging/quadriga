@@ -24,7 +24,7 @@
 		</li></sec:authorize>
 
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "editing" ? "class=\"current_page_item\"" : ""}><a href="">Editing</a></li></sec:authorize>
-		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR', 'ROLE_QUADRIGA_USER_RESTRICTED')"><li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="">Networks</a></li></sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR', 'ROLE_QUADRIGA_USER_RESTRICTED')"><li ${currentPage == "networks" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/networks">Networks</a></li></sec:authorize>
 		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')"><li ${currentPage == "admin" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/users/manage">User Management</a></li></sec:authorize>
 		<!-- <li class="page_item_logout"><a href="<c:url value="/j_spring_security_logout" />">Logout</a></li> -->
 	</ul>
