@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.implementation.networks.CreationEvent;
@@ -37,9 +39,9 @@ public class NetworkManager {
 	
 	@Autowired
 	@Qualifier("DBConnectionNetworkManagerBean")
-	private IDBConnectionDictionaryManager dbConnect;
+	private IDBConnectionNetworkManager dbConnect;
 	
-	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response){
+	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user){
 		try{
 			ElementEventsType e = response.getValue();
 			List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
@@ -78,7 +80,8 @@ public class NetworkManager {
 			}
 			network.setAppellationIds(appellationIds);
 			network.setRelationIds(relationIds);
-			
+			network.setCreator(user);
+			dbConnect.submitUserNetworkRequest(network);
 		}catch(Exception e){
 			logger.error("",e);
 		}

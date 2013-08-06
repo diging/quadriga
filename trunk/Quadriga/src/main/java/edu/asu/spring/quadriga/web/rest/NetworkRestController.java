@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +43,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.impl.NetworkManager;
+import edu.asu.spring.quadriga.service.impl.UserManager;
 
 /**
  * Controller for networks related rest api's exposed to other clients
@@ -73,6 +77,8 @@ public class NetworkRestController {
 	@Qualifier("qStoreURL_Get")
 	private String qStoreURL_Get;
 
+	@Autowired
+	private UserManager userManager;
 	/**
 	 * Gets the QStrore Add URL
 	 * 
@@ -99,13 +105,15 @@ public class NetworkRestController {
 	 * @throws ParserConfigurationException 
 	 * @throws JAXBException 
 	 * @throws TransformerException 
+	 * @throws QuadrigaStorageException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
 	public String getXMLFromVogon(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException {
+			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
 
+		IUser user = userManager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(500);
 			return "Please provide XML in body of the post request.";
@@ -119,7 +127,7 @@ public class NetworkRestController {
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(res.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-			networkManager.receiveNetworkSubmitRequest(response1);
+			networkManager.receiveNetworkSubmitRequest(response1,user);
 			
 //			Below code would help in printing XML from qstore
 //			Marshaller marshaller = context.createMarshaller();

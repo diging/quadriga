@@ -70,6 +70,13 @@ public interface DBConstants
 	public static final String DELETE_COLLECTION_ITEM ="sp_deleteCollectionItem";
 	public static final String UPDATE_COLLECTION_ITEM ="sp_updateCollectionItem";
 	
+	
+	//Networks database objects
+	public static final String ADD_NETWORK_DETAILS ="sp_addNetworksDetails";
+	public static final String ADD_NETWORK_RELATION ="sp_addNetworks_Relation";
+	public static final String ADD_NETWORK_APPELLATION ="sp_addNetworks_Appellation";
+	
+	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
 	public static final String LIST_ACTIVE_WORKSPACE = "sp_getActiveWorkspaceList";
