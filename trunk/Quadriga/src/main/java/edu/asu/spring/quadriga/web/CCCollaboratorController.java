@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
@@ -58,6 +61,8 @@ public class CCCollaboratorController {
 	
 	@Autowired
 	private IUserManager usermanager;
+	
+	private static final Logger logger = LoggerFactory.getLogger(DBConnectionModifyProjectManager.class);
 
 	 @InitBinder
 	  protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -70,6 +75,7 @@ public class CCCollaboratorController {
 					user = usermanager.getUserDetails(text);
 					 setValue(user);
 				} catch (QuadrigaStorageException e) {
+					logger.error("",e);
 					e.printStackTrace();
 				}
 		    }
