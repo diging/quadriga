@@ -196,20 +196,12 @@ public class DBConnectionManager implements IDBConnectionManager
 
 		return user;
 	}
-
+	
 	/**
-	 * Queries the database and builds a list of active user objects
-	 * 
-	 * @return List containing user objects of all active users
-	 * 
-	 * @param sInactiveRoleId This paramter should specify the id of the role
-	 * that is excluded from the active users list. 
-	 * 
-	 * @author Ram Kumar Kumaresan
+	 * {@inheritDoc} 
 	 */
 	@Override
-	// you might want to change this to a list of inactive role ids
-	public List<IUser> getAllActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException
+	public List<IUser> getUsers(String userRoleId) throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
@@ -217,9 +209,9 @@ public class DBConnectionManager implements IDBConnectionManager
 		getConnection();
 		try
 		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ACTIVE_USER_DETAILS + "(?,?)";
-			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
-			sqlStatement.setString(1, sInactiveRoleId);
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_USERS + "(?,?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");	
+			sqlStatement.setString(1, userRoleId);
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
 			//Execute the SQL Stored Procedure
@@ -227,7 +219,7 @@ public class DBConnectionManager implements IDBConnectionManager
 
 			sOutErrorValue = sqlStatement.getString(2);
 
-			//No SQL exception has occurred
+			//No SQL exception has occurred			
 			if(sOutErrorValue == null)
 			{
 				listUsers = new ArrayList<IUser>();				
@@ -238,7 +230,7 @@ public class DBConnectionManager implements IDBConnectionManager
 
 				//Iterate through each row returned by the database
 				while(rs.next())
-				{					
+				{	
 					user = this.userFactory.createUserObject();
 					user.setName(rs.getString(1));
 					user.setUserName(rs.getString(2));
@@ -251,13 +243,13 @@ public class DBConnectionManager implements IDBConnectionManager
 			}
 			else
 			{
-				logger.error("Exception in getAllActiveUsers():");
+				logger.error("Exception in getAllInActiveUsers():");
 				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in getAllActiveUsers():",e);
+			logger.error("Exception in getAllInActiveUsers():",e);
 			throw new QuadrigaStorageException(e);
 		}
 		finally
@@ -266,20 +258,12 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return listUsers;
 	}
-
+	
 	/**
-	 * Queries the database and builds a list of inactive user objects
-	 * 
-	 * @return List containing user objects of all inactive users
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
+	 * {@inheritDoc} 
 	 */
 	@Override
-	// two things: throw QuadrigaStorageException
-	// and make this a general method to retrieve users that have 
-	// a certain role
-	public List<IUser> getAllInActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException
+	public List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
@@ -287,9 +271,9 @@ public class DBConnectionManager implements IDBConnectionManager
 		getConnection();
 		try
 		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.INACTIVE_USER_DETAILS + "(?,?)";
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_USERS_NOT_IN_ROLE + "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");	
-			sqlStatement.setString(1, sInactiveRoleId);
+			sqlStatement.setString(1, userRoleId);
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
 
 			//Execute the SQL Stored Procedure

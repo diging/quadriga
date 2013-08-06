@@ -23,23 +23,11 @@ public interface IDBConnectionManager
 	public abstract List<IQuadrigaRole> listQuadrigaUserRoles(String roles) throws QuadrigaStorageException;
 
 	/**
-	 * Queries the database and builds a list of active user objects
-	 * 
-	 * @return List containing user objects of all active users
-	 */
-	public abstract List<IUser> getAllActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException;
-
-	/**
-	 * Queries the database and builds a list of inactive user objects
-	 * 
-	 * @return List containing user objects of all inactive users
-	 */
-	public abstract List<IUser> getAllInActiveUsers(String sInactiveRoleId) throws QuadrigaStorageException;
-
-	/**
 	 * Creates a user object for the given userid.
 	 * @param userid	The unique userid of the user based on which a user object will be created
+	 * 
 	 * @return			User object for the corresponding userid
+	 * @throws QuadrigaStorageException
 	 */
 	public abstract IUser getUserDetails(String userid) throws QuadrigaStorageException;
 
@@ -57,6 +45,7 @@ public interface IDBConnectionManager
 	 * @param 	sAdminId 				The userid of the admin who is changing the user setting
 	 * 
 	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @throws QuadrigaStorageException
 	 * 
 	 */
 	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId,String sAdminId) throws QuadrigaStorageException;
@@ -69,14 +58,15 @@ public interface IDBConnectionManager
 	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @throws QuadrigaStorageException
 	 */
 	public abstract int updateUserRoles(String sUserId, String sRoles,String sAdminId) throws QuadrigaStorageException;
 
 	/**
 	 * Returns all open user requests to quadriga.
-	 * 
+	 *  
 	 * @return Returns the list of user objects whose request are to be approved/denied.
-	 * 
+	 * @throws QuadrigaStorageException
 	 */	
 	public abstract List<IUser> getUserRequests() throws QuadrigaStorageException;
 
@@ -88,7 +78,7 @@ public interface IDBConnectionManager
 	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * 
+	 * @throws QuadrigaStorageException
 	 */
 	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException;
 
@@ -98,7 +88,8 @@ public interface IDBConnectionManager
 	 * @param sUserId		The userid of the user whose request is rejected
 	 * @param sAdminId 		The admin-userid who rejected the request
 	 * 
-	 * Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @throws QuadrigaStorageException
 	 */
 	public abstract int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException;
 
@@ -106,8 +97,9 @@ public interface IDBConnectionManager
 	 * Add a new account request to the quadriga.
 	 * 
 	 * @param sUserId The user id of the user who needs access to quadriga 
-	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request.
 	 * 
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request.
+	 * @throws QuadrigaStorageException
 	 * @author Ram Kumar Kumaresan 
 	 */
 	public abstract int addAccountRequest(String sUserId) throws QuadrigaStorageException;
@@ -116,8 +108,29 @@ public interface IDBConnectionManager
 	 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
 	 * 
 	 * @return Success - 1
+	 * @throws QuadrigaStorageException
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
+
+	/**
+	 * Retrieve a list of user objects who have a certain role
+	 * 
+	 * @param userRoleId	The roleid of the Quadriga Role for which the list of users are to be fetched.
+	 * @return				The list of users who are assigned the roleid.
+	 * @throws QuadrigaStorageException
+	 * @author Ram Kumar Kumaresan
+	 */
+	public abstract List<IUser> getUsers(String userRoleId) throws QuadrigaStorageException;
+
+	/**
+	 * Retrieve a list of user objects who don't have a certain role
+	 * 
+	 * @param userRoleId					The roleid of the Quadriga Role based on which the user list is to be filtered.
+	 * @return								The list of users who don't have the given role
+	 * @throws QuadrigaStorageException
+	 * @author Ram Kumar Kumaresan
+	 */
+	public abstract List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException;
 
 }

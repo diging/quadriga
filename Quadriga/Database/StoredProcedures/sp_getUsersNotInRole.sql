@@ -1,21 +1,21 @@
 /*******************************************
-Name          : sp_getActiveUsers
+Name          : sp_getUsersNotInRole
 
-Description   : Retrieves the details of all active users
-				in the Quad DB
+Description   : Retrieves the details of all users
+				who don't have input role
 
 Called By     : UI (DBConnectionManager.java)
 
 Create By     : Ram Kumar Kumaresan
 
-Modified Date : 05/22/2013
+Modified Date : 08/06/2013
 
 ********************************************/
-DROP PROCEDURE IF EXISTS sp_getActiveUsers;
+DROP PROCEDURE IF EXISTS sp_getUsersNotInRole;
 DELIMITER $$
-CREATE PROCEDURE sp_getActiveUsers
+CREATE PROCEDURE sp_getUsersNotInRole
 ( 
-    IN dbroleid    VARCHAR(50),
+    IN dbroleid    VARCHAR(100),
    OUT errmsg      VARCHAR(50)
 )
 BEGIN
@@ -28,7 +28,7 @@ BEGIN
     SET @sqlstmt = "";
     SET @dbrole = "";
 	
-    -- Retrieve all the active user details
+    -- Retrieve all the user details
     SET @sqlstmt = "SELECT fullname,username,email,quadrigarole            
 				 FROM vw_quadriga_user
 	             WHERE quadrigarole not like CONCAT('%', ?, '%')";
@@ -42,6 +42,7 @@ BEGIN
     -- intialise variables
 	SET @sqlstmt = "";
     SET @dbrole = "";
+
 
 END$$
 DELIMITER ;
