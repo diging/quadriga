@@ -45,17 +45,8 @@ BEGIN
         THEN SET errmsg = "";
       END IF;
 
-      IF EXISTS(SELECT 1 FROM vw_project WHERE projectowner = inusername
-                  AND projectid = inprojectid)
-       THEN SELECT vsws.workspacename,
-                 vsws.description,
-                 vsws.workspaceid,
-                 vsws.workspaceowner
-            FROM vw_workspace vsws
-            JOIN vw_project_workspace vwprojws
-              ON vsws.workspaceid = vwprojws.workspaceid
-            WHERE vwprojws.projectid = inprojectid;
-      ELSE  SELECT vsws.workspacename,
+       -- fetch the workspace for which the user is owner or collaborator
+       SELECT vsws.workspacename,
                  vsws.description,
                  vsws.workspaceid,
                  vsws.workspaceowner
@@ -63,7 +54,18 @@ BEGIN
             JOIN vw_project_workspace vwprojws
               ON vsws.workspaceid = vwprojws.workspaceid
             WHERE vwprojws.projectid = inprojectid
-              AND vsws.workspaceowner = inusername;
-	END IF;
+              AND vsws.workspaceowner = inusername
+	   UNION ALL
+               SELECT vsws.workspacename,
+                 vsws.description,
+                 vsws.workspaceid,
+                 vsws.workspaceowner
+            FROM vw_workspace vsws
+			JOIN vw_workspace_collaborator vwscollab
+              ON vwscollab.workspaceid = vsws.workspaceid 
+            JOIN vw_project_workspace vwprojws
+              ON vsws.workspaceid = vwprojws.workspaceid
+            WHERE vwprojws.projectid = inprojectid
+              AND vwscollab.username = inusername;
 END $$
 DELIMITER ;
