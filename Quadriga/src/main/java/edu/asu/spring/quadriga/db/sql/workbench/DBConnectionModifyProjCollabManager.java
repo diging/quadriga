@@ -95,4 +95,51 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
 
 		return null;
 	}
+	
+	@Override
+	public void updateCollaboratorRequest(String projectid,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
+	{
+		String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+        //command to execute the stored procedure
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.UPDATE_PROJECT_COLLAB_REQUEST + "(?,?,?,?,?)";
+        
+        //establish the connection
+        getConnection();
+        
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//add the input parameters
+        	sqlStatement.setString(1, projectid);
+        	sqlStatement.setString(2, collabUser);
+        	sqlStatement.setString(3, collaboratorRole);
+        	sqlStatement.setString(4, username);
+        	
+        	//add output parameter
+        	sqlStatement.registerOutParameter(5, Types.VARCHAR);
+        	
+        	sqlStatement.execute();
+        	
+        	errmsg = sqlStatement.getString(5);
+        	
+        	if(!errmsg.equals(""))
+        	{
+        		logger.info("In update collaborator method :" + errmsg);
+        		throw new QuadrigaStorageException(errmsg);
+        	}
+        }
+        catch(SQLException ex)
+        {
+        	logger.error("n update collaborator method :"+ex);
+        	throw new QuadrigaStorageException();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
 }
