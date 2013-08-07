@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.rest;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -109,18 +111,17 @@ public class NetworkRestController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
-	public String getXMLFromVogon(HttpServletRequest request,
+	public String getNetworkFromClients(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
 
 		IUser user = userManager.getUserDetails(principal.getName());
-		if (xml.equals("")) {
+		xml=xml.trim();
+		if (xml.isEmpty()) {
 			response.setStatus(500);
 			return "Please provide XML in body of the post request.";
 
 		} else {
-			if (accept != null && accept.equals("application/xml")) {
-			}
 			String res=storeXMLQStore(xml);
 			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -130,17 +131,17 @@ public class NetworkRestController {
 			networkManager.receiveNetworkSubmitRequest(response1,user);
 			
 //			Below code would help in printing XML from qstore
-//			Marshaller marshaller = context.createMarshaller();
-//			ByteArrayOutputStream os=new ByteArrayOutputStream();
-//			marshaller.marshal(response1, os);
-//			
-//			String s = os.toString();
-//			String r=prettyFormat(s,2);
+			Marshaller marshaller = context.createMarshaller();
+			ByteArrayOutputStream os=new ByteArrayOutputStream();
+			marshaller.marshal(response1, os);
+			
+			String s = os.toString();
+			String r=prettyFormat(s,2);
 //			logger.info("checking this "+r);
 
 			response.setStatus(200);
 			response.setContentType(accept);
-			return "";
+			return res;
 		}
 
 
