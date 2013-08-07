@@ -179,11 +179,12 @@ public class RetrieveProjCollabManagerTest {
 		collaboratorList.add(collaborator);
 		collaboratorList.add(collaborator1);
 		
-		String[] databaseQuery = new String[4];
-		databaseQuery[0] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[1] = "INSERT INTO tbl_quadriga_user VALUES('test project user 1','projuser1',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[2] = "INSERT INTO tbl_quadriga_user VALUES('test project user 2','projuser2',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[3] = "INSERT INTO tbl_quadriga_user VALUES('test project user 3','projuser3',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		String[] databaseQuery = new String[5];
+		databaseQuery[0] = "DELETE FROM tbl_quadriga_user";
+		databaseQuery[1] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[2] = "INSERT INTO tbl_quadriga_user VALUES('test project user 1','projuser1',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[3] = "INSERT INTO tbl_quadriga_user VALUES('test project user 2','projuser2',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[4] = "INSERT INTO tbl_quadriga_user VALUES('test project user 3','projuser3',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
 		
 		for(String query : databaseQuery)
 		{
