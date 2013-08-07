@@ -235,6 +235,7 @@ public class RetrieveProjCollabManagerTest {
 		return id;
 	}
 		
+	
 
 	@After
 	public void tearDown() throws Exception {
@@ -242,7 +243,7 @@ public class RetrieveProjCollabManagerTest {
 		String[] databaseQuery = new String[3];
 		databaseQuery[0] = "DELETE FROM tbl_project_collaborator";
 		databaseQuery[1] = "DELETE FROM tbl_project";
-		databaseQuery[2] = "DELETE FROM tbl_quadriga_user WHERE username IN ('projuser','projuser1','projuser2','projuser3')";
+		databaseQuery[2] = "DELETE FROM tbl_quadriga_user";
 		for(String query : databaseQuery)
 		{
 			((DBConnectionRetrieveProjCollabManager)dbConnection).setupTestEnvironment(query);
@@ -263,6 +264,7 @@ public class RetrieveProjCollabManagerTest {
 		dbModifyProjectConnection.addProjectRequest(project);
 		dbModifyCollabConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), principal.getName());
 		List<IUser> collaborators = dbRetrieveCollabConnection.getProjectNonCollaborators(getProjectId(project.getName()));
+		
 		assertEquals(2,collaborators.size());
 		
 	}
