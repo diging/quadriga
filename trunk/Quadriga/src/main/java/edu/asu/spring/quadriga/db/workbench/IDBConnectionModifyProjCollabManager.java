@@ -12,4 +12,7 @@ public interface IDBConnectionModifyProjCollabManager {
 
 	public abstract void setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
+	public abstract void updateCollaboratorRequest(String projectid, String collabUser,
+			String collaboratorRole, String username) throws QuadrigaStorageException;
+
 }
