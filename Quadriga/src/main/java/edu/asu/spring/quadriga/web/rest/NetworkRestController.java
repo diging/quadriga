@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -68,28 +69,10 @@ public class NetworkRestController {
 	@Autowired
 	private NetworkManager networkManager;
 	
-	@Autowired
-	@Qualifier("qStoreURL")
-	private String qStoreURL;
-
-	@Autowired
-	@Qualifier("qStoreURL_Add")
-	private String qStoreURL_Add;
-
-	@Autowired
-	@Qualifier("qStoreURL_Get")
-	private String qStoreURL_Get;
 
 	@Autowired
 	private UserManager userManager;
-	/**
-	 * Gets the QStrore Add URL
-	 * 
-	 * @return String URL
-	 */
-	public String getQStoreAddURL() {
-		return qStoreURL+""+qStoreURL_Add;
-	}
+
 
 	/**
 	 * Rest interface for uploading XML for networks
@@ -127,7 +110,7 @@ public class NetworkRestController {
 			return "Please provide XML in body of the post request.";
 
 		} else {
-			String res=storeXMLQStore(xml);
+			String res=networkManager.storeXMLQStore(xml);
 			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
@@ -141,7 +124,7 @@ public class NetworkRestController {
 			marshaller.marshal(response1, os);
 			
 			String s = os.toString();
-			String r=prettyFormat(s,2);
+			String r=networkManager.prettyFormat(s,2);
 //			logger.info("checking this "+r);
 
 			response.setStatus(200);
@@ -149,66 +132,19 @@ public class NetworkRestController {
 			return res;
 		}
 
-
-
-
 	}
 
-	/**
-	 * Formats a unformatted XML to formatted XML
-	 * @param input
-	 * @param indent
-	 * @return
-	 */
-	public String prettyFormat(String input, int indent) {
-		String result="";
-		try{
-			Source xmlInput = new StreamSource(new StringReader(input));
-			StringWriter stringWriter = new StringWriter();
-			StreamResult xmlOutput = new StreamResult(stringWriter);
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			transformerFactory.setAttribute("indent-number", indent);
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.transform(xmlInput, xmlOutput);
-			result= xmlOutput.getWriter().toString();
-		}catch(Exception e){
-
-		}
-		return result;
-	}
-
-
-
-	/**
-	 * Stores XML from Vogon into Q-Store
-	 * @author Lohith Dwaraka
-	 * @param XML
-	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
-	 */
-	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
-		String res="";
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-		RestTemplate restTemplate = new RestTemplate();
-		List<MediaType> mediaTypes = new ArrayList<MediaType>();
-		mediaTypes.add(MediaType.APPLICATION_XML);
-		messageConverters.add(new FormHttpMessageConverter());
-		messageConverters.add(new StringHttpMessageConverter());
-		restTemplate.setMessageConverters(messageConverters);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
-		headers.setAccept(mediaTypes);
-		HttpEntity request = new HttpEntity(XML,headers);
-
-		try{
-			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
-		}catch(Exception e){
-			logger.error("",e);
-		}
-		return res;
+	@ResponseBody
+	@RequestMapping(value = "rest/networkstatus/{NetworkName}", method = RequestMethod.GET)
+	public String getNetworkStatus(@PathVariable("NetworkName") String networkName,
+			HttpServletResponse response,
+			 String accept,Principal principal) throws QuadrigaException, QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		String status="UNKNOWN";
+		INetwork network =networkManager.getNetworkStatus(networkName,user);
+		
+		status = network.getStatus();
+		return status;
 
 	}
 

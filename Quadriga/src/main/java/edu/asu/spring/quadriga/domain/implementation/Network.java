@@ -16,9 +16,12 @@ import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
  */
 public class Network implements INetwork 
 {
+	private String id;
 	private IUser creator;
 	private Date creationTime;
 	private String textUrl;
+	private String name;
+	private String status;
 	private List<String> appellationIds;
 	private List<String> relationIds;
 	private ENetworkAccessibility networksAccess;
@@ -59,6 +62,23 @@ public class Network implements INetwork
 
 	
 	@Override
+	public String getName() {
+		return name;
+	}
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String getStatus() {
+		return status;
+	}
+	@Override
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	@Override
 	public Date getCreationTime() {
 		return creationTime;
 	}
@@ -75,6 +95,13 @@ public class Network implements INetwork
 		this.textUrl = textUrl;
 	}
 	
-	
+	@Override
+	public String getId() {
+		return id;
+	}
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
 
 }

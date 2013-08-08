@@ -7,9 +7,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface IDBConnectionNetworkManager {
 
 
-	public String addNetworkRequest(String networkName, IUser user)
+	public abstract String addNetworkRequest(String networkName, IUser user)
 			throws QuadrigaStorageException;
 
-	public String addNetworkStatement(String networkId, String id, String type,
+	public abstract String addNetworkStatement(String networkId, String id, String type,
 			String isTop, IUser user) throws QuadrigaStorageException;
+
+	public abstract INetwork getNetworkStatus(String networkName, IUser user)
+			throws QuadrigaStorageException;
 }
