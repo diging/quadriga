@@ -1,11 +1,12 @@
 package edu.asu.spring.quadriga.web.workspace;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
 
 import java.security.Principal;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -67,7 +68,7 @@ public class ListWSControllerTest {
 		listWSController.setWsManager(wsManager);
 		listWSController.setWsCollabManager(wsCollabManager);
 		listWSController.setDspaceManager(dspaceManager);
-		
+
 		mock = new MockHttpServletRequest();
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
@@ -93,18 +94,72 @@ public class ListWSControllerTest {
 
 	@Test
 	public void testAddFilesDspaceAuthentication() {
+		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.addFilesDspaceAuthentication("w1", mock, null, null));
+
+		//Use public access
+		mock.addParameter("dspacePublicAccess", "public");
+		mock.removeParameter("username");
+		mock.removeParameter("password");
+		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.addFilesDspaceAuthentication("w1", mock, null, null));
+
+		//Handle empty username and password
+		mock.removeParameter("dspacePublicAccess");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", mock, null, null));
+
+		//Reset the values
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
 	}
 
 	@Test
 	public void testSyncFilesDspaceAuthentication() {
+		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		assertEquals("redirect:/auth/workbench/workspace/w1/updatebitstreams", listWSController.syncFilesDspaceAuthentication("w1", mock, null, null));
+
+		//Use public access
+		mock.addParameter("dspacePublicAccess", "public");
+		mock.removeParameter("username");
+		mock.removeParameter("password");
+		assertEquals("redirect:/auth/workbench/workspace/w1/updatebitstreams", listWSController.syncFilesDspaceAuthentication("w1", mock, null, null));
+
+		//Handle empty username and password
+		mock.removeParameter("dspacePublicAccess");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", mock, null, null));
+
+		//Reset the values
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
 	}
 
 
 	@Test
 	public void testChangeDspaceAuthentication() {
+		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
+
+		//Use public access
+		mock.addParameter("dspacePublicAccess", "public");
+		mock.removeParameter("username");
+		mock.removeParameter("password");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
+
+		//Handle empty username and password
+		mock.removeParameter("dspacePublicAccess");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
+
+		//Reset the values
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
 	}
 
 
@@ -112,6 +167,9 @@ public class ListWSControllerTest {
 	@Test
 	public void testWorkspaceCommunityListRequest() {
 		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
 
 		//Load the list of communities
@@ -127,6 +185,9 @@ public class ListWSControllerTest {
 	public void testWorkspaceCommunityRequest() {
 
 		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		listWSController.changeDspaceAuthentication("w1", mock, model, principal);
 		//Load the community list
 		listWSController.workspaceCommunityListRequest(null, model, principal);
@@ -142,6 +203,9 @@ public class ListWSControllerTest {
 	@Test
 	public void testWorkspaceItemListRequest() {
 		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		listWSController.changeDspaceAuthentication("w1", mock, model, principal);
 		//Load the community list
 		listWSController.workspaceCommunityListRequest(null, model, principal);
@@ -161,6 +225,9 @@ public class ListWSControllerTest {
 	@Test
 	public void testWorkspaceBitStreamListRequest() {
 		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		listWSController.changeDspaceAuthentication("w1", mock, model, principal);
 		//Load the community list
 		listWSController.workspaceCommunityListRequest(null, model, principal);
@@ -181,6 +248,9 @@ public class ListWSControllerTest {
 	@Test
 	public void testGetCollectionStatus() {
 		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		listWSController.changeDspaceAuthentication("w1", mock, model, principal);
 		//Load the community list
 		listWSController.workspaceCommunityListRequest(null, model, principal);
@@ -188,13 +258,16 @@ public class ListWSControllerTest {
 
 		//Wait for the collection to load
 		while(listWSController.getCollectionStatus("55").equals("Loading..."));
-		
+
 		assertNotSame("Loading...",listWSController.getCollectionStatus("55"));
 	}
 
 	@Test
 	public void testGetBitStreamStatus() {
 		//Setup username and password
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		mock.removeParameter("dspacePublicAccess");
 		listWSController.changeDspaceAuthentication("w1", mock, model, principal);
 		//Load the community list
 		listWSController.workspaceCommunityListRequest(null, model, principal);
@@ -207,7 +280,7 @@ public class ListWSControllerTest {
 
 		//Wait for the bitstream to load
 		while(listWSController.getBitStreamStatus("19490", "9595", "55").equals("Loading..."));
-		
+
 		assertNotSame("Loading...", listWSController.getBitStreamStatus("19490", "9595", "55"));
 	}
 
