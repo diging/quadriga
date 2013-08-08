@@ -84,7 +84,7 @@ public class NetworkRestController {
 	 * @param response
 	 * @param xml
 	 * @param accept
-	 * @return
+	 * @return XML
 	 * @throws QuadrigaException
 	 * @throws IOException 
 	 * @throws SAXException 
@@ -102,6 +102,8 @@ public class NetworkRestController {
 		if(networkName.isEmpty()){
 			response.setStatus(500);
 			return "Please provide network name in the URL.";
+		}else{
+			
 		}
 		IUser user = userManager.getUserDetails(principal.getName());
 		xml=xml.trim();
@@ -134,6 +136,18 @@ public class NetworkRestController {
 
 	}
 
+	/**
+	 *  Rest interface for uploading XML for networks
+	 * http://<<URL>:<PORT>>/quadriga/rest/networkstatus/{NetworkName}
+	 * http://localhost:8080/quadriga/rest/networkstatus/firstNetwork
+	 * @param networkName
+	 * @param response
+	 * @param accept
+	 * @param principal
+	 * @return status
+	 * @throws QuadrigaException
+	 * @throws QuadrigaStorageException
+	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/networkstatus/{NetworkName}", method = RequestMethod.GET)
 	public String getNetworkStatus(@PathVariable("NetworkName") String networkName,

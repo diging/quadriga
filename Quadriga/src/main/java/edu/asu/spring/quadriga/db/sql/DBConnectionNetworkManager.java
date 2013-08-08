@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.sql.DataSource;
@@ -233,7 +235,6 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 
 	@Override
 	public INetwork getNetworkStatus(String networkName, IUser user) throws QuadrigaStorageException{
-		String networkId="NET_"+shortUUID();
 		IUser owner = user;
 		String dbCommand;
 		String errmsg="";
@@ -252,7 +253,6 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 			//adding the input variables to the SP
 			sqlStatement.setString(1, networkName);
 			sqlStatement.setString(2, owner.getUserName());        	
-			sqlStatement.setString(3,"PENDING");
 
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(3,Types.VARCHAR);
@@ -291,5 +291,64 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		return network;		
 	}
 
+	
+	@Override
+	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
+		IUser owner = user;
+		String dbCommand;
+		String errmsg="";
+		
+		CallableStatement sqlStatement;
+		List<INetwork> networkList = new ArrayList<INetwork>();
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_NETWORK_LIST  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, owner.getUserName());        	
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					INetwork network=networkFactory.createNetworkObject();;
+					network.setId(resultSet.getString(1));
+					network.setName(resultSet.getString(2));
+					network.setStatus(resultSet.getString(3));
+					networkList.add(network);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return networkList;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return networkList;		
+	}
 
 }

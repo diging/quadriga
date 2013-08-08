@@ -315,4 +315,16 @@ public class NetworkManager {
 		}
 		return network;
 	}
+	
+	
+	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
+		List<INetwork> networkList = new ArrayList<INetwork>();
+		
+		try{
+			networkList=dbConnect.getNetworkList(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return networkList;
+	}
 }
