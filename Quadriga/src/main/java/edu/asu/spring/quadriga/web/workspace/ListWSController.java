@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.web.workspace;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -134,18 +136,29 @@ public class ListWSController
 	 * @author 					Ram Kumar Kumaresan
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/adddspacelogin", method = RequestMethod.POST)
-	public String addFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {		
-		if(dspaceUsername == null || dspacePassword == null)
+	public String addFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {		
+		String dspaceUsername = req.getParameter("username");
+		String dspacePassword = req.getParameter("password");
+		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
+		if(dspacePublicAccess == null)
 		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			if(dspaceUsername == null || dspacePassword == null)
+			{
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			}
+			else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+			{
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			}
+			this.dspaceUsername = dspaceUsername;
+			this.dspacePassword = dspacePassword;
 		}
-		else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+		else
 		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			this.dspaceUsername = "";
+			this.dspacePassword = "";
 		}
 
-		this.dspaceUsername = dspaceUsername;
-		this.dspacePassword = dspacePassword;
 
 		return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 	}
@@ -163,18 +176,29 @@ public class ListWSController
 	 * @author 					Ram Kumar Kumaresan
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/syncdspacelogin", method = RequestMethod.POST)
-	public String syncFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {
-		if(dspaceUsername == null || dspacePassword == null)
+	public String syncFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {
+		String dspaceUsername = req.getParameter("username");
+		String dspacePassword = req.getParameter("password");
+		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
+		
+		if(dspacePublicAccess == null)
 		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			if(dspaceUsername == null || dspacePassword == null)
+			{
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			}
+			else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+			{
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			}
+			this.dspaceUsername = dspaceUsername;
+			this.dspacePassword = dspacePassword;
 		}
-		else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+		else
 		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			this.dspaceUsername = "";
+			this.dspacePassword = "";
 		}
-
-		this.dspaceUsername = dspaceUsername;
-		this.dspacePassword = dspacePassword;
 
 		return "redirect:/auth/workbench/workspace/"+workspaceId+"/updatebitstreams";
 	}
@@ -191,23 +215,35 @@ public class ListWSController
 	 * @author 					Ram Kumar Kumaresan
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/changedspacelogin", method = RequestMethod.POST)
-	public String changeDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, @RequestParam("username") String dspaceUsername, @RequestParam("password") String dspacePassword, ModelMap model, Principal principal) {		
-		if(dspaceUsername == null || dspacePassword == null)
+	public String changeDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {
+		String dspaceUsername = req.getParameter("username");
+		String dspacePassword = req.getParameter("password");
+		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
+		if(dspacePublicAccess == null)
 		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			if(dspaceUsername == null || dspacePassword == null)
+			{
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			}
+			else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+			{
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			}
+			this.dspaceUsername = dspaceUsername;
+			this.dspacePassword = dspacePassword;
 		}
-		else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+		else
 		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+			this.dspaceUsername = "";
+			this.dspacePassword = "";
 		}
 
 		getDspaceManager().clearCompleteCache();
-		this.dspaceUsername = dspaceUsername;
-		this.dspacePassword = dspacePassword;
+		
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
-	
-	
+
+
 	/**
 	 * Handle the request for the list of communities to be fetched from Dspace.
 	 * 
