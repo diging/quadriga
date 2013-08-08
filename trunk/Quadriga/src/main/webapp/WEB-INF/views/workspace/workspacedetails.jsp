@@ -9,6 +9,23 @@
 	<c:when test="${empty dspaceLogin}">
 	<script>
 	$(document).ready(function() {
+		$('#dspacePublicAccess').click(function publicAccess(){
+			if ($(this).is(':checked'))
+		    {
+				$("#username").attr("disabled", "disabled");
+				$("#username").attr("placeholder","Input Disabled");
+				$("#password").attr("disabled", "disabled");
+				$("#password").attr("placeholder","Input Disabled");
+		    }
+		    else
+		    {
+		    	$("#username").removeAttr("disabled");
+		    	$("#username").attr("placeholder","Username");
+		    	$("#password").removeAttr("disabled");
+		    	$("#password").attr("placeholder","Password");
+		    }
+		});
+		
 		$('#dspaceSync').click(function dspaceSync() {
 				$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/syncdspacelogin');
 				$( "#login-box" ).dialog( "open" );					
@@ -132,6 +149,8 @@ $('a.login-window').click(function() {
         <input id="password" name="password" value="" type="password" placeholder="Password" />
     </label>
     </fieldset>
+    <input type="checkbox" name="dspacePublicAccess" id="dspacePublicAccess" value="public"/><font size="2">Use Public Access</font>
+    
 </form>
 </div>
 <script>
@@ -147,17 +166,20 @@ $(document).ready(function(){
 	        	var $username = $('#username');
 	        	var $password = $('#password');
 	        	
-	            if ($.trim($username.val()) === '') {
-	            	$username.effect( "shake", { times:1 }, 300);
-	            	$username.focus();
-	            	bValid = false;
-	            }
-	            if($.trim($password.val()) === '') {
-	            	$password.effect( "shake", { times:1 }, 300);
-	            	if(bValid)
-	            	$password.focus();
-	            	bValid = false;
-	            }
+	        	if(!$('#dspacePublicAccess').is(':checked'))
+        		{
+        			if ($.trim($username.val()) === '') {
+	            		$username.effect( "shake", { times:1 }, 300);
+	            		$username.focus();
+	            		bValid = false;
+	            	}
+	            	if($.trim($password.val()) === '') {
+		            	$password.effect( "shake", { times:1 }, 300);
+	            		if(bValid)
+	            		$password.focus();
+	            		bValid = false;
+	            	}
+        		}
 	            
 	            if(bValid)
 	            	{
