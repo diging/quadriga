@@ -37,6 +37,7 @@ import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,8 +93,8 @@ public class NetworkRestController {
 
 	/**
 	 * Rest interface for uploading XML for networks
-	 * http://<<URL>:<PORT>>/quadriga/rest/uploadnetworks
-	 * hhttp://localhost:8080/quadriga/rest/uploadnetworks
+	 * http://<<URL>:<PORT>>/quadriga/rest/uploadnetworks/{NetworkName}
+	 * http://localhost:8080/quadriga/rest/uploadnetworks/firstNetwork
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param request
@@ -110,11 +111,15 @@ public class NetworkRestController {
 	 * @throws QuadrigaStorageException 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
-	public String getNetworkFromClients(HttpServletRequest request,
+	@RequestMapping(value = "rest/uploadnetworks/{NetworkName}", method = RequestMethod.POST)
+	public String getNetworkFromClients(@PathVariable("NetworkName") String networkName,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
 
+		if(networkName.isEmpty()){
+			response.setStatus(500);
+			return "Please provide network name in the URL.";
+		}
 		IUser user = userManager.getUserDetails(principal.getName());
 		xml=xml.trim();
 		if (xml.isEmpty()) {
@@ -128,7 +133,7 @@ public class NetworkRestController {
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(res.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-			networkManager.receiveNetworkSubmitRequest(response1,user);
+			networkManager.receiveNetworkSubmitRequest(response1,user,networkName);
 			
 //			Below code would help in printing XML from qstore
 			Marshaller marshaller = context.createMarshaller();
