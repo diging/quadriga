@@ -78,6 +78,7 @@ public interface DBConstants
 	public static final String ADD_NETWORK_DETAILS ="sp_addNetworksDetails";
 	public static final String ADD_NETWORK_RELATION ="sp_addNetworks_Relation";
 	public static final String ADD_NETWORK_APPELLATION ="sp_addNetworks_Appellation";
+	public static final String ADD_NETWORK_STATEMENT ="sp_addNetworks_statements";
 	
 	
 	// WorkSpace database objects
