@@ -18,11 +18,6 @@
 			<span>Tools</span>
 		</h2>
 	</li>
-	<li><a href="#">DSpace</a>
-		<ul>
-			<li><a
-				href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities">Add Text</a></li>
-		</ul></li>
 	<li><a href="#">Dictionary</a>
 		<ul>
 			<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/adddictionary">Add Dictionary</a></li>
