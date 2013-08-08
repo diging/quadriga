@@ -26,7 +26,7 @@
 						Collections</a></li>
 			</sec:authorize>
 
-			<li><a href="#" class="flask">Networks</a></li>
+			<li><a href="networks" class="flask">Networks</a></li>
 
 			<sec:authorize
 				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">

@@ -23,6 +23,13 @@
 </script>
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {
+		activeTable = $('.dataTable').dataTable({
+			"bJQueryUI" : true,
+			"sPaginationType" : "full_numbers",
+			"bAutoWidth" : false
+		});
+	});
+	$(document).ready(function() {
 		$("input[type=button]").button().click(function(event) {
 			event.preventDefault();
 		});
@@ -38,63 +45,36 @@
 
 
 <br />
-<div
-	style="float: left; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
-	<h4 align="center">You own these Networks</h4>
-	<hr>
+<div class="container">
 	<c:choose>
 		<c:when test="${not empty networkList}">
-			<ul class="pagination1">
-				<c:forEach var="network" items="${networkList}">
-					<li><details>
-							<summary>
-								<a
-									href="${pageContext.servletContext.contextPath}/auth/networks">
-									<c:out value="${network.name}"></c:out>
-								</a>
-							</summary>
-							<c:out value="${network.status}"></c:out>
-						</details> <c:choose>
-							<c:when test="${network.status=='PENDING'}">
-								<input type=button onClick="location.href=''" value='Approve'>
-								<input type=button onClick="location.href=''" value='Reject'>
-							</c:when>
-						</c:choose></li>
+			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
+				class="display dataTable">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Status</th>
+						<th>Action</th>
+					</tr>
+				</thead>
 
-
-				</c:forEach>
-			</ul>
+				<tbody>
+					<c:forEach var="network" items="${networkList}">
+						<tr>
+							<td width="25%" align="center"><input name="items"
+								type="hidden" value="<c:out value="${network.name}"></c:out>" />
+								<c:out value="${network.name}"></c:out></td>
+							<td width="25%" align="center"><c:out
+									value="${network.status}"></c:out></td>
+							<td width="25%" align="center"><input type=button
+								onClick="location.href=''" value='Visualize'></td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
 		</c:when>
 		<c:otherwise>
 			<spring:message code="empty.networks" />
 		</c:otherwise>
 	</c:choose>
-</div>
-
-<div
-	style="float: right; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
-
-	<h4 align="center">You participate in these Networks</h4>
-	<hr>
-	<c:choose>
-		<c:when test="${not empty dictionaryCollabList}">
-			<ul class="pagination1">
-				<c:forEach var="dictionary" items="${dictionaryCollabList}">
-					<li><details>
-							<summary>
-								<a
-									href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.id}">
-									<c:out value="${dictionary.name}"></c:out>
-								</a>
-							</summary>
-							<c:out value="${dictionary.description}"></c:out>
-						</details></li>
-				</c:forEach>
-			</ul>
-		</c:when>
-		<c:otherwise>
-			<spring:message code="empty.networks" />
-		</c:otherwise>
-	</c:choose>
-
 </div>
