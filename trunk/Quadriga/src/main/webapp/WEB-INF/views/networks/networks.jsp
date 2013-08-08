@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 
 <!--  
@@ -43,20 +43,31 @@
 	<h4 align="center">You own these Networks</h4>
 	<hr>
 	<c:choose>
-		<c:when test="${not empty dictinarylist}">
+		<c:when test="${not empty networkList}">
 			<ul class="pagination1">
-				<c:forEach var="dictionary" items="${dictinarylist}">
+				<c:forEach var="network" items="${networkList}">
 					<li><details>
 							<summary>
-								<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.id}"> <c:out
-										value="${dictionary.name}"></c:out></a>
+								<a
+									href="${pageContext.servletContext.contextPath}/auth/networks">
+									<c:out value="${network.name}"></c:out>
+								</a>
 							</summary>
-							<c:out value="${dictionary.description}"></c:out>
-						</details></li>
+							<c:out value="${network.status}"></c:out>
+						</details> <c:choose>
+							<c:when test="${network.status=='PENDING'}">
+								<input type=button onClick="location.href=''" value='Approve'>
+								<input type=button onClick="location.href=''" value='Reject'>
+							</c:when>
+						</c:choose></li>
+
+
 				</c:forEach>
 			</ul>
 		</c:when>
-		<c:otherwise> <spring:message code="empty.networks" /></c:otherwise>
+		<c:otherwise>
+			<spring:message code="empty.networks" />
+		</c:otherwise>
 	</c:choose>
 </div>
 
@@ -71,15 +82,19 @@
 				<c:forEach var="dictionary" items="${dictionaryCollabList}">
 					<li><details>
 							<summary>
-								<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.id}"> <c:out
-										value="${dictionary.name}"></c:out></a>
+								<a
+									href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.id}">
+									<c:out value="${dictionary.name}"></c:out>
+								</a>
 							</summary>
 							<c:out value="${dictionary.description}"></c:out>
 						</details></li>
 				</c:forEach>
 			</ul>
 		</c:when>
-		<c:otherwise> <spring:message code="empty.networks" /></c:otherwise>
+		<c:otherwise>
+			<spring:message code="empty.networks" />
+		</c:otherwise>
 	</c:choose>
 
 </div>

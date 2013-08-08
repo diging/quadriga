@@ -1,8 +1,8 @@
 /*******************************************
-Name          : sp_getNetworkStatus
+Name          : sp_hasNetworkName
 
-Description   : retrieves the network status
-				of a particular network
+Description   : retrieves the network details
+				of a particular User
 
 Called By     : UI (DBConnectionNetworkManager.java)
 
@@ -12,10 +12,10 @@ Modified Date : 08/08/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getNetworkStatus;
+DROP PROCEDURE IF EXISTS sp_hasNetworkName;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getNetworkStatus
+CREATE PROCEDURE sp_hasNetworkName
 (
   IN  innetworkowner  VARCHAR(20),
   IN  innetworkname  VARCHAR(20),	
@@ -36,7 +36,7 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 select networkid,networkname,status
+	 select 1
        from tbl_networks
 	   where networkowner = innetworkowner and networkname =innetworkname;
 	END IF;
