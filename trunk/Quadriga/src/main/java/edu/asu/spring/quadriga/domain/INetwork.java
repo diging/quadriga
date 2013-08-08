@@ -38,5 +38,17 @@ public interface INetwork
 
 	public abstract List<String> getAppellationIds();
 
+	public abstract String getName();
+
+	public abstract void setName(String name);
+
+	public abstract String getStatus();
+
+	public abstract void setStatus(String status);
+
+	public abstract String getId();
+
+	public abstract void setId(String id);
+
 
 }

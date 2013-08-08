@@ -79,7 +79,7 @@ public interface DBConstants
 	public static final String ADD_NETWORK_RELATION ="sp_addNetworks_Relation";
 	public static final String ADD_NETWORK_APPELLATION ="sp_addNetworks_Appellation";
 	public static final String ADD_NETWORK_STATEMENT ="sp_addNetworks_statements";
-	
+	public static final String GET_NETWORK_STATUS ="sp_getNetworkList";
 	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";

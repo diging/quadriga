@@ -1,17 +1,37 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
+import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.networks.AppellationEventType;
@@ -35,12 +55,33 @@ public class NetworkManager {
 			.getLogger(NetworkManager.class);
 
 	@Autowired
+	@Qualifier("qStoreURL")
+	private String qStoreURL;
+
+	@Autowired
+	@Qualifier("qStoreURL_Add")
+	private String qStoreURL_Add;
+
+	@Autowired
+	@Qualifier("qStoreURL_Get")
+	private String qStoreURL_Get;
+	
+	@Autowired
 	private INetworkFactory networkFactory;
 
 	@Autowired
 	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnect;
 
+	/**
+	 * Gets the QStrore Add URL
+	 * 
+	 * @return String URL
+	 */
+	public String getQStoreAddURL() {
+		return qStoreURL+""+qStoreURL_Add;
+	}
+	
 	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName){
 		String networkId="";
 		try{
@@ -87,6 +128,63 @@ public class NetworkManager {
 		}
 	}
 
+	/**
+	 * Formats a unformatted XML to formatted XML
+	 * @param input
+	 * @param indent
+	 * @return
+	 */
+	public String prettyFormat(String input, int indent) {
+		String result="";
+		try{
+			Source xmlInput = new StreamSource(new StringReader(input));
+			StringWriter stringWriter = new StringWriter();
+			StreamResult xmlOutput = new StreamResult(stringWriter);
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			transformerFactory.setAttribute("indent-number", indent);
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.transform(xmlInput, xmlOutput);
+			result= xmlOutput.getWriter().toString();
+		}catch(Exception e){
+
+		}
+		return result;
+	}
+
+
+
+	/**
+	 * Stores XML from Vogon into Q-Store
+	 * @author Lohith Dwaraka
+	 * @param XML
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
+		String res="";
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+		RestTemplate restTemplate = new RestTemplate();
+		List<MediaType> mediaTypes = new ArrayList<MediaType>();
+		mediaTypes.add(MediaType.APPLICATION_XML);
+		messageConverters.add(new FormHttpMessageConverter());
+		messageConverters.add(new StringHttpMessageConverter());
+		restTemplate.setMessageConverters(messageConverters);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		headers.setAccept(mediaTypes);
+		HttpEntity request = new HttpEntity(XML,headers);
+
+		try{
+			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
+		}catch(Exception e){
+			logger.error("",e);
+		}
+		return res;
+	}
+	
 	public void getRelationEventElements(RelationEventType re,String networkId,IUser user) throws QuadrigaStorageException{
 		List <?> ee = re.getRelationCreatorOrRelation();
 		Iterator <?> Iee=ee.iterator();
@@ -205,5 +303,16 @@ public class NetworkManager {
 				}
 			}
 		}
+	}
+	
+	
+	public INetwork getNetworkStatus(String networkName, IUser user) throws QuadrigaStorageException{
+		INetwork network = null;
+		try{
+		network = dbConnect.getNetworkStatus(networkName, user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return network;
 	}
 }
