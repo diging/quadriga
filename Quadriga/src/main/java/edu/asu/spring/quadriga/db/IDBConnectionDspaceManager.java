@@ -258,11 +258,20 @@ public interface IDBConnectionDspaceManager {
 	 * @param username					The quadriga username of the user. Must NOT be null.
 	 * `
 	 * @return							SUCCESS when the data was inserted into the database. FAILURE if the insert operation failed.
-	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation.
+	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation. Also thrown when the keys are already present in the database.
 	 */
 	public abstract int addDspaceKeys(IDspaceKeys dspaceKeys, String username)
 			throws QuadrigaStorageException;
 
+	/**
+	 * Update the Dspace Keys used by the user in Quadriga. The keys must already exist for this user in the database.
+	 * 
+	 * @param dspaceKeys				The IDspaceKeys which stores the key values for the user. Must NOT be null.
+	 * @param username					The quadriga username of the user. Must NOT be null.
+	 * 
+	 * @return							SUCCESS when the data was inserted into the database. FAILURE if the insert operation failed.
+	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation. Also thrown when the keys are not found in the database.
+	 */
 	public abstract int updateDspaceKeys(IDspaceKeys dspaceKeys, String username)
 			throws QuadrigaStorageException;
 
