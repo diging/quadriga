@@ -51,7 +51,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.NetworkManager;
+import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
 
 /**
@@ -67,7 +67,7 @@ public class NetworkRestController {
 			.getLogger(NetworkRestController.class);
 
 	@Autowired
-	private NetworkManager networkManager;
+	private INetworkManager networkManager;
 	
 
 	@Autowired

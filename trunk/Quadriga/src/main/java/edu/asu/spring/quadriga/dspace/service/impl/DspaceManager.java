@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceUpdateManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -54,7 +55,7 @@ public class DspaceManager implements IDspaceManager{
 
 	@Autowired
 	private IDBConnectionDspaceManager dbconnectionManager;
-	
+
 	@Resource(name = "dspaceStrings")
 	private Properties dspaceProperties;
 
@@ -198,7 +199,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public IBitStream getBitStream(String sCollectionId, String sItemId, String sBitStreamId)
 	{
-		
+
 		return getProxyCommunityManager().getBitStream(sCollectionId, sItemId, sBitStreamId);
 	}
 
@@ -399,8 +400,37 @@ public class DspaceManager implements IDspaceManager{
 	{
 		getProxyCommunityManager().clearCompleteCache();
 	}
-	
-	
+
+	@Override
+	public int addDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		IDspaceKeys dbDspaceKeys = dbconnectionManager.getDspaceKeys(username);
+		if(dbDspaceKeys == null)
+		{
+			//No key was found for the user. Hence the keys will be inserted.
+			if(dbconnectionManager.addDspaceKeys(dspaceKeys, username)==FAILURE)
+			{
+				logger.info("The user "+username+" got this exception when trying to insert dspace keys with the following values:");
+				if(dspaceKeys != null)
+				{
+					logger.info("Public Key: "+dspaceKeys.getPublicKey());
+					logger.info("Private Key: "+dspaceKeys.getPrivateKey());
+				}
+				throw new QuadrigaAccessException("OOPS ! There seems to be a problem in the system. We got our best minds working on it. Please check back later");
+			}
+		}
+		else
+		{
+			//Key already exists in database. Update the existing key.
+			if(dbconnectionManager.updateDspaceKeys(dspaceKeys, username)==FAILURE)
+			{
+				throw new QuadrigaAccessException("The values passed to updateDspaceKeys do not satify the method constraints !");
+			}
+		}
+		return SUCCESS;
+	}
+
+
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.
 	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.

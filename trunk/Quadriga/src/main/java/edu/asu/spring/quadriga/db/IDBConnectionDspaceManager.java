@@ -254,14 +254,16 @@ public interface IDBConnectionDspaceManager {
 	/**
 	 * Add new Dspace Keys for a user in Quadriga database. The keys must NOT exist for this user already in the database.
 	 * 
-	 * @param publicKey					The public key value for the user. Must NOT be null.
-	 * @param privateKey				The private key value for the user. Must NOT be null.
+	 * @param dspaceKeys				The IDspaceKeys which stores the key values for the user. Must NOT be null.
 	 * @param username					The quadriga username of the user. Must NOT be null.
 	 * `
 	 * @return							SUCCESS when the data was inserted into the database. FAILURE if the insert operation failed.
 	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation.
 	 */
-	public abstract int addDspaceKeys(String publicKey, String privateKey, String username)
+	public abstract int addDspaceKeys(IDspaceKeys dspaceKeys, String username)
+			throws QuadrigaStorageException;
+
+	public abstract int updateDspaceKeys(IDspaceKeys dspaceKeys, String username)
 			throws QuadrigaStorageException;
 
 }

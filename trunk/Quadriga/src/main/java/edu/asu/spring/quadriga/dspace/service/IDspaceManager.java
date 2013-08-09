@@ -186,4 +186,6 @@ public interface IDspaceManager{
 
 	public abstract Properties getDspaceProperties();
 
+	public abstract int addDspaceKeys(IDspaceKeys dspaceKeys, String username)	throws QuadrigaStorageException, QuadrigaAccessException;
+
 }
