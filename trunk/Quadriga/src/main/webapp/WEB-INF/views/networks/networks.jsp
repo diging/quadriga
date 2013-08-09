@@ -39,7 +39,7 @@
 
 <header>
 	<h2>Networks</h2>
-	<span class="byline">Manage your Networks here.</span>
+	<span class="byline">View your Networks here.</span>
 </header>
 
 

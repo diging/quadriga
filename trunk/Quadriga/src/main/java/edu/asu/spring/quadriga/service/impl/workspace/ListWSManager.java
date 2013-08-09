@@ -2,11 +2,15 @@ package edu.asu.spring.quadriga.service.impl.workspace;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.db.sql.DBConnectionNetworkManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -22,6 +26,8 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class ListWSManager implements IListWSManager 
 {
 
+	private static final Logger logger = LoggerFactory.getLogger(ListWSManager.class);
+	
 	@Autowired
 	@Qualifier("DBConnectionListWSManagerBean")
 	private IDBConnectionListWSManager dbConnect;
@@ -117,5 +123,18 @@ public class ListWSManager implements IListWSManager
 		workspace = dbConnect.getWorkspaceDetails(workspaceId,username);
 		workspace.setBitstreams(dbConnect.getBitStreams(workspaceId, username));
 		return workspace;
+	}
+	
+	@Override
+	public List<INetwork> getWorkspaceNetworkList(String workspaceid)
+			throws QuadrigaStorageException{
+		
+		List<INetwork> networkList=null;
+		try{
+			networkList=dbConnect.getWorkspaceNetworkList(workspaceid);
+		}catch(QuadrigaStorageException e){
+			logger.error("",e);
+		}
+		return networkList;
 	}
 }

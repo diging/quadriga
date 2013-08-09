@@ -81,6 +81,8 @@ public interface DBConstants
 	public static final String ADD_NETWORK_STATEMENT ="sp_addNetworks_statements";
 	public static final String GET_NETWORK_STATUS ="sp_getNetworkStatus";
 	public static final String GET_NETWORK_LIST ="sp_getNetworkList";
+	public static final String HAS_NETWORK_NAME ="sp_hasNetworkName";
+	public static final String GET_PROJECTID_WORKSPACE ="sp_getProjectIdForWorkspace";
 	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
@@ -133,5 +135,8 @@ public interface DBConstants
 	//workspace access objects
 	public static final String CHECK_WORKSPACE_OWNER = "fn_checkWorkspaceOwner";
 	public static final String LIST_WORKSPACE_BITSTREAM = "sp_getAllBitStreams";
+	
+	//workspace networks	
+	public static final String LIST_WORKSPACE_NETWORKS = "sp_getWorkspaceNetworkList";
 	
 }
