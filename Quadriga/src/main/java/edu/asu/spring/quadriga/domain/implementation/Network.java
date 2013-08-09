@@ -20,6 +20,10 @@ public class Network implements INetwork
 	private IUser creator;
 	private Date creationTime;
 	private String textUrl;
+	private String workspaceid;
+	private String projectid;
+	private String workspaceName;
+	private String projectName;
 	private String name;
 	private String status;
 	private List<String> appellationIds;
@@ -103,5 +107,40 @@ public class Network implements INetwork
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	@Override
+	public String getWorkspaceid() {
+		return workspaceid;
+	}
+	@Override
+	public void setWorkspaceid(String workspaceid) {
+		this.workspaceid = workspaceid;
+	}
+	
+	@Override
+	public String getProjectid() {
+		return projectid;
+	}
+	@Override
+	public void setProjectid(String projectid) {
+		this.projectid = projectid;
+	}
 
+	@Override
+	public String getWorkspaceName() {
+		return workspaceName;
+	}
+	@Override
+	public void setWorkspaceName(String workspaceName) {
+		this.workspaceName = workspaceName;
+	}
+	
+	@Override
+	public String getProjectName() {
+		return projectName;
+	}
+	@Override
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
 }

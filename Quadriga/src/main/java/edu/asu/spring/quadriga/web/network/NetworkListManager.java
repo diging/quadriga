@@ -43,6 +43,7 @@ public class NetworkListManager {
 		List<INetwork> networkList=null;
 		try{
 		networkList=networkManager.getNetworkList(user);
+		
 		}catch(QuadrigaStorageException e){
 			logger.error("Something wrong on DB Side",e);
 		}

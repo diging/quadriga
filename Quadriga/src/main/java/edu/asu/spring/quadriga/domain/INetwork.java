@@ -50,5 +50,21 @@ public interface INetwork
 
 	public abstract void setId(String id);
 
+	public abstract String getWorkspaceid();
+
+	public abstract void setWorkspaceid(String workspaceid);
+
+	public abstract String getProjectid();
+
+	public abstract void setProjectid(String projectid);
+
+	public abstract String getWorkspaceName();
+
+	public abstract void setWorkspaceName(String workspaceName);
+
+	public abstract String getProjectName();
+
+	public abstract void setProjectName(String projectName);
+
 
 }
