@@ -10,8 +10,8 @@
 
 	<!-- Highlight -->
 	<section class="is-highlight">
-		<span class="image image-centered"><img src="/quadriga/resources/txt-layout/images/panel-new2.png"
-			alt="" />
+		<span class="image image-centered"><img
+			src="/quadriga/resources/txt-layout/images/panel-new2.png" alt="" />
 		</span>
 
 		<ul class="special">
@@ -25,9 +25,10 @@
 				<li><a href="conceptcollections" class="tablet">Concept
 						Collections</a></li>
 			</sec:authorize>
-
-			<li><a href="networks" class="flask">Networks</a></li>
-
+			<sec:authorize
+				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
+				<li><a href="networks" class="flask">Networks</a></li>
+			</sec:authorize>
 			<sec:authorize
 				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
 				<li><a href="dictionaries" class="chart">Dictionaries</a></li>

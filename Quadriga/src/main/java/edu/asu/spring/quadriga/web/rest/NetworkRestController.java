@@ -76,8 +76,8 @@ public class NetworkRestController {
 
 	/**
 	 * Rest interface for uploading XML for networks
-	 * http://<<URL>:<PORT>>/quadriga/rest/uploadnetworks/{NetworkName}
-	 * http://localhost:8080/quadriga/rest/uploadnetworks/firstNetwork
+	 * http://<<URL>:<PORT>>/quadriga/rest/uploadnetworks
+	 * http://localhost:8080/quadriga/rest/uploadnetworks
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param request
@@ -94,18 +94,37 @@ public class NetworkRestController {
 	 * @throws QuadrigaStorageException 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/uploadnetworks/{NetworkName}", method = RequestMethod.POST)
-	public String getNetworkFromClients(@PathVariable("NetworkName") String networkName,HttpServletRequest request,
+	@RequestMapping(value = "rest/uploadnetworks", method = RequestMethod.POST)
+	public String getNetworkFromClients(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
-
+		IUser user = userManager.getUserDetails(principal.getName());
+		String networkName = request.getParameter("networkname");
+		String workspaceid = request.getParameter("workspaceid");
+		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
+		if(workspaceid.isEmpty()){
+			response.setStatus(500);
+			return "Please provide correct workspace id.";
+		}
+		if(projectid.isEmpty()){
+			response.setStatus(500);
+			return "Please provide correct workspace id.";
+		}
+		logger.debug(" Network Name : "+ networkName);
+		logger.debug(" Workspace id : "+ workspaceid);
 		if(networkName.isEmpty()){
 			response.setStatus(500);
-			return "Please provide network name in the URL.";
+			return "Please provide network name as a part of post parameters";
 		}else{
 			
+			boolean result=networkManager.hasNetworkName(networkName,user);
+			logger.debug(" Network name status : "+result);
+			if(result){
+				response.setStatus(500);
+				return "Network Name already Exist";
+			}
 		}
-		IUser user = userManager.getUserDetails(principal.getName());
+		
 		xml=xml.trim();
 		if (xml.isEmpty()) {
 			response.setStatus(500);
@@ -118,7 +137,7 @@ public class NetworkRestController {
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(res.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-			networkManager.receiveNetworkSubmitRequest(response1,user,networkName);
+			networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid);
 			
 //			Below code would help in printing XML from qstore
 			Marshaller marshaller = context.createMarshaller();

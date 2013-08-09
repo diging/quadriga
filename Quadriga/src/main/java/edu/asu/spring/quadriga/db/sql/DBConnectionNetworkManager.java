@@ -130,7 +130,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 	}
 
 	@Override
-	public String addNetworkRequest(String networkName, IUser user) throws QuadrigaStorageException{
+	public String addNetworkRequest(String networkName, IUser user, String workspaceid) throws QuadrigaStorageException{
 		String networkId="NET_"+shortUUID();
 		IUser owner = user;
 		String dbCommand;
@@ -138,7 +138,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		CallableStatement sqlStatement;
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_NETWORK_DETAILS  + "(?,?,?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_NETWORK_DETAILS  + "(?,?,?,?,?,?,?)";
 		//get the connection
 		getConnection();
 		//establish the connection with the database
@@ -148,17 +148,18 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, networkId);
-			sqlStatement.setString(2, networkName);
-			sqlStatement.setString(3, owner.getUserName());        	
-			sqlStatement.setString(4,"0");
-			sqlStatement.setString(5,"PENDING");
+			sqlStatement.setString(2, workspaceid);
+			sqlStatement.setString(3, networkName);
+			sqlStatement.setString(4, owner.getUserName());        	
+			sqlStatement.setString(5,"0");
+			sqlStatement.setString(6,"PENDING");
 
 			//adding output variables to the SP
-			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+			sqlStatement.registerOutParameter(7,Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(6);
+			errmsg = sqlStatement.getString(7);
 			if(errmsg.isEmpty()){
 				return networkId;
 			}else{
@@ -351,4 +352,115 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		return networkList;		
 	}
 
+	@Override
+	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		String projectid="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_PROJECTID_WORKSPACE  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, workspaceid);        	
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					projectid = resultSet.getString(1);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return projectid;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return projectid;		
+	}
+	
+	@Override
+	public boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		String result="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.HAS_NETWORK_NAME  + "(?,?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, user.getUserName());
+			sqlStatement.setString(2, networkName); 
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					result = resultSet.getString(1);
+				} 
+			}
+			errmsg = sqlStatement.getString(3);
+			if(errmsg.isEmpty()){
+				if(result.isEmpty()){
+					return false;
+				}else if(result.equals("1")){
+					return true;
+				}
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return true;		
+	}
+	
 }

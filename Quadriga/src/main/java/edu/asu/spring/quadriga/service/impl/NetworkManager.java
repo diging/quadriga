@@ -82,10 +82,10 @@ public class NetworkManager {
 		return qStoreURL+""+qStoreURL_Add;
 	}
 	
-	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName){
+	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid){
 		String networkId="";
 		try{
-			networkId=dbConnect.addNetworkRequest(networkName, user);
+			networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
 		}catch(QuadrigaStorageException e){
 			logger.error("DB action error ",e);
 		}
@@ -326,5 +326,26 @@ public class NetworkManager {
 			logger.error("Something went wrong in DB",e);
 		}
 		return networkList;
+	}
+	
+	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException{
+		String projectid="";
+		try{
+			projectid=dbConnect.getProjectIdForWorkspaceId(workspaceid);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return projectid;
+	}
+	
+	public boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException{
+		
+		boolean result=true;
+		try{
+			result=dbConnect.hasNetworkName(networkName,user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return result;
 	}
 }

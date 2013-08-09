@@ -9,7 +9,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface IDBConnectionNetworkManager {
 
 
-	public abstract String addNetworkRequest(String networkName, IUser user)
+	public abstract String addNetworkRequest(String networkName, IUser user, String workspaceid)
 			throws QuadrigaStorageException;
 
 	public abstract String addNetworkStatement(String networkId, String id, String type,
@@ -19,4 +19,9 @@ public interface IDBConnectionNetworkManager {
 			throws QuadrigaStorageException;
 
 	public abstract List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException;
+
+	public abstract String getProjectIdForWorkspaceId(String workspaceid)
+			throws QuadrigaStorageException;
+
+	public abstract boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException;
 }

@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -110,12 +111,15 @@ public class ListWSController
 		collaboratorList = getWsCollabManager().getWorkspaceCollaborators(workspaceid);
 
 		workspace.setCollaborators(collaboratorList);
-
+		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceid);
+		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
 		if(this.dspaceUsername != null && this.dspacePassword != null)
 		{
 			model.addAttribute("dspaceLogin", "true");
 		}
+		
+		
 		return "auth/workbench/workspace/workspacedetails";
 	}
 
