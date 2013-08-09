@@ -15,8 +15,8 @@ import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.NetworkManager;
 import edu.asu.spring.quadriga.web.rest.NetworkRestController;
 
 /**
@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.web.rest.NetworkRestController;
 public class NetworkListManager {
 	
 	@Autowired
-	NetworkManager networkManager;
+	INetworkManager networkManager;
 	
 	@Autowired
 	IUserManager userManager;

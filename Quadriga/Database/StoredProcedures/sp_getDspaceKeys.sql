@@ -23,7 +23,7 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "OOPS! Seems the database is down. We have our best minds working on it...";
 
-    SELECT publicKey,privateKey FROM tbl_quadriga_dspace_keys
+    SELECT publicKey,privateKey FROM tbl_dspace_keys
 	WHERE username = inusername;
 
 END$$

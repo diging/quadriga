@@ -130,6 +130,7 @@ public interface DBConstants
 	public static final String GET_DSPACE_REFERENCES = "sp_getAllBitStreamReferences";
 	public static final String ADD_DSPACE_KEYS = "sp_addDspaceKeys";
 	public static final String GET_DSPACE_KEYS = "sp_getDspaceKeys";
+	public static final String UPDATE_DSPACE_KEYS = "sp_updateDspaceKeys";
 	
 	//project Access objects
 	public static final String CHECK_PROJECT_OWNER = "fn_checkProjectOwner";

@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -64,6 +65,7 @@ public class ListWSController
 
 	@Autowired
 	private IDspaceKeysFactory dspaceKeysFactory;
+	private IDspaceKeys dspaceKeys;
 	
 	public IDspaceManager getDspaceManager() {
 		return dspaceManager;
@@ -100,16 +102,28 @@ public class ListWSController
 	@RequestMapping(value="/auth/workbench/keys", method=RequestMethod.GET)
 	public ModelAndView addProjectRequestForm()
 	{
-		System.out.println("Inside controller.........");
+		//TODO: Get dspace keys from database
 		return new ModelAndView("/auth/workbench/keys","command",dspaceKeysFactory.createDspaceKeysObject());
 	}
 
 	@RequestMapping(value = "/auth/workbench/updatekeys", method = RequestMethod.POST)
-	public String addStudent(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, ModelMap model) {
+	public String addStudent(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException {
 		System.out.println("...........");
 		System.out.println(dspaceKeys.getPublicKey());
 		System.out.println(dspaceKeys.getPrivateKey());
-		return "redirect:/auth/workbench";
+
+		if(dspaceKeys!=null)
+		{
+			if(dspaceKeys.getPrivateKey() != null && dspaceKeys.getPublicKey() != null)
+			{
+				if(!dspaceKeys.getPrivateKey().equals("") && !dspaceKeys.getPublicKey().equals(""))
+				{
+					dspaceManager.addDspaceKeys(dspaceKeys,principal.getName());
+				}
+			}
+		}
+		
+		return "redirect:/auth/workbench/keys";
 	}	
 	
 	/**

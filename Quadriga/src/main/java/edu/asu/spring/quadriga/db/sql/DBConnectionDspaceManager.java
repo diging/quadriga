@@ -726,14 +726,18 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	}
 	
 	@Override
-	public int addDspaceKeys(String publicKey, String privateKey, String username) throws QuadrigaStorageException
+	public int addDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException
 	{
-		if(publicKey == null || privateKey == null || username == null)
+		if(dspaceKeys == null)
+		{
+			return FAILURE;
+		}
+		if(dspaceKeys.getPublicKey() == null || dspaceKeys.getPrivateKey() == null || username == null)
 		{
 			return FAILURE;
 		}
 		
-		if(publicKey.equals("") || privateKey.equals("") || username.equals(""))
+		if(dspaceKeys.getPublicKey().equals("") || dspaceKeys.getPrivateKey().equals("") || username.equals(""))
 		{
 			return FAILURE;
 		}
@@ -749,8 +753,8 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		{
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 
-			sqlStatement.setString(1, publicKey);
-			sqlStatement.setString(2, privateKey);
+			sqlStatement.setString(1, dspaceKeys.getPublicKey());
+			sqlStatement.setString(2, dspaceKeys.getPrivateKey());
 			sqlStatement.setString(3, username);
 			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
@@ -801,7 +805,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 			//Execute the stored procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(4);
+			sOutErrorValue = sqlStatement.getString(2);
 
 			if(sOutErrorValue == null)
 			{
@@ -830,6 +834,64 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	@Override
+	public int updateDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException
+	{	
+		if(dspaceKeys == null)
+		{
+			return FAILURE;
+		}
+		if(dspaceKeys.getPublicKey() == null || dspaceKeys.getPrivateKey() == null || username == null)
+		{
+			return FAILURE;
+		}
+		
+		if(dspaceKeys.getPublicKey().equals("") || dspaceKeys.getPrivateKey().equals("") || username.equals(""))
+		{
+			return FAILURE;
+		}
+		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_DSPACE_KEYS+ "(?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, dspaceKeys.getPublicKey());
+			sqlStatement.setString(2, dspaceKeys.getPrivateKey());
+			sqlStatement.setString(3, username);
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(4);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully inserted the keys into the database
+				return SUCCESS;
+			}			
+			else
+			{
+				//Thrown when no keys were found for the user
+				throw new QuadrigaStorageException(sOutErrorValue);
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
 	@Override
 	public List<IBitStream> getBitStreamReferences(String workspaceId, String username) throws QuadrigaAccessException, QuadrigaStorageException
 	{

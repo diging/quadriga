@@ -42,6 +42,7 @@ import edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.implementation.networks.RelationType;
 import edu.asu.spring.quadriga.domain.implementation.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.INetworkManager;
 
 /**
  * This class acts as a Network manager which handles the networks object
@@ -49,7 +50,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author : Lohith Dwaraka
  */
 @Service
-public class NetworkManager {
+public class NetworkManager implements INetworkManager {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManager.class);
@@ -73,15 +74,18 @@ public class NetworkManager {
 	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnect;
 
-	/**
-	 * Gets the QStrore Add URL
-	 * 
-	 * @return String URL
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getQStoreAddURL()
 	 */
+	@Override
 	public String getQStoreAddURL() {
 		return qStoreURL+""+qStoreURL_Add;
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#receiveNetworkSubmitRequest(javax.xml.bind.JAXBElement, edu.asu.spring.quadriga.domain.IUser, java.lang.String, java.lang.String)
+	 */
+	@Override
 	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid){
 		String networkId="";
 		try{
@@ -128,12 +132,10 @@ public class NetworkManager {
 		}
 	}
 
-	/**
-	 * Formats a unformatted XML to formatted XML
-	 * @param input
-	 * @param indent
-	 * @return
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#prettyFormat(java.lang.String, int)
 	 */
+	@Override
 	public String prettyFormat(String input, int indent) {
 		String result="";
 		try{
@@ -154,15 +156,10 @@ public class NetworkManager {
 
 
 
-	/**
-	 * Stores XML from Vogon into Q-Store
-	 * @author Lohith Dwaraka
-	 * @param XML
-	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#storeXMLQStore(java.lang.String)
 	 */
+	@Override
 	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
 		String res="";
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -185,6 +182,10 @@ public class NetworkManager {
 		return res;
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getRelationEventElements(edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType, java.lang.String, edu.asu.spring.quadriga.domain.IUser)
+	 */
+	@Override
 	public void getRelationEventElements(RelationEventType re,String networkId,IUser user) throws QuadrigaStorageException{
 		List <?> ee = re.getRelationCreatorOrRelation();
 		Iterator <?> Iee=ee.iterator();
@@ -306,6 +307,10 @@ public class NetworkManager {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getNetworkStatus(java.lang.String, edu.asu.spring.quadriga.domain.IUser)
+	 */
+	@Override
 	public INetwork getNetworkStatus(String networkName, IUser user) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
@@ -317,6 +322,10 @@ public class NetworkManager {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getNetworkList(edu.asu.spring.quadriga.domain.IUser)
+	 */
+	@Override
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
 		
@@ -328,6 +337,10 @@ public class NetworkManager {
 		return networkList;
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getProjectIdForWorkspaceId(java.lang.String)
+	 */
+	@Override
 	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException{
 		String projectid="";
 		try{
@@ -338,6 +351,10 @@ public class NetworkManager {
 		return projectid;
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#hasNetworkName(java.lang.String, edu.asu.spring.quadriga.domain.IUser)
+	 */
+	@Override
 	public boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException{
 		
 		boolean result=true;

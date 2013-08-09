@@ -25,7 +25,7 @@ import edu.asu.spring.quadriga.domain.IWordPower;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.NetworkManager;
+import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.impl.workspace.ListWSManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
@@ -46,7 +46,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 	private DataSource dataSource;
 
 	@Autowired
-	NetworkManager networkManager;
+	INetworkManager networkManager;
 	
 	@Autowired
 	ListWSManager wsManager;
