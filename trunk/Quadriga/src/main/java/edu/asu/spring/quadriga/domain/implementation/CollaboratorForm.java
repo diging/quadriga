@@ -7,7 +7,6 @@ import edu.asu.spring.quadriga.domain.ICollaboratorForm;
 
 public class CollaboratorForm implements ICollaboratorForm 
 {
-	
 	private List<ICollaborator> collaborator;
 
 	@Override
