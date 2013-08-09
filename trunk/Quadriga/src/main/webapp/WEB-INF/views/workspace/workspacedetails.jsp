@@ -282,8 +282,7 @@
 																"open");
 													});
 								})
-			</script> <br>
-		<br> <c:choose>
+			</script> <br> <br> <c:choose>
 				<c:when test="${not empty workspacedetails.bitstreams}">
 					<div id="dialog-message" title="Synchronization"
 						style="display: none">Please check after few minutes. Data
@@ -364,6 +363,7 @@
 			<thead>
 				<tr>
 					<th>Name</th>
+					<th>Network Owner</th>
 					<th>Status</th>
 					<th>Action</th>
 				</tr>
@@ -375,6 +375,8 @@
 						<td width="25%" align="center"><input name="items"
 							type="hidden" value="<c:out value="${network.name}"></c:out>" />
 							<c:out value="${network.name}"></c:out></td>
+						<td width="25%" align="center"><c:out
+								value="${network.creator.userName}"></c:out></td>
 						<td width="25%" align="center"><c:out
 								value="${network.status}"></c:out></td>
 						<td width="25%" align="center"><input type=button
