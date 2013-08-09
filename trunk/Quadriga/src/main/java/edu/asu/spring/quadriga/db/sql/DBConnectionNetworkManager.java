@@ -19,9 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWordPower;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.NetworkManager;
+import edu.asu.spring.quadriga.service.impl.workspace.ListWSManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 
 /**
@@ -39,6 +45,15 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	NetworkManager networkManager;
+	
+	@Autowired
+	ListWSManager wsManager;
+	
+	@Autowired
+	IRetrieveProjectManager retrieveProjectDetails;
+	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionNetworkManager.class);
 	
 	@Autowired
@@ -322,8 +337,15 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 				while (resultSet.next()) {
 					INetwork network=networkFactory.createNetworkObject();;
 					network.setId(resultSet.getString(1));
-					network.setName(resultSet.getString(2));
-					network.setStatus(resultSet.getString(3));
+					network.setWorkspaceid(resultSet.getString(2));
+					network.setName(resultSet.getString(3));
+					network.setStatus(resultSet.getString(4));
+					
+					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
+					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
+					network.setProjectName(project.getName());
+					IWorkSpace workspace=wsManager.getWorkspaceDetails(network.getWorkspaceid(), user.getUserName());
+					network.setWorkspaceName(workspace.getName());
 					networkList.add(network);
 				} 
 			}

@@ -53,6 +53,8 @@
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Project Name</th>
+						<th>Workspace Name</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -64,6 +66,10 @@
 							<td width="25%" align="center"><input name="items"
 								type="hidden" value="<c:out value="${network.name}"></c:out>" />
 								<c:out value="${network.name}"></c:out></td>
+							<td width="25%" align="center"><c:out
+									value="${network.projectName}"></c:out></td>
+							<td width="25%" align="center"><c:out
+									value="${network.workspaceName}"></c:out></td>
 							<td width="25%" align="center"><c:out
 									value="${network.status}"></c:out></td>
 							<td width="25%" align="center"><input type=button
