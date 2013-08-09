@@ -15,12 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -30,11 +34,13 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 
 /**
  * @description this class will handle all the collaborators controls in conceptcollection
@@ -46,8 +52,10 @@ public class CCCollaboratorController {
 	
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
+	
 	@Autowired
 	IUserFactory userFactory;
+	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
 	
@@ -57,16 +65,22 @@ public class CCCollaboratorController {
 	@Autowired
 	IConceptCollectionManager conceptControllerManager;
 	
+	@Autowired
+	CollaboratorValidator collaboratorValidator;
+	
 	private IConceptCollection concept;
 	
 	@Autowired
 	private IUserManager usermanager;
 	
-	private static final Logger logger = LoggerFactory.getLogger(DBConnectionModifyProjectManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(CCCollaboratorController.class);
 
 	 @InitBinder
-	  protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-		    binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
+	  protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,  WebDataBinder validateBinder) throws Exception {
+		 
+		 validateBinder.setValidator(collaboratorValidator);
+		 
+		 binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
 		    @Override
 		    public void setAsText(String text) {
 
@@ -109,14 +123,14 @@ public class CCCollaboratorController {
 	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
 		public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
-			List<IUser> noncollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+			List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+			model.addAttribute("nonCollaboratorList", nonCollaboratorList);
 			
-			model.addAttribute("noncollaboratorList", noncollaboratorList);
 			concept = collectionFactory.createConceptCollectionObject();
-			concept.setId(collectionid);
-					
+			concept.setId(collectionid);		
 			conceptControllerManager.getCollectionDetails(concept,principal.getName());
-			model.addAttribute("conceptcollection", concept);
+			
+			model.addAttribute("collectionid", collectionid);
 			
 			ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 			collaborator.setUserObj(userFactory.createUserObject());
@@ -152,29 +166,35 @@ public class CCCollaboratorController {
 		 * @throws QuadrigaStorageException
 		 */
 	   @RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
-		public String addCollaborators(@PathVariable("collection_id") String collectionid, ModelMap model,
-				@ModelAttribute ICollaborator collaborator, Principal principal)throws QuadrigaStorageException
+		public ModelAndView addCollaborators(@PathVariable("collection_id") String collectionid, Principal principal,
+		@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result)throws QuadrigaStorageException
 		{
 			
+		   ModelAndView modelAndView = null;
+		   modelAndView = new ModelAndView("auth/conceptcollection/showCollaborators");
+		   
+		   if(result.hasErrors()){
+			   
+			   modelAndView.getModelMap().put("collaborator", collaborator);
+		   }
+		
+		   else{
+			   
 			String username = principal.getName();
-		
 			String errmsg = conceptControllerManager.addCollaborators(collaborator, collectionid, username);
-		
-
-				if(errmsg.equals("no errors"))
-				{
-					return "redirect:/auth/conceptcollections/{collection_id}";
-				}
-				
-			return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
-		}
+			modelAndView.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());  
+		   
+		   }
+		   
+		   return modelAndView;
+	}
 			
-	   @ModelAttribute
+	 /*  @ModelAttribute
 		public ICollaborator getCollaborator() {
 			ICollaborator collaborator = collaboratorFactory.createCollaborator();
 			collaborator.setUserObj(userFactory.createUserObject());
 			return collaborator;
-		} 
+		} */
 		
 		/**
 		 * @description deletes the collaborator from current conceptcollection

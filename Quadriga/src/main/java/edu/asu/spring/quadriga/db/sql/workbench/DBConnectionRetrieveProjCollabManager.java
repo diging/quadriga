@@ -24,6 +24,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
+
 public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager implements
 		IDBConnectionRetrieveProjCollabManager 
 {

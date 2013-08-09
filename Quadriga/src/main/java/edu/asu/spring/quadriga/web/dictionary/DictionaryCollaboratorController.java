@@ -35,6 +35,7 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class DictionaryCollaboratorController {
@@ -44,6 +45,7 @@ public class DictionaryCollaboratorController {
 	
 	@Autowired
 	IUserManager userManager;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryCollaboratorController.class);
 	@Autowired
@@ -114,7 +116,7 @@ public class DictionaryCollaboratorController {
 		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
 		while(iterator.hasNext())
 		{
-			if(iterator.next().getRoleid().equals("ADMIN"))
+			if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 			{
 				iterator.remove();
 			}
@@ -186,6 +188,7 @@ public class DictionaryCollaboratorController {
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
 			Principal principal	)
 	{
+		System.out.println("----------------in controller");
 		ModelAndView model = null;
 		String errmsg = "";
 		String collaboratorUser = collaborator.getUserObj().getUserName();
@@ -216,7 +219,7 @@ public class DictionaryCollaboratorController {
 		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
 		while(iterator.hasNext())
 		{
-			if(iterator.next().getRoleid().equals("ADMIN"))
+			if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 			{
 				iterator.remove();
 			}
