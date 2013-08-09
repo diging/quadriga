@@ -547,7 +547,8 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 					INetwork network=networkFactory.createNetworkObject();;
 					network.setId(resultSet.getString(1));
 					network.setName(resultSet.getString(2));
-					network.setStatus(resultSet.getString(3));
+					network.setCreator(userManger.getUserDetails(resultSet.getString(3)));
+					network.setStatus(resultSet.getString(4));
 					networkList.add(network);
 				} 
 			}
