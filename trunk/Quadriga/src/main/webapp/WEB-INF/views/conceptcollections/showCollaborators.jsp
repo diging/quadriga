@@ -38,22 +38,26 @@ $(document).ready(function() {
 
 </script>
 
- <form:form modelAttribute="collaborator" method="POST"> 
+ <form:form  method="POST" name="myForm" commandName="collaborator"
+ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
  
-		
+<!--<c:if test="${not empty nonCollaboratorList}">-->	
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${noncollaboratorList}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
-
-	 <br><br>
-	 <form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptcollection.id}/addcollaborators'"/> 
-
-</form:form>  
+	<form:errors path="userObj" cssClass="error"></form:errors>  
+	
+	<br><br>
+	
+	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
+	<td><input type="submit" value="Add"></td>
+	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+	&nbsp;
+<!-- </c:if>-->
 <br></br>
 
-<form method="POST">
+
 <input type="submit" value="Delete Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptcollection.id}/deleteCollaborator'" >
 <br><br>
 <table style="width:100%" cellpadding="0" cellspacing="0"
@@ -83,4 +87,4 @@ $(document).ready(function() {
 	</c:forEach>
 	</tbody>
 </table>
-</form>
+</form:form>  

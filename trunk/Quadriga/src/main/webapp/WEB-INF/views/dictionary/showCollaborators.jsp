@@ -20,27 +20,6 @@ $(document).ready(function() {
 	});
 });
 
-function validate()
-{
-	ValidateSelectBox('userName','text');
-}
-
-function ValidateSelectBox(selectbox,returntype)
-{
-	var retMessage = "";
-	
-	if(getSelectedValue(selectbox) == 'NONE'){
-		
-		retMessage = 'you must select a value';
-		
-		if(returntype == 'text')
-			{
-				return retMessage;
-			}
-		
-	}
-}
-
 
 $(document).ready(function(){
 	$(".selectAll").click(function(){
@@ -64,87 +43,6 @@ $(document).ready(function() {
 	});
 });
 
-
-function enableDisable()
-{
-	var chkboxArray = document.getElementById("chkboxDivision").getElementsByTagName("input");
-	
-	var elt = document.getElementById("selectbox");
-	
-	var selectedUser = elt.options[elt.selectedIndex].value;
-
-	if(selectedUser != "NONE")
-	{
-		for(var i=0;i<chkboxArray.length;i++)
-		{
-			chkboxArray[i].disabled = false;
-		}
-	}
-	
-	else
-	{
-		for(var i=0;i<chkboxArray.length;i++)
-		{
-			chkboxArray[i].disabled = true;
-		}
-	}
-}
-
-function validation()
-{	
-	var elt = document.getElementById("selectbox");
-	
-	var selectedUser = elt.options[elt.selectedIndex].value;
-	
-	var chkboxArray = document.getElementById("chkboxDivision").getElementsByTagName("input");
-
-	var flag = 0;
-	
-	if(selectedUser == "NONE")
-	{    
-	 $.alert("please select collaborator !!!");
-	 return;
-	}
-	
-	else
-		{
-		for(var i=0;i<chkboxArray.length;i++)
-		 {
-			if(chkboxArray[i].checked == true)
-			{
-				flag = 1;
-			}	
-	     }
-		}
-	
-	if(flag == 0)
-	{
-		$.alert("please select role !!!");
-	}
-	
-	
-}
-
-function deleteValidate()
-{
-	//var chkboxArray = document.getElementId("chkboxDeleteDivision").getElementByTagName("input");
-	//$.alert("1111111111111");
-	/*var flag = 0;
-	
-	for(var i=0;i<chkboxArray.length;i++)
-		{
-			if(chkboxArray[i].checked == true)
-				{
-					flag = 1;
-				}
-		}
-	
-	if(flag == 0)
-		{
-			alert("please select user to delete !!!");
-		}*/
-}
-
 </script>
 
 
@@ -162,7 +60,6 @@ function deleteValidate()
 	<td><input type="submit" value="Add"></td>
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
 	&nbsp;
-<!-- 	<input type="submit" id="submit_btn" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators'"> -->
 	</c:if>
 	
 	<br><br><br>
@@ -171,7 +68,6 @@ function deleteValidate()
 
 	<br><br>
 	
-<!-- <div id="chkboxDeleteDivision">  -->
 <table style="width:100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">	
 	<thead>
@@ -196,7 +92,6 @@ function deleteValidate()
 	</c:forEach>
 	</tbody>
 </table>
-<!-- </div>  -->
 </form:form>
 
 

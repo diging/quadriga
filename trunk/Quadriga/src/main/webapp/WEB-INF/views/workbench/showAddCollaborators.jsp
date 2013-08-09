@@ -3,8 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
     
-<script type="text/javascript">
+<style>
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
+</style>
 
+<script>
 $(document).ready(function() {
     activeTable = $('.dataTable').dataTable({
     	"bJQueryUI" : true,
@@ -19,21 +25,33 @@ $(document).ready(function() {
 	});
 });
 
+function onSubmit(){
+	
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
+}
+
 </script>
 
+<input type="submit" value="Back" onClick="onSubmit()">
+<br><br>
+<form:form method="POST" name="myForm" commandName="collaborator" 
+  action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
 
-<form:form modelAttribute="collaborator" method="POST" >
- 
+<c:if test="${not empty notCollaboratingUsers}">
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
-
+ 	<form:errors path="userObj" cssClass="error"></form:errors>  
+	
 	<br><br>
-	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
-	<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborator'">
+	
+	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
+	<td><input type="submit" value="Add"></td>
+	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+	&nbsp;
+</c:if>
 
-</form:form> 
 
 <br><br>
 
@@ -60,3 +78,6 @@ $(document).ready(function() {
 	</tbody>
 	
 </table>
+</form:form> 
+<br>
+

@@ -5,7 +5,12 @@
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-
+<style>
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
+</style>
 <script>
 
 function enableSubmit()
@@ -28,8 +33,6 @@ $(document).ready(function() {
     	"bJQueryUI" : true,
 		"sPaginationType" : "full_numbers",
 		"bAutoWidth" : false
-    	
-    	
     	
     });
 } );
@@ -58,82 +61,55 @@ $(document).ready(function() {
 </script> 
 
 
-
- <form:form modelAttribute="collaborator" method="POST" >
- 
+ <form:form name="myForm" commandName="collaborator" method="POST" 
+  action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
+  
+ 	<c:if test="${not empty nonCollaboratingUsers}">
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
-
+	<form:errors path="userObj" cssClass="error"></form:errors>  
+	
 	<br><br>
+	
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
-	<input id="submit_btn" type="submit" value="Add Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborator'">
-
-</form:form> 
-
-<br><br>
-
-<form method="POST">
-<input type="submit" value="Delete Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deletecollaborator'" >
-<br><br>
-
-<table style="width:100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">					
-	<thead>
-		<tr>
-			<th align="left"><input type="checkbox" class="selectAll" name="selected" value="check all"/>select All</th>	
-			<th align="left">collaborator</th>
-			<th align="left">roles</th>	
-		</tr>
-	</thead>
+	<td><input type="submit" value="Add"></td>
+	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+	&nbsp;
+	</c:if>
+	<br><br><br>
+	<input type="submit" value="Delete Collaborator" onclick="deleteValidate();this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/deleteCollaborators'">
+	<br><br>
 	
-	<tbody>
-	<c:forEach var="collab" items="${collaboratingUsers}">
-		<tr>
-		 <td><input type="checkbox" name="selected" value='<c:out value="${collab.userObj.userName}"></c:out>'/></td>
-		 <td><c:out value="${collab.userObj.userName}"></c:out></td>
-		 <td>
-			<c:forEach var="roles" items="${collab.collaboratorRoles}">
-		 	<c:out value="${roles.displayName}"></c:out> ||
-		 	</c:forEach>		 
-		 </td>
-		</tr>
-	</c:forEach>
-	</tbody>
-	
-</table>
-</form>
+	<table style="width:100%" cellpadding="0" cellspacing="0"
+						border="0" class="display dataTable">					
+		<thead>
+			<tr>
+				<th align="left"><input type="checkbox" class="selectAll" name="selected" value="check all"/>select All</th>	
+				<th align="left">collaborator</th>
+				<th align="left">roles</th>	
+			</tr>
+		</thead>
+		
+		<tbody>
+		<c:forEach var="collab" items="${collaboratingUsers}">
+			<tr>
+			 <td><input type="checkbox" name="selected" value='<c:out value="${collab.userObj.userName}"></c:out>'/></td>
+			 <td><c:out value="${collab.userObj.userName}"></c:out></td>
+			 <td>
+				<c:forEach var="roles" items="${collab.collaboratorRoles}">
+			 	<c:out value="${roles.displayName}"></c:out> ||
+			 	</c:forEach>		 
+			 </td>
+			</tr>
+		</c:forEach>
+		</tbody>
+		
+	</table>
+</form:form>
 
 
-
-
-<%-- 
-<head>
-	<style>
-		table
-		{
-		width:50%;
-		}
-		table, td, th
-		{
-		border:1px solid white;
-		border-style:outset;
-		border-width:medium;
-		}
-		th
-		{
-		background-color:black;
-		color:white;
-		}
-		td
-		{
-		padding:10px;
-		color:black;
-		}
-  }	
-	</style>
-</head> --%>
 
 
 
