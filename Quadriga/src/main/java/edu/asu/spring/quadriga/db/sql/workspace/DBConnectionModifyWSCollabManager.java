@@ -128,4 +128,52 @@ public class DBConnectionModifyWSCollabManager extends ADBConnectionManager impl
 		}
 		
 	}
+	
+	@Override
+	public void updateWorkspaceCollaborator(String workspaceId,String collabUser,String collaboratorRole,String userName) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_WORKSPACE_COLLABORATOR + "(?,?,?,?,?)";
+		
+		//establish the connection
+		getConnection();
+		
+		try
+		{
+			//prepare SQL Statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			//add input parameters
+			sqlStatement.setString(1, workspaceId);
+			sqlStatement.setString(2,collabUser);
+			sqlStatement.setString(3, collaboratorRole);
+			sqlStatement.setString(4, userName);
+			
+			//add output parameters
+			sqlStatement.registerOutParameter(5, Types.VARCHAR);
+			
+			//execute the sql statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(5);
+			
+			if(!errmsg.equals(""))
+			{
+				logger.info("update Workspace collaborator method :"+errmsg);
+				throw new QuadrigaStorageException(errmsg);
+			}
+		}
+		catch(SQLException e)
+		{
+			logger.error("update Workspace collaborator method :"+e);
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
 }
