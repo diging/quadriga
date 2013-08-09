@@ -65,7 +65,6 @@ public class ListWSController
 
 	@Autowired
 	private IDspaceKeysFactory dspaceKeysFactory;
-	private IDspaceKeys dspaceKeys;
 	
 	public IDspaceManager getDspaceManager() {
 		return dspaceManager;
@@ -96,22 +95,33 @@ public class ListWSController
 		this.wsManager = wsManager;
 	}
 
-
-	
-
+	/**
+	 * Handle the request to view masked dspace keys and also allow an user to update the keys.
+	 * 
+	 * @return The model object containing the dspacekeys class for generating the form in the UI.
+	 * @throws QuadrigaStorageException	Thrown when database encountered any problem during the operation.
+	 */
 	@RequestMapping(value="/auth/workbench/keys", method=RequestMethod.GET)
-	public ModelAndView addProjectRequestForm()
+	public ModelAndView addProjectRequestForm(Principal principal) throws QuadrigaStorageException
 	{
-		//TODO: Get dspace keys from database
-		return new ModelAndView("/auth/workbench/keys","command",dspaceKeysFactory.createDspaceKeysObject());
+		IDspaceKeys dspaceKeys = dspaceManager.getMaskedDspaceKeys(principal.getName());
+		ModelAndView model = new ModelAndView("/auth/workbench/keys","command",dspaceKeysFactory.createDspaceKeysObject());
+		model.addObject("dspaceKeys", dspaceKeys);
+		
+		return model;
 	}
 
+	/**
+	 * Handle request to insert or update the dspace keys used by the user.
+	 * @param dspaceKeys				The public and private key provided by the user.
+	 * 
+	 * @return							Redirect to the dspace manage pages.
+	 * @throws QuadrigaStorageException	Thrown when database encountered any problem during the operation.
+	 * @throws QuadrigaAccessException
+	 */
 	@RequestMapping(value = "/auth/workbench/updatekeys", method = RequestMethod.POST)
-	public String addStudent(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException {
-		System.out.println("...........");
-		System.out.println(dspaceKeys.getPublicKey());
-		System.out.println(dspaceKeys.getPrivateKey());
-
+	public String addStudent(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException 
+	{
 		if(dspaceKeys!=null)
 		{
 			if(dspaceKeys.getPrivateKey() != null && dspaceKeys.getPublicKey() != null)

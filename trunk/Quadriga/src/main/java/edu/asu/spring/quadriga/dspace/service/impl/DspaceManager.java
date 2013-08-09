@@ -59,7 +59,6 @@ public class DspaceManager implements IDspaceManager{
 	@Resource(name = "dspaceStrings")
 	private Properties dspaceProperties;
 
-
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
 
@@ -401,6 +400,62 @@ public class DspaceManager implements IDspaceManager{
 		getProxyCommunityManager().clearCompleteCache();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDspaceKeys getDspaceKeys(String username) throws QuadrigaStorageException
+	{
+		return dbconnectionManager.getDspaceKeys(username);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IDspaceKeys getMaskedDspaceKeys(String username) throws QuadrigaStorageException
+	{
+		IDspaceKeys dspaceKeys = dbconnectionManager.getDspaceKeys(username);
+		if(dspaceKeys != null)
+		{			
+			StringBuilder maskedPublicKey = new StringBuilder();
+			StringBuilder maskedPrivateKey = new StringBuilder();
+
+			if(dspaceKeys.getPublicKey().length()>4)
+			{
+				for(int i=0;i<dspaceKeys.getPublicKey().length()-4;i++)
+				{
+					maskedPublicKey.append('x');
+				}
+				maskedPublicKey.append(dspaceKeys.getPublicKey().subSequence(dspaceKeys.getPublicKey().length()-4, dspaceKeys.getPublicKey().length()));
+			}
+			else
+			{
+				maskedPublicKey.append(dspaceKeys.getPublicKey());
+			}
+
+			if(dspaceKeys.getPrivateKey().length()>4)
+			{
+				for(int i=0;i<dspaceKeys.getPrivateKey().length()-4;i++)
+				{
+					maskedPrivateKey.append('x');
+				}
+				maskedPrivateKey.append(dspaceKeys.getPrivateKey().subSequence(dspaceKeys.getPrivateKey().length()-4, dspaceKeys.getPrivateKey().length()));
+			}
+			else
+			{
+				maskedPrivateKey.append(dspaceKeys.getPrivateKey());
+			}
+
+			dspaceKeys.setPublicKey(maskedPublicKey.toString());
+			dspaceKeys.setPrivateKey(maskedPrivateKey.toString());
+		}
+		return dspaceKeys;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int addDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{

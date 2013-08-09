@@ -186,6 +186,38 @@ public interface IDspaceManager{
 
 	public abstract Properties getDspaceProperties();
 
+	/**
+	 * Add new Dspace keys or update existing keys in the database.
+	 * 
+	 * @param dspaceKeys					The IDspaceKeys which stores the key values for the user. Must NOT be null.
+	 * @param username						The quadriga username of the user. Must NOT be null.
+	 * 
+	 * @return								SUCCESS when the data was inserted into the database. FAILURE if the insert operation failed.
+	 * @throws QuadrigaStorageException		Thrown when database encountered any problem during the operation. Also thrown when the keys are already present in the database.
+	 * @throws QuadrigaAccessException		Thrown when the arguments passed do not satisfy the constraints of the method.
+	 */
 	public abstract int addDspaceKeys(IDspaceKeys dspaceKeys, String username)	throws QuadrigaStorageException, QuadrigaAccessException;
+
+	/**
+	 * Get the Dspace Keys for this user from the Quadriga database.
+	 * 
+	 * @param username					The quadriga username of the user. Must NOT be null.
+	 * @return							The DspaceKey object which will contain the users private and public key values for Dspace.
+	 * 									Will be NULL if no data was found in the database.
+	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation.
+	 */
+	public abstract IDspaceKeys getDspaceKeys(String username) throws QuadrigaStorageException;
+
+	/**
+	 * Get the Masked Dspace Keys for this user from the Quadriga database. Only the last for characters of the keys will be visible.
+	 * Other characters will be masked by 'x'.
+	 * 
+	 * @param username					The quadriga username of the user. Must NOT be null.
+	 * @return							The DspaceKey object which will contain the users masked private and public key values for Dspace.
+	 * 									Will be NULL if no data was found in the database.
+	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation.
+	 */
+	public abstract IDspaceKeys getMaskedDspaceKeys(String username)
+			throws QuadrigaStorageException;
 
 }

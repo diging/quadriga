@@ -371,6 +371,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String checkDspaceBitStream(String bitstreamid) throws QuadrigaStorageException
 	{		
@@ -405,6 +408,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int addBitstreamToWorkspace(String workspaceid, String bitstreamid, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -448,6 +454,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteBitstreamFromWorkspace(String workspaceid, String bitstreamids, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -487,7 +496,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}		
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int updateCommunity(String communityid, String name, String shortDescription, String introductoryText, String handle, String username) throws QuadrigaStorageException
 	{
@@ -546,6 +557,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int updateCollection(String communityid, String collectionid, String name, String shortDescription, String entityReference, String handle, String username) throws QuadrigaStorageException
 	{
@@ -606,6 +620,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int updateItem(String communityid, String collectionid, String itemid, String name, String handle, String username) throws QuadrigaStorageException
 	{
@@ -665,6 +682,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int updateBitStream(String communityid, String collectionid, String itemid, String bitstreamid, String name, String size, String mimeType, String username) throws QuadrigaStorageException
 	{
@@ -725,6 +745,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int addDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException
 	{
@@ -784,6 +807,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IDspaceKeys getDspaceKeys(String username) throws QuadrigaStorageException
 	{
@@ -834,6 +860,9 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int updateDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException
 	{	
@@ -892,6 +921,10 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 			closeConnection();
 		}
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IBitStream> getBitStreamReferences(String workspaceId, String username) throws QuadrigaAccessException, QuadrigaStorageException
 	{
