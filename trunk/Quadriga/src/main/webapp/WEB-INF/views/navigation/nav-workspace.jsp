@@ -79,6 +79,8 @@
 			
 			<li><a href="/quadriga/auth/workbench/${project.internalid}/showDeleteCollaborators">
 			Delete Collaborators</a></li>
+			<li><a href="/quadriga/auth/workbench/${project.internalid}/updatecollaborators">
+			Update Collaborators</a></li>
 		</ul></li>
 			<li><a href="/quadriga/auth/workbench/transferprojectowner/${project.internalid}">
 			Change Owner</a></li>
