@@ -70,4 +70,7 @@ ALTER TABLE tbl_workspace_dspace
 ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid);
 ALTER TABLE tbl_workspace_dspace
 ADD FOREIGN KEY(bitstreamid) REFERENCES tbl_dspace_bitstream(bitstreamid);
+
+ALTER TABLE tbl_quadriga_dspace_keys
+ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username);
 /* End - Foreign key dependencies for Dspace data */

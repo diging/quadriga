@@ -9,6 +9,7 @@
 				<h3>
 					» <a href="/quadriga/auth/workbench/addproject">Add Project</a><br /><br />
 					» <a href="/quadriga/auth/workbench/deleteproject">Delete Project</a><br /><br />
+					» <a href="/quadriga/auth/workbench/keys">Manage Dspace Login</a><br /><br />
 				</h3>
 			</article>
 		</li>

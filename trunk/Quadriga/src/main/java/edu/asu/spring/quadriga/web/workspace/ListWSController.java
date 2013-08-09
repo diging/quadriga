@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -22,7 +24,9 @@ import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -58,6 +62,9 @@ public class ListWSController
 	private String dspaceUsername;
 	private String dspacePassword;
 
+	@Autowired
+	private IDspaceKeysFactory dspaceKeysFactory;
+	
 	public IDspaceManager getDspaceManager() {
 		return dspaceManager;
 	}
@@ -88,6 +95,23 @@ public class ListWSController
 	}
 
 
+	
+
+	@RequestMapping(value="/auth/workbench/keys", method=RequestMethod.GET)
+	public ModelAndView addProjectRequestForm()
+	{
+		System.out.println("Inside controller.........");
+		return new ModelAndView("/auth/workbench/keys","command",dspaceKeysFactory.createDspaceKeysObject());
+	}
+
+	@RequestMapping(value = "/auth/workbench/updatekeys", method = RequestMethod.POST)
+	public String addStudent(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, ModelMap model) {
+		System.out.println("...........");
+		System.out.println(dspaceKeys.getPublicKey());
+		System.out.println(dspaceKeys.getPrivateKey());
+		return "redirect:/auth/workbench";
+	}	
+	
 	/**
 	 * This will list the details of workspaces 
 	 * @param  workspaceid
