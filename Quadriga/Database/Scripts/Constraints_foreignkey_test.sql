@@ -70,4 +70,7 @@ ALTER TABLE tbl_workspace_dspace
 ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid) ON DELETE CASCADE ;
 ALTER TABLE tbl_workspace_dspace
 ADD FOREIGN KEY(bitstreamid) REFERENCES tbl_dspace_bitstream(bitstreamid) ON DELETE CASCADE ;
+
+ALTER TABLE tbl_quadriga_dspace_keys
+ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
 /* End - Foreign key dependencies for Dspace data */

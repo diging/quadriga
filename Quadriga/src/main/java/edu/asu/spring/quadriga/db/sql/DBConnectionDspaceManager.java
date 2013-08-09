@@ -14,28 +14,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.factories.impl.DspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.implementation.BitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-/**
- * @Description This class is manages the database connection to perform select,
- *              insert operations on Dspace data in Quadriga Database
- * 
- * @implements IDBConnectionDspaceManager interface.
- * 
- * @Called By DspaceManager.java
- * 
- * @author Ram Kumar Kumaresan
- * 
- */
 
+/**
+ * This class manages the database connection to perform select,
+ * insert, update and delete operations on Dspace data in Quadriga Database
+ *
+ * @author Ram Kumar Kumaresan
+ */
 public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 
 	private Connection connection;
 
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+	private DspaceKeysFactory dsapceKeysFactory;
 	
 	@Override
 	public DataSource getDataSource() {
@@ -73,7 +73,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	 * 
 	 * @return The connection handle which is used to query the database
 	 * @throws QuadrigaStorageException
-	 * @author Ram Kumar Kumaresan
+	 * 
 	 */
 	private void getConnection() throws QuadrigaStorageException {
 		try {
@@ -406,7 +406,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	}
 	
 	@Override
-	public int addBitstreamToWorkspace(String workspaceid, String bitstreamid, String username) throws QuadrigaStorageException
+	public int addBitstreamToWorkspace(String workspaceid, String bitstreamid, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String sDBCommand;
 		String sOutErrorValue;
@@ -435,7 +435,7 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 			}
 			else
 			{
-				return FAILURE;
+				throw new QuadrigaAccessException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
@@ -713,6 +713,111 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 			{
 				//Error occurred in the database
 				return FAILURE;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	@Override
+	public int addDspaceKeys(String publicKey, String privateKey, String username) throws QuadrigaStorageException
+	{
+		if(publicKey == null || privateKey == null || username == null)
+		{
+			return FAILURE;
+		}
+		
+		if(publicKey.equals("") || privateKey.equals("") || username.equals(""))
+		{
+			return FAILURE;
+		}
+		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_DSPACE_KEYS+ "(?,?,?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, publicKey);
+			sqlStatement.setString(2, privateKey);
+			sqlStatement.setString(3, username);
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(4);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully inserted the keys into the database
+				return SUCCESS;
+			}			
+			else
+			{
+				//Error occurred in the database
+				return FAILURE;
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	@Override
+	public IDspaceKeys getDspaceKeys(String username) throws QuadrigaStorageException
+	{
+		IDspaceKeys dspaceKeys = null;		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DSPACE_KEYS+ "(?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, username);
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(4);
+
+			if(sOutErrorValue == null)
+			{
+				ResultSet result = sqlStatement.getResultSet();
+				while(result.next())
+				{
+					dspaceKeys = dsapceKeysFactory.createDspaceKeysObject();
+					dspaceKeys.setPublicKey(result.getString(1));
+					dspaceKeys.setPrivateKey(result.getString(2));
+				}
+				return dspaceKeys;
+			}			
+			else
+			{
+				//Error occurred in the database
+				throw new QuadrigaStorageException(sOutErrorValue);
 			}
 		}
 		catch(SQLException e)
