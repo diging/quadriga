@@ -83,25 +83,25 @@ public class DspaceManagerTest {
 	@Test
 	public void testGetAllCommunities() {
 		//Dspace return list of communities for empty username/password
-		assertNotNull(dspaceManager.getAllCommunities(null, null).size());
+		assertNotNull(dspaceManager.getAllCommunities(null,null, null).size());
 
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 	}
 
 	@Test
 	public void testGetAllCollections() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Handle null case for community id
-		assertNull(dspaceManager.getAllCollections("test", "test", null));
+		assertNull(dspaceManager.getAllCollections(null,"test", "test", null));
 	}
 
 	@Test
 	public void testGetCommunityName() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getCommunityName("18"));
 
 		//Handle null case for community id
@@ -111,8 +111,8 @@ public class DspaceManagerTest {
 	@Test
 	public void testGetCollectionName() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Handle null case for collection id
 		assertNull(dspaceManager.getCollectionName(null));
@@ -125,8 +125,8 @@ public class DspaceManagerTest {
 	@Test
 	public void testGetCollection() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Handle null case for collection id
 		assertNull(dspaceManager.getCollection(null));
@@ -142,8 +142,8 @@ public class DspaceManagerTest {
 	@Test
 	public void testGetCommunityId() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Check null case
 		assertNull(dspaceManager.getCommunityId(null));
@@ -158,8 +158,8 @@ public class DspaceManagerTest {
 	@Test
 	public void testGetAllItems() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Wait for the collection to load
 		ICollection collection = dspaceManager.getCollection("55");
@@ -176,27 +176,27 @@ public class DspaceManagerTest {
 	@Test
 	public void testGetAllBitStreams() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Check null cases
-		assertNull(dspaceManager.getAllBitStreams("test", "test", "55", null));
-		assertNull(dspaceManager.getAllBitStreams("test", "test", null, "9595"));
-		assertNull(dspaceManager.getAllBitStreams("test", "test", null, null));
+		assertNull(dspaceManager.getAllBitStreams(null,"test", "test", "55", null));
+		assertNull(dspaceManager.getAllBitStreams(null,"test", "test", null, "9595"));
+		assertNull(dspaceManager.getAllBitStreams(null,"test", "test", null, null));
 
 		//Wait for the collection to load
 		while(dspaceManager.getCollection("55") == null);
 		assertNotNull(dspaceManager.getAllItems("55"));
 
 		//Bitstreams are loaded from dspace
-		assertNotNull(dspaceManager.getAllBitStreams("test", "test", "55", "9595"));
+		assertNotNull(dspaceManager.getAllBitStreams(null,"test", "test", "55", "9595"));
 	}
 
 	@Test
 	public void testGetItemName() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Check null cases
 		assertNull(dspaceManager.getItemName(null,null));
@@ -215,15 +215,15 @@ public class DspaceManagerTest {
 	@Test
 	public void testGetBitStream() {
 		//Load all communities before trying to access collection
-		assertNotNull(dspaceManager.getAllCommunities("test", "test"));
-		assertNotNull(dspaceManager.getAllCollections("test", "test", "18"));
+		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
+		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
 
 		//Wait for the collection to load
 		while(dspaceManager.getCollection("55") == null);
 		while(dspaceManager.getAllItems("55") == null);
 
 		//Bitstreams are loaded from dspace
-		while(dspaceManager.getAllBitStreams("test", "test", "55", "9595") == null);
+		while(dspaceManager.getAllBitStreams(null,"test", "test", "55", "9595") == null);
 
 		//Check null cases
 		assertNull(dspaceManager.getBitStream("55", "9595", null));

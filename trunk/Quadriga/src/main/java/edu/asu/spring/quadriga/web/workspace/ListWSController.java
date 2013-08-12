@@ -102,7 +102,7 @@ public class ListWSController
 	 * @throws QuadrigaStorageException	Thrown when database encountered any problem during the operation.
 	 */
 	@RequestMapping(value="/auth/workbench/keys", method=RequestMethod.GET)
-	public ModelAndView addProjectRequestForm(Principal principal) throws QuadrigaStorageException
+	public ModelAndView addDspaceKeysRequestForm(Principal principal) throws QuadrigaStorageException
 	{
 		IDspaceKeys dspaceKeys = dspaceManager.getMaskedDspaceKeys(principal.getName());
 		ModelAndView model = new ModelAndView("/auth/workbench/keys","command",dspaceKeysFactory.createDspaceKeysObject());
@@ -120,7 +120,7 @@ public class ListWSController
 	 * @throws QuadrigaAccessException
 	 */
 	@RequestMapping(value = "/auth/workbench/updatekeys", method = RequestMethod.POST)
-	public String addStudent(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException 
+	public String addDspaceKeys(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException 
 	{
 		if(dspaceKeys!=null)
 		{
@@ -310,7 +310,7 @@ public class ListWSController
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
 
-		List<ICommunity> communities = getDspaceManager().getAllCommunities(this.dspaceUsername,this.dspacePassword);
+		List<ICommunity> communities = getDspaceManager().getAllCommunities(null, this.dspaceUsername,this.dspacePassword);
 
 		model.addAttribute("communityList", communities);
 		model.addAttribute("workspaceId",workspaceId);
@@ -342,7 +342,7 @@ public class ListWSController
 		{
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
-		List<ICollection> collections = getDspaceManager().getAllCollections(this.dspaceUsername,this.dspacePassword, communityId);
+		List<ICollection> collections = getDspaceManager().getAllCollections(null,this.dspaceUsername,this.dspacePassword, communityId);
 
 		model.addAttribute("communityName", communityName);
 		model.addAttribute("collectionList", collections);
@@ -453,7 +453,7 @@ public class ListWSController
 		}
 
 
-		List<IBitStream> bitstreams = getDspaceManager().getAllBitStreams(this.dspaceUsername,this.dspacePassword,collectionId, itemId);
+		List<IBitStream> bitstreams = getDspaceManager().getAllBitStreams(null,this.dspaceUsername,this.dspacePassword,collectionId, itemId);
 		model.addAttribute("communityId",communityId);
 		model.addAttribute("communityName",communityName);
 		model.addAttribute("collectionId",collectionId);
@@ -564,7 +564,7 @@ public class ListWSController
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
-		getDspaceManager().updateDspaceMetadata(workspaceId, principal.getName(), this.dspaceUsername, this.dspacePassword);
+		getDspaceManager().updateDspaceMetadata(workspaceId, principal.getName(), null, this.dspaceUsername, this.dspacePassword);
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }

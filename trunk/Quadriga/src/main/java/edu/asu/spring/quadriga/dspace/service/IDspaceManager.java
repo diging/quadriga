@@ -33,7 +33,7 @@ public interface IDspaceManager{
 	 * @param sPassword		The corresponding dspace password of the user
 	 * @return				List of communities retrieved from Dspace.
 	 */
-	public abstract List<ICommunity> getAllCommunities(String sUserName, String sPassword);
+	public abstract List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword);
 
 	/**
 	 * Get all the collections available for the given user
@@ -43,7 +43,7 @@ public interface IDspaceManager{
 	 * @param sCommunityId		The community id for which the list of collections are to be fetched.
 	 * @return					List of collections that belong to the given community id.
 	 */
-	public abstract List<ICollection> getAllCollections(String sUserName, String sPassword,String sCommunityId);
+	public abstract List<ICollection> getAllCollections(IDspaceKeys dspaceKeys, String sUserName, String sPassword,String sCommunityId);
 	
 	/**
 	 * Get all items within a collection.
@@ -63,7 +63,7 @@ public interface IDspaceManager{
 	 * @return					List of bitstreams that are available within an item.
 	 * 
 	 */
-	public abstract List<IBitStream> getAllBitStreams(String sUserName, String sPassword, String sCollectionId, String sItemId);
+	public abstract List<IBitStream> getAllBitStreams(IDspaceKeys dspaceKeys, String sUserName, String sPassword, String sCollectionId, String sItemId);
 	
 	/**
 	 * Get the community name for the given communityId.
@@ -157,7 +157,7 @@ public interface IDspaceManager{
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
 	 */
-	public abstract void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername,
+	public abstract void updateDspaceMetadata(String workspaceid, String quadrigaUsername, IDspaceKeys dspaceKeys, String dspaceUsername,
 			String password) throws QuadrigaAccessException,
 			QuadrigaStorageException;
 
