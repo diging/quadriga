@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 
 /**
  * The purpose of the class is to implement proxy pattern for the community class
@@ -50,7 +51,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) {
 		if(communities == null)
 		{
 			String sRestServicePath = getCompleteUrlPath(dspaceProperties, sUserName, sPassword);
@@ -83,7 +84,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICollection> getAllCollections(RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword, String sCommunityId) {
+	public List<ICollection> getAllCollections(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword, String sCommunityId) {
 
 		if(communities != null)
 		{
@@ -136,7 +137,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword, String communityid)
+	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword, String communityid)
 	{
 		if(fromCache)
 		{
@@ -153,13 +154,13 @@ public class ProxyCommunityManager implements ICommunityManager {
 			}
 			else
 			{
-				this.getAllCollections(restTemplate, dspaceProperties, sUserName, sPassword, communityid);
+				this.getAllCollections(restTemplate, dspaceProperties, null, sUserName, sPassword, communityid);
 			}
 		}
 		else
 		{
 			//Get the communit object to which this collection is associated
-			ICommunity community = this.getCommunity(communityid, true, null, null, null, null);
+			ICommunity community = this.getCommunity(communityid, true, null, null, null, null, null);
 
 			//Remove all the collection metadata from the cache
 			community.clearCollections();
@@ -173,7 +174,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 			}
 			
 			//Load the collection metadata associated with the community
-			this.getAllCollections(restTemplate, dspaceProperties, sUserName, sPassword, communityid);
+			this.getAllCollections(restTemplate, dspaceProperties, null, sUserName, sPassword, communityid);
 		}
 		
 		for(ICollection collection : this.collections)
@@ -337,7 +338,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword)
+	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword)
 	{		
 		//Get the community data from the cache
 		if(fromCache)
@@ -353,14 +354,14 @@ public class ProxyCommunityManager implements ICommunityManager {
 			else
 			{
 				//Load all the communities
-				this.getAllCommunities(restTemplate, dspaceProperties, sUserName, sPassword);
+				this.getAllCommunities(restTemplate, dspaceProperties, null, sUserName, sPassword);
 			}
 		}
 		else
 		{
 			//Reload the community data from dspace
 			this.communities = null;
-			this.getAllCommunities(restTemplate, dspaceProperties, sUserName, sPassword);
+			this.getAllCommunities(restTemplate, dspaceProperties, null, sUserName, sPassword);
 		}
 
 		for(ICommunity community: this.communities)

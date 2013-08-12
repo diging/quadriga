@@ -28,7 +28,7 @@ public interface ICommunityManager {
 	 * @param sPassword				The corresponding dspace password of the user
 	 * @return						List of communities retrieved from Dspace.
 	 */
-	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword);
+	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword);
 
 	/**
 	 * Get all the collections available for the given user. For the first call, this method makes a request to Dspace.
@@ -42,7 +42,7 @@ public interface ICommunityManager {
 	 * @param sCommunityId				The community id for which the list of collections are to be fetched.
 	 * @return							List of collections that belong to the given community id.
 	 */
-	public abstract List<ICollection> getAllCollections(RestTemplate restTemplate, Properties dspaceProperties,
+	public abstract List<ICollection> getAllCollections(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys,
 			String sUserName, String sPassword, String sCommunityId);
 
 	/**
@@ -68,7 +68,7 @@ public interface ICommunityManager {
 	 * @param communityid				The id of the community to which the collection belongs to.
 	 * @return							The collection object for the given collection id.  Will be NULL if there no matching collection id was found.
 	 */
-	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword,String communityid);
+	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword,String communityid);
 
 	/**
 	 * Get all items within a collection. The methods {@link #getAllCommunities(RestTemplate, Properties, String, String)} and {@link #getAllCollections(RestTemplate, Properties, String, String, String)} 
@@ -143,7 +143,7 @@ public interface ICommunityManager {
 	 * @param sPassword					The password of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @return							The community object for the corresponding community id. Will be NULL if there is no matching community id was found.
 	 */
-	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, String sUserName, String sPassword);
+	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword);
 
 	/**
 	 * Get the item object for the corresponding item id.

@@ -116,18 +116,18 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword) {
 
-		return getProxyCommunityManager().getAllCommunities(getRestTemplate(), getDspaceProperties(), sUserName, sPassword);
+		return getProxyCommunityManager().getAllCommunities(getRestTemplate(), getDspaceProperties(), null, sUserName, sPassword);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICollection> getAllCollections(String sUserName, String sPassword, String sCommunityId) {
+	public List<ICollection> getAllCollections(IDspaceKeys dspaceKeys, String sUserName, String sPassword, String sCommunityId) {
 
-		return getProxyCommunityManager().getAllCollections(getRestTemplate(), getDspaceProperties(), sUserName, sPassword, sCommunityId);
+		return getProxyCommunityManager().getAllCollections(getRestTemplate(), getDspaceProperties(), null, sUserName, sPassword, sCommunityId);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public ICollection getCollection(String sCollectionId)
 	{
-		return getProxyCommunityManager().getCollection(sCollectionId,true,null,null,null,null,null);
+		return getProxyCommunityManager().getCollection(sCollectionId,true,null,null,null,null,null,null);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<IBitStream> getAllBitStreams(String sUserName, String sPassword, String sCollectionId, String sItemId)
+	public List<IBitStream> getAllBitStreams(IDspaceKeys dspaceKeys, String sUserName, String sPassword, String sCollectionId, String sItemId)
 	{
 		return getProxyCommunityManager().getAllBitStreams(sCollectionId, sItemId);
 	}
@@ -212,8 +212,8 @@ public class DspaceManager implements IDspaceManager{
 		try
 		{
 			//Passing null values for other arguments because the community details must have already been fetched from dspace
-			ICommunity community = getProxyCommunityManager().getCommunity(communityId,true,null,null,null,null);
-			ICollection collection = getProxyCommunityManager().getCollection(collectionId,true,null,null,null,null,null);
+			ICommunity community = getProxyCommunityManager().getCommunity(communityId,true,null,null,null,null,null);
+			ICollection collection = getProxyCommunityManager().getCollection(collectionId,true,null,null,null,null,null,null);
 			IItem item = getProxyCommunityManager().getItem(collectionId, itemId);
 
 			//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
@@ -361,27 +361,27 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException
+	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, IDspaceKeys dspaceKeys,  String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException
 	{
 
 		HashSet<String> reloadedCollectionIds = new HashSet<String>();
 
 		//Reload all the communities by making only one call to dspace
-		getProxyCommunityManager().getCommunity(null, false, getRestTemplate(), getDspaceProperties(), dspaceUsername, password);
+		getProxyCommunityManager().getCommunity(null, false, getRestTemplate(), getDspaceProperties(), null, dspaceUsername, password);
 		for(IBitStream bitstream : getDbconnectionManager().getBitStreamReferences(workspaceid, quadrigaUsername))
 		{
-			ICommunity community = getProxyCommunityManager().getCommunity(bitstream.getCommunityid(), true, null, null, null,null);
+			ICommunity community = getProxyCommunityManager().getCommunity(bitstream.getCommunityid(), true, null, null, null, null,null);
 			ICollection collection = null;
 
 			if(reloadedCollectionIds.contains(bitstream.getCollectionid()))
 			{
 				//Collection has been reloaded already
-				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), true, null, null, null, null, null);
+				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), true, null, null, null, null, null, null);
 			}
 			else
 			{
 				//This is the first call to reload the collection
-				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), dspaceUsername, password, bitstream.getCommunityid());
+				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), null, dspaceUsername, password, bitstream.getCommunityid());
 				reloadedCollectionIds.add(bitstream.getCollectionid());
 			}
 
