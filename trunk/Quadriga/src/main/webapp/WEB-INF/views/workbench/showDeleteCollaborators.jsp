@@ -2,15 +2,13 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-    
+   
 <script>
 $(document).ready(function() {
     activeTable = $('.dataTable').dataTable({
     	"bJQueryUI" : true,
 		"sPaginationType" : "full_numbers",
 		"bAutoWidth" : false
-    	
-    	
     	
     });
 } );
@@ -35,12 +33,20 @@ $(document).ready(function() {
 
 		});
 	});
+	
+function onSubmit(){
+	
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
+}
 
 </script> 
 
+<input type="submit" value="Back" onClick="onSubmit()">
+<br><br>
 
-<form method="POST">
-<input type="submit" value="Delete Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deletecollaborator'" >
+<form method="POST" modelAttribute="collaboratorBackingBean" 
+action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/deletecollaborator">
+<input type="submit" value="Delete Collaborator">
 <br><br>
 
 <table style="width:100%" cellpadding="0" cellspacing="0"
@@ -54,17 +60,10 @@ $(document).ready(function() {
 	</thead>
 	
 	<tbody>
-	<c:forEach var="collab" items="${collaboratingUsers}">
-		<tr>
-		 <td><input type="checkbox" name="selected" value='<c:out value="${collab.userObj.userName}"></c:out>'/></td>
-		 <td><c:out value="${collab.userObj.userName}"></c:out></td>
-		 <td>
-			<c:forEach var="roles" items="${collab.collaboratorRoles}">
-		 	<c:out value="${roles.displayName}"></c:out> ||
-		 	</c:forEach>		 
-		 </td>
-		</tr>
-	</c:forEach>
+	<tr>
+		<td><form:checkboxes items="${collaboratingUsers}" path="collaboratorList" itemValue="userObj.userName"/></td>
+	
+	 </tr>
 	</tbody>
 	
 </table>
