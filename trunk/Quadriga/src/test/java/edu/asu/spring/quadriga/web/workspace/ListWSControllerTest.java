@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -50,6 +51,8 @@ public class ListWSControllerTest {
 	private	IRetrieveWSCollabManager wsCollabManager;
 	@Autowired
 	private IDspaceManager dspaceManager;
+	@Autowired
+	private IDspaceKeysFactory dspaceKeysFactory;
 
 	private Principal principal;
 	private BindingAwareModelMap model;
@@ -69,6 +72,7 @@ public class ListWSControllerTest {
 		listWSController.setWsManager(wsManager);
 		listWSController.setWsCollabManager(wsCollabManager);
 		listWSController.setDspaceManager(dspaceManager);
+		listWSController.setDspaceKeysFactory(dspaceKeysFactory);
 
 		mock = new MockHttpServletRequest();
 		mock.addParameter("username", "test");

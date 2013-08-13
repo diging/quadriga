@@ -112,6 +112,9 @@
 	
 
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DspaceKeysFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory" />
+	
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory" />
 	<bean
