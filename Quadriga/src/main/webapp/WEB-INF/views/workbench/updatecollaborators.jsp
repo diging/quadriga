@@ -27,8 +27,15 @@ td {
 }
 </style>
 <script>
+function submitClick(id){
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
+}
+
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
+		});
+		
+		$("input[type=button]").button().click(function(event) {
 		});
 	});
 </script>
@@ -37,36 +44,52 @@ td {
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/updatecollaborators"
 		id="updateprojcollabform">
 
-		<c:if test="${not empty collaboratorform.collaborator}">
+<c:choose> 
+    <c:when test="${success == '0'}">
+		<c:if test="${not empty collaboratorform.collaborators}">
 			<span class="byline">Select roles for the collaborator:</span>
 			<input type="submit" value='Update' name="updateprojcollab">
 			<table style="width: 100%" class="display dataTable"
 				id="projcollablist">
 				<thead>
 					<tr>
-						<th width="20%">Collaborator Name</th>
+						<th width="25%">Collaborator</th>
 						<th width="75%">Collaborator Roles</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="collabuser"
-						items="${collaboratorform.collaborator}" varStatus="status">
+						items="${collaboratorform.collaborators}" varStatus="status">
 						<tr>
 							<td><font size="3">
-									<div name="collaborator[${status.index}].userObj.userName">
-										<c:out value="${collabuser.userObj.userName}"></c:out>
-									</div>
-							</font></td>
-							 
-							<td><font size="3"> <form:checkboxes
-										path="collaborator[${status.index}].collaboratorRoles"
-										class="roles" items="${projcollabroles}" itemValue="roleid"
-										itemLabel="displayName" /></font></td>
+							<form:label path="collaborators[${status.index}].userName">
+							<c:out value="${collabuser.userName}"></c:out>
+							</form:label>
+							</font>
+							<form:input path="collaborators[${status.index}].userName" id="collaborators[${status.index}].userName" type="hidden"/>
+							</td>
 										
+							<td align="left"><font size="3"> <form:checkboxes
+										path="collaborators[${status.index}].collaboratorRoles"
+										class="roles" items="${projcollabroles}" itemValue="roleid"
+										itemLabel="displayName" /></font>
+							<form:errors path="collaborators[${status.index}].collaboratorRoles" cssClass="error"></form:errors>
+							</td>			
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 		</c:if>
+		 </c:when>
+		     <c:otherwise> 
+		     <span class="byline">Successfully updated collaborators</span> 
+		     <ul>
+		<li><input type="button"
+			onClick="submitClick(this.id);"
+			value='Back'></li>
+	</ul>
+		     </c:otherwise>
+		     	
+</c:choose>
 	</form:form>
 </article>

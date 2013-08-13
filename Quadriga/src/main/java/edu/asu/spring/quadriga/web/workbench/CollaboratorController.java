@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -41,9 +39,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
-import edu.asu.spring.quadriga.web.dictionary.DictionaryCollaboratorController;
 import edu.asu.spring.quadriga.web.login.RoleNames;
-import edu.asu.spring.quadriga.web.workbench.backing.CollaboratorsBackBean;
 
 @Controller
 public class CollaboratorController {
