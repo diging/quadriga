@@ -594,4 +594,14 @@
 			value="/WEB-INF/views/networks/networks.jsp" />
 	</definition>
 
+
+	<!-- editing -->
+	<definition name="base.definition.editing" extends="base.definition">
+		<put-attribute name="currentPage" value="editing" />
+	</definition>
+	<definition name="auth/editing" extends="base.definition.editing">
+		<put-attribute name="title" value="Quadriga Editing" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/editing/editing.jsp" />
+	</definition>
 </tiles-definitions>

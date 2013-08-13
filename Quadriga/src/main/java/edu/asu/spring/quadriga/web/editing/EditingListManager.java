@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.network;
+package edu.asu.spring.quadriga.web.editing;
 
 import java.security.Principal;
 import java.util.List;
@@ -11,13 +11,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.web.rest.NetworkRestController;
 
 /**
  * This class will handle list dictionaries controller for the dictionary
@@ -26,31 +25,32 @@ import edu.asu.spring.quadriga.web.rest.NetworkRestController;
  * 
  */
 @Controller
-public class NetworkListManager {
+public class EditingListManager {
 	
 	@Autowired
 	INetworkManager networkManager;
 	
 	@Autowired
+	IEditorManager editorManager;
+	
+	@Autowired
 	IUserManager userManager;
 	
 	private static final Logger logger = LoggerFactory
-			.getLogger(NetworkListManager.class);
+			.getLogger(EditingListManager.class);
 
-	@RequestMapping(value = "auth/networks", method = RequestMethod.GET)
-	public String listNetworks(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	@RequestMapping(value = "auth/editing", method = RequestMethod.GET)
+	public String listDictionary(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		List<INetwork> networkList=null;
 		try{
-		networkList=networkManager.getNetworkList(user);
-		
+			networkList = editorManager.getEditorNetworkList(user);
 		}catch(QuadrigaStorageException e){
-			logger.error("Something wrong on DB Side",e);
+			logger.error("Some issue in the DB",e);
 		}
 		
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
-		
-		return "auth/networks";
+		return "auth/editing";
 	}
 }
