@@ -41,6 +41,7 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * @description this class will handle all the collaborators controls in conceptcollection
@@ -141,7 +142,7 @@ public class CCCollaboratorController {
 			
 			while(iterator.hasNext())
 				{
-					if(iterator.next().getRoleid().equals("ADMIN"))
+					if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 					{
 						iterator.remove();
 					}
@@ -186,16 +187,31 @@ public class CCCollaboratorController {
 		   
 		   }
 		   
-		   return modelAndView;
+		   List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+		   modelAndView.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
+			
+			List<ICollaboratorRole> collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
+			Iterator<ICollaboratorRole> iterator = collaboratorRoleList.iterator();
+			
+			while(iterator.hasNext())
+				{
+					if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+					{
+						iterator.remove();
+					}
+				}
+			
+			modelAndView.getModelMap().put("possibleCollaboratorRoles", collaboratorRoleList);
+			
+			modelAndView.getModelMap().put("collectionid", collectionid);
+			
+			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
+			modelAndView.getModelMap().put("collaborators", collaborators);
+			
+		    return modelAndView;
 	}
 			
-	 /*  @ModelAttribute
-		public ICollaborator getCollaborator() {
-			ICollaborator collaborator = collaboratorFactory.createCollaborator();
-			collaborator.setUserObj(userFactory.createUserObject());
-			return collaborator;
-		} */
-		
+	
 		/**
 		 * @description deletes the collaborator from current conceptcollection
 		 * @param collectionid   id of the conceptcollection
@@ -220,6 +236,28 @@ public class CCCollaboratorController {
 				{
 					return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
 				}
+				
+				  List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+				  model.addAttribute("nonCollaboratorList", nonCollaboratorList);
+					
+					List<ICollaboratorRole> collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
+					Iterator<ICollaboratorRole> iterator = collaboratorRoleList.iterator();
+					
+					while(iterator.hasNext())
+						{
+							if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+							{
+								iterator.remove();
+							}
+						}
+					
+					 model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
+					
+					 model.addAttribute("collectionid", collectionid);
+					
+					List<ICollaborator> collaboratorList =  conceptControllerManager.showCollaboratingUsers(collectionid);
+					 model.addAttribute("collaboratingUsers", collaboratorList);
+					
 			
 			
 			return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";

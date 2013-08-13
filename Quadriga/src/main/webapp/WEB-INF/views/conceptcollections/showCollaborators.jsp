@@ -2,6 +2,18 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<style>
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
+
+div.ex {
+	color:blue;
+	font-style: italic
+}
+</style>
+
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -40,26 +52,27 @@ $(document).ready(function() {
 
  <form:form  method="POST" name="myForm" commandName="collaborator"
  action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
- 
-<!--<c:if test="${not empty nonCollaboratorList}">-->	
+
+<c:if test="${not empty nonCollaboratorList}">
+<div class="ex">select collaborator</div>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
-	   	<form:options items="${noncollaboratorList}"  itemValue="userName" itemLabel="userName" /> 
+	   	<form:options items="${nonCollaboratorList}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
 	<form:errors path="userObj" cssClass="error"></form:errors>  
 	
 	<br><br>
 	
+	<div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
 	<td><input type="submit" value="Add"></td>
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
 	&nbsp;
-<!-- </c:if>-->
+</c:if>
 <br></br>
 
 
-<input type="submit" value="Delete Collaborator" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptcollection.id}/deleteCollaborator'" >
-<br><br>
+<input type="submit" value="Delete" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deleteCollaborator'" >
 <table style="width:100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">					
 	<thead>

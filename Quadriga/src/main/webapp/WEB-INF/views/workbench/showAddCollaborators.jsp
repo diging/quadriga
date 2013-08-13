@@ -8,6 +8,10 @@
 	color: #ff0000;
 	font-style: italic;
 }
+
+div.ex {color:blue;
+font-style: italic
+}
 </style>
 
 <script>
@@ -38,6 +42,7 @@ function onSubmit(){
   action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
 
 <c:if test="${not empty notCollaboratingUsers}">
+<div class="ex">select collaborator</div>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
@@ -45,7 +50,7 @@ function onSubmit(){
  	<form:errors path="userObj" cssClass="error"></form:errors>  
 	
 	<br><br>
-	
+<div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
 	<td><input type="submit" value="Add"></td>
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
