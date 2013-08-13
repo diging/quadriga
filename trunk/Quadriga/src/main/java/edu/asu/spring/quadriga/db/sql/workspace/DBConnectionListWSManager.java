@@ -479,11 +479,14 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 				while(result.next())
 				{
 					bitstream = new BitStream();
-					bitstream.setCommunityName(result.getString(1));
-					bitstream.setCollectionName(result.getString(2));
-					bitstream.setItemName(result.getString(3));
-					bitstream.setName(result.getString(4));
-					bitstream.setId(result.getString(5));
+					bitstream.setCommunityid(result.getString(1));
+					bitstream.setCommunityName(result.getString(2));
+					bitstream.setCollectionid(result.getString(3));
+					bitstream.setCollectionName(result.getString(4));
+					bitstream.setItemid(result.getString(5));
+					bitstream.setItemName(result.getString(6));					
+					bitstream.setId(result.getString(7));
+					bitstream.setName(result.getString(8));
 					bitstreamList.add(bitstream);
 				}
 				
