@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/conceptdetails.xsd">
+<Quadriga:conceptList conceptPower-url="$conceptPowerURL" path = "$path">
+
+#foreach ($concept in $list)
+<Quadriga:concept>
+	<Quadriga:pos>$concept.lemma</Quadriga:pos>
+	<Quadriga:name>$concept.lemma</Quadriga:name>
+	<Quadriga:description>$concept.description</Quadriga:description>
+	<Quadriga:uri>$concept.id</Quadriga:uri>
+</Quadriga:concept> 	
+#end
+</Quadriga:conceptList>
+</Quadriga:QuadrigaReply>
