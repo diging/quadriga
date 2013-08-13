@@ -46,7 +46,7 @@ BEGIN
       END IF;
 
        -- fetch the workspace for which the user is owner or collaborator
-       SELECT vsws.workspacename,
+       SELECT DISTINCT vsws.workspacename,
                  vsws.description,
                  vsws.workspaceid,
                  vsws.workspaceowner
@@ -56,8 +56,8 @@ BEGIN
              AND vsws.isdeactivated = 1
             WHERE vwprojws.projectid = inprojectid
               AND vsws.workspaceowner = inusername
-	   UNION ALL
-               SELECT vsws.workspacename,
+	   UNION DISTINCT
+         SELECT DISTINCT vsws.workspacename,
                  vsws.description,
                  vsws.workspaceid,
                  vsws.workspaceowner

@@ -30,14 +30,14 @@ BEGIN
             projectowner,accessibility
       FROM  vw_project
       WHERE projectowner = projowner
-    UNION ALL
+    UNION DISTINCT
     SELECT DISTINCT proj.projectname,proj.description,proj.unixname,proj.projectid,
             proj.projectowner,proj.accessibility
       FROM  vw_project proj
       JOIN  vw_project_collaborator projcollab
         ON  proj.projectid = projcollab.projectid
 	 WHERE  projcollab.collaboratoruser = projowner
-    UNION ALL
+    UNION DISTINCT
 	    SELECT DISTINCT proj.projectname,proj.description,proj.unixname,proj.projectid,
             proj.projectowner,proj.accessibility
       FROM  vw_project proj
@@ -46,7 +46,7 @@ BEGIN
        JOIN vw_workspace ws
         ON projws.workspaceid = ws.workspaceid
       WHERE ws.workspaceowner = projowner
-      UNION ALL
+      UNION DISTINCT
 	  SELECT DISTINCT proj.projectname,proj.description,proj.unixname,proj.projectid,
             proj.projectowner,proj.accessibility
       FROM  vw_project proj
