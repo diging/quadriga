@@ -267,8 +267,8 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 
 			//adding the input variables to the SP
-			sqlStatement.setString(1, networkName);
-			sqlStatement.setString(2, owner.getUserName());        	
+			sqlStatement.setString(1, owner.getUserName());
+			sqlStatement.setString(2, networkName);        	
 
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(3,Types.VARCHAR);
@@ -277,6 +277,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 			ResultSet resultSet = sqlStatement.getResultSet();
 			if(resultSet !=null){ 
 				while (resultSet.next()) { 
+					
 					network.setId(resultSet.getString(1));
 					network.setName(resultSet.getString(2));
 					network.setStatus(resultSet.getString(3));
