@@ -4,11 +4,12 @@
 <!-- Content -->
 <article class="is-page-content">
 	<h3>Manage Dspace Access Keys</h3>
+	A more secure way to access Dspace repository. Generate new keys <a href="https://import.hps.ubio.org/api_keys" target="_blank">here.</a>
 	<form:form method="POST" action="/quadriga/auth/workbench/updatekeys">
 		<table>
 			<tr>
 				<td><form:label path="publicKey">Public Key :</form:label></td>
-				<td><form:input path="publicKey" /><c:choose>
+				<td><form:input path="publicKey" autocomplete="false"/><c:choose>
 						<c:when test="${not empty dspaceKeys}">
 		Existing Public Key ends in: ${dspaceKeys.publicKey }
 		</c:when>
@@ -19,7 +20,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="privateKey">Private Key :</form:label></td>
-				<td><form:input path="privateKey" /><c:choose>
+				<td><form:input path="privateKey" autocomplete="false" /><c:choose>
 						<c:when test="${not empty dspaceKeys}">
 		Existing Public Key ends in: ${dspaceKeys.privateKey }
 		</c:when>

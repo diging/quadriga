@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -26,6 +27,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceUpdateManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -114,11 +116,16 @@ public class DspaceManager implements IDspaceManager{
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException {
 
-		return getProxyCommunityManager().getAllCommunities(getRestTemplate(), getDspaceProperties(), null, sUserName, sPassword);
+		try {
+			return getProxyCommunityManager().getAllCommunities(getRestTemplate(), getDspaceProperties(), dspaceKeys, sUserName, sPassword);
+		} catch (NoSuchAlgorithmException e) {
+			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
+		}
 	}
 
 	/**
@@ -127,7 +134,7 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public List<ICollection> getAllCollections(IDspaceKeys dspaceKeys, String sUserName, String sPassword, String sCommunityId) {
 
-		return getProxyCommunityManager().getAllCollections(getRestTemplate(), getDspaceProperties(), null, sUserName, sPassword, sCommunityId);
+		return getProxyCommunityManager().getAllCollections(getRestTemplate(), getDspaceProperties(), dspaceKeys, sUserName, sPassword, sCommunityId);
 	}
 
 	/**
@@ -150,11 +157,16 @@ public class DspaceManager implements IDspaceManager{
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId)
+	public ICollection getCollection(String sCollectionId) throws QuadrigaException
 	{
-		return getProxyCommunityManager().getCollection(sCollectionId,true,null,null,null,null,null,null);
+		try {
+			return getProxyCommunityManager().getCollection(sCollectionId,true,null,null,null,null,null,null);
+		} catch (NoSuchAlgorithmException e) {
+			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
+		}
 	}
 
 	/**
@@ -205,10 +217,12 @@ public class DspaceManager implements IDspaceManager{
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
-	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
 	{
+
 		try
 		{
 			//Passing null values for other arguments because the community details must have already been fetched from dspace
@@ -328,6 +342,8 @@ public class DspaceManager implements IDspaceManager{
 			logger.info("Bitstreams selected: "+bitstreamIds.length);
 			logger.error("The logged exception is: ",e);
 			throw e;
+		} catch (NoSuchAlgorithmException e) {
+			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
 		}
 	}
 
@@ -361,33 +377,38 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, IDspaceKeys dspaceKeys,  String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException
+	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, IDspaceKeys dspaceKeys,  String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException, QuadrigaException
 	{
 
 		HashSet<String> reloadedCollectionIds = new HashSet<String>();
 
 		//Reload all the communities by making only one call to dspace
-		getProxyCommunityManager().getCommunity(null, false, getRestTemplate(), getDspaceProperties(), null, dspaceUsername, password);
-		for(IBitStream bitstream : getDbconnectionManager().getBitStreamReferences(workspaceid, quadrigaUsername))
-		{
-			ICommunity community = getProxyCommunityManager().getCommunity(bitstream.getCommunityid(), true, null, null, null, null,null);
-			ICollection collection = null;
-
-			if(reloadedCollectionIds.contains(bitstream.getCollectionid()))
+		try {
+			getProxyCommunityManager().getCommunity(null, false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password);
+			for(IBitStream bitstream : getDbconnectionManager().getBitStreamReferences(workspaceid, quadrigaUsername))
 			{
-				//Collection has been reloaded already
-				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), true, null, null, null, null, null, null);
-			}
-			else
-			{
-				//This is the first call to reload the collection
-				collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), null, dspaceUsername, password, bitstream.getCommunityid());
-				reloadedCollectionIds.add(bitstream.getCollectionid());
-			}
+				ICommunity community = getProxyCommunityManager().getCommunity(bitstream.getCommunityid(), true, null, null, null, null,null);
+				ICollection collection = null;
 
-			IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(this.getDbconnectionManager().getDataSource(), community, collection, null, bitstream, quadrigaUsername);
-			Thread bitstreamUpdateThread = new Thread(dspaceUpdateManager);
-			bitstreamUpdateThread.start();
+				if(reloadedCollectionIds.contains(bitstream.getCollectionid()))
+				{
+					//Collection has been reloaded already
+					collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), true, null, null, null, null, null, null);
+				}
+				else
+				{
+					//This is the first call to reload the collection
+					collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password, bitstream.getCommunityid());
+					reloadedCollectionIds.add(bitstream.getCollectionid());
+				}
+
+				IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(this.getDbconnectionManager().getDataSource(), community, collection, null, bitstream, quadrigaUsername);
+				Thread bitstreamUpdateThread = new Thread(dspaceUpdateManager);
+				bitstreamUpdateThread.start();
+			}
+		}
+		catch (NoSuchAlgorithmException e) {
+			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
 		}
 	}
 
@@ -482,6 +503,7 @@ public class DspaceManager implements IDspaceManager{
 				throw new QuadrigaAccessException("The values passed to updateDspaceKeys do not satify the method constraints !");
 			}
 		}
+		proxyCommunityManager.clearCompleteCache();
 		return SUCCESS;
 	}
 

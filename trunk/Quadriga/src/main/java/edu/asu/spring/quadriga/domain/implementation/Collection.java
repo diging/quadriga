@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +13,7 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 
 /**
@@ -34,16 +37,18 @@ public class Collection implements ICollection{
 	private Properties dspaceProperties;
 	private String userName;
 	private String password;
+	private IDspaceKeys dspaceKeys;
 
 	/**
 	 * Initialize the required details to make a REST service call to Dspace
 	 * @param id				The id of the collection.
 	 * @param restTemplate		The RestTemplate object containing the details about the parser.
-	 * @param dspaceProperties	TThe property strings related to dspace REST service connection.
+	 * @param dspaceProperties	The property strings related to dspace REST service connection.
+	 * @param dspaceKeys		The Dspace Access keys used by the user.
 	 * @param userName			The username of the authorized user.
 	 * @param password			The password of the authorized user.
 	 */
-	public Collection(String id, RestTemplate restTemplate, Properties dspaceProperties, String userName, String password)
+	public Collection(String id, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
 	{
 		this.dspaceProperties = dspaceProperties;
 		this.id = id;
@@ -51,6 +56,7 @@ public class Collection implements ICollection{
 		this.password = password;
 		this.restTemplate = restTemplate;
 		this.dspaceProperties = dspaceProperties;
+		this.dspaceKeys = dspaceKeys;
 	}
 
 
@@ -160,7 +166,7 @@ public class Collection implements ICollection{
 				{
 					for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
 						item = new Item();
-						item.setRestConnectionDetails(restTemplate, dspaceProperties, userName, password);
+						item.setRestConnectionDetails(restTemplate, dspaceProperties, dspaceKeys, userName, password);
 						if(item.copy(dspaceItem))
 							this.items.add(item);
 					}
@@ -174,13 +180,41 @@ public class Collection implements ICollection{
 	/**
 	 * Used to generate the corresponding url necessary to access the collection details
 	 * @return			Return the complete REST service url along with all the authentication information
+	 * @throws NoSuchAlgorithmException 
 	 */
-	private String getCompleteUrlPath()
+	private String getCompleteUrlPath() throws NoSuchAlgorithmException
 	{
-		return dspaceProperties.getProperty("dspace_url")+
-				dspaceProperties.getProperty("collection_url")+	this.id+
-				dspaceProperties.getProperty("xml")+dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+
-				this.userName +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
+		if(this.dspaceKeys == null)
+		{
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("collection_url")+	this.id+
+					dspaceProperties.getProperty("xml")+dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+
+					this.userName +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
+		}
+		else
+		{
+			String stringToHash = dspaceProperties.getProperty("collection_url")+this.id+dspaceProperties.getProperty("xml")+dspaceKeys.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest());
+			digestKey = digestKey.substring(0, 8);
+			
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("collection_url")+	this.id+
+					dspaceProperties.getProperty("xml")+dspaceProperties.getProperty("?")+dspaceProperties.getProperty("api_key")+
+					dspaceKeys.getPublicKey() +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+		}
+	}
+
+	private String bytesToHex(byte[] b) {
+		char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+				'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+		StringBuffer buf = new StringBuffer();
+		for (int j=0; j<b.length; j++) {
+			buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
+			buf.append(hexDigit[b[j] & 0x0f]);
+		}
+		return buf.toString();
 	}
 
 	/**
@@ -189,13 +223,19 @@ public class Collection implements ICollection{
 	 */
 	@Override
 	public void run() {
-		String sRestServicePath = getCompleteUrlPath();
-		IDspaceCollection dspaceCollection = (DspaceCollection) this.restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
+		String sRestServicePath;
+		try {
+			sRestServicePath = getCompleteUrlPath();
 
-		if(dspaceCollection != null)
-		{
-			this.copy(dspaceCollection);
-		}		
+			IDspaceCollection dspaceCollection = (DspaceCollection) this.restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
+
+			if(dspaceCollection != null)
+			{
+				this.copy(dspaceCollection);
+			}	
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

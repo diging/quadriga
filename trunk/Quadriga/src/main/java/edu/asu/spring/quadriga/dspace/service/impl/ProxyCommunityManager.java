@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,23 +40,40 @@ public class ProxyCommunityManager implements ICommunityManager {
 	/**
 	 * Used to generate the corresponding url necessary to access the community details
 	 * @return			Return the complete REST service url along with all the authentication information
+	 * @throws NoSuchAlgorithmException 
 	 */
-	private String getCompleteUrlPath( Properties dspaceProperties, String userName, String password)
+	private String getCompleteUrlPath(Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password) throws NoSuchAlgorithmException
 	{
-		return dspaceProperties.getProperty("dspace_url")+
-				dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
-				dspaceProperties.getProperty("email")+userName+
-				dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
+		if(dspaceKeys == null)
+		{
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
+					dspaceProperties.getProperty("email")+userName+
+					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
+		}
+		else
+		{
+			String stringToHash = dspaceProperties.getProperty("all_community_url") + dspaceKeys.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+			
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
+					dspaceProperties.getProperty("api_key")+dspaceKeys.getPublicKey()+
+					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+		}
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) {
+	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException {
 		if(communities == null)
 		{
-			String sRestServicePath = getCompleteUrlPath(dspaceProperties, sUserName, sPassword);
+			String sRestServicePath = getCompleteUrlPath(dspaceProperties, dspaceKeys, sUserName, sPassword);
 			IDspaceCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
 
 			if(dsapceCommunities.getCommunities().size()>0)
@@ -97,7 +116,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 					if(community.getCollections().size() == 0)
 					{
 						for(String collectionId :community.getCollectionIds()){
-							collection = new Collection(collectionId,restTemplate,dspaceProperties,sUserName,sPassword);
+							collection = new Collection(collectionId,restTemplate,dspaceProperties,dspaceKeys,sUserName,sPassword);
 							Thread collectionThread = new Thread(collection);
 							collectionThread.start();
 
@@ -137,7 +156,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword, String communityid)
+	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword, String communityid) throws NoSuchAlgorithmException
 	{
 		if(fromCache)
 		{
@@ -154,7 +173,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 			}
 			else
 			{
-				this.getAllCollections(restTemplate, dspaceProperties, null, sUserName, sPassword, communityid);
+				this.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
 			}
 		}
 		else
@@ -172,11 +191,11 @@ public class ProxyCommunityManager implements ICommunityManager {
 						iterator.remove();
 				}
 			}
-			
+
 			//Load the collection metadata associated with the community
-			this.getAllCollections(restTemplate, dspaceProperties, null, sUserName, sPassword, communityid);
+			this.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
 		}
-		
+
 		for(ICollection collection : this.collections)
 		{
 			if(collection.getId().equals(sCollectionId))
@@ -184,7 +203,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 				return collection;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -273,8 +292,8 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 		return null;
 	}
-	
-	
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -336,9 +355,10 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 	/**
 	 * {@inheritDoc}
+ 
 	 */
 	@Override
-	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword)
+	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException
 	{		
 		//Get the community data from the cache
 		if(fromCache)
@@ -354,14 +374,14 @@ public class ProxyCommunityManager implements ICommunityManager {
 			else
 			{
 				//Load all the communities
-				this.getAllCommunities(restTemplate, dspaceProperties, null, sUserName, sPassword);
+				this.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
 			}
 		}
 		else
 		{
 			//Reload the community data from dspace
 			this.communities = null;
-			this.getAllCommunities(restTemplate, dspaceProperties, null, sUserName, sPassword);
+			this.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
 		}
 
 		for(ICommunity community: this.communities)
@@ -398,7 +418,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -408,4 +428,15 @@ public class ProxyCommunityManager implements ICommunityManager {
 		this.communities = null;
 		this.collections = null;		
 	}
+	
+	private String bytesToHex(byte[] b) {
+	      char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+	                         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+	      StringBuffer buf = new StringBuffer();
+	      for (int j=0; j<b.length; j++) {
+	         buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
+	         buf.append(hexDigit[b[j] & 0x0f]);
+	      }
+	      return buf.toString();
+	   }
 }

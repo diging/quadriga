@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 
 /**
  * This class tests {@link DspaceManager}
@@ -81,7 +82,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetAllCommunities() {
+	public void testGetAllCommunities() throws QuadrigaException {
 		//Dspace return list of communities for empty username/password
 		assertNotNull(dspaceManager.getAllCommunities(null,null, null).size());
 
@@ -89,7 +90,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetAllCollections() {
+	public void testGetAllCollections() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
@@ -99,7 +100,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetCommunityName() {
+	public void testGetCommunityName() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getCommunityName("18"));
@@ -109,7 +110,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetCollectionName() {
+	public void testGetCollectionName() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
@@ -123,7 +124,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetCollection() {
+	public void testGetCollection() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
@@ -140,7 +141,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetCommunityId() {
+	public void testGetCommunityId() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
@@ -156,7 +157,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetAllItems() {
+	public void testGetAllItems() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
@@ -174,7 +175,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetAllBitStreams() {
+	public void testGetAllBitStreams() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
@@ -193,7 +194,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetItemName() {
+	public void testGetItemName() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));
@@ -213,7 +214,7 @@ public class DspaceManagerTest {
 	}
 
 	@Test
-	public void testGetBitStream() {
+	public void testGetBitStream() throws QuadrigaException {
 		//Load all communities before trying to access collection
 		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCollections(null,"test", "test", "18"));

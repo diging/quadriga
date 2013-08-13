@@ -6,6 +6,7 @@ import java.util.Properties;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 
 /**
  * The interface that provides access to the class representation of the Item got from Dspace repostiory.
@@ -48,15 +49,16 @@ public interface IItem  extends Runnable{
 	public abstract void addBitstream(IBitStream bitstream);
 
 	/**
-	 * Initialize the required connection details to make a REST service call to Dspace. All the values are needed to be set if the related
-	 * Bitstreams are to be loaded. This is the first method to be used when trying to load bitstreams.
+	 * Initialize the required connection details to make a REST service call to Dspace. Either the username and password or the Dspace
+	 * Keys need to be set if the related bitstreams are to be loaded. This is the first method to be used when trying to load bitstreams. 
 	 * 
 	 * @param restTemplate			The RestTemplate object containing the details about the parser.
 	 * @param dspaceProperties		The property strings related to dspace REST service connection.
+	 * @param dspaceKeys			The Dspace Access keys used by the user.
 	 * @param userName				The username of the authorized user.
 	 * @param password				The password of the authorized user.
 	 */
-	public abstract void setRestConnectionDetails(RestTemplate restTemplate, Properties dspaceProperties,
+	public abstract void setRestConnectionDetails(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, 
 			String userName, String password);
 	
 	/**
