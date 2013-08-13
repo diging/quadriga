@@ -27,4 +27,6 @@ public interface IListWSManager {
 	public abstract List<INetwork> getWorkspaceNetworkList(String workspaceid)
 			throws QuadrigaStorageException;
 
+	public abstract String getWorkspaceName(String workspaceId) throws QuadrigaStorageException;
+
 }
