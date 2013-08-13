@@ -62,12 +62,12 @@ public class UserRestController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "rest/userdetails/{username}", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/userdetails", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String getUserDetails(@PathVariable("username") String userName, ModelMap model, Principal principal, HttpServletRequest req)
+	public String getUserDetails( ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
 		
-		IUser userDetails = userManager.getUserDetails(userName);
+		IUser userDetails = userManager.getUserDetails(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		
 		Template template = null;
