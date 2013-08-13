@@ -99,7 +99,7 @@ public class DictionaryItemSearchAddController {
 				.getUserName();
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
-
+				
 				DictionaryItems di = dictonaryManager.getDictionaryItemIndex(
 						values[i], dictionaryItems);
 				msg = dictonaryManager.addNewDictionariesItems(dictionaryId,

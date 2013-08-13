@@ -84,6 +84,10 @@ public interface DBConstants
 	public static final String HAS_NETWORK_NAME ="sp_hasNetworkName";
 	public static final String GET_PROJECTID_WORKSPACE ="sp_getProjectIdForWorkspace";
 	
+	//Editing
+	
+	public static final String GET_EDITOR_NETWORK_LIST ="sp_getEditorNetworkList";
+	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
 	public static final String LIST_ACTIVE_WORKSPACE = "sp_getActiveWorkspaceList";
