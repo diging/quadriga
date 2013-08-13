@@ -10,8 +10,4 @@ public interface IDspaceKeys {
 
 	public abstract void setPrivateKey(String privateKey);
 
-	public abstract String getDigestKey();
-
-	public abstract void setDigestKey(String digestKey);
-
 }

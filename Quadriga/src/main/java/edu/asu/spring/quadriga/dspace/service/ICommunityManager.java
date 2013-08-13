@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dspace.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
 
@@ -24,11 +25,13 @@ public interface ICommunityManager {
 	 * 
 	 * @param restTemplate			The RestTemplate variable containing the information on parsers.
 	 * @param dspaceProperties		The property strings related to dspace REST service connection.
+	 * @param dspaceKeys			The Dspace Access keys used by the user.
 	 * @param sUserName				The dspace username of the user.
 	 * @param sPassword				The corresponding dspace password of the user
 	 * @return						List of communities retrieved from Dspace.
+	 * @throws NoSuchAlgorithmException 
 	 */
-	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword);
+	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException;
 
 	/**
 	 * Get all the collections available for the given user. For the first call, this method makes a request to Dspace.
@@ -37,6 +40,7 @@ public interface ICommunityManager {
 	 * 
 	 * @param restTemplate				The RestTemplate variable containing the information on parsers.
 	 * @param dspaceProperties			The property strings related to dspace REST service connection.
+	 * @param dspaceKeys				The Dspace Access keys used by the user.
 	 * @param sUserName					The dspace username of the user.
 	 * @param sPassword					The corresponding dspace password of the user
 	 * @param sCommunityId				The community id for which the list of collections are to be fetched.
@@ -63,12 +67,14 @@ public interface ICommunityManager {
 	 * 									can be fetched from Quadriga cache. 
 	 * @param restTemplate				The RestTemplate object containing the details about the parser. Only needed if fromCache is set to FALSE.
 	 * @param dspaceProperties			The property strings related to dspace REST service connection. Only needed if fromCache is set to FALSE.
+	 * @param dspaceKeys				The Dspace Access keys used by the user.
 	 * @param sUserName					The username of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @param sPassword					The password of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @param communityid				The id of the community to which the collection belongs to.
 	 * @return							The collection object for the given collection id.  Will be NULL if there no matching collection id was found.
+	 * @throws NoSuchAlgorithmException 
 	 */
-	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword,String communityid);
+	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword,String communityid) throws NoSuchAlgorithmException;
 
 	/**
 	 * Get all items within a collection. The methods {@link #getAllCommunities(RestTemplate, Properties, String, String)} and {@link #getAllCollections(RestTemplate, Properties, String, String, String)} 
@@ -139,11 +145,13 @@ public interface ICommunityManager {
 	 * 									can be fetched from Quadriga cache.
 	 * @param restTemplate				The RestTemplate object containing the details about the parser. Only needed if fromCache is set to FALSE.
 	 * @param dspaceProperties			The property strings related to dspace REST service connection. Only needed if fromCache is set to FALSE.
+	 * @param dspaceKeys				The Dspace Access keys used by the user.
 	 * @param sUserName					The username of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @param sPassword					The password of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @return							The community object for the corresponding community id. Will be NULL if there is no matching community id was found.
+	 * @throws NoSuchAlgorithmException 
 	 */
-	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword);
+	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException;
 
 	/**
 	 * Get the item object for the corresponding item id.

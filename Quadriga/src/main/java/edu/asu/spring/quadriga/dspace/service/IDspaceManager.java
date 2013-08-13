@@ -11,6 +11,7 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -32,8 +33,9 @@ public interface IDspaceManager{
 	 * @param sUserName		The dspace username of the user.
 	 * @param sPassword		The corresponding dspace password of the user
 	 * @return				List of communities retrieved from Dspace.
+	 * @throws QuadrigaException 
 	 */
-	public abstract List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword);
+	public abstract List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException;
 
 	/**
 	 * Get all the collections available for the given user
@@ -86,8 +88,9 @@ public interface IDspaceManager{
 	 * 
 	 * @param sCollectionId	The collection id whose collection object is to be fetched.
 	 * @return				The collection object for the given collection id. Will be null of there is no such collection with the id.
+	 * @throws QuadrigaException 
 	 */
-	public abstract ICollection getCollection(String sCollectionId);
+	public abstract ICollection getCollection(String sCollectionId) throws QuadrigaException;
 
 	/**
 	 * Get the community id to which the collection belongs to.
@@ -129,10 +132,11 @@ public interface IDspaceManager{
 	 * @param username						The userid of the user who is trying to add the bitstream(s) to the workspace.
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 * @throws QuadrigaException 
 	 */
 	public abstract void addBitStreamsToWorkspace(String workspaceId, String communityId,
 			String collectionId, String itemId, String[] bitstreamIds,
-			String username)throws QuadrigaStorageException, QuadrigaAccessException;
+			String username)throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException;
 
 	/**
 	 * Delete a list of bitstreams from the workspace. The user must have access to the workspace.
@@ -156,10 +160,11 @@ public interface IDspaceManager{
 	 * @param password						The dspace password supplied by the user. This password will be used to authenticate the user with the dspace server.
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
+	 * @throws QuadrigaException 
 	 */
 	public abstract void updateDspaceMetadata(String workspaceid, String quadrigaUsername, IDspaceKeys dspaceKeys, String dspaceUsername,
 			String password) throws QuadrigaAccessException,
-			QuadrigaStorageException;
+			QuadrigaStorageException, QuadrigaException;
 
 	/**
 	 * Clear all the cached dspace information
@@ -187,7 +192,7 @@ public interface IDspaceManager{
 	public abstract Properties getDspaceProperties();
 
 	/**
-	 * Add new Dspace keys or update existing keys in the database.
+	 * Add new Dspace keys or update existing keys in the database. Adding a new key to the system will clear the cached Dspace data.
 	 * 
 	 * @param dspaceKeys					The IDspaceKeys which stores the key values for the user. Must NOT be null.
 	 * @param username						The quadriga username of the user. Must NOT be null.

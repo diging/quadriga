@@ -29,6 +29,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
@@ -62,10 +63,11 @@ public class ListWSController
 
 	private String dspaceUsername;
 	private String dspacePassword;
+	private IDspaceKeys dspaceKeys;
 
 	@Autowired
 	private IDspaceKeysFactory dspaceKeysFactory;
-	
+
 	public IDspaceManager getDspaceManager() {
 		return dspaceManager;
 	}
@@ -104,10 +106,10 @@ public class ListWSController
 	@RequestMapping(value="/auth/workbench/keys", method=RequestMethod.GET)
 	public ModelAndView addDspaceKeysRequestForm(Principal principal) throws QuadrigaStorageException
 	{
-		IDspaceKeys dspaceKeys = dspaceManager.getMaskedDspaceKeys(principal.getName());
+		this.dspaceKeys = dspaceManager.getMaskedDspaceKeys(principal.getName());
 		ModelAndView model = new ModelAndView("/auth/workbench/keys","command",dspaceKeysFactory.createDspaceKeysObject());
 		model.addObject("dspaceKeys", dspaceKeys);
-		
+
 		return model;
 	}
 
@@ -129,13 +131,14 @@ public class ListWSController
 				if(!dspaceKeys.getPrivateKey().equals("") && !dspaceKeys.getPublicKey().equals(""))
 				{
 					dspaceManager.addDspaceKeys(dspaceKeys,principal.getName());
+					this.dspaceKeys = dspaceKeys;
 				}
 			}
 		}
-		
+
 		return "redirect:/auth/workbench/keys";
 	}	
-	
+
 	/**
 	 * This will list the details of workspaces 
 	 * @param  workspaceid
@@ -158,16 +161,24 @@ public class ListWSController
 		//retrieve the collaborators associated with the workspace
 		collaboratorList = getWsCollabManager().getWorkspaceCollaborators(workspaceid);
 
+
 		workspace.setCollaborators(collaboratorList);
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceid);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
-		if(this.dspaceUsername != null && this.dspacePassword != null)
+
+		//Load the Dspace Keys used by the user
+		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
+		if(this.dspaceKeys != null)
+		{
+			model.addAttribute("dspaceKeys", "true");
+		}
+		else if((this.dspaceUsername != null && this.dspacePassword != null))
 		{
 			model.addAttribute("dspaceLogin", "true");
 		}
-		
-		
+
+
 		return "auth/workbench/workspace/workspacedetails";
 	}
 
@@ -232,24 +243,28 @@ public class ListWSController
 		String dspaceUsername = req.getParameter("username");
 		String dspacePassword = req.getParameter("password");
 		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
-		
-		if(dspacePublicAccess == null)
+
+		//Check for username and password only when there are no keys for the user.
+		if(this.dspaceKeys == null)
 		{
-			if(dspaceUsername == null || dspacePassword == null)
+			if(dspacePublicAccess == null)
 			{
-				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+				if(dspaceUsername == null || dspacePassword == null)
+				{
+					return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+				}
+				else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+				{
+					return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+				}
+				this.dspaceUsername = dspaceUsername;
+				this.dspacePassword = dspacePassword;
 			}
-			else if(dspaceUsername.equals("") || dspacePassword.equals(""))
+			else
 			{
-				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+				this.dspaceUsername = "";
+				this.dspacePassword = "";
 			}
-			this.dspaceUsername = dspaceUsername;
-			this.dspacePassword = dspacePassword;
-		}
-		else
-		{
-			this.dspaceUsername = "";
-			this.dspacePassword = "";
 		}
 
 		return "redirect:/auth/workbench/workspace/"+workspaceId+"/updatebitstreams";
@@ -291,7 +306,7 @@ public class ListWSController
 		}
 
 		getDspaceManager().clearCompleteCache();
-		
+
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 
@@ -301,16 +316,17 @@ public class ListWSController
 	 * 
 	 * @return Return to the dspace communities page of Quadriga
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/communities", method = RequestMethod.GET)
-	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) {
+	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaException {
 
-		if(this.dspaceUsername == null || this.dspacePassword == null)
+		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
 
-		List<ICommunity> communities = getDspaceManager().getAllCommunities(null, this.dspaceUsername,this.dspacePassword);
+		List<ICommunity> communities = getDspaceManager().getAllCommunities(this.dspaceKeys, this.dspaceUsername,this.dspacePassword);
 
 		model.addAttribute("communityList", communities);
 		model.addAttribute("workspaceId",workspaceId);
@@ -329,7 +345,7 @@ public class ListWSController
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/{communityId}", method = RequestMethod.GET)
 	public String workspaceCommunityRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
 
-		if(this.dspaceUsername == null || this.dspacePassword == null)
+		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
@@ -342,7 +358,7 @@ public class ListWSController
 		{
 			return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
 		}
-		List<ICollection> collections = getDspaceManager().getAllCollections(null,this.dspaceUsername,this.dspacePassword, communityId);
+		List<ICollection> collections = getDspaceManager().getAllCollections(dspaceKeys,this.dspaceUsername,this.dspacePassword, communityId);
 
 		model.addAttribute("communityName", communityName);
 		model.addAttribute("collectionList", collections);
@@ -362,7 +378,7 @@ public class ListWSController
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/{collectionId}", method = RequestMethod.GET)
 	public String workspaceItemListRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
 
-		if(this.dspaceUsername == null || this.dspacePassword == null)
+		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
@@ -414,7 +430,7 @@ public class ListWSController
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/item", method = RequestMethod.GET)
 	public String workspaceBitStreamListRequest(@PathVariable("workspaceId") String workspaceId,@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal){
 
-		if(this.dspaceUsername == null || this.dspacePassword == null)
+		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
@@ -453,7 +469,7 @@ public class ListWSController
 		}
 
 
-		List<IBitStream> bitstreams = getDspaceManager().getAllBitStreams(null,this.dspaceUsername,this.dspacePassword,collectionId, itemId);
+		List<IBitStream> bitstreams = getDspaceManager().getAllBitStreams(dspaceKeys,this.dspaceUsername,this.dspacePassword,collectionId, itemId);
 		model.addAttribute("communityId",communityId);
 		model.addAttribute("communityName",communityName);
 		model.addAttribute("collectionId",collectionId);
@@ -473,9 +489,10 @@ public class ListWSController
 	 * @param collectionid		The id of the collection whose name is to fetched.
 	 * @return					Returns the collection name if it is loaded from Dspace. Else returns 'Loading...'
 	 * @author 					Ram Kumar Kumaresan
+	 * @throws QuadrigaException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
-	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) {
+	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) throws QuadrigaException {
 		ICollection collection = getDspaceManager().getCollection(collectionid);
 		if(collection != null)
 		{
@@ -519,10 +536,11 @@ public class ListWSController
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
 	 * @author 								Ram Kumar Kumaresan
+	 * @throws QuadrigaException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/addbitstreams", method = RequestMethod.POST)
-	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
-		if(this.dspaceUsername == null || this.dspacePassword == null)
+	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException{
+		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
@@ -557,14 +575,15 @@ public class ListWSController
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
 	 * @author 								Ram Kumar Kumaresan
+	 * @throws QuadrigaException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
-	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException{
-		if(this.dspaceUsername == null || this.dspacePassword == null)
+	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException{
+		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
 		{
 			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 		}
-		getDspaceManager().updateDspaceMetadata(workspaceId, principal.getName(), null, this.dspaceUsername, this.dspacePassword);
+		getDspaceManager().updateDspaceMetadata(workspaceId, principal.getName(), dspaceKeys, this.dspaceUsername, this.dspacePassword);
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }

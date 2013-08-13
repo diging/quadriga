@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -62,7 +63,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllCommunities() {
+	public void testGetAllCommunities() throws NoSuchAlgorithmException {
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 
 		proxyCommunityManager.clearCompleteCache();
@@ -73,7 +74,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllCollections() {
+	public void testGetAllCollections() throws NoSuchAlgorithmException {
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 
 		//Get the collection list for the community
@@ -88,7 +89,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllItems() {
+	public void testGetAllItems() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
@@ -105,7 +106,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCollection() {
+	public void testGetCollection() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
@@ -125,7 +126,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCommunityName() {
+	public void testGetCommunityName() throws NoSuchAlgorithmException {
 		//Load the community details
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getCommunityName("18"));
@@ -134,7 +135,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCollectionName() {
+	public void testGetCollectionName() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
@@ -147,7 +148,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCommunityId() {
+	public void testGetCommunityId() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
@@ -160,7 +161,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetItemName() {
+	public void testGetItemName() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		proxyCommunityManager.clearCompleteCache();
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
@@ -177,7 +178,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetBitStream() {
+	public void testGetBitStream() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
@@ -201,7 +202,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllBitStreams() {
+	public void testGetAllBitStreams() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
@@ -220,7 +221,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCommunity() {
+	public void testGetCommunity() throws NoSuchAlgorithmException {
 		//Load the community
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		
@@ -233,7 +234,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetItem() {
+	public void testGetItem() throws NoSuchAlgorithmException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));

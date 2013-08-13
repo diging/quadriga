@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
@@ -165,7 +166,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceCommunityListRequest() {
+	public void testWorkspaceCommunityListRequest() throws QuadrigaException {
 		//Setup username and password
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
@@ -182,7 +183,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceCommunityRequest() {
+	public void testWorkspaceCommunityRequest() throws QuadrigaException {
 
 		//Setup username and password
 		mock.addParameter("username", "test");
@@ -201,7 +202,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceItemListRequest() {
+	public void testWorkspaceItemListRequest() throws QuadrigaException {
 		//Setup username and password
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
@@ -223,7 +224,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceBitStreamListRequest() {
+	public void testWorkspaceBitStreamListRequest() throws QuadrigaException {
 		//Setup username and password
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
@@ -246,7 +247,7 @@ public class ListWSControllerTest {
 	}
 
 	@Test
-	public void testGetCollectionStatus() {
+	public void testGetCollectionStatus() throws QuadrigaException {
 		//Setup username and password
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
@@ -263,7 +264,7 @@ public class ListWSControllerTest {
 	}
 
 	@Test
-	public void testGetBitStreamStatus() {
+	public void testGetBitStreamStatus() throws QuadrigaException {
 		//Setup username and password
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");

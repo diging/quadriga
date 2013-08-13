@@ -5,6 +5,7 @@
 
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
+	<c:choose><c:when test="${empty dspaceKeys}">
 	<c:choose>
 	<c:when test="${empty dspaceLogin}">
 	<script>
@@ -25,7 +26,6 @@
 		    		resizable: false,
 		        	modal: true,
 		        	width:'auto',
-			      	open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
 			      	buttons: {
 			        	Ok: function() {
 			          				location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams';
@@ -38,6 +38,23 @@
 	</script>
 	</c:otherwise>
 	</c:choose>
+	</c:when><c:otherwise><script>
+	$(document).ready(function() {
+		$('#dspaceSync').click(function dspaceSync() {
+			$( "#dialog-message" ).dialog({
+		    		resizable: false,
+		        	modal: true,
+		        	width:'auto',
+			      	buttons: {
+			        	Ok: function() {
+			          				location.href='/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatebitstreams';
+			          				$( this ).dialog( "close" );
+			        			}
+			      			}
+			    });
+			});
+		});
+	</script></c:otherwise></c:choose>
 	<script>
 	function submitClick()
 	{
@@ -108,6 +125,7 @@
 <input type="button" name="Edit" value="Edit"/>
 </a> 
 
+<c:choose><c:when test="${empty dspaceKeys}">
 <!-- Dspace Login popup -->
 <c:choose>
 <c:when test="${not empty dspaceLogin}">
@@ -134,8 +152,22 @@ $('a.login-window').click(function() {
 </script>
 </c:otherwise>
 </c:choose>
+</c:when>
+<c:otherwise>
+<script>
+$(document).ready(function() {
+
+$('a.login-window').click(function() {
+    location.href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities";        
+});
+
+});
+</script>
+</c:otherwise>
+</c:choose>
 
 <a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
+<c:choose><c:when test="${empty dspaceKeys}">
 <c:choose>
 <c:when test="${not empty dspaceLogin}">
 <!-- Allow the user to change the dspace login credentials -->
@@ -152,9 +184,9 @@ $('a.login-window').click(function() {
         <input id="password" name="password" value="" type="password" placeholder="Password" />
     </label>
     </fieldset>
-    <input type="checkbox" name="dspacePublicAccess" id="dspacePublicAccess" value="public"/><font size="2">Use Public Access</font>
-    
+    <label><input type="checkbox" name="dspacePublicAccess" id="dspacePublicAccess" value="public" /><font size="2">Use Public Access</font></label>
 </form>
+<font size="1">We recommend setting up Dspace Access keys <a href="/quadriga/auth/workbench/keys">here</a>. Its more secure !</font>
 </div>
 <script>
 $(document).ready(function(){
@@ -162,7 +194,6 @@ $(document).ready(function(){
 	    autoOpen: false,
 	    modal: false,
 	    resizable: false,
-	    open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
 	    buttons: {
 	        Login: function () {
 	        	var bValid = true;
@@ -199,6 +230,7 @@ $(document).ready(function(){
 	});
 })
 </script>
+</c:when></c:choose>
 
 <br><br>
 <c:choose>

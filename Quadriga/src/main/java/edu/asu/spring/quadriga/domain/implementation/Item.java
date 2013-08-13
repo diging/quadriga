@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -13,6 +15,7 @@ import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItems;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceItems;
 
 /**
@@ -33,17 +36,19 @@ public class Item implements IItem{
 	private Properties dspaceProperties;
 	private String userName;
 	private String password;
+	private IDspaceKeys dspaceKeys;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setRestConnectionDetails(RestTemplate restTemplate, Properties dspaceProperties, String userName, String password)
+	public void setRestConnectionDetails(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
 	{
 		this.restTemplate = restTemplate;
 		this.dspaceProperties = dspaceProperties;
 		this.userName = userName;
 		this.password = password;
+		this.dspaceKeys = dspaceKeys;
 	}
 
 	/**
@@ -68,7 +73,7 @@ public class Item implements IItem{
 			Thread bitstreamThread = new Thread(this);
 			bitstreamThread.start();
 		}
-		
+
 		//Return the bitstream objects
 		return bitstreams;
 	}
@@ -161,15 +166,31 @@ public class Item implements IItem{
 	/**
 	 * Used to generate the corresponding url necessary to access the item details
 	 * @return			Return the complete REST service url along with all the authentication information
+	 * @throws NoSuchAlgorithmException 
 	 */
-	private String getCompleteUrlPath()
+	private String getCompleteUrlPath() throws NoSuchAlgorithmException
 	{
-		return dspaceProperties.getProperty("dspace_url")+
-		dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
-		dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+this.userName+
-		dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
+		if(this.dspaceKeys == null)
+		{
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
+					dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+this.userName+
+					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
+		}
+		else
+		{
+			String stringToHash = dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+dspaceKeys.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
+					dspaceProperties.getProperty("?")+dspaceProperties.getProperty("api_key")+
+					dspaceKeys.getPublicKey() +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+		}
 	}
-	
+
 	/**
 	 * This thread will make a REST service call to load the bitstream details. This service call will load details about the bitstreams within this item. 
 	 * After the execution of this thread, the item object will be populated with relevant bitstream information. 
@@ -178,47 +199,64 @@ public class Item implements IItem{
 	 */
 	@Override
 	public void run() {
-		String sRestServicePath = getCompleteUrlPath();
-		IDspaceItems dspaceItems = (DspaceItems) this.restTemplate.getForObject(sRestServicePath, DspaceItems.class);
-		if(dspaceItems != null)
-		{
-			//For each bitstream id load the data into the corresponding bitstream object
-			if(dspaceItems.getBitstreams().getBitstreamentityid() != null)
-			{
-				for(IDspaceBitStreamEntityId dspaceBitStream: dspaceItems.getBitstreams().getBitstreamentityid())
-				{
-					//Check if the bitstream is already present
-					boolean ispresent = false;
-					for(IBitStream bit: this.bitstreams)
-					{
-						if(bit.getName()!=null)
-							if(dspaceBitStream.getName().contains(bit.getName()))
-								ispresent = true;
-					}
+		String sRestServicePath;
+		try {
+			sRestServicePath = getCompleteUrlPath();
 
-					//Do not load the bitstream if already present
-					if(!ispresent)
+			IDspaceItems dspaceItems = (DspaceItems) this.restTemplate.getForObject(sRestServicePath, DspaceItems.class);
+			if(dspaceItems != null)
+			{
+				//For each bitstream id load the data into the corresponding bitstream object
+				if(dspaceItems.getBitstreams().getBitstreamentityid() != null)
+				{
+					for(IDspaceBitStreamEntityId dspaceBitStream: dspaceItems.getBitstreams().getBitstreamentityid())
 					{
-						for(IBitStream bitstream: this.bitstreams){
-							if(bitstream.getId().equals(dspaceBitStream.getId()))
-							{
-								bitstream.setName(dspaceBitStream.getName());
-								bitstream.setSize(dspaceBitStream.getSize());
-								bitstream.setMimeType(dspaceBitStream.getMimeType());
-								break;
+						//Check if the bitstream is already present
+						boolean ispresent = false;
+						for(IBitStream bit: this.bitstreams)
+						{
+							if(bit.getName()!=null)
+								if(dspaceBitStream.getName().contains(bit.getName()))
+									ispresent = true;
+						}
+
+						//Do not load the bitstream if already present
+						if(!ispresent)
+						{
+							for(IBitStream bitstream: this.bitstreams){
+								if(bitstream.getId().equals(dspaceBitStream.getId()))
+								{
+									bitstream.setName(dspaceBitStream.getName());
+									bitstream.setSize(dspaceBitStream.getSize());
+									bitstream.setMimeType(dspaceBitStream.getMimeType());
+									break;
+								}
 							}
 						}
 					}
+
+					//Remove the bitstream objects of the metadata files
+					Iterator<IBitStream> bitstreamIterator = this.bitstreams.iterator();
+					while(bitstreamIterator.hasNext())
+					{
+						if(bitstreamIterator.next().getName() == null)
+							bitstreamIterator.remove();
+					}				
 				}
-				
-				//Remove the bitstream objects of the metadata files
-				Iterator<IBitStream> bitstreamIterator = this.bitstreams.iterator();
-				while(bitstreamIterator.hasNext())
-				{
-					if(bitstreamIterator.next().getName() == null)
-						bitstreamIterator.remove();
-				}				
 			}
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
-	}	
+	}
+
+	private String bytesToHex(byte[] b) {
+		char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+				'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+		StringBuffer buf = new StringBuffer();
+		for (int j=0; j<b.length; j++) {
+			buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
+			buf.append(hexDigit[b[j] & 0x0f]);
+		}
+		return buf.toString();
+	}
 }

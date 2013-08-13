@@ -6,7 +6,6 @@ public class DspaceKeys implements IDspaceKeys {
 
 	private String publicKey;
 	private String privateKey;
-	private String digestKey;
 	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.dspace.service.impl.IDspaceKeys#getPublicKey()
@@ -35,19 +34,5 @@ public class DspaceKeys implements IDspaceKeys {
 	@Override
 	public void setPrivateKey(String privateKey) {
 		this.privateKey = privateKey;
-	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.dspace.service.impl.IDspaceKeys#getDigestKey()
-	 */
-	@Override
-	public String getDigestKey() {
-		return digestKey;
-	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.dspace.service.impl.IDspaceKeys#setDigestKey(java.lang.String)
-	 */
-	@Override
-	public void setDigestKey(String digestKey) {
-		this.digestKey = digestKey;
 	}
 }
