@@ -91,7 +91,6 @@ public class CCCollaboratorController {
 					 setValue(user);
 				} catch (QuadrigaStorageException e) {
 					logger.error("",e);
-					e.printStackTrace();
 				}
 		    }
 		    });
