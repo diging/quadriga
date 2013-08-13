@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dspace.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
 
@@ -30,6 +31,7 @@ public interface IDspaceManager{
 	/**
 	 * Get all the communities available for the given user
 	 * 
+	 * @param dspaceKeys	The Dspace Access keys used by the user.
 	 * @param sUserName		The dspace username of the user.
 	 * @param sPassword		The corresponding dspace password of the user
 	 * @return				List of communities retrieved from Dspace.
@@ -40,6 +42,7 @@ public interface IDspaceManager{
 	/**
 	 * Get all the collections available for the given user
 	 * 
+	 * @param dspaceKeys		The Dspace Access keys used by the user.
 	 * @param sUserName			The dspace username of the user.
 	 * @param sPassword			The corresponding dspace password of the user
 	 * @param sCommunityId		The community id for which the list of collections are to be fetched.
@@ -58,6 +61,7 @@ public interface IDspaceManager{
 	/**
 	 * Get all bitstreams within an item
 	 * 
+	 * @param dspaceKeys		The Dspace Access keys used by the user.
 	 * @param sUserName			The dspace username of the user.
 	 * @param sPassword			The corresponding dspace password of the user.
 	 * @param sCollectionId		The collection id of the collection to which the item and bitstream belongs to.
@@ -157,6 +161,7 @@ public interface IDspaceManager{
 	 * @param workspaceid					The id of the workspace to which the bitstream(s) belong to.
 	 * @param quadrigaUsername				The quadriga userid of the user who is trying to update the bitstream references.
 	 * @param dspaceUsername				The dspace username supplied by the user. This username will be used to connect to the dspace server.
+	 * @param dspaceKeys					The Dspace Access keys used by the user.
 	 * @param password						The dspace password supplied by the user. This password will be used to authenticate the user with the dspace server.
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
@@ -224,5 +229,18 @@ public interface IDspaceManager{
 	 */
 	public abstract IDspaceKeys getMaskedDspaceKeys(String username)
 			throws QuadrigaStorageException;
+
+	/**
+	 * Check whether the user has access to the list of bitstreams in Dspace.
+	 *  
+	 * @param bitstreams		The list of bitstreams which are to be tested if the user has access.
+	 * @param dspaceKeys		The Dspace Access keys used by the user.
+	 * @param username			The dspace username of the user.
+	 * @param password			The corresponding dspace password of the user.
+	 * 
+	 * @return
+	 * @throws QuadrigaException 
+	 */
+	public abstract List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String username, String password) throws QuadrigaException;
 
 }

@@ -102,15 +102,6 @@
 		});
 		
 	});
-	
-	$(document).ready(function() {
-		activeTable = $('.dataTable').dataTable({
-			"bJQueryUI" : true,
-			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false,
-			"iDisplayLength": 3
-		});
-	});
 </script>
 <table style="width:100%">
   <tr>
@@ -238,23 +229,20 @@ $(document).ready(function(){
 	<div id="dialog-message" title="Synchronization" style="display:none">
     Please check after few minutes. Data will be synced with Dspace.
 </div>
-	<font size="2"><input type="submit" value="Sync with Dspace" id="dspaceSync">
-	<input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font> 
 	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
-		<table  cellpadding="0" cellspacing="0" border="0"
-			class="display dataTable" width="100%">
-			<thead>
-				<tr>
-					<th></th>
+	<font size="2"><input type="submit" value="Sync with Dspace" id="dspaceSync" />
+	<input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font> 
+		<br><br>
+		<table border="1">
+				<tr bgcolor="#C3C3C1">
+					<th ></th>
 					<th>Community</th>
 					<th>Collection</th>
 					<th>Item</th>
 					<th>File</th>
 				</tr>
-			</thead>
-			<tbody>
 				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
-					<tr>
+					<tr bgcolor="#E0F0FF">
 						<td><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}"></td>
 						<td><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></td>
 						<td><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></td>
@@ -262,16 +250,6 @@ $(document).ready(function(){
 						<td><font size="1"><c:out value="${bitstream.name}"></c:out></font></td>
 					</tr>
 				</c:forEach>
-			</tbody>
-			<tfoot>
-				<tr>
-					<th></th>
-					<th>Community</th>
-					<th>Collection</th>
-					<th>Item</th>
-					<th>File</th>
-				</tr>
-			</tfoot>
 		</table>
 		</form>
 	</c:when>
@@ -279,7 +257,7 @@ $(document).ready(function(){
 					Workspace does not contain any files from dspace !
 				</c:otherwise>
 </c:choose>
-    </td>
+
     <!-- Display collaborators -->
     <td style="width:10%"> 
     <c:if test="${not empty workspacedetails.collaborators}">

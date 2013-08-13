@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -377,32 +378,32 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, IDspaceKeys dspaceKeys,  String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException, QuadrigaException
+	public void updateDspaceMetadata(String workspaceid, String quadrigaUsername, IDspaceKeys dspaceKeys, String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException, QuadrigaException
 	{
 
 		HashSet<String> reloadedCollectionIds = new HashSet<String>();
 
 		//Reload all the communities by making only one call to dspace
 		try {
-			getProxyCommunityManager().getCommunity(null, false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password);
+			proxyCommunityManager.getCommunity(null, false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password);
 			for(IBitStream bitstream : getDbconnectionManager().getBitStreamReferences(workspaceid, quadrigaUsername))
 			{
-				ICommunity community = getProxyCommunityManager().getCommunity(bitstream.getCommunityid(), true, null, null, null, null,null);
+				ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, null, null, null, null,null);
 				ICollection collection = null;
 
 				if(reloadedCollectionIds.contains(bitstream.getCollectionid()))
 				{
 					//Collection has been reloaded already
-					collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), true, null, null, null, null, null, null);
+					collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, null, null, null, null, null, null);
 				}
 				else
 				{
 					//This is the first call to reload the collection
-					collection = getProxyCommunityManager().getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password, bitstream.getCommunityid());
+					collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password, bitstream.getCommunityid());
 					reloadedCollectionIds.add(bitstream.getCollectionid());
 				}
 
-				IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(this.getDbconnectionManager().getDataSource(), community, collection, null, bitstream, quadrigaUsername);
+				IDspaceUpdateManager dspaceUpdateManager = new DspaceUpdateManager(this.dbconnectionManager.getDataSource(), community, collection, null, bitstream, quadrigaUsername);
 				Thread bitstreamUpdateThread = new Thread(dspaceUpdateManager);
 				bitstreamUpdateThread.start();
 			}
@@ -507,6 +508,40 @@ public class DspaceManager implements IDspaceManager{
 		return SUCCESS;
 	}
 
+	@Override
+	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException
+	{
+		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
+		System.out.println("Inside method.....");
+
+		try
+		{
+			for(IBitStream bitstream: bitstreams)
+			{
+				//TODO:Check access rights of bitstream
+				ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+				if(community != null)
+				{
+					//The user can access the community
+					//TODO: Check access for collection
+					System.out.print(community.getName());
+					ICollection collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, community.getId());
+					if(collection !=null)
+					{
+						if(collection.getName()!=null)
+						{
+							//User has access to the collection and the collection is loaded from dspace.
+							//TODO: Check access for item
+							IItem item = proxyCommunityManager.getItem(collection.getId(), bitstream.getItemid());
+						}
+					}
+				}
+			}
+		} catch (NoSuchAlgorithmException e) {
+			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
+		}
+		return checkedBitStreams;
+	}
 
 	/**
 	 * This method is used to load the Dspace server certificate during the start of the application.

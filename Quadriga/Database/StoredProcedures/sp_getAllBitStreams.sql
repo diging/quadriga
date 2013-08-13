@@ -30,7 +30,7 @@ BEGIN
 
 		THEN 
 			
-			SELECT com.name as Community, col.name as Collection, i.name as Item, b.name as Bitstream, b.bitstreamid as Bitstreamid 
+			SELECT com.communityid as Communityid, com.name as Community, col.collectionid as Collectionid, col.name as Collection, i.itemid as Itemid, i.name as Item, b.bitstreamid as Bitstreamid, b.name as Bitstream 
 			FROM tbl_dspace_bitstream AS b, 
 			tbl_dspace_community as com,
 			tbl_dspace_collection as col,
