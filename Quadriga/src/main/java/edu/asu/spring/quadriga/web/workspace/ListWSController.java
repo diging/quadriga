@@ -68,6 +68,16 @@ public class ListWSController
 	@Autowired
 	private IDspaceKeysFactory dspaceKeysFactory;
 
+	public IDspaceKeysFactory getDspaceKeysFactory() {
+		return dspaceKeysFactory;
+	}
+
+
+	public void setDspaceKeysFactory(IDspaceKeysFactory dspaceKeysFactory) {
+		this.dspaceKeysFactory = dspaceKeysFactory;
+	}
+
+
 	public IDspaceManager getDspaceManager() {
 		return dspaceManager;
 	}
@@ -107,7 +117,7 @@ public class ListWSController
 	public ModelAndView addDspaceKeysRequestForm(Principal principal) throws QuadrigaStorageException
 	{
 		this.dspaceKeys = dspaceManager.getMaskedDspaceKeys(principal.getName());
-		ModelAndView model = new ModelAndView("/auth/workbench/keys","command",dspaceKeysFactory.createDspaceKeysObject());
+		ModelAndView model = new ModelAndView("/auth/workbench/keys","command",getDspaceKeysFactory().createDspaceKeysObject());
 		model.addObject("dspaceKeys", dspaceKeys);
 
 		return model;
