@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.db.sql.DBConnectionNetworkManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -123,6 +122,23 @@ public class ListWSManager implements IListWSManager
 		workspace = dbConnect.getWorkspaceDetails(workspaceId,username);
 		workspace.setBitstreams(dbConnect.getBitStreams(workspaceId, username));
 		return workspace;
+	}
+	
+	
+	/**
+	 * This method get the workspace name for the workspace id.
+	 * @param   workspaceId
+	 * @return  workspacename - String object
+	 * @throws  QuadrigaStorageException
+	 * @author  Lohith Dwaraka
+	 * @throws QuadrigaAccessException 
+	 */
+	@Override
+	public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException
+	{
+		String workspacename;
+		workspacename = dbConnect.getWorkspaceName(workspaceId);
+		return workspacename;
 	}
 	
 	@Override

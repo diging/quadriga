@@ -187,8 +187,8 @@ public class DBConnectionEditorManager implements IDBConnectionEditorManager {
 					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
 					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
 					network.setProjectName(project.getName());
-					IWorkSpace workspace=wsManager.getWorkspaceDetails(network.getWorkspaceid(), user.getUserName());
-					network.setWorkspaceName(workspace.getName());
+					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
+					network.setWorkspaceName(workspaceName);
 					networkList.add(network);
 				} 
 			}

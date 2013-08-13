@@ -576,4 +576,64 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 		}
 		return networkList;		
 	}
+	
+	/**
+	 *  Method gets the Workspace name using workspace id                    
+	 * 
+	 * @returns         return dictonary name
+	 * 
+	 * @throws			SQLException
+	 *                     
+	 * @author          Lohith Dwaraka
+	 * 
+	 */
+	@Override
+	public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String workspaceName="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_WORKSPACE_NAME  + "(?,?)";
+
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, workspaceId);
+			logger.info("workspace id:"+workspaceId);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					workspaceName =resultSet.getString(1);
+				} 
+			}
+			//String errmsg = sqlStatement.getString(2);
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+		return workspaceName;
+
+	}
 }
