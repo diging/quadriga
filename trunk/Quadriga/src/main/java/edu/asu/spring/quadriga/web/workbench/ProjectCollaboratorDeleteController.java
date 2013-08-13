@@ -86,17 +86,41 @@ public class ProjectCollaboratorDeleteController {
 				setValue(collaboratorList);
 			} 	
 		}); 
+		
+		binder.registerCustomEditor(List.class, "collaboratorRoleList", new PropertyEditorSupport(){
+			
+			@Override
+			public void setAsText(String text) {
+								
+				String[] roleIds = text.split(",");
+				
+				List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+				for(String role:roleIds){
+					
+					ICollaboratorRole collabrole = collaboratorRoleManager.getProjectCollaboratorRoleById(role.trim());
+					collaboratorRoles.add(collabrole);
+				}
+				
+				setValue(collaboratorRoles);
+			}
+		});
+			
 	}
-	
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/deletecollaborator", method = RequestMethod.POST)
 	public String deleteCollaborators(@PathVariable("projectid") String projectid,
 	@ModelAttribute("collaboratorBackingBean") CollaboratorsBackBean collaboratorBackingBean, BindingResult result,
 	Principal principal, Model model ) throws QuadrigaStorageException {
 		
+		List<ICollaborator> collaborators = collaboratorBackingBean.getCollaboratorList();
+		List<ICollaboratorRole> roles = collaboratorBackingBean.getCollaboratorRoleList();
 		
-	System.out.println("--------collaboratorList object "+collaboratorBackingBean.getCollaboratorList());
-	
+		for(ICollaborator collaborator:collaborators)
+		{
+			String userName = collaborator.getUserObj().getUserName();
+			String errmsg = modifyProjectCollabManager.deleteCollaboratorRequest(userName, projectid);
+		}
+		
 		
 		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
 		model.addAttribute("collaboratingUsers", collaboratingUsers);
@@ -179,29 +203,6 @@ public class ProjectCollaboratorDeleteController {
 		return "redirect:/auth/workbench/{projectid}";
 		
 	}*/
-	
-	@InitBinder
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) throws Exception {
-		
-		binder.registerCustomEditor(List.class, "collaboratorList", new PropertyEditorSupport() {
-
-			@Override
-			public void setAsText(String text) {
-
-				String[] roleIds = text.split(",");
-//				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
-//				for (String roleId : roleIds) {
-//					ICollaboratorRole role = collaboratorRoleManager.getProjectCollaboratorRoleById(roleId.trim());
-//					roles.add(role);
-//				}
-//				setValue(roles);
-				System.out.println(text);
-			} 	
-		}); 
-	}
-
-	
-	
 	
 	@RequestMapping(value = "auth/workbench/{projectid}/showDeleteCollaborators", method = RequestMethod.GET)
 	public String displayDeleteCollaborator(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException{

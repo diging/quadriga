@@ -188,7 +188,6 @@ public class DictionaryCollaboratorController {
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
 			Principal principal	)
 	{
-		System.out.println("----------------in controller");
 		ModelAndView model = null;
 		String errmsg = "";
 		String collaboratorUser = collaborator.getUserObj().getUserName();

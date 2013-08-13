@@ -31,9 +31,9 @@ public class CollaboratorValidator implements Validator {
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "userObj", "collaborator_user.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "collaboratorRoles", "collaborator_roles.required");
-		
 		if(err.getFieldError("userObj")==null)
 		{
+
 		   validateUserName(userName,err);
 		}
 		
@@ -45,14 +45,18 @@ public class CollaboratorValidator implements Validator {
 	
 	public void validateUserName(String UserName,Errors err)
 	{
-		if(UserName == null)
+
+		if(UserName == null){
 			err.rejectValue("userObj", "collaborator_user_selection.required");
+		}
 	}
 	
 	public void validateCollaboratorRoles(List<ICollaboratorRole> roles,Errors err)
 	{
-		if(roles == null)
-			err.rejectValue("collaboratorRoles", "collaborator_roles_selection.required");
+
+		if(roles == null){
+
+			err.rejectValue("collaboratorRoles", "collaborator_roles_selection.required");}
 	}
 
 }
