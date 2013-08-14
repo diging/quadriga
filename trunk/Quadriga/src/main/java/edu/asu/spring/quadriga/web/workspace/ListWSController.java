@@ -171,13 +171,14 @@ public class ListWSController
 		
 		//Check bitstream access in dspace.
 		//TODO: Implement check for dspace keys and Username/password 
-//		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
-//		List<IBitStream> bitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
-//		System.out.println("Outside method....");
-//		for(IBitStream bitstream: bitstreams)
-//		{
-//			System.out.println(bitstream.getName());
-//		}
+		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
+		List<IBitStream> bitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
+		System.out.println("Outside method....");
+		for(IBitStream bitstream: bitstreams)
+		{
+			System.out.println(bitstream.getCommunityName());
+		}
+		workspace.setBitstreams(bitstreams);
 
 		//retrieve the collaborators associated with the workspace
 		collaboratorList = getWsCollabManager().getWorkspaceCollaborators(workspaceid);

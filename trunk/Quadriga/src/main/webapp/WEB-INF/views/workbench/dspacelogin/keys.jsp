@@ -25,7 +25,7 @@
 		Existing Public Key ends in: ${dspaceKeys.privateKey }
 		</c:when>
 						<c:otherwise>
-		No Public Key stored in the system !
+		No Private Key stored in the system !
 		</c:otherwise>
 					</c:choose></td>
 			</tr>

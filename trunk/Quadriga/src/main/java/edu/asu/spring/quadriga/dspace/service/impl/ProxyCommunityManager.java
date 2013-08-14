@@ -161,20 +161,20 @@ public class ProxyCommunityManager implements ICommunityManager {
 		if(fromCache)
 		{
 			//Check if a request for collections has been made to Dspace
-			if(this.collections != null)
-			{
-				for(ICollection collection : this.collections)
-				{
-					if(collection.getId().equals(sCollectionId))
-					{
-						return collection;
-					}
-				}
-			}
-			else
-			{
+//			if(this.collections != null)
+//			{
+//				for(ICollection collection : this.collections)
+//				{
+//					if(collection.getId().equals(sCollectionId))
+//					{
+//						return collection;
+//					}
+//				}
+//			}
+//			else
+//			{
 				this.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
-			}
+//			}
 		}
 		else
 		{
