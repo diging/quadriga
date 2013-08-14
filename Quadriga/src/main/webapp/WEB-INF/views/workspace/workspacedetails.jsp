@@ -251,7 +251,7 @@ $(document).ready(function(){
 				</tr>
 				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
 					<tr bgcolor="#E0F0FF">
-						<td><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}"></td>
+						<td><c:choose><c:when test="${not((bitstream.name == 'Checking BitStream Access...') or (bitstream.name == 'No Access to File')) }"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}"></c:when></c:choose></td>
 						<td><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></td>
 						<td><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></td>
 						<td><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></td>
