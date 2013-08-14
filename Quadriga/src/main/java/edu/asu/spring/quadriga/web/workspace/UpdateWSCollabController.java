@@ -1,13 +1,19 @@
 package edu.asu.spring.quadriga.web.workspace;
 
+import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +29,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 
 @Controller
 public class UpdateWSCollabController 
@@ -39,6 +46,28 @@ public class UpdateWSCollabController
 	@Autowired
 	private IModifyWSCollabManager wsModifyCollabManager;
 	
+	@Autowired
+	private CollaboratorFormValidator validator;
+	
+	@InitBinder
+	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
+		
+		validateBinder.setValidator(validator);
+		
+		binder.registerCustomEditor(List.class, "collaborators.collaboratorRoles", new PropertyEditorSupport() {
+
+			@Override
+			public void setAsText(String text) {
+				String[] roleIds = text.split(",");
+				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				for (String roleId : roleIds) {
+					ICollaboratorRole role = collaboratorRoleManager.getWSCollaboratorRoleByDBId(roleId);
+					roles.add(role);
+				}
+				setValue(roles);
+			} 	
+		}); 
+	}
 	
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.GET)
 	public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid")String workspaceid) throws QuadrigaStorageException
