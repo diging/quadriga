@@ -99,8 +99,16 @@
 		    	$("#password").removeAttr("disabled");
 		    	$("#password").attr("placeholder","Password");
 		    }
+		});		
+	});
+	
+	$(document).ready(function() {
+		activeTable = $('.dataTable').dataTable({
+			"bJQueryUI" : true,
+			"sPaginationType" : "full_numbers",
+			"bAutoWidth" : false,
+			"iDisplayLength": 3
 		});
-		
 	});
 </script>
 <table style="width:100%">
