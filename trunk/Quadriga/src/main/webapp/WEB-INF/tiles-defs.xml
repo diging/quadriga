@@ -356,6 +356,12 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/transferworkspaceowner.jsp" />
 	</definition>
+		<definition name="auth/workbench/workspace/updatecollaborators"
+		extends="base.definition.workbench">
+		<put-attribute name="title" value="Update Collaborators" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/workspace/updatecollaborators.jsp" />
+	</definition>
 
 
 	<definition name="auth/workbench/project/adddictionaries"

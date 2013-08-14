@@ -34,6 +34,7 @@
 		<ul> 
 		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/addcollaborators">Add Collaborator</a></li>
 		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletecollaborators">Delete Collaborator</a></li>
+		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/updatecollaborators">Update Collaborator</a></li>
 		</ul>
 		</li>
 		<li><a href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/transferworkspaceowner">
