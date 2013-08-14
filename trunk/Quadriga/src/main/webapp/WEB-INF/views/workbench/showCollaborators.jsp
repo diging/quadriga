@@ -67,7 +67,7 @@ $(document).ready(function() {
  	<c:if test="${not empty nonCollaboratingUsers}">
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
-	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
+	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
 	<form:errors path="userObj" cssClass="error"></form:errors>  
 	
@@ -96,7 +96,7 @@ $(document).ready(function() {
 		<c:forEach var="collab" items="${collaboratingUsers}">
 			<tr>
 			 <td><input type="checkbox" name="selected" value='<c:out value="${collab.userObj.userName}"></c:out>'/></td>
-			 <td><c:out value="${collab.userObj.userName}"></c:out></td>
+			 <td><c:out value="${collab.userObj.name}"></c:out></td>
 			 <td>
 				<c:forEach var="roles" items="${collab.collaboratorRoles}">
 			 	<c:out value="${roles.displayName}"></c:out> ||

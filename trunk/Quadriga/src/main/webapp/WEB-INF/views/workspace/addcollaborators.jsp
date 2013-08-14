@@ -45,7 +45,7 @@ $(document).ready(function() {
 		<c:if test="${not empty noncollabusers}">
 		<form:select path="userObj" id="userName">
 	    	<form:option value="NONE" label="--- Select ---"/>
-	   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="userName" /> 
+	   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="name" /> 
 		</form:select>
 		<form:errors path="userObj" cssClass="error"></form:errors>
 		<br>
@@ -72,7 +72,7 @@ $(document).ready(function() {
 		<tbody>
 	<c:forEach var="collab" items="${collaboratingusers}">
 		<tr>
-		 <td><c:out value="${collab.userObj.userName}"></c:out></td>
+		 <td><c:out value="${collab.userObj.name}"></c:out></td>
 		 <td>
 			<c:forEach var="roles" items="${collab.collaboratorRoles}">
 		 	<c:out value="${roles.displayName}"></c:out> ||

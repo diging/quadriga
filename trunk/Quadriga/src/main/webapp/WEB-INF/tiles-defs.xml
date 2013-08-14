@@ -5,6 +5,29 @@
 <tiles-definitions>
 
 	<!-- Base definitions -->
+	<definition name="base.definition.empty" template="/WEB-INF/tiles/layouts/skeleton_empty.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="currentPage" value="home" />
+	</definition>
+	
+	<definition name="base.definition.nonav"
+		template="/WEB-INF/tiles/layouts/skeleton_nomenu.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation"
+			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
+		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="currentPage" value="home" />
+	</definition>
+	
+	<definition name="base.definition.leftnav" template="/WEB-INF/tiles/layouts/skeleton_left.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation"
+			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
+		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="left-navigation" value="" />
+		<put-attribute name="currentPage" value="home" />
+	</definition>
+	
 	<definition name="base.definition" template="/WEB-INF/tiles/layouts/skeleton.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
@@ -14,37 +37,7 @@
 		<put-attribute name="right-sub-navigation" value="" />
 		<put-attribute name="currentPage" value="home" />
 	</definition>
-	<definition name="base.definition.leftrightnav"
-		template="/WEB-INF/tiles/layouts/skeleton_leftright.jsp">
-		<put-attribute name="title" value="" />
-		<put-attribute name="navigation"
-			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
-		<put-attribute name="footer" value="/tiles/credits.jsp" />
-		<put-attribute name="left-navigation" value="" />
-		<put-attribute name="right-navigation" value="" />
-		<put-attribute name="currentPage" value="home" />
-	</definition>
-	<definition name="base.definition.leftnav" template="/WEB-INF/tiles/layouts/skeleton_left.jsp">
-		<put-attribute name="title" value="" />
-		<put-attribute name="navigation"
-			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
-		<put-attribute name="footer" value="/tiles/credits.jsp" />
-		<put-attribute name="left-navigation" value="" />
-		<put-attribute name="currentPage" value="home" />
-	</definition>
-	<definition name="base.definition.nonav"
-		template="/WEB-INF/tiles/layouts/skeleton_nomenu.jsp">
-		<put-attribute name="title" value="" />
-		<put-attribute name="navigation"
-			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
-		<put-attribute name="footer" value="/tiles/credits.jsp" />
-		<put-attribute name="currentPage" value="home" />
-	</definition>
 
-	<definition name="base.definition.empty" template="/WEB-INF/tiles/layouts/skeleton_empty.jsp">
-		<put-attribute name="title" value="" />
-		<put-attribute name="currentPage" value="home" />
-	</definition>
 
 	<!-- public pages -->
 	<definition name="login" extends="base.definition">
@@ -63,14 +56,12 @@
 		<put-attribute name="content" value="/WEB-INF/views/inactiveUser.jsp" />
 	</definition>
 
-
 	<definition name="forbidden" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
 		<put-attribute name="content" value="/WEB-INF/views/forbidden.jsp" />
 	</definition>
 
 	<!-- Request pages -->
-
 	<definition name="requests/accountRequested" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Account Request" />
 		<put-attribute name="content"
@@ -82,11 +73,13 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/users/requestAccountError.jsp" />
 	</definition>
+	
 	<!-- ConceptCollection pages -->
 	<definition name="base.definition.conceptcollections"
 		extends="base.definition">
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
+	
 	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
@@ -121,9 +114,15 @@
 	<definition name="base.definition.workbench" extends="base.definition">
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
-	<definition name="base.definition.workbench.nav" extends="base.definition.leftrightnav">
+	
+	<definition name="base.definition.workbench.nav" extends="base.definition.leftnav">
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
+	
+		<definition name="base.definition.workbench.nonav" extends="base.definition.nonav">
+		<put-attribute name="currentPage" value="workbench" />
+	</definition>
+	
 	<definition name="auth/workbench" extends="base.definition.workbench">
 		<put-attribute name="title" value="Quadriga Workbench" />
 		<put-attribute name="sub-navigation"
@@ -132,7 +131,7 @@
 			value="/WEB-INF/views/workbench/workbench.jsp" />
 	</definition>
 	<!-- changing the skeleton to have left navigation -->
-	<definition name="auth/workbench/project" extends="base.definition.leftnav">
+	<definition name="auth/workbench/project" extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga - Project Details" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-workspace.jsp" />
@@ -219,25 +218,25 @@
 
 	<!-- Workspace pages -->
 	<definition name="auth/workbench/workspace/communities"
-		extends="base.definition.nonav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga - Communities" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/communities.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/community"
-		extends="base.definition.nonav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title"
 			value="Quadriga - Collections in Community" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/collections.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/community/collection"
-		extends="base.definition.nonav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga - Items in Collection" />
 		<put-attribute name="content" value="/WEB-INF/views/workspace/items.jsp" />
 	</definition>
 	<definition name="auth/workbench/workspace/community/collection/item"
-		extends="base.definition.nonav">
+		extends="base.definition.workbench.nonav">
 		<put-attribute name="title" value="Quadriga - ByteStreams in Item" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/bitstreams.jsp" />
@@ -473,11 +472,8 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/deleteconceptcollection.jsp" />
 	</definition>
-
-
-	<!-- Workspace will have only left navigation -->
 	<definition name="auth/workbench/workspace/workspacedetails"
-		extends="base.definition.leftnav">
+		extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga - Workspace Details" />
 		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-workspacecontent.jsp" />

@@ -94,6 +94,7 @@ public class UpdateWSCollabController
 		{
 			collaborator = new ModifyCollaborator();
 			collaborator.setUserName(collab.getUserObj().getUserName());
+			collaborator.setName(collab.getUserObj().getName());
 			collaborator.setCollaboratorRoles(collab.getCollaboratorRoles());
 			collaboratorList.add(collaborator);
 		}

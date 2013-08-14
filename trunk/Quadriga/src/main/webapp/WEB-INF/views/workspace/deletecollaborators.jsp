@@ -119,7 +119,7 @@ td {
 							<td><input type="checkbox" name="wscollabchecked"
 								value="${collab.userObj.userName}"></td>
 							<td><font size="3"> <c:out
-										value="${collab.userObj.userName}"></c:out>
+										value="${collab.userObj.name}"></c:out>
 							</font></td>
 							<td><font size="3"> <c:forEach var="roles"
 										items="${collab.collaboratorRoles}">
