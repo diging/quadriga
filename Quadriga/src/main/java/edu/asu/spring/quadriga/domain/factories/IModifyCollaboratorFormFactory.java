@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.backingbean.ModifyCollaboratorForm;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 
 public interface IModifyCollaboratorFormFactory {
 

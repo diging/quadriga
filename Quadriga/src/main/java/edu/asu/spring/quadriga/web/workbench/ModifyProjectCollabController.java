@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.backingbean.ModifyCollaborator;
-import edu.asu.spring.quadriga.backingbean.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
@@ -30,6 +28,8 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.impl.workbench.ModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 
 @Controller
 public class ModifyProjectCollabController 
