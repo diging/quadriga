@@ -31,6 +31,10 @@ function submitClick(id){
 	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
 }
 
+function submitCancel(){
+	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/updatecollaborators';
+}
+
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
@@ -47,8 +51,12 @@ function submitClick(id){
 <c:choose> 
     <c:when test="${success == '0'}">
 		<c:if test="${not empty collaboratorform.collaborators}">
+			<header>
+			<h2>Modify project collaborator roles</h2>
 			<span class="byline">Select roles for the collaborator:</span>
+			</header>
 			<input type="submit" value='Update' name="updateprojcollab">
+			<input type="button" onClick="submitCancel();" value='Cancel'>
 			<table style="width: 100%" class="display dataTable"
 				id="projcollablist">
 				<thead>
@@ -79,6 +87,14 @@ function submitClick(id){
 					</c:forEach>
 				</tbody>
 			</table>
+		</c:if>
+		<c:if test="${empty collaboratorform.collaborators}">
+		  <span class="byline">No collaborators associated to project</span>
+		   <ul>
+		  		<li><input type="button"
+			onClick="submitClick(this.id);"
+			value='Back'></li>
+	</ul>
 		</c:if>
 		 </c:when>
 		     <c:otherwise> 
