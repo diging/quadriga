@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.backingbean;
+package edu.asu.spring.quadriga.web.workbench.backing;
 
 import java.util.List;
 

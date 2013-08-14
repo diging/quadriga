@@ -7,9 +7,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.backingbean.ModifyCollaborator;
-import edu.asu.spring.quadriga.backingbean.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 @Service
 public class CollaboratorFormValidator implements Validator {
 
