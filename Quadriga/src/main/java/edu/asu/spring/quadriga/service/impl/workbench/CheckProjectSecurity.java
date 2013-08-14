@@ -154,4 +154,24 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		}
 		return chkAccess;
 	}
+	
+	/**
+	 * This method checks if the user is either a project owner or a quadriga admin
+	 * @param userName
+	 * @return boolean - TRUE if the user is either a project owner or a quadriga admin else FALSE
+	 * @throws QuadrigaStorageException 
+	 * @author kiranbatna
+	 */
+	@Override
+	public boolean checkProjectOwnerEditorAccess(String userName,String projectId) throws QuadrigaStorageException
+	{
+		boolean chkAccess;
+		
+		//initialize chkAccess variable
+		chkAccess = false;
+		
+		//check if the user is project owner
+		chkAccess = dbConnect.chkProjectOwnerEditorRole(userName, projectId);
+		return chkAccess;
+	}
 }

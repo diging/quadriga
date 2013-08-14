@@ -62,7 +62,7 @@ public class UserRestController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "rest/userdetails", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/user", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String getUserDetails( ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
