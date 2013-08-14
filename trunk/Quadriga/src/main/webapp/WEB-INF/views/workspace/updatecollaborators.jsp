@@ -71,7 +71,7 @@ function submitClick(id){
 										
 							<td align="left"><font size="3"> <form:checkboxes
 										path="collaborators[${status.index}].collaboratorRoles"
-										class="roles" items="${wscollabroles}" itemValue="roleid"
+										class="roles" items="${wscollabroles}" itemValue="roleDBid"
 										itemLabel="displayName" /></font>
 							<form:errors path="collaborators[${status.index}].collaboratorRoles" cssClass="error"></form:errors>
 							</td>			
