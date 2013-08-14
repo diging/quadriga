@@ -18,4 +18,6 @@ public interface IModifyProjectManager {
 			String oldOwner, String newOwner, String collabRole)
 			throws QuadrigaStorageException;
 
+	public abstract String assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException;
+
 }

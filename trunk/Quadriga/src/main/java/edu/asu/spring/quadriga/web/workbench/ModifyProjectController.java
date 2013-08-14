@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +27,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RetrievalMethod;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
@@ -35,14 +38,17 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.validator.ProjectValidator;
 import edu.asu.spring.quadriga.web.StringConstants;
+import edu.asu.spring.quadriga.web.rest.NetworkRestController;
 
 @Controller
 public class ModifyProjectController 
 {
 	@Autowired
 	IModifyProjectManager projectManager;
+	
 	
 	@Autowired
 	IRetrieveProjectManager retrieveProjectManager;
@@ -59,11 +65,18 @@ public class ModifyProjectController
 	@Autowired
 	ProjectValidator validator;
 	
+
+	@Autowired
+	IListWSManager wsManager;
+	
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(ModifyProjectController.class);
 
 	/**
 	 * Attach the custom validator to the Spring context
@@ -288,5 +301,47 @@ public class ModifyProjectController
 		{
 			throw new QuadrigaAccessException();
 		}
+	}
+	
+	/**
+	 * This controller function would assign editor roles to project owner
+	 * @param projectId
+	 * @param model
+	 * @param principal
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
+	@RequestMapping(value = "auth/workbench/assignownereditor/{projectid}", method = RequestMethod.GET)
+	public String assignOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		IUser user = userManager.getUserDetails(principal.getName());
+		logger.info("Came in here " + projectId);
+		String userName =user.getUserName();
+		String msg=projectManager.assignEditorToOwner(projectId, userName);
+		IProject project = retrieveProjectManager.getProjectDetails(projectId);
+		
+		//retrieve all the workspaces associated with the project
+		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
+		if(projectSecurity.checkProjectOwner(userName, projectId)){
+			model.addAttribute("owner", 1);
+		}else{
+			model.addAttribute("owner", 0);
+		}
+		if(projectSecurity.checkProjectOwnerEditorAccess(userName, projectId)){
+			model.addAttribute("editoraccess", 1);
+		}else{
+			model.addAttribute("editoraccess", 0);
+		}
+		model.addAttribute("project", project);
+		model.addAttribute("workspaceList",workspaceList);
+		if(msg.equals("")){
+			model.addAttribute("AssignEditorSuccess",1);
+		}else if(msg.equals("Owner already assigned as owner")){
+			model.addAttribute("AssignEditorSuccess",2);
+		}else{
+			logger.error("Failure " +msg);
+			model.addAttribute("AssignEditorSuccess",0);
+		}
+		return "auth/workbench/project";
 	}
 }

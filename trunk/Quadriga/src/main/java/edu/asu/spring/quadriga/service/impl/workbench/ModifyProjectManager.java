@@ -90,4 +90,17 @@ public class ModifyProjectManager implements IModifyProjectManager
 		dbConnect.transferProjectOwnerRequest(projectId, oldOwner, newOwner, collabRole);
 		
 	}
+	
+	/**
+	 * This method a the project ownership to another user
+	 * @param projectId
+	 * @param owner
+	 * @throws QuadrigaStorageException
+	 * @author Lohith Dwaraka
+	 */
+	@Override
+	public String assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
+		String errmsg = dbConnect.assignProjectOwnerEditor(projectId, owner);
+		return errmsg;
+	}
 }

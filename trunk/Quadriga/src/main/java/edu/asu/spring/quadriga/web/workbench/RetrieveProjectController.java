@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -24,6 +25,9 @@ public class RetrieveProjectController
 	
 	@Autowired 
 	IRetrieveProjectManager projectManager;
+	
+	@Autowired
+	ICheckProjectSecurity projectSecurity;
 	
 	@Autowired
 	IListWSManager wsManager;
@@ -84,7 +88,16 @@ public class RetrieveProjectController
 		
 		model.addAttribute("project", project);
 		model.addAttribute("workspaceList",workspaceList);
-		
+		if(projectSecurity.checkProjectOwner(userName, projectid)){
+			model.addAttribute("owner", 1);
+		}else{
+			model.addAttribute("owner", 0);
+		}
+		if(projectSecurity.checkProjectOwnerEditorAccess(userName, projectid)){
+			model.addAttribute("editoraccess", 1);
+		}else{
+			model.addAttribute("editoraccess", 0);
+		}
 		return "auth/workbench/project";
 	}
 }

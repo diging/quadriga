@@ -16,4 +16,7 @@ public interface ICheckProjectSecurity {
 	public abstract boolean checkCollabProjectAccess(String userName, String projectId,
 			String collaboratorRole) throws QuadrigaStorageException;
 
+	public abstract boolean checkProjectOwnerEditorAccess(String userName, String projectId)
+			throws QuadrigaStorageException;
+
 }
