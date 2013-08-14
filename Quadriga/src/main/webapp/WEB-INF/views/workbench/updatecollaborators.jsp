@@ -62,8 +62,8 @@ function submitClick(id){
 						items="${collaboratorform.collaborators}" varStatus="status">
 						<tr>
 							<td><font size="3">
-							<form:label path="collaborators[${status.index}].userName">
-							<c:out value="${collabuser.userName}"></c:out>
+							<form:label path="collaborators[${status.index}].name">
+							<c:out value="${collabuser.name}"></c:out>
 							</form:label>
 							</font>
 							<form:input path="collaborators[${status.index}].userName" id="collaborators[${status.index}].userName" type="hidden"/>

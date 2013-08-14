@@ -273,7 +273,7 @@ $(document).ready(function(){
     <ul class="collaborators">
 			<c:forEach var="wscollaborator" items="${workspacedetails.collaborators}">
 				<li>
-					<c:out value="${wscollaborator.userObj.userName}"></c:out>
+					<c:out value="${wscollaborator.userObj.name}"></c:out>
 				</li>
 			</c:forEach>
 		</ul>

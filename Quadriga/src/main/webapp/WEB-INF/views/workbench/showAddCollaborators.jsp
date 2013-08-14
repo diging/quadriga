@@ -45,7 +45,7 @@ function onSubmit(){
 <div class="ex">select collaborator</div>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
-	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
+	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
  	<form:errors path="userObj" cssClass="error"></form:errors>  
 	
@@ -72,7 +72,7 @@ function onSubmit(){
 	<tbody>
 	<c:forEach var="collab" items="${collaboratingUsers}">
 		<tr>
-		 <td><c:out value="${collab.userObj.userName}"></c:out></td>
+		 <td><c:out value="${collab.userObj.name}"></c:out></td>
 		 <td>
 			<c:forEach var="roles" items="${collab.collaboratorRoles}">
 		 	<c:out value="${roles.displayName}"></c:out> /
