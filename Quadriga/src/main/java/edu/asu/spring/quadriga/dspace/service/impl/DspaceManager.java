@@ -526,15 +526,34 @@ public class DspaceManager implements IDspaceManager{
 					//TODO: Check access for collection
 					System.out.print(community.getName());
 					ICollection collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, community.getId());
-					if(collection !=null)
+					if(collection!=null)
 					{
 						if(collection.getName()!=null)
 						{
 							//User has access to the collection and the collection is loaded from dspace.
 							//TODO: Check access for item
+							System.out.print(" -collection: "+collection.getName());
 							IItem item = proxyCommunityManager.getItem(collection.getId(), bitstream.getItemid());
-						}
-					}
+							if(item != null)
+							{
+								if(item.getName()!=null)
+								{
+									//User has access to the item and the item is loaded from dspace.
+									//TODO: Check access for bitstream
+									System.out.print(" -item: "+item.getName());
+									IBitStream dspaceBitstream = proxyCommunityManager.getBitStream(collection.getId(), item.getId(), bitstream.getId());
+									if(dspaceBitstream != null)
+									{
+										if(dspaceBitstream.getName() != null)
+										{
+											System.out.println(" -bitstream: "+dspaceBitstream.getName());
+											checkedBitStreams.add(bitstream);
+										}
+									}
+								} //End of if item name is null	
+							} //End of if item is null
+						} //End of if collection name is null
+					} //End of if collection is null
 				}
 			}
 		} catch (NoSuchAlgorithmException e) {
