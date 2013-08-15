@@ -50,7 +50,12 @@ BEGIN
 	
 	select distinct(workspaceid) from tbl_project_workspace 
 	where projectid in
-	( select projectid from tbl_project where projectowner =inusername));
+	( select projectid from tbl_project_editor where owner =inusername)
+	
+	UNION DISTINCT
+	
+	select distinct(workspaceid) from tbl_workspace_editor where owner =inusername);
+	
 	END IF;
 END$$
 DELIMITER ;
