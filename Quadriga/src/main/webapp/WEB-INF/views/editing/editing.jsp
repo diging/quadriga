@@ -76,8 +76,7 @@
 							<td width="15%" align="center"><input type=button
 								onClick="location.href=''" value='Visualize'></td>
 							<td width="15%" align="center"><input type=button
-								onClick="location.href=''" value='Approve'><input type=button
-								onClick="location.href=''" value='Reject'></td>
+								onClick="location.href=''" value='Assign'></td>
 						</tr>
 					</c:forEach>
 				</tbody>
