@@ -67,8 +67,8 @@
 							<c:when test="${editoraccess=='0' }">
 								<a
 									href="${pageContext.servletContext.contextPath}/auth/workbench/assignownereditor/${project.internalid}">
-									<input type="button" name="Get Owner Editor Role"
-									value="Get Owner Editor Role" />
+									<input type="button" name="Get Editor Role"
+									value="Get Editor Role" />
 								</a>
 							</c:when>
 						</c:choose>

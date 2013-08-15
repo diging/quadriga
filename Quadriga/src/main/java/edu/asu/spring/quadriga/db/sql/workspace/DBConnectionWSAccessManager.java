@@ -1,17 +1,24 @@
 package edu.asu.spring.quadriga.db.sql.workspace;
 
 import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
+import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public class DBConnectionWSAccessManager extends ADBConnectionManager  implements
 IDBConnectionWSAccessManager 
 {
+	private static final Logger logger = LoggerFactory.getLogger(DBConnectionProjectAccessManager.class);
+	
 	/**
 	 *  This method verifies if the given user is workspace owner
 	 *  @param  userName
@@ -63,4 +70,56 @@ IDBConnectionWSAccessManager
 
 	}
 
+	/**
+	 * Checks if Workspace owner has editor roles
+	 * @param userName
+	 * @param workspaceId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@Override
+	public boolean chkWorkspaceOwnerEditorRole(String userName,String workspaceId) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String result="";
+		CallableStatement sqlStatement;
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.CHECK_WORKSPACE_OWNER_EDITOR_ROLE + "(?,?,?)";
+
+		//get the connection
+		getConnection();
+
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, userName);
+			sqlStatement.setString(2, workspaceId);
+			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
+			sqlStatement.execute();
+
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					result = resultSet.getString(1);
+				}		
+			}
+			if(result.isEmpty()){
+				return false;
+			}else if(result.equals("1")){
+				return true;
+			}
+		}catch(SQLException e)
+		{
+			logger.info(" ",e);
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return false;
+
+	}
 }

@@ -315,7 +315,6 @@ public class ModifyProjectController
 	public String assignOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		IUser user = userManager.getUserDetails(principal.getName());
-		logger.info("Came in here " + projectId);
 		String userName =user.getUserName();
 		String msg=projectManager.assignEditorToOwner(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);

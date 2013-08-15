@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,7 @@ import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
@@ -55,9 +58,14 @@ public class ListWSController
 	@Autowired
 	private	IListWSManager wsManager;
 
+	private static final Logger logger = LoggerFactory.getLogger(ListWSController.class);
+	
 	@Autowired
 	private	IRetrieveWSCollabManager wsCollabManager;
 
+	@Autowired
+	ICheckWSSecurity workspaceSecurity;
+	
 	@Autowired
 	private IDspaceManager dspaceManager;
 
@@ -200,6 +208,16 @@ public class ListWSController
 			model.addAttribute("dspaceLogin", "true");
 		}
 
+		if(workspaceSecurity.checkWorkspaceOwner(userName, workspaceid)){
+			model.addAttribute("owner", 1);
+		}else{
+			model.addAttribute("owner", 0);
+		}
+		if(workspaceSecurity.checkWorkspaceOwnerEditorAccess(userName, workspaceid)){
+			model.addAttribute("editoraccess", 1);
+		}else{
+			model.addAttribute("editoraccess", 0);
+		}
 
 		return "auth/workbench/workspace/workspacedetails";
 	}
