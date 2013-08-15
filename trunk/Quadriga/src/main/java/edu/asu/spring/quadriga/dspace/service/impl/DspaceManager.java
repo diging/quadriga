@@ -527,6 +527,7 @@ public class DspaceManager implements IDspaceManager{
 			for(IBitStream bitstream: bitstreams)
 			{
 				boolean isloading = false;
+				IBitStream loadingBitStream = null;
 
 				//Check access rights for community
 				ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
@@ -535,6 +536,9 @@ public class DspaceManager implements IDspaceManager{
 					//The user can access the community
 					//Check access rights for collection
 					isloading = true;
+					loadingBitStream = new BitStream();
+					loadingBitStream.setCommunityName(bitstream.getCommunityName());
+					
 					ICollection collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, community.getId());
 					if(collection!=null)
 					{
@@ -576,17 +580,15 @@ public class DspaceManager implements IDspaceManager{
 					 * The collection/item/bitstream data is to be loaded from dspace. 
 					 * Separate threads are still working on loading them.
 					 */
-					IBitStream loadingBitStream = new BitStream();
 					loadingBitStream.setId(bitstream.getId());
 					loadingBitStream.setCommunityid(bitstream.getCommunityid());
 					loadingBitStream.setCollectionid(bitstream.getCollectionid());
 					loadingBitStream.setItemid(bitstream.getItemid());
 
 					//TODO: Put strings in the properties file.
-					loadingBitStream.setName("Checking BitStream Access...");
-					loadingBitStream.setCommunityName("Checking Community Access...");
 					loadingBitStream.setCollectionName("Checking Collection Access...");
 					loadingBitStream.setItemName("Checking Item Access...");
+					loadingBitStream.setName("Checking BitStream Access...");
 
 					checkedBitStreams.add(loadingBitStream);
 				}				

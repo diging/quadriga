@@ -69,6 +69,32 @@
 			}
 		
 	}
+	
+	$(document).ready(function() {
+
+		function getCollectionName() {
+			var divIDs = $("div[id^='collection']") // find divs with ID attribute
+			.map(function() {
+				return this.id;
+			}) // convert to set of IDs
+			.get();
+			
+			var i = 0
+			var IDs = [];
+			for (i = 0; i < divIDs.length; i++) {
+				if ($('#' + divIDs[i]).text() == 'Checking Collection Access...') {
+					IDs.push(divIDs[i]);
+				}
+			}	
+			
+			
+			$.each($.unique(IDs), function() {
+				alert('Ajax call for '+this);
+			});
+		}
+		
+		setTimeout(getCollectionName, 5000);
+	});
 	</script>
 	</c:when>
 </c:choose>
@@ -252,10 +278,10 @@ $(document).ready(function(){
 				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
 					<tr bgcolor="#E0F0FF">
 						<td><c:choose><c:when test="${not((bitstream.name == 'Checking BitStream Access...') or (bitstream.name == 'No Access to File')) }"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}"></c:when></c:choose></td>
-						<td><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></td>
-						<td><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></td>
-						<td><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></td>
-						<td><font size="1"><c:out value="${bitstream.name}"></c:out></font></td>
+						<td><div id='community_<c:out value="${bitstream.communityid}"/>'><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></div></td>
+						<td><div id='collection_<c:out value="${bitstream.collectionid}"/>'><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></div></td>
+						<td><div id='item_<c:out value="${bitstream.itemid}"/>'><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></div></td>
+						<td><div id='bitstream_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.name}"></c:out></font></div></td>
 					</tr>
 				</c:forEach>
 		</table>
