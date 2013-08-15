@@ -156,7 +156,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	}
 	
 	/**
-	 * This method checks if the user is either a project owner or a quadriga admin
+	 * This method checks if the user is Project owner and has editor role to this Project
 	 * @param userName
 	 * @return boolean - TRUE if the user is either a project owner or a quadriga admin else FALSE
 	 * @throws QuadrigaStorageException 

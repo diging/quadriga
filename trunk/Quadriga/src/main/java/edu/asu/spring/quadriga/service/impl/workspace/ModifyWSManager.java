@@ -87,5 +87,19 @@ public class ModifyWSManager implements IModifyWSManager
 	{
 		dbConnect.transferWSOwnerRequest(workspaceId, oldOwner, newOwner, collabRole);
 	}
+	
+	/**
+	 * Manager for Assigning editor roles to owner for workspace level
+	 * @param workspaceId
+	 * @param userName
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@Override
+	public String assignEditorRoleToOwner(String workspaceId,String userName) throws QuadrigaStorageException{
+		
+		String msg =dbConnect.assignWorkspaceOwnerEditor(workspaceId, userName);
+		return msg;
+	}
 
 }

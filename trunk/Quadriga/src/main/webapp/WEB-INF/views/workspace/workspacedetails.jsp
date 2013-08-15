@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 
 
 <c:choose>
@@ -137,6 +139,8 @@
 		});
 	});
 </script>
+
+
 <table style="width:100%">
   <tr>
     <!-- Display workspace details -->
@@ -146,10 +150,38 @@
 <hr>
 <div class="user">Owned by: ${workspacedetails.owner.name}</div>
 <hr>
+
+	<c:choose>
+		<c:when test="${AssignEditorSuccess=='1'}">
+			<font color="blue"> <spring:message
+					code="workspace.assign.owner.editor.success" /></font>
+
+		</c:when>
+		<c:when test="${AssignEditorSuccess=='0'}">
+			<font color="red"> <spring:message
+					code="workspace.assign.owner.editor.failure" /></font>
+		</c:when>
+		<c:when test="${AssignEditorSuccess=='2'}">
+			<font color="red"> <spring:message
+					code="workspace.assign.owner.editor.assigned" /></font>
+		</c:when>
+	</c:choose><br/>
+	
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
 <input type="button" name="Edit" value="Edit"/>
 </a> 
+<c:choose>
+	<c:when test="${owner=='1'}">
+		<c:choose>
+			<c:when test="${editoraccess=='0' }">
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/assignEditorRoleToOwner/${workspaceid}">
+						<input type="button" name="Get Editor Role" value="Get Editor Role" />
+				</a> 
+			</c:when>
+		</c:choose>
 
+	</c:when>
+</c:choose>
 <c:choose><c:when test="${empty dspaceKeys}">
 <!-- Dspace Login popup -->
 <c:choose>

@@ -119,6 +119,7 @@ public interface DBConstants
 	public static final String UPDATE_WORKSPACE_COLLABORATOR = "sp_updateworkspacecollaborator";
 	public static final String GET_WORKSPACE_NAME = "sp_getWorkspaceName";
 	public static final String ASSIGN_PROJECT_EDITOR_OWNER = "sp_addProjectEditor";
+	public static final String ASSIGN_WORKSPACE_EDITOR_OWNER = "sp_addWorkspaceEditorRole";
 	
 	// Dspace database objects
 	public static final String CHECK_DSPACEDATA_NODES="sp_checkDsapceNodes";
@@ -142,6 +143,9 @@ public interface DBConstants
 	public static final String CHECK_PROJECT_OWNER = "fn_checkProjectOwner";
 	public static final String CHECK_PROJECT_UNIX_NAME = "fn_checkDuplicateUnixName";
 	public static final String CHECK_PROJECT_OWNER_EDITOR_ROLE = "sp_hasProjectOwnerEditorRole";
+	
+	public static final String CHECK_WORKSPACE_OWNER_EDITOR_ROLE = "sp_hasWorkspaceOwnerEditorRole";
+	
 	
 	//workspace access objects
 	public static final String CHECK_WORKSPACE_OWNER = "fn_checkWorkspaceOwner";
