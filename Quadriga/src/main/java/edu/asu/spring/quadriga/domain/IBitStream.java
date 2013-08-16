@@ -47,4 +47,8 @@ public interface IBitStream {
 
 	public abstract String getCommunityid();
 
+	public abstract boolean getLoadStatus();
+
+	public abstract void setLoadStatus(boolean isloaded);
+
 }

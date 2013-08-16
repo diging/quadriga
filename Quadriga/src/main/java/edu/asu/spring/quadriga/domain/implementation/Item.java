@@ -31,6 +31,7 @@ public class Item implements IItem{
 	private String handle;
 	private List<String> bitids;
 	private List<IBitStream> bitstreams;
+	private boolean isloaded;
 
 	private RestTemplate restTemplate;
 	private Properties dspaceProperties;
@@ -49,6 +50,17 @@ public class Item implements IItem{
 		this.userName = userName;
 		this.password = password;
 		this.dspaceKeys = dspaceKeys;
+		this.isloaded = false;
+	}
+
+	@Override
+	public boolean getLoadStatus() {
+		return isloaded;
+	}
+
+	@Override
+	public void setLoadStatus(boolean isloaded) {
+		this.isloaded = isloaded;
 	}
 
 	/**
@@ -229,6 +241,7 @@ public class Item implements IItem{
 									bitstream.setName(dspaceBitStream.getName());
 									bitstream.setSize(dspaceBitStream.getSize());
 									bitstream.setMimeType(dspaceBitStream.getMimeType());
+									bitstream.setLoadStatus(true);
 									break;
 								}
 							}
@@ -258,5 +271,25 @@ public class Item implements IItem{
 			buf.append(hexDigit[b[j] & 0x0f]);
 		}
 		return buf.toString();
+	}
+
+	@Override
+	public IBitStream getBitStream(String bitstreamid)
+	{
+		if(this.bitstreams!=null)
+		{
+			for(IBitStream bitstream: this.bitstreams)
+			{
+				if(bitstream.getId().equals(bitstreamid))
+					return bitstream;
+			}
+		}
+		else
+		{
+			//Bitstreams are yet to be loaded. So load them
+			this.getBitstreams();
+		}
+		
+		return null;		
 	}
 }

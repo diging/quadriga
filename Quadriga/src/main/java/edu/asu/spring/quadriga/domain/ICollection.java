@@ -49,4 +49,8 @@ public interface ICollection extends Runnable{
 
 	public abstract void setItems(List<IItem> items);
 
+	public abstract boolean getLoadStatus();
+
+	public abstract IItem getItem(String itemid);
+
 }
