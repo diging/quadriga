@@ -182,11 +182,6 @@ public class ListWSController
 		//TODO: Implement check for dspace keys and Username/password 
 		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
 		List<IBitStream> bitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
-		System.out.println("Outside method....");
-		for(IBitStream bitstream: bitstreams)
-		{
-			System.out.println(bitstream.getCommunityName());
-		}
 		workspace.setBitstreams(bitstreams);
 
 		//retrieve the collaborators associated with the workspace
@@ -583,7 +578,6 @@ public class ListWSController
 	
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamaccessstatus", method = RequestMethod.GET)
 	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid, @RequestParam("itemid") String itemid, @RequestParam("collectionid") String collectionid) throws QuadrigaException {
-		System.out.println(collectionid+"............"+itemid+".................."+bitstreamid);
 		ICollection collection = getDspaceManager().getCollection(collectionid);
 		if(collection != null)
 		{
