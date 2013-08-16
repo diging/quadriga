@@ -278,18 +278,21 @@ public class Item implements IItem{
 	{
 		if(this.bitstreams!=null)
 		{
-			for(IBitStream bitstream: this.bitstreams)
+			//This is the first time this item is accessed for bitstreams
+			if(this.bitstreams.size() == 0)
 			{
-				if(bitstream.getId().equals(bitstreamid))
-					return bitstream;
+				//Bitstreams are yet to be loaded. So load them
+				this.getBitstreams();
+			}
+			else
+			{
+				for(IBitStream bitstream: this.bitstreams)
+				{
+					if(bitstream.getId().equals(bitstreamid))
+						return bitstream;
+				}
 			}
 		}
-		else
-		{
-			//Bitstreams are yet to be loaded. So load them
-			this.getBitstreams();
-		}
-		
 		return null;		
 	}
 }

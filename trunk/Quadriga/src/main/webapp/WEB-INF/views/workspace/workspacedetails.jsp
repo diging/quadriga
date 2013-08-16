@@ -221,9 +221,10 @@
 				//Do this once the data is available
 				ajaxCallback.success(function(data) {
 					//Load the new text in the corresponding div tag
-					//alert(data);
 					if(data != 'Loading...'){
-						alert(data);
+						if(data != 'No Access to File'){
+							$('.checkbox_' + collectionid[3]).html('<input type="checkbox" class="checkbox" name="bitstreamids" value="'+collectionid[3]+'}" />');
+						}
 						data = '<font size="1">'+data+'</font>';
 						$('.bitstream_' + collectionid[1] + '_' + collectionid[2] + '_' + collectionid[3]).html(data);
 						
@@ -299,7 +300,6 @@
 	* Function used to make an ajax call to the controller, inorder to get the bitstream name
 	*/
 	function getBitStreamName(collectionid,itemid,bitstreamid) {
-	//alert(collectionid + " - " + itemid + " - " + bitstreamid);
 		return $
 				.ajax({
 					type : 'GET',
@@ -523,7 +523,19 @@ $(document).ready(function(){
 				</tr>
 				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
 					<tr bgcolor="#E0F0FF">
-						<td><c:choose><c:when test="${not((bitstream.name == 'Checking BitStream Access...') or (bitstream.name == 'No Access to File')) }"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}"></c:when></c:choose></td>
+						<td>
+    						<div id='checkbox_<c:out value="${bitstream.id}"/>' class='checkbox_<c:out value="${bitstream.id}"/>'>
+        						<c:choose>
+            					<c:when test="${not(bitstream.name == 'No Access to File') }">
+                					<c:choose>
+	                    				<c:when test="${not(bitstream.name == 'Checking BitStream Access...')}">
+                        					<input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}" />
+                    					</c:when>
+                					</c:choose>
+            					</c:when>
+        						</c:choose>
+    						</div>
+						</td>
 						<td><div class='community_<c:out value="${bitstream.communityid}"/>' id='community_<c:out value="${bitstream.communityid}"/>'><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></div></td>
 						<td><div class='collection_<c:out value="${bitstream.collectionid}"/>' id='collection_<c:out value="${bitstream.collectionid}"/>'><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></div></td>
 						<td><div class='item_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>' id='item_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>'><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></div></td>
