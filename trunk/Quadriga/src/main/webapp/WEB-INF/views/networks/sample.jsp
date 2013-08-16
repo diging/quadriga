@@ -12,11 +12,12 @@
 <link type="text/css" href="/quadriga/resources/txt-layout/css/ForceDirected.css" rel="stylesheet" />
 </head>
 
-<body onload="init();">
+
+
+<body onload="init1(<c:out value="${json}"></c:out>);">
 <div id="container">
 
 <div id="left-container">
-
 
 
        
