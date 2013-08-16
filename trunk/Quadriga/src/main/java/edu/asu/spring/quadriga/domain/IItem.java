@@ -67,5 +67,11 @@ public interface IItem  extends Runnable{
 	 * @return				TRUE if the data was copied successfully. FALSE if the dspaceItem is null or there was error in copying the data.
 	 */
 	public abstract boolean copy(IDspaceItem dspaceItem);
+
+	public abstract boolean getLoadStatus();
+
+	public abstract void setLoadStatus(boolean isloaded);
+
+	public abstract IBitStream getBitStream(String bitstreamid);
 	
 }

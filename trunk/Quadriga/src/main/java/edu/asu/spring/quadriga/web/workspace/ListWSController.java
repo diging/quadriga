@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
+import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
@@ -176,7 +177,7 @@ public class ListWSController
 
 		userName = principal.getName();
 		workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
-		
+
 		//Check bitstream access in dspace.
 		//TODO: Implement check for dspace keys and Username/password 
 		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
@@ -536,11 +537,96 @@ public class ListWSController
 		ICollection collection = getDspaceManager().getCollection(collectionid);
 		if(collection != null)
 		{
-			if(collection.getName() != null)
-				return collection.getName();
+			if(collection.getLoadStatus() == true)
+			{
+				if(collection.getName() != null)
+					return collection.getName();
+				else
+					return "Restricted Collection";
+			}
 		}
 		return "Loading...";		
 	}
+
+	@RequestMapping(value = "/auth/workbench/workspace/itemstatus/{collectionid}/{itemid}", method = RequestMethod.GET)
+	public @ResponseBody String getItemStatus(@PathVariable("collectionid") String collectionid, @PathVariable("itemid") String itemid) throws QuadrigaException {
+		ICollection collection = getDspaceManager().getCollection(collectionid);
+		if(collection != null)
+		{
+			if(collection.getLoadStatus() == true)
+			{
+				if(collection.getName() != null)
+				{
+					try {
+						//Give time to for collection to load items. Just to be on safe side sleep this thread.
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					//Collection has been loaded.
+					IItem item = collection.getItem(itemid);
+					if(item != null)
+					{
+						return item.getName();
+					}
+					else
+					{
+						return "Restricted Item";
+					}
+				}
+				else
+					return "Restricted Item";
+			}
+		}
+		return "Loading...";
+	}
+	
+	@RequestMapping(value = "/auth/workbench/workspace/bitstreamaccessstatus", method = RequestMethod.GET)
+	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid, @RequestParam("itemid") String itemid, @RequestParam("collectionid") String collectionid) throws QuadrigaException {
+		System.out.println(collectionid+"............"+itemid+".................."+bitstreamid);
+		ICollection collection = getDspaceManager().getCollection(collectionid);
+		if(collection != null)
+		{
+			if(collection.getLoadStatus() == true)
+			{
+				if(collection.getName() != null)
+				{
+					try {
+						//Give time to for collection to load items. Just to be on safe side sleep this thread.
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					//Collection has been loaded.
+					IItem item = collection.getItem(itemid);
+					if(item != null)
+					{
+						if(!item.getBitids().contains(bitstreamid))
+						{
+							//The item does not contain the bitstream
+							return "No Access to File";
+						}
+						else
+						{
+							IBitStream bitstream = item.getBitStream(bitstreamid);
+							if(bitstream!=null)
+							{
+								if(bitstream.getName() != null)
+									return bitstream.getName();
+							}
+						}						
+					}
+
+				}
+				else
+					return "No Access to File";
+			}
+		}
+		return "Loading...";
+	}
+	
+	
 
 	/**
 	 * Handle ajax requests to retrieve the bitstream name based on the bitstream id, item id and collection id
@@ -558,6 +644,22 @@ public class ListWSController
 		{
 			if(bitstream.getName() != null)
 				return bitstream.getName();
+		}
+		return "Loading...";		
+	}
+
+	@RequestMapping(value = "/auth/workbench/workspace/collectionaccessstatus/{collectionid}", method = RequestMethod.GET)
+	public @ResponseBody String getCollectionAccessStatus(@PathVariable("collectionid") String collectionid) throws QuadrigaException {
+		ICollection collection = getDspaceManager().getCollection(collectionid);
+		if(collection != null)
+		{
+			if(collection.getLoadStatus() == true)
+			{
+				if(collection.getName() != null)
+					return collection.getName();
+				else
+					return "Restricted Collection";
+			}
 		}
 		return "Loading...";		
 	}

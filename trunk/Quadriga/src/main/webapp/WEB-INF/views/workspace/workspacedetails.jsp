@@ -74,14 +74,14 @@
 	
 	$(document).ready(function() {
 
-		function getCollectionName() {
-			var divIDs = $("div[id^='collection']") // find divs with ID attribute
+		function loadCollectionName() {
+			var divIDs = $("div[class^='collection']") // find divs with ID attribute
 			.map(function() {
 				return this.id;
 			}) // convert to set of IDs
 			.get();
 			
-			var i = 0
+			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
 				if ($('#' + divIDs[i]).text() == 'Checking Collection Access...') {
@@ -91,12 +91,226 @@
 			
 			
 			$.each($.unique(IDs), function() {
-				alert('Ajax call for '+this);
+				var collectionid = this.split("collection_");
+				var ajaxCallback = getCollectionName(collectionid[1]);
+				
+				
+				//Do this once the data is available
+				ajaxCallback.success(function(data) {
+					//Load the new text in the corresponding div tag
+					if(data != 'Loading...'){
+						data = '<font size="1">'+data+'</font>';
+						$('.collection_' + collectionid[1]).html(data);
+						
+					}
+				});//End of ajax callback
 			});
 		}
 		
-		setTimeout(getCollectionName, 5000);
+		loadCollectionName();
+		
+		/**
+		* Function to check if there is any collection name yet to be loaded.
+		* If yes, then it will invoke the loadCollectionName() after a wait period of 5 seconds.
+		* Author: Ram Kumar Kumaresan
+		*/
+		function checkCollectionDiv() {
+			var divIDs = $("div[id^='collection']") // find divs with ID attribute
+			.map(function() {
+				return this.id;
+			}) // convert to set of IDs
+			.get();
+
+			var i = 0
+			var IDs = [];
+			for (i = 0; i < divIDs.length; i++) {
+				if ($('#' + divIDs[i]).text() == 'Checking Collection Access...') {
+					IDs.push(divIDs[i]);
+				}
+			}
+			if (IDs.length > 0) {
+				setTimeout(loadCollectionName, 5000);
+				setTimeout(checkCollectionDiv, 7000);
+			}
+		}
+		setTimeout(checkCollectionDiv, 1000);
+		
+		
+		
+		function loadItemName() {
+			var divIDs = $("div[class^='item']") // find divs with ID attribute
+			.map(function() {
+				return this.id;
+			}) // convert to set of IDs
+			.get();
+			
+			var i = 0;
+			var IDs = [];
+			for (i = 0; i < divIDs.length; i++) {
+				if ($('#' + divIDs[i]).text() == 'Checking Item Access...') {
+					IDs.push(divIDs[i]);
+				}
+			}	
+			
+			
+			$.each($.unique(IDs), function() {
+				var collectionid = this.split("_");
+				var ajaxCallback = getItemName(collectionid[1],collectionid[2]);
+				
+				
+				//Do this once the data is available
+				ajaxCallback.success(function(data) {
+					//Load the new text in the corresponding div tag
+					if(data != 'Loading...'){
+						data = '<font size="1">'+data+'</font>';
+						$('.item_' + collectionid[1]+ '_' + collectionid[2]).html(data);
+						
+					}
+				});//End of ajax callback
+			});
+		}
+		
+		loadItemName();
+		
+		/**
+		* Function to check if there is any item name yet to be loaded.
+		* If yes, then it will invoke the loadItemName() after a wait period of 5 seconds.
+		* Author: Ram Kumar Kumaresan
+		*/
+		function checkItemDiv() {
+			var divIDs = $("div[id^='item']") // find divs with ID attribute
+			.map(function() {
+				return this.id;
+			}) // convert to set of IDs
+			.get();
+
+			var i = 0
+			var IDs = [];
+			for (i = 0; i < divIDs.length; i++) {
+				if ($('#' + divIDs[i]).text() == 'Checking Item Access...') {
+					IDs.push(divIDs[i]);
+				}
+			}
+			if (IDs.length > 0) {
+				setTimeout(loadItemName, 5000);
+				setTimeout(checkItemDiv, 7000);
+			}
+		}
+		setTimeout(checkItemDiv, 1000);
+		
+		function loadBitStreamName() {
+			var divIDs = $("div[class^='bitstream']") // find divs with ID attribute
+			.map(function() {
+				return this.id;
+			}) // convert to set of IDs
+			.get();
+			
+			var i = 0;
+			var IDs = [];
+			for (i = 0; i < divIDs.length; i++) {
+				if ($('#' + divIDs[i]).text() == 'Checking BitStream Access...') {
+					IDs.push(divIDs[i]);
+				}
+			}	
+			
+			$.each($.unique(IDs), function() {
+				var collectionid = this.split("_");
+				var ajaxCallback = getBitStreamName(collectionid[1],collectionid[2],collectionid[3]);
+				
+				
+				//Do this once the data is available
+				ajaxCallback.success(function(data) {
+					//Load the new text in the corresponding div tag
+					//alert(data);
+					if(data != 'Loading...'){
+						alert(data);
+						data = '<font size="1">'+data+'</font>';
+						$('.bitstream_' + collectionid[1] + '_' + collectionid[2] + '_' + collectionid[3]).html(data);
+						
+					}
+				});//End of ajax callback
+			});
+		}
+		
+		loadBitStreamName();
+		
+		/**
+		* Function to check if there is any item name yet to be loaded.
+		* If yes, then it will invoke the loadItemName() after a wait period of 5 seconds.
+		* Author: Ram Kumar Kumaresan
+		*/
+		function checkBitStreamDiv() {
+			var divIDs = $("div[id^='bitstream']") // find divs with ID attribute
+			.map(function() {
+				return this.id;
+			}) // convert to set of IDs
+			.get();
+
+			var i = 0
+			var IDs = [];
+			for (i = 0; i < divIDs.length; i++) {
+				if ($('#' + divIDs[i]).text() == 'Checking BitStream Access...') {
+					IDs.push(divIDs[i]);
+				}
+			}
+			if (IDs.length > 0) {
+				setTimeout(loadBitStreamName, 5000);
+				setTimeout(checkBitStreamDiv, 7000);
+			}
+		}
+		setTimeout(checkBitStreamDiv, 1000);
 	});
+	
+	/*
+	* Function used to make an ajax call to the controller, inorder to get the collection name
+	*/
+	function getCollectionName(collectionid) {
+		return $
+				.ajax({
+					type : 'GET',
+					url : '/quadriga/auth/workbench/workspace/collectionstatus/'
+							+ collectionid,
+					error : function(jqXHR, textStatus, errorThrown) {
+						$('#collection_' + collectionid)
+								.html(
+										"Server not responding...");
+					}
+				});
+	}
+	
+	/*
+	* Function used to make an ajax call to the controller, inorder to get the item name
+	*/
+	function getItemName(collectionid,itemid) {
+		return $
+				.ajax({
+					type : 'GET',
+					url : '/quadriga/auth/workbench/workspace/itemstatus/'
+							+ collectionid+'/'+itemid,
+					error : function(jqXHR, textStatus, errorThrown) {
+						$('#item_' + collectionid + "_" + itemid)
+								.html(
+										"Server not responding...");
+					}
+				});
+	}
+	
+	/*
+	* Function used to make an ajax call to the controller, inorder to get the bitstream name
+	*/
+	function getBitStreamName(collectionid,itemid,bitstreamid) {
+	//alert(collectionid + " - " + itemid + " - " + bitstreamid);
+		return $
+				.ajax({
+					type : 'GET',
+					url : '/quadriga/auth/workbench/workspace/bitstreamaccessstatus?collectionid='+collectionid+'&itemid='+itemid+'&bitstreamid='+bitstreamid,
+					error : function(jqXHR, textStatus, errorThrown) {
+						$('#bitstream_' + collectionid + "_" + itemid + "_" + bitstreamid)
+								.html(
+										"Server not responding...");
+					}
+				});
+	}
 	</script>
 	</c:when>
 </c:choose>
@@ -310,10 +524,10 @@ $(document).ready(function(){
 				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
 					<tr bgcolor="#E0F0FF">
 						<td><c:choose><c:when test="${not((bitstream.name == 'Checking BitStream Access...') or (bitstream.name == 'No Access to File')) }"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}"></c:when></c:choose></td>
-						<td><div id='community_<c:out value="${bitstream.communityid}"/>'><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></div></td>
-						<td><div id='collection_<c:out value="${bitstream.collectionid}"/>'><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></div></td>
-						<td><div id='item_<c:out value="${bitstream.itemid}"/>'><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></div></td>
-						<td><div id='bitstream_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.name}"></c:out></font></div></td>
+						<td><div class='community_<c:out value="${bitstream.communityid}"/>' id='community_<c:out value="${bitstream.communityid}"/>'><font size="1"><c:out value="${bitstream.communityName}"></c:out></font></div></td>
+						<td><div class='collection_<c:out value="${bitstream.collectionid}"/>' id='collection_<c:out value="${bitstream.collectionid}"/>'><font size="1"><c:out value="${bitstream.collectionName}"></c:out></font></div></td>
+						<td><div class='item_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>' id='item_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>'><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></div></td>
+						<td><div class='bitstream_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>_<c:out value="${bitstream.id}"/>' id='bitstream_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.name}"></c:out></font></div></td>
 					</tr>
 				</c:forEach>
 		</table>

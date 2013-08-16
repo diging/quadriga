@@ -32,6 +32,7 @@ public class Collection implements ICollection{
 	private String handle;
 	private String countItems;
 	private List<IItem> items;
+	private boolean isloaded;
 
 	private RestTemplate restTemplate;
 	private Properties dspaceProperties;
@@ -57,6 +58,12 @@ public class Collection implements ICollection{
 		this.restTemplate = restTemplate;
 		this.dspaceProperties = dspaceProperties;
 		this.dspaceKeys = dspaceKeys;
+		this.isloaded = false;
+	}
+
+	@Override
+	public boolean getLoadStatus() {
+		return isloaded;
 	}
 
 
@@ -168,7 +175,10 @@ public class Collection implements ICollection{
 						item = new Item();
 						item.setRestConnectionDetails(restTemplate, dspaceProperties, dspaceKeys, userName, password);
 						if(item.copy(dspaceItem))
+						{
+							item.setLoadStatus(true);
 							this.items.add(item);
+						}
 					}
 				}
 			}
@@ -228,13 +238,19 @@ public class Collection implements ICollection{
 			sRestServicePath = getCompleteUrlPath();
 
 			IDspaceCollection dspaceCollection = (DspaceCollection) this.restTemplate.getForObject(sRestServicePath, DspaceCollection.class);
-
 			if(dspaceCollection != null)
 			{
 				this.copy(dspaceCollection);
-			}	
+			}
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally
+		{
+			this.isloaded = true;
 		}
 	}
 
@@ -246,5 +262,21 @@ public class Collection implements ICollection{
 	@Override
 	public void setItems(List<IItem> items) {
 		this.items = items;
+	}
+	
+	@Override
+	public IItem getItem(String itemid)
+	{
+		if(this.items != null)
+		{
+			for(IItem item: this.items)
+			{
+				if(item.getId().equals(itemid))
+				{
+					return item;
+				}
+			}
+		}
+		return null;
 	}
 }

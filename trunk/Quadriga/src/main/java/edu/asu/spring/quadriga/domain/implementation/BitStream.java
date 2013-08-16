@@ -19,6 +19,17 @@ public class BitStream implements IBitStream{
 	private String communityName;
 	private String collectionName;
 	private String itemName;
+	private boolean isloaded;
+	
+	@Override
+	public boolean getLoadStatus() {
+		return isloaded;
+	}
+
+	@Override
+	public void setLoadStatus(boolean isloaded) {
+		this.isloaded = isloaded;
+	}
 	
 	@Override
 	public String getCommunityid() {

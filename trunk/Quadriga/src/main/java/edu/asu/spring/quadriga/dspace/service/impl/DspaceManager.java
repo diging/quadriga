@@ -517,10 +517,10 @@ public class DspaceManager implements IDspaceManager{
 
 		IBitStream restrictedBitStream = new BitStream();
 		//TODO: Put strings in the properties file.
-		restrictedBitStream.setName("No Access to File");
 		restrictedBitStream.setCommunityName("Restricted Community");
 		restrictedBitStream.setCollectionName("Restricted Collection");
 		restrictedBitStream.setItemName("Restricted Item");
+		restrictedBitStream.setName("No Access to File");
 		
 		try
 		{

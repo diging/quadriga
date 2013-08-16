@@ -18,7 +18,7 @@
 				}) // convert to set of IDs
 				.get();
 				
-				var i = 0
+				var i = 0;
 				var IDs = [];
 				for (i = 0; i < divIDs.length; i++) {
 					if ($('#' + divIDs[i]).text() == ' Loading...') {
