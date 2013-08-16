@@ -83,7 +83,7 @@
 			</table>
 		</c:when>
 		<c:otherwise>
-			iii<spring:message code="empty.networks" />
+			<spring:message code="empty.networks" />
 		</c:otherwise>
 	</c:choose>
 </div>

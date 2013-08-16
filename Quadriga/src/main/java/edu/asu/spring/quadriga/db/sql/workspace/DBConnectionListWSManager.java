@@ -608,7 +608,6 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, workspaceId);
-			logger.info("workspace id:"+workspaceId);
 
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
