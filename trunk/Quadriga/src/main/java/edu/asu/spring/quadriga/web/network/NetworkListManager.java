@@ -53,4 +53,13 @@ public class NetworkListManager {
 		
 		return "auth/networks";
 	}
+	
+	
+	@RequestMapping(value = "auth/networks/visualize", method = RequestMethod.GET)
+	public String visualizeNetworks(ModelMap model, Principal principal) {
+		
+		model.addAttribute("json", "[{\"adjacencies\": [\"graphnode21\", {\"nodeTo\": \"graphnode1\",\"nodeFrom\": \"graphnode0\",\"data\": { \"$color\": \"#557EAA\"}}]}]");
+		return "auth/networks/visualize";
+	}
+	
 }

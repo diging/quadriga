@@ -23,6 +23,8 @@
 <script src="/quadriga/resources/txt-layout/js/config.js"></script>
 <script src="/quadriga/resources/txt-layout/js/skel.min.js"></script>
 <script src="/quadriga/resources/txt-layout/js/skel-ui.min.js"></script>
+<script src="/quadriga/resources/txt-layout/js/jit.js"></script>
+<script src="/quadriga/resources/txt-layout/js/ex.js"></script>
 <script src="/quadriga/resources/txt-layout/js/jquery-ui.js"></script>
 <script src="/quadriga/resources/txt-layout/js/jquery-alert.js"></script>
 <script src="/quadriga/resources/txt-layout/js/jquery.dataTables.js"></script>
