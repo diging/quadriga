@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType;
@@ -60,6 +61,9 @@ public interface INetworkManager {
 			throws QuadrigaStorageException;
 
 	public abstract boolean hasNetworkName(String networkName, IUser user)
+			throws QuadrigaStorageException;
+
+	public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
 			throws QuadrigaStorageException;
 
 }

@@ -32,6 +32,7 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.networks.AppellationEventType;
@@ -364,5 +365,12 @@ public class NetworkManager implements INetworkManager {
 			logger.error("Something went wrong in DB",e);
 		}
 		return result;
+	}
+	
+	@Override
+	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
+		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkTopNodes(networkId);
+		
+		return networkTopNodeList;
 	}
 }

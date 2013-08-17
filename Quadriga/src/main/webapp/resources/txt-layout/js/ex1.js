@@ -29,7 +29,189 @@ var Log = {
 function init1(json){
 	// init data
 	
+	json1 = [
+	    	{
+	    		"adjacencies": [
+	    						"1",
+	    						{
+	    							"nodeTo": "5",
+	    							"nodeFrom": "3",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
+	    						},
+	    						],
+	    						"data": {
+	    							"$color": "#83548B",
+	    							"$type": "circle",
+	    							"$dim": 10
+	    						},
+	    						"id": "3",
+	    						"name": "3"
+	    	},{
+	    		"adjacencies": [
+	    						"2",
+	    						{
+	    							"nodeTo": "5",
+	    							"nodeFrom": "3",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
+	    						},
+	    						],
+	    						"data": {
+	    							"$color": "#83548B",
+	    							"$type": "circle",
+	    							"$dim": 10
+	    						},
+	    						"id": "3",
+	    						"name": "3"
+	    	},{
+	    		"adjacencies": [
+	    						{
+	    							"nodeTo": "4",
+	    							"nodeFrom": "5",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
 
+	    						},{
+	    							"nodeTo": "3",
+	    							"nodeFrom": "5",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
+	    						}
+	    						],
+	    						"data": {
+	    							"$color": "#EBB056",
+	    							"$type": "circle",
+	    							"$dim": 11
+	    						},
+	    						"id": "5",
+	    						"name": "5"
+	    	}, {
+	    		"adjacencies": [],
+	    		"data": {
+	    			"$color": "#83548B",
+	    			"$type": "square",
+	    			"$dim": 11
+	    		},
+	    		"id": "4",
+	    		"name": "4"
+	    	},
+	    	{
+	    		"adjacencies": [],
+	    		"data": {
+	    			"$color": "#83548B",
+	    			"$type": "square",
+	    			"$dim": 11
+	    		},
+	    		"id": "1",
+	    		"name": "1"
+	    	},
+	    	{
+	    		"adjacencies": [],
+	    		"data": {
+	    			"$color": "#83548B",
+	    			"$type": "square",
+	    			"$dim": 11
+	    		},
+	    		"id": "2",
+	    		"name": "2"
+	    	},
+
+	    	{
+	    		"adjacencies": [
+	    						"11",
+	    						{
+	    							"nodeTo": "15",
+	    							"nodeFrom": "13",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
+	    						},
+	    						],
+	    						"data": {
+	    							"$color": "#83548B",
+	    							"$type": "circle",
+	    							"$dim": 10
+	    						},
+	    						"id": "13",
+	    						"name": "13"
+	    	},{
+	    		"adjacencies": [
+	    						"12",
+	    						{
+	    							"nodeTo": "15",
+	    							"nodeFrom": "13",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
+	    						},
+	    						],
+	    						"data": {
+	    							"$color": "#83548B",
+	    							"$type": "circle",
+	    							"$dim": 10
+	    						},
+	    						"id": "13",
+	    						"name": "13"
+	    	},{
+	    		"adjacencies": [
+	    						{
+	    							"nodeTo": "14",
+	    							"nodeFrom": "15",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
+
+	    						},{
+	    							"nodeTo": "13",
+	    							"nodeFrom": "15",
+	    							"data": {
+	    								"$color": "#557EAA"
+	    							}
+	    						}
+	    						],
+	    						"data": {
+	    							"$color": "#EBB056",
+	    							"$type": "circle",
+	    							"$dim": 11
+	    						},
+	    						"id": "15",
+	    						"name": "15"
+	    	}, {
+	    		"adjacencies": [],
+	    		"data": {
+	    			"$color": "#83548B",
+	    			"$type": "square",
+	    			"$dim": 11
+	    		},
+	    		"id": "14",
+	    		"name": "14"
+	    	},
+	    	{
+	    		"adjacencies": [],
+	    		"data": {
+	    			"$color": "#83548B",
+	    			"$type": "square",
+	    			"$dim": 11
+	    		},
+	    		"id": "11",
+	    		"name": "11"
+	    	},
+	    	{
+	    		"adjacencies": [],
+	    		"data": {
+	    			"$color": "#83548B",
+	    			"$type": "square",
+	    			"$dim": 11
+	    		},
+	    		"id": "12",
+	    		"name": "12"
+	    	}
+	    ];
 	// end
 	// init ForceDirected
 	var fd = new $jit.ForceDirected({
