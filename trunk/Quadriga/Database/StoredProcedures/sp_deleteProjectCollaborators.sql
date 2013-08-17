@@ -22,12 +22,12 @@ BEGIN
 	END IF;
 
 	IF (errmsg IS NULL)
-	THEN SET errmsg = "no errors";
+	THEN SET errmsg = " ";
 			START TRANSACTION;
 			DELETE FROM tbl_project_collaborator
 			WHERE projectid = inprojectid AND 
 				  collaboratoruser = incollaboratoruser;
-		IF(errmsg = "no errors")
+		IF(errmsg = " ")
 		THEN COMMIT;
 		ELSE ROLLBACK;
 		END IF;
