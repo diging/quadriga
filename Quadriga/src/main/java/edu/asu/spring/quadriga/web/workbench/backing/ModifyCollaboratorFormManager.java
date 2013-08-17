@@ -1,0 +1,38 @@
+package edu.asu.spring.quadriga.web.workbench.backing;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+
+@Service
+public class ModifyCollaboratorFormManager {
+
+	@Autowired
+	IRetrieveProjCollabManager projCollabManager;
+	
+	@Autowired
+	ModifyCollaboratorFormFactory collaboratorFormFactory;
+	
+	public List<ModifyCollaborator> modifyCollaboratorManager(String projectId) throws QuadrigaStorageException
+	{
+	
+		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
+		List<ICollaborator> collaborators =  projCollabManager.getProjectCollaborators(projectId);
+		
+		for(ICollaborator collaborator:collaborators)
+		{
+			ModifyCollaborator modifyCollab = new ModifyCollaborator();
+			modifyCollab = (ModifyCollaborator) collaborator;
+			modifyCollaborators.add(modifyCollab);
+		}
+		return modifyCollaborators;
+
+	}
+}
