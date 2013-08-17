@@ -83,6 +83,7 @@ public interface DBConstants
 	public static final String GET_NETWORK_LIST ="sp_getNetworkList";
 	public static final String HAS_NETWORK_NAME ="sp_hasNetworkName";
 	public static final String GET_PROJECTID_WORKSPACE ="sp_getProjectIdForWorkspace";
+	public static final String GET_NETWORK_TOP_NODES_LIST ="sp_getNetworkTopNodes";
 	
 	//Editing
 	
