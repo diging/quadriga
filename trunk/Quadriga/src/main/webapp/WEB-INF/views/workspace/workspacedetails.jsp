@@ -223,7 +223,7 @@
 					//Load the new text in the corresponding div tag
 					if(data != 'Loading...'){
 						if(data != 'No Access to File'){
-							$('.checkbox_' + collectionid[3]).html('<input type="checkbox" class="checkbox" name="bitstreamids" value="'+collectionid[3]+'}" />');
+							$('.checkbox_' + collectionid[3]).html('<input type="checkbox" class="checkbox" name="bitstreamids" value="'+collectionid[3]+'" />');
 						}
 						data = '<font size="1">'+data+'</font>';
 						$('.bitstream_' + collectionid[1] + '_' + collectionid[2] + '_' + collectionid[3]).html(data);
@@ -348,8 +348,7 @@
 		activeTable = $('.dataTable').dataTable({
 			"bJQueryUI" : true,
 			"sPaginationType" : "full_numbers",
-			"bAutoWidth" : false,
-			"iDisplayLength": 3
+			"bAutoWidth" : false
 		});
 	});
 </script>
@@ -509,24 +508,29 @@ $(document).ready(function(){
 	<div id="dialog-message" title="Synchronization" style="display:none">
     Please check after few minutes. Data will be synced with Dspace.
 </div>
-	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
+	
 	<font size="2"><input type="submit" value="Sync with Dspace" id="dspaceSync" />
 	<input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font> 
 		<br><br>
-		<table border="1">
-				<tr bgcolor="#C3C3C1">
+	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
+		<table cellpadding="0" cellspacing="0" border="0"
+			class="display dataTable" width="100%">
+			<thead>
+				<tr>
 					<th ></th>
 					<th>Community</th>
 					<th>Collection</th>
 					<th>Item</th>
 					<th>File</th>
 				</tr>
+			</thead>
+			<tbody>
 				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
 					<tr bgcolor="#E0F0FF">
 						<td>
     						<div id='checkbox_<c:out value="${bitstream.id}"/>' class='checkbox_<c:out value="${bitstream.id}"/>'>
         						<c:choose>
-            					<c:when test="${not(bitstream.name == 'No Access to File') }">
+            					<c:when test="${not((bitstream.name == 'No Access to File') or (bitstream.name == 'Need Dspace Authentication')) }">
                 					<c:choose>
 	                    				<c:when test="${not(bitstream.name == 'Checking BitStream Access...')}">
                         					<input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}" />
@@ -542,6 +546,16 @@ $(document).ready(function(){
 						<td><div class='bitstream_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>_<c:out value="${bitstream.id}"/>' id='bitstream_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.name}"></c:out></font></div></td>
 					</tr>
 				</c:forEach>
+				</tbody>
+				<tfoot>
+				<tr>
+					<th ></th>
+					<th>Community</th>
+					<th>Collection</th>
+					<th>Item</th>
+					<th>File</th>
+				</tr>
+			</tfoot>
 		</table>
 		</form>
 	</c:when>
