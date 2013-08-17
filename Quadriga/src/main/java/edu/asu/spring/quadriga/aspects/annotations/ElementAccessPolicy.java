@@ -11,7 +11,7 @@ public @interface ElementAccessPolicy {
 	RetrievalMethod method();
 	
 	// name of param :
-	String paramName();
+	int paramIndex();
 	
 	// role of user
 	String[] userRole();

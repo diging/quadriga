@@ -41,7 +41,6 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.validator.ProjectValidator;
 import edu.asu.spring.quadriga.web.StringConstants;
-import edu.asu.spring.quadriga.web.rest.NetworkRestController;
 
 @Controller
 public class ModifyProjectController 
@@ -146,7 +145,7 @@ public class ModifyProjectController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, method = RetrievalMethod.BY_ID, paramName = "projectid", userRole = { "Quadriga_Admin" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, method = RetrievalMethod.BY_ID, paramIndex = 1, userRole = { "PROJECT_ADMIN" } )})
 	@RequestMapping(value="auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
 	public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
