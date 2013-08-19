@@ -8,11 +8,8 @@
 
 package edu.asu.spring.quadriga.domain.implementation.networks;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
@@ -21,9 +18,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for relationEventType complex type.
@@ -47,49 +41,77 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "relationEventType", propOrder = {
-    "relationCreatorOrRelation"
+		"relationCreatorOrRelation"
 })
 public class RelationEventType
-    extends CreationEvent
+extends CreationEvent
 {
 
-    @XmlElements({
-        @XmlElement(name = "relation", type = RelationType.class),
-        @XmlElement(name = "relation_creator", type = String.class)
-    })
-    protected List<Object> relationCreatorOrRelation;
+	@XmlElements({
+		@XmlElement(name = "relation", type = RelationType.class),
+		@XmlElement(name = "relation_creator", type = String.class)
+	})
+	protected List<Object> relationCreatorOrRelation;
 
-    /**
-     * Gets the value of the relationCreatorOrRelation property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the relationCreatorOrRelation property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getRelationCreatorOrRelation().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link RelationType }
-     * {@link String }
-     * 
-     * 
-     */
-    public List<Object> getRelationCreatorOrRelation() {
-        if (relationCreatorOrRelation == null) {
-            relationCreatorOrRelation = new ArrayList<Object>();
-        }
-        return this.relationCreatorOrRelation;
-    }
+	/**
+	 * Gets the value of the relationCreatorOrRelation property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list,
+	 * not a snapshot. Therefore any modification you make to the
+	 * returned list will be present inside the JAXB object.
+	 * This is why there is not a <CODE>set</CODE> method for the relationCreatorOrRelation property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * <pre>
+	 *    getRelationCreatorOrRelation().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list
+	 * {@link RelationType }
+	 * {@link String }
+	 * 
+	 * 
+	 */
+	public List<Object> getRelationCreatorOrRelation() {
+		if (relationCreatorOrRelation == null) {
+			relationCreatorOrRelation = new ArrayList<Object>();
+		}
+		return this.relationCreatorOrRelation;
+	}
+
+	public List<Object>  getRelation(RelationEventType re){
+		List<Object> relationObjectList = new ArrayList<Object>();
+		List <?> ee = re.getRelationCreatorOrRelation();
+		Iterator <?> Iee=ee.iterator();
+		while(Iee.hasNext()){
+			Object o = Iee.next();
+			if(o instanceof RelationType){
+				RelationType rt = (RelationType) o;
+				relationObjectList.add(rt);
+			}
 
 
+		}
+		return relationObjectList;
+	}
 
+	public PredicateType getPredicateType(RelationType rt){
+		PredicateType  predicate = null;
+		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> I2 = e3.iterator();
+		while(I2.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) I2.next();
+			if(element.getValue().toString().contains("PredicateType")){
+				predicate= (PredicateType) element.getValue();
+
+			}
+		}
+		return predicate;
+	}
+	
 }
 

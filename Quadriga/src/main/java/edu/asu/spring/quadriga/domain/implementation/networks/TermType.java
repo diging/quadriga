@@ -8,10 +8,8 @@
 
 package edu.asu.spring.quadriga.domain.implementation.networks;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
@@ -20,8 +18,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
@@ -78,6 +74,25 @@ public class TermType {
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
 
+    /**
+     * Returns the interperation object 
+     * @author Lohith Dwaraka 
+     * @param tt
+     * @return
+     */
+    public String getTermInterpertation(TermType tt){
+    	String interpertation ="";
+    	List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> I2 = e3.iterator();
+		while(I2.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) I2.next();
+			if(element.getName().toString().contains("interpretation")){
+				interpertation =element.getValue().toString();
+			}
+		}
+    	return interpertation;
+    }
+    
     /**
      * Gets the value of the idOrCreatorOrCreationDate property.
      * 
