@@ -94,7 +94,6 @@
 				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
 				<bean
 					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
-				
 			</list>
 		</property>
 	</bean>
@@ -116,10 +115,19 @@
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
+				<value>edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType
+				</value>
+				<value>java.lang.String</value>
 			</list>
 		</property>
 	</bean>
 	
+	<bean id="marshallingConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+	<constructor-arg ref="jaxbMarshaller" />
+    <property name="supportedMediaTypes" value="application/xml"/>
+      </bean>
+    
+
 	<bean id="errorMessages"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/errormessages.properties" />

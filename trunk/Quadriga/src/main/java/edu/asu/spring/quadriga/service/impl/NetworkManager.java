@@ -1,13 +1,18 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -22,10 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
@@ -65,8 +74,16 @@ public class NetworkManager implements INetworkManager {
 	private String qStoreURL_Add;
 
 	@Autowired
+	@Qualifier("restTemplate")
+	RestTemplate restTemplate;
+	
+	@Autowired
 	@Qualifier("qStoreURL_Get")
 	private String qStoreURL_Get;
+	
+	@Autowired
+	@Qualifier("jaxbMarshaller")
+	Jaxb2Marshaller jaxbMarshaller;
 	
 	@Autowired
 	private INetworkFactory networkFactory;
@@ -81,6 +98,11 @@ public class NetworkManager implements INetworkManager {
 	@Override
 	public String getQStoreAddURL() {
 		return qStoreURL+""+qStoreURL_Add;
+	}
+	
+	@Override
+	public String getQStoreGetURL() {
+		return qStoreURL+""+qStoreURL_Get;
 	}
 	
 	/* (non-Javadoc)
@@ -153,6 +175,36 @@ public class NetworkManager implements INetworkManager {
 
 		}
 		return result;
+	}
+	
+	@Override
+	public String generateJsontoJQuery(String id,String statementType) throws JAXBException{
+		
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+		List<MediaType> mediaTypes = new ArrayList<MediaType>();
+		mediaTypes.add(MediaType.APPLICATION_XML);
+		messageConverters.add(new StringHttpMessageConverter());
+		org.springframework.oxm.Marshaller marshaler = jaxbMarshaller;
+		org.springframework.oxm.Unmarshaller unmarshaler = jaxbMarshaller;
+		messageConverters.add(new MarshallingHttpMessageConverter(marshaler,unmarshaler));
+
+		restTemplate.setMessageConverters(messageConverters);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		headers.setAccept(mediaTypes);
+
+		ResponseEntity<String> response = restTemplate.exchange(getQStoreGetURL()+id,
+				HttpMethod.GET,
+			      new HttpEntity<String[]>(headers),
+			      String.class);
+		String responseText = response.getBody().toString();
+		JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
+		Unmarshaller unmarshaller1 = context.createUnmarshaller();
+		unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+		InputStream is = new ByteArrayInputStream(responseText.getBytes());
+		JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
+		logger.info("Respose bytes : "+responseText);
+		return "";
 	}
 
 
