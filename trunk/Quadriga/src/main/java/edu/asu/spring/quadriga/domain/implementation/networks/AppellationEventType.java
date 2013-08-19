@@ -9,7 +9,9 @@
 package edu.asu.spring.quadriga.domain.implementation.networks;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -81,7 +83,26 @@ public class AppellationEventType
         }
         return this.termOrExternalRefId;
     }
-
-	
-
+    
+    /**
+     * Returns the list of terms in an Appellation
+     * @author Lohith Dwaraka
+     * @param aet  : AppellationEventType
+     * @return
+     */
+    public List<TermType> getTerms(AppellationEventType aet){
+    	List<Object> objectList = aet.getTermOrExternalRefId();
+    	List<TermType> termTypeList = new ArrayList<TermType>();
+    	Iterator <Object> I3 = objectList.iterator();
+		while(I3.hasNext()){
+			Object o = I3.next();
+			if(o instanceof TermType){
+				
+				TermType tt = (TermType) o;
+				termTypeList.add(tt);
+				
+			}
+		}    
+		return termTypeList;
+    }
 }

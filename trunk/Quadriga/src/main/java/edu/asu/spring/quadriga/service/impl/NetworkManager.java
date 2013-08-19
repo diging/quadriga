@@ -215,22 +215,29 @@ public class NetworkManager implements INetworkManager {
 				{
 					// Trying to get a list of terms in the appellation event type object
 					AppellationEventType aet = (AppellationEventType) ce;
-					List<Object> objectList = aet.getTermOrExternalRefId();
-					Iterator <Object> I3 = objectList.iterator();
-					while(I3.hasNext()){
-						Object o = I3.next();
-						if(o instanceof TermType){
-							TermType tt = (TermType) o;
-							List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
-							Iterator <JAXBElement<?>> I2 = e3.iterator();
-							while(I2.hasNext()){
-								JAXBElement<?> element = (JAXBElement<?>) I2.next();
-								if(element.getName().toString().contains("interpretation")){
-									logger.info("Term value Elements in Appellation event "+element.getValue().toString() );
-								}
-							}
-						}
+					
+					List<TermType> termTypeList= aet.getTerms(aet);
+					Iterator <TermType> I2 = termTypeList.iterator();
+					while(I2.hasNext()){
+						TermType tt = I2.next();
+						logger.info(tt.getTermInterpertation(tt));
 					}
+//					List<Object> objectList = aet.getTermOrExternalRefId();
+//					Iterator <Object> I3 = objectList.iterator();
+//					while(I3.hasNext()){
+//						Object o = I3.next();
+//						if(o instanceof TermType){
+//							TermType tt = (TermType) o;
+//							List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
+//							Iterator <JAXBElement<?>> I2 = e3.iterator();
+//							while(I2.hasNext()){
+//								JAXBElement<?> element = (JAXBElement<?>) I2.next();
+//								if(element.getName().toString().contains("interpretation")){
+//									logger.info("Term value Elements in Appellation event "+element.getValue().toString() );
+//								}
+//							}
+//						}
+//					}
 				}
 				if(ce instanceof RelationEventType){
 					List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
