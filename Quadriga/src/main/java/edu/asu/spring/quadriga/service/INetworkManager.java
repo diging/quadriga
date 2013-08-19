@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -65,5 +66,10 @@ public interface INetworkManager {
 
 	public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
 			throws QuadrigaStorageException;
+
+	public abstract String generateJsontoJQuery(String id, String statementType)
+			throws JAXBException;
+
+	public abstract String getQStoreGetURL();
 
 }
