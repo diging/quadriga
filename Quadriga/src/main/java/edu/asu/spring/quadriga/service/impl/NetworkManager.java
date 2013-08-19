@@ -51,6 +51,7 @@ import edu.asu.spring.quadriga.domain.implementation.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.implementation.networks.RelationType;
 import edu.asu.spring.quadriga.domain.implementation.networks.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.implementation.networks.TermType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 
@@ -76,15 +77,15 @@ public class NetworkManager implements INetworkManager {
 	@Autowired
 	@Qualifier("restTemplate")
 	RestTemplate restTemplate;
-	
+
 	@Autowired
 	@Qualifier("qStoreURL_Get")
 	private String qStoreURL_Get;
-	
+
 	@Autowired
 	@Qualifier("jaxbMarshaller")
 	Jaxb2Marshaller jaxbMarshaller;
-	
+
 	@Autowired
 	private INetworkFactory networkFactory;
 
@@ -99,12 +100,12 @@ public class NetworkManager implements INetworkManager {
 	public String getQStoreAddURL() {
 		return qStoreURL+""+qStoreURL_Add;
 	}
-	
+
 	@Override
 	public String getQStoreGetURL() {
 		return qStoreURL+""+qStoreURL_Get;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#receiveNetworkSubmitRequest(javax.xml.bind.JAXBElement, edu.asu.spring.quadriga.domain.IUser, java.lang.String, java.lang.String)
 	 */
@@ -176,10 +177,10 @@ public class NetworkManager implements INetworkManager {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public String generateJsontoJQuery(String id,String statementType) throws JAXBException{
-		
+
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
 		mediaTypes.add(MediaType.APPLICATION_XML);
@@ -195,46 +196,63 @@ public class NetworkManager implements INetworkManager {
 
 		ResponseEntity<String> response = restTemplate.exchange(getQStoreGetURL()+id,
 				HttpMethod.GET,
-			      new HttpEntity<String[]>(headers),
-			      String.class);
+				new HttpEntity<String[]>(headers),
+				String.class);
 		String responseText = response.getBody().toString();
 		JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
 		Unmarshaller unmarshaller1 = context.createUnmarshaller();
 		unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 		InputStream is = new ByteArrayInputStream(responseText.getBytes());
 		JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
-		logger.info("Respose bytes : "+responseText);
+		//		logger.info("Respose bytes : "+responseText);
+		try{
+			ElementEventsType e = response1.getValue();
+			List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
+			Iterator <CreationEvent> I= c.iterator();
+			while(I.hasNext()){
+				CreationEvent ce = I.next();
+				if(ce instanceof AppellationEventType)
+				{
+					// Trying to get a list of terms in the appellation event type object
+					AppellationEventType aet = (AppellationEventType) ce;
+					List<Object> objectList = aet.getTermOrExternalRefId();
+					Iterator <Object> I3 = objectList.iterator();
+					while(I3.hasNext()){
+						Object o = I3.next();
+						if(o instanceof TermType){
+							TermType tt = (TermType) o;
+							List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
+							Iterator <JAXBElement<?>> I2 = e3.iterator();
+							while(I2.hasNext()){
+								JAXBElement<?> element = (JAXBElement<?>) I2.next();
+								if(element.getName().toString().contains("interpretation")){
+									logger.info("Term value Elements in Appellation event "+element.getValue().toString() );
+								}
+							}
+						}
+					}
+				}
+				if(ce instanceof RelationEventType){
+					List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
+					Iterator <JAXBElement<?>> I1 = e2.iterator();
+					while(I1.hasNext()){
+						JAXBElement<?> element = (JAXBElement<?>) I1.next();
+						if(element.getName().toString().contains("id")){
+							logger.info("Relation Event ID : "+element.getValue().toString());
+						}
+					}
+				}
+			}
+		}catch(Exception e){
+			logger.error("",e);
+		}
 		return "";
 	}
 
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#storeXMLQStore(java.lang.String)
-	 */
-	@Override
-	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
-		String res="";
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-		RestTemplate restTemplate = new RestTemplate();
-		List<MediaType> mediaTypes = new ArrayList<MediaType>();
-		mediaTypes.add(MediaType.APPLICATION_XML);
-		messageConverters.add(new FormHttpMessageConverter());
-		messageConverters.add(new StringHttpMessageConverter());
-		restTemplate.setMessageConverters(messageConverters);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
-		headers.setAccept(mediaTypes);
-		HttpEntity request = new HttpEntity(XML,headers);
 
-		try{
-			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
-		}catch(Exception e){
-			logger.error("",e);
-		}
-		return res;
-	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getRelationEventElements(edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType, java.lang.String, edu.asu.spring.quadriga.domain.IUser)
 	 */
@@ -255,7 +273,7 @@ public class NetworkManager implements INetworkManager {
 						//	Handles the subject part of the relation
 						if(element.getName().toString().contains("subject")){
 							SubjectObjectType  subject= (SubjectObjectType) element.getValue();
-							
+
 							//	Check for relation event inside subject and add if any
 							RelationEventType re1 = subject.getRelationEvent();
 							if(re1 == null){
@@ -272,7 +290,7 @@ public class NetworkManager implements INetworkManager {
 								}
 								getRelationEventElements(re1,networkId,user);
 							}
-							
+
 							//	Check for Appellation event inside subject and add if any
 							AppellationEventType ae1 = subject.getAppellationEvent();
 							if(ae1 == null){
@@ -292,9 +310,9 @@ public class NetworkManager implements INetworkManager {
 						}else 
 							//	Handles the object part of the relation
 							if(element.getName().toString().contains("object")){
-								
+
 								SubjectObjectType  object= (SubjectObjectType) element.getValue();
-								
+
 								//	Check for Relation event inside object and add if any
 								RelationEventType re1 = object.getRelationEvent();
 								if(re1 == null){
@@ -327,15 +345,15 @@ public class NetworkManager implements INetworkManager {
 										}
 									}
 								}
-								
+
 							}
 					}else 
 						//	Handles the predicate part of the relation
-						
+
 						if(element.getValue().toString().contains("PredicateType")){
-							
+
 							PredicateType  predicate= (PredicateType) element.getValue();
-							
+
 							//	Check for Appellation event inside predicate and add if any
 							AppellationEventType ae1 = predicate.getAppellationEvent();
 							if(ae1 == null){
@@ -352,14 +370,40 @@ public class NetworkManager implements INetworkManager {
 									}
 								}
 							}
-							
+
 						}
 				}
 			}
 		}
 	}
-	
-	
+
+
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#storeXMLQStore(java.lang.String)
+	 */
+	@Override
+	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
+		String res="";
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+		RestTemplate restTemplate = new RestTemplate();
+		List<MediaType> mediaTypes = new ArrayList<MediaType>();
+		mediaTypes.add(MediaType.APPLICATION_XML);
+		messageConverters.add(new FormHttpMessageConverter());
+		messageConverters.add(new StringHttpMessageConverter());
+		restTemplate.setMessageConverters(messageConverters);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		headers.setAccept(mediaTypes);
+		HttpEntity request = new HttpEntity(XML,headers);
+
+		try{
+			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
+		}catch(Exception e){
+			logger.error("",e);
+		}
+		return res;
+	}
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getNetworkStatus(java.lang.String, edu.asu.spring.quadriga.domain.IUser)
 	 */
@@ -367,21 +411,21 @@ public class NetworkManager implements INetworkManager {
 	public INetwork getNetworkStatus(String networkName, IUser user) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
-		network = dbConnect.getNetworkStatus(networkName, user);
+			network = dbConnect.getNetworkStatus(networkName, user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
 		return network;
 	}
-	
-	
+
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getNetworkList(edu.asu.spring.quadriga.domain.IUser)
 	 */
 	@Override
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
-		
+
 		try{
 			networkList=dbConnect.getNetworkList(user);
 		}catch(QuadrigaStorageException e){
@@ -389,7 +433,7 @@ public class NetworkManager implements INetworkManager {
 		}
 		return networkList;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getProjectIdForWorkspaceId(java.lang.String)
 	 */
@@ -403,13 +447,13 @@ public class NetworkManager implements INetworkManager {
 		}
 		return projectid;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#hasNetworkName(java.lang.String, edu.asu.spring.quadriga.domain.IUser)
 	 */
 	@Override
 	public boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException{
-		
+
 		boolean result=true;
 		try{
 			result=dbConnect.hasNetworkName(networkName,user);
@@ -418,11 +462,11 @@ public class NetworkManager implements INetworkManager {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkTopNodes(networkId);
-		
+
 		return networkTopNodeList;
 	}
 }
