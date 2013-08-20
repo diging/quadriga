@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.aspects;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -12,6 +13,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
+@Service("workspaceAuthorization")
 public class WorkspaceAuthorization implements IAuthorization 
 {
 	@Autowired

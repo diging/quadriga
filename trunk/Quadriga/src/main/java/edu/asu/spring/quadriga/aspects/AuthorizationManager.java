@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,12 @@ public class AuthorizationManager implements IAuthorizationManager
 	private transient ApplicationContext context;
 	
 	@Autowired
-	//@Qualifier("projectAuthorization")
+	@Qualifier("projectAuthorization")
 	private IAuthorization projectAuthorization;
+	
+	@Autowired
+	@Qualifier("workspaceAuthorization")
+	private IAuthorization workspaceAuthorization;
 	
 	private HashMap<CheckedElementType,IAuthorization> accessManager;
 	
@@ -31,7 +36,7 @@ public class AuthorizationManager implements IAuthorizationManager
 		
 		//insert records into the HashMap
 		accessManager.put(CheckedElementType.PROJECT, projectAuthorization);
-		accessManager.put(CheckedElementType.WORKSPACE, new WorkspaceAuthorization());
+		accessManager.put(CheckedElementType.WORKSPACE, workspaceAuthorization);
 		
 	}
 	
