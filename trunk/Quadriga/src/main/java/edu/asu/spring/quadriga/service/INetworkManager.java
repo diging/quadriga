@@ -14,6 +14,7 @@ import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.JsonObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface INetworkManager {
@@ -67,7 +68,7 @@ public interface INetworkManager {
 	public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
 			throws QuadrigaStorageException;
 
-	public abstract String generateJsontoJQuery(String id, String statementType)
+	public abstract JsonObject generateJsontoJQuery(String id, String statementType)
 			throws JAXBException;
 
 	public abstract String getQStoreGetURL();

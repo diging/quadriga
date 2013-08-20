@@ -21,6 +21,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.taglibs.standard.lang.jstl.RelationalOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,13 @@ import edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType;
 import edu.asu.spring.quadriga.domain.implementation.networks.RelationType;
 import edu.asu.spring.quadriga.domain.implementation.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.implementation.networks.TermType;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.AppellationEventObject;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.JsonObject;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.NodeObject;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.ObjectTypeObject;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.PredicateObject;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.RelationEventObject;
+import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 
@@ -70,6 +78,8 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
+	public String jsonString;
+	
 	@Autowired
 	@Qualifier("qStoreURL_Add")
 	private String qStoreURL_Add;
@@ -106,8 +116,14 @@ public class NetworkManager implements INetworkManager {
 		return qStoreURL+""+qStoreURL_Get;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#receiveNetworkSubmitRequest(javax.xml.bind.JAXBElement, edu.asu.spring.quadriga.domain.IUser, java.lang.String, java.lang.String)
+
+	/**
+	 * Parses through the XML and object goes through the event types 
+	 * @param response
+	 * @param user
+	 * @param networkName
+	 * @param workspaceid
+	 * @author Lohith Dwaraka
 	 */
 	@Override
 	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid){
@@ -179,8 +195,8 @@ public class NetworkManager implements INetworkManager {
 	}
 
 	@Override
-	public String generateJsontoJQuery(String id,String statementType) throws JAXBException{
-
+	public JsonObject generateJsontoJQuery(String id,String statementType) throws JAXBException{
+		JsonObject jsonObject = new JsonObject();
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
 		mediaTypes.add(MediaType.APPLICATION_XML);
@@ -228,22 +244,55 @@ public class NetworkManager implements INetworkManager {
 					// First get PredicateType
 					// Then go recursively to subject and object
 					RelationEventType re = (RelationEventType) ce;
-					getAllObjectFromRelationEvent(re);
+					
+					jsonObject.setIsRelationEventObject(true);
+					RelationEventObject relationEventObject = new RelationEventObject();
+					jsonObject.setRelationEventObject(relationEventObject);
+					jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
+					printJsonObject(jsonObject.getRelationEventObject());
 				}
 			}
 		}catch(Exception e){
 			logger.error("",e);
 		}
-		return "";
+		return jsonObject;
 	}
 
+	public void printJsonObject(RelationEventObject relationEventObject){
+			PredicateObject predicateObject = relationEventObject.getPredicateObject();
+			AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
+			NodeObject nodeObject = new NodeObject();
+			nodeObject.setPredicate(appellationEventObject.getNode());
+			logger.info("Predicate : "+appellationEventObject.getNode() );
+			SubjectObject subjectObject = relationEventObject.getSubjectObject();
+			ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
+			if(subjectObject.getIsRelationEventObject()){
+				nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+				logger.info("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+				if(objectTypeObject.getIsRelationEventObject()){
+					nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+					logger.info("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+				}else{
+					AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+					logger.info("Object Predicate : "+appellationEventObject1.getNode() );
+				}
+				printJsonObject(subjectObject.getRelationEventObject());
+			}else{
+				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+				logger.info("Subject Predicate : "+appellationEventObject1.getNode() );
+			}
+			if(objectTypeObject.getIsRelationEventObject()){
+				printJsonObject(objectTypeObject.getRelationEventObject());
+			}
+	}
 
 	/**
 	 * Get all the terms recursively from the relation event
 	 * 
 	 * @param re : RelationEventType
 	 */
-	public void getAllObjectFromRelationEvent(RelationEventType re){
+	public RelationEventObject getAllObjectFromRelationEvent(RelationEventType re,RelationEventObject relationEventObject){
+		
 		RelationType relationType = re.getRelation(re);
 		PredicateType predicateType = relationType.getPredicateType(relationType);
 		//		Check for Appellation event inside subject and add if any
@@ -253,6 +302,11 @@ public class NetworkManager implements INetworkManager {
 			Iterator <TermType> I2 = termTypeList.iterator();
 			while(I2.hasNext()){
 				TermType tt = I2.next();
+				AppellationEventObject appellationEventObject = new AppellationEventObject();
+				appellationEventObject.setNode(tt.getTermInterpertation(tt));
+				PredicateObject predicateObject = new PredicateObject();
+				predicateObject.setAppellationEventObject(appellationEventObject);
+				relationEventObject.setPredicateObject(predicateObject);
 				logger.info("Predicate Term : "+ tt.getTermInterpertation(tt));
 			}
 		}
@@ -261,34 +315,53 @@ public class NetworkManager implements INetworkManager {
 		//		Check for relation event inside subject and add if any
 		logger.info("Came to Subject, Now checking RE or AE");
 		RelationEventType re1 = subjectType.getRelationEvent();
+		
+		SubjectObject subjectObject = new SubjectObject();
+		
 		if(re1 == null){
+			subjectObject.setIsRelationEventObject(false);
 			logger.debug("Subject : RE1 is null");
 		}else{
 			logger.info("Subject : Its RE, now Recursive move");
-			getAllObjectFromRelationEvent(re1);
+			subjectObject.setIsRelationEventObject(true);
+			RelationEventObject relationEventObject1   = new RelationEventObject();
+			
+			relationEventObject1=getAllObjectFromRelationEvent(re1,relationEventObject1);
+			subjectObject.setRelationEventObject(relationEventObject1);
 		}
 		//	Check for Appellation event inside subject and add if any
 		AppellationEventType ae1 = subjectType.getAppellationEvent();
 		if(ae1 == null){
 			logger.debug("Subject : AE1 is null");
 		}else{
+			
+			
 			logger.info("Subject : Its AE , now printing the terms");
 			List<TermType> termTypeList= ae1.getTerms(ae1);
 			Iterator <TermType> I2 = termTypeList.iterator();
 			while(I2.hasNext()){
 				TermType tt = I2.next();
+				AppellationEventObject appellationEventObject = new AppellationEventObject();
+				appellationEventObject.setNode(tt.getTermInterpertation(tt));
+				subjectObject.setAppellationEventObject(appellationEventObject);
 				logger.info("subjectType Term : "+tt.getTermInterpertation(tt));
 			}
 		}
+		relationEventObject.setSubjectObject(subjectObject);
 		SubjectObjectType objectType = relationType.getObjectType(relationType);
+		ObjectTypeObject objectTypeObject = new ObjectTypeObject();
 		//		Check for relation event inside subject and add if any
 		logger.info("Came to Object, Now checking RE or AE");
 		RelationEventType re2 = objectType.getRelationEvent();
 		if(re2 == null){
+			objectTypeObject.setIsRelationEventObject(false);
 			logger.debug("Object : RE2 is null");
 		}else{
+			objectTypeObject.setIsRelationEventObject(true);
+			RelationEventObject relationEventObject1   = new RelationEventObject();
 			logger.info("Object : Its RE, now Recursive move");
-			getAllObjectFromRelationEvent(re2);
+			relationEventObject1=getAllObjectFromRelationEvent(re2,relationEventObject1);
+			objectTypeObject.setRelationEventObject(relationEventObject1);
 		}
 		//	Check for Appellation event inside subject and add if any
 		AppellationEventType ae2 = objectType.getAppellationEvent();
@@ -300,9 +373,14 @@ public class NetworkManager implements INetworkManager {
 			Iterator <TermType> I2 = termTypeList.iterator();
 			while(I2.hasNext()){
 				TermType tt = I2.next();
+				AppellationEventObject appellationEventObject = new AppellationEventObject();
+				appellationEventObject.setNode(tt.getTermInterpertation(tt));
+				objectTypeObject.setAppellationEventObject(appellationEventObject);
 				logger.info("objectType Term : "+tt.getTermInterpertation(tt));
 			}
 		}
+		relationEventObject.setObjectTypeObject(objectTypeObject);
+		return relationEventObject;
 	}
 
 
