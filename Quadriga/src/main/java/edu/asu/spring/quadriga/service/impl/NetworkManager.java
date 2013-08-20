@@ -271,6 +271,7 @@ public class NetworkManager implements INetworkManager {
 				logger.info("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 				if(objectTypeObject.getIsRelationEventObject()){
 					nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+					
 					logger.info("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 				}else{
 					AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
@@ -285,6 +286,8 @@ public class NetworkManager implements INetworkManager {
 				printJsonObject(objectTypeObject.getRelationEventObject());
 			}
 	}
+	
+	
 
 	/**
 	 * Get all the terms recursively from the relation event
@@ -307,13 +310,13 @@ public class NetworkManager implements INetworkManager {
 				PredicateObject predicateObject = new PredicateObject();
 				predicateObject.setAppellationEventObject(appellationEventObject);
 				relationEventObject.setPredicateObject(predicateObject);
-				logger.info("Predicate Term : "+ tt.getTermInterpertation(tt));
+				logger.debug("Predicate Term : "+ tt.getTermInterpertation(tt));
 			}
 		}
 
 		SubjectObjectType subjectType = relationType.getSubjectType(relationType);
 		//		Check for relation event inside subject and add if any
-		logger.info("Came to Subject, Now checking RE or AE");
+		logger.debug("Came to Subject, Now checking RE or AE");
 		RelationEventType re1 = subjectType.getRelationEvent();
 		
 		SubjectObject subjectObject = new SubjectObject();
@@ -322,7 +325,7 @@ public class NetworkManager implements INetworkManager {
 			subjectObject.setIsRelationEventObject(false);
 			logger.debug("Subject : RE1 is null");
 		}else{
-			logger.info("Subject : Its RE, now Recursive move");
+			logger.debug("Subject : Its RE, now Recursive move");
 			subjectObject.setIsRelationEventObject(true);
 			RelationEventObject relationEventObject1   = new RelationEventObject();
 			
@@ -336,7 +339,7 @@ public class NetworkManager implements INetworkManager {
 		}else{
 			
 			
-			logger.info("Subject : Its AE , now printing the terms");
+			logger.debug("Subject : Its AE , now printing the terms");
 			List<TermType> termTypeList= ae1.getTerms(ae1);
 			Iterator <TermType> I2 = termTypeList.iterator();
 			while(I2.hasNext()){
@@ -344,14 +347,14 @@ public class NetworkManager implements INetworkManager {
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
 				appellationEventObject.setNode(tt.getTermInterpertation(tt));
 				subjectObject.setAppellationEventObject(appellationEventObject);
-				logger.info("subjectType Term : "+tt.getTermInterpertation(tt));
+				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
 			}
 		}
 		relationEventObject.setSubjectObject(subjectObject);
 		SubjectObjectType objectType = relationType.getObjectType(relationType);
 		ObjectTypeObject objectTypeObject = new ObjectTypeObject();
 		//		Check for relation event inside subject and add if any
-		logger.info("Came to Object, Now checking RE or AE");
+		logger.debug("Came to Object, Now checking RE or AE");
 		RelationEventType re2 = objectType.getRelationEvent();
 		if(re2 == null){
 			objectTypeObject.setIsRelationEventObject(false);
@@ -359,7 +362,7 @@ public class NetworkManager implements INetworkManager {
 		}else{
 			objectTypeObject.setIsRelationEventObject(true);
 			RelationEventObject relationEventObject1   = new RelationEventObject();
-			logger.info("Object : Its RE, now Recursive move");
+			logger.debug("Object : Its RE, now Recursive move");
 			relationEventObject1=getAllObjectFromRelationEvent(re2,relationEventObject1);
 			objectTypeObject.setRelationEventObject(relationEventObject1);
 		}
@@ -368,7 +371,7 @@ public class NetworkManager implements INetworkManager {
 		if(ae2 == null){
 			logger.debug("Object : AE2 is null");
 		}else{
-			logger.info("Object : Its AE , now printing the terms");
+			logger.debug("Object : Its AE , now printing the terms");
 			List<TermType> termTypeList= ae2.getTerms(ae2);
 			Iterator <TermType> I2 = termTypeList.iterator();
 			while(I2.hasNext()){
@@ -376,7 +379,7 @@ public class NetworkManager implements INetworkManager {
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
 				appellationEventObject.setNode(tt.getTermInterpertation(tt));
 				objectTypeObject.setAppellationEventObject(appellationEventObject);
-				logger.info("objectType Term : "+tt.getTermInterpertation(tt));
+				logger.debug("objectType Term : "+tt.getTermInterpertation(tt));
 			}
 		}
 		relationEventObject.setObjectTypeObject(objectTypeObject);
