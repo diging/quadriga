@@ -1,3 +1,4 @@
+
 INSERT INTO tbl_quadriga_user
 (fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)
 VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role4,role3,role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE());
