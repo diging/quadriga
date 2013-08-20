@@ -83,35 +83,20 @@ extends CreationEvent
 		return this.relationCreatorOrRelation;
 	}
 
-	public List<Object>  getRelation(RelationEventType re){
-		List<Object> relationObjectList = new ArrayList<Object>();
+	public RelationType  getRelation(RelationEventType re){
+		RelationType relationType = null;
 		List <?> ee = re.getRelationCreatorOrRelation();
 		Iterator <?> Iee=ee.iterator();
 		while(Iee.hasNext()){
 			Object o = Iee.next();
 			if(o instanceof RelationType){
-				RelationType rt = (RelationType) o;
-				relationObjectList.add(rt);
-			}
-
-
-		}
-		return relationObjectList;
-	}
-
-	public PredicateType getPredicateType(RelationType rt){
-		PredicateType  predicate = null;
-		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I2 = e3.iterator();
-		while(I2.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I2.next();
-			if(element.getValue().toString().contains("PredicateType")){
-				predicate= (PredicateType) element.getValue();
-
+				relationType = (RelationType) o;
 			}
 		}
-		return predicate;
+		return relationType;
 	}
+
+
 	
 }
 

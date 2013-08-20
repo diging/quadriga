@@ -215,39 +215,20 @@ public class NetworkManager implements INetworkManager {
 				{
 					// Trying to get a list of terms in the appellation event type object
 					AppellationEventType aet = (AppellationEventType) ce;
-					
+
 					List<TermType> termTypeList= aet.getTerms(aet);
 					Iterator <TermType> I2 = termTypeList.iterator();
 					while(I2.hasNext()){
 						TermType tt = I2.next();
 						logger.info(tt.getTermInterpertation(tt));
 					}
-//					List<Object> objectList = aet.getTermOrExternalRefId();
-//					Iterator <Object> I3 = objectList.iterator();
-//					while(I3.hasNext()){
-//						Object o = I3.next();
-//						if(o instanceof TermType){
-//							TermType tt = (TermType) o;
-//							List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
-//							Iterator <JAXBElement<?>> I2 = e3.iterator();
-//							while(I2.hasNext()){
-//								JAXBElement<?> element = (JAXBElement<?>) I2.next();
-//								if(element.getName().toString().contains("interpretation")){
-//									logger.info("Term value Elements in Appellation event "+element.getValue().toString() );
-//								}
-//							}
-//						}
-//					}
 				}
 				if(ce instanceof RelationEventType){
-					List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
-					Iterator <JAXBElement<?>> I1 = e2.iterator();
-					while(I1.hasNext()){
-						JAXBElement<?> element = (JAXBElement<?>) I1.next();
-						if(element.getName().toString().contains("id")){
-							logger.info("Relation Event ID : "+element.getValue().toString());
-						}
-					}
+					// Trying to get a list of objects in the relations event type object
+					// First get PredicateType
+					// Then go recursively to subject and object
+					RelationEventType re = (RelationEventType) ce;
+					getAllObjectFromRelationEvent(re);
 				}
 			}
 		}catch(Exception e){
@@ -257,6 +238,72 @@ public class NetworkManager implements INetworkManager {
 	}
 
 
+	/**
+	 * Get all the terms recursively from the relation event
+	 * 
+	 * @param re : RelationEventType
+	 */
+	public void getAllObjectFromRelationEvent(RelationEventType re){
+		RelationType relationType = re.getRelation(re);
+		PredicateType predicateType = relationType.getPredicateType(relationType);
+		//		Check for Appellation event inside subject and add if any
+		AppellationEventType ae = predicateType.getAppellationEvent();
+		{
+			List<TermType> termTypeList= ae.getTerms(ae);
+			Iterator <TermType> I2 = termTypeList.iterator();
+			while(I2.hasNext()){
+				TermType tt = I2.next();
+				logger.info("Predicate Term : "+ tt.getTermInterpertation(tt));
+			}
+		}
+
+		SubjectObjectType subjectType = relationType.getSubjectType(relationType);
+		//		Check for relation event inside subject and add if any
+		logger.info("Came to Subject, Now checking RE or AE");
+		RelationEventType re1 = subjectType.getRelationEvent();
+		if(re1 == null){
+			logger.debug("Subject : RE1 is null");
+		}else{
+			logger.info("Subject : Its RE, now Recursive move");
+			getAllObjectFromRelationEvent(re1);
+		}
+		//	Check for Appellation event inside subject and add if any
+		AppellationEventType ae1 = subjectType.getAppellationEvent();
+		if(ae1 == null){
+			logger.debug("Subject : AE1 is null");
+		}else{
+			logger.info("Subject : Its AE , now printing the terms");
+			List<TermType> termTypeList= ae1.getTerms(ae1);
+			Iterator <TermType> I2 = termTypeList.iterator();
+			while(I2.hasNext()){
+				TermType tt = I2.next();
+				logger.info("subjectType Term : "+tt.getTermInterpertation(tt));
+			}
+		}
+		SubjectObjectType objectType = relationType.getObjectType(relationType);
+		//		Check for relation event inside subject and add if any
+		logger.info("Came to Object, Now checking RE or AE");
+		RelationEventType re2 = objectType.getRelationEvent();
+		if(re2 == null){
+			logger.debug("Object : RE2 is null");
+		}else{
+			logger.info("Object : Its RE, now Recursive move");
+			getAllObjectFromRelationEvent(re2);
+		}
+		//	Check for Appellation event inside subject and add if any
+		AppellationEventType ae2 = objectType.getAppellationEvent();
+		if(ae2 == null){
+			logger.debug("Object : AE2 is null");
+		}else{
+			logger.info("Object : Its AE , now printing the terms");
+			List<TermType> termTypeList= ae2.getTerms(ae2);
+			Iterator <TermType> I2 = termTypeList.iterator();
+			while(I2.hasNext()){
+				TermType tt = I2.next();
+				logger.info("objectType Term : "+tt.getTermInterpertation(tt));
+			}
+		}
+	}
 
 
 

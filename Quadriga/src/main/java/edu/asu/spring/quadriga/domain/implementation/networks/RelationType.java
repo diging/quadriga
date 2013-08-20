@@ -9,6 +9,7 @@
 package edu.asu.spring.quadriga.domain.implementation.networks;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -108,6 +109,69 @@ public class RelationType {
         return this.idOrCreatorOrCreationDate;
     }
 
+    /**
+     * Gets the PredicateType from the RelationType object
+     * @param rt : RelationType
+     * @return PredicateType
+     */
+    public PredicateType getPredicateType(RelationType rt){
+		PredicateType  predicate = null;
+		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> I2 = e3.iterator();
+		while(I2.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) I2.next();
+			if(element.getValue().toString().contains("PredicateType")){
+				predicate= (PredicateType) element.getValue();
+
+			}
+		}
+		return predicate;
+	}
+    
+    
+    /**
+     * Gets the Subject of SubjectObjectType from the RelationType object
+     * @param rt : RelationType
+     * @return SubjectObjectType
+     */
+	public SubjectObjectType getSubjectType(RelationType rt){
+		SubjectObjectType subjectType = null;
+		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> I2 = e3.iterator();
+		while(I2.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) I2.next();
+			if(element.getValue().toString().contains("SubjectObjectType")){
+				//	Handles the subject part of the relation
+				if(element.getName().toString().contains("subject")){
+					subjectType = (SubjectObjectType) element.getValue();
+				}
+
+			}
+		}
+		return subjectType;
+	}
 	
+	
+	/**
+     * Gets the Object of SubjectObjectType from the RelationType object
+     * @param rt : RelationType
+     * @return SubjectObjectType
+     */
+	public SubjectObjectType getObjectType(RelationType rt){
+		SubjectObjectType objectType = null;
+		List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> I2 = e3.iterator();
+		while(I2.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) I2.next();
+			if(element.getValue().toString().contains("SubjectObjectType")){
+				//	Handles the subject part of the relation
+				if(element.getName().toString().contains("object")){
+					objectType = (SubjectObjectType) element.getValue();
+				}
+
+			}
+		}
+		return objectType;
+	}
 
 }
