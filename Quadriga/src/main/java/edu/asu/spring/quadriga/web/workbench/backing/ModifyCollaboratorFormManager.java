@@ -29,10 +29,11 @@ public class ModifyCollaboratorFormManager {
 		for(ICollaborator collaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			modifyCollab = (ModifyCollaborator) collaborator;
+			modifyCollab.setUserName(collaborator.getUserObj().getUserName());
+			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
+		
 		return modifyCollaborators;
-
 	}
 }

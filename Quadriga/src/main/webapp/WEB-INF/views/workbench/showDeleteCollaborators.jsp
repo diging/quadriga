@@ -4,6 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
    
 <script>
+
 $(document).ready(function() {
     activeTable = $('.dataTable').dataTable({
     	"bJQueryUI" : true,
@@ -43,18 +44,27 @@ function onSubmit(){
 
 </script> 
 
+<style>
+
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
+
+</style>
+
 <input type="submit" value="Back" onClick="onSubmit()">
 <br><br>
 
 <form:form method="POST" commandName="collaboratorForm" 
-action="${pageContext.servletContext.contextPath}/auth/workbench/${projectId}/deletecollaborator" 
-id="updateprojcollabform">
+action="${pageContext.servletContext.contextPath}/auth/workbench/${projectId}/deletecollaborator">
 
 <c:choose>
 <c:when test="${success == '0'}">
 <c:if test="${not empty collaboratorForm.collaborators}">
 
 <input type="submit" value="delete">
+
 <table style="width: 100%" class="display dataTable">
 <thead>
 					<tr>
@@ -66,18 +76,17 @@ id="updateprojcollabform">
 	<c:forEach var="collabUser" items="${collaboratorForm.collaborators}" varStatus="status">
 	<tr>
 		<td>
-			<form:checkbox path="collaborators[${status.index}].userName" value="${collabUser.userName}" checked="false"/>
+			<form:checkbox path="collaborators[${status.index}].userName" value="${collabUser.userName}" />
 			<form:label path="collaborators[${status.index}].userName">
 				<c:out value="${collabUser.userName}"></c:out>
 			</form:label>
+			<form:errors path="collaborators[${status.index}].userName" cssClass="error"></form:errors> 
 		</td>
 		<td>
-			<c:forEach var="collabs" items="${collaboratorForm.collaborators}">
-				<c:forEach var="roles" items="${collabs.collaboratorRoles}">
-					<c:out value="${roles.displayName}" />
-				</c:forEach>
+			<c:forEach var="roles" items="${collabUser.collaboratorRoles}">
+				<c:out value="${roles.displayName}" />||
 			</c:forEach>
-		</td>
+		</td> 	
 	</tr>
 	</c:forEach>
 
