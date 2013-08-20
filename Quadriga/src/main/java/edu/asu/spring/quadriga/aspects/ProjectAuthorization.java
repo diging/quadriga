@@ -12,8 +12,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
-//@Service("projectAuthorization")
-@Service
+@Service("projectAuthorization")
 public class ProjectAuthorization implements IAuthorization
 {	
 	@Autowired
