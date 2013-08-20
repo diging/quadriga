@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.dspace.service.impl;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -29,11 +27,9 @@ import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
-import edu.asu.spring.quadriga.dspace.service.IDspaceUpdateManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
  *	The purpose of the class is to make rest service calls to dspace
@@ -242,100 +238,23 @@ public class DspaceManager implements IDspaceManager{
 				throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
 			}
 
-			//Check the status of community, collection and item in the database
-			String status = dbconnectionManager.checkDspaceNodes(communityId, collectionId, itemId);
-			if(status == null)
-			{
-				//Community, Collection and Item metadata does not exist. So add them to the database
-				if(dbconnectionManager.addCommunity(communityId, community.getName(), community.getShortDescription(), community.getIntroductoryText(), community.getHandle(), username) == FAILURE)
-				{
-					logger.info("The user "+username+" got this exception when trying to insert dspace community metadata with the following values:");
-					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
-				}
-				if(dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
-				{
-					logger.info("The user "+username+" got this exception when trying to insert dspace collection metadata with the following values:");
-					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
-				}
-				if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
-				{
-					logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
-					throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
-				}
-
-			}
-			else
-			{
-				//Community metadata is found in the database
-				if(status.equalsIgnoreCase(COMMUNITY_EXISTS))
-				{
-					//Collection and Item metadata does not exist. Add the metadata to the database.				
-					if(dbconnectionManager.addCollection(communityId, collectionId, collection.getName(), collection.getShortDescription(), collection.getEntityReference(), collection.getHandle(), username)==FAILURE)
-					{
-						logger.info("The user "+username+" got this exception when trying to insert dspace collection metadata with the following values:");
-						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
-					}
-					if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
-					{
-						logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
-						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
-					}
-
-				}
-				//Collection metadata is found in the database
-				else if(status.equalsIgnoreCase(COLLECTON_EXISTS))
-				{
-					//Item metadata does not exist. Add the metadata to the database.
-					if(dbconnectionManager.addItem(communityId, collectionId, itemId, item.getName(), item.getHandle(), username)==FAILURE)
-					{
-						logger.info("The user "+username+" got this exception when trying to insert dspace item metadata with the following values:");
-						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
-					}
-				}
-			}
-
-			/**The metadata about community, collections and items are added
-			 * Now check if each bitstream is already present in the database.
-			 * If yes, then just add the bitstreamid to the workspace.
-			 * If no, then add the bitstream metadata and then add the bitstreamid to workspace.
+			/**	The supplied community, collection and item are valid.
+			 *  Check if each supplied bitstream is valid.
 			 */
 			for(String bitstreamId: bitstreamIds)
 			{			
-				IBitStream bitstream;
-
-				//Bitstream is not present in the database
-				if(dbconnectionManager.checkDspaceBitStream(bitstreamId)==null)
+				IBitStream bitstream = getProxyCommunityManager().getBitStream(collectionId, itemId, bitstreamId);;
+				//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
+				if(bitstream == null)
 				{
-					bitstream = getProxyCommunityManager().getBitStream(collectionId, itemId, bitstreamId);
-					//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
-					if(bitstream == null)
-					{
-						logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
-						logger.info("Bitstream id: "+bitstreamId);
-						throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
-					}
-					if(dbconnectionManager.addBitStream(communityId, collectionId, itemId, bitstreamId, bitstream.getName(), bitstream.getSize(), bitstream.getMimeType(), username)==FAILURE)
-					{
-						logger.info("The user "+username+" got this exception when trying to insert dspace bitstream metadata with the following values:");
-						logger.info("Bitstream id: "+bitstreamId);
-						throw new QuadrigaStorageException("OOPS ! There seems to be a problem in the database. We got our best minds working on it. Please check back later");
-					}
+					logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+					logger.info("Bitstream id: "+bitstreamId);
+					throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
 				}
 
-				//Add bitstream to workspace
-				dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
+				//Add bitstream to workspace. For security, the id's are gotten from Dspace Objects.
+				dbconnectionManager.addBitstreamToWorkspace(workspaceId, community.getId(), collection.getId(), item.getId(), bitstream.getId(), username);
 			}
-		}
-		catch(QuadrigaStorageException e)
-		{
-			logger.info("Class Name: DspaceManager");
-			logger.info("Method Name: addBitStreamsToWorkspace");
-			logger.info("Community id: "+communityId);
-			logger.info("Collection id: "+collectionId);
-			logger.info("Item id: "+itemId);
-			logger.info("Bitstreams selected: "+bitstreamIds.length);
-			logger.error("The logged exception is: ",e);
-			throw e;
 		}
 		catch(QuadrigaAccessException e)
 		{
@@ -389,83 +308,6 @@ public class DspaceManager implements IDspaceManager{
 			logger.info("Bitstream selected: "+bitstreamids.length);
 			logger.error("The logged exception is: ",e);
 			throw e;
-		}
-	}
-
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void updateDspaceMetadata(String workspaceid,  List<IBitStream> workspaceBitStreams, String quadrigaUsername, IDspaceKeys dspaceKeys, String dspaceUsername, String password) throws QuadrigaAccessException, QuadrigaStorageException, QuadrigaException
-	{
-
-		HashSet<String> reloadedCollectionIds = new HashSet<String>();
-
-		//Check if the selected bitstream ids belong to the authorized list of 	bitstreams.
-		List<IBitStream> dbBitStreams = dbconnectionManager.getBitStreamReferences(workspaceid, quadrigaUsername);
-
-		Iterator<IBitStream> iterator = dbBitStreams.iterator();
-		while(iterator.hasNext())
-		{
-			IBitStream bitstream = iterator.next();
-			Boolean isauthorized = false;
-			for(IBitStream workspaceBitStream: workspaceBitStreams)
-			{
-				if(workspaceBitStream.getId()!=null)
-					if(workspaceBitStream.getId().equals(bitstream.getId()))
-					{
-						isauthorized = true;
-						break;
-					}
-			}
-
-			//Remove unauthorized bitstreams from the list to update
-			if(!isauthorized)
-				iterator.remove();
-		}
-
-		//Try to update bitstreams only if the user has access to atleast one bitstream.
-		if(dbBitStreams.size()>0)
-		{
-			//Reload all the communities by making only one call to dspace
-			try {
-				proxyCommunityManager.getCommunity(null, false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password);
-				for(IBitStream bitstream : dbBitStreams)
-				{
-					ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, null, null, null, null,null);
-					ICollection collection = null;
-
-					if(reloadedCollectionIds.contains(bitstream.getCollectionid()))
-					{
-						//Collection has been reloaded already
-						collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, null, null, null, null, null, null);
-					}
-					else
-					{
-						//This is the first call to reload the 	collection
-						collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), false, getRestTemplate(), getDspaceProperties(), dspaceKeys, dspaceUsername, password, bitstream.getCommunityid());
-						reloadedCollectionIds.add(bitstream.getCollectionid());
-					}
-
-					IDspaceUpdateManager dspaceUpdateManager = new	DspaceUpdateManager(this.dbconnectionManager.getDataSource(), community, collection, null, bitstream, quadrigaUsername);
-					Thread bitstreamUpdateThread = new Thread(dspaceUpdateManager);
-					bitstreamUpdateThread.start();
-				}
-			}
-			catch (NoSuchAlgorithmException e) {
-				throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
-			}
-			catch (Exception e)	{
-				logger.error("Error in Updating Dspace Metadata", e);
-				logger.error("Quadriga Username : "+quadrigaUsername);
-				logger.error("Dspace Username: "+dspaceUsername);
-				logger.error("Dspace Key object: "+dspaceKeys);
-				logger.error("Workspace id: "+workspaceid);
-				logger.error("Bitstreams Trying to update: "+dbBitStreams.size());
-				logger.error("Authroized bitstreams length:	"+workspaceBitStreams.size());
-			}
 		}
 	}
 
@@ -580,7 +422,7 @@ public class DspaceManager implements IDspaceManager{
 			restrictedBitStream.setItemName("Need Dspace Authentication");
 			restrictedBitStream.setName("Need Dspace Authentication");
 
-			//Dspace can't be accessed using the supplied public and private key
+			//Created Empty Bitstream data
 			for(int i=0;i<bitstreams.size();i++)
 			{
 				checkedBitStreams.add(restrictedBitStream);
@@ -613,7 +455,12 @@ public class DspaceManager implements IDspaceManager{
 					//Check access rights for collection
 					isloading = true;
 					loadingBitStream = new BitStream();
-					loadingBitStream.setCommunityName(bitstream.getCommunityName());
+
+					loadingBitStream.setId(bitstream.getId());
+					loadingBitStream.setCommunityid(bitstream.getCommunityid());
+					loadingBitStream.setCollectionid(bitstream.getCollectionid());
+					loadingBitStream.setItemid(bitstream.getItemid());
+					loadingBitStream.setCommunityName(community.getName());
 
 					ICollection collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, community.getId());
 					if(collection!=null)
@@ -621,6 +468,7 @@ public class DspaceManager implements IDspaceManager{
 						if(collection.getName()!=null)
 						{
 							//User has access to the collection and the collection is loaded from dspace.
+							loadingBitStream.setCollectionName(collection.getName());
 							//Check access rights for item
 							IItem item = proxyCommunityManager.getItem(collection.getId(), bitstream.getItemid());
 							if(item != null)
@@ -628,6 +476,7 @@ public class DspaceManager implements IDspaceManager{
 								if(item.getName()!=null)
 								{
 									//User has access to the item and the item is loaded from dspace.
+									loadingBitStream.setItemName(item.getName());
 									//Check access rights for bitstream
 									IBitStream dspaceBitstream = proxyCommunityManager.getBitStream(collection.getId(), item.getId(), bitstream.getId());
 									if(dspaceBitstream != null)
@@ -635,8 +484,9 @@ public class DspaceManager implements IDspaceManager{
 										if(dspaceBitstream.getName() != null)
 										{
 											//User has access to the bitstream and the bitstream is loaded from dspace.
+											loadingBitStream.setName(dspaceBitstream.getName());
+											checkedBitStreams.add(loadingBitStream);
 											isloading = false;
-											checkedBitStreams.add(bitstream);
 										}
 									}
 								} //End of if item name is null	
@@ -648,18 +498,16 @@ public class DspaceManager implements IDspaceManager{
 				{
 					//User does not have access to the community
 					checkedBitStreams.add(restrictedBitStream);
+					isloading = false;
 				}
 
+				// The complete hierarchy is yet to be loaded.
 				if(isloading)
 				{
 					/*
 					 * The collection/item/bitstream data is to be loaded from dspace. 
 					 * Separate threads are still working on loading them.
 					 */
-					loadingBitStream.setId(bitstream.getId());
-					loadingBitStream.setCommunityid(bitstream.getCommunityid());
-					loadingBitStream.setCollectionid(bitstream.getCollectionid());
-					loadingBitStream.setItemid(bitstream.getItemid());
 
 					//TODO: Put strings in the properties file.
 					loadingBitStream.setCollectionName("Checking Collection Access...");
@@ -675,14 +523,16 @@ public class DspaceManager implements IDspaceManager{
 		}
 		catch(HttpServerErrorException e)
 		{
-			//Dspace can't be accessed using the supplied public and private key
+			/* Dspace can't be accessed using the supplied public and private key.
+			 * This exception happens when long random strings are provided for public/private keys.
+			 */
+			checkedBitStreams.clear();
 			for(int i=0;i<bitstreams.size();i++)
 			{
 				checkedBitStreams.add(restrictedBitStream);
 			}
-			return checkedBitStreams;
-		}
-		return checkedBitStreams;
+		}		
+		return checkedBitStreams;		
 	}
 
 	/**

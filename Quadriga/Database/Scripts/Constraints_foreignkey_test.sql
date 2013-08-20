@@ -51,25 +51,8 @@ ALTER TABLE tbl_workspace
 ADD FOREIGN KEY(workspaceowner)  REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE; 
 
 /* Begin - Foreign key dependencies for Dspace data */
-ALTER TABLE tbl_dspace_collection
-ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid) ON DELETE CASCADE ;
-
-ALTER TABLE tbl_dspace_item
-ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid) ON DELETE CASCADE ;
-ALTER TABLE tbl_dspace_item
-ADD FOREIGN KEY(collectionid) REFERENCES tbl_dspace_collection(collectionid) ON DELETE CASCADE ;
-
-ALTER TABLE tbl_dspace_bitstream
-ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid) ON DELETE CASCADE ;
-ALTER TABLE tbl_dspace_bitstream
-ADD FOREIGN KEY(collectionid) REFERENCES tbl_dspace_collection(collectionid) ON DELETE CASCADE ;
-ALTER TABLE tbl_dspace_bitstream
-ADD FOREIGN KEY(itemid) REFERENCES tbl_dspace_item(itemid) ON DELETE CASCADE ;
-
 ALTER TABLE tbl_workspace_dspace
 ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid) ON DELETE CASCADE ;
-ALTER TABLE tbl_workspace_dspace
-ADD FOREIGN KEY(bitstreamid) REFERENCES tbl_dspace_bitstream(bitstreamid) ON DELETE CASCADE ;
 
 ALTER TABLE tbl_dspace_keys
 ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;

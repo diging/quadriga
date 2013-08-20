@@ -17,6 +17,9 @@ DELIMITER $$
 CREATE PROCEDURE sp_addBitstreamToWorkspace
 (
   IN  inWorkspaceid     	VARCHAR(50),
+  IN  inCommunityid 		VARCHAR(20),
+  IN  inCollectionid 		VARCHAR(20),
+  IN  inItemid		 		VARCHAR(20),
   IN  inBitstreamid 		VARCHAR(20),
   IN  inUserName			VARCHAR(50),
   OUT errorMessage			VARCHAR(50)
@@ -26,24 +29,12 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errorMessage = "SQL exception has occurred";
 	
-    -- check if user has access to the project and workspace
-	 IF EXISTS(SELECT 1 FROM tbl_project 
-	 WHERE projectid = (SELECT projectid FROM tbl_project_workspace WHERE workspaceid = inWorkspaceid)
-	 AND (projectowner = inUsername OR projectid in (SELECT projectid from tbl_project_collaborator where collaboratoruser = inUsername)))
-
-		THEN 
-			
-			IF NOT EXISTS(SELECT 1 FROM tbl_workspace
-                WHERE workspaceid = inWorkspaceid)
-      				THEN SET errorMessage = "workspace is not present";
-			ELSEIF NOT EXISTS(SELECT 1 FROM tbl_dspace_bitstream
-                WHERE bitstreamid = inBitstreamid)
-      				THEN SET errorMessage = "bitstream is not present";
-			ELSE 
+    -- check if the workspace exists
+	 IF EXISTS(SELECT 1 FROM tbl_workspace WHERE workspaceid = inWorkspaceid)
+		THEN 		
 					START TRANSACTION;
-					INSERT INTO tbl_workspace_dspace VALUES(inWorkspaceid, inBitstreamid, inUserName, NOW());
+					INSERT INTO tbl_workspace_dspace VALUES(inWorkspaceid, inCommunityid, inCollectionid, inItemid, inBitstreamid, inUserName, NOW());
 					COMMIT;
-			END IF;
 	ELSE 
 			SET errorMessage = "This action has been logged. Please don't try to hack into the system !!!";
 	END IF;

@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.dspace.service;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
 
@@ -155,24 +154,6 @@ public interface IDspaceManager{
 	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, List<IBitStream> workspaceBitStreams,
 			String username) throws QuadrigaStorageException,
 			QuadrigaAccessException;
-
-	/**
-	 * Update the existing metadata of the bitstreams present in the workspace. The user must have access to the workspace.
-	 * Will update only the metadata of files to which the user has access to in Dspace.
-	 * 
-	 * @param workspaceid					The id of the workspace to which the bitstream(s) belong to.
-	 * @param workspaceBitStreams			The list of bitstreams that the user is allowed to see in the workspace, based on the user's Dspace access rights.
-	 * @param quadrigaUsername				The quadriga userid of the user who is trying to update the bitstream references.
-	 * @param dspaceUsername				The dspace username supplied by the user. This username will be used to connect to the dspace server.
-	 * @param dspaceKeys					The Dspace Access keys used by the user.
-	 * @param password						The dspace password supplied by the user. This password will be used to authenticate the user with the dspace server.
-	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
-	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
-	 * @throws QuadrigaException 
-	 */
-	public abstract void updateDspaceMetadata(String workspaceid,  List<IBitStream> workspaceBitStreams, String quadrigaUsername, IDspaceKeys dspaceKeys, String dspaceUsername,
-			String password) throws QuadrigaAccessException,
-			QuadrigaStorageException, QuadrigaException;
 
 	/**
 	 * Clear all the cached dspace information

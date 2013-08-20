@@ -23,25 +23,16 @@ CREATE PROCEDURE sp_getAllBitStreams
 )
 BEGIN
 
-	-- check if user has access to the project and workspace
-	 IF EXISTS(SELECT 1 FROM tbl_project 
-	 WHERE projectid = (SELECT projectid FROM tbl_project_workspace WHERE workspaceid = inWorkspaceid)
-	 AND (projectowner = inUsername OR projectid in (SELECT projectid from tbl_project_collaborator where collaboratoruser = inUsername)))
-
+	-- check if the workspace exists
+	 IF EXISTS(SELECT 1 FROM tbl_workspace WHERE workspaceid = inWorkspaceid)
+	 
 		THEN 
 			
-			SELECT com.communityid as Communityid, com.name as Community, col.collectionid as Collectionid, col.name as Collection, i.itemid as Itemid, i.name as Item, b.bitstreamid as Bitstreamid, b.name as Bitstream 
-			FROM tbl_dspace_bitstream AS b, 
-			tbl_dspace_community as com,
-			tbl_dspace_collection as col,
-			tbl_dspace_item as i
-			WHERE b.bitstreamid in (
-			SELECT bitstreamid FROM tbl_workspace_dspace WHERE workspaceid = inWorkspaceid)
-			AND b.communityid = com.communityid
-			AND b.collectionid = col.collectionid
-			AND b.itemid = i.itemid;
+			SELECT communityid as Communityid, collectionid as Collectionid, itemid as Itemid, bitstreamid as Bitstreamid
+			FROM tbl_workspace_dspace WHERE workspaceid = inWorkspaceid;
+	
 	ELSE 
-			SET errorMessage = "This action has been logged. Please don't try to hack into the system !!!";
+			SET errorMessage = "No such Workspace exists. This action has been logged. Please don't try to hack into the system !!!";
 	END IF;
 
 END$$

@@ -99,11 +99,11 @@ public class ProjectAccessAspect
 			
 		}
 		
-		if(!haveAccess)
-		{
-			System.out.println("Count error :"+1);
-			 throw new QuadrigaAccessException();
-		}
+//		if(!haveAccess)
+//		{
+//			System.out.println("Count error :"+1);
+//			 throw new QuadrigaAccessException();
+//		}
 		
 		Object retVal = pjp.proceed();
 		return retVal;

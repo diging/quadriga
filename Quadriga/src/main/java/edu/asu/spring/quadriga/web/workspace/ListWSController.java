@@ -662,6 +662,7 @@ public class ListWSController
 	 * @author 								Ram Kumar Kumaresan
 	 * @throws QuadrigaException 
 	 */
+	//TODO: @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/addbitstreams", method = RequestMethod.POST)
 	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException{
 		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
@@ -693,32 +694,6 @@ public class ListWSController
 		List<IBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
 		
 		dspaceManager.deleteBitstreamFromWorkspace(workspaceId, bitstreamids, workspaceBitStreams, principal.getName());
-		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-	}
-
-	/**
-	 * Handle the request to update the bitstreams of a workspace. The bitstreams and its related metadata are updated by sending a request to dspace.
-	 * The user must have access to the project that the workspace belongs to. If not, this method will throw a QuadrigaAccessException.
-	 * 
-	 * @param workspaceId					The id of the workspace whose bitstream(s) are to be updated.
-	 * @return								Return to the workspace page.
-	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
-	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
-	 * @author 								Ram Kumar Kumaresan
-	 * @throws QuadrigaException 
-	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/updatebitstreams", method = RequestMethod.GET)
-	public String updateBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException{
-		if(this.dspaceKeys == null && (this.dspaceUsername == null || this.dspacePassword == null))
-		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-		}
-		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceId,principal.getName());
-		//Check bitstream access in dspace. 
-		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
-		List<IBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
-		
-		dspaceManager.updateDspaceMetadata(workspaceId, workspaceBitStreams, principal.getName(), dspaceKeys, this.dspaceUsername, this.dspacePassword);
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 }
