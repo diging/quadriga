@@ -3,15 +3,12 @@ package edu.asu.spring.quadriga.web.workbench;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -37,7 +35,9 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
-import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
 @Controller
 public class ProjectCollaboratorDeleteController {
@@ -98,10 +98,11 @@ public class ProjectCollaboratorDeleteController {
 			
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletecollaborator", method = RequestMethod.POST)
 	public ModelAndView deleteCollaborators(@PathVariable("projectid") String projectId,
 	@ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm, BindingResult result,
-	Principal principal) throws QuadrigaStorageException {
+	Principal principal) throws QuadrigaStorageException, QuadrigaAccessException {
 		
 		ModelAndView modelAndView ;
 		modelAndView = new ModelAndView("auth/workbench/showDeleteCollaborators");
@@ -215,8 +216,11 @@ public class ProjectCollaboratorDeleteController {
 		
 	}*/
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/showDeleteCollaborators", method = RequestMethod.GET)
-	public ModelAndView displayDeleteCollaborator(@PathVariable("projectid") String projectId) throws QuadrigaStorageException{
+	public ModelAndView displayDeleteCollaborator(@PathVariable("projectid") String projectId) 
+			throws QuadrigaStorageException, QuadrigaAccessException
+			{
 		
 		ModelAndView modelAndView;
 		modelAndView = new ModelAndView("auth/workbench/showDeleteCollaborators");

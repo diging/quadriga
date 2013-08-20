@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -98,6 +101,7 @@ public class TransferWSOwnerController
 		}); 
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "null" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.GET)
 	public ModelAndView transferWSOwnerRequestForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -122,8 +126,6 @@ public class TransferWSOwnerController
 
 		workspace.setCollaborators(collaboratorList);
 		
-		if(workspace.getOwner().getUserName().equals(owner))
-		{
 			//adding the collaborator model
 			collaborator =  collaboratorFactory.createCollaborator();
 			model.getModelMap().put("collaborator", collaborator);
@@ -150,14 +152,10 @@ public class TransferWSOwnerController
 			
 			//create model attribute
 			model.getModelMap().put("success", 0);
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
 		return model;
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "null" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.POST)
 	public ModelAndView transferWSOwnerRequest(@PathVariable("workspaceid") String workspaceid,Principal principal,
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
@@ -186,8 +184,6 @@ public class TransferWSOwnerController
 		
 		model.getModelMap().put("workspaceid", workspace.getId());
 		
-		if(workspace.getOwner().getUserName().equals(userName))
-		{
 			if(result.hasErrors())
 			{
 				model.getModelMap().put("collaborator", collaborator);
@@ -242,11 +238,6 @@ public class TransferWSOwnerController
 				
 				model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 			}
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
 		return model;
 	}
 }

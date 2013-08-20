@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectAccessManager;
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -109,28 +111,22 @@ public class ModifyWSController {
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.GET)
 	public ModelAndView updateWorkSpaceRequestForm(
 			@PathVariable("workspaceid") String workspaceid, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAccessException {
+			throws QuadrigaStorageException, QuadrigaAccessException{
 		ModelAndView model;
 		IWorkSpace workspace;
 		String userName;
-		boolean chkAccess;
 
 		// fetch the workspace details
 		userName = principal.getName();
-		// check if the user has access to modify the workspace
-		chkAccess = workspaceSecurity.chkModifyWorkspaceAccess(userName,
-				workspaceid);
-		if (chkAccess) {
+
 			workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
 			model = new ModelAndView("auth/workbench/workspace/updateworkspace");
 			model.getModelMap().put("workspace", workspace);
 			return model;
-		} else {
-			throw new QuadrigaAccessException();
-		}
 	}
 
 	/**
@@ -142,6 +138,7 @@ public class ModifyWSController {
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.POST)
 	public ModelAndView updateWorkSpaceRequest(
 			@Validated @ModelAttribute("workspace") WorkSpace workspace,
@@ -151,13 +148,8 @@ public class ModifyWSController {
 		ModelAndView model;
 		IUser wsOwner = null;
 		String userName = principal.getName();
-		boolean chkAccess;
 
-		// check if the user has access to modify the workspace
-		chkAccess = workspaceSecurity.chkModifyWorkspaceAccess(userName,
-				workspaceid);
 
-		if (chkAccess) {
 			wsOwner = userManager.getUserDetails(userName);
 
 			// set the workspace owner
@@ -178,9 +170,6 @@ public class ModifyWSController {
 				model.getModelMap().put("success", 1);
 				return model;
 			}
-		} else {
-			throw new QuadrigaAccessException();
-		}
 	}
 	
 	/**

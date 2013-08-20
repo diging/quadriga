@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.aspects.annotations.RetrievalMethod;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -145,30 +144,18 @@ public class ModifyProjectController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT, method = RetrievalMethod.BY_ID, paramIndex = 1, userRole = { "PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value="auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
 	public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		IProject project;
-		String userName = principal.getName();
-		boolean chkAccess;
 		
-		//check if the user has access to update the project
-		chkAccess = projectSecurity.checkProjectAccess(userName, projectid);
-		
-		if(chkAccess)
-		{
 			model = new ModelAndView("auth/workbench/modifyproject");
 			project = retrieveProjectManager.getProjectDetails(projectid);
 			model.getModelMap().put("project", project);
 			model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
 			return model;
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
 	}
 	
 	/**
@@ -182,19 +169,14 @@ public class ModifyProjectController
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {"ADMIN","PROJECT_ADMIN"} )})
 	@RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
 	public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project")Project project,BindingResult result,
 			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		String userName = principal.getName();
-		boolean chkAccess;
 		
-		//check if the user has access to update the project
-		chkAccess = projectSecurity.checkProjectAccess(userName, projectid);
-		
-		if(chkAccess)
-		{
 			if(result.hasErrors())
 			{
 				model = new ModelAndView("auth/workbench/modifyproject");
@@ -210,11 +192,6 @@ public class ModifyProjectController
 				model.getModelMap().put("success", 1);
 				return model;
 			}
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
 	}
 	
 	/**

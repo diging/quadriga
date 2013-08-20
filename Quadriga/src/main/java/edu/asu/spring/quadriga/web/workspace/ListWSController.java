@@ -27,7 +27,6 @@ import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
-import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;

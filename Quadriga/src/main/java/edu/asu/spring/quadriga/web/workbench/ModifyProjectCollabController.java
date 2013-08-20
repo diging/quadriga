@@ -20,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.impl.workbench.ModifyProjCollabManager;
@@ -69,8 +73,10 @@ public class ModifyProjectCollabController
 		}); 
 	}
 
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/updatecollaborators", method = RequestMethod.GET)
-	public ModelAndView updateCollaboratorRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException
+	public ModelAndView updateCollaboratorRequestForm(@PathVariable("projectid") String projectid) 
+			throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		List<ICollaborator> projCollaborators;
@@ -110,9 +116,11 @@ public class ModifyProjectCollabController
 		return model;
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/updatecollaborators", method = RequestMethod.POST)
 	public ModelAndView updateCollaboratorRequest(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
-			BindingResult result,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+			BindingResult result,@PathVariable("projectid") String projectid,Principal principal) 
+					throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		List<ModifyCollaborator> projCollaborators;
