@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -103,13 +106,13 @@ public class TransferProjOwnerController
 	 * @throws QuadrigaAccessException
 	 * @author kiranbatna
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"null"} )})
 	@RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.GET)
 	public ModelAndView transferProjectOwnerRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		IProject project;
 		List<ICollaboratorRole> collaboratorRoles;
-		String owner;
 		ICollaborator collaborator;
 		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
@@ -119,11 +122,8 @@ public class TransferProjOwnerController
 		
 		//retrieve the project details
 		project = retrieveProjectManager.getProjectDetails(projectid);
-		owner = project.getOwner().getUserName();
 		
 		//check if the user has access logged in user is project owner
-		if(owner.equals(principal.getName()))
-		{
 			//adding the collaborator model
 			collaborator =  collaboratorFactory.createCollaborator();
 			model.getModelMap().put("collaborator", collaborator);
@@ -151,12 +151,6 @@ public class TransferProjOwnerController
 			
 			//create model attribute
 			model.getModelMap().put("success", 0);
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
-		
 		return model;
 	}
 	
@@ -170,6 +164,7 @@ public class TransferProjOwnerController
      * @throws QuadrigaStorageException
      * @throws QuadrigaAccessException
      */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"null"} )})
 	@RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.POST)
 	public ModelAndView transferProjectOwnerRequest(@PathVariable("projectid") String projectid,Principal principal,
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator,BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
@@ -192,8 +187,6 @@ public class TransferProjOwnerController
 		
 		model.getModelMap().put("projectid", projectid);
 		
-		if(project.getOwner().getUserName().equals(userName))
-		{
 			if(result.hasErrors())
 			{
 				model.getModelMap().put("collaborator", collaborator);
@@ -249,12 +242,6 @@ public class TransferProjOwnerController
 				
 				model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 			}
-			
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
 		return model;
 	}
 

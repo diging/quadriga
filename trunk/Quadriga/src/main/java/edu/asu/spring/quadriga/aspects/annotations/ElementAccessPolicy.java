@@ -8,8 +8,6 @@ public @interface ElementAccessPolicy {
 
 	CheckedElementType type();
 	
-	RetrievalMethod method();
-	
 	// name of param :
 	int paramIndex();
 	

@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -31,6 +34,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -170,19 +174,16 @@ public class CollaboratorController {
 		return collaborator;
 	} 
 
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN"} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.POST)
 	public ModelAndView addCollaborators(@PathVariable("projectid") String projectid,
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
-			Principal principal) throws QuadrigaStorageException
+			Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
+		
 		ModelAndView model = null;
 		model = new ModelAndView("auth/workbench/showAddCollaborators");
 		
-		String errmsg=""; 
-		
-		String collaboratorUser = collaborator.getUserObj().getUserName();
-		List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
-
 		if(result.hasErrors())
 		{
 			model.getModelMap().put("collaborator", collaborator);
@@ -191,7 +192,7 @@ public class CollaboratorController {
 		{	
 			String userName;
 			userName = principal.getName();
-			errmsg = modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid,userName);
+			modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid,userName);
 			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 		}
 		
@@ -216,9 +217,11 @@ public class CollaboratorController {
 		return model;
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN"} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/showAddCollaborators", method = RequestMethod.GET)
-	public String displayAddCollaborator(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException{
-		
+	public String displayAddCollaborator(@PathVariable("projectid") String projectid, ModelMap model) 
+			throws QuadrigaStorageException, QuadrigaAccessException 
+	{
 		
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());

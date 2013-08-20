@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.implementation.WorkSpace;
@@ -60,29 +63,16 @@ public class AddWSController
 	 * @author    Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = { "PROJECT_ADMIN","CONTRIBUTOR" } )})
 	@RequestMapping(value="auth/workbench/{projectid}/addworkspace", method=RequestMethod.GET)
-	public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
-		boolean chkAccess;
-		String userName;
 		
-		userName = principal.getName();
-		
-		//check if the user has access to add workspace
-		chkAccess = workspaceSecurity.chkCreateWSAccess(userName, projectid);
-		
-		if(chkAccess)
-		{
 			model = new ModelAndView("auth/workbench/workspace/addworkspace");
 			model.getModelMap().put("workspace", workspaceFactory.createWorkspaceObject());
 			model.getModelMap().put("wsprojectid", projectid);
 			return model;
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
 	}
 
 	/**
@@ -96,6 +86,7 @@ public class AddWSController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = { "PROJECT_ADMIN","CONTRIBUTOR" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
 	public ModelAndView addWorkSpaceRequest(@Validated @ModelAttribute("workspace")WorkSpace workspace,BindingResult result,
 			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -103,13 +94,6 @@ public class AddWSController
 		ModelAndView model;
 		String userName = principal.getName();
 		IUser user;
-		boolean chkAccess;
-		
-		//check if the user has access
-		chkAccess = workspaceSecurity.chkCreateWSAccess(userName, projectid);
-		
-		if(chkAccess)
-		{
 			if(result.hasErrors())
 			{
 				model = new ModelAndView("auth/workbench/workspace/addworkspace");
@@ -127,10 +111,5 @@ public class AddWSController
 			model.getModelMap().put("wsprojectid", projectid);
 			return model;
 			}
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
 	}
 }
