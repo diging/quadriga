@@ -15,7 +15,7 @@ ALTER TABLE tbl_dictionary_collaborator
 ADD FOREIGN KEY(id) REFERENCES tbl_dictionary(id);
 
 ALTER TABLE tbl_dictionary_collaborator
-ADD FOREIGN KEY(collaboratoruser)  REFERENCES tbl_quadr;
+ADD FOREIGN KEY(collaboratoruser)  REFERENCES tbl_quadriga_user(username);
 
 ALTER TABLE tbl_dictionary_items
 ADD FOREIGN KEY(id) REFERENCES tbl_dictionary(id);
@@ -51,25 +51,8 @@ ALTER TABLE tbl_workspace
 ADD FOREIGN KEY(workspaceowner)  REFERENCES tbl_quadriga_user(username); 
 
 /* Begin - Foreign key dependencies for Dspace data */
-ALTER TABLE tbl_dspace_collection
-ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid);
-
-ALTER TABLE tbl_dspace_item
-ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid);
-ALTER TABLE tbl_dspace_item
-ADD FOREIGN KEY(collectionid) REFERENCES tbl_dspace_collection(collectionid);
-
-ALTER TABLE tbl_dspace_bitstream
-ADD FOREIGN KEY(communityid) REFERENCES tbl_dspace_community(communityid);
-ALTER TABLE tbl_dspace_bitstream
-ADD FOREIGN KEY(collectionid) REFERENCES tbl_dspace_collection(collectionid);
-ALTER TABLE tbl_dspace_bitstream
-ADD FOREIGN KEY(itemid) REFERENCES tbl_dspace_item(itemid);
-
 ALTER TABLE tbl_workspace_dspace
 ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid);
-ALTER TABLE tbl_workspace_dspace
-ADD FOREIGN KEY(bitstreamid) REFERENCES tbl_dspace_bitstream(bitstreamid);
 
 ALTER TABLE tbl_dspace_keys
 ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username);
