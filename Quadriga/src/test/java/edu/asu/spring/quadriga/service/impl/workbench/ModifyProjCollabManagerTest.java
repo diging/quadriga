@@ -115,7 +115,6 @@ public class ModifyProjCollabManagerTest {
 		
 		user = userFactory.createUserObject();
 		user.setUserName("projuser1");
-		System.out.println(user.getUserName());
 		
 		List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 		IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
