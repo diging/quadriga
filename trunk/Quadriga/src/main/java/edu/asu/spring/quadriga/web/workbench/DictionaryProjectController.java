@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -37,6 +40,7 @@ public class DictionaryProjectController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryProjectController.class);
 
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/adddictionary", method = RequestMethod.GET)
 	public String addProjectDictionary(
 			@PathVariable("projectid") String projectid, Model model) {
@@ -68,6 +72,7 @@ public class DictionaryProjectController {
 		return "auth/workbench/project/adddictionaries";
 	}
 
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/adddictionaries", method = RequestMethod.POST)
 	public String addProjectDictionary(HttpServletRequest req,
 			@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
@@ -157,6 +162,7 @@ public class DictionaryProjectController {
 		return "auth/workbench/project/dictionaries";
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
 	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -181,6 +187,7 @@ public class DictionaryProjectController {
 		return "auth/workbench/project/deletedictionaries";
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionaries", method = RequestMethod.POST)
 	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()

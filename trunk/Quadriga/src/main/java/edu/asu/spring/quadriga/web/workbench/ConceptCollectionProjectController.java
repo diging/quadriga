@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
@@ -68,10 +72,13 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/conceptcollections";
 	}
 	
-	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
 	public String addProjectConceptCollection(
-			@PathVariable("projectid") String projectid, Model model) {
+			@PathVariable("projectid") String projectid, Model model)
+					throws QuadrigaAccessException
+	
+	{
 		try {
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
@@ -103,9 +110,11 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/addconceptcollections";
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.POST)
 	public String addProjectConceptCollection(HttpServletRequest req,
-			@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
+			@PathVariable("projectid") String projectid, Model model) 
+					throws QuadrigaStorageException, QuadrigaAccessException {
 		String msg = "";
 		int flag=0;
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -167,9 +176,10 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/conceptcollections";
 	}
 
-	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
+	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) 
+			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
@@ -191,8 +201,10 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/deleteconceptcollections";
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
-	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
+	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) 
+			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
