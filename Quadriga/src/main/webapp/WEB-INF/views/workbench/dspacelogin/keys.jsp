@@ -3,9 +3,21 @@
 
 <!-- Content -->
 <article class="is-page-content">
+<script>
+$(document).ready(function() {
+	$("input[type=submit]").button().click(function(event) {
+		event.preventDefault();
+	});
+	
+	$("#keysSubmit").click(function()
+			{
+				$('#formKeys').submit();
+			});
+});
+</script>
 	<h3>Manage Dspace Access Keys</h3>
 	A more secure way to access Dspace repository. Generate new keys <a href="https://import.hps.ubio.org/api_keys" target="_blank">here.</a>
-	<form:form method="POST" action="/quadriga/auth/workbench/updatekeys">
+	<form:form method="POST" id="formKeys" action="/quadriga/auth/workbench/updatekeys">
 		<table>
 			<tr>
 				<td><form:label path="publicKey">Public Key :</form:label></td>
@@ -31,12 +43,43 @@
 			</tr>
 			<tr>
 				<td colspan="2"><c:choose>
-						<c:when test="${not empty dspaceKeys}">
-		<input type="submit" value="Update the keys" />
+						<c:when test="${not empty dspaceKeys}">		
+		<script>
+		$(document).ready(function() {			
+			$("#dialog-confirm").dialog({
+				open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+				autoOpen: false,
+			    modal: false,
+			    resizable: false,
+			    buttons: {
+			        Yes: function () {
+			        	$( this ).dialog( "close" );
+			        	location.href = '/quadriga/auth/workbench/deletekeys';
+			        	return false;
+			        },
+			        No: function() {
+			        	$( this ).dialog( "close" );
+		                return false;
+			        }
+			    }
+			});
+			
+		});
+		
+		function deleteCheck()
+		{			
+			 $( "#dialog-confirm" ).dialog( "open" );
+		}
+		</script>
+		<div id="dialog-confirm" title="Delete record" style="display:none;">
+  			<span style="float: left; margin: 0 7px 20px 0;"></span>Are you sure?
+		</div>
+		<input type="submit" id="keysSubmit" value="Update the keys" />
+		<input type="submit" onclick="deleteCheck()" value="Remove the keys" />
 		</c:when>
 						<c:otherwise>
-		<input type="submit" value="Store new keys" />
-		</c:otherwise>
+		<input type="submit" id="keysSubmit" value="Store new keys" />
+						</c:otherwise>
 					</c:choose></td>
 			</tr>
 		</table>

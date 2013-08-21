@@ -123,20 +123,21 @@ public interface DBConstants
 	public static final String ASSIGN_WORKSPACE_EDITOR_OWNER = "sp_addWorkspaceEditorRole";
 	
 	// Dspace database objects
-	public static final String CHECK_DSPACEDATA_NODES="sp_checkDsapceNodes";
-	public static final String CHECK_DSPACEDATA_BITSTREAM="sp_checkDsapceBitStream";
-	public static final String ADD_DSPACE_COMMUNITY = "sp_insertDspaceCommunity";
-	public static final String ADD_DSPACE_COLLECTION = "sp_insertDspaceCollection";
-	public static final String ADD_DSPACE_ITEM = "sp_insertDspaceItem";
-	public static final String ADD_DSPACE_BITSTREAM = "sp_insertDspaceBitStream";
+//	public static final String CHECK_DSPACEDATA_NODES="sp_checkDsapceNodes";
+//	public static final String CHECK_DSPACEDATA_BITSTREAM="sp_checkDsapceBitStream";
+//	public static final String ADD_DSPACE_COMMUNITY = "sp_insertDspaceCommunity";
+//	public static final String ADD_DSPACE_COLLECTION = "sp_insertDspaceCollection";
+//	public static final String ADD_DSPACE_ITEM = "sp_insertDspaceItem";
+//	public static final String ADD_DSPACE_BITSTREAM = "sp_insertDspaceBitStream";
 	public static final String ADD_WORKSPACE_BITSTREAM = "sp_addBitstreamToWorkspace";
 	public static final String DELETE_WORKSPACE_BITSTREAM = "sp_deleteBitstreamFromWorkspace";
-	public static final String UPDATE_DSPACE_COMMUNITY = "sp_updateDspaceCommunity";
-	public static final String UPDATE_DSPACE_COLLECTION = "sp_updateDspaceCollection";
-	public static final String UPDATE_DSPACE_ITEM = "sp_updateDspaceItem";
-	public static final String UPDATE_DSPACE_BITSTREAM = "sp_updateDspaceBitStream";
+//	public static final String UPDATE_DSPACE_COMMUNITY = "sp_updateDspaceCommunity";
+//	public static final String UPDATE_DSPACE_COLLECTION = "sp_updateDspaceCollection";
+//	public static final String UPDATE_DSPACE_ITEM = "sp_updateDspaceItem";
+//	public static final String UPDATE_DSPACE_BITSTREAM = "sp_updateDspaceBitStream";
 	public static final String GET_DSPACE_REFERENCES = "sp_getAllBitStreamReferences";
 	public static final String ADD_DSPACE_KEYS = "sp_addDspaceKeys";
+	public static final String DELETE_DSPACE_KEYS = "sp_deleteDspaceKeys";
 	public static final String GET_DSPACE_KEYS = "sp_getDspaceKeys";
 	public static final String UPDATE_DSPACE_KEYS = "sp_updateDspaceKeys";
 	
