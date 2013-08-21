@@ -40,9 +40,15 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the workspace owner editor details
-	 select 1
-       from tbl_workspace_editor
-	   where workspaceid = inworkspaceid and owner =inowner;
+	 select 1 from tbl_project where projectid in (
+	 select projectid from tbl_project_workspace where workspaceid in (
+	 select workspaceid from tbl_workspace_editor  where workspaceid = 'WS_23092339551502339' and owner ='test')
+	
+	 UNION DISTINCT
+	
+	 select projectid from tbl_project_editor where  projectid in 
+	 (select projectid from tbl_project_workspace where workspaceid = 'WS_23092339551502339' ));
+	 
 	END IF;
 END$$
 DELIMITER ;
