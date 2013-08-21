@@ -50,6 +50,11 @@ public class RetrieveProjectController
 		this.projectManager = projectManager;
 	}
 	
+	public void setProjectSecurity(ICheckProjectSecurity projectSecurity){
+		
+		this.projectSecurity = projectSecurity;
+	}
+	
 	/**
 	 *this method acts as a controller for handling all the activities on the workbench
 	 *home page 

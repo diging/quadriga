@@ -36,6 +36,7 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -81,6 +82,9 @@ public class RetrieveProjectControllerTest {
 	IWorkspaceFactory workspaceFactory;
 	
 	@Autowired
+	ICheckProjectSecurity projectSecurity;
+	
+	@Autowired
 	private DataSource dataSource;
 	
 	Principal principal;	
@@ -103,6 +107,7 @@ public class RetrieveProjectControllerTest {
 		retrieveProjectController = new RetrieveProjectController();
 		retrieveProjectController.setProjectManager(retrieveProjectManager);
 		retrieveProjectController.setWsManager(wsManager);
+		retrieveProjectController.setProjectSecurity(projectSecurity);
 		
 		model =  new BindingAwareModelMap();		
 
