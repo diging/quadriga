@@ -345,6 +345,9 @@
 
 	</c:when>
 </c:choose>
+
+
+
 <c:choose><c:when test="${empty dspaceKeys}">
 <!-- Dspace Login popup -->
 <c:choose>
@@ -369,7 +372,19 @@ $('a.login-window').click(function() {
 });
 
 });
+
 </script>
+
+<c:choose><c:when test="${not empty workspacedetails.bitstreams}"><script>
+$(document).ready(function() {
+	
+$('a.addlogin-window').click(function() {
+	$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/adddsapceauthentication');
+    $( "#login-box" ).dialog( "open" );	        
+});
+
+});
+</script></c:when></c:choose>
 </c:otherwise>
 </c:choose>
 </c:when>
@@ -456,7 +471,8 @@ $(document).ready(function(){
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
 	
-	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" /></font> 
+	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
+	<c:choose><c:when test="${empty dspaceKeys}"><c:choose><c:when test="${empty dspaceLogin}"><a href="#login-box" class="addlogin-window">Add Authentication</a></c:when></c:choose></c:when></c:choose></font> 
 		<br>
 	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 		<table cellpadding="0" cellspacing="0" border="0"
