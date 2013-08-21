@@ -120,30 +120,7 @@ public class ListWSControllerTest {
 		mock.addParameter("password", "test");
 	}
 
-	@Test
-	public void testSyncFilesDspaceAuthentication() {
-		//Setup username and password
-		mock.addParameter("username", "test");
-		mock.addParameter("password", "test");
-		mock.removeParameter("dspacePublicAccess");
-		assertEquals("redirect:/auth/workbench/workspace/w1/updatebitstreams", listWSController.syncFilesDspaceAuthentication("w1", mock, null, null));
-
-		//Use public access
-		mock.addParameter("dspacePublicAccess", "public");
-		mock.removeParameter("username");
-		mock.removeParameter("password");
-		assertEquals("redirect:/auth/workbench/workspace/w1/updatebitstreams", listWSController.syncFilesDspaceAuthentication("w1", mock, null, null));
-
-		//Handle empty username and password
-		mock.removeParameter("dspacePublicAccess");
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.syncFilesDspaceAuthentication("w1", mock, null, null));
-
-		//Reset the values
-		mock.addParameter("username", "test");
-		mock.addParameter("password", "test");
-	}
-
-
+	
 	@Test
 	public void testChangeDspaceAuthentication() {
 		//Setup username and password

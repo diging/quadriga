@@ -274,47 +274,32 @@ public class ListWSController
 	}
 
 
-	/**
-	 * This method is responsible for the handle of dspace Username and password.
-	 * After the assignment of dspace variables, this redirects to the {@link #updateBitStreamsFromWorkspace(String, ModelMap, Principal)} controller
-	 * for updating the bitstreams in this workspace
-	 * 
-	 * @param workspaceId		The workspace id from which the update request is raised.
-	 * @param dspaceUsername	The dspace username provided by the user.
-	 * @param dspacePassword	The dspace password provided by the user.
-	 * @return					Redirect to the dspace update page.
-	 * @author 					Ram Kumar Kumaresan
-	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/syncdspacelogin", method = RequestMethod.POST)
-	public String syncFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {
+	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/adddsapceauthentication", method = RequestMethod.POST)
+	public String addDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {
 		String dspaceUsername = req.getParameter("username");
 		String dspacePassword = req.getParameter("password");
 		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
 
-		//Check for username and password only when there are no keys for the user.
-		if(this.dspaceKeys == null)
+		if(dspacePublicAccess == null)
 		{
-			if(dspacePublicAccess == null)
+			if(dspaceUsername == null || dspacePassword == null)
 			{
-				if(dspaceUsername == null || dspacePassword == null)
-				{
-					return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-				}
-				else if(dspaceUsername.equals("") || dspacePassword.equals(""))
-				{
-					return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-				}
-				this.dspaceUsername = dspaceUsername;
-				this.dspacePassword = dspacePassword;
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 			}
-			else
+			else if(dspaceUsername.equals("") || dspacePassword.equals(""))
 			{
-				this.dspaceUsername = "";
-				this.dspacePassword = "";
+				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 			}
+			this.dspaceUsername = dspaceUsername;
+			this.dspacePassword = dspacePassword;
+		}
+		else
+		{
+			this.dspaceUsername = "";
+			this.dspacePassword = "";
 		}
 
-		return "redirect:/auth/workbench/workspace/"+workspaceId+"/updatebitstreams";
+		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 
 	/**
