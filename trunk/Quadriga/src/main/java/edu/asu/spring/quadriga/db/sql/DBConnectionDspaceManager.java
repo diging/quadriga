@@ -241,6 +241,62 @@ public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int deleteDspaceKeys(String username) throws QuadrigaStorageException
+	{
+		if(username == null)
+		{
+			return FAILURE;
+		}
+		
+		if(username.equals(""))
+		{
+			return FAILURE;
+		}
+		
+		String sDBCommand;
+		String sOutErrorValue;
+
+		getConnection();
+
+		sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DELETE_DSPACE_KEYS+ "(?,?)";
+
+		try
+		{
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+
+			sqlStatement.setString(1, username);
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			//Execute the stored procedure
+			sqlStatement.execute();
+
+			sOutErrorValue = sqlStatement.getString(2);
+
+			if(sOutErrorValue == null)
+			{
+				//Successfully inserted the keys into the database
+				return SUCCESS;
+			}			
+			else
+			{
+				//Error occurred in the database
+				throw new QuadrigaStorageException(sOutErrorValue);
+			}
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException(e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public IDspaceKeys getDspaceKeys(String username) throws QuadrigaStorageException
 	{
 		IDspaceKeys dspaceKeys = null;		

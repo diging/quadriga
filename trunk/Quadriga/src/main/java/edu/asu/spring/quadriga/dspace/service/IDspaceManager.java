@@ -227,4 +227,6 @@ public interface IDspaceManager{
 	 */
 	public abstract List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String username, String password) throws QuadrigaException;
 
+	public abstract int deleteDspaceKeys(String username) throws QuadrigaStorageException;
+
 }

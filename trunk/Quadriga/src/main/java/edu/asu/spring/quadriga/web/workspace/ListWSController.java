@@ -55,6 +55,9 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 @Scope(value="session")
 public class ListWSController 
 {
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
+	
 	@Autowired
 	private	IListWSManager wsManager;
 
@@ -155,7 +158,17 @@ public class ListWSController
 		}
 
 		return "redirect:/auth/workbench/keys";
-	}	
+	}
+	
+	@RequestMapping(value = "/auth/workbench/deletekeys", method = RequestMethod.GET)
+	public String deleteDspaceKeys(Principal principal, ModelMap model) throws QuadrigaStorageException 
+	{
+		if(dspaceManager.deleteDspaceKeys(principal.getName())==SUCCESS)
+		{
+			this.dspaceKeys = null;
+		}
+		return "redirect:/auth/workbench/keys";
+	}
 
 	/**
 	 * This will list the details of workspaces 

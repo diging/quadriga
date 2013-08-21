@@ -106,4 +106,6 @@ public interface IDBConnectionDspaceManager {
 	public abstract int updateDspaceKeys(IDspaceKeys dspaceKeys, String username)
 			throws QuadrigaStorageException;
 
+	public abstract int deleteDspaceKeys(String username) throws QuadrigaStorageException;
+
 }
