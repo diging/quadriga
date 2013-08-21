@@ -10,6 +10,7 @@
 <style>
 .ui-menu {
 	width: 150px;
+	font-size:10px;
 }
 </style>
 <ul id="menu">
