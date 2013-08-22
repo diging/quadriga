@@ -19,4 +19,7 @@ public interface IDBConnectionModifyWSManager {
 
 	public abstract String assignWorkspaceOwnerEditor(String workspaceId, String owner)
 			throws QuadrigaStorageException;
+
+	public abstract String deleteWorkspaceOwnerEditor(String workspaceId, String owner)
+			throws QuadrigaStorageException;
 }

@@ -239,4 +239,72 @@ public class ModifyWSController {
 		}
 		return "auth/workbench/workspace/workspacedetails";
 	}
+	
+	/**
+	 * Assign editor to owner for workspace level
+	 * @param workspaceId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaException 
+	 * @throws QuadrigaAccessException 
+	 */
+	@RequestMapping(value = "auth/workbench/workspace/deleteEditorRoleToOwner/{workspaceid}", method = RequestMethod.GET)
+	public String deleteEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException{
+		IUser user = userManager.getUserDetails(principal.getName());
+		String userName =user.getUserName();
+		String msg=modifyWSManager.deleteEditorRoleToOwner(workspaceId, userName);
+		IWorkSpace workspace;
+		List<ICollaborator> collaboratorList;
+
+		userName = principal.getName();
+		workspace = wsManager.getWorkspaceDetails(workspaceId,userName);
+		
+		//Check bitstream access in dspace.
+		//TODO: Implement check for dspace keys and Username/password 
+		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
+		List<IBitStream> bitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
+		workspace.setBitstreams(bitstreams);
+
+		//retrieve the collaborators associated with the workspace
+		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
+
+
+		workspace.setCollaborators(collaboratorList);
+		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
+		model.addAttribute("networkList", networkList);
+		model.addAttribute("workspacedetails", workspace);
+
+		//Load the Dspace Keys used by the user
+		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
+		if(this.dspaceKeys != null)
+		{
+			model.addAttribute("dspaceKeys", "true");
+		}
+		else if((this.dspaceUsername != null && this.dspacePassword != null))
+		{
+			model.addAttribute("dspaceLogin", "true");
+		}
+		
+		if(workspaceSecurity.checkWorkspaceOwner(userName, workspaceId)){
+			model.addAttribute("owner", 1);
+		}else{
+			model.addAttribute("owner", 0);
+		}
+		if(workspaceSecurity.checkWorkspaceOwnerEditorAccess(userName, workspaceId)){
+			model.addAttribute("editoraccess", 1);
+		}else{
+			model.addAttribute("editoraccess", 0);
+		}
+		if(msg.equals("")){
+			model.addAttribute("DeleteEditorSuccess",1);
+		}else if(msg.equals("Owner already assigned as owner")){
+			model.addAttribute("DeleteEditorSuccess",2);
+		}else{
+			logger.error("Failure " +msg);
+			model.addAttribute("DeleteEditorSuccess",0);
+		}
+		return "auth/workbench/workspace/workspacedetails";
+	}
 }

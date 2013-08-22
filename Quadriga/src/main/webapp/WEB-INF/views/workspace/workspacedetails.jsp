@@ -328,7 +328,23 @@
 			<font color="red"> <spring:message
 					code="workspace.assign.owner.editor.assigned" /></font>
 		</c:when>
-	</c:choose><br/>
+	</c:choose>
+	<c:choose>
+		<c:when test="${DeleteEditorSuccess=='1'}">
+			<font color="blue"> <spring:message
+					code="workspace.delete.owner.editor.success" /></font>
+
+		</c:when>
+		<c:when test="${DeleteEditorSuccess=='0'}">
+			<font color="red"> <spring:message
+					code="workspace.delete.owner.editor.failure" /></font>
+		</c:when>
+		<c:when test="${DeleteEditorSuccess=='2'}">
+			<font color="red"> <spring:message
+					code="workspace.delete.owner.editor.assigned" /></font>
+		</c:when>
+	</c:choose>
+	<br/>
 	
 <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
 <input type="button" name="Edit" value="Edit"/>
@@ -341,6 +357,11 @@
 						<input type="button" name="Get Editor Role" value="Get Editor Role" />
 				</a> 
 			</c:when>
+			<c:otherwise>
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/deleteEditorRoleToOwner/${workspaceid}">
+						<input type="button" name="Delete Editor Role" value="Delete Editor Role" />
+				</a> 
+			</c:otherwise>
 		</c:choose>
 
 	</c:when>

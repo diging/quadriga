@@ -20,4 +20,7 @@ public interface IModifyWSManager {
 	public abstract String assignEditorRoleToOwner(String workspaceId, String userName)
 			throws QuadrigaStorageException;
 
+	public abstract String deleteEditorRoleToOwner(String workspaceId, String userName)
+			throws QuadrigaStorageException;
+
 }
