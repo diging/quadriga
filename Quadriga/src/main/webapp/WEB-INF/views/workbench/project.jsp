@@ -56,6 +56,22 @@
 							code="project.assign.owner.editor.assigned" /></font>
 				</c:when>
 			</c:choose>
+			
+			<c:choose>
+				<c:when test="${DeleteEditorSuccess=='1'}">
+					<font color="blue"> <spring:message
+							code="project.delete.owner.editor.success" /></font>
+
+				</c:when>
+				<c:when test="${DeleteEditorSuccess=='0'}">
+					<font color="red"> <spring:message
+							code="project.delete.owner.editor.failure" /></font>
+				</c:when>
+				<c:when test="${DeleteEditorSuccess=='2'}">
+					<font color="red"> <spring:message
+							code="project.delete.owner.editor.assigned" /></font>
+				</c:when>
+			</c:choose>
 			<div align="left">
 				<hr>
 				<a href="modifyproject/${project.internalid}"> <input
@@ -71,6 +87,13 @@
 									value="Get Editor Role" />
 								</a>
 							</c:when>
+							<c:otherwise>
+								<a
+									href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.internalid}">
+									<input type="button" name="Delete Editor Role"
+									value="Delete Editor Role" />
+								</a>
+							</c:otherwise>
 						</c:choose>
 
 					</c:when>

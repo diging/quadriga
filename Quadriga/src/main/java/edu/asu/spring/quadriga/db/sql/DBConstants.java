@@ -120,6 +120,8 @@ public interface DBConstants
 	public static final String UPDATE_WORKSPACE_COLLABORATOR = "sp_updateworkspacecollaborator";
 	public static final String GET_WORKSPACE_NAME = "sp_getWorkspaceName";
 	public static final String ASSIGN_PROJECT_EDITOR_OWNER = "sp_addProjectEditor";
+	public static final String DELETE_PROJECT_EDITOR_OWNER = "sp_deleteProjectEditor";
+	
 	public static final String ASSIGN_WORKSPACE_EDITOR_OWNER = "sp_addWorkspaceEditorRole";
 	
 	// Dspace database objects

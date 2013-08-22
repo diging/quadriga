@@ -20,4 +20,7 @@ public interface IModifyProjectManager {
 
 	public abstract String assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException;
 
+	public abstract String deleteEditorToOwner(String projectId, String owner)
+			throws QuadrigaStorageException;
+
 }
