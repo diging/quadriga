@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.workspace;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.security.Principal;
@@ -20,14 +21,19 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
@@ -56,7 +62,12 @@ public class ListWSControllerTest {
 
 	private Principal principal;
 	private BindingAwareModelMap model;
-	MockHttpServletRequest mock;
+	private MockHttpServletRequest mock;
+	private DspaceKeys dspaceKeys;
+
+	@Autowired
+	IDBConnectionManager dbConnection;
+	String sDatabaseSetup;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -74,6 +85,11 @@ public class ListWSControllerTest {
 		listWSController.setDspaceManager(dspaceManager);
 		listWSController.setDspaceKeysFactory(dspaceKeysFactory);
 
+		dspaceKeys = new DspaceKeys();
+		dspaceKeys.setPublicKey("b459689e");
+		dspaceKeys.setPrivateKey("12cabcca2128e67e");
+		listWSController.setDspaceKeys(dspaceKeys);
+
 		mock = new MockHttpServletRequest();
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
@@ -84,10 +100,29 @@ public class ListWSControllerTest {
 				return "test";
 			}
 		};
+
+		//Setup the database with the proper data in the tables;
+		sDatabaseSetup = "delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&";
+		sDatabaseSetup += "delete from tbl_dspace_keys&delete from tbl_workspace_dspace";
 	}
 
 	@After
 	public void tearDown() throws Exception {
+	}
+
+	/**
+	 * Load the required data into the dependent tables
+	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
+	 */
+	@Test
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
+	{
+		String[] sQuery = sDatabaseSetup.split("&");
+		for(String singleQuery: sQuery)
+		{
+			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
+		}
 	}
 
 	@Ignore
@@ -96,10 +131,68 @@ public class ListWSControllerTest {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	public void testAddDspaceKeysRequestForm() throws QuadrigaStorageException
+	{
+		testSetupTestEnvironment();
+
+		ModelAndView model = listWSController.addDspaceKeysRequestForm(principal);
+		assertNotNull(model);
+		assertEquals("/auth/workbench/keys", model.getViewName());
+	}
+
+	@Test
+	public void testAddDspaceKeys() throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		testSetupTestEnvironment();
+		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
+
+		//Check if the actual key values were inserted into the database
+		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
+		assertEquals("b459689e",dspaceKeys.getPublicKey());
+		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
+
+		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(null, principal, model));
+		//Check if the null keys were handled
+		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
+		assertEquals("b459689e",dspaceKeys.getPublicKey());
+		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
+
+		dspaceKeys.setPrivateKey(null);
+		dspaceKeys.setPublicKey(null);
+		//Check if the null keys were handled
+		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
+		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
+		assertEquals("b459689e",dspaceKeys.getPublicKey());
+		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
+
+		dspaceKeys.setPrivateKey("");
+		dspaceKeys.setPublicKey("");
+		//Check if the empty keys were handled
+		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
+		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
+		assertEquals("b459689e",dspaceKeys.getPublicKey());
+		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
+	}
+
+	@Test
+	public void testDeleteDspaceKeys() throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		//Setup the database with keys for deletion
+		testSetupTestEnvironment();
+		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
+
+		assertEquals("redirect:/auth/workbench/keys", listWSController.deleteDspaceKeys(principal, model));
+		assertNull(listWSController.getDspaceKeys());
+
+		//Reload the keys into the controller
+		listWSController.setDspaceKeys(dspaceKeys);
+	}
 
 	@Test
 	public void testAddFilesDspaceAuthentication() {
 		//Setup username and password
+		mock.removeAllParameters();
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
 		mock.removeParameter("dspacePublicAccess");
@@ -116,32 +209,80 @@ public class ListWSControllerTest {
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", mock, null, null));
 
 		//Reset the values
+		mock.removeAllParameters();
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
 	}
 
-	
+
 	@Test
-	public void testChangeDspaceAuthentication() {
+	public void testAddDspaceAuthentication()
+	{
 		//Setup username and password
+		mock.removeAllParameters();
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
 		mock.removeParameter("dspacePublicAccess");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addDspaceAuthentication("w1", mock, null, null));
+		assertEquals("test", listWSController.getDspaceUsername());
+		assertEquals("test", listWSController.getDspacePassword());
+
+		//Use public access
+		mock.addParameter("dspacePublicAccess", "public");
+		mock.removeParameter("username");
+		mock.removeParameter("password");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addDspaceAuthentication("w1", mock, null, null));
+		assertEquals("", listWSController.getDspaceUsername());
+		assertEquals("", listWSController.getDspacePassword());
+
+		//Handle empty username and password
+		mock.removeParameter("dspacePublicAccess");
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addDspaceAuthentication("w1", mock, null, null));
+		//Values should not have changed
+		assertEquals("", listWSController.getDspaceUsername());
+		assertEquals("", listWSController.getDspacePassword());
+
+		//Reset the values
+		mock.removeAllParameters();
+		mock.addParameter("username", "test");
+		mock.addParameter("password", "test");
+		listWSController.setDspaceUsername("test");
+		listWSController.setDspacePassword("test");
+
+	}
+
+	@Test
+	public void testChangeDspaceAuthentication() {
+		//Setup username and password
+		mock.removeAllParameters();
+		mock.addParameter("username", "changedUserName");
+		mock.addParameter("password", "changedPassword");
+		mock.removeParameter("dspacePublicAccess");
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
+		assertEquals("changedUserName", listWSController.getDspaceUsername());
+		assertEquals("changedPassword", listWSController.getDspacePassword());
 
 		//Use public access
 		mock.addParameter("dspacePublicAccess", "public");
 		mock.removeParameter("username");
 		mock.removeParameter("password");
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
+		assertEquals("", listWSController.getDspaceUsername());
+		assertEquals("", listWSController.getDspacePassword());
 
 		//Handle empty username and password
 		mock.removeParameter("dspacePublicAccess");
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
+		//Values should not have changed
+		assertEquals("", listWSController.getDspaceUsername());
+		assertEquals("", listWSController.getDspacePassword());
 
 		//Reset the values
+		mock.removeAllParameters();
 		mock.addParameter("username", "test");
 		mock.addParameter("password", "test");
+		listWSController.setDspaceUsername("test");
+		listWSController.setDspacePassword("test");
 	}
 
 
