@@ -667,6 +667,8 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamstatus", method = RequestMethod.GET)
 	public @ResponseBody String getBitStreamStatus(@RequestParam("bitstreamId") String bitstreamId, @RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId) {
+		/*Not returning 'Invalid Bitstream' because we are not displaying the metadata bitstreams to the user.
+		*/
 		IBitStream bitstream = dspaceManager.getBitStream(collectionId, itemId, bitstreamId);
 		if(bitstream != null)
 		{
