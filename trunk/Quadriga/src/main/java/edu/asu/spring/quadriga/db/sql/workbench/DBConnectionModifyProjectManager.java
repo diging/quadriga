@@ -284,4 +284,49 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         	closeConnection();
         }
 	}
+	
+	
+	@Override
+	public String deleteProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		
+		//command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_PROJECT_EDITOR_OWNER + "(?,?,?)";
+        
+        //get the connection
+        getConnection();
+        
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//add input parameters
+        	sqlStatement.setString(1,projectId);
+        	sqlStatement.setString(2, owner);
+        	
+        	//add output parameter
+        	sqlStatement.registerOutParameter(3, Types.VARCHAR);
+        	
+           	sqlStatement.execute();
+        	errmsg = sqlStatement.getString(3);
+        	
+        	if(!errmsg.equals(""))
+        	{
+        		logger.info("Deleted owner from project editor Role : " +errmsg);
+        	}
+        	return errmsg;
+        }
+        catch(SQLException e)
+        {
+        	logger.error("Deleted owner from project editor Role method :"+e);
+        	throw new QuadrigaStorageException();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
 }

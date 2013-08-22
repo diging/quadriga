@@ -319,4 +319,44 @@ public class ModifyProjectController
 		}
 		return "auth/workbench/project";
 	}
+	/**
+	 * This controller function would assign editor roles to project owner
+	 * @param projectId
+	 * @param model
+	 * @param principal
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
+	@RequestMapping(value = "auth/workbench/deleteownereditor/{projectid}", method = RequestMethod.GET)
+	public String deleteOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		IUser user = userManager.getUserDetails(principal.getName());
+		String userName =user.getUserName();
+		String msg=projectManager.deleteEditorToOwner(projectId, userName);
+		IProject project = retrieveProjectManager.getProjectDetails(projectId);
+		
+		//retrieve all the workspaces associated with the project
+		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
+		if(projectSecurity.checkProjectOwner(userName, projectId)){
+			model.addAttribute("owner", 1);
+		}else{
+			model.addAttribute("owner", 0);
+		}
+		if(projectSecurity.checkProjectOwnerEditorAccess(userName, projectId)){
+			model.addAttribute("editoraccess", 1);
+		}else{
+			model.addAttribute("editoraccess", 0);
+		}
+		model.addAttribute("project", project);
+		model.addAttribute("workspaceList",workspaceList);
+		if(msg.equals("")){
+			model.addAttribute("DeleteEditorSuccess",1);
+		}else if(msg.equals("Owner already assigned as owner")){
+			model.addAttribute("DeleteEditorSuccess",2);
+		}else{
+			logger.error("Failure " +msg);
+			model.addAttribute("DeleteEditorSuccess",0);
+		}
+		return "auth/workbench/project";
+	}
 }

@@ -24,4 +24,7 @@ public interface IDBConnectionModifyProjectManager {
 	public abstract String assignProjectOwnerEditor(String projectId, String owner)
 			throws QuadrigaStorageException;
 
+	public abstract String deleteProjectOwnerEditor(String projectId, String owner)
+			throws QuadrigaStorageException;
+
 }

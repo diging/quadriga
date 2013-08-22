@@ -92,7 +92,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	}
 	
 	/**
-	 * This method a the project ownership to another user
+	 * This method will provide owner editor role to the project 
 	 * @param projectId
 	 * @param owner
 	 * @throws QuadrigaStorageException
@@ -101,6 +101,19 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Override
 	public String assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
 		String errmsg = dbConnect.assignProjectOwnerEditor(projectId, owner);
+		return errmsg;
+	}
+	
+	/**
+	 * This method will remove owner editor role from the project 
+	 * @param projectId
+	 * @param owner
+	 * @throws QuadrigaStorageException
+	 * @author Lohith Dwaraka
+	 */
+	@Override
+	public String deleteEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
+		String errmsg = dbConnect.deleteProjectOwnerEditor(projectId, owner);
 		return errmsg;
 	}
 }
