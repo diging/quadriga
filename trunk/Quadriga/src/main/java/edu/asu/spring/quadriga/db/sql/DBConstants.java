@@ -123,6 +123,7 @@ public interface DBConstants
 	public static final String DELETE_PROJECT_EDITOR_OWNER = "sp_deleteProjectEditor";
 	
 	public static final String ASSIGN_WORKSPACE_EDITOR_OWNER = "sp_addWorkspaceEditorRole";
+	public static final String DELETE_WORKSPACE_EDITOR_OWNER = "sp_deleteWorkspaceEditorRole";
 	
 	// Dspace database objects
 //	public static final String CHECK_DSPACEDATA_NODES="sp_checkDsapceNodes";

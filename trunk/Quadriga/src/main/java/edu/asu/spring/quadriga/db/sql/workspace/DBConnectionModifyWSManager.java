@@ -301,4 +301,48 @@ public class DBConnectionModifyWSManager extends ADBConnectionManager implements
         }
 	}
 	
+	
+	@Override
+	public String deleteWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		
+		//command to call the SP
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.DELETE_WORKSPACE_EDITOR_OWNER + "(?,?,?)";
+        
+        //get the connection
+        getConnection();
+        
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//add input parameters
+        	sqlStatement.setString(1,workspaceId);
+        	sqlStatement.setString(2, owner);
+        	
+        	//add output parameter
+        	sqlStatement.registerOutParameter(3, Types.VARCHAR);
+        	
+           	sqlStatement.execute();
+        	errmsg = sqlStatement.getString(3);
+        	
+        	if(!errmsg.equals(""))
+        	{
+        		logger.info("Delete Workspace editor to owner request method :"+errmsg);
+        	}
+        	return errmsg;
+        }
+        catch(SQLException e)
+        {
+        	logger.error("Delete Workspace editor to owner request method :"+e);
+        	throw new QuadrigaStorageException();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
 }
