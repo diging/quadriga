@@ -45,6 +45,8 @@ public class ProxyCommunityManagerTest {
 	@Resource(name = "dspaceStrings")
 	private Properties dspaceProperties;
 
+	private DspaceKeys dspaceKeys;
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -56,6 +58,9 @@ public class ProxyCommunityManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		proxyCommunityManager = new ProxyCommunityManager();
+		dspaceKeys = new DspaceKeys();
+		dspaceKeys.setPublicKey("b459689e");
+		dspaceKeys.setPrivateKey("12cabcca2128e67e");
 	}
 
 	@After
@@ -64,7 +69,7 @@ public class ProxyCommunityManagerTest {
 
 	@Test
 	public void testGetAllCommunities() throws NoSuchAlgorithmException {
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 
 		proxyCommunityManager.clearCompleteCache();
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, null, "test"));
@@ -75,52 +80,59 @@ public class ProxyCommunityManagerTest {
 
 	@Test
 	public void testGetAllCollections() throws NoSuchAlgorithmException {
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 
 		//Get the collection list for the community
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
 
 		//Wait for the collection to load
-		while(proxyCommunityManager.getCollectionName("55")==null);
-		assertNotNull(proxyCommunityManager.getCollectionName("55"));
+		while(proxyCommunityManager.getCollectionName("10")==null);
+		assertNotNull(proxyCommunityManager.getCollectionName("10"));
 
 		//Handle null case for community id
-		assertNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", null));
+		assertNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", null));
 	}
 
 	@Test
 	public void testGetAllItems() throws NoSuchAlgorithmException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
 
 		//Wait for the collection to load
-		while(proxyCommunityManager.getCollectionName("55")==null);
-		assertNotNull(proxyCommunityManager.getCollectionName("55"));
+		while(proxyCommunityManager.getCollectionName("10")==null);
+		assertNotNull(proxyCommunityManager.getCollectionName("10"));
+		
+		ICollection collection = proxyCommunityManager.getCollection("10", true, null, null, null, null, null, "12");
+		//Wait for items to load
+		while(collection.getLoadStatus() == false);
+		
+		//Valid collection id
+		assertNotNull(proxyCommunityManager.getAllItems("10"));
+
+		//Invalid collection id
+		assertNull(proxyCommunityManager.getAllItems("1111111111111"));
 
 		//Handle null case for collection id
 		assertNull(proxyCommunityManager.getAllItems(null));
-
-		assertNotNull(proxyCommunityManager.getAllItems("55"));		
-
 	}
 
 	@Test
 	public void testGetCollection() throws NoSuchAlgorithmException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "18"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
 
 		//Wait for the collection to load
-		while(proxyCommunityManager.getCollectionName("55")==null);
-		assertNotNull(proxyCommunityManager.getCollectionName("55"));
+		while(proxyCommunityManager.getCollectionName("10")==null);
+		assertNotNull(proxyCommunityManager.getCollectionName("10"));
 
 		//Test case to load collection from cache
-		ICollection collection = proxyCommunityManager.getCollection("55", true, null, null, null, null, null, "18");
+		ICollection collection = proxyCommunityManager.getCollection("10", true, null, null, null, null, null, "12");
 		assertNotNull(collection.getName());
 
 		//Test case to handle reload of collection
-		collection = proxyCommunityManager.getCollection("55",false,restTemplate,dspaceProperties,null,"test","test","18");
+		collection = proxyCommunityManager.getCollection("10",false,restTemplate,dspaceProperties,dspaceKeys,"test","test","12");
 		//A new REST Call would be made and hence thread takes time to load the collection name.
 		assertNull(collection.getName());
 	}
@@ -128,9 +140,10 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetCommunityName() throws NoSuchAlgorithmException {
 		//Load the community details
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getCommunityName("18"));
-
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
+		
+		assertNotNull(proxyCommunityManager.getCommunityName("12"));
+		assertNull(proxyCommunityManager.getCommunityName("11111111111111"));
 		assertNull(proxyCommunityManager.getCommunityName(null));
 	}
 
@@ -224,7 +237,7 @@ public class ProxyCommunityManagerTest {
 	public void testGetCommunity() throws NoSuchAlgorithmException {
 		//Load the community
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		
+
 		//Load from cache
 		assertNotNull(proxyCommunityManager.getCommunity("18", true, null, null, null, null, null));
 
@@ -244,7 +257,7 @@ public class ProxyCommunityManagerTest {
 		ICollection collection = proxyCommunityManager.getCollection("55", true, null, null, null, null, null, "18");
 		while(collection.getItems() == null);
 		while(collection.getItems().size() != Integer.parseInt(collection.getCountItems()));
-		
+
 		assertNotNull(proxyCommunityManager.getItem("55", "9595"));
 		assertNull(proxyCommunityManager.getItem("55", null));		
 	}

@@ -167,6 +167,7 @@ public class Collection implements ICollection{
 
 			this.items = Collections.synchronizedList(new ArrayList<IItem>());
 			IItem item = null;
+			
 			if(dspaceCollection.getItemsEntity() != null)
 			{
 				if(dspaceCollection.getItemsEntity().getItems() != null)
