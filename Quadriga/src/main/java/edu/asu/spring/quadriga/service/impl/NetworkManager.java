@@ -59,6 +59,8 @@ import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.ObjectT
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.RelationEventObject;
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.SubjectObject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 
@@ -78,7 +80,7 @@ public class NetworkManager implements INetworkManager {
 	private String qStoreURL;
 
 	public String jsonString="";
-	
+
 	@Autowired
 	@Qualifier("qStoreURL_Add")
 	private String qStoreURL_Add;
@@ -194,7 +196,7 @@ public class NetworkManager implements INetworkManager {
 	}
 
 	@Override
-	public String generateJsontoJQuery(String id,String statementType) throws JAXBException{
+	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
 		JsonObject jsonObject = new JsonObject();
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -208,106 +210,115 @@ public class NetworkManager implements INetworkManager {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
-
-		ResponseEntity<String> response = restTemplate.exchange(getQStoreGetURL()+id,
-				HttpMethod.GET,
-				new HttpEntity<String[]>(headers),
-				String.class);
-		String responseText = response.getBody().toString();
-		JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
-		Unmarshaller unmarshaller1 = context.createUnmarshaller();
-		unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-		InputStream is = new ByteArrayInputStream(responseText.getBytes());
-		JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
-		//		logger.info("Respose bytes : "+responseText);
+		ResponseEntity<String> response = null;
 		try{
-			ElementEventsType e = response1.getValue();
-			List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
-			Iterator <CreationEvent> I= c.iterator();
-			while(I.hasNext()){
-				CreationEvent ce = I.next();
-				if(ce instanceof AppellationEventType)
-				{
-					// Trying to get a list of terms in the appellation event type object
-					AppellationEventType aet = (AppellationEventType) ce;
+			response = restTemplate.exchange(getQStoreGetURL()+id,
+					HttpMethod.GET,
+					new HttpEntity<String[]>(headers),
+					String.class);
+		}catch(Exception e){
+			e.getMessage();
+		}
+		if(response ==null){
+			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
+		}else{
+			String responseText = response.getBody().toString();
+			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
+			Unmarshaller unmarshaller1 = context.createUnmarshaller();
+			unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+			InputStream is = new ByteArrayInputStream(responseText.getBytes());
+			JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
+			//		logger.info("Respose bytes : "+responseText);
+			try{
+				ElementEventsType e = response1.getValue();
+				List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
+				Iterator <CreationEvent> I= c.iterator();
+				while(I.hasNext()){
+					CreationEvent ce = I.next();
+					if(ce instanceof AppellationEventType)
+					{
+						// Trying to get a list of terms in the appellation event type object
+						AppellationEventType aet = (AppellationEventType) ce;
 
-					List<TermType> termTypeList= aet.getTerms(aet);
-					Iterator <TermType> I2 = termTypeList.iterator();
-					while(I2.hasNext()){
-						TermType tt = I2.next();
-						String node = tt.getTermInterpertation(tt);
-						logger.info(tt.getTermInterpertation(tt));
-						this.jsonString="{"+
-							"\"adjacencies\": [],"+
-							"\"data\": {"+
-								"\"$color\": \"#EE6363\","+
-								"\"$type\": \"circle\","+
-								"\"$dim\": 11"+
-							"},"+
-							"\"id\": \""+node+"\","+
-							"\"name\": \""+node+"\""+
-							"},";
+						List<TermType> termTypeList= aet.getTerms(aet);
+						Iterator <TermType> I2 = termTypeList.iterator();
+						while(I2.hasNext()){
+							TermType tt = I2.next();
+							String node = tt.getTermInterpertation(tt);
+							logger.info(tt.getTermInterpertation(tt));
+							this.jsonString="{"+
+									"\"adjacencies\": [],"+
+									"\"data\": {"+
+									"\"$color\": \"#EE6363\","+
+									"\"$type\": \"circle\","+
+									"\"$dim\": 11"+
+									"},"+
+									"\"id\": \""+node+"\","+
+									"\"name\": \""+node+"\""+
+									"},";
+						}
+					}
+					if(ce instanceof RelationEventType){
+						// Trying to get a list of objects in the relations event type object
+						// First get PredicateType
+						// Then go recursively to subject and object
+						RelationEventType re = (RelationEventType) ce;
+						this.jsonString="";
+						jsonObject.setIsRelationEventObject(true);
+						RelationEventObject relationEventObject = new RelationEventObject();
+						jsonObject.setRelationEventObject(relationEventObject);
+						jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
+						printJsonObjectRE(jsonObject.getRelationEventObject());
+
 					}
 				}
-				if(ce instanceof RelationEventType){
-					// Trying to get a list of objects in the relations event type object
-					// First get PredicateType
-					// Then go recursively to subject and object
-					RelationEventType re = (RelationEventType) ce;
-					this.jsonString="";
-					jsonObject.setIsRelationEventObject(true);
-					RelationEventObject relationEventObject = new RelationEventObject();
-					jsonObject.setRelationEventObject(relationEventObject);
-					jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
-					printJsonObjectRE(jsonObject.getRelationEventObject());
-					
-				}
+
+			}catch(Exception e){
+				logger.error("",e);
 			}
-		}catch(Exception e){
-			logger.error("",e);
 		}
 		return this.jsonString;
 	}
 
 	public void printJsonObjectRE(RelationEventObject relationEventObject){
-			PredicateObject predicateObject = relationEventObject.getPredicateObject();
-			AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
-			NodeObject nodeObject = new NodeObject();
-			nodeObject.setPredicate(appellationEventObject.getNode());
-			logger.debug("Predicate : "+appellationEventObject.getNode() );
-			SubjectObject subjectObject = relationEventObject.getSubjectObject();
-			ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
-			if(subjectObject.getIsRelationEventObject()){
-				nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-				logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-				if(objectTypeObject.getIsRelationEventObject()){
-					nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-					updateJsonStringForRENode(nodeObject);
-					logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-				}else{
-					
-					AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-					nodeObject.setObject(appellationEventObject1.getNode());
-					updateJsonStringForRENode(nodeObject);
-					logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
-				}
-				printJsonObjectRE(subjectObject.getRelationEventObject());
-			}else{
-				
-				AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
-				nodeObject.setSubject(appellationEventObject1.getNode());
-				logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
-			}
+		PredicateObject predicateObject = relationEventObject.getPredicateObject();
+		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
+		NodeObject nodeObject = new NodeObject();
+		nodeObject.setPredicate(appellationEventObject.getNode());
+		logger.debug("Predicate : "+appellationEventObject.getNode() );
+		SubjectObject subjectObject = relationEventObject.getSubjectObject();
+		ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
+		if(subjectObject.getIsRelationEventObject()){
+			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 			if(objectTypeObject.getIsRelationEventObject()){
-				printJsonObjectRE(objectTypeObject.getRelationEventObject());
+				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+				updateJsonStringForRENode(nodeObject);
+				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 			}else{
+
 				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
 				nodeObject.setObject(appellationEventObject1.getNode());
 				updateJsonStringForRENode(nodeObject);
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
+			printJsonObjectRE(subjectObject.getRelationEventObject());
+		}else{
+
+			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
+			nodeObject.setSubject(appellationEventObject1.getNode());
+			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
+		}
+		if(objectTypeObject.getIsRelationEventObject()){
+			printJsonObjectRE(objectTypeObject.getRelationEventObject());
+		}else{
+			AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+			nodeObject.setObject(appellationEventObject1.getNode());
+			updateJsonStringForRENode(nodeObject);
+			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
+		}
 	}
-	
+
 	public void updateJsonStringForRENode(NodeObject nodeObject){
 		this.jsonString=this.jsonString+"{\"adjacencies\":[";
 		this.jsonString=this.jsonString+"{";
@@ -315,13 +326,13 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString=this.jsonString+"\"nodeFrom\": \""+nodeObject.getPredicate()+"\",";
 		this.jsonString=this.jsonString+"\"data\": {\"$color\": \"#FFFFFF\"}";
 		this.jsonString=this.jsonString+"},";
-		
+
 		this.jsonString=this.jsonString+"{";
 		this.jsonString=this.jsonString+"\"nodeTo\": \""+nodeObject.getObject()+"\",";
 		this.jsonString=this.jsonString+"\"nodeFrom\": \""+nodeObject.getPredicate()+"\",";
 		this.jsonString=this.jsonString+"\"data\": {\"$color\": \"#FFFFFF\"}";
 		this.jsonString=this.jsonString+"}],";
-		
+
 		this.jsonString=this.jsonString+"\"data\": {";
 		this.jsonString=this.jsonString+"\"$color\": \"#EE6363\",";
 		this.jsonString=this.jsonString+"\"$type\": \"circle\",";
@@ -331,8 +342,8 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString=this.jsonString+"\"name\": \""+nodeObject.getPredicate()+"\"";
 		this.jsonString=this.jsonString+"},";
 	}
-	
-	
+
+
 
 	/**
 	 * Get all the terms recursively from the relation event
@@ -340,7 +351,7 @@ public class NetworkManager implements INetworkManager {
 	 * @param re : RelationEventType
 	 */
 	public RelationEventObject getAllObjectFromRelationEvent(RelationEventType re,RelationEventObject relationEventObject){
-		
+
 		RelationType relationType = re.getRelation(re);
 		PredicateType predicateType = relationType.getPredicateType(relationType);
 		//		Check for Appellation event inside subject and add if any
@@ -363,9 +374,9 @@ public class NetworkManager implements INetworkManager {
 		//		Check for relation event inside subject and add if any
 		logger.debug("Came to Subject, Now checking RE or AE");
 		RelationEventType re1 = subjectType.getRelationEvent();
-		
+
 		SubjectObject subjectObject = new SubjectObject();
-		
+
 		if(re1 == null){
 			subjectObject.setIsRelationEventObject(false);
 			logger.debug("Subject : RE1 is null");
@@ -373,7 +384,7 @@ public class NetworkManager implements INetworkManager {
 			logger.debug("Subject : Its RE, now Recursive move");
 			subjectObject.setIsRelationEventObject(true);
 			RelationEventObject relationEventObject1   = new RelationEventObject();
-			
+
 			relationEventObject1=getAllObjectFromRelationEvent(re1,relationEventObject1);
 			subjectObject.setRelationEventObject(relationEventObject1);
 		}
@@ -382,8 +393,8 @@ public class NetworkManager implements INetworkManager {
 		if(ae1 == null){
 			logger.debug("Subject : AE1 is null");
 		}else{
-			
-			
+
+
 			logger.debug("Subject : Its AE , now printing the terms");
 			List<TermType> termTypeList= ae1.getTerms(ae1);
 			Iterator <TermType> I2 = termTypeList.iterator();
@@ -579,7 +590,9 @@ public class NetworkManager implements INetworkManager {
 		try{
 			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
 		}catch(Exception e){
-			logger.error("",e);
+			logger.error("QStore not accepting the xml, please check with the server logs.",e);
+			//res = e.getMessage();
+			return res;
 		}
 		return res;
 	}

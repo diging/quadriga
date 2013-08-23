@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -78,7 +78,7 @@ public class DictionaryItemCollabController {
 	public String getDictionaryCollabPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model,Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = usermanager.getUserDetails(principal.getName());
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItemsDetailsCollab(dictionaryid);
+		List<IDictionaryItem> dictionaryItemList = dictonaryManager.getDictionaryItemsDetailsCollab(dictionaryid);
 		if (dictionaryItemList == null) {
 			logger.info("Dictionary ITem list is null");
 		}
@@ -120,7 +120,7 @@ public class DictionaryItemCollabController {
 			model.addAttribute("collab", 1);
 			model.addAttribute("delsuccess", 0);
 			//			model.addAttribute("delerrormsg", "Items were not selected");
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+			List<IDictionaryItem> dictionaryItemList = dictonaryManager
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -162,7 +162,7 @@ public class DictionaryItemCollabController {
 			}
 		}
 		logger.info("Item Returned ");
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+		List<IDictionaryItem> dictionaryItemList = dictonaryManager
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
@@ -198,7 +198,7 @@ public class DictionaryItemCollabController {
 		if(values == null){
 			model.addAttribute("updatesuccess", 0);
 			//			model.addAttribute("updateerrormsg", "Items were not selected");
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+			List<IDictionaryItem> dictionaryItemList = dictonaryManager
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -256,7 +256,7 @@ public class DictionaryItemCollabController {
 			}
 		}
 		logger.debug("Item Returned ");
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+		List<IDictionaryItem> dictionaryItemList = dictonaryManager
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
@@ -276,7 +276,7 @@ public class DictionaryItemCollabController {
 	@RequestMapping(value = "auth/dictionaries/addDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
 	public String addDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId,
-			@ModelAttribute("SpringWeb") DictionaryItems dictionaryItems,
+			@ModelAttribute("SpringWeb") DictionaryItem dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser user = usermanager.getUserDetails(principal.getName());
@@ -287,7 +287,7 @@ public class DictionaryItemCollabController {
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
 
-				DictionaryItems di = dictonaryManager.getDictionaryItemIndex(
+				DictionaryItem di = dictonaryManager.getDictionaryItemIndex(
 						values[i], dictionaryItems);
 				msg = dictonaryManager.addNewDictionariesItems(dictionaryId,
 						di.getItems(), di.getId(), di.getPos(), dictonaryManager.getDictionaryOwner(dictionaryId));
@@ -295,7 +295,7 @@ public class DictionaryItemCollabController {
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+			List<IDictionaryItem> dictionaryItemList = dictonaryManager
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -326,7 +326,7 @@ public class DictionaryItemCollabController {
 				model.addAttribute("errormsg", msg);
 			}
 		}
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+		List<IDictionaryItem> dictionaryItemList = dictonaryManager
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
@@ -381,7 +381,7 @@ public class DictionaryItemCollabController {
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+			List<IDictionaryItem> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryid,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryid);

@@ -606,7 +606,7 @@
 	<definition name="auth/networks/visualize" extends="base.definition.networks">
 		<put-attribute name="title" value="Quadriga Networks visualize" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/networks/sample.jsp" />
+			value="/WEB-INF/views/networks/networkvisual.jsp" />
 	</definition>
 
 

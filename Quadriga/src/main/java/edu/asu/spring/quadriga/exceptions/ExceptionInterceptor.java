@@ -5,6 +5,7 @@ package edu.asu.spring.quadriga.exceptions;
 
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.weaver.ast.Instanceof;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,12 @@ public class ExceptionInterceptor {
 		}  else if (t instanceof RestException) {
 			logger.error(t.getMessage(), t);
 			throw (RestException) t;
-		} else {
+		} else if ( t instanceof NullPointerException){
+			logger.error(t.getMessage(), t);
+			throw (QuadrigaException) t;
+		}
+		
+		else {
 			logger.error(t.getMessage(), t);
 			QuadrigaException se = new QuadrigaException(t.getMessage());
 			se.setStackTrace(t.getStackTrace());

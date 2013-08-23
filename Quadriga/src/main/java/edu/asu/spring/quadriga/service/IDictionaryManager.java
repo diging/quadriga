@@ -5,9 +5,9 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -60,7 +60,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionaryItems> getDictionariesItems(
+	public abstract List<IDictionaryItem> getDictionariesItems(
 			String dictionaryid,String ownerName) throws QuadrigaStorageException;
 
 	/**
@@ -120,8 +120,8 @@ public interface IDictionaryManager {
 	 * @param dictionaryItems
 	 * @return
 	 */
-	public abstract DictionaryItems getDictionaryItemIndex(String termId,
-			DictionaryItems dictionaryItems);
+	public abstract DictionaryItem getDictionaryItemIndex(String termId,
+			DictionaryItem dictionaryItems);
 
 		
 	public abstract List<ICollaborator> showCollaboratingUsers(String dictionaryId);
@@ -161,7 +161,7 @@ public interface IDictionaryManager {
 	public abstract String getDictionaryCollabPerm(String userId, String dicitonaryId)
 			throws QuadrigaStorageException;
 
-	public abstract List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid)
+	public abstract List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
 	public abstract String deleteDictionaryItemsCollab(String dictionaryId, String itemid)
