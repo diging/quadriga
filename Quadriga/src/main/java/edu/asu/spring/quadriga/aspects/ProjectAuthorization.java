@@ -54,6 +54,13 @@ public class ProjectAuthorization implements IAuthorization
 					{
 						collaboratorRoles = collaborator.getCollaboratorRoles();
 						
+						/*
+						 * You can replace the following by using a list
+						 * instead of an array and then:
+						 * for collabRole in collaboratorRoles
+						 * 		if userRoles.contains(collabRole.getRoleId)
+						 * 			...
+						 */
 						for(String role : userRoles)
 						{
 							for(ICollaboratorRole collabRole : collaboratorRoles)
@@ -65,6 +72,7 @@ public class ProjectAuthorization implements IAuthorization
 									break;
 								}
 							}
+							
 							if(haveAccess)
 								break;
 						}
