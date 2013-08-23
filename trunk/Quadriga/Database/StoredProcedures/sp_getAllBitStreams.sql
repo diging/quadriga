@@ -8,7 +8,7 @@ Called By     : UI (DBConnectionDspaceManager.java)
 
 Create By     : Ram Kumar Kumaresan
 
-Modified Date : 07/12/2013
+Modified Date : 08/23/2013
 
 ********************************************/
 
@@ -29,7 +29,7 @@ BEGIN
 		THEN 
 			
 			SELECT communityid as Communityid, collectionid as Collectionid, itemid as Itemid, bitstreamid as Bitstreamid
-			FROM tbl_workspace_dspace WHERE workspaceid = inWorkspaceid;
+			FROM tbl_workspace_dspace WHERE workspaceid = inWorkspaceid ORDER BY createddate;
 	
 	ELSE 
 			SET errorMessage = "No such Workspace exists. This action has been logged. Please don't try to hack into the system !!!";

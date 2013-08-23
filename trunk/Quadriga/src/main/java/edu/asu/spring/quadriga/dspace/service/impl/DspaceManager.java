@@ -280,7 +280,6 @@ public class DspaceManager implements IDspaceManager{
 	{
 		try
 		{	
-			//TODO:
 			//Check if the selected bitstream ids belong to the authorized list of bitstreams.
 			List<String> authorizedBitStreamsForDelete = new ArrayList<String>();
 			for(String bitstreamid: bitstreamids)
@@ -290,12 +289,16 @@ public class DspaceManager implements IDspaceManager{
 					if(workspaceBitStream.getId()!=null)
 						if(workspaceBitStream.getId().equals(bitstreamid))
 						{
-							authorizedBitStreamsForDelete.add(bitstreamid);
-							break;
+							if(!(workspaceBitStream.getName().equals(dspaceProperties.getProperty("restricted_bitstream")) && workspaceBitStream.getName().equals(dspaceProperties.getProperty("access_check_bitstream"))))
+							{
+								authorizedBitStreamsForDelete.add(bitstreamid);
+								break;
+							}
 						}
 				}
 			}
 
+			//Delete all the authorized bitstreams for the user from the workspace
 			for(String bitstreamid: authorizedBitStreamsForDelete)
 				dbconnectionManager.deleteBitstreamFromWorkspace(workspaceid, bitstreamid, username);
 		}
@@ -425,11 +428,10 @@ public class DspaceManager implements IDspaceManager{
 		if(dspaceKeys == null && (sUserName == null || sPassword == null))
 		{
 			IBitStream restrictedBitStream = new BitStream();
-			//TODO: Put strings in the properties file.
-			restrictedBitStream.setCommunityName("Need Dspace Authentication");
-			restrictedBitStream.setCollectionName("Need Dspace Authentication");
-			restrictedBitStream.setItemName("Need Dspace Authentication");
-			restrictedBitStream.setName("Need Dspace Authentication");
+			restrictedBitStream.setCommunityName(dspaceProperties.getProperty("need_authentication"));
+			restrictedBitStream.setCollectionName(dspaceProperties.getProperty("need_authentication"));
+			restrictedBitStream.setItemName(dspaceProperties.getProperty("need_authentication"));
+			restrictedBitStream.setName(dspaceProperties.getProperty("need_authentication"));
 
 			//Created Empty Bitstream data
 			for(int i=0;i<bitstreams.size();i++)
@@ -439,16 +441,12 @@ public class DspaceManager implements IDspaceManager{
 			return checkedBitStreams;
 		}
 
-
 		IBitStream restrictedBitStream = new BitStream();
-		//TODO: Put strings in the properties file.
-		restrictedBitStream.setCommunityName("Restricted Community");
-		restrictedBitStream.setCollectionName("Restricted Collection");
-		restrictedBitStream.setItemName("Restricted Item");
-		restrictedBitStream.setName("No Access to File");
-
-
-
+		restrictedBitStream.setCommunityName(dspaceProperties.getProperty("restricted_community"));
+		restrictedBitStream.setCollectionName(dspaceProperties.getProperty("restricted_collection"));
+		restrictedBitStream.setItemName(dspaceProperties.getProperty("restricted_item"));
+		restrictedBitStream.setName(dspaceProperties.getProperty("restricted_bitstream"));
+		
 		try
 		{
 			for(IBitStream bitstream: bitstreams)
@@ -517,15 +515,12 @@ public class DspaceManager implements IDspaceManager{
 					 * The collection/item/bitstream data is to be loaded from dspace. 
 					 * Separate threads are still working on loading them.
 					 */
-
-					//TODO: Put strings in the properties file.
-					loadingBitStream.setCollectionName("Checking Collection Access...");
-					loadingBitStream.setItemName("Checking Item Access...");
-					loadingBitStream.setName("Checking BitStream Access...");
+					loadingBitStream.setCollectionName(dspaceProperties.getProperty("access_check_collection"));
+					loadingBitStream.setItemName(dspaceProperties.getProperty("access_check_item"));
+					loadingBitStream.setName(dspaceProperties.getProperty("access_check_bitstream"));
 
 					checkedBitStreams.add(loadingBitStream);
-				}				
-
+				}
 			} //End of for each loop for bitstream
 		} catch (NoSuchAlgorithmException e) {
 			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
