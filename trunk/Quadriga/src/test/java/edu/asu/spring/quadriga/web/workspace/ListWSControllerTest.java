@@ -66,8 +66,8 @@ public class ListWSControllerTest {
 	private DspaceKeys dspaceKeys;
 
 	@Autowired
-	IDBConnectionManager dbConnection;
-	String sDatabaseSetup;
+	private IDBConnectionManager dbConnection;
+	private String sDatabaseSetup;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
