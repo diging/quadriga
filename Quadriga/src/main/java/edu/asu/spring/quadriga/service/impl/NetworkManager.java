@@ -21,7 +21,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.taglibs.standard.lang.jstl.RelationalOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +77,7 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
-	public String jsonString;
+	public String jsonString="";
 	
 	@Autowired
 	@Qualifier("qStoreURL_Add")
@@ -195,7 +194,7 @@ public class NetworkManager implements INetworkManager {
 	}
 
 	@Override
-	public JsonObject generateJsontoJQuery(String id,String statementType) throws JAXBException{
+	public String generateJsontoJQuery(String id,String statementType) throws JAXBException{
 		JsonObject jsonObject = new JsonObject();
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -236,7 +235,18 @@ public class NetworkManager implements INetworkManager {
 					Iterator <TermType> I2 = termTypeList.iterator();
 					while(I2.hasNext()){
 						TermType tt = I2.next();
+						String node = tt.getTermInterpertation(tt);
 						logger.info(tt.getTermInterpertation(tt));
+						this.jsonString="{"+
+							"\"adjacencies\": [],"+
+							"\"data\": {"+
+								"\"$color\": \"#EE6363\","+
+								"\"$type\": \"circle\","+
+								"\"$dim\": 11"+
+							"},"+
+							"\"id\": \""+node+"\","+
+							"\"name\": \""+node+"\""+
+							"},";
 					}
 				}
 				if(ce instanceof RelationEventType){
@@ -244,47 +254,82 @@ public class NetworkManager implements INetworkManager {
 					// First get PredicateType
 					// Then go recursively to subject and object
 					RelationEventType re = (RelationEventType) ce;
-					
+					this.jsonString="";
 					jsonObject.setIsRelationEventObject(true);
 					RelationEventObject relationEventObject = new RelationEventObject();
 					jsonObject.setRelationEventObject(relationEventObject);
 					jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
-					printJsonObject(jsonObject.getRelationEventObject());
+					printJsonObjectRE(jsonObject.getRelationEventObject());
+					
 				}
 			}
 		}catch(Exception e){
 			logger.error("",e);
 		}
-		return jsonObject;
+		return this.jsonString;
 	}
 
-	public void printJsonObject(RelationEventObject relationEventObject){
+	public void printJsonObjectRE(RelationEventObject relationEventObject){
 			PredicateObject predicateObject = relationEventObject.getPredicateObject();
 			AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
 			NodeObject nodeObject = new NodeObject();
 			nodeObject.setPredicate(appellationEventObject.getNode());
-			logger.info("Predicate : "+appellationEventObject.getNode() );
+			logger.debug("Predicate : "+appellationEventObject.getNode() );
 			SubjectObject subjectObject = relationEventObject.getSubjectObject();
 			ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
 			if(subjectObject.getIsRelationEventObject()){
 				nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-				logger.info("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+				logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 				if(objectTypeObject.getIsRelationEventObject()){
 					nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-					
-					logger.info("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+					updateJsonStringForRENode(nodeObject);
+					logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 				}else{
+					
 					AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-					logger.info("Object Predicate : "+appellationEventObject1.getNode() );
+					nodeObject.setObject(appellationEventObject1.getNode());
+					updateJsonStringForRENode(nodeObject);
+					logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 				}
-				printJsonObject(subjectObject.getRelationEventObject());
+				printJsonObjectRE(subjectObject.getRelationEventObject());
 			}else{
-				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-				logger.info("Subject Predicate : "+appellationEventObject1.getNode() );
+				
+				AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
+				nodeObject.setSubject(appellationEventObject1.getNode());
+				logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
 			}
 			if(objectTypeObject.getIsRelationEventObject()){
-				printJsonObject(objectTypeObject.getRelationEventObject());
+				printJsonObjectRE(objectTypeObject.getRelationEventObject());
+			}else{
+				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+				nodeObject.setObject(appellationEventObject1.getNode());
+				updateJsonStringForRENode(nodeObject);
+				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
+	}
+	
+	public void updateJsonStringForRENode(NodeObject nodeObject){
+		this.jsonString=this.jsonString+"{\"adjacencies\":[";
+		this.jsonString=this.jsonString+"{";
+		this.jsonString=this.jsonString+"\"nodeTo\": \""+nodeObject.getSubject()+"\",";
+		this.jsonString=this.jsonString+"\"nodeFrom\": \""+nodeObject.getPredicate()+"\",";
+		this.jsonString=this.jsonString+"\"data\": {\"$color\": \"#FFFFFF\"}";
+		this.jsonString=this.jsonString+"},";
+		
+		this.jsonString=this.jsonString+"{";
+		this.jsonString=this.jsonString+"\"nodeTo\": \""+nodeObject.getObject()+"\",";
+		this.jsonString=this.jsonString+"\"nodeFrom\": \""+nodeObject.getPredicate()+"\",";
+		this.jsonString=this.jsonString+"\"data\": {\"$color\": \"#FFFFFF\"}";
+		this.jsonString=this.jsonString+"}],";
+		
+		this.jsonString=this.jsonString+"\"data\": {";
+		this.jsonString=this.jsonString+"\"$color\": \"#EE6363\",";
+		this.jsonString=this.jsonString+"\"$type\": \"circle\",";
+		this.jsonString=this.jsonString+"\"$dim\": 11";
+		this.jsonString=this.jsonString+"},";
+		this.jsonString=this.jsonString+"\"id\": \""+nodeObject.getPredicate()+"\",";
+		this.jsonString=this.jsonString+"\"name\": \""+nodeObject.getPredicate()+"\"";
+		this.jsonString=this.jsonString+"},";
 	}
 	
 	

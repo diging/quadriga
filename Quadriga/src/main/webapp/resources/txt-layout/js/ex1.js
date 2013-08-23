@@ -29,58 +29,6 @@ var Log = {
 function init1(json){
 	// init data
 	
-	json = [{
-		"adjacencies": [
-						{
-							"nodeTo": "node5",
-							"nodeFrom": "Node6",
-							"data": {
-								"$color": "#FFFFFF"
-							}
-
-						},{
-							"nodeTo": "Node4",
-							"nodeFrom": "Node6",
-							"data": {
-								"$color": "#FFFFFF"
-							}
-						}
-						],
-						"data": {
-							"$color": "#EE6363",
-							"$type": "circle",
-							"$dim": 11
-						},
-						"id": "Node6",
-						"name": "Node6"
-	},{
-		"adjacencies": [
-						{
-							"nodeTo": "node2",
-							"nodeFrom": "Node4",
-							"data": {
-								"$color": "#FFFFFF"
-							}
-
-						},{
-							"nodeTo": "Node3",
-							"nodeFrom": "Node4",
-							"data": {
-								"$color": "#FFFFFF"
-							}
-						}
-						],
-						"data": {
-							"$color": "#EE6363",
-							"$type": "circle",
-							"$dim": 11
-						},
-						"id": "Node4",
-						"name": "Node4"
-						
-						
-	}
-	];
 	// end
 	// init ForceDirected
 	var fd = new $jit.ForceDirected({
