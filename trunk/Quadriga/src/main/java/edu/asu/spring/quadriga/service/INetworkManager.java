@@ -68,7 +68,7 @@ public interface INetworkManager {
 	public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
 			throws QuadrigaStorageException;
 
-	public abstract JsonObject generateJsontoJQuery(String id, String statementType)
+	public abstract String generateJsontoJQuery(String id, String statementType)
 			throws JAXBException;
 
 	public abstract String getQStoreGetURL();
