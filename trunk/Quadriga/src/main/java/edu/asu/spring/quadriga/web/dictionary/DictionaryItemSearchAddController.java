@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -87,7 +87,7 @@ public class DictionaryItemSearchAddController {
 	@RequestMapping(value = "auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String addDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId,
-			@ModelAttribute("SpringWeb") DictionaryItems dictionaryItems,
+			@ModelAttribute("SpringWeb") DictionaryItem dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser user = usermanager.getUserDetails(principal.getName());
@@ -100,7 +100,7 @@ public class DictionaryItemSearchAddController {
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
 				
-				DictionaryItems di = dictonaryManager.getDictionaryItemIndex(
+				DictionaryItem di = dictonaryManager.getDictionaryItemIndex(
 						values[i], dictionaryItems);
 				msg = dictonaryManager.addNewDictionariesItems(dictionaryId,
 						di.getItems(), di.getId(), di.getPos(), owner);
@@ -109,7 +109,7 @@ public class DictionaryItemSearchAddController {
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+			List<IDictionaryItem> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -133,7 +133,7 @@ public class DictionaryItemSearchAddController {
 				model.addAttribute("errormsg", msg);
 			}
 		}
-		List<IDictionaryItems> dictionaryItemList = dictonaryManager
+		List<IDictionaryItem> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
@@ -170,7 +170,7 @@ public class DictionaryItemSearchAddController {
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
-			List<IDictionaryItems> dictionaryItemList = dictonaryManager
+			List<IDictionaryItem> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryid,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryid);

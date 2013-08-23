@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
@@ -378,12 +378,12 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	 */
 	
 	@Override
-	public List<IDictionaryItems> getDictionaryItemsDetails(String dictionaryid, String ownerName)throws QuadrigaStorageException{
+	public List<IDictionaryItem> getDictionaryItemsDetails(String dictionaryid, String ownerName)throws QuadrigaStorageException{
 		String dbCommand;
 		String errmsg="";
 		getConnection();
-		IDictionaryItems dictionaryItems;
-		List<IDictionaryItems> dictionaryList=new ArrayList<IDictionaryItems>();
+		IDictionaryItem dictionaryItems;
+		List<IDictionaryItem> dictionaryList=new ArrayList<IDictionaryItem>();
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_ITEMS_DETAILS + "(?,?,?)";
 		try {
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
@@ -429,12 +429,12 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 
 	
 	@Override
-	public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid)throws QuadrigaStorageException{
+	public List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid)throws QuadrigaStorageException{
 		String dbCommand;
 		String errmsg="";
 		getConnection();
-		IDictionaryItems dictionaryItems;
-		List<IDictionaryItems> dictionaryList=new ArrayList<IDictionaryItems>();
+		IDictionaryItem dictionaryItems;
+		List<IDictionaryItem> dictionaryList=new ArrayList<IDictionaryItem>();
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_ITEMS_DETAILS_COLLAB + "(?,?)";
 		try {
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");

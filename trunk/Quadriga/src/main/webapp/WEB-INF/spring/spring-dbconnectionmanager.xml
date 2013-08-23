@@ -104,31 +104,7 @@
 
 	</bean>
 
-	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
-		<property name="messageConverters">
-			<list>
-				<bean
-					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-					<property name="marshaller" ref="jaxbMarshaller" />
-					<property name="unmarshaller" ref="jaxbMarshaller" />
-				</bean>
-				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
-				<bean
-					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
-
-	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-		<property name="classesToBeBound">
-			<list>
-				<value>edu.asu.spring.quadriga.domain.implementation.Community
-				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.Communities
-				</value>
-			</list>
-		</property>
-	</bean>
+	
 
 
 </beans>

@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 
 /**
  * This class is a dictionaryItem bean class for dictionary items
@@ -9,7 +9,7 @@ import edu.asu.spring.quadriga.domain.IDictionaryItems;
  *
  */
 
-public class DictionaryItems implements IDictionaryItems {
+public class DictionaryItem implements IDictionaryItem {
 
 	
 	private String items;

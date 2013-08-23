@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
@@ -240,7 +240,7 @@ public class DictionaryRestController {
 
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		List<IDictionaryItems> dictionaryItemsList = null;
+		List<IDictionaryItem> dictionaryItemsList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
 		Template template = null;

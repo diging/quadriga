@@ -6,7 +6,7 @@ package edu.asu.spring.quadriga.domain;
  * @author        : Lohith Dwaraka
  *
  */
-public interface IDictionaryItems {
+public interface IDictionaryItem {
 	
 	public abstract String getItems();
 	

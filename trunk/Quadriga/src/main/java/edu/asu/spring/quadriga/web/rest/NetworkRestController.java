@@ -133,6 +133,10 @@ public class NetworkRestController {
 
 		} else {
 			String res=networkManager.storeXMLQStore(xml);
+			if(res.equals("")){
+				response.setStatus(500);
+				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
+			}
 			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());

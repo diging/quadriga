@@ -69,7 +69,7 @@ public interface INetworkManager {
 			throws QuadrigaStorageException;
 
 	public abstract String generateJsontoJQuery(String id, String statementType)
-			throws JAXBException;
+			throws JAXBException, QuadrigaStorageException;
 
 	public abstract String getQStoreGetURL();
 

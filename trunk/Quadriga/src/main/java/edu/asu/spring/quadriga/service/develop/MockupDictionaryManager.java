@@ -5,10 +5,10 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -75,7 +75,7 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 	}
 
 	
-	public List<IDictionaryItems> getDictionariesItems(String id){
+	public List<IDictionaryItem> getDictionariesItems(String id){
 		return null;
 	}
 
@@ -121,8 +121,8 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public DictionaryItems getDictionaryItemIndex(String termId,
-			DictionaryItems dictionaryItems) {
+	public DictionaryItem getDictionaryItemIndex(String termId,
+			DictionaryItem dictionaryItems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -135,7 +135,7 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
+	public List<IDictionaryItem> getDictionariesItems(String dictionaryid,
 			String ownerName) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		return null;

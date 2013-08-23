@@ -13,10 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -238,10 +238,10 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to list of dictionary item to controller
 	 */
 	@Override
-	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
+	public List<IDictionaryItem> getDictionariesItems(String dictionaryid,
 			String ownerName) throws QuadrigaStorageException {
 
-		List<IDictionaryItems> dictionaryItemList = null;
+		List<IDictionaryItem> dictionaryItemList = null;
 		try {
 			dictionaryItemList = dbConnect.getDictionaryItemsDetails(
 					dictionaryid, ownerName);
@@ -252,9 +252,9 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryItemList;
 	}
 	@Override
-	public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
+	public List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
 
-		List<IDictionaryItems> dictionaryItemList = null;
+		List<IDictionaryItem> dictionaryItemList = null;
 		try {
 			dictionaryItemList = dbConnect.getDictionaryItemsDetailsCollab(
 					dictionaryid);
@@ -373,24 +373,24 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 * @return Return the dictionaryEntry bean to controller
 	 */
-	public DictionaryItems getDictionaryItemIndex(String termId,
-			DictionaryItems dictionaryItems) {
+	public DictionaryItem getDictionaryItemIndex(String termId,
+			DictionaryItem dictionaryItems) {
 
 		String terms[] = dictionaryItems.getItems().split(",");
-		String id[] = dictionaryItems.getId().split(",");
+		String ids[] = dictionaryItems.getId().split(",");
 		String pos[] = dictionaryItems.getPos().split(",");
 		int index = -1;
-		if (id.length > 0) {
-			for (int i = 0; i < id.length; i++) {
-				if (id[i].equals(termId)) {
+		if (ids.length > 0) {
+			for (int i = 0; i < ids.length; i++) {
+				if (ids[i].equals(termId)) {
 					index = i;
-					i = id.length;
+					i = ids.length;
 				}
 			}
 		}
-		DictionaryItems di = dictionaryItemsFactory
+		DictionaryItem di = dictionaryItemsFactory
 				.createDictionaryItemsObject();
-		di.setId(id[index]);
+		di.setId(ids[index]);
 		di.setItems(terms[index]);
 		di.setPos(pos[index]);
 
