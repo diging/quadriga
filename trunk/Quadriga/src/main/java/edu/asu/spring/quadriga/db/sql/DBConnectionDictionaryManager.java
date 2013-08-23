@@ -960,43 +960,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	}
 
 	@Override
-	public List<IUser> getDictionaryCollaborators(String dictionaryid) 
-	{
-		
-		String dbCommand;
-		String errmsg;
-		CallableStatement sqlStatement;
-		List<IUser> collaboratoratingUsersList = new ArrayList<IUser>();
-		
-		dbCommand = DBConstants.SP_CALL+" "+DBConstants.SHOW_DICT_COLLABORATORS+"(?,?)";
-		getConnection();
-		try {
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-			sqlStatement.setString(1, dictionaryid);
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
-			sqlStatement.execute();
-			errmsg = sqlStatement.getString(2);
-			if(errmsg=="")
-			{
-				ResultSet resultSet = sqlStatement.getResultSet();
-				while(resultSet.next())
-				{
-					IUser collaboratingUser = userFactory.createUserObject();
-					collaboratingUser.setUserName(resultSet.getString(1));
-					collaboratoratingUsersList.add(collaboratingUser);
-				}
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		
-		
-		return collaboratoratingUsersList;
-	}
-
-	@Override
 	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 
 		String dbCommand;

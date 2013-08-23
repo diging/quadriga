@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
+import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -36,6 +37,9 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
 @Controller
 public class DictionaryCollaboratorController {
@@ -59,6 +63,12 @@ public class DictionaryCollaboratorController {
 	
 	@Autowired
 	CollaboratorValidator collaboratorValidator;
+	
+	@Autowired
+	ModifyCollaboratorFormManager collaboratorFormManager;
+	
+	@Autowired
+	IModifyCollaboratorFormFactory collaboratorFormFactory;
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) throws Exception {
@@ -97,18 +107,19 @@ public class DictionaryCollaboratorController {
 	    }); 
 	}
 	
-	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showCollaborators" , method = RequestMethod.GET)
-	public String displayCollaborators(@PathVariable("dictionaryid") String dictionary_id, ModelMap model){
-		
-		logger.info("coming to this page");
-		model.addAttribute("dictionaryid", dictionary_id);
+	
+	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showAddCollaborators" , method = RequestMethod.GET)
+	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId) throws QuadrigaStorageException{
+	
+		ModelAndView modelAndView = new ModelAndView("auth/dictionaries/showAddCollaborators");
+		modelAndView.getModelMap().put("dictionaryid", dictionaryId);
 		
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
-		model.addAttribute("collaborator", collaborator); 
+		modelAndView.getModelMap().put("collaborator", collaborator); 
 
-		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionary_id);
-		model.addAttribute("nonCollaboratingUsers", nonCollaboratingUsers);
+		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
+		modelAndView.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
 		
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
@@ -121,78 +132,25 @@ public class DictionaryCollaboratorController {
 				iterator.remove();
 			}
 		}
-		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
+		modelAndView.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
 		
+		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
+		modelAndView.getModelMap().put("collaboratingUsers", collaborators);
 		
-		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionary_id);
-		model.addAttribute("collaboratingUsers", collaborators);
-		
-		return "auth/dictionaries/showCollaborators";
+		return modelAndView;	
 	}
-
-
-	/*@ModelAttribute
-	public ICollaborator getCollaborator() {
-		ICollaborator collaborator = collaboratorFactory.createCollaborator();
-		collaborator.setUserObj(userFactory.createUserObject());
-		return collaborator;
-	} */
-	
-	
-	/*@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
-	public String addDictCollaborators(HttpServletRequest req,@PathVariable("dictionaryid") String dictionary_id, 
-			 ModelMap model, Principal principal)
-	{
-		
-		String [] values = req.getParameterValues("roleselected");
-		String username = req.getParameter("userName");
-		String errmsg = "";
-		
-		String sessionUser = principal.getName();
-		logger.info("Username selected in the jsp "+ username);
-		
-		if(values != null && username != null){
-			
-			errmsg = dictionaryManager.addCollaborators(values, dictionary_id, username, sessionUser);
-			
-			logger.info("Checkbox data is null");	
-			
-		}
-		
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
-		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
-
-		while(iterator.hasNext())
-		{
-			if(iterator.next().getRoleid().equals("ADMIN"))
-			{
-				iterator.remove();
-			}
-		}
-		
-		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
-
-		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionary_id);
-		model.addAttribute("nonCollaboratingUsers", nonCollaboratingUsers);
-		
-		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionary_id);
-		model.addAttribute("collaboratingUsers", collaborators);
-
-		return "auth/dictionaries/showCollaborators";
-	
-	} */
 	
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
-	public ModelAndView addCollaborators( @PathVariable("dictionaryid") String dictionary_id, 
+	public ModelAndView addCollaborators( @PathVariable("dictionaryid") String dictionaryId, 
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
-			Principal principal	)
+			Principal principal	) throws QuadrigaStorageException
 	{
 		ModelAndView model = null;
 		String errmsg = "";
 		String collaboratorUser = collaborator.getUserObj().getUserName();
 		List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
-		model = new ModelAndView("auth/dictionaries/showCollaborators");
+		model = new ModelAndView("auth/dictionaries/showAddCollaborators");
+		
 
 		if(result.hasErrors())
 		{
@@ -201,16 +159,17 @@ public class DictionaryCollaboratorController {
 		
 		else
 		{
-		String username = principal.getName();
-			
-		errmsg = dictionaryManager.addCollaborators(collaborator, dictionary_id,collaboratorUser,username);		
-		
-		model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
+			String username = principal.getName();	
+			errmsg = dictionaryManager.addCollaborators(collaborator, dictionaryId,collaboratorUser,username);		
+			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 
 		}
 				
-		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionary_id);
+		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
 		model.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
+		
+		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
+		model.getModelMap().put("collaboratingUsers", collaborators);
 		
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
@@ -225,32 +184,8 @@ public class DictionaryCollaboratorController {
 		}
 		model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
 		
-		
-		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionary_id);
-		model.getModelMap().put("collaboratingUsers", collaborators);
-
 		return model;
 	
 	} 
-	
-	@RequestMapping(value="auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
-	public String deleteCollaborators(@PathVariable("dictionaryid") String dictionaryid, HttpServletRequest req, ModelMap model)
-	{
-		String[] collaborators = req.getParameterValues("selected");
-		
-		String errmsg = null;
-		
-		for(int i=0; i<collaborators.length; i++)
-		{
-			errmsg = dictionaryManager.deleteCollaborator(dictionaryid, collaborators[i]);
-		}
-		
-		if(errmsg.equals(""))
-		{
-			return "redirect:/auth/dictionaries/"+dictionaryid+"/showCollaborators";
-		}
-		return "redirect:/auth/dictionaries/{dictionaryid}";
-			
-	}
 	
 }

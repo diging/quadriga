@@ -123,10 +123,8 @@ public interface IDictionaryManager {
 	public abstract DictionaryItems getDictionaryItemIndex(String termId,
 			DictionaryItems dictionaryItems);
 
-	
-	public abstract List<IUser> getCollaborators(String dictionaryid);
-	
-	public abstract List<ICollaborator> showCollaboratingUsers(String collectionid);
+		
+	public abstract List<ICollaborator> showCollaboratingUsers(String dictionaryId);
 	
 	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
 	

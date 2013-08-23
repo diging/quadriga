@@ -117,56 +117,6 @@ public class CollaboratorController {
 		}); 
 	}
 
-	@RequestMapping(value = "auth/workbench/{projectid}/showCollaborators", method = RequestMethod.GET)
-	public String displayCollaborator(@PathVariable("projectid") String projectid, ModelMap model) throws QuadrigaStorageException{
-		
-		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
-		collaborator.setUserObj(userFactory.createUserObject());
-		model.addAttribute("collaborator", collaborator);
-		
-		model.addAttribute("projectid", projectid);
-		
-		// retrieve the collaborators who are not associated with project
-		List<IUser> nonCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
-
-		for(IUser user : nonCollaboratingUsers)
-		{
-			//fetch the quadriga roles and eliminate the restricted user
-			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-			for(IQuadrigaRole role : userQuadrigaRole)
-			{
-				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
-				{
-					nonCollaboratingUsers.remove(user);
-				}
-			}
-		}
-		
-		model.addAttribute("notCollaboratingUsers", nonCollaboratingUsers);
-		
-		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
-
-		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
-		model.addAttribute("collaboratingUsers", collaboratingUsers);
-		
-		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
-		
-		Iterator<ICollaboratorRole> rolesIterator = collaboratorRoles.iterator();
-		
-		while(rolesIterator.hasNext())
-		{
-			if(rolesIterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
-			{
-				rolesIterator.remove();
-			}		
-		}
-		
-		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
-		
-		return "auth/workbench/showCollaborators";
-
-	}
-
 	@ModelAttribute
 	public ICollaborator getCollaborator() {
 		ICollaborator collaborator = collaboratorFactory.createCollaborator();

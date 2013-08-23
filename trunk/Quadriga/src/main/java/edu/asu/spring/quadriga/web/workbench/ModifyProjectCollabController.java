@@ -71,6 +71,7 @@ public class ModifyProjectCollabController
 				setValue(roles);
 			} 	
 		}); 
+		
 	}
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})

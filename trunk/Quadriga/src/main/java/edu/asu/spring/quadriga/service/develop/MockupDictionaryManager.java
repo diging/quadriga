@@ -153,13 +153,7 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 		return null;
 	}
 
-	@Override
-	public List<IUser> getCollaborators(String dictionaryid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
+	
 	@Override
 	public String deleteDictionary(String user, String dictionaryId) {
 		// TODO Auto-generated method stub
