@@ -139,13 +139,13 @@
 
 <%-----------------------------------------------------------------------%>
 <%-- Author:Rohit Pendbhaje --%>
-<div>
+<%-- <div>
 <section>
 <h3 class="major"><span>Collaborators</span></h3>
 
 <ul class="collaborators">
 	<c:forEach var="existingcollab" items="${existingCollaborators}">
-	<li><c:out value="${existingcollab.userName}"></c:out></li>
+	<li><c:out value="${existingcollab.userObj.userName}"></c:out></li>
 	</c:forEach>
 </ul>
 
@@ -163,7 +163,7 @@
 
 </section>
 </section>
-</div>
+</div>   --%>
 
 <%-----------------------------------------------------------------------%>
 

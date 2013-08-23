@@ -39,7 +39,9 @@ public class CollaboratorFormDeleteValidator implements Validator {
 		if(isAllNull == true)
 		{
 			for(int i=0;i<collaboratorList.size();i++)
-			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "collaborators["+i+"].userName", "collaborator_delete_selection.required");
+			{
+				ValidationUtils.rejectIfEmptyOrWhitespace(errors, "collaborators["+i+"].userName", "collaborator_delete_selection.required");
+			}
 		}
 
 	}

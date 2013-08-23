@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+    
 <style>
 .error {
 	color: #ff0000;
@@ -25,31 +25,19 @@ $(document).ready(function() {
 	});
 });
 
-
-$(document).ready(function(){
-	$(".selectAll").click(function(){
-	if($(this).val() == "check all")
-		{
-			$('input:checkbox').prop("checked",true);
-			$(this).val("uncheck all");
-		}
-	else
-		{
-			$('input:checkbox').prop("checked",false);
-			$(this).val("check all");	
-		}
-	});
-});	
-
-
 $(document).ready(function() {
 	$("input[type=submit]").button().click(function(event) {
 
 	});
 });
 
+function goBack(){
+	
+	location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}';
+}
 </script>
 
+<input type="submit" value="Back" onClick="goBack()"/> 
 
 <form:form method="POST" name="myForm" commandName="collaborator"
  action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators">
@@ -67,36 +55,30 @@ $(document).ready(function() {
 	<td><input type="submit" value="Add"></td>
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
 	&nbsp;
-	</c:if>
+	</c:if>	
 	
-	<br><br><br>
-    
-    <input type="submit" value="Delete" onclick="deleteValidate();this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/deleteCollaborators'">	
 	<table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
-	
 	<thead>
 		<tr>
-			<th align="left"><input type="checkbox" class="selectAll" value="check all" name="selected">Select All</th>
+		<%-- 	<th align="left"><input type="checkbox" class="selectAll" value="check all" name="selected">Select All</th>--%>
 			<th align="left">collaborator</th>
 			<th align="left">roles</th>
 		</tr>
 	</thead>
 	<tbody>
 	<c:forEach var="collab" items="${collaboratingUsers}">
-		<tr>
-		  <td><input type="checkbox" name="selected" value='<c:out value="${collab.userObj.userName}"></c:out>'/></td>
-		  <td><c:out value="${collab.userObj.userName}"></c:out> </td>
-		  <td>
-			  <c:forEach var="roles" items="${collab.collaboratorRoles}">
-			  	<c:out value="${roles.displayName}"></c:out>||
-			  </c:forEach>
-		  </td>
-		</tr>
+	<tr>
+	<td>
+		<c:out value="${collab.userObj.userName}"/>
+	</td>
+	<td>
+		<c:forEach var="roles" items="${collab.collaboratorRoles}">
+		<c:out value="${roles.displayName}" />||
+		</c:forEach>
+	</td>
+	</tr>
 	</c:forEach>
 	</tbody>
-</table>
+	</table>
 </form:form>
-
-
-
-
+	

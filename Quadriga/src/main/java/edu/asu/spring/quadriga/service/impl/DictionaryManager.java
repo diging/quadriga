@@ -396,13 +396,7 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return di;
 	}
-
-	@Override
-	public List<IUser> getCollaborators(String dictionaryid) {
-		
-		List<IUser> userList = dbConnect.getDictionaryCollaborators(dictionaryid);		
-		return userList;
-	}	
+	
 	
 	@Override
 	public List<IUser> showNonCollaboratingUsers(String dictionaryid) {
