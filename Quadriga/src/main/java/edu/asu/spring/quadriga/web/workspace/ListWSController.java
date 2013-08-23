@@ -196,6 +196,7 @@ public class ListWSController
 		if(dspaceManager.deleteDspaceKeys(principal.getName())==SUCCESS)
 		{
 			this.setDspaceKeys(null);
+			dspaceManager.clearCompleteCache();
 		}
 		return "redirect:/auth/workbench/keys";
 	}
