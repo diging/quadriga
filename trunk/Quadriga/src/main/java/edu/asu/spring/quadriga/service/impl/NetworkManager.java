@@ -59,8 +59,6 @@ import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.ObjectT
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.RelationEventObject;
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.SubjectObject;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 
@@ -79,7 +77,7 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
-	public String jsonString="";
+	public StringBuffer jsonString= new StringBuffer("");
 
 	@Autowired
 	@Qualifier("qStoreURL_Add")
@@ -109,12 +107,12 @@ public class NetworkManager implements INetworkManager {
 	 */
 	@Override
 	public String getQStoreAddURL() {
-		return qStoreURL+""+qStoreURL_Add;
+		return qStoreURL+qStoreURL_Add;
 	}
 
 	@Override
 	public String getQStoreGetURL() {
-		return qStoreURL+""+qStoreURL_Get;
+		return qStoreURL+qStoreURL_Get;
 	}
 
 
@@ -134,42 +132,51 @@ public class NetworkManager implements INetworkManager {
 		}catch(QuadrigaStorageException e){
 			logger.error("DB action error ",e);
 		}
-		try{
-			ElementEventsType e = response.getValue();
-			List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
-			Iterator <CreationEvent> I= c.iterator();
-			while(I.hasNext()){
-				CreationEvent ce = I.next();
-				if(ce instanceof AppellationEventType)
-				{
-					List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
-					Iterator <JAXBElement<?>> I1 = e2.iterator();
-					while(I1.hasNext()){
-						JAXBElement<?> element = (JAXBElement<?>) I1.next();
-						if(element.getName().toString().contains("id")){
-							logger.info("Appellation Event ID : "+element.getValue().toString());
+
+		ElementEventsType e = response.getValue();
+		List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
+		Iterator <CreationEvent> I= c.iterator();
+		while(I.hasNext()){
+			CreationEvent ce = I.next();
+			if(ce instanceof AppellationEventType)
+			{
+				List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
+				Iterator <JAXBElement<?>> I1 = e2.iterator();
+				while(I1.hasNext()){
+					JAXBElement<?> element = (JAXBElement<?>) I1.next();
+					if(element.getName().toString().contains("id")){
+						logger.info("Appellation Event ID : "+element.getValue().toString());
+						try{
 							dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "AE", "1", user);
+						}catch(QuadrigaStorageException se){
+							logger.error("DB Storage issue",se);
 						}
 					}
-
 				}
-				if(ce instanceof RelationEventType){
-					List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
-					Iterator <JAXBElement<?>> I1 = e2.iterator();
-					while(I1.hasNext()){
-						JAXBElement<?> element = (JAXBElement<?>) I1.next();
-						if(element.getName().toString().contains("id")){
-							logger.info("Relation Event ID : "+element.getValue().toString());
-							dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "RE", "1", user);
-						}
-					}
-					RelationEventType re = (RelationEventType) (ce);
-					getRelationEventElements(re,networkId,user);
 
-				}
 			}
-		}catch(Exception e){
-			logger.error("",e);
+			if(ce instanceof RelationEventType){
+				List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
+				Iterator <JAXBElement<?>> I1 = e2.iterator();
+				while(I1.hasNext()){
+					JAXBElement<?> element = (JAXBElement<?>) I1.next();
+					if(element.getName().toString().contains("id")){
+						logger.info("Relation Event ID : "+element.getValue().toString());
+						try{
+							dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "RE", "1", user);
+						}catch(QuadrigaStorageException se){
+							logger.error("DB Storage issue",se);
+						}
+					}
+				}
+				RelationEventType re = (RelationEventType) (ce);
+				try{
+					getRelationEventElements(re,networkId,user);
+				}catch(QuadrigaStorageException se){
+					logger.error("DB Storage issue",se);
+				}
+
+			}
 		}
 	}
 
@@ -190,7 +197,7 @@ public class NetworkManager implements INetworkManager {
 			transformer.transform(xmlInput, xmlOutput);
 			result= xmlOutput.getWriter().toString();
 		}catch(Exception e){
-
+			logger.error("Error in formating the XML " ,e );
 		}
 		return result;
 	}
@@ -246,16 +253,7 @@ public class NetworkManager implements INetworkManager {
 							TermType tt = I2.next();
 							String node = tt.getTermInterpertation(tt);
 							logger.info(tt.getTermInterpertation(tt));
-							this.jsonString="{"+
-									"\"adjacencies\": [],"+
-									"\"data\": {"+
-									"\"$color\": \"#EE6363\","+
-									"\"$type\": \"circle\","+
-									"\"$dim\": 11"+
-									"},"+
-									"\"id\": \""+node+"\","+
-									"\"name\": \""+node+"\""+
-									"},";
+							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#EE6363\",\"$type\": \"circle\",\"$dim\": 11},\"id\": \""+node+"\",\"name\": \""+node+"\"},");
 						}
 					}
 					if(ce instanceof RelationEventType){
@@ -263,7 +261,7 @@ public class NetworkManager implements INetworkManager {
 						// First get PredicateType
 						// Then go recursively to subject and object
 						RelationEventType re = (RelationEventType) ce;
-						this.jsonString="";
+						this.jsonString.delete(0, this.jsonString.length());
 						jsonObject.setIsRelationEventObject(true);
 						RelationEventObject relationEventObject = new RelationEventObject();
 						jsonObject.setRelationEventObject(relationEventObject);
@@ -277,7 +275,7 @@ public class NetworkManager implements INetworkManager {
 				logger.error("",e);
 			}
 		}
-		return this.jsonString;
+		return this.jsonString.toString();
 	}
 
 	public void printJsonObjectRE(RelationEventObject relationEventObject){
@@ -320,27 +318,27 @@ public class NetworkManager implements INetworkManager {
 	}
 
 	public void updateJsonStringForRENode(NodeObject nodeObject){
-		this.jsonString=this.jsonString+"{\"adjacencies\":[";
-		this.jsonString=this.jsonString+"{";
-		this.jsonString=this.jsonString+"\"nodeTo\": \""+nodeObject.getSubject()+"\",";
-		this.jsonString=this.jsonString+"\"nodeFrom\": \""+nodeObject.getPredicate()+"\",";
-		this.jsonString=this.jsonString+"\"data\": {\"$color\": \"#FFFFFF\"}";
-		this.jsonString=this.jsonString+"},";
+		this.jsonString.append("{\"adjacencies\":[");
+		this.jsonString.append("{");
+		this.jsonString.append("\"nodeTo\": \""+nodeObject.getSubject()+"\",");
+		this.jsonString.append("\"nodeFrom\": \""+nodeObject.getPredicate()+"\",");
+		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"}");
+		this.jsonString.append("},");
 
-		this.jsonString=this.jsonString+"{";
-		this.jsonString=this.jsonString+"\"nodeTo\": \""+nodeObject.getObject()+"\",";
-		this.jsonString=this.jsonString+"\"nodeFrom\": \""+nodeObject.getPredicate()+"\",";
-		this.jsonString=this.jsonString+"\"data\": {\"$color\": \"#FFFFFF\"}";
-		this.jsonString=this.jsonString+"}],";
+		this.jsonString.append("{");
+		this.jsonString.append("\"nodeTo\": \""+nodeObject.getObject()+"\",");
+		this.jsonString.append("\"nodeFrom\": \""+nodeObject.getPredicate()+"\",");
+		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"}");
+		this.jsonString.append("}],");
 
-		this.jsonString=this.jsonString+"\"data\": {";
-		this.jsonString=this.jsonString+"\"$color\": \"#EE6363\",";
-		this.jsonString=this.jsonString+"\"$type\": \"circle\",";
-		this.jsonString=this.jsonString+"\"$dim\": 11";
-		this.jsonString=this.jsonString+"},";
-		this.jsonString=this.jsonString+"\"id\": \""+nodeObject.getPredicate()+"\",";
-		this.jsonString=this.jsonString+"\"name\": \""+nodeObject.getPredicate()+"\"";
-		this.jsonString=this.jsonString+"},";
+		this.jsonString.append("\"data\": {");
+		this.jsonString.append("\"$color\": \"#EE6363\",");
+		this.jsonString.append("\"$type\": \"circle\",");
+		this.jsonString.append("\"$dim\": 11");
+		this.jsonString.append("},");
+		this.jsonString.append("\"id\": \""+nodeObject.getPredicate()+"\",");
+		this.jsonString.append("\"name\": \""+nodeObject.getPredicate()+"\"");
+		this.jsonString.append("},");
 	}
 
 
