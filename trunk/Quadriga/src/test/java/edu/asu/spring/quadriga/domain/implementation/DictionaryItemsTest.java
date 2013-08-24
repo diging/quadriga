@@ -25,7 +25,7 @@ import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DictionaryItemsTest {
 
-	private DictionaryItems dictionaryItems;
+	private DictionaryItem dictionaryItems;
 	private IUser owner;
 	
 	@Autowired
@@ -46,7 +46,7 @@ public class DictionaryItemsTest {
 	@Before
 	public void setUp() throws Exception {
 		//this.dictionaryItems =  dictionaryItemsFactory.createDictionaryItemsObject();
-		this.dictionaryItems = new DictionaryItems();
+		this.dictionaryItems = new DictionaryItem();
 		this.owner = userFactory.createUserObject();
 	}
 

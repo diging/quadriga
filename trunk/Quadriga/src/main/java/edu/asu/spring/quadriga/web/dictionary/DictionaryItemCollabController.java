@@ -87,7 +87,7 @@ public class DictionaryItemCollabController {
 		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryid);
 		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals("Read/Write")){
+		if(roleType.equals(collaboratorRoleManager.getDictCollaboratorRoleByDBId("dict_role3"))){
 			
 			model.addAttribute("roleAccess", 1);
 		}
@@ -129,7 +129,7 @@ public class DictionaryItemCollabController {
 			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 			logger.info("Role :"+role+"  role type : "+roleType);
-			if(roleType.equals("Read/Write")){
+			if(roleType.equals(collaboratorRoleManager.getDictCollaboratorRoleByDBId("dict_role3"))){
 				model.addAttribute("roleAccess", 1);
 			}
 			model.addAttribute("dictID", dictionaryId);
@@ -169,7 +169,7 @@ public class DictionaryItemCollabController {
 		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals("Read/Write")){
+		if(roleType.equals(collaboratorRoleManager.getDictCollaboratorRoleByDBId("dict_role3"))){
 			model.addAttribute("roleAccess", 1);
 		}
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -205,9 +205,8 @@ public class DictionaryItemCollabController {
 			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 			logger.info("Role :"+role+"  role type : "+roleType);
-			if(roleType.equals("Read/Write")){
+			if(roleType.equals(collaboratorRoleManager.getDictCollaboratorRoleByDBId("dict_role3"))){
 				model.addAttribute("roleAccess", 1);
-				logger.info("came here");
 			}
 			model.addAttribute("collab", 1);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -264,7 +263,7 @@ public class DictionaryItemCollabController {
 		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals("Read/Write")){
+		if(roleType.equals(collaboratorRoleManager.getDictCollaboratorRoleByDBId("dict_role3"))){
 			model.addAttribute("roleAccess", 1);
 		}
 		model.addAttribute("dictName", dictionaryName);
@@ -282,8 +281,6 @@ public class DictionaryItemCollabController {
 		IUser user = usermanager.getUserDetails(principal.getName());
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
-		String owner = usermanager.getUserDetails(principal.getName())
-				.getUserName();
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
 
@@ -302,7 +299,7 @@ public class DictionaryItemCollabController {
 			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 			logger.info("Role :"+role+"  role type : "+roleType);
-			if(roleType.equals("Read/Write")){
+			if(roleType.equals(collaboratorRoleManager.getDictCollaboratorRoleByDBId("dict_role3"))){
 				model.addAttribute("roleAccess", 1);
 			}
 			model.addAttribute("collab", 1);
@@ -333,7 +330,7 @@ public class DictionaryItemCollabController {
 		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		String roleType=collaboratorRoleManager.getDictCollaboratorRoleByDBId(role);
 		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals("Read/Write")){
+		if(roleType.equals(collaboratorRoleManager.getDictCollaboratorRoleByDBId("dict_role3"))){
 			model.addAttribute("roleAccess", 1);
 		}
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -343,6 +340,7 @@ public class DictionaryItemCollabController {
 		return "auth/dictionary/dictionarycollab";
 	}
 
+	
 	/**
 	 * Handles the add dictionary item page
 	 * 
