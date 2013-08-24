@@ -32,13 +32,13 @@ import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -247,7 +247,7 @@ public class DictionaryItemSearchAddControllerTest {
 			}catch(Exception e){
 				logger.error("",e);
 			}
-			DictionaryItems dictionaryItems = new DictionaryItems();
+			DictionaryItem dictionaryItems = new DictionaryItem();
 			dictionaryItems.setId(values);
 			dictionaryItems.setItems("dog");
 			dictionaryItems.setPos("noun");
@@ -257,10 +257,10 @@ public class DictionaryItemSearchAddControllerTest {
 			String dictionaryName=(String) model.get("dictName");
 			assertEquals(dictionaryId, getDictionaryID("testDictionary"));
 			assertEquals(dictionaryName, "testDictionary");
-			List<IDictionaryItems> dictionaryItemList = (List<IDictionaryItems> )model.get("dictionaryItemList");
-			Iterator <IDictionaryItems> I =dictionaryItemList.iterator();
+			List<IDictionaryItem> dictionaryItemList = (List<IDictionaryItem> )model.get("dictionaryItemList");
+			Iterator <IDictionaryItem> I =dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),true);
-			IDictionaryItems di = I.next();
+			IDictionaryItem di = I.next();
 			assertEquals(di.getItems(),"dog");
 			assertEquals(di.getPos(),"noun");
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));

@@ -27,7 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
@@ -369,12 +369,12 @@ public class DBConnectionDictionaryManagerTest {
 				e.printStackTrace();
 			}
 			assertEquals((msg.equals("")), true);
-			List <IDictionaryItems> dictionaryItemsList = null;
+			List <IDictionaryItem> dictionaryItemsList = null;
 			dictionaryItemsList=dbConnection.getDictionaryItemsDetails(id,"jdoe");
-			Iterator<IDictionaryItems> I = dictionaryItemsList.iterator();
+			Iterator<IDictionaryItem> I = dictionaryItemsList.iterator();
 			assertEquals(I.hasNext(),true);
 			logger.info("Checking if Iterator has objects  : "+I.hasNext());
-			IDictionaryItems dictionaryItems=dictionaryItemsFactory.createDictionaryItemsObject();
+			IDictionaryItem dictionaryItems=dictionaryItemsFactory.createDictionaryItemsObject();
 			dictionaryItems=I.next();
 			logger.info("Dictionary id :"+dictionaryItems.getId());
 			logger.info("Dictionary Pos :"+dictionaryItems.getPos());

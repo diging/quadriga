@@ -34,7 +34,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
@@ -42,7 +42,7 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.implementation.CollaboratorRole;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItems;
+import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -252,10 +252,10 @@ public class DictionaryItemCollabControllerTest {
 			};
 			assertEquals(dictionaryItemCollabController.getDictionaryCollabPage(getDictionaryID("testDictionary"), model,principal),"auth/dictionary/dictionarycollab");
 			int roleAccess = (Integer) model.get("roleAccess");
-			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryItemList");
+			List <IDictionaryItem> dictionaryItemList = (List <IDictionaryItem>)model.get("dictionaryItemList");
 			String dictName =(String) model.get("dictName");
 			String dictionaryid =(String) model.get("dictionaryid");
-			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			Iterator <IDictionaryItem> I = dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),false);
 			assertEquals(roleAccess,1);
 			assertEquals(dictName,"testDictionary");
@@ -297,10 +297,10 @@ public class DictionaryItemCollabControllerTest {
 			};
 			assertEquals(dictionaryItemCollabController.deleteDictionaryItem(mock, getDictionaryID("testDictionary"), model, principal), "auth/dictionary/dictionarycollab");
 			int roleAccess = (Integer) model.get("roleAccess");
-			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryItemList");
+			List <IDictionaryItem> dictionaryItemList = (List <IDictionaryItem>)model.get("dictionaryItemList");
 			String dictName =(String) model.get("dictName");
 			String dictionaryid =(String) model.get("dictID");
-			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			Iterator <IDictionaryItem> I = dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),false);
 			assertEquals(roleAccess,1);
 			assertEquals(dictName,"testDictionary");
@@ -342,12 +342,12 @@ public class DictionaryItemCollabControllerTest {
 			};
 			assertEquals(dictionaryItemCollabController.updateDictionaryItem(mock, getDictionaryID("testDictionary"), model, principal), "auth/dictionary/dictionarycollab");
 			int roleAccess = (Integer) model.get("roleAccess");
-			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryItemList");
+			List <IDictionaryItem> dictionaryItemList = (List <IDictionaryItem>)model.get("dictionaryItemList");
 			String dictName =(String) model.get("dictName");
 			String dictionaryid =(String) model.get("dictID");
-			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			Iterator <IDictionaryItem> I = dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),true);
-			IDictionaryItems dictionaryItems = I.next();
+			IDictionaryItem dictionaryItems = I.next();
 			
 			assertEquals(roleAccess,1);
 			assertEquals(dictName,"testDictionary");
@@ -384,10 +384,10 @@ public class DictionaryItemCollabControllerTest {
 			};
 			assertEquals(dictionaryItemCollabController.searchDictionaryItemRestHandle(getDictionaryID("testDictionary"), "dog", "noun", model,principal), "auth/dictionaries/addDictionaryItemsCollab");
 			int collab = (Integer) model.get("collab");
-			List <IDictionaryItems> dictionaryItemList = (List <IDictionaryItems>)model.get("dictionaryEntryList");
+			List <IDictionaryItem> dictionaryItemList = (List <IDictionaryItem>)model.get("dictionaryEntryList");
 			String dictName =(String) model.get("dictName");
 			String dictionaryid =(String) model.get("dictionaryid");
-			Iterator <IDictionaryItems> I = dictionaryItemList.iterator();
+			Iterator <IDictionaryItem> I = dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),true);
 			
 			assertEquals(collab,1);
@@ -443,7 +443,7 @@ public class DictionaryItemCollabControllerTest {
 			}catch(Exception e){
 				logger.error("",e);
 			}
-			DictionaryItems dictionaryItems = new DictionaryItems();
+			DictionaryItem dictionaryItems = new DictionaryItem();
 			dictionaryItems.setId(values);
 			dictionaryItems.setItems("dog");
 			dictionaryItems.setPos("noun");
@@ -459,10 +459,10 @@ public class DictionaryItemCollabControllerTest {
 			String dictionaryName=(String) model.get("dictName");
 			assertEquals(dictionaryId, getDictionaryID("testDictionary"));
 			assertEquals(dictionaryName, "testDictionary");
-			List<IDictionaryItems> dictionaryItemList = (List<IDictionaryItems> )model.get("dictionaryItemList");
-			Iterator <IDictionaryItems> I =dictionaryItemList.iterator();
+			List<IDictionaryItem> dictionaryItemList = (List<IDictionaryItem> )model.get("dictionaryItemList");
+			Iterator <IDictionaryItem> I =dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),true);
-			IDictionaryItems di = I.next();
+			IDictionaryItem di = I.next();
 			assertEquals(di.getItems(),"dog");
 			assertEquals(di.getPos(),"noun");
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
