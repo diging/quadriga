@@ -174,7 +174,7 @@ public class ListWSController
 	 * @param dspaceKeys				The public and private key provided by the user.
 	 * 
 	 * @return							Redirect to the dspace manage pages.
-	 * @throws QuadrigaStorageException	Thrown when database encountered any problem during the operation.
+	 * @throws QuadrigaStorageException	Thrown when database encountered any problems during the operation.
 	 * @throws QuadrigaAccessException
 	 */
 	@RequestMapping(value = "/auth/workbench/updatekeys", method = RequestMethod.POST)
@@ -195,6 +195,12 @@ public class ListWSController
 		return "redirect:/auth/workbench/keys";
 	}
 
+	/**
+	 * Handle request to delete the dspace keys from Quadriga. Then redirect to dspace keys page
+	 * 
+	 * @return	Redirect to the dspace keys page.
+	 * @throws 	QuadrigaStorageException	Thrown when database encountered any problems during the operation
+	 */
 	@RequestMapping(value = "/auth/workbench/deletekeys", method = RequestMethod.GET)
 	public String deleteDspaceKeys(Principal principal, ModelMap model) throws QuadrigaStorageException 
 	{
@@ -275,9 +281,8 @@ public class ListWSController
 	 * This method is responsible for the handle of dspace Username and password.
 	 * After the assignment of dspace variables, this redirects to the dspace communities controller.
 	 * 
-	 * @param workspaceId		The workspace id from which the add request is raised.
-	 * @param dspaceUsername	The dspace username provided by the user.
-	 * @param dspacePassword	The dspace password provided by the user.
+	 * @param workspaceId		The id of the workspace from which the request originates.
+	 * @param req				The request object containing the username and password (or) public access option.
 	 * @return					Redirect to the dspace communities page.
 	 * @author 					Ram Kumar Kumaresan
 	 */
@@ -310,6 +315,13 @@ public class ListWSController
 	}
 
 
+	/**
+	 * Handle the request to add Dspace Authentication. To store username and password for this current user session.
+	 * 
+	 * @param workspaceId	The id of the workspace from which the request originates.
+	 * @param req			The request object containing the username and password (or) public access option.
+	 * @return				Redirect to the workspace page.
+	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/adddsapceauthentication", method = RequestMethod.POST)
 	public String addDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {
 		String dspaceUsername = req.getParameter("username");
@@ -343,9 +355,8 @@ public class ListWSController
 	 * When the user changes the dspace authentication. All the cached dspace data is cleared.
 	 * After the assignment of dspace variables, this redirects to the workspace page.
 	 * 
-	 * @param workspaceId		The workspace id from which the add request is raised.
-	 * @param dspaceUsername	The dspace username provided by the user.
-	 * @param dspacePassword	The dspace password provided by the user.
+	 * @param workspaceId		The id of the workspace from which the request originates.
+	 * @param req				The request object containing the username and password (or) public access option.
 	 * @return					Redirect to the workspace page.
 	 * @author 					Ram Kumar Kumaresan
 	 */
@@ -614,6 +625,16 @@ public class ListWSController
 		return dspaceProperties.getProperty("loading");
 	}
 
+	/**
+	 * Check the access rights of the bitstream. 
+	 * 
+	 * @param bitstreamid			The id of the bitstream.
+	 * @param itemid				The id of the item to which the bitstream belongs.
+	 * @param collectionid			The id of the collection to which the bitstream belongs.
+	 * @return						The bitstream name if it is loaded. Else Loading status. If the user does not have access to the bitstream
+	 * 								it returns 'No Access to File'
+	 * @throws QuadrigaException	Thrown when any unexpected exceptions happens when communicating with Dspace.
+	 */
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamaccessstatus", method = RequestMethod.GET)
 	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid, @RequestParam("itemid") String itemid, @RequestParam("collectionid") String collectionid) throws QuadrigaException {
 
@@ -713,7 +734,7 @@ public class ListWSController
 	}
 
 	/**
-	 * Handle the request to delete bitstream(s) from a workspace.
+	 * Handle the request to delete bitstream(s) from a workspace. Gets the list of authroized bistreams from Dspace for the user and deletes based on that authorization.
 	 * 
 	 * @param workspaceId					The id of the workspace from which the bitstream(s) are to deleted. 
 	 * @param bitstreamids					The id(s) of the bitstream(s) which are to deleted from the workspace.

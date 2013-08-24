@@ -215,18 +215,28 @@ public interface IDspaceManager{
 			throws QuadrigaStorageException;
 
 	/**
-	 * Check whether the user has access to the list of bitstreams in Dspace.
+	 * Check whether the user has access to the list of bitstreams in Dspace. Checks in the Dspace cache for finding out the access rights.
+	 * Sets the corresponding community, collection, item and bitstream name. Atleast one of Dspace authentication parameter must be present, if not, 
+	 * it will return a list of bitstreams with name set to restricted.
 	 *  
-	 * @param bitstreams		The list of bitstreams which are to be tested if the user has access.
+	 * @param bitstreams		The list of bitstreams which are to be tested against the user rights.
 	 * @param dspaceKeys		The Dspace Access keys used by the user.
 	 * @param username			The dspace username of the user.
 	 * @param password			The corresponding dspace password of the user.
 	 * 
-	 * @return
+	 * @return					All loaded bitstreams contain the corresponding names. If the user doesn't have access then the names are changed to restricted.
+	 * 							If the cache is yet to be populated then the bitstream names will be 'Checking BitStream Access...'
 	 * @throws QuadrigaException 
 	 */
 	public abstract List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String username, String password) throws QuadrigaException;
 
+	/**
+	 * Delete the dspace keys stored in dspace for this user.
+	 * 
+	 * @param username						The quadriga username of the user.
+	 * @return								SUCCESS returns 1. FAILURE returns 0.
+	 * @throws QuadrigaStorageException		Thrown when database encountered any problem during the operation.
+	 */
 	public abstract int deleteDspaceKeys(String username) throws QuadrigaStorageException;
 
 }
