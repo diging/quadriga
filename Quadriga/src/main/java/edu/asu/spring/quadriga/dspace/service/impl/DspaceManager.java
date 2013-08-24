@@ -419,6 +419,9 @@ public class DspaceManager implements IDspaceManager{
 		return dbconnectionManager.deleteDspaceKeys(username);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException
 	{
