@@ -10,5 +10,8 @@ $url/rest/workspace/$workspaceid/conceptcollections
 <Quadriga:networks>
 $url/rest/workspace/$workspaceid/networks
 </Quadriga:networks>
+<Quadriga:files>
+$url/rest/workspace/$workspaceid/files
+</Quadriga:files>
 </Quadriga:workspaceDetails> 	
 </Quadriga:QuadrigaReply>
