@@ -41,4 +41,6 @@ public interface ICollaboratorRoleManager {
 	public abstract List<ICollaboratorRole> getWsCollabRoles();
 
 	public abstract ICollaboratorRole getWSCollaboratorRoleByDBId(String collaboratorRoleDBId);
+
+	public abstract String getDictCollaboratorRoleIdByDBId(String collaboratorRoleDBId);
 }

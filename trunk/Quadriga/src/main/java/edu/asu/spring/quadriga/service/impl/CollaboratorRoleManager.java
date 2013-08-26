@@ -224,6 +224,8 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		
 		return null;
 	}
+	
+	
 
 	@Override
 	public String getDictCollaboratorRoleByDBId(String collaboratorRoleDBId) {
@@ -233,6 +235,20 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 			if(collaboratorRole.getRoleDBid().equals(collaboratorRoleDBId))
 			{
 				return collaboratorRole.getDisplayName();
+			}
+		}	
+		
+		return "";
+	}
+	
+	@Override
+	public String getDictCollaboratorRoleIdByDBId(String collaboratorRoleDBId) {
+		
+		for(ICollaboratorRole collaboratorRole:dictCollabRoles)
+		{
+			if(collaboratorRole.getRoleDBid().equals(collaboratorRoleDBId))
+			{
+				return collaboratorRole.getRoleid();
 			}
 		}	
 		
