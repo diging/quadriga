@@ -474,7 +474,11 @@ public class NetworkManager implements INetworkManager {
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Relation Event ID subject: "+element1.getValue().toString());
-										dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+										try{
+											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+										}catch(QuadrigaStorageException se){
+											logger.error("DB Storage issue",se);
+										}
 									}
 								}
 								getRelationEventElements(re1,networkId,user);
@@ -492,7 +496,11 @@ public class NetworkManager implements INetworkManager {
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-										dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+										try{
+											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+										}catch(QuadrigaStorageException se){
+											logger.error("DB Storage issue",se);
+										}
 									}
 								}
 							}
@@ -513,7 +521,11 @@ public class NetworkManager implements INetworkManager {
 										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 										if(element1.getName().toString().contains("id")){
 											logger.debug("Relation Event ID object: "+element1.getValue().toString());
-											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+											try{
+												dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+											}catch(QuadrigaStorageException se){
+												logger.error("DB Storage issue",se);
+											}
 										}
 									}
 									getRelationEventElements(re1,networkId,user);
@@ -530,7 +542,11 @@ public class NetworkManager implements INetworkManager {
 										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 										if(element1.getName().toString().contains("id")){
 											logger.debug("Appellation Event ID : "+element1.getValue().toString());
-											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+											try{
+												dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+											}catch(QuadrigaStorageException se){
+												logger.error("DB Storage issue",se);
+											}
 										}
 									}
 								}
@@ -555,11 +571,14 @@ public class NetworkManager implements INetworkManager {
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-										dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+										try{
+											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+										}catch(QuadrigaStorageException se){
+											logger.error("DB Storage issue",se);
+										}
 									}
 								}
 							}
-
 						}
 				}
 			}
