@@ -358,9 +358,15 @@
 				</a> 
 			</c:when>
 			<c:otherwise>
-				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/deleteEditorRoleToOwner/${workspaceid}">
-						<input type="button" name="Delete Editor Role" value="Delete Editor Role" />
-				</a> 
+				<c:choose>
+								<c:when test="${projectinherit == '0' }">
+									<a
+										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/deleteEditorRoleToOwner/${workspaceid}">
+										<input type="button" name="Delete Editor Role"
+										value="Delete Editor Role" />
+									</a>
+								</c:when>
+							</c:choose>
 			</c:otherwise>
 		</c:choose>
 

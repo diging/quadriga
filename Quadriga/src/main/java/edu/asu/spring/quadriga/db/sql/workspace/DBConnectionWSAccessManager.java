@@ -122,4 +122,51 @@ IDBConnectionWSAccessManager
 		return false;
 
 	}
+	
+	
+	@Override
+	public boolean chkWorkspaceProjectInheritOwnerEditorRole(String userName,String workspaceId) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String result="";
+		CallableStatement sqlStatement;
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.CHECK_WORKSPACE_PROJECT_OWNER_ROLE_INHERIT + "(?,?,?)";
+
+		//get the connection
+		getConnection();
+
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, userName);
+			sqlStatement.setString(2, workspaceId);
+			sqlStatement.registerOutParameter(3, java.sql.Types.VARCHAR);
+			sqlStatement.execute();
+
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					result = resultSet.getString(1);
+				}		
+			}
+			if(result.isEmpty()){
+				return false;
+			}else if(result.equals("1")){
+				return true;
+			}
+		}catch(SQLException e)
+		{
+			logger.info(" ",e);
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return false;
+
+	}
 }

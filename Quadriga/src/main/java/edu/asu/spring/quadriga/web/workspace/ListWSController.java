@@ -267,6 +267,11 @@ public class ListWSController
 		}else{
 			model.addAttribute("editoraccess", 0);
 		}
+		if (workspaceSecurity.checkWorkspaceProjectInheritOwnerEditorAccess(userName, workspaceid)){
+			model.addAttribute("projectinherit", 1);
+		}else{
+			model.addAttribute("projectinherit", 0);
+		}
 
 		return "auth/workbench/workspace/workspacedetails";
 	}

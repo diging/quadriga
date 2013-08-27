@@ -1,5 +1,5 @@
 /*******************************************
-Name          : sp_hasWorkspaceOwnerEditorRole
+Name          : sp_doesWorkspaceInheritProjectOwnerEditorRole
 
 Description   : Check if owner of the workspace has
 				editor roles
@@ -12,10 +12,10 @@ Modified Date : 08/14/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_hasWorkspaceOwnerEditorRole;
+DROP PROCEDURE IF EXISTS sp_doesWorkspaceInheritProjectOwnerEditorRole;
 
 DELIMITER $$
-CREATE PROCEDURE sp_hasWorkspaceOwnerEditorRole
+CREATE PROCEDURE sp_doesWorkspaceInheritProjectOwnerEditorRole
 (
   IN  inowner  VARCHAR(20),
   IN  inworkspaceid  VARCHAR(100),
@@ -40,14 +40,8 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the workspace owner editor details
-	 select 1 from tbl_project where projectid in (
-	 select projectid from tbl_project_workspace where workspaceid in (
-	 select workspaceid from tbl_workspace_editor  where workspaceid =  and owner =inowner)
-	
-	 UNION DISTINCT
-	
-	 select projectid from tbl_project_editor where  projectid in 
-	 (select projectid from tbl_project_workspace where workspaceid = inworkspaceid ));
+	select 1 from tbl_project_editor where  projectid in 
+	 (select projectid from tbl_project_workspace where workspaceid = inworkspaceid );
 	 
 	END IF;
 END$$

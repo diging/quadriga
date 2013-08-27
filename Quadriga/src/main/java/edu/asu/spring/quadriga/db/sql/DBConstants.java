@@ -139,7 +139,7 @@ public interface DBConstants
 	public static final String CHECK_PROJECT_OWNER_EDITOR_ROLE = "sp_hasProjectOwnerEditorRole";
 	
 	public static final String CHECK_WORKSPACE_OWNER_EDITOR_ROLE = "sp_hasWorkspaceOwnerEditorRole";
-	
+	public static final String CHECK_WORKSPACE_PROJECT_OWNER_ROLE_INHERIT = "sp_doesWorkspaceInheritProjectOwnerEditorRole";
 	
 	//workspace access objects
 	public static final String CHECK_WORKSPACE_OWNER = "fn_checkWorkspaceOwner";
