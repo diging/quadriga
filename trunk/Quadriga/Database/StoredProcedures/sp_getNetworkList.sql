@@ -37,7 +37,7 @@ BEGIN
      -- retrieve the dictionary details
 	 select networkid,workspaceid,networkname,status
        from tbl_networks
-	   where networkowner = innetworkowner;
+	   where networkowner = innetworkowner ;
 	END IF;
 END$$
 DELIMITER ;

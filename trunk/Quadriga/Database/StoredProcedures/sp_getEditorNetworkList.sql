@@ -54,7 +54,8 @@ BEGIN
 	
 	UNION DISTINCT
 	
-	select distinct(workspaceid) from tbl_workspace_editor where owner =inusername);
+	select distinct(workspaceid) from tbl_workspace_editor where owner =inusername)
+	and networkid not in (select networkid from tbl_network_assigned);
 	
 	END IF;
 END$$
