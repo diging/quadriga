@@ -81,11 +81,9 @@
 		* Function used to make an ajax call to the controller, inorder to get the collection name
 		*/
 		function getCollectionName(collectionid) {
-			return $
-					.ajax({
+			return $.ajax({
 						type : 'GET',
-						url : '/quadriga/auth/workbench/workspace/collectionstatus/'
-								+ collectionid,
+						url : '/quadriga/auth/workbench/workspace/collectionstatus/'+collectionid,
 						error : function(jqXHR, textStatus, errorThrown) {
 							$('#collection_' + collectionid)
 									.html(
