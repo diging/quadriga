@@ -138,7 +138,7 @@ public interface DBConstants
 //	public static final String UPDATE_DSPACE_COLLECTION = "sp_updateDspaceCollection";
 //	public static final String UPDATE_DSPACE_ITEM = "sp_updateDspaceItem";
 //	public static final String UPDATE_DSPACE_BITSTREAM = "sp_updateDspaceBitStream";
-	public static final String GET_DSPACE_REFERENCES = "sp_getAllBitStreamReferences";
+//	public static final String GET_DSPACE_REFERENCES = "sp_getAllBitStreamReferences";
 	public static final String ADD_DSPACE_KEYS = "sp_addDspaceKeys";
 	public static final String DELETE_DSPACE_KEYS = "sp_deleteDspaceKeys";
 	public static final String GET_DSPACE_KEYS = "sp_getDspaceKeys";
