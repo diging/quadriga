@@ -10,6 +10,9 @@ public interface IDBConnectionWSAccessManager
 
 	public abstract boolean chkWorkspaceOwnerEditorRole(String userName, String workspaceId)
 			throws QuadrigaStorageException;
+
+	public boolean chkWorkspaceProjectInheritOwnerEditorRole(String userName,
+			String workspaceId) throws QuadrigaStorageException;
 	
 
 }

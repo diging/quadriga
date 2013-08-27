@@ -42,7 +42,8 @@
 	<span class="byline">List of Networks you could edit.</span>
 </header>
 
-
+<input type=button onClick="location.href=''" value='List of Assigned Network'>
+<br/>
 
 <br />
 <div class="container">

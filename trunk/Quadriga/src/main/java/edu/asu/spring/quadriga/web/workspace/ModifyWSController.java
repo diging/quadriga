@@ -229,6 +229,11 @@ public class ModifyWSController {
 		}else{
 			model.addAttribute("editoraccess", 0);
 		}
+		if (workspaceSecurity.checkWorkspaceProjectInheritOwnerEditorAccess(userName, workspaceId)){
+			model.addAttribute("projectinherit", 1);
+		}else{
+			model.addAttribute("projectinherit", 0);
+		}
 		if(msg.equals("")){
 			model.addAttribute("AssignEditorSuccess",1);
 		}else if(msg.equals("Owner already assigned as owner")){
@@ -296,6 +301,9 @@ public class ModifyWSController {
 			model.addAttribute("editoraccess", 1);
 		}else{
 			model.addAttribute("editoraccess", 0);
+		}
+		if (workspaceSecurity.checkWorkspaceProjectInheritOwnerEditorAccess(userName, workspaceId)){
+			model.addAttribute("projectinherit", 1);
 		}
 		if(msg.equals("")){
 			model.addAttribute("DeleteEditorSuccess",1);

@@ -213,4 +213,24 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		chkAccess = dbConnect.chkWorkspaceOwnerEditorRole(userName, workspaceId);
 		return chkAccess;
 	}
+	
+	/**
+	 * This method checks if the user is project owner and has editor roles. If this editor is inherit to workspace access
+	 * @param userName
+	 * @return boolean - TRUE if the user is either a project owner or a quadriga admin else FALSE
+	 * @throws QuadrigaStorageException 
+	 * @author kiranbatna
+	 */
+	@Override
+	public boolean checkWorkspaceProjectInheritOwnerEditorAccess(String userName,String workspaceId) throws QuadrigaStorageException
+	{
+		boolean chkAccess;
+		
+		//initialize chkAccess variable
+		chkAccess = false;
+		
+		//check if the user is project owner
+		chkAccess = dbConnect.chkWorkspaceProjectInheritOwnerEditorRole(userName, workspaceId);
+		return chkAccess;
+	}
 }
