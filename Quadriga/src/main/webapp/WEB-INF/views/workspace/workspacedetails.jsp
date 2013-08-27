@@ -71,7 +71,7 @@
 			}) // convert to set of IDs
 			.get();
 
-			var i = 0
+			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
 				if ($('#' + divIDs[i]).text() == 'Checking Collection Access...') {
@@ -134,7 +134,7 @@
 			}) // convert to set of IDs
 			.get();
 
-			var i = 0
+			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
 				if ($('#' + divIDs[i]).text() == 'Checking Item Access...') {
@@ -197,7 +197,7 @@
 			}) // convert to set of IDs
 			.get();
 
-			var i = 0
+			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
 				if ($('#' + divIDs[i]).text() == 'Checking BitStream Access...') {
@@ -492,12 +492,11 @@ $(document).ready(function(){
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
 	
+	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
 	<c:choose><c:when test="${empty dspaceKeys}"><c:choose><c:when test="${empty dspaceLogin}"><a href="#login-box" class="addlogin-window">Add Authentication</a></c:when></c:choose></c:when></c:choose></font> 
 		<br>
-	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
-		<table cellpadding="0" cellspacing="0" border="0"
-			class="display dataTable" width="100%">
+		<table class="display dataTable" width="100%">
 			<thead>
 				<tr>
 					<th ></th>
@@ -571,8 +570,7 @@ $(document).ready(function(){
 	<c:when test="${not empty networkList}">
 		<span class="byline">Networks belonging to this workspace</span>
 		<hr>
-		<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
-			class="display dataTable">
+		<table style="width: 100%" class="display dataTable">
 			<thead>
 				<tr>
 					<th>Name</th>
