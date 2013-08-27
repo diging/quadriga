@@ -27,7 +27,7 @@ public class EditorManager implements IEditorManager {
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditorManager.class);
 
-		
+
 	@Autowired
 	private INetworkFactory networkFactory;
 
@@ -35,7 +35,7 @@ public class EditorManager implements IEditorManager {
 	@Qualifier("DBConnectionEditorManagerBean")
 	private IDBConnectionEditorManager dbConnect;
 
-	
+
 
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.IEditorManager#getEditorNetworkList(edu.asu.spring.quadriga.domain.IUser)
@@ -43,7 +43,7 @@ public class EditorManager implements IEditorManager {
 	@Override
 	public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
-		
+
 		try{
 			networkList=dbConnect.getEditorNetworkList(user);
 		}catch(QuadrigaStorageException e){
@@ -51,6 +51,16 @@ public class EditorManager implements IEditorManager {
 		}
 		return networkList;
 	}
-	
-	
+
+	@Override
+	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
+		String msg = "";
+		try{
+			msg = dbConnect.assignNetworkToUser(networkId, user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return msg;
+	}
+
 }

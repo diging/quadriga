@@ -88,6 +88,7 @@ public interface DBConstants
 	//Editing
 	
 	public static final String GET_EDITOR_NETWORK_LIST ="sp_getEditorNetworkList";
+	public static final String ASSIGN_USER_NETWORK = "sp_addNetworksAssignedDetails";
 	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
