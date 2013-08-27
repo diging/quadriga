@@ -46,19 +46,6 @@ public interface IDBConnectionDspaceManager {
 	 */
 	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String bitstreamids,
 			String username) throws QuadrigaStorageException, QuadrigaAccessException;
-
-	/**
-	 * List all the bitstreams in a workspace. The associated community, collection and item names are also fetched.
-	 * 
-	 * @param workspaceId				The workspace id for which the bitstreams are to be fetched.
-	 * @param username					The quadriga username of the user trying to access the workspace.
-	 * 
-	 * @return							The list of bitstream objects found in the workspace.
-	 * @throws QuadrigaAccessException  Thrown when the user tries to modify a workspace to which he/she does not have access to.
-	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation.
-	 */
-	public abstract List<IBitStream> getWorkspaceBitStreams(String workspaceId, String username)
-			throws QuadrigaAccessException, QuadrigaStorageException;
 	
 	/**
 	 * Set the datasource used in making a connection to the database.
