@@ -170,4 +170,7 @@ public interface IDictionaryManager {
 	public abstract String getDictionaryOwner(String dictionaryid)
 			throws QuadrigaStorageException;
 
+	public abstract String addDictionaryItems(DictionaryItem dictionartItems, String[] values,
+			String dictionaryId) throws QuadrigaStorageException;
+
 }

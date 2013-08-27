@@ -368,6 +368,29 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 
 	/**
+	 * Adding dictionary items for a dictionaryId
+	 * 
+	 * @param dictionartItems
+	 * @param values
+	 * @param dictionaryId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@Override
+	public String addDictionaryItems(DictionaryItem dictionartItems, String [] values,String dictionaryId) throws QuadrigaStorageException{
+		String msg="";
+		for (int i = 0; i < values.length; i++) {
+
+			DictionaryItem di = getDictionaryItemIndex(
+					values[i], dictionartItems);
+			msg = addNewDictionariesItems(dictionaryId,
+					di.getItems(), di.getId(), di.getPos(), getDictionaryOwner(dictionaryId));
+		}
+		return msg;
+	}
+	
+	
+	/**
 	 * Get index of term from a list for update and deleting term from
 	 * dictionary
 	 * 
@@ -448,6 +471,8 @@ public class DictionaryManager implements IDictionaryManager {
 		
 		return errmsg;
 	}
+	
+	
 	
 	
 
