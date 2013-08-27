@@ -77,7 +77,7 @@
 							<td width="15%" align="center"><input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'" value='Visualize'></td>
 							<td width="15%" align="center"><input type=button
-								onClick="location.href=''" value='Assign'></td>
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignuser/${network.id}'" value='Assign'></td>
 						</tr>
 					</c:forEach>
 				</tbody>

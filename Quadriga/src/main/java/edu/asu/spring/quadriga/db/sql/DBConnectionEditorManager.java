@@ -18,12 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
-import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWordPower;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
@@ -215,6 +212,57 @@ public class DBConnectionEditorManager implements IDBConnectionEditorManager {
 			closeConnection();
 		}
 		return networkList;		
+	}
+	
+	@Override
+	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
+		IUser owner = user;
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ASSIGN_USER_NETWORK  + "(?,?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+			sqlStatement.setString(2, owner.getUserName());        	
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(3);
+			if(errmsg.isEmpty()){
+				return "";
+			}else{
+				logger.info(" error msg : " + errmsg);
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return errmsg;		
 	}
 
 	
