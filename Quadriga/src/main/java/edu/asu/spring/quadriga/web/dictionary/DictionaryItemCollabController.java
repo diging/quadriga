@@ -196,7 +196,6 @@ public class DictionaryItemCollabController {
 		int flag = 0;
 		if(values == null){
 			model.addAttribute("updatesuccess", 0);
-			//			model.addAttribute("updateerrormsg", "Items were not selected");
 			List<IDictionaryItem> dictionaryItemList = dictonaryManager
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
@@ -281,13 +280,7 @@ public class DictionaryItemCollabController {
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
-			for (int i = 0; i < values.length; i++) {
-
-				DictionaryItem di = dictonaryManager.getDictionaryItemIndex(
-						values[i], dictionaryItems);
-				msg = dictonaryManager.addNewDictionariesItems(dictionaryId,
-						di.getItems(), di.getId(), di.getPos(), dictonaryManager.getDictionaryOwner(dictionaryId));
-			}
+			msg = dictonaryManager.addDictionaryItems(dictionaryItems, values, dictionaryId);
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
@@ -398,8 +391,6 @@ public class DictionaryItemCollabController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		// return "auth/dictionaries/dictionary/wordSearch";
-		// return "auth/dictionary/dictionary";
 		return "auth/dictionaries/addDictionaryItemsCollab";
 	}
 }

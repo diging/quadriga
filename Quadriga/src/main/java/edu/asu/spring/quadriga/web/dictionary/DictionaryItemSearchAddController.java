@@ -95,17 +95,8 @@ public class DictionaryItemSearchAddController {
 		logger.info("Came here "+ result);
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
-		String owner = usermanager.getUserDetails(principal.getName())
-				.getUserName();
 		if (values != null) {
-			for (int i = 0; i < values.length; i++) {
-				
-				DictionaryItem di = dictonaryManager.getDictionaryItemIndex(
-						values[i], dictionaryItems);
-				msg = dictonaryManager.addNewDictionariesItems(dictionaryId,
-						di.getItems(), di.getId(), di.getPos(), owner);
-
-			}
+			dictonaryManager.addDictionaryItems(dictionaryItems, values, dictionaryId);
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
