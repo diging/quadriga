@@ -20,6 +20,11 @@ td {
 	overflow: wrap;
 	text-overflow: ellipsis;
 }
+
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
 </style>
 <script>
 	$(document).ready(function() {
@@ -39,9 +44,8 @@ td {
 	$(function() {
 		
 		$("input[name='Back']").button().click(function(event) {
-			event.preventDefault();
 		});
-		
+		<%--
 		$("input[name='deleteproj']").button().click(function(event){
 			if(!$("input[name='projchecked']").is(":checked")) {
 				$.alert("Select record to delete", "Oops !!!");
@@ -49,6 +53,7 @@ td {
 				return;
 			}
 		});
+		
 		
 		$("input[name='deleteproj']").button().click(function(event) {
 			if ($("input[name='projchecked']").is(":checked")) {
@@ -82,41 +87,45 @@ td {
 			event.preventDefault();
 			return;
 		});
+		--%>
 	});
 </script>
 <article class="is-page-content">
-	<form:form modelAttribute="project" method="POST"
-		action="/auth/workbench/deleteproject" id="deleteprojform">
-		<c:if test="${not empty projectlist}">
+	<form:form modelAttribute="projectform" method="POST"
+		action="${pageContext.servletContext.contextPath}/auth/workbench/deleteproject" id="deleteprojform">
+		<c:choose> 
+		 <c:when test="${success == '0'}">
+		 		<c:if test="${not empty projectform.projectList}">
 			<span class="byline">Select the projects to be deleted:</span>
-			<c:choose>
-				<c:when test="${success=='0'}">
-					<span class="byline" style="color: #f00;"><c:out
-							value="${errormsg}"></c:out></span>
-					<br />
-				</c:when>
-			</c:choose>
 			<input class="command" type="submit" value='Delete' name="deleteproj">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
 			<table style="width: 100%" class="display dataTable" id="projectlist">
 				<thead>
 					<tr>
-						<th width="4%" align="center">Action</th>
-						<th width="21%">Project Name</th>
-						<th width="75%">Description</th>
+						<th width="3%" align="center">Action</th>
+						<th width="20%">Project Name</th>
+						<th width="77%">Description</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="project" items="${projectlist}">
+					<c:forEach var="project" items="${projectform.projectList}" varStatus="status">
 						<tr>
-							<td><input type="checkbox" name="projchecked"
-								value="${project.internalid}"></td>
-							<td><font size="3"> <c:out value="${project.name}"></c:out>
+						<td>
+						<form:checkbox path="projectList[${status.index}].internalid" value="${project.internalid }"/>
+							</td>
+							<td><font size="3">
+							<form:label path="projectList[${status.index}].name">
+							<c:out value="${project.name}"></c:out>
+							</form:label> 
 							</font></td>
-							<td><font size="3"> <c:out
-										value="${project.description}"></c:out>
-							</font></td>
+							<td><font size="3">
+								<form:label path="projectList[${status.index}].description">
+							<c:out value="${project.description}"></c:out>
+							</form:label>  
+							<form:errors path="projectList[${status.index}].internalid" cssClass="error"></form:errors>
+							</font>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -125,14 +134,25 @@ td {
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
 		</c:if>
-		<c:if test="${empty projectlist}">
+		 
+		 		<c:if test="${empty projectform.projectList}">
 			<ul>
 				<li><input type="submit" onClick="submitClick(this.id);"
 					value='Back' name="Back"></li>
 			</ul>
 			You don't have any projects to delete.
 		</c:if>
-		<div id="dlgConfirm" title="Confirmation">
+		</c:when>
+		     <c:otherwise> 
+		     <span class="byline">Successfully deleted projects</span> 
+		     <ul>
+		<li><input type="button"
+			onClick="submitClick(this.id);"
+			value='Back'></li>
+	</ul>
+		     </c:otherwise>
+		</c:choose>
+				<div id="dlgConfirm" title="Confirmation">
 			Are you sure?
 		</div>
 	</form:form>

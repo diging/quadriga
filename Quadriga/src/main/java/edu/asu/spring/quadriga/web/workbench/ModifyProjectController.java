@@ -2,14 +2,14 @@ package edu.asu.spring.quadriga.web.workbench;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
+import edu.asu.spring.quadriga.domain.factories.IModifyProjectFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -39,14 +40,12 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.validator.ProjectValidator;
-import edu.asu.spring.quadriga.web.StringConstants;
 
 @Controller
 public class ModifyProjectController 
 {
 	@Autowired
 	IModifyProjectManager projectManager;
-	
 	
 	@Autowired
 	IRetrieveProjectManager retrieveProjectManager;
@@ -63,7 +62,6 @@ public class ModifyProjectController
 	@Autowired
 	ProjectValidator validator;
 	
-
 	@Autowired
 	IListWSManager wsManager;
 	
@@ -73,9 +71,15 @@ public class ModifyProjectController
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
 	
+	@Autowired
+	private IModifyProjectFormFactory projectFormFactory; 
+	
+	@Resource(name = "projectconstants")
+	private Properties messages;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(ModifyProjectController.class);
-
+	
 	/**
 	 * Attach the custom validator to the Spring context
 	 */
@@ -97,7 +101,8 @@ public class ModifyProjectController
 	{
 		ModelAndView model = new ModelAndView("auth/workbench/addproject");
 		model.getModelMap().put("project",projectFactory.createProjectObject());
-		model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
+		model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
+		model.getModelMap().put("success", 0);
 		return model;
 	}
 
@@ -116,23 +121,21 @@ public class ModifyProjectController
 			BindingResult result,Principal principal) throws QuadrigaStorageException
 	{
 		ModelAndView model;
+		model = new ModelAndView("auth/workbench/addproject");
 		if(result.hasErrors())
 		{
-			model = new ModelAndView("auth/workbench/addproject");
 			model.getModelMap().put("project",project);
-			model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
-			return model;
+			model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
+			model.getModelMap().put("success", 0);
 		}
 		else
 		{
-			model = new ModelAndView("auth/workbench/addProjectStatus");
 			IUser user = userManager.getUserDetails(principal.getName());
             project.setOwner(user);
-			
 			projectManager.addProjectRequest(project);
 			model.getModelMap().put("success", 1);
-			return model;
 		}
+		return model;
 	}
 
 	/**
@@ -150,11 +153,11 @@ public class ModifyProjectController
 	{
 		ModelAndView model;
 		IProject project;
-		
 			model = new ModelAndView("auth/workbench/modifyproject");
 			project = retrieveProjectManager.getProjectDetails(projectid);
 			model.getModelMap().put("project", project);
-			model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
+			model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
+			model.getModelMap().put("success", 0);
 			return model;
 	}
 	
@@ -177,107 +180,22 @@ public class ModifyProjectController
 		ModelAndView model;
 		String userName = principal.getName();
 		
+		    model = new ModelAndView("auth/workbench/modifyproject");
 			if(result.hasErrors())
 			{
-				model = new ModelAndView("auth/workbench/modifyproject");
 				model.getModelMap().put("project", project);
-				model.getModelMap().put("unixnameurl",StringConstants.PROJECT_UNIX_NAME_URL);
-				return model;
+				model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
+				model.getModelMap().put("success", 0);
 			}
 			else
 			{
-				project.setInternalid(projectid);
-				projectManager.updateProjectRequest(project, userName);
-				model = new ModelAndView("auth/workbench/modifyProjectStatus");
+				 projectManager.updateProjectRequest(project, userName);
 				model.getModelMap().put("success", 1);
-				return model;
 			}
+			return model;
 	}
 	
-	/**
-	 * This method is called during form load to display all projects.
-	 * @param   model
-	 * @param   principal
-	 * @return  String - URL on success or failure.
-	 * @throws  QuadrigaStorageException
-	 * @author  Kiran Kumar Batna
-	 */
-	@RequestMapping(value="auth/workbench/deleteproject", method=RequestMethod.GET)
-	public String deleteProjectRequestForm(Model model,Principal principal) throws QuadrigaStorageException
-	{
-		String userName;
-		List<IProject> projectlist;
-		
-		userName = principal.getName();
-		
-		projectlist = retrieveProjectManager.getProjectList(userName); 
-		
-		    //adding the project details to the model
-			model.addAttribute("projectlist", projectlist);
-			return "auth/workbench/deleteproject";
-	}
-	
-	/**
-	 * This method calls the user manager to delete the projects.
-	 * @param    req
-	 * @param    model
-	 * @param    principal
-	 * @return   String - URL on success and failure.
-	 * @throws   QuadrigaStorageException 
-	 * @author   Kiran Kumar Batna
-	 * @throws QuadrigaAccessException 
-	 */
-	@RequestMapping(value = "auth/workbench/deleteproject", method = RequestMethod.POST)
-	public String deleteProjectRequest(HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
-	{
-		String[] values;
-		String projIdList = "";
-		String errmsg;
-		String userName;
-		boolean chkAccess;
-		List<IProject> projectlist;
-		
-		// fetch the selected values
-		values = req.getParameterValues("projchecked");
-		for(String projid : values)
-		{
-			projIdList = projIdList + "," + projid;
-		}
-		//removing the first ',' value
-		projIdList = projIdList.substring(1,projIdList.length());
-		
-		//check if the user has access to delete the rows
-		userName = principal.getName();
-		
-		chkAccess = projectSecurity.checkProjectAccess(userName, projIdList);
-		
-		if(chkAccess)
-		{
-			errmsg = projectManager.deleteProjectRequest(projIdList);
-			
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg","Projects deleted successfully.");
-				return "auth/workbench/deleteProjectStatus";
-			}
-			else
-			{
-				
-				projectlist = retrieveProjectManager.getProjectList(userName); 
-			
-			    //adding the project details to the model
-			    model.addAttribute("projectlist", projectlist);
-			    model.addAttribute("success", 0);
-			    model.addAttribute("errormsg", errmsg);
-			    return "auth/workbench/deleteproject";
-			}
-		}
-		else
-		{
-			throw new QuadrigaAccessException();
-		}
-	}
+
 	
 	/**
 	 * This controller function would assign editor roles to project owner

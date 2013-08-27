@@ -3,24 +3,25 @@
 
 <!-- Content -->
 <script>
-
-$(document).ready(function(){
-	  $("#unixName").keyup(function(event)
-	  {
-		var keyedInput = $("#unixName").val();
-		var constant = "";
-		if($.trim($("#unixName").val()))
-			{
-			  constant = $("#unixnameurl").val();
-			}
-	    $("#UnixURL").text(constant+keyedInput);
-	  });
+	$(document).ready(function() {
+		
+		$("#unixName").keyup(function(event) {
+			var keyedInput = $("#unixName").val();
+			$("#UnixURL").text('${unixnameurl}' + $.trim(keyedInput));
+		});
 	});
-	
+
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
+		
+		$("input[type=button]").button().click(function(event) {
+		});
 	});
+
+	function submitClick(id) {
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
+	}
 </script>
 <style>
 .error {
@@ -28,51 +29,59 @@ $(document).ready(function(){
 	font-style: italic;
 }
 </style>
-<header>
-	<h2>Create new Project</h2>
-	<span class="byline">Please fill in the following information:</span>
-</header>
-
 <article class="is-page-content">
-
 	<form:form commandName="project" method="POST"
 		action="/auth/workbench/addproject">
-		<table style="width: 100%">
-			<tr>
-				<td style="width: 170px">Name:</td>
-				<td><form:input path="name" size="60" id="name" /></td>
-				<td><form:errors path="name" cssClass="error"></form:errors></td>
-			</tr>
-			<tr>
-				<td style="vertical-align: top">Description:</td>
-				<td><form:textarea path="description" cols="44" rows="6"
-						id="description" /></td>
-				<td><form:errors path="description" cssClass="error"></form:errors></td>
-			</tr>
-			<tr>
-				<td>Project Public Access:</td>
-				<td><form:select path="projectAccess">
-						<form:options />
-					</form:select>
-					<td><form:errors path="projectAccess" cssClass="error"></form:errors></td>
-			</tr>
-			<tr>
-				<td>Unix name:</td>
-				<td><form:input path="unixName" size="60" id="unixName" /></td>
-				<td><form:errors path="unixName" cssClass="error"></form:errors></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><div id="UnixURL"></div></td>
-			</tr>
-			<tr>
-		    <td>  <input type="submit" value="Create Project"> </td>
-		    <td><input type="hidden" id="unixnameurl" value=<c:out value="${unixnameurl}"></c:out>/></td>
-		    </tr>
-		</table>
-
+		<c:choose>
+			<c:when test="${success == '0'}">
+				<header>
+					<h2>Create new Project</h2>
+					<span class="byline">Please fill in the following
+						information:</span>
+				</header>
+				<table style="width: 100%">
+					<tr>
+						<td style="width: 170px">Name:</td>
+						<td><form:input path="name" size="60" id="name" /></td>
+						<td><form:errors path="name" cssClass="error"></form:errors></td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top">Description:</td>
+						<td><form:textarea path="description" cols="44" rows="6"
+								id="description" /></td>
+						<td><form:errors path="description" cssClass="error"></form:errors></td>
+					</tr>
+					<tr>
+						<td>Project Public Access:</td>
+						<td><form:select path="projectAccess">
+								<form:option value="" label="--- Select ---" />
+								<form:options />
+							</form:select>
+						<td><form:errors path="projectAccess" cssClass="error"></form:errors></td>
+					</tr>
+					<tr>
+						<td>Unix name:</td>
+						<td><form:input path="unixName" size="60" id="unixName" /></td>
+						<td><form:errors path="unixName" cssClass="error"></form:errors></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><div id="UnixURL"></div></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="Create Project"></td>
+					</tr>
+				</table>
+			</c:when>
+			<c:when test="${success == '1'}">
+				<span class="byline">Project created successfully.</span>
+				<ul>
+					<li><input type="button" onClick="submitClick(this.id);"
+						value='Back'></li>
+				</ul>
+			</c:when>
+		</c:choose>
 	</form:form>
-
 </article>
 
 <!-- /Content -->

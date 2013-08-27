@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -206,6 +207,7 @@ public class DBConnectionRetrieveProjectManager implements IDBConnectionRetrieve
 			        	projOwnerName = resultset.getString(5);
 			        	projOwner = userManager.getUserDetails(projOwnerName);
 			        	project.setOwner(projOwner);
+			        	project.setProjectAccess(EProjectAccessibility.valueOf(resultset.getString(6)));
 			        }
 				}
 			}

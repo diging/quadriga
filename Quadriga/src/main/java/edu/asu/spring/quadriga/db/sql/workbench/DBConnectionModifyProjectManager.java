@@ -26,7 +26,7 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 	 *  @author Kiran Kumar Batna 
 	 */
 	@Override
-	public String addProjectRequest(IProject project) throws QuadrigaStorageException
+	public void addProjectRequest(IProject project) throws QuadrigaStorageException
 	{
 		String name;
 		String description;
@@ -69,7 +69,11 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 
 			errmsg = sqlStatement.getString(6);
 			
-			return errmsg;
+			if(!errmsg.equals(""))
+			{
+				logger.info("Add project request method :"+errmsg);
+	        	throw new QuadrigaStorageException();
+			}
 			
         }
         catch(SQLException e)
@@ -91,7 +95,7 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
      * @throws QuadrigaStorageException
      */
 	@Override
-	public String updateProjectRequest(IProject project,String userName) throws QuadrigaStorageException
+	public void updateProjectRequest(IProject project,String userName) throws QuadrigaStorageException
 	{
 		String name;
 		String description;
@@ -133,6 +137,12 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(7);
+			
+			if(!errmsg.equals(""))
+			{
+				logger.info("Update project request method :"+errmsg);
+	        	throw new QuadrigaStorageException(); 
+			}
         }
         catch(SQLException e)
         {
@@ -143,7 +153,6 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         {
         	closeConnection();
         }
-        return errmsg;
 	}
 	
 	/**
@@ -155,7 +164,7 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public String deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
+	public void deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String errmsg;
@@ -176,13 +185,18 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         	
         	sqlStatement.execute();
         	errmsg = sqlStatement.getString(2);
+        	
+        	if(!errmsg.equals(""))
+        	{
+        		logger.info("Delte project request method : "+errmsg);
+        		throw new QuadrigaStorageException();
+        	}
         }
         catch(SQLException ex)
         {
         	logger.info("Delte project request method : "+ex.getMessage());
         	throw new QuadrigaStorageException();
         }
-        return errmsg;
 	}
 	
 	/**
