@@ -78,14 +78,14 @@ IDBConnectionProjectAccessManager {
 	 *  @author Kiran Kumar Batna 
 	 */
 	@Override
-	public boolean chkDuplicateProjUnixName(String unixName) throws QuadrigaStorageException
+	public boolean chkDuplicateProjUnixName(String unixName,String projectId) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		CallableStatement sqlStatement;
 		boolean isDuplicate;
 
 		//command to call the SP
-		dbCommand = "? = "+" "+ DBConstants.SP_CALL+ " " + DBConstants.CHECK_PROJECT_UNIX_NAME + "(?)";
+		dbCommand = "? = "+" "+ DBConstants.SP_CALL+ " " + DBConstants.CHECK_PROJECT_UNIX_NAME + "(?,?)";
 
 		//get the connection
 		getConnection();
@@ -100,7 +100,7 @@ IDBConnectionProjectAccessManager {
 
 			//adding the input parameter
 			sqlStatement.setString(2,unixName);
-
+            sqlStatement.setString(3, projectId);
 			sqlStatement.execute();
 
 			isDuplicate = sqlStatement.getBoolean(1);

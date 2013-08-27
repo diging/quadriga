@@ -31,10 +31,6 @@ function submitClick(id){
 	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}';
 }
 
-function submitCancel(){
-	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/updatecollaborators';
-}
-
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
 		});
@@ -56,7 +52,7 @@ function submitCancel(){
 			<span class="byline">Select roles for the collaborator:</span>
 			</header>
 			<input type="submit" value='Update' name="updatewscollab">
-			<input type="button" onClick="submitCancel();" value='Back'>
+			<input type="button" onClick="submitClick(this.id);" value='Cancel'>
 			<table style="width: 100%" class="display dataTable"
 				id="wscollablist">
 				<thead>

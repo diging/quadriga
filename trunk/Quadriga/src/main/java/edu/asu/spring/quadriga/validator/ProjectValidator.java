@@ -12,6 +12,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 @Service
@@ -39,9 +40,17 @@ public class ProjectValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "unixName", "project_unixname.required");
 		
 		Project project = (Project)obj;
-
+		
 		String projUnixName = project.getUnixName();
-
+		String projectId = project.getInternalid();
+		EProjectAccessibility projectAccess = project.getProjectAccess();
+		
+		if(err.getFieldError("projectAccess")==null)
+		{
+			//validate the selected project accessibility
+			validateProjectAccessibility(projectAccess,err);
+		}
+		
 		if(err.getFieldError("unixName")==null)
 		{
 		//validate the regular expression
@@ -53,7 +62,7 @@ public class ProjectValidator implements Validator {
 		{
 			try
 			{
-				validateUnixName(projUnixName,err);
+				validateUnixName(projUnixName,projectId,err);
 			}
 			catch(QuadrigaStorageException e)
 			{
@@ -61,6 +70,15 @@ public class ProjectValidator implements Validator {
 			}
 		}
 		
+		
+	}
+	
+	public void validateProjectAccessibility( EProjectAccessibility projectAccess,Errors err)
+	{
+		if(projectAccess == null)
+		{
+			err.rejectValue("projectAccess", "project_projectAccess_selection.required");
+		}
 		
 	}
 	
@@ -75,12 +93,12 @@ public class ProjectValidator implements Validator {
 		}
 	}
 
-	public void validateUnixName(String unixName,Errors err) throws QuadrigaStorageException
+	public void validateUnixName(String unixName,String projectId,Errors err) throws QuadrigaStorageException
 	{
 		boolean isDuplicate;
 		
 		//Verifying if the Unix name already exists
-		isDuplicate = dbConnect.chkDuplicateProjUnixName(unixName);
+		isDuplicate = dbConnect.chkDuplicateProjUnixName(unixName,projectId);
 		if(isDuplicate)
 		{
 			err.rejectValue("unixName","projectUnixName.unique");

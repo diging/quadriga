@@ -85,7 +85,6 @@ public class ModifyProjectManagerTest {
 	public void testAddProjectRequest() throws QuadrigaStorageException {
 		IProject project;
 		IUser owner;
-		String errmsg;
 		
 		//create project object with the test data
 		project = projectFactory.createProjectObject();
@@ -97,16 +96,15 @@ public class ModifyProjectManagerTest {
 		project.setOwner(owner);
 		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 		
-		errmsg = projectManager.addProjectRequest(project);
+		projectManager.addProjectRequest(project);
 		
-		assertEquals("",errmsg);
+		assertTrue(true);
 	}
 
 	@Test
 	public void testUpdateProjectRequest() throws QuadrigaStorageException {
 		IProject project;
 		String owner;
-		String errmsg;
 		
 		project = projectFactory.createProjectObject();
 		project.setName("testupdateproject");
@@ -116,17 +114,16 @@ public class ModifyProjectManagerTest {
 		project.setInternalid("PROJ_2");
 		
 		owner = "projuser";
-        errmsg = projectManager.updateProjectRequest(project, owner);
-        assertEquals("",errmsg);
+        projectManager.updateProjectRequest(project, owner);
+        assertTrue(true);
 	}
 
 	@Test
 	public void testDeleteProjectRequest() throws QuadrigaStorageException {
 		String projectIdList;
-		String errmsg;
 		projectIdList = "PROJ_3,PROJ_4";
-		errmsg = projectManager.deleteProjectRequest(projectIdList);
-		assertEquals("",errmsg);
+		projectManager.deleteProjectRequest(projectIdList);
+		assertTrue(true);
 	}
 	
 	@Test

@@ -10,7 +10,9 @@
 <style>
 .ui-menu {
 	width: 150px;
-	font-size: 14px;
+	font-size:14px;
+	position:relative;
+    z-index:9999;
 }
 </style>
 <ul id="menu">

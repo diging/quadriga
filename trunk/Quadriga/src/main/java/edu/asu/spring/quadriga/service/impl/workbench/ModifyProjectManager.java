@@ -32,13 +32,11 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 * @author Kiran Kumar Batna
 	 */
 	@Override
-	public String addProjectRequest(IProject project) throws QuadrigaStorageException
+	public void addProjectRequest(IProject project) throws QuadrigaStorageException
 	{
-		String errmsg;
 		
-		errmsg = dbConnect.addProjectRequest(project);
+		dbConnect.addProjectRequest(project);
 		
-		return errmsg;
 	}
 	
 	/**
@@ -49,13 +47,10 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 * @author Kiran Kumar Batna
 	 */
 	@Override
-	public String updateProjectRequest(IProject project,String userName) throws QuadrigaStorageException
+	public void updateProjectRequest(IProject project,String userName) throws QuadrigaStorageException
 	{
-		String errmsg;
 		
-		errmsg = dbConnect.updateProjectRequest(project, userName);
-		
-		return errmsg;
+		dbConnect.updateProjectRequest(project, userName);
 	}
 	
 	/**
@@ -66,13 +61,10 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 * @author Kiran Kumar Batna
 	 */
 	@Override
-	public String deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
+	public void deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
 	{
-		String errmsg;
+		dbConnect.deleteProjectRequest(projectIdList);
 		
-		errmsg = dbConnect.deleteProjectRequest(projectIdList);
-		
-		return errmsg;
 	}
 	
 	/**

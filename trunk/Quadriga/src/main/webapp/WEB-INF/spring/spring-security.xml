@@ -77,6 +77,11 @@
     	class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
     	<beans:property name="paramName"><beans:value>siteLanguage</beans:value></beans:property>
 	</beans:bean>
+
+	<beans:bean id="projectconstants"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean" >
+		<beans:property name="location" value="classpath:locale/projectconstants.properties"></beans:property>
+	</beans:bean>
 	
 	<beans:bean id="localeResolver"
     	 class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
