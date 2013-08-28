@@ -62,5 +62,18 @@ public class EditorManager implements IEditorManager {
 		}
 		return msg;
 	}
+	
+	@Override
+	public  List<INetwork> getAssignNetworkOfUser(IUser user)
+			throws QuadrigaStorageException{
+		List<INetwork> networkList = new ArrayList<INetwork>();
+
+		try{
+			networkList=dbConnect.getAssignNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return networkList;
+	}
 
 }
