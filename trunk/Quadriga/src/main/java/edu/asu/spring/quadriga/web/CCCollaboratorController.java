@@ -120,10 +120,12 @@ public class CCCollaboratorController {
 	  * @throws QuadrigaStorageException
 	  */
 	 
-	 @RequestMapping(value="auth/conceptcollections/{collection_id}/displayCollaborators", method=RequestMethod.GET)
-		public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
+	 @RequestMapping(value="auth/conceptcollections/{collectionid}/showAddCollaborators", method=RequestMethod.GET)
+		public String displayCollaborator(@PathVariable("collectionid") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
-			List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+			
+		 
+		    List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
 			model.addAttribute("nonCollaboratorList", nonCollaboratorList);
 			
 			concept = collectionFactory.createConceptCollectionObject();
@@ -149,10 +151,10 @@ public class CCCollaboratorController {
 			
 			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
 			
-			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
-			model.addAttribute("collaborators", collaborators);
-			
-			return "auth/conceptcollection/showCollaborators";
+			List<ICollaborator>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collectionid);
+			model.addAttribute("collaboratingUsers", collaboratingUsers);
+		
+			return "auth/conceptcollection/showAddCollaborators";
 			
 		}
 		
@@ -171,7 +173,7 @@ public class CCCollaboratorController {
 		{
 			
 		   ModelAndView modelAndView = null;
-		   modelAndView = new ModelAndView("auth/conceptcollection/showCollaborators");
+		   modelAndView = new ModelAndView("auth/conceptcollection/showAddCollaborators");
 		   
 		   if(result.hasErrors()){
 			   
@@ -205,61 +207,16 @@ public class CCCollaboratorController {
 			modelAndView.getModelMap().put("collectionid", collectionid);
 			
 			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
+			for(ICollaborator collaborator2:collaborators)
+			{
+				System.out.println("--------collaborator "+collaborator2.getUserObj().getUserName());
+			}
 			modelAndView.getModelMap().put("collaborators", collaborators);
 			
 		    return modelAndView;
 	}
 			
 	
-		/**
-		 * @description deletes the collaborator from current conceptcollection
-		 * @param collectionid   id of the conceptcollection
-		 * @param model
-		 * @param req	contains string array returned by jsp
-		 * @return String having path for showcollaborators jsp page
-		 * @throws QuadrigaStorageException
-		 */
-		@RequestMapping(value="auth/conceptcollections/{collection_id}/deleteCollaborator", method = RequestMethod.POST)
-		public String deleteCollaborators(@PathVariable("collection_id") String collectionid,Model model,HttpServletRequest req)throws QuadrigaStorageException
-		{
-			String[] collaborators = req.getParameterValues("selected");
-			
-			String errmsg = null;
-			
-				for(int i=0;i<collaborators.length;i++)
-				{
-					errmsg = conceptControllerManager.deleteCollaborators(collaborators[i], collectionid);
-				}
-			
-				if(errmsg.equals("no errors"))
-				{
-					return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
-				}
-				
-				  List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
-				  model.addAttribute("nonCollaboratorList", nonCollaboratorList);
-					
-					List<ICollaboratorRole> collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
-					Iterator<ICollaboratorRole> iterator = collaboratorRoleList.iterator();
-					
-					while(iterator.hasNext())
-						{
-							if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
-							{
-								iterator.remove();
-							}
-						}
-					
-					 model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
-					
-					 model.addAttribute("collectionid", collectionid);
-					
-					List<ICollaborator> collaboratorList =  conceptControllerManager.showCollaboratingUsers(collectionid);
-					 model.addAttribute("collaboratingUsers", collaboratorList);
-					
-			
-			
-			return "redirect:/auth/conceptcollections/"+collectionid+"/displayCollaborators";
-		}
+	
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 
@@ -20,6 +21,9 @@ public class ModifyCollaboratorFormManager {
 	
 	@Autowired
 	IDictionaryManager dictManager;
+	
+	@Autowired
+	IConceptCollectionManager collectionManager;
 	
 	@Autowired
 	ModifyCollaboratorFormFactory collaboratorFormFactory;
@@ -46,6 +50,23 @@ public class ModifyCollaboratorFormManager {
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		List<ICollaborator> collaborators =  dictManager.showCollaboratingUsers(dictionaryId);
+		
+		for(ICollaborator collaborator:collaborators)
+		{
+			ModifyCollaborator modifyCollab = new ModifyCollaborator();
+			modifyCollab.setUserName(collaborator.getUserObj().getUserName());
+			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
+			modifyCollaborators.add(modifyCollab);
+		}
+		
+		return modifyCollaborators;
+	}
+	
+	public List<ModifyCollaborator> modifyConceptCollectionCollaboratorManager(String collectionId) throws QuadrigaStorageException
+	{
+	
+		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
+		List<ICollaborator> collaborators =  collectionManager.showCollaboratingUsers(collectionId);
 		
 		for(ICollaborator collaborator:collaborators)
 		{
