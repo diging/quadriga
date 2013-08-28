@@ -98,7 +98,8 @@
 	</bean>
 	<bean id="RetrieveProjCollabManagerBean" class = "edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjCollabManager"></bean>
 	<bean id="ModifyProjCollabManagerBean" class = "edu.asu.spring.quadriga.service.impl.workbench.ModifyProjCollabManager"></bean>
-	
+	<bean class = "edu.asu.spring.quadriga.web.workbench.ProjectCollaboratorDeleteController"></bean>
+	<bean class = "edu.asu.spring.quadriga.web.workbench.ModifyCollaboratorFormManager"></bean>
 	<bean 
 	class="edu.asu.spring.quadriga.service.impl.workbench.CheckProjectSecurity">
 	</bean>

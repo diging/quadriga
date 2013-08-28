@@ -56,10 +56,9 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	public List<ICollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
 	{
 		List<ICollaborator> collaboratorList;
-		
 		//retrieve the collaborators associated with project
 		collaboratorList = dbConnect.getProjectCollaborators(projectId);
-		
+
 		//map the collaborators to UI XML values
 		for (ICollaborator collaborator : collaboratorList) 
 		{

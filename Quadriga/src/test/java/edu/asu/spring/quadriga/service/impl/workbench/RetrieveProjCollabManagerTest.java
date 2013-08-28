@@ -78,8 +78,6 @@ public class RetrieveProjCollabManagerTest {
 	
 	@Autowired
 	private DataSource dataSource;
-
-	String sDatabaseSetup [];
 	
 	@Autowired
 	private IUserFactory userFactory;

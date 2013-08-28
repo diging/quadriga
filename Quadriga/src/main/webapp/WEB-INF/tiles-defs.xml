@@ -103,11 +103,25 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/addConceptCollection.jsp" />
 	</definition>
-	<definition name="auth/conceptcollection/showCollaborators"
-		extends="base.definition.conceptcollections">
-		<put-attribute name="sub-navigation" value="Non existing Collaborators" />
+	
+	<!-- changing concept collection details page's navigation to left -->
+	<definition name="auth/conceptcollections/details" extends="base.definition.workbench.nav">
+		<put-attribute name="left-navigation"
+		value="/WEB-INF/views/navigation/nav-conceptcollection.jsp"/>
 		<put-attribute name="content"
-			value="/WEB-INF/views/conceptcollections/showCollaborators.jsp" />
+		value="/WEB-INF/views/conceptcollections/collectiondetails.jsp" />
+	</definition>
+	
+	<definition name="auth/conceptcollection/showAddCollaborators"
+		extends="base.definition.conceptcollections">
+		<put-attribute name="content"
+		value="/WEB-INF/views/conceptcollections/showAddCollaborators.jsp" />
+	</definition>
+	
+	<definition name="auth/conceptcollection/showDeleteCollaborators"
+		extends="base.definition.conceptcollections">
+		<put-attribute name="content"
+		value="/WEB-INF/views/conceptcollections/showDeleteCollaborators.jsp" />
 	</definition>
 
 	<!-- Workbench pages -->
@@ -532,7 +546,7 @@
 			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
 	</definition>
 	
-	<!-- changing collaborators menu to the left side -->
+	<!-- changing dictionary collaborators menu to the left side -->
 	<definition name="auth/dictionary/dictionary" extends="base.definition.workbench.nav">
 		<put-attribute name="left-navigation" 
 		value="/WEB-INF/views/navigation/nav-dictionary.jsp"/>
