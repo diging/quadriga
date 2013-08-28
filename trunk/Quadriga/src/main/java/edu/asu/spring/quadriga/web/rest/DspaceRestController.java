@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.FileNameMap;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.Principal;
@@ -105,33 +107,43 @@ public class DspaceRestController {
 	@RequestMapping(value = "rest/file/{fileid}", method = RequestMethod.GET, produces = "application/xml")
 	public void getWorkspaceFile(@PathVariable("fileid") String fileid, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
 	{
-		fileid = "8457";
 		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
 		InputStream inputStream = null;
 
 
 		try {
 			//Retrieve file from Dspace
-			System.out.println("Retrieving file "+fileid);
-
 			//TODO: Put the string in properties file
 			URL downloadUrl = new URL("http://dstools.hpsrepository.asu.edu/rest/bitstream/"+fileid);
-			inputStream = downloadUrl.openStream();
+			HttpURLConnection httpConnection = (HttpURLConnection) downloadUrl.openConnection();
+			
+//			//Retrieve the filename
+//			String filename = null;
+//			if(retrievedContentDispostion != null && retrievedContentDispostion.indexOf("filename=") != -1)
+//			{
+//				filename = retrievedContentDispostion.split("filename=")[1];
+//			}
+//			else
+//			{
+//				filename = fileid;
+//			}
+//			System.out.println(filename);
+			
+			inputStream = httpConnection.getInputStream();
 			byte[] byteChunk = new byte[4096];
 			int sizeToBeRead;
-			
+
 			while ( (sizeToBeRead = inputStream.read(byteChunk)) > 0 ) {
 				fileOutputStream.write(byteChunk, 0, sizeToBeRead);
 			}
 			fileOutputStream.flush();
 			
-			System.out.println("Total File Size: "+fileOutputStream.size());
-			System.out.println("Done retrieving file...........");
-			
 			//Pass the file to response
 			response.reset();
+			response.setHeader("Content-Disposition",httpConnection.getHeaderField("Content-Disposition"));
+			response.setContentType(httpConnection.getContentType());
 			response.getOutputStream().write(fileOutputStream.toByteArray());
-			
+			logger.info("The user "+principal.getName()+" successfully downloaded the file "+httpConnection.getHeaderField("Content-Disposition")+" with fileid: "+fileid+" from Dspace");
 		}
 		catch(IOException ioe)
 		{
