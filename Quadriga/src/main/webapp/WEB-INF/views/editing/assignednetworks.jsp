@@ -39,11 +39,9 @@
 
 <header>
 	<h2>Editors</h2>
-	<span class="byline">List of Networks you could edit.</span>
+	<span class="byline">List of Networks you could approve or reject.</span>
 </header>
 
-<input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignnetworktouser'" value='List of Assigned Network'>
-<br/>
 
 <br />
 <div class="container">
@@ -77,7 +75,8 @@
 							<td width="15%" align="center"><input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'" value='Visualize'></td>
 							<td width="15%" align="center"><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignuser/${network.id}'" value='Assign'></td>
+								onClick="location.href=''" value='Reject'><input type=button
+								onClick="location.href=''" value='Approve'></td>
 						</tr>
 					</c:forEach>
 				</tbody>

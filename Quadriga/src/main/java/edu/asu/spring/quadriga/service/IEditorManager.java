@@ -14,4 +14,7 @@ public interface IEditorManager {
 	public abstract String assignNetworkToUser(String networkId, IUser user)
 			throws QuadrigaStorageException;
 
+	public abstract List<INetwork> getAssignNetworkOfUser(IUser user)
+			throws QuadrigaStorageException;
+
 }

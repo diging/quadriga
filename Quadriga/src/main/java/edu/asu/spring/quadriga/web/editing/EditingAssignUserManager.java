@@ -41,7 +41,7 @@ public class EditingAssignUserManager {
 			.getLogger(EditingAssignUserManager.class);
 
 	@RequestMapping(value = "auth/editing/assignuser/{networkId}", method = RequestMethod.GET)
-	public String listDictionary( @PathVariable("networkId") String networkId,ModelMap model, Principal principal) throws QuadrigaStorageException {
+	public String assignUserToNetwork(@PathVariable("networkId") String networkId,ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String msg="";
 		try{
@@ -59,5 +59,21 @@ public class EditingAssignUserManager {
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
+	}
+	
+	@RequestMapping(value = "auth/editing/assignnetworktouser", method = RequestMethod.GET)
+	public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		String msg="";
+		List<INetwork> networkList=null;
+		try{
+			networkList = editorManager.getAssignNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
+		
+		model.addAttribute("networkList", networkList);
+		model.addAttribute("userId", user.getUserName());
+		return "auth/assignednetworks";
 	}
 }

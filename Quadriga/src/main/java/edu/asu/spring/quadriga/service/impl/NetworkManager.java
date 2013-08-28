@@ -252,7 +252,7 @@ public class NetworkManager implements INetworkManager {
 						while(I2.hasNext()){
 							TermType tt = I2.next();
 							String node = tt.getTermInterpertation(tt);
-							logger.info(tt.getTermInterpertation(tt));
+							logger.debug(tt.getTermInterpertation(tt));
 							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#EE6363\",\"$type\": \"circle\",\"$dim\": 11},\"id\": \""+node+"\",\"name\": \""+node+"\"},");
 						}
 					}
