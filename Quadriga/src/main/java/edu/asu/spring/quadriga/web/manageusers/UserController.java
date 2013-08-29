@@ -108,13 +108,7 @@ public class UserController {
 			//User Request denied by the admin
 			usermanager.denyUserRequest(sAccessSelected[0], principal.getName());
 		}
-
-		//TODO- Implement tabs or remove this
-		//		//Reload the request list
-		//		List<IUser> userRequestsList = usermanager.getUserRequests();
-		//		model.addAttribute("userRequestsList", userRequestsList);
-		//		return "auth/users/requests";
-
+		
 		return "redirect:/auth/users/manage";
 
 	}
@@ -162,13 +156,6 @@ public class UserController {
 	public String deactivateUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) throws QuadrigaStorageException {
 
 		usermanager.deactivateUser(sUserName, principal.getName());
-
-		//TODO- Implement tabs or remove this
-		//		//Reload the active user list
-		//		List<IUser> activeUserList = usermanager.getAllActiveUsers();
-		//		model.addAttribute("activeUserList", activeUserList);
-		//		return "auth/users/active";
-
 		return "redirect:/auth/users/manage";
 	}
 
@@ -185,12 +172,6 @@ public class UserController {
 
 		//Deactivate the user account
 		usermanager.activateUser(sUserName, principal.getName());
-
-		//TODO- Implement tabs or remove this
-		//		//Reload the inactive user list
-		//		List<IUser> inactiveUserList = usermanager.getAllInActiveUsers();
-		//		model.addAttribute("inactiveUserList", inactiveUserList);
-		//		return "auth/users/inactive";
 
 		return "redirect:/auth/users/manage";
 	}
