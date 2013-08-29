@@ -116,11 +116,8 @@ public class DeleteProjectController
 		//create a model view
 		model = new ModelAndView("auth/workbench/deleteproject");
 		
-		System.out.println("In project delete method :");
-		
 		if(result.hasErrors())
 		{
-			System.out.println("In project delete err method :"+ result.toString());
 			//add a variable to display the entire page
 			model.getModelMap().put("success", 0);
 			
@@ -134,14 +131,12 @@ public class DeleteProjectController
 			
 			for(ModifyProject project : deleteProjectList)
 			{
-				System.out.println("In project delete :"+project.getInternalid() + " name:"+project.getName());
 				projIdList = projIdList + "," + project.getInternalid();
 			}
 			
 			projIdList = projIdList.substring(1);
 			
-			System.out.println("Selected project ids :"+projIdList);
-		//	projectManager.deleteProjectRequest(projIdList);
+			projectManager.deleteProjectRequest(projIdList);
 			
 			model.getModelMap().put("success", 1);
 		}
