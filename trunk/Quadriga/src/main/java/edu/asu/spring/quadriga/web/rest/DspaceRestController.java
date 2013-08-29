@@ -14,12 +14,17 @@ import java.net.FileNameMap;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tiles.autotag.core.runtime.annotation.Parameter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -35,6 +40,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -59,6 +65,9 @@ public class DspaceRestController {
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
 
+	@Resource(name = "dspaceStrings")
+	private Properties dspaceProperties;
+	
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 
@@ -104,31 +113,17 @@ public class DspaceRestController {
 		}
 	}
 
-	@RequestMapping(value = "rest/file/{fileid}", method = RequestMethod.GET, produces = "application/xml")
-	public void getWorkspaceFile(@PathVariable("fileid") String fileid, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
+	@RequestMapping(value = "rest/file/{fileid}", method = RequestMethod.GET)
+	public void getWorkspaceFile(@PathVariable("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
 	{
 		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
 		InputStream inputStream = null;
 
-
 		try {
+			URL downloadUrl = new URL(getDspaceDownloadURLPath(fileid, email, password, publicKey, privateKey));
+			
 			//Retrieve file from Dspace
-			//TODO: Put the string in properties file
-			URL downloadUrl = new URL("http://dstools.hpsrepository.asu.edu/rest/bitstream/"+fileid);
 			HttpURLConnection httpConnection = (HttpURLConnection) downloadUrl.openConnection();
-			
-//			//Retrieve the filename
-//			String filename = null;
-//			if(retrievedContentDispostion != null && retrievedContentDispostion.indexOf("filename=") != -1)
-//			{
-//				filename = retrievedContentDispostion.split("filename=")[1];
-//			}
-//			else
-//			{
-//				filename = fileid;
-//			}
-//			System.out.println(filename);
-			
 			inputStream = httpConnection.getInputStream();
 			byte[] byteChunk = new byte[4096];
 			int sizeToBeRead;
@@ -148,6 +143,8 @@ public class DspaceRestController {
 		catch(IOException ioe)
 		{
 			logger.info("Exception occurred during file download. Fileid: "+fileid, ioe);
+		} catch (NoSuchAlgorithmException e) {
+			logger.error("The algorithm used for dspace hashing is causing exception", e);
 		}
 		finally{
 			if(inputStream != null)
@@ -159,5 +156,41 @@ public class DspaceRestController {
 			}
 		}
 	}
+	
+	public String getDspaceDownloadURLPath(String fileid, String email, String password, String publicKey, String privateKey) throws NoSuchAlgorithmException
+	{
+		if(publicKey!=null && privateKey!=null && !publicKey.equals("") && !privateKey.equals(""))
+		{
+			//Authenticate based on public and private key
+			String stringToHash = dspaceProperties.getProperty("bitstream_url") + fileid + privateKey;
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+			
+			return dspaceProperties.getProperty("bitstream_download_url")+fileid+dspaceProperties.getProperty("?")+
+					dspaceProperties.getProperty("api_key")+publicKey+dspaceProperties.getProperty("&")+
+					dspaceProperties.getProperty("api_digest")+digestKey;
+		}
+		else if(email!=null && password!=null && !email.equals("") && !password.equals(""))
+		{				
+			//Authenticate based on email and password
+			return dspaceProperties.getProperty("bitstream_download_url")+fileid+dspaceProperties.getProperty("?")+
+					dspaceProperties.getProperty("email")+email+
+					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
+		}
+		
+		//No authentication provided
+		return dspaceProperties.getProperty("bitstream_download_url")+fileid;
+	}
 
+	private String bytesToHex(byte[] b) {
+	      char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+	                         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+	      StringBuffer buf = new StringBuffer();
+	      for (int j=0; j<b.length; j++) {
+	         buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
+	         buf.append(hexDigit[b[j] & 0x0f]);
+	      }
+	      return buf.toString();
+	   }
 }
