@@ -4,6 +4,23 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
     
 <style>
+table,td,th,caption {
+	border: 1px solid black;
+}
+
+th {
+	background-color: #E9EEF6;
+	color: black;
+	font-weight: bold;
+}
+
+td {
+	background-color: white;
+	color: black;
+	white-space: wrap;
+	overflow: wrap;
+	text-overflow: ellipsis;
+}
 .error {
 	color: #ff0000;
 	font-style: italic;
@@ -59,9 +76,8 @@ function onSubmit(){
 
 
 <br><br>
-
-<table style="width:100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">					
+<c:if test="${not empty collaboratingUsers}">
+<table style="width:100%" class="display dataTable">					
 	<thead>
 		<tr>	
 			<th align="left">collaborator</th>
@@ -75,14 +91,14 @@ function onSubmit(){
 		 <td><c:out value="${collab.userObj.name}"></c:out></td>
 		 <td>
 			<c:forEach var="roles" items="${collab.collaboratorRoles}">
-		 	<c:out value="${roles.displayName}"></c:out> /
+		 	<c:out value="${roles.displayName}"></c:out> ||
 		 	</c:forEach>		 
 		 </td>
 		</tr>
 	</c:forEach>
 	</tbody>
-	
 </table>
+</c:if>
 </form:form> 
 <br>
 
