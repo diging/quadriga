@@ -36,7 +36,7 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 
 @Controller
-public class ModifyProjectCollabController 
+public class ModifyProjectCollaboratorController 
 {
 	@Autowired
 	private IRetrieveProjCollabManager retrieveProjManager;

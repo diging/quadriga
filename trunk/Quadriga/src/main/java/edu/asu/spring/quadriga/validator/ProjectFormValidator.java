@@ -22,11 +22,27 @@ public class ProjectFormValidator implements Validator {
 	public void validate(Object obj, Errors err) 
 	{
 		List<ModifyProject> deleteProjectList;
+		String internalId;
+		boolean isAllNull = true;
 		
 		ModifyProjectForm projectForm = (ModifyProjectForm)obj;
 		deleteProjectList = projectForm.getProjectList();
 		
-		projectFormValidation(deleteProjectList,err);
+		//validating if any row is selected
+		for(ModifyProject project : deleteProjectList)
+		{
+			internalId = project.getInternalid();
+			if(internalId != null)
+			{
+				isAllNull = false;
+			}
+		}
+		
+		//if no row is selected
+		if(isAllNull)
+		{
+		  projectFormValidation(deleteProjectList,err);
+		}
 	}
 	
 	public void projectFormValidation(List<ModifyProject> deleteProjectList,Errors err)

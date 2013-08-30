@@ -96,38 +96,3 @@ action="${pageContext.servletContext.contextPath}/auth/workbench/${projectId}/de
 </c:when>
 </c:choose>
 </form:form>
-
-
-
-
-<%-- <input type="submit" value="Delete Collaborator">
-<br><br>
-
-<table style="width:100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">					
-	<thead>
-		<tr>
-		  <th align="left"><input type="checkbox" class="selectAll" name="selected" value="check all"/>select All</th>	
-			
-			<th align="left">collaborator</th>
-			<th align="left">roles</th>	
-		</tr>
-	</thead>
-	
-	<tbody>
-	<c:forEach items="${collaboratingUsers}" varStatus="loop"> 
-	<tr>
-		<td><form:checkboxes items="collaboratingUsers[${loop.index}]" path="collaboratorList" itemValue="userObj.userName" itemLabel="userObj.userName"/>
-		</td>
-		
-		<td>
-		<form:checkboxes path="collaboratorRoleList" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />||
-		<%-- <c:out value="${roles.displayName}"></c:out>|| 
-		</td>
-	</tr>
-	</c:forEach>
-	</tbody>
-	
-</table>
-</form:form> --%>
-    

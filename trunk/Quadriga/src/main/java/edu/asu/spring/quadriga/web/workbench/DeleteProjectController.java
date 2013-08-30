@@ -107,17 +107,38 @@ public class DeleteProjectController
 	 */
 	@RequestMapping(value = "auth/workbench/deleteproject", method = RequestMethod.POST)
 	public ModelAndView deleteProjectRequest(@Validated @ModelAttribute("projectform") ModifyProjectForm projectForm,
-			BindingResult result) throws QuadrigaStorageException, QuadrigaAccessException
+			BindingResult result,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		String projIdList = "";
+		String userName;
 		List<ModifyProject> deleteProjectList;
 		ModelAndView model;
+		List<IProject> projectList;
+		ModifyProject project;
 		
 		//create a model view
 		model = new ModelAndView("auth/workbench/deleteproject");
 		
+        userName = principal.getName();
+        
+        deleteProjectList = new ArrayList<ModifyProject>();
+		
 		if(result.hasErrors())
 		{
+			projectList = retrieveProjectManager.getProjectList(userName); 
+			
+			for(IProject iProject : projectList)
+			{
+				project = new ModifyProject();
+				project.setInternalid(iProject.getInternalid());
+				project.setName(iProject.getName());
+				project.setDescription(iProject.getDescription());
+				deleteProjectList.add(project);
+			}
+			
+			//create a project form
+			projectForm.setProjectList(deleteProjectList);
+			
 			//add a variable to display the entire page
 			model.getModelMap().put("success", 0);
 			
@@ -129,9 +150,9 @@ public class DeleteProjectController
 		{
 			deleteProjectList = projectForm.getProjectList();
 			
-			for(ModifyProject project : deleteProjectList)
+			for(ModifyProject delProject : deleteProjectList)
 			{
-				projIdList = projIdList + "," + project.getInternalid();
+				projIdList = projIdList + "," + delProject.getInternalid();
 			}
 			
 			projIdList = projIdList.substring(1);

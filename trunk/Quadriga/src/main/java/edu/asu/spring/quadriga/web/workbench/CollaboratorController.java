@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.web.workbench;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -125,6 +123,57 @@ public class CollaboratorController {
 	} 
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN"} )})
+	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.GET)
+	public ModelAndView displayAddCollaborator(@PathVariable("projectid") String projectid) 
+			throws QuadrigaStorageException, QuadrigaAccessException 
+	{
+		
+		ModelAndView model;
+		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
+		collaborator.setUserObj(userFactory.createUserObject());
+		
+		model = new ModelAndView("auth/workbench/addcollaborators");
+		model.getModel().put("collaborator", collaborator);
+		model.getModel().put("projectid", projectid);
+		
+		
+		// retrieve the collaborators who are not associated with project
+		List<IUser> nonCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
+
+		for(IUser user : nonCollaboratingUsers)
+		{
+			//fetch the quadriga roles and eliminate the restricted user
+			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+			for(IQuadrigaRole role : userQuadrigaRole)
+			{
+				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+				{
+					nonCollaboratingUsers.remove(user);
+				}
+			}
+		}
+		model.getModelMap().put("notCollaboratingUsers", nonCollaboratingUsers);
+
+		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
+		model.getModelMap().put("collaboratingUsers", collaboratingUsers);
+		
+		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
+		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+		
+		for(ICollaboratorRole role : collaboratorRoles)
+		{
+			if(role.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			{
+				collaboratorRoles.remove(role);
+			}
+		}
+		
+		model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
+		
+		return model;
+	}
+	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN"} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.POST)
 	public ModelAndView addCollaborators(@PathVariable("projectid") String projectid,
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
@@ -132,7 +181,7 @@ public class CollaboratorController {
 	{
 		
 		ModelAndView model = null;
-		model = new ModelAndView("auth/workbench/showAddCollaborators");
+		model = new ModelAndView("auth/workbench/addcollaborators");
 		
 		if(result.hasErrors())
 		{
@@ -151,14 +200,15 @@ public class CollaboratorController {
 		
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
-		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
-		while(iterator.hasNext())
+		
+		for(ICollaboratorRole role : collaboratorRoles)
 		{
-			if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			if(role.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 			{
-				iterator.remove();
+				collaboratorRoles.remove(role);
 			}
 		}
+		
 		model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
 		
 		List<ICollaborator> collaborators = retrieveProjCollabManager.getProjectCollaborators(projectid);
@@ -166,58 +216,6 @@ public class CollaboratorController {
 		
 		return model;
 	}
-	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN"} )})
-	@RequestMapping(value = "auth/workbench/{projectid}/showAddCollaborators", method = RequestMethod.GET)
-	public String displayAddCollaborator(@PathVariable("projectid") String projectid, ModelMap model) 
-			throws QuadrigaStorageException, QuadrigaAccessException 
-	{
-		
-		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
-		collaborator.setUserObj(userFactory.createUserObject());
-		model.addAttribute("collaborator", collaborator);
-		
-		model.addAttribute("projectid", projectid);
-		
-		// retrieve the collaborators who are not associated with project
-		List<IUser> nonCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
-
-		for(IUser user : nonCollaboratingUsers)
-		{
-			//fetch the quadriga roles and eliminate the restricted user
-			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-			for(IQuadrigaRole role : userQuadrigaRole)
-			{
-				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
-				{
-					nonCollaboratingUsers.remove(user);
-				}
-			}
-		}
-		model.addAttribute("notCollaboratingUsers", nonCollaboratingUsers);
-
-		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
-		model.addAttribute("collaboratingUsers", collaboratingUsers);
-		
-		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
-		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
-		Iterator<ICollaboratorRole> rolesIterator = collaboratorRoles.iterator();
-		
-		while(rolesIterator.hasNext())
-		{
-			if(rolesIterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
-			{
-				rolesIterator.remove();
-			}		
-		}
-		
-		model.addAttribute("possibleCollaboratorRoles", collaboratorRoles);
-		
-		return "auth/workbench/showAddCollaborators";
-	}
-	
-	
-
 }
 
  
