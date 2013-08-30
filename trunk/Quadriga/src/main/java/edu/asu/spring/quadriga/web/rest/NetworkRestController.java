@@ -157,9 +157,9 @@ public class NetworkRestController {
 	}
 
 	/**
-	 *  Rest interface for uploading XML for networks
-	 * http://<<URL>:<PORT>>/quadriga/rest/networkstatus/{NetworkName}
-	 * http://localhost:8080/quadriga/rest/networkstatus/firstNetwork
+	 *  Rest interface for getting status of network 
+	 * http://<<URL>:<PORT>>/quadriga/rest/networkstatus/{NetworkId}
+	 * http://localhost:8080/quadriga/rest/networkstatus/NET_1huxp4w7p71o0
 	 * @param networkName
 	 * @param response
 	 * @param accept

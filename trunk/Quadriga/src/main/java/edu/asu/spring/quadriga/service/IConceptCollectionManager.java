@@ -146,6 +146,9 @@ public interface IConceptCollectionManager {
 	
 	public abstract String deleteCollaborators(String userName, String collectionid)throws QuadrigaStorageException;
 
+
+	public abstract String getCocneptLemmaFromConceptId(String id);
+
 	
 	
 
