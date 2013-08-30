@@ -11,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.factories.IItemFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.ItemFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
@@ -39,7 +41,16 @@ public class Collection implements ICollection{
 	private String userName;
 	private String password;
 	private IDspaceKeys dspaceKeys;
+	
+	private IItemFactory itemFactory;
 
+	public Collection()
+	{
+		this.items = new ArrayList<IItem>();
+		this.isloaded = false;
+		this.itemFactory = new ItemFactory();
+	}
+	
 	/**
 	 * Initialize the required details to make a REST service call to Dspace
 	 * @param id				The id of the collection.
@@ -59,6 +70,7 @@ public class Collection implements ICollection{
 		this.dspaceProperties = dspaceProperties;
 		this.dspaceKeys = dspaceKeys;
 		this.isloaded = false;
+		this.itemFactory = new ItemFactory();
 	}
 
 	@Override
@@ -173,7 +185,7 @@ public class Collection implements ICollection{
 				if(dspaceCollection.getItemsEntity().getItems() != null)
 				{
 					for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
-						item = new Item();
+						item = itemFactory.createItemObject();
 						item.setRestConnectionDetails(restTemplate, dspaceProperties, dspaceKeys, userName, password);
 						if(item.copy(dspaceItem))
 						{

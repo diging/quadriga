@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
-import edu.asu.spring.quadriga.domain.implementation.Collection;
+import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
@@ -37,6 +38,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 	private List<ICommunity> communities;
 	private List<ICollection> collections;
 
+	@Autowired
+	private ICollectionFactory collectionFactory;
+	
 	/**
 	 * Used to generate the corresponding url necessary to access the community details
 	 * @return			Return the complete REST service url along with all the authentication information
@@ -116,7 +120,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 					if(community.getCollections().size() == 0)
 					{
 						for(String collectionId :community.getCollectionIds()){
-							collection = new Collection(collectionId,restTemplate,dspaceProperties,dspaceKeys,sUserName,sPassword);
+							collection = collectionFactory.createCollectionObject(collectionId,restTemplate,dspaceProperties,dspaceKeys,sUserName,sPassword);
 							Thread collectionThread = new Thread(collection);
 							collectionThread.start();
 
