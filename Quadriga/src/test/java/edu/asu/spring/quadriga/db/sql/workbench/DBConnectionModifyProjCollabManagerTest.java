@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,7 +16,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -270,10 +270,9 @@ public class DBConnectionModifyProjCollabManagerTest {
 		
 		assertEquals("",errmsg);
 		
-		errmsg = dbConnection.deleteColloratorRequest(collaborator.getUserObj().getUserName(), getProjectId(project.getName()));
+		dbConnection.deleteColloratorRequest(collaborator.getUserObj().getUserName(), getProjectId(project.getName()));
 
-		assertEquals("no errors", errmsg);
-			
+		assertTrue(true);
 	}
 
 }

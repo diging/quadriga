@@ -69,7 +69,7 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
 	}
 
 	@Override
-	public String deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException {
+	public void deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException {
 		
 		String dbCommand;
         String errmsg;
@@ -86,14 +86,18 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
 			errmsg = sqlStatement.getString(3);
 			if(errmsg.equals("no errors"))
 			{
-				return errmsg;
+				logger.info("Delte project collaborator request method :"+errmsg);
+				throw new QuadrigaStorageException();
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Delte project collaborator request method :"+e);
+			throw new QuadrigaStorageException();
 		}
-
-		return null;
+		finally
+		{
+			closeConnection();
+		}
 	}
 	
 	@Override

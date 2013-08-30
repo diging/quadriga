@@ -38,11 +38,6 @@ BEGIN
 	  THEN SET errmsg = "project name cannot be empty.";
     END IF;
 
-    IF EXISTS(SELECT 1 FROM vw_project
-                WHERE projectname = inprojectname)
-      THEN SET errmsg = "project name already exists.";
-	END IF;
-
     IF(inunixname IS NULL OR inunixname = "")
       THEN SET errmsg = "Unix name cannot be empty.";
     END IF;

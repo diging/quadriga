@@ -77,10 +77,10 @@
 		
 		<li><a href="#">Collaborators</a>
 		<ul>
-			<li><a href="/quadriga/auth/workbench/${project.internalid}/showAddCollaborators">
+			<li><a href="/quadriga/auth/workbench/${project.internalid}/addcollaborators">
 			Add Collaborators</a></li>
 			
-			<li><a href="/quadriga/auth/workbench/${project.internalid}/showDeleteCollaborators">
+			<li><a href="/quadriga/auth/workbench/${project.internalid}/deletecollaborators">
 			Delete Collaborators</a></li>
 			<li><a href="/quadriga/auth/workbench/${project.internalid}/updatecollaborators">
 			Update Collaborators</a></li>

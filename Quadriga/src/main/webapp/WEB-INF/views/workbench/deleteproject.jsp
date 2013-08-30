@@ -45,18 +45,9 @@ td {
 		
 		$("input[name='Back']").button().click(function(event) {
 		});
-		<%--
-		$("input[name='deleteproj']").button().click(function(event){
-			if(!$("input[name='projchecked']").is(":checked")) {
-				$.alert("Select record to delete", "Oops !!!");
-				event.preventDefault();
-				return;
-			}
-		});
-		
 		
 		$("input[name='deleteproj']").button().click(function(event) {
-			if ($("input[name='projchecked']").is(":checked")) {
+			if ($("form input:checkbox").is(":checked")) {
 				event.preventDefault();
 				$("#dlgConfirm").dialog({
 					resizable : false,
@@ -77,17 +68,16 @@ td {
 		});
 		
 		$("input[name='selectall']").button().click(function(event){
-			$("input[name='projchecked']").prop("checked",true);
+			$("form input:checkbox").prop("checked",true);
 			event.preventDefault();
 			return;
 		});
 		
 		$("input[name='deselectall']").button().click(function(event){
-			$("input[name='projchecked']").prop("checked",false);
+			$("form input:checkbox").prop("checked",false);
 			event.preventDefault();
 			return;
 		});
-		--%>
 	});
 </script>
 <article class="is-page-content">
@@ -112,7 +102,7 @@ td {
 					<c:forEach var="project" items="${projectform.projectList}" varStatus="status">
 						<tr>
 						<td>
-						<form:checkbox path="projectList[${status.index}].internalid" value="${project.internalid }"/>
+						<form:checkbox path="projectList[${status.index}].internalid" value="${project.internalid}"/>
 							</td>
 							<td><font size="3">
 							<form:label path="projectList[${status.index}].name">
@@ -148,7 +138,7 @@ td {
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
-			value='Back'></li>
+			value='Back' name="Back"></li>
 	</ul>
 		     </c:otherwise>
 		</c:choose>
