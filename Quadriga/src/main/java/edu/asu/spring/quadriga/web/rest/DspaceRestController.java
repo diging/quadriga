@@ -1,19 +1,11 @@
 package edu.asu.spring.quadriga.web.rest;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringWriter;
-import java.net.FileNameMap;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
@@ -24,7 +16,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tiles.autotag.core.runtime.annotation.Parameter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -52,7 +43,13 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 
-
+/**
+ * This class handles the rest requests for file downloads
+ * belonging to a workspace.
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @Controller
 public class DspaceRestController {
 
@@ -77,6 +74,13 @@ public class DspaceRestController {
 	private IRestVelocityFactory restVelocityFactory;
 
 
+	/**
+	 * Produce an xml listing all the files in a workspace
+	 * 
+	 * @param workspaceid		The id of the workspace.
+	 * @return					An xml template listing all the files in the workspace
+	 * @throws RestException	Exception with corresponding error keys set. Thrown when the operation encounters any errors.
+	 */
 	@RequestMapping(value = "rest/workspace/{workspaceid}/files", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listWorkspaceFiles(@PathVariable("workspaceid") String workspaceid, ModelMap model, Principal principal, HttpServletRequest request) throws RestException
@@ -118,6 +122,21 @@ public class DspaceRestController {
 		}
 	}
 
+	/**
+	 * This controller downloads the requested file from Dspace and returns the file as a response.
+	 * 
+	 * NOTE: If the public and private keys were stored in the quadriga database then no authentication details need to be set.
+	 * Else either the key fields or the email/password fields need to be set. If both of them are set then the keys take precedence over the email/password.
+	 * 
+	 * @param fileid			The id of the file to be downloaded
+	 * @param email				The dspace email id of the user.
+	 * @param password			The dspace password of the user.
+	 * @param publicKey			The dspae public key of the user.
+	 * @param privateKey		The dspace private key of the user.
+	 * @param principal			This is used to retrieve the logged in username.
+	 * @param response			The response of this method which will contain the file and its metadata.
+	 * @throws RestException	Thrown when the user tries to access an unauthorized file.
+	 */
 	@RequestMapping(value = "rest/file/{fileid}", method = RequestMethod.GET)
 	public void getWorkspaceFile(@PathVariable("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
 	{
@@ -166,6 +185,24 @@ public class DspaceRestController {
 		}
 	}
 	
+	/**
+	 * This method is used to generate the dspace url for downloading the file.
+	 * Based on what authentication details are provided, the url will vary for each case.
+	 * 
+	 * NOTE: If all the authentication fields are empty then this function will try to pull the keys from the quadriga database.
+	 * When even that returns empty, then the url returned will contain no authentication details.
+	 * 
+	 * @param fileid						The id of the file.
+	 * @param email							The dspace email of the user.
+	 * @param password						The dspace password of the user.
+	 * @param publicKey						The dspace public key of the user.
+	 * @param privateKey					The dspace private key of the user.
+	 * @param quadrigaUsername				The quadriga username of the person trying to download the file.
+	 * 
+	 * @return								The dspace download url for the given file based on the authentication details.
+	 * @throws NoSuchAlgorithmException		When the algorithm provided to hash is not supported by message digest in java.
+	 * @throws QuadrigaStorageException		When an error occurs in the quadriga database.
+	 */
 	private String getDspaceDownloadURLPath(String fileid, String email, String password, String publicKey, String privateKey, String quadrigaUsername) throws NoSuchAlgorithmException, QuadrigaStorageException
 	{
 		if(publicKey!=null && privateKey!=null && !publicKey.equals("") && !privateKey.equals(""))

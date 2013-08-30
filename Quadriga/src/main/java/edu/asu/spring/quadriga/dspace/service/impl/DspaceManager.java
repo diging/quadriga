@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
-import edu.asu.spring.quadriga.domain.implementation.BitStream;
+import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
@@ -58,6 +58,9 @@ public class DspaceManager implements IDspaceManager{
 
 	@Autowired
 	private IDBConnectionDspaceManager dbconnectionManager;
+	
+	@Autowired
+	private IBitStreamFactory bitstreamFactory;
 
 	@Resource(name = "dspaceStrings")
 	private Properties dspaceProperties;
@@ -430,7 +433,7 @@ public class DspaceManager implements IDspaceManager{
 		//User tries to access workspace without Dspace Login Credentials
 		if(dspaceKeys == null && (sUserName == null || sPassword == null))
 		{
-			IBitStream restrictedBitStream = new BitStream();
+			IBitStream restrictedBitStream = bitstreamFactory.createBitStreamObject();
 			restrictedBitStream.setCommunityName(dspaceProperties.getProperty("need_authentication"));
 			restrictedBitStream.setCollectionName(dspaceProperties.getProperty("need_authentication"));
 			restrictedBitStream.setItemName(dspaceProperties.getProperty("need_authentication"));
@@ -444,7 +447,7 @@ public class DspaceManager implements IDspaceManager{
 			return checkedBitStreams;
 		}
 
-		IBitStream restrictedBitStream = new BitStream();
+		IBitStream restrictedBitStream = bitstreamFactory.createBitStreamObject();
 		restrictedBitStream.setCommunityName(dspaceProperties.getProperty("restricted_community"));
 		restrictedBitStream.setCollectionName(dspaceProperties.getProperty("restricted_collection"));
 		restrictedBitStream.setItemName(dspaceProperties.getProperty("restricted_item"));
@@ -464,7 +467,7 @@ public class DspaceManager implements IDspaceManager{
 					//The user can access the community
 					//Check access rights for collection
 					isloading = true;
-					loadingBitStream = new BitStream();
+					loadingBitStream = bitstreamFactory.createBitStreamObject();
 
 					loadingBitStream.setId(bitstream.getId());
 					loadingBitStream.setCommunityid(bitstream.getCommunityid());

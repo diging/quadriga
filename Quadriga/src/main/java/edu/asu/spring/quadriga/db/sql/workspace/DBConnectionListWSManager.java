@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.BitStream;
@@ -43,6 +44,9 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 	@Autowired
     private IUserManager userManger;
 
+	@Autowired
+	private IBitStreamFactory bitstreamFactory;
+	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionListWSManager.class);
 	
 	/**
@@ -478,7 +482,7 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 				IBitStream bitstream = null;
 				while(result.next())
 				{
-					bitstream = new BitStream();
+					bitstream = bitstreamFactory.createBitStreamObject();
 					bitstream.setCommunityid(result.getString(1));
 					bitstream.setCollectionid(result.getString(2));
 					bitstream.setItemid(result.getString(3));					

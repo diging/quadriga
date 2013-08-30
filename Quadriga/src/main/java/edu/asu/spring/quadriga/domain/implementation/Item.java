@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.BitStreamFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceBitStreamEntityId;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItems;
@@ -39,6 +41,14 @@ public class Item implements IItem{
 	private String password;
 	private IDspaceKeys dspaceKeys;
 
+	private IBitStreamFactory bitstreamFactory;
+	
+	public Item()
+	{
+		this.bitstreamFactory = new BitStreamFactory();
+		this.bitids = new ArrayList<String>();
+		this.bitstreams = new ArrayList<IBitStream>();	
+	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -76,7 +86,7 @@ public class Item implements IItem{
 			IBitStream bitstream = null;
 			for(String bitid: this.bitids)
 			{
-				bitstream = new BitStream();
+				bitstream = bitstreamFactory.createBitStreamObject();
 				bitstream.setId(bitid);
 				this.bitstreams.add(bitstream);
 			}
