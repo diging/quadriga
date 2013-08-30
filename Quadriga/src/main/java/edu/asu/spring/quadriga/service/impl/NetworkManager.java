@@ -61,6 +61,7 @@ import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.Predica
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.RelationEventObject;
 import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 
 /**
@@ -78,7 +79,8 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
-	
+	@Autowired
+	IConceptCollectionManager conceptCollectionManager;
 	
 	public StringBuffer jsonString= new StringBuffer("");
 
@@ -209,6 +211,7 @@ public class NetworkManager implements INetworkManager {
 	@Override
 	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
 		JsonObject jsonObject = new JsonObject();
+		this.jsonString.delete(0, this.jsonString.length());
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
 		mediaTypes.add(MediaType.APPLICATION_XML);
@@ -255,7 +258,8 @@ public class NetworkManager implements INetworkManager {
 						Iterator <TermType> I2 = termTypeList.iterator();
 						while(I2.hasNext()){
 							TermType tt = I2.next();
-							String node = tt.getTermInterpertation(tt);
+							String node = conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt));
+							//String node = tt.getTermInterpertation(tt);
 							logger.debug(tt.getTermInterpertation(tt));
 							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#EE6363\",\"$type\": \"circle\",\"$dim\": 11},\"id\": \""+node+"\",\"name\": \""+node+"\"},");
 						}
@@ -364,7 +368,7 @@ public class NetworkManager implements INetworkManager {
 			while(I2.hasNext()){
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(tt.getTermInterpertation(tt));
+				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
 				PredicateObject predicateObject = new PredicateObject();
 				predicateObject.setAppellationEventObject(appellationEventObject);
 				relationEventObject.setPredicateObject(predicateObject);
@@ -403,7 +407,7 @@ public class NetworkManager implements INetworkManager {
 			while(I2.hasNext()){
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(tt.getTermInterpertation(tt));
+				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
 				subjectObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
 			}
@@ -435,7 +439,7 @@ public class NetworkManager implements INetworkManager {
 			while(I2.hasNext()){
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(tt.getTermInterpertation(tt));
+				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
 				objectTypeObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("objectType Term : "+tt.getTermInterpertation(tt));
 			}
