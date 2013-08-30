@@ -44,6 +44,7 @@ import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
+import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.implementation.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.implementation.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
@@ -77,6 +78,8 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
+	
+	
 	public StringBuffer jsonString= new StringBuffer("");
 
 	@Autowired
