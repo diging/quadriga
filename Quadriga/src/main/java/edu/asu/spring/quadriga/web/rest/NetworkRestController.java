@@ -4,11 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,24 +14,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.FormHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -100,6 +83,7 @@ public class NetworkRestController {
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String networkName = request.getParameter("networkname");
+		String networkId="";
 		String workspaceid = request.getParameter("workspaceid");
 		logger.info(" Network Name : "+ networkName);
 		logger.info(" Workspace id : "+ workspaceid);
@@ -142,19 +126,20 @@ public class NetworkRestController {
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(res.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-			networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid);
+			networkId=networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid);
 			
 //			Below code would help in printing XML from qstore
 			Marshaller marshaller = context.createMarshaller();
 			ByteArrayOutputStream os=new ByteArrayOutputStream();
 			marshaller.marshal(response1, os);
 			
-			String s = os.toString();
-			String r=networkManager.prettyFormat(s,2);
+//			String s = os.toString();
+//			String r=networkManager.prettyFormat(s,2);
 //			logger.info("checking this "+r);
 
 			response.setStatus(200);
 			response.setContentType(accept);
+			response.setHeader("networkid",networkId );
 			return res;
 		}
 
@@ -173,13 +158,13 @@ public class NetworkRestController {
 	 * @throws QuadrigaStorageException
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/networkstatus/{NetworkName}", method = RequestMethod.GET)
-	public String getNetworkStatus(@PathVariable("NetworkName") String networkName,
+	@RequestMapping(value = "rest/networkstatus/{NetworkId}", method = RequestMethod.GET)
+	public String getNetworkStatus(@PathVariable("NetworkId") String networkId,
 			HttpServletResponse response,
 			 String accept,Principal principal) throws QuadrigaException, QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String status="UNKNOWN";
-		INetwork network =networkManager.getNetworkStatus(networkName,user);
+		INetwork network =networkManager.getNetworkStatus(networkId,user);
 		
 		status = network.getStatus();
 		return status;

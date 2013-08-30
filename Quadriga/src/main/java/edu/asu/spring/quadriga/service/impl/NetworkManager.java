@@ -125,7 +125,7 @@ public class NetworkManager implements INetworkManager {
 	 * @author Lohith Dwaraka
 	 */
 	@Override
-	public void receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid){
+	public String receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid){
 		String networkId="";
 		try{
 			networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
@@ -178,6 +178,7 @@ public class NetworkManager implements INetworkManager {
 
 			}
 		}
+		return networkId;
 	}
 
 	/* (non-Javadoc)
@@ -618,10 +619,10 @@ public class NetworkManager implements INetworkManager {
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getNetworkStatus(java.lang.String, edu.asu.spring.quadriga.domain.IUser)
 	 */
 	@Override
-	public INetwork getNetworkStatus(String networkName, IUser user) throws QuadrigaStorageException{
+	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
-			network = dbConnect.getNetworkStatus(networkName, user);
+			network = dbConnect.getNetworkStatus(networkId, user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}

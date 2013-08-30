@@ -253,7 +253,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 	
 
 	@Override
-	public INetwork getNetworkStatus(String networkName, IUser user) throws QuadrigaStorageException{
+	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException{
 		IUser owner = user;
 		String dbCommand;
 		String errmsg="";
@@ -271,7 +271,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, owner.getUserName());
-			sqlStatement.setString(2, networkName);        	
+			sqlStatement.setString(2, networkId);        	
 
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(3,Types.VARCHAR);
