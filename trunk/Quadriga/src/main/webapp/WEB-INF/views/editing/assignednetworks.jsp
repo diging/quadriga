@@ -64,7 +64,7 @@
 					<c:forEach var="network" items="${networkList}">
 						<tr>
 							<td width="15%" align="center"><input name="items"
-								type="hidden" value="<c:out value="${network.name}"></c:out>" />
+								type="hidden" value="<c:out value="${network.id}"></c:out>" />
 								<c:out value="${network.name}"></c:out></td>
 							<td width="15%" align="center"><c:out
 									value="${network.projectName}"></c:out></td>
@@ -75,8 +75,8 @@
 							<td width="15%" align="center"><input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'" value='Visualize'></td>
 							<td width="15%" align="center"><input type=button
-								onClick="location.href=''" value='Reject'><input type=button
-								onClick="location.href=''" value='Approve'></td>
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/rejectnetwork/${network.id}'" name ='Reject' value='Reject'><input type=button
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.id}'" name ='Approve' value='Approve'></td>
 						</tr>
 					</c:forEach>
 				</tbody>

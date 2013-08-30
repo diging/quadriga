@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_getNetworkStatus
 (
   IN  innetworkowner  VARCHAR(20),
-  IN  innetworkname  VARCHAR(20),	
+  IN  innetworkid  VARCHAR(20),	
  OUT errmsg    VARCHAR(255)
 )
 BEGIN
@@ -38,7 +38,7 @@ BEGIN
      -- retrieve the dictionary details
 	 select networkid,networkname,status
        from tbl_networks
-	   where networkowner = innetworkowner and networkname =innetworkname;
+	   where networkowner = innetworkowner and networkid =innetworkid;
 	END IF;
 END$$
 DELIMITER ;

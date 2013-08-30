@@ -26,7 +26,7 @@ public interface INetworkManager {
 	 */
 	public abstract String getQStoreAddURL();
 
-	public abstract void receiveNetworkSubmitRequest(
+	public abstract String receiveNetworkSubmitRequest(
 			JAXBElement<ElementEventsType> response, IUser user,
 			String networkName, String workspaceid);
 

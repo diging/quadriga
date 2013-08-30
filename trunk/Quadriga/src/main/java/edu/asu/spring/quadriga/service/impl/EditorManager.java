@@ -75,5 +75,16 @@ public class EditorManager implements IEditorManager {
 		}
 		return networkList;
 	}
+	
+	@Override
+	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
+		String msg = "";
+		try{
+			msg = dbConnect.updateNetworkStatus(networkId, status);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return msg;
+	}
 
 }
