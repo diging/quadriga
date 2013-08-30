@@ -44,9 +44,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 
@@ -60,6 +62,9 @@ public class DspaceRestController {
 
 	@Autowired
 	private IDBConnectionListWSManager dbConnect;
+	
+	@Autowired
+	private IDBConnectionDspaceManager dbDspaceManager;
 
 	@Autowired
 	@Qualifier("restTemplate")
@@ -120,7 +125,7 @@ public class DspaceRestController {
 		InputStream inputStream = null;
 
 		try {
-			URL downloadUrl = new URL(getDspaceDownloadURLPath(fileid, email, password, publicKey, privateKey));
+			URL downloadUrl = new URL(getDspaceDownloadURLPath(fileid, email, password, publicKey, privateKey, principal.getName()));
 			
 			//Retrieve file from Dspace
 			HttpURLConnection httpConnection = (HttpURLConnection) downloadUrl.openConnection();
@@ -142,9 +147,13 @@ public class DspaceRestController {
 		}
 		catch(IOException ioe)
 		{
-			logger.info("Exception occurred during file download. Fileid: "+fileid, ioe);
+			logger.info("Access exception occurred during file download. User: "+principal.getName()+" Fileid: "+fileid, ioe);
+			throw new RestException(403);
 		} catch (NoSuchAlgorithmException e) {
 			logger.error("The algorithm used for dspace hashing is causing exception", e);
+		} catch (QuadrigaStorageException e) {
+			logger.error("Exception:", e);
+			throw new RestException(405);
 		}
 		finally{
 			if(inputStream != null)
@@ -157,7 +166,7 @@ public class DspaceRestController {
 		}
 	}
 	
-	public String getDspaceDownloadURLPath(String fileid, String email, String password, String publicKey, String privateKey) throws NoSuchAlgorithmException
+	private String getDspaceDownloadURLPath(String fileid, String email, String password, String publicKey, String privateKey, String quadrigaUsername) throws NoSuchAlgorithmException, QuadrigaStorageException
 	{
 		if(publicKey!=null && privateKey!=null && !publicKey.equals("") && !privateKey.equals(""))
 		{
@@ -177,6 +186,22 @@ public class DspaceRestController {
 			return dspaceProperties.getProperty("bitstream_download_url")+fileid+dspaceProperties.getProperty("?")+
 					dspaceProperties.getProperty("email")+email+
 					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
+		}
+		
+		//Try to get the keys from the database
+		IDspaceKeys dspacekey = dbDspaceManager.getDspaceKeys(quadrigaUsername);
+		if(dspacekey != null)
+		{
+			//User has keys stored in quadriga database
+			//Authenticate based on public and private key
+			String stringToHash = dspaceProperties.getProperty("bitstream_url") + fileid + dspacekey.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+			
+			return dspaceProperties.getProperty("bitstream_download_url")+fileid+dspaceProperties.getProperty("?")+
+					dspaceProperties.getProperty("api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("&")+
+					dspaceProperties.getProperty("api_digest")+digestKey;
 		}
 		
 		//No authentication provided
