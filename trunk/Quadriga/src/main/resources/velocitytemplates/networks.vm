@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/workspaces.xsd">
+<Quadriga:networkList>
+#foreach ($network in $networkList)
+<Quadriga:network>
+	<Quadriga:name>$network.name</Quadriga:name>
+	<Quadriga:id>$network.id</Quadriga:id>
+	<Quadriga:uri>$url/rest/networkdetails/$network.id</Quadriga:uri>
+</Quadriga:network> 	
+#end
+</Quadriga:networkList>
+</Quadriga:QuadrigaReply>

@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +30,14 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +48,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
@@ -45,6 +57,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
  * Controller for networks related rest api's exposed to other clients
@@ -61,6 +74,9 @@ public class NetworkRestController {
 	@Autowired
 	private INetworkManager networkManager;
 
+	@Autowired
+	private	IListWSManager wsManager;
+	
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 
@@ -186,6 +202,9 @@ public class NetworkRestController {
 			context.put("status", status);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
+			response.setStatus(200);
+			response.setContentType(accept);
+			response.setContentType("application/xml");
 			return writer.toString();
 		} catch (ResourceNotFoundException e) {
 
@@ -203,4 +222,91 @@ public class NetworkRestController {
 
 	}
 
+	/**
+	 *  Rest interface for getting network list belonging to a workspace 
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/{workspaceid}/networks
+	 * http://localhost:8080/quadriga/rest/workspace/WS_23092339551502339/networks
+	 * @param networkName
+	 * @param response
+	 * @param accept
+	 * @param principal
+	 * @return status
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "rest/workspace/{workspaceid}/networks", method = RequestMethod.GET)
+	public String getWorkspaceNetworkList(@PathVariable("workspaceid") String workspaceId,
+			HttpServletResponse response,
+			String accept,Principal principal,HttpServletRequest req) throws Exception {
+		
+		IUser user = userManager.getUserDetails(principal.getName());
+		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		Template template = null;
+		try {
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/networks.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("networkList", networkList);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			response.setStatus(200);
+			response.setContentType(accept);
+			response.setContentType("application/xml");
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		}
+	}
+	
+	
+	
+	/**
+	 *  Rest interface for getting network list belonging to a workspace 
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/{workspaceid}/networks
+	 * http://localhost:8080/quadriga/rest/workspace/WS_23092339551502339/networks
+	 * @param networkName
+	 * @param response
+	 * @param accept
+	 * @param principal
+	 * @return status
+	 * @throws QuadrigaStorageException 
+	 * @throws RestException 
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "rest/networkdetails/{networkid}", method = RequestMethod.GET)
+	public String getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
+			HttpServletResponse response,
+			String accept,Principal principal,HttpServletRequest req) throws JAXBException, QuadrigaStorageException, RestException {
+		
+		List<INetworkNodeInfo> networkTopNodes = networkManager.getNetworkTopNodes(networkId);
+
+		Iterator <INetworkNodeInfo> I = networkTopNodes.iterator();
+		ResponseEntity<String> res = null;
+		while (I.hasNext()){
+			INetworkNodeInfo networkNodeInfo = I.next();
+			logger.debug("Node id "+networkNodeInfo.getId());
+			res = networkManager.getNodeXmlFromQstore(networkNodeInfo.getId());
+		}
+		
+		if(res == null){
+			throw new RestException(404);
+		}
+		response.setStatus(200);
+		response.setContentType(accept);
+		response.setContentType("application/xml");
+		return res.getBody().toString();
+	}
 }
