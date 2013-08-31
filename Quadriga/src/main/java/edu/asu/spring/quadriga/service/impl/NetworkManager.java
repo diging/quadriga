@@ -209,9 +209,7 @@ public class NetworkManager implements INetworkManager {
 	}
 
 	@Override
-	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
-		JsonObject jsonObject = new JsonObject();
-		this.jsonString.delete(0, this.jsonString.length());
+	public ResponseEntity<String> getNodeXmlFromQstore(String id)throws JAXBException{
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
 		mediaTypes.add(MediaType.APPLICATION_XML);
@@ -233,6 +231,16 @@ public class NetworkManager implements INetworkManager {
 		}catch(Exception e){
 			e.getMessage();
 		}
+		return response;
+	}
+	
+	@Override
+	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
+		JsonObject jsonObject = new JsonObject();
+		this.jsonString.delete(0, this.jsonString.length());
+		
+		ResponseEntity<String> response = getNodeXmlFromQstore(id);
+		
 		if(response ==null){
 			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
 		}else{

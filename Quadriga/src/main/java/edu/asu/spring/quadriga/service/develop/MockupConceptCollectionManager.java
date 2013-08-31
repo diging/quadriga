@@ -163,6 +163,12 @@ public class MockupConceptCollectionManager implements
 		
 	}
 
+	@Override
+	public String getCocneptLemmaFromConceptId(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 	

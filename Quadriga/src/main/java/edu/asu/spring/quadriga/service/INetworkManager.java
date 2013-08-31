@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.springframework.http.ResponseEntity;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -72,5 +73,7 @@ public interface INetworkManager {
 			throws JAXBException, QuadrigaStorageException;
 
 	public abstract String getQStoreGetURL();
+
+	public abstract ResponseEntity<String> getNodeXmlFromQstore(String id) throws JAXBException;
 
 }
