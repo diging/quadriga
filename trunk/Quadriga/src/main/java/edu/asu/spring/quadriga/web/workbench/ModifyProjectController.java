@@ -153,12 +153,12 @@ public class ModifyProjectController
 	{
 		ModelAndView model;
 		IProject project;
-			model = new ModelAndView("auth/workbench/modifyproject");
-			project = retrieveProjectManager.getProjectDetails(projectid);
-			model.getModelMap().put("project", project);
-			model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
-			model.getModelMap().put("success", 0);
-			return model;
+		model = new ModelAndView("auth/workbench/modifyproject");
+		project = retrieveProjectManager.getProjectDetails(projectid);
+		model.getModelMap().put("project", project);
+		model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
+		model.getModelMap().put("success", 0);
+		return model;
 	}
 	
 	/**
@@ -179,20 +179,20 @@ public class ModifyProjectController
 	{
 		ModelAndView model;
 		String userName = principal.getName();
-		
-		    model = new ModelAndView("auth/workbench/modifyproject");
-			if(result.hasErrors())
-			{
-				model.getModelMap().put("project", project);
-				model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
-				model.getModelMap().put("success", 0);
-			}
-			else
-			{
-				 projectManager.updateProjectRequest(project, userName);
-				model.getModelMap().put("success", 1);
-			}
-			return model;
+
+		model = new ModelAndView("auth/workbench/modifyproject");
+		if(result.hasErrors())
+		{
+			model.getModelMap().put("project", project);
+			model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
+			model.getModelMap().put("success", 0);
+		}
+		else
+		{
+			projectManager.updateProjectRequest(project, userName);
+			model.getModelMap().put("success", 1);
+		}
+		return model;
 	}
 	
 

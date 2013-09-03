@@ -1,10 +1,7 @@
 package edu.asu.spring.quadriga.db;
 
-import java.util.List;
-
 import javax.sql.DataSource;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
