@@ -64,7 +64,7 @@ public class TransferProjectOwnerController
 	 * @throws QuadrigaAccessException
 	 * @author kiranbatna
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"null"} )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1,userRole = {"null"})})
 	@RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.GET)
 	public ModelAndView transferProjectOwnerRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{

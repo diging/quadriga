@@ -44,7 +44,7 @@ import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
-public class CollaboratorController {
+public class AddCollaboratorController {
 
 	@Autowired
 	IRetrieveProjectManager retrieveprojectManager;
@@ -77,7 +77,7 @@ public class CollaboratorController {
 	private CollaboratorValidator collaboratorValidator;
 	
 	private static final Logger logger = LoggerFactory
-			.getLogger(CollaboratorController.class);
+			.getLogger(AddCollaboratorController.class);
 	
 
 	@InitBinder

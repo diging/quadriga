@@ -178,7 +178,7 @@ public class ConceptCollectionProjectController {
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) 
+	public String deleteProjectConceptCollection(@PathVariable("projectid") String projectid, Model model) 
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
@@ -203,7 +203,7 @@ public class ConceptCollectionProjectController {
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
-	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) 
+	public String deleteProjectConceptCollection(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) 
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
