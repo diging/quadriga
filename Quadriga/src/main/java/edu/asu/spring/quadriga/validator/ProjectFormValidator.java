@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProject;
@@ -14,7 +13,6 @@ public class ProjectFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
 		return arg0.isAssignableFrom(ModifyProjectForm.class);
 	}
 
@@ -28,6 +26,7 @@ public class ProjectFormValidator implements Validator {
 		ModifyProjectForm projectForm = (ModifyProjectForm)obj;
 		deleteProjectList = projectForm.getProjectList();
 		
+		System.out.println("Bean object length :"+projectForm.getProjectList());
 		//validating if any row is selected
 		for(ModifyProject project : deleteProjectList)
 		{
@@ -41,15 +40,7 @@ public class ProjectFormValidator implements Validator {
 		//if no row is selected
 		if(isAllNull)
 		{
-		  projectFormValidation(deleteProjectList,err);
+			err.reject("project_selection.required");
 		}
-	}
-	
-	public void projectFormValidation(List<ModifyProject> deleteProjectList,Errors err)
-	{
-		for(int i = 0;i<deleteProjectList.size();i++)
-		{
-			ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectList["+i+"].internalid", "project_selection.required");
-		}
-	}
+	}	
 }

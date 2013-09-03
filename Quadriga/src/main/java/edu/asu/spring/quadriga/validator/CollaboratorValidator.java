@@ -14,7 +14,6 @@ public class CollaboratorValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
 		return arg0.isAssignableFrom(Collaborator.class);
 	}
 
@@ -24,7 +23,6 @@ public class CollaboratorValidator implements Validator {
 		String userName;
 		List<ICollaboratorRole> role;
 		
-		// TODO Auto-generated method stub
 		Collaborator collaborator = (Collaborator)obj;
 		userName = collaborator.getUserObj().getUserName();
 		role = collaborator.getCollaboratorRoles();

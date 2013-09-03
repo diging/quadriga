@@ -7,7 +7,13 @@
 $(function() {
 	$("input[type=submit]").button().click(function(event){
 	});
+	$("input[type=button]").button().click(function(event){
+	});
 });
+
+function submitClick(id){
+	location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}";
+}
 </script>
 <style>
 .error {
@@ -15,32 +21,41 @@ $(function() {
 	font-style: italic;
 }
 </style>
+<article class="is-page-content">
+	<form:form commandName="workspace" method="POST"
+		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspace.id}">
+<c:choose>
+<c:when test="${success == '0'}">
 <header>
 	<h2>Update Workspace</h2>
 	<span class="byline">Please update the the following
 		information:</span>
-</header>
-
-<article class="is-page-content">
-
-	<form:form commandName="workspace" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspace.id}">
-		<table style="width: 100%">
-			<tr>
-				<td style="width: 170px">Name:</td>
-				<td><form:input path="name" size="60" id="name" /></td>
-				<td><form:errors path="name" cssClass="error"></form:errors></td>
-			</tr>
-			<tr>
-				<td style="vertical-align: top">Description:</td>
-				<td><form:textarea path="description" cols="44" rows="6"
-						id="description" /></td>
-				<td><form:errors path="description" cssClass="error"></form:errors></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="Update Workspace"></td>
-			</tr>
-		</table>
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 170px">Name:</td>
+							<td><form:input path="name" size="60" id="name" /></td>
+							<td><form:errors path="name" cssClass="error"></form:errors></td>
+						</tr>
+						<tr>
+							<td style="vertical-align: top">Description:</td>
+							<td><form:textarea path="description" cols="44" rows="6"
+									id="description" /></td>
+							<td><form:errors path="description" cssClass="error"></form:errors></td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="Update Workspace"></td>
+						</tr>
+					</table>
+				</header>
+</c:when>
+<c:when test="${success == '1'}">
+<span class="byline">Workspace created successfully.</span>
+	<ul>
+					<li><input type="button" onClick="submitClick(this.id);"
+						value='Back'></li>
+				</ul>>
+</c:when>
+</c:choose>
 	</form:form>
 </article>
 

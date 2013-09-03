@@ -26,7 +26,6 @@ public class ProjectValidator implements Validator {
 	
 	@Override
 	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
 		return arg0.isAssignableFrom(Project.class);
 	}
 

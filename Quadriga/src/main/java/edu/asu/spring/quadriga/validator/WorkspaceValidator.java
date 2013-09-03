@@ -11,13 +11,11 @@ public class WorkspaceValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
 		return arg0.isAssignableFrom(WorkSpace.class);
 	}
 
 	@Override
 	public void validate(Object obj, Errors err) {
-		// TODO Auto-generated method stub
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "name", "workspace_name.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "workspace_description.required");
 	}

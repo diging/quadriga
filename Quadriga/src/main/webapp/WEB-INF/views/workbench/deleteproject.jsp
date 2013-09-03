@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!-- Content -->
 <style type="text/css">
@@ -35,6 +36,10 @@ td {
 		});
 		
 		$("#dlgConfirm").hide();
+		
+		<%-->Default uncheck the checkbox <--%>
+		$("form input:checkbox").prop("checked",false);
+		
 	});
 	
 	function submitClick(id){
@@ -87,9 +92,19 @@ td {
 		 <c:when test="${success == '0'}">
 		 		<c:if test="${not empty projectform.projectList}">
 			<span class="byline">Select the projects to be deleted:</span>
+			<c:choose>
+			<c:when test="${error == '1'}">
+			<span class="error">
+			<spring:message code="project_selection.required" />
+			</span>
+			<br></c:when>
+			</c:choose>
 			<input class="command" type="submit" value='Delete' name="deleteproj">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
+			<input type="button"
+			onClick="submitClick(this.id);"
+			value='Cancel' name="Back">
 			<table style="width: 100%" class="display dataTable" id="projectlist">
 				<thead>
 					<tr>
@@ -113,7 +128,6 @@ td {
 								<form:label path="projectList[${status.index}].description">
 							<c:out value="${project.description}"></c:out>
 							</form:label>  
-							<form:errors path="projectList[${status.index}].internalid" cssClass="error"></form:errors>
 							</font>
 							</td>
 						</tr>
@@ -123,6 +137,9 @@ td {
 			<input class="command" type="submit" value='Delete' name="deleteproj">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
+			<input type="button"
+			onClick="submitClick(this.id);"
+			value='Cancel' name="Back">
 		</c:if>
 		 
 		 		<c:if test="${empty projectform.projectList}">
@@ -133,14 +150,14 @@ td {
 			You don't have any projects to delete.
 		</c:if>
 		</c:when>
-		     <c:otherwise> 
+		     <c:when test="${success == '1'}"> 
 		     <span class="byline">Successfully deleted projects</span> 
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
 			value='Back' name="Back"></li>
 	</ul>
-		     </c:otherwise>
+          </c:when>
 		</c:choose>
 				<div id="dlgConfirm" title="Confirmation">
 			Are you sure?

@@ -12,13 +12,11 @@ public class UserValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
 		return arg0.isAssignableFrom(User.class);
 	}
 
 	@Override
 	public void validate(Object obj, Errors err) {
-		// TODO Auto-generated method stub
 		ValidationUtils.rejectIfEmptyOrWhitespace(err,"userName","user_userName_selection.required");
 		
 		User user = (User)obj;
