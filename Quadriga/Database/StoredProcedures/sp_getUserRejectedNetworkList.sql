@@ -1,21 +1,21 @@
 /*******************************************
-Name          : sp_getUserAssignedNetworkList
+Name          : sp_getUserRejectedNetworkList
 
 Description   : retrieves the network details
-				of a particular editor for approval and reject
+				of a rejected network 
 
 Called By     : UI (DBConnectionEditorManager.java)
 
 Create By     : Lohith Dwaraka
 
-Modified Date : 08/28/2013
+Modified Date : 09/03/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getUserAssignedNetworkList;
+DROP PROCEDURE IF EXISTS sp_getUserRejectedNetworkList;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getUserAssignedNetworkList
+CREATE PROCEDURE sp_getUserRejectedNetworkList
 (
   IN  inusername  VARCHAR(20),
  OUT errmsg    VARCHAR(255)
@@ -38,7 +38,7 @@ BEGIN
 	 select networkid,workspaceid,networkname,networkowner,status 
 	from tbl_networks where networkid IN (
 		select networkid from tbl_network_assigned where assigneduser = inusername
-	)and status = 'PENDING';
+	)and status = 'REJECTED';
 	
 	END IF;
 END$$

@@ -274,8 +274,8 @@ public class NetworkRestController {
 	
 	/**
 	 *  Rest interface for getting network list belonging to a workspace 
-	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/{workspaceid}/networks
-	 * http://localhost:8080/quadriga/rest/workspace/WS_23092339551502339/networks
+	 * http://<<URL>:<PORT>>/quadriga/rest/networkdetails/{networkid}
+	 * http://localhost:8080/quadriga/rest/networkdetails/NET_1huxp4w7p71o0
 	 * @param networkName
 	 * @param response
 	 * @param accept

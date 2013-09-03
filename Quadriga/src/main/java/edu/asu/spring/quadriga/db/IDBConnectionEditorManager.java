@@ -20,5 +20,11 @@ public interface IDBConnectionEditorManager {
 	public abstract String updateNetworkStatus(String networkId, String status)
 			throws QuadrigaStorageException;
 
+	public abstract List<INetwork> getRejectedNetworkOfUser(IUser user)
+			throws QuadrigaStorageException;
+
+	public abstract List<INetwork> getApprovedNetworkOfUser(IUser user)
+			throws QuadrigaStorageException;
+
 
 }

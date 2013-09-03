@@ -96,7 +96,7 @@ public class DictionaryListController {
 			String userId= principal.getName();
 			List<IDictionary> dictionaryList = null;
 			List<IDictionary> dictionaryCollabList = null;
-			logger.info("Username "+userId);
+			logger.debug("Username "+userId);
 			try {
 ;				dictionaryList = dictonaryManager.getDictionariesList(userId);
 				dictionaryCollabList=dictonaryManager.getDictionaryCollabOfUser(userId);
