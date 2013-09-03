@@ -64,14 +64,30 @@ public class EditingAssignUserManager {
 	@RequestMapping(value = "auth/editing/assignnetworktouser", method = RequestMethod.GET)
 	public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		List<INetwork> networkList=null;
+		List<INetwork> assignedNetworkList=null;
 		try{
-			networkList = editorManager.getAssignNetworkOfUser(user);
+			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
+		
+		List<INetwork> approvedNetworkList=null;
+		try{
+			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
+		
+		List<INetwork> rejectedNetworkList=null;
+		try{
+			rejectedNetworkList = editorManager.getRejectedNetworkOfUser(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
 
-		model.addAttribute("networkList", networkList);
+		model.addAttribute("AssignedNetworkList", assignedNetworkList);
+		model.addAttribute("ApprovedNetworkList", approvedNetworkList);
+		model.addAttribute("RejectedNetworkList", rejectedNetworkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/assignednetworks";
 	}

@@ -77,6 +77,32 @@ public class EditorManager implements IEditorManager {
 	}
 	
 	@Override
+	public  List<INetwork> getRejectedNetworkOfUser(IUser user)
+			throws QuadrigaStorageException{
+		List<INetwork> networkList = new ArrayList<INetwork>();
+
+		try{
+			networkList=dbConnect.getRejectedNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return networkList;
+	}
+	
+	@Override
+	public  List<INetwork> getApprovedNetworkOfUser(IUser user)
+			throws QuadrigaStorageException{
+		List<INetwork> networkList = new ArrayList<INetwork>();
+
+		try{
+			networkList=dbConnect.getApprovedNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return networkList;
+	}
+	
+	@Override
 	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		String msg = "";
 		try{
