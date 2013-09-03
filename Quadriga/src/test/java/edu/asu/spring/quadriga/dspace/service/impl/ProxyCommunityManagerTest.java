@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 
 /**
  * This class tests {@link ProxyCommunityManager}
@@ -68,7 +69,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllCommunities() throws NoSuchAlgorithmException {
+	public void testGetAllCommunities() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 
 		proxyCommunityManager.clearCompleteCache();
@@ -79,7 +80,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllCollections() throws NoSuchAlgorithmException {
+	public void testGetAllCollections() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 
 		//Get the collection list for the community
@@ -97,7 +98,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllItems() throws NoSuchAlgorithmException {
+	public void testGetAllItems() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
@@ -121,7 +122,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCollection() throws NoSuchAlgorithmException {
+	public void testGetCollection() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
@@ -151,7 +152,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCommunityName() throws NoSuchAlgorithmException {
+	public void testGetCommunityName() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community details
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 
@@ -161,7 +162,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCollectionName() throws NoSuchAlgorithmException {
+	public void testGetCollectionName() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
@@ -176,7 +177,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCommunityId() throws NoSuchAlgorithmException {
+	public void testGetCommunityId() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
@@ -189,7 +190,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetItemName() throws NoSuchAlgorithmException {
+	public void testGetItemName() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		proxyCommunityManager.clearCompleteCache();
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
@@ -209,7 +210,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetBitStream() throws NoSuchAlgorithmException {
+	public void testGetBitStream() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
@@ -232,7 +233,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetAllBitStreams() throws NoSuchAlgorithmException {
+	public void testGetAllBitStreams() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
@@ -258,7 +259,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetCommunity() throws NoSuchAlgorithmException {
+	public void testGetCommunity() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 
@@ -275,7 +276,7 @@ public class ProxyCommunityManagerTest {
 	}
 
 	@Test
-	public void testGetItem() throws NoSuchAlgorithmException {
+	public void testGetItem() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
 		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));

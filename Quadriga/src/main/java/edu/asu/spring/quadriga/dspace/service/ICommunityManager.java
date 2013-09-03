@@ -10,6 +10,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 
 /**
  * The interface to the CommunityManager which handles the request for 
@@ -30,8 +31,9 @@ public interface ICommunityManager {
 	 * @param sPassword				The corresponding dspace password of the user
 	 * @return						List of communities retrieved from Dspace.
 	 * @throws NoSuchAlgorithmException 
+	 * @throws QuadrigaAccessException 
 	 */
-	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException;
+	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException, QuadrigaAccessException;
 
 	/**
 	 * Get all the collections available for the given user. For the first call, this method makes a request to Dspace.
@@ -73,8 +75,9 @@ public interface ICommunityManager {
 	 * @param communityid				The id of the community to which the collection belongs to.
 	 * @return							The collection object for the given collection id.  Will be NULL if there no matching collection id was found.
 	 * @throws NoSuchAlgorithmException 
+	 * @throws QuadrigaAccessException 
 	 */
-	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword,String communityid) throws NoSuchAlgorithmException;
+	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword,String communityid) throws NoSuchAlgorithmException, QuadrigaAccessException;
 
 	/**
 	 * Get all items within a collection. The methods {@link #getAllCommunities(RestTemplate, Properties, String, String)} and {@link #getAllCollections(RestTemplate, Properties, String, String, String)} 
@@ -150,8 +153,9 @@ public interface ICommunityManager {
 	 * @param sPassword					The password of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @return							The community object for the corresponding community id. Will be NULL if there is no matching community id was found.
 	 * @throws NoSuchAlgorithmException 
+	 * @throws QuadrigaAccessException 
 	 */
-	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException;
+	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException, QuadrigaAccessException;
 
 	/**
 	 * Get the item object for the corresponding item id.

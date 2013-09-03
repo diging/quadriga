@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -17,6 +20,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
+import edu.asu.spring.quadriga.web.rest.DspaceRestController;
 
 /**
  * The class representation of the Collection got from Dspace repostiory. It also loads the dependent items within this collection.
@@ -41,8 +45,10 @@ public class Collection implements ICollection{
 	private String userName;
 	private String password;
 	private IDspaceKeys dspaceKeys;
-	
+
 	private IItemFactory itemFactory;
+	private static final Logger logger = LoggerFactory
+			.getLogger(DspaceRestController.class);
 
 	public Collection()
 	{
@@ -50,7 +56,7 @@ public class Collection implements ICollection{
 		this.isloaded = false;
 		this.itemFactory = new ItemFactory();
 	}
-	
+
 	/**
 	 * Initialize the required details to make a REST service call to Dspace
 	 * @param id				The id of the collection.
@@ -179,7 +185,7 @@ public class Collection implements ICollection{
 
 			this.items = Collections.synchronizedList(new ArrayList<IItem>());
 			IItem item = null;
-			
+
 			if(dspaceCollection.getItemsEntity() != null)
 			{
 				if(dspaceCollection.getItemsEntity().getItems() != null)
@@ -207,8 +213,22 @@ public class Collection implements ICollection{
 	 */
 	private String getCompleteUrlPath() throws NoSuchAlgorithmException
 	{
-		if(this.dspaceKeys == null)
+		if(this.dspaceKeys != null)
 		{
+			String stringToHash = dspaceProperties.getProperty("collection_url")+this.id+dspaceProperties.getProperty("xml")+dspaceKeys.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest());
+			digestKey = digestKey.substring(0, 8);
+
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("collection_url")+	this.id+
+					dspaceProperties.getProperty("xml")+dspaceProperties.getProperty("?")+dspaceProperties.getProperty("api_key")+
+					dspaceKeys.getPublicKey() +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+
+		}
+		else if(this.userName != null && this.password != null && !this.userName.equals("") && !this.password.equals(""))
+		{			
 			return dspaceProperties.getProperty("dspace_url")+
 					dspaceProperties.getProperty("collection_url")+	this.id+
 					dspaceProperties.getProperty("xml")+dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+
@@ -216,16 +236,9 @@ public class Collection implements ICollection{
 		}
 		else
 		{
-			String stringToHash = dspaceProperties.getProperty("collection_url")+this.id+dspaceProperties.getProperty("xml")+dspaceKeys.getPrivateKey();
-			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
-			messageDigest.update(stringToHash.getBytes());
-			String digestKey = bytesToHex(messageDigest.digest());
-			digestKey = digestKey.substring(0, 8);
-			
-			return dspaceProperties.getProperty("dspace_url")+
-					dspaceProperties.getProperty("collection_url")+	this.id+
-					dspaceProperties.getProperty("xml")+dspaceProperties.getProperty("?")+dspaceProperties.getProperty("api_key")+
-					dspaceKeys.getPublicKey() +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+			//No username+password and dspacekeys are used. So use public access
+			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("collection_url")+this.id+
+					dspaceProperties.getProperty("xml");
 		}
 	}
 
@@ -255,8 +268,12 @@ public class Collection implements ICollection{
 			{
 				this.copy(dspaceCollection);
 			}
+
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+		}
+		catch(HttpClientErrorException e){
+			logger.error("User "+userName+" tried to log in to dspace with wrong credentials !");
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -276,7 +293,7 @@ public class Collection implements ICollection{
 	public void setItems(List<IItem> items) {
 		this.items = items;
 	}
-	
+
 	@Override
 	public IItem getItem(String itemid)
 	{

@@ -34,6 +34,7 @@ import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
@@ -288,7 +289,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceCommunityListRequest() throws QuadrigaException {
+	public void testWorkspaceCommunityListRequest() throws QuadrigaException, QuadrigaAccessException {
 		//Handle null case for username, password and keys
 		listWSController.setDspaceUsername(null);
 		listWSController.setDspacePassword(null);
@@ -311,7 +312,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceCommunityRequest() throws QuadrigaException {
+	public void testWorkspaceCommunityRequest() throws QuadrigaException, QuadrigaAccessException {
 		//Handle null case for username, password and keys
 		listWSController.setDspaceUsername(null);
 		listWSController.setDspacePassword(null);
@@ -339,7 +340,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceItemListRequest() throws QuadrigaException {
+	public void testWorkspaceItemListRequest() throws QuadrigaException, QuadrigaAccessException {
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 
@@ -373,7 +374,7 @@ public class ListWSControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testWorkspaceBitStreamListRequest() throws QuadrigaException {
+	public void testWorkspaceBitStreamListRequest() throws QuadrigaException, QuadrigaAccessException {
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 
@@ -412,7 +413,7 @@ public class ListWSControllerTest {
 	}
 
 	@Test
-	public void testGetCollectionStatus() throws QuadrigaException {
+	public void testGetCollectionStatus() throws QuadrigaException, QuadrigaAccessException {
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 		//Load the community list
@@ -433,7 +434,7 @@ public class ListWSControllerTest {
 	}
 
 	@Test
-	public void testGetItemStatus() throws QuadrigaException{
+	public void testGetItemStatus() throws QuadrigaException, QuadrigaAccessException{
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 
@@ -468,7 +469,7 @@ public class ListWSControllerTest {
 	}
 
 	@Test
-	public void testGetBitStreamAccessStatus() throws QuadrigaException{
+	public void testGetBitStreamAccessStatus() throws QuadrigaException, QuadrigaAccessException{
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 
@@ -505,7 +506,7 @@ public class ListWSControllerTest {
 	}
 
 	@Test
-	public void testGetBitStreamStatus() throws QuadrigaException {
+	public void testGetBitStreamStatus() throws QuadrigaException, QuadrigaAccessException {
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 

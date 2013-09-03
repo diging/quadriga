@@ -7,10 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
@@ -23,6 +26,8 @@ import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.web.rest.DspaceRestController;
 
 /**
  * The purpose of the class is to implement proxy pattern for the community class
@@ -38,9 +43,12 @@ public class ProxyCommunityManager implements ICommunityManager {
 	private List<ICommunity> communities;
 	private List<ICollection> collections;
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(DspaceRestController.class);
+
 	@Autowired
 	private ICollectionFactory collectionFactory;
-	
+
 	/**
 	 * Used to generate the corresponding url necessary to access the community details
 	 * @return			Return the complete REST service url along with all the authentication information
@@ -48,7 +56,20 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 */
 	private String getCompleteUrlPath(Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password) throws NoSuchAlgorithmException
 	{
-		if(dspaceKeys == null)
+		if(dspaceKeys != null)
+		{
+			String stringToHash = dspaceProperties.getProperty("all_community_url") + dspaceKeys.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
+					dspaceProperties.getProperty("api_key")+dspaceKeys.getPublicKey()+
+					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+
+		}
+		else if(userName != null && password != null && !userName.equals("") && !password.equals(""))
 		{
 			return dspaceProperties.getProperty("dspace_url")+
 					dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
@@ -57,28 +78,32 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 		else
 		{
-			String stringToHash = dspaceProperties.getProperty("all_community_url") + dspaceKeys.getPrivateKey();
-			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
-			messageDigest.update(stringToHash.getBytes());
-			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
-			
-			return dspaceProperties.getProperty("dspace_url")+
-					dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
-					dspaceProperties.getProperty("api_key")+dspaceKeys.getPublicKey()+
-					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+			//No username+password and dspacekeys are used. So use public access
+			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("all_community_url");
 		}
 	}
 
-	
+
 	/**
 	 * {@inheritDoc}
+	 * @throws QuadrigaAccessException 
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException {
+	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException, QuadrigaAccessException {
 		if(communities == null)
 		{
 			String sRestServicePath = getCompleteUrlPath(dspaceProperties, dspaceKeys, sUserName, sPassword);
-			IDspaceCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
+			IDspaceCommunities dsapceCommunities = null;
+
+			try
+			{
+				dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
+			}
+			catch(HttpClientErrorException e)
+			{
+				logger.error("User "+sUserName+" tried to log in to dspace with wrong credentials !");
+				throw new QuadrigaAccessException("Wrong Dspace Login Credentials !");
+			}
 
 			if(dsapceCommunities.getCommunities().size()>0)
 			{
@@ -160,7 +185,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword, String communityid) throws NoSuchAlgorithmException
+	public ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword, String communityid) throws NoSuchAlgorithmException, QuadrigaAccessException
 	{
 		if(fromCache)
 		{
@@ -345,10 +370,9 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 	/**
 	 * {@inheritDoc}
- 
 	 */
 	@Override
-	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException
+	public ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException, QuadrigaAccessException
 	{		
 		//Get the community data from the cache
 		if(fromCache)
@@ -418,15 +442,15 @@ public class ProxyCommunityManager implements ICommunityManager {
 		this.communities = null;
 		this.collections = null;		
 	}
-	
+
 	private String bytesToHex(byte[] b) {
-	      char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
-	                         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-	      StringBuffer buf = new StringBuffer();
-	      for (int j=0; j<b.length; j++) {
-	         buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
-	         buf.append(hexDigit[b[j] & 0x0f]);
-	      }
-	      return buf.toString();
-	   }
+		char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+				'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+		StringBuffer buf = new StringBuffer();
+		for (int j=0; j<b.length; j++) {
+			buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
+			buf.append(hexDigit[b[j] & 0x0f]);
+		}
+		return buf.toString();
+	}
 }
