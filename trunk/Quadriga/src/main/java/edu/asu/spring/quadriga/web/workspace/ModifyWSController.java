@@ -120,14 +120,13 @@ public class ModifyWSController {
 		ModelAndView model;
 		IWorkSpace workspace;
 		String userName;
-
 		// fetch the workspace details
 		userName = principal.getName();
-
-			workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
-			model = new ModelAndView("auth/workbench/workspace/updateworkspace");
-			model.getModelMap().put("workspace", workspace);
-			return model;
+		workspace = wsManager.getWorkspaceDetails(workspaceid, userName);
+		model = new ModelAndView("auth/workbench/workspace/updateworkspace");
+		model.getModelMap().put("workspace", workspace);
+		model.getModelMap().put("success", 0);
+		return model;
 	}
 
 	/**
@@ -149,8 +148,8 @@ public class ModifyWSController {
 		ModelAndView model;
 		IUser wsOwner = null;
 		String userName = principal.getName();
-
-
+		model = new ModelAndView(
+				"auth/workbench/workspace/updateworkspace");
 			wsOwner = userManager.getUserDetails(userName);
 
 			// set the workspace owner
@@ -160,14 +159,11 @@ public class ModifyWSController {
 			workspace.setId(workspaceid);
 
 			if (result.hasErrors()) {
-				model = new ModelAndView(
-						"auth/workbench/workspace/updateworkspace");
 				model.getModelMap().put("workspace", workspace);
+				model.getModelMap().put("success", 0);
 				return model;
 			} else {
 				modifyWSManager.updateWorkspaceRequest(workspace);
-				model = new ModelAndView(
-						"auth/workbench/workspace/updateworkspacestatus");
 				model.getModelMap().put("success", 1);
 				return model;
 			}

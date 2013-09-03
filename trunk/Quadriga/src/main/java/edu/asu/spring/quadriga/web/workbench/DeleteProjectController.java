@@ -15,16 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IModifyProjectFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.ProjectFormValidator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProject;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProjectForm;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyProjectFormManager;
 
 @Controller
 public class DeleteProjectController 
@@ -37,13 +36,13 @@ public class DeleteProjectController
 	IModifyProjectManager projectManager;
 	
 	@Autowired
-	IRetrieveProjectManager retrieveProjectManager;
-	
-	@Autowired
 	ICheckProjectSecurity projectSecurity;
 	
 	@Autowired
 	ProjectFormValidator validator;
+	
+	@Autowired
+	ModifyProjectFormManager projectFormManager;
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder validateBinder) throws Exception 
@@ -65,28 +64,18 @@ public class DeleteProjectController
 	{
 		ModelAndView model;
 		String userName;
-		List<IProject> projectList;
 		ModifyProjectForm projectForm;
-		ModifyProject project;
-		List<ModifyProject> deleteProjectList = new ArrayList<ModifyProject>();
+		List<ModifyProject> deleteProjectList;
 		
 		//create a model
 		model = new ModelAndView("auth/workbench/deleteproject");
 		userName = principal.getName();
 		
-		projectList = retrieveProjectManager.getProjectList(userName); 
-		
-		for(IProject iProject : projectList)
-		{
-			project = new ModifyProject();
-			project.setInternalid(iProject.getInternalid());
-			project.setName(iProject.getName());
-			project.setDescription(iProject.getDescription());
-			deleteProjectList.add(project);
-		}
-		
 		//create a project form
 		projectForm = projectFormFactory.createModifyProjectForm();
+		
+		deleteProjectList = projectFormManager.getUserProjectList(userName);
+		
 		projectForm.setProjectList(deleteProjectList);
 		
 		//adding the model
@@ -111,10 +100,9 @@ public class DeleteProjectController
 	{
 		String projIdList = "";
 		String userName;
+		String projInternalId;
 		List<ModifyProject> deleteProjectList;
 		ModelAndView model;
-		List<IProject> projectList;
-		ModifyProject project;
 		
 		//create a model view
 		model = new ModelAndView("auth/workbench/deleteproject");
@@ -125,22 +113,19 @@ public class DeleteProjectController
 		
 		if(result.hasErrors())
 		{
-			projectList = retrieveProjectManager.getProjectList(userName); 
+			deleteProjectList = projectFormManager.getUserProjectList(userName);
 			
-			for(IProject iProject : projectList)
-			{
-				project = new ModifyProject();
-				project.setInternalid(iProject.getInternalid());
-				project.setName(iProject.getName());
-				project.setDescription(iProject.getDescription());
-				deleteProjectList.add(project);
-			}
-			
-			//create a project form
 			projectForm.setProjectList(deleteProjectList);
+			
+			System.out.println("Error :" + result.getErrorCount());
+			System.out.println("Field Error :" + result.getErrorCount());
+			System.out.println("Field Error :" + result.getFieldError());
 			
 			//add a variable to display the entire page
 			model.getModelMap().put("success", 0);
+			
+			//add a error variable to display the error message
+			model.getModelMap().put("error", 1);
 			
 			//add the model object
 			model.getModelMap().put("projectform",projectForm);
@@ -152,7 +137,13 @@ public class DeleteProjectController
 			
 			for(ModifyProject delProject : deleteProjectList)
 			{
-				projIdList = projIdList + "," + delProject.getInternalid();
+				//fetch the internal id
+				projInternalId = delProject.getInternalid();
+				
+				if(projInternalId !=null)
+				{
+				  projIdList = projIdList + "," + projInternalId;
+				}
 			}
 			
 			projIdList = projIdList.substring(1);

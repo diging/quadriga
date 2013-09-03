@@ -15,7 +15,6 @@ public class CollaboratorFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
 		return arg0.isAssignableFrom(ModifyCollaboratorForm.class);
 	}
 
@@ -24,7 +23,6 @@ public class CollaboratorFormValidator implements Validator {
 		
 		List<ModifyCollaborator> collaboratorList;
 		
-		// TODO Auto-generated method stub
         ModifyCollaboratorForm collaboratorForm = (ModifyCollaboratorForm)obj;
         collaboratorList = collaboratorForm.getCollaborators();
         

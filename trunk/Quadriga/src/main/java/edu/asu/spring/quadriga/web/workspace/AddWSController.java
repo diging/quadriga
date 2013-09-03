@@ -72,6 +72,7 @@ public class AddWSController
 			model = new ModelAndView("auth/workbench/workspace/addworkspace");
 			model.getModelMap().put("workspace", workspaceFactory.createWorkspaceObject());
 			model.getModelMap().put("wsprojectid", projectid);
+			model.getModelMap().put("success", 0);
 			return model;
 	}
 
@@ -94,18 +95,18 @@ public class AddWSController
 		ModelAndView model;
 		String userName = principal.getName();
 		IUser user;
+		model = new ModelAndView("auth/workbench/workspace/addworkspace");
 			if(result.hasErrors())
 			{
-				model = new ModelAndView("auth/workbench/workspace/addworkspace");
 				model.getModelMap().put("workspace", workspace);
 				model.getModelMap().put("wsprojectid", projectid);
+				model.getModelMap().put("success", 0);
 				return model;
 			}
 			else
 			{
 			user = userManager.getUserDetails(userName);
 			workspace.setOwner(user);
-			model = new ModelAndView("auth/workbench/workspace/addworkspacestatus");
 			modifyWSManger.addWorkSpaceRequest(workspace, projectid);
 			model.getModelMap().put("success", 1);
 			model.getModelMap().put("wsprojectid", projectid);
