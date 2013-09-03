@@ -42,7 +42,7 @@ BEGIN
      -- retrieve the workspace owner editor details
 	 select 1 from tbl_project where projectid in (
 	 select projectid from tbl_project_workspace where workspaceid in (
-	 select workspaceid from tbl_workspace_editor  where workspaceid =  and owner =inowner)
+	 select workspaceid from tbl_workspace_editor  where workspaceid = inworkspaceid  and owner =inowner)
 	
 	 UNION DISTINCT
 	
