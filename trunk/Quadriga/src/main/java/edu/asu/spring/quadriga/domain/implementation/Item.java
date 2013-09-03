@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
@@ -19,6 +22,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItems;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceItems;
+import edu.asu.spring.quadriga.web.rest.DspaceRestController;
 
 /**
  * The class representation of the Item got from Dspace repostiory. When needed it also loads the bitstreams from dspace.
@@ -42,7 +46,10 @@ public class Item implements IItem{
 	private IDspaceKeys dspaceKeys;
 
 	private IBitStreamFactory bitstreamFactory;
-	
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(DspaceRestController.class);
+
 	public Item()
 	{
 		this.bitstreamFactory = new BitStreamFactory();
@@ -192,14 +199,7 @@ public class Item implements IItem{
 	 */
 	private String getCompleteUrlPath() throws NoSuchAlgorithmException
 	{
-		if(this.dspaceKeys == null)
-		{
-			return dspaceProperties.getProperty("dspace_url")+
-					dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
-					dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+this.userName+
-					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
-		}
-		else
+		if(this.dspaceKeys != null)
 		{
 			String stringToHash = dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+dspaceKeys.getPrivateKey();
 			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
@@ -210,6 +210,19 @@ public class Item implements IItem{
 					dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
 					dspaceProperties.getProperty("?")+dspaceProperties.getProperty("api_key")+
 					dspaceKeys.getPublicKey() +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+
+		}
+		else if(this.userName != null && this.password != null && !this.userName.equals("") && !this.password.equals(""))
+		{			
+			return dspaceProperties.getProperty("dspace_url")+
+					dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
+					dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+this.userName+
+					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
+		}
+		else
+		{
+			//No username+password and dspacekeys are used. So use public access
+			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml");
 		}
 	}
 
@@ -269,6 +282,9 @@ public class Item implements IItem{
 			}
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+		}
+		catch(HttpClientErrorException e) {
+			logger.error("User "+userName+" tried to log in to dspace with wrong credentials !");
 		}
 	}
 

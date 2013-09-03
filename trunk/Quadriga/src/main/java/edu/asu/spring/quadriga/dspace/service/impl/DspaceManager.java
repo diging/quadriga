@@ -120,10 +120,9 @@ public class DspaceManager implements IDspaceManager{
 
 	/**
 	 * {@inheritDoc}
-	 * 
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException {
+	public List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException, QuadrigaAccessException {
 
 		try {
 			return getProxyCommunityManager().getAllCommunities(getRestTemplate(), getDspaceProperties(), dspaceKeys, sUserName, sPassword);
@@ -161,10 +160,11 @@ public class DspaceManager implements IDspaceManager{
 
 	/**
 	 * {@inheritDoc}
+	 * @throws QuadrigaAccessException 
 	 * 
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId) throws QuadrigaException
+	public ICollection getCollection(String sCollectionId) throws QuadrigaException, QuadrigaAccessException
 	{
 		try {
 			return getProxyCommunityManager().getCollection(sCollectionId,true,null,null,null,null,null,null);
@@ -221,10 +221,11 @@ public class DspaceManager implements IDspaceManager{
 
 	/**
 	 * {@inheritDoc}
+	 * @throws QuadrigaAccessException 
 	 * 
 	 */
 	@Override
-	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
+	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException
 	{
 
 		try
@@ -424,28 +425,12 @@ public class DspaceManager implements IDspaceManager{
 
 	/**
 	 * {@inheritDoc}
+	 * @throws QuadrigaAccessException 
 	 */
 	@Override
-	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException
+	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException, QuadrigaAccessException
 	{
 		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
-
-		//User tries to access workspace without Dspace Login Credentials
-		if(dspaceKeys == null && (sUserName == null || sPassword == null))
-		{
-			IBitStream restrictedBitStream = bitstreamFactory.createBitStreamObject();
-			restrictedBitStream.setCommunityName(dspaceProperties.getProperty("need_authentication"));
-			restrictedBitStream.setCollectionName(dspaceProperties.getProperty("need_authentication"));
-			restrictedBitStream.setItemName(dspaceProperties.getProperty("need_authentication"));
-			restrictedBitStream.setName(dspaceProperties.getProperty("need_authentication"));
-
-			//Created Empty Bitstream data
-			for(int i=0;i<bitstreams.size();i++)
-			{
-				checkedBitStreams.add(restrictedBitStream);
-			}
-			return checkedBitStreams;
-		}
 
 		IBitStream restrictedBitStream = bitstreamFactory.createBitStreamObject();
 		restrictedBitStream.setCommunityName(dspaceProperties.getProperty("restricted_community"));
@@ -541,7 +526,18 @@ public class DspaceManager implements IDspaceManager{
 			{
 				checkedBitStreams.add(restrictedBitStream);
 			}
-		}		
+		}
+		catch(QuadrigaAccessException qe)
+		{
+			/* Dspace can't be accessed using the supplied public and private key.
+			 * This exception happens when long random strings are provided for public/private keys or for wrong username and password
+			 */
+			checkedBitStreams.clear();
+			for(int i=0;i<bitstreams.size();i++)
+			{
+				checkedBitStreams.add(restrictedBitStream);
+			}
+		}
 		return checkedBitStreams;		
 	}
 

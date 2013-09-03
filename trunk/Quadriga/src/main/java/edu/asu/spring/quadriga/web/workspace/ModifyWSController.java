@@ -33,6 +33,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -181,9 +182,10 @@ public class ModifyWSController {
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaException 
 	 * @throws QuadrigaAccessException 
+	 * @throws RestException 
 	 */
 	@RequestMapping(value = "auth/workbench/workspace/assignEditorRoleToOwner/{workspaceid}", method = RequestMethod.GET)
-	public String assignEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException{
+	public String assignEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException, RestException{
 		IUser user = userManager.getUserDetails(principal.getName());
 		String userName =user.getUserName();
 		String msg=modifyWSManager.assignEditorRoleToOwner(workspaceId, userName);
@@ -254,9 +256,10 @@ public class ModifyWSController {
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaException 
 	 * @throws QuadrigaAccessException 
+	 * @throws RestException 
 	 */
 	@RequestMapping(value = "auth/workbench/workspace/deleteEditorRoleToOwner/{workspaceid}", method = RequestMethod.GET)
-	public String deleteEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException{
+	public String deleteEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException, RestException{
 		IUser user = userManager.getUserDetails(principal.getName());
 		String userName =user.getUserName();
 		String msg=modifyWSManager.deleteEditorRoleToOwner(workspaceId, userName);

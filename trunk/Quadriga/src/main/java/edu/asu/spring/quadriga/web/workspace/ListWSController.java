@@ -72,6 +72,7 @@ public class ListWSController
 
 	private String dspaceUsername;
 	private String dspacePassword;
+	private boolean publicAccess;
 	private IDspaceKeys dspaceKeys;
 
 	@Autowired
@@ -217,6 +218,7 @@ public class ListWSController
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 * @throws QuadrigaException 
+ 
 	 */
 	@RequestMapping(value="auth/workbench/workspace/workspacedetails/{workspaceid}", method = RequestMethod.GET)
 	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
@@ -248,7 +250,7 @@ public class ListWSController
 		{
 			model.addAttribute("dspaceKeys", "true");
 		}
-		else if((this.getDspaceUsername() != null && this.getDspacePassword() != null))
+		else if((this.getDspaceUsername() != null && this.getDspacePassword() != null) || (this.publicAccess = true))
 		{
 			model.addAttribute("dspaceLogin", "true");
 		}
@@ -304,11 +306,13 @@ public class ListWSController
 			}
 			this.setDspaceUsername(dspaceUsername);
 			this.setDspacePassword(dspacePassword);
+			this.publicAccess = false;
 		}
 		else
 		{
-			this.setDspaceUsername("");
-			this.setDspacePassword("");
+			this.setDspaceUsername(null);
+			this.setDspacePassword(null);
+			this.publicAccess = true;
 		}
 
 
@@ -341,11 +345,13 @@ public class ListWSController
 			}
 			this.setDspaceUsername(dspaceUsername);
 			this.setDspacePassword(dspacePassword);
+			this.publicAccess = false;
 		}
 		else
 		{
-			this.setDspaceUsername("");
-			this.setDspacePassword("");
+			this.setDspaceUsername(null);
+			this.setDspacePassword(null);
+			this.publicAccess = true;
 		}
 
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
@@ -379,11 +385,13 @@ public class ListWSController
 
 			this.setDspaceUsername(dspaceUsername);
 			this.setDspacePassword(dspacePassword);
+			this.publicAccess = false;
 		}
 		else
 		{
-			this.setDspaceUsername("");
-			this.setDspacePassword("");
+			this.setDspaceUsername(null);
+			this.setDspacePassword(null);
+			this.publicAccess = true;
 		}
 
 		dspaceManager.clearCompleteCache();
@@ -398,14 +406,10 @@ public class ListWSController
 	 * @return Return to the dspace communities page of Quadriga
 	 * @author Ram Kumar Kumaresan
 	 * @throws QuadrigaException 
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/communities", method = RequestMethod.GET)
-	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaException {
-
-		if(this.getDspaceKeys() == null && (this.getDspaceUsername() == null || this.getDspacePassword() == null))
-		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-		}
+	public String workspaceCommunityListRequest(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal) throws QuadrigaException, QuadrigaAccessException {
 
 		List<ICommunity> communities = dspaceManager.getAllCommunities(this.getDspaceKeys(), this.getDspaceUsername(),this.getDspacePassword());
 
@@ -425,11 +429,6 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/{communityId}", method = RequestMethod.GET)
 	public String workspaceCommunityRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("communityId") String communityId, ModelMap model, Principal principal) {
-
-		if(this.getDspaceKeys() == null && (this.getDspaceUsername() == null || this.getDspacePassword() == null))
-		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-		}
 
 		String communityName = dspaceManager.getCommunityName(communityId);
 
@@ -458,11 +457,6 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/{collectionId}", method = RequestMethod.GET)
 	public String workspaceItemListRequest(@PathVariable("workspaceId") String workspaceId, @PathVariable("collectionId") String collectionId, ModelMap model, Principal principal) {
-
-		if(this.getDspaceKeys() == null && (this.getDspaceUsername() == null || this.getDspacePassword() == null))
-		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-		}
 
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
@@ -510,12 +504,6 @@ public class ListWSController
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/community/collection/item", method = RequestMethod.GET)
 	public String workspaceBitStreamListRequest(@PathVariable("workspaceId") String workspaceId,@RequestParam("itemId") String itemId,@RequestParam("collectionId") String collectionId, ModelMap model, Principal principal){
-
-		if(this.getDspaceKeys() == null && (this.getDspaceUsername() == null || this.getDspacePassword() == null))
-		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-		}
-
 
 		String communityId = dspaceManager.getCommunityId(collectionId);
 		//No such collection has been fetched. The user is trying to access the item page directly
@@ -571,9 +559,10 @@ public class ListWSController
 	 * @return					Returns the collection name if it is loaded from Dspace. Else returns 'Loading...'
 	 * @author 					Ram Kumar Kumaresan
 	 * @throws QuadrigaException 
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/collectionstatus/{collectionid}", method = RequestMethod.GET)
-	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) throws QuadrigaException {
+	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) throws QuadrigaException, QuadrigaAccessException {
 
 		//Can't find collection in any of the communities
 		if(dspaceManager.getCommunityId(collectionid) == null)
@@ -594,7 +583,7 @@ public class ListWSController
 	}
 
 	@RequestMapping(value = "/auth/workbench/workspace/itemstatus/{collectionid}/{itemid}", method = RequestMethod.GET)
-	public @ResponseBody String getItemStatus(@PathVariable("collectionid") String collectionid, @PathVariable("itemid") String itemid) throws QuadrigaException {
+	public @ResponseBody String getItemStatus(@PathVariable("collectionid") String collectionid, @PathVariable("itemid") String itemid) throws QuadrigaException, QuadrigaAccessException {
 
 		//Can't find collection in any of the communities
 		if(dspaceManager.getCommunityId(collectionid) == null)
@@ -635,9 +624,10 @@ public class ListWSController
 	 * @return						The bitstream name if it is loaded. Else Loading status. If the user does not have access to the bitstream
 	 * 								it returns 'No Access to File'
 	 * @throws QuadrigaException	Thrown when any unexpected exceptions happens when communicating with Dspace.
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamaccessstatus", method = RequestMethod.GET)
-	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid, @RequestParam("itemid") String itemid, @RequestParam("collectionid") String collectionid) throws QuadrigaException {
+	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid, @RequestParam("itemid") String itemid, @RequestParam("collectionid") String collectionid) throws QuadrigaException, QuadrigaAccessException {
 
 		//Can't find collection in any of the communities
 		if(dspaceManager.getCommunityId(collectionid) == null)
@@ -721,14 +711,11 @@ public class ListWSController
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
 	 * @author 								Ram Kumar Kumaresan
 	 * @throws QuadrigaException 
+	 * @throws QuadrigaAccessException 
 	 */
 	//TODO: @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/addbitstreams", method = RequestMethod.POST)
-	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException{
-		if(this.getDspaceKeys() == null && (this.getDspaceUsername() == null || this.getDspacePassword() == null))
-		{
-			return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-		}
+	public String addBitStreamsToWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="communityid") String communityId,@RequestParam(value="collectionid") String collectionId,@RequestParam(value="itemid") String itemId,@RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException{
 
 		dspaceManager.addBitStreamsToWorkspace(workspaceId, communityId, collectionId, itemId, bitstreamids, principal.getName());
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
@@ -744,9 +731,10 @@ public class ListWSController
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
 	 * @author 								Ram Kumar Kumaresan
 	 * @throws QuadrigaException 
+	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/deletebitstreams", method = RequestMethod.POST)
-	public String deleteBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException{
+	public String deleteBitStreamsFromWorkspace(@PathVariable("workspaceId") String workspaceId, @RequestParam(value="bitstreamids") String[] bitstreamids, ModelMap model, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException{
 
 		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceId,principal.getName());
 		//Check bitstream access in dspace. 
