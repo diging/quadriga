@@ -46,7 +46,7 @@
 						}
 						else
 						{
-							data = '<img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> '+data;
+							data = '<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> '+data;
 						}
 						$('#bitstream_' + bitstreamid[1]).html(data);						
 					});//End of ajax callback
@@ -99,7 +99,7 @@
 			return $
 					.ajax({
 						type : 'GET',
-						url : '/quadriga/auth/workbench/workspace/bitstreamstatus?collectionId=${collectionId}&itemId=${itemId}&bitstreamId='
+						url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/bitstreamstatus?collectionId=${collectionId}&itemId=${itemId}&bitstreamId='
 								+ bitstreamid,
 						error : function(jqXHR, textStatus, errorThrown) {
 							$('#collection_' + collectionid)
@@ -139,18 +139,18 @@
 		    })
 		})
 	</script>
-				<a href="/quadriga/auth/workbench/workspace/workspacedetails/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
-				<a href="/quadriga/auth/workbench/workspace/${workspaceId}/communities" style="text-decoration: underline;">Communities</a> »
-				<a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
-				<a href="/quadriga/auth/workbench/workspace/${workspaceId}/community/collection/${collectionId}"  style="text-decoration: underline;"><c:out value="${collectionName}"></c:out></a> »
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceId}"  style="text-decoration: underline;">Workspace</a> »
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/communities" style="text-decoration: underline;">Communities</a> »
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/community/${communityId}"  style="text-decoration: underline;"><c:out value="${communityName}"></c:out></a> »
+				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/community/collection/${collectionId}"  style="text-decoration: underline;"><c:out value="${collectionName}"></c:out></a> »
 				<c:out value="${itemName}"></c:out><br />			
 			
 		<c:choose>
 			<c:when test="${not empty bitList}">
-			<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspaceId}/addbitstreams?communityid=${communityId}&collectionid=${collectionId}&itemid=${itemId}">
+			<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceId}/addbitstreams?communityid=${communityId}&collectionid=${collectionId}&itemid=${itemId}">
 			<span class="byline">Select files to add to workspace.</span>
 				<c:forEach var="bitstream" items="${bitList}">
-				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}">${bitstream.name}</c:when><c:otherwise><img src="/quadriga/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
+				<div id='bitstream_<c:out value="${bitstream.id}" />'><c:choose><c:when test="${not empty bitstream.name}"><input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}">${bitstream.name}</c:when><c:otherwise><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/images/ajax-loader.gif" width="20" height="20" /> Loading...</c:otherwise></c:choose></div>
 				</c:forEach><br>
 				<input type="submit" onclick="submitClick();" value="Add to Workspace" />
 				<input type="submit" class="checkall" value="check all" />

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
@@ -103,6 +104,11 @@ public class ProxyCommunityManager implements ICommunityManager {
 			{
 				logger.error("User "+sUserName+" tried to log in to dspace with wrong credentials !");
 				throw new QuadrigaAccessException("Wrong Dspace Login Credentials !");
+			}
+			catch(HttpServerErrorException e)
+			{
+				logger.info("The dspace server is down !");
+				throw new QuadrigaAccessException("The dspace server is down ! Please check back later.");
 			}
 
 			if(dsapceCommunities.getCommunities().size()>0)

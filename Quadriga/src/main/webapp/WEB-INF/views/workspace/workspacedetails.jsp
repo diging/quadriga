@@ -219,7 +219,7 @@
 		return $
 				.ajax({
 					type : 'GET',
-					url : '/quadriga/auth/workbench/workspace/collectionstatus/'
+					url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/collectionstatus/'
 							+ collectionid,
 					error : function(jqXHR, textStatus, errorThrown) {
 						$('#collection_' + collectionid)
@@ -236,7 +236,7 @@
 		return $
 				.ajax({
 					type : 'GET',
-					url : '/quadriga/auth/workbench/workspace/itemstatus/'
+					url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/itemstatus/'
 							+ collectionid+'/'+itemid,
 					error : function(jqXHR, textStatus, errorThrown) {
 						$('#item_' + collectionid + "_" + itemid)
@@ -253,7 +253,7 @@
 		return $
 				.ajax({
 					type : 'GET',
-					url : '/quadriga/auth/workbench/workspace/bitstreamaccessstatus?collectionid='+collectionid+'&itemid='+itemid+'&bitstreamid='+bitstreamid,
+					url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/bitstreamaccessstatus?collectionid='+collectionid+'&itemid='+itemid+'&bitstreamid='+bitstreamid,
 					error : function(jqXHR, textStatus, errorThrown) {
 						$('#bitstream_' + collectionid + "_" + itemid + "_" + bitstreamid)
 								.html(
@@ -377,13 +377,11 @@
 
 <c:choose><c:when test="${empty dspaceKeys}">
 <!-- Dspace Login popup -->
-<c:choose>
-<c:when test="${not empty dspaceLogin}">
 <script>
 $(document).ready(function() {
 
 $('a.login-window').click(function() {
-    location.href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities";        
+    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/communities";        
 });
 
 });
@@ -394,33 +392,7 @@ $('a.login-window').click(function() {
 $(document).ready(function() {
 
 $('a.login-window').click(function() {
-	$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/adddspacelogin');
-    $( "#login-box" ).dialog( "open" );	        
-});
-
-});
-
-</script>
-
-<c:choose><c:when test="${not empty workspacedetails.bitstreams}"><script>
-$(document).ready(function() {
-	
-$('a.addlogin-window').click(function() {
-	$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/adddsapceauthentication');
-    $( "#login-box" ).dialog( "open" );	        
-});
-
-});
-</script></c:when></c:choose>
-</c:otherwise>
-</c:choose>
-</c:when>
-<c:otherwise>
-<script>
-$(document).ready(function() {
-
-$('a.login-window').click(function() {
-    location.href="/quadriga/auth/workbench/workspace/${workspacedetails.id}/communities";        
+    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/communities";        
 });
 
 });
@@ -430,12 +402,8 @@ $('a.login-window').click(function() {
 
 <a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
 <c:choose><c:when test="${empty dspaceKeys}">
-<c:choose>
-<c:when test="${not empty dspaceLogin}">
 <!-- Allow the user to change the dspace login credentials -->
 <a href="#change-login" class="change-login">Change Dspace Login</a>
-</c:when>
-</c:choose>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
 <form id="dspaceLogin" method="post" class="signin">
 <fieldset class="textbox">
@@ -448,7 +416,7 @@ $('a.login-window').click(function() {
     </fieldset>
     <label><input type="checkbox" name="dspacePublicAccess" id="dspacePublicAccess" value="public" /><font size="2">Use Public Access</font></label>
 </form>
-<font size="1">We recommend setting up Dspace Access keys <a href="/quadriga/auth/workbench/keys">here</a>. Its more secure !</font>
+<font size="1">We recommend setting up Dspace Access keys <a href="${pageContext.servletContext.contextPath}/auth/workbench/keys">here</a>. Its more secure !</font>
 </div>
 <script>
 $(document).ready(function(){
@@ -487,7 +455,7 @@ $(document).ready(function(){
 	
 	
 	$('a.change-login').click(function() {
-		$('#dspaceLogin').attr('action','/quadriga/auth/workbench/workspace/${workspacedetails.id}/changedspacelogin');
+		$('#dspaceLogin').attr('action','${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/changedspacelogin');
 	    $( "#login-box" ).dialog( "open" );
 	});
 })
@@ -498,9 +466,9 @@ $(document).ready(function(){
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
 	
-	<form id="bitstream" method="POST" action="/quadriga/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
+	<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
-	<c:choose><c:when test="${empty dspaceKeys}"><c:choose><c:when test="${empty dspaceLogin}"><a href="#login-box" class="addlogin-window">Add Authentication</a></c:when></c:choose></c:when></c:choose></font> 
+	<c:choose><c:when test="${empty dspaceKeys}"></c:when></c:choose></font> 
 		<br>
 		<table class="display dataTable" width="100%">
 			<thead>
@@ -518,7 +486,7 @@ $(document).ready(function(){
 						<td>
     						<div id='checkbox_<c:out value="${bitstream.id}"/>' class='checkbox_<c:out value="${bitstream.id}"/>'>
         						<c:choose>
-            					<c:when test="${not((bitstream.name == 'No Access to File') or (bitstream.name == 'Need Dspace Authentication')) }">
+            					<c:when test="${not((bitstream.name == 'No Access to File') or (bitstream.name == 'Wrong Dspace Authentication')) }">
                 					<c:choose>
 	                    				<c:when test="${not(bitstream.name == 'Checking BitStream Access...')}">
                         					<input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}" />

@@ -10,6 +10,7 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -274,6 +275,10 @@ public class Collection implements ICollection{
 		}
 		catch(HttpClientErrorException e){
 			logger.error("User "+userName+" tried to log in to dspace with wrong credentials !");
+		}
+		catch(HttpServerErrorException e)
+		{
+			logger.info("The dspace server is down !");
 		}
 		catch(Exception e){
 			e.printStackTrace();

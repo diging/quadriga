@@ -34,7 +34,6 @@ import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
@@ -190,67 +189,6 @@ public class ListWSControllerTest {
 		listWSController.setDspaceKeys(dspaceKeys);
 	}
 
-	@Test
-	public void testAddFilesDspaceAuthentication() {
-		//Setup username and password
-		mock.removeAllParameters();
-		mock.addParameter("username", "test");
-		mock.addParameter("password", "test");
-		mock.removeParameter("dspacePublicAccess");
-		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.addFilesDspaceAuthentication("w1", mock, null, null));
-
-		//Use public access
-		mock.addParameter("dspacePublicAccess", "public");
-		mock.removeParameter("username");
-		mock.removeParameter("password");
-		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.addFilesDspaceAuthentication("w1", mock, null, null));
-
-		//Handle empty username and password
-		mock.removeParameter("dspacePublicAccess");
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addFilesDspaceAuthentication("w1", mock, null, null));
-
-		//Reset the values
-		mock.removeAllParameters();
-		mock.addParameter("username", "test");
-		mock.addParameter("password", "test");
-	}
-
-
-	@Test
-	public void testAddDspaceAuthentication()
-	{
-		//Setup username and password
-		mock.removeAllParameters();
-		mock.addParameter("username", "test");
-		mock.addParameter("password", "test");
-		mock.removeParameter("dspacePublicAccess");
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addDspaceAuthentication("w1", mock, null, null));
-		assertEquals("test", listWSController.getDspaceUsername());
-		assertEquals("test", listWSController.getDspacePassword());
-
-		//Use public access
-		mock.addParameter("dspacePublicAccess", "public");
-		mock.removeParameter("username");
-		mock.removeParameter("password");
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addDspaceAuthentication("w1", mock, null, null));
-		assertEquals("", listWSController.getDspaceUsername());
-		assertEquals("", listWSController.getDspacePassword());
-
-		//Handle empty username and password
-		mock.removeParameter("dspacePublicAccess");
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.addDspaceAuthentication("w1", mock, null, null));
-		//Values should not have changed
-		assertEquals("", listWSController.getDspaceUsername());
-		assertEquals("", listWSController.getDspacePassword());
-
-		//Reset the values
-		mock.removeAllParameters();
-		mock.addParameter("username", "test");
-		mock.addParameter("password", "test");
-		listWSController.setDspaceUsername("test");
-		listWSController.setDspacePassword("test");
-
-	}
 
 	@Test
 	public void testChangeDspaceAuthentication() {

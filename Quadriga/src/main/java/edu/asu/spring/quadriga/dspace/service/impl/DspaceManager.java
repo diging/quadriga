@@ -58,7 +58,7 @@ public class DspaceManager implements IDspaceManager{
 
 	@Autowired
 	private IDBConnectionDspaceManager dbconnectionManager;
-	
+
 	@Autowired
 	private IBitStreamFactory bitstreamFactory;
 
@@ -437,7 +437,7 @@ public class DspaceManager implements IDspaceManager{
 		restrictedBitStream.setCollectionName(dspaceProperties.getProperty("restricted_collection"));
 		restrictedBitStream.setItemName(dspaceProperties.getProperty("restricted_item"));
 		restrictedBitStream.setName(dspaceProperties.getProperty("restricted_bitstream"));
-		
+
 		try
 		{
 			for(IBitStream bitstream: bitstreams)
@@ -529,13 +529,20 @@ public class DspaceManager implements IDspaceManager{
 		}
 		catch(QuadrigaAccessException qe)
 		{
-			/* Dspace can't be accessed using the supplied public and private key.
-			 * This exception happens when long random strings are provided for public/private keys or for wrong username and password
+			/* 
+			 * This exception happens for wrong username and password.
+			 * Thrown also when the dspace server is down.
 			 */
+			
 			checkedBitStreams.clear();
+			IBitStream inaccessibleBitStream = bitstreamFactory.createBitStreamObject();
+			inaccessibleBitStream.setCommunityName(dspaceProperties.getProperty("wrong_authentication"));
+			inaccessibleBitStream.setCollectionName(dspaceProperties.getProperty("wrong_authentication"));
+			inaccessibleBitStream.setItemName(dspaceProperties.getProperty("wrong_authentication"));
+			inaccessibleBitStream.setName(dspaceProperties.getProperty("wrong_authentication"));
 			for(int i=0;i<bitstreams.size();i++)
 			{
-				checkedBitStreams.add(restrictedBitStream);
+				checkedBitStreams.add(inaccessibleBitStream);
 			}
 		}
 		return checkedBitStreams;		
