@@ -39,9 +39,6 @@
 		<logout logout-success-url="/logout" invalidate-session="true" />
 	</http>
 	
-
-	
-
 	<ldap-server url="ldap://diging.asu.edu:10389" manager-dn="uid=admin,ou=system"
 		manager-password="LDAPP@55wd" /> 
 
@@ -53,7 +50,7 @@
 		</ldap-authentication-provider>
 		<authentication-provider>
 	        <user-service>
-	       		<user name="admin" password="xxxx" authorities="ROLE_QUADRIGA_USER_ADMIN" />
+	       		<user name="admin" password="admin" authorities="ROLE_QUADRIGA_USER_ADMIN, ROLE_QUADRIGA_USER_STANDARD, ROLE_QUADRIGA_USER_COLLABORATOR" />
 	        </user-service>
    		</authentication-provider>
 	</authentication-manager>
