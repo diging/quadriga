@@ -72,7 +72,6 @@ public class ListWSController
 
 	private String dspaceUsername;
 	private String dspacePassword;
-	private boolean publicAccess;
 	private IDspaceKeys dspaceKeys;
 
 	@Autowired
@@ -218,7 +217,7 @@ public class ListWSController
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 * @throws QuadrigaException 
- 
+
 	 */
 	@RequestMapping(value="auth/workbench/workspace/workspacedetails/{workspaceid}", method = RequestMethod.GET)
 	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
@@ -250,10 +249,6 @@ public class ListWSController
 		{
 			model.addAttribute("dspaceKeys", "true");
 		}
-		else if((this.getDspaceUsername() != null && this.getDspacePassword() != null) || (this.publicAccess = true))
-		{
-			model.addAttribute("dspaceLogin", "true");
-		}
 
 		if(workspaceSecurity.checkWorkspaceOwner(userName, workspaceid)){
 			model.addAttribute("owner", 1);
@@ -279,83 +274,6 @@ public class ListWSController
 	 * Following methods are responsible for the Dspace part of the workspace
 	 */
 
-
-	/**
-	 * This method is responsible for the handle of dspace Username and password.
-	 * After the assignment of dspace variables, this redirects to the dspace communities controller.
-	 * 
-	 * @param workspaceId		The id of the workspace from which the request originates.
-	 * @param req				The request object containing the username and password (or) public access option.
-	 * @return					Redirect to the dspace communities page.
-	 * @author 					Ram Kumar Kumaresan
-	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/adddspacelogin", method = RequestMethod.POST)
-	public String addFilesDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {		
-		String dspaceUsername = req.getParameter("username");
-		String dspacePassword = req.getParameter("password");
-		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
-		if(dspacePublicAccess == null)
-		{
-			if(dspaceUsername == null || dspacePassword == null)
-			{
-				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-			}
-			else if(dspaceUsername.equals("") || dspacePassword.equals(""))
-			{
-				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-			}
-			this.setDspaceUsername(dspaceUsername);
-			this.setDspacePassword(dspacePassword);
-			this.publicAccess = false;
-		}
-		else
-		{
-			this.setDspaceUsername(null);
-			this.setDspacePassword(null);
-			this.publicAccess = true;
-		}
-
-
-		return "redirect:/auth/workbench/workspace/"+workspaceId+"/communities";
-	}
-
-
-	/**
-	 * Handle the request to add Dspace Authentication. To store username and password for this current user session.
-	 * 
-	 * @param workspaceId	The id of the workspace from which the request originates.
-	 * @param req			The request object containing the username and password (or) public access option.
-	 * @return				Redirect to the workspace page.
-	 */
-	@RequestMapping(value = "/auth/workbench/workspace/{workspaceId}/adddsapceauthentication", method = RequestMethod.POST)
-	public String addDspaceAuthentication(@PathVariable("workspaceId") String workspaceId, HttpServletRequest req, ModelMap model, Principal principal) {
-		String dspaceUsername = req.getParameter("username");
-		String dspacePassword = req.getParameter("password");
-		String dspacePublicAccess = req.getParameter("dspacePublicAccess");
-
-		if(dspacePublicAccess == null)
-		{
-			if(dspaceUsername == null || dspacePassword == null)
-			{
-				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-			}
-			else if(dspaceUsername.equals("") || dspacePassword.equals(""))
-			{
-				return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-			}
-			this.setDspaceUsername(dspaceUsername);
-			this.setDspacePassword(dspacePassword);
-			this.publicAccess = false;
-		}
-		else
-		{
-			this.setDspaceUsername(null);
-			this.setDspacePassword(null);
-			this.publicAccess = true;
-		}
-
-		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
-	}
 
 	/**
 	 * This method is responsible for the assignment/change of dspace Username and password.
@@ -385,13 +303,11 @@ public class ListWSController
 
 			this.setDspaceUsername(dspaceUsername);
 			this.setDspacePassword(dspacePassword);
-			this.publicAccess = false;
 		}
 		else
 		{
 			this.setDspaceUsername(null);
 			this.setDspacePassword(null);
-			this.publicAccess = true;
 		}
 
 		dspaceManager.clearCompleteCache();

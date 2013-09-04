@@ -64,7 +64,7 @@
 
 			//Create a path for the user to be passed to the Controller
 			var path = id + "-" + selectedAccess + "-" + checkedVals.join("-");
-			location.href = '/quadriga/auth/users/access/' + path;
+			location.href = '${pageContext.servletContext.contextPath}/auth/users/access/' + path;
 		}
 	</script>
 
@@ -125,7 +125,7 @@
 						<td class="center">NA</td>
 						<td class="center"><font size="1"> <input
 								type="submit"
-								onclick="location.href='/quadriga/auth/users/deactivate/${user.userName}'"
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/users/deactivate/${user.userName}'"
 								value="Deactivate"></font></td>
 					</tr>
 				</c:forEach>
@@ -171,7 +171,7 @@
 						<td class="center">NA</td>
 						<td class="center"><font size="1"> <input
 								type="submit"
-								onclick="location.href='/quadriga/auth/users/activate/${user.userName}'"
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/users/activate/${user.userName}'"
 								value="Activate"></font></td>
 					</tr>
 				</c:forEach>
