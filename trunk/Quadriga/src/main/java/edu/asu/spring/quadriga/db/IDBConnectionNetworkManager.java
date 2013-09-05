@@ -28,4 +28,10 @@ public interface IDBConnectionNetworkManager {
 
 	public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
 			throws QuadrigaStorageException;
+
+	public abstract String archiveNetworkStatement(String networkId, String id)
+			throws QuadrigaStorageException;
+
+	public abstract List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
+			throws QuadrigaStorageException;
 }

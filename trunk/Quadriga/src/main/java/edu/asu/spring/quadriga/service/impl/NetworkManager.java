@@ -130,12 +130,14 @@ public class NetworkManager implements INetworkManager {
 	 * @author Lohith Dwaraka
 	 */
 	@Override
-	public String receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid){
-		String networkId="";
-		try{
-			networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
-		}catch(QuadrigaStorageException e){
-			logger.error("DB action error ",e);
+	public String receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid,String updateStatus,String networkId){
+		
+		if(updateStatus == "NEW"){
+			try{
+				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
+			}catch(QuadrigaStorageException e){
+				logger.error("DB action error ",e);
+			}
 		}
 
 		ElementEventsType e = response.getValue();
@@ -660,6 +662,14 @@ public class NetworkManager implements INetworkManager {
 		return networkList;
 	}
 
+	@Override
+	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
+			throws QuadrigaStorageException{
+		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getAllNetworkNodes(networkId);
+
+		return networkTopNodeList;
+	}
+			
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getProjectIdForWorkspaceId(java.lang.String)
 	 */
@@ -694,5 +704,24 @@ public class NetworkManager implements INetworkManager {
 		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkTopNodes(networkId);
 
 		return networkTopNodeList;
+	}
+	
+	@Override
+	public String archiveNetworkStatement(String networkId,String id) throws QuadrigaStorageException{
+		String msg = dbConnect.archiveNetworkStatement(networkId, id);
+		return msg;
+	}
+	
+	@Override
+	public void archiveNetwork(String networkId) throws QuadrigaStorageException{
+		
+		List<INetworkNodeInfo> networkTopNodeList = getAllNetworkNodes(networkId);
+		Iterator <INetworkNodeInfo> I = networkTopNodeList.iterator();
+		while(I.hasNext()){
+			INetworkNodeInfo networkNodeInfo = I.next();
+			logger.info("Statement ID archived : " +networkNodeInfo.getId());
+			archiveNetworkStatement(networkId, networkNodeInfo.getId());
+		}
+		
 	}
 }

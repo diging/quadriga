@@ -29,7 +29,7 @@ public interface INetworkManager {
 
 	public abstract String receiveNetworkSubmitRequest(
 			JAXBElement<ElementEventsType> response, IUser user,
-			String networkName, String workspaceid);
+			String networkName, String workspaceid,String updateStatus,String networkId);
 
 	/**
 	 * Formats a unformatted XML to formatted XML
@@ -75,5 +75,13 @@ public interface INetworkManager {
 	public abstract String getQStoreGetURL();
 
 	public abstract ResponseEntity<String> getNodeXmlFromQstore(String id) throws JAXBException;
+
+	public abstract String archiveNetworkStatement(String networkId, String id)
+			throws QuadrigaStorageException;
+
+	public abstract List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
+			throws QuadrigaStorageException;
+
+	public abstract void archiveNetwork(String networkId) throws QuadrigaStorageException;
 
 }

@@ -1,7 +1,7 @@
 /*******************************************
-Name          : sp_getNetworkTopNodes
+Name          : sp_getAllNetworkNodes
 
-Description   : retrieves the network top nodes
+Description   : retrieves all the network nodes
 				of a particular network
 
 Called By     : UI (DBConnectionNetworkManager.java)
@@ -12,10 +12,10 @@ Modified Date : 08/08/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_getNetworkTopNodes;
+DROP PROCEDURE IF EXISTS sp_getAllNetworkNodes;
 
 DELIMITER $$
-CREATE PROCEDURE sp_getNetworkTopNodes
+CREATE PROCEDURE sp_getAllNetworkNodes
 (
   IN  innetworkid  VARCHAR(20),
  OUT errmsg    VARCHAR(255)
@@ -37,7 +37,7 @@ BEGIN
      -- retrieve the network top node
 	 select id,statementtype
        from tbl_network_statements
-	   where networkid = innetworkid and istop=1 and isarchived=0;
+	   where networkid = innetworkid and isarchived=0;
 	END IF;
 END$$
 DELIMITER ;
