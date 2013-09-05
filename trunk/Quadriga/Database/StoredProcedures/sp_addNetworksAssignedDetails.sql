@@ -36,6 +36,8 @@ BEGIN
 	  THEN SET errmsg = "User name can't be empty.";
     END IF;
     
+
+    
     
 	
     -- Inserting the record into the tbl_dictionary table
@@ -44,9 +46,9 @@ BEGIN
          START TRANSACTION;
 
             INSERT 
-              INTO tbl_network_assigned(networkid, assigneduser,
+              INTO tbl_network_assigned(networkid, assigneduser,status,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (innetworkid,inassigneduser,
+			 VALUES (innetworkid,inassigneduser,'PENDING',
                      inassigneduser,NOW(),inassigneduser,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;
