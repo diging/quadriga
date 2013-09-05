@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS tbl_network_statements
   id	  varchar(100)           NOT NULL, 
   statementtype  varchar(10)           NOT NULL,
   istop 	int NOT NULL,
+  isarchived int NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,

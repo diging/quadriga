@@ -55,6 +55,7 @@ import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -76,6 +77,9 @@ public class NetworkRestController {
 
 	@Autowired
 	private	IListWSManager wsManager;
+
+	@Autowired
+	private IEditorManager editorManager;
 	
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
@@ -114,11 +118,12 @@ public class NetworkRestController {
 		String workspaceid = request.getParameter("workspaceid");
 		logger.info(" Network Name : "+ networkName);
 		logger.info(" Workspace id : "+ workspaceid);
-		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
+
 		if(workspaceid.isEmpty()||workspaceid == null){
 			response.setStatus(500);
 			return "Please provide correct workspace id.";
 		}
+		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
 		if(projectid.isEmpty()){
 			response.setStatus(500);
 			return "Please provide correct workspace id.";
@@ -153,8 +158,8 @@ public class NetworkRestController {
 			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(res.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-			networkId=networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid);
-
+			networkId=networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid,"NEW",networkId);
+			
 			//			Below code would help in printing XML from qstore
 			Marshaller marshaller = context.createMarshaller();
 			ByteArrayOutputStream os=new ByteArrayOutputStream();
@@ -234,12 +239,12 @@ public class NetworkRestController {
 	 * @throws Exception 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/workspace/{workspaceid}/networks", method = RequestMethod.GET)
+	@RequestMapping(value = "rest/workspace/{workspaceid}/networks", method = RequestMethod.GET, produces = "application/xml")
 	public String getWorkspaceNetworkList(@PathVariable("workspaceid") String workspaceId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
-		
-		IUser user = userManager.getUserDetails(principal.getName());
+
+
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
@@ -269,9 +274,9 @@ public class NetworkRestController {
 			throw new RestException(404);
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 *  Rest interface for getting network list belonging to a workspace 
 	 * http://<<URL>:<PORT>>/quadriga/rest/networkdetails/{networkid}
@@ -286,11 +291,11 @@ public class NetworkRestController {
 	 * @throws Exception 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/networkdetails/{networkid}", method = RequestMethod.GET)
+	@RequestMapping(value = "rest/networkdetails/{networkid}", method = RequestMethod.GET, produces = "application/xml")
 	public String getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws JAXBException, QuadrigaStorageException, RestException {
-		
+
 		List<INetworkNodeInfo> networkTopNodes = networkManager.getNetworkTopNodes(networkId);
 
 		Iterator <INetworkNodeInfo> I = networkTopNodes.iterator();
@@ -300,7 +305,7 @@ public class NetworkRestController {
 			logger.debug("Node id "+networkNodeInfo.getId());
 			res = networkManager.getNodeXmlFromQstore(networkNodeInfo.getId());
 		}
-		
+
 		if(res == null){
 			throw new RestException(404);
 		}
@@ -308,5 +313,71 @@ public class NetworkRestController {
 		response.setContentType(accept);
 		response.setContentType("application/xml");
 		return res.getBody().toString();
+	}
+
+	/**
+	 *  Rest interface for re-upload a changed network ( which was rejected earlier )  
+	 * http://<<URL>:<PORT>>/quadriga/rest/reuploadnetwork/{networkid}
+	 * http://localhost:8080/quadriga/rest/reuploadnetwork/NET_1huxp4w7p71o0
+	 * @param networkId
+	 * @param response
+	 * @param accept
+	 * @param principal
+	 * @param req
+	 * @return
+	 * @throws JAXBException
+	 * @throws QuadrigaStorageException
+	 * @throws RestException
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "rest/reuploadnetwork/{networkid}", method = RequestMethod.POST)
+	public String reuploadNetwork(@PathVariable("networkid") String networkId,
+			HttpServletResponse response,HttpServletRequest request,
+			@RequestBody String xml,
+			@RequestHeader("Accept") String accept,
+			Principal principal) throws JAXBException, QuadrigaStorageException, RestException, ParserConfigurationException, SAXException, IOException {
+		IUser user = userManager.getUserDetails(principal.getName());
+
+		INetwork network = null;
+		try{
+			network = networkManager.getNetworkStatus(networkId,user);
+		}catch(QuadrigaStorageException e){
+			logger.error("DB Error :",e);
+		}
+		if(!(network.getStatus().equals("REJECTED"))){
+			response.setStatus(500);
+			return "The Network doesn't have status : REJECTED";
+		}else{
+
+			xml=xml.trim();
+			if (xml.isEmpty()) {
+				response.setStatus(500);
+				return "Please provide XML in body of the post request.";
+
+			} else {
+				
+				String res=networkManager.storeXMLQStore(xml);
+				if(res.equals("")){
+					response.setStatus(500);
+					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
+				}
+				networkManager.archiveNetwork(networkId);
+				editorManager.updateNetworkStatus(networkId, "PENDING");
+				JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
+				Unmarshaller unmarshaller = context.createUnmarshaller();
+				unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+				InputStream is = new ByteArrayInputStream(res.getBytes());
+				JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
+				networkId=networkManager.receiveNetworkSubmitRequest(response1,user,network.getName(),network.getWorkspaceid(),"UPDATE",networkId);
+				
+				response.setStatus(200);
+				response.setContentType(accept);
+				response.setHeader("networkid",networkId );
+				return res;
+			}
+		}
 	}
 }

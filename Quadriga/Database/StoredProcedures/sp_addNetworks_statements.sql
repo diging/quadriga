@@ -20,6 +20,7 @@ CREATE PROCEDURE sp_addNetworks_statements
   IN  inid    VARCHAR(50),
   IN  instatementtype    VARCHAR(50),
   IN  inistop    VARCHAR(10),
+  IN  inisarchived    VARCHAR(10),
   IN  inowner	VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
@@ -56,9 +57,9 @@ BEGIN
          START TRANSACTION;
 
             INSERT 
-              INTO tbl_network_statements(networkid,id,statementtype,istop,
+              INTO tbl_network_statements(networkid,id,statementtype,istop,isarchived,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (innetworkid,inid,instatementtype,inistop,
+			 VALUES (innetworkid,inid,instatementtype,inistop,inisarchived,
                      inowner,NOW(),inowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;

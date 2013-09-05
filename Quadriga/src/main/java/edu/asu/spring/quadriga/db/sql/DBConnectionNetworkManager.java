@@ -181,7 +181,8 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 			if(errmsg.isEmpty()){
 				return networkId;
 			}else{
-				throw new QuadrigaStorageException("Something went wrong on DB side");
+				
+				throw new QuadrigaStorageException(errmsg + "Something went wrong on DB side");
 			}
 
 		}
@@ -210,7 +211,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		CallableStatement sqlStatement;
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_NETWORK_STATEMENT  + "(?,?,?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_NETWORK_STATEMENT  + "(?,?,?,?,?,?,?)";
 		//get the connection
 		getConnection();
 		//establish the connection with the database
@@ -223,14 +224,15 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 			sqlStatement.setString(2, id);
 			sqlStatement.setString(3, type);        	
 			sqlStatement.setString(4, isTop);
-			sqlStatement.setString(5,owner.getUserName());
+			sqlStatement.setString(5, "0");
+			sqlStatement.setString(6,owner.getUserName());
 
 			//adding output variables to the SP
-			sqlStatement.registerOutParameter(6,Types.VARCHAR);
+			sqlStatement.registerOutParameter(7,Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(6);
+			errmsg = sqlStatement.getString(7);
 			return errmsg;
 
 		}
@@ -544,5 +546,107 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		}
 		
 		return networkTopNodeList;
+	}
+	
+	@Override
+	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)throws QuadrigaStorageException{
+		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_ALL_NETWORK_NODES_LIST  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					INetworkNodeInfo networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
+					networkNodeInfo.setId(resultSet.getString(1));
+					networkNodeInfo.setStatementType(resultSet.getString(2));
+					networkNodeList.add(networkNodeInfo);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return networkNodeList;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return networkNodeList;
+	}
+	
+	@Override
+	public String archiveNetworkStatement(String networkId,String id) throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ARCHIVE_NETWORK_STATEMENT  + "(?,?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+			sqlStatement.setString(2, id);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(3);
+			return errmsg;
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return errmsg;		
 	}
 }
