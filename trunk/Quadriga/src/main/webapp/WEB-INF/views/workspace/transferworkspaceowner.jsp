@@ -23,30 +23,23 @@
 		});
 	});
 </script>
-<form:form commandName="collaborator" method="POST"
+<form:form commandName="user" method="POST"
 	action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/transferworkspaceowner">
-	<c:choose>
+		<c:choose>
 		<c:when test="${success=='0'}">
 			<c:if test="${not empty collaboratinguser}">
 			   <h2>Workspace: ${wsname}</h2>
 			   <hr>
 			   <div class="user">Owned by: ${wsowner}</div>
 			   <hr>
-			   <div>Select owner of the project</div>
-				<form:select path="userObj" id="userName">
-					<form:option value="NONE" label="--- Select ---" />
+			   <div>Assign new owner to the workspace</div>
+				<form:select path="userName">
+					<form:option value="" label="--- Select ---" />
 					<form:options items="${collaboratinguser}"
 						itemValue="userName" itemLabel="userName" />
 				</form:select>
-				<form:errors path="userObj" cssClass="error"></form:errors>
-				<br>
-				<hr>
-				 <div>Select a role</div>
-				<form:checkboxes path="collaboratorRoles" class="roles"
-					items="${wscollabroles}" itemValue="roleDBid"
-					itemLabel="displayName" />
-				<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
-				<br>
+				<form:errors path="userName" cssClass="error"></form:errors>
+				<div>Note:Current owner will become workspace admin</div>
 				<td><input type="submit" value="Assign"></td>
 			</c:if>
 			<c:if test="${empty collaboratinguser}">
@@ -58,7 +51,7 @@
 		</c:if>
 		</c:when>
 		<c:otherwise>
-			<span class="byline"><c:out value="${successmsg}"></c:out></span>
+			<span class="byline">Workspace Ownership transferred successfully.</span>
 			<br />
 			<ul>
 				<li><input type="button" onClick="submitClick(this.id);"

@@ -1,37 +1,53 @@
 package edu.asu.spring.quadriga.web.workspace;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
-import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.web.StringConstants;
+import edu.asu.spring.quadriga.validator.WorkspaceFormValidator;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
 
 @Controller
 public class ActivateWSController 
 {
 	@Autowired
-	IListWSManager wsManager;
-	
-	@Autowired
 	IArchiveWSManager archiveWSManager;
 	
 	@Autowired
-	ICheckWSSecurity wsSecurityManager;
+	ModifyWorkspaceFormManager workspaceFormManager;
+	
+	@Autowired
+	WorkspaceFormFactory workspaceFormFactory;
+	
+	@Autowired
+	WorkspaceFormValidator validator;
+	
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+
+		binder.setValidator(validator);
+	}
 	
 	/**
 	 *This calls workspaceManger to list all the workspace associated with a project to deactivate.
@@ -42,20 +58,28 @@ public class ActivateWSController
 	 * @author   Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/deactivateworkspace", method=RequestMethod.GET)
-	public String deactivateWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView deactivateWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		ModelAndView model;
 		String userName;
-		List<IWorkSpace> workspaceList;
+		ModifyWorkspaceForm workspaceForm;
+		List<ModifyWorkspace> deactivateWSList;
 		
 		//check if the user has access
 		userName = principal.getName();
 		
+		model = new ModelAndView("auth/workbench/workspace/deactivateworkspace");
 		// retrieve the workspaces associated with the projects
-		workspaceList = wsManager.listWorkspace(projectid,userName);
-			
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-		    return "auth/workbench/workspace/deactivateworkspace";
+		deactivateWSList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);
+		
+		workspaceForm = workspaceFormFactory.createModifyWorkspaceForm();
+		
+		workspaceForm.setWorkspaceList(deactivateWSList);
+		
+		model.getModelMap().put("workspaceform", workspaceForm);
+		model.getModelMap().put("wsprojectid", projectid);
+		model.getModelMap().put("success", 0);
+		return model;
 	}
 	
 	/**
@@ -70,61 +94,58 @@ public class ActivateWSController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/deactivateworkspace", method = RequestMethod.POST)
-	public String deactivateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView deactivateWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
+			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		String[] values;
-		String wsIdList = "";
-		String errmsg;
+		StringBuilder workspaceId;
 		String userName;
-		boolean chkAccess;
-		List<IWorkSpace> workspaceList = null;
-
-		// fetch the selected values
-		values = req.getParameterValues("wschecked");
-
-		for(String workspaceid : values)
-		{
-			wsIdList = wsIdList + "," + workspaceid;
-		}
-
-		//removing the first ',' value
-		wsIdList = wsIdList.substring(1,wsIdList.length());
-
+		String wsInternalId;
+		ModelAndView model;
+		List<ModifyWorkspace> deactivateWSList;
+		
+		model = new ModelAndView("auth/workbench/workspace/deactivateworkspace");
+		
 		//fetch the user name
 		userName = principal.getName();
 		
-		//check if the user has access
-		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		deactivateWSList = new ArrayList<ModifyWorkspace>();
+		workspaceId = new StringBuilder();
 		
-		if(chkAccess)
+		if(result.hasErrors())
 		{
-			//deactivate the workspace'
-			errmsg = archiveWSManager.deactivateWorkspace(wsIdList, userName);
-
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg",StringConstants.WORKSPACE_DEACTIVE_SUCCESS);
-				model.addAttribute("wsprojectid", projectid);
-				return "auth/workbench/workspace/deactiveworkspaceStatus";
-			}
-			else
-			{
-				workspaceList = wsManager.listActiveWorkspace(projectid,userName);
-				//adding the workspace details to the model
-				model.addAttribute("workspaceList", workspaceList);
-				model.addAttribute("wsprojectid", projectid);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				return "auth/workbench/workspace/deactiveworkspace";
-			}
+			// retrieve the workspaces associated with the projects
+			deactivateWSList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);
+			
+			workspaceForm.setWorkspaceList(deactivateWSList);
+			
+			//frame the model objects
+			model.getModelMap().put("success", 0);
+			model.getModelMap().put("error", 1);
+			model.getModelMap().put("workspaceform", workspaceForm);
+			model.getModelMap().put("wsprojectid", projectid);
 		}
 		else
 		{
-			throw new QuadrigaAccessException();
+			deactivateWSList = workspaceForm.getWorkspaceList();
+			
+			//loop through the selected workspace
+			for(ModifyWorkspace workspace : deactivateWSList)
+			{
+				wsInternalId = workspace.getId();
+				
+				if(wsInternalId != null)
+				{
+					workspaceId.append(",");
+					workspaceId.append(wsInternalId);
+				}
+			}
+			archiveWSManager.deactivateWorkspace(workspaceId.toString().substring(1), userName);
+			
+			//frame the model objects
+			model.getModelMap().put("success", 1);
+			model.getModelMap().put("wsprojectid", projectid);			
 		}
-
-
+		return model;
 	}
 	
 	/**
@@ -136,17 +157,26 @@ public class ActivateWSController
 	 * @author   Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/activateworkspace", method=RequestMethod.GET)
-	public String activateWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView activateWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		ModelAndView model;
 		String userName;
-		List<IWorkSpace> workspaceList;
+		ModifyWorkspaceForm workspaceForm;
+		List<ModifyWorkspace> activateWSList;
 		
 		userName = principal.getName();
+		model = new ModelAndView("auth/workbench/workspace/activateworkspace");
+		
 		// retrieve the workspaces associated with the projects
-			workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-		return "auth/workbench/workspace/activateworkspace";
+		workspaceForm = workspaceFormFactory.createModifyWorkspaceForm();
+		
+		activateWSList = workspaceFormManager.getDeactivatedWorkspaceList(projectid, userName);
+        workspaceForm.setWorkspaceList(activateWSList);
+        
+        model.getModelMap().put("workspaceform", workspaceForm);
+        model.getModelMap().put("wsprojectid", projectid);
+        model.getModelMap().put("success", 0);
+		return model;
 	}
 	
 	/**
@@ -161,58 +191,54 @@ public class ActivateWSController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/activateworkspace", method = RequestMethod.POST)
-	public String activateWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView activateWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
+			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		String[] values;
-		String wsIdList = "";
-		String errmsg;
+		StringBuilder workspaceId;
 		String userName;
-		boolean chkAccess;
-		List<IWorkSpace> workspaceList = null;
-
-		// fetch the selected values
-		values = req.getParameterValues("wschecked");
-
-		for(String workspaceid : values)
-		{
-			wsIdList = wsIdList + "," + workspaceid;
-		}
-
-		//removing the first ',' value
-		wsIdList = wsIdList.substring(1,wsIdList.length());
+		String wsInternalId;
+		ModelAndView model;
+		List<ModifyWorkspace> activateWSList;
 
 		//fetch the user name
 		userName = principal.getName();
 		
-		//check if the user has access
-		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		activateWSList = new ArrayList<ModifyWorkspace>();
+		workspaceId = new StringBuilder();
+		model = new ModelAndView("auth/workbench/workspace/activateworkspace");
 		
-		if(chkAccess)
+		if(result.hasErrors())
 		{
-			//activate the workspace'
-			errmsg = archiveWSManager.activateWorkspace(wsIdList, userName);
-
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg",StringConstants.WORKSPACE_ACTIVE_SUCCESS);
-				model.addAttribute("wsprojectid", projectid);
-				return "auth/workbench/workspace/activeworkspaceStatus";
-			}
-			else
-			{
-				workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
-				//adding the workspace details to the model
-				model.addAttribute("workspaceList", workspaceList);
-				model.addAttribute("wsprojectid", projectid);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				return "auth/workbench/workspace/deactiveworkspace";
-			}
+			activateWSList =  workspaceFormManager.getDeactivatedWorkspaceList(projectid, userName);
+			workspaceForm.setWorkspaceList(activateWSList);
+			//frame the model objects
+			model.getModelMap().put("success", 0);
+			model.getModelMap().put("error", 1);
+			model.getModelMap().put("workspaceform", workspaceForm);
+			model.getModelMap().put("wsprojectid", projectid);
 		}
 		else
 		{
-			throw new QuadrigaAccessException();
+			activateWSList = workspaceForm.getWorkspaceList();
+			
+			//loop through the selected workspace
+			for(ModifyWorkspace workspace : activateWSList)
+			{
+				wsInternalId = workspace.getId();
+				
+				if(wsInternalId != null)
+				{
+					workspaceId.append(",");
+					workspaceId.append(wsInternalId);
+				}
+			}
+			
+			archiveWSManager.activateWorkspace(workspaceId.toString().substring(1), userName);
+			//frame the model objects
+			model.getModelMap().put("success", 1);
+			model.getModelMap().put("wsprojectid", projectid);	
 		}
+		return model;
+		
 	}
 }

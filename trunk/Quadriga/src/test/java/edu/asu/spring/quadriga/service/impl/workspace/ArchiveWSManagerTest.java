@@ -66,30 +66,26 @@ public class ArchiveWSManagerTest {
 
 	@Test
 	public void testArchiveWorkspace() throws QuadrigaStorageException {
-		String errmsg;
-		errmsg = wsManager.archiveWorkspace("WS_1", "projuser");
-		assertEquals("",errmsg);
+		wsManager.archiveWorkspace("WS_1", "projuser");
+		assertTrue(true);
 	}
 
 	@Test
 	public void testUnArchiveWorkspace() throws QuadrigaStorageException {
-		String errmsg;
-		errmsg = wsManager.unArchiveWorkspace("WS_1", "projuser");
-		assertEquals("",errmsg);
+		wsManager.unArchiveWorkspace("WS_1", "projuser");
+		assertTrue(true);
 	}
 
 	@Test
 	public void testDeactivateWorkspace() throws QuadrigaStorageException {
-		String errmsg;
-		errmsg = wsManager.deactivateWorkspace("WS_2","projuser");
-		assertEquals("",errmsg);
+		wsManager.deactivateWorkspace("WS_2","projuser");
+		assertTrue(true);
 	}
 
 	@Test
 	public void testActivateWorkspace() throws QuadrigaStorageException {
-		String errmsg;
-		errmsg = wsManager.activateWorkspace("WS_2","projuser");
-		assertEquals("",errmsg);
+		wsManager.activateWorkspace("WS_2","projuser");
+		assertTrue(true);
 	}
 
 }

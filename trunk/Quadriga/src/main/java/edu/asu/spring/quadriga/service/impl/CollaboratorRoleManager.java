@@ -24,9 +24,6 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	@Qualifier("projectCollaborator")
 	private List<ICollaboratorRole> projectCollabRoles;
 	
-	private static final Logger logger = LoggerFactory
-			.getLogger(CollaboratorRoleManager.class);
-	
 	@Autowired
 	@Qualifier("ccCollaborator")
 	private List<ICollaboratorRole> ccCollabRoles;
@@ -162,6 +159,19 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		for(ICollaboratorRole role:wsCollabRoles)
 		{
 			if(role.getRoleDBid().equals(collaboratorRoleDBId))
+			{
+				return role;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public ICollaboratorRole getWSCollaboratorRoleById(String collaboratorRoleId)
+	{
+		for(ICollaboratorRole role:wsCollabRoles)
+		{
+			if(role.getRoleid().equals(collaboratorRoleId))
 			{
 				return role;
 			}

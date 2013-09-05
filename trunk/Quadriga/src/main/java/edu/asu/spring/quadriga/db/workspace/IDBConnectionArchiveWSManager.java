@@ -4,9 +4,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionArchiveWSManager {
 
-	public abstract String deactivateWorkspace(String workspaceIdList, int deactivate,
+	public abstract void deactivateWorkspace(String workspaceIdList, int deactivate,
 			String wsUser) throws QuadrigaStorageException;
 
-	public abstract String archiveWorkspace(String workspaceIdList, int archive,
+	public abstract void archiveWorkspace(String workspaceIdList, int archive,
 			String wsUser) throws QuadrigaStorageException;
 }

@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!-- Content -->
 <style type="text/css">
@@ -20,6 +21,10 @@ td {
 	overflow: wrap;
 	text-overflow: ellipsis;
 }
+.error {
+	color: #ff0000;
+	font-style: italic;
+}
 </style>
 <script>
 $(document).ready(function() {
@@ -28,6 +33,9 @@ $(document).ready(function() {
 		"sPaginationType" : "full_numbers",
 		"bAutoWidth" : false
 	});
+	
+	<%-->Default uncheck the checkbox <--%>
+	$("form input:checkbox").prop("checked",false);
 });
 
 function submitClick(id){
@@ -36,45 +44,45 @@ function submitClick(id){
 $(function() {
 	
 	$("input[name='Back']").button().click(function(event) {
-		event.preventDefault();
 	});
 	
-	$("input[name='deactivatews']").button().click(function(event){
-		if(!$("input[name='wschecked']").is(":checked")) {
-			$.alert("Select record to archive", "Oops !!!");
-			event.preventDefault();
-			return;
-		}
+	$("input[name='deactivatews']").button().click(function(event) {
 	});
 	
 	$("input[name='selectall']").button().click(function(event){
-		$("input[name='wschecked']").prop("checked",true);
+		$("form input:checkbox").prop("checked",true);
 		event.preventDefault();
 		return;
 	});
 	
 	$("input[name='deselectall']").button().click(function(event){
-		$("input[name='wschecked']").prop("checked",false);
+		$("form input:checkbox").prop("checked",false);
 		event.preventDefault();
 		return;
 	});
 });
 </script>
 <article class="is-page-content">
-	<form:form modelAttribute="workspace" method="POST"
+	<form:form modelAttribute="workspaceform" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/deactivateworkspace" id="deactivatewsform">
-		<c:if test="${not empty workspaceList}">
-			<span class="byline">Select the workspace to be deactivated:</span>
-			<c:choose>
-				<c:when test="${success=='0'}">
-					<span class="byline" style="color: #f00;"><c:out
-							value="${errormsg}"></c:out></span>
-					<br />
-				</c:when>
-			</c:choose>
+		<c:choose>
+			<c:when test="${success == '0'}">
+					<c:if test="${not empty workspaceform.workspaceList}">
+					<span class="byline">Select the workspace to be deactivated:</span>
+					<c:choose>
+						<c:when test="${error == '1'}">
+							<span class="error"> <spring:message
+									code="workspace_selection.required" />
+							</span>
+							<br>
+						</c:when>
+					</c:choose>
 			<input class="command" type="submit" value='Deactivate' name="deactivatews">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
+			<input type="button"
+			onClick="submitClick(this.id);"
+			value='Cancel' name="Back">
 			<table style="width: 100%" class="display dataTable" id="workspacelist">
 				<thead>
 					<tr>
@@ -84,15 +92,22 @@ $(function() {
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="workspace" items="${workspaceList}">
+					<c:forEach var="workspace" items="${workspaceform.workspaceList}" varStatus="status">
 						<tr>
-							<td><input type="checkbox" name="wschecked"
-								value="${workspace.id}"></td>
-							<td><font size="3"> <c:out value="${workspace.name}"></c:out>
+						<td>
+						<form:checkbox path="workspaceList[${status.index}].id" value="${workspace.id}"/>
+							</td>
+							<td><font size="3">
+							<form:label path="workspaceList[${status.index}].name">
+							<c:out value="${workspace.name}"></c:out>
+							</form:label> 
 							</font></td>
-							<td><font size="3"> <c:out
-										value="${workspace.description}"></c:out>
-							</font></td>
+							<td><font size="3">
+								<form:label path="workspaceList[${status.index}].description">
+							<c:out value="${workspace.description}"></c:out>
+							</form:label>  
+							</font>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -100,13 +115,26 @@ $(function() {
 			<input class="command" type="submit" value='Deactivate' name="deactivatews">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
-		</c:if>
-		<c:if test="${empty workspaceList}">
-			<ul>
+			<input type="button"
+			onClick="submitClick(this.id);"
+			value='Cancel' name="Back">
+				</c:if>
+				<c:if test="${empty workspaceform.workspaceList}">
+					<ul>
 				<li><input type="submit" onClick="submitClick(this.id);"
 					value='Back' name="Back"></li>
 			</ul>
-			You don't have any workspace to deactivate.
-		</c:if>
+			You don't have any workspace to activate.
+				</c:if>
+			</c:when>
+				     <c:when test="${success == '1'}"> 
+		     <span class="byline">Successfully deactivated selected workspace</span> 
+		     <ul>
+		<li><input type="button"
+			onClick="submitClick(this.id);"
+			value='Back' name="Back"></li>
+	</ul>
+          </c:when>
+		</c:choose>
 	</form:form>
 </article>

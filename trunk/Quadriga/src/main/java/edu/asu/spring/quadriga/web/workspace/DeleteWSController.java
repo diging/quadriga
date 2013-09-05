@@ -1,37 +1,53 @@
 package edu.asu.spring.quadriga.web.workspace;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.web.StringConstants;
+import edu.asu.spring.quadriga.validator.WorkspaceFormValidator;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
 
 @Controller
 public class DeleteWSController 
 {
 	@Autowired
-	IListWSManager wsManager;
-	
-	@Autowired
 	IModifyWSManager modifyWSManger;
 	
 	@Autowired
-	ICheckWSSecurity wsSecurityManager;
+	WorkspaceFormValidator validator;
+	
+	@Autowired
+	ModifyWorkspaceFormManager workspaceFormManager;
+	
+	@Autowired
+	WorkspaceFormFactory workspaceFormFactory;
+	
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+
+		binder.setValidator(validator);
+	}
 	
 	/**
 	 * This calls workspaceManger to list the deactivated workspace associated with a project for deletion.
@@ -42,18 +58,29 @@ public class DeleteWSController
 	 * @author   Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/deleteworkspace", method=RequestMethod.GET)
-	public String deleteWorkspaceRequestForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView deleteWorkspaceRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		ModelAndView model;
 		String userName;
-		List<IWorkSpace> workspaceList;
+		ModifyWorkspaceForm workspaceForm;
+		List<ModifyWorkspace> deleteWSList;
 		
+		//check if the user has access
 		userName = principal.getName();
+		
+		model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
+		
 		// retrieve the workspaces associated with the projects
-		workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid", projectid);
-
-		return "auth/workbench/workspace/deleteworkspace";
+		deleteWSList = workspaceFormManager.getDeactivatedWorkspaceList(projectid,userName);
+		
+		workspaceForm = workspaceFormFactory.createModifyWorkspaceForm();
+		
+		workspaceForm.setWorkspaceList(deleteWSList);
+		
+		model.getModelMap().put("workspaceform", workspaceForm);
+		model.getModelMap().put("wsprojectid", projectid);
+		model.getModelMap().put("success", 0);
+		return model;
 	}
 	
 	/**
@@ -68,53 +95,57 @@ public class DeleteWSController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteworkspace", method = RequestMethod.POST)
-	public String deleteWorkspaceRequest(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView deleteWorkspaceRequest(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
+			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		String[] values;
-		String wsIdList = "";
-		String errmsg;
+		StringBuilder workspaceId;
 		String userName;
-		boolean chkAccess;
-		List<IWorkSpace> workspaceList = null;
-
+		String wsInternalId;
+		ModelAndView model;
+		List<ModifyWorkspace> deleteWSList;
+		
+		model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
+		
+		//fetch the user name
 		userName = principal.getName();
-		// fetch the selected values
-		values = req.getParameterValues("wschecked");
-		for(String workspaceid : values)
-		{
-			wsIdList = wsIdList + "," + workspaceid;
-		}
-		//removing the first ',' value
-		wsIdList = wsIdList.substring(1,wsIdList.length());
 		
-		//check if user has access
-		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		deleteWSList = new ArrayList<ModifyWorkspace>();
+		workspaceId = new StringBuilder();
 		
-		if(chkAccess)
+		if(result.hasErrors())
 		{
-			errmsg = modifyWSManger.deleteWorkspaceRequest(wsIdList);
-
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg",StringConstants.WORKSPACE_DELETE_SUCCESS);
-				model.addAttribute("wsprojectid", projectid);
-				return "auth/workbench/workspace/deleteworkspaceStatus";
-			}
-			else
-			{
-	            workspaceList = wsManager.listDeactivatedWorkspace(projectid,userName);
-				//adding the workspace details to the model
-				model.addAttribute("workspaceList", workspaceList);
-				model.addAttribute("wsprojectid", projectid);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				return "auth/workbench/workspace/deleteworkspace";
-			}
+			// retrieve the workspaces associated with the projects
+			deleteWSList = workspaceFormManager.getDeactivatedWorkspaceList(projectid,userName);
+			
+			workspaceForm.setWorkspaceList(deleteWSList);
+			
+			//frame the model objects
+			model.getModelMap().put("success", 0);
+			model.getModelMap().put("error", 1);
+			model.getModelMap().put("workspaceform", workspaceForm);
+			model.getModelMap().put("wsprojectid", projectid);
 		}
 		else
 		{
-			throw new QuadrigaAccessException();
+			deleteWSList = workspaceForm.getWorkspaceList();
+			
+			//loop through the selected workspace
+			for(ModifyWorkspace workspace : deleteWSList)
+			{
+				wsInternalId = workspace.getId();
+				
+				if(wsInternalId != null)
+				{
+					workspaceId.append(",");
+					workspaceId.append(wsInternalId);
+				}
+			}
+			modifyWSManger.deleteWorkspaceRequest(workspaceId.toString().substring(1));
+			
+			//frame the model objects
+			model.getModelMap().put("success", 1);
+			model.getModelMap().put("wsprojectid", projectid);			
 		}
+		return model;
 	}
 }

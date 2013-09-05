@@ -1,25 +1,29 @@
 package edu.asu.spring.quadriga.web.workspace;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
-import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.web.StringConstants;
+import edu.asu.spring.quadriga.validator.WorkspaceFormValidator;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceFormManager;
 
 @Controller
 public class ArchiveWSController 
@@ -28,10 +32,19 @@ public class ArchiveWSController
 	IArchiveWSManager archiveWSManager;
 	
 	@Autowired
-	IListWSManager wsManager;
+	ModifyWorkspaceFormManager workspaceFormManager;
 	
 	@Autowired
-	ICheckWSSecurity wsSecurityManager;
+	WorkspaceFormFactory workspaceFormFactory;
+	
+	@Autowired
+	WorkspaceFormValidator validator;
+	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder)
+	{
+		binder.setValidator(validator);
+	}
 	
 	/**
 	 * This calls workspaceManger to list the workspace associated with a project for archival process.
@@ -42,18 +55,26 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/archiveworkspace", method=RequestMethod.GET)
-	public String archiveWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView archiveWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		ModelAndView model;
 		String userName;
-		List<IWorkSpace> workspaceList;
+		ModifyWorkspaceForm workspaceForm;
+		List<ModifyWorkspace> archiveWorkspaceList;
 		
+		model = new ModelAndView("auth/workbench/workspace/archiveworkspace");
 		userName = principal.getName();
 		
+		workspaceForm = workspaceFormFactory.createModifyWorkspaceForm();
+		
 		// retrieve the workspaces associated with the projects
-		    workspaceList = wsManager.listActiveWorkspace(projectid,userName);
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid",projectid);
-		return "auth/workbench/workspace/archiveworkspace";
+		archiveWorkspaceList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);
+		workspaceForm.setWorkspaceList(archiveWorkspaceList);
+		
+		model.getModelMap().put("workspaceform", workspaceForm);
+		model.getModelMap().put("wsprojectid",projectid);
+		model.getModelMap().put("success", 0);
+		return model;
 	}
 	
 	/**
@@ -68,58 +89,59 @@ public class ArchiveWSController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/archiveworkspace", method = RequestMethod.POST)
-	public String archiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView archiveWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
+			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		String[] values;
-		String wsIdList = "";
-		String errmsg;
+		StringBuilder workspaceId;
 		String userName;
-		boolean chkAccess;
-		List<IWorkSpace> workspaceList = null;
-
-		// fetch the selected values
-		values = req.getParameterValues("wschecked");
-		for(String workspaceid : values)
-		{
-			wsIdList = wsIdList + "," + workspaceid;
-		}
-
-		//removing the first ',' value
-		wsIdList = wsIdList.substring(1,wsIdList.length());
-
+		String wsInternalId;
+		ModelAndView model;
+		List<ModifyWorkspace> archiveWorkspaceList;
+		
+		model = new ModelAndView("auth/workbench/workspace/archiveworkspace");
 		//fetch the user name
 		userName = principal.getName();
-
-		//check if the user has access to archive the workspace
-		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
 		
-		if(chkAccess)
+		archiveWorkspaceList = new ArrayList<ModifyWorkspace>();
+		workspaceId = new StringBuilder();
+		
+		if(result.hasErrors())
 		{
-			//archive the workspace
-			errmsg = archiveWSManager.archiveWorkspace(wsIdList, userName);
-
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg",StringConstants.WORKSPACE_ARCHIVE_SUCCESS);
-				model.addAttribute("wsprojectid", projectid);
-				return "auth/workbench/workspace/archiveworkspaceStatus";
-			}
-			else
-			{
-				workspaceList = wsManager.listActiveWorkspace(projectid,userName);
-				//adding the workspace details to the model
-				model.addAttribute("workspaceList", workspaceList);
-				model.addAttribute("wsprojectid", projectid);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				return "auth/workbench/workspace/archiveworkspace";
-			}
+			// retrieve the workspaces associated with the projects
+			archiveWorkspaceList = workspaceFormManager.getActiveWorkspaceList(projectid, userName);
+			
+			workspaceForm.setWorkspaceList(archiveWorkspaceList);
+			
+			//frame the model objects
+			model.getModelMap().put("success", 0);
+			model.getModelMap().put("error", 1);
+			model.getModelMap().put("workspaceform", workspaceForm);
+			model.getModelMap().put("wsprojectid", projectid);
 		}
 		else
 		{
-			throw new QuadrigaAccessException();
+			archiveWorkspaceList = workspaceForm.getWorkspaceList();
+			
+			//loop through the selected workspace
+			for(ModifyWorkspace workspace : archiveWorkspaceList)
+			{
+				wsInternalId = workspace.getId();
+				
+				if(wsInternalId != null)
+				{
+					workspaceId.append(",");
+					workspaceId.append(wsInternalId);
+				}
+			}
+			
+			archiveWSManager.archiveWorkspace(workspaceId.toString().substring(1), userName);
+			
+			//frame the model objects
+			model.getModelMap().put("success", 1);
+			model.getModelMap().put("wsprojectid", projectid);	
 		}
+
+      return model; 
 
 	}
 	
@@ -132,17 +154,28 @@ public class ArchiveWSController
 	 * @author  Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/{projectid}/unarchiveworkspace", method=RequestMethod.GET)
-	public String unarchiveWorkspaceForm(Model model,@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
+	public ModelAndView unarchiveWorkspaceForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
-		String userName;
-		List<IWorkSpace> workspaceList;
 		
+		ModelAndView model;
+		String userName;
+		ModifyWorkspaceForm workspaceForm;
+		List<ModifyWorkspace> unarchiveWSList;
+		
+		//check if the user has access
 		userName = principal.getName();
+		
+		model = new ModelAndView("auth/workbench/workspace/unarchiveworkspace");
+		workspaceForm = workspaceFormFactory.createModifyWorkspaceForm();
+		
 		// retrieve the workspaces associated with the projects
-		    workspaceList = wsManager.listArchivedWorkspace(projectid,userName);
-			model.addAttribute("workspaceList", workspaceList);
-			model.addAttribute("wsprojectid",projectid);
-		return "auth/workbench/workspace/unarchiveworkspace";
+		unarchiveWSList = workspaceFormManager.getArchivedWorkspaceList(projectid, userName);
+		workspaceForm.setWorkspaceList(unarchiveWSList);
+		
+		model.getModelMap().put("workspaceform", workspaceForm);
+		model.getModelMap().put("wsprojectid", projectid);
+		model.getModelMap().put("success", 0);
+		return model;
 	}
 	
 	/**
@@ -157,58 +190,58 @@ public class ArchiveWSController
 	 * @throws QuadrigaAccessException 
 	 */
 	@RequestMapping(value = "auth/workbench/{projectid}/unarchiveworkspace", method = RequestMethod.POST)
-	public String unarchiveWorkspace(@PathVariable("projectid") String projectid,HttpServletRequest req, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView unarchiveWorkspace(@Validated @ModelAttribute("workspaceform") ModifyWorkspaceForm workspaceForm,BindingResult result,
+			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		String[] values;
-		String wsIdList = "";
-		String errmsg;
+		StringBuilder workspaceId;
 		String userName;
-		boolean chkAccess;
-		List<IWorkSpace> workspaceList = null;
-
-		// fetch the selected values
-		values = req.getParameterValues("wschecked");
-		for(String workspaceid : values)
-		{
-			wsIdList = wsIdList + "," + workspaceid;
-		}
-
-		//removing the first ',' value
-		wsIdList = wsIdList.substring(1,wsIdList.length());
-
+		String wsInternalId;
+		ModelAndView model;
+		List<ModifyWorkspace> unarchiveWSList;
+		
+		model = new ModelAndView("auth/workbench/workspace/unarchiveworkspace");
+		
 		//fetch the user name
 		userName = principal.getName();
 		
-		//check the user access
-		chkAccess = wsSecurityManager.chkWorkspaceAccess(userName, projectid, wsIdList);
+		unarchiveWSList = new ArrayList<ModifyWorkspace>();
+		workspaceId = new StringBuilder();
 		
-		if(chkAccess)
+		if(result.hasErrors())
 		{
-			//unarchive the workspace
-			errmsg = archiveWSManager.unArchiveWorkspace(wsIdList, userName);
-
-			if(errmsg.equals(""))
-			{
-				model.addAttribute("success", 1);
-				model.addAttribute("successMsg",StringConstants.WORKSPACE_UNARCHIVE_SUCCESS);
-				model.addAttribute("wsprojectid", projectid);
-				return "auth/workbench/workspace/unarchiveworkspaceStatus";
-			}
-			else
-			{
-				workspaceList = wsManager.listArchivedWorkspace(projectid,userName);
-				//adding the workspace details to the model
-				model.addAttribute("workspaceList", workspaceList);
-				model.addAttribute("wsprojectid", projectid);
-				model.addAttribute("success", 0);
-				model.addAttribute("errormsg", errmsg);
-				return "auth/workbench/workspace/unarchiveworkspace";
-			}
+			// retrieve the workspaces associated with the projects
+			unarchiveWSList = workspaceFormManager.getArchivedWorkspaceList(projectid, userName);
+			
+			workspaceForm.setWorkspaceList(unarchiveWSList);
+			
+			//frame the model objects
+			model.getModelMap().put("success", 0);
+			model.getModelMap().put("error", 1);
+			model.getModelMap().put("workspaceform", workspaceForm);
+			model.getModelMap().put("wsprojectid", projectid);
 		}
 		else
 		{
-			throw new QuadrigaAccessException();
+			unarchiveWSList = workspaceForm.getWorkspaceList();
+			
+			//loop through the selected workspace
+			for(ModifyWorkspace workspace : unarchiveWSList)
+			{
+				wsInternalId = workspace.getId();
+				
+				if(wsInternalId != null)
+				{
+					workspaceId.append(",");
+					workspaceId.append(wsInternalId);
+				}
+			}
+			archiveWSManager.unArchiveWorkspace(workspaceId.toString().substring(1), userName);
+			
+			//frame the model objects
+			model.getModelMap().put("success", 1);
+			model.getModelMap().put("wsprojectid", projectid);			
 		}
+		return model;
 	}
 
 }

@@ -36,7 +36,7 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public String archiveWorkspace(String workspaceIdList,int archive,String wsUser) throws QuadrigaStorageException
+	public void archiveWorkspace(String workspaceIdList,int archive,String wsUser) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -64,17 +64,22 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 			sqlStatement.execute();
 			
 			errmsg = sqlStatement.getString(4);
+			
+			if(!errmsg.equals(""))
+			{
+				logger.info("Archvie workspace method :"+errmsg);
+				throw new QuadrigaStorageException();
+			}
 		}
 		catch(SQLException e)
 		{
-			logger.info("Archvie workspace method :"+e.getMessage());
+			logger.error("Archvie workspace method :",e);
 			throw new QuadrigaStorageException(e.getMessage());
 		}
 		finally
 		{
 			closeConnection();
 		}
-		return errmsg;
 	}
 	
 	/**
@@ -89,7 +94,7 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public String deactivateWorkspace(String workspaceIdList,int deactivate,String wsUser) throws QuadrigaStorageException
+	public void deactivateWorkspace(String workspaceIdList,int deactivate,String wsUser) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -117,16 +122,21 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 			sqlStatement.execute();
 			
 			errmsg = sqlStatement.getString(4);
+			
+			if(!errmsg.equals(""))
+			{
+				logger.info("Deactivate workspace method  :"+errmsg);
+				throw new QuadrigaStorageException();
+			}
 		}
 		catch(SQLException e)
 		{
-			logger.info("Deactivate workspace method  :"+e.getMessage());
-			throw new QuadrigaStorageException(e.getMessage());
+			logger.error("Deactivate workspace method  :",e);
+			throw new QuadrigaStorageException();
 		}
 		finally
 		{
 			closeConnection();
 		}
-		return errmsg;
 	}
 }
