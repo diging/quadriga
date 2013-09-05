@@ -51,7 +51,7 @@ public class TransferProjectOwnerController
 	ICollaboratorRoleManager roleManager;
 	
 	@InitBinder
-	protected void initBinder(WebDataBinder validateBinder) throws Exception {
+	protected void initBinder(WebDataBinder validateBinder){
 		validateBinder.setValidator(validator);
 	}
 	
@@ -66,7 +66,7 @@ public class TransferProjectOwnerController
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1,userRole = {"null"})})
 	@RequestMapping(value = "auth/workbench/transferprojectowner/{projectid}", method = RequestMethod.GET)
-	public ModelAndView transferProjectOwnerRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
+	public ModelAndView transferProjectOwnerRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		IProject project;
@@ -158,11 +158,8 @@ public class TransferProjectOwnerController
 	        	//fetch the new owner
 	        	newOwner = collaboratorUser.getUserName();
 	        	
-	        	System.out.println("New User selected"+newOwner);
-	        	
 	        	collaboratorRole = roleManager.getProjectCollaboratorRoleById(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN).getRoleDBid();
 	        	
-	        	System.out.println("Collaborator Role  :"+collaboratorRole);
 				//call the method to transfer the ownership
 				projectManager.transferProjectOwnerRequest(projectid, userName, newOwner,collaboratorRole);
 				

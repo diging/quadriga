@@ -31,17 +31,14 @@ public class ArchiveWSManager implements IArchiveWSManager
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public String archiveWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
+	public void archiveWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
 	{
 		int archive;
-		String errmsg;
 		
 		//assigning the archive parameter 1 species archive a workspace
 		archive = 1;
 		
-		errmsg = dbConnect.archiveWorkspace(workspaceIdList, archive, wsUser);
-		 
-		return errmsg;
+		dbConnect.archiveWorkspace(workspaceIdList, archive, wsUser);
 	}
 	
 	/**
@@ -53,17 +50,13 @@ public class ArchiveWSManager implements IArchiveWSManager
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public String unArchiveWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
+	public void unArchiveWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
 	{
 		int archive;
-		String errmsg;
-		
 		//assigning the archive parameter 1 species archive a workspace
 		archive = 0;
 		
-		errmsg = dbConnect.archiveWorkspace(workspaceIdList, archive, wsUser);
-		 
-		return errmsg;
+		dbConnect.archiveWorkspace(workspaceIdList, archive, wsUser);
 	}
 	
 	/**
@@ -75,16 +68,13 @@ public class ArchiveWSManager implements IArchiveWSManager
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public String deactivateWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
+	public void deactivateWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
 	{
 		int deactivate;
-		String errmsg;
 		
 		//assigning the deactivate variable.
 		deactivate = 1;
-		
-		errmsg = dbConnect.deactivateWorkspace(workspaceIdList, deactivate, wsUser);
-		return errmsg;
+		dbConnect.deactivateWorkspace(workspaceIdList, deactivate, wsUser);
 	}
 	
 	/**
@@ -97,14 +87,12 @@ public class ArchiveWSManager implements IArchiveWSManager
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public String activateWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
+	public void activateWorkspace(String workspaceIdList,String wsUser) throws QuadrigaStorageException
 	{
 		int deactivate;
-		String errmsg;
 		//assigning the deactivate variable.
 		deactivate = 0;
-		errmsg = dbConnect.deactivateWorkspace(workspaceIdList, deactivate, wsUser);
-		return errmsg;
+		dbConnect.deactivateWorkspace(workspaceIdList, deactivate, wsUser);
 	}
 
 }

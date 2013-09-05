@@ -6,40 +6,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyProject;
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyProjectForm;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
+import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
+
 @Service
-public class ProjectFormValidator implements Validator {
+public class WorkspaceFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		return arg0.isAssignableFrom(ModifyProjectForm.class);
+		return arg0.isAssignableFrom(ModifyWorkspaceForm.class);
 	}
 
 	@Override
 	public void validate(Object obj, Errors err) 
 	{
-		List<ModifyProject> deleteProjectList;
+		List<ModifyWorkspace> workspaceList;
 		String internalId;
 		boolean isAllNull = true;
 		
-		ModifyProjectForm projectForm = (ModifyProjectForm)obj;
-		deleteProjectList = projectForm.getProjectList();
+		ModifyWorkspaceForm workspaceForm = (ModifyWorkspaceForm)obj;
+		workspaceList = workspaceForm.getWorkspaceList();
 		
 		//validating if any row is selected
-		for(ModifyProject project : deleteProjectList)
+		for(ModifyWorkspace workspace : workspaceList)
 		{
-			internalId = project.getInternalid();
+			internalId = workspace.getId();
 			if(internalId != null)
 			{
 				isAllNull = false;
 			}
 		}
-		
 		//if no row is selected
 		if(isAllNull)
 		{
-			err.reject("project_selection.required");
+			err.reject("workspace_selection.required");
 		}
-	}	
+
+	}
+
 }
