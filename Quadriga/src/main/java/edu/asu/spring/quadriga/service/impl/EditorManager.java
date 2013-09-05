@@ -66,7 +66,7 @@ public class EditorManager implements IEditorManager {
 	@Override
 	public  List<INetwork> getAssignNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
-		List<INetwork> networkList = new ArrayList<INetwork>();
+		List<INetwork> networkList = null;
 
 		try{
 			networkList=dbConnect.getAssignNetworkOfUser(user);
@@ -79,7 +79,7 @@ public class EditorManager implements IEditorManager {
 	@Override
 	public  List<INetwork> getRejectedNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
-		List<INetwork> networkList = new ArrayList<INetwork>();
+		List<INetwork> networkList = null;
 
 		try{
 			networkList=dbConnect.getRejectedNetworkOfUser(user);

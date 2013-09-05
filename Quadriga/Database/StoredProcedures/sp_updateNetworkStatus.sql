@@ -47,6 +47,8 @@ BEGIN
          START TRANSACTION;
 			UPDATE 
 			tbl_networks SET status= instatus WHERE networkid=innetworkid;
+			UPDATE
+			tbl_network_assigned SET status= instatus WHERE networkid=innetworkid;
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

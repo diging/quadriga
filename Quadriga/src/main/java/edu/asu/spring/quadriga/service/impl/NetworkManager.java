@@ -226,6 +226,7 @@ public class NetworkManager implements INetworkManager {
 		headers.setAccept(mediaTypes);
 		ResponseEntity<String> response = null;
 		try{
+			logger.debug("URL : "+getQStoreGetURL()+id);
 			response = restTemplate.exchange(getQStoreGetURL()+id,
 					HttpMethod.GET,
 					new HttpEntity<String[]>(headers),
@@ -252,7 +253,7 @@ public class NetworkManager implements INetworkManager {
 			unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(responseText.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
-			//		logger.info("Respose bytes : "+responseText);
+					logger.debug("Respose bytes : "+responseText);
 			try{
 				ElementEventsType e = response1.getValue();
 				List<CreationEvent> c =e.getRelationEventOrAppellationEvent();

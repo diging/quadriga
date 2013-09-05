@@ -38,7 +38,7 @@ BEGIN
 	 select networkid,workspaceid,networkname,networkowner,status 
 	from tbl_networks where networkid IN (
 		select networkid from tbl_network_assigned where assigneduser = inusername
-	)and status = 'PENDING';
+	)and status = 'ASSIGNED';
 	
 	END IF;
 END$$

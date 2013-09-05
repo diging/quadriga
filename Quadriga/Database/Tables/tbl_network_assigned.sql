@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_network_assigned
 (
   networkid       varchar(100)           NOT NULL ,
   assigneduser    VARCHAR(50)   NOT NULL ,
+  status 		  VARCHAR(50)   NOT NULL ,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
