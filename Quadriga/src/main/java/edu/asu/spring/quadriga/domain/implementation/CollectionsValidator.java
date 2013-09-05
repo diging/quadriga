@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
+import edu.asu.spring.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 @Service
 public class CollectionsValidator implements Validator {

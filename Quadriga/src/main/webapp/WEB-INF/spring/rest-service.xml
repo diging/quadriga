@@ -115,7 +115,7 @@
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType
+				<value>edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType
 				</value>
 				<value>java.lang.String</value>
 			</list>

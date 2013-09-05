@@ -30,5 +30,8 @@ public interface RoleNames {
 	public static final String ROLE_DICTIONARY_COLLABORATOR_ADMIN = "ADMIN";
 	public static final String ROLE_DICTIONARY_COLLABORATOR_READ = "DICT_READ_ACCESS";
 	public static final String ROLE_DICTIONARY_COLLABORATOR_READ_WRITE = "DICT_READ/WRITE_ACCESS";
+	
+	//concept collection roles constants
+	public static final String ROLE_CC_COLLABORATOR_ADMIN = "ADMIN";
 
 }

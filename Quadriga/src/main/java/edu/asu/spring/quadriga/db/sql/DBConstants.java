@@ -58,6 +58,8 @@ public interface DBConstants
 	public static final String SHOW_CC_COLLABORATOR_REQUEST = "sp_showCollectionCollaborators";
 	public static final String SHOW_CC_NONCOLLABORATOR_REQUEST = "sp_showCollectionNonCollaborators";
 	public static final String DELETE_CC_COLLABORATOR_REQUEST = "sp_deleteCollectionCollaborators";
+	public static final String TRANSFER_COLLECTION_OWNERSHIP = "sp_changeconceptcollectionowner";
+	
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
 	public static final String GET_DICTIONARY_ITEMS_DETAILS_COLLAB = "sp_getDictionaryItems_collab";
 	public static final String GET_DICTIONARY_NAME = "sp_getDictionaryName";

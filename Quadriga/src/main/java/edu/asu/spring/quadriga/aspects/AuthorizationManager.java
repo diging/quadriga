@@ -25,6 +25,10 @@ public class AuthorizationManager implements IAuthorizationManager
 	@Qualifier("workspaceAuthorization")
 	private IAuthorization workspaceAuthorization;
 	
+	@Autowired
+	@Qualifier("conceptCollectionAuthorization")
+	private IAuthorization conceptCollectionAuthorization;
+	
 	private HashMap<CheckedElementType,IAuthorization> accessManager;
 	
 
@@ -37,6 +41,7 @@ public class AuthorizationManager implements IAuthorizationManager
 		//insert records into the HashMap
 		accessManager.put(CheckedElementType.PROJECT, projectAuthorization);
 		accessManager.put(CheckedElementType.WORKSPACE, workspaceAuthorization);
+		accessManager.put(CheckedElementType.CONCEPTCOLLECTION, conceptCollectionAuthorization);
 		
 	}
 	

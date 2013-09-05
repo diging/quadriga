@@ -13,9 +13,9 @@ import org.xml.sax.SAXException;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.networks.ElementEventsType;
-import edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType;
-import edu.asu.spring.quadriga.domain.implementation.networks.jsonobject.JsonObject;
+import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface INetworkManager {

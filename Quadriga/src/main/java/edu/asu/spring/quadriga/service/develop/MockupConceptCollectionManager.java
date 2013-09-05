@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IConceptCollectionManager;
+import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 /*	@Description : This class acts as a dummy Conceptcollection manager which adds list of concepts
 **   				and their descriptions on the concept collection.
 **   
