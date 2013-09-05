@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.asu.spring.quadriga.db.IDBConnectionCCManager;
+import edu.asu.spring.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -31,8 +31,8 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**

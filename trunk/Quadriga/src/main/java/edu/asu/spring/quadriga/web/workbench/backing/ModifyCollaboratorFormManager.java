@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 
 @Service
 public class ModifyCollaboratorFormManager {

@@ -43,7 +43,7 @@ public class DictionaryWorkspaceController {
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionary", method = RequestMethod.GET)
-	public String addProjectDictionary(
+	public String addWorkspaceDictionary(
 			@PathVariable("workspaceid") String workspaceId, Model model) 
 					throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -77,7 +77,7 @@ public class DictionaryWorkspaceController {
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionaries", method = RequestMethod.POST)
-	public String addProjectDictionary(HttpServletRequest req,
+	public String addWorkspaceDictionary(HttpServletRequest req,
 			@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		String msg = "";
 		int flag=0;
@@ -167,7 +167,7 @@ public class DictionaryWorkspaceController {
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionary", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
+	public String deleteWorkspaceDictionary(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();

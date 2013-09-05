@@ -41,7 +41,10 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="DBConnectionCCManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionCCManager">
+	<bean id="DBConnectionCCManagerBean" class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionCCManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+		<bean id="DBConnectionModifyCCManagerBean" class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionModifyCCManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 

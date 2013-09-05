@@ -23,9 +23,9 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
+import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 
 @Controller
 public class ConceptCollectionWorkspaceController {
@@ -74,7 +74,7 @@ public class ConceptCollectionWorkspaceController {
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.GET)
-	public String addProjectConceptCollection(
+	public String addWorkspaceConceptCollection(
 			@PathVariable("workspaceid") String workspaceId, Model model) 
 					throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -176,7 +176,7 @@ public class ConceptCollectionWorkspaceController {
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.GET)
-	public String deleteProjectDictionary(@PathVariable("workspaceid") String workspaceId, Model model) 
+	public String deleteWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) 
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
@@ -201,7 +201,7 @@ public class ConceptCollectionWorkspaceController {
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.POST)
-	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model)
+	public String deleteWorkspaceConceptCollection(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
