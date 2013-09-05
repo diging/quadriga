@@ -213,14 +213,14 @@ public class DspaceRestController {
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 			
-			return dspaceProperties.getProperty("bitstream_download_url")+fileid+dspaceProperties.getProperty("?")+
+			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid+dspaceProperties.getProperty("?")+
 					dspaceProperties.getProperty("api_key")+publicKey+dspaceProperties.getProperty("&")+
 					dspaceProperties.getProperty("api_digest")+digestKey;
 		}
 		else if(email!=null && password!=null && !email.equals("") && !password.equals(""))
 		{				
 			//Authenticate based on email and password
-			return dspaceProperties.getProperty("bitstream_download_url")+fileid+dspaceProperties.getProperty("?")+
+			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid+dspaceProperties.getProperty("?")+
 					dspaceProperties.getProperty("email")+email+
 					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
 		}
@@ -236,13 +236,13 @@ public class DspaceRestController {
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 			
-			return dspaceProperties.getProperty("bitstream_download_url")+fileid+dspaceProperties.getProperty("?")+
+			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid+dspaceProperties.getProperty("?")+
 					dspaceProperties.getProperty("api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("&")+
 					dspaceProperties.getProperty("api_digest")+digestKey;
 		}
 		
 		//No authentication provided
-		return dspaceProperties.getProperty("bitstream_download_url")+fileid;
+		return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid;
 	}
 
 	private String bytesToHex(byte[] b) {
