@@ -34,7 +34,7 @@ BEGIN
 
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
-     -- retrieve the dictionary details
+     -- retrieve the networks details
 	 select networkid,workspaceid,networkname,status
        from tbl_networks
 	   where networkowner = innetworkowner ;

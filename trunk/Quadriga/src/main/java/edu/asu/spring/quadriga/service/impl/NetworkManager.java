@@ -68,6 +68,7 @@ import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManage
  * 
  * @author : Lohith Dwaraka
  */
+
 @Service
 public class NetworkManager implements INetworkManager {
 
@@ -86,15 +87,20 @@ public class NetworkManager implements INetworkManager {
 	@Autowired
 	@Qualifier("qStoreURL_Add")
 	private String qStoreURL_Add;
-
+	
+	
 	@Autowired
 	@Qualifier("restTemplate")
 	RestTemplate restTemplate;
 
 	@Autowired
+	@Qualifier("qStoreURL_Get_POST")
+	private String qStoreURL_Get_POST;
+
+	@Autowired
 	@Qualifier("qStoreURL_Get")
 	private String qStoreURL_Get;
-
+	
 	@Autowired
 	@Qualifier("jaxbMarshaller")
 	Jaxb2Marshaller jaxbMarshaller;
@@ -106,22 +112,33 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnect;
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getQStoreAddURL()
+	/* 
+	 * Prepare a QStore Add URL to add new networks to QStore
 	 */
 	@Override
 	public String getQStoreAddURL() {
 		return qStoreURL+qStoreURL_Add;
 	}
 
+	/* 
+	 * Prepare a QStore Get URL to fetch element of networks from Qstore
+	 */
 	@Override
 	public String getQStoreGetURL() {
 		return qStoreURL+qStoreURL_Get;
 	}
+	
+	/* 
+	 * Prepare a QStore Get URL to fetch all the element of networks from Qstore
+	 */
+	@Override
+	public String getQStoreGetPOSTURL() {
+		return qStoreURL+qStoreURL_Get_POST;
+	}
 
 
 	/**
-	 * Parses through the XML and object goes through the event types 
+	 * Store the element IDs into DB by parsing through the XML and object goes through the event types 
 	 * @param response
 	 * @param user
 	 * @param networkName
@@ -187,8 +204,8 @@ public class NetworkManager implements INetworkManager {
 		return networkId;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#prettyFormat(java.lang.String, int)
+	/* 
+	 * Formats the XML 
 	 */
 	@Override
 	public String prettyFormat(String input, int indent) {
@@ -209,6 +226,9 @@ public class NetworkManager implements INetworkManager {
 		return result;
 	}
 
+	/**
+	 * Gets the network element xml for a particular ID
+	 */
 	@Override
 	public ResponseEntity<String> getNodeXmlFromQstore(String id)throws JAXBException{
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -236,6 +256,10 @@ public class NetworkManager implements INetworkManager {
 		return response;
 	}
 	
+	
+	/**
+	 * Generate JSON string of the network to JIT jquery
+	 */
 	@Override
 	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
 		JsonObject jsonObject = new JsonObject();
@@ -296,6 +320,10 @@ public class NetworkManager implements INetworkManager {
 		return this.jsonString.toString();
 	}
 
+	/**
+	 * Helper funtions to create a JSon object
+	 * @param relationEventObject
+	 */
 	public void printJsonObjectRE(RelationEventObject relationEventObject){
 		PredicateObject predicateObject = relationEventObject.getPredicateObject();
 		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
@@ -335,6 +363,10 @@ public class NetworkManager implements INetworkManager {
 		}
 	}
 
+	/**
+	 * Update JSON with every new triplet node
+	 * @param nodeObject
+	 */
 	public void updateJsonStringForRENode(NodeObject nodeObject){
 		this.jsonString.append("{\"adjacencies\":[");
 		this.jsonString.append("{");
@@ -346,7 +378,7 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getObject()+"\",");
 		this.jsonString.append("\"nodeFrom\": \""+nodeObject.getPredicate()+"\",");
-		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"}");
+		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"},\"$labeltext\": \"OBJECT\",\"$labelid\":\"11\"");
 		this.jsonString.append("}],");
 
 		this.jsonString.append("\"data\": {");
@@ -460,8 +492,10 @@ public class NetworkManager implements INetworkManager {
 
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getRelationEventElements(edu.asu.spring.quadriga.domain.implementation.networks.RelationEventType, java.lang.String, edu.asu.spring.quadriga.domain.IUser)
+
+	/** 
+	 * Get all the objects recursively for JSON creation
+	 * 
 	 */
 	@Override
 	public void getRelationEventElements(RelationEventType re,String networkId,IUser user) throws QuadrigaStorageException{
@@ -604,8 +638,8 @@ public class NetworkManager implements INetworkManager {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#storeXMLQStore(java.lang.String)
+	/** 
+	 * Store XML into QStore
 	 */
 	@Override
 	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
@@ -632,8 +666,36 @@ public class NetworkManager implements INetworkManager {
 		return res;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getNetworkStatus(java.lang.String, edu.asu.spring.quadriga.domain.IUser)
+	/** 
+	 * Get whole network XML from QStore
+	 */
+	@Override
+	public String getWholeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
+		String res="";
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+		RestTemplate restTemplate = new RestTemplate();
+		List<MediaType> mediaTypes = new ArrayList<MediaType>();
+		mediaTypes.add(MediaType.APPLICATION_XML);
+		messageConverters.add(new FormHttpMessageConverter());
+		messageConverters.add(new StringHttpMessageConverter());
+		restTemplate.setMessageConverters(messageConverters);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		headers.setAccept(mediaTypes);
+		HttpEntity request = new HttpEntity(XML,headers);
+
+		try{
+			res = restTemplate.postForObject(getQStoreGetPOSTURL(), request,String.class);
+		}catch(Exception e){
+			logger.error("QStore not accepting the xml, please check with the server logs.",e);
+			//res = e.getMessage();
+			return res;
+		}
+		return res;
+	}
+
+	/**
+	 * Get Network Status from DB
 	 */
 	@Override
 	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException{
@@ -647,8 +709,8 @@ public class NetworkManager implements INetworkManager {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getNetworkList(edu.asu.spring.quadriga.domain.IUser)
+	/* 
+	 * Get Network list belonging to users
 	 */
 	@Override
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
@@ -662,6 +724,9 @@ public class NetworkManager implements INetworkManager {
 		return networkList;
 	}
 
+	/**
+	 * Get All the nodes of the networks
+	 */
 	@Override
 	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
 			throws QuadrigaStorageException{
@@ -670,8 +735,8 @@ public class NetworkManager implements INetworkManager {
 		return networkTopNodeList;
 	}
 			
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#getProjectIdForWorkspaceId(java.lang.String)
+	/* 
+	 * Get Project ID associated to workspace id
 	 */
 	@Override
 	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException{
@@ -684,8 +749,8 @@ public class NetworkManager implements INetworkManager {
 		return projectid;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.INetworkManager#hasNetworkName(java.lang.String, edu.asu.spring.quadriga.domain.IUser)
+	/**
+	 * Check if the network name already exist
 	 */
 	@Override
 	public boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException{
@@ -699,6 +764,9 @@ public class NetworkManager implements INetworkManager {
 		return result;
 	}
 
+	/**
+	 * Get only the Top Nodes of the network
+	 */
 	@Override
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkTopNodes(networkId);
@@ -706,12 +774,18 @@ public class NetworkManager implements INetworkManager {
 		return networkTopNodeList;
 	}
 	
+	/**
+	 * Archive network Statements
+	 */
 	@Override
 	public String archiveNetworkStatement(String networkId,String id) throws QuadrigaStorageException{
 		String msg = dbConnect.archiveNetworkStatement(networkId, id);
 		return msg;
 	}
 	
+	/**
+	 * Archive network
+	 */
 	@Override
 	public void archiveNetwork(String networkId) throws QuadrigaStorageException{
 		

@@ -68,10 +68,21 @@ public class NetworkListManager {
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkListManager.class);
 
+	/*
+	 * Prepare the QStore GET URL
+	 */
 	public String getQStoreGetURL() {
 		return qStoreURL+""+qStoreURL_Get;
 	}
 
+	/**
+	 * Get the list of network belonging to the user
+	 * @author Lohith Dwaraka
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/networks", method = RequestMethod.GET)
 	public String listNetworks(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
@@ -90,6 +101,16 @@ public class NetworkListManager {
 	}
 
 
+	/**
+	 * Get the network displayed on to JSP by passing JSON string
+	 * @author Lohith Dwaraka
+	 * @param networkId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws JAXBException
+	 */
 	@RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		StringBuffer jsonstring=new StringBuffer();

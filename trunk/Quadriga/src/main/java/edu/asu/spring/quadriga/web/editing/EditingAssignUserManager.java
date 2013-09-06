@@ -41,8 +41,16 @@ public class EditingAssignUserManager {
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingAssignUserManager.class);
 
+	/**
+	 * Assign a network to User
+	 * @param networkId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/editing/assignuser/{networkId}", method = RequestMethod.GET)
-	public String assignUserToNetwork(@PathVariable("networkId") String networkId,ModelMap model, Principal principal) throws QuadrigaStorageException {
+	public String assignNetworkToUser(@PathVariable("networkId") String networkId,ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		try{
 			editorManager.assignNetworkToUser(networkId, user);
@@ -62,6 +70,13 @@ public class EditingAssignUserManager {
 		return "auth/editing";
 	}
 
+	/**
+	 * List networks assigned to a User
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/editing/assignnetworktouser", method = RequestMethod.GET)
 	public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
@@ -93,6 +108,15 @@ public class EditingAssignUserManager {
 		return "auth/assignednetworks";
 	}
 
+	
+	/**
+	 * Approve a network
+	 * @param networkId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/editing/approvenetwork/{networkid}", method = RequestMethod.GET)
 	public String approveNetwork(@PathVariable ( "networkid") String networkId  ,ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
@@ -130,6 +154,14 @@ public class EditingAssignUserManager {
 		return "auth/assignednetworks";
 	}
 
+	/**
+	 * Reject a submitted network
+	 * @param networkId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/editing/rejectnetwork/{networkid}", method = RequestMethod.GET)
 	public String rejectNetwork(@PathVariable ( "networkid") String networkId  ,ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());

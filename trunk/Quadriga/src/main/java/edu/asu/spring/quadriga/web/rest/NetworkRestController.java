@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.web.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -286,33 +287,50 @@ public class NetworkRestController {
 	 * @param accept
 	 * @param principal
 	 * @return status
-	 * @throws QuadrigaStorageException 
-	 * @throws RestException 
 	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/networkdetails/{networkid}", method = RequestMethod.GET, produces = "application/xml")
 	public String getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,
-			String accept,Principal principal,HttpServletRequest req) throws JAXBException, QuadrigaStorageException, RestException {
+			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
 		List<INetworkNodeInfo> networkTopNodes = networkManager.getNetworkTopNodes(networkId);
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		Template template = null;
+		String networkXML="";
+		try {
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/getnetworksfromqstore.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("statmentList", networkTopNodes);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			logger.debug("XML : "+ writer.toString());
+			networkXML = networkManager.getWholeXMLQStore(writer.toString());
+		} catch (ResourceNotFoundException e) {
 
-		Iterator <INetworkNodeInfo> I = networkTopNodes.iterator();
-		ResponseEntity<String> res = null;
-		while (I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			res = networkManager.getNodeXmlFromQstore(networkNodeInfo.getId());
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
 		}
+		
 
-		if(res == null){
+		if(networkXML.isEmpty() || networkXML == null){
 			throw new RestException(404);
 		}
 		response.setStatus(200);
 		response.setContentType(accept);
 		response.setContentType("application/xml");
-		return res.getBody().toString();
+		return networkXML;
 	}
 
 	/**
@@ -380,4 +398,7 @@ public class NetworkRestController {
 			}
 		}
 	}
+	
+	
+	
 }
