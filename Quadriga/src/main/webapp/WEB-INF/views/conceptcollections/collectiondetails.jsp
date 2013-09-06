@@ -49,6 +49,9 @@ function resetSelectAll() {
 }
 
 </script>
+<table style="width:100%">
+<tr>
+<td style="width:90%">
 
 <header>
 	<h2>Concept Collection: <span contenteditable="true"> ${concept.name}</span></h2>
@@ -99,12 +102,24 @@ function resetSelectAll() {
 								value="${conceptItem.description}"></c:out></font></td>
 
 
-
 				</tr>
 			</c:forEach>
-
 		</tbody>
-
 	</table>
 	</form>
 </div>
+</td>
+<td style="width:10%">
+	<section>
+		<h1 class="major">
+			<span>collaborators</span>
+		</h1>
+		<ul class="collaborators">
+			<c:forEach var="collab" items="${collaboratingUsers}">
+				<li><c:out value="${collab.userObj.name}"></c:out></li>
+			</c:forEach>
+		</ul>
+	</section>
+</td>
+</tr>
+</table>

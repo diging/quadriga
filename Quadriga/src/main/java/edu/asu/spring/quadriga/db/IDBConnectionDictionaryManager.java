@@ -90,19 +90,56 @@ public interface IDBConnectionDictionaryManager {
 			String termid, String term, String pos)
 			throws QuadrigaStorageException;
 	
+	/**
+	 * makes database call to show non-collaborating users of the current dictionary
+	 * 
+	 * @param dictionaryid
+	 * @return List<IUser>
+	 * @throws QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 */
 	public abstract List<IUser> showNonCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
 	
+	
+	/**
+	 * makes database call to show collaborating users of the current dictionary
+	 * 
+	 * @param dictionaryid
+	 * @return List<ICollaborator>
+	 * @throws QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 */
 	public abstract List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException;
 	
+	
+	/**
+	 * makes db call to add collaborator in dictionary
+	 * 
+	 * @param collaborator
+	 * @param dictionaryid
+	 * @param userName
+	 * @param sessionUser
+	 * @return String 			error message from the database
+	 * @throws QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 */
 	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException;
 
+	/**
+	 * makes db call to delete collaborator in dictionary
+	 * 
+	 * @param dictionaryid
+	 * @param userName
+	 * @return String 			error message from the database
+	 * @author rohit pendbhaje
+	 */
 	public abstract String deleteCollaborators(String dictionaryid, String userName);
 	
 
 	/**
 	 * Deletes the dictionary 
 	 * @param dictionaryId
-	 * @return
+	 * @return 
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException;

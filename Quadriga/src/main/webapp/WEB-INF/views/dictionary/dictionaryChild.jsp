@@ -131,43 +131,14 @@
 }
 </style>
 
+<table style="width:100%">
+  <tr>
+	<td style="width:90%">
 
 <header>
 	<h2>Dictionary: ${dictName}</h2>
 	<span class="byline">These are all the terms in your dictionary</span>
 </header>
-
-<%-----------------------------------------------------------------------%>
-<%-- Author:Rohit Pendbhaje --%>
-<%-- <div>
-<section>
-<h3 class="major"><span>Collaborators</span></h3>
-
-<ul class="collaborators">
-	<c:forEach var="existingcollab" items="${existingCollaborators}">
-	<li><c:out value="${existingcollab.userObj.userName}"></c:out></li>
-	</c:forEach>
-</ul>
-
-<section>
-<ul class="noStyle">
-		<li>
-			<article class="is-post-summary">
-				<h3>
-					» <a href="/quadriga/auth/dictionaries/${dictionaryid}/showCollaborators">Manage Collaborators</a>
-				</h3>
-			</article>
-		</li>	
-	</ul>
-
-
-</section>
-</section>
-</div>   --%>
-
-<%-----------------------------------------------------------------------%>
-
-
 <ul>
 	<li><input type=button
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
@@ -228,12 +199,11 @@
 
 	</c:otherwise>
 </c:choose>
-<div class="container">
+<div>
 	<c:choose>
 		<c:when test="${not empty dictionaryItemList}">
 
 			<form method="POST">
-
 
 				<input type=button
 					onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"
@@ -293,3 +263,18 @@
 	</c:otherwise>
 	</c:choose>
 </div>
+</td>
+<td style="width:10%">
+<section>
+<h3 class="major">
+<span>Collaborators</span>
+</h3>
+<ul class="collaborators">
+<c:forEach var="collab" items="${collaboratingUsers}">
+<li><c:out value="${collab.userObj.name}"/></li>
+</c:forEach>
+</ul>
+</section>
+</td>
+</tr>
+</table>

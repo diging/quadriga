@@ -29,17 +29,22 @@ $(document).ready(function() {
 
 	});
 });
+
+function onSubmit(){
+	
+	location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}';	
+}
 </script>
 
+<input type="submit" value="Back" onClick="onSubmit()"/>
+<br><br>
 <form:form method="POST" commandName="collaboratorForm" 
 action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deleteCollaborator">
 <input type="submit" value="Delete" />
-  <%--  <input type="submit" value="Delete" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deleteCollaborator'" > --%>
 <table style="width:100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">					
 	<thead>
 		<tr>
-		<%-- 	<th align="left"><input type="checkbox" class="selectAll" name="selected" value="check all"/>select All</th>--%>	
 			<th align="left">collaborator</th>
 			<th>roles</th>	
 		</tr>	
@@ -48,9 +53,9 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 	<tbody>
 	<c:forEach var="collab" items="${collaboratorForm.collaborators}" varStatus="status">
 		<tr>
-		  <td><form:checkbox path="collaborators[${status.index}].userName" value="${collabUser.userName}" />
+		  <td><form:checkbox path="collaborators[${status.index}].userName" value="${collab.userName}" />
 			<form:label path="collaborators[${status.index}].userName">
-				<c:out value="${collabUser.userName}"></c:out>
+				<c:out value="${collab.userName}"></c:out>
 			</form:label>
 			<form:errors path="collaborators[${status.index}].userName" cssClass="error"></form:errors> 
 		</td>
@@ -59,7 +64,6 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 		  	<c:out value="${roles.displayName}"></c:out>||
 		  	</c:forEach>
 		  </td>
-
 		</tr>
 	</c:forEach>
 	</tbody>

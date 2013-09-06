@@ -420,7 +420,35 @@ public class DictionaryManager implements IDictionaryManager {
 		return di;
 	}
 	
+	/**
+	 * this method used to return collaborators which are present in the current dictionary
+	 * 
+	 * @param		dictionaryid
+	 * @return		List of collaborators
+	 * @exception 	QuadrigaStorageException	
+	 */
+	@Override
+	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
+		
+		List<ICollaborator> collaborators = null;
+		try {
+			
+		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
+		
+		} catch (QuadrigaStorageException e) {
+			e.printStackTrace();
+		}
 	
+		return collaborators;
+	}
+	
+	/**
+	 * this method used to return collaborators which are not present in the current dictionary
+	 * 
+	 * @param		dictionaryid
+	 * @return		List of users
+	 * @exception 	QuadrigaStorageException	
+	 */
 	@Override
 	public List<IUser> showNonCollaboratingUsers(String dictionaryid) {
 
@@ -433,6 +461,13 @@ public class DictionaryManager implements IDictionaryManager {
 		return nonCollabUsers;
 	}
 
+	/**
+	 * this method used to add collaborators in the current dictionary
+	 * 
+	 * @param		dictionaryid
+	 * @return		List of users
+	 * @exception 	QuadrigaStorageException	
+	 */
 	@Override
 	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 		
@@ -448,22 +483,16 @@ public class DictionaryManager implements IDictionaryManager {
 		
 		return errmsg;
 	}
-
-	@Override
-	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
-		
-		List<ICollaborator> collaborators = null;
-		try {
-			
-		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
-		
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
-		}
 	
-		return collaborators;
-	}
-
+	
+	/**
+	 * this method used to delete collaborators in the current dictionary
+	 * 
+	 * @param dictionaryid
+	 * @param userName			current session user
+	 * @return List of users
+	 * @exception 	QuadrigaStorageException	
+	 */
 	@Override
 	public String deleteCollaborator(String dictionaryid, String userName) {
 		
@@ -472,8 +501,4 @@ public class DictionaryManager implements IDictionaryManager {
 		return errmsg;
 	}
 	
-	
-	
-	
-
 }

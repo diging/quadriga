@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.dictionary;
 
 import java.beans.PropertyEditorSupport;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -86,7 +87,7 @@ public class DictionaryDeleteCollabController {
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
 	public ModelAndView deleteCollaborators(@PathVariable("dictionaryid") String dictionaryId, 
 	@Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm, BindingResult result,
-	ModelMap model) throws QuadrigaStorageException
+	ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		ModelAndView modelAndView;
 		modelAndView = new ModelAndView("auth/dictionaries/showDeleteCollaborators");
@@ -120,7 +121,7 @@ public class DictionaryDeleteCollabController {
 	}
 	
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showDeleteCollaborators" , method = RequestMethod.GET)
-	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId) throws QuadrigaStorageException{
+	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException{
 		
 		
 		ModelAndView modelAndView = new ModelAndView("auth/dictionaries/showDeleteCollaborators");

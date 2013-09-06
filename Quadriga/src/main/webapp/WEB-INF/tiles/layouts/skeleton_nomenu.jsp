@@ -76,6 +76,7 @@
 				<div>
 					<div class="loggedInMsg">
 						Welcome <span class="user" style="margin-left: 5px;"><sec:authentication property="principal.username" /></span>!
+						<h4><span>»<a href="${pageContext.servletContext.contextPath}/auth/profile">profile</a></span></h4>
 					</div>
 					<div class="loggedOutLink">
 						<a href="<c:url value='/j_spring_security_logout' />">Logout</a>

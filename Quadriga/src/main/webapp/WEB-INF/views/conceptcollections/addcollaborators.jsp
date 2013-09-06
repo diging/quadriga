@@ -1,6 +1,8 @@
-<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+    
 
 <style>
 .error {
@@ -24,34 +26,22 @@ $(document).ready(function() {
 	});
 });
 
-
-$(document).ready(function(){
-	$(".selectAll").click(function(){
-	if($(this).val() == "check all")
-		{
-			$('input:checkbox').prop("checked",true);
-			$(this).val("uncheck all");
-		}
-	else
-		{
-			$('input:checkbox').prop("checked",false);
-			$(this).val("check all");	
-		}
-	});
-});	
-
-
 $(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
 
 		});
 	});
-
-
+	
+function onSubmit(){
+	
+	location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}';	
+}
 </script>
 
- <form:form  method="POST" name="myForm" commandName="collaborator"
- action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
+<input type="submit" value="Back" onClick="onSubmit()"/>
+<br><br>  
+<form:form  method="POST" name="myForm" commandName="collaborator"
+action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
 
 <c:if test="${not empty nonCollaboratorList}">
 <div class="ex">select collaborator</div>
@@ -69,15 +59,16 @@ $(document).ready(function() {
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
 	&nbsp;
 </c:if>
-<br></br>
+<br></br>  
 
+	<td><input type="submit" value="Add"></td>
 
-<input type="submit" value="Delete" onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deleteCollaborator'" >
+</form:form>
+
 <table style="width:100%" cellpadding="0" cellspacing="0"
 					border="0" class="display dataTable">					
 	<thead>
 		<tr>
-			<th align="left"><input type="checkbox" class="selectAll" name="selected" value="check all"/>select All</th>	
 			<th align="left">collaborator</th>
 			<th>roles</th>	
 		</tr>
@@ -85,19 +76,18 @@ $(document).ready(function() {
 	</thead>
 	
 	<tbody>
-	<c:forEach var="collab" items="${collaborators}">
+	<c:forEach var="collab" items="${collaboratingUsers}">
 		<tr>
-
-		  <td><input type="checkbox" name="selected" value='<c:out value="${collab.userObj.userName}"></c:out>'/></td>
 		  <td><c:out value="${collab.userObj.userName}"></c:out> </td>
 		  <td>
 		  	<c:forEach var="roles" items="${collab.collaboratorRoles}">
-		  	<c:out value="${roles.displayName}"></c:out>|
+		  	<c:out value="${roles.displayName}"></c:out>||
 		  	</c:forEach>
 		  </td>
-
 		</tr>
 	</c:forEach>
 	</tbody>
-</table>
-</form:form>  
+</table>  
+
+ 
+

@@ -21,7 +21,7 @@ BEGIN
      
 	-- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-      SET errmsg = 'SQL exception has occurred';
+     SET errmsg = 'SQL exception has occurred';
     
     IF(errmsg IS NULL)
     THEN

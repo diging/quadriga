@@ -102,7 +102,7 @@ public class DictionaryItemController {
 		model.addAttribute("dictionaryid", dictionaryid);
 
 		List<ICollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
-		model.addAttribute("existingCollaborators", existingCollaborators);
+		model.addAttribute("collaboratingUsers", existingCollaborators);
 
 		return "auth/dictionary/dictionary";
 	}

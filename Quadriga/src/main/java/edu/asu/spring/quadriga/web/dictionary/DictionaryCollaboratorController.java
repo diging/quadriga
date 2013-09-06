@@ -41,6 +41,13 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
+/**
+ * this class is used for deleting the collaborators and displaying them on the collaborators
+ * details page from dictionaries.
+ *  
+ * @author rohit pendbhaje
+ *
+ */
 @Controller
 public class DictionaryCollaboratorController {
 	
@@ -107,9 +114,17 @@ public class DictionaryCollaboratorController {
 	    }); 
 	}
 	
-	
+	/**
+	 * this method is used to display collaborators on the add collaboratos page
+	 * 
+	 * 
+	 * @param dictionaryId
+	 * @param principal 		current session user
+	 * @return ModelAndView		return model and view from controller
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showAddCollaborators" , method = RequestMethod.GET)
-	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId) throws QuadrigaStorageException{
+	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException{
 	
 		ModelAndView modelAndView = new ModelAndView("auth/dictionaries/showAddCollaborators");
 		modelAndView.getModelMap().put("dictionaryid", dictionaryId);
@@ -140,18 +155,27 @@ public class DictionaryCollaboratorController {
 		return modelAndView;	
 	}
 	
+	/**
+	 * this method is used to delete the collaborators from the dictionary
+	 * 
+	 * @param dictionaryId
+	 * @param collaborator		object returned from the view
+	 * @param result			result of the validated object (in this case collaborator)
+	 * @param principal			current session user
+	 * @return ModelAndView		return model and view from controller
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
 	public ModelAndView addCollaborators( @PathVariable("dictionaryid") String dictionaryId, 
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
 			Principal principal	) throws QuadrigaStorageException
 	{
 		ModelAndView model = null;
-		String errmsg = "";
+		model = new ModelAndView("auth/dictionaries/showAddCollaborators");
+
 		String collaboratorUser = collaborator.getUserObj().getUserName();
 		List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
-		model = new ModelAndView("auth/dictionaries/showAddCollaborators");
 		
-
 		if(result.hasErrors())
 		{
 			model.getModelMap().put("collaborator", collaborator);
@@ -160,17 +184,20 @@ public class DictionaryCollaboratorController {
 		else
 		{
 			String username = principal.getName();	
-			errmsg = dictionaryManager.addCollaborators(collaborator, dictionaryId,collaboratorUser,username);		
+			String errmsg = dictionaryManager.addCollaborators(collaborator, dictionaryId,collaboratorUser,username);		
 			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 
 		}
-				
+			
+		//mapping collaborators absent in the dictionary
 		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
 		model.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
 		
+		//mapping existing collaborators present in the dictionary
 		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
 		model.getModelMap().put("collaboratingUsers", collaborators);
 		
+		//mapping collaborator roles
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
 		

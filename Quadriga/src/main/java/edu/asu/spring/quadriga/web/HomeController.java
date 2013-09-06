@@ -33,5 +33,12 @@ public class HomeController {
 
 		return "auth/home";
 	}
+	
+	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
+	public String loginProfile(Model model, Principal principal)
+	{
+		System.out.println("------------in homecontroller");
+		return "auth/home/profile";
+	}
 
 }
