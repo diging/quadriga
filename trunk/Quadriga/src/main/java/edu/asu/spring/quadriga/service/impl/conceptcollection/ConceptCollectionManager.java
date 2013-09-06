@@ -208,20 +208,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	/**
-	 * @description	  retrieves collaborators for adding in the conceptcollection from database
-	 * @param  collectionid
- 	 * @throws QuadrigaStorageException
-	 * @return String error message
-	 * @author rohit pendbhaje
-	 */
-	@Override
-	public String addCollaborators(ICollaborator collaborator, String collectionid, String userName)throws QuadrigaStorageException {
-
-		String errmsg = dbConnect.addCollaboratorRequest(collaborator, collectionid, userName);
-		return errmsg;
-	}
-
-	/**
 	 * @description	  retrieves collaborating users from database
 	 * @param  collectionid
 	 * @throws QuadrigaStorageException

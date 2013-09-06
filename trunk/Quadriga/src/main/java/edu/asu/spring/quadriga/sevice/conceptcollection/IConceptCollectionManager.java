@@ -140,8 +140,6 @@ public interface IConceptCollectionManager {
 	
 	public abstract List<ICollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException;
 	
-	public abstract String addCollaborators(ICollaborator collaborator, String collectionid, String userName) throws QuadrigaStorageException;
-	
 	public abstract void getCollaborators(IConceptCollection collection)throws QuadrigaStorageException;
 	
 	public abstract String deleteCollaborators(String userName, String collectionid)throws QuadrigaStorageException;

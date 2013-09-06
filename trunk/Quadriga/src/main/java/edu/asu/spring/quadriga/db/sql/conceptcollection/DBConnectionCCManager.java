@@ -35,6 +35,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
  * This class executes all the stored procedures related to the concept
@@ -77,6 +78,9 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
+	
+	@Autowired
+    private IUserManager userManager;
 
 	/**
 	 * {@inheritDoc}
@@ -201,6 +205,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		String dbCommand;
 		String errmsg = null;
 		CallableStatement sqlStatement;
+		IUser owner = null;
 		collection.setCollaborators(new ArrayList<ICollaborator>());
 
 		getConnection();
@@ -220,6 +225,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				if (resultSet.next()) {
 					collection.setDescription(resultSet.getString(7));
 					collection.setName(resultSet.getString(6));
+					owner = userManager.getUserDetails(resultSet.getString(8));
+					collection.setOwner(owner);
 					do {
 						if (resultSet.getString(1) != null) {
 							concept = conceptFactory.createConceptObject();
@@ -493,66 +500,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		}
 	}
 
-	/**
-	 * retrieves data from database to add collaborators
-	 * 
-	 * @param collaborator
-	 * @param collectionid
-	 * @param userName
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 * 
-	 */
-	@Override
-	public String addCollaboratorRequest(ICollaborator collaborator,
-			String collectionid, String userName)
-			throws QuadrigaStorageException {
-		if(collaborator==null || collectionid == null || userName == null || collectionid.isEmpty() || userName.isEmpty())
-		{
-			logger.error("addCollaboratorRequest: input argument are improper");
-			return null;
-		}
-		String dbCommand;
-		String errmsg = null;
-		String role = "";
-		CallableStatement sqlStatement;
-
-		String collabName = collaborator.getUserObj().getUserName();
-		dbCommand = DBConstants.SP_CALL + " "
-				+ DBConstants.ADD_CC_COLLABORATOR_REQUEST + "(?,?,?,?,?)";
-
-		getConnection();
-
-		try {
-			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setString(1, collectionid);
-			sqlStatement.setString(2, collabName);
-
-			for (ICollaboratorRole collaboratorRole : collaborator
-					.getCollaboratorRoles()) {
-				if (collaboratorRole.getRoleDBid() != null) {
-					role += collaboratorRole.getRoleDBid() + ",";
-				}
-			}
-
-			role = role.substring(0, role.length() - 1);
-			sqlStatement.setString(3, role);
-			sqlStatement.setString(4, userName);
-			sqlStatement.registerOutParameter(5, Types.VARCHAR);
-			sqlStatement.execute();
-
-			errmsg = sqlStatement.getString(5);
-			
-		} catch (SQLException e) {
-			throw new QuadrigaStorageException(e);
-		}
-
-		finally {
-			closeConnection();
-		}
-
-		return errmsg;
-	}
 
 	/**
 	 * retrieves data from database to retrieve collaborators

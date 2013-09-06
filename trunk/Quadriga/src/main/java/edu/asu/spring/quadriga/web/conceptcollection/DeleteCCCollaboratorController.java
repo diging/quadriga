@@ -3,14 +3,11 @@ package edu.asu.spring.quadriga.web.conceptcollection;
 import java.security.Principal;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,7 +34,7 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
 @Controller
-public class CCCollaboratorDeleteController {
+public class DeleteCCCollaboratorController {
 	
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
@@ -57,8 +54,6 @@ public class CCCollaboratorDeleteController {
 	@Autowired
 	CollaboratorValidator collaboratorValidator;
 	
-	private IConceptCollection concept;
-	
 	@Autowired
 	private IUserManager usermanager;
 	
@@ -73,33 +68,35 @@ public class CCCollaboratorDeleteController {
 	
 	
 	@InitBinder
-	protected void initBinder (HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder){
-		
+	protected void initBinder (WebDataBinder validateBinder)
+	{
 		validateBinder.setValidator(validator);
-		
 	}
 	
-	@RequestMapping(value="auth/conceptcollections/{collection_id}/showDeleteCollaborators", method=RequestMethod.GET)
-	public String displayCollaborator(@PathVariable("collection_id") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
+	@RequestMapping(value="auth/conceptcollections/{collection_id}/deletecollaborators", method=RequestMethod.GET)
+	public ModelAndView displayCollaborator(@PathVariable("collection_id") String collectionid,Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 	{
+	    ModelAndView model;
+		IConceptCollection conceptCollection;
+		List<IUser> nonCollaboratorList;
 		
-		List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
-		model.addAttribute("nonCollaboratorList", nonCollaboratorList);
+		model = new ModelAndView("auth/conceptcollection/deletecollaborators");
 		
-		concept = collectionFactory.createConceptCollectionObject();
-		concept.setId(collectionid);		
-		conceptControllerManager.getCollectionDetails(concept,principal.getName());
+		nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+		model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 		
-		model.addAttribute("collectionid", collectionid);
+		conceptCollection = collectionFactory.createConceptCollectionObject();
+		conceptCollection.setId(collectionid);		
+		conceptControllerManager.getCollectionDetails(conceptCollection,principal.getName());
+		
+		model.getModelMap().put("collectionid", collectionid);
 		
 		ModifyCollaboratorForm modifyCollaboratorForm = new ModifyCollaboratorForm();
-		model.addAttribute("collaboratorForm", modifyCollaboratorForm);
+		model.getModelMap().put("collaboratorForm", modifyCollaboratorForm);
 		
 		List<ICollaborator> collaboratorList =  conceptControllerManager.showCollaboratingUsers(collectionid);
-		model.addAttribute("collaboratingUsers", collaboratorList);
-
-		
-		return "auth/conceptcollection/showDeleteCollaborators";
+		model.getModelMap().put("collaboratingUsers", collaboratorList);
+		return model;
 	}
 	
 	/**
@@ -115,7 +112,7 @@ public class CCCollaboratorDeleteController {
 	@Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,BindingResult result)throws QuadrigaStorageException
 	{
 		
-		ModelAndView modelAndView = new ModelAndView("auth/conceptcollection/showDeleteCollaborators");
+		ModelAndView modelAndView = new ModelAndView("auth/conceptcollection/deletecollaborators");
 		String errmsg = null;
 		
 		List<ModifyCollaborator> collaborators = collaboratorForm.getCollaborators();

@@ -124,14 +124,6 @@ public class MockupConceptCollectionManager implements
 	}
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator,
-			String collectionid, String userName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
 	public String deleteCollaborators(String userName, String collectionid) {
 		// TODO Auto-generated method stub
 		return null;

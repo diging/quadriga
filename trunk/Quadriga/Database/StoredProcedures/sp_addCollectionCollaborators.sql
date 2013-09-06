@@ -52,7 +52,7 @@ BEGIN
 
 	-- inserting record into the tbl_project_collaborator table
 	IF(errmsg IS NULL)
-	THEN SET errmsg = "no errors";
+	THEN SET errmsg = "";
 	START TRANSACTION;
 	INSERT INTO
 	tbl_conceptcollections_collaborator(collectionid,collaboratoruser,collaboratorrole,
@@ -60,7 +60,7 @@ BEGIN
 	SELECT incollectionid,incollaboratoruser,role,inuser,NOW(),inuser,NOW()
 	FROM temp_tbl_role;
 
-		IF (errmsg = "no errors")
+		IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;
 		END IF;

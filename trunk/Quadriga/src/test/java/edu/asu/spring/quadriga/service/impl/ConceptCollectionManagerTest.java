@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 
 import java.security.Principal;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,13 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.mysql.jdbc.Statement;
-
+import edu.asu.spring.db.conceptcollection.IDBConnectionCCCollaboratorManager;
 import edu.asu.spring.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -68,6 +65,9 @@ public class ConceptCollectionManagerTest {
 	
 	@Autowired
 	IDBConnectionCCManager dbConnection;
+	
+	@Autowired
+	IDBConnectionCCCollaboratorManager dbCollaboratorConnection;
 	
 	@Autowired
 	IConceptCollectionManager collectionManager;
@@ -444,7 +444,7 @@ public class ConceptCollectionManagerTest {
 		
 		List<IConceptCollection> list =  collectionManager.getCollectionsOwnedbyUser(owner.getUserName());
 		collection.setId(list.get(0).getId());
-		dbConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
+		dbCollaboratorConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
 		
 		List<IUser> collaborators = collectionManager.showNonCollaboratingUsers(collection.getId());
 		assertEquals(1, collaborators.size());
@@ -469,7 +469,7 @@ public class ConceptCollectionManagerTest {
 		
 		List<IConceptCollection>list = collectionManager.getCollectionsOwnedbyUser(owner.getUserName());
 		collection.setId(list.get(0).getId());
-		dbConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
+		dbCollaboratorConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
 		
 		List<ICollaborator> collabUsers = collectionManager.showCollaboratingUsers(collection.getId());
 		assertEquals(1, collabUsers.size());
@@ -493,7 +493,7 @@ public class ConceptCollectionManagerTest {
 		
 		List<IConceptCollection>list = collectionManager.getCollectionsOwnedbyUser(owner.getUserName());
 		collection.setId(list.get(0).getId());
-		dbConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
+		dbCollaboratorConnection.addCollaboratorRequest(collaborator, collection.getId(), principal.getName());
 		
 		List<ICollaborator> collabUsers = collectionManager.showCollaboratingUsers(collection.getId());
 		assertEquals(1, collabUsers.size());
