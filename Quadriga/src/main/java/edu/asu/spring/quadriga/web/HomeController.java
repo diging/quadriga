@@ -5,16 +5,25 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import edu.asu.spring.quadriga.domain.IProfile;
+import edu.asu.spring.quadriga.domain.factories.IServiceUriFactory;
+import edu.asu.spring.quadriga.domain.implementation.Profile;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
 public class HomeController {
+	
+	@Autowired
+	IServiceUriFactory serviceUriFactory;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -41,12 +50,22 @@ public class HomeController {
 		return "auth/home/profile";
 	}
 	
-	@RequestMapping(value = "auth/profile/adduri", method = RequestMethod.GET)
-	public String addUri(Model model, Principal principal)
+	@RequestMapping(value = "auth/profile/showadduri", method = RequestMethod.GET)
+	public String showAddUri(Model model, Principal principal)
 	{
+		IProfile serviceUri = serviceUriFactory.createServiceUriObject();
+		model.addAttribute("serviceUri", serviceUri);
 		
-		System.out.println("------------in homecontroller1111");
-
+		
+		return "auth/home/profile/adduri";
+	}
+	
+	@RequestMapping(value = "auth/profile/adduri", method = RequestMethod.POST)
+	public String addUri(@ModelAttribute("serviceUri") Profile serviceUri, Model model, Principal principal)
+	{
+		String str = serviceUri.getServiceName();
+		System.out.println("-----------str "+str);
+		
 		
 		
 		return "auth/home/profile/adduri";
