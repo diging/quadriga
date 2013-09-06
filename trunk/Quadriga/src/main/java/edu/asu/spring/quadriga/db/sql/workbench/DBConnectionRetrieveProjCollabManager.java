@@ -90,6 +90,7 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 						collabroles = resultset.getString(2);
 						//retrieve the user details
 						user = userManager.getUserDetails(username);
+						System.out.println("-----------DB project name "+user.getName());
 						//storing the collaborator roles in a comma(,) separated list
 						userCollaboratorRole = splitAndgetCollaboratorRolesList(collabroles);
 						//add the user and his collaborator roles to a object

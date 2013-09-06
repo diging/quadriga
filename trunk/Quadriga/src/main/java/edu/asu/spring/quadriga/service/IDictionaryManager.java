@@ -124,17 +124,47 @@ public interface IDictionaryManager {
 			DictionaryItem dictionaryItems);
 
 		
+	/**
+	 * this method used to call the db manager method and return collaborators which are 
+	 * present in the current dictionary
+	 * 
+	 * @param dictionaryId
+	 * @return List<ICollaborator>
+	 */
 	public abstract List<ICollaborator> showCollaboratingUsers(String dictionaryId);
 	
+	/**
+	 * this method used to call the db manager method and return collaborators which are 
+	 * not present in the current dictionary
+	 * 
+	 * @param collectionid
+	 * @return List<IUser>
+	 */
 	public abstract List<IUser> showNonCollaboratingUsers(String collectionid);
 	
+	
+	/**
+	 * this method used to add collaborators in the current dictionary
+	 * 
+	 * @param collaborator
+	 * @param dictionaryid
+	 * @param userName
+	 * @param sessionUser
+	 * @return String
+	 */
 	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser);
 	
+	
+	/**
+	 * this method used to delete collaborators in the current dictionary
+	 * 
+	 * @param dictionaryid
+	 * @param userName
+	 * @return
+	 */
 	public abstract String deleteCollaborator(String dictionaryid, String userName);
 
 	
-
-
 	/**
 	 * Delete a dictinary
 	 * @param user

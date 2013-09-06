@@ -451,11 +451,12 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/dictionaries.jsp" />
 	</definition>
-	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
+<!--  	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/dictionaryChild.jsp" />
 	</definition>
+	-->
 	<definition name="auth/dictionary/dictionarycollab" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
 		<put-attribute name="content"
@@ -507,14 +508,23 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/showWordSearch.jsp" />
 	</definition>
+	<!-- 
+	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
+	<put-attribute name="content" 
+	value="/WEB-INF/views/dictionary/dictionaryChild.jsp"/>
+	
+	</definition>  -->
+	
+	
 	
 	<!-- changing dictionary collaborators menu to the left side -->
-	<definition name="auth/dictionary/dictionary" extends="base.definition.workbench.nav">
+	
+	<definition name="auth/dictionary/dictionary" extends="base.definition.leftnav">
 		<put-attribute name="left-navigation" 
 		value="/WEB-INF/views/navigation/nav-dictionary.jsp"/>
 		<put-attribute name="content" 
 		value="/WEB-INF/views/dictionary/dictionaryChild.jsp" />
-	</definition>
+	</definition> 
 	<definition name="auth/dictionaries/showAddCollaborators"
 		extends="base.definition.dictionaries">
 		<put-attribute name="content"
@@ -588,4 +598,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/assignednetworks.jsp" />
 	</definition>
+	
+	<definition name="auth/home/profile" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/profile.jsp"/>
+	</definition>
+	
 </tiles-definitions>
+
+	

@@ -60,7 +60,6 @@ function goBack(){
 	<table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
 	<thead>
 		<tr>
-		<%-- 	<th align="left"><input type="checkbox" class="selectAll" value="check all" name="selected">Select All</th>--%>
 			<th align="left">collaborator</th>
 			<th align="left">roles</th>
 		</tr>
@@ -80,5 +79,6 @@ function goBack(){
 	</c:forEach>
 	</tbody>
 	</table>
-</form:form>
+</form:form> 
+
 	

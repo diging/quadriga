@@ -30,6 +30,7 @@ import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
  * Class implements {@link DBConnectionDictionaryManager} for all the DB connection necessary for dictionary functionality.
@@ -72,6 +73,9 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
+	
+	@Autowired
+	private IUserManager userManager;
 
 	/**
 	 * Assigns the data source
@@ -897,7 +901,14 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return errmsg;
 	}
 	
-	
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param role
+	 * @return List<ICollaboratorRole>
+	 */
 	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role)
 	{
         String[] collabroles;
@@ -917,6 +928,11 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return collaboratorRoleList;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	public List<IUser> showNonCollaboratingUsersRequest(String dictionaryid)throws QuadrigaStorageException {
 
@@ -959,6 +975,12 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return nonCollabUsersList;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 */
+	
 	@Override
 	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 
@@ -976,7 +998,6 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 				{
 					role += collaboratorRole.getRoleDBid() + ",";
 				}
-			
 		}
 		
 		role = role.substring(0,role.length()-1);
@@ -1008,12 +1029,19 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return null;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * 
+	 */
 	@Override
 	public List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid)
 			throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
+		String userName;
 		List<ICollaborator> collaborators = new ArrayList<ICollaborator>();
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		//List<IUser> collabList = new ArrayList<IUser>();
@@ -1034,8 +1062,10 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 				
 				while(resultSet.next())
 				{
+					userName = resultSet.getString(1);
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					IUser user = userFactory.createUserObject();
+					user = userManager.getUserDetails(userName);
 					user.setUserName(resultSet.getString(1));
 					collaborator.setUserObj(user);
 					
@@ -1053,6 +1083,11 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		return collaborators;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 */
 	@Override
 	public String deleteCollaborators(String dictionaryid, String userName) {
 
@@ -1080,11 +1115,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			e.printStackTrace();
 		}
 		
-		
 		return null;
 	}
-	
-	
-	
-	
+
 }

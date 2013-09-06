@@ -13,6 +13,14 @@ import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 
+/**
+ * this class returns the collaborator of ModifyCollaborator domain by calling existing DBConnectonManager 
+ * methods of conecptcollection,project and dictionary which by default return collaborator
+ * of ICollaborator domain.
+ * 
+ * @author rohit pendbhaje
+ *
+ */
 @Service
 public class ModifyCollaboratorFormManager {
 
@@ -28,6 +36,13 @@ public class ModifyCollaboratorFormManager {
 	@Autowired
 	ModifyCollaboratorFormFactory collaboratorFormFactory;
 	
+	/**
+	 * takes project id to return collaborators of ModifyCollaborator domain
+	 * 
+	 * @param projectId
+	 * @return List<ModifyCollaborator> list of modifycollaborator domain
+	 * @throws QuadrigaStorageException
+	 */
 	public List<ModifyCollaborator> modifyCollaboratorManager(String projectId) throws QuadrigaStorageException
 	{
 	
@@ -45,6 +60,13 @@ public class ModifyCollaboratorFormManager {
 		return modifyCollaborators;
 	}
 	
+	/**
+	 * takes dictionary id to return collaborators of ModifyCollaborator domain
+	 * 
+	 * @param dictionaryId
+	 * @return List<ModifyCollaborator> list of modifycollaborator domain
+	 * @throws QuadrigaStorageException
+	 */
 	public List<ModifyCollaborator> modifyDictCollaboratorManager(String dictionaryId) throws QuadrigaStorageException
 	{
 	
@@ -62,6 +84,13 @@ public class ModifyCollaboratorFormManager {
 		return modifyCollaborators;
 	}
 	
+	/**
+	 * takes collection id to return collaborators of ModifyCollaborator domain
+	 * 
+	 * @param collectionid
+	 * @return List<ModifyCollaborator> list of modifycollaborator domain
+	 * @throws QuadrigaStorageException
+	 */
 	public List<ModifyCollaborator> modifyConceptCollectionCollaboratorManager(String collectionId) throws QuadrigaStorageException
 	{
 	
