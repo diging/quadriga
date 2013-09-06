@@ -784,7 +784,7 @@ public class NetworkManager implements INetworkManager {
 	}
 	
 	/**
-	 * Archive network
+	 * Archive network elements
 	 */
 	@Override
 	public void archiveNetwork(String networkId) throws QuadrigaStorageException{
@@ -793,7 +793,7 @@ public class NetworkManager implements INetworkManager {
 		Iterator <INetworkNodeInfo> I = networkTopNodeList.iterator();
 		while(I.hasNext()){
 			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.info("Statement ID archived : " +networkNodeInfo.getId());
+			logger.debug("Statement ID archived : " +networkNodeInfo.getId());
 			archiveNetworkStatement(networkId, networkNodeInfo.getId());
 		}
 		

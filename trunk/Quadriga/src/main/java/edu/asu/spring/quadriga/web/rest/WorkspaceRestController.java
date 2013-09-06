@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
@@ -136,13 +134,11 @@ public class WorkspaceRestController {
 	@ResponseBody
 	public String workspaceDetails(@PathVariable("workspaces_id") String workspaces_id, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
 	{
-		IWorkSpace workspace;
 		VelocityEngine engine = null;
 		Template template = null;
 
 		try {
 			//will use in future list workspaces need to be modified
-			String userId = principal.getName();
 			//List<IDictionary> dictionaryList =workspaceDictionaryManager.listWorkspaceDictionary(workspaces_id, userId);
 			//List<IConceptCollection> ccList = workspaceCCManager.listWorkspaceCC(workspaces_id, userId);
 			//workspace = wsManager.getWorkspaceDetails(workspaces_id,userId);
