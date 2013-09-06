@@ -4,7 +4,6 @@ package edu.asu.spring.quadriga.web.conceptcollection;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -26,10 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
@@ -39,6 +34,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.sevice.conceptcollection.ICCCollaboratorManager;
 import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -49,7 +45,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  *
  */
 @Controller
-public class CCCollaboratorController {
+public class AddCCCollaboratorController {
 	
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
@@ -64,17 +60,18 @@ public class CCCollaboratorController {
 	private IConceptCollectionFactory collectionFactory;
 	
 	@Autowired
-	IConceptCollectionManager conceptControllerManager;
+	private ICCCollaboratorManager CollaboratorManager;
+	
+	@Autowired
+	private IConceptCollectionManager conceptControllerManager;
 	
 	@Autowired
 	CollaboratorValidator collaboratorValidator;
 	
-	private IConceptCollection concept;
-	
 	@Autowired
 	private IUserManager usermanager;
 	
-	private static final Logger logger = LoggerFactory.getLogger(CCCollaboratorController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AddCCCollaboratorController.class);
 
 	 @InitBinder
 	  protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,  WebDataBinder validateBinder) throws Exception {
@@ -119,43 +116,40 @@ public class CCCollaboratorController {
 	  * @throws QuadrigaAccessException
 	  * @throws QuadrigaStorageException
 	  */
-	 
-	 @RequestMapping(value="auth/conceptcollections/{collectionid}/showAddCollaborators", method=RequestMethod.GET)
-		public String displayCollaborator(@PathVariable("collectionid") String collectionid, ModelMap model, Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
+	 @RequestMapping(value="auth/conceptcollections/{collectionid}/addcollaborators", method=RequestMethod.GET)
+	 public ModelAndView addCollaborator(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
+			ICollaborator collaborator;
+			ModelAndView model;
+			List<IUser> nonCollaboratorList;
+			List<ICollaboratorRole> collaboratorRoleList;
+			List<ICollaborator>collaboratingUsers;
+
+			model = new ModelAndView( "auth/conceptcollection/addcollaborators");
 			
-		 
-		    List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
-			model.addAttribute("nonCollaboratorList", nonCollaboratorList);
+			//fetch the non collaborators and add it to the model
+			nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+			model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 			
-			concept = collectionFactory.createConceptCollectionObject();
-			concept.setId(collectionid);		
-			conceptControllerManager.getCollectionDetails(concept,principal.getName());
+			model.getModelMap().put("collectionid", collectionid);
 			
-			model.addAttribute("collectionid", collectionid);
-			
-			ICollaborator collaborator =  collaboratorFactory.createCollaborator();
+			collaborator =  collaboratorFactory.createCollaborator();
 			collaborator.setUserObj(userFactory.createUserObject());
-			model.addAttribute("collaborator", collaborator); 
+			model.getModelMap().put("collaborator", collaborator);
 			
-			List<ICollaboratorRole> collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
-			Iterator<ICollaboratorRole> iterator = collaboratorRoleList.iterator();
+			collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
 			
-			while(iterator.hasNext())
+			for(ICollaboratorRole role : collaboratorRoleList)
+			{
+				if(role.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 				{
-					if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
-					{
-						iterator.remove();
-					}
+					collaboratorRoleList.remove(role);
 				}
-			
-			model.addAttribute("possibleCollaboratorRoles", collaboratorRoleList);
-			
-			List<ICollaborator>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collectionid);
-			model.addAttribute("collaboratingUsers", collaboratingUsers);
-		
-			return "auth/conceptcollection/showAddCollaborators";
-			
+			}
+			model.getModelMap().put("collaboratorRoles",collaboratorRoleList);
+		    collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collectionid);
+		    model.getModelMap().put("collaboratingUsers", collaboratingUsers);
+			return model;
 		}
 		
 		/**
@@ -171,52 +165,40 @@ public class CCCollaboratorController {
 		public ModelAndView addCollaborators(@PathVariable("collection_id") String collectionid, Principal principal,
 		@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result)throws QuadrigaStorageException
 		{
-			
-		   ModelAndView modelAndView = null;
-		   modelAndView = new ModelAndView("auth/conceptcollection/showAddCollaborators");
+		   List<IUser> nonCollaboratorList;
+		   List<ICollaboratorRole> collaboratorRoleList;
+		   ModelAndView model;
+		   model = new ModelAndView("auth/conceptcollection/addcollaborators");
 		   
-		   if(result.hasErrors()){
-			   
-			   modelAndView.getModelMap().put("collaborator", collaborator);
+		   model.getModelMap().put("collectionid", collectionid);
+		   if(result.hasErrors())
+		   {
+			   model.getModelMap().put("collaborator", collaborator);
 		   }
-		
-		   else{
-			   
-			String username = principal.getName();
-			String errmsg = conceptControllerManager.addCollaborators(collaborator, collectionid, username);
-			modelAndView.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());  
-		   
+		   else
+		   {
+			  String username = principal.getName();
+			  CollaboratorManager.addCollaborators(collaborator, collectionid, username);
+			  model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());  
 		   }
 		   
-		   List<IUser> nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
-		   modelAndView.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
+		   nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+		   model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 			
-			List<ICollaboratorRole> collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
-			Iterator<ICollaboratorRole> iterator = collaboratorRoleList.iterator();
-			
-			while(iterator.hasNext())
-				{
-					if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
-					{
-						iterator.remove();
-					}
-				}
-			
-			modelAndView.getModelMap().put("possibleCollaboratorRoles", collaboratorRoleList);
-			
-			modelAndView.getModelMap().put("collectionid", collectionid);
+		   collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
+		   for(ICollaboratorRole role : collaboratorRoleList)
+		   {
+			   if(role.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			   {
+				   collaboratorRoleList.remove(role);
+			   }
+		   }
+		   
+		   model.getModelMap().put("collaboratorRoles",collaboratorRoleList);
 			
 			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
-			for(ICollaborator collaborator2:collaborators)
-			{
-				System.out.println("--------collaborator "+collaborator2.getUserObj().getUserName());
-			}
-			modelAndView.getModelMap().put("collaborators", collaborators);
+			model.getModelMap().put("collaborators", collaborators);
 			
-		    return modelAndView;
+		    return model;
 	}
-			
-	
-	
-
 }

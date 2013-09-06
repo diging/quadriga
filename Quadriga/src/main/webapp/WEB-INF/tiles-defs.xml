@@ -112,17 +112,26 @@
 		value="/WEB-INF/views/conceptcollections/collectiondetails.jsp" />
 	</definition>
 	
-	<definition name="auth/conceptcollection/showAddCollaborators"
+	<definition name="auth/conceptcollection/addcollaborators"
 		extends="base.definition.conceptcollections">
+		<put-attribute name="title" value="ConceptCollection - Add Collaborators" />
 		<put-attribute name="content"
-		value="/WEB-INF/views/conceptcollections/showAddCollaborators.jsp" />
+		value="/WEB-INF/views/conceptcollections/addcollaborators.jsp" />
 	</definition>
 	
-	<definition name="auth/conceptcollection/showDeleteCollaborators"
+	<definition name="auth/conceptcollection/deletecollaborators"
 		extends="base.definition.conceptcollections">
+	<put-attribute name="title" value="ConceptCollection - Delete Collaborators" />
 		<put-attribute name="content"
-		value="/WEB-INF/views/conceptcollections/showDeleteCollaborators.jsp" />
+		value="/WEB-INF/views/conceptcollections/deletecollaborators.jsp" />
 	</definition>
+	<definition name="auth/conceptcollections/transferconceptcollectionowner"
+		extends="base.definition.conceptcollections">
+		<put-attribute name="title" value="ConceptCollection - Transfer Ownership" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/conceptcollections/transfercollectionowner.jsp" />
+	</definition>
+	
 
 	<!-- Workbench pages -->
 	<definition name="base.definition.workbench" extends="base.definition">

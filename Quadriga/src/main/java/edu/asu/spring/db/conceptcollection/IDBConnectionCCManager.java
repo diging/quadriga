@@ -119,16 +119,6 @@ public interface IDBConnectionCCManager {
 		public abstract List<IUser> showNonCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
 		
 		/**
-		 * Method add colloborators to the concept collections.
-		 * 
-		 * @return String
-		 * @author rohit
-		 * @throws QuadrigaStorageException 
-		 *  
-		 */
-		public abstract String addCollaboratorRequest(ICollaborator collaborator,String collectionid, String userName) throws QuadrigaStorageException;
-		
-		/**
 		 * Method used to  get colloborators of a particular collection.
 		 * 
 		 * 

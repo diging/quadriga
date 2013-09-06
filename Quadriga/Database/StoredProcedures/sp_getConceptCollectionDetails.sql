@@ -51,7 +51,8 @@ BEGIN
      THEN SET errmsg = "";
      
       -- retrieve the item details
-      SELECT vw_conceptcollections_items.item, vw_conceptcollections_items.description, vw_conceptcollections_items.pos, vw_conceptcollections_items.lemma, vw_conceptcollections.id, vw_conceptcollections.collectionname, vw_conceptcollections.description  
+      SELECT vw_conceptcollections_items.item, vw_conceptcollections_items.description, vw_conceptcollections_items.pos, vw_conceptcollections_items.lemma, vw_conceptcollections.id, vw_conceptcollections.collectionname, 
+            vw_conceptcollections.description,vw_conceptcollections.collectionowner
         FROM vw_conceptcollections LEFT JOIN vw_conceptcollections_items
 	    ON vw_conceptcollections_items.id = vw_conceptcollections.id WHERE vw_conceptcollections.id = incollectionid;
       
