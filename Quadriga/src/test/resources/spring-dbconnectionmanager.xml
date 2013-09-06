@@ -13,10 +13,20 @@
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionDspaceManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	<bean id="DBConnectionCCManagerBean"
-		class="edu.asu.spring.quadriga.db.sql.DBConnectionCCManager">
+	   
+	   <!--  Concept Collection bean -->
+	<bean id="DBConnectionCCManagerBean" class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionCCManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	<bean id="DBConnectionModifyCCManagerBean" 
+	    class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionModifyCCManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="DBConnectionCCCollaboratorManagerBean" 
+	    class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionCCCollaboratorManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 	<bean id="DBConnectionProjectDictionaryBean" class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionary">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
