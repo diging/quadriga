@@ -2,21 +2,20 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
-<script>
-function addURI(){
-var retValue = prompt("Name of Service:"," ");
-//$alert(prompt("Name of Service:"," "),prompt("URI:",""));
-var retValue1 = prompt("URI:","");
+<script type="text/javascript">
+function onSubmit(){
+	
+	location.href='${pageContext.servletContext.contextPath}/auth/profile/adduri';	
 }
+
 </script>
 
- <h1>profile</h1>
- ---------------------------------
- <ul>
- <li>Name:<sec:authentication property="principal.username" /></li>
- <li>Email:</li>
- </ul>
- <input type="submit" value="Add URI" onClick="addURI();" />
+<form>
+<ul>
+<li>name:</li>
+<li>email:</li>
+</ul>
+<input type="submit" value="add uri" onclick="onSubmit();">
+</form>

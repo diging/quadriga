@@ -28,7 +28,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
-
+		
 		});
 	});
 	

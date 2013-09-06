@@ -40,5 +40,16 @@ public class HomeController {
 		System.out.println("------------in homecontroller");
 		return "auth/home/profile";
 	}
+	
+	@RequestMapping(value = "auth/profile/adduri", method = RequestMethod.GET)
+	public String addUri(Model model, Principal principal)
+	{
+		
+		System.out.println("------------in homecontroller1111");
+
+		
+		
+		return "auth/home/profile/adduri";
+	}
 
 }
