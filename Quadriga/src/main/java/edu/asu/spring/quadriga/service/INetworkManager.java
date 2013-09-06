@@ -15,7 +15,6 @@ import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface INetworkManager {
@@ -83,5 +82,10 @@ public interface INetworkManager {
 			throws QuadrigaStorageException;
 
 	public abstract void archiveNetwork(String networkId) throws QuadrigaStorageException;
+
+	public abstract String getWholeXMLQStore(String XML) throws ParserConfigurationException,
+			SAXException, IOException;
+
+	public abstract String getQStoreGetPOSTURL();
 
 }

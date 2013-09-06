@@ -359,6 +359,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 			if(errmsg.isEmpty()){
 				return networkList;
 			}else{
+				logger.error("Error Msg : "+errmsg);
 				throw new QuadrigaStorageException("Something went wrong on DB side");
 			}
 

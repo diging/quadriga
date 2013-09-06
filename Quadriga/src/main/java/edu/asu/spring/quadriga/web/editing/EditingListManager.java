@@ -39,8 +39,15 @@ public class EditingListManager {
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingListManager.class);
 
+	/**
+	 * List of networks available to editor
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/editing", method = RequestMethod.GET)
-	public String listDictionary(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		List<INetwork> networkList=null;
 		try{

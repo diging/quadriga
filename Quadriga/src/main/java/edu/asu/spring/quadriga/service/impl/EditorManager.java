@@ -37,8 +37,8 @@ public class EditorManager implements IEditorManager {
 
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.IEditorManager#getEditorNetworkList(edu.asu.spring.quadriga.domain.IUser)
+	/**
+	 * Get network list for a editor
 	 */
 	@Override
 	public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException{
@@ -52,6 +52,9 @@ public class EditorManager implements IEditorManager {
 		return networkList;
 	}
 
+	/**
+	 * Assign a network to user
+	 */
 	@Override
 	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
 		String msg = "";
@@ -63,6 +66,9 @@ public class EditorManager implements IEditorManager {
 		return msg;
 	}
 	
+	/**
+	 * Get assigned network list of the user
+	 */
 	@Override
 	public  List<INetwork> getAssignNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
@@ -76,6 +82,9 @@ public class EditorManager implements IEditorManager {
 		return networkList;
 	}
 	
+	/**
+	 * Get Rejected network list of user
+	 */
 	@Override
 	public  List<INetwork> getRejectedNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
@@ -89,6 +98,9 @@ public class EditorManager implements IEditorManager {
 		return networkList;
 	}
 	
+	/**
+	 * Get Approved network list of a user
+	 */
 	@Override
 	public  List<INetwork> getApprovedNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
@@ -102,6 +114,10 @@ public class EditorManager implements IEditorManager {
 		return networkList;
 	}
 	
+	/**
+	 * Update the status of the network
+	 * PENDING / ASSIGNED / REJECTED / APPROVED
+	 */
 	@Override
 	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		String msg = "";
