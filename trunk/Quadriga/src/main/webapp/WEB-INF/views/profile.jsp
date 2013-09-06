@@ -5,17 +5,21 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <script type="text/javascript">
-function onSubmit(){
+
+$(function() {
+	$("input[type=submit]").button().click(function(event) {
+	});
 	
-	location.href='${pageContext.servletContext.contextPath}/auth/profile/adduri';	
-}
+	$("input[type=button]").button().click(function(event) {
+	});
+});
 
 </script>
 
-<form>
+<form action="${pageContext.servletContext.contextPath}/auth/profile/showadduri">
 <ul>
 <li>name:</li>
 <li>email:</li>
 </ul>
-<input type="submit" value="add uri" onclick="onSubmit();">
+<input type="submit" value="add uri" >
 </form>
