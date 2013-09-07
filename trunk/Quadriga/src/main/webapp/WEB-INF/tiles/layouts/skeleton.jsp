@@ -14,29 +14,29 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
-<link rel="stylesheet"	href="/quadriga/resources/txt-layout/css/jquery-ui.css" />
-<link rel="stylesheet"	href="/quadriga/resources/txt-layout/css/jquery.dataTables_themeroller.css" />
-<link rel="stylesheet"	href="/quadriga/resources/txt-layout/css/demo_table_jui.css" />
-<link rel="stylesheet"	href="/quadriga/resources/txt-layout/css/ul-pagination-styles.css" />
+<link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/jquery-ui.css" />
+<link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/jquery.dataTables_themeroller.css" />
+<link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/demo_table_jui.css" />
+<link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ul-pagination-styles.css" />
 <link	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"	rel="stylesheet" />
-<script src="/quadriga/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
-<script src="/quadriga/resources/txt-layout/js/config.js"></script>
-<script src="/quadriga/resources/txt-layout/js/skel.min.js"></script>
-<script src="/quadriga/resources/txt-layout/js/skel-ui.min.js"></script>
-<script src="/quadriga/resources/txt-layout/js/jit.js"></script>
-<script src="/quadriga/resources/txt-layout/js/ex1.js"></script>
-<script src="/quadriga/resources/txt-layout/js/jquery-ui.js"></script>
-<script src="/quadriga/resources/txt-layout/js/jquery-alert.js"></script>
-<script src="/quadriga/resources/txt-layout/js/jquery.dataTables.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/config.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel-ui.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jit.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/ex1.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-ui.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.dataTables.js"></script>
 <script
-	src="/quadriga/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
 <noscript>
 	<link rel="stylesheet"
-		href="/quadriga/resources/txt-layout/css/skel-noscript.css" />
+		href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/skel-noscript.css" />
 	<link rel="stylesheet"
-		href="/quadriga/resources/txt-layout/css/style.css" />
+		href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.css" />
 	<link rel="stylesheet"
-		href="/quadriga/resources/txt-layout/css/style-desktop.css" />
+		href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style-desktop.css" />
 </noscript>
 <!--[if lte IE 9]><link rel="stylesheet" href="resources/txt-layout/css/ie9.css" /><![endif]-->
 <!--[if lte IE 8]><script src="resources/txt-layout/js/html5shiv.js"></script><link rel="stylesheet" href="resources/txt-layout/css/ie8.css" /><![endif]-->

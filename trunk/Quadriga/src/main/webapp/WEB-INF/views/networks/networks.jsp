@@ -52,9 +52,9 @@
 				class="display dataTable">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Project Name</th>
-						<th>Workspace Name</th>
+						<th align="left">Name</th>
+						<th>Project</th>
+						<th>Workspace</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -63,7 +63,7 @@
 				<tbody>
 					<c:forEach var="network" items="${networkList}">
 						<tr>
-							<td width="25%" align="center"><input name="items"
+							<td width="25%" align="left"><img style="vertical-align: middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png" > <input name="items"
 								type="hidden" value="<c:out value="${network.name}"></c:out>" />
 								<c:out value="${network.name}"></c:out></td>
 							<td width="25%" align="center"><c:out
