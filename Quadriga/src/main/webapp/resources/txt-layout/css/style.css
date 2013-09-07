@@ -76,6 +76,10 @@
 		{
 			text-decoration: none;
 		}
+		
+	a.inText {
+		font-weight: normal;
+	}
 
 	form
 	{
