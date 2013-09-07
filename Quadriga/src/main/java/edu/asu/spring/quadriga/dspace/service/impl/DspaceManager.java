@@ -69,6 +69,16 @@ public class DspaceManager implements IDspaceManager{
 			.getLogger(DspaceManager.class);
 
 	@Override
+	public IBitStreamFactory getBitstreamFactory() {
+		return bitstreamFactory;
+	}
+
+	@Override
+	public void setBitstreamFactory(IBitStreamFactory bitstreamFactory) {
+		this.bitstreamFactory = bitstreamFactory;
+	}
+
+	@Override
 	public Properties getDspaceProperties() {
 		return dspaceProperties;
 	}
@@ -432,7 +442,7 @@ public class DspaceManager implements IDspaceManager{
 	{
 		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
 
-		IBitStream restrictedBitStream = bitstreamFactory.createBitStreamObject();
+		IBitStream restrictedBitStream = getBitstreamFactory().createBitStreamObject();
 		restrictedBitStream.setCommunityName(dspaceProperties.getProperty("restricted_community"));
 		restrictedBitStream.setCollectionName(dspaceProperties.getProperty("restricted_collection"));
 		restrictedBitStream.setItemName(dspaceProperties.getProperty("restricted_item"));
@@ -452,7 +462,7 @@ public class DspaceManager implements IDspaceManager{
 					//The user can access the community
 					//Check access rights for collection
 					isloading = true;
-					loadingBitStream = bitstreamFactory.createBitStreamObject();
+					loadingBitStream = getBitstreamFactory().createBitStreamObject();
 
 					loadingBitStream.setId(bitstream.getId());
 					loadingBitStream.setCommunityid(bitstream.getCommunityid());
@@ -535,7 +545,7 @@ public class DspaceManager implements IDspaceManager{
 			 */
 			
 			checkedBitStreams.clear();
-			IBitStream inaccessibleBitStream = bitstreamFactory.createBitStreamObject();
+			IBitStream inaccessibleBitStream = getBitstreamFactory().createBitStreamObject();
 			inaccessibleBitStream.setCommunityName(dspaceProperties.getProperty("wrong_authentication"));
 			inaccessibleBitStream.setCollectionName(dspaceProperties.getProperty("wrong_authentication"));
 			inaccessibleBitStream.setItemName(dspaceProperties.getProperty("wrong_authentication"));
