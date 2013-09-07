@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
@@ -76,6 +77,9 @@ public class DspaceManagerTest {
 	private IDBConnectionManager dbConnection;
 	private String sDatabaseSetup;
 
+	@Autowired
+	private IBitStreamFactory bitstreamFactory;
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -92,6 +96,7 @@ public class DspaceManagerTest {
 		dspaceManager.setDbconnectionManager(dbconnectionManager);
 		dspaceManager.setDspaceProperties(dspaceProperties);
 		dspaceManager.setProxyCommunityManager(proxyCommunityManager);
+		dspaceManager.setBitstreamFactory(bitstreamFactory);
 
 		dspaceKeys = new DspaceKeys();
 		dspaceKeys.setPublicKey("b459689e");
@@ -126,7 +131,6 @@ public class DspaceManagerTest {
 		//Dspace return list of communities for empty username/password
 		assertNotNull(dspaceManager.getAllCommunities(null,null, null).size());
 
-		assertNotNull(dspaceManager.getAllCommunities(null,"test", "test"));
 		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null, null));
 	}
 
@@ -415,24 +419,24 @@ public class DspaceManagerTest {
 		List<IBitStream> bitstreams = new ArrayList<IBitStream>();
 		bitstreams.add(bitstream);
 
-		//Check empty dspace credentials
-		List<IBitStream> checkedBitStreams = dspaceManager.checkDspaceBitstreamAccess(bitstreams, null, null, null);
-		for(IBitStream checkedBitStream: checkedBitStreams)
-		{
-			assertEquals("Need Dspace Authentication", checkedBitStream.getCommunityName());
-			assertEquals("Need Dspace Authentication", checkedBitStream.getCollectionName());
-			assertEquals("Need Dspace Authentication", checkedBitStream.getItemName());
-			assertEquals("Need Dspace Authentication", checkedBitStream.getName());
-		}
-
-
-		checkedBitStreams = dspaceManager.checkDspaceBitstreamAccess(bitstreams, dspaceKeys, null, null);
+		List<IBitStream> checkedBitStreams = dspaceManager.checkDspaceBitstreamAccess(bitstreams, dspaceKeys, null, null);
 		for(IBitStream checkedBitStream: checkedBitStreams)
 		{
 			assertEquals("Leuckart Wall Charts", checkedBitStream.getCommunityName());
 			assertEquals("Images", checkedBitStream.getCollectionName());
 			assertEquals("Leuckart Chart, Series I, Chart 80: Echinodermata; Holothurioidea; Echinoidea, Ophiuroidea; Holothuria, Cucumaria, etc. Larval development", checkedBitStream.getItemName());
 			assertEquals("050.tif", checkedBitStream.getName());
+		}
+
+		dspaceManager.clearCompleteCache();	
+		//Check wrong dspace credentials
+		checkedBitStreams = dspaceManager.checkDspaceBitstreamAccess(bitstreams, null, "test", "test");
+		for(IBitStream checkedBitStream: checkedBitStreams)
+		{
+			assertEquals("Wrong Dspace Authentication", checkedBitStream.getCommunityName());
+			assertEquals("Wrong Dspace Authentication", checkedBitStream.getCollectionName());
+			assertEquals("Wrong Dspace Authentication", checkedBitStream.getItemName());
+			assertEquals("Wrong Dspace Authentication", checkedBitStream.getName());
 		}
 	}
 }

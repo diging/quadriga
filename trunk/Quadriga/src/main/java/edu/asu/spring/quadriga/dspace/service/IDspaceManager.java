@@ -10,6 +10,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -242,5 +243,9 @@ public interface IDspaceManager{
 	 * @throws QuadrigaStorageException		Thrown when database encountered any problem during the operation.
 	 */
 	public abstract int deleteDspaceKeys(String username) throws QuadrigaStorageException;
+
+	public abstract IBitStreamFactory getBitstreamFactory();
+
+	public abstract void setBitstreamFactory(IBitStreamFactory bitstreamFactory);
 
 }
