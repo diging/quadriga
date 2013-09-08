@@ -79,6 +79,9 @@
 		extends="base.definition">
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
+		<definition name="base.definition.conceptcollections.nav" extends="base.definition.leftnav">
+		<put-attribute name="currentPage" value="conceptCollections" />
+	</definition>
 	
 	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
@@ -105,7 +108,7 @@
 	</definition>
 	
 	<!-- changing concept collection details page's navigation to left -->
-	<definition name="auth/conceptcollections/details" extends="base.definition.workbench.nav">
+	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections.nav">
 		<put-attribute name="left-navigation"
 		value="/WEB-INF/views/navigation/nav-conceptcollection.jsp"/>
 		<put-attribute name="content"

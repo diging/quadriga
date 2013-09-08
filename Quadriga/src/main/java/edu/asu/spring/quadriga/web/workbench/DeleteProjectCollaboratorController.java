@@ -105,6 +105,7 @@ public class DeleteProjectCollaboratorController {
 		
 		ModelAndView modelAndView ;
 		List<ModifyCollaborator>collaborators;
+		String userName;
 		modelAndView = new ModelAndView("auth/workbench/deletecollaborators");
 
 		if(result.hasErrors())
@@ -114,6 +115,7 @@ public class DeleteProjectCollaboratorController {
 			
 			modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
 			modelAndView.getModelMap().put("success", 0);
+			modelAndView.getModelMap().put("error", 1);
 			modelAndView.getModelMap().put("projectId", projectId);
 		}
 		
@@ -122,14 +124,13 @@ public class DeleteProjectCollaboratorController {
 		    collaborators = collaboratorForm.getCollaborators();
 			for(ModifyCollaborator collaborator: collaborators)
 			{
-				modifyProjectCollabManager.deleteCollaboratorRequest(collaborator.getUserName(), projectId);
+			    userName = collaborator.getUserName();
+			    if(userName!=null)
+			    {
+				 modifyProjectCollabManager.deleteCollaboratorRequest(userName, projectId);
+			    }
 			}
-			
-			List<ModifyCollaborator> collaboratorsList = collaboratorFormManager.modifyCollaboratorManager(projectId);
-			collaboratorForm.setCollaborators(collaboratorsList);
-		
-			modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
-			modelAndView.getModelMap().put("success", 0);
+			modelAndView.getModelMap().put("success", 1);
 			modelAndView.getModelMap().put("projectId", projectId);
 		}
 		

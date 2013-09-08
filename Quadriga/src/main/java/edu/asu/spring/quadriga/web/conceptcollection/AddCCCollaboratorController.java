@@ -234,7 +234,7 @@ public class AddCCCollaboratorController {
 		   model.getModelMap().put("collaboratorRoles",collaboratorRoleList);
 			
 			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
-			model.getModelMap().put("collaborators", collaborators);
+			model.getModelMap().put("collaboratingUsers", collaborators);
 			
 		    return model;
 	}

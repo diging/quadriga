@@ -104,6 +104,8 @@ td {
 				name="deletecollab">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
+			<input type="submit" onClick="submitClick(this.id);"
+					value='Cancel' name="Back">
 			<table style="width: 100%" class="display dataTable"
 				id="wscollablist">
 				<thead>
@@ -133,6 +135,8 @@ td {
 			<input type="submit" value='Delete' name="deletecollab">
 			<input type="button" value="Select All" name="selectall">
 			<input type="button" value="DeSelect All" name="deselectall">
+			<input type="submit" onClick="submitClick(this.id);"
+					value='Cancel' name="Back">
 		</c:if>
 		<c:if test="${empty collaboratingusers}">
 		<c:choose>

@@ -44,14 +44,15 @@ $(document).ready(function() {
 	$("input[type=submit]").button().click(function(event) {
 		
 	});
+$("input[type=button]").button().click(function(event) {
+		
+	});
 });
 
 function onSubmit(){
 	location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}';
 }
 </script>
-<input type="submit" value="Back" onClick="onSubmit()">
-<br><br>
 <form:form  method="POST" name="myForm" commandName="collaborator"
 action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
 
@@ -62,16 +63,18 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 	   	<form:options items="${nonCollaboratorList}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
 	<form:errors path="userObj" cssClass="error"></form:errors>  
-	<br><br>
+	<br>
 	<div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" items="${collaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<td><input type="submit" value="Add"></td>
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
-	&nbsp;
 <br/>
+<input type="submit" value="Add">
+<input type="button" value="Cancel" onClick="onSubmit()">
+<br><br>
 </c:if>
 <c:if test="${empty nonCollaboratorList}">
  <span class="byline">All collaborators are associated to concept collection</span>
+ <input type="button" value="Back" onClick="onSubmit()">
 </c:if>
 <br>
 <c:if test="${not empty collaboratingUsers}">

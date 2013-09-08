@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.asu.spring.db.conceptcollection;
+package edu.asu.spring.quadriga.db.conceptcollection;
 
 import java.util.List;
 
