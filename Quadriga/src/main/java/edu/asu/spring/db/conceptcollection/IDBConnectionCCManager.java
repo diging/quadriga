@@ -127,8 +127,4 @@ public interface IDBConnectionCCManager {
 		 */
 		public abstract void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException;
 		
-		public abstract String deleteCollaboratorRequest(String userName, String collectionid) throws QuadrigaStorageException;
-		
-		
-		
 	}

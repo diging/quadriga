@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
@@ -48,11 +49,14 @@ public class ModifyCollaboratorFormManager {
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		List<ICollaborator> collaborators =  projCollabManager.getProjectCollaborators(projectId);
+		IUser user;
 		
 		for(ICollaborator collaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			modifyCollab.setUserName(collaborator.getUserObj().getUserName());
+			user = collaborator.getUserObj();
+			modifyCollab.setUserName(user.getUserName());
+			modifyCollab.setName(user.getName());
 			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
@@ -71,18 +75,22 @@ public class ModifyCollaboratorFormManager {
 	{
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
+		IUser user;
 		List<ICollaborator> collaborators =  dictManager.showCollaboratingUsers(dictionaryId);
 		
 		for(ICollaborator collaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			modifyCollab.setUserName(collaborator.getUserObj().getUserName());
+			user = collaborator.getUserObj();
+			modifyCollab.setUserName(user.getUserName());
+			modifyCollab.setName(user.getName());
 			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
 		
 		return modifyCollaborators;
 	}
+	
 	
 	/**
 	 * takes collection id to return collaborators of ModifyCollaborator domain
@@ -91,16 +99,19 @@ public class ModifyCollaboratorFormManager {
 	 * @return List<ModifyCollaborator> list of modifycollaborator domain
 	 * @throws QuadrigaStorageException
 	 */
-	public List<ModifyCollaborator> modifyConceptCollectionCollaboratorManager(String collectionId) throws QuadrigaStorageException
+	public List<ModifyCollaborator> modifyCCCollaboratorManager(String collectionId) throws QuadrigaStorageException
 	{
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
+		IUser user;
 		List<ICollaborator> collaborators =  collectionManager.showCollaboratingUsers(collectionId);
 		
 		for(ICollaborator collaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			modifyCollab.setUserName(collaborator.getUserObj().getUserName());
+			user = collaborator.getUserObj();
+			modifyCollab.setUserName(user.getUserName());
+			modifyCollab.setName(user.getName());
 			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}

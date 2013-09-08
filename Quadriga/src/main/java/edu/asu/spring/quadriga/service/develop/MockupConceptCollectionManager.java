@@ -124,12 +124,6 @@ public class MockupConceptCollectionManager implements
 	}
 
 	@Override
-	public String deleteCollaborators(String userName, String collectionid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void addItems(String lemmma, String id, String pos, String desc,
 			String conceptcollectionId, String string)
 			throws QuadrigaStorageException, QuadrigaAccessException {

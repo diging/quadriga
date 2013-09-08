@@ -125,6 +125,12 @@
 		<put-attribute name="content"
 		value="/WEB-INF/views/conceptcollections/deletecollaborators.jsp" />
 	</definition>
+	<definition name="auth/conceptcollection/updatecollaborators"
+		extends="base.definition.conceptcollections">
+	<put-attribute name="title" value="ConceptCollection - Update Collaborators" />
+		<put-attribute name="content"
+		value="/WEB-INF/views/conceptcollections/updatecollaborators.jsp" />
+	</definition>
 	<definition name="auth/conceptcollections/transferconceptcollectionowner"
 		extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="ConceptCollection - Transfer Ownership" />
@@ -184,15 +190,15 @@
 	<!-- Add/Update/Delete Project Collaborator START -->
 	<definition name="auth/workbench/addcollaborators"
 		extends="base.definition.workbench">
-		<put-attribute name="title" value="Non existing Collaborators" />
+		<put-attribute name="title" value="Quadriga Project - Add Collaborators" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/addcollaborators.jsp" />
 	</definition>
-	<definition name="auth/workbench/showDeleteCollaborators"
+	<definition name="auth/workbench/deletecollaborators"
 		extends="base.definition.workbench">
-		<put-attribute name="title" value="Non existing Collaborators" />
+		<put-attribute name="title" value="Quadriga Project - Delete Collaborators" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/workbench/showDeleteCollaborators.jsp" />
+			value="/WEB-INF/views/workbench/deletecollaborators.jsp" />
 	</definition>
 		<definition name="auth/workbench/updatecollaborators" extends="base.definition.workbench">
 		<put-attribute name="title" value="Update Collaborators" />

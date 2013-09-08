@@ -1,17 +1,12 @@
 package edu.asu.spring.quadriga.web.workbench;
 
-import java.beans.PropertyEditorSupport;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -76,25 +70,8 @@ public class DeleteProjectCollaboratorController {
 	private ModifyCollaboratorFormManager collaboratorFormManager;
 	
 	@InitBinder
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) throws Exception {
-		
+	protected void initBinder(WebDataBinder validateBinder) throws Exception {
 		validateBinder.setValidator(validator);
-		
-		binder.registerCustomEditor(List.class, "collaborators.collaboratorRoles", new PropertyEditorSupport() {
-		
-		@Override
-		public void setAsText(String text) {						
-		String[] roleIds = text.split(",");
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-		for(String role:roleIds){			
-			ICollaboratorRole collabrole = collaboratorRoleManager.getProjectCollaboratorRoleById(role.trim());
-			collaboratorRoles.add(collabrole);
-		}
-				
-		setValue(collaboratorRoles);
-		}
-		
-	 });
 }
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletecollaborators", method = RequestMethod.GET)

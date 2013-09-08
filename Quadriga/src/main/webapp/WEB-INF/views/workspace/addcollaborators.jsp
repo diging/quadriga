@@ -56,12 +56,12 @@ $(document).ready(function() {
 		</c:if>
 		
 		<c:if test="${empty noncollabusers}">
-          All active users are collaborators to the workspace.		   
+          <span class="byline">All collaborators are associated to the workspace</span>		   
 		</c:if>
 		</form:form>
+		
 		<c:if test="${not empty collaboratingusers}">
-		<br>
-		<br>
+		<span class="byline">Associated workspace collaborators :</span>
 		<table style="width: 100%" class="display dataTable" id="collabaratinguserlist">
 		   <thead>
 		<tr>	

@@ -226,21 +226,4 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			}
 		}
 	}
-
-	/**
-	 * @description	  retrieves collaborators for adding in the conceptcollection from database
-	 * @param  collectionid
-	 * @param  userName
-	 * @throws QuadrigaStorageException
-	 * @return String error message
-	 * @author rohit pendbhaje
-	 */
-	@Override
-	public String deleteCollaborators(String userName, String collectionid) throws QuadrigaStorageException {
-		
-		String errmsg = dbConnect.deleteCollaboratorRequest(userName, collectionid);
-		
-		return errmsg;
-	}
-
 }

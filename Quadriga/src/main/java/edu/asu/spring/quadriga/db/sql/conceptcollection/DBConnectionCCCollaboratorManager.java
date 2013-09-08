@@ -82,5 +82,101 @@ public class DBConnectionCCCollaboratorManager extends ADBConnectionManager impl
 		}
 	}
 
+	/**
+	 * retrieves data from database to delete collaborators
+	 * 
+	 * @param collectionid
+	 * @param userName
+	 * @throws QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 * 
+	 */
+	@Override
+	public void deleteCollaboratorRequest(String userName, String collectionid)
+			throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+
+		dbCommand = DBConstants.SP_CALL + " "
+				+ DBConstants.DELETE_CC_COLLABORATOR_REQUEST + "(?,?,?)";
+
+		getConnection();
+
+		try {
+
+			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
+			sqlStatement.setString(1, collectionid);
+			sqlStatement.setString(2, userName);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(3);
+
+			if(!errmsg.equals(""))
+			{
+				logger.info("In concept collection delete collaorator method :"+errmsg);
+				throw new QuadrigaStorageException();
+			}
+		}
+		catch (SQLException e) 
+		{
+			logger.error("In concept collection delete collaorator method :",e);
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+	}
+	
+	@Override
+	public void updateCollaboratorRequest(String collectionId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
+	{
+		String dbCommand;
+        String errmsg;
+        CallableStatement sqlStatement;
+        
+        //command to execute the stored procedure
+        dbCommand = DBConstants.SP_CALL+ " " + DBConstants.UPDATE_COLLECTION_COLLABORATOR + "(?,?,?,?,?)";
+        
+        //establish the connection
+        getConnection();
+        
+        try
+        {
+        	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+        	
+        	//add the input parameters
+        	sqlStatement.setString(1, collectionId);
+        	sqlStatement.setString(2, collabUser);
+        	sqlStatement.setString(3, collaboratorRole);
+        	sqlStatement.setString(4, username);
+        	
+        	//add output parameter
+        	sqlStatement.registerOutParameter(5, Types.VARCHAR);
+        	
+        	sqlStatement.execute();
+        	
+        	errmsg = sqlStatement.getString(5);
+        	
+        	if(!errmsg.equals(""))
+        	{
+        		logger.info("In concept collection update collaborator method :" + errmsg);
+        		throw new QuadrigaStorageException(errmsg);
+        	}
+        }
+        catch(SQLException ex)
+        {
+        	logger.error("in concept collection update collaborator method :",ex);
+        	throw new QuadrigaStorageException();
+        }
+        finally
+        {
+        	closeConnection();
+        }
+	}
 
 }

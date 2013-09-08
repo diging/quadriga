@@ -22,5 +22,18 @@ public class CCCollaboratorManager implements ICCCollaboratorManager
 	{
 		dbConnect.addCollaboratorRequest(collaborator, collectionid, userName);
 	}
+	
+	@Override
+	public void deleteCollaborators(String userName, String collectionid) throws QuadrigaStorageException 
+	{
+		dbConnect.deleteCollaboratorRequest(userName, collectionid);
+	}
+	
+	@Override
+	public void  updateCollaboratorRequest(String collectionId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
+	{
+		dbConnect.updateCollaboratorRequest(collectionId, collabUser, collaboratorRole, username);
+	}
+
 
 }

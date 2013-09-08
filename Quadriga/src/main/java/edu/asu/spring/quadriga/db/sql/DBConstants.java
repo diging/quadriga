@@ -157,4 +157,8 @@ public interface DBConstants
 	//workspace networks	
 	public static final String LIST_WORKSPACE_NETWORKS = "sp_getWorkspaceNetworkList";
 	
+	//concept collection database objects
+	public static final String UPDATE_COLLECTION_COLLABORATOR = "sp_updatecollectioncollaborator";
+	
+	
 }
