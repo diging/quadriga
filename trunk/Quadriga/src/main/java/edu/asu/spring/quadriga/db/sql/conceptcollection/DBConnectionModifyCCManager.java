@@ -7,7 +7,7 @@ import java.sql.Types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.asu.spring.db.conceptcollection.IDBConnectionModifyCCManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager;
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

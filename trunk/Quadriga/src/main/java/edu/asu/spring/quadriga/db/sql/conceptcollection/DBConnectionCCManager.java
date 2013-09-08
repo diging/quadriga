@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.asu.spring.db.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
@@ -297,7 +297,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			}
 		} catch (SQLException e) {
 			logger.error("Exception:", e);
-			e.printStackTrace();
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} finally {
@@ -424,7 +423,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			return errmsg;
 		} catch (SQLException e) {
 			logger.error("Exception", e);
-			e.printStackTrace();
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} finally {
@@ -465,7 +463,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			return errmsg;
 		} catch (SQLException e) {
 			logger.error("Exception", e);
-			e.printStackTrace();
 			throw new QuadrigaStorageException(
 					"Damn....Database guys are at work!!!!!!");
 		} finally {
@@ -668,8 +665,8 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("retrieve concept collection collaborators :",e);
+		
 		}
 
 		finally {

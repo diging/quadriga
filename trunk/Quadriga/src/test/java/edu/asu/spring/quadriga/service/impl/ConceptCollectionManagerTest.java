@@ -29,8 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.asu.spring.db.conceptcollection.IDBConnectionCCCollaboratorManager;
-import edu.asu.spring.db.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCCollaboratorManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;

@@ -25,8 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.asu.spring.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectConceptCollectionTest;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
 import edu.asu.spring.quadriga.domain.IConceptCollection;

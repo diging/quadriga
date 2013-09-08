@@ -25,6 +25,9 @@ td {
 	color: #ff0000;
 	font-style: italic;
 }
+div.ex {color:blue;
+font-style: italic
+}
 </style>
 <script>
 $(document).ready(function() {
@@ -37,26 +40,36 @@ $(document).ready(function() {
 	
 	$("input[type=submit]").button().click(function(event) {
 	});
+	$("input[type=button]").button().click(function(event) {
+	});
 });
+function onSubmit(){
+	
+	location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}';
+}
 </script>
 	<form:form commandName="collaborator" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/addcollaborators">
 		
 		<c:if test="${not empty noncollabusers}">
+		<div class="ex">select collaborator</div>
 		<form:select path="userObj" id="userName">
 	    	<form:option value="NONE" label="--- Select ---"/>
 	   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="name" /> 
 		</form:select>
 		<form:errors path="userObj" cssClass="error"></form:errors>
 		<br>
+		<div class="ex">select access rights</div>	
 		<form:checkboxes path="collaboratorRoles" class="roles" items="${wscollabroles}" itemValue="roleDBid" itemLabel="displayName" />
 		<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
-		<br>
+		<br/>
 	<td><input type="submit" value="Add"></td>
+	<input type="button" value="Cancel" onClick="onSubmit()">
 		</c:if>
 		
 		<c:if test="${empty noncollabusers}">
-          <span class="byline">All collaborators are associated to the workspace</span>		   
+          <span class="byline">All collaborators are associated to the workspace</span>	
+          <input type="button" value="Back" onClick="onSubmit()">	   
 		</c:if>
 		</form:form>
 		

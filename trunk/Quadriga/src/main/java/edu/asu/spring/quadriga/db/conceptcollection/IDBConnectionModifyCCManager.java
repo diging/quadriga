@@ -1,4 +1,4 @@
-package edu.asu.spring.db.conceptcollection;
+package edu.asu.spring.quadriga.db.conceptcollection;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 

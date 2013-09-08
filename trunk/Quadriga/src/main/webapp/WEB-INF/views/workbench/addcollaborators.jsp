@@ -44,6 +44,9 @@ $(document).ready(function() {
 	$("input[type=submit]").button().click(function(event) {
 
 	});
+	$("input[type=button]").button().click(function(event) {
+
+	});
 });
 
 function onSubmit(){
@@ -53,8 +56,6 @@ function onSubmit(){
 
 </script>
 
-<input type="submit" value="Back" onClick="onSubmit()">
-<br><br>
 <form:form method="POST" name="myForm" commandName="collaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
 
@@ -65,18 +66,20 @@ function onSubmit(){
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
  	<form:errors path="userObj" cssClass="error"></form:errors>  
-	
-	<br><br>
+	<br>
 <div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<td><input type="submit" value="Add"></td>
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
-	&nbsp;
+	<br/>
+<input type="submit" value="Add">
+<input type="button" value="Cancel" onClick="onSubmit()">
+<br><br>
 </c:if>
 <c:if test="${empty notCollaboratingUsers}">
  <span class="byline">All collaborators are associated to the project</span>
+ <input type="button" value="Back" onClick="onSubmit()">
 </c:if>
-<br><br>
+<br>
 <c:if test="${not empty collaboratingUsers}">
 <span class="byline">Associated project collaborators :</span>
 <table style="width:100%" class="display dataTable">					

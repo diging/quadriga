@@ -163,12 +163,13 @@ public class AddWSCollabController
 		ModelAndView model;
 		String userName;
 		String collabUser;
-		String roleIDList = "";
+		StringBuilder roleIdList;
 		List<IUser> nonCollaboratingUser;
 		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
 		
 		//create the model view
 		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
+		roleIdList = new StringBuilder();
 		
 		if(result.hasErrors())
 		{
@@ -182,14 +183,12 @@ public class AddWSCollabController
 			collabUser = collaborator.getUserObj().getUserName();
 			for(ICollaboratorRole role : collaborator.getCollaboratorRoles())
 			{
-				roleIDList = roleIDList + "," + role.getRoleDBid();
+				roleIdList.append(",");
+				roleIdList.append(role.getRoleDBid());
 			}
 			
-			//removing the first ',' from the list
-			roleIDList = roleIDList.substring(1);
-			
 			//call the method to insert the collaborator
-			wsManager.addWorkspaceCollaborator(collabUser, roleIDList, workspaceid, userName);
+			wsManager.addWorkspaceCollaborator(collabUser, roleIdList.toString().substring(1), workspaceid, userName);
 			
 			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.db.conceptcollection.IDBConnectionModifyCCManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.sevice.conceptcollection.IModifyConceptCollectionManager;
 

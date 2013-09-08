@@ -127,11 +127,11 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 			value='Cancel' name="Back">
 				</c:if>
 				<c:if test="${empty collaboratorForm.collaborators}">
-					<ul>
+			You don't have associated collaborators to delete.
+								<ul>
 				<li><input type=button onClick="submitClick(this.id);"
 					value='Back' name="Back"></li>
 			</ul>
-			You don't have associated collaborators to delete.
 				</c:if>
 			</c:when>
 				     <c:when test="${success == '1'}"> 

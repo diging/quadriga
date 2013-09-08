@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.db.conceptcollection.IDBConnectionModifyCCManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;

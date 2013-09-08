@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.db.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
