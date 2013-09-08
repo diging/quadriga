@@ -449,7 +449,7 @@ public class ConceptCollectionManagerTest {
 		List<IUser> collaborators = collectionManager.showNonCollaboratingUsers(collection.getId());
 		assertEquals(1, collaborators.size());
 		
-		dbConnection.deleteCollaboratorRequest(collaborator.getUserObj().getUserName(), collection.getId());
+		dbCollaboratorConnection.deleteCollaboratorRequest(collaborator.getUserObj().getUserName(), collection.getId());
 	}
 	
 	
@@ -474,7 +474,7 @@ public class ConceptCollectionManagerTest {
 		List<ICollaborator> collabUsers = collectionManager.showCollaboratingUsers(collection.getId());
 		assertEquals(1, collabUsers.size());
 		
-		collectionManager.deleteCollaborators(collaborator.getUserObj().getUserName(), collection.getId());	
+		dbCollaboratorConnection.deleteCollaboratorRequest(collaborator.getUserObj().getUserName(), collection.getId());	
 	}
 	
 	@Test
@@ -498,7 +498,7 @@ public class ConceptCollectionManagerTest {
 		List<ICollaborator> collabUsers = collectionManager.showCollaboratingUsers(collection.getId());
 		assertEquals(1, collabUsers.size());
 		
-		collectionManager.deleteCollaborators(collaborator.getUserObj().getUserName(), collection.getId());	
+		dbCollaboratorConnection.deleteCollaboratorRequest(collaborator.getUserObj().getUserName(), collection.getId());	
 
 		List<ICollaborator> collabUsers1 = collectionManager.showCollaboratingUsers(collection.getId());
 		assertEquals(0, collabUsers1.size());	

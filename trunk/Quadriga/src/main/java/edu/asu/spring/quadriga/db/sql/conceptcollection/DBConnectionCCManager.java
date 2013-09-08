@@ -24,7 +24,6 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
@@ -540,8 +539,10 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 					ICollaborator collaborator = collaboratorFactory
 							.createCollaborator();
 					IUser user = userFactory.createUserObject();
-					user.setUserName(resultset.getString(1));
+					//fetching the user details
+					user = userManager.getUserDetails(resultset.getString(1));
 					collaborator.setUserObj(user);
+					//fetch the collaborator roles
 					collaboratorRoles = splitAndgetCollaboratorRolesList(resultset
 							.getString(2));
 
@@ -581,7 +582,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
-		List<IQuadrigaRole> quadrigaRoles = new ArrayList<IQuadrigaRole>();
 		List<IUser> collaboratorList = new ArrayList<IUser>();
 		dbCommand = DBConstants.SP_CALL + " "
 				+ DBConstants.SHOW_CC_NONCOLLABORATOR_REQUEST + "(?,?)";
@@ -598,10 +598,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 				ResultSet resultset = sqlStatement.getResultSet();
 				while (resultset.next()) {
 					IUser collaborator = userFactory.createUserObject();
-					collaborator.setUserName(resultset.getString(1));
-					quadrigaRoles = dbConnectionManager
-							.listQuadrigaUserRoles(resultset.getString(2));
-					collaborator.setQuadrigaRoles(quadrigaRoles);
+					collaborator = userManager.getUserDetails(resultset.getString(1));
 					collaboratorList.add(collaborator);
 				}
 			}
@@ -682,53 +679,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	}
 
 	/**
-	 * retrieves data from database to delete collaborators
-	 * 
-	 * @param collectionid
-	 * @param userName
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 * 
-	 */
-	@Override
-	public String deleteCollaboratorRequest(String userName, String collectionid)
-			throws QuadrigaStorageException {
-		if(userName==null || collectionid == null || userName.isEmpty() || collectionid.isEmpty())
-		{
-			logger.error("deleteCollaboratorRequest: input argument IConceptCollection is null");
-			return null;
-		}
-		String dbCommand;
-		String errmsg;
-		CallableStatement sqlStatement;
-
-		dbCommand = DBConstants.SP_CALL + " "
-				+ DBConstants.DELETE_CC_COLLABORATOR_REQUEST + "(?,?,?)";
-
-		getConnection();
-
-		try {
-
-			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setString(1, collectionid);
-			sqlStatement.setString(2, userName);
-			sqlStatement.registerOutParameter(3, Types.VARCHAR);
-			sqlStatement.execute();
-
-			errmsg = sqlStatement.getString(3);
-
-			if (errmsg.equals("no errors")) {
-				return errmsg;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			throw new QuadrigaStorageException();
-		}
-
-		return null;
-	}
-
-	/**
 	 * splits the comma seperated roles string coming from database and converts
 	 * into list of roles
 	 * 
@@ -750,11 +700,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		collabroles = role.split(",");
 
 		for (int i = 0; i < collabroles.length; i++) {
-			collaboratorRole = collaboratorRoleFactory
-					.createCollaboratorRoleObject();
-			collaboratorRole.setRoleDBid(collabroles[i]);
-			collaboratorRole.setDisplayName(collaboratorRoleManager
-					.getCollectionCollabRoleByDBId(collabroles[i]));
+			collaboratorRole = collaboratorRoleManager.getCollectionCollabRoleByDBId(collabroles[i]);
 			collaboratorRoleList.add(collaboratorRole);
 		}
 

@@ -264,13 +264,13 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	}
 
 	@Override
-	public String getCollectionCollabRoleByDBId(String collaboratorRoleDBId) {
+	public ICollaboratorRole getCollectionCollabRoleByDBId(String collaboratorRoleDBId) {
 
 		for(ICollaboratorRole role:ccCollabRoles)
 		{
 			if(role.getRoleDBid().equals(collaboratorRoleDBId))
 			{
-				return role.getDisplayName();
+				return role;
 			}	
 		}
 		return null;

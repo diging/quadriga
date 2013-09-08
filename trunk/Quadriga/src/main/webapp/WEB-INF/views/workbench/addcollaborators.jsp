@@ -73,10 +73,12 @@ function onSubmit(){
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
 	&nbsp;
 </c:if>
-
-
+<c:if test="${empty notCollaboratingUsers}">
+ <span class="byline">All collaborators are associated to the project</span>
+</c:if>
 <br><br>
 <c:if test="${not empty collaboratingUsers}">
+<span class="byline">Associated project collaborators :</span>
 <table style="width:100%" class="display dataTable">					
 	<thead>
 		<tr>	

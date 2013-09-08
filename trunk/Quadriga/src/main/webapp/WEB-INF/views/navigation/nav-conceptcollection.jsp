@@ -27,6 +27,8 @@
 				Add Collaborators</a></li>
 			<li><a href="/quadriga/auth/conceptcollections/${collectionid}/deletecollaborators">
 				Delete Collaborators</a></li>
+			<li><a href="/quadriga/auth/conceptcollections/${collectionid}/updatecollaborators">
+				Update Collaborators</a></li>
 		</ul>
 	</li>
 	<li><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/transferconceptcollectionowner/${collectionid}">

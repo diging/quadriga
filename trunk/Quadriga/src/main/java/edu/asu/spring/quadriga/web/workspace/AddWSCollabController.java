@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.workspace;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -121,16 +122,19 @@ public class AddWSCollabController
 		//fetch the users who are not collaborators to the workspace
 		nonCollaboratingUser = wsCollabManager.getWorkspaceNonCollaborators(workspaceid);
 		
-		//remove the restricted user from the list
-		for(IUser user : nonCollaboratingUser)
+		//remove the restricted user
+		Iterator<IUser> userIterator = nonCollaboratingUser.iterator();
+		while(userIterator.hasNext())
 		{
 			//fetch the quadriga roles and eliminate the restricted user
+			IUser user = userIterator.next();
 			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
 			for(IQuadrigaRole role : userQuadrigaRole)
 			{
 				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
 				{
-					nonCollaboratingUser.remove(user);
+					userIterator.remove();
+					break;
 				}
 			}
 		}
@@ -198,16 +202,19 @@ public class AddWSCollabController
 		//fetch the users who are not collaborators to the workspace
 		nonCollaboratingUser = wsCollabManager.getWorkspaceNonCollaborators(workspaceid);
 		
-		//remove the restricted user from the list
-		for(IUser user : nonCollaboratingUser)
+		//remove the restricted user
+		Iterator<IUser> userIterator = nonCollaboratingUser.iterator();
+		while(userIterator.hasNext())
 		{
 			//fetch the quadriga roles and eliminate the restricted user
+			IUser user = userIterator.next();
 			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
 			for(IQuadrigaRole role : userQuadrigaRole)
 			{
 				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
 				{
-					nonCollaboratingUser.remove(user);
+					userIterator.remove();
+					break;
 				}
 			}
 		}

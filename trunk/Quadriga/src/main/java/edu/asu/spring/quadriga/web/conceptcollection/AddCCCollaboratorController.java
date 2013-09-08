@@ -4,6 +4,7 @@ package edu.asu.spring.quadriga.web.conceptcollection;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
@@ -129,6 +131,23 @@ public class AddCCCollaboratorController {
 			
 			//fetch the non collaborators and add it to the model
 			nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+			
+			//remove the restricted user
+			Iterator<IUser> userIterator = nonCollaboratorList.iterator();
+			while(userIterator.hasNext())
+			{
+				//fetch the quadriga roles and eliminate the restricted user
+				IUser user = userIterator.next();
+				List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+				for(IQuadrigaRole role : userQuadrigaRole)
+				{
+					if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+					{
+						userIterator.remove();
+						break;
+					}
+				}
+			}
 			model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 			
 			model.getModelMap().put("collectionid", collectionid);
@@ -138,12 +157,13 @@ public class AddCCCollaboratorController {
 			model.getModelMap().put("collaborator", collaborator);
 			
 			collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
-			
-			for(ICollaboratorRole role : collaboratorRoleList)
+			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoleList.iterator();
+			while(collabRoleIterator.hasNext())
 			{
-				if(role.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+				ICollaboratorRole collabRole = collabRoleIterator.next();
+				if(collabRole.getRoleid().equals(RoleNames.ROLE_CC_COLLABORATOR_ADMIN))
 				{
-					collaboratorRoleList.remove(role);
+					collabRoleIterator.remove();
 				}
 			}
 			model.getModelMap().put("collaboratorRoles",collaboratorRoleList);
@@ -183,17 +203,34 @@ public class AddCCCollaboratorController {
 		   }
 		   
 		   nonCollaboratorList = conceptControllerManager.showNonCollaboratingUsers(collectionid);	
+			//remove the restricted user
+			Iterator<IUser> userIterator = nonCollaboratorList.iterator();
+			while(userIterator.hasNext())
+			{
+				//fetch the quadriga roles and eliminate the restricted user
+				IUser user = userIterator.next();
+				List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+				for(IQuadrigaRole role : userQuadrigaRole)
+				{
+					if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+					{
+						userIterator.remove();
+						break;
+					}
+				}
+			}
 		   model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 			
 		   collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
-		   for(ICollaboratorRole role : collaboratorRoleList)
-		   {
-			   if(role.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
-			   {
-				   collaboratorRoleList.remove(role);
-			   }
-		   }
-		   
+			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoleList.iterator();
+			while(collabRoleIterator.hasNext())
+			{
+				ICollaboratorRole collabRole = collabRoleIterator.next();
+				if(collabRole.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+				{
+					collabRoleIterator.remove();
+				}
+			}
 		   model.getModelMap().put("collaboratorRoles",collaboratorRoleList);
 			
 			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
