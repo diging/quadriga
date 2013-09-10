@@ -179,7 +179,7 @@ public class NetworkRestController {
 	 * @throws Exception 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/networkstatus/{NetworkId}", method = RequestMethod.GET)
+	@RequestMapping(value = "rest/networkstatus/{NetworkId}", method = RequestMethod.GET, produces = "application/xml")
 	public String getNetworkStatus(@PathVariable("NetworkId") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {

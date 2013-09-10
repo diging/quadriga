@@ -26,4 +26,10 @@ public interface IEditorManager {
 	public abstract List<INetwork> getRejectedNetworkOfUser(IUser user)
 			throws QuadrigaStorageException;
 
+	public abstract List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user)
+			throws QuadrigaStorageException;
+
+	public abstract List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user)
+			throws QuadrigaStorageException;
+
 }

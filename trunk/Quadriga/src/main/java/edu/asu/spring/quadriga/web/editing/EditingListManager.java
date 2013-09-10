@@ -49,6 +49,14 @@ public class EditingListManager {
 	@RequestMapping(value = "auth/editing", method = RequestMethod.GET)
 	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
+		
+		List<INetwork> assignedNetworkList=null;
+		try{
+			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
+		
 		List<INetwork> networkList=null;
 		try{
 			networkList = editorManager.getEditorNetworkList(user);
@@ -56,7 +64,54 @@ public class EditingListManager {
 			logger.error("Some issue in the DB",e);
 		}
 		
+		model.addAttribute("assignedNetworkList", assignedNetworkList);
 		model.addAttribute("networkList", networkList);
+		model.addAttribute("userId", user.getUserName());
+		return "auth/editing";
+	}
+	
+	/**
+	 * List of networks assigned to other editor
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "auth/networksOtherEditors", method = RequestMethod.GET)
+	public String listNetworkAssignedToOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		
+		List<INetwork> assignedNetworkList=null;
+		try{
+			assignedNetworkList = editorManager.getAssignedNetworkListOfOtherEditors(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
+		
+		model.addAttribute("assignedNetworkList", assignedNetworkList);
+		model.addAttribute("userId", user.getUserName());
+		return "auth/editing";
+	}
+	
+	/**
+	 * List of networks finished by other editor
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "auth/finishednetworksOtherEditors", method = RequestMethod.GET)
+	public String listFinishedNetworksByOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		
+		List<INetwork> finishedNetworkList=null;
+		try{
+			finishedNetworkList = editorManager.getfinishedNetworkListOfOtherEditors(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
+		
+		model.addAttribute("finishedNetworkList", finishedNetworkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
 	}

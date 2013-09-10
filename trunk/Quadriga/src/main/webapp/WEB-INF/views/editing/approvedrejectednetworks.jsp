@@ -40,38 +40,6 @@
 
 </header>
 
-<span class="byline">Networks you are working on.</span>
-<c:choose>
-	<c:when test="${not empty AssignedNetworkList}">
-		<ul class="pagination1">
-			<c:forEach var="network" items="${AssignedNetworkList}">
-				<li>
-					<details>
-						<summary><a
-							href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}">
-								<c:out value="${network.name}"></c:out>
-						</a></summary>
-						<ul>
-						<li>Project : <c:out value="${network.projectName}"></c:out></li>
-						<li>Workspace : <c:out value="${network.workspaceName}"></c:out></li>
-						<li>Submitted by : <c:out value="${network.creator.userName}"></c:out> </li>
-						<li>Status : <c:out value="${network.status}"></c:out></li>
-						<li><input type=button
-							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/rejectnetwork/${network.id}'"
-							name='Reject' value='Reject'></li>
-						<li><input type=button
-							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.id}'"
-							name='Approve' value='Approve'></li>
-					</ul></details>
-				</li>
-			</c:forEach>
-		</ul>
-
-	</c:when>
-	<c:otherwise>
-		<spring:message code="empty.networks" />
-	</c:otherwise>
-</c:choose>
 
 
 <span class="byline">Networks you have approved.</span>

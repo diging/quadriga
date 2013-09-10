@@ -97,6 +97,8 @@ public interface DBConstants
 	public static final String GET_USER_ASSIGN_NETWORK = "sp_getUserAssignedNetworkList";
 	public static final String GET_USER_REJECTED_NETWORK = "sp_getUserRejectedNetworkList";
 	public static final String GET_USER_APPROVED_NETWORK = "sp_getUserApprovedNetworkList";
+	public static final String GET_ASSIGNED_NETWORK_OTHER_EDITORS = "sp_getNetworkAssignedtoOtherUser";
+	public static final String GET_FINISHED_NETWORK_OTHER_EDITORS = "sp_getNetworkFinishedByOtherUser";
 	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
