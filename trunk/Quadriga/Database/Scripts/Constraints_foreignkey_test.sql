@@ -57,3 +57,11 @@ ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid) ON DELETE CAS
 ALTER TABLE tbl_dspace_keys
 ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
 /* End - Foreign key dependencies for Dspace data */
+
+/* Begin - Foreign key dependencies for user profile */
+ALTER TABLE tbl_quadriga_userprofile
+ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
+/* End - Foreign key dependencies for user profile */
+
+
+

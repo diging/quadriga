@@ -537,12 +537,12 @@
 	<definition name="auth/dictionaries/showAddCollaborators"
 		extends="base.definition.dictionaries">
 		<put-attribute name="content"
-		value="/WEB-INF/views/dictionary/showAddCollaborators.jsp" />
+		value="/WEB-INF/views/dictionary/addcollaborators.jsp" />
 	</definition>
 	<definition name="auth/dictionaries/showDeleteCollaborators"
 		extends="base.definition.dictionaries">
 		<put-attribute name="content"
-		value="/WEB-INF/views/dictionary/showDeleteCollaborators.jsp"/>
+		value="/WEB-INF/views/dictionary/deletecollaborators.jsp"/>
 	</definition>
 		
 		
