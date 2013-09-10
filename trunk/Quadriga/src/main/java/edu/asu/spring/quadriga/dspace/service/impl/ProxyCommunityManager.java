@@ -7,14 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
@@ -28,7 +24,6 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
-import edu.asu.spring.quadriga.web.rest.DspaceRestController;
 
 /**
  * The purpose of the class is to implement proxy pattern for the community class
@@ -43,9 +38,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 	private List<ICommunity> communities;
 	private List<ICollection> collections;
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(DspaceRestController.class);
 
 	@Autowired
 	private ICollectionFactory collectionFactory;
@@ -86,30 +78,16 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 
 	/**
-	 * {@inheritDoc}
-	 * @throws QuadrigaAccessException 
+	 * {@inheritDoc} 
 	 */
 	@Override
-	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException, QuadrigaAccessException {
+	public List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException {
 		if(communities == null)
 		{
 			String sRestServicePath = getCompleteUrlPath(dspaceProperties, dspaceKeys, sUserName, sPassword);
 			IDspaceCommunities dsapceCommunities = null;
 
-			try
-			{
-				dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
-			}
-			catch(HttpClientErrorException e)
-			{
-				logger.error("User "+sUserName+" tried to log in to dspace with wrong credentials !");
-				throw new QuadrigaAccessException("Wrong Dspace Login Credentials !");
-			}
-			catch(HttpServerErrorException e)
-			{
-				logger.info("The dspace server is down !");
-				throw new QuadrigaAccessException("The dspace server is down ! Please check back later.");
-			}
+			dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
 
 			if(dsapceCommunities.getCommunities().size()>0)
 			{
