@@ -65,7 +65,7 @@ public class EditorManager implements IEditorManager {
 		}
 		return msg;
 	}
-	
+
 	/**
 	 * Get assigned network list of the user
 	 */
@@ -81,7 +81,33 @@ public class EditorManager implements IEditorManager {
 		}
 		return networkList;
 	}
-	
+
+	@Override
+	public List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
+
+		List<INetwork> networkList = null;
+
+		try{
+			networkList=dbConnect.getfinishedNetworkListOfOtherEditors(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return networkList;
+	}
+
+	@Override
+	public List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
+
+		List<INetwork> networkList = null;
+
+		try{
+			networkList=dbConnect.getAssignedNetworkListOfOtherEditors(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return networkList;
+	}
+
 	/**
 	 * Get Rejected network list of user
 	 */
@@ -97,7 +123,7 @@ public class EditorManager implements IEditorManager {
 		}
 		return networkList;
 	}
-	
+
 	/**
 	 * Get Approved network list of a user
 	 */
@@ -113,7 +139,7 @@ public class EditorManager implements IEditorManager {
 		}
 		return networkList;
 	}
-	
+
 	/**
 	 * Update the status of the network
 	 * PENDING / ASSIGNED / REJECTED / APPROVED

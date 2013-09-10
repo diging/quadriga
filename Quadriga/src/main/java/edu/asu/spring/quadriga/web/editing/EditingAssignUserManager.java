@@ -57,13 +57,19 @@ public class EditingAssignUserManager {
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
+		List<INetwork> assignedNetworkList=null;
+		try{
+			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
 		List<INetwork> networkList=null;
 		try{
 			networkList = editorManager.getEditorNetworkList(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-
+		model.addAttribute("assignedNetworkList", assignedNetworkList);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
@@ -76,15 +82,10 @@ public class EditingAssignUserManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	@RequestMapping(value = "auth/editing/assignnetworktouser", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/editing/approvedandrejectednetworksofuser", method = RequestMethod.GET)
 	public String listNetworksAssignedToUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		List<INetwork> assignedNetworkList=null;
-		try{
-			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
+		
 		
 		List<INetwork> approvedNetworkList=null;
 		try{
@@ -100,11 +101,10 @@ public class EditingAssignUserManager {
 			logger.error("Some issue in the DB",e);
 		}
 
-		model.addAttribute("AssignedNetworkList", assignedNetworkList);
 		model.addAttribute("ApprovedNetworkList", approvedNetworkList);
 		model.addAttribute("RejectedNetworkList", rejectedNetworkList);
 		model.addAttribute("userId", user.getUserName());
-		return "auth/assignednetworks";
+		return "auth/approvedrejectednetworks";
 	}
 
 	
@@ -132,25 +132,18 @@ public class EditingAssignUserManager {
 			logger.error("Some issue in the DB",e);
 		}
 		
-		List<INetwork> approvedNetworkList=null;
+		List<INetwork> networkList=null;
 		try{
-			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+			networkList = editorManager.getEditorNetworkList(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
 		
-		List<INetwork> rejectedNetworkList=null;
-		try{
-			rejectedNetworkList = editorManager.getRejectedNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
 
 		model.addAttribute("AssignedNetworkList", assignedNetworkList);
-		model.addAttribute("ApprovedNetworkList", approvedNetworkList);
-		model.addAttribute("RejectedNetworkList", rejectedNetworkList);
+		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
-		return "auth/assignednetworks";
+		return "auth/editing";
 	}
 
 	/**
@@ -177,24 +170,18 @@ public class EditingAssignUserManager {
 			logger.error("Some issue in the DB",e);
 		}
 		
-		List<INetwork> approvedNetworkList=null;
+
+		List<INetwork> networkList=null;
 		try{
-			approvedNetworkList = editorManager.getApprovedNetworkOfUser(user);
+			networkList = editorManager.getEditorNetworkList(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
 		
-		List<INetwork> rejectedNetworkList=null;
-		try{
-			rejectedNetworkList = editorManager.getRejectedNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
 
 		model.addAttribute("AssignedNetworkList", assignedNetworkList);
-		model.addAttribute("ApprovedNetworkList", approvedNetworkList);
-		model.addAttribute("RejectedNetworkList", rejectedNetworkList);
+		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
-		return "auth/assignednetworks";
+		return "auth/editing";
 	}
 }

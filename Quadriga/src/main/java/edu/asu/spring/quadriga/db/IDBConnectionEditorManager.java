@@ -26,5 +26,11 @@ public interface IDBConnectionEditorManager {
 	public abstract List<INetwork> getApprovedNetworkOfUser(IUser user)
 			throws QuadrigaStorageException;
 
+	public abstract List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user)
+			throws QuadrigaStorageException;
+
+	public abstract List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user)
+			throws QuadrigaStorageException;
+
 
 }
