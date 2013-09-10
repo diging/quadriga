@@ -34,7 +34,7 @@
 			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
-				if ($('#' + divIDs[i]).text() == 'Checking Collection Access...') {
+				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_collection" />') {
 					IDs.push(divIDs[i]);
 				}
 			}	
@@ -74,7 +74,7 @@
 			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
-				if ($('#' + divIDs[i]).text() == 'Checking Collection Access...') {
+				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_collection" />') {
 					IDs.push(divIDs[i]);
 				}
 			}
@@ -97,7 +97,7 @@
 			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
-				if ($('#' + divIDs[i]).text() == 'Checking Item Access...') {
+				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_item" />') {
 					IDs.push(divIDs[i]);
 				}
 			}	
@@ -137,7 +137,7 @@
 			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
-				if ($('#' + divIDs[i]).text() == 'Checking Item Access...') {
+				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_item" />') {
 					IDs.push(divIDs[i]);
 				}
 			}
@@ -158,7 +158,7 @@
 			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
-				if ($('#' + divIDs[i]).text() == 'Checking BitStream Access...') {
+				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_bitstream" />') {
 					IDs.push(divIDs[i]);
 				}
 			}	
@@ -200,7 +200,7 @@
 			var i = 0;
 			var IDs = [];
 			for (i = 0; i < divIDs.length; i++) {
-				if ($('#' + divIDs[i]).text() == 'Checking BitStream Access...') {
+				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_bitstream" />') {
 					IDs.push(divIDs[i]);
 				}
 			}
