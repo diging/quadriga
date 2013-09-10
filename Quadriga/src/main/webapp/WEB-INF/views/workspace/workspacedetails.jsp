@@ -486,7 +486,7 @@ $(document).ready(function(){
 						<td>
     						<div id='checkbox_<c:out value="${bitstream.id}"/>' class='checkbox_<c:out value="${bitstream.id}"/>'>
         						<c:choose>
-            					<c:when test="${not((bitstream.name == 'No Access to File') or (bitstream.name == 'Wrong Dspace Authentication')) }">
+            					<c:when test="${not((bitstream.name == 'No Access to File') or (bitstream.name == 'Wrong Dspace Authentication') or (bitstream.name == 'Dspace is Down...')) }">
                 					<c:choose>
 	                    				<c:when test="${not(bitstream.name == 'Checking BitStream Access...')}">
                         					<input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}" />

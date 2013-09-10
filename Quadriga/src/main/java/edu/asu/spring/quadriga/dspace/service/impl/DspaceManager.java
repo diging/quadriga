@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
@@ -136,7 +138,23 @@ public class DspaceManager implements IDspaceManager{
 
 		try {
 			return getProxyCommunityManager().getAllCommunities(getRestTemplate(), getDspaceProperties(), dspaceKeys, sUserName, sPassword);
-		} catch (NoSuchAlgorithmException e) {
+		}
+		catch(ResourceAccessException e)
+		{
+			logger.error("Dspace is not accessible. Check the url used and if dspace is up !");
+			throw new QuadrigaAccessException("Quadriga is having trouble accessing Dspace. Please check back later.");
+		}
+		catch(HttpClientErrorException e)
+		{
+			logger.error("User "+sUserName+" tried to log in to dspace with wrong credentials !");
+			throw new QuadrigaAccessException("Wrong Dspace Login Credentials !");
+		}
+		catch(HttpServerErrorException e)
+		{
+			logger.info("The dspace server is down !");
+			throw new QuadrigaAccessException("The dspace server is down ! Please check back later.");
+		}		
+		catch (NoSuchAlgorithmException e) {
 			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
 		}
 	}
@@ -282,6 +300,16 @@ public class DspaceManager implements IDspaceManager{
 			throw e;
 		} catch (NoSuchAlgorithmException e) {
 			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
+		}
+		catch(HttpClientErrorException e)
+		{
+			logger.error("User "+username+" tried to log in to dspace with wrong credentials !");
+			throw new QuadrigaAccessException("Wrong Dspace Login Credentials !");
+		}
+		catch(HttpServerErrorException e)
+		{
+			logger.info("The dspace server is down !");
+			throw new QuadrigaAccessException("The dspace server is down ! Please check back later.");
 		}
 	}
 
@@ -526,24 +554,26 @@ public class DspaceManager implements IDspaceManager{
 		} catch (NoSuchAlgorithmException e) {
 			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
 		}
-		catch(HttpServerErrorException e)
+		catch(ResourceAccessException | HttpServerErrorException e)
 		{
-			/* Dspace can't be accessed using the supplied public and private key.
-			 * This exception happens when long random strings are provided for public/private keys.
-			 */
+			logger.error("Dspace is not accessible. Check the url used and also if dspace is down!");
 			checkedBitStreams.clear();
+			IBitStream dspaceDownBitStream = getBitstreamFactory().createBitStreamObject();
+			dspaceDownBitStream.setCommunityName(dspaceProperties.getProperty("dspace_down"));
+			dspaceDownBitStream.setCollectionName(dspaceProperties.getProperty("dspace_down"));
+			dspaceDownBitStream.setItemName(dspaceProperties.getProperty("dspace_down"));
+			dspaceDownBitStream.setName(dspaceProperties.getProperty("dspace_down"));
 			for(int i=0;i<bitstreams.size();i++)
 			{
-				checkedBitStreams.add(restrictedBitStream);
+				checkedBitStreams.add(dspaceDownBitStream);
 			}
 		}
-		catch(QuadrigaAccessException qe)
+		catch(HttpClientErrorException qe)
 		{
 			/* 
 			 * This exception happens for wrong username and password.
-			 * Thrown also when the dspace server is down.
+			 * Also thrown for wrong public/private key 
 			 */
-			
 			checkedBitStreams.clear();
 			IBitStream inaccessibleBitStream = getBitstreamFactory().createBitStreamObject();
 			inaccessibleBitStream.setCommunityName(dspaceProperties.getProperty("wrong_authentication"));

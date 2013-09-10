@@ -31,9 +31,8 @@ public interface ICommunityManager {
 	 * @param sPassword				The corresponding dspace password of the user
 	 * @return						List of communities retrieved from Dspace.
 	 * @throws NoSuchAlgorithmException 
-	 * @throws QuadrigaAccessException 
 	 */
-	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException, QuadrigaAccessException;
+	public abstract List<ICommunity> getAllCommunities(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException;
 
 	/**
 	 * Get all the collections available for the given user. For the first call, this method makes a request to Dspace.
