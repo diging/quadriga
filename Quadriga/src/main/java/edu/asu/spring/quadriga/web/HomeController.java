@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.factories.IServiceUriFactory;
 import edu.asu.spring.quadriga.domain.implementation.Profile;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IUserProfileManager;
 
 /**
  * Handles requests for the application home page.
@@ -24,6 +26,9 @@ public class HomeController {
 	
 	@Autowired
 	IServiceUriFactory serviceUriFactory;
+	
+	@Autowired
+	IUserProfileManager profileManager;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -46,7 +51,6 @@ public class HomeController {
 	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
 	public String loginProfile(Model model, Principal principal)
 	{
-		System.out.println("------------in homecontroller");
 		return "auth/home/profile";
 	}
 	
@@ -61,10 +65,13 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "auth/profile/adduri", method = RequestMethod.POST)
-	public String addUri(@ModelAttribute("serviceUri") Profile serviceUri, Model model, Principal principal)
+	public String addUri(@ModelAttribute("serviceUri") Profile serviceUri, Model model, Principal principal) throws QuadrigaStorageException
 	{
-		String str = serviceUri.getServiceName();
-		System.out.println("-----------str "+str);
+		String service = serviceUri.getServiceName();
+		String uri = serviceUri.getUri();
+		
+		String errmsg = profileManager.addUserProfile(principal.getName(),service,uri);
+		
 		
 		
 		
