@@ -138,6 +138,11 @@
 		<property name="location" value="classpath:locale/errormessages.properties" />
 	</bean>
 	
+	<bean id="uiMessages"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/messages_en_US.properties" />
+	</bean>
+	
 	<bean id="dspaceStrings"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/dspacestrings.properties" />

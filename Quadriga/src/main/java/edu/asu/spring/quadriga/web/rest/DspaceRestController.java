@@ -208,21 +208,21 @@ public class DspaceRestController {
 		if(publicKey!=null && privateKey!=null && !publicKey.equals("") && !privateKey.equals(""))
 		{
 			//Authenticate based on public and private key
-			String stringToHash = dspaceProperties.getProperty("bitstream_url") + fileid + privateKey;
-			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			String stringToHash = dspaceProperties.getProperty("dspace.bitstream_url") + fileid + privateKey;
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 			
-			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid+dspaceProperties.getProperty("?")+
-					dspaceProperties.getProperty("api_key")+publicKey+dspaceProperties.getProperty("&")+
-					dspaceProperties.getProperty("api_digest")+digestKey;
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.api_key")+publicKey+dspaceProperties.getProperty("dspace.&")+
+					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 		}
 		else if(email!=null && password!=null && !email.equals("") && !password.equals(""))
 		{				
 			//Authenticate based on email and password
-			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid+dspaceProperties.getProperty("?")+
-					dspaceProperties.getProperty("email")+email+
-					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.email")+email+
+					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+password;
 		}
 		
 		//Try to get the keys from the database
@@ -231,18 +231,18 @@ public class DspaceRestController {
 		{
 			//User has keys stored in quadriga database
 			//Authenticate based on public and private key
-			String stringToHash = dspaceProperties.getProperty("bitstream_url") + fileid + dspacekey.getPrivateKey();
-			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			String stringToHash = dspaceProperties.getProperty("dspace.bitstream_url") + fileid + dspacekey.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 			
-			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid+dspaceProperties.getProperty("?")+
-					dspaceProperties.getProperty("api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("&")+
-					dspaceProperties.getProperty("api_digest")+digestKey;
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("dspace.&")+
+					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 		}
 		
 		//No authentication provided
-		return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("bitstream_url")+fileid;
+		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid;
 	}
 
 	private String bytesToHex(byte[] b) {

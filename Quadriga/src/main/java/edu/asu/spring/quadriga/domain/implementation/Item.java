@@ -202,28 +202,28 @@ public class Item implements IItem{
 	{
 		if(this.dspaceKeys != null)
 		{
-			String stringToHash = dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+dspaceKeys.getPrivateKey();
-			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			String stringToHash = dspaceProperties.getProperty("dspace.item_url")+this.id+dspaceProperties.getProperty("dspace.xml")+dspaceKeys.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 
-			return dspaceProperties.getProperty("dspace_url")+
-					dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
-					dspaceProperties.getProperty("?")+dspaceProperties.getProperty("api_key")+
-					dspaceKeys.getPublicKey() +dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+			return dspaceProperties.getProperty("dspace.dspace_url")+
+					dspaceProperties.getProperty("dspace.item_url")+this.id+dspaceProperties.getProperty("dspace.xml")+
+					dspaceProperties.getProperty("dspace.?")+dspaceProperties.getProperty("dspace.api_key")+
+					dspaceKeys.getPublicKey() +dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 
 		}
 		else if(this.userName != null && this.password != null && !this.userName.equals("") && !this.password.equals(""))
 		{			
-			return dspaceProperties.getProperty("dspace_url")+
-					dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml")+
-					dspaceProperties.getProperty("?")+dspaceProperties.getProperty("email")+this.userName+
-					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+this.password;
+			return dspaceProperties.getProperty("dspace.dspace_url")+
+					dspaceProperties.getProperty("dspace.item_url")+this.id+dspaceProperties.getProperty("dspace.xml")+
+					dspaceProperties.getProperty("dspace.?")+dspaceProperties.getProperty("dspace.email")+this.userName+
+					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+this.password;
 		}
 		else
 		{
 			//No username+password and dspacekeys are used. So use public access
-			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("item_url")+this.id+dspaceProperties.getProperty("xml");
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.item_url")+this.id+dspaceProperties.getProperty("dspace.xml");
 		}
 	}
 

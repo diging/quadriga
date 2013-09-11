@@ -77,8 +77,8 @@ public class ListWSController
 	@Autowired
 	private IDspaceKeysFactory dspaceKeysFactory;
 
-	@Resource(name = "dspaceStrings")
-	private Properties dspaceProperties;
+	@Resource(name = "uiMessages")
+	private Properties dspaceMessages;
 
 	public IDspaceKeys getDspaceKeys() {
 		return dspaceKeys;
@@ -482,7 +482,7 @@ public class ListWSController
 
 		//Can't find collection in any of the communities
 		if(dspaceManager.getCommunityId(collectionid) == null)
-			return dspaceProperties.getProperty("restricted_collection");
+			return dspaceMessages.getProperty("dspace.restricted_collection");
 
 		ICollection collection = dspaceManager.getCollection(collectionid);
 		if(collection != null)
@@ -492,10 +492,10 @@ public class ListWSController
 				if(collection.getName() != null)
 					return collection.getName();
 				else
-					return dspaceProperties.getProperty("restricted_collection");
+					return dspaceMessages.getProperty("dspace.restricted_collection");
 			}
 		}
-		return dspaceProperties.getProperty("loading");		
+		return dspaceMessages.getProperty("dspace.loading");		
 	}
 
 	@RequestMapping(value = "/auth/workbench/workspace/itemstatus/{collectionid}/{itemid}", method = RequestMethod.GET)
@@ -503,7 +503,7 @@ public class ListWSController
 
 		//Can't find collection in any of the communities
 		if(dspaceManager.getCommunityId(collectionid) == null)
-			return dspaceProperties.getProperty("restricted_item");
+			return dspaceMessages.getProperty("dspace.restricted_item");
 
 		ICollection collection = dspaceManager.getCollection(collectionid);
 		if(collection != null)
@@ -521,14 +521,14 @@ public class ListWSController
 					else
 					{
 						//No item found in the collection
-						return dspaceProperties.getProperty("restricted_item");
+						return dspaceMessages.getProperty("dspace.restricted_item");
 					}
 				}
 				else
-					return dspaceProperties.getProperty("restricted_item");
+					return dspaceMessages.getProperty("dspace.restricted_item");
 			}
 		}
-		return dspaceProperties.getProperty("loading");
+		return dspaceMessages.getProperty("dspace.loading");
 	}
 
 	/**
@@ -547,7 +547,7 @@ public class ListWSController
 
 		//Can't find collection in any of the communities
 		if(dspaceManager.getCommunityId(collectionid) == null)
-			return dspaceProperties.getProperty("restricted_bitstream");
+			return dspaceMessages.getProperty("dspace.restricted_bitstream");
 
 		ICollection collection = dspaceManager.getCollection(collectionid);
 		if(collection != null)
@@ -563,7 +563,7 @@ public class ListWSController
 						if(!item.getBitids().contains(bitstreamid))
 						{
 							//The item does not contain the bitstream
-							return dspaceProperties.getProperty("restricted_bitstream");
+							return dspaceMessages.getProperty("dspace.restricted_bitstream");
 						}
 						else
 						{
@@ -578,14 +578,14 @@ public class ListWSController
 					else
 					{
 						//No item found in the collection
-						return dspaceProperties.getProperty("restricted_bitstream");
+						return dspaceMessages.getProperty("dspace.restricted_bitstream");
 					}
 				}
 				else
-					return dspaceProperties.getProperty("restricted_bitstream");
+					return dspaceMessages.getProperty("dspace.restricted_bitstream");
 			}
 		}
-		return dspaceProperties.getProperty("loading");
+		return dspaceMessages.getProperty("dspace.loading");
 	}
 
 
@@ -610,7 +610,7 @@ public class ListWSController
 			if(bitstream.getName() != null)
 				return bitstream.getName();
 		}
-		return dspaceProperties.getProperty("loading");		
+		return dspaceMessages.getProperty("dspace.loading");		
 	}
 
 	/**
