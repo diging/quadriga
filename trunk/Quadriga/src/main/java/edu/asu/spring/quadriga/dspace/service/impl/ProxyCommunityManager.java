@@ -51,28 +51,28 @@ public class ProxyCommunityManager implements ICommunityManager {
 	{
 		if(dspaceKeys != null)
 		{
-			String stringToHash = dspaceProperties.getProperty("all_community_url") + dspaceKeys.getPrivateKey();
-			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("algorithm"));
+			String stringToHash = dspaceProperties.getProperty("dspace.all_community_url") + dspaceKeys.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 
-			return dspaceProperties.getProperty("dspace_url")+
-					dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
-					dspaceProperties.getProperty("api_key")+dspaceKeys.getPublicKey()+
-					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("api_digest")+digestKey;
+			return dspaceProperties.getProperty("dspace.dspace_url")+
+					dspaceProperties.getProperty("dspace.all_community_url")+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.api_key")+dspaceKeys.getPublicKey()+
+					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 
 		}
 		else if(userName != null && password != null && !userName.equals("") && !password.equals(""))
 		{
-			return dspaceProperties.getProperty("dspace_url")+
-					dspaceProperties.getProperty("all_community_url")+dspaceProperties.getProperty("?")+
-					dspaceProperties.getProperty("email")+userName+
-					dspaceProperties.getProperty("&")+dspaceProperties.getProperty("password")+password;
+			return dspaceProperties.getProperty("dspace.dspace_url")+
+					dspaceProperties.getProperty("dspace.all_community_url")+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.email")+userName+
+					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+password;
 		}
 		else
 		{
 			//No username+password and dspacekeys are used. So use public access
-			return dspaceProperties.getProperty("dspace_url")+dspaceProperties.getProperty("all_community_url");
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.all_community_url");
 		}
 	}
 

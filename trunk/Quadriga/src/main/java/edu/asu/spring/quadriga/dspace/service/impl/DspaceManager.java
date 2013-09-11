@@ -66,6 +66,9 @@ public class DspaceManager implements IDspaceManager{
 
 	@Resource(name = "dspaceStrings")
 	private Properties dspaceProperties;
+	
+	@Resource(name = "uiMessages")
+	private Properties dspaceMessages;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
@@ -331,7 +334,7 @@ public class DspaceManager implements IDspaceManager{
 					if(workspaceBitStream.getId()!=null)
 						if(workspaceBitStream.getId().equals(bitstreamid))
 						{
-							if(!(workspaceBitStream.getName().equals(dspaceProperties.getProperty("restricted_bitstream")) && workspaceBitStream.getName().equals(dspaceProperties.getProperty("access_check_bitstream"))))
+							if(!(workspaceBitStream.getName().equals(dspaceMessages.getProperty("dspace.restricted_bitstream")) && workspaceBitStream.getName().equals(dspaceMessages.getProperty("dspace.access_check_bitstream"))))
 							{
 								authorizedBitStreamsForDelete.add(bitstreamid);
 								break;
@@ -471,10 +474,10 @@ public class DspaceManager implements IDspaceManager{
 		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
 
 		IBitStream restrictedBitStream = getBitstreamFactory().createBitStreamObject();
-		restrictedBitStream.setCommunityName(dspaceProperties.getProperty("restricted_community"));
-		restrictedBitStream.setCollectionName(dspaceProperties.getProperty("restricted_collection"));
-		restrictedBitStream.setItemName(dspaceProperties.getProperty("restricted_item"));
-		restrictedBitStream.setName(dspaceProperties.getProperty("restricted_bitstream"));
+		restrictedBitStream.setCommunityName(dspaceMessages.getProperty("dspace.restricted_community"));
+		restrictedBitStream.setCollectionName(dspaceMessages.getProperty("dspace.restricted_collection"));
+		restrictedBitStream.setItemName(dspaceMessages.getProperty("dspace.restricted_item"));
+		restrictedBitStream.setName(dspaceMessages.getProperty("dspace.restricted_bitstream"));
 
 		try
 		{
@@ -544,9 +547,9 @@ public class DspaceManager implements IDspaceManager{
 					 * The collection/item/bitstream data is to be loaded from dspace. 
 					 * Separate threads are still working on loading them.
 					 */
-					loadingBitStream.setCollectionName(dspaceProperties.getProperty("access_check_collection"));
-					loadingBitStream.setItemName(dspaceProperties.getProperty("access_check_item"));
-					loadingBitStream.setName(dspaceProperties.getProperty("access_check_bitstream"));
+					loadingBitStream.setCollectionName(dspaceMessages.getProperty("dspace.access_check_collection"));
+					loadingBitStream.setItemName(dspaceMessages.getProperty("dspace.access_check_item"));
+					loadingBitStream.setName(dspaceMessages.getProperty("dspace.access_check_bitstream"));
 
 					checkedBitStreams.add(loadingBitStream);
 				}
@@ -559,10 +562,10 @@ public class DspaceManager implements IDspaceManager{
 			logger.error("Dspace is not accessible. Check the url used and also if dspace is down!");
 			checkedBitStreams.clear();
 			IBitStream dspaceDownBitStream = getBitstreamFactory().createBitStreamObject();
-			dspaceDownBitStream.setCommunityName(dspaceProperties.getProperty("dspace_down"));
-			dspaceDownBitStream.setCollectionName(dspaceProperties.getProperty("dspace_down"));
-			dspaceDownBitStream.setItemName(dspaceProperties.getProperty("dspace_down"));
-			dspaceDownBitStream.setName(dspaceProperties.getProperty("dspace_down"));
+			dspaceDownBitStream.setCommunityName(dspaceMessages.getProperty("dspace.dspace_down"));
+			dspaceDownBitStream.setCollectionName(dspaceMessages.getProperty("dspace.dspace_down"));
+			dspaceDownBitStream.setItemName(dspaceMessages.getProperty("dspace.dspace_down"));
+			dspaceDownBitStream.setName(dspaceMessages.getProperty("dspace.dspace_down"));
 			for(int i=0;i<bitstreams.size();i++)
 			{
 				checkedBitStreams.add(dspaceDownBitStream);
@@ -576,10 +579,10 @@ public class DspaceManager implements IDspaceManager{
 			 */
 			checkedBitStreams.clear();
 			IBitStream inaccessibleBitStream = getBitstreamFactory().createBitStreamObject();
-			inaccessibleBitStream.setCommunityName(dspaceProperties.getProperty("wrong_authentication"));
-			inaccessibleBitStream.setCollectionName(dspaceProperties.getProperty("wrong_authentication"));
-			inaccessibleBitStream.setItemName(dspaceProperties.getProperty("wrong_authentication"));
-			inaccessibleBitStream.setName(dspaceProperties.getProperty("wrong_authentication"));
+			inaccessibleBitStream.setCommunityName(dspaceMessages.getProperty("dspace.wrong_authentication"));
+			inaccessibleBitStream.setCollectionName(dspaceMessages.getProperty("dspace.wrong_authentication"));
+			inaccessibleBitStream.setItemName(dspaceMessages.getProperty("dspace.wrong_authentication"));
+			inaccessibleBitStream.setName(dspaceMessages.getProperty("dspace.wrong_authentication"));
 			for(int i=0;i<bitstreams.size();i++)
 			{
 				checkedBitStreams.add(inaccessibleBitStream);
