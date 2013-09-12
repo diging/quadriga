@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager;
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public class DBConnectionModifyCCManager extends ADBConnectionManager implements
@@ -17,6 +18,49 @@ public class DBConnectionModifyCCManager extends ADBConnectionManager implements
 {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionModifyCCManager.class);
+	
+	@Override
+	public void updateCollectionDetails(IConceptCollection collection,String userName) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.UPDATE_COLLECTION_DETAILS + "(?,?,?,?,?,?)";
+		
+		//get the connection
+		getConnection();
+		
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+            //fetch the required values
+            sqlStatement.setString(1, collection.getName());
+            sqlStatement.setString(2, collection.getDescription());
+            sqlStatement.setString(3,"0");
+            sqlStatement.setString(4, userName);
+            sqlStatement.setString(5, collection.getId());
+            sqlStatement.registerOutParameter(6, Types.VARCHAR);
+            sqlStatement.execute();
+            errmsg = sqlStatement.getString(6);
+            if(!errmsg.equals(""))
+            {
+            	logger.info("Update collection request method :"+errmsg);
+            	throw new QuadrigaStorageException();
+            }
+		}
+		catch(SQLException e)
+		{
+			logger.error("Update collection request method",e);
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+		  //close connection
+		  closeConnection();
+		}
+	}
 	
 	@Override
 	public void transferCollectionOwnerRequest(String collectionId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
@@ -64,5 +108,7 @@ public class DBConnectionModifyCCManager extends ADBConnectionManager implements
         }
 		
 	}
+	
+	
 
 }

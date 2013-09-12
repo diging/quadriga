@@ -36,8 +36,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.sevice.conceptcollection.ICCCollaboratorManager;
-import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 

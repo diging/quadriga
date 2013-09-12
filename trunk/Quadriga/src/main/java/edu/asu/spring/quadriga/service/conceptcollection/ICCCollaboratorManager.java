@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.sevice.conceptcollection;
+package edu.asu.spring.quadriga.service.conceptcollection;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

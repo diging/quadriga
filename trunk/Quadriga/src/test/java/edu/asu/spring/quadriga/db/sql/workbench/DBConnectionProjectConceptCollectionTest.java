@@ -40,11 +40,11 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @ContextConfiguration(locations = {

@@ -38,7 +38,7 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEn
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
 /**
  * This class is the controller for the concept collection requests.

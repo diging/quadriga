@@ -23,9 +23,9 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
-import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 
 @Controller
 public class ConceptCollectionWorkspaceController {

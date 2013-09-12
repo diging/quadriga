@@ -49,7 +49,7 @@ public interface DBConstants
 	public static final String ADD_DICT_COLLABORATORS = "sp_addDictionaryCollaborators";
 	public static final String DELETE_DICT_COLLABORATORS = "sp_deleteDictionaryCollaborators";
 	
-	
+	//Concept collection objects
 	public static final String GET_CCOWNED_DETAILS = "sp_getConceptCollections";
 	public static final String GET_CCCOLLABORATIONS_DETAILS = "sp_getUserCollectionCollaborations";
 	public static final String VALIDATE_COLLECTIONID = "sp_validatecollectionid";
@@ -61,6 +61,7 @@ public interface DBConstants
 	public static final String SHOW_CC_NONCOLLABORATOR_REQUEST = "sp_showCollectionNonCollaborators";
 	public static final String DELETE_CC_COLLABORATOR_REQUEST = "sp_deleteCollectionCollaborators";
 	public static final String TRANSFER_COLLECTION_OWNERSHIP = "sp_changeconceptcollectionowner";
+	public static final String UPDATE_COLLECTION_DETAILS = "sp_updateConceptCollection";
 	
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
 	public static final String GET_DICTIONARY_ITEMS_DETAILS_COLLAB = "sp_getDictionaryItems_collab";
