@@ -169,4 +169,9 @@ public interface ICommunityManager {
 	 * Clear all the cached dspace information
 	 */
 	public abstract void clearCompleteCache();
+
+	
+	public abstract boolean validateDspaceCredentials(RestTemplate restTemplate,
+			Properties dspaceProperties, IDspaceKeys dspaceKeys,
+			String sUserName, String sPassword) throws NoSuchAlgorithmException;
 }

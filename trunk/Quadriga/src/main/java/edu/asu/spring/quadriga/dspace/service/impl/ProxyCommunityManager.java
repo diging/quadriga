@@ -421,6 +421,17 @@ public class ProxyCommunityManager implements ICommunityManager {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@SuppressWarnings("unused")
+	public boolean validateDspaceCredentials(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException {
+		String sRestServicePath = getCompleteUrlPath(dspaceProperties, dspaceKeys, sUserName, sPassword);
+		IDspaceCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void clearCompleteCache()
 	{
 		this.communities = null;
@@ -437,4 +448,6 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 		return buf.toString();
 	}
+
+
 }

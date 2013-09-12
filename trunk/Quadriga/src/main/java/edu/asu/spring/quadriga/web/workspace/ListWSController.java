@@ -231,7 +231,23 @@ public class ListWSController
 
 		//Check bitstream access in dspace. 
 		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		List<IBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
+		if(this.getDspaceKeys() != null)
+		{
+			model.addAttribute("dspaceKeys", "true");
+		}
+		
+		//Check if the dspace authentication is correct.
+		List<IBitStream> workspaceBitStreams = null;
+		if(dspaceManager.validateDspaceCredentials(this.dspaceUsername, this.dspacePassword, this.dspaceKeys))
+		{
+			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
+		}
+		else
+		{	
+			//Set a flag to indicate the error in dspace login credentials.
+			model.addAttribute("wrongDspaceLogin", "true");
+			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), null, null, null);
+		}
 		workspace.setBitstreams(workspaceBitStreams);
 
 		//retrieve the collaborators associated with the workspace
@@ -242,13 +258,6 @@ public class ListWSController
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceid);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
-
-		//Load the Dspace Keys used by the user
-		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		if(this.getDspaceKeys() != null)
-		{
-			model.addAttribute("dspaceKeys", "true");
-		}
 
 		if(workspaceSecurity.checkWorkspaceOwner(userName, workspaceid)){
 			model.addAttribute("owner", 1);
