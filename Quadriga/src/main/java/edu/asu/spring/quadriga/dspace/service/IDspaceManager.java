@@ -28,6 +28,9 @@ public interface IDspaceManager{
 	public final static String COMMUNITY_EXISTS = "community exists";
 	public final static String COLLECTON_EXISTS = "collection exists";
 	
+	public abstract IBitStreamFactory getBitstreamFactory();
+	public abstract void setBitstreamFactory(IBitStreamFactory bitstreamFactory);
+	
 	/**
 	 * Get all the communities available for the given user
 	 * 
@@ -240,8 +243,17 @@ public interface IDspaceManager{
 	 */
 	public abstract int deleteDspaceKeys(String username) throws QuadrigaStorageException;
 
-	public abstract IBitStreamFactory getBitstreamFactory();
-
-	public abstract void setBitstreamFactory(IBitStreamFactory bitstreamFactory);
+	/**
+	 * The purpose of this method is ONLY to validate the supplied dspace credentials and will return false if it
+	 * was not able to connect to dspace using them. It does not handle other expcetions and will return true for all 
+	 * other cases.The dspacekeys take precedence over the login username and password. 
+	 * 
+	 * @param username		The dspace username.
+	 * @param password		The dspace password.
+	 * @param dspacekeys	The public and private keys for dspace.
+	 * 
+	 * @return				FALSE if the provided login credentials are wrong. TRUE for any other case (including dspace down exception).
+	 */
+	public abstract boolean validateDspaceCredentials(String username, String password,	IDspaceKeys dspacekeys);
 
 }

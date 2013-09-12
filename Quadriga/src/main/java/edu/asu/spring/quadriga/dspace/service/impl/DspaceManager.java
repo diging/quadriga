@@ -62,7 +62,7 @@ public class DspaceManager implements IDspaceManager{
 
 	@Resource(name = "dspaceStrings")
 	private Properties dspaceProperties;
-	
+
 	@Resource(name = "uiMessages")
 	private Properties dspaceMessages;
 
@@ -575,5 +575,31 @@ public class DspaceManager implements IDspaceManager{
 			}
 		}
 		return checkedBitStreams;		
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean validateDspaceCredentials(String username, String password, IDspaceKeys dspacekeys)
+	{
+		try
+		{
+			return proxyCommunityManager.validateDspaceCredentials(restTemplate, dspaceProperties, dspacekeys, username, password);
+		}
+		catch(HttpClientErrorException e)
+		{
+			/* 
+			 * This exception happens for wrong username and password.
+			 * Also thrown for wrong public/private key 
+			 */
+			return false;
+
+		}
+		catch(Exception e)
+		{
+			
+		}
+		return true;		
 	}
 }

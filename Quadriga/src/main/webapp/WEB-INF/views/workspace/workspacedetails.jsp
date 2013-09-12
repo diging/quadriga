@@ -403,7 +403,7 @@ $('a.login-window').click(function() {
 <a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
 <c:choose><c:when test="${empty dspaceKeys}">
 <!-- Allow the user to change the dspace login credentials -->
-<a href="#change-login" class="change-login">Change Dspace Login</a>
+<a href="#change-login" class="change-login">Change Dspace Login<c:choose><c:when test="${not empty wrongDspaceLogin}">*</c:when></c:choose></a>
 <div id="login-box" class="login-popup" title="Dspace Authentication">
 <form id="dspaceLogin" method="post" class="signin">
 <fieldset class="textbox">
@@ -465,7 +465,7 @@ $(document).ready(function(){
 <br><br>
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
-	
+	<c:choose><c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when></c:choose>
 	<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
 	<c:choose><c:when test="${empty dspaceKeys}"></c:when></c:choose></font> 
