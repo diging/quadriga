@@ -61,7 +61,7 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObje
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
-import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
 /**
  * This class acts as a Network manager which handles the networks object

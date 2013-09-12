@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.sevice.conceptcollection.ICCCollaboratorManager;
+import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;

@@ -106,6 +106,12 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/addConceptCollection.jsp" />
 	</definition>
+	<definition name="auth/conceptcollections/updatecollectiondetails"
+		extends="base.definition.conceptcollections">
+		<put-attribute name="title" value="Quadriga - Collection Details" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/conceptcollections/updatecollectiondetails.jsp" />
+	</definition>
 	
 	<!-- changing concept collection details page's navigation to left -->
 	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections.nav">

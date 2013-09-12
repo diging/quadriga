@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCCollaboratorManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.sevice.conceptcollection.ICCCollaboratorManager;
+import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
 
 @Service
 public class CCCollaboratorManager implements ICCCollaboratorManager 

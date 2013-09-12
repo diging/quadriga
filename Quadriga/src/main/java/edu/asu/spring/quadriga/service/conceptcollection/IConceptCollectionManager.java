@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.asu.spring.quadriga.sevice.conceptcollection;
+package edu.asu.spring.quadriga.service.conceptcollection;
 
 import java.util.List;
 

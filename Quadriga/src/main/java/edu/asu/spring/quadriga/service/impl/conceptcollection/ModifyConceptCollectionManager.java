@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.sevice.conceptcollection.IModifyConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IModifyConceptCollectionManager;
 
 @Service
 public class ModifyConceptCollectionManager implements
@@ -27,6 +28,13 @@ public class ModifyConceptCollectionManager implements
 		
 		dbConnect.transferCollectionOwnerRequest(collectionId, oldOwner, newOwner, collabRole);
 		
+	}
+	
+	@Override
+	public void updateCollectionDetails(IConceptCollection collection,String userName) throws QuadrigaStorageException
+	{
+		logger.info("Update concept collection details : ");
+		dbConnect.updateCollectionDetails(collection, userName);
 	}
 
 }

@@ -11,8 +11,8 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IDictionaryManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
-import edu.asu.spring.quadriga.sevice.conceptcollection.IConceptCollectionManager;
 
 /**
  * this class returns the collaborator of ModifyCollaborator domain by calling existing DBConnectonManager 
