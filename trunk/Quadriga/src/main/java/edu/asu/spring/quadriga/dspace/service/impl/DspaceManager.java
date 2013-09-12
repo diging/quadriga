@@ -47,10 +47,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class DspaceManager implements IDspaceManager{
 
 	@Autowired
-	@Qualifier("dspaceFilePath")
-	private String filePath;
-
-	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
 
@@ -121,16 +117,6 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public void setRestTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
-	}
-
-	@Override
-	public String getFilePath() {
-		return filePath;
-	}
-
-	@Override
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
 	}
 
 	/**
@@ -590,29 +576,4 @@ public class DspaceManager implements IDspaceManager{
 		}
 		return checkedBitStreams;		
 	}
-
-	/**
-	 * This method is used to load the Dspace server certificate during the start of the application.
-	 * It also overloads the verify method of the hostname verifier to always return TRUE for the dspace hostname.
-	 * It will be invoked only once.
-	 */
-	public void start()
-	{
-		logger.info("The certificate filepath used is: "+getFilePath());
-		System.setProperty("javax.net.ssl.trustStore", getFilePath());
-
-
-		javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
-				new javax.net.ssl.HostnameVerifier(){
-
-					public boolean verify(String hostname,
-							javax.net.ssl.SSLSession sslSession) {
-						if (hostname.equals(getDspaceProperties().getProperty("dspace_url").split("//")[1])) {
-							return true;
-						}
-						return false;
-					}
-				});
-	}
-
 }

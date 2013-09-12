@@ -164,10 +164,6 @@ public interface IDspaceManager{
 	 */
 	public abstract void clearCompleteCache();
 
-	public abstract void setFilePath(String filePath);
-
-	public abstract String getFilePath();
-
 	public abstract void setRestTemplate(RestTemplate restTemplate);
 
 	public abstract RestTemplate getRestTemplate();

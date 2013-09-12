@@ -54,10 +54,6 @@ public class DspaceManagerTest {
 	private IDspaceManager dspaceManager;
 
 	@Autowired
-	@Qualifier("dspaceFilePath")
-	private String filePath;
-
-	@Autowired
 	@Qualifier("restTemplate")
 	private RestTemplate restTemplate;
 
@@ -91,7 +87,6 @@ public class DspaceManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		dspaceManager = new DspaceManager();
-		dspaceManager.setFilePath(filePath);
 		dspaceManager.setRestTemplate(restTemplate);
 		dspaceManager.setDbconnectionManager(dbconnectionManager);
 		dspaceManager.setDspaceProperties(dspaceProperties);

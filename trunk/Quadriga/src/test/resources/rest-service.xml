@@ -12,19 +12,6 @@
 		tag in property classesToBeBound. Also make sure to annotate the corresponding 
 		classes with the @XMLRootElement tag -->
 
-	<bean id="dspaceFilePath" class="java.lang.String">
-		<constructor-arg>
-			<value>C:\\Users\\Ram\\Documents\\EclipseProjects\\Quadriga\\src\\main\\resources\\jssecacerts</value>
-			<!--<value>/home/tomcat/webapps/certificates/jssecacerts</value>-->
-		</constructor-arg>
-	</bean>
-	
-	<bean id="DspaceManager"
-		class="edu.asu.spring.quadriga.dspace.service.impl.DspaceManager"
-		init-method="start">
-	</bean>
-
-
 	<bean id="qStoreURL" class="java.lang.String">
 		<constructor-arg>
 			<value>http://diging.asu.edu:8080/QStore4S</value>
