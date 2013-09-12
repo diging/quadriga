@@ -248,7 +248,7 @@ public class DBConnectionEditorManager implements IDBConnectionEditorManager {
 					network.setName(resultSet.getString(3));
 					network.setCreator(userManager.getUserDetails(resultSet.getString(4)));
 					network.setStatus(resultSet.getString(5));
-					
+					network.setAssignedUser(resultSet.getString(6));
 					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
 					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
 					network.setProjectName(project.getName());
@@ -626,6 +626,61 @@ public class DBConnectionEditorManager implements IDBConnectionEditorManager {
 		// command to call the SP
 		dbCommand = DBConstants.SP_CALL + " "
 				+ DBConstants.UPDATE_NETWORK_STATUS + "(?,?,?)";
+
+		// get the connection
+		getConnection();
+		logger.debug("dbCommand : " + dbCommand);
+		// establish the connection with the database
+		try {
+			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
+
+			// adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+			sqlStatement.setString(2, status);
+
+			// adding output variables to the SP
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(3);
+			return errmsg;
+
+		} catch (SQLException e) {
+			errmsg = "DB related issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+		} catch (Exception e) {
+			errmsg = "Exception outside DB";
+			logger.error(errmsg,e);
+		} finally {
+			closeConnection();
+		}
+		return errmsg;
+	}
+	
+	
+	/**
+	 * Method update items in a dictionary
+	 * 
+	 * @returns path of list dictionary items page
+	 * 
+	 * @throws SQLException
+	 * 
+	 * @author Lohith Dwaraka
+	 * 
+	 */
+
+	@Override
+	public String updateAssignedNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
+
+		String dbCommand;
+		String errmsg = "";
+		CallableStatement sqlStatement;
+
+		// command to call the SP
+		dbCommand = DBConstants.SP_CALL + " "
+				+ DBConstants.UPDATE_ASSIGNED_NETWORK_STATUS + "(?,?,?)";
 
 		// get the connection
 		getConnection();

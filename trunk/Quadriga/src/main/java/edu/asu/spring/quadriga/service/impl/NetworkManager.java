@@ -789,13 +789,13 @@ public class NetworkManager implements INetworkManager {
 	@Override
 	public void archiveNetwork(String networkId) throws QuadrigaStorageException{
 		
-		List<INetworkNodeInfo> networkTopNodeList = getAllNetworkNodes(networkId);
-		Iterator <INetworkNodeInfo> I = networkTopNodeList.iterator();
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Statement ID archived : " +networkNodeInfo.getId());
-			archiveNetworkStatement(networkId, networkNodeInfo.getId());
+		try{
+		dbConnect.archiveNetwork(networkId);
+		}catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
 		}
-		
+
 	}
+	
+	
 }

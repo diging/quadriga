@@ -154,5 +154,20 @@ public class EditorManager implements IEditorManager {
 		}
 		return msg;
 	}
+	
+	/**
+	 * Update the status of the assigned network
+	 * PENDING / ASSIGNED / REJECTED / APPROVED
+	 */
+	@Override
+	public String updateAssignedNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
+		String msg = "";
+		try{
+			msg = dbConnect.updateAssignedNetworkStatus(networkId, status);
+		}catch(QuadrigaStorageException e){
+			logger.error("Something went wrong in DB",e);
+		}
+		return msg;
+	}
 
 }

@@ -44,12 +44,12 @@ BEGIN
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
          START TRANSACTION;
-
+			
             INSERT 
               INTO tbl_network_assigned(networkid, assigneduser,status,
-                         updatedby,updateddate,createdby,createddate)
+                         updatedby,updateddate,createdby,createddate,isarchived)
 			 VALUES (innetworkid,inassigneduser,'PENDING',
-                     inassigneduser,NOW(),inassigneduser,NOW());	
+                     inassigneduser,NOW(),inassigneduser,NOW(),'0');	
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

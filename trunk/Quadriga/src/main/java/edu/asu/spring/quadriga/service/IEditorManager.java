@@ -32,4 +32,7 @@ public interface IEditorManager {
 	public abstract List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user)
 			throws QuadrigaStorageException;
 
+	public abstract String updateAssignedNetworkStatus(String networkId, String status)
+			throws QuadrigaStorageException;
+
 }

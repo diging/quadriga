@@ -37,9 +37,21 @@ BEGIN
     -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
-         START TRANSACTION;
+      	 START TRANSACTION;
+      	 IF EXISTS(SELECT 1 FROM tbl_network_statements
+				   WHERE id= instatementid and networkid =innetworkid and isarchived =1)
+		 THEN 
+         
 			UPDATE 
-			tbl_network_statements SET isarchived=1 WHERE id=instatementid and networkid =innetworkid;
+			tbl_network_statements SET isarchived=2 WHERE id=instatementid and networkid =innetworkid and isarchived =1;
+		 END IF;
+		 IF EXISTS(SELECT 1 FROM tbl_network_statements
+				   WHERE id= instatementid and networkid =innetworkid and isarchived =0)
+		 THEN
+			UPDATE 
+			tbl_network_statements SET isarchived=1 WHERE id=instatementid and networkid =innetworkid and isarchived =0;
+		 END IF;
+		 
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

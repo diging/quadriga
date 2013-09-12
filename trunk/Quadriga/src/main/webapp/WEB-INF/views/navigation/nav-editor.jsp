@@ -13,6 +13,7 @@
 	font-size:14px;
 	position:relative;
     z-index:9999;
+    margin:1;
 }
 </style>
 
@@ -22,13 +23,10 @@
 			<span>Tools</span>
 		</h2>
 	</li>
-	<li><a href="#">Finished Networks</a>
+	<li><a href="#">List of Approved and rejected Network</a>
 
 	</li>
-	<li><a href="#">Networks Assigned To Others</a>
-
-	</li>
-	<li><a href="#">Other Editor's Finished Networks</a>
+	<li><a href="#">Networks assigned to other editors</a>
 
 	</li>
 </ul>

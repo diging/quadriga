@@ -35,12 +35,15 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 select networkid,workspaceid,networkname,networkowner,status 
-	from tbl_networks where networkid IN (
+     
+     select distinct(n.networkid),workspaceid,networkname,networkowner,n.status,tna.assigneduser
+	from tbl_networks n, tbl_network_assigned tna  where n.networkid IN (
 	
-	select networkid from tbl_network_assigned where assigneduser <>
+	select t.networkid from tbl_network_assigned t where assigneduser <>
 	inusername
-	) and status = 'ASSIGNED';
+	) and n.status = 'ASSIGNED' and tna.assigneduser <> inusername;
+	
+
 	
 	END IF;
 END$$

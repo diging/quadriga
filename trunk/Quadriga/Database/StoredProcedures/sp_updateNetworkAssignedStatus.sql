@@ -1,9 +1,9 @@
 /*******************************************
-Name          : sp_updateNetworkStatus
+Name          : sp_updateNetworkAssignedStatus
 
-Description   : Update the Network status to approved or reject
+Description   : Update the assigned Network status to approved or reject
 
-Called By     : UI (DBConnectionEditignManager.java)
+Called By     : UI (DBConnectionEditingManager.java)
 
 Create By     : Lohith Dwaraka
 
@@ -11,9 +11,9 @@ Modified Date : 08/30/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_updateNetworkStatus;
+DROP PROCEDURE IF EXISTS sp_updateNetworkAssignedStatus;
 DELIMITER $$
-CREATE PROCEDURE sp_updateNetworkStatus	
+CREATE PROCEDURE sp_updateNetworkAssignedStatus	
 (
   IN  innetworkid    VARCHAR(100),
   IN  instatus    VARCHAR(50),
@@ -45,8 +45,8 @@ BEGIN
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
          START TRANSACTION;
-			UPDATE 
-			tbl_networks SET status= instatus WHERE networkid=innetworkid;
+			UPDATE
+			tbl_network_assigned SET status= instatus WHERE networkid=innetworkid;
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;
