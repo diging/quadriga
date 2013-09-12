@@ -26,6 +26,7 @@ public class Network implements INetwork
 	private String projectName;
 	private String name;
 	private String status;
+	private String assignedUser;
 	private List<String> appellationIds;
 	private List<String> relationIds;
 	private ENetworkAccessibility networksAccess;
@@ -143,4 +144,15 @@ public class Network implements INetwork
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
+	
+	@Override
+	public String getAssignedUser() {
+		return assignedUser;
+	}
+	@Override
+	public void setAssignedUser(String assignedUser) {
+		this.assignedUser = assignedUser;
+	}
+	
+	
 }

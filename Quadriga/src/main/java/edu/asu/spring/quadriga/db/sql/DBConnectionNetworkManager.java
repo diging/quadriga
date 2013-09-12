@@ -650,4 +650,49 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		}
 		return errmsg;		
 	}
+	
+	
+	@Override
+	public String archiveNetwork(String networkId) throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ARCHIVE_NETWORK  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(2);
+			return errmsg;
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return errmsg;		
+	}
 }

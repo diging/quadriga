@@ -54,6 +54,7 @@ public class EditingAssignUserManager {
 		try{
 			editorManager.assignNetworkToUser(networkId, user);
 			editorManager.updateNetworkStatus(networkId, "ASSIGNED");
+			editorManager.updateAssignedNetworkStatus(networkId, "ASSIGNED");
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
@@ -104,10 +105,31 @@ public class EditingAssignUserManager {
 		model.addAttribute("ApprovedNetworkList", approvedNetworkList);
 		model.addAttribute("RejectedNetworkList", rejectedNetworkList);
 		model.addAttribute("userId", user.getUserName());
-		return "auth/approvedrejectednetworks";
+		return "auth/editing/approvedrejectednetworks";
 	}
 
-	
+	/**
+	 * List networks assigned to other Users
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "auth/editing/networksAssginedToOtherUsers", method = RequestMethod.GET)
+	public String listNetworksAssignedToOtherUser(ModelMap model, Principal principal) throws QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		
+		List<INetwork> networkList=null;
+		try{
+			networkList = editorManager.getAssignedNetworkListOfOtherEditors(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Some issue in the DB",e);
+		}
+		
+		model.addAttribute("networkList", networkList);
+		model.addAttribute("userId", user.getUserName());
+		return "auth/editing/networksAssginedToOtherUsers";
+	}
 	/**
 	 * Approve a network
 	 * @param networkId
@@ -122,6 +144,7 @@ public class EditingAssignUserManager {
 
 		try{
 			editorManager.updateNetworkStatus(networkId, "APPROVED");
+			editorManager.updateAssignedNetworkStatus(networkId, "APPROVED");
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
@@ -160,6 +183,7 @@ public class EditingAssignUserManager {
 
 		try{
 			editorManager.updateNetworkStatus(networkId, "REJECTED");
+			editorManager.updateAssignedNetworkStatus(networkId, "REJECTED");
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}

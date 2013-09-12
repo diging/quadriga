@@ -19,5 +19,6 @@ CREATE TABLE IF NOT EXISTS tbl_network_assigned
   updateddate     TIMESTAMP     NOT NULL,
   createdby       VARCHAR(10)   NOT NULL,
   createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(networkid,assigneduser)
+  isarchived	  VARCHAR(10)   NOT NULL,
+  PRIMARY KEY(networkid,assigneduser,createddate)
 )

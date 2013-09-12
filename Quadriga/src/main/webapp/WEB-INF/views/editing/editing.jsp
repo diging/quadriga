@@ -47,7 +47,7 @@
 	value='List of Approved and rejected Network'>
 	
 	<input type=button
-	onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvedandrejectednetworksofuser'"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/networksAssginedToOtherUsers'"
 	value='Networks assigned to other editors'>
 <br />
 
@@ -89,8 +89,8 @@
 	</c:otherwise>
 </c:choose>
 
-<span class="byline">Unassigned Networks available for
-	editors.</span>
+<span class="byline">List of unassigned Networks available for
+	all editors.</span>
 	<c:choose>
 		<c:when test="${not empty networkList}">
 			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"

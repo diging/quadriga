@@ -1,22 +1,21 @@
 /*******************************************
-Name          : sp_updateNetworkStatus
+Name          : sp_archiveNetwork
 
-Description   : Update the Network status to approved or reject
+Description   : Archive the network
 
-Called By     : UI (DBConnectionEditignManager.java)
+Called By     : UI (DBConnectionNetworkManager.java)
 
 Create By     : Lohith Dwaraka
 
-Modified Date : 08/30/2013
+Modified Date : 09/11/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_updateNetworkStatus;
+DROP PROCEDURE IF EXISTS sp_archiveNetwork;
 DELIMITER $$
-CREATE PROCEDURE sp_updateNetworkStatus	
+CREATE PROCEDURE sp_archiveNetwork	
 (
   IN  innetworkid    VARCHAR(100),
-  IN  instatus    VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -29,24 +28,26 @@ BEGIN
     IF(innetworkid IS NULL OR innetworkid = "")
       THEN SET errmsg = "Network id cannot be empty.";
     END IF;
-
-    IF (instatus IS NULL OR instatus = "")
-	 THEN SET errmsg = "Status cannot be empty";
-	END IF;
 	
-    
-    IF NOT EXISTS(SELECT 1 FROM tbl_networks
-				   WHERE networkid = innetworkid)
-     
-      THEN SET errmsg = "Network not present";
-    END IF; 
-	
-    -- Updating the record into the tbl_networks table
+    -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
-         START TRANSACTION;
+      	 START TRANSACTION;
+
 			UPDATE 
-			tbl_networks SET status= instatus WHERE networkid=innetworkid;
+			tbl_network_statements SET isarchived=2 WHERE networkid =innetworkid and isarchived =1;
+
+			UPDATE 
+			tbl_network_statements SET isarchived=1 WHERE networkid =innetworkid and isarchived =0;
+			
+			UPDATE 
+			tbl_network_assigned SET isarchived=2 WHERE networkid =innetworkid and isarchived =1;
+			
+			UPDATE 
+			tbl_network_assigned SET isarchived=1 WHERE networkid =innetworkid and isarchived =0;
+			
+			
+
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

@@ -66,5 +66,9 @@ public interface INetwork
 
 	public abstract void setProjectName(String projectName);
 
+	public abstract String getAssignedUser();
+
+	public abstract void setAssignedUser(String assignedUser);
+
 
 }

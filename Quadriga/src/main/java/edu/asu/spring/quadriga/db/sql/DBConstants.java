@@ -90,12 +90,16 @@ public interface DBConstants
 	public static final String GET_NETWORK_TOP_NODES_LIST ="sp_getNetworkTopNodes";
 	public static final String GET_ALL_NETWORK_NODES_LIST ="sp_getAllNetworkNodes";
 	public static final String UPDATE_NETWORK_STATUS = "sp_updateNetworkStatus";
+	public static final String UPDATE_ASSIGNED_NETWORK_STATUS = "sp_updateNetworkAssignedStatus";
+	
 	public static final String ARCHIVE_NETWORK_STATEMENT ="sp_archiveNetworkStatement";
+	public static final String ARCHIVE_NETWORK = "sp_archiveNetwork";
 	
 	//Editing
 	
 	public static final String GET_EDITOR_NETWORK_LIST ="sp_getEditorNetworkList";
 	public static final String ASSIGN_USER_NETWORK = "sp_addNetworksAssignedDetails";
+	
 	public static final String GET_USER_ASSIGN_NETWORK = "sp_getUserAssignedNetworkList";
 	public static final String GET_USER_REJECTED_NETWORK = "sp_getUserRejectedNetworkList";
 	public static final String GET_USER_APPROVED_NETWORK = "sp_getUserApprovedNetworkList";

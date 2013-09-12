@@ -55,7 +55,7 @@ BEGIN
 	UNION DISTINCT
 	
 	select distinct(workspaceid) from tbl_workspace_editor where owner =inusername)
-	and networkid not in (select networkid from tbl_network_assigned where status != 'PENDING');
+	and networkid not in (select networkid from tbl_network_assigned where isarchived ='0');
 	
 	END IF;
 END$$
