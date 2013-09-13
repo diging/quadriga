@@ -600,18 +600,15 @@
 
 
 	<!-- editing -->
-	<definition name="base.definition.editing" template="/WEB-INF/tiles/layouts/skeleton_left.jsp" extends="base.definition">
+	<definition name="base.definition.editing"  extends="base.definition">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
 			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
-		<put-attribute name="left-navigation" value="" />
 		<put-attribute name="currentPage" value="editing" />
 	</definition>
 	<definition name="auth/editing" extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Editing" />
-		<put-attribute name="left-navigation" 
-		value="/WEB-INF/views/navigation/nav-editor.jsp"/>
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/editing.jsp" />
 	</definition>
