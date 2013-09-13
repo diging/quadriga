@@ -40,7 +40,9 @@
 
 </header>
 
-
+<input type=button
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing'"
+	value='Back'>
 
 <span class="byline">List of assigned Networks to other editors.</span>
 <c:choose>
