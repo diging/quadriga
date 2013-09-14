@@ -70,5 +70,11 @@ public interface INetwork
 
 	public abstract void setAssignedUser(String assignedUser);
 
+	public abstract void setNetworkOldVersion(INetworkOldVersion networkOldVersion);
+
+	public abstract INetworkOldVersion getNetworkOldVersion();
+
+
+
 
 }

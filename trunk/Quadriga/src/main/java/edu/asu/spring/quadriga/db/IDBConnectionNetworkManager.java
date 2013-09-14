@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -36,4 +37,10 @@ public interface IDBConnectionNetworkManager {
 			throws QuadrigaStorageException;
 
 	public abstract String archiveNetwork(String networkId) throws QuadrigaStorageException;
+
+	public abstract INetworkOldVersion getNetworkOldVersionDetails(String networkId)
+			throws QuadrigaStorageException;
+
+	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
+			throws QuadrigaStorageException;
 }

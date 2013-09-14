@@ -20,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
+import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
@@ -50,6 +52,9 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 	
 	@Autowired
 	ListWSManager wsManager;
+	
+	@Autowired
+	INetworkOldVersionFactory networkOldVersionFactory;
 	
 	@Autowired
 	INetworkNodeInfoFactory networkNodeInfoFactory;
@@ -549,6 +554,64 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		return networkTopNodeList;
 	}
 	
+	
+	@Override
+	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)throws QuadrigaStorageException{
+		List<INetworkNodeInfo> networkTopNodeList = new ArrayList<INetworkNodeInfo>();
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_NETWORK_OLD_VERSION_TOP_NODES_LIST  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					INetworkNodeInfo networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
+					networkNodeInfo.setId(resultSet.getString(1));
+					networkNodeInfo.setStatementType(resultSet.getString(2));
+					networkTopNodeList.add(networkNodeInfo);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return networkTopNodeList;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return networkTopNodeList;
+	}
+	
 	@Override
 	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
@@ -604,6 +667,63 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 		}
 		
 		return networkNodeList;
+	}
+	
+	
+	@Override
+	public INetworkOldVersion getNetworkOldVersionDetails(String networkId)throws QuadrigaStorageException{
+		INetworkOldVersion networkOldVersion =null;
+		String dbCommand;
+		String errmsg="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_NETWORK_OLD_VERSION_DETAILS  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					networkOldVersion =networkOldVersionFactory.createNetworkOldVersionObject();
+					networkOldVersion.setPreviousVersionAssignedUser(resultSet.getString(1)); 
+					networkOldVersion.setPreviousVersionStatus(resultSet.getString(2));
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return networkOldVersion;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return networkOldVersion;
 	}
 	
 	@Override

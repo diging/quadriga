@@ -163,7 +163,7 @@ public class EditingAssignUserManager {
 		}
 		
 
-		model.addAttribute("AssignedNetworkList", assignedNetworkList);
+		model.addAttribute("assignedNetworkList", assignedNetworkList);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
@@ -203,7 +203,7 @@ public class EditingAssignUserManager {
 		}
 		
 
-		model.addAttribute("AssignedNetworkList", assignedNetworkList);
+		model.addAttribute("assignedNetworkList", assignedNetworkList);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
