@@ -34,14 +34,14 @@ BEGIN
 
 
 	IF(errmsg IS NULL)
-	THEN SET errmsg = " ";
+	THEN SET errmsg = "no errors";
 	START TRANSACTION;
 	INSERT INTO 
 	tbl_quadriga_userprofile(username,servicename,uri,updatedby,
 							 updateddate,createdby,createddate)
 	VALUES(inusername,inservicename,inuri,inusername,NOW(),inusername,NOW());
 	
-	IF (errmsg=" ")
+	IF (errmsg="no errors")
 	THEN COMMIT;
 	ELSE ROLLBACK;
 	END IF;
