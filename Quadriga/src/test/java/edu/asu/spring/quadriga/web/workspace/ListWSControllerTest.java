@@ -8,6 +8,9 @@ import static org.junit.Assert.fail;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -28,6 +31,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
@@ -69,6 +73,9 @@ public class ListWSControllerTest {
 	private IDBConnectionManager dbConnection;
 	private String sDatabaseSetup;
 
+	@Resource(name = "uiMessages")
+	private Properties dspaceMessages;
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -84,6 +91,7 @@ public class ListWSControllerTest {
 		listWSController.setWsCollabManager(wsCollabManager);
 		listWSController.setDspaceManager(dspaceManager);
 		listWSController.setDspaceKeysFactory(dspaceKeysFactory);
+		listWSController.setDspaceMessages(dspaceMessages);
 
 		dspaceKeys = new DspaceKeys();
 		dspaceKeys.setPublicKey("b459689e");
@@ -102,8 +110,11 @@ public class ListWSControllerTest {
 		};
 
 		//Setup the database with the proper data in the tables;
-		sDatabaseSetup = "delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&";
-		sDatabaseSetup += "delete from tbl_dspace_keys&delete from tbl_workspace_dspace";
+		sDatabaseSetup = "delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())";
+		sDatabaseSetup += "&delete from tbl_dspace_keys&delete from tbl_workspace_dspace";
+		sDatabaseSetup += "&delete from tbl_project;&insert into tbl_project values('projtrial','This is a trial project','trial','PROJ_1','test','ACCESSIBLE','test',CURDATE(),'test',CURDATE())";
+		sDatabaseSetup += "&delete from tbl_workspace;&insert into tbl_workspace values('workspacetrial','This is a trial workspace','WS_1','test',0,0,'test',CURDATE(),'test',CURDATE());";
+		sDatabaseSetup += "&delete from tbl_workspace_dspace";
 	}
 
 	@After
@@ -206,15 +217,15 @@ public class ListWSControllerTest {
 		mock.removeParameter("username");
 		mock.removeParameter("password");
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
-		assertEquals("", listWSController.getDspaceUsername());
-		assertEquals("", listWSController.getDspacePassword());
+		assertEquals(null, listWSController.getDspaceUsername());
+		assertEquals(null, listWSController.getDspacePassword());
 
 		//Handle empty username and password
 		mock.removeParameter("dspacePublicAccess");
 		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.changeDspaceAuthentication("w1", mock, null, null));
 		//Values should not have changed
-		assertEquals("", listWSController.getDspaceUsername());
-		assertEquals("", listWSController.getDspacePassword());
+		assertEquals(null, listWSController.getDspaceUsername());
+		assertEquals(null, listWSController.getDspacePassword());
 
 		//Reset the values
 		mock.removeAllParameters();
@@ -233,12 +244,12 @@ public class ListWSControllerTest {
 		listWSController.setDspacePassword(null);
 		listWSController.setDspaceKeys(null);
 
-		//Handling null case for empty authentication		
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1",listWSController.workspaceCommunityListRequest("w1", model, null));
+		//Handling null case for empty authentication
+		assertEquals("auth/workbench/workspace/communities",listWSController.workspaceCommunityListRequest("w1", model, null));
 
-		//Setup username and password
-		listWSController.setDspaceUsername("test");
-		listWSController.setDspacePassword("test");
+		//Setup proper dspace keys
+		dspaceManager.clearCompleteCache();
+		listWSController.setDspaceKeys(dspaceKeys);
 
 		//Load the list of communities
 		assertEquals("auth/workbench/workspace/communities",listWSController.workspaceCommunityListRequest("w1", model, null));
@@ -255,7 +266,8 @@ public class ListWSControllerTest {
 		listWSController.setDspaceUsername(null);
 		listWSController.setDspacePassword(null);
 		listWSController.setDspaceKeys(null);
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.workspaceCommunityRequest("w1", "12", model, principal));
+		//Direct request for community without getting the list first
+		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.workspaceCommunityRequest("w1", "12", model, principal));
 
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
@@ -293,7 +305,7 @@ public class ListWSControllerTest {
 		listWSController.setDspaceUsername(null);
 		listWSController.setDspacePassword(null);
 		listWSController.setDspaceKeys(null);
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.workspaceItemListRequest("w1", "10", model, principal));
+		assertEquals("auth/workbench/workspace/community/collection", listWSController.workspaceItemListRequest("w1", "10", model, principal));
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 
@@ -335,7 +347,7 @@ public class ListWSControllerTest {
 		listWSController.setDspaceUsername(null);
 		listWSController.setDspacePassword(null);
 		listWSController.setDspaceKeys(null);
-		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/w1", listWSController.workspaceBitStreamListRequest("w1", "1217", "10", model, principal));
+		assertEquals("auth/workbench/workspace/community/collection/item", listWSController.workspaceBitStreamListRequest("w1", "1217", "10", model, principal));
 		//Setup Dspace access keys
 		listWSController.setDspaceKeys(dspaceKeys);
 
@@ -466,22 +478,57 @@ public class ListWSControllerTest {
 
 	}
 
-	@Ignore
 	@Test
-	public void testAddBitStreamsToWorkspace() {
-		fail("Not yet implemented");
+	public void testAddBitStreamsToWorkspace() throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException {
+		testSetupTestEnvironment();
+		String[] bitstreamids = {"3991"};
+		/**
+		 * Valid test case. Add bitstream to workspace.
+		 */
+		//Load all communities before trying to access collection
+		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null,null));
+		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
+		//Wait for the collection to load
+		while(dspaceManager.getCollection("10") == null);
+		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		//Bitstreams are loaded from dspace
+		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
+		//Add workspace-file link in the database.
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/WS_1", listWSController.addBitStreamsToWorkspace("WS_1", "12", "10", "1217", bitstreamids, model, principal));
+
+		//Check in the database if the file was added
+		IWorkSpace workspace = wsManager.getWorkspaceDetails("WS_1", "test");
+		IBitStream bitstream = workspace.getBitstreams().get(0);
+		assertEquals("12",bitstream.getCommunityid());
+		assertEquals("10", bitstream.getCollectionid());
+		assertEquals("1217", bitstream.getItemid());
+		assertEquals("3991", bitstream.getId());
 	}
 
-	@Ignore
-	@Test
-	public void testDeleteBitStreamsFromWorkspace() {
-		fail("Not yet implemented");
-	}
 
-	@Ignore
 	@Test
-	public void testUpdateBitStreamsFromWorkspace() {
-		fail("Not yet implemented");
+	public void testDeleteBitStreamsFromWorkspace() throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException {
+		testSetupTestEnvironment();
+		String[] bitstreamids = {"3991"};
+		/**
+		 * Add bitstream to workspace.
+		 */
+		//Load all communities before trying to access collection
+		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null,null));
+		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
+		//Wait for the collection to load
+		while(dspaceManager.getCollection("10") == null);
+		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		//Bitstreams are loaded from dspace
+		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
+		//Add workspace-file link in the database.
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/WS_1", listWSController.addBitStreamsToWorkspace("WS_1", "12", "10", "1217", bitstreamids, model, principal));
+
+		assertEquals("redirect:/auth/workbench/workspace/workspacedetails/WS_1", listWSController.deleteBitStreamsFromWorkspace("WS_1", bitstreamids, model, principal));
+		//Check in the database if the file was deleted
+		IWorkSpace workspace = wsManager.getWorkspaceDetails("WS_1", "test");
+		assertEquals(0, workspace.getBitstreams().size());
+
 	}
 
 }

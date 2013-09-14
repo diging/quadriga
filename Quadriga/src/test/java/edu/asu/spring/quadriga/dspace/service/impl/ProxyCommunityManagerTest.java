@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 
@@ -47,6 +48,9 @@ public class ProxyCommunityManagerTest {
 	private Properties dspaceProperties;
 
 	private DspaceKeys dspaceKeys;
+	
+	@Autowired
+	private ICollectionFactory collectionFactory;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -59,6 +63,8 @@ public class ProxyCommunityManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		proxyCommunityManager = new ProxyCommunityManager();
+		proxyCommunityManager.setCollectionFactory(collectionFactory);
+		
 		dspaceKeys = new DspaceKeys();
 		dspaceKeys.setPublicKey("b459689e");
 		dspaceKeys.setPrivateKey("12cabcca2128e67e");
@@ -70,6 +76,7 @@ public class ProxyCommunityManagerTest {
 
 	@Test
 	public void testGetAllCommunities() throws NoSuchAlgorithmException, QuadrigaAccessException {
+		//Test is an invalid user. DspaceKeys are used if available and the username/password are ignored.
 		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
 
 		proxyCommunityManager.clearCompleteCache();
@@ -81,27 +88,27 @@ public class ProxyCommunityManagerTest {
 
 	@Test
 	public void testGetAllCollections() throws NoSuchAlgorithmException, QuadrigaAccessException {
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
 
 		//Get the collection list for the community
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);
 		assertNotNull(proxyCommunityManager.getCollectionName("10"));
 
 		//Invalid community id
-		assertNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "11111111111111111"));
+		assertNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "11111111111111111"));
 
 		//Handle null case for community id
-		assertNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", null));
+		assertNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, null));
 	}
 
 	@Test
 	public void testGetAllItems() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);
@@ -124,8 +131,8 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetCollection() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);
@@ -146,7 +153,7 @@ public class ProxyCommunityManagerTest {
 		assertNotNull(proxyCommunityManager.getCollection("10", true, null, null, null, null, null, null));
 		
 		//Test case to handle reload of collection
-		collection = proxyCommunityManager.getCollection("10",false,restTemplate,dspaceProperties,dspaceKeys,"test","test","12");
+		collection = proxyCommunityManager.getCollection("10",false,restTemplate,dspaceProperties,dspaceKeys,null,null,"12");
 		//A new REST Call would be made and hence thread takes time to load the collection name.
 		assertNull(collection.getName());
 	}
@@ -154,7 +161,7 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetCommunityName() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community details
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, "test", "test"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
 
 		assertNotNull(proxyCommunityManager.getCommunityName("12"));
 		assertNull(proxyCommunityManager.getCommunityName("11111111111111"));
@@ -164,8 +171,8 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetCollectionName() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);
@@ -179,8 +186,8 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetCommunityId() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);
@@ -193,8 +200,8 @@ public class ProxyCommunityManagerTest {
 	public void testGetItemName() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
 		proxyCommunityManager.clearCompleteCache();
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load the items
 		while(proxyCommunityManager.getCollectionName("10")==null);
@@ -212,8 +219,8 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetBitStream() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);
@@ -235,8 +242,8 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetAllBitStreams() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);
@@ -261,7 +268,7 @@ public class ProxyCommunityManagerTest {
 	@Test
 	public void testGetCommunity() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
 
 		//Load from cache
 		assertNotNull(proxyCommunityManager.getCommunity("12", true, null, null, null, null, null));
@@ -271,15 +278,15 @@ public class ProxyCommunityManagerTest {
 		assertNull(proxyCommunityManager.getCommunity(null, true, null, null, null, null, null));
 
 		//Reload value
-		ICommunity community = proxyCommunityManager.getCommunity("12", false, restTemplate, dspaceProperties, null, "test","test");
+		ICommunity community = proxyCommunityManager.getCommunity("12", false, restTemplate, dspaceProperties, dspaceKeys, null, null);
 		assertNotNull(community);
 	}
 
 	@Test
 	public void testGetItem() throws NoSuchAlgorithmException, QuadrigaAccessException {
 		//Load the community and collection
-		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, null, "test", "test"));
-		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, null, "test", "test", "12"));
+		assertNotNull(proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, null, null));
+		assertNotNull(proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, null, null, "12"));
 
 		//Wait for the collection to load
 		while(proxyCommunityManager.getCollectionName("10")==null);

@@ -463,9 +463,9 @@ $(document).ready(function(){
 </c:when></c:choose>
 
 <br><br>
+<c:choose><c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when></c:choose>
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
-	<c:choose><c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when></c:choose>
 	<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
 	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
 	<c:choose><c:when test="${empty dspaceKeys}"></c:when></c:choose></font> 
@@ -516,7 +516,7 @@ $(document).ready(function(){
 		</form>
 	</c:when>
 	<c:otherwise>
-					Workspace does not contain any files from dspace !
+					<br>Workspace does not contain any files from dspace !
 				</c:otherwise>
 </c:choose>
 

@@ -59,6 +59,7 @@
 	<bean id="ListWSManager"
 		class="edu.asu.spring.quadriga.service.impl.workspace.ListWSManager">
 	</bean>
+	<bean class="edu.asu.spring.quadriga.dspace.service.impl.DspaceManager"></bean>
 
 	<bean id="ModifyWSManager"
 		class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSManager">
@@ -209,6 +210,16 @@
 		<constructor-arg>
 			<value>/rest/Word/</value>
 		</constructor-arg>
+	</bean>
+	
+	<bean id="dspaceStrings"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/dspacestrings.properties" />
+	</bean>
+	
+	<bean id="uiMessages"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/messages_en_US.properties" />
 	</bean>
 
 	<!-- Reference the rest settings -->

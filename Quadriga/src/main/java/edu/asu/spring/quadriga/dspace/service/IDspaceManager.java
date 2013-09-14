@@ -30,6 +30,8 @@ public interface IDspaceManager{
 	
 	public abstract IBitStreamFactory getBitstreamFactory();
 	public abstract void setBitstreamFactory(IBitStreamFactory bitstreamFactory);
+	public abstract Properties getDspaceMessages();
+	public abstract void setDspaceMessages(Properties dspaceMessages);
 	
 	/**
 	 * Get all the communities available for the given user
@@ -254,6 +256,6 @@ public interface IDspaceManager{
 	 * 
 	 * @return				FALSE if the provided login credentials are wrong. TRUE for any other case (including dspace down exception).
 	 */
-	public abstract boolean validateDspaceCredentials(String username, String password,	IDspaceKeys dspacekeys);
+	public abstract boolean validateDspaceCredentials(String username, String password,	IDspaceKeys dspacekeys);	
 
 }
