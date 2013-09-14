@@ -9,5 +9,9 @@ public interface IProfile {
 	public abstract String getUri();
 	
 	public abstract void setUri(String uri);
+	
+	public abstract IUser getUSerObj();
+	
+	public abstract void setUserObj(IUser user);
 
 }

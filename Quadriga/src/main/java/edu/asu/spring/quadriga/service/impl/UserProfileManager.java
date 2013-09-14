@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -25,10 +27,11 @@ public class UserProfileManager implements IUserProfileManager {
 	}
 
 	@Override
-	public IProfile showUserProfile() {
-
+	public List<IProfile> showUserProfile(String loggedinUser) throws QuadrigaStorageException {
 		
-		return null;
+		List<IProfile> profileList = connectionProfileManager.showProfileDBRequest(loggedinUser);
+		
+		return profileList;
 	}
 	
 	
