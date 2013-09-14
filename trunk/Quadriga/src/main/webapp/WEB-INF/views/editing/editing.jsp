@@ -71,7 +71,7 @@
 								<c:when test="${not empty network.networkOldVersion}">
 									<li>Old Version : 
 								    <a href="${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${network.id}">Visualize</a> (
-								    User - 
+								    Editor : 
 									<c:out value="${network.networkOldVersion.previousVersionAssignedUser}"></c:out>
 									( 
 									<c:out value="${network.networkOldVersion.previousVersionStatus}"></c:out>
