@@ -42,9 +42,6 @@ public class HomeController {
 	@Autowired
 	IUserManager userManager;
 	
-	@Autowired
-	ProfileValidator projectValidator;
-	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder){
 		
