@@ -83,12 +83,13 @@
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	
-	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections">
+	<definition name="auth/conceptcollections" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/conceptcollection.jsp" />
 		<put-attribute name="sub-navigation"
 			value="/WEB-INF/views/conceptcollections/collection-right.jsp" />
+		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections">
 		<put-attribute name="title" value="Quadriga - Collection Details" />
@@ -461,10 +462,11 @@
 	<definition name="base.definition.dictionaries" extends="base.definition">
 		<put-attribute name="currentPage" value="dictionaries" />
 	</definition>
-	<definition name="auth/dictionaries" extends="base.definition.dictionaries">
+	<definition name="auth/dictionaries" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/dictionaries.jsp" />
+		<put-attribute name="currentPage" value="dictionaries" />
 	</definition>
 <!--  	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />
@@ -607,7 +609,7 @@
 		<put-attribute name="footer" value="/tiles/credits.jsp" />
 		<put-attribute name="currentPage" value="editing" />
 	</definition>
-	<definition name="auth/editing" extends="base.definition.editing">
+	<definition name="auth/editing" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Editing" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/editing.jsp" />

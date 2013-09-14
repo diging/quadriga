@@ -119,7 +119,10 @@
 
 <div id="dialog-message" title="Confirm ?"></div>
 
-
+	<header>
+			<h2> Delete dictionary </h2>
+	</header>
+	
 
 	<input type=button
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"

@@ -42,6 +42,10 @@
 	</c:choose>
 	<form:form modelAttribute="dictionary" method="POST"
 		action="/auth/dictionaries/addDictionary">
+		<header>
+			<h2> Add dictionary </h2>
+		</header>
+		
 		<table>
 			<tr>
 				<td>Name:</td>
