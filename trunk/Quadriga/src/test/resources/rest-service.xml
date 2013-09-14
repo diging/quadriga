@@ -112,11 +112,5 @@
 		<property name="location" value="classpath:locale/errormessages.properties" />
 	</bean>
 	
-	<bean id="dspaceStrings"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="location" value="classpath:locale/dspacestrings.properties" />
-	</bean>
-	
-	
 	
 </beans>

@@ -10,6 +10,7 @@ import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 
 /**
@@ -174,4 +175,8 @@ public interface ICommunityManager {
 	public abstract boolean validateDspaceCredentials(RestTemplate restTemplate,
 			Properties dspaceProperties, IDspaceKeys dspaceKeys,
 			String sUserName, String sPassword) throws NoSuchAlgorithmException;
+
+	public abstract ICollectionFactory getCollectionFactory();
+
+	public abstract void setCollectionFactory(ICollectionFactory collectionFactory);
 }

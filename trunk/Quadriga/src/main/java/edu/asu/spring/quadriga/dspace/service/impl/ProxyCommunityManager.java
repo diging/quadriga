@@ -42,6 +42,18 @@ public class ProxyCommunityManager implements ICommunityManager {
 	@Autowired
 	private ICollectionFactory collectionFactory;
 
+	@Override
+	public ICollectionFactory getCollectionFactory() {
+		return collectionFactory;
+	}
+
+
+	@Override
+	public void setCollectionFactory(ICollectionFactory collectionFactory) {
+		this.collectionFactory = collectionFactory;
+	}
+
+
 	/**
 	 * Used to generate the corresponding url necessary to access the community details
 	 * @return			Return the complete REST service url along with all the authentication information
@@ -129,7 +141,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 					if(community.getCollections().size() == 0)
 					{
 						for(String collectionId :community.getCollectionIds()){
-							collection = collectionFactory.createCollectionObject(collectionId,restTemplate,dspaceProperties,dspaceKeys,sUserName,sPassword);
+							collection = getCollectionFactory().createCollectionObject(collectionId,restTemplate,dspaceProperties,dspaceKeys,sUserName,sPassword);
 							Thread collectionThread = new Thread(collection);
 							collectionThread.start();
 
