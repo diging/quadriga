@@ -16,9 +16,12 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
+import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
@@ -57,6 +60,10 @@ public class DBConnectionEditorManager implements IDBConnectionEditorManager {
 	IRetrieveProjectManager retrieveProjectDetails;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionNetworkManager.class);
+	
+	@Autowired
+	@Qualifier("DBConnectionNetworkManagerBean")
+	private IDBConnectionNetworkManager dbConnectNetwork;
 	
 	@Autowired
 	NetworkFactory networkFactory;
@@ -437,7 +444,8 @@ public class DBConnectionEditorManager implements IDBConnectionEditorManager {
 					network.setName(resultSet.getString(3));
 					network.setCreator(userManager.getUserDetails(resultSet.getString(4)));
 					network.setStatus(resultSet.getString(5));
-					
+					INetworkOldVersion networkOldVersion = dbConnectNetwork.getNetworkOldVersionDetails(network.getId());
+					network.setNetworkOldVersion(networkOldVersion);
 					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
 					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
 					network.setProjectName(project.getName());

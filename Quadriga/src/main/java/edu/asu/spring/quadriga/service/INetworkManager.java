@@ -88,4 +88,7 @@ public interface INetworkManager {
 
 	public abstract String getQStoreGetPOSTURL();
 
+	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
+			throws QuadrigaStorageException;
+
 }

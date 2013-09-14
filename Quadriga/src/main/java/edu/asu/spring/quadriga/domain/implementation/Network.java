@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 
@@ -27,6 +28,7 @@ public class Network implements INetwork
 	private String name;
 	private String status;
 	private String assignedUser;
+	private INetworkOldVersion networkOldVersion;
 	private List<String> appellationIds;
 	private List<String> relationIds;
 	private ENetworkAccessibility networksAccess;
@@ -153,6 +155,18 @@ public class Network implements INetwork
 	public void setAssignedUser(String assignedUser) {
 		this.assignedUser = assignedUser;
 	}
+	
+	@Override
+	public INetworkOldVersion getNetworkOldVersion() {
+		return networkOldVersion;
+	}
+	@Override
+	public void setNetworkOldVersion(INetworkOldVersion networkOldVersion) {
+		this.networkOldVersion = networkOldVersion;
+	}
+	
+	
+	
 	
 	
 }

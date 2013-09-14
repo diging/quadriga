@@ -774,6 +774,16 @@ public class NetworkManager implements INetworkManager {
 		return networkTopNodeList;
 	}
 	
+	
+	/**
+	 * Get only the Top Nodes of the network's old version
+	 */
+	@Override
+	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)throws QuadrigaStorageException{
+		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkOldVersionTopNodes(networkId);
+
+		return networkTopNodeList;
+	}
 	/**
 	 * Archive network Statements
 	 */

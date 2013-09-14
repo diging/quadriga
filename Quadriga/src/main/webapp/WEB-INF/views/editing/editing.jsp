@@ -45,8 +45,8 @@
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvedandrejectednetworksofuser'"
 	value='List of Approved and rejected Network'>
-	
-	<input type=button
+
+<input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/networksAssginedToOtherUsers'"
 	value='Networks assigned to other editors'>
 <br />
@@ -60,13 +60,26 @@
 				<li><details>
 						<summary>
 							<a
-								href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}">
+								href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}">
 								<c:out value="${network.name}"></c:out>
 							</a>
 						</summary>
 						<ul>
 							<li>Project : <c:out value="${network.projectName}"></c:out></li>
 							<li>Workspace : <c:out value="${network.workspaceName}"></c:out></li>
+							<c:choose>
+								<c:when test="${not empty network.networkOldVersion}">
+									<li>Old Version : 
+								    <a href="${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${network.id}">Visualize</a> (
+								    User - 
+									<c:out value="${network.networkOldVersion.previousVersionAssignedUser}"></c:out>
+									( 
+									<c:out value="${network.networkOldVersion.previousVersionStatus}"></c:out>
+									)
+									)
+								    </li>
+								</c:when>
+							</c:choose>
 							<li>Submitted by : <c:out
 									value="${network.creator.userName}"></c:out>
 							</li>
@@ -76,7 +89,7 @@
 								name='Reject' value='Reject'> <input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.id}'"
 								name='Approve' value='Approve'> <input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}'"
 								value='Visualize'></li>
 						</ul>
 					</details></li>
@@ -91,45 +104,45 @@
 
 <span class="byline">List of unassigned Networks available for
 	all editors.</span>
-	<c:choose>
-		<c:when test="${not empty networkList}">
-			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
-				class="display dataTable">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Project Name</th>
-						<th>Workspace Name</th>
-						<th>Status</th>
-						<th>Visualize</th>
-						<th>Action</th>
-					</tr>
-				</thead>
+<c:choose>
+	<c:when test="${not empty networkList}">
+		<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
+			class="display dataTable">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Project Name</th>
+					<th>Workspace Name</th>
+					<th>Status</th>
+					<th>Visualize</th>
+					<th>Action</th>
+				</tr>
+			</thead>
 
-				<tbody>
-					<c:forEach var="network" items="${networkList}">
-						<tr>
-							<td width="15%" align="center"><input name="items"
-								type="hidden" value="<c:out value="${network.name}"></c:out>" />
-								<c:out value="${network.name}"></c:out></td>
-							<td width="15%" align="center"><c:out
-									value="${network.projectName}"></c:out></td>
-							<td width="15%" align="center"><c:out
-									value="${network.workspaceName}"></c:out></td>
-							<td width="15%" align="center"><c:out
-									value="${network.status}"></c:out></td>
-							<td width="15%" align="center"><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
-								value='Visualize'></td>
-							<td width="15%" align="center"><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignuser/${network.id}'"
-								value='Assign'></td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</c:when>
-		<c:otherwise>
-			<spring:message code="empty.networks" />
-		</c:otherwise>
-	</c:choose>
+			<tbody>
+				<c:forEach var="network" items="${networkList}">
+					<tr>
+						<td width="15%" align="center"><input name="items"
+							type="hidden" value="<c:out value="${network.name}"></c:out>" />
+							<c:out value="${network.name}"></c:out></td>
+						<td width="15%" align="center"><c:out
+								value="${network.projectName}"></c:out></td>
+						<td width="15%" align="center"><c:out
+								value="${network.workspaceName}"></c:out></td>
+						<td width="15%" align="center"><c:out
+								value="${network.status}"></c:out></td>
+						<td width="15%" align="center"><input type=button
+							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}'"
+							value='Visualize'></td>
+						<td width="15%" align="center"><input type=button
+							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignuser/${network.id}'"
+							value='Assign'></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</c:when>
+	<c:otherwise>
+		<spring:message code="empty.networks" />
+	</c:otherwise>
+</c:choose>
