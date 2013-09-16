@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,6 +42,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
 
 /**
  * This class tests {@link ListWSController}
@@ -75,6 +78,9 @@ public class ListWSControllerTest {
 
 	@Resource(name = "uiMessages")
 	private Properties dspaceMessages;
+	
+	@Autowired
+	private	DspaceKeysValidator keysValidator;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -92,6 +98,7 @@ public class ListWSControllerTest {
 		listWSController.setDspaceManager(dspaceManager);
 		listWSController.setDspaceKeysFactory(dspaceKeysFactory);
 		listWSController.setDspaceMessages(dspaceMessages);
+		listWSController.setKeysValidator(keysValidator);
 
 		dspaceKeys = new DspaceKeys();
 		dspaceKeys.setPublicKey("b459689e");
@@ -156,34 +163,15 @@ public class ListWSControllerTest {
 	public void testAddDspaceKeys() throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		testSetupTestEnvironment();
-		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
+		BindingResult result = 
+			    new BeanPropertyBindingResult("command", "command");
+		listWSController.addDspaceKeys(dspaceKeys, result, principal);
 
 		//Check if the actual key values were inserted into the database
 		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
 		assertEquals("b459689e",dspaceKeys.getPublicKey());
 		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
 
-		//Check if the null keys were handled
-		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(null, principal, model));
-		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
-		assertEquals("b459689e",dspaceKeys.getPublicKey());
-		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
-
-		//Check if the null keys were handled
-		dspaceKeys.setPrivateKey(null);
-		dspaceKeys.setPublicKey(null);
-		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
-		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
-		assertEquals("b459689e",dspaceKeys.getPublicKey());
-		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
-
-		//Check if the empty keys were handled
-		dspaceKeys.setPrivateKey("");
-		dspaceKeys.setPublicKey("");
-		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
-		dspaceKeys =  (DspaceKeys) dspaceManager.getDspaceKeys("test");
-		assertEquals("b459689e",dspaceKeys.getPublicKey());
-		assertEquals("12cabcca2128e67e", dspaceKeys.getPrivateKey());
 	}
 
 	@Test
@@ -191,7 +179,9 @@ public class ListWSControllerTest {
 	{
 		//Setup the database with keys for deletion
 		testSetupTestEnvironment();
-		assertEquals("redirect:/auth/workbench/keys", listWSController.addDspaceKeys(dspaceKeys, principal, model));
+		BindingResult result = 
+			    new BeanPropertyBindingResult("command", "command");
+		listWSController.addDspaceKeys(dspaceKeys, result, principal);
 
 		assertEquals("redirect:/auth/workbench/keys", listWSController.deleteDspaceKeys(principal, model));
 		assertNull(listWSController.getDspaceKeys());
@@ -267,6 +257,7 @@ public class ListWSControllerTest {
 		listWSController.setDspacePassword(null);
 		listWSController.setDspaceKeys(null);
 		//Direct request for community without getting the list first
+		dspaceManager.clearCompleteCache();
 		assertEquals("redirect:/auth/workbench/workspace/w1/communities", listWSController.workspaceCommunityRequest("w1", "12", model, principal));
 
 		//Setup Dspace access keys

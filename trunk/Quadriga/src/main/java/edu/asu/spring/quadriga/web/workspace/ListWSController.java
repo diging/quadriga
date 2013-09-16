@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +40,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
+import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
 
 /**
  * Controller to handle all the workspace requests for Quadriga.
@@ -79,6 +84,26 @@ public class ListWSController
 
 	@Resource(name = "uiMessages")
 	private Properties dspaceMessages;
+
+	@Autowired
+	private	DspaceKeysValidator keysValidator;
+
+	/**
+	 * Attach the custom validator to the Spring context
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+
+		binder.setValidator(getKeysValidator());
+	}
+
+	public DspaceKeysValidator getKeysValidator() {
+		return keysValidator;
+	}
+
+	public void setKeysValidator(DspaceKeysValidator keysValidator) {
+		this.keysValidator = keysValidator;
+	}
 
 	public Properties getDspaceMessages() {
 		return dspaceMessages;
@@ -168,9 +193,8 @@ public class ListWSController
 	@RequestMapping(value="/auth/workbench/keys", method=RequestMethod.GET)
 	public ModelAndView addDspaceKeysRequestForm(Principal principal) throws QuadrigaStorageException
 	{
-		this.setDspaceKeys(dspaceManager.getMaskedDspaceKeys(principal.getName()));
 		ModelAndView model = new ModelAndView("/auth/workbench/keys","command",getDspaceKeysFactory().createDspaceKeysObject());
-		model.addObject("dspaceKeys", getDspaceKeys());
+		model.addObject("dspaceKeys", dspaceManager.getMaskedDspaceKeys(principal.getName()));
 
 		return model;
 	}
@@ -184,21 +208,23 @@ public class ListWSController
 	 * @throws QuadrigaAccessException
 	 */
 	@RequestMapping(value = "/auth/workbench/updatekeys", method = RequestMethod.POST)
-	public String addDspaceKeys(@ModelAttribute("SpringWeb")DspaceKeys dspaceKeys, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException 
+	public ModelAndView addDspaceKeys(@Validated @ModelAttribute("command")DspaceKeys dspaceKeys, BindingResult result, Principal principal) throws QuadrigaStorageException, QuadrigaAccessException 
 	{
-		if(dspaceKeys!=null)
-		{
-			if(dspaceKeys.getPrivateKey() != null && dspaceKeys.getPublicKey() != null)
-			{
-				if(!dspaceKeys.getPrivateKey().equals("") && !dspaceKeys.getPublicKey().equals(""))
-				{
-					dspaceManager.addDspaceKeys(dspaceKeys,principal.getName());
-					this.setDspaceKeys(dspaceKeys);
-				}
-			}
+		ModelAndView model = null;
+		if(result.hasErrors())
+		{			
+			model = new ModelAndView("/auth/workbench/keys","command",dspaceKeys);
 		}
+		else
+		{
+			//Successfull validation so update the database and set the keys
+			model = new ModelAndView("/auth/workbench/keys","command",getDspaceKeysFactory().createDspaceKeysObject());
+			dspaceManager.addDspaceKeys(dspaceKeys,principal.getName());
+			this.setDspaceKeys(dspaceKeys);
+		}
+		model.addObject("dspaceKeys", dspaceManager.getMaskedDspaceKeys(principal.getName()));
 
-		return "redirect:/auth/workbench/keys";
+		return model;
 	}
 
 	/**
@@ -227,7 +253,7 @@ public class ListWSController
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 * @throws QuadrigaException 
-
+	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/workspace/workspacedetails/{workspaceid}", method = RequestMethod.GET)
 	public String getWorkspaceDetails(@PathVariable("workspaceid") String workspaceid, Principal principal, ModelMap model) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException
@@ -245,7 +271,7 @@ public class ListWSController
 		{
 			model.addAttribute("dspaceKeys", "true");
 		}
-		
+
 		//Check if the dspace authentication is correct.
 		List<IBitStream> workspaceBitStreams = null;
 		if(dspaceManager.validateDspaceCredentials(this.dspaceUsername, this.dspacePassword, this.dspaceKeys))
