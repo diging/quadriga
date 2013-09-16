@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -295,7 +297,7 @@ public class NetworkManager implements INetworkManager {
 							String node = conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt));
 							//String node = tt.getTermInterpertation(tt);
 							logger.debug(tt.getTermInterpertation(tt));
-							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#EE6363\",\"$type\": \"circle\",\"$dim\": 11},\"id\": \""+node+"\",\"name\": \""+node+"\"},");
+							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+node+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
 						}
 					}
 					if(ce instanceof RelationEventType){
@@ -320,6 +322,16 @@ public class NetworkManager implements INetworkManager {
 		return this.jsonString.toString();
 	}
 
+	/**
+	 * Generate short UUID (13 characters)
+	 * 
+	 * @return short UUID
+	 */
+	public String shortUUID() {
+		UUID uuid = UUID.randomUUID();
+		long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
+		return Long.toString(l, Character.MAX_RADIX);
+	}
 	/**
 	 * Helper funtions to create a JSon object
 	 * @param relationEventObject
@@ -382,11 +394,11 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("}],");
 
 		this.jsonString.append("\"data\": {");
-		this.jsonString.append("\"$color\": \"#EE6363\",");
+		this.jsonString.append("\"$color\": \"#F2BB66\",");
 		this.jsonString.append("\"$type\": \"circle\",");
 		this.jsonString.append("\"$dim\": 11");
 		this.jsonString.append("},");
-		this.jsonString.append("\"id\": \""+nodeObject.getPredicate()+"\",");
+		this.jsonString.append("\"id\": \""+nodeObject.getPredicate()+"_"+shortUUID()+"\",");
 		this.jsonString.append("\"name\": \""+nodeObject.getPredicate()+"\"");
 		this.jsonString.append("},");
 	}
