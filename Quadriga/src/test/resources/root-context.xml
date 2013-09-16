@@ -13,6 +13,7 @@
 	<bean
 		class="edu.asu.spring.quadriga.dspace.service.impl.ProxyCommunityManager"></bean>
 
+	<bean class="edu.asu.spring.quadriga.validator.DspaceKeysValidator"></bean>
 
 	<bean id="QuadrigaRoleMapper"
 		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">

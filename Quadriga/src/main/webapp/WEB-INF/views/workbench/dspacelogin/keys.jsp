@@ -21,7 +21,7 @@ $(document).ready(function() {
 		<table>
 			<tr>
 				<td><form:label path="publicKey">Public Key :</form:label></td>
-				<td><form:input path="publicKey" autocomplete="false"/><c:choose>
+				<td><form:input path="publicKey" autocomplete="false"/><form:errors path="publicKey" cssClass="error"></form:errors><c:choose>
 						<c:when test="${not empty dspaceKeys}">
 		Existing Public Key ends in: ${dspaceKeys.publicKey }
 		</c:when>
@@ -32,7 +32,7 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td><form:label path="privateKey">Private Key :</form:label></td>
-				<td><form:input path="privateKey" autocomplete="false" /><c:choose>
+				<td><form:input path="privateKey" autocomplete="false" /><form:errors path="privateKey" cssClass="error"></form:errors><c:choose>
 						<c:when test="${not empty dspaceKeys}">
 		Existing Public Key ends in: ${dspaceKeys.privateKey }
 		</c:when>
