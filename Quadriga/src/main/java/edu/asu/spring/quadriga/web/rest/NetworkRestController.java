@@ -106,10 +106,9 @@ public class NetworkRestController {
 		String networkName = request.getParameter("networkname");
 		String networkId="";
 		String workspaceid = request.getParameter("workspaceid");
-		logger.info(" Network Name : "+ networkName);
-		logger.info(" Workspace id : "+ workspaceid);
+		
 
-		if(workspaceid.isEmpty()||workspaceid == null){
+		if(workspaceid == null||workspaceid.isEmpty()){
 			response.setStatus(500);
 			return "Please provide correct workspace id.";
 		}
@@ -119,7 +118,7 @@ public class NetworkRestController {
 			return "Please provide correct workspace id.";
 		}
 
-		if(networkName.isEmpty()||networkName == null){
+		if(networkName == null ||  networkName.isEmpty()){
 			response.setStatus(500);
 			return "Please provide network name as a part of post parameters";
 		}else{
@@ -132,6 +131,8 @@ public class NetworkRestController {
 			}
 		}
 
+		logger.info(" Network Name : "+ networkName);
+		logger.info(" Workspace id : "+ workspaceid);
 		xml=xml.trim();
 		if (xml.isEmpty()) {
 			response.setStatus(500);

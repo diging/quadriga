@@ -52,7 +52,7 @@
 				<li>
 					<details>
 						<summary><a
-							href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}">
+							href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}">
 								<c:out value="${network.name}"></c:out>
 						</a></summary>
 						<ul>
@@ -81,7 +81,7 @@
 				<li>
 					<details>
 						<summary><a
-							href="${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}">
+							href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}">
 								<c:out value="${network.name}"></c:out>
 						</a></summary>
 						<ul>
