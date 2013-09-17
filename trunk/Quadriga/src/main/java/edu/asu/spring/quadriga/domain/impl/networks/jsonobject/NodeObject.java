@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.domain.impl.networks.jsonobject;
 
 public class NodeObject {
 
+	String relationEventId;
 	String predicate;
 	String subject;
 	String object;
@@ -26,4 +27,12 @@ public class NodeObject {
 	public void setObject(String object){
 		this.object= object;
 	}
+	
+	public String getRelationEventId(){
+		return relationEventId;
+	}
+	public void setRelationEventId(String relationEventId){
+		this.relationEventId= relationEventId;
+	}
+	
 }

@@ -114,6 +114,8 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnect;
 
+	private List<List<String>> relationEventPredicateMapping= new ArrayList < List <String>>();;
+	
 	/* 
 	 * Prepare a QStore Add URL to add new networks to QStore
 	 */
@@ -206,6 +208,21 @@ public class NetworkManager implements INetworkManager {
 		return networkId;
 	}
 
+	
+	
+	public String getRelationEventId(RelationEventType re){
+		List<JAXBElement<?>> e2 = re.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> I1 = e2.iterator();
+		while(I1.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) I1.next();
+			if(element.getName().toString().contains("id")){
+				logger.info("Relation Event ID : "+element.getValue().toString());
+				return element.getValue().toString();
+			}
+		}
+		return "";
+	}
+	
 	/* 
 	 * Formats the XML 
 	 */
@@ -310,6 +327,9 @@ public class NetworkManager implements INetworkManager {
 						RelationEventObject relationEventObject = new RelationEventObject();
 						jsonObject.setRelationEventObject(relationEventObject);
 						jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
+						
+						relationEventPredicateMapping.clear(); 
+						
 						printJsonObjectRE(jsonObject.getRelationEventObject());
 
 					}
@@ -340,6 +360,7 @@ public class NetworkManager implements INetworkManager {
 		PredicateObject predicateObject = relationEventObject.getPredicateObject();
 		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
 		NodeObject nodeObject = new NodeObject();
+		nodeObject.setRelationEventId(predicateObject.getRelationEventID());
 		nodeObject.setPredicate(appellationEventObject.getNode());
 		logger.debug("Predicate : "+appellationEventObject.getNode() );
 		SubjectObject subjectObject = relationEventObject.getSubjectObject();
@@ -380,6 +401,12 @@ public class NetworkManager implements INetworkManager {
 	 * @param nodeObject
 	 */
 	public void updateJsonStringForRENode(NodeObject nodeObject){
+		String predicateNameId = nodeObject.getPredicate()+"_"+shortUUID();
+		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
+		if(!(temp.equals(""))){
+			predicateNameId = temp;
+		}
+		
 		this.jsonString.append("{\"adjacencies\":[");
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getSubject()+"\",");
@@ -398,13 +425,35 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("\"$type\": \"circle\",");
 		this.jsonString.append("\"$dim\": 11");
 		this.jsonString.append("},");
-		this.jsonString.append("\"id\": \""+nodeObject.getPredicate()+"_"+shortUUID()+"\",");
+		this.jsonString.append("\"id\": \""+predicateNameId+"\",");
 		this.jsonString.append("\"name\": \""+nodeObject.getPredicate()+"\"");
 		this.jsonString.append("},");
 	}
 
 
-
+	public String checkRelationEventRepeatation(String relationEventId,String predicateName){
+		Iterator<List<String>> I = relationEventPredicateMapping.iterator();
+		
+		while(I.hasNext()){
+			List<String> pairs = I.next();
+			Iterator<String> I1 = pairs.iterator();
+			while(I1.hasNext()){
+				String id = I1.next();
+				if(id.equals(relationEventId)){
+					String predicateNameLocal = I1.next();
+					logger.info(" relationEventId  :" +relationEventId +"predicate Name"+predicateNameLocal );
+					return predicateNameLocal;
+				}
+			}
+		}
+		List<String> pairs = new ArrayList<String>();
+		pairs.add(relationEventId);
+		pairs.add(predicateName);
+		relationEventPredicateMapping.add(pairs);
+		
+		return "";
+		
+	}
 	/**
 	 * Get all the terms recursively from the relation event
 	 * 
@@ -425,6 +474,7 @@ public class NetworkManager implements INetworkManager {
 				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
 				PredicateObject predicateObject = new PredicateObject();
 				predicateObject.setAppellationEventObject(appellationEventObject);
+				predicateObject.setRelationEventID(getRelationEventId(re));
 				relationEventObject.setPredicateObject(predicateObject);
 				logger.debug("Predicate Term : "+ tt.getTermInterpertation(tt));
 			}
