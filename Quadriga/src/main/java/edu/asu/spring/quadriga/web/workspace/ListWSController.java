@@ -91,10 +91,10 @@ public class ListWSController
 	/**
 	 * Attach the custom validator to the Spring context
 	 */
-	@InitBinder
+	@InitBinder("command")
 	protected void initBinder(WebDataBinder binder) {
 
-		binder.setValidator(getKeysValidator());
+		binder.setValidator(keysValidator);
 	}
 
 	public DspaceKeysValidator getKeysValidator() {
