@@ -41,6 +41,7 @@ public class PredicateType {
 
     @XmlElement(name = "appellation_event", required = true)
     protected AppellationEventType appellationEvent;
+    
 
     /**
      * Gets the value of the appellationEvent property.
@@ -65,5 +66,7 @@ public class PredicateType {
     public void setAppellationEvent(AppellationEventType value) {
         this.appellationEvent = value;
     }
+
+    
 
 }
