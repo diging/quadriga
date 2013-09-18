@@ -153,4 +153,17 @@ public class ListWSManager implements IListWSManager
 		}
 		return networkList;
 	}
+	
+	@Override
+	public List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid)
+			throws QuadrigaStorageException{
+		
+		List<INetwork> networkList=null;
+		try{
+			networkList=dbConnect.getWorkspaceRejectedNetworkList(workspaceid);
+		}catch(QuadrigaStorageException e){
+			logger.error("",e);
+		}
+		return networkList;
+	}
 }

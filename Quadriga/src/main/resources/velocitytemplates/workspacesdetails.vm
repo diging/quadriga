@@ -8,7 +8,7 @@ $url/rest/workspace/$workspaceid/dictionaries
 $url/rest/workspace/$workspaceid/conceptcollections
 </Quadriga:conceptcollections>
 <Quadriga:networks>
-$url/rest/workspace/$workspaceid/networks
+$url/rest/workspace/$workspaceid/rejectednetworks
 </Quadriga:networks>
 <Quadriga:files>
 $url/rest/workspace/$workspaceid/files

@@ -441,7 +441,7 @@ public class NetworkManager implements INetworkManager {
 				String id = I1.next();
 				if(id.equals(relationEventId)){
 					String predicateNameLocal = I1.next();
-					logger.info(" relationEventId  :" +relationEventId +"predicate Name"+predicateNameLocal );
+					logger.info(" relationEventId  :" +relationEventId +" id : "+id+"predicate Name"+predicateNameLocal );
 					return predicateNameLocal;
 				}
 			}

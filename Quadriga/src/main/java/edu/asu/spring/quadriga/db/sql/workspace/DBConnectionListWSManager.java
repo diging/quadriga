@@ -578,6 +578,71 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 		return networkList;		
 	}
 	
+	
+	/**
+	 * Gets a list of rejected networks belonging to the workspace
+	 * @param workspaceid
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@Override
+	public List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid) throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		
+		CallableStatement sqlStatement;
+		List<INetwork> networkList = new ArrayList<INetwork>();
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE_REJECTED_NETWORKS  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, workspaceid);        	
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					INetwork network=networkFactory.createNetworkObject();;
+					network.setId(resultSet.getString(1));
+					network.setName(resultSet.getString(2));
+					network.setCreator(userManger.getUserDetails(resultSet.getString(3)));
+					network.setStatus(resultSet.getString(4));
+					networkList.add(network);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return networkList;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return networkList;		
+	}
 	/**
 	 *  Method gets the Workspace name using workspace id                    
 	 * 
