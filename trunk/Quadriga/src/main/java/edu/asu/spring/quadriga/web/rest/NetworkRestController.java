@@ -219,7 +219,7 @@ public class NetworkRestController {
 	}
 
 	/**
-	 *  Rest interface for getting network list belonging to a workspace 
+	 *  Rest interface for getting all the network list belonging to a workspace 
 	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/{workspaceid}/networks
 	 * http://localhost:8080/quadriga/rest/workspace/WS_23092339551502339/networks
 	 * @param networkName
@@ -267,6 +267,53 @@ public class NetworkRestController {
 	}
 
 
+	/**
+	 *  Rest interface for getting rejected network list belonging to a workspace 
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/{workspaceid}/rejectednetworks
+	 * http://localhost:8080/quadriga/rest/workspace/WS_23092339551502339/rejectednetworks
+	 * @param networkName
+	 * @param response
+	 * @param accept
+	 * @param principal
+	 * @return status
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "rest/workspace/{workspaceid}/rejectednetworks", method = RequestMethod.GET, produces = "application/xml")
+	public String getWorkspaceRejectedNetworkList(@PathVariable("workspaceid") String workspaceId,
+			HttpServletResponse response,
+			String accept,Principal principal,HttpServletRequest req) throws Exception {
+
+
+		List<INetwork> networkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		Template template = null;
+		try {
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/networks.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("networkList", networkList);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			response.setStatus(200);
+			response.setContentType(accept);
+			response.setContentType("application/xml");
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		}
+	}
 
 	/**
 	 *  Rest interface for getting network list belonging to a workspace 

@@ -33,4 +33,7 @@ public interface IDBConnectionListWSManager {
 
 	public abstract String getWorkspaceName(String workspaceId) throws QuadrigaStorageException;
 
+	public abstract List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid)
+			throws QuadrigaStorageException;
+
 }
