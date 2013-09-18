@@ -24,8 +24,8 @@ import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEn
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.IDictionaryManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 
 /**
  * This class will handle list dictionaries items controller for the dictionary

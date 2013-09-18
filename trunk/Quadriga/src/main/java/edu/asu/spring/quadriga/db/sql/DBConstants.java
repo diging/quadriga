@@ -42,6 +42,7 @@ public interface DBConstants
 
 	public static final String ADD_DICTIONARY = "sp_addDictionaryDetails";
 	public static final String GET_DICTIONARY_DETAILS = "sp_getDictionaryDetails";
+	public static final String GET_DICTIONARY_LIST = "sp_getDictionarylist";
 	public static final String GET_DICTIONARY_PERM = "sp_getDictionaryPerm";
 	
 	public static final String SHOW_DICT_COLLABORATORS = "sp_showDictionaryCollaborators";
@@ -63,6 +64,7 @@ public interface DBConstants
 	public static final String TRANSFER_COLLECTION_OWNERSHIP = "sp_changeconceptcollectionowner";
 	public static final String UPDATE_COLLECTION_DETAILS = "sp_updateConceptCollection";
 	
+	// Dictionary objects
 	public static final String GET_DICTIONARY_ITEMS_DETAILS = "sp_getDictionaryItems";
 	public static final String GET_DICTIONARY_ITEMS_DETAILS_COLLAB = "sp_getDictionaryItems_collab";
 	public static final String GET_DICTIONARY_NAME = "sp_getDictionaryName";
@@ -77,6 +79,7 @@ public interface DBConstants
 	public static final String ADD_CONCEPTCOLLECTION ="sp_addConceptCollections";
 	public static final String DELETE_COLLECTION_ITEM ="sp_deleteCollectionItem";
 	public static final String UPDATE_COLLECTION_ITEM ="sp_updateCollectionItem";
+	public static final String UPDATE_DICTIONARY_DETAILS = "sp_updateDictionary";
 	
 	
 	//Networks database objects

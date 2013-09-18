@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl;
+package edu.asu.spring.quadriga.service.impl.dictionary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 
 /**
  * This class acts as a Dictionary manager which adds list of Dictionary words
