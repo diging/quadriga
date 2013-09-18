@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.db.sql;
+package edu.asu.spring.quadriga.db.sql.dictionary;
 
 
 import java.sql.CallableStatement;
@@ -16,7 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.asu.spring.quadriga.db.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
@@ -170,7 +171,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		getConnection();
 		IDictionary dictionary;
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
-		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_DETAILS + "(?,?)";
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.GET_DICTIONARY_LIST + "(?,?)";
 		try {
 
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");

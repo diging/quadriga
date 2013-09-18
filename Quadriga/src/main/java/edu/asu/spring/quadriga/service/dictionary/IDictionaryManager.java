@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service;
+package edu.asu.spring.quadriga.service.dictionary;
 
 import java.util.List;
 

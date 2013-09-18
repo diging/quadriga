@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 
 /**
  *   @Description : This class acts as a dummy Dictionary manager which adds list of Dictionary words

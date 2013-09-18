@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.db;
+package edu.asu.spring.quadriga.db.dictionary;
 
 import java.util.List;
 

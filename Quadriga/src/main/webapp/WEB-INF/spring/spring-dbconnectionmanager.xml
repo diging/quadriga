@@ -11,9 +11,19 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<bean id="DBConnectionDictionaryManagerBean"
-		class="edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManager">
+		class="edu.asu.spring.quadriga.db.sql.dictionary.DBConnectionDictionaryManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+		<bean id="DBConnectionModifyDictionaryManagerBean"
+		class="edu.asu.spring.quadriga.db.sql.dictionary.DBConnectionModifyDictionaryManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+			<bean id="DBConnectionRetrieveDictionaryManagerBean"
+		class="edu.asu.spring.quadriga.db.sql.dictionary.DBConnectionRetrieveDictionaryManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	
 	<bean id="DBConnectionNetworkManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionNetworkManager">
 		<property name="dataSource" ref="dataSource" />

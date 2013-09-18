@@ -30,4 +30,7 @@
 				Delete Collaborators</a></li>
 		</ul>
 	</li>
+		<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionaryid}">
+			Update</a>
+	</li>
 </ul>
