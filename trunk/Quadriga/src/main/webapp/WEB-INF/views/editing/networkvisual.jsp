@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <!-- CSS Files -->
-<link type="text/css" href="/quadriga/resources/txt-layout/css/base.css" rel="stylesheet" />
-<link type="text/css" href="/quadriga/resources/txt-layout/css/ForceDirected.css" rel="stylesheet" />
+<link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/base.css" rel="stylesheet" />
+<link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ForceDirected.css" rel="stylesheet" />
 </head>
 <script type="text/javascript" charset="utf8">
 	$(document).ready(function() {

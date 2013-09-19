@@ -17,7 +17,7 @@ $(document).ready(function() {
 </script>
 	<h3>Manage Dspace Access Keys</h3>
 	A more secure way to access Dspace repository. Generate new keys <a href="https://import.hps.ubio.org/api_keys" target="_blank">here.</a>
-	<form:form method="POST" id="formKeys" action="/quadriga/auth/workbench/updatekeys">
+	<form:form method="POST" id="formKeys" action="${pageContext.servletContext.contextPath}/auth/workbench/updatekeys">
 		<table>
 			<tr>
 				<td><form:label path="publicKey">Public Key :</form:label></td>
@@ -54,7 +54,7 @@ $(document).ready(function() {
 			    buttons: {
 			        Yes: function () {
 			        	$( this ).dialog( "close" );
-			        	location.href = '/quadriga/auth/workbench/deletekeys';
+			        	location.href = '${pageContext.servletContext.contextPath}/auth/workbench/deletekeys';
 			        	return false;
 			        },
 			        No: function() {

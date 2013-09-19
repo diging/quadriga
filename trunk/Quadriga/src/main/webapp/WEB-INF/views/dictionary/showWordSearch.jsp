@@ -6,7 +6,7 @@
 <header>
 	<span class="byline">Word search Results : <c:out
 			value="${dictName}"></c:out></span>
-	<!-- 	<a href="/quadriga/auth/dictionaries/addDictionaryItems">Add Dictionary Items</a> -->
+	<!-- 	<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems">Add Dictionary Items</a> -->
 
 </header>
 

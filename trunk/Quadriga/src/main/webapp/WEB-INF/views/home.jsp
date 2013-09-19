@@ -11,7 +11,7 @@
 	<!-- Highlight -->
 	<section class="is-highlight">
 		<span class="image image-centered"><img
-			src="/quadriga/resources/txt-layout/images/panel-new2.png" alt="" />
+			src="${pageContext.servletContext.contextPath}/resources/txt-layout/images/panel-new2.png" alt="" />
 		</span>
 
 		<ul class="special">

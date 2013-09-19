@@ -26,65 +26,65 @@
 	<li><a href="#">Workspace</a>
 		<ul>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/addworkspace">Add
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/addworkspace">Add
 					Workspace</a></li>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/deleteworkspace">Delete
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/deleteworkspace">Delete
 					Workspace</a></li>
 		</ul></li>
 		<li><a href="#">Archive Workspace</a>
 		<ul>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/archiveworkspace">Archive
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/archiveworkspace">Archive
 					Workspace</a></li>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/unarchiveworkspace">Activate
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/unarchiveworkspace">Activate
 					Archived Workspace</a></li>
 		</ul></li>
 			<li><a href="#">Deactivate Workspace</a>
 		<ul>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/deactivateworkspace">Deactivate
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/deactivateworkspace">Deactivate
 					Workspace</a></li>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/activateworkspace">Activate
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/activateworkspace">Activate
 					Workspace</a></li>
 		</ul></li>
 	<li><a href="#">Dictionary</a>
 		<ul>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/adddictionary">Add
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/adddictionary">Add
 					Dictionary</a></li>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/dictionaries">List
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/dictionaries">List
 					Dictionary</a></li>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/deletedictionary">Delete
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/deletedictionary">Delete
 					Dictionary</a></li>
 		</ul></li>
 	<li><a href="#">Collections</a>
 		<ul>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/addconceptcollection">Add
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/addconceptcollection">Add
 					Collection Concept</a></li>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/conceptcollections">List
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/conceptcollections">List
 					Collection Concept</a></li>
 			<li><a
-				href="/quadriga/auth/workbench/${project.internalid}/deleteconceptcollections">Delete
+				href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/deleteconceptcollections">Delete
 					Collection Concept</a></li>
 		</ul></li>
 		
 		<li><a href="#">Collaborators</a>
 		<ul>
-			<li><a href="/quadriga/auth/workbench/${project.internalid}/addcollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/addcollaborators">
 			Add Collaborators</a></li>
 			
-			<li><a href="/quadriga/auth/workbench/${project.internalid}/deletecollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/deletecollaborators">
 			Delete Collaborators</a></li>
-			<li><a href="/quadriga/auth/workbench/${project.internalid}/updatecollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/updatecollaborators">
 			Update Collaborators</a></li>
 		</ul></li>
-			<li><a href="/quadriga/auth/workbench/transferprojectowner/${project.internalid}">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.internalid}">
 			Change Owner</a></li>
 </ul>

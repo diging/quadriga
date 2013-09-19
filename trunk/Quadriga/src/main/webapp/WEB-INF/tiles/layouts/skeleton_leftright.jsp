@@ -27,7 +27,7 @@
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.dataTables.js"></script>
 <script
-	src="/quadriga/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
 <noscript>
 	<link rel="stylesheet"
 		href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/skel-noscript.css" />

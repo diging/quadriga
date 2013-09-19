@@ -19,7 +19,7 @@
 		</sec:authorize>
 		<sec:authorize access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')"><li ${currentPage == "dictionaries" ? "class=\"current_page_item\"" : ""}><a href="${pageContext.servletContext.contextPath}/auth/dictionaries">Dictionaries</a>
 		<ul>
-				<li><a href="/quadriga/auth/dictionaries/addDictionary">Add Dictionary</a></li>
+				<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">Add Dictionary</a></li>
 		</ul>
 		</li></sec:authorize>
 
