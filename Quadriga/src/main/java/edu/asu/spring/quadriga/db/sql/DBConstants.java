@@ -81,6 +81,7 @@ public interface DBConstants
 	public static final String DELETE_COLLECTION_ITEM ="sp_deleteCollectionItem";
 	public static final String UPDATE_COLLECTION_ITEM ="sp_updateCollectionItem";
 	public static final String UPDATE_DICTIONARY_DETAILS = "sp_updateDictionary";
+	public static final String UPDATE_DICTIONARY_COLLAB_REQUEST = "sp_updatedictionarycollaborator";
 	
 	
 	//Networks database objects

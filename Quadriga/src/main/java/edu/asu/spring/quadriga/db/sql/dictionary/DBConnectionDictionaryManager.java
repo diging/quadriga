@@ -920,9 +920,7 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 		
 		for(int i=0;i<collabroles.length;i++)
 		{
-			collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-			collaboratorRole.setRoleDBid(collabroles[i]);
-			collaboratorRole.setDisplayName(collaboratorRoleManager.getDictCollaboratorRoleByDBId(collabroles[i]));
+			collaboratorRole = collaboratorRoleManager.getDictCollaboratorRoleByDBId(collabroles[i]);
 			collaboratorRoleList.add(collaboratorRole);
 		}
 		

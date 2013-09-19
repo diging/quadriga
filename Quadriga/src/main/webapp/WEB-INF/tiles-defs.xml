@@ -565,6 +565,11 @@
 		<put-attribute name="content"
 		value="/WEB-INF/views/dictionary/deletecollaborators.jsp"/>
 	</definition>
+		<definition name="auth/dictionaries/updatecollaborators"
+		extends="base.definition.dictionaries">
+		<put-attribute name="content"
+		value="/WEB-INF/views/dictionary/updatecollaborators.jsp"/>
+	</definition>
 		
 		
 	<!-- Home pages -->
