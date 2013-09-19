@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,11 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	
 
 	@Override
-	public List<ICollaboratorRole> getWsCollabRoles() {
-		return wsCollabRoles;
+	public List<ICollaboratorRole> getWsCollabRoles()
+	{
+		List<ICollaboratorRole> role = new ArrayList<ICollaboratorRole>();
+		role.addAll(this.wsCollabRoles);
+		return role;
 	}
 
 	@Override
@@ -51,8 +55,11 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	}
 
 	@Override
-	public List<ICollaboratorRole> getProjectCollaboratorRoles() {
-		return this.projectCollabRoles;
+	public List<ICollaboratorRole> getProjectCollaboratorRoles() 
+	{
+		List<ICollaboratorRole> role = new ArrayList<ICollaboratorRole>();
+		role.addAll(this.projectCollabRoles);
+		return role;
 	}
 
 	@Override
@@ -62,8 +69,11 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	}
 
 	@Override
-	public List<ICollaboratorRole> getCollectionCollaboratorRoles() {
-		return this.ccCollabRoles;
+	public List<ICollaboratorRole> getCollectionCollaboratorRoles() 
+	{
+		List<ICollaboratorRole> role = new ArrayList<ICollaboratorRole>();
+		role.addAll(this.ccCollabRoles);
+		return role;
 	}
 	
 	@Override
@@ -72,8 +82,11 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	}
 
 	@Override
-	public List<ICollaboratorRole> getDictCollaboratorRoles() {
-		return this.dictCollabRoles; 
+	public List<ICollaboratorRole> getDictCollaboratorRoles() 
+	{
+		List<ICollaboratorRole> role = new ArrayList<ICollaboratorRole>();
+		role.addAll(this.dictCollabRoles);
+		return role;
 	} 
 
 
@@ -211,6 +224,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		
 		for(ICollaboratorRole role: dictCollabRoles)
 		{
+			System.out.println(role.getRoleid());
 			if(role.getRoleid().equals(collaboratorRoleId))
 			{
 				return role;

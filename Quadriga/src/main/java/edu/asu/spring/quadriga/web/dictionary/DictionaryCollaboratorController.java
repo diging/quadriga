@@ -8,11 +8,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -37,8 +34,6 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
-import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
 /**
@@ -57,8 +52,6 @@ public class DictionaryCollaboratorController {
 	@Autowired
 	IUserManager userManager;
 	
-	private static final Logger logger = LoggerFactory
-			.getLogger(DictionaryCollaboratorController.class);
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
 	
@@ -147,6 +140,7 @@ public class DictionaryCollaboratorController {
 				iterator.remove();
 			}
 		}
+		
 		modelAndView.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
 		
 		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);

@@ -21,5 +21,11 @@ public class ModifyDictionaryManager implements IModifyDictionaryManager
 	{
 		dbConnect.updateDictionaryRequest(dictionary, userName);
 	}
+	
+	@Override
+	public void transferDictionaryOwner(String dictionaryId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
+	{
+		dbConnect.transferDictionaryOwner(dictionaryId, oldOwner, newOwner, collabRole);
+	}
 
 }
