@@ -24,9 +24,9 @@
 	</li>
 	<li><a href="#">Collaborators</a>
 		<ul>
-			<li><a href="/quadriga/auth/dictionaries/${dictionaryid}/showAddCollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showAddCollaborators">
 				Add Collaborators</a></li>
-			<li><a href="/quadriga/auth/dictionaries/${dictionaryid}/showDeleteCollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showDeleteCollaborators">
 				Delete Collaborators</a></li>
 		</ul>
 	</li>

@@ -8,8 +8,8 @@
 <title>ForceDirected - Force Directed Static Graph</title>
 
 <!-- CSS Files -->
-<link type="text/css" href="/quadriga/resources/txt-layout/css/base.css" rel="stylesheet" />
-<link type="text/css" href="/quadriga/resources/txt-layout/css/ForceDirected.css" rel="stylesheet" />
+<link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/base.css" rel="stylesheet" />
+<link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ForceDirected.css" rel="stylesheet" />
 </head>
 
 

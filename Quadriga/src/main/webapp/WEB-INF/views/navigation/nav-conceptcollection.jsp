@@ -23,11 +23,11 @@
 	</li>
 	<li><a href="#">Collaborators</a>
 		<ul>
-			<li><a href="/quadriga/auth/conceptcollections/${collectionid}/addcollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators">
 				Add Collaborators</a></li>
-			<li><a href="/quadriga/auth/conceptcollections/${collectionid}/deletecollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/deletecollaborators">
 				Delete Collaborators</a></li>
-			<li><a href="/quadriga/auth/conceptcollections/${collectionid}/updatecollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/updatecollaborators">
 				Update Collaborators</a></li>
 		</ul>
 	</li>
