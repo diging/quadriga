@@ -133,7 +133,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @return String 			error message from the database
 	 * @author rohit pendbhaje
 	 */
-	public abstract String deleteCollaborators(String dictionaryid, String userName);
+	public abstract void deleteCollaborators(String dictionaryid, String userName) throws QuadrigaStorageException;
 	
 
 	/**

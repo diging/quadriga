@@ -1085,10 +1085,11 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 	/**
 	 * 
 	 * {@inheritDoc}
+	 * @throws QuadrigaStorageException 
 	 * 
 	 */
 	@Override
-	public String deleteCollaborators(String dictionaryid, String userName) {
+	public void deleteCollaborators(String dictionaryid, String userName) throws QuadrigaStorageException {
 
 		String dbCommand;
 		String errmsg;
@@ -1105,16 +1106,15 @@ public class DBConnectionDictionaryManager implements IDBConnectionDictionaryMan
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(3);
 			
-			if(errmsg.equals(""))
+			if(!errmsg.equals(""))
 			{
-				return errmsg;
+				throw new QuadrigaStorageException();
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		
-		return null;
 	}
 
 }

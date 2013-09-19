@@ -494,11 +494,10 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @exception 	QuadrigaStorageException	
 	 */
 	@Override
-	public String deleteCollaborator(String dictionaryid, String userName) {
+	public void deleteCollaborator(String dictionaryid, String userName) throws QuadrigaStorageException {
 		
-		String errmsg = dbConnect.deleteCollaborators(dictionaryid, userName);
+		dbConnect.deleteCollaborators(dictionaryid, userName);
 		
-		return errmsg;
 	}
 	
 }
