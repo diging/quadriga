@@ -83,14 +83,14 @@ public class NetworkManager implements INetworkManager {
 
 	@Autowired
 	IConceptCollectionManager conceptCollectionManager;
-	
+
 	public StringBuffer jsonString= new StringBuffer("");
 
 	@Autowired
 	@Qualifier("qStoreURL_Add")
 	private String qStoreURL_Add;
-	
-	
+
+
 	@Autowired
 	@Qualifier("restTemplate")
 	RestTemplate restTemplate;
@@ -102,7 +102,7 @@ public class NetworkManager implements INetworkManager {
 	@Autowired
 	@Qualifier("qStoreURL_Get")
 	private String qStoreURL_Get;
-	
+
 	@Autowired
 	@Qualifier("jaxbMarshaller")
 	Jaxb2Marshaller jaxbMarshaller;
@@ -114,8 +114,19 @@ public class NetworkManager implements INetworkManager {
 	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnect;
 
-	private List<List<String>> relationEventPredicateMapping= new ArrayList < List <String>>();;
-	
+	private List<List<Object>> relationEventPredicateMapping;
+
+	@Override
+	public List<List<Object>> getRelationEventPredicateMapping(){
+		return this.relationEventPredicateMapping;
+	}
+
+	@Override
+	public void setRelationEventPredicateMapping( List<List<Object>> relationEventPredicateMapping){
+		this.relationEventPredicateMapping=relationEventPredicateMapping;
+	}
+
+
 	/* 
 	 * Prepare a QStore Add URL to add new networks to QStore
 	 */
@@ -124,6 +135,8 @@ public class NetworkManager implements INetworkManager {
 		return qStoreURL+qStoreURL_Add;
 	}
 
+
+
 	/* 
 	 * Prepare a QStore Get URL to fetch element of networks from Qstore
 	 */
@@ -131,7 +144,7 @@ public class NetworkManager implements INetworkManager {
 	public String getQStoreGetURL() {
 		return qStoreURL+qStoreURL_Get;
 	}
-	
+
 	/* 
 	 * Prepare a QStore Get URL to fetch all the element of networks from Qstore
 	 */
@@ -151,7 +164,7 @@ public class NetworkManager implements INetworkManager {
 	 */
 	@Override
 	public String receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid,String updateStatus,String networkId){
-		
+
 		if(updateStatus == "NEW"){
 			try{
 				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
@@ -208,21 +221,21 @@ public class NetworkManager implements INetworkManager {
 		return networkId;
 	}
 
-	
-	
+
+
 	public String getRelationEventId(RelationEventType re){
 		List<JAXBElement<?>> e2 = re.getIdOrCreatorOrCreationDate();
 		Iterator <JAXBElement<?>> I1 = e2.iterator();
 		while(I1.hasNext()){
 			JAXBElement<?> element = (JAXBElement<?>) I1.next();
 			if(element.getName().toString().contains("id")){
-				logger.info("Relation Event ID : "+element.getValue().toString());
+				logger.debug("Relation Event ID : "+element.getValue().toString());
 				return element.getValue().toString();
 			}
 		}
 		return "";
 	}
-	
+
 	/* 
 	 * Formats the XML 
 	 */
@@ -274,8 +287,8 @@ public class NetworkManager implements INetworkManager {
 		}
 		return response;
 	}
-	
-	
+
+
 	/**
 	 * Generate JSON string of the network to JIT jquery
 	 */
@@ -283,9 +296,8 @@ public class NetworkManager implements INetworkManager {
 	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
 		JsonObject jsonObject = new JsonObject();
 		this.jsonString.delete(0, this.jsonString.length());
-		
+
 		ResponseEntity<String> response = getNodeXmlFromQstore(id);
-		
 		if(response ==null){
 			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
 		}else{
@@ -295,7 +307,7 @@ public class NetworkManager implements INetworkManager {
 			unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(responseText.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
-					logger.debug("Respose bytes : "+responseText);
+			logger.debug("Respose bytes : "+responseText);
 			try{
 				ElementEventsType e = response1.getValue();
 				List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
@@ -327,9 +339,9 @@ public class NetworkManager implements INetworkManager {
 						RelationEventObject relationEventObject = new RelationEventObject();
 						jsonObject.setRelationEventObject(relationEventObject);
 						jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
-						
-						relationEventPredicateMapping.clear(); 
-						
+
+
+
 						printJsonObjectRE(jsonObject.getRelationEventObject());
 
 					}
@@ -361,6 +373,7 @@ public class NetworkManager implements INetworkManager {
 		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
 		NodeObject nodeObject = new NodeObject();
 		nodeObject.setRelationEventId(predicateObject.getRelationEventID());
+
 		nodeObject.setPredicate(appellationEventObject.getNode());
 		logger.debug("Predicate : "+appellationEventObject.getNode() );
 		SubjectObject subjectObject = relationEventObject.getSubjectObject();
@@ -401,22 +414,24 @@ public class NetworkManager implements INetworkManager {
 	 * @param nodeObject
 	 */
 	public void updateJsonStringForRENode(NodeObject nodeObject){
-		String predicateNameId = nodeObject.getPredicate()+"_"+shortUUID();
+		String predicateNameId = nodeObject.getPredicate();
+
 		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
+		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
 		if(!(temp.equals(""))){
 			predicateNameId = temp;
 		}
-		
+
 		this.jsonString.append("{\"adjacencies\":[");
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getSubject()+"\",");
-		this.jsonString.append("\"nodeFrom\": \""+nodeObject.getPredicate()+"\",");
+		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",");
 		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"}");
 		this.jsonString.append("},");
 
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getObject()+"\",");
-		this.jsonString.append("\"nodeFrom\": \""+nodeObject.getPredicate()+"\",");
+		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",");
 		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"},\"$labeltext\": \"OBJECT\",\"$labelid\":\"11\"");
 		this.jsonString.append("}],");
 
@@ -426,34 +441,96 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("\"$dim\": 11");
 		this.jsonString.append("},");
 		this.jsonString.append("\"id\": \""+predicateNameId+"\",");
-		this.jsonString.append("\"name\": \""+nodeObject.getPredicate()+"\"");
+		this.jsonString.append("\"name\": \""+predicateName+"\"");
 		this.jsonString.append("},");
 	}
 
 
 	public String checkRelationEventRepeatation(String relationEventId,String predicateName){
-		Iterator<List<String>> I = relationEventPredicateMapping.iterator();
-		
+		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
+
 		while(I.hasNext()){
-			List<String> pairs = I.next();
-			Iterator<String> I1 = pairs.iterator();
+			List<Object> objectList = I.next();
+			Iterator<Object> I1 = objectList.iterator();
 			while(I1.hasNext()){
-				String id = I1.next();
-				if(id.equals(relationEventId)){
-					String predicateNameLocal = I1.next();
-					logger.info(" relationEventId  :" +relationEventId +" id : "+id+"predicate Name"+predicateNameLocal );
-					return predicateNameLocal;
+				Object object = I1.next();
+				if(object instanceof String[]){
+					String pairs[] = (String [])object;
+					if(pairs[0].equals(relationEventId)){
+						String predicateNameLocal = pairs[1];
+						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
+						return predicateNameLocal;
+					}
 				}
 			}
 		}
-		List<String> pairs = new ArrayList<String>();
-		pairs.add(relationEventId);
-		pairs.add(predicateName);
-		relationEventPredicateMapping.add(pairs);
-		
 		return "";
-		
+
 	}
+
+	public String stackRelationEventPredicateAppellationObject(String relationEventId,String predicateName,AppellationEventObject appellationEventObject){
+		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
+
+		while(I.hasNext()){
+			List<Object> objectList = I.next();
+			Iterator<Object> I1 = objectList.iterator();
+			while(I1.hasNext()){
+				Object object = I1.next();
+				if(object instanceof String[]){
+					String pairs[] = (String [])object;
+					if(pairs[0].equals(relationEventId)){
+						String predicateNameLocal = pairs[1];
+						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
+						return predicateNameLocal;
+					}
+				}
+			}
+		}
+		String[] pairs = new String [2];
+		pairs[0]=(relationEventId);
+		pairs[1]=(predicateName);
+		List<Object> objectList = new ArrayList<Object>();
+		objectList.add(pairs);
+		objectList.add(appellationEventObject);
+		relationEventPredicateMapping.add(objectList);
+
+		return "";
+
+	}
+
+
+	public AppellationEventObject checkRelationEventStack(String relationEventId){
+
+		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
+		int flag=0;
+		AppellationEventObject appellationEventObject=null;
+		while(I.hasNext()){
+			List<Object> objectList = I.next();
+			Iterator<Object> I1 = objectList.iterator();
+
+			while(I1.hasNext()){
+				Object object = I1.next();
+
+				if(object instanceof String[]){
+					String pairs[] = (String [])object;
+					if(pairs[0].equals(relationEventId)){
+						String predicateNameLocal = pairs[1];
+						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
+						flag=1;
+					}
+				}
+				if(object instanceof AppellationEventObject){
+					appellationEventObject=(AppellationEventObject)object;
+				}
+			}
+			if(flag==1){
+				return appellationEventObject;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Get all the terms recursively from the relation event
 	 * 
@@ -462,6 +539,7 @@ public class NetworkManager implements INetworkManager {
 	public RelationEventObject getAllObjectFromRelationEvent(RelationEventType re,RelationEventObject relationEventObject){
 
 		RelationType relationType = re.getRelation(re);
+
 		PredicateType predicateType = relationType.getPredicateType(relationType);
 		//		Check for Appellation event inside subject and add if any
 		AppellationEventType ae = predicateType.getAppellationEvent();
@@ -471,10 +549,12 @@ public class NetworkManager implements INetworkManager {
 			while(I2.hasNext()){
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
 				PredicateObject predicateObject = new PredicateObject();
 				predicateObject.setAppellationEventObject(appellationEventObject);
+
 				predicateObject.setRelationEventID(getRelationEventId(re));
+				stackRelationEventPredicateAppellationObject(getRelationEventId(re),predicateObject.getAppellationEventObject().getNode(),appellationEventObject);
 				relationEventObject.setPredicateObject(predicateObject);
 				logger.debug("Predicate Term : "+ tt.getTermInterpertation(tt));
 			}
@@ -491,12 +571,23 @@ public class NetworkManager implements INetworkManager {
 			subjectObject.setIsRelationEventObject(false);
 			logger.debug("Subject : RE1 is null");
 		}else{
-			logger.debug("Subject : Its RE, now Recursive move");
-			subjectObject.setIsRelationEventObject(true);
-			RelationEventObject relationEventObject1   = new RelationEventObject();
-
-			relationEventObject1=getAllObjectFromRelationEvent(re1,relationEventObject1);
-			subjectObject.setRelationEventObject(relationEventObject1);
+			AppellationEventObject temp = checkRelationEventStack(getRelationEventId(re1));
+			/*
+			 * I am trying to fool subject as Appellation event
+			 * when we find a existing relation event been referred here
+			 * I will give appellation event with predicate of referred relation event
+			 */
+			if(!(temp == null)){
+				subjectObject.setIsRelationEventObject(false);
+				subjectObject.setAppellationEventObject(temp);
+			}else{
+				logger.debug("Subject : Its RE, now Recursive move");
+				subjectObject.setIsRelationEventObject(true);
+				RelationEventObject relationEventObject1   = new RelationEventObject();
+				checkRelationEventStack(getRelationEventId(re1));
+				relationEventObject1=getAllObjectFromRelationEvent(re1,relationEventObject1);
+				subjectObject.setRelationEventObject(relationEventObject1);
+			}
 		}
 		//	Check for Appellation event inside subject and add if any
 		AppellationEventType ae1 = subjectType.getAppellationEvent();
@@ -526,11 +617,22 @@ public class NetworkManager implements INetworkManager {
 			objectTypeObject.setIsRelationEventObject(false);
 			logger.debug("Object : RE2 is null");
 		}else{
-			objectTypeObject.setIsRelationEventObject(true);
-			RelationEventObject relationEventObject1   = new RelationEventObject();
-			logger.debug("Object : Its RE, now Recursive move");
-			relationEventObject1=getAllObjectFromRelationEvent(re2,relationEventObject1);
-			objectTypeObject.setRelationEventObject(relationEventObject1);
+			AppellationEventObject temp = checkRelationEventStack(getRelationEventId(re1));
+			/*
+			 * I am trying to fool subject as Appellation event
+			 * when we find a existing relation event been referred here
+			 * I will give appellation event with predicate of referred relation event
+			 */
+			if(!(temp == null)){
+				objectTypeObject.setIsRelationEventObject(false);
+				objectTypeObject.setAppellationEventObject(temp);
+			}else{
+				objectTypeObject.setIsRelationEventObject(true);
+				RelationEventObject relationEventObject1   = new RelationEventObject();
+				logger.debug("Object : Its RE, now Recursive move");
+				relationEventObject1=getAllObjectFromRelationEvent(re2,relationEventObject1);
+				objectTypeObject.setRelationEventObject(relationEventObject1);
+			}
 		}
 		//	Check for Appellation event inside subject and add if any
 		AppellationEventType ae2 = objectType.getAppellationEvent();
@@ -796,7 +898,7 @@ public class NetworkManager implements INetworkManager {
 
 		return networkTopNodeList;
 	}
-			
+
 	/* 
 	 * Get Project ID associated to workspace id
 	 */
@@ -835,8 +937,8 @@ public class NetworkManager implements INetworkManager {
 
 		return networkTopNodeList;
 	}
-	
-	
+
+
 	/**
 	 * Get only the Top Nodes of the network's old version
 	 */
@@ -854,20 +956,20 @@ public class NetworkManager implements INetworkManager {
 		String msg = dbConnect.archiveNetworkStatement(networkId, id);
 		return msg;
 	}
-	
+
 	/**
 	 * Archive network elements
 	 */
 	@Override
 	public void archiveNetwork(String networkId) throws QuadrigaStorageException{
-		
+
 		try{
-		dbConnect.archiveNetwork(networkId);
+			dbConnect.archiveNetwork(networkId);
 		}catch(QuadrigaStorageException e){
 			throw new QuadrigaStorageException();
 		}
 
 	}
-	
-	
+
+
 }
