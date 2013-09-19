@@ -96,7 +96,7 @@ BEGIN
      START TRANSACTION;
      -- delete the new user as a dictionary collaborator
      DELETE FROM tbl_dictionary_collaborator WHERE collaboratoruser = innewowner
-        AND dictionaryid = indictionaryid;
+        AND id = indictionaryid;
 
      	 -- assign new owner to the project
      UPDATE tbl_dictionary
