@@ -619,7 +619,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * 
 	 */
 	@Override
-	public void getCollaborators(IConceptCollection collection) {
+	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
 		if(collection == null )
 		{
 			logger.error("getCollaborators: input argument IConceptCollection is null");
