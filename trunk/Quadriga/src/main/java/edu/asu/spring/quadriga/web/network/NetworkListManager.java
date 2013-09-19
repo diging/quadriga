@@ -1,11 +1,13 @@
 package edu.asu.spring.quadriga.web.network;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.tomcat.dbcp.dbcp.AbandonedConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +122,8 @@ public class NetworkListManager {
 		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
 		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
 		jsonstring.append("[");
+		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
+		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
 		while(I.hasNext()){
 			INetworkNodeInfo networkNodeInfo = I.next();
 			logger.debug("Node id "+networkNodeInfo.getId());

@@ -91,4 +91,9 @@ public interface INetworkManager {
 	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
 			throws QuadrigaStorageException;
 
+	public abstract List<List<Object>> getRelationEventPredicateMapping();
+
+	public abstract void setRelationEventPredicateMapping(
+			List<List<Object>> relationEventPredicateMapping);
+
 }
