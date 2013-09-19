@@ -37,10 +37,11 @@ public abstract  class ADBConnectionManager {
 	 * 
 	 * @return : 0 on success
 	 *           -1 on failure
+	 * @throws QuadrigaStorageException 
 	 *           
 	 * @throws : SQL Exception          
 	 */
-	protected int closeConnection() {
+	protected int closeConnection() throws QuadrigaStorageException {
 		try {
 			if (connection != null) {
 				connection.close();
@@ -49,7 +50,7 @@ public abstract  class ADBConnectionManager {
 		}
 		catch(SQLException se)
 		{
-			return -1;
+			throw new QuadrigaStorageException(se);
 		}
 	}
 
@@ -57,10 +58,11 @@ public abstract  class ADBConnectionManager {
 	 * @Description : Establishes connection with the Quadriga DB
 	 * 
 	 * @return      : connection handle for the created connection
+	 * @throws QuadrigaStorageException 
 	 * 
 	 * @throws      : SQLException 
 	 */
-	protected void getConnection() {
+	protected void getConnection() throws QuadrigaStorageException {
 		try
 		{
 			connection = dataSource.getConnection();
@@ -68,6 +70,7 @@ public abstract  class ADBConnectionManager {
 		catch(SQLException e)
 		{
 			e.printStackTrace();
+			throw new QuadrigaStorageException(e);
 		}
 	}
 	

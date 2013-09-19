@@ -8,7 +8,6 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -47,26 +46,6 @@ public interface IConceptCollectionManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException;
-	
-	
-	/**
-	 * Method is used to update concept collections data and items list 
-	 * Input: ConceptCollection
-	 * Output: String - message of success or failure
-	 * @param conceptCollection
-	 * @return
-	 */
-	public abstract String updateConceptCollection(ConceptCollection conceptCollection);
-	
-	
-	/**
-	 * Method is used to delete a item from the list. 
-	 * Input: ConceptcollecitonId
-	 * Output: Success/failure
-	 * @param id
-	 * @return
-	 */
-	public abstract int deleteConceptCollection(String id);	
 	
 	
 	/**

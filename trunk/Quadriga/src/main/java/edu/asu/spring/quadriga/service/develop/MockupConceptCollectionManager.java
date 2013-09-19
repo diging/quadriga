@@ -47,19 +47,6 @@ public class MockupConceptCollectionManager implements
 		return list;
 		
 	}
-
-	@Override
-	public String updateConceptCollection(ConceptCollection conceptCollection) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int deleteConceptCollection(String id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	
 	
 

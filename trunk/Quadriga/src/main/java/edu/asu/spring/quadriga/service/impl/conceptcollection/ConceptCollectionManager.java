@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
-import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -76,24 +74,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		return conceptList;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#updateConceptCollection(edu.asu.spring.quadriga.domain.implementation.ConceptCollection)
-	 */
-	@Override
-	public String updateConceptCollection(ConceptCollection conceptCollection) {
-		throw new NotImplementedException();
-	}
-
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#deleteConceptCollection(java.lang.String)
-	 */
-	@Override
-	public int deleteConceptCollection(String id) {
-		throw new NotImplementedException();
-	}
-
-
-	
 
 	@Override
 	public List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException {
