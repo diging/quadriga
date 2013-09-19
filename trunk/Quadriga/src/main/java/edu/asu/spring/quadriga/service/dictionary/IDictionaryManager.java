@@ -161,7 +161,7 @@ public interface IDictionaryManager {
 	 * @param userName
 	 * @return
 	 */
-	public abstract String deleteCollaborator(String dictionaryid, String userName);
+	public abstract void deleteCollaborator(String dictionaryid, String userName) throws QuadrigaStorageException;
 
 	
 	/**

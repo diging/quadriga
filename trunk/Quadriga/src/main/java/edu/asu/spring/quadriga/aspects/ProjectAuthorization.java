@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.aspects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ProjectAuthorization implements IAuthorization
 		String collaboratorName;
 		String collaboratorRoleId;
 		List<ICollaboratorRole> collaboratorRoles;
-		
+		ArrayList<String> roles;
 		haveAccess = false;
 		
 		//fetch the details of the project
@@ -44,6 +45,7 @@ public class ProjectAuthorization implements IAuthorization
 		{
 			if(!userRoles[0].equals("null"))
 			{
+				roles = getAccessRoleList(userRoles);
 				List<ICollaborator> collaboratorList = project.getCollaborators();
 				for(ICollaborator collaborator : collaboratorList)
 				{
@@ -54,32 +56,31 @@ public class ProjectAuthorization implements IAuthorization
 					{
 						collaboratorRoles = collaborator.getCollaboratorRoles();
 						
-						/*
-						 * You can replace the following by using a list
-						 * instead of an array and then:
-						 * for collabRole in collaboratorRoles
-						 * 		if userRoles.contains(collabRole.getRoleId)
-						 * 			...
-						 */
-						for(String role : userRoles)
-						{
 							for(ICollaboratorRole collabRole : collaboratorRoles)
 							{
 								collaboratorRoleId = collabRole.getRoleid();
-								if(role.equals(collaboratorRoleId))
+								if(roles.contains(collaboratorRoleId))
 								{
 									haveAccess = true;
-									break;
+									return haveAccess;
 								}
-							}
-							
-							if(haveAccess)
-								break;
-						}
+						    }
 					}
 				}
 			}
 		}
 		return haveAccess;
+	}
+	
+	public ArrayList<String> getAccessRoleList(String[] userRoles)
+	{
+		ArrayList<String> rolesList = new ArrayList<String>();
+		
+		for(String role : userRoles)
+		{
+			rolesList.add(role);
+		}
+		
+		return rolesList;
 	}
 }

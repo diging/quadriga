@@ -69,7 +69,7 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
 <br/>
 <input type="submit" value="Add">
-<input type="button" value="Cancel" onClick="onSubmit()">
+<input type="button" value="Back" onClick="onSubmit()">
 <br><br>
 </c:if>
 <c:if test="${empty nonCollaboratorList}">

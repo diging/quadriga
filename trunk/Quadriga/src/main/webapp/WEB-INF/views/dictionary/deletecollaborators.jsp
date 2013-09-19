@@ -23,50 +23,113 @@ $(document).ready(function() {
 		"sPaginationType" : "full_numbers",
 		"bAutoWidth" : false
 	});
+	
+	<%-->Default uncheck the checkbox <--%>
+	$("form input:checkbox").prop("checked",false);
 });
 
-$(document).ready(function() {
-	$("input[type=submit]").button().click(function(event) {
-
+$(function() {
+	
+	$("input[name='Back']").button().click(function(event) {
+	});
+	
+	$("input[name='deletedict']").button().click(function(event) {
+	});
+	
+	$("input[name='selectall']").button().click(function(event){
+		$("form input:checkbox").prop("checked",true);
+		event.preventDefault();
+		return;
+	});
+	
+	$("input[name='deselectall']").button().click(function(event){
+		$("form input:checkbox").prop("checked",false);
+		event.preventDefault();
+		return;
 	});
 });
 
-function goBack(){
+function submitClick(id){
 	
 	location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}';
 }
 </script>
 
-<input type="submit" value="Back" onClick="goBack()"/> 
-<br><br>
 <form:form method="POST" commandName="collaboratorForm"
 action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/deleteCollaborators">
-    
-    <input type="submit" value="Delete">	
-	<table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
-	
-	<thead>
-		<tr>
-			<th align="left">collaborator</th>
-			<th align="left">roles</th>
-		</tr>
-	</thead>
-	<tbody>
-	<c:forEach var="collab" items="${collaboratorForm.collaborators}" varStatus="status">
-		<tr>
-		  <td><form:checkbox path="collaborators[${status.index}].userName" value="${collab.userName}" />
-		  <form:label path="collaborators[${status.index}].userName">
-		  <c:out value="${collab.userName}"/>
-		  </form:label>
-		  <form:errors path="collaborators[${status.index}].userName" cssClass="error"/>
-		  </td>
-		  <td>
-			  <c:forEach var="roles" items="${collab.collaboratorRoles}">
-			  	<c:out value="${roles.displayName}"></c:out>||
-			  </c:forEach>
-		  </td>
-		</tr>
-	</c:forEach>
-	</tbody>
+<c:choose>
+<c:when test="${success == '0'}">
+<c:if test="${not empty collaboratorForm.collaborators}">
+					<span class="byline">Select concept collection collaborator to be deleted:</span>
+					<c:choose>
+						<c:when test="${error == '1'}">
+							<span class="error"> <spring:message
+									code="collaborator_user_selection.required" />
+							</span>
+							<br>
+						</c:when>
+					</c:choose>
+			<input class="command" type="submit" value='Delete' name="deletedict">
+			<input type="button" value="Select All" name="selectall">
+			<input type="button" value="DeSelect All" name="deselectall">
+			<input type="button"
+			onClick="submitClick(this.id);"
+			value='Cancel' name="Back">
+<table style="width: 100%" class="display dataTable">
+<thead>
+						<tr>
+						<th width="4%" align="center">Action</th>
+						<th width="21%">Collaborator</th>
+						<th width="75%">Collaborator Roles</th>
+					</tr>
+</thead>
+						<tbody>
+							<c:forEach var="collabUser"
+								items="${collaboratorForm.collaborators}" varStatus="status">
+								<tr>
+								   <td>
+								   <form:checkbox path="collaborators[${status.index}].userName" value="${collabUser.userName}"/>
+								   </td>
+								<td><font size="3">
+							<form:label path="collaborators[${status.index}].userName">
+							    <c:out value="${collabUser.userName}"></c:out>
+							</form:label> 
+							</font></td>
+							<td><font size="3">
+								<form:label path="collaborators[${status.index}].collaboratorRoles">
+								 <c:forEach var="roles" items="${collabUser.collaboratorRoles}" varStatus="loop" >
+								 <c:out value="${roles.displayName}" />||
+								 </c:forEach>
+							</form:label>  
+							</font>
+							</td>
+							
+							</tr>
+							</c:forEach>
+						</tbody>
 </table>
+<input class="command" type="submit" value='Delete' name="deletedict">
+			<input type="button" value="Select All" name="selectall">
+			<input type="button" value="DeSelect All" name="deselectall">
+			<input type="button"
+			onClick="submitClick(this.id);"
+			value='Cancel' name="Back">
+</c:if>
+				<c:if test="${empty collaboratorForm.collaborators}">
+			You don't have associated collaborators to delete.
+								<ul>
+				<li><input type=button onClick="submitClick(this.id);"
+					value='Back' name="Back"></li>
+			</ul>
+				</c:if>
+</c:when>
+				     <c:when test="${success == '1'}"> 
+		     <span class="byline">Successfully deleted selected collaborators</span> 
+		     <ul>
+		<li><input type="button"
+			onClick="submitClick(this.id);"
+			value='Back' name="Back"></li>
+	</ul>
+          </c:when>
+</c:choose>
 </form:form>
