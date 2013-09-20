@@ -28,7 +28,7 @@ a {
 
 #container {
     width: 1000px;
-    height: 600px;
+    height: 1000px;
     margin:0 auto;
     position:relative;
 }
@@ -42,7 +42,7 @@ a {
 }
 
 #left-container, #right-container {
-    width:200px;
+    width:120px;
     color:#686c70;
     text-align: left;
     overflow: auto;
@@ -71,8 +71,8 @@ a {
 }
 
 #center-container {
-    width:600px;
-    left:200px;
+    width:800px;
+    left:100px;
     background-color:#01837C;
     color:#ccc;
 }
@@ -98,7 +98,7 @@ a {
 
 #infovis {
     position:relative;
-    width:600px;
+    width:800px;
     height:600px;
     margin:auto;
     overflow:hidden;
