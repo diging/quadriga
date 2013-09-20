@@ -6,7 +6,7 @@
 
 <head>
 <style>
-.error{
+.errors{
 
 color: #ff0000;
 	font-style: italic;
@@ -44,12 +44,12 @@ action="${pageContext.servletContext.contextPath}/auth/profile/adduri">
 <tr>
 	<td>Service Name</td>
 	<td><form:input path="serviceName" size="60"/></td>
-	<%--<form:errors path="serviceName" cssClass="errors"/> --%>
+	<td><form:errors path="serviceName" cssClass="errors"/></td> 
 </tr>
 <tr>
 	<td>URI</td>
 	<td><form:input path="uri" size="60"/></td>
-	<%--<form:errors path="uri" cssClass="errors"/>	 --%>
+	<td><form:errors path="uri" cssClass="errors"/></td>	 
 </tr>
 <tr>
 	<td><input type="submit" value="Add"></td>
