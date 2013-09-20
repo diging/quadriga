@@ -426,13 +426,13 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getSubject()+"\",");
 		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",");
-		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"}");
+		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\",\"$labelid\": \"arrow1\",\"$labeltext\": \"Subject\"}");
 		this.jsonString.append("},");
 
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getObject()+"\",");
 		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",");
-		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\"},\"$labeltext\": \"OBJECT\",\"$labelid\":\"11\"");
+		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\",\"$labelid\": \"arrow1\",\"$labeltext\": \"Object\"}");
 		this.jsonString.append("}],");
 
 		this.jsonString.append("\"data\": {");
