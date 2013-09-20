@@ -24,6 +24,8 @@ import edu.asu.spring.quadriga.domain.implementation.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
+import edu.asu.spring.quadriga.validator.ProfileValidator;
+import edu.asu.spring.quadriga.validator.ProjectValidator;
 
 /**
  * Handles requests for the application home page.
@@ -32,18 +34,26 @@ import edu.asu.spring.quadriga.service.IUserProfileManager;
 public class HomeController {
 	
 	@Autowired
-	IServiceUriFactory serviceUriFactory;
+	private IServiceUriFactory serviceUriFactory;
 	
 	@Autowired
-	IUserProfileManager profileManager;
+	private IUserProfileManager profileManager;
 	
 	@Autowired
-	IUserManager userManager;
+	private IUserManager userManager;
+	
+	@Autowired
+	private ProfileValidator profileValidator;
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder){
 		
-	//	binder.setValidator(projectValidator);
+		if(binder.getTarget() instanceof Profile)
+		{
+			binder.setValidator(profileValidator);
+		}
+		
+		//binder.setValidator(projectValidator);
 	}
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -103,7 +113,7 @@ public class HomeController {
 		else{
 			
 			String errmsg = profileManager.addUserProfile(principal.getName(),service,uri);
-			model.addAttribute("success",0);
+			//model.addAttribute("success",0);
 		}
 		
 		return "auth/home/profile/adduri";
