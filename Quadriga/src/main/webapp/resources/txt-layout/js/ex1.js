@@ -31,6 +31,23 @@ function init1(json){
 	
 	// end
 	// init ForceDirected
+	
+	  //label placement on edges 
+	  $jit.ForceDirected.Plot.EdgeTypes.implement({ 
+		  'labeled': {
+              'render': function(adj, canvas) {
+                this.edgeTypes.arrow.render.call(this, adj, canvas);
+                var data = adj.data;
+                if(data.$labeltext) {
+                  var ctx = canvas.getCtx();
+                  var posFr = adj.nodeFrom.pos.getc(true);
+                  var posTo = adj.nodeTo.pos.getc(true);
+                  ctx.fillText(data.$labeltext, (posFr.x + posTo.x)/2, (posFr.y + posTo.y)/2);
+                }// if data.labeltext
+              }
+            }
+	  }); 
+	  
 	var fd = new $jit.ForceDirected({
 		//id of the visualization container
 		injectInto: 'infovis',
@@ -54,7 +71,8 @@ function init1(json){
 		Edge: {
 			overridable: true,
 			color: '#23A4FF',
-			lineWidth: 0.4
+			lineWidth: 0.4,
+			type: 'labeled'
 		},
 		//Native canvas text styling
 		Label: {
