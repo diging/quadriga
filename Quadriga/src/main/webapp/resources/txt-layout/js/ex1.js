@@ -122,7 +122,13 @@ function init1(json){
 				var html = "<h4>" + node.name + "</h4><b> connections:</b><ul><li>",
 				list = [];
 				node.eachAdjacency(function(adj){
-					list.push(adj.nodeTo.name);
+					// Adding arrow label to inner-details
+					var str2 = adj.data.$labeltext;
+					var str1 = adj.nodeTo.name;
+					
+					var str3 = str2.concat(" : ");
+					str3 = str3.concat(str1);
+					list.push(str3);
 				});
 				//append connections information
 				$jit.id('inner-details').innerHTML = html + list.join("</li><li>") + "</li></ul>";
