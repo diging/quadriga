@@ -24,7 +24,7 @@
 		<property name="userFactory" ref="userFactory"></property>
 	</bean>
 
-	<bean id="DictionaryManager" class="edu.asu.spring.quadriga.service.impl.DictionaryManager">
+	<bean id="DictionaryManager" class="edu.asu.spring.quadriga.service.impl.dictionary.DictionaryManager">
 	</bean>
 
 

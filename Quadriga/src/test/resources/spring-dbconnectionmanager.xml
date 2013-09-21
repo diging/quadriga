@@ -6,7 +6,7 @@
 	<bean id="DBConnectionManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	<bean id="DBConnectionDictionaryManagerBean" class="edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManager">
+	<bean id="DBConnectionDictionaryManagerBean" class="edu.asu.spring.quadriga.db.sql.dictionary.DBConnectionDictionaryManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<bean id="DBConnectionDspaceManagerBean"
