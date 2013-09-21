@@ -1,0 +1,134 @@
+package edu.asu.spring.quadriga.domain.implementation;
+
+import edu.asu.spring.quadriga.domain.IBitStream;
+
+/**
+ * The class representation of the ByteStream got from Dspace repostiory.
+ * 
+ * @author Ram Kumar Kumaresan
+ */
+public class BitStream implements IBitStream{
+
+	private String id;
+	private String name;
+	private String size;
+	private String mimeType;
+	private String communityid;
+	private String collectionid;
+	private String itemid;
+	private String communityName;
+	private String collectionName;
+	private String itemName;
+	private boolean isloaded;
+	
+	@Override
+	public boolean getLoadStatus() {
+		return isloaded;
+	}
+
+	@Override
+	public void setLoadStatus(boolean isloaded) {
+		this.isloaded = isloaded;
+	}
+	
+	@Override
+	public String getCommunityid() {
+		return communityid;
+	}
+
+	@Override
+	public void setCommunityid(String communityid) {
+		this.communityid = communityid;
+	}
+
+	@Override
+	public String getCollectionid() {
+		return collectionid;
+	}
+
+	@Override
+	public void setCollectionid(String collectionid) {
+		this.collectionid = collectionid;
+	}
+
+	@Override
+	public String getItemid() {
+		return itemid;
+	}
+
+	@Override
+	public void setItemid(String itemid) {
+		this.itemid = itemid;
+	}
+
+	@Override
+	public String getCommunityName() {
+		return communityName;
+	}
+
+	@Override
+	public void setCommunityName(String communityName) {
+		this.communityName = communityName;
+	}
+
+	@Override
+	public String getCollectionName() {
+		return collectionName;
+	}
+
+	@Override
+	public void setCollectionName(String collectionName) {
+		this.collectionName = collectionName;
+	}
+
+	@Override
+	public String getItemName() {
+		return itemName;
+	}
+
+	@Override
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	@Override
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;		
+	}
+
+	@Override
+	public String getSize() {
+		return this.size;
+	}
+
+	@Override
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+}
