@@ -149,9 +149,11 @@ public class DBConnectionManager implements IDBConnectionManager
 		String outputValue;
 		String dbCommand;
 		IUser user = null;
-		getConnection();
+		Connection connection = null;
+
 		try
 		{
+			connection = dataSource.getConnection();
 			dbCommand = DBConstants.SP_CALL + " " + DBConstants.USER_DETAILS + "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1,userid);
@@ -191,7 +193,11 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		finally
 		{
-			closeConnection();
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new QuadrigaStorageException(e);
+			}
 		}
 
 		return user;
