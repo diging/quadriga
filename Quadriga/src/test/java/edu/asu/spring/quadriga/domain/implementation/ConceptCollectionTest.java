@@ -11,10 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory;
 
 /*
 * @Description 	: tests getters and setters for concept description, concept id , concept owner and
@@ -29,7 +27,7 @@ public class ConceptCollectionTest {
 	private ConceptCollection conceptcollection;
 	private IUser owner;
 	private List<ICollaborator> collaborators;
-	private List<IConcept> items = new ArrayList<IConcept>();
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -79,11 +77,11 @@ public class ConceptCollectionTest {
 	@Test
 	public void testGetId() {
 		
-		conceptcollection.setName(null);
-		assertEquals(conceptcollection.getName(), null);
+		conceptcollection.setId(null);
+		assertEquals(conceptcollection.getId(), null);
 		
-		conceptcollection.setName("3333");
-		assertEquals(conceptcollection.getName(), "3333");
+		conceptcollection.setId("3333");
+		assertEquals(conceptcollection.getId(), "3333");
 		
 	}
 
@@ -108,17 +106,6 @@ public class ConceptCollectionTest {
 		conceptcollection.setCollaborators(collaborators);
 		assertEquals(conceptcollection.getCollaborators(), collaborators);
 		
-	}
-	@Test
-	public void testGetItems() {
-		
-		IConcept concept=(new ConceptFactory().createConceptObject());
-		conceptcollection.addItem(concept);
-		concept.setId("hellotest");
-		assertEquals(conceptcollection.getItems().get(0).equals(concept),true );
-		conceptcollection.getItems().remove(0);
-		assertEquals(conceptcollection.getItems().size(),0 );
-				
 	}
 
 }

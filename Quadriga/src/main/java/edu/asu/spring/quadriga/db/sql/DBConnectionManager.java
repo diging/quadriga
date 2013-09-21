@@ -4,25 +4,27 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.HTMLDocument.Iterator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.factories.IProjectOwnerFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
+import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.domain.IProject;
 
 /**
  * @Description      This call implements the database connection to retrieve
@@ -32,7 +34,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  *  
  * @Called By        UserManager.java
  *                     
- * @author           Kiran Kumar Batna
+ * @author           Kiran
  * @author 			 Ram Kumar Kumaresan
  *
  */
@@ -40,11 +42,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class DBConnectionManager implements IDBConnectionManager
 {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DBConnectionManager.class);
-	
 	private Connection connection;
-
+	
 	@Autowired
 	private DataSource dataSource;
 
@@ -53,12 +52,17 @@ public class DBConnectionManager implements IDBConnectionManager
 
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
-
+	
 	@Autowired
 	private IProjectFactory projectfactory;
-
+	
 	@Autowired
-	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	private IProjectOwnerFactory projectownerfactory;
+	
+	private ResultSet resultset;
+	
+	private IProject project;
+	
 
 	/**
 	 *  @Description: Assigns the data source
@@ -72,62 +76,41 @@ public class DBConnectionManager implements IDBConnectionManager
 	}
 
 	/**
-	 * Close the DB connection
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
+	 * @Description : Close the DB connection
+	 * 
+	 * @return : 0 on success
+	 *           -1 on failure
+	 *           
+	 * @throws : SQL Exception          
 	 */
-	private void closeConnection() throws QuadrigaStorageException {
+	private int closeConnection() {
 		try {
 			if (connection != null) {
 				connection.close();
 			}
+			return 0;
 		}
-		catch(SQLException e)
+		catch(SQLException se)
 		{
-			throw new QuadrigaStorageException(e);
+			return -1;
 		}
 	}
 
 	/**
-	 * Establishes connection with the Quadriga DB
-	 * @return      connection handle for the created connection
-	 * @throws      QuadrigaStorageException
-	 * @author      Kiran Kumar Batna
+	 * @Description : Establishes connection with the Quadriga DB
+	 * 
+	 * @return      : connection handle for the created connection
+	 * 
+	 * @throws      : SQLException 
 	 */
-	private void getConnection() throws QuadrigaStorageException {
+	private void getConnection() {
 		try
 		{
 			connection = dataSource.getConnection();
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in getConnection():",e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @throws QuadrigaStorageException 
-	 */
-	@Override
-	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
-	{
-		getConnection();
-		try
-		{
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(sQuery);
-			return SUCCESS;
-		}
-		catch(SQLException ex)
-		{
-			logger.error("Exception in setupTestEnvironment():",ex);
-			throw new QuadrigaStorageException(ex);
-		}
-		finally
-		{
-			closeConnection();
+			e.printStackTrace();
 		}
 	}
 
@@ -138,22 +121,19 @@ public class DBConnectionManager implements IDBConnectionManager
 	 *  
 	 *  @return      : null - if the user is not present in the quadriga DB
 	 *                 IUser - User object containing the user details.
-	 * @throws QuadrigaStorageException 
 	 *                 
 	 *  @throws      : SQL Exception
 	 */
 	@Override
-	public IUser getUserDetails(String userid) throws QuadrigaStorageException
+	public IUser getUserDetails(String userid)
 	{
 		List<IQuadrigaRole> userRole = null;
 		String outputValue;
 		String dbCommand;
 		IUser user = null;
-		Connection connection = null;
-
 		try
 		{
-			connection = dataSource.getConnection();
+			getConnection();
 			dbCommand = DBConstants.SP_CALL + " " + DBConstants.USER_DETAILS + "(?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1,userid);
@@ -162,11 +142,11 @@ public class DBConnectionManager implements IDBConnectionManager
 			sqlStatement.execute();
 
 			outputValue = sqlStatement.getString(2);
-
-			if(outputValue == "")
+			
+			if(outputValue.isEmpty())
 			{
 				ResultSet result =  sqlStatement.getResultSet();
-
+				
 				if(result.isBeforeFirst())
 				{
 					user  = userFactory.createUserObject();
@@ -175,88 +155,65 @@ public class DBConnectionManager implements IDBConnectionManager
 						user.setName(result.getString(1));
 						user.setUserName(result.getString(2));
 						user.setEmail(result.getString(3));
-						userRole = listQuadrigaUserRoles(result.getString(4));
+						userRole = UserRoles(result.getString(4));
 						user.setQuadrigaRoles(userRole);
 					}
 				}
-			}
-			else
-			{
-				logger.error("Exception in getUserGetails():");
-				throw new QuadrigaStorageException(outputValue);
-			}
+			}	 
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in getUserDetails():",e);
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new QuadrigaStorageException(e);
-			}
+			closeConnection();
 		}
 
 		return user;
 	}
-	
-	/**
-	 * {@inheritDoc} 
-	 */
+
 	@Override
-	public List<IUser> getUsers(String userRoleId) throws QuadrigaStorageException
+	public List<IUser> getAllActiveUsers()
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-		getConnection();
+		
 		try
 		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_USERS + "(?,?)";
-			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");	
-			sqlStatement.setString(1, userRoleId);
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ACTIVE_USER_DETAILS + "(?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.registerOutParameter(1,Types.VARCHAR);
 
-			//Execute the SQL Stored Procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(2);
+			sOutErrorValue = sqlStatement.getString(1);
 
-			//No SQL exception has occurred			
 			if(sOutErrorValue == null)
 			{
 				listUsers = new ArrayList<IUser>();				
 				IUser user = null;
 				List<IQuadrigaRole> userRole = null;
-
+				
 				ResultSet rs = sqlStatement.getResultSet();
-
-				//Iterate through each row returned by the database
 				while(rs.next())
-				{	
+				{					
 					user = this.userFactory.createUserObject();
 					user.setName(rs.getString(1));
 					user.setUserName(rs.getString(2));
 					user.setEmail(rs.getString(3));
-					userRole = listQuadrigaUserRoles(rs.getString(4));
+					userRole = UserRoles(rs.getString(4));
 					user.setQuadrigaRoles(userRole);	
-
+					
 					listUsers.add(user);
 				}				
-			}
-			else
-			{
-				logger.error("Exception in getAllInActiveUsers():");
-				throw new QuadrigaStorageException(sOutErrorValue);
-			}
+			}			
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in getAllInActiveUsers():",e);
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
@@ -265,60 +222,47 @@ public class DBConnectionManager implements IDBConnectionManager
 		return listUsers;
 	}
 	
-	/**
-	 * {@inheritDoc} 
-	 */
 	@Override
-	public List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException
+	public List<IUser> getAllInActiveUsers()
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-		getConnection();
+		
 		try
 		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_USERS_NOT_IN_ROLE + "(?,?)";
-			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");	
-			sqlStatement.setString(1, userRoleId);
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.INACTIVE_USER_DETAILS + "(?)";
+			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
+			sqlStatement.registerOutParameter(1,Types.VARCHAR);
 
-			//Execute the SQL Stored Procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(2);
+			sOutErrorValue = sqlStatement.getString(1);
 
-			//No SQL exception has occurred			
 			if(sOutErrorValue == null)
 			{
 				listUsers = new ArrayList<IUser>();				
 				IUser user = null;
 				List<IQuadrigaRole> userRole = null;
-
+				
 				ResultSet rs = sqlStatement.getResultSet();
-
-				//Iterate through each row returned by the database
 				while(rs.next())
 				{	
 					user = this.userFactory.createUserObject();
 					user.setName(rs.getString(1));
 					user.setUserName(rs.getString(2));
 					user.setEmail(rs.getString(3));
-					userRole = listQuadrigaUserRoles(rs.getString(4));
+					userRole = UserRoles(rs.getString(4));
 					user.setQuadrigaRoles(userRole);	
-
+					
 					listUsers.add(user);
 				}				
-			}
-			else
-			{
-				logger.error("Exception in getAllInActiveUsers():");
-				throw new QuadrigaStorageException(sOutErrorValue);
-			}
+			}			
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in getAllInActiveUsers():",e);
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
@@ -326,145 +270,105 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return listUsers;
 	}
-
-	/**
-	 * Deactivate a user in Quadriga.
-	 * 
-	 * @param 	sUserId					The userid of the user whose account has to be deactivated
-	 * @param 	sDeactiveRoleDBId		The roleid corresponding to the inactive role fetched from the application context file
-	 * 
-	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
-	 */
+	
 	@Override
-	public int deactivateUser(String sUserId,String sDeactiveRoleDBId,String sAdminId) throws QuadrigaStorageException
+	public int deactivateUser(String sUserId,String sDeactiveRoleDBId)
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		getConnection();
+		
 		try
 		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DEACTIVATE_USER+ "(?,?,?,?)";
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DEACTIVATE_USER+ "(?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
 			sqlStatement.setString(2, sDeactiveRoleDBId);
-			sqlStatement.setString(3, sAdminId); 
-			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
 
-			//Execute the Stored Procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(4);
+			sOutErrorValue = sqlStatement.getString(3);
 
 			if(sOutErrorValue == null)
 			{
 				//User deactivated successfully
-				return SUCCESS;
+				return 1;
 			}			
 			else
 			{
 				//Error occurred in the database
-				return FAILURE;
+				return 0;
 			}
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in deactiveUser():",e);
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
 			closeConnection();
 		}
 	}
-
-	/**
-	 * Overwrite the existing userroles with the new user roles.
-	 * 
-	 * @param sUserId The userid of the user whose roles are to be changed.
-	 * @param sRoles The new roles of the user. Must be fetched from the applicaton context file.
-	 * @param sAdminId The userid of the admin who is changing the user setting
-	 * 
-	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
-	 */
+	
 	@Override
-	public int updateUserRoles(String sUserId,String sRoles,String sAdminId) throws QuadrigaStorageException
+	public int updateUserRoles(String sUserId,String sRoles)
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		getConnection();
+		
 		try
 		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_USER_ROLES+ "(?,?,?,?)";
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.UPDATE_USER_ROLES+ "(?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
 			sqlStatement.setString(2, sRoles);
-			sqlStatement.setString(3, sAdminId); 
-			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
 
-			//Execute the stored procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(4);
+			sOutErrorValue = sqlStatement.getString(3);
 
 			if(sOutErrorValue == null)
 			{
 				//User roles updated successfully
-				return SUCCESS;
+				return 1;
 			}			
 			else
 			{
 				//Error occurred in the database
-				return FAILURE;
+				return 0;
 			}
 		}
 		catch(SQLException e)
 		{
-			logger.info("Exception in updateUserRoles():",e);
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
 			closeConnection();
 		}
 	}
-
-	/**
-	 * Approve the user request to access Quadriga and also assign new roles set by the admin.
-	 * 
-	 * @param sUserId The userid of the user whose access has been approved.
-	 * @param sRoles The roles set by the admin. Must correspond to the roles found in the application context file
-	 * @param sAdminId The userid of the admin who is changing the user setting
-	 * 
-	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
-	 */
+	
 	@Override
-	public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException
+	public int approveUserRequest(String sUserId,String sRoles)
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		getConnection();
+		
 		try
 		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.APPROVE_USER_REQUEST+ "(?,?,?,?)";
+			getConnection();
+			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.APPROVE_USER_REQUEST+ "(?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
 			sqlStatement.setString(2, sRoles);
-			sqlStatement.setString(3,sAdminId);
-			sqlStatement.registerOutParameter(4,Types.VARCHAR);
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
 
-			//Execute the stored procedure
 			sqlStatement.execute();
 
-			sOutErrorValue = sqlStatement.getString(4);
+			sOutErrorValue = sqlStatement.getString(3);
 
 			if(sOutErrorValue == null)
 			{
@@ -479,34 +383,23 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in approveUserRequest():",e);
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
 			closeConnection();
 		}
 	}
-
-	/**
-	 * A user has been denied the access to Quadriga.
-	 * 
-	 * @param sUserId		The userid of the user whose request is rejected
-	 * @param sAdminId 		The admin-userid who rejected the request
-	 * 
-	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
-	 */
+	
 	@Override
-	public int denyUserRequest(String sUserId,String sAdminId) throws QuadrigaStorageException
+	public int denyUserRequest(String sUserId,String sAdminId)
 	{
 		String sDBCommand;
 		String sOutErrorValue;
-		getConnection();
+		
 		try
 		{
+			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.DENY_USER_REQUEST+ "(?,?,?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.setString(1, sUserId);
@@ -520,43 +413,35 @@ public class DBConnectionManager implements IDBConnectionManager
 			if(sOutErrorValue == null)
 			{
 				//User request approved successfully
-				return SUCCESS;
+				return 1;
 			}			
 			else
 			{
 				//Error occurred in the database
-				return FAILURE;
+				return 0;
 			}
 		}
 		catch(SQLException e)
 		{
-			logger.error("Exception in denyUserRequest():",e);
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
 			closeConnection();
 		}
 	}
-
-
-	/**
-	 * Returns all open user requests to quadriga.
-	 * 
-	 * @return Returns the list of user objects whose request are to be approved/denied.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
-	 */	
+	
+	
 	@Override
-	public List<IUser> getUserRequests() throws QuadrigaStorageException
+	public List<IUser> getUserRequests()
 	{
 		List<IUser> listUsers = null;
 		String sDBCommand;
 		String sOutErrorValue;
-		getConnection();
+		
 		try
 		{
+			getConnection();
 			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.GET_USER_REQUESTS+ "(?)";
 			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
 			sqlStatement.registerOutParameter(1,Types.VARCHAR);
@@ -569,7 +454,7 @@ public class DBConnectionManager implements IDBConnectionManager
 			{
 				listUsers = new ArrayList<IUser>();				
 				IUser user = null;
-
+				
 				ResultSet rs = sqlStatement.getResultSet();
 				while(rs.next())
 				{					
@@ -582,73 +467,20 @@ public class DBConnectionManager implements IDBConnectionManager
 			}			
 			else
 			{
-				throw new QuadrigaStorageException(sOutErrorValue);
+				throw new SQLException("Error occurred in the Database");
 			}
 		}
 		catch(SQLException e)
 		{
-			throw new QuadrigaStorageException(e);
+			throw new RuntimeException(e.getMessage());
 		}
 		finally
 		{
 			closeConnection();
 		}
-
+		
 		return listUsers;
 	}
-
-	/**
-	 * Add a new account request to the quadriga.
-	 * 
-	 * @param sUserId The user id of the user who needs access to quadriga 
-	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
-	 */
-
-	@Override
-	public int addAccountRequest(String sUserId) throws QuadrigaStorageException
-	{
-		String sDBCommand;
-		String sOutErrorValue;
-		getConnection();
-		try
-		{
-			sDBCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_USER_REQUEST+ "(?,?)";
-			CallableStatement sqlStatement = connection.prepareCall("{"+sDBCommand+"}");			
-			sqlStatement.setString(1, sUserId);;
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
-
-			sqlStatement.execute();
-
-			sOutErrorValue = sqlStatement.getString(2);
-
-			if(sOutErrorValue == null)
-			{
-
-				//User request submitted successfully
-				return 1;
-			}			
-			else
-			{
-				logger.error("Exception in addAccountRequest():");
-				throw new QuadrigaStorageException(sOutErrorValue);
-			}
-		}
-		catch(SQLException e)
-		{
-			logger.error("Exception in addAccountRequest():",e);
-			throw new QuadrigaStorageException(e);
-		}
-		finally
-		{
-			closeConnection();
-		}		
-	}
-
-
-
 	/**
 	 *   @Description   : Splits the comma separated roles into a list
 	 *   
@@ -658,7 +490,7 @@ public class DBConnectionManager implements IDBConnectionManager
 	 *   @return        : list of QuadrigaRoles.
 	 */
 	@Override
-	public List<IQuadrigaRole> listQuadrigaUserRoles(String roles)
+	public List<IQuadrigaRole> UserRoles(String roles)
 	{
 		String[] role;
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
@@ -673,4 +505,73 @@ public class DBConnectionManager implements IDBConnectionManager
 		}
 		return rolesList;
 	}
+	
+	public IUser projectOwner(String owner)
+	{
+			
+		IUser owner1 = null;
+		
+		owner1 = projectownerfactory.createProjectOwnerObject();
+		
+		owner1.setProjectOwner(owner);
+		
+		return owner1;
+		
+	}
+
+	@Override
+	public List<IProject> getProjectOfUser(String sUserId) {
+		
+	 	
+		String dbCommand;
+		IUser owner;
+		
+		getConnection();
+		List<IProject> projectList = new ArrayList<IProject>();
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_DETAILS + "(?)";
+		try {
+			
+			
+			CallableStatement sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			sqlStatement.registerOutParameter(1, Types.VARCHAR);
+			
+			sqlStatement.execute();
+			
+			resultset = sqlStatement.getResultSet();
+			
+	        while(resultset.next())
+	        {
+				
+	        	project = projectfactory.createProjectObject();
+	        	project.setName(resultset.getString(1));
+	        	project.setDescription(resultset.getString(2));
+	        	project.setId(resultset.getString(3));
+	        	project.setInternalid(resultset.getInt(4));
+	        	owner = projectOwner(resultset.getString(5));
+	        	project.setOwner(owner);
+	        	 	        		        	
+	        	projectList.add(project);
+	        	
+	         }
+	          	
+		} 
+		
+		catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+		return projectList;
+	}
+
+	@Override
+	public void setUserDetails(String name, String username, String email,
+			String roles) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

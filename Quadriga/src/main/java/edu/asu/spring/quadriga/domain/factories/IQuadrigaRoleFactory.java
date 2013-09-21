@@ -5,7 +5,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 /**
  * @description   : Factory interface for Quadriga Role factory
  * 
- * @author        : Kiran Kumar Batna
+ * @author        : Kiran
  *
  */
 public interface IQuadrigaRoleFactory 

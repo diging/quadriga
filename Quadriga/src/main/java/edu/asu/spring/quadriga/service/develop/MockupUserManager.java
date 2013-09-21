@@ -7,13 +7,13 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
-import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
 
@@ -33,20 +33,16 @@ public class MockupUserManager implements IUserManager {
 	private Map<String, IUser> users;
 	private List<String> activeUsers;
 	private List<String> inactiveUsers;
-	private List<String> userRequests;
 
-	private List<String> deniedList;
 	public MockupUserManager() {
-
+		
 	}
-
+	
 	@PostConstruct
 	public void init() {
 		users = new HashMap<String, IUser>();
 		activeUsers = new ArrayList<String>();
 		inactiveUsers = new ArrayList<String>();
-		userRequests = new ArrayList<String>();
-		deniedList = new ArrayList<String>();
 
 		// Add John Doe
 		{
@@ -116,19 +112,13 @@ public class MockupUserManager implements IUserManager {
 
 			users.put("bob", user);
 		}
-
+		
 		// initialize active user list
 		activeUsers.add("jdoe");
-
+		
 		// initialize inactive user list
 		inactiveUsers.add("test");
 		inactiveUsers.add("bob");
-
-		//initialize user requests list
-		userRequests.add("dexter");
-		userRequests.add("deb");
-		
-		deniedList.add("trinity");
 	}
 
 	/**
@@ -136,7 +126,7 @@ public class MockupUserManager implements IUserManager {
 	 */
 	@Override
 	public IUser getUserDetails(String sUserId) {
-
+		
 		// The user is active in Quad DB
 		if (activeUsers.contains(sUserId)) {
 			if (users.get(sUserId) != null)
@@ -145,7 +135,7 @@ public class MockupUserManager implements IUserManager {
 		// The user account is deactivated in the Quad DB
 		else if (inactiveUsers.contains(sUserId)) {
 			IUser user = users.get(sUserId);
-
+			
 			if (user != null) {
 
 				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
@@ -154,7 +144,7 @@ public class MockupUserManager implements IUserManager {
 				role.setId("ROLE_QUADRIGA_USER_STANDARD");
 				roles.add(role);
 				user.setQuadrigaRoles(roles);
-
+				
 				return user;
 			}
 		}
@@ -175,63 +165,53 @@ public class MockupUserManager implements IUserManager {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String updateUserDetails(IUser existingUser) {
+		throw new NotImplementedException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int addNewUser(IUser newUser) {
+		users.put(newUser.getUserName(), newUser);
+		return 0;
+	}
 
 	@Override
 	public List<IUser> getAllActiveUsers() {
-		List<IUser> listUser = new ArrayList<IUser>();
-
-		for(String sUsername: activeUsers)
-		{
-			IUser user = new User();
-			user.setUserName(sUsername);
-			listUser.add(user);
-		}
-
-		return listUser;
+		throw new NotImplementedException(
+				"getAllActiveUsers() is not yet implemented");
 	}
 
 	@Override
 	public List<IUser> getAllInActiveUsers() {
-		List<IUser> listUser = new ArrayList<IUser>();
-
-		for(String sUsername: inactiveUsers)
-		{
-			IUser user = new User();
-			user.setUserName(sUsername);
-			listUser.add(user);
-		}
-
-		return listUser;
+		throw new NotImplementedException(
+				"getAllInactivaeUsers is not yet implemented");
 	}
 
 	@Override
-	public int deactivateUser(String sUserId, String sAdminId) {
-		activeUsers.remove(sUserId);
-		inactiveUsers.add(sUserId);
-		return 1;
+	public int deactivateUser(String sUserId) {
+		throw new NotImplementedException(
+				"dectivateUser() is not yet implemented");
 	}
 
 	@Override
-	public int activateUser(String sUserId, String sAdminId) {
-		inactiveUsers.add(sUserId);
-		activeUsers.add(sUserId);		
-		return 1;
+	public int activateUser(String sUserId) {
+		throw new NotImplementedException(
+				"activateUser() is not yet implemented");
 	}
 
 	@Override
 	public List<IUser> getUserRequests() {
-		List<IUser> listUser = new ArrayList<IUser>();
-
-		for(String sUsername: userRequests)
-		{
-			IUser user = new User();
-			user.setUserName(sUsername);
-			listUser.add(user);
-		}
-
-		return listUser;
+		throw new NotImplementedException(
+				"getUserRequest() is not yet implemented");
 	}
-
+	
 	public IUserFactory getUserFactory() {
 		return userFactory;
 	}
@@ -239,7 +219,7 @@ public class MockupUserManager implements IUserManager {
 	public void setUserFactory(IUserFactory userFactory) {
 		this.userFactory = userFactory;
 	}
-
+	
 	public List<String> getActiveUsers() {
 		return activeUsers;
 	}
@@ -257,27 +237,20 @@ public class MockupUserManager implements IUserManager {
 	}
 
 	@Override
-	public int approveUserRequest(String sUserId, String sRoles, String sAdminId) {
-		userRequests.remove(sUserId);
-		activeUsers.add(sUserId);
-		return 1;
+	public int approveUserRequest(String sUserId, String sRoles) {
+		throw new NotImplementedException("approveUserRequest() is not yet implemented");
 	}
 
 	@Override
 	public int denyUserRequest(String sUserId, String sAdminId) {
-		userRequests.remove(sUserId);
-		deniedList.add(sUserId);
-		return 1;
+		throw new NotImplementedException("denyUserRequest() is not yet implemented");
 	}
 
-
 	@Override
-	public int addAccountRequest(String userId) {
-		if (userRequests.contains(userId))
-			return 0;
+	public void setUserDetails(String name, String username, String email,
+			String roles) {
+		// TODO Auto-generated method stub
 		
-		userRequests.add(userId);
-		return 1;
 	}
 
 }

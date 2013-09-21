@@ -20,14 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 /**
  * 
- * @author Ram Kumar Kumaresan
+ * @author Who wrote this?
  *
  */
-@ContextConfiguration(locations={"file:src/test/resources/quadriga-roles.xml"})
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/quadriga-roles.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class QuadrigaRoleManagerTest {
 
@@ -60,7 +59,7 @@ public class QuadrigaRoleManagerTest {
 
 	@Test
 	public void testSetQuadrigaRoles() {
-		IQuadrigaRoleManager qrManager = new QuadrigaRoleManager();
+		QuadrigaRoleManager qrManager = new QuadrigaRoleManager();
 		
 		//Assign null
 		qrManager.setQuadrigaRoles(null);

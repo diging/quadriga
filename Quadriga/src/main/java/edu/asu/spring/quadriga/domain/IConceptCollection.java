@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @description   : interface to implement ConceptCollection.
  * 
- * @author        : Kiran Kumar Batna
+ * @author        : Kiran
  *
  */
 public interface IConceptCollection 
@@ -19,7 +19,9 @@ public interface IConceptCollection
 
 	public abstract IUser getOwner();
 
-	
+	public abstract void setId(String id);
+
+	public abstract String getId();
 
 	public abstract void setDescription(String description);
 
@@ -28,17 +30,5 @@ public interface IConceptCollection
 	public abstract void setName(String name);
 
 	public abstract String getName();
-	
-	
-	
-	public abstract void addItem(IConcept concept);
-
-	public abstract List<IConcept> getItems();
-
-	// id should be a string
-	public abstract  void setId(String id);
-
-	public abstract String getId();
-	
 
 }

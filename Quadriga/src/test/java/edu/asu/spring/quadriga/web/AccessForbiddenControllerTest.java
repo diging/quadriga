@@ -28,8 +28,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @author Julia Damerow
  *
  */
-@ContextConfiguration(locations={"file:src/test/resources/spring-security.xml", 
-		"file:src/test/resources/root-context.xml"})
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/spring-security.xml", "file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AccessForbiddenControllerTest {
 

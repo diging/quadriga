@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain;
 /**
  * @description   : interface to implement CollaboratorRole.
  * 
- * @author        : Kiran Kumar Batna
+ * @author        : Kiran
  *
  */
 public interface ICollaboratorRole 
@@ -24,9 +24,5 @@ public interface ICollaboratorRole
 	public abstract void setRoleDBid(String roleDBid);
 
 	public abstract String getRoleDBid();
-	
-	public abstract void setDisplayName(String displayName);
-	
-	public abstract String getDisplayName();
 
 }

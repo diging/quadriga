@@ -10,37 +10,28 @@
 
 	<!-- Highlight -->
 	<section class="is-highlight">
-		<span class="image image-centered"><img
-			src="${pageContext.servletContext.contextPath}/resources/txt-layout/images/panel-new2.png" alt="" />
-		</span>
-
 		<ul class="special">
-			<sec:authorize
-				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-				<li><a href="workbench" class="battery">Workbench</a></li>
-			</sec:authorize>
-
-			<sec:authorize
-				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-				<li><a href="conceptcollections" class="tablet">Concept
-						Collections</a></li>
-			</sec:authorize>
-			<sec:authorize
-				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-				<li><a href="networks" class="flask">Networks</a></li>
-			</sec:authorize>
-			<sec:authorize
-				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-				<li><a href="dictionaries" class="chart">Dictionaries</a></li>
-			</sec:authorize>
+			<li><a href="workbench" class="battery">Workbench</a></li>
+			<li><a href="#" class="tablet">Concept Collections</a></li>
+			<li><a href="#" class="flask">Networks</a></li>
+			<li><a href="#" class="chart">Dictionaries</a></li>
 		</ul>
 		<header>
 			<h2>${username}, welcome to Quadriga</h2>
 			<span class="byline">manage your network projects here</span>
 		</header>
 
+		<!-- Link visible only to Quadriga Admins -->
+		<sec:authorize access="hasRole('ROLE_QUADRIGA_USER_ADMIN')">
+			<p>
+				<a href='users/manage' >Manage
+					Users</a>
+			</p>
+		</sec:authorize>
 	</section>
 	<!-- /Highlight -->
+
+
 </article>
 
 <!-- /Content -->

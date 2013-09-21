@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 
 /*
 * @Description 	: tests getters and setters for workspace name, id, collaborators, description 
@@ -25,7 +24,7 @@ import edu.asu.spring.quadriga.domain.IWorkSpace;
 
 public class WorkSpaceTest {
 	
-	private IWorkSpace workspace;
+	private WorkSpace workspace;
 	private IUser owner;
 	private List<ICollaborator> collaborators;
 

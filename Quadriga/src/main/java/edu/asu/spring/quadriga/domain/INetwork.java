@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 /**
  * @description   : interface to implement Network class.
  * 
- * @author        : Kiran Kumar Batna
+ * @author        : Kiran
  *
  */
 public interface INetwork 
@@ -37,44 +37,6 @@ public interface INetwork
 	public abstract void setAppellationIds(List<String> appellationIds);
 
 	public abstract List<String> getAppellationIds();
-
-	public abstract String getName();
-
-	public abstract void setName(String name);
-
-	public abstract String getStatus();
-
-	public abstract void setStatus(String status);
-
-	public abstract String getId();
-
-	public abstract void setId(String id);
-
-	public abstract String getWorkspaceid();
-
-	public abstract void setWorkspaceid(String workspaceid);
-
-	public abstract String getProjectid();
-
-	public abstract void setProjectid(String projectid);
-
-	public abstract String getWorkspaceName();
-
-	public abstract void setWorkspaceName(String workspaceName);
-
-	public abstract String getProjectName();
-
-	public abstract void setProjectName(String projectName);
-
-	public abstract String getAssignedUser();
-
-	public abstract void setAssignedUser(String assignedUser);
-
-	public abstract void setNetworkOldVersion(INetworkOldVersion networkOldVersion);
-
-	public abstract INetworkOldVersion getNetworkOldVersion();
-
-
 
 
 }

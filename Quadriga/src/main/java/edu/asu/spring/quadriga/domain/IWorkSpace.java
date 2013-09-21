@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @description   : interface to implement WorkSpace class.
  * 
- * @author        : Kiran Kumar Batna
+ * @author        : Kiran
  *
  */
 public interface IWorkSpace 
@@ -30,11 +30,5 @@ public interface IWorkSpace
 	public abstract void setId(String id);
 
 	public abstract String getId();
-
-	public abstract void addBitstream(IBitStream bitstream);
-
-	public abstract void setBitstreams(List<IBitStream> bitstreams);
-
-	public abstract List<IBitStream> getBitstreams();
 
 }

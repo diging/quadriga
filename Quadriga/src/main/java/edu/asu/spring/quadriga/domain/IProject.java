@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 /**
  * @description   : interface to implement Project class.
  * 
- * @author        : Kiran Kumar Batna
+ * @author        : Kiran
  *
  */
 public interface IProject {
@@ -21,18 +21,22 @@ public interface IProject {
 
 	public abstract void setDescription(String description);
 
-	public abstract String getUnixName();
+	public abstract String getId();
 
-	public abstract void setUnixName(String id);
+	public abstract void setId(String id);
+
+	public abstract int getInternalid();
+
+	public abstract void setInternalid(int internalid);
 
 	public abstract IUser getOwner();
 
 	public abstract void setOwner(IUser owner);
-	
+
 	public abstract List<ICollaborator> getCollaborators();
 
 	public abstract void setCollaborators(List<ICollaborator> collaborators);
-	
+
 	public abstract EProjectAccessibility getProjectAccess();
 
 	public abstract void setProjectAccess(EProjectAccessibility projectAccess);
@@ -42,8 +46,4 @@ public interface IProject {
 	public abstract void setNetworksDefaultAccess(
 			ENetworkAccessibility networksDefaultAccess);
 
-	public abstract void setInternalid(String internalid);
-
-	public abstract String getInternalid();
-	
 }

@@ -21,11 +21,13 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	/**List of QuadrigaRole objects which will store various user roles.*/
 	@Autowired
 	private List<IQuadrigaRole> quadrigaRoles;
-
+	
 	/**
-	 * {@inheritDoc}
+	 * Return the corresponding QuadrigaRole for a given QuadrigaRoleId.
+	 * 
+	 * @param sQuadrigaRoleDBId		The role id fetched from the Quadriga database.
+	 * @return 						QuadrigaRole object corresponding to the role id.
 	 */
-	@Override
 	public IQuadrigaRole getQuadrigaRole(String sQuadrigaRoleDBId) {
 		for(IQuadrigaRole role: quadrigaRoles)
 		{
@@ -34,12 +36,8 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 		}
 		return null;
 	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
+	
+	
 	public String getQuadrigaRoleDBId(String sQuadrigaRoleId)
 	{
 		for(IQuadrigaRole role:quadrigaRoles)
@@ -47,22 +45,23 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 			if(role.getId().equals(sQuadrigaRoleId))
 				return role.getDBid();
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
-	 * {@inheritDoc}
+	 * Returns the list of QuadrigaRoles used in the application context.
+	 * 
+	 * @return 			List of QuadrigaRoles
 	 */
-	@Override
 	public List<IQuadrigaRole> getQuadrigaRoles() {
 		return this.quadrigaRoles;
 	}
-
+	
 	/**
-	 * {@inheritDoc}
+	 *  
+	 * @param quadrigaRoles List of QuadrigaRoles
 	 */
-	@Override
 	public void setQuadrigaRoles(List<IQuadrigaRole> quadrigaRoles) {
 		this.quadrigaRoles = quadrigaRoles;
 	}

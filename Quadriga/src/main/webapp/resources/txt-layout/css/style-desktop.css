@@ -311,7 +311,7 @@
 		#nav li
 		{
 			display: inline-block;
-			margin: 0 0.2em 0 0.2em;
+			margin: 0 0.5em 0 0.5em;
 			top: 0;
 			position: relative;
 			-moz-transition: top .15s ease-in-out;
@@ -319,7 +319,6 @@
 			-o-transition: top .15s ease-in-out;
 			-ms-transition: top .15s ease-in-out;
 			transition: top .15s ease-in-out;
-			min-width: 140px;
 		}
 
 			#nav li a
@@ -329,7 +328,7 @@
 				text-decoration: none;
 				color: #6b7770;
 				top: -3px;
-				padding: 3px 1.4em 0.25em 1.4em;
+				padding: 3px 1.5em 0.25em 1.5em;
 				border-bottom-left-radius: 6px;
 				border-bottom-right-radius: 6px;
 				outline: 0;
@@ -344,45 +343,12 @@
 			{
 				top: 3px;
 			}
-			#nav ul ul{
-			
-			 	display: none;
-			}
-				#nav ul ul li {
-			 		font-size: 14px;
-					font-style: normal;
-					text-transform: none;
-					margin: 0px;
-					border-bottom-left-radius: 0px;
-					border-bottom-right-radius: 0px;
-					min-width: 135px;
-				}
-				
-				#nav ul ul li:last-child a {
-					border-bottom-left-radius: 6px;
-					border-bottom-right-radius: 6px;
-				}
-					#nav ul ul li a {
-				 		
-						border-bottom-left-radius: 0px;
-						border-bottom-right-radius: 0px;
-					}
-				
-			#nav ul li:hover > ul  {
- 			 
- 			display: block;
-			position: absolute;
-			}
+
 				#nav li:hover a
 				{
 					background: #C1CAC5;
 					color: #fff;
 				}
-				#nav li li a:hover {
-  				color:#fff;
-  				background: #C1CAC5;
-  				
-			}
 
 			#nav li.current_page_item
 			{

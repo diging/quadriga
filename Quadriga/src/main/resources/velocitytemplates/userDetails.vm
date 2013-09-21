@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/userDetails.xsd">
-<Quadriga:userDetails>
-	<Quadriga:username>$userdetails.name</Quadriga:username>
-	<Quadriga:userid>$userdetails.userName</Quadriga:userid>
-	<Quadriga:email>$userdetails.email</Quadriga:email>
-	<Quadriga:uri>$url/rest/userDetails/$userdetails.userName</Quadriga:uri>
-</Quadriga:userDetails> 	
-</Quadriga:QuadrigaReply>

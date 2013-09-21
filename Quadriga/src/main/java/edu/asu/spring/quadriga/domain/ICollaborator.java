@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @description  : interface to implement Collaborator class.
  * 
- * @author       : Kiran Kumar Batna
+ * @author       : Kiran
  *
  */
 public interface ICollaborator 
@@ -22,9 +22,5 @@ public interface ICollaborator
 	public abstract void setUserObj(IUser userObj);
 
 	public abstract IUser getUserObj();
-	
-	//public abstract void setProjectCollaborator(String collaborator);
-	
-	public abstract void setCollaboratorName(String collaborator);
 
 }

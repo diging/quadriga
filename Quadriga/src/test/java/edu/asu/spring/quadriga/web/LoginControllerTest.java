@@ -17,9 +17,8 @@ import org.springframework.validation.support.BindingAwareModelMap;
 import edu.asu.spring.quadriga.web.LoginController;
 
 /**
- * This class test the {@link LoginController}
  * 
- * @author Ram Kumar Kumaresan
+ * @author Who wrote this?
  *
  */
 public class LoginControllerTest {
@@ -38,10 +37,6 @@ public class LoginControllerTest {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
-	/**
-	 * This method sets up the needed objects for testing the {@link LoginController}
-	 * 
-	 */
 	@Before
 	public void setUp() throws Exception {
 		loginController = new LoginController();
@@ -61,37 +56,24 @@ public class LoginControllerTest {
 	public void tearDown() throws Exception {
 	}
 
-	/**
-	 * This method checks if the {@link LoginController} returns the appropriate paths for the valid user.
-	 * 
-	 */
 	@Test
 	public void testValidUserHandle() throws SQLException {
 
 		//Valid and Active user
-		assertEquals(loginController.validUserHandle(model, principal, authentication),"auth/home");
+		assertEquals(loginController.validUserHandle(model, principal, authentication),"auth/loggedIn");
 
 	}
 
-	/**
-	 * This method checks if the {@link LoginController} returns the login path correctly.
-	 */
 	@Test
 	public void testLogin() {
 		assertEquals(loginController.login(model),"login");
 	}
 
-	/**
-	 * This method checks if the {@link LoginController} returns the login path for a failed login.
-	 */
 	@Test
 	public void testLoginerror() {
 		assertEquals(loginController.loginerror(model),"login");
 	}
 
-	/**
-	 * This method checks if the {@link LoginController} returns the logout path.
-	 */
 	@Test
 	public void testLogout() {
 		assertEquals(loginController.logout(model),"login");
