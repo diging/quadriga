@@ -30,9 +30,5 @@
 			group-role-attribute="cn">
 		</ldap-authentication-provider>
 	</authentication-manager>
-	
-
-	<!--Reference to Quad Database connection file-->
-	<beans:import resource="spring-dbconnectionmanager.xml" />
 
 </beans:beans>

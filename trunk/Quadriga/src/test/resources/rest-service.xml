@@ -112,5 +112,4 @@
 		<property name="location" value="classpath:locale/errormessages.properties" />
 	</bean>
 	
-	
 </beans>
