@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
@@ -9,10 +10,25 @@
 
 	<context:component-scan base-package="edu.asu.spring.quadriga"/>
 	
+	<!--Reference to Quad Database connection file-->
+	<beans:import resource="spring-dbconnectionmanager.xml" />
 
-	<bean id="QuadrigaRoleMapper"
-		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">
-		<property name="userManager" ref="userManager"></property>
-	</bean>
+	<!-- Reference to Quadriga roles -->
+	<beans:import resource="quadriga-roles.xml" />
 	
-</beans>
+	<!-- Reference to Collaborator roles -->
+	<beans:import resource="collaborator-roles.xml"/>
+	
+	<!-- Reference the rest settings -->
+	<beans:import resource="rest-service.xml"/>
+	
+	<!-- Reference the Concept Collection roles-->
+	<beans:import resource="cc-collaborator-roles.xml"/>
+	
+	<!-- Reference the Dictionary Collaborator roles -->
+	<beans:import resource="dict-collaborator-roles.xml"/>
+
+	<!-- Reference the mesages -->
+	<beans:import resource="message-localization.xml"/>
+	
+</beans:beans>
