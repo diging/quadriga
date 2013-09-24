@@ -50,7 +50,7 @@ public class WorkspaceAuthorization implements IAuthorization
 			
 			if(!haveAccess)
 			{
-				if(!userRoles[0].equals("null"))
+				if(userRoles.length>0)
 				{
 					collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
 					for(ICollaborator collaborator : collaboratorList)

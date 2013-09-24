@@ -115,6 +115,7 @@ public interface DBConstants
 	
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
+	public static final String LIST_WORKSPACE_OF_COLLABORATOR = "sp_getWorkspacesOfCollaborator";
 	public static final String LIST_ACTIVE_WORKSPACE = "sp_getActiveWorkspaceList";
 	public static final String LIST_ARCHIVE_WORKSPACE = "sp_getArchiveWorkspaceList";
 	public static final String LIST_DEACTIVATED_WORKSPACE = "sp_getDeactivatedWorkspaceList";

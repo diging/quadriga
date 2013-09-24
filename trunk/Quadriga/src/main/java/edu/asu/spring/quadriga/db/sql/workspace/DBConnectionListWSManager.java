@@ -128,6 +128,80 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 		return workspaceList;
 	}	
 	
+	
+	@Override
+	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String user) throws QuadrigaStorageException
+	{
+		String errmsg;
+		String dbCommand;
+		String wsOwnerName;
+		CallableStatement sqlStatement;
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
+		IWorkSpace workspace = null;
+		IUser wsOwner = null;
+		
+		//command call to the Stored Procedure
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_WORKSPACE_OF_COLLABORATOR + "(?,?,?)";
+		
+		//establish the connection
+	    getConnection();
+		try
+		{
+			// prepare the SQL Statement for execution
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			
+			// add input parameters
+			sqlStatement.setString(1, projectid);
+			sqlStatement.setString(2, user);
+			
+			// add output parameter
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			
+			// execute the sql statement
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(3);
+			
+			if(errmsg == "")
+			{
+				ResultSet result =  sqlStatement.getResultSet();
+				
+				if(result.isBeforeFirst())
+				{
+					while(result.next())
+					{
+						workspace = workspaceFactory.createWorkspaceObject();
+						workspace.setName(result.getString(1));
+						workspace.setDescription(result.getString(2));
+						workspace.setId(result.getString(3));
+						
+						// retrieve the user name details
+						wsOwnerName = result.getString(4);
+						wsOwner = userManger.getUserDetails(wsOwnerName);
+						workspace.setOwner(wsOwner);
+						
+						//adding the workspace to the list
+						workspaceList.add(workspace);
+					}
+				}
+			}
+			else
+			{
+				throw new QuadrigaStorageException(errmsg);
+			}
+		}
+		catch(SQLException e)
+		{
+			logger.info("List workspace method  :"+e.getMessage());
+			throw new QuadrigaStorageException(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return workspaceList;
+	}	
+	
 	/**
 	 * This will list all the active workspaces associated with the project.
 	 * @param    projectid
