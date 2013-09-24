@@ -85,7 +85,7 @@ public class DeleteProjectCollaboratorController {
 		
 		collaboratorForm = collaboratorFormFactory.createCollaboratorFormObject();
 		
-		List<ModifyCollaborator> modifyCollaborator = collaboratorFormManager.modifyCollaboratorManager(projectId);
+		List<ModifyCollaborator> modifyCollaborator = collaboratorFormManager.modifyProjectCollaboratorManager(projectId);
 		
 		collaboratorForm.setCollaborators(modifyCollaborator);
 		
@@ -110,7 +110,7 @@ public class DeleteProjectCollaboratorController {
 
 		if(result.hasErrors())
 		{
-			collaborators = collaboratorFormManager.modifyCollaboratorManager(projectId);
+			collaborators = collaboratorFormManager.modifyProjectCollaboratorManager(projectId);
 			collaboratorForm.setCollaborators(collaborators);
 			
 			modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);

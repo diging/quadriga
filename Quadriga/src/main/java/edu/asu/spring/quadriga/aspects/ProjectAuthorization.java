@@ -43,7 +43,7 @@ public class ProjectAuthorization implements IAuthorization
 		//check the user roles if he is not a project owner
 		if(!haveAccess)
 		{
-			if(!userRoles[0].equals("null"))
+			if(userRoles.length>0)
 			{
 				roles = getAccessRoleList(userRoles);
 				List<ICollaborator> collaboratorList = project.getCollaborators();

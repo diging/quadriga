@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -30,6 +29,7 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
+import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
 @Controller
 public class UpdateWSCollabController 
@@ -48,6 +48,9 @@ public class UpdateWSCollabController
 	
 	@Autowired
 	private CollaboratorFormValidator validator;
+	
+	@Autowired
+	private ModifyCollaboratorFormManager collaboratorFormManager;
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
@@ -73,31 +76,20 @@ public class UpdateWSCollabController
 	public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid")String workspaceid) throws QuadrigaStorageException
 	{
 		ModelAndView model;
-		List<ICollaborator> wsCollaborators;
 		ModifyCollaboratorForm collaboratorForm;
-		ModifyCollaborator collaborator;
 		List<ModifyCollaborator> collaboratorList = new ArrayList<ModifyCollaborator>();
 		
 		//create model view
 		model = new ModelAndView("auth/workbench/workspace/updatecollaborators");
 		
 		//retrieve the list of Collaborators and their roles.
-		wsCollaborators = wsCollabManager.getWorkspaceCollaborators(workspaceid);
+		collaboratorList = collaboratorFormManager.modifyWorkspaceCollaboratorManager(workspaceid);
 		
 		//fetch the roles that can be associated to the workspace collaborator
 		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
 		
 		//create a model for collaborators
 		collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
-		
-		for(ICollaborator collab : wsCollaborators)
-		{
-			collaborator = new ModifyCollaborator();
-			collaborator.setUserName(collab.getUserObj().getUserName());
-			collaborator.setName(collab.getUserObj().getName());
-			collaborator.setCollaboratorRoles(collab.getCollaboratorRoles());
-			collaboratorList.add(collaborator);
-		}
 		
 		collaboratorForm.setCollaborators(collaboratorList);
 		
@@ -132,6 +124,8 @@ public class UpdateWSCollabController
 			model.getModelMap().put("success", 0);
 
 			//add the model map
+			wsCollaborators = collaboratorFormManager.modifyWorkspaceCollaboratorManager(workspaceid);
+			collaboratorForm.setCollaborators(wsCollaborators);
 			model.getModelMap().put("collaboratorform", collaboratorForm);
 			model.getModelMap().put("workspaceid", workspaceid);
 			

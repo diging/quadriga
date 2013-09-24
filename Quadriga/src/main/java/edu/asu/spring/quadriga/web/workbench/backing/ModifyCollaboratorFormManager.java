@@ -13,6 +13,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
 /**
  * this class returns the collaborator of ModifyCollaborator domain by calling existing DBConnectonManager 
@@ -37,6 +38,9 @@ public class ModifyCollaboratorFormManager {
 	@Autowired
 	ModifyCollaboratorFormFactory collaboratorFormFactory;
 	
+	@Autowired
+	IRetrieveWSCollabManager workspaceManager;
+	
 	/**
 	 * takes project id to return collaborators of ModifyCollaborator domain
 	 * 
@@ -44,7 +48,7 @@ public class ModifyCollaboratorFormManager {
 	 * @return List<ModifyCollaborator> list of modifycollaborator domain
 	 * @throws QuadrigaStorageException
 	 */
-	public List<ModifyCollaborator> modifyCollaboratorManager(String projectId) throws QuadrigaStorageException
+	public List<ModifyCollaborator> modifyProjectCollaboratorManager(String projectId) throws QuadrigaStorageException
 	{
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
@@ -117,6 +121,26 @@ public class ModifyCollaboratorFormManager {
 		}
 		
 		return modifyCollaborators;
+	}
+	
+	public List<ModifyCollaborator> modifyWorkspaceCollaboratorManager(String workspaceId) throws QuadrigaStorageException
+	{
+		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
+		IUser user;
+		List<ICollaborator> collaborators =  workspaceManager.getWorkspaceCollaborators(workspaceId);
+		
+		for(ICollaborator collaborator:collaborators)
+		{
+			ModifyCollaborator modifyCollab = new ModifyCollaborator();
+			user = collaborator.getUserObj();
+			modifyCollab.setUserName(user.getUserName());
+			modifyCollab.setName(user.getName());
+			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
+			modifyCollaborators.add(modifyCollab);
+		}
+		
+		return modifyCollaborators;
+		
 	}
 	
 	

@@ -50,6 +50,14 @@ public class ListWSManager implements IListWSManager
 		return workspaceList;
 	}
 	
+	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String user) throws QuadrigaStorageException
+	{
+		List<IWorkSpace> workspaceList;
+		workspaceList = dbConnect.listWorkspaceOfCollaborator(projectid, user);
+		
+		return workspaceList;
+	}
+	
 	/**
 	 * This will list all the active workspaces associated
 	 * with the project.
