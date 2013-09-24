@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.springframework.http.ResponseEntity;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -50,8 +51,8 @@ public interface INetworkManager {
 	public abstract String storeXMLQStore(String XML)
 			throws ParserConfigurationException, SAXException, IOException;
 
-	public abstract void getRelationEventElements(RelationEventType re,
-			String networkId, IUser user) throws QuadrigaStorageException;
+	public abstract List<String[]> getRelationEventElements(RelationEventType re,
+			List<String[]> networkNodeCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException;
 
 	public abstract INetwork getNetworkStatus(String networkName, IUser user)
 			throws QuadrigaStorageException;

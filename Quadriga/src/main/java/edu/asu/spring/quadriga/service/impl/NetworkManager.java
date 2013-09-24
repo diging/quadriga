@@ -42,9 +42,11 @@ import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
+import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
@@ -61,9 +63,11 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
  * This class acts as a Network manager which handles the networks object
@@ -86,6 +90,10 @@ public class NetworkManager implements INetworkManager {
 
 	public StringBuffer jsonString= new StringBuffer("");
 
+
+	@Autowired
+	private	IListWSManager wsManager;
+	
 	@Autowired
 	@Qualifier("qStoreURL_Add")
 	private String qStoreURL_Add;
@@ -110,6 +118,8 @@ public class NetworkManager implements INetworkManager {
 	@Autowired
 	private INetworkFactory networkFactory;
 
+	boolean fileExist=true;
+	
 	@Autowired
 	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnect;
@@ -127,6 +137,14 @@ public class NetworkManager implements INetworkManager {
 	}
 
 
+	public boolean getFileExist(){
+		return this.fileExist;
+	}
+	
+	public void setFileExist(boolean fileExist){
+		this.fileExist = fileExist;
+	}
+	
 	/* 
 	 * Prepare a QStore Add URL to add new networks to QStore
 	 */
@@ -165,14 +183,28 @@ public class NetworkManager implements INetworkManager {
 	@Override
 	public String receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid,String updateStatus,String networkId){
 
-		if(updateStatus == "NEW"){
-			try{
-				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
-			}catch(QuadrigaStorageException e){
-				logger.error("DB action error ",e);
-			}
+		setFileExist(true);
+		List <String[]> networkDetailsCache = new ArrayList<String[]>();
+		IWorkSpace workspace = null;
+		try {
+			workspace = wsManager.getWorkspaceDetails(workspaceid, user.getUserName());
+		} catch (QuadrigaStorageException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		} catch (QuadrigaAccessException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
 		}
-
+		
+		
+		
+		List<IBitStream> bitStreamList = workspace.getBitstreams();
+		logger.info("list of bitstream");
+		Iterator <IBitStream> I2 = bitStreamList.iterator();
+		while(I2.hasNext()){
+			logger.info(I2.next().getId()+"");
+		}
+				
 		ElementEventsType e = response.getValue();
 		List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> I= c.iterator();
@@ -186,10 +218,15 @@ public class NetworkManager implements INetworkManager {
 					JAXBElement<?> element = (JAXBElement<?>) I1.next();
 					if(element.getName().toString().contains("id")){
 						logger.info("Appellation Event ID : "+element.getValue().toString());
-						try{
-							dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "AE", "1", user);
-						}catch(QuadrigaStorageException se){
-							logger.error("DB Storage issue",se);
+						//dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "AE", "1", user);
+						String networkNodeInfo[] = { element.getValue().toString(),"AE", "1"};
+						networkDetailsCache.add(networkNodeInfo);
+					}
+					if(element.getName().toString().contains("source_reference")){
+						logger.debug("Dspace file : "+element.getValue().toString());
+						boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+						if(dspaceFileExists == false){
+							setFileExist(false);
 						}
 					}
 				}
@@ -202,26 +239,70 @@ public class NetworkManager implements INetworkManager {
 					JAXBElement<?> element = (JAXBElement<?>) I1.next();
 					if(element.getName().toString().contains("id")){
 						logger.info("Relation Event ID : "+element.getValue().toString());
-						try{
-							dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "RE", "1", user);
-						}catch(QuadrigaStorageException se){
-							logger.error("DB Storage issue",se);
+						//dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "RE", "1", user);
+						String networkNodeInfo[] = { element.getValue().toString(),"RE", "1"};
+						networkDetailsCache.add(networkNodeInfo);
+
+					}
+					if(element.getName().toString().contains("source_reference")){
+						logger.debug("Dspace file : "+element.getValue().toString());
+						boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+						if(dspaceFileExists == false){
+							setFileExist(false);
 						}
 					}
 				}
 				RelationEventType re = (RelationEventType) (ce);
 				try{
-					getRelationEventElements(re,networkId,user);
+					getRelationEventElements(re,networkDetailsCache,bitStreamList);
 				}catch(QuadrigaStorageException se){
 					logger.error("DB Storage issue",se);
 				}
 
 			}
 		}
+		
+		if(!getFileExist()){
+			logger.info("Network not uploaded");
+			logger.info("Some of the text files in the uploaded network were not present in the workspace");
+			return "";
+		}
+		logger.debug("File Exist paramete value : "+getFileExist());
+		
+		if(updateStatus == "NEW"){
+			try{
+				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
+			}catch(QuadrigaStorageException e1){
+				logger.error("DB action error ",e1);
+			}
+		}
+		
+		for(String node[] : networkDetailsCache){
+			try{
+				dbConnect.addNetworkStatement(networkId,node[0],node[1], node[2], user);
+			}catch(QuadrigaStorageException e1){
+				logger.error("DB error while adding network statment",e1);
+			}
+		}
 		return networkId;
 	}
 
 
+	public boolean hasBitStream(String uri,List<IBitStream> bitStreamList){
+		if(uri.isEmpty()){
+			logger.debug("true");
+			return true;
+		}
+		String fileId =uri=uri.substring(uri.lastIndexOf("/")+1,uri.length());
+		for(IBitStream bitStream : bitStreamList){
+			if(fileId.equals(bitStream.getId())){
+				logger.debug("true");
+				return true;
+			}
+		}
+		logger.debug("false");
+		return false;
+	}
 
 	public String getRelationEventId(RelationEventType re){
 		List<JAXBElement<?>> e2 = re.getIdOrCreatorOrCreationDate();
@@ -662,7 +743,7 @@ public class NetworkManager implements INetworkManager {
 	 * 
 	 */
 	@Override
-	public void getRelationEventElements(RelationEventType re,String networkId,IUser user) throws QuadrigaStorageException{
+	public List<String[]> getRelationEventElements(RelationEventType re,List<String[]> networkDetailsCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
 		List <?> ee = re.getRelationCreatorOrRelation();
 		Iterator <?> Iee=ee.iterator();
 		while(Iee.hasNext()){
@@ -690,14 +771,19 @@ public class NetworkManager implements INetworkManager {
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Relation Event ID subject: "+element1.getValue().toString());
-										try{
-											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
-										}catch(QuadrigaStorageException se){
-											logger.error("DB Storage issue",se);
+											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+											String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
+											networkDetailsCache.add(networkNodeInfo);
+									}
+									if(element1.getName().toString().contains("source_reference")){
+										logger.debug("Dspace file : "+element1.getValue().toString());
+										boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
+										if(dspaceFileExists == false){
+											setFileExist(false);
 										}
 									}
 								}
-								getRelationEventElements(re1,networkId,user);
+								networkDetailsCache=getRelationEventElements(re1,networkDetailsCache,bitStreamList);
 							}
 
 							//	Check for Appellation event inside subject and add if any
@@ -712,10 +798,15 @@ public class NetworkManager implements INetworkManager {
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-										try{
-											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-										}catch(QuadrigaStorageException se){
-											logger.error("DB Storage issue",se);
+											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+											String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
+											networkDetailsCache.add(networkNodeInfo);
+									}
+									if(element1.getName().toString().contains("source_reference")){
+										logger.debug("Dspace file : "+element1.getValue().toString());
+										boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
+										if(dspaceFileExists == false){
+											setFileExist(false);
 										}
 									}
 								}
@@ -737,14 +828,19 @@ public class NetworkManager implements INetworkManager {
 										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 										if(element1.getName().toString().contains("id")){
 											logger.debug("Relation Event ID object: "+element1.getValue().toString());
-											try{
-												dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
-											}catch(QuadrigaStorageException se){
-												logger.error("DB Storage issue",se);
+												//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+												String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
+												networkDetailsCache.add(networkNodeInfo);
+										}
+										if(element1.getName().toString().contains("source_reference")){
+											logger.debug("Dspace file : "+element1.getValue().toString());
+											boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
+											if(dspaceFileExists == false){
+												setFileExist(false);
 											}
 										}
 									}
-									getRelationEventElements(re1,networkId,user);
+									networkDetailsCache=getRelationEventElements(re1,networkDetailsCache,bitStreamList);
 								}
 								//	Check for Appellation event inside object and add if any
 								AppellationEventType ae1 = object.getAppellationEvent();
@@ -758,10 +854,15 @@ public class NetworkManager implements INetworkManager {
 										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 										if(element1.getName().toString().contains("id")){
 											logger.debug("Appellation Event ID : "+element1.getValue().toString());
-											try{
-												dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-											}catch(QuadrigaStorageException se){
-												logger.error("DB Storage issue",se);
+												//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+												String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
+												networkDetailsCache.add(networkNodeInfo);
+										}
+										if(element1.getName().toString().contains("source_reference")){
+											logger.debug("Dspace file : "+element1.getValue().toString());
+											boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
+											if(dspaceFileExists == false){
+												setFileExist(false);
 											}
 										}
 									}
@@ -787,10 +888,15 @@ public class NetworkManager implements INetworkManager {
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-										try{
-											dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-										}catch(QuadrigaStorageException se){
-											logger.error("DB Storage issue",se);
+											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+											String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
+											networkDetailsCache.add(networkNodeInfo);
+									}
+									if(element1.getName().toString().contains("source_reference")){
+										logger.debug("Dspace file : "+element1.getValue().toString());
+										boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
+										if(dspaceFileExists == false){
+											setFileExist(false);
 										}
 									}
 								}
@@ -799,6 +905,7 @@ public class NetworkManager implements INetworkManager {
 				}
 			}
 		}
+		return networkDetailsCache;
 	}
 
 
