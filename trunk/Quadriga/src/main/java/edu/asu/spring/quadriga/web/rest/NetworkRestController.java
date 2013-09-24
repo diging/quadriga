@@ -151,6 +151,11 @@ public class NetworkRestController {
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
 			networkId=networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid,"NEW",networkId);
 			
+			if(networkId.isEmpty()){
+				response.setStatus(500);
+				return "Text files doesn't belongs to this workspace.";
+			}
+			
 			//			Below code would help in printing XML from qstore
 			Marshaller marshaller = context.createMarshaller();
 			ByteArrayOutputStream os=new ByteArrayOutputStream();
