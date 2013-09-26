@@ -66,19 +66,23 @@ function init1(json){
 		// with dollar prefixed data-properties in the
 		// JSON structure.
 		Node: {
-		      overridable: true
+		      overridable: true,
+		      dim : '10',
+		      color : '#FF8000'
 		    },
 		Edge: {
 			overridable: true,
+			type : 'arrow',
 			color: '#23A4FF',
 			lineWidth: 0.4,
-			type: 'labeled'
+			type: 'labeled',
+			dim: '15'
 		},
 		//Native canvas text styling
 		Label: {
 			type: labelType, //Native or HTML
 			size: 10,
-			style: 'bold'
+			//style: 'bold'
 		},
 		//Add Tips
 		Tips: {
