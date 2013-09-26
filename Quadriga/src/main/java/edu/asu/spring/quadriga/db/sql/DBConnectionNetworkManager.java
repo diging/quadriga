@@ -2,16 +2,12 @@ package edu.asu.spring.quadriga.db.sql;
 
 import java.nio.ByteBuffer;
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,12 +37,8 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  * @author           Lohith Dwaraka 
  *
  */
-public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
-	private Connection connection;
-
-	@Autowired
-	private DataSource dataSource;
-
+public class DBConnectionNetworkManager extends ADBConnectionManager implements IDBConnectionNetworkManager {
+	
 	@Autowired
 	INetworkManager networkManager;
 	
@@ -67,80 +59,7 @@ public class DBConnectionNetworkManager implements IDBConnectionNetworkManager {
 	@Autowired
 	NetworkFactory networkFactory;
 	
-	/**
-	 * Assigns the data source
-	 *  
-	 *  @param : dataSource
-	 */
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-
-	/**
-	 * Close the DB connection
-	 * 
-	 * @return : 0 on success
-	 *           -1 on failure
-	 *           
-	 * @throws : SQL Exception          
-	 */
-	private int closeConnection() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-			return 0;
-		}
-		catch(SQLException se)
-		{
-			logger.error("DB Issue",se);
-		}
-		return 1;
-	}
-
-	/**
-	 * Establishes connection with the Quadriga DB
-	 * 
-	 * @return      : connection handle for the created connection
-	 * 
-	 * @throws      : SQLException 
-	 */
-	private void getConnection() {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			logger.error("DB Issue",e);
-		}
-	}
-
-	/**
-	 * Sets up the environment
-	 * 
-	 * @return      : int
-	 * 
-	 * @throws      : SQLException 
-	 */
-	public int setupTestEnvironment(String sQuery)
-	{
-		try
-		{
-			getConnection();
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(sQuery);
-			return 1;
-		}
-		catch(SQLException ex)
-		{
-			logger.error("DB Issue",ex);
-		}finally{
-			closeConnection();
-		}
-		return 1;
-	}
+	
 	/**
 	 * Generate short UUID (13 characters)
 	 * 

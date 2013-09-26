@@ -1,20 +1,17 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -24,75 +21,16 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
-public class DBConnectionRetrieveProjectManager implements IDBConnectionRetrieveProjectManager 
-{
-	private Connection connection;
-	
-	@Autowired
-	private DataSource dataSource;
-	
+public class DBConnectionRetrieveProjectManager extends ADBConnectionManager implements IDBConnectionRetrieveProjectManager 
+{	
 	@Autowired
 	private IProjectFactory projectFactory;
 	
 	@Autowired
     private IUserManager userManager;
 	
-	
-	public DataSource getDataSource(){
-		
-		return this.dataSource;
-	}
-	
-	public void setDataSource(DataSource dataSource){
-		this.dataSource=dataSource;
-	}
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionRetrieveProjectManager.class);
 
-	private void getConnection() throws QuadrigaStorageException {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			logger.error("Exception in getConnection():",e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-	
-	private void closeConnection() throws QuadrigaStorageException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			throw new QuadrigaStorageException(e);
-		}
-	}
-	
-	@Override
-	public int setupTestEnvironment(String sQuery)throws QuadrigaStorageException {
-	{
-			getConnection();
-			try
-			{
-				Statement stmt = connection.createStatement();
-				stmt.executeUpdate(sQuery);
-				return SUCCESS;
-			}
-			catch(SQLException ex)
-			{
-				logger.error("Exception in setupTestEnvironment():",ex);
-				throw new QuadrigaStorageException(ex);
-			}
-			finally
-			{
-				closeConnection();
-			}
-		}
-	}
 	
 	/**
 	 * This method fetches the list of projects for current logged in user.

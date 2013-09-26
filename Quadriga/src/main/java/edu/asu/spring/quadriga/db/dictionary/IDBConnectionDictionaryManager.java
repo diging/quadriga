@@ -17,12 +17,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionDictionaryManager {
 
-	/**
-	 * 
-	 * @param sQuery
-	 * @return
-	 */
-	public abstract int setupTestEnvironment(String sQuery);
 
 	/**
 	 * Queries the database to get a list of dictionary objects list
@@ -169,6 +163,7 @@ public interface IDBConnectionDictionaryManager {
 
 	public abstract String getDictionaryOwner(String dictionaryId)
 			throws QuadrigaStorageException;
-
+	
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
 }

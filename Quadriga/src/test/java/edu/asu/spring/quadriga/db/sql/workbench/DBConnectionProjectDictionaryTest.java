@@ -189,7 +189,7 @@ public class DBConnectionProjectDictionaryTest {
 	}
 
 	@Test
-	public void testSetupTestEnvironment() {
+	public void testSetupTestEnvironment() throws QuadrigaStorageException {
 		for (String singleQuery : sDatabaseSetup) {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
@@ -197,7 +197,7 @@ public class DBConnectionProjectDictionaryTest {
 	
 
 	@Test
-	public void testAddProjectDictionary() {
+	public void testAddProjectDictionary() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -298,7 +298,7 @@ public class DBConnectionProjectDictionaryTest {
 	}
 
 	@Test
-	public void testListProjectDictionary() {
+	public void testListProjectDictionary() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -397,7 +397,7 @@ public class DBConnectionProjectDictionaryTest {
 	}
 
 	@Test
-	public void testDeleteProjectDictionary() {
+	public void testDeleteProjectDictionary() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection

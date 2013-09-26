@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.db;
 
-import javax.sql.DataSource;
-
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -14,9 +12,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  *
  */
 public interface IDBConnectionDspaceManager {
-
-	public final static int SUCCESS = 1;
-	public final static int FAILURE = 0;
 	
 	/**
 	 * Add a bitstream to a workspace in Quadriga.
@@ -44,18 +39,6 @@ public interface IDBConnectionDspaceManager {
 	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String bitstreamids,
 			String username) throws QuadrigaStorageException, QuadrigaAccessException;
 	
-	/**
-	 * Set the datasource used in making a connection to the database.
-	 * 
-	 */
-	public abstract void setDataSource(DataSource dataSource);
-
-	/**
-	 * Get the datasource used by this class to make a connection to the database. 
-	 * @return
-	 */
-	public abstract DataSource getDataSource();
-
 	/**
 	 * Get the Dspace Keys for this user from the Quadriga database.
 	 * 

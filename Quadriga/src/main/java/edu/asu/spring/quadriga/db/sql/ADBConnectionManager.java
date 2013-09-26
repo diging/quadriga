@@ -19,6 +19,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public abstract  class ADBConnectionManager {
 	
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
+	
 	protected Connection connection;
 	@Autowired
 	protected DataSource dataSource;
@@ -80,13 +83,14 @@ public abstract  class ADBConnectionManager {
 	 * @throws QuadrigaStorageException
 	 * @author Kiran Kumar Batna
 	 */
-	public void setupTestEnvironment(String sQuery) throws QuadrigaStorageException
+	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
 	{
 		getConnection();
 		try
 		{
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(sQuery);
+			return SUCCESS;
 		}
 		catch(SQLException ex)
 		{

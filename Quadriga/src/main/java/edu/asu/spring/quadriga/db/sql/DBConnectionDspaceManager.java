@@ -1,12 +1,9 @@
 package edu.asu.spring.quadriga.db.sql;
 
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,63 +20,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  *
  * @author Ram Kumar Kumaresan
  */
-public class DBConnectionDspaceManager implements IDBConnectionDspaceManager {
+public class DBConnectionDspaceManager extends ADBConnectionManager implements IDBConnectionDspaceManager {
 
-	private Connection connection;
-
-	@Autowired
-	private DataSource dataSource;
 	
 	@Autowired
 	private DspaceKeysFactory dsapceKeysFactory;
 	
-	@Override
-	public DataSource getDataSource() {
-		return dataSource;
-	}
-
-	/**
-	 * @Description: Assigns the data source used by this class
-	 * 
-	 * @param : dataSource
-	 */
-	@Override
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
-
-	/**
-	 * Close the database connection
-	 * 
-	 * @throws QuadrigaStorageException
-	 * @author Ram Kumar Kumaresan
-	 */
-	private void closeConnection() throws QuadrigaStorageException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException e) {
-			throw new QuadrigaStorageException();
-		}
-	}
-
-	/**
-	 * Establishes connection with the Quadriga database
-	 * 
-	 * @return The connection handle which is used to query the database
-	 * @throws QuadrigaStorageException
-	 * 
-	 */
-	private void getConnection() throws QuadrigaStorageException {
-		try {
-			connection = dataSource.getConnection();
-		} catch (SQLException e) {
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
-		
 	/**
 	 * {@inheritDoc}
 	 */

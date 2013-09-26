@@ -195,13 +195,13 @@ public class WorkspaceCCManagerTest {
 	}
 
 	@Test
-	public void testSetupTestEnvironment() {
+	public void testSetupTestEnvironment() throws QuadrigaStorageException {
 		for (String singleQuery : sDatabaseSetup) {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
 	}
 	@Test
-	public void testAddWorkspaceCC() throws QuadrigaAccessException {
+	public void testAddWorkspaceCC() throws QuadrigaAccessException, QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -319,7 +319,7 @@ public class WorkspaceCCManagerTest {
 	}
 
 	@Test
-	public void testListWorkspaceCC() throws QuadrigaAccessException {
+	public void testListWorkspaceCC() throws QuadrigaAccessException, QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection

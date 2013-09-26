@@ -2,8 +2,6 @@ package edu.asu.spring.quadriga.db;
 
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -17,8 +15,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface IDBConnectionManager 
 {
-	public final static int SUCCESS = 1;
-	public final static int FAILURE = 0;
 	
 	public abstract List<IQuadrigaRole> listQuadrigaUserRoles(String roles) throws QuadrigaStorageException;
 
@@ -30,12 +26,6 @@ public interface IDBConnectionManager
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract IUser getUserDetails(String userid) throws QuadrigaStorageException;
-
-	/**
-	 * Assign the dataSource object to the class state.
-	 * @param dataSource	The datasource object must contain the database connection details
-	 */
-	public abstract void setDataSource(DataSource dataSource);
 
 	/**
 	 * Deactivate a user in Quadriga.

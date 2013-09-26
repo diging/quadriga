@@ -190,7 +190,7 @@ public class DictionaryListControllerTest {
 	}
 
 	@Test
-	public void testSetupTestEnvironment()
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
 	{
 		for(String singleQuery: sDatabaseSetup)
 		{
@@ -249,7 +249,7 @@ public class DictionaryListControllerTest {
 	}
 
 	@Test
-	public void testAddDictionaryForm() {
+	public void testAddDictionaryForm() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			assertEquals(dictionaryListController.addDictionaryForm(model),"auth/dictionaries/addDictionary");

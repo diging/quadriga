@@ -220,14 +220,14 @@ public class DBConnectionWorkspaceDictionaryTest {
 	}
 
 	@Test
-	public void testSetupTestEnvironment() {
+	public void testSetupTestEnvironment() throws QuadrigaStorageException {
 		for (String singleQuery : sDatabaseSetup) {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
 	}
 
 	@Test
-	public void testAddWorkspaceDictionary() throws QuadrigaAccessException {
+	public void testAddWorkspaceDictionary() throws QuadrigaAccessException, QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -348,7 +348,7 @@ public class DBConnectionWorkspaceDictionaryTest {
 	}
 
 	@Test
-	public void testListWorkspaceDictionary() throws QuadrigaAccessException {
+	public void testListWorkspaceDictionary() throws QuadrigaAccessException, QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
