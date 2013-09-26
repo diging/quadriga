@@ -506,7 +506,7 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("{\"adjacencies\":[");
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getSubject()+"\",");
-		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",");
+		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",\"dim\" : \"15\", ");
 		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\",\"$labelid\": \"arrow1\",\"$labeltext\": \"Subject\"}");
 		this.jsonString.append("},");
 
@@ -517,7 +517,7 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("}],");
 
 		this.jsonString.append("\"data\": {");
-		this.jsonString.append("\"$color\": \"#F2BB66\",");
+		this.jsonString.append("\"$color\": \"#CC0066\",");
 		this.jsonString.append("\"$type\": \"circle\",");
 		this.jsonString.append("\"$dim\": 13");
 		this.jsonString.append("},");
