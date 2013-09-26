@@ -28,22 +28,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectConceptColleciton;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -219,7 +215,7 @@ public class DBConnectionProjectConceptCollectionTest {
 	}
 
 	@Test
-	public void testSetupTestEnvironment() {
+	public void testSetupTestEnvironment() throws QuadrigaStorageException {
 		for (String singleQuery : sDatabaseSetup) {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
@@ -227,7 +223,7 @@ public class DBConnectionProjectConceptCollectionTest {
 	
 
 	@Test
-	public void testAddProjectConceptCollection() {
+	public void testAddProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -327,7 +323,7 @@ public class DBConnectionProjectConceptCollectionTest {
 	}
 
 	@Test
-	public void testListProjectConceptCollection() {
+	public void testListProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -426,7 +422,7 @@ public class DBConnectionProjectConceptCollectionTest {
 	}
 
 	@Test
-	public void testDeleteProjectConceptCollection() {
+	public void testDeleteProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection

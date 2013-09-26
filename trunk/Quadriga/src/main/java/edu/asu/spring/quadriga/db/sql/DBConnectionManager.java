@@ -4,12 +4,9 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,16 +34,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  *
  */
 
-public class DBConnectionManager implements IDBConnectionManager
+public class DBConnectionManager extends ADBConnectionManager implements IDBConnectionManager
 {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DBConnectionManager.class);
 	
-	private Connection connection;
-
-	@Autowired
-	private DataSource dataSource;
 
 	@Autowired
 	private IUserFactory userFactory;
@@ -60,76 +53,6 @@ public class DBConnectionManager implements IDBConnectionManager
 	@Autowired
 	private ICollaboratorRoleFactory collaboratorRoleFactory;
 
-	/**
-	 *  @Description: Assigns the data source
-	 *  
-	 *  @param : dataSource
-	 */
-	@Override
-	public void setDataSource(DataSource dataSource) 
-	{
-		this.dataSource = dataSource;
-	}
-
-	/**
-	 * Close the DB connection
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
-	 */
-	private void closeConnection() throws QuadrigaStorageException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		}
-		catch(SQLException e)
-		{
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
-	/**
-	 * Establishes connection with the Quadriga DB
-	 * @return      connection handle for the created connection
-	 * @throws      QuadrigaStorageException
-	 * @author      Kiran Kumar Batna
-	 */
-	private void getConnection() throws QuadrigaStorageException {
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			logger.error("Exception in getConnection():",e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @throws QuadrigaStorageException 
-	 */
-	@Override
-	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
-	{
-		getConnection();
-		try
-		{
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(sQuery);
-			return SUCCESS;
-		}
-		catch(SQLException ex)
-		{
-			logger.error("Exception in setupTestEnvironment():",ex);
-			throw new QuadrigaStorageException(ex);
-		}
-		finally
-		{
-			closeConnection();
-		}
-	}
 
 	/**
 	 *  @Description : Retrieves the user details for the given userid

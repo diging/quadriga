@@ -215,7 +215,7 @@ public class DictionaryItemCollabControllerTest {
 	}
 
 	@Test
-	public void testSetupTestEnvironment()
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
 	{
 		for(String singleQuery: sDatabaseSetup)
 		{

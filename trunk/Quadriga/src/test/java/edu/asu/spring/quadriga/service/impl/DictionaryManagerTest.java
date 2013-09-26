@@ -140,9 +140,10 @@ public class DictionaryManagerTest {
 	/**
 	 * Load the required data into the dependent tables
 	 * @author Ram Kumar Kumaresan
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testSetupTestEnvironment()
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
 	{
 		for(String singleQuery: sDatabaseSetup)
 		{

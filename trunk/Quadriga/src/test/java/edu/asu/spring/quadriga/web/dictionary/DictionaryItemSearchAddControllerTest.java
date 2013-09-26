@@ -178,7 +178,7 @@ public class DictionaryItemSearchAddControllerTest {
 	public void tearDown() throws Exception {
 	}
 	@Test
-	public void testSetupTestEnvironment()
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
 	{
 		for(String singleQuery: sDatabaseSetup)
 		{

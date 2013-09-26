@@ -184,7 +184,7 @@ public class ProjectConceptCollectionManagerTest {
 	}
 
 	@Test
-	public void testSetupTestEnvironment() {
+	public void testSetupTestEnvironment() throws QuadrigaStorageException {
 		for (String singleQuery : sDatabaseSetup) {
 			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
 		}
@@ -218,9 +218,10 @@ public class ProjectConceptCollectionManagerTest {
 	}
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.workbench.ProjectConceptCollectionManager#addProjectConceptCollection(java.lang.String, java.lang.String, java.lang.String)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testAddProjectConceptCollection() {
+	public void testAddProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -319,9 +320,10 @@ public class ProjectConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.workbench.ProjectConceptCollectionManager#listProjectConceptCollection(java.lang.String, java.lang.String)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testListProjectConceptCollection() {
+	public void testListProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
@@ -420,9 +422,10 @@ public class ProjectConceptCollectionManagerTest {
 
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.workbench.ProjectConceptCollectionManager#deleteProjectConceptCollection(java.lang.String, java.lang.String, java.lang.String)}.
+	 * @throws QuadrigaStorageException 
 	 */
 	@Test
-	public void testDeleteProjectConceptCollection() {
+	public void testDeleteProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
 			dbConnection
