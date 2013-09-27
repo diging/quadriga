@@ -13,9 +13,19 @@
 			pageSize : "3"
 		});
 	});
+	
+	$(function() 
+			{
+				    $( "#tabs" ).tabs();
+			});
 </script>
 
-
+<style>
+   .tabs
+   {
+	font-size: 80%;
+   }
+</style>
 
 <table style="width: 100%">
 	<tr>
@@ -26,22 +36,45 @@
 			<hr>
 			<div class="user">Owned by: ${project.owner.name}</div>
 			<hr> <!--  Display associated workspace -->
-			<section>
-				<c:if test="${not empty workspaceList}">
-    	Project associates these workspaces:
+			<div id = "tabs" class="tabs">
+			<ul>
+			  	  <li><a href="#asowner">Owner</a></li>
+	              <li><a href="#ascollaborator">Collaborator</a></li>
+			</ul>
+			<div id="asowner">
+						<c:if test="${not empty workspaceList}">
+    	              Project associates these workspaces:
     		<ul class="style2 pagination1">
-						<c:forEach var="workspace" items="${workspaceList}">
-							<li><a
-								href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
-										value="${workspace.name}"></c:out></a> <br> <c:out
-									value="${workspace.description}"></c:out></li>
-						</c:forEach>
-					</ul>
-				</c:if>
-				<c:if test="${empty workspaceList}">
+								<c:forEach var="workspace" items="${workspaceList}">
+									<li><a
+										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
+												value="${workspace.name}"></c:out></a> <br> <c:out
+											value="${workspace.description}"></c:out></li>
+								</c:forEach>
+							</ul>
+						</c:if>
+						<c:if test="${empty workspaceList}">
 			No workspaces are associated yet. You should create one!
 		</c:if>
-			</section> <c:choose>
+					</div>
+				<div id="ascollaborator">
+						<c:if test="${not empty collabworkspacelist}">
+    	              Project associates these workspaces:
+    		<ul class="style2 pagination1">
+								<c:forEach var="workspace" items="${collabworkspacelist}">
+									<li><a
+										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
+												value="${workspace.name}"></c:out></a> <br> <c:out
+											value="${workspace.description}"></c:out></li>
+								</c:forEach>
+							</ul>
+						</c:if>
+						<c:if test="${empty collabworkspacelist}">
+			You are not collaborator to any projects.
+		</c:if>
+					</div>
+			</div>
+			<c:choose>
 				<c:when test="${AssignEditorSuccess=='1'}">
 					<font color="blue"> <spring:message
 							code="project.assign.owner.editor.success" /></font>

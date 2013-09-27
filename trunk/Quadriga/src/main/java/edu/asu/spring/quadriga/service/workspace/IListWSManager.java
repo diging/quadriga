@@ -32,4 +32,7 @@ public interface IListWSManager {
 	public abstract List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid)
 			throws QuadrigaStorageException;
 
+	public abstract List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid,
+			String user) throws QuadrigaStorageException;
+
 }

@@ -57,20 +57,6 @@ BEGIN
              AND vsws.isarchived = 0
              AND vsws.isdeactivated = 0
             WHERE vwprojws.projectid = inprojectid
-              AND vsws.workspaceowner = inusername
-	   UNION DISTINCT
-         SELECT DISTINCT vsws.workspacename,
-                 vsws.description,
-                 vsws.workspaceid,
-                 vsws.workspaceowner
-            FROM vw_workspace vsws
-			JOIN vw_workspace_collaborator vwscollab
-              ON vwscollab.workspaceid = vsws.workspaceid 
-            JOIN vw_project_workspace vwprojws
-              ON vsws.workspaceid = vwprojws.workspaceid
-             AND vsws.isarchived = 0
-             AND vsws.isdeactivated = 0
-            WHERE vwprojws.projectid = inprojectid
-              AND vwscollab.username = inusername;
+              AND vsws.workspaceowner = inusername;
 END$$
 DELIMITER ;

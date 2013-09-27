@@ -211,7 +211,7 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
-	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
+	public List<IWorkSpace> listActiveWorkspace(String projectid,String user,String spName) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -222,7 +222,7 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 		IUser wsOwner = null;
 		
 		//command call to the Stored Procedure
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.LIST_ACTIVE_WORKSPACE + "(?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + spName + "(?,?,?)";
 		
 		//establish the connection
 	    getConnection();

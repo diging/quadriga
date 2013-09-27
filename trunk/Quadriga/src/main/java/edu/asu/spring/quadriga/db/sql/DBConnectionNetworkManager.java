@@ -24,8 +24,8 @@ import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
-import edu.asu.spring.quadriga.service.impl.workspace.ListWSManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 
 /**
@@ -43,7 +43,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 	INetworkManager networkManager;
 	
 	@Autowired
-	ListWSManager wsManager;
+	IListWSManager wsManager;
 	
 	@Autowired
 	INetworkOldVersionFactory networkOldVersionFactory;

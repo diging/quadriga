@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -70,11 +71,21 @@ public class ListWSManager implements IListWSManager
 	@Override
 	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
-		List<IWorkSpace> workspaceList;
+		List<IWorkSpace> ownerWorkspaceList;
 		
-		workspaceList = dbConnect.listActiveWorkspace(projectid,user);
+		ownerWorkspaceList = dbConnect.listActiveWorkspace(projectid, user, DBConstants.LIST_ACTIVE_WORKSPACE_AS_OWNER);
 
-		return workspaceList;
+		return ownerWorkspaceList;
+	}
+	
+	@Override
+	public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid,String user) throws QuadrigaStorageException
+	{
+		List<IWorkSpace> collaboratorWorkspaceList;
+		
+		collaboratorWorkspaceList = dbConnect.listActiveWorkspace(projectid, user, DBConstants.LIST_ACTIVE_WORKSPACE_AS_COLLABORATOR);
+
+		return collaboratorWorkspaceList;
 	}
 	
 	/**

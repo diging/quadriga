@@ -161,15 +161,14 @@
 		<definition name="base.definition.workbench.nonav" extends="base.definition.nonav">
 		<put-attribute name="currentPage" value="workbench" />
 	</definition>
-	
-	<definition name="auth/workbench" extends="base.definition.workbench">
+	<!-- changing the skeleton to have left navigation -->
+	<definition name="auth/workbench" extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga Workbench" />
-		<put-attribute name="sub-navigation"
+		<put-attribute name="left-navigation"
 			value="/WEB-INF/views/navigation/nav-workbench.jsp" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/workbench/workbench.jsp" />
 	</definition>
-	<!-- changing the skeleton to have left navigation -->
 	<definition name="auth/workbench/project" extends="base.definition.workbench.nav">
 		<put-attribute name="title" value="Quadriga - Project Details" />
 		<put-attribute name="left-navigation"

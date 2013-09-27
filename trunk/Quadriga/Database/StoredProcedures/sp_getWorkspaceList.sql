@@ -54,6 +54,6 @@ BEGIN
             JOIN vw_project_workspace vwprojws
               ON vsws.workspaceid = vwprojws.workspaceid
             WHERE vwprojws.projectid = inprojectid
-              AND vsws.workspaceowner = inusername
+              AND vsws.workspaceowner = inusername;
 END $$
 DELIMITER ;

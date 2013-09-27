@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -49,7 +50,37 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	{
 		List<IProject> projectList;
 		
-		projectList = dbConnect.getProjectList(sUserName);
+		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_OWNER);
+		
+		return projectList;
+	}
+	
+	@Override
+	public List<IProject> getCollaboratorProjectList(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList;
+		
+		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_COLLABORATOR);
+		
+		return projectList;
+	}
+	
+	@Override
+	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList;
+		
+		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_WORKSPACE_OWNER);
+		
+		return projectList;
+	}
+	
+	@Override
+	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList;
+		
+		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_WORKSPACE_COLLABORATOR);
 		
 		return projectList;
 	}
