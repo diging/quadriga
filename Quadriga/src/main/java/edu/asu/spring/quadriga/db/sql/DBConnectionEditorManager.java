@@ -24,8 +24,8 @@ import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.workspace.ListWSManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 
 /**
@@ -46,7 +46,7 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 	IUserManager userManager;
 	
 	@Autowired
-	ListWSManager wsManager;
+	IListWSManager wsManager;
 	
 	@Autowired
 	IRetrieveProjectManager retrieveProjectDetails;

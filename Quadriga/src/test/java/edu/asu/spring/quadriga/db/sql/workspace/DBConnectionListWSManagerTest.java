@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -135,7 +136,7 @@ public class DBConnectionListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listActiveWorkspace("PROJ_2","projuser");
+		workspaceList = dbConnect.listActiveWorkspace("PROJ_2","projuser",DBConstants.LIST_ACTIVE_WORKSPACE_AS_OWNER);
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");

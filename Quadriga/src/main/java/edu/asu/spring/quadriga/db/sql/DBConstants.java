@@ -27,7 +27,11 @@ public interface DBConstants
 	public final static String SHOW_USER_PROFILE="sp_showUserProfile";
 	
 	//project related objects
-	public static final String PROJECT_LIST="sp_getProjectList";
+	public static final String PROJECT_LIST_AS_OWNER="sp_getProjectList";
+	public static final String PROJECT_LIST_AS_COLLABORATOR = "sp_getCollaboratorProjectList";
+	public static final String PROJECT_LIST_AS_WORKSPACE_OWNER = "sp_getWorkspaceOwnerProjectList";
+	public static final String PROJECT_LIST_AS_WORKSPACE_COLLABORATOR = "sp_getWSCollaboratorProjectList";
+	
 	public static final String PROJECT_DETAILS="sp_getProjectDetails";
 	public static final String PROJECT_COLLABORATORS="sp_getProjectCollaborators";
 	public static final String ADD_PROJECT_REQUEST = "sp_addProjectDetails";
@@ -116,7 +120,8 @@ public interface DBConstants
 	// WorkSpace database objects
 	public static final String LIST_WORKSPACE = "sp_getWorkspaceList";
 	public static final String LIST_WORKSPACE_OF_COLLABORATOR = "sp_getWorkspacesOfCollaborator";
-	public static final String LIST_ACTIVE_WORKSPACE = "sp_getActiveWorkspaceList";
+	public static final String LIST_ACTIVE_WORKSPACE_AS_OWNER = "sp_getActiveWorkspaceList";
+	public static final String LIST_ACTIVE_WORKSPACE_AS_COLLABORATOR = "sp_getCollaboratorActiveWorkspaceList";
 	public static final String LIST_ARCHIVE_WORKSPACE = "sp_getArchiveWorkspaceList";
 	public static final String LIST_DEACTIVATED_WORKSPACE = "sp_getDeactivatedWorkspaceList";
 	public static final String ADD_WORKSPACE_REQUEST = "sp_createworkspace";

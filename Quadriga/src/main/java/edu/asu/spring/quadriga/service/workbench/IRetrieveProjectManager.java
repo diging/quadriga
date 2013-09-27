@@ -16,4 +16,13 @@ public interface IRetrieveProjectManager {
 	
 	public abstract List<ICollaborator> getCollaboratingUsers(String projectId) throws QuadrigaStorageException;
 
+	public abstract List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
+			throws QuadrigaStorageException;
+
+	public abstract List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
+			throws QuadrigaStorageException;
+
+	public abstract List<IProject> getCollaboratorProjectList(String sUserName)
+			throws QuadrigaStorageException;
+
 }

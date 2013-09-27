@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -65,44 +65,70 @@ public class RetrieveProjectController
 	 * @author 		rohit sukleshwar pendbhaje
 	 */
 	@RequestMapping(value="auth/workbench", method = RequestMethod.GET)
-	public String getProjectList(ModelMap model,Principal principal) throws QuadrigaStorageException
+	public ModelAndView getProjectList(Principal principal) throws QuadrigaStorageException
 	{
 		String username;
-		List<IProject> projectList;
+		ModelAndView model;
+		List<IProject> projectListAsOwner;
+		List<IProject> projectListAsCollaborator;
+		List<IProject> projectListAsWorkspaceOwner;
+		List<IProject> projectListAsWSCollaborator;
 		
 		username = principal.getName();
-		projectList = projectManager.getProjectList(username);
 		
-		model.addAttribute("projectlist", projectList);
+		//Fetch all the projects for which the user is owner
+		projectListAsOwner = projectManager.getProjectList(username);
 		
-		return "auth/workbench";
+		//Fetch all the projects for which the user is collaborator
+		projectListAsCollaborator = projectManager.getCollaboratorProjectList(username);
+		
+		//Fetch all the projects for which the user is associated workspace owner
+		projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(username);
+		
+		//Fetch all the projects for which the user is associated workspace collaborator
+		projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(username);
+		
+		
+		model = new ModelAndView("auth/workbench");
+		model.getModelMap().put("projectlistasowner", projectListAsOwner);
+        model.getModelMap().put("projectlistascollaborator", projectListAsCollaborator);
+        model.getModelMap().put("projectlistaswsowner", projectListAsWorkspaceOwner);
+        model.getModelMap().put("projectlistaswscollaborator", projectListAsWSCollaborator);
+		
+		return model;
 	}
 	
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
-	public String getProjectDetails(@PathVariable("projectid") String projectid, ModelMap model,Principal principal) throws QuadrigaStorageException
+	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
+		ModelAndView model;
 		String userName;
 		IProject project;
 		List<IWorkSpace> workspaceList;
+		List<IWorkSpace> collaboratorWorkspaceList;
+		
+		model = new ModelAndView("auth/workbench/project");
 		
 		userName = principal.getName();
 		project = projectManager.getProjectDetails(projectid);
 		
 		//retrieve all the workspaces associated with the project
 		workspaceList = wsManager.listActiveWorkspace(projectid,userName);
+		collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 		
-		model.addAttribute("project", project);
-		model.addAttribute("workspaceList",workspaceList);
+		model.getModelMap().put("project", project);
+		model.getModelMap().put("workspaceList",workspaceList);
+		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
 		if(projectSecurity.checkProjectOwner(userName, projectid)){
-			model.addAttribute("owner", 1);
+			model.getModelMap().put("owner", 1);
 		}else{
-			model.addAttribute("owner", 0);
+			model.getModelMap().put("owner", 0);
 		}
 		if(projectSecurity.checkProjectOwnerEditorAccess(userName, projectid)){
-			model.addAttribute("editoraccess", 1);
+			model.getModelMap().put("editoraccess", 1);
 		}else{
-			model.addAttribute("editoraccess", 0);
+			model.getModelMap().put("editoraccess", 0);
 		}
-		return "auth/workbench/project";
+		return model;
 	}
 }

@@ -244,7 +244,7 @@ public class RetrieveProjectControllerTest {
 			project2.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 			dbModifyConnect.addProjectRequest(project2);
 			
-			assertEquals(retrieveProjectController.getProjectList(model, principal), "auth/workbench");
+			assertEquals(retrieveProjectController.getProjectList(principal), "auth/workbench");
 			
 			List<IProject> projectlist = (List<IProject>) model.get("projectlist");
 			assertEquals(2, projectlist.size());
@@ -281,7 +281,7 @@ public class RetrieveProjectControllerTest {
 			workspace1.setOwner(user);
 			dbWorkspaceConnect.addWorkSpaceRequest(workspace1, getProjectId("testproject1"));
 			
-			assertEquals(retrieveProjectController.getProjectDetails(getProjectId("testproject1"), model, principal), "auth/workbench/project");
+			assertEquals(retrieveProjectController.getProjectDetails(getProjectId("testproject1"),principal), "auth/workbench/project");
 
 			List<IWorkSpace> wslist = (List<IWorkSpace>) model.get("workspaceList");
 			assertEquals(2, wslist.size());

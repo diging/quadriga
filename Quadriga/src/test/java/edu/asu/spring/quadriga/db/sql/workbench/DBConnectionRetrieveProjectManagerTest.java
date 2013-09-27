@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -75,7 +76,7 @@ public class DBConnectionRetrieveProjectManagerTest {
 		List<IProject> testProjectList = new ArrayList<IProject>();
 		IProject project;
 		
-		projectList = dbConnect.getProjectList("projuser");
+		projectList = dbConnect.getProjectList("projuser",DBConstants.PROJECT_LIST_AS_OWNER);
 		
 		//create project object with the test data
 		project = projectFactory.createProjectObject();

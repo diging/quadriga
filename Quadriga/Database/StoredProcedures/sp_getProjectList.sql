@@ -1,3 +1,15 @@
+/*******************************************
+Name          : sp_getProjectList
+
+Description   : Get the projects associated to the user as owner
+
+Called By     : UI
+
+Create By     : Kiran Kumar Batna
+
+Modified Date : 09/27/2013
+
+********************************************/
 DROP PROCEDURE IF EXISTS sp_getProjectList;
 DELIMITER $$
 CREATE PROCEDURE sp_getProjectList
@@ -7,8 +19,8 @@ CREATE PROCEDURE sp_getProjectList
 )
 BEGIN
 	-- the error handler for any sql exception
-  --  DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-  --    SET errmsg = 'SQL exception has occurred';
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+      SET errmsg = 'SQL exception has occurred';
       
 	IF(errmsg IS NULL)
     THEN
@@ -29,31 +41,6 @@ BEGIN
     SELECT  projectname,description,unixname,projectid,
             projectowner,accessibility
       FROM  vw_project
-      WHERE projectowner = projowner
-    UNION DISTINCT
-    SELECT DISTINCT proj.projectname,proj.description,proj.unixname,proj.projectid,
-            proj.projectowner,proj.accessibility
-      FROM  vw_project proj
-      JOIN  vw_project_collaborator projcollab
-        ON  proj.projectid = projcollab.projectid
-	 WHERE  projcollab.collaboratoruser = projowner
-    UNION DISTINCT
-	    SELECT DISTINCT proj.projectname,proj.description,proj.unixname,proj.projectid,
-            proj.projectowner,proj.accessibility
-      FROM  vw_project proj
-	  JOIN vw_project_workspace projws
-        ON projws.projectid = proj.projectid
-       JOIN vw_workspace ws
-        ON projws.workspaceid = ws.workspaceid
-      WHERE ws.workspaceowner = projowner
-      UNION DISTINCT
-	  SELECT DISTINCT proj.projectname,proj.description,proj.unixname,proj.projectid,
-            proj.projectowner,proj.accessibility
-      FROM  vw_project proj
-	  JOIN vw_project_workspace ws
-        ON ws.projectid = proj.projectid
-       JOIN vw_workspace_collaborator collab
-        ON ws.workspaceid = collab.workspaceid
-	WHERE collab.username = projowner;    
+      WHERE projectowner = projowner;
 END$$
 DELIMITER ;

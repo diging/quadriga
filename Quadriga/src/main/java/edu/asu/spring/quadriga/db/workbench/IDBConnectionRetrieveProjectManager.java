@@ -13,7 +13,7 @@ public interface IDBConnectionRetrieveProjectManager {
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;
 
-	public abstract List<IProject> getProjectList(String sUserName)
+	public abstract List<IProject> getProjectList(String sUserName,String spName)
 			throws QuadrigaStorageException;
 
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;

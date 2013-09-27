@@ -16,7 +16,7 @@ public interface IDBConnectionListWSManager {
 	public abstract List<IWorkSpace> listArchivedWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
 
-	public abstract List<IWorkSpace> listActiveWorkspace(String projectid,String user)
+	public abstract List<IWorkSpace> listActiveWorkspace(String projectid,String user,String spName)
 			throws QuadrigaStorageException;
 
 	public abstract IWorkSpace getWorkspaceDetails(String workspaceId,String user)
