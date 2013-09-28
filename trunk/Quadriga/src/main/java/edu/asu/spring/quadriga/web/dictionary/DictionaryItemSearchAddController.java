@@ -172,11 +172,6 @@ public class DictionaryItemSearchAddController {
 				model.addAttribute("errorstatus", 1);
 			}
 			
-			/**
-			 * @author rohit pendbhaje
-			 */
-			
-			
 
 		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException(

@@ -28,14 +28,7 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	private ICollaboratorRoleManager roleMapper;
 	
 	
-	/**
-	 * This methods returns the users who are not collaborators 
-	 * to the supplied project
-	 * @param projectid
-	 * @return List - List of users
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 */
+	
 	@Override
 	public List<IUser> getProjectNonCollaborators(String projectid) throws QuadrigaStorageException
 	{
@@ -46,12 +39,7 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 		return nonCollaborators;
 	}
 	
-	/**
-	 * This method returns the collaborators associated with the project.
-	 * @param projectId
-	 * @return List<ICollaborator>
-	 * @throws QuadrigaStorageException
-	 */
+	
 	@Override
 	public List<ICollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
 	{
