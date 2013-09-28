@@ -68,8 +68,6 @@ public class ProjectValidator implements Validator {
 				logger.error("Error", e);
 			}
 		}
-		
-		
 	}
 	
 	public void validateProjectAccessibility( EProjectAccessibility projectAccess,Errors err)
