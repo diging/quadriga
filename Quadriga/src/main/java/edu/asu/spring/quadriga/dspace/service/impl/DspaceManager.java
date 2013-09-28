@@ -557,7 +557,21 @@ public class DspaceManager implements IDspaceManager{
 		} catch (NoSuchAlgorithmException e) {
 			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
 		}
-		catch(ResourceAccessException | HttpServerErrorException e)
+		catch(ResourceAccessException e)
+		{
+			logger.error("Dspace is not accessible. Check the url used and also if dspace is down!");
+			checkedBitStreams.clear();
+			IBitStream dspaceDownBitStream = getBitstreamFactory().createBitStreamObject();
+			dspaceDownBitStream.setCommunityName(getDspaceMessages().getProperty("dspace.dspace_down"));
+			dspaceDownBitStream.setCollectionName(getDspaceMessages().getProperty("dspace.dspace_down"));
+			dspaceDownBitStream.setItemName(getDspaceMessages().getProperty("dspace.dspace_down"));
+			dspaceDownBitStream.setName(getDspaceMessages().getProperty("dspace.dspace_down"));
+			for(int i=0;i<bitstreams.size();i++)
+			{
+				checkedBitStreams.add(dspaceDownBitStream);
+			}
+		}
+		catch(HttpServerErrorException e)
 		{
 			logger.error("Dspace is not accessible. Check the url used and also if dspace is down!");
 			checkedBitStreams.clear();
