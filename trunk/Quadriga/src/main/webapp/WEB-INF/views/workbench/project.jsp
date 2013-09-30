@@ -70,7 +70,7 @@
 							</ul>
 						</c:if>
 						<c:if test="${empty collabworkspacelist}">
-			You are not collaborator to any projects.
+			You are not collaborator to any workspace.
 		</c:if>
 					</div>
 			</div>
