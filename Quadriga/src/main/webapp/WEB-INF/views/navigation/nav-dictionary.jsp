@@ -28,7 +28,7 @@
 				Add Collaborators</a></li>
 			<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/showDeleteCollaborators">
 				Delete Collaborators</a></li>
-			<li><a href="/quadriga/auth/dictionaries/${dictionaryid}/updatecollaborators">
+			<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/updatecollaborators">
 				Update Collaborators</a></li>
 		</ul>
 	</li>
