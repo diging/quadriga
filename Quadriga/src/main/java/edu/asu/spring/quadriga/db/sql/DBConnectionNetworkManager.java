@@ -208,8 +208,15 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 				while (resultSet.next()) { 
 					
 					network.setId(resultSet.getString(1));
-					network.setName(resultSet.getString(2));
-					network.setStatus(resultSet.getString(3));
+					network.setWorkspaceid(resultSet.getString(2));
+					network.setName(resultSet.getString(3));
+					network.setStatus(resultSet.getString(4));
+					
+					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
+					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
+					network.setProjectName(project.getName());
+					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
+					network.setWorkspaceName(workspaceName);
 				} 
 			}
 			errmsg = sqlStatement.getString(3);
