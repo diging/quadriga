@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
@@ -50,6 +51,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.impl.UserManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 
 /**
@@ -72,6 +74,9 @@ public class ConceptCollectionRestController {
 	@Autowired
 	private IWorkspaceCCManager workspaceCCManager;
 
+	@Autowired
+	private UserManager userManager;
+	
 	@Autowired
 	private IConceptCollectionManager conceptControllerManager;
 
@@ -154,8 +159,8 @@ public class ConceptCollectionRestController {
 
 	/**
 	 * Rest interface for uploading XML for concept collection
-	 * http://<<URL>:<PORT>>/quadriga/rest/uploadconcepts
-	 * hhttp://localhost:8080/quadriga/rest/uploadconcepts
+	 * http://<<URL>:<PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
+	 * hhttp://localhost:8080/quadriga/rest/syncconcepts/
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param request
@@ -168,12 +173,15 @@ public class ConceptCollectionRestController {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 * @throws JAXBException 
+	 * @throws QuadrigaAccessException 
+	 * @throws QuadrigaStorageException 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/uploadconcepts", method = RequestMethod.POST)
-	public String getCCXMLFromVogon(HttpServletRequest request,
+	@RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
+	public String getCCXMLFromVogon(@PathVariable("conceptCollectionID") String conceptCollectionId,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException {
+			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaAccessException, QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(500);
 			return "Please provide XML in body of the post request.";
@@ -199,10 +207,16 @@ public class ConceptCollectionRestController {
 
 			while(I.hasNext()){
 				Concept c = I.next();
-				logger.info("arg Name :"+ c.getName().trim());
-				logger.info("arg Pos :"+ c.getPos().trim());
-				logger.info("arg URI :"+ c.getUri().trim());
-				logger.info("arg descrtiption :"+ c.getDescription().trim());
+				logger.debug("arg Name :"+ c.getName().trim());
+				logger.debug("arg Pos :"+ c.getPos().trim());
+				logger.debug("arg URI :"+ c.getUri().trim());
+				logger.debug("arg descrtiption :"+ c.getDescription().trim());
+				try{
+					conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(),  c.getDescription(), conceptCollectionId, user.getUserName());
+				}catch(QuadrigaStorageException e){
+					logger.error("Errors in adding items",e);
+				}
+				
 			}
 
 

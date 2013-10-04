@@ -275,7 +275,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		dbCommand = DBConstants.SP_CALL + " " + DBConstants.ADD_COLLECTION_ITEM
 				+ "(?,?,?,?,?,?,?)";
 		getConnection();
-		logger.info("---" + username);
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, id);
