@@ -188,7 +188,7 @@ public class ConceptCollectionRestController {
 
 		} else {
 
-			logger.info("XML : "+xml);
+			logger.debug("XML : "+xml);
 			JAXBElement<QuadrigaConceptReply> response1=null;
 			try{
 				JAXBContext context = JAXBContext.newInstance(QuadrigaConceptReply.class);
@@ -204,7 +204,7 @@ public class ConceptCollectionRestController {
 			List<Concept> conceptList = c1.getConcepts();
 
 			Iterator<Concept> I = conceptList.iterator();
-
+			
 			while(I.hasNext()){
 				Concept c = I.next();
 				logger.debug("arg Name :"+ c.getName().trim());
@@ -215,15 +215,15 @@ public class ConceptCollectionRestController {
 					conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(),  c.getDescription(), conceptCollectionId, user.getUserName());
 				}catch(QuadrigaStorageException e){
 					logger.error("Errors in adding items",e);
+					response.setStatus(500);
+					response.setContentType(accept);
+					return "Fail";
 				}
 				
 			}
-
-
-
 			response.setStatus(200);
 			response.setContentType(accept);
-			return "";
+			return "Success";
 		}
 	}
 
