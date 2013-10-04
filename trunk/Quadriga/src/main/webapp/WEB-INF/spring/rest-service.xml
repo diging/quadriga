@@ -104,6 +104,8 @@
 				</value>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceItems
 				</value>
+				<value>edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList
+				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply

@@ -1,13 +1,21 @@
 package edu.asu.spring.quadriga.web.rest;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -33,6 +41,9 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -60,7 +71,7 @@ public class ConceptCollectionRestController {
 
 	@Autowired
 	private IWorkspaceCCManager workspaceCCManager;
-	
+
 	@Autowired
 	private IConceptCollectionManager conceptControllerManager;
 
@@ -68,7 +79,7 @@ public class ConceptCollectionRestController {
 	@Autowired
 	private IConceptCollectionFactory collectionFactory;
 
-	
+
 	@Autowired
 	private IConceptFactory conFact;
 
@@ -78,11 +89,11 @@ public class ConceptCollectionRestController {
 	@Autowired
 	@Qualifier("conceptPowerURL")
 	private String conceptPowerURL;
-	
+
 	@Autowired
 	@Qualifier("updateConceptPowerURLPath")
 	private String updateConceptPowerURLPath;
-	
+
 	/**
 	 * Rest interface for the getting list of concept collections of a user
 	 * http://<<URL>:<PORT>>/quadriga/rest/conceptcollections
@@ -98,11 +109,11 @@ public class ConceptCollectionRestController {
 	@RequestMapping(value = "rest/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listConceptCollections(ModelMap model, Principal principal, HttpServletRequest req) throws RestException
-			 {
+	{
 		List<IConceptCollection> collectionsList = null;
 		VelocityEngine engine = null;
 		Template template = null;
-		  
+
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
@@ -113,7 +124,7 @@ public class ConceptCollectionRestController {
 					.getTemplate("velocitytemplates/conceptcollections.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", collectionsList);
-			
+
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
@@ -121,11 +132,11 @@ public class ConceptCollectionRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
-			
+
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (MethodInvocationException e) {
-			
+
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (QuadrigaStorageException e) {
@@ -138,7 +149,7 @@ public class ConceptCollectionRestController {
 			throw new RestException(403);
 		}
 
-		
+
 	}
 
 	/**
@@ -156,26 +167,52 @@ public class ConceptCollectionRestController {
 	 * @throws IOException 
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
+	 * @throws JAXBException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/uploadconcepts", method = RequestMethod.POST)
 	public String getCCXMLFromVogon(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException {
-
+			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException {
 		if (xml.equals("")) {
 			response.setStatus(500);
 			return "Please provide XML in body of the post request.";
 
 		} else {
-			if (accept != null && accept.equals("application/xml")) {
+
+			logger.info("XML : "+xml);
+			JAXBElement<QuadrigaConceptReply> response1=null;
+			try{
+				JAXBContext context = JAXBContext.newInstance(QuadrigaConceptReply.class);
+				Unmarshaller unmarshaller = context.createUnmarshaller();
+				unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+				InputStream is = new ByteArrayInputStream(xml.getBytes());
+				response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
+			}catch(Exception e ){
+				logger.error("Error in unmarshalling",e);
 			}
+			QuadrigaConceptReply qReply= response1.getValue();
+			ConceptList c1 = qReply.getConceptList();
+			List<Concept> conceptList = c1.getConcepts();
+
+			Iterator<Concept> I = conceptList.iterator();
+
+			while(I.hasNext()){
+				Concept c = I.next();
+				logger.info("arg Name :"+ c.getName().trim());
+				logger.info("arg Pos :"+ c.getPos().trim());
+				logger.info("arg URI :"+ c.getUri().trim());
+				logger.info("arg descrtiption :"+ c.getDescription().trim());
+			}
+
+
+
 			response.setStatus(200);
 			response.setContentType(accept);
 			return "";
 		}
 	}
-	
+
 	/**
 	 * Rest interface for the getting list of concept collections of a user
 	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/conceptcollections
@@ -191,11 +228,11 @@ public class ConceptCollectionRestController {
 	@RequestMapping(value = "rest/workspace/{workspaceId}/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listWorkspaceConceptCollections(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
-			 {
+	{
 		List<IConceptCollection> collectionsList = null;
 		VelocityEngine engine = null;
 		Template template = null;
-		  
+
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
@@ -205,7 +242,7 @@ public class ConceptCollectionRestController {
 					.getTemplate("velocitytemplates/conceptcollections.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("list", collectionsList);
-			
+
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
@@ -213,11 +250,11 @@ public class ConceptCollectionRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
-			
+
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (MethodInvocationException e) {
-			
+
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (QuadrigaStorageException e) {
@@ -230,9 +267,9 @@ public class ConceptCollectionRestController {
 			throw new RestException(403);
 		}
 
-		
+
 	}
-	
+
 	/**
 	 * Rest interface for the getting concept details i.e, list of items in the
 	 * collection
@@ -288,7 +325,7 @@ public class ConceptCollectionRestController {
 			logger.error("Exception:", e);
 			throw new RestException(405);
 		}
-		
-	}
+
+			}
 
 }

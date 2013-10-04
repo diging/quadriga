@@ -4,7 +4,7 @@
 
 #foreach ($concept in $list)
 <Quadriga:concept>
-	<Quadriga:pos>$concept.lemma</Quadriga:pos>
+	<Quadriga:pos>$concept.pos</Quadriga:pos>
 	<Quadriga:name>$concept.lemma</Quadriga:name>
 	<Quadriga:description>$concept.description</Quadriga:description>
 	<Quadriga:uri>$concept.id</Quadriga:uri>
