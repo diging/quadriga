@@ -35,7 +35,7 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 select assigneduser,status from tbl_network_assigned 
+	 select assigneduser,status,updateddate from tbl_network_assigned 
 	 where isarchived='1' and networkid=innetworkid;
 	
 	END IF;

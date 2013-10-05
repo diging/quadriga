@@ -624,6 +624,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 					networkOldVersion =networkOldVersionFactory.createNetworkOldVersionObject();
 					networkOldVersion.setPreviousVersionAssignedUser(resultSet.getString(1)); 
 					networkOldVersion.setPreviousVersionStatus(resultSet.getString(2));
+					networkOldVersion.setUpdateDate(resultSet.getString(3));
 				} 
 			}
 			errmsg = sqlStatement.getString(2);

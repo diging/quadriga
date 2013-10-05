@@ -6,6 +6,7 @@ public class NetworkOldVersion implements INetworkOldVersion {
 
 	private String previousVersionAssignedUser;
 	private String previousVersionStatus;
+	private String updateDate;
 
 	
 	/* (non-Javadoc)
@@ -24,6 +25,22 @@ public class NetworkOldVersion implements INetworkOldVersion {
 		this.previousVersionStatus = previousVersionStatus;
 	}
 	
+	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#getPreviousVersionStatus()
+	 */
+	@Override
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#setPreviousVersionStatus(java.lang.String)
+	 */
+	@Override
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
 
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#getPreviousVersionAssignedUser()

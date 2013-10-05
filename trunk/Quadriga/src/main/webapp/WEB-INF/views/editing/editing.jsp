@@ -75,7 +75,8 @@
 									<c:out value="${network.networkOldVersion.previousVersionAssignedUser}"></c:out>
 									( 
 									<c:out value="${network.networkOldVersion.previousVersionStatus}"></c:out>
-									)
+									) Update Date :
+									<c:out value="${network.networkOldVersion.updateDate}"></c:out>
 									)
 								    </li>
 								</c:when>
