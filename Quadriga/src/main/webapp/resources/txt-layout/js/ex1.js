@@ -66,7 +66,7 @@ function init1(json){
 		// with dollar prefixed data-properties in the
 		// JSON structure.
 		Node: {
-		      overridable: false,
+		      overridable: true,
 		      dim : '10',
 		      color : '#8904B1'
 		    },
