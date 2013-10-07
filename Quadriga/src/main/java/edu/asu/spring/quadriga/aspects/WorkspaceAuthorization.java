@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.aspects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class WorkspaceAuthorization implements IAuthorization
 		IWorkSpace workspace;
 		List<ICollaborator> collaboratorList;
 		List<ICollaboratorRole> collaboratorRoles;
+		ArrayList<String> roles;
 		
 		haveAccess = false;
 		
@@ -52,6 +54,7 @@ public class WorkspaceAuthorization implements IAuthorization
 			{
 				if(userRoles.length>0)
 				{
+					roles = getAccessRoleList(userRoles);
 					collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
 					for(ICollaborator collaborator : collaboratorList)
 					{
@@ -62,25 +65,32 @@ public class WorkspaceAuthorization implements IAuthorization
 						{
 							collaboratorRoles = collaborator.getCollaboratorRoles();
 							
-							for(String role : userRoles)
-							{
 								for(ICollaboratorRole collabRole : collaboratorRoles)
 								{
 									collaboratorRoleId = collabRole.getRoleid();
-									if(role.equals(collaboratorRoleId))
+									if(roles.contains(collaboratorRoleId))
 									{
 										haveAccess = true;
-										break;
+										return haveAccess;
 									}
 								}
-								if(haveAccess)
-									break;
-							}
 						}
 					}
 				}
 			}
 		}
 		return haveAccess;
+	}
+	
+	public ArrayList<String> getAccessRoleList(String[] userRoles)
+	{
+		ArrayList<String> rolesList = new ArrayList<String>();
+		
+		for(String role : userRoles)
+		{
+			rolesList.add(role);
+		}
+		
+		return rolesList;
 	}
 }

@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -116,6 +119,7 @@ public class DictionaryCollaboratorController {
 	 * @return ModelAndView		return model and view from controller
 	 * @throws QuadrigaStorageException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showAddCollaborators" , method = RequestMethod.GET)
 	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException{
 	
@@ -159,6 +163,7 @@ public class DictionaryCollaboratorController {
 	 * @return ModelAndView		return model and view from controller
 	 * @throws QuadrigaStorageException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
 	public ModelAndView addCollaborators( @PathVariable("dictionaryid") String dictionaryId, 
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,

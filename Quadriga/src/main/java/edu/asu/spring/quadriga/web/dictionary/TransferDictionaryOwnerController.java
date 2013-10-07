@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -55,6 +58,7 @@ public class TransferDictionaryOwnerController
 		validateBinder.setValidator(validator);
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value="auth/dictionaries/changedictionaryowner/{dictionaryid}", method = RequestMethod.GET)
 	public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException
 	{
@@ -89,6 +93,7 @@ public class TransferDictionaryOwnerController
 		return model;
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value="auth/dictionaries/changedictionaryowner/{dictionaryid}", method = RequestMethod.POST)
     public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid,Principal principal,
 			@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result) throws QuadrigaStorageException

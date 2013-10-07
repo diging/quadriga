@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
@@ -46,6 +50,7 @@ public class DeleteCCCollaboratorController {
 		validateBinder.setValidator(validator);
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/{collectionid}/deletecollaborators", method=RequestMethod.GET)
 	public ModelAndView deleteCollaborators(@PathVariable("collectionid") String collectionid,Principal principal) 
 			throws QuadrigaAccessException, QuadrigaStorageException
@@ -75,6 +80,7 @@ public class DeleteCCCollaboratorController {
 	 * @return String having path for showcollaborators jsp page
 	 * @throws QuadrigaStorageException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/{collectionid}/deleteCollaborator", method = RequestMethod.POST)
 	public ModelAndView deleteCollaborators(@PathVariable("collectionid") String collectionid,
 	@Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,BindingResult result)

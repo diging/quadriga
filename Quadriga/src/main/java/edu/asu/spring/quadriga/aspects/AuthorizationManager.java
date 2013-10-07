@@ -29,9 +29,11 @@ public class AuthorizationManager implements IAuthorizationManager
 	@Qualifier("conceptCollectionAuthorization")
 	private IAuthorization conceptCollectionAuthorization;
 	
-	private HashMap<CheckedElementType,IAuthorization> accessManager;
+	@Autowired
+	@Qualifier("dictionaryAuthorization")
+	private IAuthorization dictionaryAuthorization;
 	
-
+	private HashMap<CheckedElementType,IAuthorization> accessManager;
 	
 	@PostConstruct
 	public void init() {
@@ -42,6 +44,7 @@ public class AuthorizationManager implements IAuthorizationManager
 		accessManager.put(CheckedElementType.PROJECT, projectAuthorization);
 		accessManager.put(CheckedElementType.WORKSPACE, workspaceAuthorization);
 		accessManager.put(CheckedElementType.CONCEPTCOLLECTION, conceptCollectionAuthorization);
+		accessManager.put(CheckedElementType.DICTIONARY, dictionaryAuthorization);
 		
 	}
 	

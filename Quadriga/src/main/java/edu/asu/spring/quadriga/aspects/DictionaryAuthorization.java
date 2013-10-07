@@ -4,48 +4,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 
-@Service("conceptCollectionAuthorization")
-public class ConceptCollectionAuthorization implements IAuthorization 
+public class DictionaryAuthorization implements IAuthorization 
 {
 	@Autowired
-	IConceptCollectionManager conceptCollectionManager;
+	IRetrieveDictionaryManager dictionaryRetrieveManager;
 	
 	@Autowired
-	private IConceptCollectionFactory collectionFactory;
+	IDictionaryFactory dictionaryFactory;
+	
+	@Autowired
+	IDictionaryManager dictonaryManager;
 
 	@Override
-	public boolean chkAuthorization(String userName, String conceptCollectionId,
+	public boolean chkAuthorization(String userName, String accessObjectId,
 			String[] userRoles) throws QuadrigaStorageException,
 			QuadrigaAccessException 
 	{
 		boolean haveAccess;
-		String conceptCollectionOwner;
+		String dictionaryOwner;
 		String collaboratorName;
 		String collaboratorRoleId;
 		List<ICollaboratorRole> collaboratorRoles;
-		IConceptCollection collection;
+		IDictionary dictionary;
 		ArrayList<String> roles;
 		
 		haveAccess = false;
 		
 		//fetch the details of the concept collection
-		collection = collectionFactory.createConceptCollectionObject();
-		collection.setId(conceptCollectionId);
-		conceptCollectionManager.getCollectionDetails(collection, userName);
+		dictionary = dictionaryRetrieveManager.getDictionaryDetails(accessObjectId);
 		
-		//check if the user is a concept collection owner
-		conceptCollectionOwner = collection.getOwner().getUserName();
-		if(userName.equals(conceptCollectionOwner))
+		
+		//check if the user is a dictionary  owner
+		dictionaryOwner = dictionary.getOwner().getUserName();
+		if(userName.equals(dictionaryOwner))
 		{
 			haveAccess = true;
 		}
@@ -57,7 +58,7 @@ public class ConceptCollectionAuthorization implements IAuthorization
 			{
 				roles = getAccessRoleList(userRoles);
 				//fetch the collaborators of the concept collection
-				List<ICollaborator> collaboratorList = conceptCollectionManager.showCollaboratingUsers(conceptCollectionId);
+				List<ICollaborator> collaboratorList = dictonaryManager.showCollaboratingUsers(accessObjectId);
 				
 				for(ICollaborator collaborator : collaboratorList)
 				{
