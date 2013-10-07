@@ -31,4 +31,7 @@
 	<!-- Reference the mesages -->
 	<beans:import resource="message-localization.xml"/>
 	
+	<!-- Reference the email configuration -->
+	<beans:import resource="email-config.xml"/>
+	
 </beans:beans>
