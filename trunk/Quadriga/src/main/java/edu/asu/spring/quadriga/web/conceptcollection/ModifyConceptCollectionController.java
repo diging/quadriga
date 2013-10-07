@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
@@ -22,6 +25,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IModifyConceptCollectionManager;
 import edu.asu.spring.quadriga.validator.ConceptCollectionValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ModifyConceptCollectionController 
@@ -44,6 +48,7 @@ public class ModifyConceptCollectionController
 		binder.setValidator(validator);
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.GET)
 	public ModelAndView updateConceptCollectionDetials(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -65,6 +70,7 @@ public class ModifyConceptCollectionController
 		return model;
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 3, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.POST)
 	public ModelAndView updateConceptCollectionDetails(@Validated @ModelAttribute("collection")ConceptCollection collection,BindingResult result,
 			@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException

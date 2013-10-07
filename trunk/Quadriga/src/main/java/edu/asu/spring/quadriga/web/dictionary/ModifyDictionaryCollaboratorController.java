@@ -20,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
@@ -69,6 +73,7 @@ public class ModifyDictionaryCollaboratorController
 		
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/dictionaries/{dictionaryid}/updatecollaborators", method=RequestMethod.GET)
 	 public ModelAndView updateCollaboratorForm(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException
 	 {
@@ -97,6 +102,7 @@ public class ModifyDictionaryCollaboratorController
 		 return model;
 	 }
 
+	 @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 3, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/dictionaries/{dictionaryid}/updatecollaborators", method=RequestMethod.POST)
 	 public ModelAndView updateCollaboratorForm(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
 			 BindingResult result,@PathVariable("dictionaryid") String dictionaryid,Principal principal) throws QuadrigaStorageException

@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -27,6 +30,7 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
@@ -73,6 +77,7 @@ public class ModifyCCCollaboratorController
 		
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/updatecollaborators", method=RequestMethod.GET)
 	 public ModelAndView updateCollaboratorForm(@PathVariable("collectionid") String collectionid) throws QuadrigaStorageException
 	 {
@@ -101,6 +106,7 @@ public class ModifyCCCollaboratorController
 		 return model;
 	 }
 	 
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 3, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/updatecollaborators", method=RequestMethod.POST)
 	 public ModelAndView updateCollaboratorForm(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
 			 BindingResult result,@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException

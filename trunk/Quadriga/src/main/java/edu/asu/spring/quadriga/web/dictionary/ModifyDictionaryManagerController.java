@@ -14,12 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IModifyDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.DictionaryValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ModifyDictionaryManagerController 
@@ -38,7 +42,7 @@ public class ModifyDictionaryManagerController
 		validateBinder.setValidator(validator);
 	}
 	
-	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/updatedictionary/{dictionaryid}", method = RequestMethod.GET)
      public ModelAndView updateDictionaryDetails(@PathVariable("dictionaryid") String dictionaryid,Principal principal) throws QuadrigaStorageException
      {
@@ -54,6 +58,7 @@ public class ModifyDictionaryManagerController
     	 return model;
      }
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 3, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/updatedictionary/{dictionaryid}", method = RequestMethod.POST)
 	public ModelAndView updateDictionaryDetails(@Validated @ModelAttribute("dictionary")Dictionary dictionary,BindingResult result,
 			@PathVariable("dictionaryid") String dictionaryid,Principal principal) throws QuadrigaStorageException

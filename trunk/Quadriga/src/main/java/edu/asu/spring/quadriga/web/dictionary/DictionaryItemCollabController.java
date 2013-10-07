@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
@@ -103,7 +106,8 @@ public class DictionaryItemCollabController {
 	 * @return Return to list dictionary item page
 	 * @throws QuadrigaStorageException
 	 */
-
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
 	@RequestMapping(value = "auth/dictionaries/deleteDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
 	public String deleteDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
@@ -183,7 +187,8 @@ public class DictionaryItemCollabController {
 	 * 
 	 * @return Return to list dictionary item page
 	 */
-
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
 	@RequestMapping(value = "auth/dictionaries/updateDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
 	public String updateDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
@@ -270,6 +275,8 @@ public class DictionaryItemCollabController {
 		return "auth/dictionary/dictionarycollab";
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
+            RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
 	@RequestMapping(value = "auth/dictionaries/addDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)
 	public String addDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId,

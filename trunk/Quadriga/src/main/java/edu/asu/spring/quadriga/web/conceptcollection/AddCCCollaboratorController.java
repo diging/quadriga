@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -118,6 +121,7 @@ public class AddCCCollaboratorController {
 	  * @throws QuadrigaAccessException
 	  * @throws QuadrigaStorageException
 	  */
+	 @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/addcollaborators", method=RequestMethod.GET)
 	 public ModelAndView addCollaborator(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
@@ -181,6 +185,7 @@ public class AddCCCollaboratorController {
 		 * @return String having path for showcollaborators jsp page.
 		 * @throws QuadrigaStorageException
 		 */
+	   @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	   @RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
 		public ModelAndView addCollaborators(@PathVariable("collection_id") String collectionid, Principal principal,
 		@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result)throws QuadrigaStorageException

@@ -9,14 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -26,6 +27,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * This class will handle list dictionaries items controller for the dictionary
@@ -115,7 +117,8 @@ public class DictionaryItemController {
 	 * @return Return to list dictionary item page
 	 * @throws QuadrigaStorageException
 	 */
-
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
+			                                                                                                RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
 	@RequestMapping(value = "auth/dictionaries/deleteDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String deleteDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
@@ -182,7 +185,8 @@ public class DictionaryItemController {
 	 * 
 	 * @return Return to list dictionary item page
 	 */
-
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
+			                                                                                                RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
 	@RequestMapping(value = "auth/dictionaries/updateDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String updateDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
