@@ -14,6 +14,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  */
 public interface IUserManager {
 
+	public final static int SUCCESS = 1;
+	public final static int FAILURE = 0;
+	
 	/**
 	 * Method which creates a user object for the given userId.
 	 * 
