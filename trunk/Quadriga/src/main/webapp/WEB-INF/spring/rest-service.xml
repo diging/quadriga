@@ -135,7 +135,7 @@
 	
 	<bean id="dspaceStrings"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="location" value="classpath:locale/dspacestrings.properties" />
+		<property name="location" value="classpath:dspacestrings.properties" />
 	</bean>
 	
 	
