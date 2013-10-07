@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.email.EmailNotificationSender;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -37,6 +38,9 @@ public class UserManager implements IUserManager {
 
 	@Autowired
 	private IUserFactory userFactory;
+	
+	@Autowired
+	private EmailNotificationSender emailSender;
 
 	public IUserFactory getUserFactory() {
 		return userFactory;
@@ -172,6 +176,15 @@ public class UserManager implements IUserManager {
 
 		//Add the new role to the user.
 		int iResult = dbConnect.deactivateUser(sUserId, sDeactiveRoleDBId, sAdminId);
+		
+		//TODO: Implement email notification
+		if(iResult == SUCCESS)
+		{
+			//TODO: Remove test email setup	
+			System.out.println("Inside the email notification if.....");
+			emailSender.sendNotificationEmail("ramkumar007@gmail.com", "test subject", "test message");
+			System.out.println("Outside the email notification if.....");
+		}
 		return iResult;
 	}
 
