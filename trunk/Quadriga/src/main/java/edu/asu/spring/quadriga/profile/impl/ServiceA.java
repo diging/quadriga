@@ -38,7 +38,7 @@ public class ServiceA implements IService {
 
 	@Override
 	public String getId() {
-		return id;
+		return "edu.asu.ServiceA";
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class ServiceA implements IService {
 
 	@Override
 	public String getName() {
-		return name;
+		return "ServiceA";
 	}
 	
 	
