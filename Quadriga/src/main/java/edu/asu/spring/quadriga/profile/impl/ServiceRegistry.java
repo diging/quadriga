@@ -25,13 +25,13 @@ public class ServiceRegistry implements IServiceRegistry {
 	
 	@Autowired
 	private ApplicationContext ctx;
-	
-	@Autowired
-	private IService serviceA;
+
 	
 	private Map<String, IService> serviceMap;
 	
 	private Map<String, IService> newServiceMap;
+	
+	private Map<String,String> serviceIdNameMap;
 		
 	
 	public ServiceRegistry(){
@@ -86,56 +86,31 @@ public class ServiceRegistry implements IServiceRegistry {
 		return serviceMap.get(serviceId);
 	}
 
-	@Override
-	public List<String> getServiceIds() {
-			
-		List<String> serviceIdList = new ArrayList<String>();
-		Set<String> serviceIds= newServiceMap.keySet();
-		
-		Iterator<String> serviceIdIter = serviceIds.iterator();
-		
-		while(serviceIdIter.hasNext()){
-			
-			serviceIdList.add(serviceIdIter.next());
-		}
-		
-		return serviceIdList;
-	}
 
 	@Override
-	public List<String> getServiceNames() {
+	public Map<String, String> getServiceNameIdMap() {
 
-		List<String> serviceNames = new ArrayList<String>();
-		Iterator<?> serviceIter = newServiceMap.entrySet().iterator();
+		serviceIdNameMap = new HashMap<String,String>();
+		Iterator<?> iterator = newServiceMap.entrySet().iterator();
 		
-		while(serviceIter.hasNext()){
+		while(iterator.hasNext()){
 			
 			@SuppressWarnings("rawtypes")
-			Map.Entry entry = (Map.Entry)serviceIter.next();
-			
-			IService serviceObj = (IService) entry.getValue();
-			serviceNames.add(serviceObj.getName());
+			Map.Entry entry = (Map.Entry)iterator.next();
+			IService serviceObj = (IService)entry.getValue();
+			serviceIdNameMap.put(serviceObj.getId(), serviceObj.getName());
+				
 		}
 		
-		return serviceNames;
+		return serviceIdNameMap;
 	}
 
-	@Override
-	public List<IService> getServiceObjectList() {
-		
-		List<IService> serviceObjList = new ArrayList<IService>();
-		Iterator<?> serviceIter = newServiceMap.entrySet().iterator();
-		
-		while(serviceIter.hasNext()){
-			
-			@SuppressWarnings("rawtypes")
-			Map.Entry entry = (Map.Entry)serviceIter.next();
-			
-			IService serviceObj = (IService) entry.getValue();
-			serviceObjList.add(serviceObj);
-		}
-		
-		return serviceObjList;
+	public Map<String, String> getServiceIdNameMap() {
+		return serviceIdNameMap;
+	}
+
+	public void setServiceIdNameMap(Map<String, String> serviceIdNameMap) {
+		this.serviceIdNameMap = serviceIdNameMap;
 	} 
 	
 	
