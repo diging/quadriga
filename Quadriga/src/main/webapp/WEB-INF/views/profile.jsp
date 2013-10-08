@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 
 <script type="text/javascript">
 
@@ -33,9 +35,39 @@ h1{
 </style>
 </head>
 
+<form:form method="GET" modelAttribute="ServiceForm"
+action="${pageContext.servletContext.contextPath}/auth/profile">
 
+<form:select path="${ServiceForm.serviceList}" id="selectbox">
+ <form:option value="NONE" label="--- Select ---"/>
+<c:forEach var="service" items="${ServiceForm.serviceList}" varStatus="status">
+<form:option value="service[${status.index}].id" label="service[${status.index}].name" />
+</c:forEach>
+</form:select>
+ 
+</form:form>
 
- <form action="${pageContext.servletContext.contextPath}/auth/profile/showadduri">
+ 
+ 
+ 
+ <%--<form:option value="NONE" label="--- Select ---"/> 
+<form:options items="${ServiceForm.serviceList}" itemvalue="id" itemlabel="name" /> --%>
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <%-- <form action="${pageContext.servletContext.contextPath}/auth/profile/showadduri">
  <table>
 	 <tr>
 		 <td width="50%"><span style="font-weight:bold;">Name:&nbsp</span><c:out value="${user.name}"/></td>
@@ -60,7 +92,7 @@ h1{
  </tbody>
  </table>
  <input type="submit" value="Add uri">
- </form>
+ </form> --%>
  
  
  <%-- <form action="${pageContext.servletContext.contextPath}/auth/profile/showadduri">

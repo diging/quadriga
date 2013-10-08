@@ -18,14 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.IProfile;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IServiceUriFactory;
 import edu.asu.spring.quadriga.domain.implementation.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.IService;
+import edu.asu.spring.quadriga.profile.IServiceFormFactory;
+import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
-import edu.asu.spring.quadriga.validator.ProjectValidator;
 
 /**
  * Handles requests for the application home page.
@@ -44,6 +46,18 @@ public class HomeController {
 	
 	@Autowired
 	private ProfileValidator profileValidator;
+	
+	@Autowired
+	private IServiceRegistry serviceRegistry;
+	
+	@Autowired
+	private IService serviceA;
+	
+	@Autowired
+	private ISearchResult searchResult;
+	
+	@Autowired
+	private IServiceFormFactory serviceFormFactory;
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder){
@@ -73,21 +87,51 @@ public class HomeController {
 		return "auth/home";
 	}
 	
-	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
-	public String loginProfile(Model model, Principal principal) throws QuadrigaStorageException
-	{
-		IProfile serviceUri = serviceUriFactory.createServiceUriObject();
-		model.addAttribute("serviceUri", serviceUri);
-		
-		
-		IUser user = userManager.getUserDetails(principal.getName());
-		model.addAttribute("user", user);
-		
-		List<IProfile> profileList = profileManager.showUserProfile(principal.getName());
-		model.addAttribute("profileList", profileList);
+//	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
+//	public String loginProfile(Model model, Principal principal) throws QuadrigaStorageException
+//	{
+//		IProfile serviceUri = serviceUriFactory.createServiceUriObject();
+//		model.addAttribute("serviceUri", serviceUri);
+//		
+//		
+//		IUser user = userManager.getUserDetails(principal.getName());
+//		model.addAttribute("user", user);
+//		
+//		List<IProfile> profileList = profileManager.showUserProfile(principal.getName());
+//		model.addAttribute("profileList", profileList);
+//		
+//		
+//
+//		return "auth/home/profile";
+//	}
 
+	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
+	public String search(Model model, Principal principal) throws QuadrigaStorageException
+	{
+		
+//		searchResult.setWord("Dog");
+//		String serviceId = "serviceA";   //temporary
+//		
+//		
+//		IService serviceA = serviceRegistry.getServiceObject(serviceId);
+//		searchResult = serviceA.search(searchResult.getWord());
+//		
+//		List<IService> serviceList = new ArrayList<IService>();
+//		
+//		serviceList.add(serviceA);
+//		
+//		model.addAttribute("serviceList", serviceList);
+
+		model.addAttribute("ServiceForm",serviceFormFactory.getServiceFormObject());
+		List<String> serviceIds = serviceRegistry.getServiceIds();
+		model.addAttribute("serviceIds", serviceIds);
+		
+		List<String> serviceNames = serviceRegistry.getServiceNames();
+		model.addAttribute("serviceNames", serviceNames);
+		
 		return "auth/home/profile";
 	}
+	
 	
 	@RequestMapping(value = "auth/profile/showadduri", method = RequestMethod.GET)
 	public String showAddUri(Model model, Principal principal) throws QuadrigaStorageException
