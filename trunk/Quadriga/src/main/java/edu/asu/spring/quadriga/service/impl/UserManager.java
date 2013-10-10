@@ -4,6 +4,8 @@ package edu.asu.spring.quadriga.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.email.EmailNotificationSender;
+import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -29,6 +31,9 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Service("userManager")
 public class UserManager implements IUserManager {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(UserManager.class);
+	
 	@Autowired
 	@Qualifier("DBConnectionManagerBean")
 	private IDBConnectionManager dbConnect;
@@ -38,9 +43,9 @@ public class UserManager implements IUserManager {
 
 	@Autowired
 	private IUserFactory userFactory;
-	
+
 	@Autowired
-	private EmailNotificationSender emailSender;
+	private IEmailNotificationManager emailManager;
 
 	public IUserFactory getUserFactory() {
 		return userFactory;
@@ -74,32 +79,32 @@ public class UserManager implements IUserManager {
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
 
 		user = dbConnect.getUserDetails(sUserId);
-			if(user!=null)
-			{
-				userRole = user.getQuadrigaRoles();
+		if(user!=null)
+		{
+			userRole = user.getQuadrigaRoles();
 
-				for(i=0;i<userRole.size();i++)
+			for(i=0;i<userRole.size();i++)
+			{
+				quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
+
+				//If user account is deactivated remove other roles 
+				if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
 				{
-					quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
-
-					//If user account is deactivated remove other roles 
-					if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
-					{
-						rolesList.clear();
-						rolesList.add(quadrigaRole);
-						break;
-					}
+					rolesList.clear();
 					rolesList.add(quadrigaRole);
+					break;
 				}
-				user.setQuadrigaRoles(rolesList);
-			}
-			else
-			{
-				user = userFactory.createUserObject();
-				quadrigaRole = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
 				rolesList.add(quadrigaRole);
-				user.setQuadrigaRoles(rolesList);
 			}
+			user.setQuadrigaRoles(rolesList);
+		}
+		else
+		{
+			user = userFactory.createUserObject();
+			quadrigaRole = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+			rolesList.add(quadrigaRole);
+			user.setQuadrigaRoles(rolesList);
+		}
 
 		return user;	
 	}
@@ -115,7 +120,7 @@ public class UserManager implements IUserManager {
 	public List<IUser> getAllActiveUsers() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
-		
+
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
@@ -134,7 +139,7 @@ public class UserManager implements IUserManager {
 	public List<IUser> getAllInActiveUsers() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
-		
+
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
@@ -154,7 +159,7 @@ public class UserManager implements IUserManager {
 	{
 		List<IUser> listUsers = null;
 
-     	listUsers = dbConnect.getUserRequests();
+		listUsers = dbConnect.getUserRequests();
 		return listUsers;		
 	}
 
@@ -176,14 +181,19 @@ public class UserManager implements IUserManager {
 
 		//Add the new role to the user.
 		int iResult = dbConnect.deactivateUser(sUserId, sDeactiveRoleDBId, sAdminId);
-		
-		//TODO: Implement email notification
+
 		if(iResult == SUCCESS)
 		{
-			//TODO: Remove test email setup	
-			System.out.println("Inside the email notification if.....");
-			emailSender.sendNotificationEmail("ramkumar007@gmail.com", "test subject", "test message");
-			System.out.println("Outside the email notification if.....");
+			logger.info("The admin "+sAdminId+" deactivated the account of "+sUserId);
+			IUser user = this.getUserDetails(sUserId);
+			
+			//TODO:Remove test email setup
+			user.setEmail("ramkumar007@gmail.com");
+			
+			if(user.getEmail()!=null && !user.getEmail().equals(""))
+				emailManager.sendAccountDeactivationEmail(user, sAdminId);
+			else
+				logger.info("The user "+sUserId+" did not have an email address to send account deactivation email");
 		}
 		return iResult;
 	}
@@ -237,7 +247,7 @@ public class UserManager implements IUserManager {
 	public int activateUser(String sUserId,String sAdminId) throws QuadrigaStorageException {
 
 		int iResult=0;
-		
+
 		//Find the deactivated role id and create a QuadrigaRole Object
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
@@ -260,10 +270,22 @@ public class UserManager implements IUserManager {
 				}
 			}
 			user.setQuadrigaRoles(rolesList);
-			
+
 			//Convert the user roles to one string with DBROLEIDs
 			//Update the role in the Quadriga Database.
 			iResult = dbConnect.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(),sAdminId);
+			if(iResult == SUCCESS)
+			{
+				logger.info("The admin "+sAdminId+" activated the account of "+sUserId);
+				
+				//TODO:Remove test email setup
+				user.setEmail("ramkumar007@gmail.com");
+				
+				if(user.getEmail()!=null && !user.getEmail().equals(""))
+					emailManager.sendAccountActivationEmail(user, sAdminId);
+				else
+					logger.info("The user "+sUserId+" did not have an email address to send account activation email");
+			}
 		}
 
 		return iResult;
@@ -281,10 +303,10 @@ public class UserManager implements IUserManager {
 	@Override
 	public int addAccountRequest(String userId) throws QuadrigaStorageException {
 		int iUserStatus;
-		
+
 		//Get all open user requests
 		List<IUser> listUsers = dbConnect.getUserRequests();
-		
+
 		//Check if an open request is already placed for the userid
 		for(IUser user:listUsers)
 		{
@@ -294,7 +316,7 @@ public class UserManager implements IUserManager {
 				return iUserStatus;
 			}
 		}
-		
+
 		//Place a new access request
 		iUserStatus = dbConnect.addAccountRequest(userId);
 		return iUserStatus;
