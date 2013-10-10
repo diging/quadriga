@@ -310,7 +310,7 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 	 * @param sRoles The new roles of the user. Must be fetched from the applicaton context file.
 	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
-	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
+	 * @return Returns the status of the operation. 1 - Operation Success. 0 - Error occurred.
 	 * 
 	 * @author Ram Kumar Kumaresan
 	 * @throws QuadrigaStorageException 
