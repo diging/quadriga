@@ -11,6 +11,12 @@ public interface IModifyProjectManager {
 	public abstract void updateProjectRequest(IProject project, String userName)
 			throws QuadrigaStorageException;
 
+	/**
+	 * This method adds a project into the database.
+	 * @param project
+	 * @throws QuadrigaStorageException
+	 * @author Kiran Kumar Batna
+	 */
 	public abstract void addProjectRequest(IProject project)
 			throws QuadrigaStorageException;
 
