@@ -85,6 +85,18 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return projectList;
 	}
 	
+	@Override
+	public List<IProject> getProjectListByCollaboratorRole(String sUserName,String role) throws QuadrigaStorageException
+	{
+		List<IProject> projectList;
+		
+		projectList = dbConnect.getCollaboratorProjectList(sUserName,role);
+		
+		return projectList;
+	}
+	
+	
+	
 	/**
 	 * This method returns the project details for the supplied project.
 	 * @param projectId

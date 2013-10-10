@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,12 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.factories.IModifyProjectFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.validator.ProjectFormValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProject;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProjectForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProjectFormManager;
@@ -44,6 +50,9 @@ public class DeleteProjectController
 	@Autowired
 	ModifyProjectFormManager projectFormManager;
 	
+	private static final Logger logger = LoggerFactory
+			.getLogger(DeleteProjectController.class);
+	
 	@InitBinder
 	protected void initBinder(WebDataBinder validateBinder) throws Exception 
 	{
@@ -59,6 +68,7 @@ public class DeleteProjectController
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/workbench/deleteproject", method=RequestMethod.GET)
 	public ModelAndView deleteProjectRequestForm(Principal principal) throws QuadrigaStorageException
 	{
@@ -74,7 +84,7 @@ public class DeleteProjectController
 		//create a project form
 		projectForm = projectFormFactory.createModifyProjectForm();
 		
-		deleteProjectList = projectFormManager.getUserProjectList(userName);
+		deleteProjectList = projectFormManager.getProjectList(userName,RoleNames.ROLE_COLLABORATOR_ADMIN);
 		
 		projectForm.setProjectList(deleteProjectList);
 		
@@ -94,6 +104,7 @@ public class DeleteProjectController
 	 * @author   Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/deleteproject", method = RequestMethod.POST)
 	public ModelAndView deleteProjectRequest(@Validated @ModelAttribute("projectform") ModifyProjectForm projectForm,
 			BindingResult result,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -114,7 +125,8 @@ public class DeleteProjectController
 		
 		if(result.hasErrors())
 		{
-			deleteProjectList = projectFormManager.getUserProjectList(userName);
+			logger.error("Deleting project details :",result);
+			deleteProjectList = projectFormManager.getProjectList(userName,RoleNames.ROLE_COLLABORATOR_ADMIN);
 			
 			projectForm.setProjectList(deleteProjectList);
 			

@@ -30,12 +30,6 @@ $(document).ready(function(){
 	}
 	
 </script>
-<style>
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 <article class="is-page-content">
 
 	<form:form commandName="project" method="POST"
@@ -49,14 +43,14 @@ $(document).ready(function(){
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Name:</td>
-				<td><form:input path="name" size="60" id="name" /></td>
-				<td><form:errors path="name" cssClass="error"></form:errors></td>
+				<td style="width: 400px"><form:input path="name" size="60" id="name" /></td>
+				<td><form:errors path="name" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description:</td>
 				<td><form:textarea path="description" cols="44" rows="6"
 						id="description" /></td>
-						<td><form:errors path="description" cssClass="error"></form:errors></td>
+						<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 			</tr>
 					<tr>
 						<td>Project Public Access:</td>
@@ -64,12 +58,12 @@ $(document).ready(function(){
 						     <form:option value="" label="--- Select ---" />
 								<form:options />
 							</form:select>
-						<td><form:errors path="projectAccess" cssClass="error"></form:errors></td>
+						<td><form:errors path="projectAccess" class="ui-state-error-text"></form:errors></td>
 					</tr>
 			<tr>
 				<td>Unix name:</td>
 				<td><form:input path="unixName" size="60" id="unixName" /></td>
-				<td><form:errors path="unixName" cssClass="error"></form:errors></td>
+				<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td><form:input path="internalid" type="hidden" /> </td>

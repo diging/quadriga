@@ -44,15 +44,17 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 	{
 		String dbCommand;
 		String errmsg;
+		String projOwnerName;
+		IUser projOwner;
         IProject project;
         CallableStatement sqlStatement;
         List<IProject> projectList = new ArrayList<IProject>();
         
-        //establish the connection
-		getConnection();
-		
 		dbCommand = DBConstants.SP_CALL + " " + spName + "(?,?)";
 		try {
+			
+	        //establish the connection
+			getConnection();
 			
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1, sUserName);
@@ -75,12 +77,91 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 			        	project.setDescription(resultset.getString(2));
 			        	project.setUnixName(resultset.getString(3));
 			        	project.setInternalid(resultset.getString(4));
+			        	//retrieve the user details
+			        	projOwnerName = resultset.getString(5);
+			        	projOwner = userManager.getUserDetails(projOwnerName);
+			        	project.setOwner(projOwner);
+			        	project.setProjectAccess(EProjectAccessibility.valueOf(resultset.getString(6)));
+			        	
 			        	projectList.add(project);
 			         }
 				}
 			}
 			else
 			{
+				throw new QuadrigaStorageException(errmsg);
+			}
+		} 
+		catch (SQLException e)
+		{
+			logger.error("Retrieve projects list method :",e);
+			throw new QuadrigaStorageException();
+		}
+        finally
+        {
+        	closeConnection();
+        }
+		return projectList;
+	}
+	
+	/**
+	 * This method fetches the list of projects for current logged in user.
+	 * and for the specified collaborator role.
+	 * @returns  List of projects
+	 * @throws	 QuadrigaStorageException 
+	 * @author   Rohit Sukelshwar Pendbhaje
+     */
+	@Override
+	public List<IProject> getCollaboratorProjectList(String sUserName,String collaboratorRole) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		String projOwnerName;
+		IUser projOwner;
+        IProject project;
+        CallableStatement sqlStatement;
+        List<IProject> projectList = new ArrayList<IProject>();
+        
+		dbCommand = DBConstants.SP_CALL + " " + DBConstants.PROJECT_DETAILS_BY_COLLAB_ROLE + "(?,?,?)";
+		try {
+			
+	        //establish the connection
+			getConnection();
+			
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, sUserName);
+			sqlStatement.setString(2, collaboratorRole);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(3);
+			
+			if(errmsg.equals(""))
+			{
+				ResultSet resultset = sqlStatement.getResultSet();
+				
+				if(resultset.isBeforeFirst())
+				{
+					while(resultset.next())
+			        {
+						project = projectFactory.createProjectObject();
+			        	project.setName(resultset.getString(1));
+			        	project.setDescription(resultset.getString(2));
+			        	project.setUnixName(resultset.getString(3));
+			        	project.setInternalid(resultset.getString(4));
+			        	//retrieve the user details
+			        	projOwnerName = resultset.getString(5);
+			        	projOwner = userManager.getUserDetails(projOwnerName);
+			        	project.setOwner(projOwner);
+			        	project.setProjectAccess(EProjectAccessibility.valueOf(resultset.getString(6)));
+			        	projectList.add(project);
+			         }
+				}
+			}
+			else
+			{
+				logger.error("Retrieve project list",errmsg);
 				throw new QuadrigaStorageException(errmsg);
 			}
 		} 

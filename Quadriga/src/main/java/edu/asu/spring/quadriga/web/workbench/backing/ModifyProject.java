@@ -8,6 +8,7 @@ public class ModifyProject
 	private String internalid;
 	private String name;
 	private String description;
+	private String projectOwner;
 	
 	public ModifyProject()
 	{
@@ -31,6 +32,14 @@ public class ModifyProject
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getProjectOwner() {
+		return projectOwner;
+	}
+
+	public void setProjectOwner(String projectOwner) {
+		this.projectOwner = projectOwner;
 	}
 
 

@@ -40,16 +40,12 @@ public class ModifyProjectManager implements IModifyProjectManager
 	}
 	
 	/**
-	 * This method updates a project into the database.
-	 * @param project
-	 * @return String - error message blank on success and contains error on failure.
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void updateProjectRequest(IProject project,String userName) throws QuadrigaStorageException
 	{
-		
+		logger.info("Updating project details");
 		dbConnect.updateProjectRequest(project, userName);
 	}
 	

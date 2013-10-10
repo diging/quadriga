@@ -3,30 +3,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <!-- Content -->
-<style type="text/css">
-table,td,th,caption {
-	border: 1px solid black;
-}
-
-th {
-	background-color: #E9EEF6;
-	color: black;
-	font-weight: bold;
-}
-
-td {
-	background-color: white;
-	color: black;
-	white-space: wrap;
-	overflow: wrap;
-	text-overflow: ellipsis;
-}
-
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 <script>
 	$(document).ready(function() {
 		activeTable = $('.dataTable').dataTable({
@@ -94,7 +70,7 @@ td {
 			<span class="byline">Select the projects to be deleted:</span>
 			<c:choose>
 			<c:when test="${error == '1'}">
-			<span class="error">
+			<span class="ui-state-error-text">
 			<spring:message code="project_selection.required" />
 			</span>
 			<br></c:when>

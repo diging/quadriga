@@ -40,6 +40,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.validator.ProjectValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ModifyProjectController 
@@ -148,12 +149,13 @@ public class ModifyProjectController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/workbench/modifyproject/{projectid}", method = RequestMethod.GET)
 	public ModelAndView updateProjectRequestForm(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		IProject project;
+		logger.info("Updating project details");
 		model = new ModelAndView("auth/workbench/modifyproject");
 		project = retrieveProjectManager.getProjectDetails(projectid);
 		model.getModelMap().put("project", project);
@@ -173,7 +175,7 @@ public class ModifyProjectController
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {"ADMIN","PROJECT_ADMIN"} )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/modifyproject/{projectid}", method = RequestMethod.POST)
 	public ModelAndView updateProjectRequest(@Validated @ModelAttribute("project")Project project,BindingResult result,
 			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -181,9 +183,11 @@ public class ModifyProjectController
 		ModelAndView model;
 		String userName = principal.getName();
 
+		logger.info("Update project details");
 		model = new ModelAndView("auth/workbench/modifyproject");
 		if(result.hasErrors())
 		{
+			logger.error("Update project details error:",result);
 			model.getModelMap().put("project", project);
 			model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
 			model.getModelMap().put("success", 0);
@@ -216,7 +220,7 @@ public class ModifyProjectController
 		
 		//retrieve all the workspaces associated with the project
 		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
-		if(projectSecurity.checkProjectOwner(userName, projectId)){
+		if(projectSecurity.checkProjectOwner(userName)){
 			model.addAttribute("owner", 1);
 		}else{
 			model.addAttribute("owner", 0);
@@ -256,7 +260,7 @@ public class ModifyProjectController
 		
 		//retrieve all the workspaces associated with the project
 		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
-		if(projectSecurity.checkProjectOwner(userName, projectId)){
+		if(projectSecurity.checkProjectOwner(userName)){
 			model.addAttribute("owner", 1);
 		}else{
 			model.addAttribute("owner", 0);

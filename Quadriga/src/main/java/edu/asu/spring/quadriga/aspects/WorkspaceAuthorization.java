@@ -82,6 +82,14 @@ public class WorkspaceAuthorization implements IAuthorization
 		return haveAccess;
 	}
 	
+	@Override
+	public boolean chkAuthorizationByRole(String userName,String[] userRoles )
+			throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		return false;
+		
+	}
+	
 	public ArrayList<String> getAccessRoleList(String[] userRoles)
 	{
 		ArrayList<String> rolesList = new ArrayList<String>();
