@@ -42,7 +42,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		boolean chkAccess;
 		
 		//check if the user is a project owner
-		chkAccess = projectSecurity.checkProjectOwner(userName, projectId);
+		chkAccess = projectSecurity.checkProjectOwner(userName);
 		
 		//check if the user is a project collaborator and has a ADMIN role
 		if(!chkAccess)
@@ -83,7 +83,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	    chkAccess = false;
 	    
 	    //check if the user is a project owner
-	    chkAccess = projectSecurity.checkProjectOwner(userName, projectId);
+	    chkAccess = projectSecurity.checkProjectOwner(userName);
 	    
 	    //check if the user is workspace owner
 	    if(!chkAccess)

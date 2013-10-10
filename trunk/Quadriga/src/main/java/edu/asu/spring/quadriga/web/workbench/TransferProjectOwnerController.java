@@ -158,7 +158,7 @@ public class TransferProjectOwnerController
 	        	//fetch the new owner
 	        	newOwner = collaboratorUser.getUserName();
 	        	
-	        	collaboratorRole = roleManager.getProjectCollaboratorRoleById(RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN).getRoleDBid();
+	        	collaboratorRole = roleManager.getProjectCollaboratorRoleById(RoleNames.ROLE_COLLABORATOR_ADMIN).getRoleDBid();
 	        	
 				//call the method to transfer the ownership
 				projectManager.transferProjectOwnerRequest(projectid, userName, newOwner,collaboratorRole);

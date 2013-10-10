@@ -25,4 +25,7 @@ public interface IRetrieveProjectManager {
 	public abstract List<IProject> getCollaboratorProjectList(String sUserName)
 			throws QuadrigaStorageException;
 
+	public abstract List<IProject> getProjectListByCollaboratorRole(String sUserName,String role)
+			throws QuadrigaStorageException;
+
 }

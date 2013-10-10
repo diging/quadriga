@@ -84,11 +84,7 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 	}
 	
     /**
-     * This method updates the details of given project.
-     * @param project
-     * @param userName
-     * @return String errmsg blank on success and error message on failure.
-     * @throws QuadrigaStorageException
+     * {@inheritDoc}
      */
 	@Override
 	public void updateProjectRequest(IProject project,String userName) throws QuadrigaStorageException
@@ -112,11 +108,11 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         //command to call the SP
         dbCommand = DBConstants.SP_CALL+ " " + DBConstants.MODIFY_PROJECT_REQUEST + "(?,?,?,?,?,?,?)";
        
-        //get the connection
-        getConnection();
-        
         try
         {
+            //get the connection
+            getConnection();
+            
         	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
         	
         	//adding the input variables to the SP
@@ -136,13 +132,13 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 			
 			if(!errmsg.equals(""))
 			{
-				logger.info("Update project request method :"+errmsg);
+				logger.error("Update project request method :",errmsg);
 	        	throw new QuadrigaStorageException(); 
 			}
         }
         catch(SQLException e)
         {
-        	logger.info("Update project request method :"+e.getMessage());
+        	logger.error("Update project request method :",e);
         	throw new QuadrigaStorageException(); 
         }
         finally

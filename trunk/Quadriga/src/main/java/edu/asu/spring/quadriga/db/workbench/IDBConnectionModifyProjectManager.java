@@ -8,6 +8,13 @@ public interface IDBConnectionModifyProjectManager {
 	public abstract void deleteProjectRequest(String projectIdList)
 			throws QuadrigaStorageException;
 
+    /**
+     * This method updates the details of given project.
+     * @param project
+     * @param userName
+     * @throws QuadrigaStorageException
+     * @author kiran kumar batna
+     */
 	public abstract void updateProjectRequest(IProject project, String userName)
 			throws QuadrigaStorageException;
 

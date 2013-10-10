@@ -70,7 +70,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 */
 	
 	@Override
-	public boolean checkProjectOwner(String userName,String projectId) throws QuadrigaStorageException
+	public boolean checkProjectOwner(String userName) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
 		
@@ -78,7 +78,29 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = dbConnect.chkProjectOwner(userName,projectId);
+		chkAccess = dbConnect.chkProjectOwner(userName);
+		
+		return chkAccess;
+		
+	}
+	
+	/**
+	 * This method checks if the user is project owner
+	 * @param userName
+	 * @return boolean - TRUE if the user is project owner else FALSE
+	 * @throws QuadrigaStorageException
+	 * @author kiranbatna
+	 */
+	@Override
+	public boolean checkProjectCollaborator(String userName,String collaboratorRole) throws QuadrigaStorageException
+	{
+		boolean chkAccess;
+		
+		//initialize check Access variable
+		chkAccess = false;
+		
+		//check if the user is project owner
+		chkAccess = dbConnect.chkProjectCollaborator(userName, collaboratorRole);
 		
 		return chkAccess;
 		
@@ -146,7 +168,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = this.checkProjectOwner(userName,projectId);
+		chkAccess = this.checkProjectOwner(userName);
 		
 		if(!chkAccess)
 		{

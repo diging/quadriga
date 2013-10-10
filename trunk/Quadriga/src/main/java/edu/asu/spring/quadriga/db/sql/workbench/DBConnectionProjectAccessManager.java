@@ -27,14 +27,14 @@ IDBConnectionProjectAccessManager {
 	 *  @author Kiran Kumar Batna 
 	 */
 	@Override
-	public boolean chkProjectOwner(String userName,String projectId) throws QuadrigaStorageException
+	public boolean chkProjectOwner(String userName) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		CallableStatement sqlStatement;
 		boolean chkAccess;
 
 		//command to call the SP
-		dbCommand = "? = "+" "+ DBConstants.SP_CALL+ " " + DBConstants.CHECK_PROJECT_OWNER + "(?,?)";
+		dbCommand = "? = "+" "+ DBConstants.SP_CALL+ " " + DBConstants.CHECK_PROJECT_OWNER + "(?)";
 
 		//get the connection
 		getConnection();
@@ -49,7 +49,6 @@ IDBConnectionProjectAccessManager {
 
 			//adding the input parameter
 			sqlStatement.setString(2,userName);
-			sqlStatement.setString(3,projectId);
 
 			sqlStatement.execute();
 
@@ -60,7 +59,60 @@ IDBConnectionProjectAccessManager {
 		}
 		catch(SQLException e)
 		{
-			logger.info(" ",e);
+			logger.error("Check project access:",e);
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+	}
+	
+	/**
+	 *  This method verifies if the given user has any projects associated as 
+	 *  collaborator
+	 *  @param  userName
+	 *  @param  collaboratorRole
+	 *  @return Booelan TRUE- if he is project owner else FALSE
+	 *  @exception QuadrigaStorageException
+	 *  @author Kiran Kumar Batna 
+	 */
+	@Override
+	public boolean chkProjectCollaborator(String userName,String collaboratorRole) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		CallableStatement sqlStatement;
+		boolean chkAccess;
+
+		//command to call the SP
+		dbCommand = "? = "+" "+ DBConstants.SP_CALL+ " " + DBConstants.CHECK_PROJECT_COLLABORATOR + "(?,?)";
+
+		//establish the connection with the database
+		try
+		{
+			//get the connection
+			getConnection();
+			
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(1,Types.BOOLEAN);
+
+			//adding the input parameter
+			sqlStatement.setString(2,userName);
+			sqlStatement.setString(3,collaboratorRole);
+
+			sqlStatement.execute();
+
+			chkAccess = sqlStatement.getBoolean(1);
+
+			return chkAccess;
+
+		}
+		catch(SQLException e)
+		{
+			logger.error("Check project access:",e);
 			throw new QuadrigaStorageException();
 		}
 		finally

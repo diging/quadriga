@@ -7,4 +7,7 @@ public interface IAuthorization {
 
 	public abstract boolean chkAuthorization(String userName, String accessObjectId,
 			String[] userRoles) throws QuadrigaStorageException, QuadrigaAccessException;
+	
+	public abstract boolean chkAuthorizationByRole(String userName,String[] userRoles)
+			throws QuadrigaStorageException, QuadrigaAccessException;
 }

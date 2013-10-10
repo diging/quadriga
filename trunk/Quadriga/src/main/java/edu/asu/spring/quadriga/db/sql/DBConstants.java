@@ -43,6 +43,7 @@ public interface DBConstants
 	public static final String DELETE_PROJECT_COLLAB_REQUEST = "sp_deleteProjectCollaborators";
 	public static final String TRANSFER_PROJECT_OWNERSHIP = "sp_changeprojectowner";
 	public static final String UPDATE_PROJECT_COLLAB_REQUEST = "sp_updateprojectcollaborator";
+	public static final String PROJECT_DETAILS_BY_COLLAB_ROLE = "sp_getProjectListByCollaboratorRole";
 
 	public static final String ADD_DICTIONARY = "sp_addDictionaryDetails";
 	public static final String GET_DICTIONARY_DETAILS = "sp_getDictionaryDetails";
@@ -167,6 +168,7 @@ public interface DBConstants
 	public static final String CHECK_PROJECT_OWNER = "fn_checkProjectOwner";
 	public static final String CHECK_PROJECT_UNIX_NAME = "fn_checkDuplicateUnixName";
 	public static final String CHECK_PROJECT_OWNER_EDITOR_ROLE = "sp_hasProjectOwnerEditorRole";
+	public static final String CHECK_PROJECT_COLLABORATOR = "fn_checkProjectCollaborator";
 	
 	public static final String CHECK_WORKSPACE_OWNER_EDITOR_ROLE = "sp_hasWorkspaceOwnerEditorRole";
 	public static final String CHECK_WORKSPACE_PROJECT_OWNER_ROLE_INHERIT = "sp_doesWorkspaceInheritProjectOwnerEditorRole";

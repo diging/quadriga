@@ -18,5 +18,8 @@ public interface IDBConnectionRetrieveProjectManager {
 
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
+	public abstract List<IProject> getCollaboratorProjectList(String sUserName, String collaboratorRole)
+			throws QuadrigaStorageException;
+
 
 }

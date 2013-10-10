@@ -11,6 +11,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @Service("projectAuthorization")
@@ -18,6 +19,9 @@ public class ProjectAuthorization implements IAuthorization
 {	
 	@Autowired
 	private IRetrieveProjectManager projectManager;
+	
+	@Autowired
+	private ICheckProjectSecurity projectSecurityManager;
 	
 	@Override
 	public boolean chkAuthorization(String userName,String projectId,String[] userRoles) 
@@ -66,6 +70,37 @@ public class ProjectAuthorization implements IAuthorization
 								}
 						    }
 					}
+				}
+			}
+		}
+		return haveAccess;
+	}
+	
+	@Override
+	public boolean chkAuthorizationByRole(String userName,String[] userRoles )
+			throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		boolean haveAccess;
+		ArrayList<String> roles;
+		haveAccess = false;
+		
+		//fetch the details of the project
+		haveAccess = projectSecurityManager.checkProjectOwner(userName);
+		
+		//check the user roles if he is not a project owner
+		if(!haveAccess)
+		{
+			if(userRoles.length>0)
+			{
+				roles = getAccessRoleList(userRoles);
+				
+				//check if the user associated with the role has any projects
+				for(String role : roles)
+				{
+					haveAccess = projectSecurityManager.checkProjectCollaborator(userName, role);
+					
+					if(haveAccess)
+						break;
 				}
 			}
 		}
