@@ -83,7 +83,6 @@ public class ModifyProjectController
 	/**
 	 * Attach the custom validator to the Spring context
 	 */
-	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 
@@ -92,13 +91,13 @@ public class ModifyProjectController
 	
 	/**
 	 * This method is called during the load of add project request form
-	 * @param  model -  model object
-	 * @return String - the URL of the form
+	 * @return model -  model object
 	 * @author Kiran Kumar Batna
 	 */
 	@RequestMapping(value="auth/workbench/addproject", method=RequestMethod.GET)
 	public ModelAndView addProjectRequestForm()
 	{
+		logger.info("Loading add project form page");
 		ModelAndView model = new ModelAndView("auth/workbench/addproject");
 		model.getModelMap().put("project",projectFactory.createProjectObject());
 		model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
@@ -107,12 +106,12 @@ public class ModifyProjectController
 	}
 
 	/**
-	 * This method call the usermanager to insert the record in
+	 * This method call the user manager to insert the record in
 	 * the database on form submission
 	 * @param  project - object containing the form details.
-	 * @param  model
+	 * @param  result - object containing the errors.
 	 * @param  principal
-	 * @return String - the URL on success and failure
+	 * @return model - model object
 	 * @throws QuadrigaStorageException 
 	 * @author Kiran Kumar Batna
 	 */
@@ -122,8 +121,10 @@ public class ModifyProjectController
 	{
 		ModelAndView model;
 		model = new ModelAndView("auth/workbench/addproject");
+        logger.info("Adding project details.");
 		if(result.hasErrors())
 		{
+			logger.error("Adding project details",result);
 			model.getModelMap().put("project",project);
 			model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
 			model.getModelMap().put("success", 0);

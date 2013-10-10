@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,10 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 
-//add
-//update
-//delete
+/**
+ * This class add/update/delete a project
+ * @author kbatna
+ */
 @Service
 public class ModifyProjectManager implements IModifyProjectManager 
 {
@@ -24,19 +27,16 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Autowired
 	private IUserManager userManager;
 	
+	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectManager.class);
+	
 	/**
-	 * This method adds a project into the database.
-	 * @param project
-	 * @return String - error message blank on success and contains error on failure.
-	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void addProjectRequest(IProject project) throws QuadrigaStorageException
 	{
-		
+		logger.info("Adding project details");
 		dbConnect.addProjectRequest(project);
-		
 	}
 	
 	/**

@@ -19,11 +19,7 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionModifyProjectManager.class);
 	
 	/**
-	 *  This method inserts a record for new project
-	 *  @param  project
-	 *  @return String error message on error else a blank string
-	 *  @exception QuadrigaStorageException
-	 *  @author Kiran Kumar Batna 
+	 *  {@inheritDoc}
 	 */
 	@Override
 	public void addProjectRequest(IProject project) throws QuadrigaStorageException
@@ -47,12 +43,12 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         //command to call the SP
         dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_PROJECT_REQUEST + "(?,?,?,?,?,?)";
         
-        //get the connection
-        getConnection();
-        
         //establish the connection with the database
         try
         {
+            //get the connection
+            getConnection();
+            
         	sqlStatement = connection.prepareCall("{"+dbCommand+"}");
         	
         	//adding the input variables to the SP
@@ -71,14 +67,14 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 			
 			if(!errmsg.equals(""))
 			{
-				logger.info("Add project request method :"+errmsg);
+				logger.error("Add project request method :",errmsg);
 	        	throw new QuadrigaStorageException();
 			}
 			
         }
         catch(SQLException e)
         {
-        	logger.info("Add project request method :"+e.getMessage());
+        	logger.error("Add project request method :",e);
         	throw new QuadrigaStorageException();
         }
         finally
