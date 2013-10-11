@@ -6,7 +6,7 @@ public interface ISearchResult {
 	
 	public String getDescription();
 	
-	public void setWord(String word);
+	public void setId(String id);
 	
-	public String getWord();
+	public String getId();
 }

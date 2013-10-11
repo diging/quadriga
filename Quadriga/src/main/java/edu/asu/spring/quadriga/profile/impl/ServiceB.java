@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.profile.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.profile.ISearchResult;
@@ -30,11 +32,11 @@ public class ServiceB implements IService {
 	@Override
 	public String getName() {
 
-		return "serviceB";
+		return "ServiceB";
 	}
 
 	@Override
-	public ISearchResult search(String word) {
+	public List<ISearchResult> search(String word) {
 
 		return null;
 	}
