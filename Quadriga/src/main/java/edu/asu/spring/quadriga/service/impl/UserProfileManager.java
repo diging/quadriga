@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 
 @Service
@@ -19,19 +20,20 @@ public class UserProfileManager implements IUserProfileManager {
 	IDBConnectionProfileManager connectionProfileManager;
 
 	@Override
-	public String addUserProfile(String name,String servicename,String uri) throws QuadrigaStorageException {
+	public String addUserProfile(String name,String serviceid,String profileid,
+			String description) throws QuadrigaStorageException {
 
-		String errmsg = connectionProfileManager.addUserProfileDBRequest(name, servicename, uri);
+		String errmsg = connectionProfileManager.addUserProfileDBRequest(name, serviceid, profileid, description);
 		
 		return errmsg;
 	}
 
 	@Override
-	public List<IProfile> showUserProfile(String loggedinUser) throws QuadrigaStorageException {
+	public List<ISearchResult> showUserProfile(String loggedinUser, String serviceid) throws QuadrigaStorageException {
 		
-		List<IProfile> profileList = connectionProfileManager.showProfileDBRequest(loggedinUser);
+		List<ISearchResult> searchResultList = connectionProfileManager.showProfileDBRequest(loggedinUser, serviceid);
 		
-		return profileList;
+		return searchResultList;
 	}
 	
 	
