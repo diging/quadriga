@@ -8,8 +8,8 @@ import edu.asu.spring.quadriga.profile.ISearchResult;
 
 public interface IUserProfileManager {
 	
-	public abstract String addUserProfile(String name,String serviceid, String profileid, String desription ) throws QuadrigaStorageException;
+//	public abstract String addUserProfile(String name,String serviceid, String profileid, String desription ) throws QuadrigaStorageException;
 	
-	public abstract List<ISearchResult> showUserProfile(String loggedinUser, String serviceid) throws QuadrigaStorageException;
+//	public abstract List<ISearchResult> showUserProfile(String loggedinUser, String serviceid) throws QuadrigaStorageException;
 
 }
