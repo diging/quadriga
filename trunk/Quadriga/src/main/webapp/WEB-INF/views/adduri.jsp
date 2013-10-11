@@ -15,7 +15,8 @@ color: #ff0000;
 </style>
 </head>
 
-<script>
+<%--<script>
+
 
 $(document).ready(function() {
 	$("input[type=submit]").button().click(function(event) {
@@ -56,4 +57,4 @@ action="${pageContext.servletContext.contextPath}/auth/profile/adduri">
 </tr>
 </table>
 </header>
-</form:form>
+</form:form> --%>

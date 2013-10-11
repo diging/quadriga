@@ -2,17 +2,18 @@ DROP PROCEDURE IF EXISTS sp_addUserProfile;
 DELIMITER $$
 CREATE PROCEDURE sp_addUserProfile
 (
-	IN inusername 	VARCHAR(50),
-	IN inservicename	VARCHAR(50),
-	IN inuri		VARCHAR(256),
-	OUT errmsg		VARCHAR(100)
+	IN inusername 		VARCHAR(50),
+	IN inserviceid		VARCHAR(50),
+	IN inprofileid		VARCHAR(50),
+	IN indescription	VARCHAR(256),
+	OUT errmsg			VARCHAR(100)
 )
 
 BEGIN
 
 	 -- the error handler for any sql exception
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-	SET errmsg = "SQL exception has occurred";
+    -- DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+	-- SET errmsg = "SQL exception has occurred";
 
 	-- validating the input parameter
 	IF(inusername IS NULL OR inusername=" ")
@@ -20,16 +21,16 @@ BEGIN
 	END IF;
 
 	IF(SELECT 1 FROM tbl_quadriga_userprofile where username = inusername 
-		and servicename=inservicename and uri=inuri)
-		THEN SET errmsg = "service and uri already exists";
+		and profileid=inprofileid)
+		THEN SET errmsg = "service and profile id already exists";
 	END IF;
 
-	IF(inservicename IS NULL OR inservicename=" ")
-		THEN SET errmsg = "servicename cannot be empty";
+	IF(inserviceid IS NULL OR inserviceid=" ")
+		THEN SET errmsg = "service id cannot be empty";
 	END IF;
 
-	IF(inuri IS NULL OR inuri=" ")
-		THEN SET errmsg = "uri cannot be empty";
+	IF(inprofileid IS NULL OR inprofileid=" ")
+		THEN SET errmsg = "profile id cannot be empty";
 	END IF;
 
 
@@ -37,9 +38,9 @@ BEGIN
 	THEN SET errmsg = "no errors";
 	START TRANSACTION;
 	INSERT INTO 
-	tbl_quadriga_userprofile(username,servicename,uri,updatedby,
+	tbl_quadriga_userprofile(username,serviceid,profileid,description,updatedby,
 							 updateddate,createdby,createddate)
-	VALUES(inusername,inservicename,inuri,inusername,NOW(),inusername,NOW());
+	VALUES(inusername,inserviceid,inprofileid,indescription,inusername,NOW(),inusername,NOW());
 	
 	IF (errmsg="no errors")
 	THEN COMMIT;
