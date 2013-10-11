@@ -12,6 +12,6 @@ public interface IService {
 	
 	public abstract String getName();
 	
-	public abstract ISearchResult search(String word);
+	public abstract List<ISearchResult> search(String word);
 
 }

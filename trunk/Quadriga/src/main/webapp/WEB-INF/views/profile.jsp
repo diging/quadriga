@@ -6,7 +6,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
-<script type="text/javascript">
+<%--<script type="text/javascript">
 
 $(function() {
 	$("input[type=submit]").button().click(function(event) {
@@ -24,7 +24,7 @@ $(document).ready(function() {
 	});
 });
 
-</script>
+</script> --%>
 
 <head>
 <style type="text/css">
@@ -35,29 +35,62 @@ h1{
 </style>
 </head>
 
-<form:form method="GET" modelAttribute="ServiceForm"
-action="${pageContext.servletContext.contextPath}/auth/profile">
+<form:form method="GET" modelAttribute="ServiceBackBean"
+action="${pageContext.servletContext.contextPath}/auth/profile/search">
 
-<form:select path="${ServiceForm.serviceList}" id="selectbox">
- <form:option value="NONE" label="--- Select ---"/>
-<c:forEach var="service" items="${ServiceForm.serviceList}" varStatus="status">
-<form:option value="service[${status.index}].id" label="service[${status.index}].name" />
-</c:forEach>
-</form:select>
+<table>
+	<tr>
+	
+		<td>
+		Service Name
+		</td>
+		<td>
+		<form:select path="id" items="${serviceNameIdMap}"/>
+		</td>
+	</tr>	
+	<tr>
+		<td>
+		Search Term
+		</td>
+		<td>
+		<form:input path="term" label="search term"/>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<input type="submit" value="search"/> 
+		</td>
+	</tr>
+</table>
+</form:form>  
+
+<form:form method="POST" action="${pageContext.servletContext.contextPath}/auth/profile/additem">
  
-</form:form>
+ 
+ 
+ 
+ </form:form>
+ 
+ 
+ <%--<form:select path="serviceIdNameMap" items="${serviceNameIdMap}" multiple="true" /> --%>
+
+
+
+<%--<c:forEach var="service" items="${ServiceForm.serviceList}" varStatus="status">
+<form:select path="serviceList[${status.index}].id">
+	<form:option value="NONE" label="----select----" />
+	<form:options items="${serviceNameIdMap}" itemValue="id" itemLabel="name"/>
+</form:select>
+</c:forEach> --%>
+
+
+ 
 
  
  
  
  <%--<form:option value="NONE" label="--- Select ---"/> 
 <form:options items="${ServiceForm.serviceList}" itemvalue="id" itemlabel="name" /> --%>
- 
- 
-
- 
- 
- 
  
  
  

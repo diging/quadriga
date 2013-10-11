@@ -9,9 +9,9 @@ public class SearchResult implements ISearchResult {
 
 	
 	String description;
-	String word;
+	String id;
 	
-	
+
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
@@ -23,13 +23,14 @@ public class SearchResult implements ISearchResult {
 	}
 
 	@Override
-	public void setWord(String word) {
-		this.word = word;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	@Override
-	public String getWord() {
-		return word;
+	public String getId() {
+		return id;
 	}
 
+	
 }

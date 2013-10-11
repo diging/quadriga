@@ -2,17 +2,15 @@ package edu.asu.spring.quadriga.profile.impl;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.profile.IService;
-
 public class ServiceForm  {
 	
-	List<IService> serviceList;
+	List<ServiceBackBean> serviceList;
 
-	public List<IService> getServiceList() {
+	public List<ServiceBackBean> getServiceList() {
 		return serviceList;
 	}
 
-	public void setServiceList(List<IService> serviceList) {
+	public void setServiceList(List<ServiceBackBean> serviceList) {
 		this.serviceList = serviceList;
 	}
 

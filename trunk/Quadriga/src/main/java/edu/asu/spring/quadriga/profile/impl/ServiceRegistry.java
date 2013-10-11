@@ -81,9 +81,7 @@ public class ServiceRegistry implements IServiceRegistry {
 	@Override
 	public IService getServiceObject(String serviceId) {
 		
-		
-		
-		return serviceMap.get(serviceId);
+		return newServiceMap.get(serviceId);
 	}
 
 

@@ -1,25 +1,22 @@
 package edu.asu.spring.quadriga.profile.impl;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class ServiceBackBean {
-	
-	String name;
-	String word;
-	
-	
-	public String getName() {
-		return name;
+
+	String term;
+	String id;
+
+	public String getTerm() {
+		return term;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getWord() {
-		return word;
-	}
-	public void setWord(String word) {
-		this.word = word;
+	public void setTerm(String term) {
+		this.term = term;
 	}
 
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 }

@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.profile.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,7 @@ public class ServiceA implements IService {
 	@Autowired
 	ISearchResult searchResult;
 	
-	@Override
-	public ISearchResult search(String word) {
-		
-		searchResult.setDescription("a smooth-textured sausage of minced beef or pork usually smoked; often served on a bread roll");
-
-		
-		return searchResult;
-	}
-
+	
 	@Override
 	public void setId(String id) {
 		this.id = id;
@@ -51,6 +44,17 @@ public class ServiceA implements IService {
 	public String getName() {
 		return "ServiceA";
 	}
+	
+	@Override
+	public List<ISearchResult> search(String word) {
+		
+		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
+		searchResult.setDescription("a smooth-textured sausage of minced beef or pork usually smoked; often served on a bread roll");
+		searchResults.add(searchResult);
+		
+		return searchResults;
+	}
+
 	
 	
 	

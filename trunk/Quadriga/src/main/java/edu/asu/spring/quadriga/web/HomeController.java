@@ -5,26 +5,24 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import edu.asu.spring.quadriga.domain.IProfile;
-import edu.asu.spring.quadriga.domain.factories.IServiceUriFactory;
 import edu.asu.spring.quadriga.domain.implementation.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
+import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
@@ -34,9 +32,6 @@ import edu.asu.spring.quadriga.validator.ProfileValidator;
  */
 @Controller
 public class HomeController {
-	
-	@Autowired
-	private IServiceUriFactory serviceUriFactory;
 	
 	@Autowired
 	private IUserProfileManager profileManager;
@@ -58,6 +53,9 @@ public class HomeController {
 	
 	@Autowired
 	private IServiceFormFactory serviceFormFactory;
+	
+	@Autowired
+	private IUserProfileManager userProfileManager;
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder){
@@ -106,59 +104,60 @@ public class HomeController {
 //	}
 
 	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
-	public String search(Model model, Principal principal) throws QuadrigaStorageException
+	public String showSearchForm(Model model, Principal principal) throws QuadrigaStorageException
 	{
 		
-//		searchResult.setWord("Dog");
-//		String serviceId = "serviceA";   //temporary
-//		
-//		
-//		IService serviceA = serviceRegistry.getServiceObject(serviceId);
-//		searchResult = serviceA.search(searchResult.getWord());
-//		
-//		List<IService> serviceList = new ArrayList<IService>();
-//		
-//		serviceList.add(serviceA);
-//		
-//		model.addAttribute("serviceList", serviceList);
-
-		model.addAttribute("ServiceForm",serviceFormFactory.getServiceFormObject());
-		List<String> serviceIds = serviceRegistry.getServiceIds();
-		model.addAttribute("serviceIds", serviceIds);
+		model.addAttribute("ServiceBackBean",new ServiceBackBean());
 		
-		List<String> serviceNames = serviceRegistry.getServiceNames();
-		model.addAttribute("serviceNames", serviceNames);
+		Map<String,String> serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
+		
+		model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
+		
+		return "auth/home/profile";
+	} 
+	
+	
+	
+	
+	
+	@RequestMapping(value = "auth/profile/search", method = RequestMethod.GET)
+	public String search(Model model, Principal principal, @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean) throws QuadrigaStorageException
+	{
+		String serviceId = serviceBackBean.getId();
+		String term = serviceBackBean.getTerm();
+		
+		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
+		
+		serviceObj.search(term);
+		
+		//IProfile serviceUri = serviceUriFactory.createServiceUriObject();
+		////model.addAttribute("serviceUri", serviceUri);
+		
 		
 		return "auth/home/profile";
 	}
 	
-	
-	@RequestMapping(value = "auth/profile/showadduri", method = RequestMethod.GET)
-	public String showAddUri(Model model, Principal principal) throws QuadrigaStorageException
+	@RequestMapping(value = "auth/profile/additem", method = RequestMethod.POST)
+	public String addUri(@ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean, Model model, Principal principal) throws QuadrigaStorageException
 	{
-		IProfile serviceUri = serviceUriFactory.createServiceUriObject();
-		model.addAttribute("serviceUri", serviceUri);
+				
+		String serviceId = serviceBackBean.getId();
+		String term = serviceBackBean.getTerm();
 		
+		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
 		
-		return "auth/home/profile/adduri";
-	}
-	
-	@RequestMapping(value = "auth/profile/adduri", method = RequestMethod.POST)
-	public String addUri(@Validated @ModelAttribute("serviceUri") Profile serviceUri, BindingResult result, Model model, Principal principal) throws QuadrigaStorageException
-	{
-		String service = serviceUri.getServiceName();
-		String uri = serviceUri.getUri();
+		List<ISearchResult> searchresults  = serviceObj.search(term);
 		
-		if(result.hasErrors())
-		{
-			model.addAttribute("serviceUri", serviceUri);
-		}
-		
-		else{
+		for(ISearchResult searchResult: searchresults){
 			
-			String errmsg = profileManager.addUserProfile(principal.getName(),service,uri);
-			//model.addAttribute("success",0);
+			String errmsg = userProfileManager.addUserProfile(principal.getName(), serviceId, searchResult.getId(), searchResult.getDescription());
+			
 		}
+		
+			
+			//String errmsg = profileManager.addUserProfile(principal.getName(),service,uri);
+			//model.addAttribute("success",0);
+		
 		
 		return "auth/home/profile/adduri";
 	}
