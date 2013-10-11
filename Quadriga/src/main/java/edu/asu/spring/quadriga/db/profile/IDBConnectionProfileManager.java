@@ -4,12 +4,12 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.profile.ISearchResult;
 
 public interface IDBConnectionProfileManager {
 	
-	public abstract String addUserProfileDBRequest(String name, String servicename, String uri) throws QuadrigaStorageException;
+	public abstract String addUserProfileDBRequest(String name, String serviceid, String id, String description) throws QuadrigaStorageException;
 	
-	public abstract List<IProfile> showProfileDBRequest(String loggedinUser) throws QuadrigaStorageException;
-
+	public abstract List<ISearchResult> showProfileDBRequest(String loggedinUser, String serviceid) throws QuadrigaStorageException;
 
 }

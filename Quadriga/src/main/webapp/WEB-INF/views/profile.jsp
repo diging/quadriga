@@ -6,7 +6,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
-<%--<script type="text/javascript">
+<script type="text/javascript">
 
 $(function() {
 	$("input[type=submit]").button().click(function(event) {
@@ -24,7 +24,7 @@ $(document).ready(function() {
 	});
 });
 
-</script> --%>
+</script> 
 
 <head>
 <style type="text/css">
@@ -62,10 +62,41 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 		</td>
 	</tr>
 </table>
+
+<c:if test="${not empty searchResults}">
+<table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+	
+	<c:forEach var="result" items="${searchResults}">
+		<tr>
+			<td><c:out value="${result.id}"></c:out></td>
+			<td><c:out value="${result.description}"></c:out></td>
+		</tr>
+	</c:forEach>
+	</tbody>
+</table>
+</c:if>
 </form:form>  
 
-<form:form method="POST" action="${pageContext.servletContext.contextPath}/auth/profile/additem">
+<form:form method="POST"  modelAttribute="ServiceBackBean" 
+action="${pageContext.servletContext.contextPath}/auth/profile/additem">
+ Results of the Search
+ <input type="submit" value="Select & Save">
+ <table>
+ <tr>
+ <td></td>
  
+ </tr>
+ 
+ 
+ </table>
  
  
  
@@ -76,66 +107,9 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 
 
 
-<%--<c:forEach var="service" items="${ServiceForm.serviceList}" varStatus="status">
-<form:select path="serviceList[${status.index}].id">
-	<form:option value="NONE" label="----select----" />
-	<form:options items="${serviceNameIdMap}" itemValue="id" itemLabel="name"/>
-</form:select>
-</c:forEach> --%>
-
-
  
 
  
  
  
- <%--<form:option value="NONE" label="--- Select ---"/> 
-<form:options items="${ServiceForm.serviceList}" itemvalue="id" itemlabel="name" /> --%>
  
- 
- 
- 
- 
- 
- 
- 
- 
- <%-- <form action="${pageContext.servletContext.contextPath}/auth/profile/showadduri">
- <table>
-	 <tr>
-		 <td width="50%"><span style="font-weight:bold;">Name:&nbsp</span><c:out value="${user.name}"/></td>
-		 <td width="50%"><span style="font-weight:bold;">Email:&nbsp</span><c:out value="${user.email}"/></td>
-	 </tr>
- </table>
- 
- <table width="100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">
- <thead>
- 	<tr>
- 		<th align="left">ServiceName</th>
- 		<th align="left">URI</th>
- 	</tr>
- </thead>
- <tbody>
- <c:forEach var="profile" items="${profileList}">
-	 <tr>
-		 <td width="50%"><c:out value="${profile.serviceName}"/></td>
-		 <td width="50%"><c:out value="${profile.uri}"/></td>
-	 </tr>
- </c:forEach>
- </tbody>
- </table>
- <input type="submit" value="Add uri">
- </form> --%>
- 
- 
- <%-- <form action="${pageContext.servletContext.contextPath}/auth/profile/showadduri">
-<ul>
-<li><h1 class="heading">Name:</h1><c:out value="${user.name}"></c:out></li>
-<li><h1 class="heading">Email:</h1><c:out value="${user.email}"></c:out></li>
-<c:forEach var="profile" items="${profileList}">
-<li class="withborder"><h1 class="heading">ServiceUri:</h1><c:out value="${profile.serviceName}"/>
-<br><br><h1 class="heading">URI:</h1><c:out value="${profile.uri}" /></li>
-</c:forEach>
-</ul>
-<input type="submit" value="Add URI">
-</form>--%>

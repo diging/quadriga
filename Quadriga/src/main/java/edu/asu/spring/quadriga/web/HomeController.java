@@ -117,11 +117,15 @@ public class HomeController {
 	} 
 	
 	
-	@RequestMapping(value = "auth/profile/search", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/profile/search", method = RequestMethod.GET)
 	public String search(Model model, Principal principal, @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean) throws QuadrigaStorageException
 	{
 		String serviceId = serviceBackBean.getId();
 		String term = serviceBackBean.getTerm();
+		
+		Map<String,String> serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
+
+		model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
 		
 		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
 		
@@ -139,7 +143,11 @@ public class HomeController {
 	@RequestMapping(value = "auth/profile/additem", method = RequestMethod.POST)
 	public String addUri(@ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean, Model model, Principal principal) throws QuadrigaStorageException
 	{
-				
+		
+		
+		
+		
+		
 		/*String serviceId = serviceBackBean.getId();
 		String term = serviceBackBean.getTerm();
 		

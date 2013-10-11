@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.domain.implementation.Collaborator;
  *
  */
 
-@Service
+@Service	
 public class CollaboratorFactory implements ICollaboratorFactory {
 
 	/**
