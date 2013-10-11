@@ -117,10 +117,7 @@ public class HomeController {
 	} 
 	
 	
-	
-	
-	
-	@RequestMapping(value = "auth/profile/search", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/profile/search", method = RequestMethod.POST)
 	public String search(Model model, Principal principal, @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean) throws QuadrigaStorageException
 	{
 		String serviceId = serviceBackBean.getId();
@@ -128,7 +125,9 @@ public class HomeController {
 		
 		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
 		
-		serviceObj.search(term);
+		List<ISearchResult> searchResults = serviceObj.search(term);
+		
+		model.addAttribute("searchResults", searchResults);
 		
 		//IProfile serviceUri = serviceUriFactory.createServiceUriObject();
 		////model.addAttribute("serviceUri", serviceUri);
@@ -141,7 +140,7 @@ public class HomeController {
 	public String addUri(@ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean, Model model, Principal principal) throws QuadrigaStorageException
 	{
 				
-		String serviceId = serviceBackBean.getId();
+		/*String serviceId = serviceBackBean.getId();
 		String term = serviceBackBean.getTerm();
 		
 		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
@@ -152,7 +151,7 @@ public class HomeController {
 			
 			String errmsg = userProfileManager.addUserProfile(principal.getName(), serviceId, searchResult.getId(), searchResult.getDescription());
 			
-		}
+		}*/
 		
 			
 			//String errmsg = profileManager.addUserProfile(principal.getName(),service,uri);
