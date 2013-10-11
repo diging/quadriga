@@ -19,7 +19,7 @@ public class UserProfileManager implements IUserProfileManager {
 	@Qualifier("DBConnectionProfileManagerBean")
 	IDBConnectionProfileManager connectionProfileManager;
 
-	@Override
+	/*@Override
 	public String addUserProfile(String name,String serviceid,String profileid,
 			String description) throws QuadrigaStorageException {
 
@@ -34,7 +34,7 @@ public class UserProfileManager implements IUserProfileManager {
 		List<ISearchResult> searchResultList = connectionProfileManager.showProfileDBRequest(loggedinUser, serviceid);
 		
 		return searchResultList;
-	}
+	} */
 	
 	
 	
