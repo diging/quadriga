@@ -551,7 +551,7 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 			{
 
 				//User request submitted successfully
-				return 1;
+				return SUCCESS;
 			}			
 			else
 			{

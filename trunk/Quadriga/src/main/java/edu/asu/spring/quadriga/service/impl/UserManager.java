@@ -33,7 +33,7 @@ public class UserManager implements IUserManager {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(UserManager.class);
-	
+
 	@Autowired
 	@Qualifier("DBConnectionManagerBean")
 	private IDBConnectionManager dbConnect;
@@ -186,10 +186,10 @@ public class UserManager implements IUserManager {
 		{
 			logger.info("The admin "+sAdminId+" deactivated the account of "+sUserId);
 			IUser user = this.getUserDetails(sUserId);
-			
+
 			//TODO:Remove test email setup
 			user.setEmail("ramkumar007@gmail.com");
-			
+
 			if(user.getEmail()!=null && !user.getEmail().equals(""))
 				emailManager.sendAccountDeactivationEmail(user, sAdminId);
 			else
@@ -277,10 +277,10 @@ public class UserManager implements IUserManager {
 			if(iResult == SUCCESS)
 			{
 				logger.info("The admin "+sAdminId+" activated the account of "+sUserId);
-				
+
 				//TODO:Remove test email setup
 				user.setEmail("ramkumar007@gmail.com");
-				
+
 				if(user.getEmail()!=null && !user.getEmail().equals(""))
 					emailManager.sendAccountActivationEmail(user, sAdminId);
 				else
@@ -319,6 +319,40 @@ public class UserManager implements IUserManager {
 
 		//Place a new access request
 		iUserStatus = dbConnect.addAccountRequest(userId);
+		
+		//Check the status of the request
+		if(iUserStatus == SUCCESS)
+		{
+			String sAdminRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
+			List<IUser> listAdminUsers = dbConnect.getUsers(sAdminRoleDBId);
+
+			//Ignore the user if the account is deactivated
+			adminlabel:
+			for(IUser admin:listAdminUsers)
+			{
+				List<IQuadrigaRole> roles = admin.getQuadrigaRoles();
+				IQuadrigaRole quadrigaRole = null;
+
+				for(IQuadrigaRole role: roles)
+				{
+					quadrigaRole = rolemanager.getQuadrigaRole(role.getDBid());
+					if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
+					{
+						//Continue to the next user as this user account is deactivated
+						continue adminlabel;
+					}
+				}
+
+				//TODO:Remove test email setup
+				admin.setEmail("ramkumar007@gmail.com");
+				if(admin.getEmail()!=null && !admin.getEmail().equals(""))
+				{
+					emailManager.sendNewAccountRequestPlacementEmail(admin, userId);
+				}
+				else
+					logger.info("The system tried to send email to the admin "+admin.getUserName()+" but the admin did not have an email setup");
+			}
+		}
 		return iUserStatus;
 	}
 
