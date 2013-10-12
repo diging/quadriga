@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -57,6 +58,9 @@ public class UserManagerTest {
 
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
+	
+	@Autowired
+	private IEmailNotificationManager emailManager;
 
 	String sDatabaseSetup;
 

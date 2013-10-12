@@ -47,6 +47,14 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private IEmailNotificationManager emailManager;
 
+	public IEmailNotificationManager getEmailManager() {
+		return emailManager;
+	}
+
+	public void setEmailManager(IEmailNotificationManager emailManager) {
+		this.emailManager = emailManager;
+	}
+
 	public IUserFactory getUserFactory() {
 		return userFactory;
 	}
@@ -191,7 +199,7 @@ public class UserManager implements IUserManager {
 			user.setEmail("ramkumar007@gmail.com");
 
 			if(user.getEmail()!=null && !user.getEmail().equals(""))
-				emailManager.sendAccountDeactivationEmail(user, sAdminId);
+				getEmailManager().sendAccountDeactivationEmail(user, sAdminId);
 			else
 				logger.info("The user "+sUserId+" did not have an email address to send account deactivation email");
 		}
@@ -282,7 +290,7 @@ public class UserManager implements IUserManager {
 				user.setEmail("ramkumar007@gmail.com");
 
 				if(user.getEmail()!=null && !user.getEmail().equals(""))
-					emailManager.sendAccountActivationEmail(user, sAdminId);
+					getEmailManager().sendAccountActivationEmail(user, sAdminId);
 				else
 					logger.info("The user "+sUserId+" did not have an email address to send account activation email");
 			}
@@ -347,7 +355,7 @@ public class UserManager implements IUserManager {
 				admin.setEmail("ramkumar007@gmail.com");
 				if(admin.getEmail()!=null && !admin.getEmail().equals(""))
 				{
-					emailManager.sendNewAccountRequestPlacementEmail(admin, userId);
+					getEmailManager().sendNewAccountRequestPlacementEmail(admin, userId);
 				}
 				else
 					logger.info("The system tried to send email to the admin "+admin.getUserName()+" but the admin did not have an email setup");

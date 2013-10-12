@@ -15,4 +15,5 @@
 	<import resource="dict-collaborator-roles.xml" />
 	<import resource="rest-service.xml" />
 	<import resource="spring-dbconnectionmanager.xml" />
+	<import resource="email-config.xml"/>
 </beans>
