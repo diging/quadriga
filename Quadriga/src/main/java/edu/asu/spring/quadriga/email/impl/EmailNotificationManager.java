@@ -42,4 +42,15 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		}
 	}
 
+	@Override
+	public void sendNewAccountRequestPlacementEmail(IUser admin, String userid) {
+		if(admin.getEmail()!=null && !admin.getEmail().equals("") && userid!=null && !userid.equals(""))
+		{
+			String message = emailMessages.getProperty("email.account_request_msg_head")+userid+" "+emailMessages.getProperty("email.account_request_msg_tail");
+			emailSender.sendNotificationEmail(admin.getEmail(), emailMessages.getProperty("email.account_request_subject"), message );
+			logger.info("The system sent a user request email to "+admin.getUserName()+" for the request placed by "+userid);
+		}
+		
+	}
+
 }

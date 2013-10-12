@@ -7,5 +7,7 @@ public interface IEmailNotificationManager {
 	public void sendAccountDeactivationEmail(IUser user, String adminid);
 
 	public void sendAccountActivationEmail(IUser user, String adminid);
+	
+	public void sendNewAccountRequestPlacementEmail(IUser admin, String userid);
 
 }
