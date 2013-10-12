@@ -121,6 +121,8 @@
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DspaceKeysFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory" />
+	<bean class="edu.asu.spring.quadriga.email.impl.EmailNotificationManager" />
+	<bean class="edu.asu.spring.quadriga.email.impl.EmailNotificationSender" />
 
 	<bean
 		class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory" />
@@ -147,7 +149,7 @@
 	
 	<bean id="dspaceStrings"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="location" value="classpath:locale/dspacestrings.properties" />
+		<property name="location" value="classpath:dspacestrings.properties" />
 	</bean>
 	
 	<bean id="uiMessages"
