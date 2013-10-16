@@ -233,4 +233,17 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		chkAccess = dbConnect.chkWorkspaceProjectInheritOwnerEditorRole(userName, workspaceId);
 		return chkAccess;
 	}
+	
+	@Override
+	public boolean checkIsWorkspaceExists(String workspaceId) throws QuadrigaStorageException
+	{
+		boolean chkAccess;
+		
+		//initialize the chkAccess variable
+		chkAccess = false;
+		
+		//check if the workspace exists
+		chkAccess = dbConnect.chkWorkspaceExists(workspaceId);
+		return chkAccess;
+	}
 }

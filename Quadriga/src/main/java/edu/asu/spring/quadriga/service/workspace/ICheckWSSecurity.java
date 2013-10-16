@@ -25,4 +25,7 @@ public interface ICheckWSSecurity {
 	public abstract boolean checkWorkspaceProjectInheritOwnerEditorAccess(String userName,
 			String workspaceId) throws QuadrigaStorageException;
 
+	public abstract boolean checkIsWorkspaceExists(String workspaceId)
+			throws QuadrigaStorageException;
+
 }

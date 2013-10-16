@@ -176,6 +176,7 @@ public interface DBConstants
 	//workspace access objects
 	public static final String CHECK_WORKSPACE_OWNER = "fn_checkWorkspaceOwner";
 	public static final String LIST_WORKSPACE_BITSTREAM = "sp_getAllBitStreams";
+	public static final String CHECK_WORKSPACE_ISEXISTS = "fn_checkWorkspaceExists";
 	
 	//workspace networks	
 	public static final String LIST_WORKSPACE_NETWORKS = "sp_getWorkspaceNetworkList";

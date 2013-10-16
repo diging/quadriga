@@ -69,6 +69,50 @@ IDBConnectionWSAccessManager
 		}
 
 	}
+	
+	
+	@Override
+	public boolean chkWorkspaceExists(String workspaceId) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		CallableStatement sqlStatement;
+		boolean isExists;
+
+		//command to call the SP
+		dbCommand = "? = "+" "+ DBConstants.SP_CALL+ " " + DBConstants.CHECK_WORKSPACE_ISEXISTS + "(?)";
+
+		//get the connection
+		getConnection();
+
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(1,Types.BOOLEAN);
+
+			//adding the input parameter
+			sqlStatement.setString(2,workspaceId);
+
+			sqlStatement.execute();
+
+			isExists = sqlStatement.getBoolean(1);
+
+			return isExists;
+
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+	}
+
 
 	/**
 	 * Checks if Workspace owner has editor roles
