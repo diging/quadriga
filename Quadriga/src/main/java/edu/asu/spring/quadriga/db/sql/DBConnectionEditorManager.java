@@ -588,7 +588,7 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 	
 	
 	/**
-	 * Method update items in a dictionary
+	 * Method update assigned in a network
 	 * 
 	 * @returns path of list dictionary items page
 	 * 
@@ -626,6 +626,64 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(3);
+			return errmsg;
+
+		} catch (SQLException e) {
+			errmsg = "DB related issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+		} catch (Exception e) {
+			errmsg = "Exception outside DB";
+			logger.error(errmsg,e);
+		} finally {
+			closeConnection();
+		}
+		return errmsg;
+	}
+	
+	
+	
+	/**
+	 * Method add Annotation to a network
+	 * 
+	 * @returns success/fail
+	 * 
+	 * @throws SQLException
+	 * 
+	 * @author Lohith Dwaraka
+	 * 
+	 */
+
+	@Override
+	public String addAnnotationToNetwork(String networkId, String nodeName, String annotationText, String userId) throws QuadrigaStorageException {
+
+		String dbCommand;
+		String errmsg = "";
+		CallableStatement sqlStatement;
+
+		// command to call the SP
+		dbCommand = DBConstants.SP_CALL + " "
+				+ DBConstants.ADD_ANNOTATIONS_TO_NETWORKS + "(?,?,?,?,?)";
+
+		// get the connection
+		getConnection();
+		logger.debug("dbCommand : " + dbCommand);
+		// establish the connection with the database
+		try {
+			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
+
+			// adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+			sqlStatement.setString(2, nodeName);
+			sqlStatement.setString(3, annotationText);
+			sqlStatement.setString(4, userId);
+
+			// adding output variables to the SP
+			sqlStatement.registerOutParameter(5, Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(5);
 			return errmsg;
 
 		} catch (SQLException e) {
