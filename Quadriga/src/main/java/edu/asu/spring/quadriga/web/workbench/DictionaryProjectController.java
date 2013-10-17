@@ -24,6 +24,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class DictionaryProjectController {
@@ -40,7 +41,7 @@ public class DictionaryProjectController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryProjectController.class);
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/adddictionary", method = RequestMethod.GET)
 	public String addProjectDictionary(
 			@PathVariable("projectid") String projectid, Model model) {
@@ -72,7 +73,7 @@ public class DictionaryProjectController {
 		return "auth/workbench/project/adddictionaries";
 	}
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/adddictionaries", method = RequestMethod.POST)
 	public String addProjectDictionary(HttpServletRequest req,
 			@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
@@ -90,8 +91,7 @@ public class DictionaryProjectController {
 				dicitonaryList = projectDictionaryManager.listProjectDictionary(
 						projectid, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new QuadrigaStorageException();
 			}
 			if(dicitonaryList == null){
 				logger.info("Dictionary list is empty buddy");
@@ -111,8 +111,7 @@ public class DictionaryProjectController {
 						flag=1;
 					}
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				throw new QuadrigaStorageException();
 				}
 			}
 		}
@@ -126,8 +125,7 @@ public class DictionaryProjectController {
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionar list is empty buddy");
@@ -149,8 +147,7 @@ public class DictionaryProjectController {
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionar list is empty buddy");
@@ -162,7 +159,7 @@ public class DictionaryProjectController {
 		return "auth/workbench/project/dictionaries";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionary", method = RequestMethod.GET)
 	public String deleteProjectDictionary(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -174,8 +171,7 @@ public class DictionaryProjectController {
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionar list is empty buddy");
@@ -187,7 +183,7 @@ public class DictionaryProjectController {
 		return "auth/workbench/project/deletedictionaries";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletedictionaries", method = RequestMethod.POST)
 	public String deleteProjectDictionary(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -204,8 +200,7 @@ public class DictionaryProjectController {
 				dicitonaryList = projectDictionaryManager.listProjectDictionary(
 						projectid, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new QuadrigaStorageException();
 			}
 			if(dicitonaryList == null){
 				logger.info("Dictionary list is empty buddy");
@@ -220,8 +215,7 @@ public class DictionaryProjectController {
 				try {
 					msg=projectDictionaryManager.deleteProjectDictionary(projectid, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new QuadrigaStorageException();
 				}
 				if(!msg.equals("")){
 					flag=1;
@@ -238,8 +232,7 @@ public class DictionaryProjectController {
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionary list is empty buddy");

@@ -29,6 +29,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
@@ -73,7 +74,7 @@ public class DeleteProjectCollaboratorController {
 	protected void initBinder(WebDataBinder validateBinder) throws Exception {
 		validateBinder.setValidator(validator);
 }
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletecollaborators", method = RequestMethod.GET)
 	public ModelAndView displayDeleteCollaborator(@PathVariable("projectid") String projectId) 
 			throws QuadrigaStorageException, QuadrigaAccessException
@@ -97,7 +98,7 @@ public class DeleteProjectCollaboratorController {
 		return modelAndView;
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deletecollaborators", method = RequestMethod.POST)
 	public ModelAndView deleteCollaborators(@PathVariable("projectid") String projectId,
 	@Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm, BindingResult result,
