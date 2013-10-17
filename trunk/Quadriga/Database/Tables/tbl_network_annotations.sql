@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS tbl_network_annotations
 (
   networkid       varchar(50)  NOT NULL,
   nodename    VARCHAR(50) NOT NULL,
-  annotaiontext    TEXT NOT NULL,
+  annotationtext    TEXT NOT NULL,
   annotationid    VARCHAR(50) NOT NULL,
   userid	VARCHAR(50) NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
