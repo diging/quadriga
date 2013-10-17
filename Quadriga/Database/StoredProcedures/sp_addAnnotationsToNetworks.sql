@@ -59,7 +59,7 @@ BEGIN
               INTO tbl_network_annotations(networkid,nodename,annotationtext,annotationid,userid,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (innetworkid,innodename,inannotaiontext,annotationId,inuserid,
-                     indictionaryowner,NOW(),indictionaryowner,NOW());	
+                     inuserid,NOW(),inuserid,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;
