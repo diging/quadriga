@@ -106,6 +106,8 @@ public interface DBConstants
 	public static final String GET_NETWORK_OLD_VERSION_DETAILS="sp_getNetworkPreviousVersionDetails";
 	public static final String ARCHIVE_NETWORK_STATEMENT ="sp_archiveNetworkStatement";
 	public static final String ARCHIVE_NETWORK = "sp_archiveNetwork";
+	public static final String ADD_ANNOTATIONS_TO_NETWORKS = "sp_addAnnotaionsToNetworks";
+	
 	
 	//Editing
 	
