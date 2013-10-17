@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ConceptCollectionProjectController {
@@ -54,8 +55,7 @@ public class ConceptCollectionProjectController {
 		try {
 			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(conceptCollectionList == null){
 			logger.info("Concept collection list is empty buddy");
@@ -72,7 +72,7 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/conceptcollections";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
 	public String addProjectConceptCollection(
 			@PathVariable("projectid") String projectid, Model model)
@@ -88,8 +88,7 @@ public class ConceptCollectionProjectController {
 			try {
 				conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new QuadrigaStorageException();
 			}
 			if (conceptCollectionList == null) {
 				logger.info("conceptCollectionList list is empty");
@@ -105,12 +104,12 @@ public class ConceptCollectionProjectController {
 			model.addAttribute("projectid", projectid);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
-			logger.error(" ----" + e.getMessage());
+			logger.error(" ----",e);
 		}
 		return "auth/workbench/project/addconceptcollections";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.POST)
 	public String addProjectConceptCollection(HttpServletRequest req,
 			@PathVariable("projectid") String projectid, Model model) 
@@ -128,8 +127,7 @@ public class ConceptCollectionProjectController {
 			try {
 				conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new QuadrigaStorageException();
 			}
 			if(conceptCollectionList == null){
 				logger.info("Concept Collection list is empty buddy");
@@ -149,8 +147,7 @@ public class ConceptCollectionProjectController {
 						flag=1;
 					}
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new QuadrigaStorageException();
 				}
 			}
 		}
@@ -163,8 +160,7 @@ public class ConceptCollectionProjectController {
 		try {
 			conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(conceptCollectionList == null){
 			logger.info("conceptCollectionList list is empty buddy");
@@ -176,7 +172,7 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/conceptcollections";
 	}
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.GET)
 	public String deleteProjectConceptCollection(@PathVariable("projectid") String projectid, Model model) 
 			throws QuadrigaStorageException, QuadrigaAccessException {
@@ -188,8 +184,7 @@ public class ConceptCollectionProjectController {
 		try {
 			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(conceptCollectionList == null){
 			logger.info("conceptCollectionList list is empty buddy");
@@ -201,7 +196,7 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/deleteconceptcollections";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {"ADMIN","PROJECT_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
 	public String deleteProjectConceptCollection(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) 
 			throws QuadrigaStorageException, QuadrigaAccessException {
@@ -218,8 +213,7 @@ public class ConceptCollectionProjectController {
 			try {
 				conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new QuadrigaStorageException();
 			}
 			if(conceptCollectionList == null){
 				logger.info("Concept Collection list is empty buddy");
@@ -234,8 +228,7 @@ public class ConceptCollectionProjectController {
 				try {
 					msg=projectConceptCollectionManager.deleteProjectConceptCollection(projectid, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new QuadrigaStorageException();
 				}
 				if(!msg.equals("")){
 					flag=1;
@@ -251,8 +244,7 @@ public class ConceptCollectionProjectController {
 		try {
 			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new QuadrigaStorageException();
 		}
 		if(conceptCollectionList == null){
 			logger.info("Dictionary list is empty buddy");

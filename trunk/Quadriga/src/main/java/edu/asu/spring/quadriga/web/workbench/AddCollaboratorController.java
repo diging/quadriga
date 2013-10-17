@@ -123,7 +123,7 @@ public class AddCollaboratorController {
 		return collaborator;
 	} 
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN"} )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.GET)
 	public ModelAndView displayAddCollaborator(@PathVariable("projectid") String projectid) 
 			throws QuadrigaStorageException, QuadrigaAccessException 
@@ -180,7 +180,7 @@ public class AddCollaboratorController {
 		return model;
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN"} )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.POST)
 	public ModelAndView addCollaborators(@PathVariable("projectid") String projectid,
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
