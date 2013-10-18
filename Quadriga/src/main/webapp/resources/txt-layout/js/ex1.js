@@ -26,7 +26,7 @@ var Log = {
 };
 
 
-function init1(json){
+function init1(json,networkId){
 	// init data
 	
 	// end
@@ -135,7 +135,24 @@ function init1(json){
 				});
 				//append connections information
 				$jit.id('inner-details').innerHTML = html + list.join("</li><li>") + "</li></ul>";
-			}
+			},
+			
+			onRightClick: function(node) {
+		        if(!node) return;
+				alert("hi");
+		        // Build the right column relations list.
+		        // This is done by traversing the clicked node connections.
+		       // var html = "<h4>" + node.name + "</h4><b> connections:</b><ul><li>",
+			   var html = "";
+			   html = "<form action='auth/editing/saveAnnotation/" ;
+			   		html+= networkId+"' method='post'>";
+		         html += "<textarea name='text' id='text' cols='15' rows='15'></textarea>";
+				  html+= "<input type='button' value='submit'>"; 
+				  html += "</form>";
+				  
+		         //append connections information
+		        $jit.id('inner-details').innerHTML = networkId+ html ;
+		      },
 		},
 		//Number of iterations for the FD algorithm
 		iterations: 200,

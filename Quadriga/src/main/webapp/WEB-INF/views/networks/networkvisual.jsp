@@ -14,7 +14,7 @@
 
 
 
-<body onload="init1(<c:out value='${jsonstring}'></c:out>);">
+<body onload="init1(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkId}'></c:out>);">
 <div id="container">
 
 <div id="left-container">
