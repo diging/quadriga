@@ -64,7 +64,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 </table>
 </form:form>  
 
-
+<c:choose>
 	<c:when test="${success=='0'}">
 		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
@@ -93,14 +93,15 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				</tbody>
 			</table>
 			
-			<c:choose>
+			<%-- <c:choose>
 				<c:when test="${success == '1'}">
 	 				<font color="blue"><spring:message code="add_profile_success"/></font>
 	 			</c:when>
- 			</c:choose>
+ 			</c:choose> --%>
 		
 		 </form:form>
 	 </c:when>
+</c:choose>
 	
 
  
