@@ -96,23 +96,6 @@ public class HomeController {
 		return "auth/home";
 	}
 	
-//	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
-//	public String loginProfile(Model model, Principal principal) throws QuadrigaStorageException
-//	{
-//		IProfile serviceUri = serviceUriFactory.createServiceUriObject();
-//		model.addAttribute("serviceUri", serviceUri);
-//		
-//		
-//		IUser user = userManager.getUserDetails(principal.getName());
-//		model.addAttribute("user", user);
-//		
-//		List<IProfile> profileList = profileManager.showUserProfile(principal.getName());
-//		model.addAttribute("profileList", profileList);
-//		
-//		
-//
-//		return "auth/home/profile";
-//	}
 
 	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
 	public String showSearchForm(Model model, Principal principal) throws QuadrigaStorageException
@@ -146,7 +129,6 @@ public class HomeController {
 			
 			searchResultBackBeanForm.setSearchResultList(searchResultList);
 			model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
-			model.addAttribute("method", 1);
 			model.addAttribute("success",0);		
 		}
 		
@@ -169,9 +151,7 @@ public class HomeController {
 		
 		List<SearchResultBackBean> searchResults = searchResultBackBeanForm.getSearchResultList();
 		
-		
-		
-		
+	
 		for( ISearchResult conceptSearchResult: conceptsearchResults)
 		{
 			for(SearchResultBackBean searchResultBackBean:searchResults  )
@@ -180,10 +160,6 @@ public class HomeController {
 				profileid = searchResultBackBean.getId();
 				if(profileid!=null)
 				{
-					/*System.out.println("--------------profileid "+profileid);
-					idbuilder.append(",");
-					idbuilder.append(profileid);
-*/
 					
 					if( searchResultBackBean.getId().equals(conceptSearchResult.getId()) )
 					{
@@ -208,32 +184,8 @@ public class HomeController {
 			model.addAttribute("success",1);
 		}
 		
-	/*	System.out.println("----------idbuilder "+idbuilder.substring(1));
-
-		System.out.println("----------descbuilder "+descbuilder);
-		userProfileManager.addUserProfile(principal.getName(), serviceid, idbuilder.substring(1), descbuilder.substring(1));
-
-*/		
-		/*for(SearchResultBackBean searchResultBackBean:searchResults)
-		{
-			if(searchResultBackBean.getId().equals(sea)
-		}*/
-		
-		
-		/*IService serviceObj = serviceRegistry.getServiceObject(serviceid);
-		
-		List<ISearchResult> searchResults = serviceObj.search(term);
-		
-		for(ISearchResult searchrrrrrrresult:searchResults){
-					
-		if( searchResult.getId().equals(searchrrrrrrresult.getId()) ){
-				description = searchrrrrrrresult.getDescription();
-				userProfileManager.addUserProfile(principal.getName(), serviceid, profileid, description);
-			}
-		}
-			*/
-		
-		return "auth/home/profile";
+			
+		return "auth/home/profile/adduri";
 	}
 
 }
