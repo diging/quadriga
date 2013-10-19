@@ -72,7 +72,6 @@ public abstract  class ADBConnectionManager {
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
 			throw new QuadrigaStorageException(e);
 		}
 	}
@@ -85,9 +84,9 @@ public abstract  class ADBConnectionManager {
 	 */
 	public int setupTestEnvironment(String sQuery) throws QuadrigaStorageException
 	{
-		getConnection();
 		try
 		{
+			getConnection();
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(sQuery);
 			return SUCCESS;
