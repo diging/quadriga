@@ -4,8 +4,8 @@ CREATE PROCEDURE sp_addUserProfile
 (
 	IN inusername 		VARCHAR(50),
 	IN inserviceid		VARCHAR(50),
-	IN inprofileid		VARCHAR(50),
-	IN indescription	VARCHAR(256),
+	IN inprofileid		VARCHAR(255),
+	IN indescription	VARCHAR(255),
 	OUT errmsg			VARCHAR(100)
 )
 
@@ -22,7 +22,7 @@ BEGIN
 
 	IF(SELECT 1 FROM tbl_quadriga_userprofile where username = inusername 
 		and profileid=inprofileid)
-		THEN SET errmsg = "service and profile id already exists";
+		THEN SET errmsg = "profile id already exists";
 	END IF;
 
 	IF(inserviceid IS NULL OR inserviceid=" ")

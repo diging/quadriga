@@ -8,9 +8,8 @@ import edu.asu.spring.quadriga.profile.ISearchResult;
 public class SearchResult implements ISearchResult {
 
 	
-	String description;
-	String id;
-	
+	private String description;
+	private String id;
 
 	@Override
 	public void setDescription(String description) {

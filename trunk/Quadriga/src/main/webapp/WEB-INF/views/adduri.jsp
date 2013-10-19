@@ -15,6 +15,18 @@ color: #ff0000;
 </style>
 </head>
 
+<script>
+function goBack(){
+	
+	location.href = '${pageContext.servletContext.contextPath}/auth/profile/search' ;
+}
+
+</script>
+
+<h1>profile added successfully</h1>
+<input type="button" value="back" onClick="goBack()"/>
+
+
 <%--<script>
 
 

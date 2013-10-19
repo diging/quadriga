@@ -19,11 +19,10 @@ public class UserProfileManager implements IUserProfileManager {
 	@Qualifier("DBConnectionProfileManagerBean")
 	IDBConnectionProfileManager connectionProfileManager;
 
-	/*@Override
-	public String addUserProfile(String name,String serviceid,String profileid,
-			String description) throws QuadrigaStorageException {
+	@Override
+	public String addUserProfile(String name,String serviceid,String profilebuilder) throws QuadrigaStorageException {
 
-		String errmsg = connectionProfileManager.addUserProfileDBRequest(name, serviceid, profileid, description);
+		String errmsg = connectionProfileManager.addUserProfileDBRequest(name, serviceid, profilebuilder);
 		
 		return errmsg;
 	}
@@ -34,7 +33,7 @@ public class UserProfileManager implements IUserProfileManager {
 		List<ISearchResult> searchResultList = connectionProfileManager.showProfileDBRequest(loggedinUser, serviceid);
 		
 		return searchResultList;
-	} */
+	} 
 	
 	
 	

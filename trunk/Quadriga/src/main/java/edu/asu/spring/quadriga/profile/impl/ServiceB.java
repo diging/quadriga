@@ -11,17 +11,18 @@ import edu.asu.spring.quadriga.profile.IService;
 public class ServiceB implements IService {
 
 	String name;
-	String id;
+	String serviceId;
+	
 	
 	@Override
-	public void setId(String id) {
-		
+	public void setServiceId(String id) {
+
 	}
 
 	@Override
-	public String getId() {
+	public String getServiceId() {
 
-		return "edu.asu.ServiceB";
+		return "edu.asu.serviceB";
 	}
 
 	@Override
@@ -41,4 +42,5 @@ public class ServiceB implements IService {
 		return null;
 	}
 
+	
 }

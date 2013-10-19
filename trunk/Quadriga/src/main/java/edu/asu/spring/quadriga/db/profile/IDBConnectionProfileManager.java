@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.profile.ISearchResult;
 
 public interface IDBConnectionProfileManager {
 	
-	public abstract String addUserProfileDBRequest(String name, String serviceid, String id, String description) throws QuadrigaStorageException;
+	public abstract String addUserProfileDBRequest(String name, String serviceid, String id) throws QuadrigaStorageException;
 	
 	public abstract List<ISearchResult> showProfileDBRequest(String loggedinUser, String serviceid) throws QuadrigaStorageException;
 
