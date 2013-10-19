@@ -35,73 +35,74 @@ h1{
 </style>
 </head>
 
+
 <form:form method="GET" modelAttribute="ServiceBackBean"
 action="${pageContext.servletContext.contextPath}/auth/profile/search">
 
 <table>
 	<tr>
-	
 		<td>
-		Service Name
+			Service Name
 		</td>
 		<td>
-		<form:select path="id" items="${serviceNameIdMap}"/>
+			<form:select path="id" items="${serviceNameIdMap}"/>
 		</td>
 	</tr>	
 	<tr>
 		<td>
-		Search Term
+			Search Term
 		</td>
 		<td>
-		<form:input path="term" label="search term"/>
+			<form:input path="term" label="search term"/>
 		</td>
 	</tr>
 	<tr>
 		<td>
-		<input type="submit" value="search"/> 
+			<input type="submit" value="search"/> 
 		</td>
 	</tr>
 </table>
-
-<c:if test="${not empty searchResults}">
-<table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Description</th>
-		</tr>
-	</thead>
-	
-	<tbody>
-	
-	<c:forEach var="result" items="${searchResults}">
-		<tr>
-			<td><c:out value="${result.id}"></c:out></td>
-			<td><c:out value="${result.description}"></c:out></td>
-		</tr>
-	</c:forEach>
-	</tbody>
-</table>
-</c:if>
 </form:form>  
 
-<form:form method="POST"  modelAttribute="ServiceBackBean" 
-action="${pageContext.servletContext.contextPath}/auth/profile/additem">
- Results of the Search
- <input type="submit" value="Select & Save">
- <table>
- <tr>
- <td></td>
- 
- </tr>
- 
- 
- </table>
- 
- 
- 
- </form:form>
- 
+
+	<c:when test="${success=='0'}">
+		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
+		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
+		 Results of the Search
+		 <input type="submit" value="Select & Save">
+			 <table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
+				
+				<thead>
+					<tr>
+						<th>select</th>
+						<th>ID</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+			
+				<tbody>
+				
+				<c:forEach var="result" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
+					<tr>
+						<td><form:checkbox path="searchResultList[${status.index}].id" value="${result.id}" /></td>
+						<td><c:out value="${result.id}"></c:out></td>
+						<td><c:out value="${result.description}"></c:out></td>
+					</tr>
+				</c:forEach>
+				
+				</tbody>
+			</table>
+			
+			<c:choose>
+				<c:when test="${success == '1'}">
+	 				<font color="blue"><spring:message code="add_profile_success"/></font>
+	 			</c:when>
+ 			</c:choose>
+		
+		 </form:form>
+	 </c:when>
+	
+
  
  <%--<form:select path="serviceIdNameMap" items="${serviceNameIdMap}" multiple="true" /> --%>
 

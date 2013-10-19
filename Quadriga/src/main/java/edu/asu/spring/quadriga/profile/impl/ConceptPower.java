@@ -29,18 +29,21 @@ public class ConceptPower implements IService {
 	@Autowired
 	private ISearchResultFactory searchResultFactory;
 	
+	String serviceid;
+	String name;
+	
 	@Override
-	public void setId(String id) {
+	public void setServiceId(String serviceid) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public String getId() {
+	public String getServiceId() {
 		// TODO Auto-generated method stub
 		return "edu.asu.conceptpower";
 	}
-
+	
 	@Override
 	public void setName(String name) {
 		// TODO Auto-generated method stub
@@ -71,13 +74,10 @@ public class ConceptPower implements IService {
 				searchResults.add(searchResult);
 			}
 			
-		//	dbConnectionProfileManager.addUserProfileDBRequest(name, serviceid, searchResult.getId(), searchResult.getDescription())
-			
-			
-			//System.out.println("---------id"+searchResult.getId());
-			//System.out.println("---------description"+searchResult.getDescription());
 		}
 		return searchResults;
 	}
+
+	
 
 }

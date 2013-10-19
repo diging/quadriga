@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 @Service
 public class ServiceA implements IService {
 
-	String id;
+	String serviceId;
 	String name;
 	
 	@Autowired
@@ -25,18 +25,17 @@ public class ServiceA implements IService {
 	
 	
 	@Override
-	public void setId(String id) {
-		this.id = id;
+	public void setServiceId(String id) {
+				
 	}
 
 	@Override
-	public String getId() {
-		return "edu.asu.ServiceA";
+	public String getServiceId() {
+		return "edu.asu.serviceA";
 	}
 
 	@Override
 	public void setName(String name) {
-		this.name = name;
 		
 	}
 

@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface IService {
 	
-	public abstract void setId(String id);
+	public abstract void setServiceId(String id);
 	
-	public abstract String getId();
+	public abstract String getServiceId();
 	
 	public abstract void setName(String name);
 	

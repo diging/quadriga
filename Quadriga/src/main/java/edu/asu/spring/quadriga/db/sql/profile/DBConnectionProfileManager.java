@@ -40,12 +40,16 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 	ISearchResultFactory searchResultFactory;
 	
 	@Override
-	public String addUserProfileDBRequest(String username, String serviceid,String profileid,
-			String description) throws QuadrigaStorageException {
+	public String addUserProfileDBRequest(String username, String serviceid,String profilebuilder) throws QuadrigaStorageException {
 				
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
+		
+		String[] profilStrings = profilebuilder.split(",");
+		String id = profilStrings[0];
+		String desc = profilStrings[1];
+	
 		
 		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_USER_PROFILE + "(?,?,?,?,?)";
 		
@@ -55,12 +59,14 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, username);
 			sqlStatement.setString(2, serviceid);
-			sqlStatement.setString(3, profileid);
-			sqlStatement.setString(4, description);
+			sqlStatement.setString(3, id);
+			sqlStatement.setString(4, desc);
 			sqlStatement.registerOutParameter(5, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(5);
-			if(errmsg.equals("no errors"))
+			System.out.println("--------errmsg "+errmsg);
+			
+			if(!errmsg.equals("no errors"))
 			{
 				throw new QuadrigaStorageException();
 			}

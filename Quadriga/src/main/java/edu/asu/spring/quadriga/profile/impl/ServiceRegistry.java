@@ -36,7 +36,6 @@ public class ServiceRegistry implements IServiceRegistry {
 	
 	public ServiceRegistry(){
 		
-		System.out.println(" -------------in serviceregistry constructor");
 		
 	}
 	
@@ -54,7 +53,7 @@ public class ServiceRegistry implements IServiceRegistry {
 			@SuppressWarnings("rawtypes")
 			Map.Entry mEntry = (Map.Entry) serviceIter.next();
 			IService serviceObject = (IService) mEntry.getValue();
-			newServiceMap.put(serviceObject.getId(), serviceObject);
+			newServiceMap.put(serviceObject.getServiceId(), serviceObject);
 			
 		}
 		
@@ -96,7 +95,7 @@ public class ServiceRegistry implements IServiceRegistry {
 			@SuppressWarnings("rawtypes")
 			Map.Entry entry = (Map.Entry)iterator.next();
 			IService serviceObj = (IService)entry.getValue();
-			serviceIdNameMap.put(serviceObj.getId(), serviceObj.getName());
+			serviceIdNameMap.put(serviceObj.getServiceId(), serviceObj.getName());
 				
 		}
 		
