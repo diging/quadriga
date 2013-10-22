@@ -27,11 +27,11 @@ var Log = {
 
 
 function init1(json,networkId){
-	// init data
 	
+	// init data
 	// end
 	// init ForceDirected
-	
+	//alert("json");
 	  //label placement on edges 
 	  $jit.ForceDirected.Plot.EdgeTypes.implement({ 
 		  'labeled': {
@@ -139,14 +139,14 @@ function init1(json,networkId){
 			
 			onRightClick: function(node) {
 		        if(!node) return;
-				alert("hi");
+				//alert("hi");
 		        // Build the right column relations list.
 		        // This is done by traversing the clicked node connections.
 		       // var html = "<h4>" + node.name + "</h4><b> connections:</b><ul><li>",
 			   var html = "";
 			   html = "<form action='auth/editing/saveAnnotation/" ;
 			   		html+= networkId+"' method='post'>";
-		         html += "<textarea name='text' id='text' cols='15' rows='15'></textarea>";
+		         html += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
 				  html+= "<input type='button' value='submit'>"; 
 				  html += "</form>";
 				  

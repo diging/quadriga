@@ -134,11 +134,23 @@ public class NetworkListManager {
 			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
 		}
 		jsonstring1 = jsonstring1+"]";
+	//	String newJson = jsonstring1+"#"+networkId;
 		logger.debug(jsonstring1);
+		
 		logger.info("Json object formed and sent to the JSP");
+		/*String[] jsonArr = new String[2];
+		jsonArr[0] =  jsonstring1;
+		jsonArr[1] = networkId;*/
+		//System.out.println("json string:"+newJson);
 		//model.addAttribute("json", "[{\"adjacencies\": [\"1\",{\"nodeTo\": \"5\",\"nodeFrom\": \"3\",\"data\": {\"$color\": \"#557EAA\"}},],\"data\": {\"$color\": \"#83548B\",\"$type\": \"circle\",\"$dim\": 10},\"id\": \"3\",\"name\": \"3\"},{\"adjacencies\": [\"2\",{\"nodeTo\": \"5\",\"nodeFrom\": \"3\",\"data\": {\"$color\": \"#557EAA\"}},],\"data\": {\"$color\": \"#83548B\",\"$type\": \"circle\",\"$dim\": 10},\"id\": \"3\",\"name\": \"3\"},{\"adjacencies\": [{\"nodeTo\": \"4\",\"nodeFrom\": \"5\",\"data\": {\"$color\": \"#557EAA\"}},{\"nodeTo\": \"3\",\"nodeFrom\": \"5\",\"data\": {\"$color\": \"#557EAA\"}}],\"data\": {\"$color\": \"#EBB056\",\"$type\": \"circle\",\"$dim\": 11},\"id\": \"5\",\"name\": \"5\"}, {\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"4\",\"name\": \"4\"},{\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"1\",\"name\": \"1\"},{\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"2\",\"name\": \"2\"}]");
+		//model.addAttribute("jsonstring",jsonArr);
+		String nwId = "\""+networkId+"\"";
 		model.addAttribute("jsonstring",jsonstring1);
-		model.addAttribute("networkId",networkId);
+		model.addAttribute("networkid",nwId);
+		logger.info("json string:"+jsonstring1);
+		logger.info("network id:"+nwId);
+		
+		//model.addAttribute("networkId",networkId);
 		return "auth/networks/visualize";
 	}
 
