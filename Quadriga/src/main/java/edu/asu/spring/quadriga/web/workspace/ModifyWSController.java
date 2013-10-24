@@ -40,6 +40,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.WorkspaceValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ModifyWSController {
@@ -112,7 +113,7 @@ public class ModifyWSController {
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.GET)
 	public ModelAndView updateWorkSpaceRequestForm(
 			@PathVariable("workspaceid") String workspaceid, Principal principal)
@@ -138,7 +139,7 @@ public class ModifyWSController {
 	 * @author Kiran Kumar Batna
 	 * @throws QuadrigaAccessException
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "auth/workbench/workspace/updateworkspacedetails/{workspaceid}", method = RequestMethod.POST)
 	public ModelAndView updateWorkSpaceRequest(
 			@Validated @ModelAttribute("workspace") WorkSpace workspace,

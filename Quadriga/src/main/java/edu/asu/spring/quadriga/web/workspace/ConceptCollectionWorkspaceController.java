@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class ConceptCollectionWorkspaceController {
@@ -43,7 +44,7 @@ public class ConceptCollectionWorkspaceController {
 			.getLogger(ConceptCollectionWorkspaceController.class);
 
 	
-
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/conceptcollections", method = RequestMethod.GET)
 	public String listProjectConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -72,7 +73,7 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/conceptcollections";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.GET)
 	public String addWorkspaceConceptCollection(
 			@PathVariable("workspaceid") String workspaceId, Model model) 
@@ -109,7 +110,7 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/addconceptcollections";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.POST)
 	public String addWorkspaceConceptCollection(HttpServletRequest req,
 			@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -174,7 +175,7 @@ public class ConceptCollectionWorkspaceController {
 	}
 
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.GET)
 	public String deleteWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) 
 			throws QuadrigaStorageException, QuadrigaAccessException {
@@ -199,7 +200,7 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/deleteconceptcollections";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.POST)
 	public String deleteWorkspaceConceptCollection(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model)
 			throws QuadrigaStorageException, QuadrigaAccessException {

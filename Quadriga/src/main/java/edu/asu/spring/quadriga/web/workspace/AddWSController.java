@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.validator.WorkspaceValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class AddWSController
@@ -63,7 +64,7 @@ public class AddWSController
 	 * @author    Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN","CONTRIBUTOR" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@RequestMapping(value="auth/workbench/{projectid}/addworkspace", method=RequestMethod.GET)
 	public ModelAndView addWorkSpaceRequestForm(@PathVariable("projectid") String projectid) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -87,7 +88,7 @@ public class AddWSController
 	 * @author  Kiran Kumar Batna
 	 * @throws QuadrigaAccessException 
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = { "ADMIN","PROJECT_ADMIN","CONTRIBUTOR" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 3, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addworkspace", method = RequestMethod.POST)
 	public ModelAndView addWorkSpaceRequest(@Validated @ModelAttribute("workspace")WorkSpace workspace,BindingResult result,
 			@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
