@@ -39,6 +39,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * This class is the controller for the concept collection requests.
@@ -149,6 +150,7 @@ public class ConceptcollectionController {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_RAD_WRITE} )})
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
 	public String conceptSearchHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model)
 			throws QuadrigaStorageException {
@@ -173,6 +175,7 @@ public class ConceptcollectionController {
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException
 	 */
+	@AccessPolicies({@ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1,userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_RAD_WRITE})})
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
 	public String saveItemsHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
@@ -286,7 +289,6 @@ public class ConceptcollectionController {
 	 * 			This functions returns to details page
 	 * @throws QuadrigaStorageException
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {"ADMIN","PROJECT_ADMIN" } )})
 	@RequestMapping(value = "auth/conceptcollections/updateitems", method = RequestMethod.POST)
 	public String conceptUpdateHandler(HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException {

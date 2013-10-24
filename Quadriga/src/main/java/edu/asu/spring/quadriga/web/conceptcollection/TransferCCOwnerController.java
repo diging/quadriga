@@ -99,6 +99,7 @@ public class TransferCCOwnerController
 		return model;
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value = "auth/conceptcollections/transferconceptcollectionowner/{collectionid}", method = RequestMethod.POST)
 	public ModelAndView transferConceptCollectionOwner(@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result,
 			@PathVariable("collectionid") String collectionId,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
