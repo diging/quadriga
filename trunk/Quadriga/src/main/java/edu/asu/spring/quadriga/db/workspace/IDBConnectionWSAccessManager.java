@@ -16,6 +16,12 @@ public interface IDBConnectionWSAccessManager
 
 	public abstract boolean chkWorkspaceExists(String workspaceId)
 			throws QuadrigaStorageException;
+
+	public abstract boolean chkIsWorkspaceAssocaited(String userName)
+			throws QuadrigaStorageException;
+
+	public abstract boolean chkIsCollaboratorWorkspaceAssociated(String userName,
+			String role) throws QuadrigaStorageException;
 	
 
 }

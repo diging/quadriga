@@ -28,4 +28,10 @@ public interface ICheckWSSecurity {
 	public abstract boolean checkIsWorkspaceExists(String workspaceId)
 			throws QuadrigaStorageException;
 
+	public abstract boolean checkIsWorkspaceAssociated(String userName)
+			throws QuadrigaStorageException;
+
+	public abstract boolean chkIsCollaboratorWorkspaceAssociated(String userName,
+			String role) throws QuadrigaStorageException;
+
 }

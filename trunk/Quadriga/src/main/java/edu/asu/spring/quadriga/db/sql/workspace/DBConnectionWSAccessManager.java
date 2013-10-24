@@ -112,7 +112,86 @@ IDBConnectionWSAccessManager
 		}
 
 	}
+	
+	@Override
+	public boolean chkIsWorkspaceAssocaited(String userName) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		CallableStatement sqlStatement;
+		boolean isAssociated;
+		
+		//command to call the function
+		dbCommand = "? =  " + " " + DBConstants.SP_CALL + " " + DBConstants.CHECK_IS_WORKSPACE_ASSOCIATED + "(?)";
+		
+		isAssociated = false;
+		
+		try
+		{
+			//establish the connection
+			getConnection();
+			
+			sqlStatement = connection.prepareCall("{"+dbCommand + "}");
+			
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(1, Types.BOOLEAN);
+			
+			//adding the input parameter
+			sqlStatement.setString(2, userName);
+			
+			sqlStatement.execute();
+			
+			isAssociated = sqlStatement.getBoolean(1);
+			
+			return isAssociated;
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
 
+	@Override
+	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,String role) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		CallableStatement sqlStatement;
+		boolean isAssociated;
+		
+		//command to call the function
+		dbCommand = "? = " + " " + DBConstants.SP_CALL + " " + DBConstants.CHECK_IS_COLLABORATOR_WORKSPACE_ASSOCIATED + "(?,?)";
+		
+		isAssociated = false;
+		
+		try
+		{
+			getConnection();
+			
+			sqlStatement = connection.prepareCall("{"+dbCommand+ "}");
+			
+			sqlStatement.registerOutParameter(1,Types.BOOLEAN);
+			
+			sqlStatement.setString(2, userName);
+			sqlStatement.setString(3,role);
+			
+			sqlStatement.execute();
+			
+			isAssociated = sqlStatement.getBoolean(1);
+			
+			return isAssociated;
+		}
+		catch(SQLException e)
+		{
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
 
 	/**
 	 * Checks if Workspace owner has editor roles
@@ -213,4 +292,6 @@ IDBConnectionWSAccessManager
 		return false;
 
 	}
+	
+
 }

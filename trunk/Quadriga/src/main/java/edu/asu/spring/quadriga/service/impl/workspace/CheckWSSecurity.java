@@ -194,6 +194,26 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		
 	}
 	
+	@Override
+	public boolean checkIsWorkspaceAssociated(String userName) throws QuadrigaStorageException
+	{
+		boolean isAssociated;
+		isAssociated = false;
+		
+		isAssociated = dbConnect.chkIsWorkspaceAssocaited(userName);
+		return isAssociated;
+	}
+	
+	@Override
+	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,String role) throws QuadrigaStorageException
+	{
+		boolean isAssociated;
+		isAssociated = false;
+		
+		isAssociated = dbConnect.chkIsCollaboratorWorkspaceAssociated(userName, role);
+		return isAssociated;
+	}
+	
 	/**
 	 * This method checks if the user is workspace owner and has editor role to this workspace
 	 * @param userName

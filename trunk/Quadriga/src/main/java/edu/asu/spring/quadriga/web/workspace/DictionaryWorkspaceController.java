@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Controller
 public class DictionaryWorkspaceController {
@@ -41,7 +42,7 @@ public class DictionaryWorkspaceController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryWorkspaceController.class);
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionary", method = RequestMethod.GET)
 	public String addWorkspaceDictionary(
 			@PathVariable("workspaceid") String workspaceId, Model model) 
@@ -75,7 +76,7 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/adddictionaries";
 	}
 
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionaries", method = RequestMethod.POST)
 	public String addWorkspaceDictionary(HttpServletRequest req,
 			@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -142,6 +143,7 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/dictionaries";
 	}
 
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/dictionaries", method = RequestMethod.GET)
 	public String listWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -165,7 +167,7 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/dictionaries";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionary", method = RequestMethod.GET)
 	public String deleteWorkspaceDictionary(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
@@ -189,7 +191,7 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/deletedictionaries";
 	}
 	
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = { "SINGLE_WORKSPACE_ADMIN" } )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionaries", method = RequestMethod.POST)
 	public String deleteWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()

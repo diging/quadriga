@@ -20,13 +20,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
@@ -72,8 +77,9 @@ public class UpdateWSCollabController
 		}); 
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.GET)
-	public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid")String workspaceid) throws QuadrigaStorageException
+	public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid")String workspaceid) throws QuadrigaStorageException,QuadrigaAccessException
 	{
 		ModelAndView model;
 		ModifyCollaboratorForm collaboratorForm;
@@ -102,9 +108,10 @@ public class UpdateWSCollabController
 		return model;
 	}
 	
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.POST)
 	public ModelAndView updateWorkspaceCollaborator(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
-			BindingResult result,@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException
+			BindingResult result,@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException,QuadrigaAccessException
 	{
 		ModelAndView model;
 		List<ModifyCollaborator> wsCollaborators;
