@@ -121,8 +121,12 @@
 		class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
 
+	<!--  Hibernate session factory injection -->
+	<bean id = "transactionManager" class = "org.springframework.orm.hibernate4.HibernateTransactionManager">
+    	<property name = "sessionFactory" ref = "sessionFactory" />
+	</bean>		
+	
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -132,8 +136,4 @@
 		<property name="password" value="dbadmin" />
 
 	</bean>
-
-	
-
-
 </beans>

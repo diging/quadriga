@@ -278,6 +278,35 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.7.3</version>
 		</dependency>
+<!--  Hibernate and Dependent jars -->
+		<!-- Hibernate core -->
+		 <dependency>
+      		<groupId>org.hibernate</groupId>
+      		<artifactId>hibernate-core</artifactId>
+     	 	<version>4.2.6.Final</version>
+    	</dependency>
+	 
+		<!-- Hibernate library dependecy start -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+	  
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>1.0</version>
+		</dependency>
+			
+		<!-- Hibernate library dependecy end -->
+	
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>

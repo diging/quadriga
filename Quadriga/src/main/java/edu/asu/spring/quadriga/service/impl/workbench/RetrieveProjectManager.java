@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.RetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
@@ -23,6 +25,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Autowired
 	@Qualifier("DBConnectionRetrieveProjectManagerBean")
 	private IDBConnectionRetrieveProjectManager dbConnect;
+	
+	@Autowired
+	private RetrieveProjectManagerDAO retrieveProjectManagerDAO;
 	
 	@Autowired
 	@Qualifier("DBConnectionRetrieveProjCollabManagerBean")
@@ -95,16 +100,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return projectList;
 	}
 	
-	
-	
-	/**
-	 * This method returns the project details for the supplied project.
-	 * @param projectId
-	 * @return Iproject
-	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
-	 */
-	@Override
+	/*@Override
 	public IProject getProjectDetails(String projectId) throws QuadrigaStorageException
 	{
 		IProject project;
@@ -120,6 +116,20 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		project.setCollaborators(collaboratorList);
 		
 		return project;
+	}*/
+	
+	/**
+	 * This method returns the project details for the supplied project.
+	 * @param projectId
+	 * @return Iproject
+	 * @throws QuadrigaStorageException
+	 * @author rohit pendbhaje
+	 */
+	@Override
+	@Transactional
+	public IProject getProjectDetails(String projectId) throws QuadrigaStorageException
+	{
+		return retrieveProjectManagerDAO.getProjectDetails(projectId);
 	}
 
 	@Override
