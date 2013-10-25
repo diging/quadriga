@@ -5,12 +5,6 @@
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<style>
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 <script>
 
 function enableSubmit()
@@ -69,13 +63,13 @@ $(document).ready(function() {
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
-	<form:errors path="userObj" cssClass="error"></form:errors>  
+	<form:errors path="userObj" class="ui-state-error-text"></form:errors>  
 	
 	<br><br>
 	
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
 	<td><input type="submit" value="Add"></td>
-	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+	<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
 	&nbsp;
 	</c:if>
 	<br><br><br>

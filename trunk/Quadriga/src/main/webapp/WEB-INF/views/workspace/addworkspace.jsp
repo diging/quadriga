@@ -14,12 +14,6 @@ function submitClick(id){
 	location.href = "${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}";
 }
 </script>
-<style>
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 <article class="is-page-content">
 	<form:form commandName="workspace" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/addworkspace">
@@ -34,13 +28,13 @@ function submitClick(id){
 					<tr>
 						<td style="width: 170px">Name:</td>
 						<td><form:input path="name" size="60" id="name" /></td>
-						<td><form:errors path="name" cssClass="error"></form:errors></td>
+						<td><form:errors path="name" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
 						<td style="vertical-align: top">Description:</td>
 						<td><form:textarea path="description" cols="44" rows="6"
 								id="description" /></td>
-						<td><form:errors path="description" cssClass="error"></form:errors></td>
+						<td><form:errors path="description" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
 						<td><input type="submit" value="Create Workspace"></td>
