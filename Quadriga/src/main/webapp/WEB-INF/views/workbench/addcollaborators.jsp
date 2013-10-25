@@ -4,27 +4,6 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
     
 <style>
-table,td,th,caption {
-	border: 1px solid black;
-}
-
-th {
-	background-color: #E9EEF6;
-	color: black;
-	font-weight: bold;
-}
-
-td {
-	background-color: white;
-	color: black;
-	white-space: wrap;
-	overflow: wrap;
-	text-overflow: ellipsis;
-}
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
 
 div.ex {color:blue;
 font-style: italic
@@ -65,11 +44,11 @@ function onSubmit(){
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
- 	<form:errors path="userObj" cssClass="error"></form:errors>  
+ 	<form:errors path="userObj" class="ui-state-error-text"></form:errors>  
 	<br>
 <div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+	<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
 	<br/>
 <input type="submit" value="Add">
 <input type="button" value="Cancel" onClick="onSubmit()">

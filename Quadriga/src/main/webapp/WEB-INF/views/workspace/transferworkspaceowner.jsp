@@ -2,12 +2,6 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<style>
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 <script>
 	function submitClick(id) {
 		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${projectid}';
@@ -38,7 +32,7 @@
 					<form:options items="${collaboratinguser}"
 						itemValue="userName" itemLabel="userName" />
 				</form:select>
-				<form:errors path="userName" cssClass="error"></form:errors>
+				<form:errors path="userName" class="ui-state-error-text"></form:errors>
 				<div>Note:Current owner will become workspace admin</div>
 				<td><input type="submit" value="Assign"></td>
 			</c:if>

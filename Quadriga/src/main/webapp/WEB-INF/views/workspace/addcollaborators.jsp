@@ -3,28 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <style type="text/css">
-table,td,th,caption {
-	border: 1px solid black;
-}
-
-th {
-	background-color: #E9EEF6;
-	color: black;
-	font-weight: bold;
-}
-
-td {
-	background-color: white;
-	color: black;
-	white-space: wrap;
-	overflow: wrap;
-	text-overflow: ellipsis;
-}
-
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
 div.ex {color:blue;
 font-style: italic
 }
@@ -57,11 +35,11 @@ function onSubmit(){
 	    	<form:option value="NONE" label="--- Select ---"/>
 	   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="name" /> 
 		</form:select>
-		<form:errors path="userObj" cssClass="error"></form:errors>
+		<form:errors path="userObj" class="ui-state-error-text"></form:errors>
 		<br>
 		<div class="ex">select access rights</div>	
 		<form:checkboxes path="collaboratorRoles" class="roles" items="${wscollabroles}" itemValue="roleDBid" itemLabel="displayName" />
-		<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+		<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
 		<br/>
 	<td><input type="submit" value="Add"></td>
 	<input type="button" value="Cancel" onClick="onSubmit()">

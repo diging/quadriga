@@ -128,6 +128,8 @@
 
 		<c:otherwise>
 			<br>
+			<span class="ui-state-error-text">
 			<spring:message code="empty.CC" />
+			</span>
 		</c:otherwise>
 	</c:choose>

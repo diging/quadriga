@@ -33,16 +33,16 @@
 				code="workspace.CC.add.success" /></font>
 	</c:when>
 	<c:when test="${success=='0'}">
-		<font color="red"><spring:message
-				code="workspace.CC.add.fail" /></font>
+		<span class="ui-state-error-text"><spring:message
+				code="workspace.CC.add.fail" /></span>
 	</c:when>
 	<c:when test="${deletesuccess=='1'}">
 		<font color="blue"><spring:message
 				code="workspace.CC.delete.success" /></font>
 	</c:when>
 	<c:when test="${deletesuccess=='0'}">
-		<font color="red"><spring:message
-				code="workspace.CC.delete.fail" /></font>
+		<span class="ui-state-error-text"><spring:message
+				code="workspace.CC.delete.fail" /></span>
 	</c:when>
 </c:choose>
 
@@ -63,7 +63,9 @@
 		<c:otherwise>
 
 			<br>
+			<span class="ui-state-error-text">
 			<spring:message code="empty.CC" />
+			</span>
 		</c:otherwise>
 	</c:choose>
 </div>
