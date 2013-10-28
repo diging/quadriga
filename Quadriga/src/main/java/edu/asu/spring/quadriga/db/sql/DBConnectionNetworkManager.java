@@ -24,6 +24,8 @@ import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
+import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.impl.UserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -53,6 +55,9 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 	
 	@Autowired
 	IRetrieveProjectManager retrieveProjectDetails;
+	
+	@Autowired
+	IUserManager userManager;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionNetworkManager.class);
 	
@@ -244,6 +249,71 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		return network;		
 	}
 
+	
+	@Override
+	public INetwork getNetworkDetails(String networkId) throws QuadrigaStorageException{
+		String dbCommand;
+		String errmsg="";
+		INetwork network=networkFactory.createNetworkObject();;
+		CallableStatement sqlStatement;
+		
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_NETWORK_DETAILS  + "(?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, networkId);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					
+					network.setId(resultSet.getString(1));
+					network.setWorkspaceid(resultSet.getString(2));
+					network.setName(resultSet.getString(3));
+					network.setStatus(resultSet.getString(4));
+					IUser user = userManager.getUserDetails(resultSet.getString(5));
+					network.setCreator(user);
+					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
+					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
+					network.setProjectName(project.getName());
+					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
+					network.setWorkspaceName(workspaceName);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return network;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			logger.error(errmsg,e);
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return network;		
+	}
 	
 	@Override
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{

@@ -1044,6 +1044,23 @@ public class NetworkManager implements INetworkManager {
 
 		return networkTopNodeList;
 	}
+	
+	
+	/**
+	 * Get network detail object
+	 * @param networkId
+	 * @return
+	 */
+	@Override
+	public INetwork getNetworkDetails(String networkId){
+		INetwork network =null;
+		try{
+		network = dbConnect.getNetworkDetails(networkId);
+		}catch(QuadrigaStorageException e){
+			logger.error("DB error ",e);
+		}
+		return network;
+	}
 
 
 	/**
