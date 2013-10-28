@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 
 @Service
@@ -29,7 +31,7 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		if(user.getEmail()!= null && !user.getEmail().equals(""))
 		{
 			emailSender.sendNotificationEmail(user.getEmail(), emailMessages.getProperty("email.account_deactivation_subject"), emailMessages.getProperty("email.account_deactivation_msg"));
-			logger.info("The admin "+adminid+" sent a deactivation email to "+user.getUserName());
+			logger.info("The admin <<"+adminid+">> sent a deactivation email to <"+user.getUserName()+">");
 		}	
 	}
 	
@@ -38,7 +40,7 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		if(user.getEmail()!= null && !user.getEmail().equals(""))
 		{
 			emailSender.sendNotificationEmail(user.getEmail(), emailMessages.getProperty("email.account_activation_subject"), emailMessages.getProperty("email.account_activation_msg"));
-			logger.info("The admin "+adminid+" sent an activation email to "+user.getUserName());
+			logger.info("The admin <<"+adminid+">> sent an activation email to <"+user.getUserName()+">");
 		}
 	}
 
@@ -48,9 +50,30 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		{
 			String message = emailMessages.getProperty("email.account_request_msg_head")+userid+" "+emailMessages.getProperty("email.account_request_msg_tail");
 			emailSender.sendNotificationEmail(admin.getEmail(), emailMessages.getProperty("email.account_request_subject"), message );
-			logger.info("The system sent a user request email to "+admin.getUserName()+" for the request placed by "+userid);
+			logger.info("The system sent a user request email to <<"+admin.getUserName()+">> for the request placed by <"+userid+">");
 		}
 		
+	}
+	
+	@Override
+	public void sendNewWorkspaceAddedToProject(IProject project, IWorkSpace workspace){
+		IUser projectOwner = project.getOwner();
+		if(projectOwner.getEmail() != null && !projectOwner.getEmail().equals(""))
+		{
+			//Build the message to be sent to the user
+			StringBuilder message = new StringBuilder(emailMessages.getProperty("email.new_workspace_msg_part1"));
+			message.append(project.getName()+".");
+			message.append(emailMessages.getProperty("email.new_workspace_msg_part2"));
+			message.append(emailMessages.getProperty("email.new_workspace_msg_part3"));
+			message.append(workspace.getName());
+			message.append(emailMessages.getProperty("email.new_workspace_msg_part4"));
+			message.append(workspace.getDescription());
+			message.append(emailMessages.getProperty("email.new_workspace_msg_part5"));
+			message.append(workspace.getOwner().getUserName());
+
+			emailSender.sendNotificationEmail(projectOwner.getEmail(), emailMessages.getProperty("email.new_workspace_subject"), message.toString());
+			logger.info("The system sent an email notification to <<"+projectOwner.getEmail()+">> for the workspace <"+workspace.getName()+"> added by <"+workspace.getOwner().getUserName()+">");
+		}
 	}
 
 }
