@@ -195,11 +195,8 @@ public class UserManager implements IUserManager {
 			logger.info("The admin "+sAdminId+" deactivated the account of "+sUserId);
 			IUser user = this.getUserDetails(sUserId);
 
-			//TODO:Remove test email setup
-			user.setEmail("ramkumar007@gmail.com");
-
 			if(user.getEmail()!=null && !user.getEmail().equals(""))
-				getEmailManager().sendAccountDeactivationEmail(user, sAdminId);
+				emailManager.sendAccountDeactivationEmail(user, sAdminId);
 			else
 				logger.info("The user "+sUserId+" did not have an email address to send account deactivation email");
 		}
@@ -286,11 +283,8 @@ public class UserManager implements IUserManager {
 			{
 				logger.info("The admin "+sAdminId+" activated the account of "+sUserId);
 
-				//TODO:Remove test email setup
-				user.setEmail("ramkumar007@gmail.com");
-
 				if(user.getEmail()!=null && !user.getEmail().equals(""))
-					getEmailManager().sendAccountActivationEmail(user, sAdminId);
+					emailManager.sendAccountActivationEmail(user, sAdminId);
 				else
 					logger.info("The user "+sUserId+" did not have an email address to send account activation email");
 			}
@@ -351,11 +345,9 @@ public class UserManager implements IUserManager {
 					}
 				}
 
-				//TODO:Remove test email setup
-				admin.setEmail("ramkumar007@gmail.com");
 				if(admin.getEmail()!=null && !admin.getEmail().equals(""))
 				{
-					getEmailManager().sendNewAccountRequestPlacementEmail(admin, userId);
+					emailManager.sendNewAccountRequestPlacementEmail(admin, userId);
 				}
 				else
 					logger.info("The system tried to send email to the admin "+admin.getUserName()+" but the admin did not have an email setup");
