@@ -43,4 +43,7 @@ public interface IDBConnectionNetworkManager {
 
 	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
 			throws QuadrigaStorageException;
+
+	public abstract INetwork getNetworkDetails(String networkId)
+			throws QuadrigaStorageException;
 }

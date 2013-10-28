@@ -95,6 +95,7 @@ public interface DBConstants
 	public static final String ADD_NETWORK_APPELLATION ="sp_addNetworks_Appellation";
 	public static final String ADD_NETWORK_STATEMENT ="sp_addNetworks_statements";
 	public static final String GET_NETWORK_STATUS ="sp_getNetworkStatus";
+	public static final String GET_NETWORK_DETAILS ="sp_getNetworkDetails";
 	public static final String GET_NETWORK_LIST ="sp_getNetworkList";
 	public static final String HAS_NETWORK_NAME ="sp_hasNetworkName";
 	public static final String GET_PROJECTID_WORKSPACE ="sp_getProjectIdForWorkspace";

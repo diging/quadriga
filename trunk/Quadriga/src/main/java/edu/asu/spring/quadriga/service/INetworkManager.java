@@ -97,4 +97,6 @@ public interface INetworkManager {
 	public abstract void setRelationEventPredicateMapping(
 			List<List<Object>> relationEventPredicateMapping);
 
+	public abstract INetwork getNetworkDetails(String networkId);
+
 }
