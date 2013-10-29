@@ -38,12 +38,23 @@
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 
-
+	<!-- Home pages -->
+	<definition name="auth/home" extends="base.definition.nonav">
+		<put-attribute name="title" value="Quadriga - Login" />
+		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
+	</definition>
+	
+	<!-- About page -->
+	<definition name="auth/about" extends="base.definition.nonav">
+	    <put-attribute name="title" value="Quadruga - Introduction" />
+		<put-attribute name="content" value="/WEB-INF/views/about.jsp"/>
+		<put-attribute name="currentPage" value="about" />
+	</definition>
+	
 	<!-- public pages -->
-	<definition name="login" extends="base.definition">
+	<definition name="login" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
-		<put-attribute name="navigation" value="/WEB-INF/views/top-navs/no-nav.jsp" />
 	</definition>
 
 	<definition name="nouser" extends="base.definition">
@@ -60,7 +71,7 @@
 		<put-attribute name="title" value="Quadriga - Deactivated Accont" />
 		<put-attribute name="content" value="/WEB-INF/views/forbidden.jsp" />
 	</definition>
-
+	
 	<!-- Request pages -->
 	<definition name="requests/accountRequested" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Account Request" />
@@ -79,16 +90,16 @@
 		extends="base.definition">
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
-		<definition name="base.definition.conceptcollections.nav" extends="base.definition.leftnav">
+	<definition name="base.definition.conceptcollections.nav" extends="base.definition.leftnav">
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	
-	<definition name="auth/conceptcollections" extends="base.definition.nonav">
+	<definition name="auth/conceptcollections" extends="base.definition.conceptcollections.nav">
 		<put-attribute name="title" value="Quadriga - Concept Collections" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/conceptcollections/conceptcollection.jsp" />
-		<put-attribute name="sub-navigation"
-			value="/WEB-INF/views/conceptcollections/collection-right.jsp" />
+		<put-attribute name="left-navigation"
+			value="/WEB-INF/views/navigation/nav-conceptcollectionbench.jsp" />
 		<put-attribute name="currentPage" value="conceptCollections" />
 	</definition>
 	<definition name="auth/conceptcollections/details" extends="base.definition.conceptcollections">
@@ -571,13 +582,6 @@
 	</definition>
 		
 		
-	<!-- Home pages -->
-	<definition name="auth/home" extends="base.definition.nonav">
-		<put-attribute name="title" value="Quadriga - Login" />
-		<put-attribute name="content" value="/WEB-INF/views/home.jsp" />
-	</definition>
-
-
 	<!-- User management pages -->
 	<definition name="auth/users/manage" extends="base.definition.nonav">
 		<put-attribute name="title" value="Quadriga - Manage Users" />

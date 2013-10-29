@@ -3,73 +3,66 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("ul.pagination1").quickPagination({
-			pageSize : "10"
-		});
-		$("ul.pagination2").quickPagination({
-			pageSize : "10"
-		});
-
+$(document).ready(function() {
+	$("ul.pagination1").quickPagination({
+		pageSize : "5"
 	});
+});
+	$(function() 
+			{
+				    $( "#tabs" ).tabs();
+			});
 </script>
-<script type="text/javascript" charset="utf8">
-	$(document).ready(function() {
-		$("input[type=button]").button().click(function(event) {
-			event.preventDefault();
-		});
-	});
-</script>
-
+<style>
+   .tabs
+   {
+	font-size: 80%;
+   }
+</style>
 <header>
 	<h2>Concept Collections</h2>
 	<span class="byline">Manage your concept collections here.</span>
 </header>
-<ul>
-	<li><input type=button
-		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/addCollectionsForm'"
-		value='Add ConceptCollection'></li>
-</ul>
-
-<div
-	style="float: left; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
-	<h3 align="center">You own these concept collections</h3>
-	<hr>
-	<ul class="pagination1">
-		<c:if test="${not empty conceptlist}">
+	<div id = "tabs" class="tabs">
+	<ul>
+	  <li><a href="#asowner">Owner</a></li>
+	  <li><a href="#ascollaborator">Collaborator</a></li>
+	</ul>
+	<div id=asowner>
+			<c:if test="${not empty conceptlist}">
+			You own these concept collections:
+			<ul class="style2 pagination1">
 			<c:forEach var="concept" items="${conceptlist}">
-				<li><details>
-						<summary>
-							<a href="conceptcollections/${concept.id}"> <c:out
-									value="${concept.name}"></c:out>
-							</a>
-						</summary>
-						<c:out value="${concept.description}"></c:out>
-					</details></li>
+			
+			<li>
+			   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.id}">
+			          <c:out value="${concept.name}"></c:out>
+			   </a> <br> 
+			     <c:out value="${concept.description}"></c:out>
+			</li>
 			</c:forEach>
+			</ul>
 		</c:if>
-	</ul>
-
-</div>
-
-<div
-	style="float: right; width: 45%; border-radius: 5px; border: 2px solid #e3daa8; padding: 20px;">
-	<h3 align="center">You collaborate on these concept collections</h3>
-	<hr>
-	<ul class="pagination2">
-		<c:if test="${not empty collaborationlist}">
-			<c:forEach var="concept" items="${collaborationlist}">
-				<li><details>
-						<summary>
-							<a href="conceptcollections/${concept.id}"> <c:out
-									value="${concept.name}"></c:out>
-							</a>
-						</summary>
-						<c:out value="${concept.description}"></c:out>
-					</details></li>
+		<c:if test="${empty conceptlist}">
+	      You don't own any concept collections.
+	   </c:if>
+	</div>
+	<div id=ascollaborator>
+	<c:if test="${not empty collaborationlist}">
+	You collaborate on these concept collections:
+	<ul class="style2 pagination1">
+	<c:forEach var="concept" items="${collaborationlist}">
+	<li>
+			   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.id}">
+			          <c:out value="${concept.name}"></c:out>
+			   </a> <br> 
+			     <c:out value="${concept.description}"></c:out>
+			     </li>
 			</c:forEach>
-		</c:if>
 	</ul>
-
-</div>
-
+		</c:if>
+			<c:if test="${empty collaborationlist}">
+	      You don't collaborate on any concept collections.
+	   </c:if>
+	</div>
+	</div>
