@@ -24,12 +24,14 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.impl.workbench.ModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -47,6 +49,9 @@ public class ModifyProjectCollaboratorController
 	
 	@Autowired
 	private ModifyProjCollabManager projectManager;
+	
+	@Autowired
+	private IRetrieveProjectManager projectDetailsManager;
 	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
@@ -90,6 +95,9 @@ public class ModifyProjectCollaboratorController
 		//create model view
 		model = new ModelAndView("auth/workbench/updatecollaborators");
 		
+		//retrieve the project details
+		IProject project = projectDetailsManager.getProjectDetails(projectid);
+		
 		//retrieve the list of Collaborators and their roles.
 		collaboratorList = collaboratorManager.modifyProjectCollaboratorManager(projectid);
 		
@@ -105,6 +113,8 @@ public class ModifyProjectCollaboratorController
 		model.getModelMap().put("projcollabroles", collaboratorRoles);
 		model.getModelMap().put("collaboratorform", collaboratorForm);
 		model.getModelMap().put("projectid", projectid);
+		model.getModel().put("projectname", project.getName());
+		model.getModelMap().put("projectdesc",project.getDescription());
 		model.getModelMap().put("success", 0);
 		
 		return model;
@@ -130,6 +140,9 @@ public class ModifyProjectCollaboratorController
 		
 		if(result.hasErrors())
 		{
+			//retrieve the project details
+			IProject project = projectDetailsManager.getProjectDetails(projectid);
+			
 			//add a variable to display the entire page
 			model.getModelMap().put("success", 0);
 
@@ -137,6 +150,8 @@ public class ModifyProjectCollaboratorController
 			projCollaborators = collaboratorManager.modifyProjectCollaboratorManager(projectid);
 			collaboratorForm.setCollaborators(projCollaborators);
 			model.getModelMap().put("collaboratorform", collaboratorForm);
+			model.getModel().put("projectname", project.getName());
+			model.getModelMap().put("projectdesc",project.getDescription());
 			model.getModelMap().put("projectid", projectid);
 			
 			//retrieve the collaborator roles and assign it to a map

@@ -472,11 +472,15 @@
 	<definition name="base.definition.dictionaries" extends="base.definition">
 		<put-attribute name="currentPage" value="dictionaries" />
 	</definition>
-	<definition name="auth/dictionaries" extends="base.definition.nonav">
+	<definition name="base.definition.dictionaries.nav" extends="base.definition.leftnav">
+		<put-attribute name="currentPage" value="dictionaries" />
+	</definition>
+	
+	<definition name="auth/dictionaries" extends="base.definition.dictionaries.nav">
 		<put-attribute name="title" value="Quadriga Dictionary" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/dictionary/dictionaries.jsp" />
-		<put-attribute name="currentPage" value="dictionaries" />
+		<put-attribute name="left-navigation" value="/WEB-INF/views/navigation/nav-dictionarybench.jsp" />
 	</definition>
 <!--  	<definition name="auth/dictionary/dictionary" extends="base.definition.dictionaries">
 		<put-attribute name="title" value="Quadriga - Manage Dictionary Items" />

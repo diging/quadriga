@@ -24,10 +24,12 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
@@ -57,6 +59,9 @@ public class UpdateWSCollabController
 	@Autowired
 	private ModifyCollaboratorFormManager collaboratorFormManager;
 	
+	@Autowired
+	private IListWSManager retrieveWSManager;
+	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
 		
@@ -79,7 +84,7 @@ public class UpdateWSCollabController
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.GET)
-	public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid")String workspaceid) throws QuadrigaStorageException,QuadrigaAccessException
+	public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid")String workspaceid,Principal principal) throws QuadrigaStorageException,QuadrigaAccessException
 	{
 		ModelAndView model;
 		ModifyCollaboratorForm collaboratorForm;
@@ -87,6 +92,8 @@ public class UpdateWSCollabController
 		
 		//create model view
 		model = new ModelAndView("auth/workbench/workspace/updatecollaborators");
+		String userName = principal.getName();
+		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
 		
 		//retrieve the list of Collaborators and their roles.
 		collaboratorList = collaboratorFormManager.modifyWorkspaceCollaboratorManager(workspaceid);
@@ -103,6 +110,8 @@ public class UpdateWSCollabController
 		model.getModelMap().put("wscollabroles", collaboratorRoles);
 		model.getModelMap().put("collaboratorform", collaboratorForm);
 		model.getModelMap().put("workspaceid", workspaceid);
+		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		model.getModelMap().put("success", 0);
 		
 		return model;
@@ -130,6 +139,11 @@ public class UpdateWSCollabController
 			//add a variable to display the entire page
 			model.getModelMap().put("success", 0);
 
+			//add the workspace details
+			IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
+			model.getModelMap().put("workspacename",workspace.getName());
+			model.getModelMap().put("workspacedesc", workspace.getDescription());
+			
 			//add the model map
 			wsCollaborators = collaboratorFormManager.modifyWorkspaceCollaboratorManager(workspaceid);
 			collaboratorForm.setCollaborators(wsCollaborators);

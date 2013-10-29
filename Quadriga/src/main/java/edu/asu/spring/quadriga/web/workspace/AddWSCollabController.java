@@ -30,13 +30,16 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
@@ -66,6 +69,9 @@ public class AddWSCollabController
 	
 	@Autowired
 	private CollaboratorValidator validator;
+	
+	@Autowired
+	private IListWSManager retrieveWSManager;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyWSCollabManager.class);
 	
@@ -106,7 +112,7 @@ public class AddWSCollabController
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.GET)
-	public ModelAndView addWorkspaceCollaboratorForm(@PathVariable("workspaceid") String workspaceid) throws QuadrigaStorageException
+	public ModelAndView addWorkspaceCollaboratorForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		List<IUser> nonCollaboratingUser;
@@ -114,6 +120,9 @@ public class AddWSCollabController
 		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
 		
 		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
+		String userName = principal.getName();
+		
+		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
 		
 		//adding the collaborator model
 		collaborator =  collaboratorFactory.createCollaborator();
@@ -121,6 +130,8 @@ public class AddWSCollabController
 		
 		//adding the workspace id
 		model.getModelMap().put("workspaceid", workspaceid);
+		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		
 		
 		//fetch the users who are not collaborators to the workspace
@@ -163,7 +174,7 @@ public class AddWSCollabController
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.POST)
 	public ModelAndView addWorkspaceCollaborator(@Validated @ModelAttribute("collaborator") Collaborator collaborator,BindingResult result,
-			@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException
+			@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		String userName;
@@ -175,6 +186,11 @@ public class AddWSCollabController
 		//create the model view
 		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
 		roleIdList = new StringBuilder();
+		userName = principal.getName();
+		
+		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
+		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		
 		if(result.hasErrors())
 		{
@@ -184,7 +200,7 @@ public class AddWSCollabController
 		else
 		{
 			//get all the required input parameters
-			userName = principal.getName();
+			
 			collabUser = collaborator.getUserObj().getUserName();
 			for(ICollaboratorRole role : collaborator.getCollaboratorRoles())
 			{
