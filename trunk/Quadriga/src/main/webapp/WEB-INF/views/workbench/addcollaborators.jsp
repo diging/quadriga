@@ -37,29 +37,33 @@ function onSubmit(){
 
 <form:form method="POST" name="myForm" commandName="collaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
-
+  <h2>Associate collaborators to project:</h2>
+<h3>Project: ${projectname}</h3>
+<div>${projectdesc}</div>
 <c:if test="${not empty notCollaboratingUsers}">
+<hr>
 <div class="ex">select collaborator</div>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
  	<form:errors path="userObj" class="ui-state-error-text"></form:errors>  
-	<br>
+<br>
 <div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
 	<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
-	<br/>
+<br />
 <input type="submit" value="Add">
 <input type="button" value="Cancel" onClick="onSubmit()">
-<br><br>
 </c:if>
 <c:if test="${empty notCollaboratingUsers}">
+<hr>
  <span class="byline">All collaborators are associated to the project</span>
  <input type="button" value="Back" onClick="onSubmit()">
 </c:if>
 <br>
 <c:if test="${not empty collaboratingUsers}">
+<hr>
 <span class="byline">Associated project collaborators :</span>
 <table style="width:100%" class="display dataTable">					
 	<thead>

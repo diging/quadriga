@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
@@ -27,6 +28,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -48,6 +50,18 @@ public class DictionaryItemController {
 	
 	@Autowired
 	ICollaboratorRoleManager collaboratorRoleManager;
+	
+	@Autowired
+	IRetrieveDictionaryManager retrieveDictionaryManager;
+
+	public IRetrieveDictionaryManager getRetrieveDictionaryManager() {
+		return retrieveDictionaryManager;
+	}
+
+	public void setRetrieveDictionaryManager(
+			IRetrieveDictionaryManager retrieveDictionaryManager) {
+		this.retrieveDictionaryManager = retrieveDictionaryManager;
+	}
 
 	public IUserManager getUsermanager() {
 		return usermanager;
@@ -86,22 +100,17 @@ public class DictionaryItemController {
 	public String getDictionaryPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model, Principal principal)
 					throws QuadrigaStorageException, QuadrigaAccessException {
-		IUser user = usermanager.getUserDetails(principal.getName());
-		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
+		
+		//fetch the dictionary details
+		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+		
+		String userName = principal.getName();
 
-		logger.info("User permission on this dicitonary : "+result);
 		List<IDictionaryItem> dictionaryItemList = dictonaryManager
-				.getDictionariesItems(dictionaryid,user.getUserName());
-
-		if (dictionaryItemList == null) {
-			logger.info("Dictionary ITem list is null");
-		}
-		String dictionaryName = "";
-		dictionaryName = dictonaryManager.getDictionaryName(dictionaryid);
+				.getDictionariesItems(dictionaryid,userName);
 
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		model.addAttribute("dictName", dictionaryName);
-		model.addAttribute("dictionaryid", dictionaryid);
+		model.addAttribute("dictionary", dictionary);
 
 		List<ICollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
 		model.addAttribute("collaboratingUsers", existingCollaborators);

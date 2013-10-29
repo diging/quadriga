@@ -20,6 +20,9 @@ public class ConceptCollection implements IConceptCollection
 	private String name;
 	private String description;
 	private String id;
+	private IUser owner;
+	private List<ICollaborator> collaborators;
+	private List<IConcept> items = new ArrayList<IConcept>();
 	
 	@Override
 	public String getId() {
@@ -29,9 +32,7 @@ public class ConceptCollection implements IConceptCollection
 	public void setId(String id) {
 		this.id = id;
 	}
-	private IUser owner;
-	private List<ICollaborator> collaborators;
-	private List<IConcept> items = new ArrayList<IConcept>();
+
 	@Override
 	public String getName() {
 		return name;

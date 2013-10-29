@@ -32,9 +32,6 @@
 				Update Collaborators</a></li>
 		</ul>
 	</li>
-		<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionaryid}">
-			Update</a>
-	</li>
 		<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/changedictionaryowner/${dictionaryid}">
 			Change Owner</a>
 	</li>

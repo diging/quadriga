@@ -97,7 +97,6 @@
 	}
 
 	function deleteItem(item) {
-		$.alert("hello");
 		$("#dialog-message")
 				.dialog(
 						{
@@ -134,20 +133,17 @@
 <table style="width:100%">
   <tr>
 	<td style="width:90%">
-
-<header>
-	<h2>Dictionary: ${dictName}</h2>
-	<span class="byline">These are all the terms in your dictionary</span>
-</header>
-<ul>
-	<li><input type=button
+    <h2>Dictionary: ${dictionary.name}</h2>
+    <div>${dictionary.description}</div>
+    <br />
+    <div class="user">Owned by: ${dictionary.owner.name}</div>
+    <br />
+    <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
-		value='Back to all Dictionaries'></li>
-</ul>
-
-
-<hr>
-<br>
+		value='Back to all Dictionaries'>
+	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.id}'"
+	   value = "Edit">
+	<hr>
 <c:choose>
 	<c:when test="${additemsuccess=='1'}">
 		<font color="blue"> <spring:message code="add.items.success" /></font>
@@ -195,8 +191,6 @@
 
 	</c:when>
 	<c:otherwise>
-		
-
 	</c:otherwise>
 </c:choose>
 <div>
@@ -213,8 +207,7 @@
 				<input type="submit" value="Update Items"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/dictionaries/updateDictionaryItems/${dictionaryid}'" />
 				<br /> <br />
-				<table style="width: 100%" cellpadding="0" cellspacing="0"
-					border="0" class="display dataTable">
+				<table class="display dataTable">
 					<!-- <table  class="dataTable" id="pagination1"> -->
 					<thead>
 						<tr>
@@ -239,22 +232,13 @@
 										value="${dictionaryItem.id}"></c:out></td>
 								<td width="25%" align="center"><c:out
 										value="${dictionaryItem.pos}"></c:out></td>
-								<!--<td align="center">
-					<c:out value="${dictionaryItem.vocabulary}"></c:out> 
-				</td>
-				<td align="center">
-					<c:out value="${dictionaryItem.description}"></c:out> 
-				</td>-->
-
 
 							</tr>
 						</c:forEach>
 					</tbody>
-
 				</table>
 			</form>
 		</c:when>
-
 		<c:otherwise>
 			<input type=button
 				onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionaryItems/${dictionaryid}'"

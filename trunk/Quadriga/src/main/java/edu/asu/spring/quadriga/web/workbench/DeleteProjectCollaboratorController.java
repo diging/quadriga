@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -84,6 +85,9 @@ public class DeleteProjectCollaboratorController {
 		modelAndView = new ModelAndView("auth/workbench/deletecollaborators");
 		ModifyCollaboratorForm collaboratorForm;
 		
+		//retrieve project details
+		IProject project = retrieveprojectManager.getProjectDetails(projectId);
+		
 		collaboratorForm = collaboratorFormFactory.createCollaboratorFormObject();
 		
 		List<ModifyCollaborator> modifyCollaborator = collaboratorFormManager.modifyProjectCollaboratorManager(projectId);
@@ -92,6 +96,8 @@ public class DeleteProjectCollaboratorController {
 		
 		modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
 		modelAndView.getModelMap().put("projectId", projectId);
+		modelAndView.getModel().put("projectname", project.getName());
+		modelAndView.getModelMap().put("projectdesc",project.getDescription());
 		
 		modelAndView.getModelMap().put("success", 0);
 				
@@ -114,10 +120,14 @@ public class DeleteProjectCollaboratorController {
 			collaborators = collaboratorFormManager.modifyProjectCollaboratorManager(projectId);
 			collaboratorForm.setCollaborators(collaborators);
 			
+			//retrieve project details
+			IProject project = retrieveprojectManager.getProjectDetails(projectId);
 			modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
 			modelAndView.getModelMap().put("success", 0);
 			modelAndView.getModelMap().put("error", 1);
 			modelAndView.getModelMap().put("projectId", projectId);
+			modelAndView.getModel().put("projectname", project.getName());
+			modelAndView.getModelMap().put("projectdesc",project.getDescription());
 		}
 		
 		else

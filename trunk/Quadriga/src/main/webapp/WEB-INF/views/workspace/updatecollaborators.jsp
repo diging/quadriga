@@ -8,6 +8,13 @@ function submitClick(id){
 }
 
 	$(document).ready(function() {
+		
+		activeTable = $('.dataTable').dataTable({
+			"bJQueryUI" : true,
+			"sPaginationType" : "full_numbers",
+			"bAutoWidth" : false
+		});
+		
 		$("input[type=submit]").button().click(function(event) {
 		});
 		
@@ -19,14 +26,14 @@ function submitClick(id){
 	<form:form commandName="collaboratorform" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/updatecollaborators"
 		id="updatewscollabform">
-
 <c:choose> 
     <c:when test="${success == '0'}">
 		<c:if test="${not empty collaboratorform.collaborators}">
-			<header>
 			<h2>Modify workspace collaborator roles</h2>
+		   <h3>Workspace: ${workspacename}</h3>
+           <div>${workspacedesc}</div>
+            <hr>
 			<span class="byline">Select roles for the collaborator:</span>
-			</header>
 			<input type="submit" value='Update' name="updatewscollab">
 			<input type="button" onClick="submitClick(this.id);" value='Cancel'>
 			<table style="width: 100%" class="display dataTable"
@@ -61,7 +68,7 @@ function submitClick(id){
 			</table>
 		</c:if>
 		<c:if test="${empty collaboratorform.collaborators}">
-		   <span class="byline">No collaborators associated to workspace</span>
+		   <span class="byline">No collaborators associated to <c:out value="workspacename"></c:out> workspace</span>
 		        <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
@@ -70,7 +77,7 @@ function submitClick(id){
 		</c:if>
 		 </c:when>
 		     <c:otherwise> 
-		     <span class="byline">Successfully updated collaborators</span> 
+		     <span class="byline">Successfully updated collaborators for <c:out value="workspacename"> workspace</c:out></span> 
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"

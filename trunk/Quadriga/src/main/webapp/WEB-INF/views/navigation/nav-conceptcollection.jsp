@@ -34,8 +34,4 @@
 	<li><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/transferconceptcollectionowner/${collectionid}">
 			Change Owner</a>
 	</li>
-		</li>
-		<li><a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${collectionid}">
-			Update</a>
-	</li>
 </ul>

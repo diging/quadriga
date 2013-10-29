@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
@@ -130,12 +131,17 @@ public class AddCollaboratorController {
 	{
 		
 		ModelAndView model;
+		
+		//retrieve the project details
+		IProject project = retrieveprojectManager.getProjectDetails(projectid);
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
 		
 		model = new ModelAndView("auth/workbench/addcollaborators");
 		model.getModel().put("collaborator", collaborator);
-		model.getModel().put("projectid", projectid);
+		model.getModel().put("projectname", project.getName());
+		model.getModelMap().put("projectdesc",project.getDescription());
+		model.getModelMap().put("projectid", projectid);
 		
 		
 		// retrieve the collaborators who are not associated with project
@@ -189,6 +195,12 @@ public class AddCollaboratorController {
 		
 		ModelAndView model = null;
 		model = new ModelAndView("auth/workbench/addcollaborators");
+		
+		//retrieve the project details
+		IProject project = retrieveprojectManager.getProjectDetails(projectid);
+		model.getModelMap().put("projectname", project.getName());
+		model.getModelMap().put("projectdesc", project.getDescription());
+		model.getModelMap().put("projectid", projectid);
 		
 		if(result.hasErrors())
 		{

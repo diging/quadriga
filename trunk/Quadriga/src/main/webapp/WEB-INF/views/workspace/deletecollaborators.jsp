@@ -24,7 +24,7 @@
 
 		$("input[name='deletecollab']").button().click(function(event) {
 			if (!$("input[name='wscollabchecked']").is(":checked")) {
-				$("#msg").text("Select record to archive");
+				$("#msg").text("Select collaborator to delete");
 				event.preventDefault();
 				return;
 			}
@@ -69,6 +69,10 @@
 		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deletecollaborators"
 		id="deletewscollabform">
 		<c:if test="${not empty collaboratingusers}">
+		<h2>Delete workspace collaborators</h2>
+		    <h3>Workspace: ${workspacename}</h3>
+            <div>${workspacedesc}</div>
+            <hr>
 			<span class="byline">Select the collaborators to be deleted:</span>
 			<c:choose>
 				<c:when test="${success=='1'}">
@@ -78,7 +82,7 @@
 					<br />
 				</c:when>
 			</c:choose>
-			<span class="byline" id="msg" title="msg" style="color: #f00;">
+			<span class="ui-state-error-text" id="msg" title="msg" style="color: #f00;">
 			</span>
 			<br />
 			<input class="command" type="submit" value='Delete'
@@ -128,7 +132,7 @@
 					<br />
 				</c:when>
 			</c:choose>
-			You don't have any more collaborators associated to the workspace to delete.
+			<span class="byline">You don't have any more collaborators associated to the workspace to delete.</span>
 			<ul>
 				<li><input type="submit" onClick="submitClick(this.id);"
 					value='Back' name="Back"></li>
