@@ -27,11 +27,11 @@
 			</sec:authorize>
 			<sec:authorize
 				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-				<li><a href="networks" class="flask">Networks</a></li>
+				<li><a href="dictionaries" class="chart">Dictionaries</a></li>
 			</sec:authorize>
 			<sec:authorize
 				access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD', 'ROLE_QUADRIGA_USER_COLLABORATOR')">
-				<li><a href="dictionaries" class="chart">Dictionaries</a></li>
+				<li><a href="networks" class="flask">Networks</a></li>
 			</sec:authorize>
 		</ul>
 		<header>

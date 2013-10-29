@@ -21,6 +21,7 @@
 		<intercept-url pattern="/" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/welcome**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/home**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
+		<intercept-url pattern="/auth/about**" access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN','ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/workbench/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptcollections/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
 		<intercept-url pattern="/auth/conceptdetails/**" access="hasAnyRole('ROLE_QUADRIGA_USER_STANDARD','ROLE_QUADRIGA_USER_COLLABORATOR')"/>
