@@ -22,9 +22,11 @@ public interface RoleNames {
 	public static final String ROLE_COLLABORATOR_ADMIN = "ADMIN";
 	public static final String ROLE_PROJ_COLLABORATOR_ADMIN = "PROJECT_ADMIN";
 	public static final String ROLE_PROJ_COLLABORATOR_CONTRIBUTOR = "CONTRIBUTOR";
+	public static final String ROLE_PROJ_COLLABORATOR_EDITOR = "EDITOR";
 	
 	//Workspace collaborator roles constants
 	public static final String ROLE_WORKSPACE_COLLABORATOR_ADMIN = "SINGLE_WORKSPACE_ADMIN";
+	public static final String ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR = "SINGLE_WORKSPACE_CONTRIBUTOR";
 	
 	//dictionary collaborator roles constants
 	public static final String ROLE_DICTIONARY_COLLABORATOR_ADMIN = "ADMIN";

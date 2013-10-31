@@ -5,11 +5,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
     
 <style>
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-
 div.ex {
 	color:blue;
 	font-style: italic
@@ -29,35 +24,47 @@ $(document).ready(function() {
 	$("input[type=submit]").button().click(function(event) {
 
 	});
+	
+	$("input[type=button]").button().click(function(event) {
+
+	});
 });
 
-function goBack(){
+function onSubmit(){
 	
 	location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}';
 }
 </script>
 
-<input type="submit" value="Back" onClick="goBack()"/> 
-
 <form:form method="POST" name="myForm" commandName="collaborator"
  action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators">
-	
+<h2>Associate collaborators to dictionary:</h2>
+<h3>Dictionary: ${dictionaryname}</h3>
+<div>${dictionarydesc}</div>
 	<c:if test="${not empty nonCollaboratingUsers}">
+	<hr>
 	<div class="ex">select collaborator</div>
 	<form:select path="userObj" id="selectbox" name="userName" onchange="enableDisable()" >
 	  	<form:option value="NONE" label="--- Select ---"/>
 		<form:options items="${nonCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
-	<form:errors path="userObj" cssClass="error"></form:errors>  
-	<br><br>
+	<form:errors path="userObj" cssClass="ui-state-error-text"></form:errors>  
+	<br>
 	<div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<td><input type="submit" value="Add"></td>
-	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
-	&nbsp;
+	<form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors>
+	<br>
+	<input type="submit" value="Add">
+<input type="button" value="Back" onClick="onSubmit()">
 	</c:if>	
-	
-	<table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
+	<c:if test="${empty nonCollaboratingUsers}">
+	<hr>
+	<span class="byline">All collaborators are associated to dictionary</span>
+ <input type="button" value="Back" onClick="onSubmit()">
+	</c:if>
+	<c:if test="${not empty collaboratingUsers}">
+	<hr>
+	<table style="width:100%" class="display dataTable">	
 	<thead>
 		<tr>
 			<th align="left">collaborator</th>
@@ -79,6 +86,8 @@ function goBack(){
 	</c:forEach>
 	</tbody>
 	</table>
+	</c:if>
+	
 </form:form> 
 
 	

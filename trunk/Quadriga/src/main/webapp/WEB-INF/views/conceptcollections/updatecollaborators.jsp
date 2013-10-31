@@ -2,41 +2,26 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!-- Content -->
-<style type="text/css">
-table,td,th,caption {
-	border: 1px solid black;
-}
-
-th {
-	background-color: #E9EEF6;
-	color: black;
-	font-weight: bold;
-}
-
-td {
-	background-color: white;
-	color: black;
-	white-space: wrap;
-	overflow: wrap;
-	text-overflow: ellipsis;
-}
-
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 <script>
 function submitClick(id){
 	location.href = '${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}';
 }
 
 	$(document).ready(function() {
+		
+		activeTable = $('.dataTable').dataTable({
+				"bJQueryUI" : true,
+				"sPaginationType" : "full_numbers",
+				"bAutoWidth" : false
+			});
+			
 		$("input[type=submit]").button().click(function(event) {
 		});
 		
 		$("input[type=button]").button().click(function(event) {
 		});
+		
+		
 	});
 </script>
 <article class="is-page-content">
@@ -47,10 +32,11 @@ function submitClick(id){
 <c:choose> 
     <c:when test="${success == '0'}">
 		<c:if test="${not empty collaboratorform.collaborators}">
-			<header>
 			<h2>Modify concept collection collaborator roles</h2>
+		   <h3>Concept Collection: ${collectionname}</h3>
+           <div>${collectiondesc}</div>
+            <hr>
 			<span class="byline">Select roles for the collaborator:</span>
-			</header>
 			<input type="submit" value='Update' name="updateprojcollab">
 			<input type="button" onClick="submitClick(this.id);" value='Cancel'>
 			<table style="width: 100%" class="display dataTable"
@@ -78,7 +64,7 @@ function submitClick(id){
 										path="collaborators[${status.index}].collaboratorRoles"
 										class="roles" items="${cccollabroles}" itemValue="roleid"
 										itemLabel="displayName" /></font>
-							<form:errors path="collaborators[${status.index}].collaboratorRoles" cssClass="error"></form:errors>
+							<form:errors path="collaborators[${status.index}].collaboratorRoles" cssClass="ui-state-error-text"></form:errors>
 							</td>			
 						</tr>
 					</c:forEach>

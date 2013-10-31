@@ -20,13 +20,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * This class will handle list dictionaries controller for the dictionary
@@ -88,8 +93,12 @@ public class EditingListManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR})
+	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
+	,@ElementAccessPolicy(type=CheckedElementType.EDITOR,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/editing", method = RequestMethod.GET)
-	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException
+	,QuadrigaAccessException{
 		IUser user = userManager.getUserDetails(principal.getName());
 		
 		List<INetwork> assignedNetworkList=null;
@@ -119,8 +128,13 @@ public class EditingListManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR})
+	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
+	,@ElementAccessPolicy(type=CheckedElementType.EDITOR,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/networksOtherEditors", method = RequestMethod.GET)
-	public String listNetworkAssignedToOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	public String listNetworkAssignedToOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException
+	,QuadrigaAccessException
+	{
 		IUser user = userManager.getUserDetails(principal.getName());
 		
 		List<INetwork> assignedNetworkList=null;

@@ -26,15 +26,18 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
@@ -60,6 +63,9 @@ public class DictionaryCollaboratorController {
 	
 	@Autowired
 	IUserFactory userFactory;
+	
+	@Autowired
+	IRetrieveDictionaryManager retrieveDictionaryManager;
 	
 	@Autowired
 	ICollaboratorRoleManager collaboratorRoleManager;
@@ -121,10 +127,17 @@ public class DictionaryCollaboratorController {
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showAddCollaborators" , method = RequestMethod.GET)
-	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException{
+	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException,
+	QuadrigaAccessException{
 	
 		ModelAndView modelAndView = new ModelAndView("auth/dictionaries/showAddCollaborators");
+		
+		//fetch the dictionary details
+		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
+		
 		modelAndView.getModelMap().put("dictionaryid", dictionaryId);
+		modelAndView.getModelMap().put("dictionaryname", dictionary.getName());
+		modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
 		
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		collaborator.setUserObj(userFactory.createUserObject());
@@ -167,10 +180,15 @@ public class DictionaryCollaboratorController {
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/addCollaborators" , method = RequestMethod.POST)
 	public ModelAndView addCollaborators( @PathVariable("dictionaryid") String dictionaryId, 
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
-			Principal principal	) throws QuadrigaStorageException
+			Principal principal	) throws QuadrigaStorageException,QuadrigaAccessException
 	{
 		ModelAndView model = null;
 		model = new ModelAndView("auth/dictionaries/showAddCollaborators");
+		
+		//fetch dictionary details
+		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
+		model.getModelMap().put("dictionaryname", dictionary.getName());
+		model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 
 		String collaboratorUser = collaborator.getUserObj().getUserName();
 		List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
@@ -183,7 +201,7 @@ public class DictionaryCollaboratorController {
 		else
 		{
 			String username = principal.getName();	
-			String errmsg = dictionaryManager.addCollaborators(collaborator, dictionaryId,collaboratorUser,username);		
+			dictionaryManager.addCollaborators(collaborator, dictionaryId,collaboratorUser,username);		
 			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 
 		}

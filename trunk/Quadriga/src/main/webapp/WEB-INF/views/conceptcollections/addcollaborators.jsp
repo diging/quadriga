@@ -5,28 +5,6 @@
     
 
 <style>
-table,td,th,caption {
-	border: 1px solid black;
-}
-
-th {
-	background-color: #E9EEF6;
-	color: black;
-	font-weight: bold;
-}
-
-td {
-	background-color: white;
-	color: black;
-	white-space: wrap;
-	overflow: wrap;
-	text-overflow: ellipsis;
-}
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-
 div.ex {color:blue;
 font-style: italic
 }
@@ -55,29 +33,32 @@ function onSubmit(){
 </script>
 <form:form  method="POST" name="myForm" commandName="collaborator"
 action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
-
+<h2>Associate collaborators to collection:</h2>
+<h3>Concept Collection: ${collectionname}</h3>
+<div>${collectiondesc}</div>
 <c:if test="${not empty nonCollaboratorList}">
+<hr>
 <div class="ex">select collaborator</div>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${nonCollaboratorList}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
-	<form:errors path="userObj" cssClass="error"></form:errors>  
+	<form:errors path="userObj" cssClass="ui-state-error-text"></form:errors>  
 	<br>
 	<div class="ex">select access rights</div>	
 	<form:checkboxes path="collaboratorRoles" items="${collaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<form:errors path="collaboratorRoles" cssClass="error"></form:errors>
+	<form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors>
 <br/>
 <input type="submit" value="Add">
 <input type="button" value="Back" onClick="onSubmit()">
-<br><br>
 </c:if>
 <c:if test="${empty nonCollaboratorList}">
+<hr>
  <span class="byline">All collaborators are associated to concept collection</span>
  <input type="button" value="Back" onClick="onSubmit()">
 </c:if>
-<br>
 <c:if test="${not empty collaboratingUsers}">
+<hr>
 <span class="byline">Associated concept collection collaborators :</span>
 <table style="width:100%" class="display dataTable">					
 	<thead>

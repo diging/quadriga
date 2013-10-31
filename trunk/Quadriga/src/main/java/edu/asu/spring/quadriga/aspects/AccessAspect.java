@@ -59,6 +59,9 @@ public class AccessAspect
 			{
 				haveAccess = authorization.chkAuthorizationByRole(userName, policy.userRole());
 			}
+			
+			if(haveAccess)
+				break;
 		}
 		
 		if(!haveAccess)
