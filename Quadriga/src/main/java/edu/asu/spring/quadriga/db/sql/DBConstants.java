@@ -190,5 +190,9 @@ public interface DBConstants
 	//concept collection database objects
 	public static final String UPDATE_COLLECTION_COLLABORATOR = "sp_updatecollectioncollaborator";
 	
+	//Editor database objects
+	public static final String CHECK_IS_EDITOR = "fn_checkIsEditor";
+	public static final String CHECK_IS_NETWORK_EDITOR = "fn_checkIsNetworkEditor";
+	
 	
 }

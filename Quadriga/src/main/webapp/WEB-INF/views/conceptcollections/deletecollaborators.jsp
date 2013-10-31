@@ -3,30 +3,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-    
-<style>
-table,td,th,caption {
-	border: 1px solid black;
-}
-
-th {
-	background-color: #E9EEF6;
-	color: black;
-	font-weight: bold;
-}
-
-td {
-	background-color: white;
-	color: black;
-	white-space: wrap;
-	overflow: wrap;
-	text-overflow: ellipsis;
-}
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-</style>
 
 <script>
 $(document).ready(function() {
@@ -71,10 +47,14 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 		<c:choose>
 			<c:when test="${success == '0'}">
 					<c:if test="${not empty collaboratorForm.collaborators}">
+					<h2>Delete concept collection collaborator</h2>
+					<h3>Concept Collection: ${collectionname}</h3>
+					<div>${collectiondesc}</div>
+					<hr>
 					<span class="byline">Select concept collection collaborator to be deleted:</span>
 					<c:choose>
 						<c:when test="${error == '1'}">
-							<span class="error"> <spring:message
+							<span class="ui-state-error-text"> <spring:message
 									code="collaborator_user_selection.required" />
 							</span>
 							<br>

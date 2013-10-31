@@ -98,7 +98,7 @@ $(function() {
 				</c:if>
 				<c:if test="${empty workspaceform.workspaceList}">
 					<ul>
-				<li><input type="submit" onClick="submitClick(this.id);"
+				<li><input type="button" onClick="submitClick(this.id);"
 					value='Back' name="Back"></li>
 			</ul>
 			You don't have any workspace to activate.

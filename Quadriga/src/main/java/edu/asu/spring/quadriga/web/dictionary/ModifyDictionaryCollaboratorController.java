@@ -24,10 +24,13 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
+import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -48,6 +51,9 @@ public class ModifyDictionaryCollaboratorController
 	
 	@Autowired
 	IDictionaryCollaboratorManager dictionaryManager;
+	
+	@Autowired
+	IRetrieveDictionaryManager retrieveDictionaryManager;
 	
 	@Autowired
 	private CollaboratorFormValidator validator;
@@ -75,7 +81,7 @@ public class ModifyDictionaryCollaboratorController
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/dictionaries/{dictionaryid}/updatecollaborators", method=RequestMethod.GET)
-	 public ModelAndView updateCollaboratorForm(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException
+	 public ModelAndView updateCollaboratorForm(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException,QuadrigaAccessException
 	 {
 		 ModelAndView model;
 		 ModifyCollaboratorForm collaboratorForm;
@@ -83,6 +89,9 @@ public class ModifyDictionaryCollaboratorController
 		 List<ICollaboratorRole> collaboratorRoles;
 		 
 		 model = new ModelAndView("auth/dictionaries/updatecollaborators");
+		 
+		 //fetch the dictionary details
+		 IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
 		 
 		 //create a model for collaborators
 		 collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
@@ -98,6 +107,8 @@ public class ModifyDictionaryCollaboratorController
 			model.getModelMap().put("dictcollabroles", collaboratorRoles);
 			model.getModelMap().put("collaboratorform", collaboratorForm);
 			model.getModelMap().put("dictionaryid", dictionaryid);
+			model.getModelMap().put("dictionaryname", dictionary.getName());
+			model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 			model.getModelMap().put("success", 0);
 		 return model;
 	 }
@@ -121,6 +132,9 @@ public class ModifyDictionaryCollaboratorController
 			
 			if(result.hasErrors())
 			{
+				//fetch the dictionary details
+				IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+				
 				//add a variable to display the entire page
 				model.getModelMap().put("success", 0);
 
@@ -129,6 +143,8 @@ public class ModifyDictionaryCollaboratorController
 				//add the model map
 				model.getModelMap().put("collaboratorform", collaboratorForm);
 				model.getModelMap().put("dictionaryid", dictionaryid);
+				model.getModelMap().put("dictionaryname", dictionary.getName());
+				model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 				
 				//retrieve the collaborator roles and assign it to a map
 				//fetch the roles that can be associated to the workspace collaborator

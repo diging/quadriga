@@ -116,6 +116,11 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
+	<bean id="DBConnectionEditorAccessManagerBean"
+		class="edu.asu.spring.quadriga.db.sql.editor.DBConnectionEditorAccessManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 	<!-- profile page bean -->
 	<bean id="DBConnectionProfileManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager">

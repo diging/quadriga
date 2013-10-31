@@ -24,7 +24,10 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
@@ -54,6 +57,9 @@ public class ModifyCCCollaboratorController
 	private ICCCollaboratorManager collaboratorManager;
 	
 	@Autowired
+	private IConceptCollectionFactory collectionFactory;
+	
+	@Autowired
 	private ModifyCollaboratorFormManager collaboratorFormManager;
 	
 	@InitBinder
@@ -79,7 +85,7 @@ public class ModifyCCCollaboratorController
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/updatecollaborators", method=RequestMethod.GET)
-	 public ModelAndView updateCollaboratorForm(@PathVariable("collectionid") String collectionid) throws QuadrigaStorageException
+	 public ModelAndView updateCollaboratorForm(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	 {
 		 ModelAndView model;
 		 ModifyCollaboratorForm collaboratorForm;
@@ -87,6 +93,14 @@ public class ModifyCCCollaboratorController
 		 List<ICollaboratorRole> collaboratorRoles;
 		 
 		 model = new ModelAndView("auth/conceptcollection/updatecollaborators");
+		 
+		 String userName = principal.getName();
+
+		 //fetch the concept collection details
+		 IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
+		 conceptCollection.setId(collectionid);
+		 conceptControllerManager.getCollectionDetails(conceptCollection, userName);
+		 
 		 
 		 //create a model for collaborators
 		 collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
@@ -102,6 +116,8 @@ public class ModifyCCCollaboratorController
 			model.getModelMap().put("cccollabroles", collaboratorRoles);
 			model.getModelMap().put("collaboratorform", collaboratorForm);
 			model.getModelMap().put("collectionid", collectionid);
+			model.getModelMap().put("collectionname", conceptCollection.getName());
+			model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 			model.getModelMap().put("success", 0);
 		 return model;
 	 }
@@ -109,7 +125,7 @@ public class ModifyCCCollaboratorController
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 3, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/updatecollaborators", method=RequestMethod.POST)
 	 public ModelAndView updateCollaboratorForm(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,
-			 BindingResult result,@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException
+			 BindingResult result,@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	 {
 			ModelAndView model;
 			List<ModifyCollaborator> ccCollaborators;
@@ -126,6 +142,11 @@ public class ModifyCCCollaboratorController
 			
 			if(result.hasErrors())
 			{
+				//fetch the concept collection details
+				IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
+				conceptCollection.setId(collectionid);
+				conceptControllerManager.getCollectionDetails(conceptCollection, userName);
+
 				//add a variable to display the entire page
 				model.getModelMap().put("success", 0);
 
@@ -134,6 +155,8 @@ public class ModifyCCCollaboratorController
 				//add the model map
 				model.getModelMap().put("collaboratorform", collaboratorForm);
 				model.getModelMap().put("collectionid", collectionid);
+				model.getModelMap().put("collectionname", conceptCollection.getName());
+				model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 				
 				//retrieve the collaborator roles and assign it to a map
 				//fetch the roles that can be associated to the workspace collaborator

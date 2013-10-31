@@ -3,18 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-   
-<style>
-.error {
-	color: #ff0000;
-	font-style: italic;
-}
-
-div.ex {
-	color:blue;
-	font-style: italic
-}
-</style>
 
 <script>
 $(document).ready(function() {
@@ -60,10 +48,14 @@ action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary
 <c:choose>
 <c:when test="${success == '0'}">
 <c:if test="${not empty collaboratorForm.collaborators}">
+					<h2>Delete dictionary collaborator</h2>
+					<h3>Dictionary: ${dictionaryname}</h3>
+					<div>${dictionarydesc}</div>
+					<hr>
 					<span class="byline">Select concept collection collaborator to be deleted:</span>
 					<c:choose>
 						<c:when test="${error == '1'}">
-							<span class="error"> <spring:message
+							<span class="ui-state-error-text"> <spring:message
 									code="collaborator_user_selection.required" />
 							</span>
 							<br>

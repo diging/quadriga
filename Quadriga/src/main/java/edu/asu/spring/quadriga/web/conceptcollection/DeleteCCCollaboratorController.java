@@ -18,10 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -43,6 +46,12 @@ public class DeleteCCCollaboratorController {
 	@Autowired
 	private CollaboratorFormDeleteValidator validator;
 	
+	@Autowired
+	private IConceptCollectionFactory collectionFactory;
+	
+	@Autowired
+	private IConceptCollectionManager conceptControllerManager;
+	
 	
 	@InitBinder
 	protected void initBinder (WebDataBinder validateBinder)
@@ -58,7 +67,13 @@ public class DeleteCCCollaboratorController {
 	    ModelAndView model;
 	    ModifyCollaboratorForm collaboratorForm;
 		
+	    String userName = principal.getName();
 		model = new ModelAndView("auth/conceptcollection/deletecollaborators");
+		
+		//fetch the concept collection details
+		IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
+		conceptCollection.setId(collectionid);
+		conceptControllerManager.getCollectionDetails(conceptCollection, userName);
 		
 		collaboratorForm = collaboratorFormFactory.createCollaboratorFormObject();
 		
@@ -67,6 +82,8 @@ public class DeleteCCCollaboratorController {
 		collaboratorForm.setCollaborators(modifyCollaborator);
 		
 		model.getModelMap().put("collectionid", collectionid);
+		model.getModelMap().put("collectionname", conceptCollection.getName());
+		model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 		model.getModelMap().put("collaboratorForm", collaboratorForm);
 		model.getModelMap().put("success", 0);
 		return model;
@@ -79,12 +96,13 @@ public class DeleteCCCollaboratorController {
 	 * @param req	contains string array returned by jsp
 	 * @return String having path for showcollaborators jsp page
 	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException 
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/{collectionid}/deleteCollaborator", method = RequestMethod.POST)
 	public ModelAndView deleteCollaborators(@PathVariable("collectionid") String collectionid,
-	@Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,BindingResult result)
-			throws QuadrigaStorageException
+	@Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm,BindingResult result,Principal principal)
+			throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		String user;
@@ -95,8 +113,19 @@ public class DeleteCCCollaboratorController {
 		model = new ModelAndView("auth/conceptcollection/deletecollaborators");
 		model.getModelMap().put("collectionid", collectionid);
 		
+		String userName = principal.getName();
+		
 		if(result.hasErrors())
 		{
+			//fetch the concept collection details
+			//fetch the concept collection details
+			IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
+			conceptCollection.setId(collectionid);
+			conceptControllerManager.getCollectionDetails(conceptCollection, userName);
+
+			model.getModelMap().put("collectionname", conceptCollection.getName());
+			model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
+			
 			collaborators = collaboratorFormManager.modifyCCCollaboratorManager(collectionid);
 			collaboratorForm.setCollaborators(collaborators);
 			model.getModelMap().put("success", 0);

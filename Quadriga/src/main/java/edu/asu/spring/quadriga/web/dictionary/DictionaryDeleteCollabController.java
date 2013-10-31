@@ -19,12 +19,15 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
@@ -40,6 +43,9 @@ public class DictionaryDeleteCollabController {
 	
 	@Autowired
 	IDictionaryManager dictionaryManager;
+	
+	@Autowired
+	IRetrieveDictionaryManager retrieveDictionaryManager;
 	
 	@Autowired
 	private CollaboratorFormDeleteValidator validator;
@@ -65,7 +71,7 @@ public class DictionaryDeleteCollabController {
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
 	public ModelAndView deleteCollaborators(@PathVariable("dictionaryid") String dictionaryId, 
 	@Validated @ModelAttribute("collaboratorForm") ModifyCollaboratorForm collaboratorForm, BindingResult result,
-	ModelMap model, Principal principal) throws QuadrigaStorageException
+	ModelMap model, Principal principal) throws QuadrigaStorageException,QuadrigaAccessException
 	{
 		
 		ModelAndView modelAndView ;
@@ -73,9 +79,11 @@ public class DictionaryDeleteCollabController {
 		String userName;
 		
 		modelAndView = new ModelAndView("auth/dictionaries/showDeleteCollaborators");
-
+		
 		if(result.hasErrors())
 		{
+			//fetch the dictionary details
+			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
 			collaborators = collaboratorFormManager.modifyDictCollaboratorManager(dictionaryId);
 			collaboratorForm.setCollaborators(collaborators);
 			
@@ -83,6 +91,8 @@ public class DictionaryDeleteCollabController {
 			modelAndView.getModelMap().put("success", 0);
 			modelAndView.getModelMap().put("error", 1);
 			modelAndView.getModelMap().put("dictionaryid", dictionaryId);
+			modelAndView.getModelMap().put("dictionaryname", dictionary.getName());
+			modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
 		}
 		
 		else
@@ -105,11 +115,16 @@ public class DictionaryDeleteCollabController {
 	
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showDeleteCollaborators" , method = RequestMethod.GET)
-	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException{
-		
+	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException
+	,QuadrigaAccessException
+	{
 		
 		ModelAndView modelAndView;
 		ModifyCollaboratorForm collaboratorForm;
+		
+		//fetch the dictionary details
+		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
+		
 		
 		modelAndView = new ModelAndView("auth/dictionaries/showDeleteCollaborators");
 		
@@ -121,6 +136,8 @@ public class DictionaryDeleteCollabController {
 		
 		modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
 		modelAndView.getModelMap().put("dictionaryid", dictionaryId);
+		modelAndView.getModelMap().put("dictionaryname", dictionary.getName());
+		modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
 		
 		modelAndView.getModelMap().put("success", 0);
 				
