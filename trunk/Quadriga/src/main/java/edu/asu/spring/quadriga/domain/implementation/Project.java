@@ -188,7 +188,7 @@ public class Project implements IProject {
 			return false;
 		Project other = (Project) obj;
 		if (collaborators == null) {
-			if (other.collaborators != null)
+			if (other.collaborators != null && other.collaborators.size()>0)
 				return false;
 		} else if (!collaborators.equals(other.collaborators))
 			return false;

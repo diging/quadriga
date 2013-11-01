@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.ModifyProjectManagerDAO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
@@ -14,6 +15,7 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
+@Repository
 public class ModifyProjectManagerDAOImpl implements ModifyProjectManagerDAO {
 	
 	@Autowired
