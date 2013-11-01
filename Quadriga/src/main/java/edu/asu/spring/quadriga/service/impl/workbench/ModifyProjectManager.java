@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.ModifyProjectManagerDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -23,6 +25,9 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Autowired
 	@Qualifier("DBConnectionModifyProjectManagerBean")
 	private IDBConnectionModifyProjectManager dbConnect;
+	
+	@Autowired
+	private ModifyProjectManagerDAO modifyProjectManagerDAO;
 	
 	@Autowired
 	private IUserManager userManager;
@@ -70,12 +75,13 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 * @param newOwner
 	 * @param collabRole
 	 * @throws QuadrigaStorageException
-	 * @author kiranbatna
+	 * @author Karthik Jayaraman
 	 */
 	@Override
+	@Transactional
 	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
-		dbConnect.transferProjectOwnerRequest(projectId, oldOwner, newOwner, collabRole);
+		modifyProjectManagerDAO.transferProjectOwnerRequest(projectId, oldOwner, newOwner, collabRole);
 		
 	}
 	

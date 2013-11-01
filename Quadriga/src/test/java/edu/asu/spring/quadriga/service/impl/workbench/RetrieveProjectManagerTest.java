@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -30,7 +31,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-"file:src/test/resources/root-context.xml" })
+"file:src/test/resources/root-context.xml","file:src/test/resources/hibernate.cfg.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RetrieveProjectManagerTest {
 
@@ -105,6 +106,7 @@ public class RetrieveProjectManagerTest {
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
 		project.setInternalid("PROJ_1");
+		project.setProjectAccess(EProjectAccessibility.valueOf("ACCESSIBLE"));
 		testProjectList.add(project);
 		
 		project = projectFactory.createProjectObject();
@@ -112,6 +114,7 @@ public class RetrieveProjectManagerTest {
 		project.setDescription("test case data");
 		project.setUnixName("testproject2");
 		project.setInternalid("PROJ_2");
+		project.setProjectAccess(EProjectAccessibility.valueOf("ACCESSIBLE"));
 		testProjectList.add(project);
 		
 		if(projectList== null)
@@ -138,6 +141,7 @@ public class RetrieveProjectManagerTest {
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
 		project.setInternalid("PROJ_1");
+		project.setProjectAccess(EProjectAccessibility.valueOf("ACCESSIBLE"));
 		user = userManager.getUserDetails("projuser");
 		project.setOwner(user);
 		
