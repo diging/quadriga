@@ -15,7 +15,11 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class ProjectCollaboratorDTOPK implements Serializable {
-    @Basic(optional = false)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4916171768836439078L;
+	@Basic(optional = false)
     @Column(name = "projectid")
     private String projectid;
     @Basic(optional = false)

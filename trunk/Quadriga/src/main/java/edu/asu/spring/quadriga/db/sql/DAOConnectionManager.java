@@ -13,7 +13,7 @@ public abstract class DAOConnectionManager {
 
 	@Autowired
 	protected SessionFactory sessionFactory;
-
+	
 	/**
 	 * Establishes the test environment
 	 * @param sQuery
@@ -29,7 +29,7 @@ public abstract class DAOConnectionManager {
 			return SUCCESS;
 		}
 		catch(Exception ex)
-		{
+		{	
 			ex.printStackTrace();
 			throw new QuadrigaStorageException();
 		}

@@ -48,35 +48,36 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	 * @param sUserName
 	 * @return List - list of projects.
 	 * @throws QuadrigaStorageException
-	 * @author rohit pendbhaje
+	 * @author Karthik Jayaraman
 	 */
 	@Override
+	@Transactional
 	public List<IProject> getProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
 		
-		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_OWNER);
+		projectList = retrieveProjectManagerDAO.getProjectList(sUserName);
 		
 		return projectList;
 	}
 	
 	@Override
+	@Transactional
 	public List<IProject> getCollaboratorProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
 		
-		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_COLLABORATOR);
+		projectList = retrieveProjectManagerDAO.getCollaboratorProjectList(sUserName);
 		
 		return projectList;
 	}
 	
 	@Override
+	@Transactional
 	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		
-		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_WORKSPACE_OWNER);
-		
+		projectList = retrieveProjectManagerDAO.getProjectListAsWorkspaceOwner(sUserName);
 		return projectList;
 	}
 	

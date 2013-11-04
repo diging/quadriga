@@ -1,5 +1,10 @@
 package edu.asu.spring.quadriga.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,4 +65,114 @@ public class RetrieveProjectManagerDAOImpl extends DAOConnectionManager implemen
 			throw new QuadrigaStorageException(e);
 		}
 	}
+	
+	/**
+	 * This method fetches the list of projects where current logged in user is the owner.
+	 * If the logged in user is quadriga admin all the projects are retrieved.                
+	 * @returns  List of projects
+	 * @throws	 QuadrigaStorageException 
+	 * @author   Karthik Jayaraman
+     */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<IProject> getProjectList(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList = new ArrayList<IProject>();
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.projectowner.username =:username");
+			query.setParameter("username", sUserName);
+			List<ProjectDTO> projectDTOList = query.list();
+			
+			if(projectDTOList != null && projectDTOList.size() >0)
+			{
+				Iterator<ProjectDTO> projectIterator = projectDTOList.iterator();
+				while(projectIterator.hasNext())
+				{
+					ProjectDTO projectDTO = projectIterator.next();
+					IProject project = projectDTOMapper.getProject(projectDTO);
+					project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+					projectList.add(project);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			logger.info("getProjectList details method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectList;
+	}	
+	
+	/**
+	 * This method fetches the list of projects where current logged in user is the collaborator.
+	 * @returns  List of projects
+	 * @throws	 QuadrigaStorageException 
+	 * @author   Karthik Jayaraman
+     */
+	@Override
+	public List<IProject> getCollaboratorProjectList(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList = new ArrayList<IProject>();
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select distinct projectCollab.projectDTO from ProjectCollaboratorDTO projectCollab where projectCollab.quadrigaUserDTO.username =:username");
+			query.setParameter("username", sUserName);
+			List<ProjectDTO> projectDTOList = query.list();
+			
+			if(projectDTOList != null && projectDTOList.size() >0)
+			{
+				Iterator<ProjectDTO> projectIterator = projectDTOList.iterator();
+				while(projectIterator.hasNext())
+				{
+					ProjectDTO projectDTO = projectIterator.next();
+					IProject project = projectDTOMapper.getProject(projectDTO);
+					project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+					projectList.add(project);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectList;
+	}
+	
+	/**
+	 * This method fetches the list of projects where current logged in user is the collaborator.
+	 * @returns  List of projects
+	 * @throws	 QuadrigaStorageException 
+	 * @author   Karthik Jayaraman
+     */
+	@Override
+	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList = new ArrayList<IProject>();
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO.workspaceowner.username =:username group by projWork.projectDTO.projectid");
+			query.setParameter("username", sUserName);
+			List<ProjectDTO> projectDTOList = query.list();
+			
+			if(projectDTOList != null && projectDTOList.size() >0)
+			{
+				Iterator<ProjectDTO> projectIterator = projectDTOList.iterator();
+				while(projectIterator.hasNext())
+				{
+					ProjectDTO projectDTO = projectIterator.next();
+					IProject project = projectDTOMapper.getProject(projectDTO);
+					project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+					projectList.add(project);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectList;
+	} 
 }

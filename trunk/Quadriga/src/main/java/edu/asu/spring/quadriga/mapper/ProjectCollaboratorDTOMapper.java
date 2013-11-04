@@ -49,7 +49,6 @@ public class ProjectCollaboratorDTOMapper {
 					collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
 					roleMapper.fillProjectCollaboratorRole(collaboratorRole);
 					collaboratorRoleList.add(collaboratorRole);
-					
 				}
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
 				projectCollaboratorList.add(collaborator);

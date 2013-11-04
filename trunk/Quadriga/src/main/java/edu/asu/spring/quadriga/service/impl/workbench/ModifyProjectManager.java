@@ -82,7 +82,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
 		modifyProjectManagerDAO.transferProjectOwnerRequest(projectId, oldOwner, newOwner, collabRole);
-		
 	}
 	
 	/**
