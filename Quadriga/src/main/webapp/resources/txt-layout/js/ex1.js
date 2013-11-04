@@ -1,4 +1,4 @@
-var labelType, useGradients, nativeTextSupport, animate,pathName;
+var labelType, useGradients, nativeTextSupport, animate;
 
 (function() {
 	var ua = navigator.userAgent,
@@ -13,64 +13,7 @@ var labelType, useGradients, nativeTextSupport, animate,pathName;
 	nativeTextSupport = labelType == 'Native';
 	useGradients = nativeCanvasSupport;
 	animate = !(iStuff || !nativeCanvasSupport);
-	
-	
-	
 })();
-function callAjax(){
-	//alert("ajax");
-	//alert(id);
-	/*var form  = document.getElementById("annot_form");*/
-//alert(document.write(document.getElementById(id).action));
-//alert($('#annot_form').attr('id'));
-	var url_form = $('#annot_form').attr("action");
-	//alert(url_form);
-	
-  var ajaxCallback =  makeAjaxCall(url_form);
-  
-  ajaxCallback.success(function(data) {
-	  alert(data);
-		//Load the new text in the corresponding div tag
-		if(data == 'success'){
-			alert("Annotation added succesfully");
-		}
-		else
-		{
-			alert("Failed to add annotation");
-		}
-								
-	});
-}
-
-function makeAjaxCall(url_form){
-	$.ajax({
-	       type: 'POST',
-	       url: url_form,
-	       error : function(jqXHR, textStatus, errorThrown) {
-			alert(errorThrown);
-		}
-	    });
-	
-}
-$("#annot_submit").submit(function(event) 
-			{
-		alert("here");
-		var url = path+"/auth/editing/saveAnnotation/"+networkId;
-	    $.ajax({
-	       type: "POST",
-	       beforeSend: function(){},
-	       url: url,
-	       data: $("#annot_form").serialize(), // serializes the form's elements.
-	       success: function(data)
-	       {
-	    	   alert("success");
-	          // document.getElementById("statushidden").value=data;
-	          // console.log($("annot_form")[0].submit);
-	          // $("annot_form")[0].submit(); ///// SHOWING Error on this line///////      
-	       }
-	    });
-
-			});
 
 var Log = {
 		elem: false,
@@ -83,16 +26,13 @@ var Log = {
 };
 
 
-function init1(json,networkId,path){
-	pathName = path;
-	/*alert("hi");
-	alert(path);*/
+function init1(json){
 	// init data
+	
 	// end
 	// init ForceDirected
-	//alert("json");
+	
 	  //label placement on edges 
-	//alert(path);
 	  $jit.ForceDirected.Plot.EdgeTypes.implement({ 
 		  'labeled': {
               'render': function(adj, canvas) {
@@ -195,28 +135,7 @@ function init1(json,networkId,path){
 				});
 				//append connections information
 				$jit.id('inner-details').innerHTML = html + list.join("</li><li>") + "</li></ul>";
-			},
-			
-			onRightClick: function(node) {
-		        if(!node) return;
-				//alert("hi");
-		        // Build the right column relations list.
-		        // This is done by traversing the clicked node connections.
-		       // var html = "<h4>" + node.name + "</h4><b> connections:</b><ul><li>",
-			   var html = "";
-			   
-			   html = "<form id='annot_form' action="+path+"/auth/editing/saveAnnotation/" ;
-			   		html+= networkId+" method='POST' >";
-			   		//html = "<form id='annot_form' action='ggb' method='POST'  >";
-		         html += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-		        html+= "<input  type='hidden' name='nodename' id='nodename' value="+node.id+" />";
-				  html+= "<input type='submit' id='annot_submit' value='submit' onclick='callAjax();'>"; 
-				  html += "</form>";
-			  
-				  
-		         //append connections information
-		        $jit.id('inner-details').innerHTML = path+ html ;
-		      },
+			}
 		},
 		//Number of iterations for the FD algorithm
 		iterations: 200,
