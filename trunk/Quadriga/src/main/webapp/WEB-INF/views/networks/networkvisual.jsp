@@ -14,8 +14,9 @@
 
 
 
-<body onload="init1(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>);" > 
-<!--  body onload="init1(<c:out value='${jsonstring}'></c:out>);" -->
+<%-- <body onload="init1(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>);" /> --%> 
+<!--   body onload="init1(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='${pageContext.servletContext.contextPath}'></c:out>);"  -->
+<body onload="init1(<c:out value='${jsonstring}'></c:out>);" >
 <div id="container">
 
 <div id="left-container">
