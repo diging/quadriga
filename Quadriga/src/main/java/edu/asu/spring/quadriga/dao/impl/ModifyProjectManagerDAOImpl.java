@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.ModifyProjectManagerDAO;
+import edu.asu.spring.quadriga.db.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
@@ -16,7 +17,7 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class ModifyProjectManagerDAOImpl implements ModifyProjectManagerDAO {
+public class ModifyProjectManagerDAOImpl extends DAOConnectionManager implements ModifyProjectManagerDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -52,6 +53,7 @@ public class ModifyProjectManagerDAOImpl implements ModifyProjectManagerDAO {
 		ProjectCollaboratorDTO projectCollaboratorDTO = new ProjectCollaboratorDTO();
 		projectCollaboratorDTO.setProjectDTO(projectDTO);
 		projectCollaboratorDTO.setProjectCollaboratorDTOPK(new ProjectCollaboratorDTOPK(projectId,oldOwner,collabRole));
+		projectCollaboratorDTO.setQuadrigaUserDTO(new QuadrigaUserDTO(oldOwner));
 		projectCollaboratorDTO.setCreatedby(oldOwner);
 		projectCollaboratorDTO.setCreateddate(new Date());
 		projectCollaboratorDTO.setUpdatedby(oldOwner);

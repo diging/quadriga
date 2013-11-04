@@ -1,7 +1,6 @@
-package edu.asu.spring.quadriga.service.impl.workbench;
+package edu.asu.spring.quadriga.dao;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,38 +13,32 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjectManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
+import edu.asu.spring.quadriga.dao.impl.ModifyProjectManagerDAOImpl;
 import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.IUserManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+"file:src/test/resources/hibernate.cfg.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration
 @Transactional
-public class ModifyProjectManagerTest {
-
-	@Autowired
-	IDBConnectionModifyProjectManager dbConnect;
+public class ModifyProjectManagerDAOTest {
 	
 	@Autowired
 	IProjectFactory projectFactory;
 	
 	@Autowired
-	IUserFactory userFactory;
+    private IUserManager userManager;
 	
 	@Autowired
-	IModifyProjectManager projectManager;
+	ModifyProjectManagerDAO modifyProjectManagerDAO;
 	
+
 	@Autowired
-	IRetrieveProjectManager retrieveProjectManager;
+	RetrieveProjectManagerDAO retrieveProjectManagerDAO;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -68,12 +61,13 @@ public class ModifyProjectManagerTest {
 		
 		for(String query : databaseQuery)
 		{
-			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
+			((ModifyProjectManagerDAOImpl)modifyProjectManagerDAO).setupTestEnvironment(query);
 		}
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		
 		String[] databaseQuery = new String[4];
 		databaseQuery[0] = "DELETE FROM tbl_project_collaborator WHERE projectid = 'PROJ_5'";
 		databaseQuery[1] = "DELETE FROM tbl_project WHERE projectid IN ('PROJ_2','PROJ_3','PROJ_4','PROJ_5')";
@@ -81,77 +75,22 @@ public class ModifyProjectManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username IN ('projuser','projcollab')";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
-		}
-	}
-
-	@Test
-	public void testAddProjectRequest() throws QuadrigaStorageException {
-		IProject project;
-		IUser owner;
-		
-		//create project object with the test data
-		project = projectFactory.createProjectObject();
-		project.setName("testproject1");
-		project.setDescription("test case data");
-		project.setUnixName("testproject1");
-		owner = userFactory.createUserObject();
-		owner.setUserName("projuser");
-		project.setOwner(owner);
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
-		
-		projectManager.addProjectRequest(project);
-		
-		assertTrue(true);
-	}
-
-	@Test
-	public void testUpdateProjectRequest() throws QuadrigaStorageException {
-		IProject project;
-		String owner;
-		
-		project = projectFactory.createProjectObject();
-		project.setName("testupdateproject");
-		project.setDescription("test case data");
-		project.setUnixName("testproject2");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
-		project.setInternalid("PROJ_2");
-		
-		owner = "projuser";
-        projectManager.updateProjectRequest(project, owner);
-        assertTrue(true);
-	}
-
-	@Test
-	public void testDeleteProjectRequest() throws QuadrigaStorageException {
-		String projectIdList;
-		projectIdList = "PROJ_3,PROJ_4";
-		projectManager.deleteProjectRequest(projectIdList);
-		assertTrue(true);
+			((ModifyProjectManagerDAOImpl)modifyProjectManagerDAO).setupTestEnvironment(query);
+		}	
 	}
 	
 	@Test
-	public void testTransferProjectRequest() throws QuadrigaStorageException
+	public void testTransferProject() throws QuadrigaStorageException
 	{
 		IProject project;
 		String owner;
 		
-		project = retrieveProjectManager.getProjectDetails("PROJ_5");
-		
-		projectManager.transferProjectOwnerRequest("PROJ_5", "projuser", "projcollab", "collaborator_role3");
+		modifyProjectManagerDAO.transferProjectOwnerRequest("PROJ_5", "projuser", "projcollab", "collaborator_role3");
 		
 		//retrieve the project details
-	   project = retrieveProjectManager.getProjectDetails("PROJ_5");
-	   
-	   if(project == null)
-	   {
-		   fail();
-	   }
-	   
-	   owner = project.getOwner().getUserName();
-	   assertEquals("projcollab",owner);
+		project = retrieveProjectManagerDAO.getProjectDetails("PROJ_5");
+		owner = project.getOwner().getUserName();
+		assertEquals("projcollab",owner);
 	}
-	
-	
 
 }
