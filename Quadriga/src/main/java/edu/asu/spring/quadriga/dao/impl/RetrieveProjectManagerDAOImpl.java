@@ -174,5 +174,35 @@ public class RetrieveProjectManagerDAOImpl extends DAOConnectionManager implemen
 			throw new QuadrigaStorageException(e);
 		}
 		return projectList;
-	} 
+	}
+	
+	@Override
+	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList = new ArrayList<IProject>();
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.quadrigaUserDTO.username =:username )");
+			query.setParameter("username", sUserName);
+			List<ProjectDTO> projectDTOList = query.list();
+			
+			if(projectDTOList != null && projectDTOList.size() >0)
+			{
+				Iterator<ProjectDTO> projectIterator = projectDTOList.iterator();
+				while(projectIterator.hasNext())
+				{
+					ProjectDTO projectDTO = projectIterator.next();
+					IProject project = projectDTOMapper.getProject(projectDTO);
+					project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+					projectList.add(project);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectList;
+	}
 }
