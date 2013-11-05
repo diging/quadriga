@@ -91,7 +91,10 @@
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.id}'"
 								name='Approve' value='Approve'> <input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}'"
-								value='Visualize'></li>
+								value='Visualize'
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
+								value='Edit Network'>
+								</li>
 						</ul>
 					</details></li>
 			</c:forEach>
