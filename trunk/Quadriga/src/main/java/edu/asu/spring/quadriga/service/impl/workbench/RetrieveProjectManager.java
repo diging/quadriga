@@ -82,12 +82,13 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	}
 	
 	@Override
+	@Transactional
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
 		
-		projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_WORKSPACE_COLLABORATOR);
-		
+		//projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_WORKSPACE_COLLABORATOR);
+		projectList = retrieveProjectManagerDAO.getProjectListAsWorkspaceCollaborator(sUserName);
 		return projectList;
 	}
 	

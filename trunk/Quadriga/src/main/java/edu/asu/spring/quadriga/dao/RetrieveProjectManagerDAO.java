@@ -19,4 +19,7 @@ public interface RetrieveProjectManagerDAO {
 	List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
 			throws QuadrigaStorageException;
 
+	List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
+			throws QuadrigaStorageException;
+
 }
