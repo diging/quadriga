@@ -58,8 +58,34 @@
 		</constructor-arg>
 	</bean>
 	
+	<bean>
+		<constructor-arg>
+		<value>http://viaf.org/viaf/search</value>
+		</constructor-arg>
+	</bean>
 	
-
+	<bean id="searchViafURLPath" class="java.lang.String">
+		<constructor-arg>
+			<value>?query=cql.any+all+%22[searchTerms]
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath1" class="java.lang.String">
+		<constructor-arg>
+			<value>
+			%22+&amp;maximumRecords=100&amp;startRecord
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath2" class="java.lang.String">
+		<constructor-arg>
+			<value>
+			=[startIndex]&amp;sortKeys=holdingscount&amp;httpAccept=application/rss%2bxml
+			</value>
+		</constructor-arg>
+	</bean>
 	
 	<bean id="updateFromWordPowerURLPath" class="java.lang.String">
 		<constructor-arg>
@@ -111,6 +137,8 @@
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType
+				</value>
+				<value>edu.asu.spring.quadriga.profile.impl.ViafReply
 				</value>
 				<value>java.lang.String</value>
 			</list>
