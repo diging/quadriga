@@ -164,7 +164,7 @@ public class NetworkListManager {
 	 * @throws QuadrigaStorageException
 	 * @throws JAXBException
 	 */
-	@RequestMapping(value = "auth/networks/editnetworks/{networkId}", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/editing/editnetworks/{networkId}", method = RequestMethod.GET)
 	public String visualizeAndEditNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		StringBuffer jsonstring=new StringBuffer();
 		logger.debug("Network id "+networkId);
@@ -196,7 +196,7 @@ public class NetworkListManager {
 		logger.info("json string:"+jsonstring1);
 		logger.info("network id:"+nwId);
 		
-		return "auth/networks/editnetworks";
+		return "auth/editing/editnetworks";
 	}
 
 	

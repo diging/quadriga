@@ -17,12 +17,45 @@ var labelType, useGradients, nativeTextSupport, animate,pathName;
 	
 	
 })();
+
+
+
+function makeAjaxCall()
+{
+  //Establish connection to php script
+  $.ajax({
+      type: 'POST',
+      url: $('#annot_form').attr("action")   
+  }).done(function(data) { 
+	  location.reload();
+	  alert(data);
+	  var msg = '<span>' + data + '</span>';
+      $('#message').html(msg);
+	  console.log(data); })
+    .fail(function() { alert("error"); })
+    .always(function() { alert("complete"); });
+}
+
+/*var request = $.ajax({
+	url: $('#annot_form').attr("action"),
+	type: "post",
+	data:   
+		{
+			'action': 'update',
+			'id': suggestion_id,
+			'name': selected_text,
+			'uri': selected_uri,
+			'paper': 0
+		}
+});
+ 
+request.done(function (response, textStatus, jqXHR) {
+	alert("success: annotation created");
+	console.log(response)
+});
+
 function callAjax(){
-	//alert("ajax");
-	//alert(id);
-	/*var form  = document.getElementById("annot_form");*/
-//alert(document.write(document.getElementById(id).action));
-//alert($('#annot_form').attr('id'));
+
 	var url_form = $('#annot_form').attr("action");
 	//alert(url_form);
 	
@@ -51,8 +84,8 @@ function makeAjaxCall(url_form){
 		}
 	    });
 	
-}
-$("#annot_submit").submit(function(event) 
+}*/
+/*$("#annot_submit").submit(function(event) 
 			{
 		alert("here");
 		var url = path+"/auth/editing/saveAnnotation/"+networkId;
@@ -70,7 +103,7 @@ $("#annot_submit").submit(function(event)
 	       }
 	    });
 
-			});
+			});*/
 
 var Log = {
 		elem: false,
@@ -83,8 +116,9 @@ var Log = {
 };
 
 
-function init1(json,networkId,path){
+function init(json,networkId,path){
 	pathName = path;
+	//alert(networkId);
 	/*alert("hi");
 	alert(path);*/
 	// init data
@@ -208,9 +242,11 @@ function init1(json,networkId,path){
 			   html = "<form id='annot_form' action="+path+"/auth/editing/saveAnnotation/" ;
 			   		html+= networkId+" method='POST' >";
 			   		//html = "<form id='annot_form' action='ggb' method='POST'  >";
+			   		html += "<p id='message'></p>";
 		         html += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
 		        html+= "<input  type='hidden' name='nodename' id='nodename' value="+node.id+" />";
-				  html+= "<input type='submit' id='annot_submit' value='submit' onclick='callAjax();'>"; 
+				  html+= "<input type='submit' id='annot_submit' value='submit' onclick='callAjax();'>";
+				//  html+= "<input type='submit' id='annot_submit' value='submit' />";
 				  html += "</form>";
 			  
 				  

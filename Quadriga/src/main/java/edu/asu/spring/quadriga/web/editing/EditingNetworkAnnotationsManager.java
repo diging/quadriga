@@ -44,9 +44,9 @@ public class EditingNetworkAnnotationsManager {
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingNetworkAnnotationsManager.class);
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/auth/editing/saveAnnotation/{networkId}", method = RequestMethod.POST)
-	public String saveAnnotationtoToNode(HttpServletRequest request,
+	public @ResponseBody String saveAnnotationtoToNode(HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
 			@RequestParam("annotText") String annotationText,
@@ -65,5 +65,9 @@ public class EditingNetworkAnnotationsManager {
 
 		return "success";
 	}
+	
+	
+	
+	
 
 }
