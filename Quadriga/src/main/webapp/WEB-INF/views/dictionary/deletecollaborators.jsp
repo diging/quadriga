@@ -38,8 +38,8 @@ $(function() {
 });
 
 function submitClick(id){
-	
 	location.href = '${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}';
+	
 }
 </script>
 
@@ -80,7 +80,7 @@ action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary
 								items="${collaboratorForm.collaborators}" varStatus="status">
 								<tr>
 								   <td>
-								   <form:checkbox path="collaborators[${status.index}].userName" value="${collabUser.userName}"/>
+								   <form:checkbox path="collaborators[${status.index}].userName"  value="${collabUser.userName}"/>
 								   </td>
 								<td><font size="3">
 							<form:label path="collaborators[${status.index}].userName">

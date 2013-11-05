@@ -16,6 +16,4 @@ public class SearchResultBackBeanForm {
 	public void setSearchResultList(List<SearchResultBackBean> searchResultList) {
 		this.searchResultList = searchResultList;
 	}
-	
-
 }

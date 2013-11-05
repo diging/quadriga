@@ -22,6 +22,26 @@ $(document).ready(function() {
 		"sPaginationType" : "full_numbers",
 		"bAutoWidth" : false
 	});
+	
+	$("form input:checkbox").prop("checked",false);
+});
+
+$(function(){
+$("input[name='selectAll']").button().click(function(){
+		
+		$("form input:checkbox").prop("checked",true);
+		event.preventDefault();
+		return;
+	});
+	
+$("input[name='deselectAll']").button().click(function(){
+	
+	$("form input:checkbox").prop("checked",false);
+	event.preventDefault();
+	return;
+	
+});
+
 });
 
 </script> 
@@ -62,19 +82,27 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 		</td>
 	</tr>
 </table>
+
+	
 </form:form>  
 
+
+
 <c:choose>
-	<c:when test="${success=='0'}">
+	<c:when test="${not empty searchResultList}">
 		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
 		 Results of the Search
+		 <br>
+		 <input type="button" value="selectAll" name="selectAll"/>
+		 <input type="button" value="deselectAll" name="deselectAll"/>
 		 <input type="submit" value="Select & Save">
 			 <table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
 				
 				<thead>
 					<tr>
 						<th>select</th>
+						<th>Name</th>
 						<th>ID</th>
 						<th>Description</th>
 					</tr>
@@ -85,6 +113,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				<c:forEach var="result" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
 					<tr>
 						<td><form:checkbox path="searchResultList[${status.index}].id" value="${result.id}" /></td>
+						<td><c:out value="${result.profileName}"></c:out></td>
 						<td><c:out value="${result.id}"></c:out></td>
 						<td><c:out value="${result.description}"></c:out></td>
 					</tr>
@@ -93,19 +122,22 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				</tbody>
 			</table>
 			
-			<%-- <c:choose>
-				<c:when test="${success == '1'}">
-	 				<font color="blue"><spring:message code="add_profile_success"/></font>
-	 			</c:when>
- 			</c:choose> --%>
-		
 		 </form:form>
 	 </c:when>
 </c:choose>
+
+<c:choose>
+		<c:when test="${success == '1'}">
+			<font color="blue"><spring:message code="add_profile_success"/></font>
+	 	</c:when>
+		 	<c:otherwise>
+					<font color="red">${errmsg}</font>
+				</c:otherwise>
+			</c:choose> 
+			
 	
 
  
- <%--<form:select path="serviceIdNameMap" items="${serviceNameIdMap}" multiple="true" /> --%>
 
 
 

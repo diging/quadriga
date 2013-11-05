@@ -29,30 +29,28 @@ public class ConceptPower implements IService {
 	@Autowired
 	private ISearchResultFactory searchResultFactory;
 	
-	String serviceid;
-	String name;
+	private String serviceid;
+	private String name;
 	
 	@Override
 	public void setServiceId(String serviceid) {
-		// TODO Auto-generated method stub
-		
+		this.serviceid = serviceid;		
 	}
 
 	@Override
 	public String getServiceId() {
-		// TODO Auto-generated method stub
+
 		return "edu.asu.conceptpower";
 	}
 	
 	@Override
 	public void setName(String name) {
-		// TODO Auto-generated method stub
-
+		this.name = name;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
+
 		return "ConceptPower";
 	}
 
@@ -69,6 +67,7 @@ public class ConceptPower implements IService {
 			for(ConceptEntry ce : conceptEntries)
 			{
 				ISearchResult searchResult =searchResultFactory.getSearchResultObject();
+				searchResult.setName(ce.getLemma());
 				searchResult.setId(ce.getId());
 				searchResult.setDescription(ce.getDescription());
 				searchResults.add(searchResult);
