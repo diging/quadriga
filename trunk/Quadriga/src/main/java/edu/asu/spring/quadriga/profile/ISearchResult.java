@@ -9,5 +9,9 @@ public interface ISearchResult {
 	public void setId(String id);
 	
 	public String getId();
+	
+	public String getName();
+	
+	public void setName(String name);
 
 }

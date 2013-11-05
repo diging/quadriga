@@ -34,11 +34,6 @@ public class ServiceRegistry implements IServiceRegistry {
 	private Map<String,String> serviceIdNameMap;
 		
 	
-	public ServiceRegistry(){
-		
-		
-	}
-	
 	@PostConstruct
 	public void init(){
 		

@@ -68,6 +68,11 @@ public class HomeController {
 	@Autowired
 	private SearchResultBackBeanFormManager backBeanFormManager;
 	
+	private Map<String,String> serviceNameIdMap ;
+	
+	private String serviceId;
+	private String term;
+	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder){
 		
@@ -129,12 +134,13 @@ public class HomeController {
 	@RequestMapping(value = "auth/profile/search", method = RequestMethod.GET)
 	public String search(Model model, Principal principal, @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean) throws QuadrigaStorageException
 	{
-		String serviceId = serviceBackBean.getId();
+		System.out.println("---------in search GET");
+		serviceId = serviceBackBean.getId();
 		model.addAttribute("serviceid", serviceId);
 		String term = serviceBackBean.getTerm();
 		model.addAttribute("term", term);
 		
-		Map<String,String> serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
+		serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
 
 		model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
 		
@@ -144,7 +150,7 @@ public class HomeController {
 			
 			searchResultBackBeanForm.setSearchResultList(searchResultList);
 			model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
-			model.addAttribute("success",0);		
+			model.addAttribute("searchResultList",searchResultList);		
 		}
 		
 		
@@ -156,10 +162,8 @@ public class HomeController {
 	{
 		
 		String profileid;
-		String description ;
 		StringBuilder profilebuilder ;
 		String errmsg = null;
-		
 		IService serviceObj = serviceRegistry.getServiceObject(serviceid);
 		
 		List<ISearchResult> conceptsearchResults = serviceObj.search(term);
@@ -173,19 +177,23 @@ public class HomeController {
 			{	
 								
 				profileid = searchResultBackBean.getId();
+
 				if(profileid!=null)
 				{
 					
 					if( searchResultBackBean.getId().equals(conceptSearchResult.getId()) )
 					{
 						profilebuilder = new StringBuilder();
-						profileid = searchResultBackBean.getId();
+						searchResultBackBean.getId();
 						profilebuilder.append(",");
-						profilebuilder.append(profileid);
+						profilebuilder.append(searchResultBackBean.getId());
 						searchResultBackBean.setDescription(conceptSearchResult.getDescription());	
-						description = searchResultBackBean.getDescription();
+						searchResultBackBean.getDescription();
 						profilebuilder.append(",");
-						profilebuilder.append(description);
+						profilebuilder.append(searchResultBackBean.getDescription());
+						searchResultBackBean.setProfileName(conceptSearchResult.getName());
+						profilebuilder.append(",");
+						profilebuilder.append(searchResultBackBean.getProfileName());
 						errmsg = userProfileManager.addUserProfile(principal.getName(), serviceid, profilebuilder.substring(1) );
 
 					}
@@ -194,13 +202,21 @@ public class HomeController {
 		}
 		
 		if(errmsg.equals("no errors"))
-		{
-			model.addAttribute("success",0);		
+		{	
 			model.addAttribute("success",1);
+			model.addAttribute("ServiceBackBean",new ServiceBackBean());
+			model.addAttribute("serviceNameIdMap",serviceNameIdMap);
+			model.addAttribute("searchResults", searchResults);
 		}
 		
-			
-		return "auth/home/profile/adduri";
+		else
+		{
+			model.addAttribute("errmsg", errmsg);
+			model.addAttribute("ServiceBackBean",new ServiceBackBean());
+			model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
+		}
+		
+		return "auth/home/profile";
 	}
 
 }
