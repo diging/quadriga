@@ -1,8 +1,5 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class WordpowerReply {
 
 
 
- public List<WordpowerReply.DictionaryEntry> getDictionaryEntry() {
+ public List<WordpowerReply.DictionaryEntry> getDictionaryEntry() {	
      if (dictionaryEntry == null) {
          dictionaryEntry = new ArrayList<WordpowerReply.DictionaryEntry>();
      }

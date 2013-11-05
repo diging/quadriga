@@ -49,9 +49,10 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 		String[] profilStrings = profilebuilder.split(",");
 		String id = profilStrings[0];
 		String desc = profilStrings[1];
+		String profilename = profilStrings[2];
 	
 		
-		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_USER_PROFILE + "(?,?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_USER_PROFILE + "(?,?,?,?,?,?)";
 		
 		getConnection();
 		
@@ -59,16 +60,16 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, username);
 			sqlStatement.setString(2, serviceid);
-			sqlStatement.setString(3, id);
-			sqlStatement.setString(4, desc);
-			sqlStatement.registerOutParameter(5, Types.VARCHAR);
+			sqlStatement.setString(3, profilename);
+			sqlStatement.setString(4, id);
+			sqlStatement.setString(5, desc);
+			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(5);
-			System.out.println("--------errmsg "+errmsg);
+			errmsg = sqlStatement.getString(6);
 			
 			if(!errmsg.equals("no errors"))
 			{
-				throw new QuadrigaStorageException();
+				return errmsg;
 			}
 		} catch (SQLException e) {
 			
@@ -107,8 +108,6 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 				ResultSet resulset = sqlStatement.getResultSet();
 				while(resulset.next())
 				{
-					IUser user = userFactory.createUserObject();
-					user = userManager.getUserDetails(loggedinUser);
 					ISearchResult searchResult = searchResultFactory.getSearchResultObject();
 					searchResult.setId(resulset.getString(1));
 					searchResult.setDescription(resulset.getString(2));

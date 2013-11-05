@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS tbl_quadriga_userprofile
 (
 	username		VARCHAR(20)		NOT NULL,
 	serviceid		VARCHAR(20)		NOT NULL,
+	profilename		VARCHAR(50)		DEFAULT NULL,
 	profileid		VARCHAR(100)	DEFAULT NULL,
 	description		VARCHAR(255)	DEFAULT NULL,
 	updatedby     	VARCHAR(10)   	NOT NULL,

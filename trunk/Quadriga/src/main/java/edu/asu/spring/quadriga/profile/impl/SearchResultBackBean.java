@@ -1,16 +1,21 @@
 package edu.asu.spring.quadriga.profile.impl;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-
-import edu.asu.spring.quadriga.profile.ISearchResult;
 
 @Service
 public class SearchResultBackBean {
 	
+	private String profileName;
 	private String id;
 	private String description;
+	
+	
+	public String getProfileName() {
+		return profileName;
+	}
+	public void setProfileName(String profileName) {
+		this.profileName = profileName;
+	}
 	
 	public String getId() {
 		return id;
