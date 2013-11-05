@@ -25,6 +25,7 @@
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/skel-ui.min.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jit.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/ex1.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/ex2.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-ui.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.dataTables.js"></script>
