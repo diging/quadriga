@@ -153,6 +153,51 @@ public class NetworkListManager {
 		//model.addAttribute("networkId",networkId);
 		return "auth/networks/visualize";
 	}
+	
+	/**
+	 * Get the network displayed  on to JSP by passing JSON string and allow to add annotations 
+	 * @author Sowjanya Ambati
+	 * @param networkId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws JAXBException
+	 */
+	@RequestMapping(value = "auth/networks/editnetworks/{networkId}", method = RequestMethod.GET)
+	public String visualizeAndEditNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+		StringBuffer jsonstring=new StringBuffer();
+		logger.debug("Network id "+networkId);
+		String qstoreGetURL = getQStoreGetURL();
+		logger.debug("Qstore Get URL : "+qstoreGetURL);
+		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
+		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
+		jsonstring.append("[");
+		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
+		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
+		while(I.hasNext()){
+			INetworkNodeInfo networkNodeInfo = I.next();
+			logger.debug("Node id "+networkNodeInfo.getId());
+			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
+			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
+		}
+		String jsonstring1 = jsonstring.toString();
+		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
+			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
+		}
+		jsonstring1 = jsonstring1+"]";
+		logger.debug(jsonstring1);
+		
+		logger.info("Json object formed and sent to the JSP");
+		
+		String nwId = "\""+networkId+"\"";
+		model.addAttribute("jsonstring",jsonstring1);
+		model.addAttribute("networkid",nwId);
+		logger.info("json string:"+jsonstring1);
+		logger.info("network id:"+nwId);
+		
+		return "auth/networks/editnetworks";
+	}
 
 	
 }
