@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.db.sql;
 
+import java.util.UUID;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,25 @@ public abstract class DAOConnectionManager {
 			Query query = sessionFactory.getCurrentSession().createSQLQuery(sQuery);
 			query.executeUpdate();
 			return SUCCESS;
+		}
+		catch(Exception ex)
+		{	
+			ex.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+	}
+	
+
+	/**
+	 * Generate an unique identifier for the database field
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
+	public String generateUniqueID() throws QuadrigaStorageException
+	{
+		try
+		{
+			return UUID.randomUUID().toString();
 		}
 		catch(Exception ex)
 		{	

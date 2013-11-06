@@ -38,10 +38,12 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public void addProjectRequest(IProject project) throws QuadrigaStorageException
 	{
 		logger.info("Adding project details");
-		dbConnect.addProjectRequest(project);
+		//dbConnect.addProjectRequest(project);
+		modifyProjectManagerDAO.addProjectRequest(project);
 	}
 	
 	/**
@@ -59,13 +61,15 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 * @param project
 	 * @return String - error message blank on success and contains error on failure.
 	 * @throws QuadrigaStorageException
-	 * @author Kiran Kumar Batna
+	 * @author Karthik Jayaraman
 	 */
 	@Override
+	@Transactional
 	public void deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
 	{
+		logger.info("Deleting project details");
+		//modifyProjectManagerDAO.deleteProjectRequest(projectIdList);
 		dbConnect.deleteProjectRequest(projectIdList);
-		
 	}
 	
 	/**

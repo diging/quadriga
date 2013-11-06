@@ -110,6 +110,7 @@ public class RetrieveProjectManagerDAOImpl extends DAOConnectionManager implemen
 	 * @throws	 QuadrigaStorageException 
 	 * @author   Karthik Jayaraman
      */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IProject> getCollaboratorProjectList(String sUserName) throws QuadrigaStorageException
 	{
@@ -146,6 +147,7 @@ public class RetrieveProjectManagerDAOImpl extends DAOConnectionManager implemen
 	 * @throws	 QuadrigaStorageException 
 	 * @author   Karthik Jayaraman
      */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
 	{
@@ -176,6 +178,7 @@ public class RetrieveProjectManagerDAOImpl extends DAOConnectionManager implemen
 		return projectList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
 	{
