@@ -88,7 +88,8 @@ public class ProjectDTO implements Serializable {
     private QuadrigaUserDTO projectowner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO", orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
+    
     private List<ProjectCollaboratorDTO> projectCollaboratorDTOList;
 
     public ProjectDTO() {
