@@ -188,6 +188,48 @@
 			</tfoot>
 		</table>
 	</c:if>
+		<br />
+	<c:if test="${not empty inactiveUserList}">
+		<h3>Delete User Accounts</h3>
+		<table class="display dataTable" style="width:100%">
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Admin</th>
+					<th>Standard User</th>
+					<th>Restricted User</th>
+					<th>Collaborator</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="user" items="${inactiveUserList}">
+					<tr>
+						<td width="20%"><c:out
+									value="${user.userName}"></c:out></font></td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center">NA</td>
+						<td class="center"> <input
+								type="submit"
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/users/delete/${user.userName}'"
+								value="Delete"></font></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>Username</th>
+					<th>Admin</th>
+					<th>Standard User</th>
+					<th>Restricted User</th>
+					<th>Collaborator</th>
+					<th>Action</th>
+				</tr>
+			</tfoot>
+		</table>
+	</c:if>
 
 
 </article>

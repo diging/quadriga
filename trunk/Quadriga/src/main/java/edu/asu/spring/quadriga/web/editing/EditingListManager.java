@@ -95,7 +95,7 @@ public class EditingListManager {
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
-	,@ElementAccessPolicy(type=CheckedElementType.EDITOR,paramIndex=0,userRole={})})
+	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/editing", method = RequestMethod.GET)
 	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException
 	,QuadrigaAccessException{
@@ -130,7 +130,7 @@ public class EditingListManager {
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR})
 	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
-	,@ElementAccessPolicy(type=CheckedElementType.EDITOR,paramIndex=0,userRole={})})
+	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/networksOtherEditors", method = RequestMethod.GET)
 	public String listNetworkAssignedToOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException
 	,QuadrigaAccessException
@@ -156,8 +156,11 @@ public class EditingListManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR})
+	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
+	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/finishednetworksOtherEditors", method = RequestMethod.GET)
-	public String listFinishedNetworksByOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	public String listFinishedNetworksByOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException,QuadrigaAccessException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		
 		List<INetwork> finishedNetworkList=null;
@@ -183,6 +186,9 @@ public class EditingListManager {
 	 * @throws QuadrigaStorageException
 	 * @throws JAXBException
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR})
+	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
+	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=1,userRole={})})
 	@RequestMapping(value = "auth/editing/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		StringBuffer jsonstring=new StringBuffer();

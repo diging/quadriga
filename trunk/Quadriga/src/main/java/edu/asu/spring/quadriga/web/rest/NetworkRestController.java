@@ -47,7 +47,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
-import edu.asu.spring.quadriga.service.impl.UserManager;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
@@ -75,7 +75,7 @@ public class NetworkRestController {
 	private IRestVelocityFactory restVelocityFactory;
 
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
 
 
 	/**

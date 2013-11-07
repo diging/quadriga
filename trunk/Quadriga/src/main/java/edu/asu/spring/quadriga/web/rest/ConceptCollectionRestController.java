@@ -51,7 +51,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.impl.UserManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 
 /**
@@ -75,7 +74,7 @@ public class ConceptCollectionRestController {
 	private IWorkspaceCCManager workspaceCCManager;
 
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
 	
 	@Autowired
 	private IConceptCollectionManager conceptControllerManager;

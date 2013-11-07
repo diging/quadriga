@@ -280,4 +280,7 @@ public class MockupUserManager implements IUserManager {
 		return 1;
 	}
 
+	public void deleteUser(String sUserId, String sAdminId) {
+	}
+
 }
