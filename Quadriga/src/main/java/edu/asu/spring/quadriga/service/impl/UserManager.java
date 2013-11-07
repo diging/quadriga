@@ -202,6 +202,24 @@ public class UserManager implements IUserManager {
 		}
 		return iResult;
 	}
+	
+	/**
+	 * Method to delete Quadriga user by admin
+	 * @param sUserId
+	 * @param sAdminId
+	 * @throws QuadrigaStorageException 
+	 */
+	@Override
+	public void deleteUser(String delelteUser,String adminUser) throws QuadrigaStorageException
+	{
+		//fetch the admin role
+		String adminDbRole = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
+		//fetch the deactivated role
+		String deactivatedRole = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+	    
+		dbConnect.deleteUser(delelteUser, adminUser, adminDbRole, deactivatedRole);
+		
+	}
 
 	/**
 	 * Approve a user request to access quadriga.

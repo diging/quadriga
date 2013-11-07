@@ -249,6 +249,42 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 		}
 		return listUsers;
 	}
+	
+	@Override
+	public void deleteUser(String deleteUser,String adminUser,String adminRole,String deactivatedRole) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		try
+		{
+			getConnection();
+			dbCommand = DBConstants.SP_CALL + " " + DBConstants.DELETE_USER + "(?,?,?,?,?)";
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+			sqlStatement.setString(1, deleteUser);
+			sqlStatement.setString(2, adminUser);
+			sqlStatement.setString(3, adminRole);
+			sqlStatement.setString(4, deactivatedRole);
+			sqlStatement.registerOutParameter(5,Types.VARCHAR);
+			
+			//execute the stored procedure
+			sqlStatement.execute();
+			
+			errmsg = sqlStatement.getString(5);
+			
+			if(!errmsg.equals(""))
+			{
+				logger.error("In delete quadriga user :",errmsg);
+				throw new QuadrigaStorageException(errmsg);
+			}
+		}
+		catch(SQLException e)
+		{
+			logger.error("In delete quadriga user:",e);
+			throw new QuadrigaStorageException();
+		}
+		
+	}
 
 	/**
 	 * Deactivate a user in Quadriga.

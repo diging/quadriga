@@ -5,7 +5,5 @@ public enum CheckedElementType {
 	DICTIONARY,
 	WORKSPACE,
 	CONCEPTCOLLECTION,
-	NETWORK,
-	EDITOR;
-	
+	NETWORK;
 }

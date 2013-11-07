@@ -93,4 +93,7 @@ public interface IUserManager {
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - An open request is already placed for the userid.
 	 */
 	public abstract int addAccountRequest(String userId) throws QuadrigaStorageException;
+
+
+	public abstract void deleteUser(String sUserId, String sAdminId) throws QuadrigaStorageException;
 }

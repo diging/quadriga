@@ -15,9 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
-import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -64,7 +64,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
 	@Autowired
-	private DBConnectionManager dbConnectionManager;
+	private IDBConnectionManager dbConnectionManager;
 
 	@Autowired
 	private IDBConnectionRetrieveProjCollabManager dbConnectionProjectManager;

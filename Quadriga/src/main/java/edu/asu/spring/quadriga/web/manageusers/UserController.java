@@ -175,6 +175,22 @@ public class UserController {
 
 		return "redirect:/auth/users/manage";
 	}
+	
+	/**
+	 * Method to delete Quadriga user by admin
+	 * @param sUserName
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value="auth/users/delete/{userName}", method = RequestMethod.GET)
+	public String deleteUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) throws QuadrigaStorageException 
+	{
+
+		usermanager.deleteUser(sUserName,principal.getName());
+		return "redirect:/auth/users/manage";
+	}
 
 	
 }

@@ -12,6 +12,7 @@ public interface DBConstants
 {
 	public final static String SP_CALL = "call";
 	
+	//User management
 	public final static String USER_DETAILS = "sp_getUserDetails";	
 	public final static String ACTIVE_USER_DETAILS="sp_getActiveUsers";
 	public final static String INACTIVE_USER_DETAILS="sp_getInActiveUsers";
@@ -25,6 +26,7 @@ public interface DBConstants
 	public final static String GET_USERS_NOT_IN_ROLE="sp_getUsersNotInRole";
 	public final static String ADD_USER_PROFILE="sp_addUserProfile";
 	public final static String SHOW_USER_PROFILE="sp_showUserProfile";
+	public final static String DELETE_USER = "sp_deleteQuadrigaUser";
 	
 	//project related objects
 	public static final String PROJECT_LIST_AS_OWNER="sp_getProjectList";

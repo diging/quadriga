@@ -123,4 +123,7 @@ public interface IDBConnectionManager
 	 */
 	public abstract List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException;
 
+	public abstract void deleteUser(String deleteUser, String adminUser, String adminRole,
+			String deactivatedRole) throws QuadrigaStorageException;
+
 }
