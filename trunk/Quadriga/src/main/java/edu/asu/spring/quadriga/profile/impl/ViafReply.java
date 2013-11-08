@@ -28,6 +28,7 @@ public class ViafReply {
 
 	@XmlAccessorType(XmlAccessType.FIELD)
 	@XmlType(propOrder={"title","link","pubDate","guid"})
+	@XmlRootElement(name="item")
 	public static class Items {
 		
 		@XmlElement(required=true)

@@ -50,7 +50,7 @@ public class ViafService implements IService {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
+
 		return "Viaf";
 	}
 
@@ -59,7 +59,7 @@ public class ViafService implements IService {
 
 
 		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
-		int si = 1;
+		Integer si = 1;
 		
 		List<ViafReply.Items> viafEntries = viafmanager.search(word, si);
 		

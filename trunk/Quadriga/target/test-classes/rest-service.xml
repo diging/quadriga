@@ -12,7 +12,6 @@
 		tag in property classesToBeBound. Also make sure to annotate the corresponding 
 		classes with the @XMLRootElement tag -->
 
-
 	<bean id="qStoreURL" class="java.lang.String">
 		<constructor-arg>
 			<value>http://diging.asu.edu:8080/QStore4S</value>
@@ -26,11 +25,6 @@
 	<bean id="qStoreURL_Get" class="java.lang.String">
 		<constructor-arg>
 			<value>/get?id=</value>
-		</constructor-arg>
-	</bean>
-	<bean id="qStoreURL_Get_POST" class="java.lang.String">
-		<constructor-arg>
-			<value>/get</value>
 		</constructor-arg>
 	</bean>
 	
@@ -58,34 +52,8 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="viafURL" class="java.lang.String">
-		<constructor-arg>
-		<value>http://viaf.org/viaf/search</value>
-		</constructor-arg>
-	</bean>
 	
-	<bean id="searchViafURLPath" class="java.lang.String">
-		<constructor-arg>
-			<value>?query=cql.any+all+
-			</value>
-		</constructor-arg>
-	</bean>
-	
-	<bean id="searchViafURLPath1" class="java.lang.String">
-		<constructor-arg>
-			<value>
-			+&amp;maximumRecords=100&amp;startRecord=
-			</value>
-		</constructor-arg>
-	</bean>
-	
-	<bean id="searchViafURLPath2" class="java.lang.String">
-		<constructor-arg>
-			<value>
-			&amp;sortKeys=holdingscount&amp;httpAccept=application/rss%2bxml
-			</value>
-		</constructor-arg>
-	</bean>
+
 	
 	<bean id="updateFromWordPowerURLPath" class="java.lang.String">
 		<constructor-arg>
@@ -96,6 +64,35 @@
 	<bean id="updateConceptPowerURLPath" class="java.lang.String">
 		<constructor-arg>
 			<value>/rest/Concept?id=</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="viafURL" class="java.lang.String">
+		<constructor-arg>
+		<value>http://viaf.org/viaf/search</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath" class="java.lang.String">
+		<constructor-arg>
+			<value>?query=cql.any+all+%22
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath1" class="java.lang.String">
+		<constructor-arg>
+			<value>
+			%22+&amp;maximumRecords=100&amp;startRecord=
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath2" class="java.lang.String">
+		<constructor-arg>
+			<value>
+			&amp;sortKeys=holdingscount&amp;httpAccept=application/rss%2bxml
+			</value>
 		</constructor-arg>
 	</bean>
 	
@@ -113,6 +110,7 @@
 				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
 				<bean
 					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				
 			</list>
 		</property>
 	</bean>
@@ -130,42 +128,17 @@
 				</value>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceItems
 				</value>
-				<value>edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList
-				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
-				<value>edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType
-				</value>
-				<value>edu.asu.spring.quadriga.profile.impl.ViafReply
-				</value>
-				<value>java.lang.String</value>
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="marshallingConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-	<constructor-arg ref="jaxbMarshaller" />
-    <property name="supportedMediaTypes" value="application/xml"/>
-      </bean>
-    
-
 	<bean id="errorMessages"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/errormessages.properties" />
 	</bean>
-	
-	<bean id="uiMessages"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="location" value="classpath:locale/messages_en_US.properties" />
-	</bean>
-	
-	<bean id="dspaceStrings"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="location" value="classpath:dspacestrings.properties" />
-	</bean>
-	
-	
 	
 </beans>

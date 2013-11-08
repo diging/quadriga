@@ -1,12 +1,8 @@
 package edu.asu.spring.quadriga.profile.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -52,24 +48,6 @@ public class ServiceRegistry implements IServiceRegistry {
 			
 		}
 		
-//		Iterator<?> newServiceIter = newServiceMap.entrySet().iterator();
-//		
-//		while(newServiceIter.hasNext()){
-//			
-//			Map.Entry mEntry = (Map.Entry) newServiceIter.next();
-//			
-//			//IService serviceobject = (IService) mEntry.getValue();
-//			System.out.println(mEntry.getKey()+":"+mEntry.getValue());
-//			
-//		}
-		
-		//Iterator<IService> iterator =  
-		
-		
-		//IService servicea = service.get(serviceA);
-		
-		//serviceA.setName("serviceA");
-	
 	}
 	
 	@Override
@@ -104,8 +82,5 @@ public class ServiceRegistry implements IServiceRegistry {
 	public void setServiceIdNameMap(Map<String, String> serviceIdNameMap) {
 		this.serviceIdNameMap = serviceIdNameMap;
 	} 
-	
-	
-	
 
 }
