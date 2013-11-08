@@ -9,9 +9,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -26,7 +29,10 @@ public class UserController {
 
 	@Autowired 
 	private IUserManager usermanager;
-
+	
+	@Autowired
+	private IQuadrigaRoleManager rolemanager;
+	
 	public IUserManager getUsermanager() {
 		return usermanager;
 	}
@@ -54,6 +60,13 @@ public class UserController {
 		//Get all Inactive Users
 		List<IUser> inactiveUserList = usermanager.getAllInActiveUsers();
 		model.addAttribute("inactiveUserList", inactiveUserList);
+		
+		//Get all Quadriga roles
+		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles();
+		model.addAttribute("quadrigaroles",quadrigaRoles);
+		model.addAttribute("quadrolessize",quadrigaRoles.size());
+		
+		
 
 		return "auth/users/manage";
 	}
@@ -185,12 +198,28 @@ public class UserController {
 	 * @throws QuadrigaStorageException
 	 */
 	@RequestMapping(value="auth/users/delete/{userName}", method = RequestMethod.GET)
-	public String deleteUser(@PathVariable("userName") String sUserName, ModelMap model, Principal principal) throws QuadrigaStorageException 
+	public ModelAndView deleteUser(@PathVariable("userName") String sUserName,Principal principal) throws QuadrigaStorageException 
 	{
-
-		usermanager.deleteUser(sUserName,principal.getName());
-		return "redirect:/auth/users/manage";
+		boolean isAssociated;
+        //check if the user is associated to workbench
+		isAssociated = false;
+		
+		ModelAndView model;
+		
+		isAssociated = usermanager.checkWorkbenchAssociated(sUserName);
+		
+		if(isAssociated)
+		{
+			model = new ModelAndView("auth/users/deleteusererror");
+			model.getModelMap().put("username",sUserName);
+			
+		}
+		else
+		{
+			usermanager.deleteUser(sUserName,principal.getName());
+			model = new ModelAndView("redirect:/auth/users/manage");
+		}
+		return model;
 	}
 
-	
 }

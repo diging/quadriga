@@ -285,6 +285,44 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 		}
 		
 	}
+	
+	@Override
+	public boolean checkWorkbenchAssociated(String deleteUser) throws QuadrigaStorageException
+	{
+		boolean isAssociated;
+		isAssociated = false;
+		String dbCommand;
+		CallableStatement sqlStatement;
+		try
+		{
+			getConnection();
+			dbCommand = "? = "+ DBConstants.SP_CALL + " "+ DBConstants.CHECK_WORKBENCH_ASSOCIATED + "(?)";
+			
+			sqlStatement = connection.prepareCall("{"+dbCommand + "}");
+			
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(1,Types.BOOLEAN);
+
+			//adding the input parameter
+			sqlStatement.setString(2,deleteUser);
+
+			sqlStatement.execute();
+
+			isAssociated = sqlStatement.getBoolean(1);
+
+			return isAssociated;
+		}
+		catch(SQLException e)
+		{
+			logger.error("Check is workbench associated:",e);
+			throw new QuadrigaStorageException();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+	}
 
 	/**
 	 * Deactivate a user in Quadriga.

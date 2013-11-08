@@ -26,11 +26,6 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
       SET errmsg = "SQL exception has occurred";
 
-     -- variables used in the procedure
-    SET @sqlstmt = "";
-    SET @dbrole = "";
-    SET @user = "";
- 
     -- check if the inputs are empty
     IF (indeleteUser = "" OR indeleteUser IS NULL)
      THEN SET errmsg = "User to be deleted cannot be empty";
@@ -48,43 +43,21 @@ BEGIN
      THEN SET errmsg = "Username is invalid";
     END IF;
 
-    -- check if the usr is deactivated
-    SET @sqlstmt = "IF NOT EXISTS (SELECT 1 FROM vw_quadriga_user WHERE username = ? 
-                                   AND quadrigarole like CONCAT('%', ?, '%'))
-                        THEN SET @errmsg = 'Only deactivated user can be deleted';
-                     END IF;";
+    IF EXISTS (SELECT 1 FROM vw_project WHERE projectowner = indeleteUser)
+     THEN SET errmsg = "User is asscoiated with projects.Cant delete the user";
+    END IF;
 
-    SET @user  = indeleteUser;
-    SET @dbrole = indeactivatedRole;
+    IF EXISTS (SELECT 1 FROM vw_project_collaborator WHERE collaboratoruser = indeleteUser)
+      THEN SET errmsg = "User is asscoiated with projects.Cant delete the user";
+    END IF;
 
-	PREPARE squery FROM @sqlstmt;
-    EXECUTE squery USING @user,@dbrole;
-    DEALLOCATE PREPARE squery;
-    
-	SET errmsg = @errmsg;
+    IF EXISTS (SELECT 1 FROM vw_workspace WHERE workspaceowner = indeleteUser)
+      THEN SET errmsg = "User is asscoiated with workspace.Cant delete the user";
+    END IF;
 
-    -- intialise variables
-	SET @sqlstmt = "";
-    SET @dbrole = "";
-
-     -- check if the user has admin role
-    SET @sqlstmt = "IF NOT EXISTS (SELECT 1 FROM vw_quadriga_user WHERE username = ? 
-                                   AND quadrigarole like CONCAT('%', ?, '%'))
-                        THEN SET @errmsg = 'Only admin has permissions to delete users';
-                     END IF;";
-
-    SET @user  = inadminUser;
-    SET @dbrole = inadminRole;
-
-	PREPARE squery FROM @sqlstmt;
-    EXECUTE squery USING @user,@dbrole;
-    DEALLOCATE PREPARE squery;
-
-	SET errmsg = @errmsg;
-
-    -- intialise variables
-	SET @sqlstmt = "";
-    SET @dbrole = "";
+    IF EXISTS (SELECT 1 FROM vw_workspace_collaborator WHERE username = indeleteUser)
+       THEN SET errmsg = "User is asscoiated with workspace.Cant delete the user";
+    END IF;
 
     IF (errmsg IS NULL)
      THEN 

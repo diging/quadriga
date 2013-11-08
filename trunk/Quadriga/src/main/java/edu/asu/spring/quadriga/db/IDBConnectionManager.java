@@ -126,4 +126,7 @@ public interface IDBConnectionManager
 	public abstract void deleteUser(String deleteUser, String adminUser, String adminRole,
 			String deactivatedRole) throws QuadrigaStorageException;
 
+	public abstract boolean checkWorkbenchAssociated(String deleteUser)
+			throws QuadrigaStorageException;
+
 }

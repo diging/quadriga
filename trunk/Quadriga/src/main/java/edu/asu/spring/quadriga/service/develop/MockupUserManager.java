@@ -14,6 +14,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.implementation.User;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
 
@@ -281,6 +282,11 @@ public class MockupUserManager implements IUserManager {
 	}
 
 	public void deleteUser(String sUserId, String sAdminId) {
+	}
+
+	public boolean checkWorkbenchAssociated(String deleteUser)
+			throws QuadrigaStorageException {
+		return false;
 	}
 
 }
