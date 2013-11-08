@@ -157,13 +157,13 @@
 		<property name="location" value="classpath:locale/messages_en_US.properties" />
 	</bean>
 	
-	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.impl.RetrieveProjectManagerDAOImpl"/>
+	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.RetrieveProjectManagerDAOImpl"/>
 	
 	<bean id="projectDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectDTOMapper"/>
 	
 	<bean id="projectCollaboratorDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper"/>
 	
-	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.impl.ModifyProjectManagerDAOImpl"/>
+	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAOImpl"/>
 	
 	
 </beans>

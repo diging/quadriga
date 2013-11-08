@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.impl;
+package edu.asu.spring.quadriga.dao.workbench.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.RetrieveProjectManagerDAO;
-import edu.asu.spring.quadriga.db.sql.DAOConnectionManager;
+import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
+import edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

@@ -15,11 +15,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.dao.sql.impl.DspaceManagerDAO;
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -69,6 +71,9 @@ public class DspaceManager implements IDspaceManager{
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
 
+	@Autowired
+	private DspaceManagerDAO dspaceManagerDAO;
+	
 	@Override
 	public Properties getDspaceMessages() {
 		return dspaceMessages;
@@ -373,9 +378,10 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public IDspaceKeys getDspaceKeys(String username) throws QuadrigaStorageException
 	{
-		return dbconnectionManager.getDspaceKeys(username);
+		return dspaceManagerDAO.getDspaceKeys(username);
 	}
 
 	/**
@@ -426,9 +432,10 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public int addDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		IDspaceKeys dbDspaceKeys = dbconnectionManager.getDspaceKeys(username);
+		/*IDspaceKeys dbDspaceKeys = dbconnectionManager.getDspaceKeys(username);
 		if(dbDspaceKeys == null)
 		{
 			//No key was found for the user. Hence the keys will be inserted.
@@ -452,16 +459,18 @@ public class DspaceManager implements IDspaceManager{
 			}
 		}
 		proxyCommunityManager.clearCompleteCache();
-		return SUCCESS;
+		return SUCCESS;*/
+		return dspaceManagerDAO.saveOrUpdateDspaceKeys(dspaceKeys, username);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public int deleteDspaceKeys(String username) throws QuadrigaStorageException
 	{
-		return dbconnectionManager.deleteDspaceKeys(username);
+		return dspaceManagerDAO.deleteDspaceKeys(username);
 	}
 
 	/**

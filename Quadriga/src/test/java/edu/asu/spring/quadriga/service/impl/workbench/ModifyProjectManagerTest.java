@@ -100,7 +100,7 @@ public class ModifyProjectManagerTest {
 		project.setOwner(owner);
 		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 		
-		projectManager.addProjectRequest(project);
+		projectManager.addProjectRequest(project,"projuser");
 		
 		assertTrue(true);
 	}
@@ -118,7 +118,7 @@ public class ModifyProjectManagerTest {
 		project.setInternalid("PROJ_2");
 		
 		owner = "projuser";
-        projectManager.updateProjectRequest(project, owner);
+        projectManager.updateProjectRequest("PROJ_2","testupdateproject","test case data",EProjectAccessibility.ACCESSIBLE.name(),"testproject2",owner);
         assertTrue(true);
 	}
 
