@@ -134,7 +134,7 @@ public class ModifyProjectController
 		{
 			IUser user = userManager.getUserDetails(principal.getName());
             project.setOwner(user);
-			projectManager.addProjectRequest(project);
+			projectManager.addProjectRequest(project,principal.getName());
 			model.getModelMap().put("success", 1);
 		}
 		return model;
@@ -194,7 +194,7 @@ public class ModifyProjectController
 		}
 		else
 		{
-			projectManager.updateProjectRequest(project, userName);
+			projectManager.updateProjectRequest(project.getInternalid(),project.getName(),project.getDescription(),project.getProjectAccess().name(),project.getUnixName(),userName);
 			model.getModelMap().put("success", 1);
 		}
 		return model;

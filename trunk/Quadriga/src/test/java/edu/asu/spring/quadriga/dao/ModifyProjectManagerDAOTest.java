@@ -13,7 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.impl.ModifyProjectManagerDAOImpl;
+import edu.asu.spring.quadriga.dao.workbench.ModifyProjectManagerDAO;
+import edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO;
+import edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAOImpl;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

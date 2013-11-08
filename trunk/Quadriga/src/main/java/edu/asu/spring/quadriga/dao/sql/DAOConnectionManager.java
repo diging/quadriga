@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.db.sql;
+package edu.asu.spring.quadriga.dao.sql;
 
 import java.util.UUID;
 
