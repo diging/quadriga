@@ -6,5 +6,5 @@ import edu.asu.spring.quadriga.profile.impl.ViafReply;
 
 
 public interface IViafManager {
-	public List<ViafReply.Items> search(String item, int startIndex);
+	public List<ViafReply.Items> search(String item, Integer startIndex);
 }

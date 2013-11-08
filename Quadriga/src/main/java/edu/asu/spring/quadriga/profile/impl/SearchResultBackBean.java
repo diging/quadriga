@@ -5,16 +5,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class SearchResultBackBean {
 	
-	private String profileName;
+	private String word;
 	private String id;
 	private String description;
 	
 	
 	public String getProfileName() {
-		return profileName;
+		return word;
 	}
-	public void setProfileName(String profileName) {
-		this.profileName = profileName;
+	public void setProfileName(String word) {
+		this.word = word;
 	}
 	
 	public String getId() {

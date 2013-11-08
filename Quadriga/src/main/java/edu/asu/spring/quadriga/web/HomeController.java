@@ -51,9 +51,6 @@ public class HomeController {
 	private IServiceRegistry serviceRegistry;
 	
 	@Autowired
-	private IService serviceA;
-	
-	@Autowired
 	private SearchResult searchResult;
 	
 	@Autowired
@@ -134,7 +131,6 @@ public class HomeController {
 	@RequestMapping(value = "auth/profile/search", method = RequestMethod.GET)
 	public String search(Model model, Principal principal, @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean) throws QuadrigaStorageException
 	{
-		System.out.println("---------in search GET");
 		serviceId = serviceBackBean.getId();
 		model.addAttribute("serviceid", serviceId);
 		String term = serviceBackBean.getTerm();
