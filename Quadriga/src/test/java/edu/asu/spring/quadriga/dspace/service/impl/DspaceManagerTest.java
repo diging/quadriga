@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
@@ -47,8 +49,10 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
  *
  */
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-		"file:src/test/resources/root-context.xml","file:src/test/resources/rest-service.xml"})
+		"file:src/test/resources/root-context.xml","file:src/test/resources/rest-service.xml","file:src/test/resources/hibernate.cfg.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@TransactionConfiguration
 public class DspaceManagerTest {
 
 	public final static int SUCCESS = 1;
