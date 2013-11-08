@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-"file:src/test/resources/root-context.xml" })
+"file:src/test/resources/root-context.xml","file:src/test/resources/hibernate.cfg.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration
 @Transactional
