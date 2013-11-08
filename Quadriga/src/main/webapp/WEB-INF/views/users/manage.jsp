@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!-- Content -->
 
 <header>
@@ -68,7 +69,8 @@
 		}
 	</script>
 
-
+		<sec:authorize
+				access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN')">
 	<c:if test="${not empty userRequestsList}">
 		<h3>User Requests to access Quadriga</h3>
 		<c:forEach var="user" items="${userRequestsList}">
@@ -102,8 +104,7 @@
 
 	<c:if test="${not empty activeUserList}">
 		<h3>Current Active Users</h3>
-		<table cellpadding="0" cellspacing="0" border="0"
-			class="display dataTable" width="100%">
+		<table class="display dataTable" width="100%">
 			<thead>
 				<tr>
 					<th>Username</th>
@@ -162,7 +163,7 @@
 			</thead>
 			<tbody>
 				<c:forEach var="user" items="${inactiveUserList}">
-					<tr class="gradeX">
+					<tr>
 						<td width="20%"><font size="3"><c:out
 									value="${user.userName}"></c:out></font></td>
 						<td class="center">NA</td>
@@ -195,11 +196,9 @@
 			<thead>
 				<tr>
 					<th>Username</th>
-					<th>Admin</th>
-					<th>Standard User</th>
-					<th>Restricted User</th>
-					<th>Collaborator</th>
-					<th>Action</th>
+					 <c:forEach var="i" begin="1" end="${quadrolessize}">
+                      <th>${quadrigaroles.getName}</th>
+                      </c:forEach>
 				</tr>
 			</thead>
 			<tbody>
@@ -231,7 +230,7 @@
 		</table>
 	</c:if>
 
-
+</sec:authorize>
 </article>
 
 <!-- /Content -->

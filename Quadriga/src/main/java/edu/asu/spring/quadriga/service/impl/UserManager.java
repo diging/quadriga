@@ -221,6 +221,15 @@ public class UserManager implements IUserManager {
 		
 	}
 
+	@Override
+	public boolean checkWorkbenchAssociated(String deleteUser) throws QuadrigaStorageException
+	{
+		boolean isAssociated;
+		isAssociated = false;
+		isAssociated = dbConnect.checkWorkbenchAssociated(deleteUser);
+		return isAssociated;
+	}
+	
 	/**
 	 * Approve a user request to access quadriga.
 	 * 

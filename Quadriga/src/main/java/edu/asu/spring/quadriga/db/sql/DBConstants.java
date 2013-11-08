@@ -27,6 +27,7 @@ public interface DBConstants
 	public final static String ADD_USER_PROFILE="sp_addUserProfile";
 	public final static String SHOW_USER_PROFILE="sp_showUserProfile";
 	public final static String DELETE_USER = "sp_deleteQuadrigaUser";
+	public final static String CHECK_WORKBENCH_ASSOCIATED = "fn_check_workbench_association";
 	
 	//project related objects
 	public static final String PROJECT_LIST_AS_OWNER="sp_getProjectList";

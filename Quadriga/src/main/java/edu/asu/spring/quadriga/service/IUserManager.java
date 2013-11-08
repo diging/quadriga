@@ -96,4 +96,8 @@ public interface IUserManager {
 
 
 	public abstract void deleteUser(String sUserId, String sAdminId) throws QuadrigaStorageException;
+
+
+	public abstract boolean checkWorkbenchAssociated(String deleteUser)
+			throws QuadrigaStorageException;
 }
