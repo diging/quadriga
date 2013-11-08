@@ -63,7 +63,7 @@ public class EditingNetworkAnnotationsManager {
 		}
 		logger.info("Annotation added to the node:" + nodeName);
 
-		return "success";
+		return "{ success: true; }";
 	}
 	
 	
