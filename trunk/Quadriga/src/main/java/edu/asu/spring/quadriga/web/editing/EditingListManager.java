@@ -94,7 +94,7 @@ public class EditingListManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 0, userRole = {RoleNames.ROLE_PROJ_COLLABORATOR_EDITOR})
-	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR})
+	,@ElementAccessPolicy(type=CheckedElementType.WORKSPACE,paramIndex=0,userRole={RoleNames.ROLE_WORKSPACE_COLLABORATOR_EDITOR})
 	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/editing", method = RequestMethod.GET)
 	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException

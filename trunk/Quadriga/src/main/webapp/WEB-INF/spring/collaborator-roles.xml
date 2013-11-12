@@ -64,4 +64,14 @@
 			value="contributors who can add texts and create/upload networks"></property>
 	</bean>
 	
+	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<qualifier value="workspaceCollaborator" />
+		<property name="roleDBid" value="wscollab_role3"></property>
+		<property name="roleid" value="WORKSPACE_EDITOR"></property>
+		<property name="rolename" value="workspace editor"></property>
+		<property name="displayName" value="EDITOR"></property>
+		<property name="roledescription"
+			value="editors who can add texts and create/upload networks"></property>
+	</bean>
+	
 </beans>
