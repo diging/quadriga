@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,6 +70,9 @@ public class HomeController {
 	
 	private Map<String,String> serviceNameIdMap ;
 	
+	@Resource(name = "contentdescriptors")
+	private Properties messages;
+	
 	private String serviceId;
 	private String term;
 	
@@ -94,6 +100,10 @@ public class HomeController {
 		String sUserId = principal.getName();		
 		model.addAttribute("username", sUserId);
 		model.addAttribute("serverTime", formattedDate );
+		model.addAttribute("wbmsg",messages.getProperty("workbench_desc"));
+		model.addAttribute("conceptmsg",messages.getProperty("concept_desc"));
+		model.addAttribute("dictmsg",messages.getProperty("dictonary_desc"));
+		model.addAttribute("networksmsg",messages.getProperty("network_desc"));
 
 		return "auth/home";
 	}

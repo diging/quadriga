@@ -27,6 +27,7 @@ public interface RoleNames {
 	//Workspace collaborator roles constants
 	public static final String ROLE_WORKSPACE_COLLABORATOR_ADMIN = "SINGLE_WORKSPACE_ADMIN";
 	public static final String ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR = "SINGLE_WORKSPACE_CONTRIBUTOR";
+	public static final String ROLE_WORKSPACE_COLLABORATOR_EDITOR = "EDITOR";
 	
 	//dictionary collaborator roles constants
 	public static final String ROLE_DICTIONARY_COLLABORATOR_ADMIN = "ADMIN";
