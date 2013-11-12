@@ -59,7 +59,7 @@ public class ViafService implements IService {
 
 
 		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
-		Integer si = 1;
+		String si = "1";
 		
 		List<ViafReply.Items> viafEntries = viafmanager.search(word, si);
 		

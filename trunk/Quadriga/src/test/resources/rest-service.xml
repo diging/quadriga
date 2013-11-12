@@ -67,6 +67,35 @@
 		</constructor-arg>
 	</bean>
 	
+	<bean id="viafURL" class="java.lang.String">
+		<constructor-arg>
+		<value>http://viaf.org/viaf/search</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath" class="java.lang.String">
+		<constructor-arg>
+			<value>?query=cql.any+all+%22
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath1" class="java.lang.String">
+		<constructor-arg>
+			<value>
+			%22+&amp;maximumRecords=100&amp;startRecord=
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="searchViafURLPath2" class="java.lang.String">
+		<constructor-arg>
+			<value>
+			&amp;sortKeys=holdingscount&amp;httpAccept=application/rss%2bxml
+			</value>
+		</constructor-arg>
+	</bean>
+	
 	
 	
 

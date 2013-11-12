@@ -165,5 +165,19 @@
 	
 	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAOImpl"/>
 	
+	<bean id="serviceRegistry" class="edu.asu.spring.quadriga.profile.impl.ServiceRegistry" />
 	
+	<bean id="searchResult" class="edu.asu.spring.quadriga.profile.impl.SearchResult" />
+	
+	<bean id="conceptPower" class="edu.asu.spring.quadriga.profile.impl.ConceptPower" />
+	
+	<bean id="viafService" class="edu.asu.spring.quadriga.profile.impl.ViafService" />
+	
+	<bean id="dbConnectionProfileManager" class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager"/>
+	
+	<bean id="profileFactory" class="edu.asu.spring.quadriga.domain.factories.impl.ProfileFactory"/>
+	
+	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.impl.SearchResultFactory" />
+	
+	<bean id="viafManager" class="edu.asu.spring.quadriga.profile.impl.ViafManager"/>
 </beans>
