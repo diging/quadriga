@@ -39,14 +39,13 @@ public class ViafManager implements IViafManager {
 	
 	
 	@Override
-	public List<ViafReply.Items> search (String item, Integer startIndex) {
+	public List<ViafReply.Items> search (String item, String startIndex) {
 		
 		List<ViafReply.Items> items = null;
 		String fullUrl;
 		
-			fullUrl = viafURL + searchViafURLPath + item + searchViafURLPath1 + startIndex + searchViafURLPath2;
-			fullUrl = fullUrl.replaceAll("\n", "");
-			fullUrl = fullUrl.replaceAll("\t", "");
+			fullUrl = viafURL.trim() + searchViafURLPath.trim() + item.trim() + searchViafURLPath1.trim() + startIndex.trim() + searchViafURLPath2.trim();
+			
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
 			items = rep.getItems();
 		

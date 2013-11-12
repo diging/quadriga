@@ -33,13 +33,13 @@ public class ProjectCollaboratorDTOMapper {
 	
 	public List<ICollaborator> getProjectCollaboratorList(ProjectDTO projectDTO) throws QuadrigaStorageException
 	{
-		List<ICollaborator> projectCollaboratorList = new ArrayList<>();
+		List<ICollaborator> projectCollaboratorList = new ArrayList<ICollaborator>();
 		if(projectDTO.getProjectCollaboratorDTOList() != null && projectDTO.getProjectCollaboratorDTOList().size() > 0)
 		{
 			HashMap<String,List<String>> collabMap = mapUserRoles(projectDTO);
 			for(String userID:collabMap.keySet())
 			{
-				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<>();
+				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				collaborator.setUserObj(userManager.getUserDetails(userID));
 				for(String roleName: collabMap.get(userID))
@@ -59,7 +59,7 @@ public class ProjectCollaboratorDTOMapper {
 	
 	public HashMap<String,List<String>> mapUserRoles(ProjectDTO projectDTO)
 	{
-		HashMap<String,List<String>> collabMap = new HashMap<>();
+		HashMap<String,List<String>> collabMap = new HashMap<String, List<String>>();
 		List<String> roleList = null;
 		
 		for(ProjectCollaboratorDTO projectCollaboratorDTO : projectDTO.getProjectCollaboratorDTOList())

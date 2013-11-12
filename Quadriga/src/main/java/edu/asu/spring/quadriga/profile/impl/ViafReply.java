@@ -9,15 +9,17 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "items"})
-@XmlRootElement(name="rss")
+@XmlType(propOrder = {"items"})
+@XmlRootElement(name="channel", namespace="http://a9.com/-/spec/opensearch/1.1/")
 public class ViafReply {
 	
 	@XmlElementWrapper(name="channel")
 	@XmlElement(name="item")
 	private List<ViafReply.Items> items;
 	
+	//@XmlPath
 	public List<ViafReply.Items> getItems() {
 		return items;
 	}
