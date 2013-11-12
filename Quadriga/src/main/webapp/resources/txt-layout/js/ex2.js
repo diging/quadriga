@@ -28,16 +28,7 @@ var Log = {
 function init(json, networkId, path) {
 	console.log("init");
 	pathName = path;
-	// alert(networkId);
-	/*
-	 * alert("hi"); alert(path);
-	 */
-	// init data
-	// end
-	// init ForceDirected
-	// alert("json");
-	// label placement on edges
-	// alert(path);
+	
 	$jit.ForceDirected.Plot.EdgeTypes.implement({
 		'labeled' : {
 			'render' : function(adj, canvas) {
@@ -164,22 +155,30 @@ function init(json, networkId, path) {
 						// var html = "<h4>" + node.name + "</h4><b>
 						// connections:</b><ul><li>",
 						var html = "";
-
-						html = "<div id='popup'><form id='annot_form' action=" + path
-								+ "/auth/editing/saveAnnotation/";
-						html += networkId + " method='POST' >";
-						// html = "<form id='annot_form' action='ggb'
-						// method='POST' >";
-						html += "<p id='message'></p>";
-						html += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-						html += "<input  type='hidden' name='nodename' id='nodename' value="
-								+ node.id + " />";
-						html += "<input type='submit' id='annot_submit' value='submit'>";
-						html += "</form></div>";
+						
+						html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
+						var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
+														+ "/auth/editing/saveAnnotation/";
+						 html1 += networkId + " method='POST' >";
+						 html1 += "<p id='message'></p>";
+						 html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+						 html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+														+ node.id + " />";
+						 html1 += "<input type='submit' id='annot_submit' value='submit'>";
+						 html1 += "</form></div>";
+						 var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
+														+ "/auth/editing/saveAnnotation/";
+						 html2 += networkId + " method='POST' >";
+						 html2 += "<p id='message'></p>";
+						 html2 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+						 html2 += "<input  type='hidden' name='nodename' id='nodename' value="
+														+ node.id + " />";
+						 html2 += "<input type='submit' id='annot_submit' value='submit'>";
+						 html2 += "</form></div>";
 
 						// append connections information
 						$jit.id('inner-details').innerHTML = path + html;
-						
+						//$jit.id('inner-details').innerHTML = html1;
 						$('#annot_form').submit(function(event) {
 							var text = $('#annotText').val();  
 						    var nodename = $('#nodename').val(); 
@@ -201,6 +200,19 @@ function init(json, networkId, path) {
 						});
 						
 						$('#popup').dialog();
+						$('#annot_node').click(function() {
+							  alert( "Handler for .click() called." );
+							  $jit.id('inner-details').innerHTML = path + html1;
+							  $( "popup1" ).show( "slow" );
+							  $('#popup1').dialog();
+						});
+						$('#annot_relation').click(function() {
+							  alert( "Handler for .click() called." );
+							  $jit.id('inner-details').innerHTML = path + html2;
+							  $( "popup1" ).show( "slow" );
+							  $('#popup2').dialog();
+						});
+						
 					},
 				},
 				// Number of iterations for the FD algorithm
