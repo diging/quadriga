@@ -17,9 +17,10 @@ DELIMITER $$
 CREATE PROCEDURE sp_addAnnotaionsToNetworks	
 (
   IN  innetworkid VARCHAR(200),
-  IN  innodename    VARCHAR(300),
+  IN  inid    VARCHAR(300),
   IN  inannotaiontext    TEXT,
   IN inuserid VARCHAR(50) ,
+  IN inobjecttype VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -44,10 +45,13 @@ BEGIN
 	END IF;
 	
 	  
-	IF (innodename IS NULL OR innodename = "")
-	 THEN SET errmsg = "Node name cannot be empty";
+	IF (inid IS NULL OR inid = "")
+	 THEN SET errmsg = "Object id cannot be empty";
 	END IF;
 
+	IF (inobjecttype IS NULL OR inobjecttype = "")
+	 THEN SET errmsg = "Object Type cannot be empty";
+	END IF;
 	
     -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
@@ -56,9 +60,9 @@ BEGIN
          SET uniqueId = UUID_SHORT();
          SET annotationId = CONCAT('ANNOT_',CAST(uniqueId AS CHAR));
             INSERT 
-              INTO tbl_network_annotations(networkid,nodename,annotationtext,annotationid,userid,
+              INTO tbl_network_annotations(networkid,nodename,annotationtext,annotationid,userid,objecttype,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (innetworkid,innodename,inannotaiontext,annotationId,inuserid,
+			 VALUES (innetworkid,innodename,inannotaiontext,annotationId,inuserid,objecttype,
                      inuserid,NOW(),inuserid,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;
