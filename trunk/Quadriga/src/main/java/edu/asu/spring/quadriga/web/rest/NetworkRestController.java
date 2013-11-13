@@ -109,24 +109,24 @@ public class NetworkRestController {
 		
 
 		if(workspaceid == null||workspaceid.isEmpty()){
-			response.setStatus(500);
+			response.setStatus(404);
 			return "Please provide correct workspace id.";
 		}
 		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
 		if(projectid.isEmpty()){
-			response.setStatus(500);
+			response.setStatus(404);
 			return "Please provide correct workspace id.";
 		}
 
 		if(networkName == null ||  networkName.isEmpty()){
-			response.setStatus(500);
+			response.setStatus(404);
 			return "Please provide network name as a part of post parameters";
 		}else{
 
 			boolean result=networkManager.hasNetworkName(networkName,user);
 			logger.debug(" Network name status : "+result);
 			if(result){
-				response.setStatus(500);
+				response.setStatus(409);
 				return "Network Name already Exist";
 			}
 		}
@@ -135,13 +135,13 @@ public class NetworkRestController {
 		logger.info(" Workspace id : "+ workspaceid);
 		xml=xml.trim();
 		if (xml.isEmpty()) {
-			response.setStatus(500);
+			response.setStatus(406);
 			return "Please provide XML in body of the post request.";
 
 		} else {
 			String res=networkManager.storeXMLQStore(xml);
 			if(res.equals("")){
-				response.setStatus(500);
+				response.setStatus(406);
 				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 			}
 			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
@@ -152,7 +152,7 @@ public class NetworkRestController {
 			networkId=networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid,"NEW",networkId);
 			
 			if(networkId.isEmpty()){
-				response.setStatus(500);
+				response.setStatus(404);
 				return "Text files doesn't belongs to this workspace.";
 			}
 			
