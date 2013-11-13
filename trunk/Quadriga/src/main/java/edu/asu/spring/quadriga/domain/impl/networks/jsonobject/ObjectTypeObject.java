@@ -34,4 +34,10 @@ public class ObjectTypeObject {
 		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
 		return appellationEventObject.getNode();
 	}
+	public String getObjectRelationPredictionAppellationTermId(ObjectTypeObject objectTypeObject){
+		RelationEventObject relationEventObject = objectTypeObject.getRelationEventObject();
+		PredicateObject predicateObject = relationEventObject.getPredicateObject();
+		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
+		return appellationEventObject.getTermId();
+	}
 }

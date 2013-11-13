@@ -405,9 +405,10 @@ public class NetworkManager implements INetworkManager {
 						while(I2.hasNext()){
 							TermType tt = I2.next();
 							String node = conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt));
+							String termId = tt.getTermID(tt)+"_"+shortUUID();
 							//String node = tt.getTermInterpertation(tt);
 							logger.debug(tt.getTermInterpertation(tt));
-							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+node+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
+							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
 						}
 					}
 					if(ce instanceof RelationEventType){
@@ -456,20 +457,24 @@ public class NetworkManager implements INetworkManager {
 		nodeObject.setRelationEventId(predicateObject.getRelationEventID());
 
 		nodeObject.setPredicate(appellationEventObject.getNode());
+		nodeObject.setPredicateId(appellationEventObject.getTermId());
 		logger.debug("Predicate : "+appellationEventObject.getNode() );
 		SubjectObject subjectObject = relationEventObject.getSubjectObject();
 		ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
 		if(subjectObject.getIsRelationEventObject()){
 			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
 			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 			if(objectTypeObject.getIsRelationEventObject()){
 				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
 				updateJsonStringForRENode(nodeObject);
 				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 			}else{
 
 				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
 				nodeObject.setObject(appellationEventObject1.getNode());
+				nodeObject.setObjectId(appellationEventObject1.getTermId());
 				updateJsonStringForRENode(nodeObject);
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
@@ -478,6 +483,7 @@ public class NetworkManager implements INetworkManager {
 
 			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
 			nodeObject.setSubject(appellationEventObject1.getNode());
+			nodeObject.setSubjectId(appellationEventObject1.getTermId());
 			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
 		}
 		if(objectTypeObject.getIsRelationEventObject()){
@@ -485,6 +491,7 @@ public class NetworkManager implements INetworkManager {
 		}else{
 			AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
 			nodeObject.setObject(appellationEventObject1.getNode());
+			nodeObject.setObjectId(appellationEventObject1.getTermId());
 			updateJsonStringForRENode(nodeObject);
 			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 		}
@@ -631,6 +638,7 @@ public class NetworkManager implements INetworkManager {
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
 				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
+				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 				PredicateObject predicateObject = new PredicateObject();
 				predicateObject.setAppellationEventObject(appellationEventObject);
 
@@ -684,6 +692,7 @@ public class NetworkManager implements INetworkManager {
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
 				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 				subjectObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
 			}
@@ -727,6 +736,7 @@ public class NetworkManager implements INetworkManager {
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
 				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 				objectTypeObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("objectType Term : "+tt.getTermInterpertation(tt));
 			}
