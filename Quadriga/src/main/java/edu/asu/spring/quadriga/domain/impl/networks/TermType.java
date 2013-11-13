@@ -20,6 +20,11 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import edu.asu.spring.quadriga.service.impl.NetworkManager;
+
 
 
 /**
@@ -74,6 +79,8 @@ public class TermType {
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
 
+    private static final Logger logger = LoggerFactory
+			.getLogger(TermType.class);
     /**
      * Returns the interperation object 
      * @author Lohith Dwaraka 
@@ -91,6 +98,25 @@ public class TermType {
 			}
 		}
     	return interpertation;
+    }
+    
+    /**
+     * Returns the term ID object 
+     * @author Lohith Dwaraka 
+     * @param tt
+     * @return
+     */
+    public String getTermID(TermType tt){
+    	String id ="";
+    	List<JAXBElement<?>> e3 =tt.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> I2 = e3.iterator();
+		while(I2.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) I2.next();
+			if(element.getName().toString().contains("}id")){
+				id =element.getValue().toString();
+			}
+		}
+    	return id;
     }
     
     /**
