@@ -75,7 +75,9 @@ public class ConceptCollectionRestController {
 
 	@Autowired
 	private IUserManager userManager;
-	
+
+	@Autowired
+	private IConceptCollectionFactory conceptCollectionFactory;
 	@Autowired
 	private IConceptCollectionManager conceptControllerManager;
 
@@ -144,11 +146,9 @@ public class ConceptCollectionRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(405);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		}
@@ -203,7 +203,7 @@ public class ConceptCollectionRestController {
 			List<Concept> conceptList = c1.getConcepts();
 
 			Iterator<Concept> I = conceptList.iterator();
-			
+
 			while(I.hasNext()){
 				Concept c = I.next();
 				logger.debug("arg Name :"+ c.getName().trim());
@@ -218,7 +218,7 @@ public class ConceptCollectionRestController {
 					response.setContentType(accept);
 					return "Fail";
 				}
-				
+
 			}
 			response.setStatus(200);
 			response.setContentType(accept);
@@ -271,11 +271,9 @@ public class ConceptCollectionRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(405);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		}
@@ -283,6 +281,93 @@ public class ConceptCollectionRestController {
 
 	}
 
+	/**
+	 * Rest interface add a new Concept collection with a list of concepts
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/createcc
+	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/createcc
+	 * 
+	 * @author Lohith Dwaraka
+	 * @param userId
+	 * @param model
+	 * @return
+	 * @throws RestException 
+	 * @throws QuadrigaStorageException 
+	 * @throws QuadrigaAccessException 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
+	@ResponseBody
+	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
+			HttpServletResponse response, @RequestBody String xml,
+			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
+		IUser user = usermanager.getUserDetails(principal.getName());
+		
+		String ccName = request.getParameter("name");
+		String desc = request.getParameter("desc");
+		logger.debug("CC Name  :"+ccName+"   desc : "+desc);
+		IConceptCollection collection = conceptCollectionFactory.createConceptCollectionObject();
+
+		if(ccName.isEmpty() || ccName == null){
+			response.setStatus(404);
+			return "Please provide concept collection name";
+		}
+		if(desc.isEmpty() || desc == null){
+			response.setStatus(404);
+			return "Please provide concept collection description";
+		}
+		logger.debug("XML : "+xml);
+		JAXBElement<QuadrigaConceptReply> response1=null;
+		try{
+			JAXBContext context = JAXBContext.newInstance(QuadrigaConceptReply.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+			InputStream is = new ByteArrayInputStream(xml.getBytes());
+			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
+		}catch(Exception e ){
+			logger.error("Error in unmarshalling",e);
+		}
+		if(response1 == null){
+			response.setStatus(404);
+			return "Concepts XML is not valid";
+		}
+		QuadrigaConceptReply qReply= response1.getValue();
+		ConceptList c1 = qReply.getConceptList();
+		List<Concept> conceptList = c1.getConcepts();
+		if(conceptList.size()<1){
+			response.setStatus(404);
+			return "Concepts XML is not valid";
+		}
+		
+		collection.setDescription(desc);
+		collection.setOwner(user);
+		collection.setName(ccName);
+		
+		String reponse = conceptControllerManager.addConceptCollection(collection);
+		String ccId = conceptControllerManager.getConceptCollectinId(ccName);
+		
+		Iterator<Concept> I = conceptList.iterator();
+
+		while(I.hasNext()){
+			Concept c = I.next();
+			logger.debug("arg Name :"+ c.getName().trim());
+			logger.debug("arg Pos :"+ c.getPos().trim());
+			logger.debug("arg URI :"+ c.getUri().trim());
+			logger.debug("arg descrtiption :"+ c.getDescription().trim());
+			try{
+				conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(),  c.getDescription(), ccId, user.getUserName());
+			}catch(QuadrigaStorageException e){
+				logger.error("Errors in adding items",e);
+				response.setStatus(500);
+				response.setContentType(accept);
+				return "Fail";
+			}
+
+		}
+		response.setStatus(200);
+		response.setContentType(accept);
+		return ccId;
+	}
+	
 	/**
 	 * Rest interface for the getting concept details i.e, list of items in the
 	 * collection

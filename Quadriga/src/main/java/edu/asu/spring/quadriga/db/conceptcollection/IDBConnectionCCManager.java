@@ -126,5 +126,7 @@ public interface IDBConnectionCCManager {
 		 * 
 		 */
 		public abstract void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException;
+		public abstract  String getConceptCollectinId(String ccName)
+				throws QuadrigaStorageException;
 		
 	}
