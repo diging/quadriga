@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workspace.IModifyWSManagerDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -37,7 +39,9 @@ public class ModifyWSManager implements IModifyWSManager
 	@Autowired
 	private IEmailNotificationManager emailManager;
 
-
+	@Autowired
+	private IModifyWSManagerDAO modifyWSManagerDAOImpl;
+	
 	/**
 	 * This inserts a workspace for a project into database.
 	 * @param     workspace
@@ -47,28 +51,25 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @author    kiranbatna
 	 */
 	@Override
-	public String addWorkSpaceRequest(IWorkSpace workspace,String projectId) throws QuadrigaStorageException
+	@Transactional
+	public void addWorkSpaceRequest(IWorkSpace workspace,String projectId) throws QuadrigaStorageException
 	{
-		String errmsg;
-		errmsg = dbConnect.addWorkSpaceRequest(workspace,projectId);
+		//dbConnect.addWorkSpaceRequest(workspace,projectId);
 		
-		if(errmsg.equals(""))
-		{
-			//Get project owner
-			IProject project = dbProjectManager.getProjectDetails(projectId);
-			
-			//TODO: Remove email setup
-			project.getOwner().setEmail("ramkumar007@gmail.com");
+		modifyWSManagerDAOImpl.addWorkSpaceRequest(workspace, projectId);
+		
+		//Get project owner
+		IProject project = dbProjectManager.getProjectDetails(projectId);
+		
+		//TODO: Remove email setup
+		/*project.getOwner().setEmail("ramkumar007@gmail.com");
 
-			//Set email to owner that a new workspace has been added.
-			if(project.getOwner().getEmail() != null && !project.getOwner().getEmail().equals(""))
-				emailManager.sendNewWorkspaceAddedToProject(project, workspace);
-			else
-				logger.info("The project owner <<"+project.getOwner()+">> did not have an email address to the notification for new workspace addition");
+		//Set email to owner that a new workspace has been added.
+		if(project.getOwner().getEmail() != null && !project.getOwner().getEmail().equals(""))
+			emailManager.sendNewWorkspaceAddedToProject(project, workspace);
+		else
+			logger.info("The project owner <<"+project.getOwner()+">> did not have an email address to the notification for new workspace addition");*/
 
-		}
-
-		return errmsg;
 	}
 
 	/**

@@ -81,8 +81,6 @@ public class ModifyWSManagerTest {
 	public void testAddWorkSpaceRequest() throws QuadrigaStorageException {
 		IUser user;
 		IWorkSpace workspace;
-		String errmsg;
-		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
 		
@@ -91,9 +89,9 @@ public class ModifyWSManagerTest {
 		workspace.setDescription("test workspace");
 		workspace.setOwner(user);
 		
-		errmsg = wsManager.addWorkSpaceRequest(workspace, "PROJ_2");
+		wsManager.addWorkSpaceRequest(workspace, "PROJ_2");
 		
-		assertEquals("",errmsg);
+		assertTrue(true);
 	}
 
 	@Test
