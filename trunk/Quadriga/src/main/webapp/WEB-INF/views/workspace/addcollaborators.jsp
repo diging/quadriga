@@ -51,7 +51,7 @@ function onSubmit(){
 		<c:if test="${empty noncollabusers}">
 		<hr>
           <span class="byline">All collaborators are associated to the workspace</span>	
-          <input type="button" value="Back" onClick="onSubmit()">	   
+          <input type="button" value="Okay" onClick="onSubmit()">	   
 		</c:if>
 		</form:form>
 		

@@ -135,7 +135,7 @@
 			<span class="byline">You don't have any more collaborators associated to the workspace to delete.</span>
 			<ul>
 				<li><input type="submit" onClick="submitClick(this.id);"
-					value='Back' name="Back"></li>
+					value='Okay' name="Back"></li>
 			</ul>
 		</c:if>
 		<div id="dlgConfirm" title="Confirmation">Are you sure?</div>

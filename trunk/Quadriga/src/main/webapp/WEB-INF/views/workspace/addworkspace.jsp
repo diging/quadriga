@@ -49,7 +49,7 @@ function submitClick(id){
 		  <span class="byline">Workspace created successfully.</span>
 		<ul>
 					<li><input type="button" onClick="submitClick(this.id);"
-						value='Back'></li>
+						value='Okay'></li>
 				</ul>>
 		  </c:when>
 		</c:choose>

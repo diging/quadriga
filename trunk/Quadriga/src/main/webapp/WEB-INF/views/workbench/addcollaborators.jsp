@@ -59,7 +59,7 @@ function onSubmit(){
 <c:if test="${empty notCollaboratingUsers}">
 <hr>
  <span class="byline">All collaborators are associated to the project</span>
- <input type="button" value="Back" onClick="onSubmit()">
+ <input type="button" value="Okay" onClick="onSubmit()">
 </c:if>
 <br>
 <c:if test="${not empty collaboratingUsers}">

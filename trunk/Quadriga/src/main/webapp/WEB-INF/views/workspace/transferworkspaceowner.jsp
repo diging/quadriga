@@ -40,7 +40,7 @@
           You don't have any collaborators assigned to the project.
           <ul>
 				<li><input type="button" onClick="submitClick(this.id);"
-					value='Back'></li>
+					value='Okay'></li>
 			</ul>	   
 		</c:if>
 		</c:when>
@@ -49,7 +49,7 @@
 			<br />
 			<ul>
 				<li><input type="button" onClick="submitClick(this.id);"
-					value='Back'></li>
+					value='Okay'></li>
 			</ul>
 		</c:otherwise>
 	</c:choose>

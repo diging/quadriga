@@ -108,7 +108,7 @@
 
 				<input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Back to Workspace'><br />
+	value='Okay'><br />
 				<input type="submit" value="Delete Concept Collections"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/deleteconceptcollections'" />
 

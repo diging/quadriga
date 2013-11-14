@@ -126,7 +126,7 @@
 
 	<input type=button
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
-		value='Back to all Dictionaries'>
+		value='Okay'>
 
 
 <br/>

@@ -88,7 +88,7 @@
 		<form method="POST">
 			<input type=button
 				onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
-				value='Back to Project'> <br /><input type="submit"
+				value='Okay'> <br /><input type="submit"
 				value="Add Concept Collection"
 				onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addconceptcollection'" />
 

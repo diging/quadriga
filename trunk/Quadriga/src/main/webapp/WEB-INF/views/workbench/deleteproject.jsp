@@ -121,7 +121,7 @@
 		 		<c:if test="${empty projectform.projectList}">
 			<ul>
 				<li><input type="submit" onClick="submitClick(this.id);"
-					value='Back' name="Back"></li>
+					value='Okay' name="Back"></li>
 			</ul>
 			You don't have any projects to delete.
 		</c:if>
@@ -131,7 +131,7 @@
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
-			value='Back' name="Back"></li>
+			value='Okay' name="Back"></li>
 	</ul>
           </c:when>
 		</c:choose>

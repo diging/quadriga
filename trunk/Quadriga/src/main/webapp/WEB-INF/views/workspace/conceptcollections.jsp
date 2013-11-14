@@ -24,7 +24,7 @@
 <hr />
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-	value='Back to Workspace'>
+	value='Okay'>
 <br>
 <br>
 <c:choose>

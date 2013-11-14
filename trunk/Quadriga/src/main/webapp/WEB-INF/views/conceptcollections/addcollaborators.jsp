@@ -50,12 +50,12 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 	<form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors>
 <br/>
 <input type="submit" value="Add">
-<input type="button" value="Back" onClick="onSubmit()">
+<input type="button" value="Okay" onClick="onSubmit()">
 </c:if>
 <c:if test="${empty nonCollaboratorList}">
 <hr>
  <span class="byline">All collaborators are associated to concept collection</span>
- <input type="button" value="Back" onClick="onSubmit()">
+ <input type="button" value="Okay" onClick="onSubmit()">
 </c:if>
 <c:if test="${not empty collaboratingUsers}">
 <hr>

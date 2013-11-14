@@ -24,7 +24,7 @@ function goBack(){
 </script>
 
 <h1>profile added successfully</h1>
-<input type="button" value="back" onClick="goBack()"/>
+<input type="button" value="Okay" onClick="goBack()"/>
 
 
 <%--<script>

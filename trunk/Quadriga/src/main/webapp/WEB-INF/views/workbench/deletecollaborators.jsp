@@ -111,7 +111,7 @@ action="${pageContext.servletContext.contextPath}/auth/workbench/${projectId}/de
 			You don't have associated collaborators to delete.
 								<ul>
 				<li><input type=button onClick="submitClick(this.id);"
-					value='Back' name="Back"></li>
+					value='Okay' name="Back"></li>
 			</ul>
 				</c:if>
 </c:when>
@@ -120,7 +120,7 @@ action="${pageContext.servletContext.contextPath}/auth/workbench/${projectId}/de
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
-			value='Back' name="Back"></li>
+			value='Okay' name="Back"></li>
 	</ul>
           </c:when>
 </c:choose>

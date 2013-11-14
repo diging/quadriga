@@ -26,7 +26,7 @@
 </script>
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing'"
-	value='Back to Editing'>
+	value='Okay'>
 	
 <br/>
 <br/>

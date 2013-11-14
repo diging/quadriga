@@ -55,12 +55,12 @@ function onSubmit(){
 	<form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors>
 	<br>
 	<input type="submit" value="Add">
-<input type="button" value="Back" onClick="onSubmit()">
+<input type="button" value="Okay" onClick="onSubmit()">
 	</c:if>	
 	<c:if test="${empty nonCollaboratingUsers}">
 	<hr>
 	<span class="byline">All collaborators are associated to dictionary</span>
- <input type="button" value="Back" onClick="onSubmit()">
+ <input type="button" value="Okay" onClick="onSubmit()">
 	</c:if>
 	<c:if test="${not empty collaboratingUsers}">
 	<hr>
