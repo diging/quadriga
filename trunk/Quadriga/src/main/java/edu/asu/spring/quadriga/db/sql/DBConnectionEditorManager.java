@@ -655,15 +655,16 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 	 */
 
 	@Override
-	public String addAnnotationToNetwork(String networkId, String nodeName, String annotationText, String userId) throws QuadrigaStorageException {
+	public String addAnnotationToNetwork(String networkId, String id, String annotationText, String userId,String objectType) throws QuadrigaStorageException {
 
 		String dbCommand;
 		String errmsg = "";
+		
 		CallableStatement sqlStatement;
 
 		// command to call the SP
 		dbCommand = DBConstants.SP_CALL + " "
-				+ DBConstants.ADD_ANNOTATIONS_TO_NETWORKS + "(?,?,?,?,?)";
+				+ DBConstants.ADD_ANNOTATIONS_TO_NETWORKS + "(?,?,?,?,?,?)";
 
 		// get the connection
 		getConnection();
@@ -674,16 +675,17 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 
 			// adding the input variables to the SP
 			sqlStatement.setString(1, networkId);
-			sqlStatement.setString(2, nodeName);
+			sqlStatement.setString(2, id);
 			sqlStatement.setString(3, annotationText);
 			sqlStatement.setString(4, userId);
+			sqlStatement.setString(5, objectType);
 
 			// adding output variables to the SP
-			sqlStatement.registerOutParameter(5, Types.VARCHAR);
+			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(5);
+			errmsg = sqlStatement.getString(6);
 			return errmsg;
 
 		} catch (SQLException e) {

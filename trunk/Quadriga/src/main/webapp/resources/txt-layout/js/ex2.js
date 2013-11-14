@@ -148,7 +148,6 @@ function init(json, networkId, path) {
 					onRightClick : function(node) {
 						if (!node)
 							return;
-						// alert("hi");
 						// Build the right column relations list.
 						// This is done by traversing the clicked node
 						// connections.
@@ -156,17 +155,10 @@ function init(json, networkId, path) {
 						// connections:</b><ul><li>",
 						var html = "";
 						
+						
 						html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
-						var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
-														+ "/auth/editing/saveAnnotation/";
-						 html1 += networkId + " method='POST' >";
-						 html1 += "<p id='message'></p>";
-						 html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-						 html1 += "<input  type='hidden' name='nodename' id='nodename' value="
-														+ node.id + " />";
-						 html1 += "<input type='submit' id='annot_submit' value='submit'>";
-						 html1 += "</form></div>";
-						 var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
+						
+					/*	 var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
 														+ "/auth/editing/saveAnnotation/";
 						 html2 += networkId + " method='POST' >";
 						 html2 += "<p id='message'></p>";
@@ -174,12 +166,57 @@ function init(json, networkId, path) {
 						 html2 += "<input  type='hidden' name='nodename' id='nodename' value="
 														+ node.id + " />";
 						 html2 += "<input type='submit' id='annot_submit' value='submit'>";
-						 html2 += "</form></div>";
+						 html2 += "</form></div>";*/
+						 
 
 						// append connections information
 						$jit.id('inner-details').innerHTML = path + html;
 						//$jit.id('inner-details').innerHTML = html1;
-						$('#annot_form').submit(function(event) {
+						
+						$('#annot_node').click(function() {
+							  alert( "Handler for .click() called." );
+							  var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
+														+ "/auth/editing/saveAnnotation/";
+							  html1 += networkId + " method='POST' >";
+							  html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+							  html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+								+ node.id + " />";
+							  html1 += "<input type='button' id='annot_submit' value='submit'>";
+							  html1 += "</div></form>";
+							  $jit.id('inner-details').innerHTML = path + html1;
+							  $('#annot_submit').click(function(event) {
+									var text = $('#text').val();  
+								    var nodename = $('#nodename').val(); 
+								    var url = path+"/auth/editing/saveAnnotation/"+networkId;
+								    alert("text:"+text);
+								    alert("nodename:"+nodename);
+								    alert("url:"+url);
+									$.ajax({
+										url : $('#annot_form').attr("action"),
+										type : "POST",
+										//data : $('#nodename').serialize(),
+										data: $('#annot_form').serialize(),
+										success : function() {
+											alert("done");
+										},
+										error: function() {
+											alert("error");
+										}
+									});
+
+									event.preventDefault();
+								});
+							  
+							  $( '#popup1' ).show( "slow" );
+							  $('#popup1').dialog();
+						});
+						$('#annot_relation').click(function() {
+							  alert( "Handler for .click() called." );
+							  $jit.id('inner-details').innerHTML = path + html2;
+							  $( '#popup2' ).show( "slow" );
+							  $('#popup2').dialog();
+						});
+						/*$('#annot_form').submit(function(event) {
 							var text = $('#annotText').val();  
 						    var nodename = $('#nodename').val(); 
 						    
@@ -197,21 +234,10 @@ function init(json, networkId, path) {
 							});
 
 							event.preventDefault();
-						});
+						});*/
 						
 						$('#popup').dialog();
-						$('#annot_node').click(function() {
-							  alert( "Handler for .click() called." );
-							  $jit.id('inner-details').innerHTML = path + html1;
-							  $( "popup1" ).show( "slow" );
-							  $('#popup1').dialog();
-						});
-						$('#annot_relation').click(function() {
-							  alert( "Handler for .click() called." );
-							  $jit.id('inner-details').innerHTML = path + html2;
-							  $( "popup1" ).show( "slow" );
-							  $('#popup2').dialog();
-						});
+						
 						
 					},
 				},
