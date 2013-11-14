@@ -2,8 +2,10 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,9 @@ import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
@@ -66,6 +71,68 @@ public class ModifyWSManagerDAOImpl extends DAOConnectionManager implements IMod
 		catch(Exception e)
 		{
 			logger.error("addWorkSpaceRequest method :",e);
+        	throw new QuadrigaStorageException();
+		}
+	}
+	
+	
+	@Override
+	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
+	{
+		WorkspaceCollaboratorDTO collaborator = null;
+		try
+		{
+		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,workspaceId);
+		//set the new workspace owner
+		workspaceDTO.setWorkspaceowner(getUserDTO(newOwner));
+		workspaceDTO.setUpdatedby(oldOwner);
+		workspaceDTO.setUpdateddate(new Date());
+		
+		
+		//fetch the workspace collaborators
+		Iterator<WorkspaceCollaboratorDTO> workspaceCollaborator = workspaceDTO.getWorkspaceCollaboratorDTOList().iterator();
+		while(workspaceCollaborator.hasNext())
+		{
+			collaborator = workspaceCollaborator.next();
+			if(collaborator.getQuadrigaUserDTO().getUsername().equals(newOwner))
+			{
+				workspaceCollaborator.remove();
+				break;
+			}
+		}
+		
+		//add the current owner as a collaborator
+		collaborator = new WorkspaceCollaboratorDTO();
+		collaborator.setWorkspaceDTO(workspaceDTO);
+		collaborator.setWorkspaceCollaboratorDTOPK(new WorkspaceCollaboratorDTOPK(workspaceId,oldOwner,collabRole));
+		collaborator.setQuadrigaUserDTO(getUserDTO(oldOwner));
+		collaborator.setCreatedby(oldOwner);
+		collaborator.setUpdateddate(new Date());
+		collaborator.setUpdateddate(new Date());
+		collaborator.setUpdatedby(oldOwner);
+		workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
+		
+		sessionFactory.getCurrentSession().update(workspaceDTO);
+		}
+		catch(Exception e)
+		{
+			logger.error("transferWorkspaceOwnerRequest method :",e);
+        	throw new QuadrigaStorageException();
+		}
+	}
+	
+	@Override
+	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
+	{
+		try
+		{
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
+		query.setParameter("username", userName);
+		return (QuadrigaUserDTO) query.uniqueResult();
+		}
+		catch(Exception e)
+		{
+			logger.error("getProjectOwner :",e);
         	throw new QuadrigaStorageException();
 		}
 	}

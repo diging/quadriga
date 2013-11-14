@@ -115,9 +115,10 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
-		dbConnect.transferWSOwnerRequest(workspaceId, oldOwner, newOwner, collabRole);
+		modifyWSManagerDAOImpl.transferWSOwnerRequest(workspaceId, oldOwner, newOwner, collabRole);
 	}
 
 	/**
