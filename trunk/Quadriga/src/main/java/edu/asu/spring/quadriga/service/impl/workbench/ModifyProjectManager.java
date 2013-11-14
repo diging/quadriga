@@ -70,7 +70,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 	{
 		logger.info("Deleting project details");
 		modifyProjectManagerDAO.deleteProjectRequest(projectIdList);
-		//dbConnect.deleteProjectRequest(projectIdList);
 	}
 	
 	/**

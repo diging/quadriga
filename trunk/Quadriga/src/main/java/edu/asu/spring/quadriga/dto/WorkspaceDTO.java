@@ -55,10 +55,10 @@ public class WorkspaceDTO implements Serializable {
     private String workspaceid;
     @Basic(optional = false)
     @Column(name = "isarchived")
-    private short isarchived;
+    private Boolean isarchived;
     @Basic(optional = false)
     @Column(name = "isdeactivated")
-    private short isdeactivated;
+    private Boolean isdeactivated;
     @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
@@ -90,7 +90,7 @@ public class WorkspaceDTO implements Serializable {
         this.workspaceid = workspaceid;
     }
 
-    public WorkspaceDTO(String workspaceid, String workspacename, short isarchived, short isdeactivated, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public WorkspaceDTO(String workspaceid, String workspacename, Boolean isarchived, Boolean isdeactivated, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceid = workspaceid;
         this.workspacename = workspacename;
         this.isarchived = isarchived;
@@ -125,19 +125,19 @@ public class WorkspaceDTO implements Serializable {
         this.workspaceid = workspaceid;
     }
 
-    public short getIsarchived() {
+    public Boolean getIsarchived() {
         return isarchived;
     }
 
-    public void setIsarchived(short isarchived) {
+    public void setIsarchived(Boolean isarchived) {
         this.isarchived = isarchived;
     }
 
-    public short getIsdeactivated() {
+    public Boolean getIsdeactivated() {
         return isdeactivated;
     }
 
-    public void setIsdeactivated(short isdeactivated) {
+    public void setIsdeactivated(Boolean isdeactivated) {
         this.isdeactivated = isdeactivated;
     }
 
