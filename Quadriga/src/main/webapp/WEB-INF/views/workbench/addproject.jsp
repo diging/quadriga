@@ -71,7 +71,7 @@
 				<span class="byline">Project created successfully.</span>
 				<ul>
 					<li><input type="button" onClick="submitClick(this.id);"
-						value='Back'></li>
+						value='Okay'></li>
 				</ul>
 			</c:when>
 		</c:choose>

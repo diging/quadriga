@@ -89,7 +89,7 @@
 
 				<input type=button
 					onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
-					value='Back to Workspace'> <br /><input type="submit"
+					value='Okay'> <br /><input type="submit"
 					value="Add Concept Collection"
 					onclick="this.form.action='${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/addconceptcollection'" />
 

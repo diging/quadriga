@@ -72,7 +72,7 @@ function submitClick(id){
 		        <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
-			value='Back'></li>
+			value='Okay'></li>
 	</ul>
 		</c:if>
 		 </c:when>
@@ -81,7 +81,7 @@ function submitClick(id){
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
-			value='Back'></li>
+			value='Okay'></li>
 	</ul>
 		     </c:otherwise>
 		     	

@@ -18,5 +18,5 @@ $(document).ready(function() {
 </span>
 <input type="button"
 			onClick="submitClick(this.id);"
-			value='Back' name="Back">
+			value='Okay' name="Back">
 			

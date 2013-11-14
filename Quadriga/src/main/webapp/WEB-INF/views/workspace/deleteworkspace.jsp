@@ -122,7 +122,7 @@ $(function() {
 				<c:if test="${empty workspaceform.workspaceList}">
 					<ul>
 				<li><input type=button onClick="submitClick(this.id);"
-					value='Back' name="Back"></li>
+					value='Okay' name="Back"></li>
 			</ul>
 			You don't have any deactivated workspace to delete.
 				</c:if>
@@ -135,7 +135,7 @@ $(function() {
 		     <ul>
 		<li><input type="button"
 			onClick="submitClick(this.id);"
-			value='Back' name="Back"></li>
+			value='Okay' name="Back"></li>
 	</ul>
           </c:when>
 		</c:choose>

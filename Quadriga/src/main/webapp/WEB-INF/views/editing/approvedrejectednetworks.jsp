@@ -42,7 +42,7 @@
 
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing'"
-	value='Back'>
+	value='Okay'>
 
 <span class="byline">Networks you have approved.</span>
 <c:choose>

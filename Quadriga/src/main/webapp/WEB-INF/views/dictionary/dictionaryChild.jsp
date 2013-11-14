@@ -140,7 +140,7 @@
     <br />
     <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
-		value='Back to all Dictionaries'>
+		value='Okay'>
 	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.id}'"
 	   value = "Edit">
 	<hr>
