@@ -206,4 +206,11 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			}
 		}
 	}
+	
+	@Override
+	public String getConceptCollectinId(String ccName) throws QuadrigaStorageException{
+		String ccId = dbConnect.getConceptCollectinId(ccName);
+		return ccId;
+	}
+	
 }

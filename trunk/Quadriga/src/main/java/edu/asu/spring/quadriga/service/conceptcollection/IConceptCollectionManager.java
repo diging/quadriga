@@ -123,6 +123,9 @@ public interface IConceptCollectionManager {
 	
 	public abstract String getCocneptLemmaFromConceptId(String id);
 
+
+	public abstract String getConceptCollectinId(String ccName) throws QuadrigaStorageException;
+
 	
 	
 

@@ -363,7 +363,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		name = con.getName();
 		description = con.getDescription();
 		owner = con.getOwner();
-		
+		logger.debug(name+"  "+description +"  "+owner.getUserName());
 		dbCommand = DBConstants.SP_CALL + " "
 				+ DBConstants.ADD_CONCEPTCOLLECTION + "(?,?,?,?,?)";
 
@@ -371,7 +371,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			logger.info("db command " +dbCommand);
+			logger.debug("db command " +dbCommand);
 			sqlStatement.setString(1, name);
 			sqlStatement.setString(2, description);
 			sqlStatement.setString(3, "0");
@@ -701,6 +701,65 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		}
 
 		return collaboratorRoleList;
+	}
+	
+	/**
+	 *  Method gets the dictionary name using dictionary id                    
+	 * 
+	 * @returns         return dictonary name
+	 * 
+	 * @throws			SQLException
+	 *                     
+	 * @author          Lohith Dwaraka
+	 * 
+	 */
+	@Override
+	public String getConceptCollectinId(String ccName) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String ccId="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_CONCEPTCOLLECTION_ID  + "(?,?)";
+
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, ccName);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					ccId =resultSet.getString(1);
+				} 
+			}
+			//String errmsg = sqlStatement.getString(2);
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+		return ccId;
+
 	}
 
 }
