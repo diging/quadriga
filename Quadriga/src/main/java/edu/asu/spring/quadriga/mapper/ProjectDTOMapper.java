@@ -9,6 +9,7 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -37,7 +38,7 @@ public class ProjectDTOMapper{
 		projectDTO.setDescription(project.getDescription());
 		projectDTO.setUnixname(project.getUnixName());
 		projectDTO.setProjectid(project.getInternalid());
-		//projectDTO.setProjectowner(new QuadrigaUserDTO(project.getOwner().getUserName()));
+		projectDTO.setProjectowner(new QuadrigaUserDTO(project.getOwner().getUserName()));
 		projectDTO.setCreatedby(project.getOwner().getUserName());
 		projectDTO.setCreateddate(new Date());
 		projectDTO.setUpdatedby(project.getOwner().getUserName());
