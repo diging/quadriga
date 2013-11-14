@@ -153,6 +153,7 @@ function init(json, networkId, path) {
 						// connections.
 						// var html = "<h4>" + node.name + "</h4><b>
 						// connections:</b><ul><li>",
+						var type ="node";
 						var html = "";
 						
 						
@@ -175,6 +176,22 @@ function init(json, networkId, path) {
 						
 						$('#annot_node').click(function() {
 							  alert( "Handler for .click() called." );
+							  
+							  $.ajax({
+									url : path+"/auth/editing/getAnnotation/"+networkId,
+									type : "POST",
+									//data : $('#nodename').serialize(),
+									data: "nodeid="+node.id+"&type="+type,
+									success : function(data) {
+										alert("done");
+										$('#annotText').innerHTML = data;
+									},
+									error: function() {
+										alert("error");
+									}
+								});
+							  event.preventDefault();
+							  
 							  var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
 														+ "/auth/editing/saveAnnotation/";
 							  html1 += networkId + " method='POST' >";
@@ -197,7 +214,9 @@ function init(json, networkId, path) {
 										//data : $('#nodename').serialize(),
 										data: $('#annot_form').serialize(),
 										success : function() {
+											
 											alert("done");
+											
 										},
 										error: function() {
 											alert("error");

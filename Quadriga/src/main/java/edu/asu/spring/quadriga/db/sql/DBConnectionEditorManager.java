@@ -701,5 +701,64 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 		return errmsg;
 	}
 	
+	public String getAnnotation(String type, String id) throws QuadrigaStorageException{
+		
+		String dbCommand;
+		String errmsg="";
+		String annotationText = "";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_ANNOTATIONS_TO_NETWORKS  + "(?,?,?)";
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, id); 
+			sqlStatement.setString(2, type);  
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+			
+			sqlStatement.execute();
+			
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) {
+					
+					annotationText = resultSet.getString(3);
+				} 
+			}
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.isEmpty()){
+				return annotationText;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+		}
+		catch(SQLException e)
+		{
+			errmsg="DB Issue";
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+
+		}catch(Exception e){
+			errmsg="DB Issue";
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+		return annotationText;		
+		
+		
+		
+	}
 	
 }
