@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
-public class RetrieveProjectManagerDAOImpl extends DAOConnectionManager implements RetrieveProjectManagerDAO {
+public class RetrieveProjectManagerDAO extends DAOConnectionManager implements IRetrieveProjectManagerDAO {
 
 	@Autowired
 	private ProjectDTOMapper projectDTOMapper;
@@ -39,7 +39,7 @@ public class RetrieveProjectManagerDAOImpl extends DAOConnectionManager implemen
 		this.sessionFactory = sessionFactory;
 	}
 
-	private static final Logger logger = LoggerFactory.getLogger(RetrieveProjectManagerDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RetrieveProjectManagerDAO.class);
 	
 	/**
 	 * This retrieves the project details for the supplied project internal id.

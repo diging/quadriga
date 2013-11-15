@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workbench.ModifyProjectManagerDAO;
+import edu.asu.spring.quadriga.dao.workbench.IModifyProjectManagerDAO;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
-public class ModifyProjectManagerDAOImpl extends DAOConnectionManager implements ModifyProjectManagerDAO {
+public class ModifyProjectManagerDAO extends DAOConnectionManager implements IModifyProjectManagerDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -31,7 +31,7 @@ public class ModifyProjectManagerDAOImpl extends DAOConnectionManager implements
 	@Autowired
 	private ProjectDTOMapper projectDTOMapper;
 	
-	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectManagerDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectManagerDAO.class);
 	
 	/**
 	 * This method transfers the project ownership to another user

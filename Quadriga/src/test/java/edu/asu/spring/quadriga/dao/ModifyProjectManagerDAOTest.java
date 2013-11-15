@@ -13,9 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.ModifyProjectManagerDAO;
-import edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO;
-import edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAOImpl;
+import edu.asu.spring.quadriga.dao.workbench.IModifyProjectManagerDAO;
+import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
+import edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAO;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -36,11 +36,11 @@ public class ModifyProjectManagerDAOTest {
     private IUserManager userManager;
 	
 	@Autowired
-	ModifyProjectManagerDAO modifyProjectManagerDAO;
+	IModifyProjectManagerDAO modifyProjectManagerDAO;
 	
 
 	@Autowired
-	RetrieveProjectManagerDAO retrieveProjectManagerDAO;
+	IRetrieveProjectManagerDAO retrieveProjectManagerDAO;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -63,7 +63,7 @@ public class ModifyProjectManagerDAOTest {
 		
 		for(String query : databaseQuery)
 		{
-			((ModifyProjectManagerDAOImpl)modifyProjectManagerDAO).setupTestEnvironment(query);
+			((ModifyProjectManagerDAO)modifyProjectManagerDAO).setupTestEnvironment(query);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class ModifyProjectManagerDAOTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username IN ('projuser','projcollab')";
 		for(String query : databaseQuery)
 		{
-			((ModifyProjectManagerDAOImpl)modifyProjectManagerDAO).setupTestEnvironment(query);
+			((ModifyProjectManagerDAO)modifyProjectManagerDAO).setupTestEnvironment(query);
 		}	
 	}
 	
