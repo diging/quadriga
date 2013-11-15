@@ -40,6 +40,7 @@ public class DspaceManagerDAO extends DAOConnectionManager implements IDspaceMan
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("DspaceKeysDTO.findByUsername");
+			query.setParameter("username", username);
 			DspaceKeysDTO dspaceKeysDTO = (DspaceKeysDTO) query.uniqueResult();
 			return dspaceDTOMapper.getIDspaceKeys(dspaceKeysDTO);
 			

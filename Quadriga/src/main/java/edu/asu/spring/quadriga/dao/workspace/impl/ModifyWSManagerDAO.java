@@ -56,8 +56,8 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IModifyW
 			
 			ProjectWorkspaceDTO projectWorkspaceDTO = new ProjectWorkspaceDTO();
 			projectWorkspaceDTO.setProjectWorkspaceDTOPK(new ProjectWorkspaceDTOPK(projectId, workspaceDTO.getWorkspaceid()));
-			projectWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
-			projectWorkspaceDTO.setProjectDTO((ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId));
+			/*projectWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
+			projectWorkspaceDTO.setProjectDTO((ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId));*/
 			projectWorkspaceDTO.setCreatedby(workspaceDTO.getCreatedby());
 			projectWorkspaceDTO.setCreateddate(new Date());
 			projectWorkspaceDTO.setUpdatedby(workspaceDTO.getUpdatedby());
