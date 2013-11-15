@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.sql.IUserManagerDAO;
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -47,6 +49,9 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private IEmailNotificationManager emailManager;
 
+	@Autowired
+	private IUserManagerDAO usermanagerDAO;
+	
 	public IEmailNotificationManager getEmailManager() {
 		return emailManager;
 	}
@@ -330,24 +335,24 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public int addAccountRequest(String userId) throws QuadrigaStorageException {
 		int iUserStatus;
 
 		//Get all open user requests
-		List<IUser> listUsers = dbConnect.getUserRequests();
+		List<IUser> listUsers = usermanagerDAO.getUserRequests();
 
 		//Check if an open request is already placed for the userid
 		for(IUser user:listUsers)
 		{
 			if(user.getUserName().equalsIgnoreCase(userId))
 			{
-				iUserStatus = 0;
-				return iUserStatus;
+				return FAILURE;
 			}
 		}
 
 		//Place a new access request
-		iUserStatus = dbConnect.addAccountRequest(userId);
+		iUserStatus = usermanagerDAO.addAccountRequest(userId);
 		
 		//Check the status of the request
 		if(iUserStatus == SUCCESS)

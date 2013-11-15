@@ -65,8 +65,6 @@ public class UserController {
 		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles();
 		model.addAttribute("quadrigaroles",quadrigaRoles);
 		model.addAttribute("quadrolessize",quadrigaRoles.size());
-		
-		
 
 		return "auth/users/manage";
 	}
