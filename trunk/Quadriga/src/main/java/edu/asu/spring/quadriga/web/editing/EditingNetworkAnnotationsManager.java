@@ -67,7 +67,7 @@ public class EditingNetworkAnnotationsManager {
 		return "{ success: true; }";
 	}
 	
-	@RequestMapping(value = "/auth/editing/saveAnnotation/{networkId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/auth/editing/getAnnotation/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String getAnnotationtoToNode(HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
