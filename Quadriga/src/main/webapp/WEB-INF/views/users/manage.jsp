@@ -196,9 +196,11 @@
 			<thead>
 				<tr>
 					<th>Username</th>
-					 <c:forEach var="i" begin="1" end="${quadrolessize}">
-                      <th>${quadrigaroles.getName}</th>
-                      </c:forEach>
+					<th>Admin</th>
+					<th>Standard User</th>
+					<th>Restricted User</th>
+					<th>Collaborator</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
