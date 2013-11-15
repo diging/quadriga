@@ -164,6 +164,8 @@ public class EditorManager implements IEditorManager {
 		String msg = "";
 		try{
 			msg = dbConnect.updateAssignedNetworkStatus(networkId, status);
+			//TODO: Get the network owner details based on network id
+			//TODO: Send email to owner
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
