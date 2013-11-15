@@ -202,4 +202,6 @@ public interface IDictionaryManager {
 	public abstract String addDictionaryItems(DictionaryItem dictionartItems, String[] values,
 			String dictionaryId) throws QuadrigaStorageException;
 
+	public abstract String getDictionaryId(String dictName) throws QuadrigaStorageException;
+
 }

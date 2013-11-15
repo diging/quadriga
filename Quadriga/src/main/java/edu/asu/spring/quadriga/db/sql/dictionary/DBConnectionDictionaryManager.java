@@ -1037,5 +1037,54 @@ public class DBConnectionDictionaryManager extends ADBConnectionManager implemen
 		}
 		
 	}
+	
+	@Override
+	public String getDictionaryId(String dictName) throws QuadrigaStorageException
+	{
+		String dbCommand;
+		String dictId="";
+		CallableStatement sqlStatement;
+		//command to call the SP
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_DICTIONARY_ID  + "(?,?)";
+
+		//get the connection
+		getConnection();
+		//establish the connection with the database
+		try
+		{
+			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
+
+			//adding the input variables to the SP
+			sqlStatement.setString(1, dictName);
+
+			//adding output variables to the SP
+			sqlStatement.registerOutParameter(2,Types.VARCHAR);
+
+			sqlStatement.execute();
+			ResultSet resultSet = sqlStatement.getResultSet();
+			if(resultSet !=null){ 
+				while (resultSet.next()) { 
+					dictId =resultSet.getString(1);
+				} 
+			}
+			//String errmsg = sqlStatement.getString(2);
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally
+		{
+			closeConnection();
+		}
+
+		return dictId;
+
+	}
 
 }

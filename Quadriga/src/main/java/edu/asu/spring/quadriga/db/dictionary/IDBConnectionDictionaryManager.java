@@ -166,4 +166,6 @@ public interface IDBConnectionDictionaryManager {
 	
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
+	public abstract String getDictionaryId(String dictName) throws QuadrigaStorageException;
+
 }
