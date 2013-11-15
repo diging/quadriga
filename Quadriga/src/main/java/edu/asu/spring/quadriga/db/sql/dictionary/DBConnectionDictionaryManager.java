@@ -143,7 +143,7 @@ public class DBConnectionDictionaryManager extends ADBConnectionManager implemen
 			if(resultSet !=null){ 
 				while (resultSet.next()) { 
 					role=(resultSet.getString(1));
-					logger.info("role : "+role);
+					logger.debug("role : "+role);
 				} 
 			}
 			errmsg = sqlStatement.getString(3);
@@ -429,7 +429,7 @@ public class DBConnectionDictionaryManager extends ADBConnectionManager implemen
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, dictionaryId);
-			logger.info("dictionary id:"+dictionaryId);
+			logger.debug("dictionary id:"+dictionaryId);
 
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
@@ -480,7 +480,7 @@ public class DBConnectionDictionaryManager extends ADBConnectionManager implemen
 
 			//adding the input variables to the SP
 			sqlStatement.setString(1, dictionaryId);
-			logger.info("dictionary id:"+dictionaryId);
+			logger.debug("dictionary id:"+dictionaryId);
 
 			//adding output variables to the SP
 			sqlStatement.registerOutParameter(2,Types.VARCHAR);
@@ -608,7 +608,7 @@ public class DBConnectionDictionaryManager extends ADBConnectionManager implemen
 		getConnection();
 		logger.debug("dbCommand : "+dbCommand);
 		//establish the connection with the database
-		logger.info(dictinaryId +" , "+item+" , "+id +" , "+pos+" , "+ owner);
+		logger.debug(dictinaryId +" , "+item+" , "+id +" , "+pos+" , "+ owner);
 		try
 		{
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
