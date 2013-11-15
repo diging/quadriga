@@ -500,4 +500,10 @@ public class DictionaryManager implements IDictionaryManager {
 		
 	}
 	
+	@Override
+	public String getDictionaryId(String dictName) throws QuadrigaStorageException
+	{
+		String dictId = dbConnect.getDictionaryId(dictName);
+		return dictId;
+	}
 }

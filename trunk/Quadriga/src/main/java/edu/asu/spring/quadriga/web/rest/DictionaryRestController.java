@@ -1,13 +1,20 @@
 package edu.asu.spring.quadriga.web.rest;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -31,12 +38,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
+import edu.asu.spring.quadriga.domain.impl.dictionarylist.Dictionary;
+import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItem;
+import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItemList;
+import edu.asu.spring.quadriga.domain.impl.dictionarylist.QuadrigaDictDetailsReply;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -278,5 +296,91 @@ public class DictionaryRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		}
+	}
+	
+	
+	
+	
+	/**
+	 * Rest interface add a new dictionary with a list of dictionary
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/createdict
+	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/createdict
+	 * 
+	 * @author Lohith Dwaraka
+	 * @param userId
+	 * @param model
+	 * @return
+	 * @throws RestException 
+	 * @throws QuadrigaStorageException 
+	 * @throws QuadrigaAccessException 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "rest/workspace/{workspaceId}/createdict", method = RequestMethod.POST)
+	@ResponseBody
+	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
+			HttpServletResponse response, @RequestBody String xml,
+			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
+		IUser user = usermanager.getUserDetails(principal.getName());
+		
+		String dictName = request.getParameter("name");
+		String desc = request.getParameter("desc");
+		logger.debug("dict Name  :"+dictName+"   desc : "+desc);
+		IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+
+		if(dictName.isEmpty() || dictName == null){
+			response.setStatus(404);
+			return "Please provide dictionary name";
+		}
+		if(desc.isEmpty() || desc == null){
+			response.setStatus(404);
+			return "Please provide dictionary description";
+		}
+		logger.debug("XML : "+xml);
+		JAXBElement<QuadrigaDictDetailsReply> response1=null;
+		try{
+			JAXBContext context = JAXBContext.newInstance(QuadrigaDictDetailsReply.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+			InputStream is = new ByteArrayInputStream(xml.getBytes());
+			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
+		}catch(Exception e ){
+			logger.error("Error in unmarshalling",e);
+		}
+		if(response1 == null){
+			response.setStatus(404);
+			return "Concepts XML is not valid";
+		}
+		QuadrigaDictDetailsReply qReply= response1.getValue();
+		DictionaryItemList dictList =qReply.getDictionaryItemsList(); 
+		List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
+		if(dictionaryList.size()<1){
+			response.setStatus(404);
+			return "Concepts XML is not valid";
+		}
+		
+		dictionary.setDescription(desc);
+		dictionary.setOwner(user);
+		dictionary.setName(dictName);
+		
+		String reponse = dictionaryManager.addNewDictionary(dictionary);
+		String dictId = dictionaryManager.getDictionaryId(dictName);
+		
+		Iterator<DictionaryItem> I = dictionaryList.iterator();
+
+		while(I.hasNext()){
+			DictionaryItem d = I.next();
+			try{
+				dictionaryManager.addNewDictionariesItems(dictId, d.getTerm(), d.getUri(), d.getPos(), user.getUserName());
+			}catch(QuadrigaStorageException e){
+				logger.error("Errors in adding items",e);
+				response.setStatus(500);
+				response.setContentType(accept);
+				return "Fail";
+			}
+
+		}
+		response.setStatus(200);
+		response.setContentType(accept);
+		return dictId;
 	}
 }
