@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
@@ -355,7 +356,7 @@ public class DictionaryRestController {
 		List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
 		if(dictionaryList.size()<1){
 			response.setStatus(404);
-			return "Concepts XML is not valid";
+			return "Dictionary XML is not valid";
 		}
 		
 		dictionary.setDescription(desc);
@@ -382,5 +383,82 @@ public class DictionaryRestController {
 		response.setStatus(200);
 		response.setContentType(accept);
 		return dictId;
+	}
+	
+	
+	/**
+	 * Rest interface for uploading XML for concept collection
+	 * http://<<URL>:<PORT>>/quadriga/rest/syncconcepts/{conceptCollectionID}
+	 * hhttp://localhost:8080/quadriga/rest/syncconcepts/
+	 * 
+	 * @author Lohith Dwaraka
+	 * @param request
+	 * @param response
+	 * @param xml
+	 * @param accept
+	 * @return
+	 * @throws QuadrigaException
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
+	 * @throws JAXBException 
+	 * @throws QuadrigaAccessException 
+	 * @throws QuadrigaStorageException 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "rest/syncdictionary/{dictionaryID}", method = RequestMethod.POST)
+	public String getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,HttpServletRequest request,
+			HttpServletResponse response, @RequestBody String xml,
+			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaAccessException, QuadrigaStorageException {
+		IUser user = usermanager.getUserDetails(principal.getName());
+		if (xml.equals("")) {
+			response.setStatus(500);
+			return "Please provide XML in body of the post request.";
+
+		} else {
+
+			logger.debug("XML : "+xml);
+			
+			JAXBElement<QuadrigaDictDetailsReply> response1=null;
+			try{
+				JAXBContext context = JAXBContext.newInstance(QuadrigaDictDetailsReply.class);
+				Unmarshaller unmarshaller = context.createUnmarshaller();
+				unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+				InputStream is = new ByteArrayInputStream(xml.getBytes());
+				response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
+			}catch(Exception e ){
+				logger.error("Error in unmarshalling",e);
+			}
+			if(response1 == null){
+				response.setStatus(404);
+				return "Concepts XML is not valid";
+			}
+			QuadrigaDictDetailsReply qReply= response1.getValue();
+			DictionaryItemList dictList =qReply.getDictionaryItemsList(); 
+			List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
+			if(dictionaryList.size()<1){
+				response.setStatus(404);
+				return "Dictionary XML is not valid";
+			}
+			
+
+			Iterator<DictionaryItem> I = dictionaryList.iterator();
+
+			while(I.hasNext()){
+				DictionaryItem d = I.next();
+				try{
+					dictionaryManager.addNewDictionariesItems(dictionaryID, d.getTerm(), d.getUri(), d.getPos(), user.getUserName());
+				}catch(QuadrigaStorageException e){
+					logger.error("Errors in adding items",e);
+					response.setStatus(500);
+					response.setContentType(accept);
+					return "Fail";
+				}
+
+			}
+			response.setStatus(200);
+			response.setContentType(accept);
+			return "Success";
+		}
 	}
 }
