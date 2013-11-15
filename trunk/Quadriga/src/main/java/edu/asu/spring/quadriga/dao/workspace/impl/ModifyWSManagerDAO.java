@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.workspace;
+package edu.asu.spring.quadriga.dao.workspace.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
+import edu.asu.spring.quadriga.dao.workspace.IModifyWSManagerDAO;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
@@ -24,7 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 
 @Repository
-public class ModifyWSManagerDAOImpl extends DAOConnectionManager implements IModifyWSManagerDAO {
+public class ModifyWSManagerDAO extends DAOConnectionManager implements IModifyWSManagerDAO {
 
 	@Autowired
 	WorkspaceDTOMapper workspaceDTOMapper;
@@ -33,7 +35,7 @@ public class ModifyWSManagerDAOImpl extends DAOConnectionManager implements IMod
 	SessionFactory sessionFactory;
 	
 
-	private static final Logger logger = LoggerFactory.getLogger(ModifyWSManagerDAOImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(ModifyWSManagerDAO.class);
 	
 	/**
 	 * This adds a workspace record into the database.
@@ -53,7 +55,7 @@ public class ModifyWSManagerDAOImpl extends DAOConnectionManager implements IMod
 			List<ProjectWorkspaceDTO> projectWorkspaceList = workspaceDTO.getProjectWorkspaceDTOList();
 			
 			ProjectWorkspaceDTO projectWorkspaceDTO = new ProjectWorkspaceDTO();
-			//projectWorkspaceDTO.setProjectWorkspaceDTOPK(new ProjectWorkspaceDTOPK(projectId, workspaceDTO.getWorkspaceid()));
+			projectWorkspaceDTO.setProjectWorkspaceDTOPK(new ProjectWorkspaceDTOPK(projectId, workspaceDTO.getWorkspaceid()));
 			projectWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
 			projectWorkspaceDTO.setProjectDTO((ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId));
 			projectWorkspaceDTO.setCreatedby(workspaceDTO.getCreatedby());
@@ -66,6 +68,7 @@ public class ModifyWSManagerDAOImpl extends DAOConnectionManager implements IMod
 				projectWorkspaceList = new ArrayList<ProjectWorkspaceDTO>();
 			}
 			projectWorkspaceList.add(projectWorkspaceDTO);
+			workspaceDTO.setProjectWorkspaceDTOList(projectWorkspaceList);
 			sessionFactory.getCurrentSession().save(workspaceDTO);
 		}
 		catch(Exception e)

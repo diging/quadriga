@@ -21,7 +21,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.dao.sql.impl.DspaceManagerDAO;
+import edu.asu.spring.quadriga.dao.sql.IDspaceManagerDAO;
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -72,7 +72,7 @@ public class DspaceManager implements IDspaceManager{
 			.getLogger(DspaceManager.class);
 
 	@Autowired
-	private DspaceManagerDAO dspaceManagerDAO;
+	private IDspaceManagerDAO dspaceManagerDAO;
 	
 	@Override
 	public Properties getDspaceMessages() {

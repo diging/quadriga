@@ -5,7 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface RetrieveProjectManagerDAO {
+public interface IRetrieveProjectManagerDAO {
 
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;

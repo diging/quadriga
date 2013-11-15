@@ -4,7 +4,7 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface ModifyProjectManagerDAO {
+public interface IModifyProjectManagerDAO {
 
 	public abstract void transferProjectOwnerRequest(String projectId,
 			String oldOwner, String newOwner, String collabRole)
