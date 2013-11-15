@@ -29,6 +29,11 @@
 		<beans:property name="location" value="classpath:locale/contentdescriptors.properties"></beans:property>
 	</beans:bean>
 	
+		<beans:bean id="database_error_msgs"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean" >
+		<beans:property name="location" value="classpath:locale/database_error_msgs.properties"></beans:property>
+	</beans:bean>
+	
 	<beans:bean id="localeResolver"
     	 class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 	</beans:bean>

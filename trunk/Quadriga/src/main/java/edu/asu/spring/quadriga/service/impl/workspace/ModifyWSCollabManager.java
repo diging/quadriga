@@ -1,10 +1,10 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSCollabManager;
+import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCollaboratorManagerDAO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 
@@ -13,8 +13,7 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
 {
 	
 	@Autowired
-	@Qualifier("DBConnectionModifyWSCollabManagerBean")
-	IDBConnectionModifyWSCollabManager dbConnect;
+	IWorkspaceCollaboratorManagerDAO workspaceCollaboratorDAO;
 	
 	/**
 	 * This method adds the collaborator to a workspace
@@ -26,9 +25,10 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public void addWorkspaceCollaborator(String collaborator,String collabRoleList,String workspaceid,String userName) throws QuadrigaStorageException
 	{
-		dbConnect.addWorkspaceCollaborator(collaborator, collabRoleList, workspaceid, userName);
+		workspaceCollaboratorDAO.addWorkspaceCollaborator(collaborator, collabRoleList, workspaceid, userName);
 	}
 	
 	/**
@@ -39,14 +39,16 @@ public class ModifyWSCollabManager implements IModifyWSCollabManager
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public void deleteWorkspaceCollaborator(String collaborator,String workspaceid) throws QuadrigaStorageException
 	{
-		dbConnect.deleteWorkspaceCollaborator(collaborator, workspaceid);
+		workspaceCollaboratorDAO.deleteWorkspaceCollaborator(collaborator, workspaceid);
 	}
 	
 	@Override
+	@Transactional
 	public void updateWorkspaceCollaborator(String workspaceId,String collabUser,String collaboratorRole,String userName) throws QuadrigaStorageException
 	{
-		dbConnect.updateWorkspaceCollaborator(workspaceId, collabUser, collaboratorRole, userName);
+		workspaceCollaboratorDAO.updateWorkspaceCollaborator(workspaceId, collabUser, collaboratorRole, userName);
 	}
 }
