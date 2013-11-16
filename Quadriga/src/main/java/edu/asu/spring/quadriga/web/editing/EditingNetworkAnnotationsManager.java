@@ -50,19 +50,27 @@ public class EditingNetworkAnnotationsManager {
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
 			@RequestParam("annotText") String annotationText,
-			@RequestParam("nodename") String nodeName, 
+			@RequestParam("nodename") String id, 
+			
 			//@RequestParam("objecttype") String objectType, 
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		logger.info("network ID:" + networkId);
 		String objectType = "node";
 		try {
-			dbConnectionEditManager.addAnnotationToNetwork(networkId, nodeName,
+			String arr[] = null;
+			arr = dbConnectionEditManager.getAnnotation(objectType,id , user.getUserName());
+			if(arr[0] == null && arr[1] == null){
+			dbConnectionEditManager.addAnnotationToNetwork(networkId, id,
 					annotationText, user.getUserName(),objectType);
+			} else {
+				dbConnectionEditManager.updateAnnotationToNetwork(arr[1], annotationText);
+			}
+			
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.info("Annotation added to the node:" + nodeName);
+		logger.info("Annotation added to the node:" + id);
 
 		return "{ success: true; }";
 	}
@@ -80,7 +88,9 @@ public class EditingNetworkAnnotationsManager {
 		String annotation = "";
 		
 		try {
-			annotation = dbConnectionEditManager.getAnnotation(type,nodeId);
+			String resultArr[] = null;
+			resultArr = dbConnectionEditManager.getAnnotation(type,nodeId,user.getUserName());
+			annotation = resultArr[0];
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}

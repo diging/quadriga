@@ -153,7 +153,7 @@ function init(json, networkId, path) {
 						// connections.
 						// var html = "<h4>" + node.name + "</h4><b>
 						// connections:</b><ul><li>",
-						var type ="node";
+						
 						var html = "";
 						
 						
@@ -175,16 +175,28 @@ function init(json, networkId, path) {
 						//$jit.id('inner-details').innerHTML = html1;
 						
 						$('#annot_node').click(function() {
-							  alert( "Handler for .click() called." );
-							  
+							var type1 ="node";
+							 // alert( "Handler for .click() called." );
+							  var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
+								+ "/auth/editing/saveAnnotation/";
+	  html1 += networkId + " method='POST' >";
+	  html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+	  html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+		+ node.id + " />";
+	  html1 += "<input type='button' id='annot_submit' value='submit'>";
+	  html1 += "</div></form>";
+	  $jit.id('inner-details').innerHTML = path + html1;
 							  $.ajax({
 									url : path+"/auth/editing/getAnnotation/"+networkId,
-									type : "POST",
+									type : "GET",
 									//data : $('#nodename').serialize(),
-									data: "nodeid="+node.id+"&type="+type,
+									data: "nodeid="+node.id+"&type="+type1,
 									success : function(data) {
 										alert("done");
-										$('#annotText').innerHTML = data;
+										//alert("data:"+data);
+										$('#text').append(data);
+										//$jit.id('inner-details').innerHTML = path + html1;
+										
 									},
 									error: function() {
 										alert("error");
@@ -192,27 +204,20 @@ function init(json, networkId, path) {
 								});
 							  event.preventDefault();
 							  
-							  var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
-														+ "/auth/editing/saveAnnotation/";
-							  html1 += networkId + " method='POST' >";
-							  html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-							  html1 += "<input  type='hidden' name='nodename' id='nodename' value="
-								+ node.id + " />";
-							  html1 += "<input type='button' id='annot_submit' value='submit'>";
-							  html1 += "</div></form>";
-							  $jit.id('inner-details').innerHTML = path + html1;
+							  
 							  $('#annot_submit').click(function(event) {
-									var text = $('#text').val();  
+									var annottext = $('#text').val();  
 								    var nodename = $('#nodename').val(); 
 								    var url = path+"/auth/editing/saveAnnotation/"+networkId;
-								    alert("text:"+text);
-								    alert("nodename:"+nodename);
-								    alert("url:"+url);
+								  //  alert("text:"+annottext);
+								 //   alert("nodename:"+nodename);
+								 //   alert("url:"+url);
 									$.ajax({
 										url : $('#annot_form').attr("action"),
 										type : "POST",
 										//data : $('#nodename').serialize(),
-										data: $('#annot_form').serialize(),
+										//data: $('#annot_form').serialize(),
+										data :"nodename="+node.id+"&annotText="+annottext,
 										success : function() {
 											
 											alert("done");

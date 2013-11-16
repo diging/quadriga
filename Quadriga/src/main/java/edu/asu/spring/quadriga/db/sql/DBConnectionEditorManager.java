@@ -686,7 +686,13 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 			sqlStatement.execute();
 
 			errmsg = sqlStatement.getString(6);
-			return errmsg;
+			if(errmsg.isEmpty()){
+				return errmsg;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+			
 
 		} catch (SQLException e) {
 			errmsg = "DB related issue";
@@ -701,14 +707,16 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 		return errmsg;
 	}
 	
-	public String getAnnotation(String type, String id) throws QuadrigaStorageException{
+	public String[] getAnnotation(String type, String id,String userId) throws QuadrigaStorageException{
 		
 		String dbCommand;
 		String errmsg="";
 		String annotationText = "";
+		String annotationId = "";
+		String[] arr = new String[2];
 		CallableStatement sqlStatement;
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_ANNOTATIONS_TO_NETWORKS  + "(?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_ANNOTATIONS  + "(?,?,?,?)";
 		//get the connection
 		getConnection();
 		//establish the connection with the database
@@ -718,11 +726,12 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 
 			//adding the input variables to the SP
-			sqlStatement.setString(1, id); 
-			sqlStatement.setString(2, type);  
-
+			sqlStatement.setString(1, userId);
+			sqlStatement.setString(2, id); 
+			sqlStatement.setString(3, type);  
+			
 			//adding output variables to the SP
-			sqlStatement.registerOutParameter(3,Types.VARCHAR);
+			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 			
 			sqlStatement.execute();
 			
@@ -730,12 +739,15 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 			if(resultSet !=null){ 
 				while (resultSet.next()) {
 					
-					annotationText = resultSet.getString(3);
+					annotationText = resultSet.getString(1);
+					annotationId = resultSet.getString(2);
+					arr[0] = annotationText;
+					arr[1] = annotationId;
 				} 
 			}
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(4);
 			if(errmsg.isEmpty()){
-				return annotationText;
+				return arr;
 			}else{
 				throw new QuadrigaStorageException("Something went wrong on DB side");
 			}
@@ -755,10 +767,71 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 		{
 			closeConnection();
 		}
-		return annotationText;		
+		return arr;		
 		
 		
 		
+	}
+
+	/**
+	 * Method to update Annotation to a network
+	 * 
+	 * @returns success/fail
+	 * 
+	 * @throws SQLException
+	 * 
+	 * @author Sowjanya Ambati
+	 * 
+	 */
+
+	@Override
+	public String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException {
+
+		String dbCommand;
+		String errmsg = "";
+		
+		CallableStatement sqlStatement;
+
+		// command to call the SP
+		dbCommand = DBConstants.SP_CALL + " "
+				+ DBConstants.UPDATE_ANNOTATIONS_TO_NETWORKS + "(?,?,?)";
+
+		// get the connection
+		getConnection();
+		logger.debug("dbCommand : " + dbCommand);
+		// establish the connection with the database
+		try {
+			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
+
+			// adding the input variables to the SP
+			sqlStatement.setString(1, annotationText);
+			sqlStatement.setString(2, annotationId);
+		
+			// adding output variables to the SP
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+
+			sqlStatement.execute();
+
+			errmsg = sqlStatement.getString(3);
+			if(errmsg.isEmpty()){
+				return errmsg;
+			}else{
+				throw new QuadrigaStorageException("Something went wrong on DB side");
+			}
+
+			
+
+		} catch (SQLException e) {
+			errmsg = "DB related issue";
+			logger.error(errmsg,e);
+			throw new QuadrigaStorageException();
+		} catch (Exception e) {
+			errmsg = "Exception outside DB";
+			logger.error(errmsg,e);
+		} finally {
+			closeConnection();
+		}
+		return errmsg;
 	}
 	
 }
