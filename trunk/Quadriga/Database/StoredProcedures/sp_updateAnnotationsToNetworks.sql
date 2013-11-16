@@ -1,5 +1,5 @@
 /*******************************************
-Name          : sp_addAnnotaionsToNetworks
+Name          : sp_updateAnnotaionsToNetworks
 
 Description   : adds the annotations to
 				tbl_network_annotations table
@@ -12,15 +12,12 @@ Modified Date : 10/16/2013
 
 ********************************************/
 
-DROP PROCEDURE IF EXISTS sp_addAnnotaionsToNetworks;
+DROP PROCEDURE IF EXISTS sp_updateAnnotaionsToNetworks;
 DELIMITER $$
-CREATE PROCEDURE sp_addAnnotaionsToNetworks	
+CREATE PROCEDURE sp_updateAnnotaionsToNetworks	
 (
-  IN  innetworkid VARCHAR(200),
-  IN  inid    VARCHAR(300),
-  IN  inannotaiontext    TEXT,
-  IN inuserid VARCHAR(50) ,
-  IN inobjecttype VARCHAR(50),
+  IN  inannotationtext    TEXT,
+  IN  inannotationid	VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
@@ -31,39 +28,25 @@ BEGIN
     SET errmsg = "SQL exception has occurred";
 	
     -- validating the input variables
-	IF (innetworkid IS NULL OR innetworkid = "")
-	 THEN SET errmsg = "Network ID cannot be empty";
-	END IF;
+	
       
     IF (inannotaiontext IS NULL OR inannotaiontext = "")
 	 THEN SET errmsg = "Annotation text cannot be empty";
 	END IF;
-	
-	
-	IF (inuserid IS NULL OR inuserid = "")
-	 THEN SET errmsg = "User id cannot be empty";
-	END IF;
-	
 	  
-	IF (inid IS NULL OR inid = "")
+	IF (annotationId IS NULL OR annotationId = "")
 	 THEN SET errmsg = "Object id cannot be empty";
 	END IF;
 
-	IF (inobjecttype IS NULL OR inobjecttype = "")
-	 THEN SET errmsg = "Object Type cannot be empty";
-	END IF;
+	
 	
     -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
          START TRANSACTION;
-         SET uniqueId = UUID_SHORT();
-         SET annotationId = CONCAT('ANNOT_',CAST(uniqueId AS CHAR));
-            INSERT 
-              INTO tbl_network_annotations(networkid,id,annotationtext,annotationid,userid,objecttype,
-                         updatedby,updateddate,createdby,createddate)
-			 VALUES (innetworkid,inid,inannotaiontext,annotationId,inuserid,inobjecttype,
-                     inuserid,NOW(),inuserid,NOW());	
+            UPDATE 
+               tbl_network_annotations set annotationtext = inannotationtext
+			 WHERE annotationid =inannotationId;	
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;

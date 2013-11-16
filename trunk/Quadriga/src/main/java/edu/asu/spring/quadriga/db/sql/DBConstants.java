@@ -113,7 +113,8 @@ public interface DBConstants
 	public static final String ARCHIVE_NETWORK_STATEMENT ="sp_archiveNetworkStatement";
 	public static final String ARCHIVE_NETWORK = "sp_archiveNetwork";
 	public static final String ADD_ANNOTATIONS_TO_NETWORKS = "sp_addAnnotaionsToNetworks";
-	
+	public static final String GET_ANNOTATIONS = "sp_getAnnotations";
+	public static final String UPDATE_ANNOTATIONS_TO_NETWORKS = "sp_updateAnnotaionsToNetworks";
 	
 	//Editing
 	

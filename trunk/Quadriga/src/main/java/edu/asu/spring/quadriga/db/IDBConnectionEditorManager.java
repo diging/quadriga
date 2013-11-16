@@ -38,7 +38,8 @@ public interface IDBConnectionEditorManager {
 	public abstract String addAnnotationToNetwork(String networkId, String nodeName,
 			String annotationText, String userId,String objectType)
 			throws QuadrigaStorageException;
-	public abstract String getAnnotation(String type, String id) throws QuadrigaStorageException;
+	public abstract String[] getAnnotation(String type, String id,String userid) throws QuadrigaStorageException;
+	public abstract String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException;
 
 
 }
