@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.profile.IViafManager;
 
 
-@Service
+
 public class ViafManager implements IViafManager {
 	
 	@Inject
@@ -44,8 +44,13 @@ public class ViafManager implements IViafManager {
 		List<ViafReply.Items> items = null;
 		String fullUrl;
 		
+
 			fullUrl = viafURL.trim() + searchViafURLPath.trim() + item.trim() + searchViafURLPath1.trim() + startIndex.trim() + searchViafURLPath2.trim();
+			//fullUrl = fullUrl.replaceAll("\n", "");
+			//fullUrl = fullUrl.replaceAll("\t", "");
+
 			
+
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
 			items = rep.getItems();
 		

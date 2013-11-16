@@ -21,11 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.implementation.Profile;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
+import edu.asu.spring.quadriga.profile.impl.ProfileManager;
 import edu.asu.spring.quadriga.profile.impl.SearchResult;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
@@ -43,6 +45,9 @@ public class HomeController {
 	
 	@Autowired
 	private IUserProfileManager profileManager;
+	
+	@Autowired
+	private ProfileManager profilemanager;
 	
 	@Autowired
 	private IUserManager userManager;
@@ -125,6 +130,14 @@ public class HomeController {
 	
 
 	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
+	public String showProfile(Model model, Principal principal) throws QuadrigaException, QuadrigaStorageException
+	{
+		List<ISearchResult> userProfile = profilemanager.getUserProfile();
+		model.addAttribute("userProfile", userProfile);
+		return "auth/home/showProfile";
+	}
+	
+	@RequestMapping(value="auth/profile/addnew", method = RequestMethod.GET)
 	public String showSearchForm(Model model, Principal principal) throws QuadrigaStorageException
 	{
 		
@@ -141,9 +154,11 @@ public class HomeController {
 	@RequestMapping(value = "auth/profile/search", method = RequestMethod.GET)
 	public String search(Model model, Principal principal, @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean) throws QuadrigaStorageException
 	{
+		
 		serviceId = serviceBackBean.getId();
 		model.addAttribute("serviceid", serviceId);
 		String term = serviceBackBean.getTerm();
+		
 		model.addAttribute("term", term);
 		
 		serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
