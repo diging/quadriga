@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.profile.impl;
+/*package edu.asu.spring.quadriga.profile.impl;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import org.springframework.web.client.RestTemplate;
 @XmlRootElement(name="rss")
 public class ViafChannelReply {
 	
-	/*@Inject
+	@Inject
 	@Named("restTemplate")
-	RestTemplate restTemplate;*/
+	RestTemplate restTemplate;
 	
 	@XmlElement(name="item")
 	private List<ViafItemReply> itemList;
@@ -29,3 +29,4 @@ public class ViafChannelReply {
 
 	
 }
+*/

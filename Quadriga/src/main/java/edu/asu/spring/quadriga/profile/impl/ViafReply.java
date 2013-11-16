@@ -1,45 +1,51 @@
 package edu.asu.spring.quadriga.profile.impl;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {"items"})
-@XmlRootElement(name="channel", namespace="http://a9.com/-/spec/opensearch/1.1/")
+@XmlRootElement(name="rss")
 public class ViafReply {
 	
-	@XmlElementWrapper(name="channel")
+	@XmlElement(name="channel")
+	private Items channel;
+	
+	public Items getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Items channel) {
+		this.channel = channel;
+	}
+
+	
+	/*@XmlElementWrapper(name="rss")
 	@XmlElement(name="item")
 	private List<ViafReply.Items> items;
 	
 	//@XmlPath
 	public List<ViafReply.Items> getItems() {
 		return items;
-	}
+	} 
 	public void setItems(List<ViafReply.Items> items) {
 		this.items = items;
 	}
 
 
 	@XmlAccessorType(XmlAccessType.FIELD)
-	@XmlType(propOrder={"title","link","pubDate","guid"})
 	@XmlRootElement(name="item")
 	public static class Items {
 		
-		@XmlElement(required=true)
+		@XmlElement(name="title")
 		private String title;
-		@XmlElement(required=true)
+		@XmlElement(name="link")
 		private String link;
-		@XmlElement(required=true)
+		@XmlElement(name="pubDate")
 		private String pubDate;
-		@XmlElement(required=true)
+		@XmlElement(name="guid")
 		private String guid;
 		
 		public String getTitle() {
@@ -66,6 +72,5 @@ public class ViafReply {
 		public void setGuid(String guid) {
 			this.guid = guid;
 		}
-	}
-
+	}*/
 }

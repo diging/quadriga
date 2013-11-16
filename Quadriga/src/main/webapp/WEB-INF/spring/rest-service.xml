@@ -82,7 +82,7 @@
 	<bean id="searchViafURLPath2" class="java.lang.String">
 		<constructor-arg>
 			<value>
-			&amp;sortKeys=holdingscount&amp;httpAccept=application/rss%2bxml
+			&amp;sortKeys=holdingscount&amp;httpAccept=application/rss+xml
 			</value>
 		</constructor-arg>
 	</bean>
@@ -117,6 +117,23 @@
 		</property>
 	</bean>
  
+ 	<bean id="restTemplateViaf" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				<!-- <bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+				</bean> -->
+				<bean
+					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+					<property name="marshaller" ref="jaxbMarshaller" />
+					<property name="unmarshaller" ref="jaxbMarshaller" />
+				</bean>
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
 			
         
     

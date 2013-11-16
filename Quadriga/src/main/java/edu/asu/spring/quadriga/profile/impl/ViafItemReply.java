@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.profile.impl;
+/*package edu.asu.spring.quadriga.profile.impl;
 
 import javax.xml.bind.annotation.XmlElement;
 
@@ -41,3 +41,4 @@ public class ViafItemReply {
 	
 
 }
+*/
