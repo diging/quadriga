@@ -43,16 +43,17 @@
 		manager-password="LDAPP@55wd" /> 
 
 	<authentication-manager alias="authenticationManager" erase-credentials="false">
-		<ldap-authentication-provider user-context-mapper-ref="QuadrigaRoleMapper"
-			user-search-filter="(uid={0})" user-search-base="ou=users,o=diging"
-			group-search-filter="(uniqueMember={0})" group-search-base="ou=groups, o=diging"
-			group-role-attribute="cn">
-		</ldap-authentication-provider>
 		<authentication-provider>
 	        <user-service>
 	       		<user name="admin" password="admin" authorities="ROLE_QUADRIGA_USER_ADMIN, ROLE_QUADRIGA_USER_STANDARD, ROLE_QUADRIGA_USER_COLLABORATOR" />
 	        </user-service>
    		</authentication-provider>
+		<ldap-authentication-provider user-context-mapper-ref="QuadrigaRoleMapper"
+			user-search-filter="(uid={0})" user-search-base="ou=users,o=diging"
+			group-search-filter="(uniqueMember={0})" group-search-base="ou=groups, o=diging"
+			group-role-attribute="cn">
+		</ldap-authentication-provider>
+		
 	</authentication-manager>
 	
 </beans:beans>

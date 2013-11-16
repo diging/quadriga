@@ -7,7 +7,6 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.profile.IViafManager;
@@ -39,9 +38,9 @@ public class ViafManager implements IViafManager {
 	
 	
 	@Override
-	public List<ViafReply.Items> search (String item, String startIndex) {
+	public List<Item> search (String item, String startIndex) {
 		
-		List<ViafReply.Items> items = null;
+		List<Item> items = null;
 		String fullUrl;
 		
 
@@ -52,7 +51,7 @@ public class ViafManager implements IViafManager {
 			
 
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
-			items = rep.getItems();
+			items = rep.getChannel().getItems();
 		
 		return items;
 	}

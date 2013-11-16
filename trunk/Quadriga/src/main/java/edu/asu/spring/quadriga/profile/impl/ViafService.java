@@ -68,7 +68,11 @@ public class ViafService implements IService {
 
 		
 		
+
+		//List<Items> viafEntries = viafmanager.search(word, si);
+
 		//List<ViafReply.Items> viafEntries = viafmanager.search(word, si);
+
 		
 		List<HashMap<String,String>> viafEntries = viafmanager.search(word);
 		
@@ -93,11 +97,11 @@ public class ViafService implements IService {
 		/*if(viafEntries!=null)
 		{
 			
-			for(ViafReply.Items vi : viafEntries)
+			for(Items vi : viafEntries)
 			{
 				ISearchResult searchResult =searchResultFactory.getSearchResultObject();
-				searchResult.setName(vi.getTitle());
-				searchResult.setId(vi.getLink());
+//				searchResult.setName(vi.getTitle());
+//				searchResult.setId(vi.getLink());
 				searchResult.setDescription(vi.getPubDate());
 				//searchResult.setDescription(ce.getDescription());
 				searchResults.add(searchResult);

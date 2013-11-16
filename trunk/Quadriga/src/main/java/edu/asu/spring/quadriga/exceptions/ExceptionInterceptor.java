@@ -35,7 +35,7 @@ public class ExceptionInterceptor {
 			throw (RestException) t;
 		} else if ( t instanceof NullPointerException){
 			logger.error(t.getMessage(), t);
-			throw (QuadrigaException) t;
+			throw new QuadrigaException(t);
 		}
 		
 		else {
