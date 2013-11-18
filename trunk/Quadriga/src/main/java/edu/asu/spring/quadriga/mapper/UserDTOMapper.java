@@ -27,7 +27,6 @@ public class UserDTOMapper{
 	public IUser getUser(QuadrigaUserDTO userDTO)
 	{
 		IUser user = userFactory.createUserObject();
-		
 		user.setUserName(userDTO.getUsername());
 		user.setName(userDTO.getFullname());
 		user.setEmail(userDTO.getEmail());
@@ -63,6 +62,28 @@ public class UserDTOMapper{
 				user.setUserName(userRequestDTO.getUsername());
 				user.setName(userRequestDTO.getFullname());
 				user.setEmail(userRequestDTO.getEmail());
+				listUsers.add(user);
+			}
+		}
+		
+		return listUsers;
+	}
+	
+	public List<IUser> getUsers(List<QuadrigaUserDTO> usersDTO)
+	{
+		List<IUser> listUsers = null;
+		if(usersDTO != null)
+		{
+			IUser user = null;
+			listUsers = new ArrayList<IUser>();
+			
+			for(QuadrigaUserDTO userDTO : usersDTO)
+			{
+				user = userFactory.createUserObject();
+				user.setUserName(userDTO.getUsername());
+				user.setName(userDTO.getFullname());
+				user.setEmail(userDTO.getEmail());
+				user.setQuadrigaRoles(listQuadrigaUserRoles(userDTO.getQuadrigarole()));
 				listUsers.add(user);
 			}
 		}
