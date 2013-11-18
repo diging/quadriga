@@ -15,7 +15,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceDetails
 (
-  IN  inworkspaceid  VARCHAR(50),
+  IN  inworkspaceid  VARCHAR(150),
   IN  inuser         VARCHAR(30),
   OUT errmsg         VARCHAR(255)        
 )

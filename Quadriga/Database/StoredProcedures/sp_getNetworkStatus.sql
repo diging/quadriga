@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_getNetworkStatus
 (
   IN  innetworkowner  VARCHAR(20),
-  IN  innetworkid  VARCHAR(20),	
+  IN  innetworkid  VARCHAR(150),	
  OUT errmsg    VARCHAR(255)
 )
 BEGIN

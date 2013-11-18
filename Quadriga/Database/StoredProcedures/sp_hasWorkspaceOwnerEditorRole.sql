@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_hasWorkspaceOwnerEditorRole
 (
   IN  inowner  VARCHAR(20),
-  IN  inworkspaceid  VARCHAR(100),
+  IN  inworkspaceid  VARCHAR(150),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN

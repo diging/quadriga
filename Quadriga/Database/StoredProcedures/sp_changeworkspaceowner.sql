@@ -14,7 +14,7 @@ DROP PROCEDURE IF EXISTS sp_changeworkspaceowner;
 DELIMITER $$
 CREATE PROCEDURE sp_changeworkspaceowner
 (
-  IN  inworkspaceid     VARCHAR(100),
+  IN  inworkspaceid     VARCHAR(150),
   IN  inoldowner        VARCHAR(50),
   IN  innewowner        VARCHAR(50),
   IN  incollabrole      TEXT,

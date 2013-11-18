@@ -15,7 +15,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceNonCollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceNonCollaborators
 (
-	IN inworkspaceid	VARCHAR(100),
+	IN inworkspaceid	VARCHAR(150),
 	OUT errmsg		    VARCHAR(200)
 )
 BEGIN

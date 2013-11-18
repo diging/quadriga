@@ -12,8 +12,8 @@ Modified Date : 08/06/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_networks
 (
-  networkid       varchar(100)           NOT NULL ,
-  workspaceid     varchar(100)           NOT NULL ,
+  networkid       varchar(150)           NOT NULL ,
+  workspaceid     varchar(150)           NOT NULL ,
   networkname	varchar(100)           NOT NULL ,
   networkowner    VARCHAR(50)   NOT NULL ,
   accessibility   TINYINT       NOT NULL,

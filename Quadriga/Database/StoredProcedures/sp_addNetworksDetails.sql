@@ -17,7 +17,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_addNetworksDetails
 (
   IN  innetworkid    VARCHAR(100),
-  IN  inworkspaceid    VARCHAR(100),
+  IN  inworkspaceid    VARCHAR(150),
   IN  innetworkname	  VARCHAR(100),
   IN  innetworkowner    VARCHAR(50),
   IN  inaccessibility   TINYINT  ,

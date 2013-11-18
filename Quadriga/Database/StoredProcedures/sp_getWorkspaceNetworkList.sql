@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceNetworkList;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceNetworkList
 (
-  IN  inworkspaceid  VARCHAR(20),
+  IN  inworkspaceid  VARCHAR(150),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN

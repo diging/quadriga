@@ -14,7 +14,7 @@ DROP PROCEDURE IF EXISTS sp_addworkspacecollaborators;
 DELIMITER $$
 CREATE PROCEDURE sp_addworkspacecollaborators
 (
-  	IN inworkspaceid 		VARCHAR(100),
+  	IN inworkspaceid 		VARCHAR(150),
 	IN incollaboratoruser	VARCHAR(30),
 	IN incollaboratorrole	TEXT,
     IN inuser               VARCHAR(10),

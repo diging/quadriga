@@ -15,7 +15,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_deletewscollaborators
 (
   IN inusername    TEXT,
-  IN inworkspaceid VARCHAR(100),
+  IN inworkspaceid VARCHAR(150),
   OUT errmsg        VARCHAR(255)
 )
 BEGIN

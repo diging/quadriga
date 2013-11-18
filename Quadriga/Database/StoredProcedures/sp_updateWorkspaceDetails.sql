@@ -14,7 +14,7 @@ DROP PROCEDURE IF EXISTS sp_updateWorkspaceDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_updateWorkspaceDetails
 (
- IN  inworkspacename   VARCHAR(50),
+ IN  inworkspacename   VARCHAR(150),
  IN  indescription     TEXT,
  IN  inuser            VARCHAR(30),
  IN  inworkspaceid     VARCHAR(50),

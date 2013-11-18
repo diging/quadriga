@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS sp_addBitstreamToWorkspace;
 DELIMITER $$
 CREATE PROCEDURE sp_addBitstreamToWorkspace
 (
-  IN  inWorkspaceid     	VARCHAR(50),
+  IN  inWorkspaceid     	VARCHAR(150),
   IN  inCommunityid 		VARCHAR(20),
   IN  inCollectionid 		VARCHAR(20),
   IN  inItemid		 		VARCHAR(20),

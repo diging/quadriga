@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS sp_deleteBitstreamFromWorkspace;
 DELIMITER $$
 CREATE PROCEDURE sp_deleteBitstreamFromWorkspace
 (
-  IN  inWorkspaceid     	VARCHAR(50),
+  IN  inWorkspaceid     	VARCHAR(150),
   IN  inBitstreamid 		VARCHAR(20),
   IN  inUserName			VARCHAR(50),
   OUT errorMessage			VARCHAR(100)
