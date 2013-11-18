@@ -18,7 +18,7 @@ DELIMITER $$
 CREATE PROCEDURE sp_doesWorkspaceInheritProjectOwnerEditorRole
 (
   IN  inowner  VARCHAR(20),
-  IN  inworkspaceid  VARCHAR(100),
+  IN  inworkspaceid  VARCHAR(150),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN

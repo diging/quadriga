@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS sp_deleteWorkspaceEditorRole;
 DELIMITER $$
 CREATE PROCEDURE sp_deleteWorkspaceEditorRole
 (
-  IN  inworkspaceid    VARCHAR(100),
+  IN  inworkspaceid    VARCHAR(150),
   IN  inowner    VARCHAR(100),
   OUT errmsg           VARCHAR(255)    
 )

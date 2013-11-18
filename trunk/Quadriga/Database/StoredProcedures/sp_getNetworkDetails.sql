@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getNetworkDetails;
 DELIMITER $$
 CREATE PROCEDURE sp_getNetworkDetails
 (
-  IN  innetworkid  VARCHAR(20),	
+  IN  innetworkid  VARCHAR(150),	
  OUT errmsg    VARCHAR(255)
 )
 BEGIN

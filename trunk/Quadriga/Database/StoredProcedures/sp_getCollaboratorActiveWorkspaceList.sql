@@ -15,7 +15,7 @@ DROP PROCEDURE IF EXISTS sp_getCollaboratorActiveWorkspaceList;
 DELIMITER $$
 CREATE PROCEDURE sp_getCollaboratorActiveWorkspaceList
 (
-  IN  inprojectid    VARCHAR(50),
+  IN  inprojectid    VARCHAR(150),
   IN  inusername     VARCHAR(30),
   OUT errmsg         VARCHAR(255)
 )

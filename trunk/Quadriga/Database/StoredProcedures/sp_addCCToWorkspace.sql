@@ -16,7 +16,7 @@ DROP PROCEDURE IF EXISTS sp_addCCToWorkspace;
 DELIMITER $$
 CREATE PROCEDURE sp_addCCToWorkspace
 (
-	IN  inworkspaceid    VARCHAR(50),  
+	IN  inworkspaceid    VARCHAR(150),  
 	IN  inccid    VARCHAR(50),
   	IN  inuserid    VARCHAR(50) ,
   	OUT errmsg           VARCHAR(255)    

@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getAllBitStreams;
 DELIMITER $$
 CREATE PROCEDURE sp_getAllBitStreams
 ( 
-   IN  inWorkspaceid     VARCHAR(50),
+   IN  inWorkspaceid     VARCHAR(150),
    IN  inUsername        VARCHAR(20),
    OUT errorMessage      VARCHAR(100)
 )

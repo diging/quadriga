@@ -15,7 +15,7 @@ DROP PROCEDURE IF EXISTS sp_deleteworkspace;
 DELIMITER $$
 CREATE PROCEDURE sp_deleteworkspace
 (
-  IN inworkspaceid   TEXT,
+  IN inworkspaceid   VARCHAR(150),
   OUT errmsg         VARCHAR(255)
 )
 BEGIN

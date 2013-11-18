@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceDictionaryList;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceDictionaryList
 (
-  IN  inworkspaceid  VARCHAR(50),
+  IN  inworkspaceid  VARCHAR(150),
   IN inuserid VARCHAR(50),
  OUT errmsg    VARCHAR(255)
 )

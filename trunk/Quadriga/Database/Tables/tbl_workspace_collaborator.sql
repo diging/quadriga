@@ -12,7 +12,7 @@ Modified Date : 05/30/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_workspace_collaborator
 (
-  workspaceid       VARCHAR(100)  NOT NULL ,
+  workspaceid       VARCHAR(150)  NOT NULL ,
   username          VARCHAR(30)   NOT NULL,
   collaboratorrole  VARCHAR(50)   NOT NULL,
   updatedby         VARCHAR(20)   NOT NULL,

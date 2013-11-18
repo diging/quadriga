@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_getWorkspaceName;
 DELIMITER $$
 CREATE PROCEDURE sp_getWorkspaceName
 (
-  IN  inid  VARCHAR(100),
+  IN  inid  VARCHAR(150),
  OUT errmsg    VARCHAR(255)
 )
 BEGIN
