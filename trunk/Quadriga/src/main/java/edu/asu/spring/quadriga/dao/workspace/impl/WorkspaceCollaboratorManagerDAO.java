@@ -68,6 +68,7 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 					collaboratorList.add(workspaceCollaborator);
 				}
 				
+				workspace.setWorkspaceCollaboratorDTOList(collaboratorList);
 				sessionFactory.getCurrentSession().update(workspace);
 			}
 			else
@@ -104,7 +105,8 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 				Iterator<WorkspaceCollaboratorDTO> iterator = collaboratorList.iterator();
 				while(iterator.hasNext())
 				{
-					if(collaborators.contains(iterator.next()))
+					String userName = iterator.next().getWorkspaceCollaboratorDTOPK().getUsername();
+					if(collaborators.contains(userName))
 					{
 						iterator.remove();
 					}
@@ -153,6 +155,8 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 						iterator.remove();
 					}
 				}
+				
+				workspace.setWorkspaceCollaboratorDTOList(collaboratorList);
 				//add the user with new roles
 				//create a collaboratorDTO with the given details
 				for(String value : collaboratorRoles)
@@ -168,6 +172,8 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 					collaborator.setUpdateddate(new Date());
 					collaboratorList.add(collaborator);
 				}
+				
+				workspace.setWorkspaceCollaboratorDTOList(collaboratorList);
 				
 				sessionFactory.getCurrentSession().update(workspace);
 			}
