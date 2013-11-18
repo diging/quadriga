@@ -447,7 +447,7 @@ public class DictionaryRestController {
 			while(I.hasNext()){
 				DictionaryItem d = I.next();
 				try{
-					dictionaryManager.addNewDictionariesItems(dictionaryID, d.getTerm(), d.getUri(), d.getPos(), user.getUserName());
+					dictionaryManager.addNewDictionariesItems(dictionaryID, d.getTerm().trim(), d.getUri().trim(), d.getPos().trim(), user.getUserName());
 				}catch(QuadrigaStorageException e){
 					logger.error("Errors in adding items",e);
 					response.setStatus(500);

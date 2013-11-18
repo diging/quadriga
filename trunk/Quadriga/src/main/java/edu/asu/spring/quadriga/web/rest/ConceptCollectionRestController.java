@@ -229,7 +229,7 @@ public class ConceptCollectionRestController {
 	/**
 	 * Rest interface for the getting list of concept collections of a user
 	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/conceptcollections
-	 * http://localhost:8080/quadriga//rest/workspace/WS_22992652874022949/conceptcollections
+	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/conceptcollections
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param userId
@@ -354,7 +354,7 @@ public class ConceptCollectionRestController {
 			logger.debug("arg URI :"+ c.getUri().trim());
 			logger.debug("arg descrtiption :"+ c.getDescription().trim());
 			try{
-				conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(),  c.getDescription(), ccId, user.getUserName());
+				conceptControllerManager.addItems(c.getName().trim(), c.getUri().trim(), c.getPos().trim(),  c.getDescription().trim(), ccId, user.getUserName());
 			}catch(QuadrigaStorageException e){
 				logger.error("Errors in adding items",e);
 				response.setStatus(500);
