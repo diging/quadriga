@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.profile.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,11 @@ import edu.asu.spring.quadriga.profile.IViafManager;
 @Service
 public class ViafService implements IService {
 
-	//@Autowired
-	//private IViafManager viafmanager;
-	
 	@Autowired
-	private ViafManager1 viafmanager;
+	private IViafManager viafmanager;
+	
+	/*@Autowired
+	private ViafManager1 viafmanager;*/
 	
 	@Autowired
 	private ISearchResult searchResult;
@@ -64,20 +63,21 @@ public class ViafService implements IService {
 
 		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
 
-		//String si = "1";
+		String si = "1";
 
 		
 		
 
-		//List<Items> viafEntries = viafmanager.search(word, si);
+		List<Item> viafEntries = viafmanager.search(word, si);
+		
 
 		//List<ViafReply.Items> viafEntries = viafmanager.search(word, si);
 
 		
-		List<HashMap<String,String>> viafEntries = viafmanager.search(word);
+		//List<HashMap<String,String>> viafEntries = viafmanager.search(word);
 		
 		
-		if(viafEntries!=null){
+		/*if(viafEntries!=null){
 
 			for(HashMap<String,String> entries : viafEntries)
 			{
@@ -92,12 +92,12 @@ public class ViafService implements IService {
 		
 		}
 		
-		return searchResults;
+		return searchResults;*/
 		
-		/*if(viafEntries!=null)
+		if(viafEntries!=null)
 		{
 			
-			for(Items vi : viafEntries)
+			for(Item vi : viafEntries)
 			{
 				ISearchResult searchResult =searchResultFactory.getSearchResultObject();
 //				searchResult.setName(vi.getTitle());
@@ -108,7 +108,7 @@ public class ViafService implements IService {
 			}
 			
 		}
-		return searchResults;*/
+		return searchResults;
 	
 	}
 	

@@ -11,13 +11,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ViafReply {
 	
 	@XmlElement(name="channel")
-	private Items channel;
+	private Channel channel;
 	
-	public Items getChannel() {
+	public Channel getChannel() {
 		return channel;
 	}
 
-	public void setChannel(Items channel) {
+	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
 
