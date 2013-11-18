@@ -78,7 +78,7 @@ public class WorkspaceDTO implements Serializable {
     @JoinColumn(name = "workspaceowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO workspaceowner;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO", orphanRemoval=true)
     private List<WorkspaceCollaboratorDTO> workspaceCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
