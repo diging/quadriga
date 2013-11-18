@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.profile;
 import java.util.List;
 
 import edu.asu.spring.quadriga.profile.impl.Item;
-import edu.asu.spring.quadriga.profile.impl.Items;
+import edu.asu.spring.quadriga.profile.impl.Channel;
 
 
 public interface IViafManager {

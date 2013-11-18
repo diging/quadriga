@@ -7,12 +7,13 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.profile.IViafManager;
 
 
-
+@Service
 public class ViafManager implements IViafManager {
 	
 	@Inject
@@ -51,6 +52,8 @@ public class ViafManager implements IViafManager {
 			
 
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
+			//String rep = restTemplate.getForObject(fullUrl, String.class);
+			//System.out.println(rep);
 			items = rep.getChannel().getItems();
 		
 		return items;
