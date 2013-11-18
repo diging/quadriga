@@ -42,6 +42,7 @@ import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -76,6 +77,9 @@ public class NetworkRestController {
 
 	@Autowired
 	private IUserManager userManager;
+	
+	@Autowired
+	private IEmailNotificationManager emailManager;
 
 
 	/**
@@ -165,6 +169,11 @@ public class NetworkRestController {
 			//			String r=networkManager.prettyFormat(s,2);
 			//			logger.info("checking this "+r);
 
+			
+			//TODO: Send email to all editors of a workspace
+			//TODO: Get the workspace editors from the workspaceid
+			
+			
 			response.setStatus(200);
 			response.setContentType(accept);
 			response.setHeader("networkid",networkId );
