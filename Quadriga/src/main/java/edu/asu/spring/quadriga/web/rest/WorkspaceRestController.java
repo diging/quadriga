@@ -3,11 +3,19 @@
  */
 package edu.asu.spring.quadriga.web.rest;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -21,17 +29,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
+import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
+import edu.asu.spring.quadriga.domain.impl.workspacexml.QuadrigaWorkspaceDetailsReply;
+import edu.asu.spring.quadriga.domain.impl.workspacexml.Workspace;
+import edu.asu.spring.quadriga.domain.impl.workspacexml.WorkspacesList;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
@@ -59,6 +79,9 @@ public class WorkspaceRestController {
 
 	@Autowired
 	IListWSManager wsManager;
+	
+	@Autowired
+	IModifyWSManager modifyWSManager;
 	/**
 	 * Rest interface for the getting list of workspaces of a project
 	 * http://<<URL>:<PORT>>/quadriga/rest/projects/{project_id}/workspaces
@@ -174,5 +197,68 @@ public class WorkspaceRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		}
+	}
+	
+	
+	/**
+	 * Rest interface add a new workspace to the project
+	 * http://<<URL>:<PORT>>/quadriga/rest/projects/{project_id}/createworkspace
+	 * http://localhost:8080/quadriga/rest/projects/{project_id}/createworkspace
+	 * 
+	 * @author Lohith Dwaraka
+	 * @param userId
+	 * @param model
+	 * @return
+	 * @throws RestException 
+	 * @throws QuadrigaStorageException 
+	 * @throws QuadrigaAccessException 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "rest/projects/{project_id}/createworkspace", method = RequestMethod.POST)
+	@ResponseBody
+	public String addWorkspaceToProject(@PathVariable("project_id") String projectId,HttpServletRequest request,
+			HttpServletResponse response, @RequestBody String xml,
+			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
+		IUser user = userManager.getUserDetails(principal.getName());
+		
+		
+		logger.debug("XML : "+xml);
+		JAXBElement<QuadrigaWorkspaceDetailsReply> response1=null;
+		try{
+			JAXBContext context = JAXBContext.newInstance(QuadrigaWorkspaceDetailsReply.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+			InputStream is = new ByteArrayInputStream(xml.getBytes());
+			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaWorkspaceDetailsReply.class);
+		}catch(Exception e ){
+			logger.error("Error in unmarshalling",e);
+		}
+		if(response1 == null){
+			response.setStatus(404);
+			return "Concepts XML is not valid";
+		}
+		QuadrigaWorkspaceDetailsReply qReply= response1.getValue();
+		WorkspacesList w1 = qReply.getWorkspacesList();
+		List<Workspace> workspaceList = w1.getWorkspaceList();
+		if(workspaceList.size()<1){
+			response.setStatus(404);
+			return "Workspace XML is not valid";
+		}
+		IWorkSpace workspaceNew = workspaceFactory.createWorkspaceObject();
+		for(Workspace workspace : workspaceList){
+			logger.info("Description : "+workspace.getDescription().trim());
+			logger.info("URI : "+workspace.getUri().trim());
+			logger.info("Name : " +workspace.getName().trim());
+			logger.info("ID : "+workspace.getId().trim());
+			workspaceNew.setDescription(workspace.getDescription().trim());
+			workspaceNew.setName(workspace.getName().trim());
+			workspaceNew.setOwner(user);
+			modifyWSManager.addWorkSpaceRequest(workspaceNew, projectId);
+		}
+		
+		
+		response.setStatus(200);
+		response.setContentType(accept);
+		return "success";
 	}
 }
