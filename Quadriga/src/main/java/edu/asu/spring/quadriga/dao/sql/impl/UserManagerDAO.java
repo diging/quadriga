@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.sql.IUserManagerDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
@@ -54,8 +55,8 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 	{
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByQuadrigarole");
-			query.setParameter("quadrigarole", userRoleId);
+			Query query = sessionFactory.getCurrentSession().createQuery(" from QuadrigaUserDTO user where user.quadrigarole like :quadrigarole");
+			query.setParameter("quadrigarole", "%"+userRoleId+"%");
 
 			List<QuadrigaUserDTO> usersDTO = query.list();
 			List<IUser> listUsers = userMapper.getUsers(usersDTO);
@@ -108,7 +109,7 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from QuadrigaUserDTO user where user.quadrigarole not like :quadrigarole");
-			query.setParameter("quadrigarole", "'%"+userRoleId+"%'");
+			query.setParameter("quadrigarole", "%"+userRoleId+"%");
 
 			List<QuadrigaUserDTO> usersDTO = query.list();
 			List<IUser> listUsers = userMapper.getUsers(usersDTO);
@@ -199,8 +200,8 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 				userDTO.setUpdatedby(sAdminId);
 				userDTO.setUpdateddate(new Date());
 
-				sessionFactory.getCurrentSession().delete(userRequestDTO);
 				sessionFactory.getCurrentSession().save(userDTO);
+				sessionFactory.getCurrentSession().delete(userRequestDTO);
 
 				return SUCCESS;
 			}
@@ -219,19 +220,71 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 	{
 		try
 		{
-			
+			QuadrigaUserRequestsDTO userRequestDTO = (QuadrigaUserRequestsDTO) sessionFactory.getCurrentSession().get(QuadrigaUserRequestsDTO.class,sUserId);
+
+			if(userRequestDTO != null)
+			{
+				QuadrigaUserDeniedDTO userDeniedDTO = new QuadrigaUserDeniedDTO();
+				userDeniedDTO.setActionid(generateUniqueID());
+				userDeniedDTO.setFullname(userRequestDTO.getFullname());
+				userDeniedDTO.setUsername(userRequestDTO.getUsername());
+				userDeniedDTO.setPasswd(userRequestDTO.getPasswd());
+				userDeniedDTO.setEmail(userRequestDTO.getEmail());
+				userDeniedDTO.setDeniedby(sAdminId);
+				userDeniedDTO.setUpdatedby(sAdminId);
+				userDeniedDTO.setUpdateddate(new Date());
+				userDeniedDTO.setCreatedby(sAdminId);
+				userDeniedDTO.setCreateddate(new Date());
+
+				sessionFactory.getCurrentSession().save(userDeniedDTO);
+				sessionFactory.getCurrentSession().delete(userRequestDTO);				
+
+				return SUCCESS;
+			}
+			else
+				return FAILURE;
+
 		}
 		catch(Exception e)
 		{
 			logger.error("Error in deactivating user account: ",e);
 			throw new QuadrigaStorageException(e);
 		}
-		throw new NotYetImplementedException("Not yet implememted the method");
 	}
-	
+
 	@Override
-	public void deleteUser(String deleteUser,String adminUser,String adminRole,String deactivatedRole) throws QuadrigaStorageException
+	public int deleteUser(String deleteUser,String adminUser,String adminRole,String deactivatedRole) throws QuadrigaStorageException
 	{
-		throw new NotYetImplementedException("Not yet implememted the method");
+		try
+		{
+			QuadrigaUserDTO userDTO = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,deleteUser);
+			if(userDTO.getProjectDTOList().size() != 0)
+			{
+				
+			}
+			else if(userDTO.getWorkspaceDTOList().size() != 0)
+			{
+
+			}
+			else if(userDTO.getProjectCollaboratorDTOList().size() != 0)
+			{
+				
+			}
+			else if(userDTO.getWorkspaceCollaboratorDTOList().size() != 0)
+			{
+				
+			}
+			else
+			{
+				sessionFactory.getCurrentSession().delete(userDTO);
+				return SUCCESS;
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in deactivating user account: ",e);
+			throw new QuadrigaStorageException(e);
+		}
+		return FAILURE;
 	}
 }

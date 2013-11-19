@@ -5,11 +5,12 @@ Description   : Store the details of denied users requests.
 
 Create By     : Ram Kumar Kumaresan
 
-Modified Date : 05/24/2013
+Modified Date : 11/19/2013
 
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_quadriga_user_denied
 (
+  actionid		VARCHAR(100) NOT NULL,
   fullname      VARCHAR(50) DEFAULT NULL,
   username      VARCHAR(10) NOT NULL,
   passwd        VARCHAR(10) DEFAULT NULL,
@@ -18,5 +19,6 @@ CREATE TABLE IF NOT EXISTS tbl_quadriga_user_denied
   updatedby     VARCHAR(10) NOT NULL,
   updateddate   TIMESTAMP   NOT NULL,
   createdby     VARCHAR(10) NOT NULL,
-  createddate   DATETIME    NOT NULL 
+  createddate   DATETIME    NOT NULL,
+  PRIMARY KEY(actionid)
 )

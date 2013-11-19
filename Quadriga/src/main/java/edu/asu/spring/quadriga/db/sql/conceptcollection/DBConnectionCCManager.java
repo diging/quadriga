@@ -64,9 +64,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
 	@Autowired
-	private IDBConnectionManager dbConnectionManager;
-
-	@Autowired
 	private IDBConnectionRetrieveProjCollabManager dbConnectionProjectManager;
 
 	@Autowired

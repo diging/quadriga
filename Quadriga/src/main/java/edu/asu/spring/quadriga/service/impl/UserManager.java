@@ -37,10 +37,6 @@ public class UserManager implements IUserManager {
 			.getLogger(UserManager.class);
 
 	@Autowired
-	@Qualifier("DBConnectionManagerBean")
-	private IDBConnectionManager dbConnect;
-
-	@Autowired
 	private IQuadrigaRoleManager rolemanager;
 
 	@Autowired
@@ -83,6 +79,7 @@ public class UserManager implements IUserManager {
 	 *
 	 */
 	@Override
+	@Transactional
 	public IUser getUserDetails(String sUserId) throws QuadrigaStorageException
 	{
 		int i = 0;
@@ -91,7 +88,8 @@ public class UserManager implements IUserManager {
 		IQuadrigaRole quadrigaRole = null;
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
 
-		user = dbConnect.getUserDetails(sUserId);
+		user = usermanagerDAO.getUserDetails(sUserId);
+		
 		if(user!=null)
 		{
 			userRole = user.getQuadrigaRoles();
@@ -130,6 +128,7 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public List<IUser> getAllActiveUsers() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
@@ -137,7 +136,8 @@ public class UserManager implements IUserManager {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-		listUsers = dbConnect.getUsersNotInRole(sDeactiveRoleDBId);
+		listUsers = usermanagerDAO.getUsersNotInRole(sDeactiveRoleDBId);
+		
 		return listUsers;		
 	}
 
@@ -149,6 +149,7 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public List<IUser> getAllInActiveUsers() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
@@ -156,7 +157,7 @@ public class UserManager implements IUserManager {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
-		listUsers = dbConnect.getUsers(sDeactiveRoleDBId);
+		listUsers = usermanagerDAO.getUsers(sDeactiveRoleDBId);
 		return listUsers;		
 	}
 
@@ -168,11 +169,13 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public List<IUser> getUserRequests() throws QuadrigaStorageException
 	{
 		List<IUser> listUsers = null;
 
-		listUsers = dbConnect.getUserRequests();
+		listUsers = usermanagerDAO.getUserRequests();
+		
 		return listUsers;		
 	}
 
@@ -188,13 +191,14 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public int deactivateUser(String sUserId,String sAdminId) throws QuadrigaStorageException {
 		//Find the ROLEDBID for Deactivated account
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		//Add the new role to the user.
-		int iResult = dbConnect.deactivateUser(sUserId, sDeactiveRoleDBId, sAdminId);
-
+		int iResult = usermanagerDAO.deactivateUser(sUserId, sDeactiveRoleDBId, sAdminId);
+		
 		if(iResult == SUCCESS)
 		{
 			logger.info("The admin "+sAdminId+" deactivated the account of "+sUserId);
@@ -215,6 +219,7 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public void deleteUser(String delelteUser,String adminUser) throws QuadrigaStorageException
 	{
 		//fetch the admin role
@@ -222,19 +227,10 @@ public class UserManager implements IUserManager {
 		//fetch the deactivated role
 		String deactivatedRole = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 	    
-		dbConnect.deleteUser(delelteUser, adminUser, adminDbRole, deactivatedRole);
+		usermanagerDAO.deleteUser(delelteUser, adminUser, adminDbRole, deactivatedRole);
 		
 	}
 
-	@Override
-	public boolean checkWorkbenchAssociated(String deleteUser) throws QuadrigaStorageException
-	{
-		boolean isAssociated;
-		isAssociated = false;
-		isAssociated = dbConnect.checkWorkbenchAssociated(deleteUser);
-		return isAssociated;
-	}
-	
 	/**
 	 * Approve a user request to access quadriga.
 	 * 
@@ -247,9 +243,10 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public int approveUserRequest(String sUserId,String sRoles,String sAdminId) throws QuadrigaStorageException {
 
-		int iResult = dbConnect.approveUserRequest(sUserId, sRoles, sAdminId);
+		int iResult = usermanagerDAO.approveUserRequest(sUserId, sRoles, sAdminId);
 		return iResult;
 	}
 
@@ -264,9 +261,10 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public int denyUserRequest(String sUserId,String sAdminId) throws QuadrigaStorageException {
 
-		int iResult = dbConnect.denyUserRequest(sUserId, sAdminId);
+		int iResult = usermanagerDAO.denyUserRequest(sUserId, sAdminId);
 		return iResult;
 	}
 
@@ -281,6 +279,7 @@ public class UserManager implements IUserManager {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public int activateUser(String sUserId,String sAdminId) throws QuadrigaStorageException {
 
 		int iResult=0;
@@ -290,7 +289,8 @@ public class UserManager implements IUserManager {
 
 		//Find all the roles of the user
 		IUser user = null;
-		user = dbConnect.getUserDetails(sUserId);
+		
+		user = usermanagerDAO.getUserDetails(sUserId);
 
 		//Remove the deactivated role from user roles
 		if(user!=null)
@@ -310,7 +310,7 @@ public class UserManager implements IUserManager {
 
 			//Convert the user roles to one string with DBROLEIDs
 			//Update the role in the Quadriga Database.
-			iResult = dbConnect.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(),sAdminId);
+			iResult = usermanagerDAO.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(), sAdminId);
 			if(iResult == SUCCESS)
 			{
 				logger.info("The admin "+sAdminId+" activated the account of "+sUserId);
@@ -358,7 +358,7 @@ public class UserManager implements IUserManager {
 		if(iUserStatus == SUCCESS)
 		{
 			String sAdminRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
-			List<IUser> listAdminUsers = dbConnect.getUsers(sAdminRoleDBId);
+			List<IUser> listAdminUsers = usermanagerDAO.getUsers(sAdminRoleDBId);
 
 			//Ignore the user if the account is deactivated
 			adminlabel:
