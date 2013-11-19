@@ -1,24 +1,29 @@
 package edu.asu.spring.quadriga.mapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
-public class ProjectCollaboratorDTOMapper {
+public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 
 	@Autowired
     private IUserManager userManager;
@@ -30,6 +35,9 @@ public class ProjectCollaboratorDTOMapper {
 	private ICollaboratorFactory collaboratorFactory;
 	@Autowired
 	private ICollaboratorRoleManager roleMapper;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	public List<ICollaborator> getProjectCollaboratorList(ProjectDTO projectDTO) throws QuadrigaStorageException
 	{
@@ -77,5 +85,39 @@ public class ProjectCollaboratorDTOMapper {
 			}
 		}
 		return collabMap;
+	}
+	
+	public List<ProjectCollaboratorDTO> getProjectCollaboratorDAO(ICollaborator collaborator,String projectId,String loggedInUser) throws QuadrigaStorageException
+	{
+		List<ProjectCollaboratorDTO> collaboratorList = new ArrayList<ProjectCollaboratorDTO>();
+		
+		try
+		{
+			String collabUser = collaborator.getUserObj().getUserName();
+			List<ICollaboratorRole> collaboratorRoles = collaborator.getCollaboratorRoles();
+			QuadrigaUserDTO userDTO = getUserDTO(collabUser);
+			
+			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+			for(ICollaboratorRole role : collaboratorRoles)
+			{
+				ProjectCollaboratorDTO collaboratorDTO = new ProjectCollaboratorDTO();
+				ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectId,collabUser,role.getRoleDBid());
+				collaboratorDTO.setProjectDTO(projectDTO);
+				collaboratorDTO.setQuadrigaUserDTO(userDTO);
+				collaboratorDTO.setProjectCollaboratorDTOPK(collaboratorKey);
+				collaboratorDTO.setCreatedby(loggedInUser);
+				collaboratorDTO.setCreateddate(new Date());
+				collaboratorDTO.setUpdatedby(loggedInUser);
+				collaboratorDTO.setUpdateddate(new Date());
+				collaboratorList.add(collaboratorDTO);
+			}
+		}
+		catch(QuadrigaStorageException ex)
+		{
+			throw new QuadrigaStorageException();
+		}
+	
+		return collaboratorList;
+		
 	}
 }
