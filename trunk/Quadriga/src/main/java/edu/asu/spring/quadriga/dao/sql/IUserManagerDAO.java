@@ -18,7 +18,7 @@ public interface IUserManagerDAO {
 
 	public abstract List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException;
 
-	public abstract void deleteUser(String deleteUser, String adminUser, String adminRole, String deactivatedRole) throws QuadrigaStorageException;
+	public abstract int deleteUser(String deleteUser, String adminUser, String adminRole, String deactivatedRole) throws QuadrigaStorageException;
 
 	public abstract int deactivateUser(String sUserId, String sDeactiveRoleDBId, String sAdminId) throws QuadrigaStorageException;
 
