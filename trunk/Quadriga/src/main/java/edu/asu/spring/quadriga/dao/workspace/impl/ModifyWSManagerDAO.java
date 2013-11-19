@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.workspace.IModifyWSManagerDAO;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
-import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;

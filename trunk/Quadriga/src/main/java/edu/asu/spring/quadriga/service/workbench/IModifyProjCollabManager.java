@@ -5,7 +5,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyProjCollabManager {
 
-	public abstract String addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName)
+	public abstract void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName)
 			throws QuadrigaStorageException;
 	
 	public abstract void deleteCollaboratorRequest(String userName, String Projectid) throws QuadrigaStorageException;

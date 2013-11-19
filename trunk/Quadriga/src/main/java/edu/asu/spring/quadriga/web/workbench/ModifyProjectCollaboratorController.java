@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -29,7 +30,7 @@ import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.impl.workbench.ModifyProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
@@ -48,7 +49,7 @@ public class ModifyProjectCollaboratorController
 	private IModifyCollaboratorFormFactory collaboratorFactory;
 	
 	@Autowired
-	private ModifyProjCollabManager projectManager;
+	private IModifyProjCollabManager projectManager;
 	
 	@Autowired
 	private IRetrieveProjectManager projectDetailsManager;
@@ -134,54 +135,61 @@ public class ModifyProjectCollaboratorController
 		StringBuilder collabRoles;
 		
 		userName = principal.getName();
-		
-		//create model view
-		model = new ModelAndView("auth/workbench/updatecollaborators");
-		
-		if(result.hasErrors())
+		try
 		{
-			//retrieve the project details
-			IProject project = projectDetailsManager.getProjectDetails(projectid);
+			//create model view
+			model = new ModelAndView("auth/workbench/updatecollaborators");
 			
-			//add a variable to display the entire page
-			model.getModelMap().put("success", 0);
-
-			//add the model map
-			projCollaborators = collaboratorManager.modifyProjectCollaboratorManager(projectid);
-			collaboratorForm.setCollaborators(projCollaborators);
-			model.getModelMap().put("collaboratorform", collaboratorForm);
-			model.getModel().put("projectname", project.getName());
-			model.getModelMap().put("projectdesc",project.getDescription());
-			model.getModelMap().put("projectid", projectid);
-			
-			//retrieve the collaborator roles and assign it to a map
-			//fetch the roles that can be associated to the workspace collaborator
-			List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
-			model.getModelMap().put("projcollabroles", collaboratorRoles);
-		}
-		else
-		{
-			projCollaborators = collaboratorForm.getCollaborators();
-			
-			//fetch the user and his collaborator roles
-			for(ModifyCollaborator collab : projCollaborators)
+			if(result.hasErrors())
 			{
-				collabRoles = new StringBuilder();
-				collabUser = collab.getUserName();
-				values = collab.getCollaboratorRoles();
+				//retrieve the project details
+				IProject project = projectDetailsManager.getProjectDetails(projectid);
 				
-				//fetch the role names for the roles and form a string
-				for(ICollaboratorRole role : values)
+				//add a variable to display the entire page
+				model.getModelMap().put("success", 0);
+
+				//add the model map
+				projCollaborators = collaboratorManager.modifyProjectCollaboratorManager(projectid);
+				collaboratorForm.setCollaborators(projCollaborators);
+				model.getModelMap().put("collaboratorform", collaboratorForm);
+				model.getModel().put("projectname", project.getName());
+				model.getModelMap().put("projectdesc",project.getDescription());
+				model.getModelMap().put("projectid", projectid);
+				
+				//retrieve the collaborator roles and assign it to a map
+				//fetch the roles that can be associated to the workspace collaborator
+				List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+				model.getModelMap().put("projcollabroles", collaboratorRoles);
+			}
+			else
+			{
+				projCollaborators = collaboratorForm.getCollaborators();
+				
+				//fetch the user and his collaborator roles
+				for(ModifyCollaborator collab : projCollaborators)
 				{
-					collabRoles.append(",");
-					collabRoles.append(role.getRoleDBid());
+					collabRoles = new StringBuilder();
+					collabUser = collab.getUserName();
+					values = collab.getCollaboratorRoles();
+					
+					//fetch the role names for the roles and form a string
+					for(ICollaboratorRole role : values)
+					{
+						collabRoles.append(",");
+						collabRoles.append(role.getRoleDBid());
+					}
+					
+				    projectManager.updateCollaboratorRequest(projectid, collabUser, collabRoles.toString().substring(1), userName);
+					
+					model.getModelMap().put("success", 1);
 				}
-				
-			    projectManager.updateCollaboratorRequest(projectid, collabUser, collabRoles.toString().substring(1), userName);
-				
-				model.getModelMap().put("success", 1);
 			}
 		}
+		catch(HibernateException ex)
+		{
+			throw new QuadrigaStorageException();
+		}
+		
 		return model;
 	}
 

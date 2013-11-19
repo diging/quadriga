@@ -1,12 +1,10 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workspace.impl.ArchiveWorkspaceManagerDAO;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 
@@ -20,10 +18,6 @@ import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 public class ArchiveWSManager implements IArchiveWSManager 
 {
 
-	@Autowired
-	@Qualifier("DBConnectionArchiveWSMangerBean")
-	private IDBConnectionArchiveWSManager dbConnect;
-	
 	@Autowired
 	private ArchiveWorkspaceManagerDAO archiveWorkspaceManager;
 	
