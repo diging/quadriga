@@ -46,9 +46,10 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 		String[] collaboratorRoles;
 		try
 		{
-			collaboratorList = new ArrayList<WorkspaceCollaboratorDTO>();
 			//fetch the workspaceDTO details
 			workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceid);
+			
+			collaboratorList = workspace.getWorkspaceCollaboratorDTOList();
 			
 			if(!workspace.equals(null))
 			{

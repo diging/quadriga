@@ -8,9 +8,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.HibernateSystemException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -195,59 +197,66 @@ public class AddCollaboratorController {
 		
 		ModelAndView model = null;
 		model = new ModelAndView("auth/workbench/addcollaborators");
-		
-		//retrieve the project details
-		IProject project = retrieveprojectManager.getProjectDetails(projectid);
-		model.getModelMap().put("projectname", project.getName());
-		model.getModelMap().put("projectdesc", project.getDescription());
-		model.getModelMap().put("projectid", projectid);
-		
-		if(result.hasErrors())
+		try
 		{
-			model.getModelMap().put("collaborator", collaborator);
-		}
-		else
-		{	
-			String userName;
-			userName = principal.getName();
-			modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid,userName);
-			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
-		}
-		
-		List<IUser> nonCollaboratingUsers = retrieveProjCollabManager.getProjectNonCollaborators(projectid);
-		//remove the restricted user
-		Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
-		while(userIterator.hasNext())
-		{
-			//fetch the quadriga roles and eliminate the restricted user
-			IUser user = userIterator.next();
-			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-			for(IQuadrigaRole role : userQuadrigaRole)
+			//retrieve the project details
+			IProject project = retrieveprojectManager.getProjectDetails(projectid);
+			model.getModelMap().put("projectname", project.getName());
+			model.getModelMap().put("projectdesc", project.getDescription());
+			model.getModelMap().put("projectid", projectid);
+			
+			if(result.hasErrors())
 			{
-				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+				model.getModelMap().put("collaborator", collaborator);
+			}
+			else
+			{	
+				String userName;
+				userName = principal.getName();
+				modifyProjectCollabManager.addCollaboratorRequest(collaborator, projectid,userName);
+				model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
+			}
+			
+			List<IUser> nonCollaboratingUsers = retrieveProjCollabManager.getProjectNonCollaborators(projectid);
+			//remove the restricted user
+			Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
+			while(userIterator.hasNext())
+			{
+				//fetch the quadriga roles and eliminate the restricted user
+				IUser user = userIterator.next();
+				List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+				for(IQuadrigaRole role : userQuadrigaRole)
 				{
-					userIterator.remove();
-					break;
+					if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+					{
+						userIterator.remove();
+						break;
+					}
 				}
 			}
-		}
-		model.getModelMap().put("notCollaboratingUsers", nonCollaboratingUsers);
-		
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-		collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
-		Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoles.iterator();
-		while(collabRoleIterator.hasNext())
-		{
-			ICollaboratorRole collabRole = collabRoleIterator.next();
-			if(collabRole.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			model.getModelMap().put("notCollaboratingUsers", nonCollaboratingUsers);
+			
+			List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+			collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoles.iterator();
+			while(collabRoleIterator.hasNext())
 			{
-				collabRoleIterator.remove();
+				ICollaboratorRole collabRole = collabRoleIterator.next();
+				if(collabRole.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+				{
+					collabRoleIterator.remove();
+				}
 			}
+			model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
+			
+			List<ICollaborator> collaborators = retrieveProjCollabManager.getProjectCollaborators(projectid);
+			model.getModelMap().put("collaboratingUsers", collaborators);
 		}
-		model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
-		
-		List<ICollaborator> collaborators = retrieveProjCollabManager.getProjectCollaborators(projectid);
-		model.getModelMap().put("collaboratingUsers", collaborators);
+		catch(HibernateSystemException ex)
+		{
+			throw new QuadrigaStorageException();
+		}
+
 		
 		return model;
 	}

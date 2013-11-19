@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
@@ -23,6 +24,7 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
+//@Repository
 public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 
 	@Autowired
@@ -87,10 +89,8 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 		return collabMap;
 	}
 	
-	public List<ProjectCollaboratorDTO> getProjectCollaboratorDAO(ICollaborator collaborator,String projectId,String loggedInUser) throws QuadrigaStorageException
+	public void getProjectCollaboratorDAO(List<ProjectCollaboratorDTO> collaboratorList,ICollaborator collaborator,String projectId,String loggedInUser) throws QuadrigaStorageException
 	{
-		List<ProjectCollaboratorDTO> collaboratorList = new ArrayList<ProjectCollaboratorDTO>();
-		
 		try
 		{
 			String collabUser = collaborator.getUserObj().getUserName();
@@ -117,7 +117,6 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 			throw new QuadrigaStorageException();
 		}
 	
-		return collaboratorList;
 		
 	}
 }
