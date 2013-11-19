@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workspace.IListWSManagerDAO;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -31,6 +33,9 @@ public class ListWSManager implements IListWSManager
 	@Autowired
 	@Qualifier("DBConnectionListWSManagerBean")
 	private IDBConnectionListWSManager dbConnect;
+	
+	@Autowired
+	private IListWSManagerDAO listWSManagerDAO;
 	
 	/**
 	 * This will list all the workspaces associated
@@ -79,12 +84,11 @@ public class ListWSManager implements IListWSManager
 	}
 	
 	@Override
+	@Transactional
 	public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> collaboratorWorkspaceList;
-		
-		collaboratorWorkspaceList = dbConnect.listActiveWorkspace(projectid, user, DBConstants.LIST_ACTIVE_WORKSPACE_AS_COLLABORATOR);
-
+		collaboratorWorkspaceList = listWSManagerDAO.listActiveWorkspace(projectid, user);
 		return collaboratorWorkspaceList;
 	}
 	
@@ -117,12 +121,11 @@ public class ListWSManager implements IListWSManager
 	 * @author   Kiran Kumar Batna
 	 */
 	@Override
+	@Transactional
 	public List<IWorkSpace> listDeactivatedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		
-		workspaceList = dbConnect.listDeactivatedWorkspace(projectid,user);
-
+		workspaceList = listWSManagerDAO.listDeactivatedWorkspace(projectid, user);
 		return workspaceList;
 	}
 	
