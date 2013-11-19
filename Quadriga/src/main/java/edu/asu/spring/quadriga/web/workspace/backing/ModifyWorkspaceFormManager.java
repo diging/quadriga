@@ -48,15 +48,17 @@ public class ModifyWorkspaceFormManager
 		
 		workspaceList =  wsManager.listDeactivatedWorkspace(projectId,userName);
 		
-		for(IWorkSpace workspace : workspaceList)
+		if(workspaceList != null)
 		{
-			modifyWorkspace = new ModifyWorkspace();
-			modifyWorkspace.setId(workspace.getId());
-			modifyWorkspace.setName(workspace.getName());
-			modifyWorkspace.setDescription(workspace.getDescription());
-			modifyWorkspaceList.add(modifyWorkspace);
+			for(IWorkSpace workspace : workspaceList)
+			{
+				modifyWorkspace = new ModifyWorkspace();
+				modifyWorkspace.setId(workspace.getId());
+				modifyWorkspace.setName(workspace.getName());
+				modifyWorkspace.setDescription(workspace.getDescription());
+				modifyWorkspaceList.add(modifyWorkspace);
+			}			
 		}
-		
 		return modifyWorkspaceList;
 	}
 	

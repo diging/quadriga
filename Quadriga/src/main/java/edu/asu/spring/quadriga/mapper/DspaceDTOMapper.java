@@ -14,7 +14,7 @@ public class DspaceDTOMapper {
 	@Autowired
 	private DspaceKeysFactory dsapceKeysFactory;
 
-	public IDspaceKeys getIDspaceKeys(DspaceKeysDTO dspaceKeysDTO)  throws QuadrigaStorageException
+	public IDspaceKeys getIDspaceKeys(DspaceKeysDTO dspaceKeysDTO) throws QuadrigaStorageException
 	{
 		IDspaceKeys dspaceKeys = dsapceKeysFactory.createDspaceKeysObject();
 		dspaceKeys.setPublicKey(dspaceKeysDTO.getDspaceKeysDTOPK().getPublickey());

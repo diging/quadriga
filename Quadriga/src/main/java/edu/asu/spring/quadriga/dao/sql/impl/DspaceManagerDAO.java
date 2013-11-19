@@ -24,8 +24,7 @@ public class DspaceManagerDAO extends DAOConnectionManager implements IDspaceMan
 	@Autowired
 	private DspaceDTOMapper dspaceDTOMapper;
 	
-	private static final Logger logger = LoggerFactory
-			.getLogger(DspaceManagerDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(DspaceManagerDAO.class);
 
 	/**
 	 * This method get the Dspace keys from the database for the user
