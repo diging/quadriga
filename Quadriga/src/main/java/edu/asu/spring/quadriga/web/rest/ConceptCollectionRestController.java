@@ -51,7 +51,9 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * Controller for conception collection rest apis exposed to other clients
@@ -85,7 +87,9 @@ public class ConceptCollectionRestController {
 	@Autowired
 	private IConceptCollectionFactory collectionFactory;
 
-
+	@Autowired
+	private ICheckWSSecurity checkWSSecurity; 
+	
 	@Autowired
 	private IConceptFactory conFact;
 
@@ -301,6 +305,29 @@ public class ConceptCollectionRestController {
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = usermanager.getUserDetails(principal.getName());
+		
+		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
+			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
+			response.setStatus(404);
+			return "Workspace ID : "+workspaceId+" doesn't exist";
+		}
+		
+		if(!checkWSSecurity.checkWorkspaceOwner(user.getUserName(), workspaceId)){
+			logger.info("User is not the owner of this workspace");
+			if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
+				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
+				response.setStatus(403);
+				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
+				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
+				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
+			}else if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
+				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
+				response.setStatus(403);
+				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
+				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
+				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
+			}
+		}
 		
 		String ccName = request.getParameter("name");
 		String desc = request.getParameter("desc");
