@@ -16,7 +16,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 public class ModifyProjCollabManager implements IModifyProjCollabManager 
 {
      @Autowired
-     private IModifyProjectCollaboratorDAO projectCollaboratorManager;
+     private IModifyProjectCollaboratorDAO modifyProjectCollaboratorDAO;
 	
      /**
 	 * This method adds a collaborator for the project supplied.
@@ -31,21 +31,20 @@ public class ModifyProjCollabManager implements IModifyProjCollabManager
 	public void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
 	{
 		
-		projectCollaboratorManager.addCollaboratorRequest(collaborator, projectid, userName);
+		modifyProjectCollaboratorDAO.addCollaboratorRequest(collaborator, projectid, userName);
 		
 	}
 
 	@Override
 	@Transactional
 	public void deleteCollaboratorRequest(String userName, String projectid) throws QuadrigaStorageException {
-		
-		projectCollaboratorManager.deleteColloratorRequest(userName, projectid);
+		modifyProjectCollaboratorDAO.deleteColloratorRequest(userName, projectid);
 	}
 	
 	@Override
 	@Transactional
 	public void updateCollaboratorRequest(String projectid,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
 	{
-		projectCollaboratorManager.updateCollaboratorRequest(projectid, collabUser, collaboratorRole, username);
+		modifyProjectCollaboratorDAO.updateCollaboratorRequest(projectid, collabUser, collaboratorRole, username);
 	}
 }

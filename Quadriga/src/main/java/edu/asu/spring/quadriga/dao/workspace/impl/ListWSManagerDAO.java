@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.workspace.IListWSManagerDAO;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -20,7 +21,7 @@ import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
 
 @Repository
-public class ListWSManagerDAO implements IListWSManagerDAO {
+public class ListWSManagerDAO extends DAOConnectionManager  implements IListWSManagerDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;

@@ -18,6 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workspace.IListWSManagerDAO;
+import edu.asu.spring.quadriga.dao.workspace.impl.ListWSManagerDAO;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -26,7 +27,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.db.sql.workspace.DBConnectionListWSManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" ,"file:src/test/resources/hibernate.cfg.xml" })
@@ -73,7 +73,7 @@ public class ListWSManagerTest {
 		databaseQuery[9] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionListWSManager)listWSManagerDAO).setupTestEnvironment(query);
+			((ListWSManagerDAO)listWSManagerDAO).setupTestEnvironment(query);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class ListWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionListWSManager)listWSManagerDAO).setupTestEnvironment(query);
+			((ListWSManagerDAO)listWSManagerDAO).setupTestEnvironment(query);
 		}
 	}
 
