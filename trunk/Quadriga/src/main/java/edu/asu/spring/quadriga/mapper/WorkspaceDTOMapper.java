@@ -22,7 +22,7 @@ public class WorkspaceDTOMapper {
 	private IWorkspaceFactory workspaceFactory;
 	
 	@Autowired
-    private IUserManager userManger;
+    private IUserManager userManager;
 	
 	public WorkspaceDTO getWorkspaceDTO(IWorkSpace iWorkSpace)
 	{
@@ -45,7 +45,7 @@ public class WorkspaceDTOMapper {
 		workSpace.setName(workspaceDTO.getWorkspacename());
 		workSpace.setDescription(workspaceDTO.getDescription());
 		workSpace.setId(workspaceDTO.getWorkspaceid());
-		workSpace.setOwner(userManger.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+		workSpace.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 		return workSpace;
 	}
 	

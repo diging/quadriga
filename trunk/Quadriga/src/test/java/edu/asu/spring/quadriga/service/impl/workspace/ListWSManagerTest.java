@@ -14,7 +14,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workspace.IListWSManagerDAO;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -26,8 +29,10 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.db.sql.workspace.DBConnectionListWSManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-"file:src/test/resources/root-context.xml" })
+"file:src/test/resources/root-context.xml" ,"file:src/test/resources/hibernate.cfg.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@TransactionConfiguration
+@Transactional
 public class ListWSManagerTest {
 
 	@Autowired
@@ -41,6 +46,9 @@ public class ListWSManagerTest {
 	
 	@Autowired
 	IListWSManager wsManager;
+	
+	@Autowired
+	IListWSManagerDAO listWSManagerDAO;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -65,7 +73,7 @@ public class ListWSManagerTest {
 		databaseQuery[9] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
+			((DBConnectionListWSManager)listWSManagerDAO).setupTestEnvironment(query);
 		}
 	}
 
@@ -78,7 +86,7 @@ public class ListWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
+			((DBConnectionListWSManager)listWSManagerDAO).setupTestEnvironment(query);
 		}
 	}
 
@@ -89,7 +97,7 @@ public class ListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = wsManager.listWorkspace("PROJ_2","projuser");
+		workspaceList = listWSManagerDAO.listWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
