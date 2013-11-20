@@ -37,6 +37,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
@@ -299,6 +302,7 @@ public class ConceptCollectionRestController {
 	 * @throws QuadrigaAccessException 
 	 * @throws Exception
 	 */
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
 	@ResponseBody
 	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
@@ -312,22 +316,24 @@ public class ConceptCollectionRestController {
 			return "Workspace ID : "+workspaceId+" doesn't exist";
 		}
 		
-		if(!checkWSSecurity.checkWorkspaceOwner(user.getUserName(), workspaceId)){
-			logger.info("User is not the owner of this workspace");
-			if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
-				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
-				response.setStatus(403);
-				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
-				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
-				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
-			}else if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
-				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
-				response.setStatus(403);
-				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
-				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
-				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
-			}
-		}
+		
+//		
+//		if(!checkWSSecurity.checkWorkspaceOwner(user.getUserName(), workspaceId)){
+//			logger.info("User is not the owner of this workspace");
+//			if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
+//				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
+//				response.setStatus(403);
+//				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
+//				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
+//				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
+//			}else if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
+//				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
+//				response.setStatus(403);
+//				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
+//				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
+//				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
+//			}
+//		}
 		
 		String ccName = request.getParameter("name");
 		String desc = request.getParameter("desc");
@@ -390,6 +396,9 @@ public class ConceptCollectionRestController {
 			}
 
 		}
+		
+		String msg = workspaceCCManager.addWorkspaceCC(workspaceId, ccId, user.getUserName());
+		
 		response.setStatus(200);
 		response.setContentType(accept);
 		return ccId;
