@@ -114,7 +114,6 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 				}
 				
 				workspace.setWorkspaceCollaboratorDTOList(collaboratorList);
-				
 				sessionFactory.getCurrentSession().update(workspace);
 			}
 			else
@@ -156,6 +155,7 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 						iterator.remove();
 					}
 				}
+				sessionFactory.getCurrentSession().flush();
 				
 				workspace.setWorkspaceCollaboratorDTOList(collaboratorList);
 				//add the user with new roles
