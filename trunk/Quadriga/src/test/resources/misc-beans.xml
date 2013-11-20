@@ -157,13 +157,13 @@
 		<property name="location" value="classpath:locale/messages_en_US.properties" />
 	</bean>
 	
-	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.RetrieveProjectManagerDAOImpl"/>
+	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.RetrieveProjectManagerDAO"/>
 	
 	<bean id="projectDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectDTOMapper"/>
 	
 	<bean id="projectCollaboratorDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper"/>
 	
-	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAOImpl"/>
+	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAO"/>
 	
 	<bean id="serviceRegistry" class="edu.asu.spring.quadriga.profile.impl.ServiceRegistry" />
 	
@@ -180,4 +180,29 @@
 	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.impl.SearchResultFactory" />
 	
 	<bean id="viafManager" class="edu.asu.spring.quadriga.profile.impl.ViafManager"/>
+	
+	<bean id="listWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.impl.ListWSManagerDAO"/>
+	
+	<bean id="usermanagerDAO" class="edu.asu.spring.quadriga.dao.sql.impl.UserManagerDAO"/>
+	
+	<bean id="userMapper" class="edu.asu.spring.quadriga.mapper.UserDTOMapper"/>
+	
+	<bean id="dspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.DspaceDTOMapper"/>
+	
+	<bean id="archiveWorkspaceManager" class="edu.asu.spring.quadriga.dao.workspace.impl.ArchiveWorkspaceManagerDAO"/>
+	
+	<bean id="workspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper"/>
+	
+	<bean id="workspaceDspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper"/>
+	
+	<bean id="dspaceManagerDAO" class="edu.asu.spring.quadriga.dao.sql.impl.DspaceManagerDAO"/>
+	
+	<bean id="modifyWSManagerDAOImpl" class="edu.asu.spring.quadriga.dao.workspace.impl.ModifyWSManagerDAO"/>
+	
+	<bean id="modifyProjectCollaboratorDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectCollaboratorDAO"/>
+	
+	<bean id="database_error_msgs" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/database_error_msgs.properties" />
+	</bean>
+		
 </beans>

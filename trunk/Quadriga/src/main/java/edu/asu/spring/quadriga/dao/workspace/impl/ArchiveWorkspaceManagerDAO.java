@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.workspace.IArchiveWorkspaceManagerDAO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 @Repository
-public class ArchiveWorkspaceManagerDAO implements
-		IArchiveWorkspaceManagerDAO 
+public class ArchiveWorkspaceManagerDAO implements IArchiveWorkspaceManagerDAO 
 {
 	
 	@Autowired
