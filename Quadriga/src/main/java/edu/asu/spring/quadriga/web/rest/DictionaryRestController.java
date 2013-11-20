@@ -39,17 +39,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
-import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
-import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
-import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
-import edu.asu.spring.quadriga.domain.impl.dictionarylist.Dictionary;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItem;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItemList;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.QuadrigaDictDetailsReply;
@@ -59,6 +54,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 /**
@@ -80,6 +76,9 @@ public class DictionaryRestController {
 
 	@Autowired
 	private IWorkspaceDictionaryManager workspaceDictionaryManager;
+	
+	@Autowired
+	private ICheckWSSecurity checkWSSecurity; 
 	
 	@Autowired
 	private IUserManager usermanager;
@@ -323,6 +322,12 @@ public class DictionaryRestController {
 			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = usermanager.getUserDetails(principal.getName());
 		
+		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
+			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
+			response.setStatus(404);
+			return "Workspace ID : "+workspaceId+" doesn't exist";
+		}
+		
 		String dictName = request.getParameter("name");
 		String desc = request.getParameter("desc");
 		logger.debug("dict Name  :"+dictName+"   desc : "+desc);
@@ -380,6 +385,7 @@ public class DictionaryRestController {
 			}
 
 		}
+		workspaceDictionaryManager.addWorkspaceDictionary(workspaceId, dictId, user.getUserName());
 		response.setStatus(200);
 		response.setContentType(accept);
 		return dictId;
@@ -456,6 +462,7 @@ public class DictionaryRestController {
 				}
 
 			}
+			
 			response.setStatus(200);
 			response.setContentType(accept);
 			return "Success";
