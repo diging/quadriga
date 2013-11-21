@@ -165,7 +165,7 @@ this.edge.epsilon);
 						alert(node.type);
 						var html = "";
 						if(node.type=="Predicate"){
-							html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
+							html = "<div id='popup'><input type='button' id='annot_node' value='Add Annotation to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
 						} else{
 						
 						html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </div>";
@@ -191,13 +191,13 @@ this.edge.epsilon);
 							 // alert( "Handler for .click() called." );
 							  var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
 								+ "/auth/editing/saveAnnotation/";
-	  html1 += networkId + " method='POST' >";
-	  html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-	  html1 += "<input  type='hidden' name='nodename' id='nodename' value="
-		+ node.id + " />";
-	  html1 += "<input type='button' id='annot_submit' value='submit'>";
-	  html1 += "</div></form>";
-	  $jit.id('inner-details').innerHTML = path + html1;
+							  html1 += networkId + " method='POST' >";
+							  html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+							  html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+								  + node.id + " />";
+							  html1 += "<input type='button' id='annot_submit' value='submit'>";
+							  html1 += "</div></form>";
+							  $jit.id('inner-details').innerHTML = path + html1;
 							  $.ajax({
 									url : path+"/auth/editing/getAnnotation/"+networkId,
 									type : "GET",
@@ -251,7 +251,64 @@ this.edge.epsilon);
 						});
 						$('#annot_relation').click(function() {
 							  alert( "Handler for .click() called." );
-							  $jit.id('inner-details').innerHTML = path + html2;
+							  var type1 = "relation";
+							  var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
+								+ "/auth/editing/saveAnnotation/";
+							  html2 += networkId + " method='POST' >";
+							  html2 += "<p id='message'></p>";
+							  html2 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+							  html2 += "<input  type='hidden' name='nodename' id='nodename' value="
+								+ node.id + " />";
+							  html2 += "<input type='submit' id='annot_submit' value='submit'>";
+							  html2 += "</form></div>";
+							  
+							  $.ajax({
+									url : path+"/auth/editing/getAnnotation/"+networkId,
+									type : "GET",
+									//data : $('#nodename').serialize(),
+									data: "nodeid="+node.id+"&type="+type1,
+									success : function(data) {
+										alert("done");
+										alert("data:"+data);
+										alert("before:" +$('#text').val());
+										//$('#text').append(data);
+										$('#text').text(data);
+										alert("after:"+$('#text').val());
+										//$jit.id('inner-details').innerHTML = path + html1;
+										
+									},
+									error: function() {
+										alert("error");
+									}
+								});
+							  event.preventDefault();
+							  
+							  
+							  $('#annot_submit').click(function(event) {
+									var annottext = $('#text').val();  
+								    var nodename = $('#nodename').val(); 
+								    var url = path+"/auth/editing/saveAnnotation/"+networkId;
+								    alert("text:"+annottext);
+								    alert("nodename:"+nodename);
+								    alert("url:"+url);
+									$.ajax({
+										url : $('#annot_form').attr("action"),
+										type : "POST",
+										data :"nodename="+node.id+"&annotText="+annottext,
+										success : function() {
+											
+											alert("done");
+											$('#popup2').dialog('close');
+										},
+										error: function() {
+											alert("error");
+										}
+									});
+
+									event.preventDefault();
+								});
+							  
+							//  $jit.id('inner-details').innerHTML = path + html2;
 							  $( '#popup2' ).show( "slow" );
 							  $('#popup2').dialog();
 						});
