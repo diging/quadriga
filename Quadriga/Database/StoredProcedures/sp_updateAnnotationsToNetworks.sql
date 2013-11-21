@@ -21,8 +21,7 @@ CREATE PROCEDURE sp_updateAnnotaionsToNetworks
   OUT errmsg           VARCHAR(255)    
 )
 BEGIN
-	DECLARE uniqueId  BIGINT;
-    DECLARE annotationId VARCHAR(100);
+	
     -- the error handler for any sql exception
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
     SET errmsg = "SQL exception has occurred";
@@ -34,8 +33,8 @@ BEGIN
 	 THEN SET errmsg = "Annotation text cannot be empty";
 	END IF;
 	  
-	IF (annotationId IS NULL OR annotationId = "")
-	 THEN SET errmsg = "Object id cannot be empty";
+	IF (inannotationid IS NULL OR inannotationid = "")
+	 THEN SET errmsg = "Annotation id cannot be empty";
 	END IF;
 
 	

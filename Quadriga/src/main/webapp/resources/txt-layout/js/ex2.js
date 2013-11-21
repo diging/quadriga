@@ -42,7 +42,16 @@ function init(json, networkId, path) {
 							(posFr.y + posTo.y) / 2);
 				}// if data.labeltext
 			}
-		}
+	
+		},
+	
+	'contains': function(adj, pos) { 
+        var from = adj.nodeFrom.pos.getc(true), 
+            to = adj.nodeTo.pos.getc(true); 
+        return this.edgeHelper.arrow.contains(from, to, pos, 
+this.edge.epsilon); 
+      } 
+	 
 	});
 
 	var fd = new $jit.ForceDirected(
@@ -153,11 +162,14 @@ function init(json, networkId, path) {
 						// connections.
 						// var html = "<h4>" + node.name + "</h4><b>
 						// connections:</b><ul><li>",
-						
+						alert(node.type);
 						var html = "";
+						if(node.type=="Predicate"){
+							html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
+						} else{
 						
-						
-						html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
+						html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </div>";
+						}
 						
 					/*	 var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
 														+ "/auth/editing/saveAnnotation/";
@@ -193,8 +205,11 @@ function init(json, networkId, path) {
 									data: "nodeid="+node.id+"&type="+type1,
 									success : function(data) {
 										alert("done");
-										//alert("data:"+data);
-										$('#text').append(data);
+										alert("data:"+data);
+										alert("before:" +$('#text').val());
+										//$('#text').append(data);
+										$('#text').text(data);
+										alert("after:"+$('#text').val());
 										//$jit.id('inner-details').innerHTML = path + html1;
 										
 									},
@@ -209,9 +224,9 @@ function init(json, networkId, path) {
 									var annottext = $('#text').val();  
 								    var nodename = $('#nodename').val(); 
 								    var url = path+"/auth/editing/saveAnnotation/"+networkId;
-								  //  alert("text:"+annottext);
-								 //   alert("nodename:"+nodename);
-								 //   alert("url:"+url);
+								    alert("text:"+annottext);
+								    alert("nodename:"+nodename);
+								    alert("url:"+url);
 									$.ajax({
 										url : $('#annot_form').attr("action"),
 										type : "POST",
@@ -221,7 +236,7 @@ function init(json, networkId, path) {
 										success : function() {
 											
 											alert("done");
-											
+											$('#popup1').dialog('close');
 										},
 										error: function() {
 											alert("error");

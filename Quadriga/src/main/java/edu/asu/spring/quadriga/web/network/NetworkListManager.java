@@ -135,8 +135,8 @@ public class NetworkListManager {
 		}
 		jsonstring1 = jsonstring1+"]";
 	//	String newJson = jsonstring1+"#"+networkId;
-		logger.debug(jsonstring1);
-		
+		logger.info(jsonstring1);
+	
 		logger.info("Json object formed and sent to the JSP");
 		/*String[] jsonArr = new String[2];
 		jsonArr[0] =  jsonstring1;
