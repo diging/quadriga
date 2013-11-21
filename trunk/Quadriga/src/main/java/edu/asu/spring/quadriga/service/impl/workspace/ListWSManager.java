@@ -84,7 +84,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> collaboratorWorkspaceList;
-		collaboratorWorkspaceList = listWSManagerDAO.listActiveWorkspace(projectid, user);
+		collaboratorWorkspaceList = listWSManagerDAO.listActiveWorkspaceOfCollaborator(projectid, user);
 		return collaboratorWorkspaceList;
 	}
 	

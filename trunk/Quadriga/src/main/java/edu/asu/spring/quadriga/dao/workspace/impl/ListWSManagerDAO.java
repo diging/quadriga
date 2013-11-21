@@ -212,7 +212,8 @@ public class ListWSManagerDAO extends DAOConnectionManager  implements IListWSMa
 		List<IWorkSpace> workspaceList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where (workcollab.quadrigaUserDTO.username =:username or projWork.workspaceDTO.workspaceowner.username =:username) and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isdeactivated =:isdeactivated"); 
+			//Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where (workcollab.quadrigaUserDTO.username =:username or projWork.workspaceDTO.workspaceowner.username =:username) and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isdeactivated =:isdeactivated"); 
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO.workspaceowner.username =:username and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isdeactivated =:isdeactivated");
 			query.setParameter("username", username);
 			query.setParameter("projectid", projectid);
 			query.setParameter("isdeactivated", true);
