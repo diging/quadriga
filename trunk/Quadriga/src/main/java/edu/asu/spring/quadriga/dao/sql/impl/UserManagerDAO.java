@@ -2,6 +2,9 @@ package edu.asu.spring.quadriga.dao.sql.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -29,6 +32,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 
 	@Autowired
 	private UserDTOMapper userMapper;
+	
+	@Resource(name = "database_error_msgs")
+	private Properties messages;
 
 	private static final Logger logger = LoggerFactory.getLogger(UserManagerDAO.class);
 
@@ -260,19 +266,19 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 			QuadrigaUserDTO userDTO = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,deleteUser);
 			if(userDTO.getProjectDTOList().size() != 0)
 			{
-				
+				throw new QuadrigaStorageException(messages.getProperty("delete_user_project_owner"));
 			}
 			else if(userDTO.getWorkspaceDTOList().size() != 0)
 			{
-
+				throw new QuadrigaStorageException(messages.getProperty("delete_user_workspace_owner"));
 			}
 			else if(userDTO.getProjectCollaboratorDTOList().size() != 0)
 			{
-				
+				throw new QuadrigaStorageException(messages.getProperty("delete_user_project_collaborator"));
 			}
 			else if(userDTO.getWorkspaceCollaboratorDTOList().size() != 0)
 			{
-				
+				throw new QuadrigaStorageException(messages.getProperty("delete_user_workspace_collaborator"));
 			}
 			else
 			{
@@ -285,6 +291,5 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 			logger.error("Error in deactivating user account: ",e);
 			throw new QuadrigaStorageException(e);
 		}
-		return FAILURE;
 	}
 }
