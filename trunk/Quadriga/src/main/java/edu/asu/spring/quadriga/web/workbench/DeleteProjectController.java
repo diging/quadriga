@@ -109,7 +109,7 @@ public class DeleteProjectController
 	public ModelAndView deleteProjectRequest(@Validated @ModelAttribute("projectform") ModifyProjectForm projectForm,
 			BindingResult result,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		StringBuilder projIdList;
+		ArrayList<String> projectIdList;
 		String userName;
 		String projInternalId;
 		List<ModifyProject> deleteProjectList;
@@ -117,7 +117,7 @@ public class DeleteProjectController
 		
 		//create a model view
 		model = new ModelAndView("auth/workbench/deleteproject");
-		projIdList = new StringBuilder();
+		projectIdList = new ArrayList<String>();
 		
         userName = principal.getName();
         
@@ -151,12 +151,11 @@ public class DeleteProjectController
 				
 				if(projInternalId !=null)
 				{
-					projIdList.append(",");
-					projIdList.append(projInternalId);
+					projectIdList.add(projInternalId);
 				}
 			}
 			
-			projectManager.deleteProjectRequest(projIdList.toString().substring(1));
+			projectManager.deleteProjectRequest(projectIdList);
 			
 			model.getModelMap().put("success", 1);
 		}

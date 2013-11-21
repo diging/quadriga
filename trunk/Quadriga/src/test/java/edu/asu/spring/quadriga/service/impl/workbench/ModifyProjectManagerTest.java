@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.service.impl.workbench;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -124,8 +126,9 @@ public class ModifyProjectManagerTest {
 
 	@Test
 	public void testDeleteProjectRequest() throws QuadrigaStorageException {
-		String projectIdList;
-		projectIdList = "PROJ_3,PROJ_4";
+		ArrayList<String> projectIdList = new ArrayList<String>();
+		projectIdList.add("PROJ_3");
+		projectIdList.add("PROJ_4");
 		projectManager.deleteProjectRequest(projectIdList);
 		assertTrue(true);
 	}

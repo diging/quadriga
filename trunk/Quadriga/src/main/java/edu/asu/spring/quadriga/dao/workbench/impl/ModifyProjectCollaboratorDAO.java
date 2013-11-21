@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao.workbench.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -119,48 +120,60 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 		ProjectCollaboratorDTOPK collaboratorKey = null;
 		List<ProjectCollaboratorDTO> collaboratorList = null;
 		List<String> roles = null;
+		List<String> existingRoles = null;
 		QuadrigaUserDTO user = null;
 		String collaborator;
+		String collabRole;
 		Date date = null;
 		try
 		{
 			project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
 			collaboratorList = project.getProjectCollaboratorDTOList();
 			roles = getList(collaboratorRole);
+			existingRoles = new ArrayList<String>();
 			
 			if(!project.equals(null))
 			{
-				//delete all the roles associated with the user
+				//remove the user roles which are not associated with the input selection
 				Iterator<ProjectCollaboratorDTO> iterator = collaboratorList.iterator();
 				while(iterator.hasNext())
 				{
-					collaborator = iterator.next().getQuadrigaUserDTO().getUsername();
+					projectCollaborator = iterator.next();
+					collaboratorKey = projectCollaborator.getProjectCollaboratorDTOPK();
+					collaborator = projectCollaborator.getQuadrigaUserDTO().getUsername();
+					collabRole = collaboratorKey.getCollaboratorrole();
 					if(collaborator.equals(collabUser))
 					{
-						iterator.remove();
+						if(!roles.contains(collabRole))
+						{
+							iterator.remove();
+						}
+						else
+						{
+							existingRoles.add(collabRole);
+						}
 					}
 				}
 				
-				project.setProjectCollaboratorDTOList(collaboratorList);
-				
-				sessionFactory.getCurrentSession().update(project);
-				
+				//add the new roles to the collaborator
 				user = getUserDTO(collabUser);
 				
-				//add the roles to the collaborator user
 				for(String role : roles)
 				{
-					date = new Date();
-					projectCollaborator = new ProjectCollaboratorDTO();
-					collaboratorKey = new ProjectCollaboratorDTOPK(projectid,collabUser,role);
-					projectCollaborator.setProjectDTO(project);
-					projectCollaborator.setProjectCollaboratorDTOPK(collaboratorKey);
-					projectCollaborator.setQuadrigaUserDTO(user);
-					projectCollaborator.setCreatedby(username);
-					projectCollaborator.setCreateddate(date);
-					projectCollaborator.setUpdatedby(username);
-					projectCollaborator.setUpdateddate(date);
-					collaboratorList.add(projectCollaborator);
+					if(!existingRoles.contains(role))
+					{
+						date = new Date();
+						projectCollaborator = new ProjectCollaboratorDTO();
+						collaboratorKey = new ProjectCollaboratorDTOPK(projectid,collabUser,role);
+						projectCollaborator.setProjectDTO(project);
+						projectCollaborator.setProjectCollaboratorDTOPK(collaboratorKey);
+						projectCollaborator.setQuadrigaUserDTO(user);
+						projectCollaborator.setCreatedby(username);
+						projectCollaborator.setCreateddate(date);
+						projectCollaborator.setUpdatedby(username);
+						projectCollaborator.setUpdateddate(date);
+						collaboratorList.add(projectCollaborator);
+					}
 				}
 				
 				project.setProjectCollaboratorDTOList(collaboratorList);
@@ -176,7 +189,6 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 			logger.error("Error while updating project collaborators",ex);
 			throw new QuadrigaStorageException();
 		}
-		
 	}
 
 }
