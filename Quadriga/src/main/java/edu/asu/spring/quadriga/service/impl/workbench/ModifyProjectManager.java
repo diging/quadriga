@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 */
 	@Override
 	@Transactional
-	public void deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
+	public void deleteProjectRequest(ArrayList<String> projectIdList) throws QuadrigaStorageException
 	{
 		logger.info("Deleting project details");
 		modifyProjectManagerDAO.deleteProjectRequest(projectIdList);
@@ -97,9 +99,8 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 */
 	@Override
 	@Transactional
-	public String assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
-		String errmsg = modifyProjectManagerDAO.assignProjectOwnerEditor(projectId, owner);
-		return errmsg;
+	public void assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
+		 modifyProjectManagerDAO.assignProjectOwnerEditor(projectId, owner);
 	}
 	
 	/**
@@ -111,8 +112,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 */
 	@Override
 	@Transactional
-	public String deleteEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
-		String errmsg = modifyProjectManagerDAO.deleteProjectOwnerEditor(projectId, owner);
-		return errmsg;
+	public void deleteEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
+		 modifyProjectManagerDAO.deleteProjectOwnerEditor(projectId, owner);
 	}
 }

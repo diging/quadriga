@@ -1,8 +1,10 @@
 package edu.asu.spring.quadriga.dao.workbench.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -33,77 +35,6 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectManagerDAO.class);
 	
-	/**
-	 * This method transfers the project ownership to another user
-	 * @param projectId
-	 * @param oldOwner
-	 * @param newOwner
-	 * @param collabRole
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	@Override
-	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
-	{
-		try
-		{
-			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
-			projectDTO.setProjectowner(getProjectOwner(newOwner));
-			projectDTO.setUpdatedby(oldOwner);
-			projectDTO.setUpdateddate(new Date());
-			
-			Iterator<ProjectCollaboratorDTO> iterator = projectDTO.getProjectCollaboratorDTOList().iterator();
-			while(iterator.hasNext())
-			{
-				ProjectCollaboratorDTO projectCollaboratorDTO = iterator.next();
-				if(projectCollaboratorDTO.getQuadrigaUserDTO().getUsername().equals(newOwner))
-				{
-					iterator.remove();
-				}
-			}
-			
-			ProjectCollaboratorDTO projectCollaboratorDTO = new ProjectCollaboratorDTO();
-			projectCollaboratorDTO.setProjectDTO(projectDTO);
-			projectCollaboratorDTO.setProjectCollaboratorDTOPK(new ProjectCollaboratorDTOPK(projectId,oldOwner,collabRole));
-			projectCollaboratorDTO.setQuadrigaUserDTO(new QuadrigaUserDTO(oldOwner));
-			projectCollaboratorDTO.setCreatedby(oldOwner);
-			projectCollaboratorDTO.setCreateddate(new Date());
-			projectCollaboratorDTO.setUpdatedby(oldOwner);
-			projectCollaboratorDTO.setUpdateddate(new Date());
-			projectDTO.getProjectCollaboratorDTOList().add(projectCollaboratorDTO);
-			
-			sessionFactory.getCurrentSession().update(projectDTO);
-		}
-		catch(Exception e)
-		{
-			logger.error("transferProjectOwnerRequest method :",e);
-        	throw new QuadrigaStorageException();
-		}
-		
-	}
-	
-	/**
-	 * This method retrieve the project of the user by his username
-	 * @param userName
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 */
-	@Override
-	public QuadrigaUserDTO getProjectOwner(String userName) throws QuadrigaStorageException
-	{
-		try
-		{
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-			query.setParameter("username", userName);
-			return (QuadrigaUserDTO) query.uniqueResult();
-		}
-		catch(Exception e)
-		{
-			logger.error("getProjectOwner :",e);
-        	throw new QuadrigaStorageException();
-		}
-	}
-	
 	
 	/**
 	 * This method saves a new project
@@ -123,37 +54,11 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
         {
         	sessionFactory.getCurrentSession().save(projectDTO);			
         }
-        catch(Exception e)
+        catch(HibernateException e)
         {
         	logger.error("getProjectOwner :",e);
         	throw new QuadrigaStorageException();
         }
-	}
-	
-	
-	/**
-	 * This method deletes the project and its associations from database.
-	 * @param    projectIdList - Project internal id's in a comma 
-	 *           separated string.
-	 * @author   Karthik Jayaraman
-	 */
-	@Override
-	public void deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
-	{
-		String[] projectIDList = projectIdList.split(",");
-		try
-		{
-			for(int i=0;i<projectIdList.length();i++)
-			{
-				ProjectDTO  projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectIDList[0]);
-				sessionFactory.getCurrentSession().delete(projectDTO);
-			}
-		}
-		catch(Exception e)
-		{
-			logger.error("Add project request method :",e);
-			throw new QuadrigaStorageException();
-		}
 	}
 	
 	/**
@@ -180,10 +85,83 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 			projectDTO.setUpdateddate(new Date());
 			sessionFactory.getCurrentSession().update(projectDTO);
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("updateProjectRequest method : "+e);
 			throw new QuadrigaStorageException();
+		}
+		
+	}
+	
+	/**
+	 * This method deletes the project and its associations from database.
+	 * @param    projectIdList - Project internal id's in a comma 
+	 *           separated string.
+	 * @author   Karthik Jayaraman
+	 */
+	@Override
+	public void deleteProjectRequest(ArrayList<String> projectIdList) throws QuadrigaStorageException
+	{
+		try
+		{
+			for(String projectId : projectIdList)
+			{
+				ProjectDTO  projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,projectId);
+				sessionFactory.getCurrentSession().delete(projectDTO);
+			}
+		}
+		catch(HibernateException e)
+		{
+			logger.error("Add project request method :",e);
+			throw new QuadrigaStorageException();
+		}
+	}
+	
+	/**
+	 * This method transfers the project ownership to another user
+	 * @param projectId
+	 * @param oldOwner
+	 * @param newOwner
+	 * @param collabRole
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
+	@Override
+	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
+	{
+		try
+		{
+			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+			projectDTO.setProjectowner(getUserDTO(newOwner));
+			projectDTO.setUpdatedby(oldOwner);
+			projectDTO.setUpdateddate(new Date());
+			
+			Iterator<ProjectCollaboratorDTO> iterator = projectDTO.getProjectCollaboratorDTOList().iterator();
+			while(iterator.hasNext())
+			{
+				ProjectCollaboratorDTO projectCollaboratorDTO = iterator.next();
+				if(projectCollaboratorDTO.getQuadrigaUserDTO().getUsername().equals(newOwner))
+				{
+					iterator.remove();
+				}
+			}
+			
+			ProjectCollaboratorDTO projectCollaboratorDTO = new ProjectCollaboratorDTO();
+			projectCollaboratorDTO.setProjectDTO(projectDTO);
+			projectCollaboratorDTO.setProjectCollaboratorDTOPK(new ProjectCollaboratorDTOPK(projectId,oldOwner,collabRole));
+			projectCollaboratorDTO.setQuadrigaUserDTO(new QuadrigaUserDTO(oldOwner));
+			projectCollaboratorDTO.setCreatedby(oldOwner);
+			projectCollaboratorDTO.setCreateddate(new Date());
+			projectCollaboratorDTO.setUpdatedby(oldOwner);
+			projectCollaboratorDTO.setUpdateddate(new Date());
+			projectDTO.getProjectCollaboratorDTOList().add(projectCollaboratorDTO);
+			
+			sessionFactory.getCurrentSession().update(projectDTO);
+		}
+		catch(HibernateException e)
+		{
+			logger.error("transferProjectOwnerRequest method :",e);
+        	throw new QuadrigaStorageException();
 		}
 		
 	}
@@ -195,9 +173,8 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 	 * @author Karthik Jayaraman
 	 */
 	@Override
-	public String assignProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
+	public void assignProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
 	{
-		String result = "";
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ProjectEditorDTO projEditorDTO where projEditorDTO.projectEditorDTOPK.projectid =:projectid and  projEditorDTO.projectEditorDTOPK.owner =:owner");
@@ -206,11 +183,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 			
 			ProjectEditorDTO projectEditorDTO = (ProjectEditorDTO) query.uniqueResult();
 			
-			if(projectEditorDTO != null && projectEditorDTO.getProjectEditorDTOPK().getOwner().equals(owner))
-			{
-				result = "Owner already assigned as owner";
-			}
-			else
+			if((projectEditorDTO.equals(null)) && (projectEditorDTO.getProjectEditorDTOPK().getOwner().equals(owner)))
 			{
 				projectEditorDTO = new ProjectEditorDTO();
 				projectEditorDTO.setProjectEditorDTOPK(new ProjectEditorDTOPK(projectId, owner));
@@ -221,12 +194,11 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 				sessionFactory.getCurrentSession().save(projectEditorDTO);
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("assignProjectOwnerEditor method : "+e);
 			throw new QuadrigaStorageException();  
 		}
-		return result;
 	}
 	
 	/**
@@ -236,9 +208,8 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 	 * @author Karthik Jayaraman
 	 */
 	@Override
-	public String deleteProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
+	public void deleteProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
 	{
-		String result = "";
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ProjectEditorDTO projEditorDTO where projEditorDTO.projectEditorDTOPK.projectid =:projectid and  projEditorDTO.projectEditorDTOPK.owner =:owner");
@@ -246,11 +217,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 			query.setParameter("owner", owner);
 			
 			ProjectEditorDTO projectEditorDTO = (ProjectEditorDTO) query.uniqueResult();
-			if(projectEditorDTO == null)
-			{
-				result = "Owner don't exist";
-			}
-			else
+			if(!projectEditorDTO.equals(null))
 			{
 				sessionFactory.getCurrentSession().delete(projectEditorDTO);
 			}
@@ -260,6 +227,5 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 			logger.error("deleteProjectOwnerEditor method : "+e);
 			throw new QuadrigaStorageException();  
 		}
-		return result;
 	}
 }

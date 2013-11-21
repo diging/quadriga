@@ -215,7 +215,7 @@ public class ModifyProjectController
 	{
 		IUser user = userManager.getUserDetails(principal.getName());
 		String userName =user.getUserName();
-		String msg=projectManager.assignEditorToOwner(projectId, userName);
+		projectManager.assignEditorToOwner(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);
 		
 		//retrieve all the workspaces associated with the project
@@ -232,14 +232,6 @@ public class ModifyProjectController
 		}
 		model.addAttribute("project", project);
 		model.addAttribute("workspaceList",workspaceList);
-		if(msg.equals("")){
-			model.addAttribute("AssignEditorSuccess",1);
-		}else if(msg.equals("Owner already assigned as owner")){
-			model.addAttribute("AssignEditorSuccess",2);
-		}else{
-			logger.error("Failure " +msg);
-			model.addAttribute("AssignEditorSuccess",0);
-		}
 		return "auth/workbench/project";
 	}
 	/**
@@ -255,7 +247,7 @@ public class ModifyProjectController
 	{
 		IUser user = userManager.getUserDetails(principal.getName());
 		String userName =user.getUserName();
-		String msg=projectManager.deleteEditorToOwner(projectId, userName);
+		projectManager.deleteEditorToOwner(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);
 		
 		//retrieve all the workspaces associated with the project
@@ -272,14 +264,6 @@ public class ModifyProjectController
 		}
 		model.addAttribute("project", project);
 		model.addAttribute("workspaceList",workspaceList);
-		if(msg.equals("")){
-			model.addAttribute("DeleteEditorSuccess",1);
-		}else if(msg.equals("Owner already assigned as owner")){
-			model.addAttribute("DeleteEditorSuccess",2);
-		}else{
-			logger.error("Failure " +msg);
-			model.addAttribute("DeleteEditorSuccess",0);
-		}
 		return "auth/workbench/project";
 	}
 }

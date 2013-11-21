@@ -136,10 +136,13 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 		WorkspaceCollaboratorDTOPK collaboratorPK = null;
 		List<WorkspaceCollaboratorDTO> collaboratorList = null;
 		ArrayList<String> collaboratorRoles;
+		ArrayList<String> existingRoles;
+		String wsCollabRole;
 		String wsCollaborator;
 		
 		try
 		{
+			existingRoles = new ArrayList<String>();
 			workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
 			collaboratorList = workspace.getWorkspaceCollaboratorDTOList();
 			collaboratorRoles = getList(collaboratorRole);
@@ -149,29 +152,41 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 				Iterator<WorkspaceCollaboratorDTO> iterator = collaboratorList.iterator();
 				while(iterator.hasNext())
 				{
-					wsCollaborator = iterator.next().getQuadrigaUserDTO().getUsername();
+					collaborator = iterator.next();
+					collaboratorPK = collaborator.getWorkspaceCollaboratorDTOPK();
+					wsCollaborator = collaborator.getQuadrigaUserDTO().getUsername();
+					wsCollabRole = collaboratorPK.getCollaboratorrole();
 					if(wsCollaborator.equals(collabUser))
 					{
-						iterator.remove();
+						if(!collaboratorRoles.contains(wsCollabRole))
+						{
+							iterator.remove();
+						}
+						else
+						{
+							existingRoles.add(wsCollabRole);
+						}
+						
 					}
 				}
-				sessionFactory.getCurrentSession().flush();
-				
-				workspace.setWorkspaceCollaboratorDTOList(collaboratorList);
+
 				//add the user with new roles
 				//create a collaboratorDTO with the given details
 				for(String value : collaboratorRoles)
 				{
-					collaborator = new WorkspaceCollaboratorDTO();
-					collaboratorPK = new WorkspaceCollaboratorDTOPK(workspaceId,collabUser,value);
-					collaborator.setWorkspaceDTO(workspace);
-					collaborator.setWorkspaceCollaboratorDTOPK(collaboratorPK);
-					collaborator.setQuadrigaUserDTO(getUserDTO(collabUser));
-					collaborator.setCreatedby(userName);
-					collaborator.setCreateddate(new Date());
-					collaborator.setUpdatedby(userName);
-					collaborator.setUpdateddate(new Date());
-					collaboratorList.add(collaborator);
+					if(!existingRoles.contains(value))
+					{
+						collaborator = new WorkspaceCollaboratorDTO();
+						collaboratorPK = new WorkspaceCollaboratorDTOPK(workspaceId,collabUser,value);
+						collaborator.setWorkspaceDTO(workspace);
+						collaborator.setWorkspaceCollaboratorDTOPK(collaboratorPK);
+						collaborator.setQuadrigaUserDTO(getUserDTO(collabUser));
+						collaborator.setCreatedby(userName);
+						collaborator.setCreateddate(new Date());
+						collaborator.setUpdatedby(userName);
+						collaborator.setUpdateddate(new Date());
+						collaboratorList.add(collaborator);
+					}
 				}
 				
 				workspace.setWorkspaceCollaboratorDTOList(collaboratorList);
@@ -187,7 +202,5 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 		{
 			throw new QuadrigaStorageException();
 		}
-		
 	}
-
 }
