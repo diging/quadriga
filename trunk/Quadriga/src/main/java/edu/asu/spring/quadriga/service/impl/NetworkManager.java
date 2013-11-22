@@ -526,10 +526,11 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("\"data\": {");
 		this.jsonString.append("\"$color\": \"#CC0066\",");
 		this.jsonString.append("\"$type\": \"circle\",");
+		this.jsonString.append("\"nodetype\": \"Predicate\",");
 		this.jsonString.append("\"$dim\": 13");
 		this.jsonString.append("},");
 		this.jsonString.append("\"id\": \""+predicateNameId+"\",");
-		this.jsonString.append("\"type\": \"Predicate\",");
+		
 		this.jsonString.append("\"name\": \""+predicateName+"\"");
 		this.jsonString.append("},");
 	}
