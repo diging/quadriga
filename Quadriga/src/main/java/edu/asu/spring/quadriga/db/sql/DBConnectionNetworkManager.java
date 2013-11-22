@@ -25,7 +25,6 @@ import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.UserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -85,7 +84,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		CallableStatement sqlStatement;
 
 		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_NETWORK_DETAILS  + "(?,?,?,?,?,?,?)";
+		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.ADD_NETWORK_DETAILS  + "(?,?,?,?,?,?)";
 		//get the connection
 		getConnection();
 		//establish the connection with the database
@@ -98,11 +97,10 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 			sqlStatement.setString(2, workspaceid);
 			sqlStatement.setString(3, networkName);
 			sqlStatement.setString(4, owner.getUserName());        	
-			sqlStatement.setString(5,"0");
-			sqlStatement.setString(6,"PENDING");
+			sqlStatement.setString(5,"PENDING");
 
 			//adding output variables to the SP
-			sqlStatement.registerOutParameter(7,Types.VARCHAR);
+			sqlStatement.registerOutParameter(6,Types.VARCHAR);
 
 			sqlStatement.execute();
 

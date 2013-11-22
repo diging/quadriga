@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 /**
  * This class is responsible for Querying the MySQL database
- * and fetch the class objects
+ * and fetch the class objects related to user class
  * 
  * @author Ram Kumar Kumaresan
  *

@@ -20,7 +20,6 @@ CREATE PROCEDURE sp_addNetworksDetails
   IN  inworkspaceid    VARCHAR(150),
   IN  innetworkname	  VARCHAR(100),
   IN  innetworkowner    VARCHAR(50),
-  IN  inaccessibility   TINYINT  ,
   IN  instatus		  VARCHAR(50) ,
   OUT errmsg           VARCHAR(255)    
 )
@@ -58,9 +57,9 @@ BEGIN
          START TRANSACTION;
 
             INSERT 
-              INTO tbl_networks(networkid,workspaceid,networkname,networkowner,accessibility,status,
+              INTO tbl_networks(networkid,workspaceid,networkname,networkowner,status,
                          updatedby,updateddate,createdby,createddate)
-			 VALUES (innetworkid,inworkspaceid,innetworkname,innetworkowner,inaccessibility,instatus,
+			 VALUES (innetworkid,inworkspaceid,innetworkname,innetworkowner,instatus,
                      innetworkowner,NOW(),innetworkowner,NOW());	
 		 IF (errmsg = "")
            THEN COMMIT;

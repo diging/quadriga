@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NetworksDTO.findByWorkspaceid", query = "SELECT n FROM NetworksDTO n WHERE n.workspaceid = :workspaceid"),
     @NamedQuery(name = "NetworksDTO.findByNetworkname", query = "SELECT n FROM NetworksDTO n WHERE n.networkname = :networkname"),
     @NamedQuery(name = "NetworksDTO.findByNetworkowner", query = "SELECT n FROM NetworksDTO n WHERE n.networkowner = :networkowner"),
-    @NamedQuery(name = "NetworksDTO.findByAccessibility", query = "SELECT n FROM NetworksDTO n WHERE n.accessibility = :accessibility"),
     @NamedQuery(name = "NetworksDTO.findByStatus", query = "SELECT n FROM NetworksDTO n WHERE n.status = :status"),
     @NamedQuery(name = "NetworksDTO.findByUpdatedby", query = "SELECT n FROM NetworksDTO n WHERE n.updatedby = :updatedby"),
     @NamedQuery(name = "NetworksDTO.findByUpdateddate", query = "SELECT n FROM NetworksDTO n WHERE n.updateddate = :updateddate"),
@@ -51,9 +50,6 @@ public class NetworksDTO implements Serializable {
     @Basic(optional = false)
     @Column(name = "networkowner")
     private String networkowner;
-    @Basic(optional = false)
-    @Column(name = "accessibility")
-    private short accessibility;
     @Basic(optional = false)
     @Column(name = "status")
     private String status;
@@ -79,12 +75,11 @@ public class NetworksDTO implements Serializable {
         this.networkid = networkid;
     }
 
-    public NetworksDTO(String networkid, String workspaceid, String networkname, String networkowner, short accessibility, String status, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public NetworksDTO(String networkid, String workspaceid, String networkname, String networkowner, String status, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.networkid = networkid;
         this.workspaceid = workspaceid;
         this.networkname = networkname;
         this.networkowner = networkowner;
-        this.accessibility = accessibility;
         this.status = status;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
@@ -122,14 +117,6 @@ public class NetworksDTO implements Serializable {
 
     public void setNetworkowner(String networkowner) {
         this.networkowner = networkowner;
-    }
-
-    public short getAccessibility() {
-        return accessibility;
-    }
-
-    public void setAccessibility(short accessibility) {
-        this.accessibility = accessibility;
     }
 
     public String getStatus() {
