@@ -379,6 +379,7 @@ public class DictionaryRestController {
 			DictionaryItem d = I.next();
 			try{
 				dictionaryManager.addNewDictionariesItems(dictId, d.getTerm(), d.getUri(), d.getPos(), user.getUserName());
+				dictionaryManager.updateDictionariesItems(dictId, d.getUri(), d.getTerm(), d.getPos());
 			}catch(QuadrigaStorageException e){
 				logger.error("Errors in adding items",e);
 				response.setStatus(500);
@@ -456,6 +457,7 @@ public class DictionaryRestController {
 				DictionaryItem d = I.next();
 				try{
 					dictionaryManager.addNewDictionariesItems(dictionaryID, d.getTerm().trim(), d.getUri().trim(), d.getPos().trim(), user.getUserName());
+					dictionaryManager.updateDictionariesItems(dictionaryID, d.getUri(), d.getTerm(), d.getPos());
 				}catch(QuadrigaStorageException e){
 					logger.error("Errors in adding items",e);
 					response.setStatus(500);
