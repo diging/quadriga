@@ -56,6 +56,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * Controller for dictionary related rest apis exposed to other clients
@@ -321,23 +322,24 @@ public class DictionaryRestController {
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = usermanager.getUserDetails(principal.getName());
-		
 		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
 			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
 			response.setStatus(404);
 			return "Workspace ID : "+workspaceId+" doesn't exist";
 		}
 		
+		String [] roles = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR};
+		boolean hasAccess = hasWorkspaceAccess(workspaceId, user.getUserName(),roles);
+		
 		String dictName = request.getParameter("name");
 		String desc = request.getParameter("desc");
-		logger.debug("dict Name  :"+dictName+"   desc : "+desc);
 		IDictionary dictionary = dictionaryFactory.createDictionaryObject();
 
-		if(dictName.isEmpty() || dictName == null){
+		if(dictName == null ||  dictName.isEmpty()){
 			response.setStatus(404);
 			return "Please provide dictionary name";
 		}
-		if(desc.isEmpty() || desc == null){
+		if( desc == null ||  desc.isEmpty()){
 			response.setStatus(404);
 			return "Please provide dictionary description";
 		}
@@ -467,5 +469,25 @@ public class DictionaryRestController {
 			response.setContentType(accept);
 			return "Success";
 		}
+	}
+	
+	public boolean hasWorkspaceAccess(String workspaceId, String userName, String [] roles) throws QuadrigaStorageException{
+		boolean hasAccess = false; 
+		if(checkWSSecurity.checkWorkspaceOwner(userName, workspaceId)){
+			logger.info("Owner access");
+			return true;
+		}else{
+			//check if the user associated with the role has any projects
+			for(String role : roles)
+			{
+				hasAccess = checkWSSecurity.chkIsCollaboratorWorkspaceAssociated(userName, role);
+				
+				if(hasAccess){
+					logger.info("Role access : " + role);
+					return true;
+				}
+			}
+		}
+		return hasAccess;
 	}
 }
