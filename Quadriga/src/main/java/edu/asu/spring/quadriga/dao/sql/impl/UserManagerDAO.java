@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,13 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
+/**
+ * This class is responsible for Querying the MySQL database
+ * and fetch the class objects
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @Repository
 public class UserManagerDAO extends DAOConnectionManager implements IUserManagerDAO
 {
@@ -38,6 +44,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 
 	private static final Logger logger = LoggerFactory.getLogger(UserManagerDAO.class);
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public IUser getUserDetails(String userid) throws QuadrigaStorageException
 	{
@@ -56,6 +65,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<IUser> getUsers(String userRoleId) throws QuadrigaStorageException
 	{
@@ -76,6 +88,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public int addAccountRequest(String userName) throws QuadrigaStorageException
 	{
@@ -92,6 +107,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}		
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<IUser> getUserRequests() throws QuadrigaStorageException
 	{
@@ -109,6 +127,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException
 	{
@@ -129,6 +150,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public int deactivateUser(String sUserId,String sDeactiveRoleDBId,String sAdminId) throws QuadrigaStorageException
 	{
@@ -160,6 +184,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}		
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public int updateUserRoles(String sUserId,String sRoles,String sAdminId) throws QuadrigaStorageException
 	{
@@ -186,6 +213,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException
 	{		
@@ -221,6 +251,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public int denyUserRequest(String sUserId,String sAdminId) throws QuadrigaStorageException
 	{
@@ -258,12 +291,19 @@ public class UserManagerDAO extends DAOConnectionManager implements IUserManager
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
-	public int deleteUser(String deleteUser,String adminUser,String adminRole,String deactivatedRole) throws QuadrigaStorageException
+	public int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException
 	{
 		try
 		{
 			QuadrigaUserDTO userDTO = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,deleteUser);
+			
+			if(!userDTO.getQuadrigarole().contains(deactivatedRole))
+				throw new QuadrigaStorageException(messages.getProperty("delete_user_not_deactivated")); 
+			
 			if(userDTO.getProjectDTOList().size() != 0)
 			{
 				throw new QuadrigaStorageException(messages.getProperty("delete_user_project_owner"));
