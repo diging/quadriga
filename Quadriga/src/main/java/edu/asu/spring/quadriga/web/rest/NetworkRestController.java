@@ -50,6 +50,7 @@ import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * Controller for networks related rest api's exposed to other clients
@@ -416,7 +417,7 @@ public class NetworkRestController {
 		}catch(QuadrigaStorageException e){
 			logger.error("DB Error :",e);
 		}
-		if(!(network.getStatus().equals("REJECTED"))){
+		if(!(network.getStatus().equals(INetworkStatus.REJECTED))){
 			response.setStatus(500);
 			return "The Network doesn't have status : REJECTED";
 		}else{
@@ -434,7 +435,7 @@ public class NetworkRestController {
 					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 				}
 				networkManager.archiveNetwork(networkId);
-				editorManager.updateNetworkStatus(networkId, "PENDING");
+				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
 				JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
 				Unmarshaller unmarshaller = context.createUnmarshaller();
 				unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
