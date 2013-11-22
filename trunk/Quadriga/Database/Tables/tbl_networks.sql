@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS tbl_networks
   workspaceid     varchar(150)           NOT NULL ,
   networkname	varchar(100)           NOT NULL ,
   networkowner    VARCHAR(50)   NOT NULL ,
-  accessibility   TINYINT       NOT NULL,
   status		  VARCHAR(50)   NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
