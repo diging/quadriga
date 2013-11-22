@@ -7,12 +7,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.sql.IUserManagerDAO;
-import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -28,7 +26,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * 
  * @author       Kiran Kumar Batna
  * @author 		 Ram Kumar Kumaresan
- *
+ * 
  */
 @Service("userManager")
 public class UserManager implements IUserManager {
@@ -47,7 +45,7 @@ public class UserManager implements IUserManager {
 
 	@Autowired
 	private IUserManagerDAO usermanagerDAO;
-	
+
 	public IEmailNotificationManager getEmailManager() {
 		return emailManager;
 	}
@@ -89,7 +87,7 @@ public class UserManager implements IUserManager {
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
 
 		user = usermanagerDAO.getUserDetails(sUserId);
-		
+
 		if(user!=null)
 		{
 			userRole = user.getQuadrigaRoles();
@@ -137,7 +135,7 @@ public class UserManager implements IUserManager {
 		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
 		listUsers = usermanagerDAO.getUsersNotInRole(sDeactiveRoleDBId);
-		
+
 		return listUsers;		
 	}
 
@@ -175,7 +173,7 @@ public class UserManager implements IUserManager {
 		List<IUser> listUsers = null;
 
 		listUsers = usermanagerDAO.getUserRequests();
-		
+
 		return listUsers;		
 	}
 
@@ -198,7 +196,7 @@ public class UserManager implements IUserManager {
 
 		//Add the new role to the user.
 		int iResult = usermanagerDAO.deactivateUser(sUserId, sDeactiveRoleDBId, sAdminId);
-		
+
 		if(iResult == SUCCESS)
 		{
 			logger.info("The admin "+sAdminId+" deactivated the account of "+sUserId);
@@ -211,7 +209,7 @@ public class UserManager implements IUserManager {
 		}
 		return iResult;
 	}
-	
+
 	/**
 	 * Method to delete Quadriga user by admin
 	 * @param sUserId
@@ -222,13 +220,11 @@ public class UserManager implements IUserManager {
 	@Transactional
 	public void deleteUser(String delelteUser,String adminUser) throws QuadrigaStorageException
 	{
-		//fetch the admin role
-		String adminDbRole = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
-		//fetch the deactivated role
-		String deactivatedRole = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
-	    
-		usermanagerDAO.deleteUser(delelteUser, adminUser, adminDbRole, deactivatedRole);
-		
+		//Find the ROLEDBID for Deactivated account
+		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+
+		usermanagerDAO.deleteUser(delelteUser, sDeactiveRoleDBId);
+
 	}
 
 	/**
@@ -289,7 +285,7 @@ public class UserManager implements IUserManager {
 
 		//Find all the roles of the user
 		IUser user = null;
-		
+
 		user = usermanagerDAO.getUserDetails(sUserId);
 
 		//Remove the deactivated role from user roles
@@ -353,7 +349,7 @@ public class UserManager implements IUserManager {
 
 		//Place a new access request
 		iUserStatus = usermanagerDAO.addAccountRequest(userId);
-		
+
 		//Check the status of the request
 		if(iUserStatus == SUCCESS)
 		{
@@ -362,28 +358,28 @@ public class UserManager implements IUserManager {
 
 			//Ignore the user if the account is deactivated
 			adminlabel:
-			for(IUser admin:listAdminUsers)
-			{
-				List<IQuadrigaRole> roles = admin.getQuadrigaRoles();
-				IQuadrigaRole quadrigaRole = null;
-
-				for(IQuadrigaRole role: roles)
+				for(IUser admin:listAdminUsers)
 				{
-					quadrigaRole = rolemanager.getQuadrigaRole(role.getDBid());
-					if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
+					List<IQuadrigaRole> roles = admin.getQuadrigaRoles();
+					IQuadrigaRole quadrigaRole = null;
+
+					for(IQuadrigaRole role: roles)
 					{
-						//Continue to the next user as this user account is deactivated
-						continue adminlabel;
+						quadrigaRole = rolemanager.getQuadrigaRole(role.getDBid());
+						if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
+						{
+							//Continue to the next user as this user account is deactivated
+							continue adminlabel;
+						}
 					}
-				}
 
-				if(admin.getEmail()!=null && !admin.getEmail().equals(""))
-				{
-					emailManager.sendNewAccountRequestPlacementEmail(admin, userId);
+					if(admin.getEmail()!=null && !admin.getEmail().equals(""))
+					{
+						emailManager.sendNewAccountRequestPlacementEmail(admin, userId);
+					}
+					else
+						logger.info("The system tried to send email to the admin "+admin.getUserName()+" but the admin did not have an email setup");
 				}
-				else
-					logger.info("The system tried to send email to the admin "+admin.getUserName()+" but the admin did not have an email setup");
-			}
 		}
 		return iUserStatus;
 	}
