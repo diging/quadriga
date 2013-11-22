@@ -15,4 +15,10 @@ public interface IModifyWSManagerDAO {
 	public abstract void transferWSOwnerRequest(String workspaceId, String oldOwner,
 			String newOwner, String collabRole) throws QuadrigaStorageException;
 
+	void assignWorkspaceOwnerEditor(String workspaceId, String owner)
+			throws QuadrigaStorageException;
+
+	String deleteWorkspaceOwnerEditor(String workspaceId, String owner)
+			throws QuadrigaStorageException;
+
 }

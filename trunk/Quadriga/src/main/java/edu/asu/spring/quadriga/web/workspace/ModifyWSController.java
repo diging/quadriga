@@ -185,7 +185,8 @@ public class ModifyWSController {
 	public String assignEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException, RestException{
 		IUser user = userManager.getUserDetails(principal.getName());
 		String userName =user.getUserName();
-		String msg=modifyWSManager.assignEditorRoleToOwner(workspaceId, userName);
+		String msg="";
+		modifyWSManager.assignEditorRoleToOwner(workspaceId, userName);
 		IWorkSpace workspace;
 		List<ICollaborator> collaboratorList;
 

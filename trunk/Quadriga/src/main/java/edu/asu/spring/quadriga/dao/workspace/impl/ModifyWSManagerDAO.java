@@ -1,5 +1,8 @@
 package edu.asu.spring.quadriga.dao.workspace.impl;
 
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.workspace.IModifyWSManagerDAO;
+import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
@@ -21,6 +25,8 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceEditorDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 
@@ -124,6 +130,50 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IModifyW
 	}
 	
 	@Override
+	public void assignWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
+	{
+		try
+		{
+			WorkspaceEditorDTO workspaceEditorDTO = new WorkspaceEditorDTO();
+			workspaceEditorDTO.setWorkspaceEditorDTOPK(new WorkspaceEditorDTOPK(workspaceId, owner));
+			workspaceEditorDTO.setCreatedby(owner);
+			workspaceEditorDTO.setCreateddate(new Date());
+			workspaceEditorDTO.setUpdatedby(owner);
+			workspaceEditorDTO.setUpdateddate(new Date());
+			sessionFactory.getCurrentSession().save(workspaceEditorDTO);
+		}
+		catch(Exception e)
+		{
+			logger.error("assignWorkspaceOwnerEditor method :",e);
+        	throw new QuadrigaStorageException();
+		}
+	}
+	
+	@Override
+	public String deleteWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
+	{
+		String result = null;
+		try
+		{
+			WorkspaceEditorDTO workspaceEditorDTO = (WorkspaceEditorDTO) sessionFactory.getCurrentSession().get(WorkspaceEditorDTO.class, new WorkspaceEditorDTO(workspaceId, owner));
+			if(workspaceEditorDTO != null)
+			{
+				sessionFactory.getCurrentSession().delete(workspaceEditorDTO);
+			}
+			else
+			{
+				result = "Owner don't exist";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteWorkspaceOwnerEditor method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return result;
+	}
+	
+	@Override
 	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
 	{
 		try
@@ -134,7 +184,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IModifyW
 		}
 		catch(Exception e)
 		{
-			logger.error("getProjectOwner :",e);
+			logger.error("getUserDTO :",e);
         	throw new QuadrigaStorageException();
 		}
 	}

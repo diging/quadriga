@@ -183,7 +183,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IMo
 			
 			ProjectEditorDTO projectEditorDTO = (ProjectEditorDTO) query.uniqueResult();
 			
-			if((projectEditorDTO.equals(null)) && (projectEditorDTO.getProjectEditorDTOPK().getOwner().equals(owner)))
+			if( projectEditorDTO != null && (projectEditorDTO.getProjectEditorDTOPK().getOwner().equals(owner)))
 			{
 				projectEditorDTO = new ProjectEditorDTO();
 				projectEditorDTO.setProjectEditorDTOPK(new ProjectEditorDTOPK(projectId, owner));
