@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * This class will handle list dictionaries controller for the dictionary
@@ -53,8 +54,8 @@ public class EditingAssignUserManager {
 		IUser user = userManager.getUserDetails(principal.getName());
 		try{
 			editorManager.assignNetworkToUser(networkId, user);
-			editorManager.updateNetworkStatus(networkId, "ASSIGNED");
-			editorManager.updateAssignedNetworkStatus(networkId, "ASSIGNED");
+			editorManager.updateNetworkStatus(networkId, INetworkStatus.ASSIGNED);
+			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.ASSIGNED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
@@ -143,8 +144,8 @@ public class EditingAssignUserManager {
 		IUser user = userManager.getUserDetails(principal.getName());
 
 		try{
-			editorManager.updateNetworkStatus(networkId, "APPROVED");
-			editorManager.updateAssignedNetworkStatus(networkId, "APPROVED");
+			editorManager.updateNetworkStatus(networkId, INetworkStatus.APPROVED);
+			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.APPROVED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
@@ -182,8 +183,8 @@ public class EditingAssignUserManager {
 		IUser user = userManager.getUserDetails(principal.getName());
 
 		try{
-			editorManager.updateNetworkStatus(networkId, "REJECTED");
-			editorManager.updateAssignedNetworkStatus(networkId, "REJECTED");
+			editorManager.updateNetworkStatus(networkId, INetworkStatus.REJECTED);
+			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.REJECTED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
