@@ -26,9 +26,6 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 @Service
 public class ModifyWSManager implements IModifyWSManager 
 {
-	private static final Logger logger = LoggerFactory
-			.getLogger(UserManager.class);
-
 	@Autowired
 	@Qualifier("DBConnectionModifyWSManagerBean")
 	private IDBConnectionModifyWSManager dbConnect;
@@ -129,10 +126,9 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String assignEditorRoleToOwner(String workspaceId,String userName) throws QuadrigaStorageException{
-
-		String msg =dbConnect.assignWorkspaceOwnerEditor(workspaceId, userName);
-		return msg;
+	@Transactional
+	public void assignEditorRoleToOwner(String workspaceId,String userName) throws QuadrigaStorageException{
+		modifyWSManagerDAOImpl.assignWorkspaceOwnerEditor(workspaceId, userName);
 	}
 
 	/**
