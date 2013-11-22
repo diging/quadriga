@@ -37,9 +37,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
-import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
-import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
@@ -60,14 +57,14 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * Controller for conception collection rest apis exposed to other clients
+ * 
  * @author SatyaSwaroop Boddu
  * @author LohithDwaraka
- *
+ * 
  */
 
 @Controller
 public class ConceptCollectionRestController {
-
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ConceptCollectionRestController.class);
@@ -91,8 +88,8 @@ public class ConceptCollectionRestController {
 	private IConceptCollectionFactory collectionFactory;
 
 	@Autowired
-	private ICheckWSSecurity checkWSSecurity; 
-	
+	private ICheckWSSecurity checkWSSecurity;
+
 	@Autowired
 	private IConceptFactory conFact;
 
@@ -116,13 +113,13 @@ public class ConceptCollectionRestController {
 	 * @param userId
 	 * @param model
 	 * @return
-	 * @throws RestException 
+	 * @throws RestException
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String listConceptCollections(ModelMap model, Principal principal, HttpServletRequest req) throws RestException
-	{
+	public String listConceptCollections(ModelMap model, Principal principal,
+			HttpServletRequest req) throws RestException {
 		List<IConceptCollection> collectionsList = null;
 		VelocityEngine engine = null;
 		Template template = null;
@@ -135,7 +132,8 @@ public class ConceptCollectionRestController {
 					.getCollectionsOwnedbyUser(userId);
 			template = engine
 					.getTemplate("velocitytemplates/conceptcollections.vm");
-			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			VelocityContext context = new VelocityContext(
+					restVelocityFactory.getVelocityContext());
 			context.put("list", collectionsList);
 
 			StringWriter writer = new StringWriter();
@@ -159,7 +157,6 @@ public class ConceptCollectionRestController {
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		}
-
 
 	}
 
@@ -175,18 +172,22 @@ public class ConceptCollectionRestController {
 	 * @param accept
 	 * @return
 	 * @throws QuadrigaException
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 * @throws JAXBException 
-	 * @throws QuadrigaAccessException 
-	 * @throws QuadrigaStorageException 
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 * @throws JAXBException
+	 * @throws QuadrigaAccessException
+	 * @throws QuadrigaStorageException
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
-	public String getCCXMLFromVogon(@PathVariable("conceptCollectionID") String conceptCollectionId,HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaAccessException, QuadrigaStorageException {
+	public String getCCXMLFromVogon(
+			@PathVariable("conceptCollectionID") String conceptCollectionId,
+			HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String xml, @RequestHeader("Accept") String accept,
+			Principal principal) throws QuadrigaException,
+			ParserConfigurationException, SAXException, IOException,
+			JAXBException, QuadrigaAccessException, QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(500);
@@ -194,33 +195,38 @@ public class ConceptCollectionRestController {
 
 		} else {
 
-			logger.debug("XML : "+xml);
-			JAXBElement<QuadrigaConceptReply> response1=null;
-			try{
-				JAXBContext context = JAXBContext.newInstance(QuadrigaConceptReply.class);
+			logger.debug("XML : " + xml);
+			JAXBElement<QuadrigaConceptReply> response1 = null;
+			try {
+				JAXBContext context = JAXBContext
+						.newInstance(QuadrigaConceptReply.class);
 				Unmarshaller unmarshaller = context.createUnmarshaller();
-				unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+				unmarshaller
+						.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 				InputStream is = new ByteArrayInputStream(xml.getBytes());
-				response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
-			}catch(Exception e ){
-				logger.error("Error in unmarshalling",e);
+				response1 = unmarshaller.unmarshal(new StreamSource(is),
+						QuadrigaConceptReply.class);
+			} catch (Exception e) {
+				logger.error("Error in unmarshalling", e);
 			}
-			QuadrigaConceptReply qReply= response1.getValue();
+			QuadrigaConceptReply qReply = response1.getValue();
 			ConceptList c1 = qReply.getConceptList();
 			List<Concept> conceptList = c1.getConcepts();
 
 			Iterator<Concept> I = conceptList.iterator();
 
-			while(I.hasNext()){
+			while (I.hasNext()) {
 				Concept c = I.next();
-				logger.debug("arg Name :"+ c.getName().trim());
-				logger.debug("arg Pos :"+ c.getPos().trim());
-				logger.debug("arg URI :"+ c.getUri().trim());
-				logger.debug("arg descrtiption :"+ c.getDescription().trim());
-				try{
-					conceptControllerManager.addItems(c.getName(), c.getUri(), c.getPos(),  c.getDescription(), conceptCollectionId, user.getUserName());
-				}catch(QuadrigaStorageException e){
-					logger.error("Errors in adding items",e);
+				logger.debug("arg Name :" + c.getName().trim());
+				logger.debug("arg Pos :" + c.getPos().trim());
+				logger.debug("arg URI :" + c.getUri().trim());
+				logger.debug("arg descrtiption :" + c.getDescription().trim());
+				try {
+					conceptControllerManager.addItems(c.getName(), c.getUri(),
+							c.getPos(), c.getDescription(),
+							conceptCollectionId, user.getUserName());
+				} catch (QuadrigaStorageException e) {
+					logger.error("Errors in adding items", e);
 					response.setStatus(500);
 					response.setContentType(accept);
 					return "Fail";
@@ -235,20 +241,23 @@ public class ConceptCollectionRestController {
 
 	/**
 	 * Rest interface for the getting list of concept collections of a user
-	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/conceptcollections
-	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/conceptcollections
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/
+	 * conceptcollections
+	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949
+	 * /conceptcollections
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param userId
 	 * @param model
 	 * @return
-	 * @throws RestException 
+	 * @throws RestException
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/workspace/{workspaceId}/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
-	public String listWorkspaceConceptCollections(@PathVariable("workspaceId") String workspaceId, ModelMap model, Principal principal, HttpServletRequest req) throws RestException
-	{
+	public String listWorkspaceConceptCollections(
+			@PathVariable("workspaceId") String workspaceId, ModelMap model,
+			Principal principal, HttpServletRequest req) throws RestException {
 		List<IConceptCollection> collectionsList = null;
 		VelocityEngine engine = null;
 		Template template = null;
@@ -257,10 +266,12 @@ public class ConceptCollectionRestController {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 			String userId = principal.getName();
-			collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+			collectionsList = workspaceCCManager.listWorkspaceCC(workspaceId,
+					userId);
 			template = engine
 					.getTemplate("velocitytemplates/conceptcollections.vm");
-			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			VelocityContext context = new VelocityContext(
+					restVelocityFactory.getVelocityContext());
 			context.put("list", collectionsList);
 
 			StringWriter writer = new StringWriter();
@@ -285,125 +296,127 @@ public class ConceptCollectionRestController {
 			throw new RestException(403);
 		}
 
-
 	}
 
 	/**
 	 * Rest interface add a new Concept collection with a list of concepts
 	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/createcc
-	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/createcc
+	 * http:
+	 * //localhost:8080/quadriga/rest/workspace/WS_22992652874022949/createcc
 	 * 
 	 * @author Lohith Dwaraka
 	 * @param userId
 	 * @param model
 	 * @return
-	 * @throws RestException 
-	 * @throws QuadrigaStorageException 
-	 * @throws QuadrigaAccessException 
+	 * @throws RestException
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
 	 * @throws Exception
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
+
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
 	@ResponseBody
-	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
+	public String addConceptCollectionsToWorkspace(
+			@PathVariable("workspaceId") String workspaceId,
+			HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String xml, @RequestHeader("Accept") String accept,
+			ModelMap model, Principal principal, HttpServletRequest req)
+			throws RestException, QuadrigaStorageException,
+			QuadrigaAccessException {
 		IUser user = usermanager.getUserDetails(principal.getName());
-		
-		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
-			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
+
+		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
+			logger.info("Workspace ID : " + workspaceId + " doesn't exist");
 			response.setStatus(404);
-			return "Workspace ID : "+workspaceId+" doesn't exist";
+			return "Workspace ID : " + workspaceId + " doesn't exist";
 		}
+
 		
-		
-//		
-//		if(!checkWSSecurity.checkWorkspaceOwner(user.getUserName(), workspaceId)){
-//			logger.info("User is not the owner of this workspace");
-//			if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
-//				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
-//				response.setStatus(403);
-//				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
-//				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
-//				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
-//			}else if(!checkWSSecurity.chkCollabWorkspaceAccess(user.getUserName(), workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN)){
-//				logger.info("User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId);
-//				response.setStatus(403);
-//				//ROLE_WORKSPACE_COLLABORATOR_ADMIN
-//				//ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR
-//				return "User "+ user.getUserName()+" doesn't have permission for Workspace ID : "+workspaceId;
-//			}
-//		}
+		String [] roles = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR};
+		boolean hasAccess = hasWorkspaceAccess(workspaceId, user.getUserName(),roles);
+
+		if(!hasAccess){
+			logger.info("User : "+ user.getUserName()+" doesn't have access to Workspace ID : " + workspaceId );
+			response.setStatus(400);
+			return "User : "+ user.getUserName()+" doesn't have access to Workspace ID : " + workspaceId;
+		}
 		
 		String ccName = request.getParameter("name");
 		String desc = request.getParameter("desc");
-		logger.debug("CC Name  :"+ccName+"   desc : "+desc);
-		IConceptCollection collection = conceptCollectionFactory.createConceptCollectionObject();
+		IConceptCollection collection = conceptCollectionFactory
+				.createConceptCollectionObject();
 
-		if(ccName.isEmpty() || ccName == null){
+		if (ccName == null || ccName.isEmpty()) {
 			response.setStatus(404);
 			return "Please provide concept collection name";
 		}
-		if(desc.isEmpty() || desc == null){
+		if (desc == null ||  desc.isEmpty()) {
 			response.setStatus(404);
 			return "Please provide concept collection description";
 		}
-		logger.debug("XML : "+xml);
-		JAXBElement<QuadrigaConceptReply> response1=null;
-		try{
-			JAXBContext context = JAXBContext.newInstance(QuadrigaConceptReply.class);
+		logger.debug("XML : " + xml);
+		JAXBElement<QuadrigaConceptReply> response1 = null;
+		try {
+			JAXBContext context = JAXBContext
+					.newInstance(QuadrigaConceptReply.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+			unmarshaller
+					.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(xml.getBytes());
-			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaConceptReply.class);
-		}catch(Exception e ){
-			logger.error("Error in unmarshalling",e);
+			response1 = unmarshaller.unmarshal(new StreamSource(is),
+					QuadrigaConceptReply.class);
+		} catch (Exception e) {
+			logger.error("Error in unmarshalling", e);
 		}
-		if(response1 == null){
+		if (response1 == null) {
 			response.setStatus(404);
 			return "Concepts XML is not valid";
 		}
-		QuadrigaConceptReply qReply= response1.getValue();
+		QuadrigaConceptReply qReply = response1.getValue();
 		ConceptList c1 = qReply.getConceptList();
 		List<Concept> conceptList = c1.getConcepts();
-		if(conceptList.size()<1){
+		if (conceptList.size() < 1) {
 			response.setStatus(404);
 			return "Concepts XML is not valid";
 		}
-		
+
 		collection.setDescription(desc);
 		collection.setOwner(user);
 		collection.setName(ccName);
-		
-		String reponse = conceptControllerManager.addConceptCollection(collection);
+
+		String reponse = conceptControllerManager
+				.addConceptCollection(collection);
 		String ccId = conceptControllerManager.getConceptCollectinId(ccName);
-		
+
 		Iterator<Concept> I = conceptList.iterator();
 
-		while(I.hasNext()){
+		while (I.hasNext()) {
 			Concept c = I.next();
-			logger.debug("arg Name :"+ c.getName().trim());
-			logger.debug("arg Pos :"+ c.getPos().trim());
-			logger.debug("arg URI :"+ c.getUri().trim());
-			logger.debug("arg descrtiption :"+ c.getDescription().trim());
-			try{
-				conceptControllerManager.addItems(c.getName().trim(), c.getUri().trim(), c.getPos().trim(),  c.getDescription().trim(), ccId, user.getUserName());
-			}catch(QuadrigaStorageException e){
-				logger.error("Errors in adding items",e);
+			logger.debug("arg Name :" + c.getName().trim());
+			logger.debug("arg Pos :" + c.getPos().trim());
+			logger.debug("arg URI :" + c.getUri().trim());
+			logger.debug("arg descrtiption :" + c.getDescription().trim());
+			try {
+				conceptControllerManager.addItems(c.getName().trim(), c
+						.getUri().trim(), c.getPos().trim(), c.getDescription()
+						.trim(), ccId, user.getUserName());
+			} catch (QuadrigaStorageException e) {
+				logger.error("Errors in adding items", e);
 				response.setStatus(500);
 				response.setContentType(accept);
 				return "Fail";
 			}
 
 		}
-		
-		String msg = workspaceCCManager.addWorkspaceCC(workspaceId, ccId, user.getUserName());
-		
+
+		String msg = workspaceCCManager.addWorkspaceCC(workspaceId, ccId,
+				user.getUserName());
+
 		response.setStatus(200);
 		response.setContentType(accept);
 		return ccId;
 	}
-	
+
 	/**
 	 * Rest interface for the getting concept details i.e, list of items in the
 	 * collection
@@ -414,15 +427,15 @@ public class ConceptCollectionRestController {
 	 * @param collectionID
 	 * @param model
 	 * @return
-	 * @throws RestException 
+	 * @throws RestException
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/conceptdetails/{collectionID}", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String getConceptList(
-			@PathVariable("collectionID") String collectionID, ModelMap model, HttpServletRequest req, Principal principal) throws RestException
-			{
-		VelocityEngine engine=null;
+			@PathVariable("collectionID") String collectionID, ModelMap model,
+			HttpServletRequest req, Principal principal) throws RestException {
+		VelocityEngine engine = null;
 		Template template = null;
 		StringWriter sw = new StringWriter();
 		collection = collectionFactory.createConceptCollectionObject();
@@ -430,13 +443,15 @@ public class ConceptCollectionRestController {
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
-			conceptControllerManager.getCollectionDetails(collection, principal.getName());
+			conceptControllerManager.getCollectionDetails(collection,
+					principal.getName());
 			template = engine
 					.getTemplate("velocitytemplates/conceptdetails.vm");
-			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			VelocityContext context = new VelocityContext(
+					restVelocityFactory.getVelocityContext());
 			context.put("list", collection.getItems());
-			context.put("conceptPowerURL",conceptPowerURL);
-			context.put("path",updateConceptPowerURLPath);
+			context.put("conceptPowerURL", conceptPowerURL);
+			context.put("path", updateConceptPowerURLPath);
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {
@@ -454,12 +469,31 @@ public class ConceptCollectionRestController {
 		} catch (QuadrigaAccessException e) {
 			logger.error("Exception:", e);
 			throw new RestException(403);
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("Exception:", e);
 			throw new RestException(405);
 		}
 
+	}
+	
+	public boolean hasWorkspaceAccess(String workspaceId, String userName, String [] roles) throws QuadrigaStorageException{
+		boolean hasAccess = false; 
+		if(checkWSSecurity.checkWorkspaceOwner(userName, workspaceId)){
+			logger.info("Owner access");
+			return true;
+		}else{
+			//check if the user associated with the role has any projects
+			for(String role : roles)
+			{
+				hasAccess = checkWSSecurity.chkIsCollaboratorWorkspaceAssociated(userName, role);
+				
+				if(hasAccess){
+					logger.info("Role access : " + role);
+					return true;
+				}
 			}
+		}
+		return hasAccess;
+	}
 
 }
