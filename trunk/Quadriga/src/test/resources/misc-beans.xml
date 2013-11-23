@@ -185,7 +185,11 @@
 	
 	<bean id="usermanagerDAO" class="edu.asu.spring.quadriga.dao.sql.impl.UserManagerDAO"/>
 	
+	<bean id="usermanagerDAO" class="edu.asu.spring.quadriga.dao.sql.impl.NetworkManagerDAO"/>
+	
 	<bean id="userMapper" class="edu.asu.spring.quadriga.mapper.UserDTOMapper"/>
+	
+	<bean id="userMapper" class="edu.asu.spring.quadriga.mapper.NetworkDTOMapper"/>
 	
 	<bean id="dspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.DspaceDTOMapper"/>
 	

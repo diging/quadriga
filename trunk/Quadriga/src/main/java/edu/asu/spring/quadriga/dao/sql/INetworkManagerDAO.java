@@ -15,7 +15,7 @@ public interface INetworkManagerDAO {
 		public abstract String addNetworkStatement(String networkId, String id, String type,
 				String isTop, IUser user) throws QuadrigaStorageException;
 	
-		public abstract INetwork getNetworkStatus(String networkName, IUser user)
+		public abstract INetwork getNetworkStatus(String networkId, IUser user)
 				throws QuadrigaStorageException;
 	
 		public abstract List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException;
