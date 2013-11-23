@@ -104,7 +104,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(7);
+			errmsg = sqlStatement.getString(6);
 			if(errmsg.isEmpty()){
 				return networkId;
 			}else{
