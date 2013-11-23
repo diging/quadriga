@@ -4,7 +4,7 @@ CREATE PROCEDURE sp_addUserProfile
 (
 	IN inusername 		VARCHAR(50),
 	IN inserviceid		VARCHAR(50),
-	IN inprofilename	VARCHAR(50),
+	IN inprofilename	VARCHAR(255),
 	IN inprofileid		VARCHAR(255),
 	IN indescription	VARCHAR(255),
 	OUT errmsg			VARCHAR(100)

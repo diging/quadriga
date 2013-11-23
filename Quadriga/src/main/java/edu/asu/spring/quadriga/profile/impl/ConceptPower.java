@@ -72,7 +72,6 @@ public class ConceptPower implements IService {
 				searchResult.setDescription(ce.getDescription());
 				searchResults.add(searchResult);
 			}
-			
 		}
 		return searchResults;
 	}

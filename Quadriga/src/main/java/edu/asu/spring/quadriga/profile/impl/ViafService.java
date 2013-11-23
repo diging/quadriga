@@ -3,8 +3,13 @@ package edu.asu.spring.quadriga.profile.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.profile.ISearchResult;
@@ -33,6 +38,27 @@ public class ViafService implements IService {
 	private String serviceid;
 	private String name;
 		
+	@Inject
+	@Named("restTemplateViaf")
+	RestTemplate restTemplate;
+
+	@Autowired
+	@Qualifier("viafURL")
+	private String viafURL;
+
+	@Autowired
+	@Qualifier("searchViafURLPath")
+	private String searchViafURLPath;
+	
+	@Autowired
+	@Qualifier("searchViafURLPath1")
+	private String searchViafURLPath1;
+	
+	@Autowired
+	@Qualifier("searchViafURLPath2")
+	private String searchViafURLPath2;
+	
+
 	@Override
 	public void setServiceId(String serviceid) {
 		this.serviceid = serviceid;
@@ -59,8 +85,11 @@ public class ViafService implements IService {
 
 	@Override
 	public List<ISearchResult> search(String word) {
+		
+		
+		String startIndex="1";
 
-
+/*
 		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
 
 		String si = "1";
@@ -77,7 +106,7 @@ public class ViafService implements IService {
 		//List<HashMap<String,String>> viafEntries = viafmanager.search(word);
 		
 		
-		/*if(viafEntries!=null){
+		if(viafEntries!=null){
 
 			for(HashMap<String,String> entries : viafEntries)
 			{
@@ -92,7 +121,7 @@ public class ViafService implements IService {
 		
 		}
 		
-		return searchResults;*/
+		return searchResults;
 		
 		if(viafEntries!=null)
 		{
@@ -108,10 +137,41 @@ public class ViafService implements IService {
 			}
 			
 		}
+		return searchResults;*/
+		
+		List<Item> items = null;
+		String fullUrl;
+		
+
+			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + word.trim() + searchViafURLPath1.trim() + startIndex.trim() + searchViafURLPath2.trim();
+			 
+			//fullUrl = fullUrl.replaceAll("\n", "");
+			//fullUrl = fullUrl.replaceAll("\t", "");
+
+			
+
+			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
+			//String ex = restTemplate.getForObject(fullUrl, String.class);
+			//System.out.println(ex);
+			//String rep = restTemplate.getForObject(fullUrl, String.class);
+			//System.out.println(rep);
+			items = rep.getChannel().getItems();
+			
+			List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
+			for(Item i : items)
+			{
+				ISearchResult searchResult = searchResultFactory.getSearchResultObject();
+				searchResult.setDescription(i.getPubDate());
+				searchResult.setId(i.getLink());
+				searchResult.setName(i.getTitle());
+				searchResults.add(searchResult);
+			}
+			
 		return searchResults;
 	
 	}
 	
+		
 	
 
 }

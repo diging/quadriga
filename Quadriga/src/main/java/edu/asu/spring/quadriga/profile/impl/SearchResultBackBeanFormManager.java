@@ -32,7 +32,7 @@ public class SearchResultBackBeanFormManager {
 		for(ISearchResult searchResult:searchResults){
 			
 				SearchResultBackBean searchResultBackBean = new SearchResultBackBean();
-				searchResultBackBean.setProfileName(searchResult.getName());
+				searchResultBackBean.setWord(searchResult.getName());
 				searchResultBackBean.setId(searchResult.getId());
 				searchResultBackBean.setDescription(searchResult.getDescription());
 				searchResultBackBeansList.add(searchResultBackBean);	

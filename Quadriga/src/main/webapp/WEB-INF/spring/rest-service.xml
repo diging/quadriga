@@ -66,7 +66,7 @@
 	
 	<bean id="searchViafURLPath" class="java.lang.String">
 		<constructor-arg>
-			<value>?query=cql.any+all+
+			<value>?query=cql.any all 
 			</value>
 		</constructor-arg>
 	</bean>
@@ -120,9 +120,9 @@
  	<bean id="restTemplateViaf" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
 			<list>
-				<!-- <bean
+				 <!-- <bean
 					class="org.springframework.http.converter.StringHttpMessageConverter">
-				</bean> -->
+				</bean>  -->
 				<bean
 					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
 					<property name="marshaller" ref="jaxbMarshaller" />

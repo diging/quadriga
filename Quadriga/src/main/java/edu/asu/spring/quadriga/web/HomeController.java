@@ -19,16 +19,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.implementation.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.ProfileManager;
-import edu.asu.spring.quadriga.profile.impl.SearchResult;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanFormManager;
@@ -59,7 +60,7 @@ public class HomeController {
 	private IServiceRegistry serviceRegistry;
 	
 	@Autowired
-	private SearchResult searchResult;
+	private ISearchResultFactory searchResultFactory;
 	
 	@Autowired
 	private IServiceFormFactory serviceFormFactory;
@@ -134,7 +135,27 @@ public class HomeController {
 	{
 		List<ISearchResult> userProfile = profilemanager.getUserProfile();
 		model.addAttribute("userProfile", userProfile);
+		
+		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
+		
+		searchResultBackBeanForm.setSearchResultList(resultLists);
+		
+		model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
+		
+		//model.addAttribute("SearchResultBackBeanForm", new SearchResultBackBeanForm());
+		
+		if(!resultLists.isEmpty()){
+			
+			model.addAttribute("resultLists", resultLists);
+		}
+		
+		
+		//model.addAttribute("SearchResultBackBean",new SearchResultBackBean());
+		
 		return "auth/home/showProfile";
+		
+		//return new ModelAndView("redirect:auth/profile/search");
+		
 	}
 	
 	@RequestMapping(value="auth/profile/addnew", method = RequestMethod.GET)
@@ -146,6 +167,8 @@ public class HomeController {
 		Map<String,String> serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
 		
 		model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
+		
+		model.addAttribute("SearchResultBackBeanForm", new SearchResultBackBeanForm());
 		
 		return "auth/home/profile";
 	} 
@@ -174,49 +197,59 @@ public class HomeController {
 			model.addAttribute("searchResultList",searchResultList);		
 		}
 		
+		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
+		
+		if(!resultLists.isEmpty()){
+			
+			model.addAttribute("resultLists", resultLists);
+		}
 		
 		return "auth/home/profile";
 	}
 	
 	@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
-	public String addUri(@ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm, @PathVariable("serviceid") String serviceid, @PathVariable("term") String term, Model model, Principal principal) throws QuadrigaStorageException
+	public String addUri(@ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm,
+	@PathVariable("serviceid") String serviceid, @PathVariable("term") String term, Model model, Principal principal) throws QuadrigaStorageException
 	{
 		
 		String profileid;
-		StringBuilder profilebuilder ;
+		StringBuilder profilebuilder;
 		String errmsg = null;
 		IService serviceObj = serviceRegistry.getServiceObject(serviceid);
 		
-		List<ISearchResult> conceptsearchResults = serviceObj.search(term);
+		List<ISearchResult> originalsearchResults = serviceObj.search(term);
 		
-		List<SearchResultBackBean> searchResults = searchResultBackBeanForm.getSearchResultList();
+		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
 		
 	
-		for( ISearchResult conceptSearchResult: conceptsearchResults)
+		for( ISearchResult searchResult: originalsearchResults)
 		{
-			for(SearchResultBackBean searchResultBackBean:searchResults  )
+			for(SearchResultBackBean backBeanSearchResult:backBeanSearchResults)
 			{	
 								
-				profileid = searchResultBackBean.getId();
+				profileid = backBeanSearchResult.getId();
 
 				if(profileid!=null)
 				{
 					
-					if( searchResultBackBean.getId().equals(conceptSearchResult.getId()) )
+					if( backBeanSearchResult.getId().equals(searchResult.getId()) )
 					{
 						profilebuilder = new StringBuilder();
-						searchResultBackBean.getId();
+						String id = backBeanSearchResult.getId();
+						id = id.replace(",", " ");
 						profilebuilder.append(",");
-						profilebuilder.append(searchResultBackBean.getId());
-						searchResultBackBean.setDescription(conceptSearchResult.getDescription());	
-						searchResultBackBean.getDescription();
+						profilebuilder.append(id);
+						backBeanSearchResult.setDescription(searchResult.getDescription());	
+						String desc = backBeanSearchResult.getDescription();
+						desc = desc.replace(",", " ");
 						profilebuilder.append(",");
-						profilebuilder.append(searchResultBackBean.getDescription());
-						searchResultBackBean.setProfileName(conceptSearchResult.getName());
+						profilebuilder.append(desc);
+						backBeanSearchResult.setWord(searchResult.getName());
+						String name = backBeanSearchResult.getWord();
+						name = name.replace(",", " ");
 						profilebuilder.append(",");
-						profilebuilder.append(searchResultBackBean.getProfileName());
-						errmsg = userProfileManager.addUserProfile(principal.getName(), serviceid, profilebuilder.substring(1) );
-
+						profilebuilder.append(name);
+						errmsg = userProfileManager.addUserProfile(principal.getName(), serviceid, profilebuilder.substring(1));
 					}
 				}
 			}
@@ -227,7 +260,7 @@ public class HomeController {
 			model.addAttribute("success",1);
 			model.addAttribute("ServiceBackBean",new ServiceBackBean());
 			model.addAttribute("serviceNameIdMap",serviceNameIdMap);
-			model.addAttribute("searchResults", searchResults);
+			model.addAttribute("searchResults", backBeanSearchResults);
 		}
 		
 		else
@@ -237,7 +270,53 @@ public class HomeController {
 			model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
 		}
 		
-		return "auth/home/profile";
+		List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
+	
+		model.addAttribute("resultLists", resultLists);
+		
+		return "auth/home/showProfile";
 	}
+	
+	@RequestMapping(value="/auth/profile/delete",method = RequestMethod.POST)
+	public String deleteSearchResult(@ModelAttribute("SearchResultBackBean") SearchResultBackBeanForm searchResultBackBeanForm, 
+			Principal principal, Model model) throws QuadrigaStorageException
+	{
+		String errmsg = null;
+		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
+		
+		searchResultBackBeanForm.setSearchResultList(resultLists);
+
+		if(!resultLists.isEmpty()){
+				
+			model.addAttribute("resultLists", searchResultBackBeanForm.getSearchResultList());
+		}
+			
+		List<SearchResultBackBean> backBeanList = searchResultBackBeanForm.getSearchResultList();
+		
+		for(SearchResultBackBean searchResultBackBean : backBeanList)
+		{
+			errmsg = profileManager.deleteUserProfile(searchResultBackBean.getId());
+		}
+		
+		if(errmsg.equals("no errors"))
+		{
+			model.addAttribute("result", "profile deleted successfully");
+		}
+		else
+			model.addAttribute("result", "sorry can't add");
+		
+		
+		/*String errmsg = profileManager.deleteUserProfile(searchResultBackBean.getId());
+		
+		if(errmsg.equals("no errors"))
+		{
+			model.addAttribute("result", "profile deleted successfully");
+		}
+		else
+			model.addAttribute("result", "sorry can't add");*/
+		
+		return "auth/home/showProfile";
+	}
+	
 
 }

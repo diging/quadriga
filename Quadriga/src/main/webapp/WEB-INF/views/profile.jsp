@@ -54,7 +54,7 @@ h1{
 
 </style>
 </head>
-
+<h1>Search Your Profile In Following Services</h1>
 
 <form:form method="GET" modelAttribute="ServiceBackBean"
 action="${pageContext.servletContext.contextPath}/auth/profile/search">
@@ -82,20 +82,18 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 		</td>
 	</tr>
 </table>
-
-	
 </form:form>  
 
-
-
-<c:choose>
+ <c:choose>
 	<c:when test="${not empty searchResultList}">
 		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
 		 Results of the Search
 		 <br>
-		 <input type="button" value="selectAll" name="selectAll"/>
+		<!--  <input type="button" value="selectAll" name="selectAll"/>
 		 <input type="button" value="deselectAll" name="deselectAll"/>
+		 --> 
+		 
 		 <input type="submit" value="Select & Save">
 			 <table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
 				
@@ -109,13 +107,12 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				</thead>
 			
 				<tbody>
-				
 				<c:forEach var="result" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
 					<tr>
 						<td><form:checkbox path="searchResultList[${status.index}].id" value="${result.id}" /></td>
-						<td><c:out value="${result.profileName}"></c:out></td>
-						<td><c:out value="${result.id}"></c:out></td>
-						<td><c:out value="${result.description}"></c:out></td>
+						<td><c:out value="${result.word}"/></td>
+						<td><c:out value="${result.id}"/></td>
+						<td><c:out value="${result.description}"/></td> 
 					</tr>
 				</c:forEach>
 				
@@ -126,14 +123,21 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 	 </c:when>
 </c:choose>
 
+ 
 <c:choose>
 		<c:when test="${success == '1'}">
 			<font color="blue"><spring:message code="add_profile_success"/></font>
 	 	</c:when>
-		 	<c:otherwise>
-					<font color="red">${errmsg}</font>
-				</c:otherwise>
-			</c:choose> 
+	 	<c:otherwise>
+				<font color="red">${errmsg}</font>
+		</c:otherwise>
+</c:choose> 
+
+
+			
+
+
+
 			
 	
 

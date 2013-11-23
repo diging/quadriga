@@ -10,6 +10,8 @@ import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
+import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 
 @Service
@@ -28,11 +30,20 @@ public class UserProfileManager implements IUserProfileManager {
 	}
 
 	@Override
-	public List<ISearchResult> showUserProfile(String loggedinUser, String serviceid) throws QuadrigaStorageException {
+	public List<SearchResultBackBean> showUserProfile(String loggedinUser) throws QuadrigaStorageException {
 		
-		List<ISearchResult> searchResultList = connectionProfileManager.showProfileDBRequest(loggedinUser, serviceid);
+		List<SearchResultBackBean> searchResultList = connectionProfileManager.showProfileDBRequest(loggedinUser);
 		
 		return searchResultList;
+	}
+
+	@Override
+	public String deleteUserProfile(String id)
+			throws QuadrigaStorageException {
+		
+		String errmsg = connectionProfileManager.deleteUserProfileDBRequest(id);
+		
+		return errmsg;
 	} 
 	
 	

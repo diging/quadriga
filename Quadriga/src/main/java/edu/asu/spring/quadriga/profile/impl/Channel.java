@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-//@XmlRootElement(name="channel")
 public class Channel {
 	
 	@XmlElement(name="item")
@@ -17,7 +16,7 @@ public class Channel {
 	@XmlElement(name="title")
 	private String title;
 	
-	@XmlElement(name="totalResults", namespace="opensearch")	
+	@XmlElement(name="totalResults", namespace="http://a9.com/-/spec/opensearch/1.1/")	
 	private Integer totalResults;
 	
 	@XmlElement(name="link")
@@ -25,7 +24,6 @@ public class Channel {
 	
 	@XmlElement(name="description")
 	private String description;
-	
 	
 	public Integer getTotalResults() {
 		return totalResults;
