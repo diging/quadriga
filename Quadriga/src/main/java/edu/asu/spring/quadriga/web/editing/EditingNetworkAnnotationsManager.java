@@ -51,12 +51,11 @@ public class EditingNetworkAnnotationsManager {
 			@PathVariable("networkId") String networkId,
 			@RequestParam("annotText") String annotationText,
 			@RequestParam("nodename") String id, 
-			
-			//@RequestParam("objecttype") String objectType, 
+			@RequestParam("type") String objectType, 
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		logger.info("network ID:" + networkId);
-		String objectType = "node";
+		//String objectType = "node";
 		try {
 			String arr[] = null;
 			arr = dbConnectionEditManager.getAnnotation(objectType,id , user.getUserName());
@@ -94,7 +93,7 @@ public class EditingNetworkAnnotationsManager {
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.info("Annotation added to the node:" + nodeId);
+		logger.info("Got Annotation of :" + nodeId);
 		return annotation;
 	}
 		
