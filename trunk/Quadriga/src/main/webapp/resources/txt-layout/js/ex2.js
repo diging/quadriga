@@ -90,6 +90,7 @@ this.edge.epsilon);
 				Label : {
 					type : labelType, // Native or HTML
 					size : 10
+					
 				},
 				// Add Tips
 				Tips : {
@@ -162,9 +163,9 @@ this.edge.epsilon);
 						// connections.
 						// var html = "<h4>" + node.name + "</h4><b>
 						// connections:</b><ul><li>",
-						alert(node.type);
+						//alert(node.data.nodetype);
 						var html = "";
-						if(node.type=="Predicate"){
+						if(node.data.nodetype=="Predicate"){
 							html = "<div id='popup'><input type='button' id='annot_node' value='Add Annotation to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
 						} else{
 						
@@ -205,11 +206,11 @@ this.edge.epsilon);
 									data: "nodeid="+node.id+"&type="+type1,
 									success : function(data) {
 										alert("done");
-										alert("data:"+data);
-										alert("before:" +$('#text').val());
+										//alert("data:"+data);
+										//alert("before:" +$('#text').val());
 										//$('#text').append(data);
 										$('#text').text(data);
-										alert("after:"+$('#text').val());
+										//alert("after:"+$('#text').val());
 										//$jit.id('inner-details').innerHTML = path + html1;
 										
 									},
@@ -232,7 +233,7 @@ this.edge.epsilon);
 										type : "POST",
 										//data : $('#nodename').serialize(),
 										//data: $('#annot_form').serialize(),
-										data :"nodename="+node.id+"&annotText="+annottext,
+										data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
 										success : function() {
 											
 											alert("done");
@@ -250,7 +251,7 @@ this.edge.epsilon);
 							  $('#popup1').dialog();
 						});
 						$('#annot_relation').click(function() {
-							  alert( "Handler for .click() called." );
+							//  alert( "Handler for .click() called." );
 							  var type1 = "relation";
 							  var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
 								+ "/auth/editing/saveAnnotation/";
@@ -259,9 +260,9 @@ this.edge.epsilon);
 							  html2 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
 							  html2 += "<input  type='hidden' name='nodename' id='nodename' value="
 								+ node.id + " />";
-							  html2 += "<input type='submit' id='annot_submit' value='submit'>";
+							  html2 += "<input type='submit' id='annot_submit1' value='submit'>";
 							  html2 += "</form></div>";
-							  
+							  $jit.id('inner-details').innerHTML = path + html2;
 							  $.ajax({
 									url : path+"/auth/editing/getAnnotation/"+networkId,
 									type : "GET",
@@ -270,10 +271,10 @@ this.edge.epsilon);
 									success : function(data) {
 										alert("done");
 										alert("data:"+data);
-										alert("before:" +$('#text').val());
-										//$('#text').append(data);
-										$('#text').text(data);
-										alert("after:"+$('#text').val());
+										//alert("before:" +$('#text').val());
+										$('#text').append(data);
+										//$('#text').text(data);
+										//alert("after:"+$('#text').val());
 										//$jit.id('inner-details').innerHTML = path + html1;
 										
 									},
@@ -281,10 +282,10 @@ this.edge.epsilon);
 										alert("error");
 									}
 								});
-							  event.preventDefault();
+							//  event.preventDefault();
 							  
 							  
-							  $('#annot_submit').click(function(event) {
+							  $('#annot_submit1').click(function(event) {
 									var annottext = $('#text').val();  
 								    var nodename = $('#nodename').val(); 
 								    var url = path+"/auth/editing/saveAnnotation/"+networkId;
@@ -294,7 +295,7 @@ this.edge.epsilon);
 									$.ajax({
 										url : $('#annot_form').attr("action"),
 										type : "POST",
-										data :"nodename="+node.id+"&annotText="+annottext,
+										data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
 										success : function() {
 											
 											alert("done");
