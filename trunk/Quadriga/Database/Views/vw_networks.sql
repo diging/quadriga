@@ -11,7 +11,7 @@ Modified Date : 10/30/2013
 
 ********************************************/
 DROP VIEW IF EXISTS vw_networks;
-CREATE VIEW vw_networks(networkid,workspaceid,networkname,networkowner,accessibility,status)
+CREATE VIEW vw_networks(networkid,workspaceid,networkname,networkowner,status)
 AS 
-  SELECT networkid,workspaceid,networkname,networkowner,accessibility,status
+  SELECT networkid,workspaceid,networkname,networkowner,status
    FROM tbl_networks;
