@@ -21,10 +21,13 @@ import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
+import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 /**
@@ -42,8 +45,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements INetworkM
 	private SessionFactory sessionFactory;
 
 	@Autowired
-	private UserDTOMapper userMapper;
-	
+	private NetworkDTOMapper networkMapper;
+
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
 
@@ -51,18 +54,57 @@ public class NetworkManagerDAO extends DAOConnectionManager implements INetworkM
 
 	@Override
 	public String addNetworkRequest(String networkName, IUser user, String workspaceid) throws QuadrigaStorageException {
-		
-		throw new NotYetImplementedException("Yet to be implemeted");
+
+		String networkid = generateUniqueID();
+		NetworksDTO networksDTO = networkMapper.getNetworksDTO(networkid, networkName, user.getName(), workspaceid);
+
+		try
+		{
+			sessionFactory.getCurrentSession().save(networksDTO);	
+			return networkid;
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in adding a network request: ",e);
+			throw new QuadrigaStorageException(e);
+		}
 	}
 
 	@Override
 	public String addNetworkStatement(String networkId, String id, String type, String isTop, IUser user) throws QuadrigaStorageException {
-		throw new NotYetImplementedException("Yet to be implemeted");
+
+		NetworkStatementsDTO networkStatementsDTO = networkMapper.getNetworkStatementsDTO(networkId, id, type, isTop, user.getName());
+
+		try
+		{
+			sessionFactory.getCurrentSession().save(networkStatementsDTO);	
+			return null;
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in adding a network request: ",e);
+			throw new QuadrigaStorageException(e);
+		}
 	}
 
 	@Override
-	public INetwork getNetworkStatus(String networkName, IUser user)
-			throws QuadrigaStorageException {
+	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException {
+		Query query = sessionFactory.getCurrentSession().createQuery(" from NetworksDTO network where network.networkowner = :networkowner and network.networkid = :networkid");
+		query.setParameter("networkowner", user.getName());
+		query.setParameter("networkid", networkId);
+
+		try
+		{
+			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
+
+			//TODO: Talk with karthik on fetching the workspace and project id in one call to the database. Need to change the class structure
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in fetching a network status: ",e);
+			throw new QuadrigaStorageException(e);
+		}
+
 		throw new NotYetImplementedException("Yet to be implemeted");
 	}
 
@@ -78,12 +120,43 @@ public class NetworkManagerDAO extends DAOConnectionManager implements INetworkM
 
 	@Override
 	public boolean hasNetworkName(String networkName, IUser user) throws QuadrigaStorageException {
-		throw new NotYetImplementedException("Yet to be implemeted");
+		Query query = sessionFactory.getCurrentSession().createQuery(" from NetworksDTO network where network.networkowner = :networkowner and network.networkname = :networkname");
+		query.setParameter("networkowner", user.getName());
+		query.setParameter("networkname", networkName);
+
+		try
+		{
+			List<NetworksDTO> networksDTO = query.list();
+
+			if(networksDTO.size() > 0)
+				return true;
+			else 
+				return false;
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in fetching a network status: ",e);
+			throw new QuadrigaStorageException(e);
+		}
+
 	}
 
 	@Override
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId) throws QuadrigaStorageException {
-		throw new NotYetImplementedException("Yet to be implemeted");
+		Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkStatementsDTO network where network.networkid = :networkid and network.istop = 1 and isarchived = 0");
+		query.setParameter("networkid", networkId);
+
+		try
+		{
+			List<NetworkStatementsDTO> networkStatementsDTOList = query.list();
+			return networkMapper.getListOfNetworkNodeInfo(networkStatementsDTOList);
+		}
+
+		catch(Exception e)
+		{
+			logger.error("Error in fetching a network status: ",e);
+			throw new QuadrigaStorageException(e);
+		}
 	}
 
 	@Override
