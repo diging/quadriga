@@ -10,13 +10,13 @@ public class SearchResultBackBean {
 	private String description;
 	
 	
-	public String getProfileName() {
+	
+	public String getWord() {
 		return word;
 	}
-	public void setProfileName(String word) {
+	public void setWord(String word) {
 		this.word = word;
 	}
-	
 	public String getId() {
 		return id;
 	}

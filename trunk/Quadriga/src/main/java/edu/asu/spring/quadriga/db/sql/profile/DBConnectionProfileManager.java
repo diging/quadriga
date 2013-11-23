@@ -21,6 +21,8 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
+import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
+import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 public class DBConnectionProfileManager extends ADBConnectionManager implements IDBConnectionProfileManager {
@@ -85,41 +87,77 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 	}
 	
 	@Override
-	public List<ISearchResult> showProfileDBRequest(String loggedinUser, String serviceid) throws QuadrigaStorageException {
+	public List<SearchResultBackBean> showProfileDBRequest(String loggedinUser) throws QuadrigaStorageException {
 		
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
-		List<ISearchResult> searchresultList = new ArrayList<ISearchResult>();
+		List<SearchResultBackBean> searchresultList = new ArrayList<SearchResultBackBean>();
 		
-		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.SHOW_USER_PROFILE+ "(?,?,?)";
+		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.SHOW_USER_PROFILE+ "(?,?)";
 
 		getConnection();
 		
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, loggedinUser);
-			sqlStatement.setString(2, serviceid);
-			sqlStatement.registerOutParameter(3, Types.VARCHAR);
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(3);
+			errmsg = sqlStatement.getString(2);
 			if(errmsg.equals("no errors"))
 			{
 				ResultSet resulset = sqlStatement.getResultSet();
 				while(resulset.next())
 				{
-					ISearchResult searchResult = searchResultFactory.getSearchResultObject();
-					searchResult.setId(resulset.getString(1));
-					searchResult.setDescription(resulset.getString(2));
-					searchresultList.add(searchResult);
+					SearchResultBackBean searchResultBackBean = new SearchResultBackBean();
+					searchResultBackBean.setId(resulset.getString(1));
+					searchResultBackBean.setDescription(resulset.getString(2));
+					searchResultBackBean.setWord(resulset.getString(3));
+					searchresultList.add(searchResultBackBean);
 				}
 			}
-			
+			 	 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 		return searchresultList;
+	}
+
+	@Override
+	public String deleteUserProfileDBRequest(String id) throws QuadrigaStorageException {
+		
+		String dbCommand;
+		String errmsg;
+		CallableStatement sqlStatement;
+		
+		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_USER_PROFILE + "(?,?)";
+		
+		getConnection();
+		
+		try {
+			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
+			sqlStatement.setString(1, id);
+			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.execute();
+			errmsg = sqlStatement.getString(2);
+			if(errmsg.equals("no errors"))
+			{
+				return errmsg;
+			}
+			else
+			{
+				throw new QuadrigaStorageException();
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		return null;
 	}
 
 }

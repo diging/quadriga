@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.profile.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.profile.ISearchResult;
+import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IViafManager;
 
 
@@ -17,7 +20,7 @@ import edu.asu.spring.quadriga.profile.IViafManager;
 public class ViafManager implements IViafManager {
 	
 	@Inject
-	@Named("restTemplate")
+	@Named("restTemplateViaf")
 	RestTemplate restTemplate;
 
 	@Autowired
@@ -36,27 +39,44 @@ public class ViafManager implements IViafManager {
 	@Qualifier("searchViafURLPath2")
 	private String searchViafURLPath2;
 	
+	@Autowired
+	private ISearchResultFactory searchResultFactory;
+	
 	
 	
 	@Override
-	public List<Item> search (String item, String startIndex) {
+	public List<ISearchResult> search (String item, String startIndex) {
 		
 		List<Item> items = null;
 		String fullUrl;
 		
 
-			fullUrl = viafURL.trim() + searchViafURLPath.trim() + item.trim() + searchViafURLPath1.trim() + startIndex.trim() + searchViafURLPath2.trim();
+			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + item.trim() + searchViafURLPath1.trim() + startIndex.trim() + searchViafURLPath2.trim();
+			 
 			//fullUrl = fullUrl.replaceAll("\n", "");
 			//fullUrl = fullUrl.replaceAll("\t", "");
 
 			
 
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
+			//String ex = restTemplate.getForObject(fullUrl, String.class);
+			//System.out.println(ex);
 			//String rep = restTemplate.getForObject(fullUrl, String.class);
 			//System.out.println(rep);
 			items = rep.getChannel().getItems();
-		
-		return items;
+			
+			List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
+			for(Item i : items)
+			{
+				ISearchResult searchResult = searchResultFactory.getSearchResultObject();
+				searchResult.setDescription(i.getPubDate());
+				searchResult.setId(i.getLink());
+				searchResult.setName(i.getTitle());
+				searchResults.add(searchResult);
+			}
+			
+			
+		return searchResults;
 	}
 	
 
