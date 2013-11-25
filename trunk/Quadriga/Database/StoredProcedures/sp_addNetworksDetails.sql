@@ -47,9 +47,6 @@ BEGIN
 	  THEN SET errmsg = "Status cannot be empty.";
     END IF;
 
-    IF(inaccessibility IS NULL)
-       THEN SET errmsg = "accessibility cannot be empty";
-    END IF;
 	
     -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
