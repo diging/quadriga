@@ -53,7 +53,7 @@ public class NetworkAssignedDTO implements Serializable {
     private String createdby;
     @Basic(optional = false)
     @Column(name = "isarchived")
-    private String isarchived;
+    private int isarchived;
 
     public NetworkAssignedDTO() {
     }
@@ -62,7 +62,7 @@ public class NetworkAssignedDTO implements Serializable {
         this.networkAssignedDTOPK = networkAssignedDTOPK;
     }
 
-    public NetworkAssignedDTO(NetworkAssignedDTOPK networkAssignedDTOPK, String status, String updatedby, Date updateddate, String createdby, String isarchived) {
+    public NetworkAssignedDTO(NetworkAssignedDTOPK networkAssignedDTOPK, String status, String updatedby, Date updateddate, String createdby, int isarchived) {
         this.networkAssignedDTOPK = networkAssignedDTOPK;
         this.status = status;
         this.updatedby = updatedby;
@@ -115,11 +115,11 @@ public class NetworkAssignedDTO implements Serializable {
         this.createdby = createdby;
     }
 
-    public String getIsarchived() {
+    public int getIsarchived() {
         return isarchived;
     }
 
-    public void setIsarchived(String isarchived) {
+    public void setIsarchived(int isarchived) {
         this.isarchived = isarchived;
     }
 
