@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.sql.IUserManagerDAO;
+import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -42,9 +42,9 @@ public class UserManager implements IUserManager {
 
 	@Autowired
 	private IEmailNotificationManager emailManager;
-
+	
 	@Autowired
-	private IUserManagerDAO usermanagerDAO;
+	private IDBConnectionManager usermanagerDAO;
 
 	public IEmailNotificationManager getEmailManager() {
 		return emailManager;
