@@ -26,7 +26,7 @@ public class ConceptCollection implements IConceptCollection
 	
 	@Override
 	public String getId() {
-		return id;
+		return id; 
 	}
 	@Override
 	public void setId(String id) {
@@ -70,6 +70,13 @@ public class ConceptCollection implements IConceptCollection
 	public List<IConcept> getItems() {
 		return items;
 	}
+	
+	@Override
+	public void setItems(List<IConcept> concepts)
+	{
+		this.items = concepts;
+	}
+	
 	@Override
 	public void addItem(IConcept concept) {
 		if(items.indexOf(concept)<0){

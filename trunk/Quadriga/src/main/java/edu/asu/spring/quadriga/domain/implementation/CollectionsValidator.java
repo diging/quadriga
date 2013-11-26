@@ -8,6 +8,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 @Service
 public class CollectionsValidator implements Validator {
@@ -23,7 +24,7 @@ public class CollectionsValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors errors) {
-		ConceptCollection c = (ConceptCollection) obj;
+		IConceptCollection c = (IConceptCollection) obj;
 		String id = c.getName();
 		
 			try {

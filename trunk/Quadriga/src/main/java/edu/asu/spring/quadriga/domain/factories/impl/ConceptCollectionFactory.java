@@ -2,8 +2,10 @@ package edu.asu.spring.quadriga.domain.factories.impl;
 
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.implementation.Concept;
 import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 
 
@@ -20,6 +22,12 @@ public class ConceptCollectionFactory implements IConceptCollectionFactory {
 	public IConceptCollection createConceptCollectionObject() {
 		// TODO Auto-generated method stub
 		return new ConceptCollection();
+	}
+	
+	@Override
+	public IConcept createConcept()
+	{
+		return new Concept();
 	}
 
 }

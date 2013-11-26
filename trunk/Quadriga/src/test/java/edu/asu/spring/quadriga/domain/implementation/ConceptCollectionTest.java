@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.IConcept;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory;
@@ -26,7 +27,7 @@ import edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory;
 
 public class ConceptCollectionTest {
 	
-	private ConceptCollection conceptcollection;
+	private IConceptCollection conceptcollection;
 	private IUser owner;
 	private List<ICollaborator> collaborators;
 	private List<IConcept> items = new ArrayList<IConcept>();
