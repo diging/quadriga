@@ -282,28 +282,34 @@ public class HomeController {
 			Principal principal, Model model) throws QuadrigaStorageException
 	{
 		String errmsg = null;
-		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
-		
-		searchResultBackBeanForm.setSearchResultList(resultLists);
-
-		if(!resultLists.isEmpty()){
-				
-			model.addAttribute("resultLists", searchResultBackBeanForm.getSearchResultList());
-		}
+//		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
+//		
+//		searchResultBackBeanForm.setSearchResultList(resultLists);
+//
+//		if(!resultLists.isEmpty()){
+//				
+//			model.addAttribute("resultLists", searchResultBackBeanForm.getSearchResultList());
+//		}
 			
 		List<SearchResultBackBean> backBeanList = searchResultBackBeanForm.getSearchResultList();
 		
 		for(SearchResultBackBean searchResultBackBean : backBeanList)
 		{
-			errmsg = profileManager.deleteUserProfile(searchResultBackBean.getId());
+			if(searchResultBackBean.getId() != null)
+			errmsg = profileManager.deleteUserProfile(searchResultBackBean.getId(), principal.getName());
 		}
 		
 		if(errmsg.equals("no errors"))
 		{
+			model.addAttribute("success", 1);
 			model.addAttribute("result", "profile deleted successfully");
+			List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
+			searchResultBackBeanForm.setSearchResultList(resultLists);
+			model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
+			
 		}
 		else
-			model.addAttribute("result", "sorry can't add");
+			model.addAttribute("result", "sorry can't delete");
 		
 		
 		/*String errmsg = profileManager.deleteUserProfile(searchResultBackBean.getId());

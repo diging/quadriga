@@ -14,6 +14,6 @@ public interface IUserProfileManager {
 	
 	public abstract List<SearchResultBackBean> showUserProfile(String loggedinUser) throws QuadrigaStorageException;
 	
-	public abstract String deleteUserProfile(String id) throws QuadrigaStorageException;
+	public abstract String deleteUserProfile(String id, String username) throws QuadrigaStorageException;
 
 }

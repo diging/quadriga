@@ -25,6 +25,7 @@ public interface DBConstants
 	public final static String GET_USERS="sp_getUsers";
 	public final static String GET_USERS_NOT_IN_ROLE="sp_getUsersNotInRole";
 	public final static String ADD_USER_PROFILE="sp_addUserProfile";
+	public final static String DELETE_USER_PROFILE="sp_deleteUserProfile";
 	public final static String SHOW_USER_PROFILE="sp_showUserProfile";
 	public final static String DELETE_USER = "sp_deleteQuadrigaUser";
 	public final static String CHECK_WORKBENCH_ASSOCIATED = "fn_check_workbench_association";

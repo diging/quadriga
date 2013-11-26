@@ -90,10 +90,9 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
 		 Results of the Search
 		 <br>
-		<!--  <input type="button" value="selectAll" name="selectAll"/>
-		 <input type="button" value="deselectAll" name="deselectAll"/>
-		 --> 
-		 
+		 <input type="button" value="Select All" name="selectAll"> 
+		 <input type="button" value="Deselect All" name="deselectAll">
+		
 		 <input type="submit" value="Select & Save">
 			 <table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
 				
@@ -109,7 +108,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				<tbody>
 				<c:forEach var="result" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
 					<tr>
-						<td><form:checkbox path="searchResultList[${status.index}].id" value="${result.id}" /></td>
+						<td><form:checkbox path="searchResultList[${status.index}].id" value="${result.id}"/></td>
 						<td><c:out value="${result.word}"/></td>
 						<td><c:out value="${result.id}"/></td>
 						<td><c:out value="${result.description}"/></td> 
