@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
+import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
@@ -35,16 +37,17 @@ public class ConceptCollectionDTOMapper
 	public IConceptCollection getConceptCollection(ConceptcollectionsDTO conceptCollection)
 	{
 		List<ICollaborator> collaboratorList = null;
+		List<IConcept> conceptList = null;
 		IConceptCollection concept = null;
 		ICollaborator collaborator= null;
+		IConcept tempConcept = null;
 		
 		concept = conceptCollectionFactory.createConceptCollectionObject();
 		collaboratorList = new ArrayList<ICollaborator>();
+		conceptList = new ArrayList<IConcept>();
 		
 		//fetch all the input values
 		List<ConceptcollectionsCollaboratorDTO> conceptCollectionCollaborators = conceptCollection.getConceptcollectionsCollaboratorDTOList();
-		//TODO : Fetch the corresponding items and convert them into IConcept
-	//	List<ConceptcollectionsItemsDTO> collectionItems = conceptCollection.getConceptcollectionsItemsDTOList();
 		
 		//loop through the collaborators
 		for(ConceptcollectionsCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
@@ -69,13 +72,34 @@ public class ConceptCollectionDTOMapper
 			}
 		}
 		
+		//loop through all the items and add it to concept collection
+		List<ConceptcollectionsItemsDTO> collectionItems = conceptCollection.getConceptcollectionsItemsDTOList();
+		
+		for(ConceptcollectionsItemsDTO collectionConcept : collectionItems)
+		{
+			tempConcept = getConceptCollectionItems(collectionConcept);
+			conceptList.add(tempConcept);
+		}
+		
 		concept.setId(conceptCollection.getId());
 		concept.setName(conceptCollection.getCollectionname());
 		concept.setDescription(conceptCollection.getDescription());
         concept.setOwner(userDTOMapper.getUser(conceptCollection.getCollectionowner()));
-        concept.setCollaborators(collaboratorList);        
+        concept.setCollaborators(collaboratorList);   
+        concept.setItems(conceptList);
 		
+		return concept;
+	}
+	
+	public IConcept getConceptCollectionItems(ConceptcollectionsItemsDTO conceptCollectionConcept)
+	{
+		IConcept concept = null;
 		
+		concept = conceptCollectionFactory.createConcept();
+		concept.setId(conceptCollectionConcept.getConceptcollectionsItemsDTOPK().getId());
+		concept.setDescription(conceptCollectionConcept.getDescription());
+		concept.setLemma(conceptCollectionConcept.getLemma());
+		concept.setPos(conceptCollectionConcept.getPos());
 		return concept;
 	}
 	

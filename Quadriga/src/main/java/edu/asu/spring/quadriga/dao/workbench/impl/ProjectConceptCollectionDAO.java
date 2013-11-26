@@ -1,13 +1,14 @@
 package edu.asu.spring.quadriga.dao.workbench.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +20,7 @@ import edu.asu.spring.quadriga.dto.ProjectConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptcollectionDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 
 public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 		IProjectConceptCollectionDAO 
@@ -26,6 +28,9 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private ConceptCollectionDTOMapper collectionMapper;
 	
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
@@ -72,35 +77,36 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 	public List<IConceptCollection> listProjectConceptCollection(String projectId,
 			String userId) throws QuadrigaStorageException
 	{
-		//TODO : uncomment and complete the logic
-//		List<IConceptCollection> conceptCollectionList = null;
-//		IConceptCollection conceptCollection = null;
-//		
-//		//check if the project id is valid
-//		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
-//		
-//		if(project.equals(null))
-//		{
-//			throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
-//		}
-//		
-//		conceptCollectionList = new ArrayList<IConceptCollection>();
-//		
-//		//retrieve the concept collection id for the given project id
-//		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectConceptcollectionDTO.findByProjectid");
-//		query.setParameter("projectid", projectId);
-//
-//		List<ProjectConceptcollectionDTO> projectConceptCollection = query.list();
-//		
-//		//retrieve the concept collection details for every concept collection id
-//		for(ProjectConceptcollectionDTO tempProjectConceptCollection : projectConceptCollection)
-//		{
-//			ProjectConceptcollectionDTOPK projectConceptCollectionKey = tempProjectConceptCollection.getProjectConceptcollectionDTOPK();
-//			
-//		}
+		List<IConceptCollection> conceptCollectionList = null;
+		IConceptCollection conceptCollection = null;
 		
+		//check if the project id is valid
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
 		
-		throw new NotImplementedException();
+		if(project.equals(null))
+		{
+			throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
+		}
+		
+		conceptCollectionList = new ArrayList<IConceptCollection>();
+		
+		//retrieve the concept collection id for the given project id
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectConceptcollectionDTO.findByProjectid");
+		query.setParameter("projectid", projectId);
+
+		@SuppressWarnings("unchecked")
+		List<ProjectConceptcollectionDTO> projectConceptCollection = query.list();
+		
+		//retrieve the concept collection details for every concept collection id
+		for(ProjectConceptcollectionDTO tempProjectConceptCollection : projectConceptCollection)
+		{
+			ProjectConceptcollectionDTOPK projectConceptCollectionKey = tempProjectConceptCollection.getProjectConceptcollectionDTOPK();
+			ConceptcollectionsDTO collection = (ConceptcollectionsDTO) sessionFactory.getCurrentSession().get(ConceptcollectionsDTO.class,projectConceptCollectionKey.getConceptcollectionid());
+			conceptCollection = collectionMapper.getConceptCollection(collection);
+			conceptCollectionList.add(conceptCollection);
+		}
+		
+		return conceptCollectionList;
 	}
 	
 	public void deleteProjectConceptCollection(String projectId,

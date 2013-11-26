@@ -39,6 +39,8 @@ public interface IConceptCollection
 	public abstract  void setId(String id);
 
 	public abstract String getId();
-	
+
+	public abstract void setItems(List<IConcept> concepts);
+
 
 }
