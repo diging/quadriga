@@ -251,7 +251,7 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 	}
 	
 	@Override
-	public void deleteUser(String deleteUser,String adminUser,String adminRole,String deactivatedRole) throws QuadrigaStorageException
+	public int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String errmsg;
@@ -262,8 +262,8 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 			dbCommand = DBConstants.SP_CALL + " " + DBConstants.DELETE_USER + "(?,?,?,?,?)";
 			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
 			sqlStatement.setString(1, deleteUser);
-			sqlStatement.setString(2, adminUser);
-			sqlStatement.setString(3, adminRole);
+			sqlStatement.setString(2, null);
+			sqlStatement.setString(3, null);
 			sqlStatement.setString(4, deactivatedRole);
 			sqlStatement.registerOutParameter(5,Types.VARCHAR);
 			
@@ -277,6 +277,7 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 				logger.error("In delete quadriga user :",errmsg);
 				throw new QuadrigaStorageException(errmsg);
 			}
+			return SUCCESS;
 		}
 		catch(SQLException e)
 		{
@@ -286,7 +287,6 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 		
 	}
 	
-	@Override
 	public boolean checkWorkbenchAssociated(String deleteUser) throws QuadrigaStorageException
 	{
 		boolean isAssociated;
@@ -654,7 +654,6 @@ public class DBConnectionManager extends ADBConnectionManager implements IDBConn
 	 *                            
 	 *   @return        : list of QuadrigaRoles.
 	 */
-	@Override
 	public List<IQuadrigaRole> listQuadrigaUserRoles(String roles)
 	{
 		String[] role;

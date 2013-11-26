@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.sql.IUserManagerDAO;
+import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
@@ -32,7 +32,7 @@ import edu.asu.spring.quadriga.mapper.UserDTOMapper;
  *
  */
 @Repository
-public class UserManagerDAO extends DAOConnectionManager implements IUserManagerDAO
+public class UserManagerDAO extends DAOConnectionManager implements IDBConnectionManager
 {
 
 	@Autowired

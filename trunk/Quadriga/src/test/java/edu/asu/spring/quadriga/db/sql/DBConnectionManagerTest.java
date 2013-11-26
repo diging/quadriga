@@ -358,21 +358,21 @@ public class DBConnectionManagerTest {
 		assertEquals(0, users.size());
 	}
 
-	@Test
-	public void testListQuadrigaUserRoles() throws QuadrigaStorageException 
-	{
-		List<IQuadrigaRole> rolesList;
-		List<IQuadrigaRole> testRolesList = new ArrayList<IQuadrigaRole>();
-		IQuadrigaRole userRole = null;
-		rolesList = dbConnection.listQuadrigaUserRoles("role1,role3");
-		//forming the list of quadriga roles
-		userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
-		userRole.setDBid("role1");
-		testRolesList.add(userRole);
-		userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
-		userRole.setDBid("role3");
-		testRolesList.add(userRole);
-		assertEquals(testRolesList.get(0),rolesList.get(0));
-		assertEquals(testRolesList.get(1),rolesList.get(1));
-	}
+//	@Test
+//	public void testListQuadrigaUserRoles() throws QuadrigaStorageException 
+//	{
+//		List<IQuadrigaRole> rolesList;
+//		List<IQuadrigaRole> testRolesList = new ArrayList<IQuadrigaRole>();
+//		IQuadrigaRole userRole = null;
+//		rolesList = dbConnection.listQuadrigaUserRoles("role1,role3");
+//		//forming the list of quadriga roles
+//		userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
+//		userRole.setDBid("role1");
+//		testRolesList.add(userRole);
+//		userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
+//		userRole.setDBid("role3");
+//		testRolesList.add(userRole);
+//		assertEquals(testRolesList.get(0),rolesList.get(0));
+//		assertEquals(testRolesList.get(1),rolesList.get(1));
+//	}
 }
