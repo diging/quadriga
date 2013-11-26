@@ -38,10 +38,10 @@ public class UserProfileManager implements IUserProfileManager {
 	}
 
 	@Override
-	public String deleteUserProfile(String id)
+	public String deleteUserProfile(String id, String username)
 			throws QuadrigaStorageException {
 		
-		String errmsg = connectionProfileManager.deleteUserProfileDBRequest(id);
+		String errmsg = connectionProfileManager.deleteUserProfileDBRequest(id, username);
 		
 		return errmsg;
 	} 

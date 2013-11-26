@@ -125,22 +125,23 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 	}
 
 	@Override
-	public String deleteUserProfileDBRequest(String id) throws QuadrigaStorageException {
+	public String deleteUserProfileDBRequest(String id, String username) throws QuadrigaStorageException {
 		
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
 		
-		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_USER_PROFILE + "(?,?)";
+		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.DELETE_USER_PROFILE + "(?,?,?)";
 		
 		getConnection();
 		
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
-			sqlStatement.setString(1, id);
-			sqlStatement.registerOutParameter(2, Types.VARCHAR);
+			sqlStatement.setString(1, username);
+			sqlStatement.setString(2, id);
+			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(2);
+			errmsg = sqlStatement.getString(3);
 			if(errmsg.equals("no errors"))
 			{
 				return errmsg;

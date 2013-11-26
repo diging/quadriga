@@ -9,8 +9,6 @@ public class SearchResultBackBean {
 	private String id;
 	private String description;
 	
-	
-	
 	public String getWord() {
 		return word;
 	}
