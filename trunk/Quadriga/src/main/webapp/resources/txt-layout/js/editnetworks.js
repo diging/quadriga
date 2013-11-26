@@ -40,7 +40,18 @@ function init(json, networkId, path) {
 					var posTo = adj.nodeTo.pos.getc(true);
 					ctx.fillText(data.$labeltext, (posFr.x + posTo.x) / 2,
 							(posFr.y + posTo.y) / 2);
-				}// if data.labeltext
+				}
+				var from = adj.nodeFrom.pos.getc(true),
+				to = adj.nodeTo.pos.getc(true),
+				dim = adj.getData('dim'),
+				direction = adj.data.$direction,
+				inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id);
+				this.edgeHelper.arrow.render(from, to, dim, inv, canvas);
+			},
+			'contains': function(adj, pos) {
+				var from = adj.nodeFrom.pos.getc(true),
+				to = adj.nodeTo.pos.getc(true);
+				return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
 			}
 	
 		},
@@ -80,9 +91,8 @@ this.edge.epsilon);
 				},
 				Edge : {
 					overridable : true,
-					type : 'arrow',
 					color : '#23A4FF',
-					lineWidth : 0.4,
+					lineWidth : 1,
 					type : 'labeled',
 					dim : '15'
 				},
@@ -112,6 +122,7 @@ this.edge.epsilon);
 				// Add node events
 				Events : {
 					enable : true,
+					enableForEdges : true,
 					type : 'Native',
 					// Change cursor style when hovering a node
 					onMouseEnter : function() {
@@ -133,13 +144,20 @@ this.edge.epsilon);
 						this.onDragMove(node, eventInfo, e);
 					},
 					// Add also a click handler to nodes
-					onClick : function(node) {
-						if (!node)
+					onClick : function(edge, eventInfo,e) {
+						if (!edge)
 							return;
+						
+						if(edge.nodeFrom){
+							console.log("target is a edge");
+							
+						}else{
+							console.log("target is a node");
+						}
 						// Build the right column relations list.
 						// This is done by traversing the clicked node
 						// connections.
-						var html = "<h4>" + node.name
+						var html = "<h4>" + edge.nodeFrom
 								+ "</h4><b> connections:</b><ul><li>", list = [];
 						node.eachAdjacency(function(adj) {
 							// Adding arrow label to inner-details
