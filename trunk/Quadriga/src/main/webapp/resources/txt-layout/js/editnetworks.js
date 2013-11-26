@@ -12,6 +12,8 @@ var labelType, useGradients, nativeTextSupport, animate, pathName;
 	nativeTextSupport = labelType == 'Native';
 	useGradients = nativeCanvasSupport;
 	animate = !(iStuff || !nativeCanvasSupport);
+	
+	
 
 })();
 
@@ -150,6 +152,22 @@ this.edge.epsilon);
 						
 						if(edge.nodeFrom){
 							console.log("target is a edge");
+							/*var node1 = edge.nodeTo;
+							var node2 = edge.nodeFrom;
+							node1.setData('dim', 17, 'end');
+							node2.setData('dim', 17, 'end');*/
+							edge.selected = true;
+					          edge.setData('dim', 17, 'end');
+							/*fd.fx.animate({
+					        	modes: ['node-property:dim',
+					               'edge-property:lineWidth:color'],
+					          	duration: 500
+					        });*/
+							/*edge.setDataset('end', {
+					              lineWidth: 3,
+					              color: '#36acfb'
+					            });*/
+
 							
 						}else{
 							console.log("target is a node");
@@ -184,11 +202,17 @@ this.edge.epsilon);
 						//alert(node.data.nodetype);
 						var html = "";
 						if(node.data.nodetype=="Predicate"){
-							html = "<div id='popup'><input type='button' id='annot_node' value='Add Annotation to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
+							html = "<div id='popup' title='Annotation' ><input type='button' id='annot_node' value='Add Annotation to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
 						} else{
+							if(node.nodeFrom){
+								html = "<div id='popup' title='Annotation'><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </div>";
+							}
+							else{
 						
-						html = "<div id='popup'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </div>";
+						html = "<div id='popup' title='Annotation'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </div>";
+						   }
 						}
+						
 						
 					/*	 var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
 														+ "/auth/editing/saveAnnotation/";
@@ -208,7 +232,7 @@ this.edge.epsilon);
 						$('#annot_node').click(function() {
 							var type1 ="node";
 							 // alert( "Handler for .click() called." );
-							  var html1 = "<div id='popup1' style='display: none'><form id='annot_form' action=" + path
+							  var html1 = "<div id='popup1' title='Annotation' style='display: none'><form id='annot_form' action=" + path
 								+ "/auth/editing/saveAnnotation/";
 							  html1 += networkId + " method='POST' >";
 							  html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
@@ -266,12 +290,30 @@ this.edge.epsilon);
 								});
 							  
 							  $( '#popup1' ).show( "slow" );
-							  $('#popup1').dialog();
+							  /*var dialogOpts = {
+								      modal: true,
+								      autoOpen: false,
+								      height: 320,
+								      width: 480,
+								      draggable: true,
+								      resizeable: true,
+								      title:'Annotation'
+								   };*/
+							  /*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
+							  $('#popup1').children('.ui-dialog-titlebar-close').show();*/
+							  $('#popup1').dialog({
+									  open: function(event, ui) {
+										  $('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
+										  }
+										  });
+							  /*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
+							  $('#popup1').children('.ui-dialog-titlebar-close').show();*/
+							//  $(".ui-dialog-titlebar").hide();
 						});
 						$('#annot_relation').click(function() {
 							//  alert( "Handler for .click() called." );
 							  var type1 = "relation";
-							  var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
+							  var html2 = "<div id='popup2' title='Annotation' style='display: none'><form id='annot_form' action=" + path
 								+ "/auth/editing/saveAnnotation/";
 							  html2 += networkId + " method='POST' >";
 							  html2 += "<p id='message'></p>";
@@ -329,6 +371,15 @@ this.edge.epsilon);
 							  
 							//  $jit.id('inner-details').innerHTML = path + html2;
 							  $( '#popup2' ).show( "slow" );
+							  /*var dialogOpts = {
+								      modal: true,
+								      autoOpen: false,
+								      height: 320,
+								      width: 480,
+								      draggable: true,
+								      resizeable: true,
+								      title:'Annotation'
+								   };*/
 							  $('#popup2').dialog();
 						});
 						/*$('#annot_form').submit(function(event) {
