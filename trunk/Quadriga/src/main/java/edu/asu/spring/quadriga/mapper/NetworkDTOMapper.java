@@ -9,9 +9,13 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
+import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
+import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTOPK;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
@@ -22,7 +26,13 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 public class NetworkDTOMapper {
 
 	@Autowired
-	INetworkNodeInfoFactory networkNodeInfoFactory;
+	private INetworkNodeInfoFactory networkNodeInfoFactory;
+	
+	@Autowired
+	private INetworkOldVersionFactory networkOldVersionFactory;
+	
+	@Autowired
+	private NetworkFactory networkFactory;
 	
 	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String workspaceid)
 	{
@@ -41,12 +51,33 @@ public class NetworkDTOMapper {
 		INetwork network = null;
 		if(networksDTO != null)
 		{
+			network = networkFactory.createNetworkObject();
 			network.setId(networksDTO.getNetworkid());
 			network.setName(networksDTO.getNetworkname());
 			network.setWorkspaceid(networksDTO.getNetworkid());
 			network.setStatus(networksDTO.getStatus());
 		}
 		return network;
+	}
+	
+	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO)
+	{
+		List<INetwork> networkList = null;
+		if(networksDTO != null)
+		{
+			networkList = new ArrayList<INetwork>();
+			INetwork network = null;
+			for(NetworksDTO networkDTO: networksDTO)
+			{
+				network = networkFactory.createNetworkObject();
+				network.setId(networkDTO.getNetworkid());
+				network.setName(networkDTO.getNetworkname());
+				network.setWorkspaceid(networkDTO.getNetworkid());
+				network.setStatus(networkDTO.getStatus());
+				networkList.add(network);
+			}
+		}		
+		return networkList;
 	}
 	
 	public List<INetworkNodeInfo> getListOfNetworkNodeInfo(List<NetworkStatementsDTO> networkStatementsDTOList)
@@ -65,5 +96,19 @@ public class NetworkDTOMapper {
 			}
 		}
 		return networkList;
+	}
+	
+	public INetworkOldVersion getNetworkOldVersion(NetworkAssignedDTO networkAssignedDTO)
+	{
+		INetworkOldVersion networkOldVersion =null;
+		if(networkAssignedDTO != null)
+		{
+			networkOldVersion = networkOldVersionFactory.createNetworkOldVersionObject();
+			networkOldVersion.setPreviousVersionAssignedUser(networkAssignedDTO.getNetworkAssignedDTOPK().getAssigneduser());
+			networkOldVersion.setPreviousVersionStatus(networkAssignedDTO.getStatus());
+			networkOldVersion.setUpdateDate(networkAssignedDTO.getUpdateddate().toString());
+		}
+		
+		return networkOldVersion;
 	}
 }
