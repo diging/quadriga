@@ -669,6 +669,10 @@
 		<put-attribute name="content" value="/WEB-INF/views/showProfile.jsp"/>
 	</definition>
 	
+	<definition name="website" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/website.jsp"/>
+	</definition>
+	
 	<definition name="auth/home/profile/adduri" extends="base.definition">
 		<put-attribute name="content" value="/WEB-INF/views/adduri.jsp" />
 	</definition>
