@@ -92,7 +92,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	@Override
 	public String addNetworkStatement(String networkId, String id, String type, String isTop, IUser user) throws QuadrigaStorageException {
 
-		NetworkStatementsDTO networkStatementsDTO = networkMapper.getNetworkStatementsDTO(generateUniqueID(), networkId, id, type, isTop, user.getName());
+		NetworkStatementsDTO networkStatementsDTO = networkMapper.getNetworkStatementsDTO(generateUniqueID(), networkId, id, type, isTop, user.getUserName());
 
 		try
 		{
@@ -108,11 +108,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 	@Override
 	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException {
-		INetwork network = null;
+		INetwork network = networkFactory.createNetworkObject();
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworksDTO network where network.networkowner = :networkowner and network.networkid = :networkid");
-			query.setParameter("networkowner", user.getName());
+			query.setParameter("networkowner", user.getUserName());
 			query.setParameter("networkid", networkId);
 
 			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
@@ -209,7 +209,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworksDTO network where network.networkowner = :networkowner and network.networkname = :networkname");
-			query.setParameter("networkowner", user.getName());
+			query.setParameter("networkowner", user.getUserName());
 			query.setParameter("networkname", networkName);
 			List<NetworksDTO> networksDTO = query.list();
 

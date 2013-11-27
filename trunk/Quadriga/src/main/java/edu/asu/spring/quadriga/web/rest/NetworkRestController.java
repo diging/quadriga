@@ -72,13 +72,13 @@ public class NetworkRestController {
 
 	@Autowired
 	private IEditorManager editorManager;
-	
+
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 
 	@Autowired
 	private IUserManager userManager;
-	
+
 	@Autowired
 	private IEmailNotificationManager emailManager;
 
@@ -111,7 +111,7 @@ public class NetworkRestController {
 		String networkName = request.getParameter("networkname");
 		String networkId="";
 		String workspaceid = request.getParameter("workspaceid");
-		
+
 
 		if(workspaceid == null||workspaceid.isEmpty()){
 			response.setStatus(404);
@@ -155,12 +155,12 @@ public class NetworkRestController {
 			InputStream is = new ByteArrayInputStream(res.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
 			networkId=networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid,"NEW",networkId);
-			
+
 			if(networkId.isEmpty()){
 				response.setStatus(404);
 				return "Text files doesn't belongs to this workspace.";
 			}
-			
+
 			//			Below code would help in printing XML from qstore
 			Marshaller marshaller = context.createMarshaller();
 			ByteArrayOutputStream os=new ByteArrayOutputStream();
@@ -170,11 +170,11 @@ public class NetworkRestController {
 			//			String r=networkManager.prettyFormat(s,2);
 			//			logger.info("checking this "+r);
 
-			
+
 			//TODO: Send email to all editors of a workspace
 			//TODO: Get the workspace editors from the workspaceid
-			
-			
+
+
 			response.setStatus(200);
 			response.setContentType(accept);
 			response.setHeader("networkid",networkId );
@@ -210,7 +210,10 @@ public class NetworkRestController {
 			template = engine
 					.getTemplate("velocitytemplates/networkstatus.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("status", status);
+			if(status == null)
+				context.put("status", "UNKNOWN");
+			else
+				context.put("status", status);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			response.setStatus(200);
@@ -374,7 +377,7 @@ public class NetworkRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		}
-		
+
 
 		if(networkXML.isEmpty() || networkXML == null){
 			throw new RestException(404);
@@ -428,7 +431,7 @@ public class NetworkRestController {
 				return "Please provide XML in body of the post request.";
 
 			} else {
-				
+
 				String res=networkManager.storeXMLQStore(xml);
 				if(res.equals("")){
 					response.setStatus(500);
@@ -442,7 +445,7 @@ public class NetworkRestController {
 				InputStream is = new ByteArrayInputStream(res.getBytes());
 				JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
 				networkId=networkManager.receiveNetworkSubmitRequest(response1,user,network.getName(),network.getWorkspaceid(),"UPDATE",networkId);
-				
+
 				response.setStatus(200);
 				response.setContentType(accept);
 				response.setHeader("networkid",networkId );
@@ -450,7 +453,7 @@ public class NetworkRestController {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 }

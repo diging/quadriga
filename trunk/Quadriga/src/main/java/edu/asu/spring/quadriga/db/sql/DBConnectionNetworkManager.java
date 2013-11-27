@@ -186,7 +186,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		IUser owner = user;
 		String dbCommand;
 		String errmsg="";
-		INetwork network=networkFactory.createNetworkObject();;
+		INetwork network=networkFactory.createNetworkObject();
 		CallableStatement sqlStatement;
 		
 		//command to call the SP
