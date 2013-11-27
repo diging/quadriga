@@ -51,74 +51,6 @@ public class QuadrigaRole implements IQuadrigaRole
 		this.description = description;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean compareQuadrigaRole(IQuadrigaRole role)
-	{
-		if(role !=null && role instanceof IQuadrigaRole)
-		{
-			//Check if both DBid are not null
-			if(this.DBid != null && role.getDBid() != null)
-			{
-				if(!(this.DBid.equals(role.getDBid())))
-				{
-					return false;
-				}				
-			}
-			else if(!(this.DBid == null && role.getDBid() == null))
-			{
-				//One of the value is null and the other is not null
-				return false;
-			}
-
-			//Check if id is not null
-			if(this.id != null && role.getId() != null)
-			{
-				if(!(this.id.equals(role.getId())))
-				{
-					return false;
-				}
-			}
-			else if(!(this.id == null && role.getId() == null))
-			{
-				//One of the value is null and the other is not null
-				return false;
-			}
-
-			//Check if name is not null
-			if(this.name != null && role.getName() != null)
-			{
-				if(!(this.name.equals(role.getName())))
-				{
-					return false;
-				}
-			}
-			else if(!(this.name== null && role.getName() == null))
-			{
-				//One of the value is null and the other is not null
-				return false;
-			}
-
-			//Check if description is not null
-			if(this.description != null && role.getDescription() != null)
-			{
-				if(!(this.description.equals(role.getDescription())))
-				{
-					return false;
-				}
-			}
-			else if(!(this.description == null && role.getDescription() == null))
-			{
-				//One of the value is null and the other is not null
-				return false;
-			}
-			return true;
-		}		
-		return false;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -133,35 +65,73 @@ public class QuadrigaRole implements IQuadrigaRole
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		
+		if(obj == null)
+			return false;
+		
+		if(this == obj)
 			return true;
-		if (obj == null)
+		
+		if(this.getClass() != obj.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		QuadrigaRole other = (QuadrigaRole) obj;
-		if (DBid == null) {
-			if (other.DBid != null)
+		
+		
+		IQuadrigaRole role = (QuadrigaRole) obj;
+		//Check values of DBid
+		if(this.DBid == null)
+		{
+			if(role.getDBid() != null)
+			{
 				return false;
-		} else if (!DBid.equals(other.DBid))
+			}				
+		}
+		else if(!this.DBid.equals(role.getDBid()))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
-		if (description == null) {
-			if (other.description != null)
+		}
+
+		//Check values of id
+		if(this.id == null)
+		{
+			if(role.getId() != null)
+			{
 				return false;
-		} else if (!description.equals(other.description))
+			}
+		}
+		else if(!this.getId().equals(role.getId()))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
-		if (id == null) {
-			if (other.id != null)
+		}
+
+		//Check if name is not null
+		if(this.name == null)
+		{
+			if(role.getName() != null)
+			{
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		}
+		else if(!this.name.equals(role.getName()))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		}
+
+		//Check if description is not null
+		if(this.description == null)
+		{
+			if(role.getDescription() != null)
+			{
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		}
+		else if(!this.description.equals(role.getDescription()))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
+		}
 		return true;
 	}
-
-
 }
