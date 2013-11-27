@@ -255,4 +255,10 @@ public class DspaceRestController {
 	      }
 	      return buf.toString();
 	   }
+	
+	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.GET)
+	public void addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam(value="fileid") String fileid, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
+	{
+		System.out.println(workspaceid+" Inside the rest service..."+fileid);
+	}
 }

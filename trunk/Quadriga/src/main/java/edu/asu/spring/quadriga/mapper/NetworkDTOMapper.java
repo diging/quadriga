@@ -10,14 +10,11 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
-import edu.asu.spring.quadriga.domain.implementation.Network;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
-import edu.asu.spring.quadriga.dto.NetworkStatementsDTOPK;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -34,15 +31,16 @@ public class NetworkDTOMapper {
 	@Autowired
 	private NetworkFactory networkFactory;
 	
+	
 	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String workspaceid)
 	{
 		NetworksDTO networkDTO = new NetworksDTO(networkid, workspaceid, networkName, username, INetworkStatus.PENDING, username, new Date(), username, new Date());
 		return networkDTO;
 	}
 	
-	public NetworkStatementsDTO getNetworkStatementsDTO(String networkId,String id,String type,String isTop, String username)
+	public NetworkStatementsDTO getNetworkStatementsDTO(String rowid, String networkId,String id,String type,String isTop, String username)
 	{
-		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(new NetworkStatementsDTOPK(networkId, id), type, Integer.parseInt(isTop), INetworkStatus.NOT_ARCHIVED, username, new Date(), username, new Date());
+		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(rowid, networkId, id, Integer.parseInt(isTop), INetworkStatus.NOT_ARCHIVED, type, username, new Date(), username, new Date());
 		return networkStatementsDTO;
 	}
 	
@@ -90,7 +88,7 @@ public class NetworkDTOMapper {
 			for(NetworkStatementsDTO networkStatementsDTO:networkStatementsDTOList)
 			{
 				networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
-				networkNodeInfo.setId(networkStatementsDTO.getNetworkStatementsDTOPK().getId());
+				networkNodeInfo.setId(networkStatementsDTO.getId());
 				networkNodeInfo.setStatementType(networkStatementsDTO.getStatementtype());
 				networkList.add(networkNodeInfo);
 			}

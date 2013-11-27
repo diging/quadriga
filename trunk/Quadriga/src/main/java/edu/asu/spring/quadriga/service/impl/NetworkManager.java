@@ -38,6 +38,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
@@ -121,7 +122,6 @@ public class NetworkManager implements INetworkManager {
 	boolean fileExist=true;
 	
 	@Autowired
-	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnect;
 
 	private List<List<Object>> relationEventPredicateMapping;
@@ -181,6 +181,7 @@ public class NetworkManager implements INetworkManager {
 	 * @author Lohith Dwaraka
 	 */
 	@Override
+	@Transactional
 	public String receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid,String updateStatus,String networkId){
 
 		setFileExist(true);
@@ -981,6 +982,7 @@ public class NetworkManager implements INetworkManager {
 	 * Get Network Status from DB
 	 */
 	@Override
+	@Transactional
 	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
@@ -996,6 +998,7 @@ public class NetworkManager implements INetworkManager {
 	 * Get Network list belonging to users
 	 */
 	@Override
+	@Transactional
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
@@ -1011,6 +1014,7 @@ public class NetworkManager implements INetworkManager {
 	 * Get All the nodes of the networks
 	 */
 	@Override
+	@Transactional
 	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
 			throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getAllNetworkNodes(networkId);
@@ -1022,6 +1026,7 @@ public class NetworkManager implements INetworkManager {
 	 * Get Project ID associated to workspace id
 	 */
 	@Override
+	@Transactional
 	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException{
 		String projectid="";
 		try{
@@ -1036,6 +1041,7 @@ public class NetworkManager implements INetworkManager {
 	 * Check if the network name already exist
 	 */
 	@Override
+	@Transactional
 	public boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException{
 
 		boolean result=true;
@@ -1051,6 +1057,7 @@ public class NetworkManager implements INetworkManager {
 	 * Get only the Top Nodes of the network
 	 */
 	@Override
+	@Transactional
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkTopNodes(networkId);
 
@@ -1064,6 +1071,7 @@ public class NetworkManager implements INetworkManager {
 	 * @return
 	 */
 	@Override
+	@Transactional
 	public INetwork getNetworkDetails(String networkId){
 		INetwork network =null;
 		try{
@@ -1079,6 +1087,7 @@ public class NetworkManager implements INetworkManager {
 	 * Get only the Top Nodes of the network's old version
 	 */
 	@Override
+	@Transactional
 	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkOldVersionTopNodes(networkId);
 
@@ -1088,6 +1097,7 @@ public class NetworkManager implements INetworkManager {
 	 * Archive network Statements
 	 */
 	@Override
+	@Transactional
 	public String archiveNetworkStatement(String networkId,String id) throws QuadrigaStorageException{
 		String msg = dbConnect.archiveNetworkStatement(networkId, id);
 		return msg;
@@ -1097,6 +1107,7 @@ public class NetworkManager implements INetworkManager {
 	 * Archive network elements
 	 */
 	@Override
+	@Transactional
 	public void archiveNetwork(String networkId) throws QuadrigaStorageException{
 
 		try{
