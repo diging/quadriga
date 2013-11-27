@@ -252,7 +252,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 	public INetwork getNetworkDetails(String networkId) throws QuadrigaStorageException{
 		String dbCommand;
 		String errmsg="";
-		INetwork network=networkFactory.createNetworkObject();;
+		INetwork network=networkFactory.createNetworkObject();
 		CallableStatement sqlStatement;
 		
 		//command to call the SP

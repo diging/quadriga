@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -39,7 +40,7 @@ public class EditingNetworkAnnotationsManager {
 	INetworkManager networkManager;
 
 	@Autowired
-	DBConnectionEditorManager dbConnectionEditManager;
+	IDBConnectionEditorManager dbConnectionEditManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingNetworkAnnotationsManager.class);
