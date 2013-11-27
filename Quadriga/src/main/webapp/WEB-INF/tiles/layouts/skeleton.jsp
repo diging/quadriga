@@ -28,7 +28,7 @@
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/networkvisualize.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-ui.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
-<script src="${pageContext.servletContext.contextPath}/resources/txt-layut/js/jquery.dataTables.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.dataTables.js"></script>
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
 <noscript>

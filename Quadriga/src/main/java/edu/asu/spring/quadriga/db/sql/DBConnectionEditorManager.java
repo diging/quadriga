@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
@@ -54,7 +54,6 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionNetworkManager.class);
 	
 	@Autowired
-	@Qualifier("DBConnectionNetworkManagerBean")
 	private IDBConnectionNetworkManager dbConnectNetwork;
 	
 	@Autowired
@@ -331,6 +330,7 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 	
 
 	@Override
+	@Transactional
 	public List<INetwork> getAssignNetworkOfUser(IUser user) throws QuadrigaStorageException{
 		IUser owner = user;
 		String dbCommand;
