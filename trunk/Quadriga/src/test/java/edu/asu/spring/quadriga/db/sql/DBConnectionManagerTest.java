@@ -122,7 +122,7 @@ public class DBConnectionManagerTest {
 
 		//Check if correct user details are required
 		IUser testUser = dbConnection.getUserDetails("jdoe");
-		assertEquals(true, user.compareUserObjects(testUser));
+		assertEquals(true, user.equals(testUser));
 
 		//Check if no user is returned for wrong userid
 		assertNull(dbConnection.getUserDetails("logan"));

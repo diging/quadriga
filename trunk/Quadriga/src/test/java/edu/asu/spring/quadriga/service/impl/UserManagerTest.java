@@ -138,7 +138,7 @@ public class UserManagerTest {
 
 		//A valid user
 		IUser testUser = usermanager.getUserDetails("jdoe");
-		assertEquals(true, user.compareUserObjects(testUser));
+		assertEquals(true, user.equals(testUser));
 
 		//Invalid user
 		IUser failUser = userFactory.createUserObject();
@@ -146,7 +146,7 @@ public class UserManagerTest {
 		rolesList.add(rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT));
 		failUser.setQuadrigaRoles(rolesList);
 		testUser = usermanager.getUserDetails("123");
-		assertEquals(true, failUser.compareUserObjects(testUser));
+		assertEquals(true, failUser.equals(testUser));
 
 	}
 

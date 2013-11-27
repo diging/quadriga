@@ -87,55 +87,8 @@ public class User implements IUser, Serializable
 		return sRoleDBIds.toString();
 	}
 
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean compareUserObjects(IUser user)
-	{
-		if(user!=null && user instanceof IUser)
-		{
-			//Check the user name
-			if(this.userName !=null && user.getUserName() !=null)
-			{
-				//Check if username matches for the user objects
-				if(!(this.userName.equals(user.getUserName())))
-				{
-					return false;
-				}
-			}
-			else if(!(this.userName == null && user.getUserName() == null))
-			{
-				//One of the value is null and the other is not null
-				return false;
-			}
-
-			//Check the roles for user objects
-			if(this.quadrigaRoles != null && user.getQuadrigaRoles() != null)
-			{
-				//Check if all the roles match for the user objects
-				List<IQuadrigaRole> userRoles = user.getQuadrigaRoles();
-				if(this.quadrigaRoles.size() == userRoles.size())
-				{				
-					for(int i=0;i<this.quadrigaRoles.size();i++)
-					{
-						if(!(userRoles.get(i).compareQuadrigaRole(this.quadrigaRoles.get(i))))
-						{
-							return false;
-						}
-					}
-					return true;
-				}
-			}
-			else if(this.quadrigaRoles == null && user.getQuadrigaRoles() == null)
-			{
-				//Both the roles are null
-				return true;
-			}
-		}
-		return false;
-	}
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -150,40 +103,80 @@ public class User implements IUser, Serializable
 				+ ((userName == null) ? 0 : userName.hashCode());
 		return result;
 	}
+	
+	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		
+		if(obj == null)
+			return false;
+		
+		if(this == obj)
 			return true;
-		if (obj == null)
+		
+		if(this.getClass() != obj.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (email == null) {
-			if (other.email != null)
+		
+		User user = (User) obj;
+		//Check the username
+		if(this.userName == null)
+		{
+			if(user.userName != null)
 				return false;
-		} else if (!email.equals(other.email))
+		}
+		else if(!this.userName.equals(user.userName))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		}
+		
+		//Check the name
+		if(this.name == null)
+		{
+			if(user.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		}
+		else if(!this.name.equals(user.name))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
-		if (password == null) {
-			if (other.password != null)
+		}
+		
+		//Check the password
+		if(this.password == null)
+		{
+			if(user.password != null)
 				return false;
-		} else if (!password.equals(other.password))
+		}
+		else if(!this.password.equals(user.password))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
-		if (quadrigaRoles == null) {
-			if (other.quadrigaRoles != null)
+		}
+		
+		//Check the email
+		if(this.email == null)
+		{
+			if(user.email != null)
 				return false;
-		} else if (!quadrigaRoles.equals(other.quadrigaRoles))
+		}
+		else if(!this.email.equals(user.email))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
-		if (userName == null) {
-			if (other.userName != null)
+		}
+		
+		//Check the quadrigaRoles
+		if(this.quadrigaRoles == null)
+		{
+			if(user.quadrigaRoles != null)
 				return false;
-		} else if (!userName.equals(other.userName))
+		}
+		else if(!this.quadrigaRoles.equals(user.quadrigaRoles))
+		{
+			//One of the value is null and the other is not null (or) the values do not match
 			return false;
+		}
 		return true;
 	}	
 }

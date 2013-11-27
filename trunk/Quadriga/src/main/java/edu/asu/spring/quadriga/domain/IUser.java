@@ -39,18 +39,5 @@ public interface IUser
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract String getQuadrigaRolesDBId();
-
-	/**
-	 * Compares this user object to the specified user object. 
-	 * The result is true if and only if the argument is not null and is a User object 
-	 * that represents the same state(variable values) as this object.
-	 * 
-	 * @param user The user object to which this object is to be compared with
-	 * 
-	 * @return TRUE - If both user objects represent the same user. FALSE - If there is any difference in the user values.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 */
-	public abstract boolean compareUserObjects(IUser user);
    
 }
