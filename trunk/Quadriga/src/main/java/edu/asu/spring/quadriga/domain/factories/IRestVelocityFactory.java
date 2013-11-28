@@ -16,5 +16,7 @@ public interface IRestVelocityFactory {
 
 	public abstract VelocityEngine getVelocityEngine(HttpServletRequest req) throws FileNotFoundException, IOException;
 	public abstract VelocityContext getVelocityContext();
+	public abstract VelocityEngine getVelocityRestEngine() throws FileNotFoundException,
+			IOException;
 	
 }

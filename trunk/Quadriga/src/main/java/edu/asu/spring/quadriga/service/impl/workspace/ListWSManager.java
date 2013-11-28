@@ -138,7 +138,9 @@ public class ListWSManager implements IListWSManager
 	{
 		IWorkSpace workspace;
 		workspace = listWSManagerDAO.getWorkspaceDetails(workspaceId,username);
-		workspace.setBitstreams(listWSManagerDAO.getBitStreams(workspaceId, username));
+		if(workspace!=null){
+			workspace.setBitstreams(listWSManagerDAO.getBitStreams(workspaceId, username));
+		}
 		return workspace;
 	}
 	
