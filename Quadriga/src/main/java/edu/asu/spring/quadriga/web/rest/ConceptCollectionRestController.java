@@ -49,6 +49,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.service.IErrorMessageRest;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -72,6 +73,9 @@ public class ConceptCollectionRestController {
 	@Autowired
 	private IUserManager usermanager;
 
+	@Autowired
+	private IErrorMessageRest errorMessageRest;
+	
 	@Autowired
 	private IWorkspaceCCManager workspaceCCManager;
 
@@ -178,21 +182,22 @@ public class ConceptCollectionRestController {
 	 * @throws JAXBException
 	 * @throws QuadrigaAccessException
 	 * @throws QuadrigaStorageException
+	 * @throws RestException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
-	public String getCCXMLFromVogon(
+	public String addConceptsToConceptColleciton(
 			@PathVariable("conceptCollectionID") String conceptCollectionId,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String xml, @RequestHeader("Accept") String accept,
 			Principal principal) throws QuadrigaException,
 			ParserConfigurationException, SAXException, IOException,
-			JAXBException, QuadrigaAccessException, QuadrigaStorageException {
+			JAXBException, QuadrigaAccessException, QuadrigaStorageException, RestException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
-			response.setStatus(500);
-			return "Please provide XML in body of the post request.";
-
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.", request);
+			return errorMsg;
 		} else {
 
 			logger.debug("XML : " + xml);
@@ -229,7 +234,8 @@ public class ConceptCollectionRestController {
 					logger.error("Errors in adding items", e);
 					response.setStatus(500);
 					response.setContentType(accept);
-					return "Fail";
+					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);
+					return errorMsg;
 				}
 
 			}
@@ -314,21 +320,24 @@ public class ConceptCollectionRestController {
 	 * @throws Exception
 	 */
 
-	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
 	@ResponseBody
+	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
 	public String addConceptCollectionsToWorkspace(
 			@PathVariable("workspaceId") String workspaceId,
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String xml, @RequestHeader("Accept") String accept,
-			ModelMap model, Principal principal, HttpServletRequest req)
+			ModelMap model, Principal principal )
 			throws RestException, QuadrigaStorageException,
 			QuadrigaAccessException {
 		IUser user = usermanager.getUserDetails(principal.getName());
-
+		String ccName = request.getParameter("name");
+		String desc = request.getParameter("desc");
+		
 		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
 			logger.info("Workspace ID : " + workspaceId + " doesn't exist");
 			response.setStatus(404);
-			return "Workspace ID : " + workspaceId + " doesn't exist";
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist", request);
+			return errorMsg;
 		}
 
 		
@@ -338,21 +347,24 @@ public class ConceptCollectionRestController {
 		if(!hasAccess){
 			logger.info("User : "+ user.getUserName()+" doesn't have access to Workspace ID : " + workspaceId );
 			response.setStatus(400);
+			
 			return "User : "+ user.getUserName()+" doesn't have access to Workspace ID : " + workspaceId;
 		}
 		
-		String ccName = request.getParameter("name");
-		String desc = request.getParameter("desc");
+		
 		IConceptCollection collection = conceptCollectionFactory
 				.createConceptCollectionObject();
 
 		if (ccName == null || ccName.isEmpty()) {
 			response.setStatus(404);
-			return "Please provide concept collection name";
+			logger.info("came here " + ccName);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection name", request);
+			return errorMsg;
 		}
 		if (desc == null ||  desc.isEmpty()) {
 			response.setStatus(404);
-			return "Please provide concept collection description";
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection description", request);
+			return errorMsg;
 		}
 		logger.debug("XML : " + xml);
 		JAXBElement<QuadrigaConceptReply> response1 = null;
@@ -370,14 +382,16 @@ public class ConceptCollectionRestController {
 		}
 		if (response1 == null) {
 			response.setStatus(404);
-			return "Concepts XML is not valid";
+			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid", request);
+			return errorMsg;
 		}
 		QuadrigaConceptReply qReply = response1.getValue();
 		ConceptList c1 = qReply.getConceptList();
 		List<Concept> conceptList = c1.getConcepts();
 		if (conceptList.size() < 1) {
 			response.setStatus(404);
-			return "Concepts XML is not valid";
+			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid", request);
+			return errorMsg;
 		}
 
 		collection.setDescription(desc);
@@ -404,7 +418,8 @@ public class ConceptCollectionRestController {
 				logger.error("Errors in adding items", e);
 				response.setStatus(500);
 				response.setContentType(accept);
-				return "Fail";
+				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);
+				return errorMsg;				
 			}
 
 		}
