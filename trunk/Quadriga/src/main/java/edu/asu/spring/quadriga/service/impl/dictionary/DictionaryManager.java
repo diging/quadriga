@@ -8,8 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.dao.sql.dictionary.impl.DictionaryManagerDAO;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
@@ -64,6 +66,9 @@ public class DictionaryManager implements IDictionaryManager {
 	@Autowired
 	DictionaryItemsFactory dictionaryItemsFactory;
 
+	@Autowired
+	DictionaryManagerDAO dictionaryManagerDAO;
+	
 	/**
 	 * Gets the searchWordPowerURL
 	 * 
@@ -88,16 +93,16 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to list dictionary to controller
 	 * @throws QuadrigaStorageException
 	 */
+	@Transactional
 	public List<IDictionary> getDictionariesList(String userId)
 			throws QuadrigaStorageException {
 
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 
 		try {
-			dictionaryList = dbConnect.getDictionaryOfUser(userId);
+			dictionaryList = dictionaryManagerDAO.getDictionaryOfUser(userId);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.error("",e);
+			logger.error("getDictionariesList",e);
 		}
 
 		return dictionaryList;

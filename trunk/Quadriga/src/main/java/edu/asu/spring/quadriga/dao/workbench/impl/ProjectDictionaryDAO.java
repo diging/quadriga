@@ -10,8 +10,9 @@ import javax.annotation.Resource;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryMangerDAO;
+import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
@@ -20,8 +21,8 @@ import edu.asu.spring.quadriga.dto.ProjectDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 
-
-public class ProjectDictionaryManagerDAO implements IProjectDictionaryMangerDAO 
+@Repository
+public class ProjectDictionaryDAO implements IProjectDictionaryDAO 
 {
 	@Resource(name = "database_error_msgs")
 	private Properties messages;

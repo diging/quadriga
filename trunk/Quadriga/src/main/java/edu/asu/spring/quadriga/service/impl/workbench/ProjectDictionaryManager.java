@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -18,6 +20,9 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	@Qualifier("DBConnectionProjectDictionaryBean")
 	private IDBConnectionProjectDictionary dbConnect;
 	
+	@Autowired
+	private IProjectDictionaryDAO projectDictionaryDAO; 
+	
 	/**
 	 * Add dictionary to the project  
 	 * @param projectId
@@ -27,10 +32,10 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String addProjectDictionary(String projectId, String dictionaryId,
+	@Transactional
+	public void addProjectDictionary(String projectId, String dictionaryId,
 			String userId) throws QuadrigaStorageException {
-		String msg = dbConnect.addProjectDictionary(projectId, dictionaryId, userId);
-		return msg;
+		projectDictionaryDAO.addProjectDictionary(projectId, dictionaryId, userId);
 	}
 
 	/**
@@ -43,7 +48,7 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	@Override
 	public List<IDictionary> listProjectDictionary(String projectId,
 			String userId) throws QuadrigaStorageException {
-		List<IDictionary> dictionaryList = dbConnect.listProjectDictionary(projectId, userId);
+		List<IDictionary> dictionaryList = projectDictionaryDAO.listProjectDictionary(projectId, userId);
 		return dictionaryList;
 	}
 
@@ -55,9 +60,7 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException{
-		
-		String msg=dbConnect.deleteProjectDictionary(projectId, userId, dictioanaryId);
-		return msg;
+	public void deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException{
+		projectDictionaryDAO.deleteProjectDictionary(projectId, userId, dictioanaryId);
 	}
 }

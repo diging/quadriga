@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.mapper;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -100,6 +100,20 @@ public class DictionaryDTOMapper extends DAOConnectionManager
         //TODO : add collaborator description
 		
 		return collaborator;
+	}
+	
+	public List<IDictionary> getDictionaryList(List<DictionaryDTO> dictionaryDTOList)
+	{
+		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+		if(dictionaryDTOList != null && dictionaryDTOList.size() > 0)
+		{
+			Iterator<DictionaryDTO> dictionaryDTOIterator = dictionaryDTOList.iterator();
+			while(dictionaryDTOIterator.hasNext())
+			{
+				dictionaryList.add(getDictionary(dictionaryDTOIterator.next()));
+			}
+		}
+		return dictionaryList;
 	}
 
 }

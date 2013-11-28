@@ -120,11 +120,11 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 		boolean isEditor;
 		isEditor = false;
 		int count;
-		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectid) FROM ProjectEditorDTO pc WHERE pc.projectid =:projectId AND pc.owner =:userName");
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectEditorDTOPK.projectid) FROM ProjectEditorDTO pc WHERE pc.projectEditorDTOPK.projectid =:projectId AND pc.projectEditorDTOPK.owner =:userName");
 		query.setParameter("userName", userName);
 		query.setParameter("projectId",projectId);
 		
-		count = ((Integer) query.iterate().next()).intValue();
+		count = ((Number) query.uniqueResult()).intValue();
 		if(count > 0)
 		{
 			isEditor = true;

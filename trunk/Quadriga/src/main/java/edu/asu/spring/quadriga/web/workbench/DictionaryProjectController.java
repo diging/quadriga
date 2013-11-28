@@ -105,8 +105,7 @@ public class DictionaryProjectController {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("values " + values[i]);
 				try {
-					msg=projectDictionaryManager.addProjectDictionary(projectid,
-							values[i], userId);
+					projectDictionaryManager.addProjectDictionary(projectid,values[i], userId);
 					if(!msg.equals("")){
 						flag=1;
 					}
@@ -213,7 +212,7 @@ public class DictionaryProjectController {
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				try {
-					msg=projectDictionaryManager.deleteProjectDictionary(projectid, userId, values[i]);
+					projectDictionaryManager.deleteProjectDictionary(projectid, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
 					throw new QuadrigaStorageException();
 				}
