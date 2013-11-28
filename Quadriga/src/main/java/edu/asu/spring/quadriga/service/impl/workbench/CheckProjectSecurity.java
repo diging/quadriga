@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workbench.impl.ProjectAccessManagerDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -29,6 +31,9 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	
 	@Autowired
 	private IRetrieveProjCollabManager projectManager;
+	
+	@Autowired
+	private ProjectAccessManagerDAO projectAccessManagerDAO;
 	
 	/**
 	 * This method checks if the user is Quadriga Admin
@@ -185,6 +190,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean checkProjectOwnerEditorAccess(String userName,String projectId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -193,7 +199,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = dbConnect.chkProjectOwnerEditorRole(userName, projectId);
+		chkAccess = projectAccessManagerDAO.chkProjectOwnerEditorRole(userName, projectId);
 		return chkAccess;
 	}
 }

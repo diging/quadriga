@@ -5,7 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IProjectDictionaryMangerDAO 
+public interface IProjectDictionaryDAO 
 {
 
 	public abstract void deleteProjectDictionary(String projectId, String userId,

@@ -15,7 +15,7 @@ public interface IProjectDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public String addProjectDictionary(String projectId, String dictionaryId, String userId)throws QuadrigaStorageException;
+	public void addProjectDictionary(String projectId, String dictionaryId, String userId)throws QuadrigaStorageException;
 	
 	/**
 	 * List the dictionary in a project for a user - userId
@@ -33,6 +33,6 @@ public interface IProjectDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public String deleteProjectDictionary(String projectId, String userId,
+	public void deleteProjectDictionary(String projectId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException;
 }

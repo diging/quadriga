@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.dao.sql.dictionary.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +12,10 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.sql.dictionary.IDictionaryManagerDAO;
-import edu.asu.spring.quadriga.mapper.DspaceDTOMapper;
+import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 
 @Repository
 public class DictionaryManagerDAO extends DAOConnectionManager implements IDictionaryManagerDAO
@@ -18,40 +25,35 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDicti
 	private SessionFactory sessionFactory;
 
 	@Autowired
-	private DspaceDTOMapper dspaceDTOMapper;
+	private DictionaryDTOMapper dictionaryDTOMapper;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryManagerDAO.class);
 
 	/**
-	 * This method is to add dictionary
-	 * 
-	 * @param username
+	 * Gets the dictionary of the user matched with his user name
+	 * @return List of Dictionary 
 	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
 	 */
-	/*@Override
-	public String addDictionary(IDictionary dictionary)throws QuadrigaStorageException
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IDictionary> getDictionaryOfUser(String userId) throws QuadrigaStorageException 
 	{
+		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("DspaceKeysDTO.findByUsername");
-			query.setParameter("username", username);
-			DspaceKeysDTO dspaceKeysDTO = (DspaceKeysDTO) query.uniqueResult();
-			if(dspaceKeysDTO != null)
+			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryDTO dictionary where dictionary.dictionaryowner.username =:username");
+			query.setParameter("username", userId);
+			List<DictionaryDTO> dictionaryDTOList = query.list();
+			if(dictionaryDTOList != null && dictionaryDTOList.size() > 0)
 			{
-				return dspaceDTOMapper.getIDspaceKeys(dspaceKeysDTO);
+				dictionaryList = dictionaryDTOMapper.getDictionaryList(dictionaryDTOList);
 			}
-			else
-			{
-				return null;
-			}
-		}
-		catch(Exception e)
+		} 
+		catch (Exception e) 
 		{
-			logger.error("getDspaceKeys method :",e);
-        	throw new QuadrigaStorageException();
+			logger.error("getDictionaryOfUser method :",e);
 		}
-	}*/
-	
+		return dictionaryList;
+	}
 	
 }
