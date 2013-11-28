@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.RestAccessException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.web.rest.ProjectRestController;
 
@@ -22,6 +23,9 @@ import edu.asu.spring.quadriga.web.rest.ProjectRestController;
 @Component
 public class RestAccessAspect 
 {
+	@Autowired
+	private RestAccessException restAccessException;
+	
 	private static final Logger logger = LoggerFactory
 			.getLogger(RestAccessAspect.class);
 	
@@ -77,7 +81,7 @@ public class RestAccessAspect
 		if(!haveAccess)
 		{
 			logger.info("I am here, who am i, i am restaccesspolicy");
-			throw new RestException(400);
+			return restAccessException.accessErrorMsg(400,"You Don't have permission");
 		}
 		Object retVal = pjp.proceed();
 		return retVal;

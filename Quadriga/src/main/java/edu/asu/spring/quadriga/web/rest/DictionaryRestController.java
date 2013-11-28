@@ -52,6 +52,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.service.IErrorMessageRest;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -84,6 +85,9 @@ public class DictionaryRestController {
 	@Autowired
 	private IUserManager usermanager;
 
+	@Autowired
+	private IErrorMessageRest errorMessageRest;
+	
 	@Autowired
 	private IDictionaryManager dictionaryManager;
 
@@ -320,12 +324,13 @@ public class DictionaryRestController {
 	@ResponseBody
 	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
+			@RequestHeader("Accept") String accept, ModelMap model, Principal principal) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = usermanager.getUserDetails(principal.getName());
 		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
 			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
 			response.setStatus(404);
-			return "Workspace ID : "+workspaceId+" doesn't exist";
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
+			return errorMsg;
 		}
 		
 		String [] roles = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR};
@@ -337,11 +342,13 @@ public class DictionaryRestController {
 
 		if(dictName == null ||  dictName.isEmpty()){
 			response.setStatus(404);
-			return "Please provide dictionary name";
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name");
+			return errorMsg;
 		}
 		if( desc == null ||  desc.isEmpty()){
 			response.setStatus(404);
-			return "Please provide dictionary description";
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary description");
+			return errorMsg;
 		}
 		logger.debug("XML : "+xml);
 		JAXBElement<QuadrigaDictDetailsReply> response1=null;
@@ -356,14 +363,16 @@ public class DictionaryRestController {
 		}
 		if(response1 == null){
 			response.setStatus(404);
-			return "Concepts XML is not valid";
+			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid");
+			return errorMsg;
 		}
 		QuadrigaDictDetailsReply qReply= response1.getValue();
 		DictionaryItemList dictList =qReply.getDictionaryItemsList(); 
 		List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
 		if(dictionaryList.size()<1){
 			response.setStatus(404);
-			return "Dictionary XML is not valid";
+			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid");
+			return errorMsg;
 		}
 		
 		dictionary.setDescription(desc);
@@ -384,7 +393,8 @@ public class DictionaryRestController {
 				logger.error("Errors in adding items",e);
 				response.setStatus(500);
 				response.setContentType(accept);
-				return "Fail";
+				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
+				return errorMsg;
 			}
 
 		}
@@ -413,17 +423,18 @@ public class DictionaryRestController {
 	 * @throws JAXBException 
 	 * @throws QuadrigaAccessException 
 	 * @throws QuadrigaStorageException 
+	 * @throws RestException 
 	 */
 	@ResponseBody
 	@RequestMapping(value = "rest/syncdictionary/{dictionaryID}", method = RequestMethod.POST)
 	public String getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaAccessException, QuadrigaStorageException {
+			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaAccessException, QuadrigaStorageException, RestException {
 		IUser user = usermanager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(500);
-			return "Please provide XML in body of the post request.";
-
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
+			return errorMsg;
 		} else {
 
 			logger.debug("XML : "+xml);
@@ -440,14 +451,16 @@ public class DictionaryRestController {
 			}
 			if(response1 == null){
 				response.setStatus(404);
-				return "Concepts XML is not valid";
+				String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid");
+				return errorMsg;
 			}
 			QuadrigaDictDetailsReply qReply= response1.getValue();
 			DictionaryItemList dictList =qReply.getDictionaryItemsList(); 
 			List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
 			if(dictionaryList.size()<1){
 				response.setStatus(404);
-				return "Dictionary XML is not valid";
+				String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid");
+				return errorMsg;
 			}
 			
 
@@ -462,7 +475,8 @@ public class DictionaryRestController {
 					logger.error("Errors in adding items",e);
 					response.setStatus(500);
 					response.setContentType(accept);
-					return "Fail";
+					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
+					return errorMsg;
 				}
 
 			}

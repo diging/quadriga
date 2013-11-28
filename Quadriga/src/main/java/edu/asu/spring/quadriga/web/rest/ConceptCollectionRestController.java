@@ -37,6 +37,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
@@ -196,7 +199,7 @@ public class ConceptCollectionRestController {
 		IUser user = userManager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.", request);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
 			return errorMsg;
 		} else {
 
@@ -234,7 +237,7 @@ public class ConceptCollectionRestController {
 					logger.error("Errors in adding items", e);
 					response.setStatus(500);
 					response.setContentType(accept);
-					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);
+					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
 					return errorMsg;
 				}
 
@@ -319,7 +322,7 @@ public class ConceptCollectionRestController {
 	 * @throws QuadrigaAccessException
 	 * @throws Exception
 	 */
-
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@ResponseBody
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
 	public String addConceptCollectionsToWorkspace(
@@ -336,7 +339,7 @@ public class ConceptCollectionRestController {
 		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
 			logger.info("Workspace ID : " + workspaceId + " doesn't exist");
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist", request);
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist");
 			return errorMsg;
 		}
 
@@ -358,12 +361,12 @@ public class ConceptCollectionRestController {
 		if (ccName == null || ccName.isEmpty()) {
 			response.setStatus(404);
 			logger.info("came here " + ccName);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection name", request);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection name");
 			return errorMsg;
 		}
 		if (desc == null ||  desc.isEmpty()) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection description", request);
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection description");
 			return errorMsg;
 		}
 		logger.debug("XML : " + xml);
@@ -382,7 +385,7 @@ public class ConceptCollectionRestController {
 		}
 		if (response1 == null) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid", request);
+			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid");
 			return errorMsg;
 		}
 		QuadrigaConceptReply qReply = response1.getValue();
@@ -390,7 +393,7 @@ public class ConceptCollectionRestController {
 		List<Concept> conceptList = c1.getConcepts();
 		if (conceptList.size() < 1) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid", request);
+			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid");
 			return errorMsg;
 		}
 
@@ -418,7 +421,7 @@ public class ConceptCollectionRestController {
 				logger.error("Errors in adding items", e);
 				response.setStatus(500);
 				response.setContentType(accept);
-				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error", request);
+				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
 				return errorMsg;				
 			}
 
