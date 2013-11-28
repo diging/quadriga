@@ -423,7 +423,15 @@ button.ui-button::-moz-focus-inner {
 	margin: -10px 0 0 0;
 	padding: 1px;
 	height: 20px;
+    background-image:url('http://www.charlottemotorspeedway.com/images/icon_x.png') !important;
+
 }
+
+
+.ui-dialog-titlebar-close span {
+    display:none !important;
+}
+
 .ui-dialog .ui-dialog-content {
 	position: relative;
 	border: 0;

@@ -152,17 +152,19 @@ this.edge.epsilon);
 						
 						if(edge.nodeFrom){
 							console.log("target is a edge");
-							/*var node1 = edge.nodeTo;
-							var node2 = edge.nodeFrom;
+							alert(edge.nodeFrom.name);
+							alert(edge.nodeTo.name);
+							var node1 = edge.nodeTo.id;
+							var node2 = edge.nodeFrom.id;
 							node1.setData('dim', 17, 'end');
-							node2.setData('dim', 17, 'end');*/
-							edge.selected = true;
-					          edge.setData('dim', 17, 'end');
-							/*fd.fx.animate({
+							node2.setData('dim', 18, 'end');
+							/*edge.selected = true;
+					          edge.setData('dim', 17, 'end');*/
+							fd.fx.animate({
 					        	modes: ['node-property:dim',
 					               'edge-property:lineWidth:color'],
 					          	duration: 500
-					        });*/
+					        });
 							/*edge.setDataset('end', {
 					              lineWidth: 3,
 					              color: '#36acfb'
