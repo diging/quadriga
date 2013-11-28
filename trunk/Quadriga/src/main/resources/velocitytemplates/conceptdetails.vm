@@ -6,7 +6,7 @@
 <Quadriga:concept>
 	<Quadriga:pos>$concept.pos</Quadriga:pos>
 	<Quadriga:name>$concept.lemma</Quadriga:name>
-	<Quadriga:description>$concept.description</Quadriga:description>
+	<Quadriga:description><![CDATA[$concept.description]]></Quadriga:description>
 	<Quadriga:uri>$concept.id</Quadriga:uri>
 </Quadriga:concept> 	
 #end
