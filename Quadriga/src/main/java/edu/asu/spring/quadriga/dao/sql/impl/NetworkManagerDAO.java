@@ -171,6 +171,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 					//Get the workspace name
 					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
 					network.setWorkspaceName(workspaceName);
+				}else{
+					logger.info("projectWorkspaceDTO is null beta");
 				}
 			}
 

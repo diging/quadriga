@@ -118,7 +118,7 @@ public class NetworkRestController {
 			return "Please provide correct workspace id.";
 		}
 		String projectid = networkManager.getProjectIdForWorkspaceId(workspaceid);
-		if(projectid.isEmpty()){
+		if(projectid == null || projectid.isEmpty()){
 			response.setStatus(404);
 			return "Please provide correct workspace id.";
 		}

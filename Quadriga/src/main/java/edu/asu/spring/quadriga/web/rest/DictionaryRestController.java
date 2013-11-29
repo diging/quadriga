@@ -39,6 +39,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -159,40 +162,6 @@ public class DictionaryRestController {
 	
 	}
 
-	/**
-	 * Rest interface for uploading XML for dictionaries
-	 * http://<<URL>:<PORT>>/quadriga/rest/uploaddictionaries
-	 * hhttp://localhost:8080/quadriga/rest/uploaddictionaries
-	 * 
-	 * @author Lohith Dwaraka
-	 * @param request
-	 * @param response
-	 * @param xml
-	 * @param accept
-	 * @return
-	 * @throws QuadrigaException
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 */
-	@ResponseBody
-	@RequestMapping(value = "rest/uploaddictionaries", method = RequestMethod.POST)
-	public String getDictXMLFromVogon(HttpServletRequest request,
-			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept) throws QuadrigaException, ParserConfigurationException, SAXException, IOException {
-
-		if (xml.equals("")) {
-			response.setStatus(500);
-			return "Please provide XML in body of the post request.";
-
-		} else {
-			if (accept != null && accept.equals("application/xml")) {
-			}
-			response.setStatus(200);
-			response.setContentType(accept);
-			return "";
-		}
-	}
 	
 	
 	/**
@@ -320,6 +289,7 @@ public class DictionaryRestController {
 	 * @throws QuadrigaAccessException 
 	 * @throws Exception
 	 */
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createdict", method = RequestMethod.POST)
 	@ResponseBody
 	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
@@ -329,12 +299,10 @@ public class DictionaryRestController {
 		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
 			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist",request);
 			return errorMsg;
 		}
 		
-		String [] roles = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR};
-		boolean hasAccess = hasWorkspaceAccess(workspaceId, user.getUserName(),roles);
 		
 		String dictName = request.getParameter("name");
 		String desc = request.getParameter("desc");
@@ -342,12 +310,12 @@ public class DictionaryRestController {
 
 		if(dictName == null ||  dictName.isEmpty()){
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name");
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary name",request);
 			return errorMsg;
 		}
 		if( desc == null ||  desc.isEmpty()){
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary description");
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide dictionary description",request);
 			return errorMsg;
 		}
 		logger.debug("XML : "+xml);
@@ -360,10 +328,13 @@ public class DictionaryRestController {
 			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaDictDetailsReply.class);
 		}catch(Exception e ){
 			logger.error("Error in unmarshalling",e);
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
+			return errorMsg;
 		}
 		if(response1 == null){
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid");
+			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid",request);
 			return errorMsg;
 		}
 		QuadrigaDictDetailsReply qReply= response1.getValue();
@@ -371,7 +342,7 @@ public class DictionaryRestController {
 		List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
 		if(dictionaryList.size()<1){
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid");
+			String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid",request);
 			return errorMsg;
 		}
 		
@@ -393,7 +364,7 @@ public class DictionaryRestController {
 				logger.error("Errors in adding items",e);
 				response.setStatus(500);
 				response.setContentType(accept);
-				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
+				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
 				return errorMsg;
 			}
 
@@ -425,6 +396,7 @@ public class DictionaryRestController {
 	 * @throws QuadrigaStorageException 
 	 * @throws RestException 
 	 */
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@ResponseBody
 	@RequestMapping(value = "rest/syncdictionary/{dictionaryID}", method = RequestMethod.POST)
 	public String getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,HttpServletRequest request,
@@ -451,7 +423,7 @@ public class DictionaryRestController {
 			}
 			if(response1 == null){
 				response.setStatus(404);
-				String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid");
+				String errorMsg = errorMessageRest.getErrorMsg("Dictionaries XML is not valid",request);
 				return errorMsg;
 			}
 			QuadrigaDictDetailsReply qReply= response1.getValue();
@@ -459,7 +431,7 @@ public class DictionaryRestController {
 			List<DictionaryItem> dictionaryList = dictList.getDictionaryItems();
 			if(dictionaryList.size()<1){
 				response.setStatus(404);
-				String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid");
+				String errorMsg = errorMessageRest.getErrorMsg("Dictionary XML is not valid",request);
 				return errorMsg;
 			}
 			
@@ -475,7 +447,7 @@ public class DictionaryRestController {
 					logger.error("Errors in adding items",e);
 					response.setStatus(500);
 					response.setContentType(accept);
-					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
+					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
 					return errorMsg;
 				}
 
@@ -487,23 +459,5 @@ public class DictionaryRestController {
 		}
 	}
 	
-	public boolean hasWorkspaceAccess(String workspaceId, String userName, String [] roles) throws QuadrigaStorageException{
-		boolean hasAccess = false; 
-		if(checkWSSecurity.checkWorkspaceOwner(userName, workspaceId)){
-			logger.info("Owner access");
-			return true;
-		}else{
-			//check if the user associated with the role has any projects
-			for(String role : roles)
-			{
-				hasAccess = checkWSSecurity.chkIsCollaboratorWorkspaceAssociated(userName, role);
-				
-				if(hasAccess){
-					logger.info("Role access : " + role);
-					return true;
-				}
-			}
-		}
-		return hasAccess;
-	}
+
 }

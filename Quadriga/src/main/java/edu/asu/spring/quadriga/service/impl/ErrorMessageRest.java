@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.service.impl;
 
 import java.io.StringWriter;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -35,6 +37,31 @@ public class ErrorMessageRest implements IErrorMessageRest {
 
 		try {
 			engine = restVelocityFactory.getVelocityRestEngine();
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/error.vm");
+			VelocityContext context = new VelocityContext(
+					restVelocityFactory.getVelocityContext());
+			context.put("errMsg", errorMsg);
+			template.merge(context, sw);
+			return sw.toString();
+		} catch (ResourceNotFoundException e) {
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (Exception e) {
+			logger.error("Exception:", e);
+			throw new RestException(405);
+		}
+	}
+	
+	@Override
+	public String getErrorMsg(String errorMsg,HttpServletRequest req) throws RestException {
+		VelocityEngine engine = null;
+		Template template = null;
+		StringWriter sw = new StringWriter();
+
+		try {
+			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
 			template = engine
 					.getTemplate("velocitytemplates/error.vm");

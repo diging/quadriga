@@ -187,6 +187,7 @@ public class ConceptCollectionRestController {
 	 * @throws QuadrigaStorageException
 	 * @throws RestException 
 	 */
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@ResponseBody
 	@RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
 	public String addConceptsToConceptColleciton(
@@ -199,7 +200,7 @@ public class ConceptCollectionRestController {
 		IUser user = userManager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.",request);
 			return errorMsg;
 		} else {
 
@@ -216,6 +217,9 @@ public class ConceptCollectionRestController {
 						QuadrigaConceptReply.class);
 			} catch (Exception e) {
 				logger.error("Error in unmarshalling", e);
+				response.setStatus(404);
+				String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
+				return errorMsg;
 			}
 			QuadrigaConceptReply qReply = response1.getValue();
 			ConceptList c1 = qReply.getConceptList();
@@ -237,7 +241,7 @@ public class ConceptCollectionRestController {
 					logger.error("Errors in adding items", e);
 					response.setStatus(500);
 					response.setContentType(accept);
-					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
+					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
 					return errorMsg;
 				}
 
@@ -339,21 +343,10 @@ public class ConceptCollectionRestController {
 		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
 			logger.info("Workspace ID : " + workspaceId + " doesn't exist");
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist");
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist",request);
 			return errorMsg;
 		}
 
-		
-		String [] roles = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR};
-		boolean hasAccess = hasWorkspaceAccess(workspaceId, user.getUserName(),roles);
-
-		if(!hasAccess){
-			logger.info("User : "+ user.getUserName()+" doesn't have access to Workspace ID : " + workspaceId );
-			response.setStatus(400);
-			
-			return "User : "+ user.getUserName()+" doesn't have access to Workspace ID : " + workspaceId;
-		}
-		
 		
 		IConceptCollection collection = conceptCollectionFactory
 				.createConceptCollectionObject();
@@ -361,12 +354,12 @@ public class ConceptCollectionRestController {
 		if (ccName == null || ccName.isEmpty()) {
 			response.setStatus(404);
 			logger.info("came here " + ccName);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection name");
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection name",request);
 			return errorMsg;
 		}
 		if (desc == null ||  desc.isEmpty()) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection description");
+			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection description",request);
 			return errorMsg;
 		}
 		logger.debug("XML : " + xml);
@@ -382,10 +375,13 @@ public class ConceptCollectionRestController {
 					QuadrigaConceptReply.class);
 		} catch (Exception e) {
 			logger.error("Error in unmarshalling", e);
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
+			return errorMsg;
 		}
 		if (response1 == null) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid");
+			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid",request);
 			return errorMsg;
 		}
 		QuadrigaConceptReply qReply = response1.getValue();
@@ -393,7 +389,7 @@ public class ConceptCollectionRestController {
 		List<Concept> conceptList = c1.getConcepts();
 		if (conceptList.size() < 1) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid");
+			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid",request);
 			return errorMsg;
 		}
 
@@ -421,7 +417,7 @@ public class ConceptCollectionRestController {
 				logger.error("Errors in adding items", e);
 				response.setStatus(500);
 				response.setContentType(accept);
-				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error");
+				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
 				return errorMsg;				
 			}
 
@@ -494,24 +490,5 @@ public class ConceptCollectionRestController {
 
 	}
 	
-	public boolean hasWorkspaceAccess(String workspaceId, String userName, String [] roles) throws QuadrigaStorageException{
-		boolean hasAccess = false; 
-		if(checkWSSecurity.checkWorkspaceOwner(userName, workspaceId)){
-			logger.info("Owner access");
-			return true;
-		}else{
-			//check if the user associated with the role has any projects
-			for(String role : roles)
-			{
-				hasAccess = checkWSSecurity.chkIsCollaboratorWorkspaceAssociated(userName, role);
-				
-				if(hasAccess){
-					logger.info("Role access : " + role);
-					return true;
-				}
-			}
-		}
-		return hasAccess;
-	}
 
 }
