@@ -73,15 +73,13 @@ public class RestAccessAspect
 			}
 			
 			if(haveAccess){
-				logger.info("I am here, who am i, i am rest access policy");
 				break;
 			}
 		}
 		
 		if(!haveAccess)
 		{
-			logger.info("I am here, who am i, i am restaccesspolicy");
-			return restAccessException.accessErrorMsg(400,"You Don't have permission");
+			return restAccessException.accessErrorMsg(400,"You don't have permission");
 		}
 		Object retVal = pjp.proceed();
 		return retVal;

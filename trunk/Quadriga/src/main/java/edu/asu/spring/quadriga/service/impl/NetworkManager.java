@@ -173,7 +173,7 @@ public class NetworkManager implements INetworkManager {
 
 
 	/**
-	 * Store the element IDs into DB by parsing through the XML and object goes through the event types 
+	 * Store the top network RE and AE IDs into DB by parsing through the XML and object goes through the event types 
 	 * @param response
 	 * @param user
 	 * @param networkName
@@ -289,6 +289,13 @@ public class NetworkManager implements INetworkManager {
 	}
 
 
+	/**
+	 * Check if we have bit streams in the network XML
+	 * @param uri
+	 * @param bitStreamList
+	 * @return
+	 * @author Lohith Dwaraka
+	 */
 	public boolean hasBitStream(String uri,List<IBitStream> bitStreamList){
 		if(uri.isEmpty()){
 			logger.debug("true");
@@ -305,6 +312,11 @@ public class NetworkManager implements INetworkManager {
 		return false;
 	}
 
+	/**
+	 * Helper class to get relation event ID
+	 * @param re
+	 * @return
+	 */
 	public String getRelationEventId(RelationEventType re){
 		List<JAXBElement<?>> e2 = re.getIdOrCreatorOrCreationDate();
 		Iterator <JAXBElement<?>> I1 = e2.iterator();
@@ -318,8 +330,8 @@ public class NetworkManager implements INetworkManager {
 		return "";
 	}
 
-	/* 
-	 * Formats the XML 
+	/**
+	 * Formats the input XML with nice intendation
 	 */
 	@Override
 	public String prettyFormat(String input, int indent) {
