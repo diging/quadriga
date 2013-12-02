@@ -10,6 +10,7 @@ import org.hibernate.CacheMode;
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
@@ -265,7 +266,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			ScrollableResults scrollableDTO = session.createQuery("  FROM NetworkStatementsDTO n WHERE n.networkid = :networkid and n.id = :id")
 					.setParameter("networkid", networkId)
 					.setParameter("id", id)
-					.setCacheMode(CacheMode.IGNORE)
 					.scroll(ScrollMode.FORWARD_ONLY);
 
 			while(scrollableDTO.next())
@@ -327,7 +327,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			transaction = session.beginTransaction();
 
 			//Select only the rows matching the network id and obtain a scrollable list
-			ScrollableResults scrollableDTO = session.getNamedQuery("NetworkStatementsDTO.findByNetworkid").setParameter("networkid", networkId).setCacheMode(CacheMode.IGNORE).scroll(ScrollMode.FORWARD_ONLY);
+			Query query = session.getNamedQuery("NetworkStatementsDTO.findByNetworkid");
+			query.setParameter("networkid", networkId);
+			ScrollableResults scrollableDTO = query.scroll(ScrollMode.FORWARD_ONLY);
 
 			while(scrollableDTO.next())
 			{
@@ -345,7 +347,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				}
 			}
 
-			scrollableDTO = session.getNamedQuery("NetworkAssignedDTO.findByNetworkid").setParameter("networkid", networkId).setCacheMode(CacheMode.IGNORE).scroll(ScrollMode.FORWARD_ONLY);
+			scrollableDTO = session.getNamedQuery("NetworkAssignedDTO.findByNetworkid").setParameter("networkid", networkId).scroll(ScrollMode.FORWARD_ONLY);
 			while(scrollableDTO.next())
 			{
 				//Update the rows with archive id 1 or 0
@@ -369,6 +371,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 		catch(Exception e)
 		{
+			System.out.println("Exception occurred.....................................");
 			if(transaction != null)
 				transaction.rollback();
 
@@ -383,8 +386,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		try
 		{
 			INetworkOldVersion networkOldVersion =null;
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworkAssignedDTO.findByNetworkid");
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
 			query.setParameter("networkid", networkId);
+			query.setParameter("isarchived", INetworkStatus.ARCHIVE_LEVEL_ONE);
 
 			NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query.uniqueResult();
 
@@ -407,8 +411,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkStatementsDTO n WHERE n.networkid = :networkid and istop = 1 and n.isarchived = 1");
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkStatementsDTO n WHERE n.networkid = :networkid and istop = 1 and n.isarchived = :isarchived");
 			query.setParameter("networkid", networkId);
+			query.setParameter("isarchived", INetworkStatus.ARCHIVE_LEVEL_ONE);
 
 			List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
 			if(listNetworkStatementsDTO != null)
