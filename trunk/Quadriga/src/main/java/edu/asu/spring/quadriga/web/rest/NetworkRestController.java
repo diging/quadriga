@@ -414,6 +414,11 @@ public class NetworkRestController {
 			Principal principal) throws JAXBException, QuadrigaStorageException, RestException, ParserConfigurationException, SAXException, IOException {
 		IUser user = userManager.getUserDetails(principal.getName());
 
+		if(networkId == null||networkId.isEmpty()){
+			response.setStatus(404);
+			return "Please provide network id.";
+		}
+		
 		INetwork network = null;
 		try{
 			network = networkManager.getNetworkStatus(networkId,user);
