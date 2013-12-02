@@ -14,7 +14,9 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
@@ -207,5 +209,21 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 			throw new QuadrigaStorageException(e);
 		}
 		return projectList;
+	}
+
+	@Override
+	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
+				
+			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.unixname =:unixname");
+			query.setParameter("unixname", unixName);
+			//Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectDTO.findByUnixname");
+			ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
+			if(projectDTO!=null){
+				IProject project = projectDTOMapper.getProject(projectDTO);
+				return project;
+			}
+			else
+				return null;
+		
 	}
 }

@@ -10,6 +10,7 @@ public interface IRetrieveProjectManager {
 
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;
+	public abstract IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException;
 
 	public abstract List<IProject> getProjectList(String sUserName)
 			throws QuadrigaStorageException;
