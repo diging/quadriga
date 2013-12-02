@@ -69,9 +69,8 @@ public class MockupConceptCollectionManager implements
 	
 
 	@Override
-	public String addConceptCollection(IConceptCollection collection) {
+	public void addConceptCollection(IConceptCollection collection) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	

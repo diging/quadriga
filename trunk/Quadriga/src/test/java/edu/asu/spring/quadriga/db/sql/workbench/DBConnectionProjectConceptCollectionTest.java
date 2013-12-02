@@ -246,7 +246,7 @@ public class DBConnectionProjectConceptCollectionTest {
 			conceptColleciton.setOwner(user);
 			String msg = "";
 			try {
-				msg = conceptCollectionManager.addConceptCollection(conceptColleciton);
+				conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -346,7 +346,7 @@ public class DBConnectionProjectConceptCollectionTest {
 			conceptColleciton.setOwner(user);
 			String msg = "";
 			try {
-				msg = conceptCollectionManager.addConceptCollection(conceptColleciton);
+				conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -445,7 +445,7 @@ public class DBConnectionProjectConceptCollectionTest {
 			conceptColleciton.setOwner(user);
 			String msg = "";
 			try {
-				msg = conceptCollectionManager.addConceptCollection(conceptColleciton);
+				conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -95,7 +95,7 @@ public interface IConceptCollectionManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract  String addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException;
+	public abstract  void addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException;
 
 	
 	/**
