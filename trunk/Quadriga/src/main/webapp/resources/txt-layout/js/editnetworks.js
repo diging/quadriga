@@ -204,14 +204,14 @@ this.edge.epsilon);
 						//alert(node.data.nodetype);
 						var html = "";
 						if(node.data.nodetype=="Predicate"){
-							html = "<div id='popup' title='Annotation' ><input type='button' id='annot_node' value='Add Annotation to Node' /> </br><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </br></div>";
+							html = "<div id='popup' title='Annotation' ><input type='button' id='annot_node' value='Add Annotation to Node' /> </br><input type='button' id='annot_relation' value='Add Annotation to Relation' /> </br></div>";
 						} else{
 							if(node.nodeFrom){
-								html = "<div id='popup' title='Annotation'><input type='button' id='annot_relation' value='Add Annoataion to Relation' /> </div>";
+								html = "<div id='popup' title='Annotation'><input type='button' id='annot_relation' value='Add Annotation to Relation' /> </div>";
 							}
 							else{
 						
-						html = "<div id='popup' title='Annotation'><input type='button' id='annot_node' value='Add Annoataion to Node' /> </div>";
+						html = "<div id='popup' title='Annotation'><input type='button' id='annot_node' value='Add Annotation to Node' /> </div>";
 						   }
 						}
 						
@@ -249,7 +249,7 @@ this.edge.epsilon);
 									//data : $('#nodename').serialize(),
 									data: "nodeid="+node.id+"&type="+type1,
 									success : function(data) {
-										alert("done");
+										//alert("done");
 										//alert("data:"+data);
 										//alert("before:" +$('#text').val());
 										//$('#text').append(data);
@@ -292,15 +292,7 @@ this.edge.epsilon);
 								});
 							  
 							  $( '#popup1' ).show( "slow" );
-							  /*var dialogOpts = {
-								      modal: true,
-								      autoOpen: false,
-								      height: 320,
-								      width: 480,
-								      draggable: true,
-								      resizeable: true,
-								      title:'Annotation'
-								   };*/
+							  
 							  /*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
 							  $('#popup1').children('.ui-dialog-titlebar-close').show();*/
 							  $('#popup1').dialog({
@@ -331,8 +323,8 @@ this.edge.epsilon);
 									//data : $('#nodename').serialize(),
 									data: "nodeid="+node.id+"&type="+type1,
 									success : function(data) {
-										alert("done");
-										alert("data:"+data);
+										//alert("done");
+										//alert("data:"+data);
 										//alert("before:" +$('#text').val());
 										$('#text').append(data);
 										//$('#text').text(data);
@@ -360,7 +352,7 @@ this.edge.epsilon);
 										data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
 										success : function() {
 											
-											alert("done");
+											//alert("done");
 											$('#popup2').dialog('close');
 										},
 										error: function() {
