@@ -52,7 +52,7 @@ public class NetworkDTOMapper {
 			network = networkFactory.createNetworkObject();
 			network.setId(networksDTO.getNetworkid());
 			network.setName(networksDTO.getNetworkname());
-			network.setWorkspaceid(networksDTO.getNetworkid());
+			network.setWorkspaceid(networksDTO.getWorkspaceid());
 			network.setStatus(networksDTO.getStatus());
 		}
 		return network;
@@ -70,7 +70,7 @@ public class NetworkDTOMapper {
 				network = networkFactory.createNetworkObject();
 				network.setId(networkDTO.getNetworkid());
 				network.setName(networkDTO.getNetworkname());
-				network.setWorkspaceid(networkDTO.getNetworkid());
+				network.setWorkspaceid(networkDTO.getWorkspaceid());
 				network.setStatus(networkDTO.getStatus());
 				networkList.add(network);
 			}
