@@ -77,14 +77,14 @@ h1{
 		<td>
 			Owner:
 		</td>
-		<td>${project.owner}</td>
+		<td>${project.owner.name}</td>
 	</tr>	
-	<tr>
+	<!--  <tr>
 		<td>
 			Collaborators:
 		</td>
 		<td>${project.collaborators}</td>
-	</tr>
+	</tr>-->
 	<tr>
 		<td>
 			<input type="submit" value="Browse Networks"/> 

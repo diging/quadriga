@@ -133,6 +133,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	{
 		return retrieveProjectManagerDAO.getProjectDetails(projectId);
 	}
+	
+	
+	
 
 	@Override
 	public List<ICollaborator> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
@@ -140,6 +143,13 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		List<ICollaborator> collaboratingUsersList = databaseConnect.getProjectCollaboratorsRequest(projectId);
 		
 		return collaboratingUsersList;
+	}
+
+	@Override
+	@Transactional
+	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
+		
+		return retrieveProjectManagerDAO.getProjectDetailsByUnixName(unixName);
 	}
 
 

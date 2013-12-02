@@ -9,6 +9,7 @@ public interface IRetrieveProjectManagerDAO {
 
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;
+	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException;
 
 	List<IProject> getProjectList(String sUserName)
 			throws QuadrigaStorageException;
