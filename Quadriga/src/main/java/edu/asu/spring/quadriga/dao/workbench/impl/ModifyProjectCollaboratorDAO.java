@@ -48,16 +48,13 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 		try
 		{
 			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-			
 			projectCollaborator = projectDTO.getProjectCollaboratorDTOList();
 			
 			if(!projectDTO.equals(null))
 			{
 				
 				projectMapper.getProjectCollaboratorDAO(projectCollaborator,collaborator, projectid, userName);
-				
 				projectDTO.setProjectCollaboratorDTOList(projectCollaborator);
-				
 				sessionFactory.getCurrentSession().update(projectDTO);
 				
 			}

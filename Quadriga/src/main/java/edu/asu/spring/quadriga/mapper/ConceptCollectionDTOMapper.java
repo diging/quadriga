@@ -1,6 +1,8 @@
 package edu.asu.spring.quadriga.mapper;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,13 @@ import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
 @Service
@@ -123,4 +128,44 @@ public class ConceptCollectionDTOMapper
 		return collaborator;
 	}
 
+	/**
+	 * 
+	 * Returns list of Conceptcollections mapped to ConceptcollectionsDTO
+	 * @param conceptCollection
+	 * @return ConceptCollection
+	 * @author Karthik Jayaraman
+	 * 
+	 */
+	public List<IConceptCollection> getConceptCollectionList(List<ConceptcollectionsDTO> conceptCollectionDTOList) throws QuadrigaException
+	{
+		List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
+		Iterator<ConceptcollectionsDTO> conceptIterator = conceptCollectionDTOList.iterator();
+		while(conceptIterator.hasNext())
+		{
+			conceptCollectionList.add(getConceptCollection(conceptIterator.next()));
+		}
+		return conceptCollectionList;
+	}
+	
+	/**
+	 * 
+	 * Returns ConceptcollectionsDTO mapped to Conceptcollection
+	 * @param conceptCollection
+	 * @return ConceptcollectionsDTO
+	 * @author Karthik Jayaraman
+	 * 
+	 */
+	public ConceptcollectionsDTO getConceptCollectionDTO(IConceptCollection conceptCollection) throws QuadrigaStorageException
+	{
+		ConceptcollectionsDTO conceptcollectionsDTO = new ConceptcollectionsDTO();
+		conceptcollectionsDTO.setUpdatedby(conceptCollection.getOwner().getUserName());
+		conceptcollectionsDTO.setUpdateddate(new Date());
+		conceptcollectionsDTO.setCreatedby(conceptCollection.getOwner().getUserName());
+		conceptcollectionsDTO.setCreateddate(new Date());
+		conceptcollectionsDTO.setDescription(conceptCollection.getName());
+		conceptcollectionsDTO.setDescription(conceptCollection.getDescription());
+		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
+		return conceptcollectionsDTO;
+	}
+	
 }

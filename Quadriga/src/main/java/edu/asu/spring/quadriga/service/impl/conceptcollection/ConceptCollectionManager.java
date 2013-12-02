@@ -14,8 +14,10 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.dao.sql.conceptcollection.ICCManagerDAO;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -62,32 +64,35 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	private ICollaboratorRoleManager roleMapper ;
 	
+	@Autowired
+	private ICCManagerDAO ccManagerDAO;
+	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getCollectionsOfUser(java.lang.String)
 	 */
 	@Override
+	@Transactional
 	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
 	{
 		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
-		conceptList = dbConnect.getConceptsOwnedbyUser(sUserId);
+		conceptList = ccManagerDAO.getConceptsOwnedbyUser(sUserId);
 		return conceptList;
 	}
 
 
 	@Override
+	@Transactional
 	public List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException {
 		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
-		conceptList = dbConnect.getCollaboratedConceptsofUser(sUserId);
+		conceptList = ccManagerDAO.getCollaboratedConceptsofUser(sUserId);
 		return conceptList;
 	}
 
 	@Override
 	public void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAccessException {
 		dbConnect.getCollectionDetails(concept,username);
-		//dbConnect.getCollaborators(concept);
-		
 	}
 
 	@Override
@@ -149,9 +154,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
-	public String addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException {
-		
-		return dbConnect.addCollection(collection);
+	@Transactional
+	public void addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException {
+		ccManagerDAO.addCollection(collection);
 	}
 
 	@Override

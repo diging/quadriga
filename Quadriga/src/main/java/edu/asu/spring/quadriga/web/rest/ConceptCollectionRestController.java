@@ -397,8 +397,7 @@ public class ConceptCollectionRestController {
 		collection.setOwner(user);
 		collection.setName(ccName);
 
-		String reponse = conceptControllerManager
-				.addConceptCollection(collection);
+		conceptControllerManager.addConceptCollection(collection);
 		String ccId = conceptControllerManager.getConceptCollectinId(ccName);
 
 		Iterator<Concept> I = conceptList.iterator();
