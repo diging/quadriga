@@ -356,6 +356,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				{
 					networkAssignedDTO.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
 					session.update(networkAssignedDTO);
+					
 				}
 				else if(networkAssignedDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE)
 				{
