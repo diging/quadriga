@@ -14,6 +14,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
+import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -356,7 +358,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				{
 					networkAssignedDTO.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
 					session.update(networkAssignedDTO);
-					
+
 				}
 				else if(networkAssignedDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE)
 				{
@@ -466,5 +468,132 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/******************************************************************************************************
+	 * 
+	 * The following methods deal with editor section of the network module
+	 * 
+	 *******************************************************************************************************/
+	public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException{
+		List<INetwork> networkList = new ArrayList<INetwork>();
+		INetwork network = null;
+
+		throw new NotYetImplementedException("Yet to be implemented");
+	}
+
+	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
+		NetworkAssignedDTO newtorkAssignedDTO = networkMapper.getNetworkAssignedDTO(networkId, user.getUserName(), INetworkStatus.PENDING, INetworkStatus.NOT_ARCHIVED);
+
+		try
+		{
+			sessionFactory.getCurrentSession().save(newtorkAssignedDTO);	
+			return "";
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in assigning network to user: ",e);
+			throw new QuadrigaStorageException(e);
+		}	
+	}
+
+	public List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
+		throw new NotYetImplementedException("Yet to be implemented");
+	}
+
+	public List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
+		throw new NotYetImplementedException("Yet to be implemented");
+	}
+
+	public List<INetwork> getAssignNetworkOfUser(IUser user) throws QuadrigaStorageException{
+		throw new NotYetImplementedException("Yet to be implemented");
+	}
+
+	public List<INetwork> getApprovedNetworkOfUser(IUser user) throws QuadrigaStorageException{
+		throw new NotYetImplementedException("Yet to be implemented");
+	}
+
+	public List<INetwork> getRejectedNetworkOfUser(IUser user) throws QuadrigaStorageException{
+		throw new NotYetImplementedException("Yet to be implemented");
+	}
+
+	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByNetworkid");
+			query.setParameter("networkid", networkId);
+
+			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
+			networksDTO.setStatus(status);
+
+			sessionFactory.getCurrentSession().update(networksDTO);
+
+			return "";
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in changing network status: ",e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+	public String updateAssignedNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived = :isarchived");
+			query.setParameter("networkid", networkId);
+			query.setParameter("isarchived", INetworkStatus.NOT_ARCHIVED);
+
+			NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query.uniqueResult();
+			networkAssignedDTO.setStatus(status);
+
+			sessionFactory.getCurrentSession().update(networkAssignedDTO);
+
+			return "";
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in changing network status: ",e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+	public String addAnnotationToNetwork(String networkId, String id, String annotationText, String userId,String objectType) throws QuadrigaStorageException {
+		NetworksAnnotationsDTO networkAnnotationsDTO = networkMapper.getNetworkAnnotationDTO(networkId, id, annotationText, "ANNOT_"+generateUniqueID(), userId, objectType);
+
+		try
+		{
+			sessionFactory.getCurrentSession().save(networkAnnotationsDTO);	
+			return "";
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in assigning network to user: ",e);
+			throw new QuadrigaStorageException(e);
+		}	
+	}
+
+	public String[] getAnnotation(String type, String id,String userId) throws QuadrigaStorageException{
+		String[] annotationArray = new String[2];
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksAnnotationsDTO n where n.id = :id and username = :username and objecttype =: objecttype");
+			query.setParameter("id", id);
+			query.setParameter("username", userId);
+			query.setParameter("objecttype", type);
+			
+			NetworksAnnotationsDTO networkAnnotationsDTO = (NetworksAnnotationsDTO) query.uniqueResult();
+			annotationArray[0] = networkAnnotationsDTO.getAnnotationtext();
+			annotationArray[1] = networkAnnotationsDTO.getAnnotationid();
+			return annotationArray;
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in fetching annotation: ",e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+	public String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException {
+		throw new NotYetImplementedException("Yet to be implemented");
+	}
 
 }
