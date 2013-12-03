@@ -198,14 +198,15 @@ public class NetworkManager implements INetworkManager {
 		}
 		
 		
-		
+		// Get DSpace of the workspace
 		List<IBitStream> bitStreamList = workspace.getBitstreams();
 		logger.info("list of bitstream");
 		Iterator <IBitStream> I2 = bitStreamList.iterator();
 		while(I2.hasNext()){
 			logger.info(I2.next().getId()+"");
 		}
-				
+		// Below code reads the top level Appelation events 
+		
 		ElementEventsType e = response.getValue();
 		List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> I= c.iterator();
@@ -217,12 +218,14 @@ public class NetworkManager implements INetworkManager {
 				Iterator <JAXBElement<?>> I1 = e2.iterator();
 				while(I1.hasNext()){
 					JAXBElement<?> element = (JAXBElement<?>) I1.next();
+					// get id
 					if(element.getName().toString().contains("id")){
 						logger.info("Appellation Event ID : "+element.getValue().toString());
 						//dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "AE", "1", user);
 						String networkNodeInfo[] = { element.getValue().toString(),"AE", "1"};
 						networkDetailsCache.add(networkNodeInfo);
 					}
+					// get dspace quadriga URL
 					if(element.getName().toString().contains("source_reference")){
 						logger.debug("Dspace file : "+element.getValue().toString());
 						boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
@@ -233,11 +236,13 @@ public class NetworkManager implements INetworkManager {
 				}
 
 			}
+			// Below code reads the top level Relation events 
 			if(ce instanceof RelationEventType){
 				List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
 				Iterator <JAXBElement<?>> I1 = e2.iterator();
 				while(I1.hasNext()){
 					JAXBElement<?> element = (JAXBElement<?>) I1.next();
+					// get id
 					if(element.getName().toString().contains("id")){
 						logger.info("Relation Event ID : "+element.getValue().toString());
 						//dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "RE", "1", user);
@@ -245,6 +250,7 @@ public class NetworkManager implements INetworkManager {
 						networkDetailsCache.add(networkNodeInfo);
 
 					}
+					// get dspace quadriga URL
 					if(element.getName().toString().contains("source_reference")){
 						logger.debug("Dspace file : "+element.getValue().toString());
 						boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
@@ -255,6 +261,8 @@ public class NetworkManager implements INetworkManager {
 				}
 				RelationEventType re = (RelationEventType) (ce);
 				try{
+					// Go Recursively and check for Relation event within a relation events
+					// and add it to DB
 					getRelationEventElements(re,networkDetailsCache,bitStreamList);
 				}catch(QuadrigaStorageException se){
 					logger.error("DB Storage issue",se);
@@ -262,7 +270,7 @@ public class NetworkManager implements INetworkManager {
 
 			}
 		}
-		
+		// Check if it DSpace is present in the XML
 		if(!getFileExist()){
 			logger.info("Network not uploaded");
 			logger.info("Some of the text files in the uploaded network were not present in the workspace");
@@ -270,6 +278,7 @@ public class NetworkManager implements INetworkManager {
 		}
 		logger.debug("File Exist paramete value : "+getFileExist());
 		
+		// Add network into DB 
 		if(updateStatus == "NEW"){
 			try{
 				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
@@ -277,7 +286,7 @@ public class NetworkManager implements INetworkManager {
 				logger.error("DB action error ",e1);
 			}
 		}
-		
+		// Add network statements for networks
 		for(String node[] : networkDetailsCache){
 			try{
 				dbConnect.addNetworkStatement(networkId,node[0],node[1], node[2], user);
@@ -357,6 +366,7 @@ public class NetworkManager implements INetworkManager {
 	 */
 	@Override
 	public ResponseEntity<String> getNodeXmlFromQstore(String id)throws JAXBException{
+		// Message converters for JAXb to understand the xml
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
 		mediaTypes.add(MediaType.APPLICATION_XML);
@@ -366,12 +376,15 @@ public class NetworkManager implements INetworkManager {
 		messageConverters.add(new MarshallingHttpMessageConverter(marshaler,unmarshaler));
 
 		restTemplate.setMessageConverters(messageConverters);
+		
+		// Setting up the http header accept type
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
 		ResponseEntity<String> response = null;
 		try{
 			logger.debug("URL : "+getQStoreGetURL()+id);
+			// Get the XML from QStore
 			response = restTemplate.exchange(getQStoreGetURL()+id,
 					HttpMethod.GET,
 					new HttpEntity<String[]>(headers),
@@ -390,40 +403,50 @@ public class NetworkManager implements INetworkManager {
 	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
 		JsonObject jsonObject = new JsonObject();
 		this.jsonString.delete(0, this.jsonString.length());
-
+		// Get Node based XML from QStore
 		ResponseEntity<String> response = getNodeXmlFromQstore(id);
 		if(response ==null){
 			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
 		}else{
+			
 			String responseText = response.getBody().toString();
+			// Try to unmarshall the XML got from QStore to an ElementEventsType object
 			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
 			Unmarshaller unmarshaller1 = context.createUnmarshaller();
 			unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 			InputStream is = new ByteArrayInputStream(responseText.getBytes());
 			JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
 			logger.debug("Respose bytes : "+responseText);
+			// Dig in the ElementEventsType object for relation and appellation events
 			try{
 				ElementEventsType e = response1.getValue();
 				List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
 				Iterator <CreationEvent> I= c.iterator();
 				while(I.hasNext()){
 					CreationEvent ce = I.next();
+					// Check if event is Appellation event
 					if(ce instanceof AppellationEventType)
 					{
 						// Trying to get a list of terms in the appellation event type object
 						AppellationEventType aet = (AppellationEventType) ce;
-
+						// Get the term part of Appellation event, to display on UI
 						List<TermType> termTypeList= aet.getTerms(aet);
 						Iterator <TermType> I2 = termTypeList.iterator();
 						while(I2.hasNext()){
 							TermType tt = I2.next();
+							// Fetch concept name from concept power
 							String node = conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt));
+							// add random string to concept name 
+							// so it will handle repeated nodes in different relations
+							// this is required for Json builder
 							String termId = tt.getTermID(tt)+"_"+shortUUID();
 							//String node = tt.getTermInterpertation(tt);
 							logger.debug(tt.getTermInterpertation(tt));
+							// Appending and building JSON for appellation event
 							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
 						}
 					}
+					// Check if event is Relation event
 					if(ce instanceof RelationEventType){
 						// Trying to get a list of objects in the relations event type object
 						// First get PredicateType
@@ -436,7 +459,7 @@ public class NetworkManager implements INetworkManager {
 						jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
 
 
-
+						// This would help us in forming the json string as per requirement.
 						printJsonObjectRE(jsonObject.getRelationEventObject());
 
 					}
@@ -464,20 +487,26 @@ public class NetworkManager implements INetworkManager {
 	 * @param relationEventObject
 	 */
 	public void printJsonObjectRE(RelationEventObject relationEventObject){
+		// Use temp structure to allow our json builder work easily.
+		// First get predicate
 		PredicateObject predicateObject = relationEventObject.getPredicateObject();
 		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
 		NodeObject nodeObject = new NodeObject();
+		// Store into a our temp structure
 		nodeObject.setRelationEventId(predicateObject.getRelationEventID());
 
 		nodeObject.setPredicate(appellationEventObject.getNode());
 		nodeObject.setPredicateId(appellationEventObject.getTermId());
 		logger.debug("Predicate : "+appellationEventObject.getNode() );
+		
+		// Get subject/Object into temp structure 
 		SubjectObject subjectObject = relationEventObject.getSubjectObject();
 		ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
 		if(subjectObject.getIsRelationEventObject()){
 			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
 			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			// Get Object into temp structure 
 			if(objectTypeObject.getIsRelationEventObject()){
 				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
@@ -499,6 +528,7 @@ public class NetworkManager implements INetworkManager {
 			nodeObject.setSubjectId(appellationEventObject1.getTermId());
 			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
 		}
+		// Get Object into temp structure 
 		if(objectTypeObject.getIsRelationEventObject()){
 			printJsonObjectRE(objectTypeObject.getRelationEventObject());
 		}else{
@@ -516,13 +546,13 @@ public class NetworkManager implements INetworkManager {
 	 */
 	public void updateJsonStringForRENode(NodeObject nodeObject){
 		String predicateNameId = nodeObject.getPredicate();
-
+		// Check for reference to relation
 		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
 		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
 		if(!(temp.equals(""))){
 			predicateNameId = temp;
 		}
-
+		// Forming the JSON object
 		this.jsonString.append("{\"adjacencies\":[");
 		this.jsonString.append("{");
 		this.jsonString.append("\"nodeTo\": \""+nodeObject.getSubject()+"\",");
@@ -548,6 +578,12 @@ public class NetworkManager implements INetworkManager {
 		this.jsonString.append("},");
 	}
 
+	/**
+	 * Check for repeats in the XML to avoid any repeated reference
+	 * @param relationEventId
+	 * @param predicateName
+	 * @return
+	 */
 
 	public String checkRelationEventRepeatation(String relationEventId,String predicateName){
 		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
@@ -571,6 +607,13 @@ public class NetworkManager implements INetworkManager {
 
 	}
 
+	/**
+	 * Making a cache of relation predicate objects for checking references
+	 * @param relationEventId
+	 * @param predicateName
+	 * @param appellationEventObject
+	 * @return
+	 */
 	public String stackRelationEventPredicateAppellationObject(String relationEventId,String predicateName,AppellationEventObject appellationEventObject){
 		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
 
@@ -602,6 +645,11 @@ public class NetworkManager implements INetworkManager {
 	}
 
 
+	/**
+	 * Get Appellation associated to relation event
+	 * @param relationEventId
+	 * @return
+	 */
 	public AppellationEventObject checkRelationEventStack(String relationEventId){
 
 		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
@@ -940,6 +988,7 @@ public class NetworkManager implements INetworkManager {
 	@Override
 	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
 		String res="";
+		// add message converters
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		RestTemplate restTemplate = new RestTemplate();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -947,12 +996,14 @@ public class NetworkManager implements INetworkManager {
 		messageConverters.add(new FormHttpMessageConverter());
 		messageConverters.add(new StringHttpMessageConverter());
 		restTemplate.setMessageConverters(messageConverters);
+		// prepare http headers
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
 		HttpEntity request = new HttpEntity(XML,headers);
 
 		try{
+			// add xml in QStore
 			res = restTemplate.postForObject(getQStoreAddURL(), request,String.class);
 		}catch(Exception e){
 			logger.error("QStore not accepting the xml, please check with the server logs.",e);
@@ -968,6 +1019,7 @@ public class NetworkManager implements INetworkManager {
 	@Override
 	public String getWholeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
 		String res="";
+		// Add message converters for JAxb
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		RestTemplate restTemplate = new RestTemplate();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -975,12 +1027,14 @@ public class NetworkManager implements INetworkManager {
 		messageConverters.add(new FormHttpMessageConverter());
 		messageConverters.add(new StringHttpMessageConverter());
 		restTemplate.setMessageConverters(messageConverters);
+		// Add http header
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
 		HttpEntity request = new HttpEntity(XML,headers);
 
 		try{
+			// Get complete network xml from QStore
 			res = restTemplate.postForObject(getQStoreGetPOSTURL(), request,String.class);
 		}catch(Exception e){
 			logger.error("QStore not accepting the xml, please check with the server logs.",e);
