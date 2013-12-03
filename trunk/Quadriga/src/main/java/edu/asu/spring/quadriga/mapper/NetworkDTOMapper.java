@@ -13,8 +13,11 @@ import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
+import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
+import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
+import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -108,5 +111,35 @@ public class NetworkDTOMapper {
 		}
 		
 		return networkOldVersion;
+	}
+	
+	public NetworkAssignedDTO getNetworkAssignedDTO(String networkid, String assignedUsername, String status, int archived)
+	{
+		NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
+		networkAssignedDTO.setNetworkAssignedDTOPK(new NetworkAssignedDTOPK(networkid, assignedUsername, new Date()));
+		networkAssignedDTO.setStatus(status);
+		networkAssignedDTO.setCreatedby(assignedUsername);
+		networkAssignedDTO.setUpdatedby(assignedUsername);
+		networkAssignedDTO.setUpdateddate(new Date());
+		networkAssignedDTO.setIsarchived(archived);
+		
+		return networkAssignedDTO;
+	}
+	
+	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String networkid, String id, String annotationtext, String annotationid, String username, String objecttype)
+	{
+		NetworksAnnotationsDTO networkAnnotationsDTO = new NetworksAnnotationsDTO();
+		networkAnnotationsDTO.setNetworkid(networkid);
+		networkAnnotationsDTO.setId(id);
+		networkAnnotationsDTO.setAnnotationtext(annotationtext);
+		networkAnnotationsDTO.setAnnotationid(annotationid);
+		networkAnnotationsDTO.setObjecttype(objecttype);
+		networkAnnotationsDTO.setUsername(username);
+		networkAnnotationsDTO.setCreatedby(username);
+		networkAnnotationsDTO.setCreateddate(new Date());
+		networkAnnotationsDTO.setUpdatedby(username);
+		networkAnnotationsDTO.setUpdateddate(new Date());
+		
+		return networkAnnotationsDTO;
 	}
 }
