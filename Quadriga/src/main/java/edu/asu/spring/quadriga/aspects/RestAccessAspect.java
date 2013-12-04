@@ -10,14 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.RestAccessException;
-import edu.asu.spring.quadriga.exceptions.RestException;
-import edu.asu.spring.quadriga.web.rest.ProjectRestController;
 
 @Aspect
 @Component

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
@@ -18,19 +20,24 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -41,19 +48,19 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  */
 @Controller
 public class EditingListManager {
-	
+
 	@Autowired
 	INetworkManager networkManager;
-	
+
 	@Autowired
 	IEditorManager editorManager;
-	
+
 	@Autowired
 	IUserManager userManager;
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingListManager.class);
-	
+
 	@Autowired
 	@Qualifier("restTemplate")
 	RestTemplate restTemplate;
@@ -79,6 +86,8 @@ public class EditingListManager {
 	private String qStoreURL_Get;
 
 
+	@Autowired
+	private IConceptCollectionManager conceptCollectionManager;
 	/*
 	 * Prepare the QStore GET URL
 	 */
@@ -100,27 +109,27 @@ public class EditingListManager {
 	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException
 	,QuadrigaAccessException{
 		IUser user = userManager.getUserDetails(principal.getName());
-		
+
 		List<INetwork> assignedNetworkList=null;
 		try{
 			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-		
+
 		List<INetwork> networkList=null;
 		try{
 			networkList = editorManager.getEditorNetworkList(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-		
+
 		model.addAttribute("assignedNetworkList", assignedNetworkList);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
 	}
-	
+
 	/**
 	 * List of networks assigned to other editor
 	 * @param model
@@ -136,19 +145,19 @@ public class EditingListManager {
 	,QuadrigaAccessException
 	{
 		IUser user = userManager.getUserDetails(principal.getName());
-		
+
 		List<INetwork> assignedNetworkList=null;
 		try{
 			assignedNetworkList = editorManager.getAssignedNetworkListOfOtherEditors(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-		
+
 		model.addAttribute("assignedNetworkList", assignedNetworkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
 	}
-	
+
 	/**
 	 * List of networks finished by other editor
 	 * @param model
@@ -162,20 +171,20 @@ public class EditingListManager {
 	@RequestMapping(value = "auth/finishednetworksOtherEditors", method = RequestMethod.GET)
 	public String listFinishedNetworksByOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException,QuadrigaAccessException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		
+
 		List<INetwork> finishedNetworkList=null;
 		try{
 			finishedNetworkList = editorManager.getfinishedNetworkListOfOtherEditors(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-		
+
 		model.addAttribute("finishedNetworkList", finishedNetworkList);
 		model.addAttribute("userId", user.getUserName());
 		return "auth/editing";
 	}
-	
-	
+
+
 	/**
 	 * Get the network displayed on to JSP by passing JSON string on editing page
 	 * @author Lohith Dwaraka
@@ -217,9 +226,9 @@ public class EditingListManager {
 		model.addAttribute("jsonstring",jsonstring1);
 		return "auth/editing/visualize";
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Visualize old version of network
 	 * Get the network displayed on to JSP by passing JSON string on editing page
@@ -257,5 +266,35 @@ public class EditingListManager {
 		model.addAttribute("jsonstring",jsonstring1);
 		return "auth/editing/visualize";
 	}
-	
+
+	@RequestMapping(value = "/rest/editing/getconcept/{lemma}", method = RequestMethod.GET)
+	@ResponseBody
+	public String getConceptCollectionObject(@PathVariable("lemma") String lemma,HttpServletRequest request, HttpServletResponse response, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+
+		ConceptpowerReply conceptPowerReply = conceptCollectionManager.search(lemma, "NOUN");
+		List <ConceptEntry> conceptList = conceptPowerReply.getConceptEntry();
+		Iterator <ConceptEntry> conceptListIterator = conceptList.iterator();
+		while(conceptListIterator.hasNext()){
+
+			ConceptEntry ce = conceptListIterator.next();
+			if(ce.getLemma().equalsIgnoreCase(lemma)){
+				response.setStatus(200);
+				return ce.getDescription();
+			}
+		}
+		conceptPowerReply = conceptCollectionManager.search(lemma, "VERB");
+		conceptList = conceptPowerReply.getConceptEntry();
+		conceptListIterator = conceptList.iterator();
+		while(conceptListIterator.hasNext()){
+
+			ConceptEntry ce = conceptListIterator.next();
+			if(ce.getLemma().equalsIgnoreCase(lemma)){
+				response.setStatus(200);
+				return ce.getDescription();
+			}
+		}
+
+		return "";
+	}
+
 }
