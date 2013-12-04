@@ -49,6 +49,7 @@ import edu.asu.spring.quadriga.domain.impl.workspacexml.WorkspacesList;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.service.IErrorMessageRest;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
@@ -68,6 +69,9 @@ public class WorkspaceRestController {
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
 
+	@Autowired
+	private IErrorMessageRest errorMessageRest;
+	
 	@Autowired
 	private IWorkspaceDictionaryManager workspaceDictionaryManager;
 	
@@ -218,7 +222,7 @@ public class WorkspaceRestController {
 	@ResponseBody
 	public String addWorkspaceToProject(@PathVariable("project_id") String projectId,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
-			@RequestHeader("Accept") String accept, ModelMap model, Principal principal, HttpServletRequest req) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
+			@RequestHeader("Accept") String accept, ModelMap model, Principal principal) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = userManager.getUserDetails(principal.getName());
 		
 		
@@ -232,6 +236,9 @@ public class WorkspaceRestController {
 			response1 =  unmarshaller.unmarshal(new StreamSource(is), QuadrigaWorkspaceDetailsReply.class);
 		}catch(Exception e ){
 			logger.error("Error in unmarshalling",e);
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
+			return errorMsg;
 		}
 		if(response1 == null){
 			response.setStatus(404);
@@ -242,7 +249,8 @@ public class WorkspaceRestController {
 		List<Workspace> workspaceList = w1.getWorkspaceList();
 		if(workspaceList.size()<1){
 			response.setStatus(404);
-			return "Workspace XML is not valid";
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace XML is not valid",request);
+			return errorMsg;
 		}
 		IWorkSpace workspaceNew = workspaceFactory.createWorkspaceObject();
 		for(Workspace workspace : workspaceList){
