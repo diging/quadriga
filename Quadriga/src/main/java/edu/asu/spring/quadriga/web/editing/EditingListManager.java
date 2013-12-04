@@ -293,6 +293,42 @@ public class EditingListManager {
 				return ce.getDescription();
 			}
 		}
+		
+		conceptPowerReply = conceptCollectionManager.search(lemma, "adverb");
+		conceptList = conceptPowerReply.getConceptEntry();
+		conceptListIterator = conceptList.iterator();
+		while(conceptListIterator.hasNext()){
+
+			ConceptEntry ce = conceptListIterator.next();
+			if(ce.getLemma().equalsIgnoreCase(lemma)){
+				response.setStatus(200);
+				return ce.getDescription();
+			}
+		}
+		
+		conceptPowerReply = conceptCollectionManager.search(lemma, "adjective");
+		conceptList = conceptPowerReply.getConceptEntry();
+		conceptListIterator = conceptList.iterator();
+		while(conceptListIterator.hasNext()){
+
+			ConceptEntry ce = conceptListIterator.next();
+			if(ce.getLemma().equalsIgnoreCase(lemma)){
+				response.setStatus(200);
+				return ce.getDescription();
+			}
+		}
+		
+		conceptPowerReply = conceptCollectionManager.search(lemma, "others");
+		conceptList = conceptPowerReply.getConceptEntry();
+		conceptListIterator = conceptList.iterator();
+		while(conceptListIterator.hasNext()){
+
+			ConceptEntry ce = conceptListIterator.next();
+			if(ce.getLemma().equalsIgnoreCase(lemma)){
+				response.setStatus(200);
+				return ce.getDescription();
+			}
+		}
 
 		return "";
 	}
