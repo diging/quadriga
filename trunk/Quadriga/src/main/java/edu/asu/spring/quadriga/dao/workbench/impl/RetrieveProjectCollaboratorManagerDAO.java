@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectCollaboratorManagerDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -16,6 +17,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
+@Repository
 public class RetrieveProjectCollaboratorManagerDAO implements IRetrieveProjectCollaboratorManagerDAO
 {
 	@Autowired
@@ -50,19 +52,25 @@ public class RetrieveProjectCollaboratorManagerDAO implements IRetrieveProjectCo
 		List<IUser> user = null;
 		IUser nonCollaborator = null;
 		
-		user = new ArrayList<IUser>();
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
 		
-		Query query = sessionFactory.getCurrentSession().createQuery(" SELECT user FROM QuadrigaUserDTO user LEFT JOIN ProjectCollaboratorDTO collaborator" +
-				" WHERE collaborator.collaboratoruser IS NULL AND collaborator.projectid =:projectid");
+		user = new ArrayList<IUser>();
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT user FROM QuadrigaUserDTO user WHERE user.username NOT IN " +
+				"(SELECT collaborator.projectCollaboratorDTOPK.collaboratoruser FROM ProjectCollaboratorDTO collaborator " +
+				"  WHERE collaborator.projectCollaboratorDTOPK.projectid =:projectid)");
 		query.setParameter("projectid", projectid);
 		
 		@SuppressWarnings("unchecked")
-		List<QuadrigaUserDTO> collaborator =    query.list();
+		List<QuadrigaUserDTO> collaborator = query.list();
 		
 		for(QuadrigaUserDTO tempCollab : collaborator)
 		{
-			nonCollaborator = userMapper.getUser(tempCollab);
-			user.add(nonCollaborator);
+			if(!project.getProjectowner().getUsername().equals(tempCollab.getUsername()))
+			{
+				nonCollaborator = userMapper.getUser(tempCollab);
+				user.add(nonCollaborator);
+			}
+		
 		}
 		return user;
 	}

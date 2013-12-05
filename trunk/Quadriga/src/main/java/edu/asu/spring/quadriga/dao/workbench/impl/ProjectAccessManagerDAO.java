@@ -64,6 +64,31 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 		return isUserAssociated;
 	}
 	
+	
+	@Override
+	public boolean chkIsCollaboratorProjectAssociated(String userName,String collaboratorRole)
+	{
+         boolean isCollaborator;
+		
+		isCollaborator = false;
+		int count;
+		
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.collaboratoruser =:userName AND pc.collaboratorrole =:collaboratorRole");
+		query.setParameter("userName", userName);
+		query.setParameter("collaboratorRole", collaboratorRole);
+		count = ((Integer) query.iterate().next()).intValue();
+		if(count > 0)
+		{
+			isCollaborator = true;
+		}
+		else
+		{
+			isCollaborator = false;
+		}
+		
+		return isCollaborator;
+	}
+	
 	@Override
 	public boolean chkProjectCollaborator(String userName,String collaboratorRole,String projectId)
 	{

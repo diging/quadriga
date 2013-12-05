@@ -3,12 +3,10 @@ package edu.asu.spring.quadriga.service.impl.workbench;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
@@ -16,10 +14,6 @@ import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 @Service
 public class ProjectDictionaryManager implements IProjectDictionaryManager {
 
-	@Autowired
-	@Qualifier("DBConnectionProjectDictionaryBean")
-	private IDBConnectionProjectDictionary dbConnect;
-	
 	@Autowired
 	private IProjectDictionaryDAO projectDictionaryDAO; 
 	
@@ -46,6 +40,7 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public List<IDictionary> listProjectDictionary(String projectId,
 			String userId) throws QuadrigaStorageException {
 		List<IDictionary> dictionaryList = projectDictionaryDAO.listProjectDictionary(projectId, userId);
@@ -60,6 +55,7 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public void deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException{
 		projectDictionaryDAO.deleteProjectDictionary(projectId, userId, dictioanaryId);
 	}

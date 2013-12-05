@@ -11,6 +11,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
@@ -22,6 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 
+@Repository
 public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 		IProjectConceptCollectionDAO 
 {
@@ -35,6 +37,7 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
 	
+	@Override
 	public void addProjectConceptCollection(String projectId,
 			String conceptCollectionId, String userId) throws QuadrigaStorageException
 	{
@@ -74,6 +77,7 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 	}
 	
 	
+	@Override
 	public List<IConceptCollection> listProjectConceptCollection(String projectId,
 			String userId) throws QuadrigaStorageException
 	{
@@ -109,6 +113,7 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 		return conceptCollectionList;
 	}
 	
+	@Override
 	public void deleteProjectConceptCollection(String projectId,
 			String userId, String conceptCollectionId) throws QuadrigaStorageException
 	{

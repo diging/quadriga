@@ -16,7 +16,7 @@ public interface IProjectConceptCollectionManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addProjectConceptCollection(String projectId,
+	public abstract void addProjectConceptCollection(String projectId,
 			String dictionaryId, String userId) throws QuadrigaStorageException;
 
 	/**
@@ -39,7 +39,7 @@ public interface IProjectConceptCollectionManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteProjectConceptCollection(String projectId,
+	public abstract void deleteProjectConceptCollection(String projectId,
 			String userId, String conceptCollectionId)
 			throws QuadrigaStorageException;
 

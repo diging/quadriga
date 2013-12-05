@@ -3,12 +3,10 @@ package edu.asu.spring.quadriga.service.impl.workbench;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.impl.ProjectAccessManagerDAO;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
+import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManagerDAO;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -26,14 +24,10 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	private IUserManager userManager;
 	
 	@Autowired
-	@Qualifier("DBConnectionProjectAccessManagerBean")
-	private IDBConnectionProjectAccessManager dbConnect;
-	
-	@Autowired
 	private IRetrieveProjCollabManager projectManager;
 	
 	@Autowired
-	private ProjectAccessManagerDAO projectAccessManagerDAO;
+	private IProjectAccessManagerDAO projectAccessManagerDAO;
 	
 	/**
 	 * This method checks if the user is Quadriga Admin
@@ -43,6 +37,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean checkQudrigaAdmin(String userName) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -75,7 +70,8 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 */
 	
 	@Override
-	public boolean checkProjectOwner(String userName) throws QuadrigaStorageException
+	@Transactional
+	public boolean checkProjectOwner(String userName,String projectId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
 		
@@ -83,7 +79,39 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = dbConnect.chkProjectOwner(userName);
+		chkAccess = projectAccessManagerDAO.chkProjectOwner(userName, projectId);
+		
+		return chkAccess;
+		
+	}
+	
+	@Override
+	@Transactional
+	public boolean chkIsProjectAssociated(String userName) throws QuadrigaStorageException
+	{
+		boolean chkAccess;
+		
+		//initialize check access variable
+		chkAccess = false;
+		
+		//check if the use is associated with any project
+		chkAccess = projectAccessManagerDAO.chkIsProjectAssociated(userName);
+		
+		return chkAccess;
+	}
+	
+	@Override
+	@Transactional
+	public boolean chkIsCollaboratorProjectAssociated(String userName,String collaboratorRole) throws QuadrigaStorageException
+	{
+		boolean chkAccess;
+		
+		//initialize check access variable
+		chkAccess = false;
+		
+		//check if the collaborator is associated with any project
+		chkAccess = projectAccessManagerDAO.chkIsCollaboratorProjectAssociated(userName, collaboratorRole);
+		
 		
 		return chkAccess;
 		
@@ -97,7 +125,8 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 * @author kiranbatna
 	 */
 	@Override
-	public boolean checkProjectCollaborator(String userName,String collaboratorRole) throws QuadrigaStorageException
+	@Transactional
+	public boolean checkProjectCollaborator(String userName,String collaboratorRole,String projectId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
 		
@@ -105,7 +134,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = dbConnect.chkProjectCollaborator(userName, collaboratorRole);
+		chkAccess = projectAccessManagerDAO.chkProjectCollaborator(userName, collaboratorRole, projectId);
 		
 		return chkAccess;
 		
@@ -121,6 +150,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean checkCollabProjectAccess(String userName,String projectId,String collaboratorRole) throws QuadrigaStorageException
 	{
 		List<ICollaborator> collaboratorList;
@@ -165,6 +195,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean checkProjectAccess(String userName,String projectId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -173,7 +204,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = this.checkProjectOwner(userName);
+		chkAccess = this.checkProjectOwner(userName,projectId);
 		
 		if(!chkAccess)
 		{

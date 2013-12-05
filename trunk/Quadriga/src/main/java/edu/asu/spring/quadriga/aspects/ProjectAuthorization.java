@@ -85,7 +85,7 @@ public class ProjectAuthorization implements IAuthorization
 		haveAccess = false;
 		
 		//fetch the details of the project
-		haveAccess = projectSecurityManager.checkProjectOwner(userName);
+		haveAccess = projectSecurityManager.chkIsProjectAssociated(userName);
 		
 		//check the user roles if he is not a project owner
 		if(!haveAccess)
@@ -97,8 +97,7 @@ public class ProjectAuthorization implements IAuthorization
 				//check if the user associated with the role has any projects
 				for(String role : roles)
 				{
-					haveAccess = projectSecurityManager.checkProjectCollaborator(userName, role);
-					
+					haveAccess = projectSecurityManager.chkIsCollaboratorProjectAssociated(userName, role);
 					if(haveAccess)
 						break;
 				}

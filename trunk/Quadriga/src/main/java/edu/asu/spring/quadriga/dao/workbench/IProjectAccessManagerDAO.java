@@ -13,4 +13,7 @@ public interface IProjectAccessManagerDAO {
 
 	public abstract boolean chkProjectOwner(String userName, String projectId);
 
+	public abstract boolean chkIsCollaboratorProjectAssociated(String userName,
+			String collaboratorRole);
+
 }

@@ -14,9 +14,7 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
@@ -183,6 +181,35 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
+	{
+		List<IProject> projectList = new ArrayList<IProject>();
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.quadrigaUserDTO.username =:username )");
+			query.setParameter("username", sUserName);
+			List<ProjectDTO> projectDTOList = query.list();
+			
+			if(projectDTOList != null && projectDTOList.size() >0)
+			{
+				Iterator<ProjectDTO> projectIterator = projectDTOList.iterator();
+				while(projectIterator.hasNext())
+				{
+					ProjectDTO projectDTO = projectIterator.next();
+					IProject project = projectDTOMapper.getProject(projectDTO);
+					project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+					projectList.add(project);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectList;
+	}
+	
+	public List<IProject> getProjectListByCollaboratorRole(String sUserName,String collaboratorRole) throws QuadrigaStorageException
 	{
 		List<IProject> projectList = new ArrayList<IProject>();
 		try

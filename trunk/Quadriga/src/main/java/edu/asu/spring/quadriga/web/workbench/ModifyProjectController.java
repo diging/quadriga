@@ -220,7 +220,7 @@ public class ModifyProjectController
 		
 		//retrieve all the workspaces associated with the project
 		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
-		if(projectSecurity.checkProjectOwner(userName)){
+		if(projectSecurity.checkProjectOwner(userName,projectId)){
 			model.addAttribute("owner", 1);
 		}else{
 			model.addAttribute("owner", 0);
@@ -252,7 +252,7 @@ public class ModifyProjectController
 		
 		//retrieve all the workspaces associated with the project
 		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
-		if(projectSecurity.checkProjectOwner(userName)){
+		if(projectSecurity.checkProjectOwner(userName,projectId)){
 			model.addAttribute("owner", 1);
 		}else{
 			model.addAttribute("owner", 0);

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 /**
  * Class responsible for mapping the UserManagerDTO to the UserManager
@@ -28,8 +28,8 @@ public class UserDTOMapper{
 	private UserFactory userFactory;	
 
 	@Autowired
-	private IQuadrigaRoleFactory quadrigaRoleFactory;
-
+	private IQuadrigaRoleManager roleManager;
+	
 	/**
 	 * Convert a userDTO object to a user object of java class. 
 	 * If the object is null, a null object will be returned.
@@ -148,8 +148,7 @@ public class UserDTOMapper{
 		role = roles.split("\\s*,\\s*");
 		for(int i = 0; i<role.length;i++)
 		{
-			userRole = quadrigaRoleFactory.createQuadrigaRoleObject();
-			userRole.setDBid(role[i]);
+			userRole = roleManager.getQuadrigaRole(role[i]);
 			rolesList.add(userRole);
 		}
 		return rolesList;
