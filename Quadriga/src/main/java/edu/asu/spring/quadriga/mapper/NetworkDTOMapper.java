@@ -19,6 +19,8 @@ import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 
@@ -34,6 +36,9 @@ public class NetworkDTOMapper {
 	@Autowired
 	private NetworkFactory networkFactory;
 	
+	@Autowired
+	private IUserManager userManager;
+	
 	
 	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String workspaceid)
 	{
@@ -47,7 +52,7 @@ public class NetworkDTOMapper {
 		return networkStatementsDTO;
 	}
 	
-	public INetwork getNetwork(NetworksDTO networksDTO)
+	public INetwork getNetwork(NetworksDTO networksDTO) throws QuadrigaStorageException
 	{
 		INetwork network = null;
 		if(networksDTO != null)
@@ -57,11 +62,13 @@ public class NetworkDTOMapper {
 			network.setName(networksDTO.getNetworkname());
 			network.setWorkspaceid(networksDTO.getWorkspaceid());
 			network.setStatus(networksDTO.getStatus());
+			if(networksDTO.getNetworkowner() != null)
+				network.setCreator(userManager.getUserDetails(networksDTO.getNetworkowner()));
 		}
 		return network;
 	}
 	
-	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO)
+	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO) throws QuadrigaStorageException
 	{
 		List<INetwork> networkList = null;
 		if(networksDTO != null)
@@ -75,6 +82,9 @@ public class NetworkDTOMapper {
 				network.setName(networkDTO.getNetworkname());
 				network.setWorkspaceid(networkDTO.getWorkspaceid());
 				network.setStatus(networkDTO.getStatus());
+				if(networkDTO.getNetworkowner() != null)
+					network.setCreator(userManager.getUserDetails(networkDTO.getNetworkowner()));
+				
 				networkList.add(network);
 			}
 		}		

@@ -363,13 +363,18 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 					network.setName(resultSet.getString(3));
 					network.setCreator(userManager.getUserDetails(resultSet.getString(4)));
 					network.setStatus(resultSet.getString(5));
+					
 					INetworkOldVersion networkOldVersion = dbConnectNetwork.getNetworkOldVersionDetails(network.getId());
 					network.setNetworkOldVersion(networkOldVersion);
+					
 					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
+					
 					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
 					network.setProjectName(project.getName());
+					
 					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
 					network.setWorkspaceName(workspaceName);
+					
 					networkList.add(network);
 				} 
 			}
