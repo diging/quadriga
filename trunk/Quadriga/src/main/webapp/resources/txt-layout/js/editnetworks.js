@@ -154,10 +154,10 @@ this.edge.epsilon);
 							console.log("target is a edge");
 							alert(edge.nodeFrom.name);
 							alert(edge.nodeTo.name);
-							var node1 = edge.nodeTo.id;
-							var node2 = edge.nodeFrom.id;
-							node1.setData('dim', 17, 'end');
-							node2.setData('dim', 18, 'end');
+							var node1 = edge.nodeTo;
+							var node2 = edge.nodeFrom;
+							node1.setData('dim', 10, 'end');
+							node2.setData('dim', 10, 'end');
 							/*edge.selected = true;
 					          edge.setData('dim', 17, 'end');*/
 							fd.fx.animate({
@@ -169,7 +169,10 @@ this.edge.epsilon);
 					              lineWidth: 3,
 					              color: '#36acfb'
 					            });*/
+							
+							
 
+							
 							
 						}else{
 							console.log("target is a node");
@@ -179,7 +182,7 @@ this.edge.epsilon);
 						// connections.
 						var html = "<h4>" + edge.nodeFrom
 								+ "</h4><b> connections:</b><ul><li>", list = [];
-						node.eachAdjacency(function(adj) {
+						edge.eachAdjacency(function(adj) {
 							// Adding arrow label to inner-details
 							var str2 = adj.data.$labeltext;
 							var str1 = adj.nodeTo.name;
@@ -188,6 +191,8 @@ this.edge.epsilon);
 							str3 = str3.concat(str1);
 							list.push(str3);
 						});
+						
+						
 						// append connections information
 						$jit.id('inner-details').innerHTML = html
 								+ list.join("</li><li>") + "</li></ul>";
@@ -215,17 +220,7 @@ this.edge.epsilon);
 						   }
 						}
 						
-						
-					/*	 var html2 = "<div id='popup2' style='display: none'><form id='annot_form' action=" + path
-														+ "/auth/editing/saveAnnotation/";
-						 html2 += networkId + " method='POST' >";
-						 html2 += "<p id='message'></p>";
-						 html2 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-						 html2 += "<input  type='hidden' name='nodename' id='nodename' value="
-														+ node.id + " />";
-						 html2 += "<input type='submit' id='annot_submit' value='submit'>";
-						 html2 += "</form></div>";*/
-						 
+					
 
 						// append connections information
 						$jit.id('inner-details').innerHTML = path + html;
@@ -242,7 +237,25 @@ this.edge.epsilon);
 								  + node.id + " />";
 							  html1 += "<input type='button' id='annot_submit' value='submit'>";
 							  html1 += "</div></form>";
-							  $jit.id('inner-details').innerHTML = path + html1;
+							  var lemma = node.name;
+							  var description = "";
+							  $.ajax({
+								  
+									url : path+"/rest/editing/getconcept/"+lemma,
+									type : "GET",
+									
+									success : function(data) {
+										description = data;
+										alert("done");
+										
+										
+									},
+									error: function() {
+										alert("error");
+									}
+								});
+							  
+							  $jit.id('inner-details').innerHTML =  html1 + decsription;
 							  $.ajax({
 									url : path+"/auth/editing/getAnnotation/"+networkId,
 									type : "GET",
