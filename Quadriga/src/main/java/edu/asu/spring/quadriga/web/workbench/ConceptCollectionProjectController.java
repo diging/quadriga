@@ -141,7 +141,7 @@ public class ConceptCollectionProjectController {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("values " + values[i]);
 				try {
-					msg=projectConceptCollectionManager.addProjectConceptCollection(projectid,
+					projectConceptCollectionManager.addProjectConceptCollection(projectid,
 							values[i], userId);
 					if(!msg.equals("")){
 						flag=1;
@@ -226,7 +226,7 @@ public class ConceptCollectionProjectController {
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				try {
-					msg=projectConceptCollectionManager.deleteProjectConceptCollection(projectid, userId, values[i]);
+					projectConceptCollectionManager.deleteProjectConceptCollection(projectid, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
 					throw new QuadrigaStorageException();
 				}

@@ -120,7 +120,7 @@ public class RetrieveProjectController
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
 		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
-		if(projectSecurity.checkProjectOwner(userName)){
+		if(projectSecurity.checkProjectOwner(userName,projectid)){
 			model.getModelMap().put("owner", 1);
 		}else{
 			model.getModelMap().put("owner", 0);

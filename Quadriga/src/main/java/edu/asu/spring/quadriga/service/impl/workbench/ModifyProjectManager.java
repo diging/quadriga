@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workbench.IModifyProjectManagerDAO;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -24,10 +22,6 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 public class ModifyProjectManager implements IModifyProjectManager 
 {
 
-	@Autowired
-	@Qualifier("DBConnectionModifyProjectManagerBean")
-	private IDBConnectionModifyProjectManager dbConnect;
-	
 	@Autowired
 	private IModifyProjectManagerDAO modifyProjectManagerDAO;
 	
@@ -55,7 +49,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 	public void updateProjectRequest(String projID, String projName,String projDesc,String projAccess, String unixName,String userName) throws QuadrigaStorageException
 	{
 		logger.info("Updating project details");
-		//dbConnect.updateProjectRequest(project, userName);
 		modifyProjectManagerDAO.updateProjectRequest(projID, projName, projDesc, projAccess, unixName, userName);
 	}
 	

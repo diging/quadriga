@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
-import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -87,7 +86,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	{
 		List<IProject> projectList;
 		
-		//projectList = dbConnect.getProjectList(sUserName,DBConstants.PROJECT_LIST_AS_WORKSPACE_COLLABORATOR);
 		projectList = retrieveProjectManagerDAO.getProjectListAsWorkspaceCollaborator(sUserName);
 		return projectList;
 	}
@@ -101,24 +99,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		
 		return projectList;
 	}
-	
-	/*@Override
-	public IProject getProjectDetails(String projectId) throws QuadrigaStorageException
-	{
-		IProject project;
-		List<ICollaborator> collaboratorList;
-		
-		//retrieve project details
-		project = dbConnect.getProjectDetails(projectId);
-		
-		//retrieve the collaborators associated with project
-		collaboratorList = projectManager.getProjectCollaborators(projectId); 
-				
-		//assigning the collaborators to the project
-		project.setCollaborators(collaboratorList);
-		
-		return project;
-	}*/
 	
 	/**
 	 * This method returns the project details for the supplied project.
