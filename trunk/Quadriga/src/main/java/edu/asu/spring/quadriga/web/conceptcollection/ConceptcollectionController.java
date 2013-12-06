@@ -32,6 +32,7 @@ import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.implementation.CollectionsValidator;
+import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -224,7 +225,7 @@ public class ConceptcollectionController {
 	 * */
 	@RequestMapping(value = "auth/conceptcollections/addCollectionsForm", method = RequestMethod.POST)
 	public ModelAndView addConceptCollection(
-			@Validated @ModelAttribute("collection") IConceptCollection collection,
+			@Validated @ModelAttribute("collection") ConceptCollection collection,
 			BindingResult result, Model model, Principal principal)
 			throws QuadrigaStorageException {
 		if (result.hasErrors()) {
