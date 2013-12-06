@@ -24,11 +24,6 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-	<bean id="DBConnectionEditorManagerBean"
-		class="edu.asu.spring.quadriga.db.sql.DBConnectionEditorManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
 	<bean id="DBConnectionWorkspaceDictionaryBean"
 		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionWorkspaceDictionary">
 		<property name="dataSource" ref="dataSource" />

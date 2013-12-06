@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS tbl_network_annotations
   id    VARCHAR(50) NOT NULL,
   annotationtext    TEXT NOT NULL,
   annotationid    VARCHAR(50) NOT NULL,
-  userid	VARCHAR(50) NOT NULL,
+  username	VARCHAR(50) NOT NULL,
   objecttype		VARCHAR(50) NOT NULL,
   updatedby       VARCHAR(10)   NOT NULL,
   updateddate     TIMESTAMP     NOT NULL,
