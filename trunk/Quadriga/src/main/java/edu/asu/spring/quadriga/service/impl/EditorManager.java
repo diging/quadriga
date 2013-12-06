@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -32,7 +33,7 @@ public class EditorManager implements IEditorManager {
 	private INetworkFactory networkFactory;
 
 	@Autowired
-	@Qualifier("DBConnectionEditorManagerBean")
+//	@Qualifier("DBConnectionEditorManagerBean")
 	private IDBConnectionEditorManager dbConnect;
 
 
@@ -41,6 +42,7 @@ public class EditorManager implements IEditorManager {
 	 * Get network list for a editor
 	 */
 	@Override
+	@Transactional
 	public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
@@ -56,6 +58,7 @@ public class EditorManager implements IEditorManager {
 	 * Assign a network to user
 	 */
 	@Override
+	@Transactional
 	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
 		String msg = "";
 		try{
@@ -70,6 +73,7 @@ public class EditorManager implements IEditorManager {
 	 * Get assigned network list of the user
 	 */
 	@Override
+	@Transactional
 	public  List<INetwork> getAssignNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
 		List<INetwork> networkList = null;
@@ -83,6 +87,7 @@ public class EditorManager implements IEditorManager {
 	}
 
 	@Override
+	@Transactional
 	public List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
 
 		List<INetwork> networkList = null;
@@ -96,6 +101,7 @@ public class EditorManager implements IEditorManager {
 	}
 
 	@Override
+	@Transactional
 	public List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
 
 		List<INetwork> networkList = null;
@@ -112,6 +118,7 @@ public class EditorManager implements IEditorManager {
 	 * Get Rejected network list of user
 	 */
 	@Override
+	@Transactional
 	public  List<INetwork> getRejectedNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
 		List<INetwork> networkList = null;
@@ -128,6 +135,7 @@ public class EditorManager implements IEditorManager {
 	 * Get Approved network list of a user
 	 */
 	@Override
+	@Transactional
 	public  List<INetwork> getApprovedNetworkOfUser(IUser user)
 			throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -145,6 +153,7 @@ public class EditorManager implements IEditorManager {
 	 * PENDING / ASSIGNED / REJECTED / APPROVED
 	 */
 	@Override
+	@Transactional
 	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		String msg = "";
 		try{
@@ -160,6 +169,7 @@ public class EditorManager implements IEditorManager {
 	 * PENDING / ASSIGNED / REJECTED / APPROVED
 	 */
 	@Override
+	@Transactional
 	public String updateAssignedNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		String msg = "";
 		try{

@@ -50,9 +50,9 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 		int count;
 		isUserAssociated = false;
 		
-		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(p.projectid) FROM ProjectDTO p WHERE p.projectowner =:userName");
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(p.projectid) FROM ProjectDTO p WHERE p.projectowner.username =:userName");
 		query.setParameter("userName", userName);
-		count = ((Integer) query.iterate().next()).intValue();
+		count = ((Number) query.iterate().next()).intValue();
 		if(count > 0)
 		{
 			isUserAssociated = true;
@@ -76,7 +76,7 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.collaboratoruser =:userName AND pc.collaboratorrole =:collaboratorRole");
 		query.setParameter("userName", userName);
 		query.setParameter("collaboratorRole", collaboratorRole);
-		count = ((Integer) query.iterate().next()).intValue();
+		count = ((Number) query.iterate().next()).intValue();
 		if(count > 0)
 		{
 			isCollaborator = true;
@@ -101,7 +101,7 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 		query.setParameter("userName", userName);
 		query.setParameter("collaboratorRole", collaboratorRole);
 		query.setParameter("projectId",projectId);
-		count = ((Integer) query.iterate().next()).intValue();
+		count = ((Number) query.iterate().next()).intValue();
 		if(count > 0)
 		{
 			isCollaborator = true;

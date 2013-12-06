@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
+import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
@@ -48,7 +49,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  *
  */
 @Repository
-public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnectionNetworkManager
+public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnectionNetworkManager,IDBConnectionEditorManager
 {
 
 	@Autowired
@@ -470,15 +471,50 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * The following methods deal with editor section of the network module
 	 * 
 	 *******************************************************************************************************/
+	@Override
 	public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
-		INetwork network = null;
 
-		sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.workspaceid in");
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.isarchived='0') and n.workspaceid in ( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc where wc.workspaceCollaboratorDTOPK.username = :username and wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and wc.workspaceCollaboratorDTOPK.workspaceid in (select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw where pw.projectWorkspaceDTOPK.projectid in (select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in ('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in (select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.owner = :username))) or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we where we.workspaceEditorDTOPK.owner = :username))");
+			query.setParameter("username", user.getUserName());
+			
+			List<NetworksDTO> listNetworksDTO = query.list();
+			System.out.println(query.toString());
+			System.out.println("______________________________"+listNetworksDTO.size());
+			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
-		throw new NotYetImplementedException("Yet to be implemented");
+			//Update project name and workspace name of the network
+			for(INetwork network : networkList)
+			{				
+				//Get the project id associated with the workspace id
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
+				query.setParameter("workspaceid", network.getWorkspaceid());
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
+
+				if(projectWorkspaceDTO!= null)
+				{
+					//Get the project details
+					IProject project = retrieveProjectDetails.getProjectDetails(projectWorkspaceDTO.getProjectWorkspaceDTOPK().getProjectid());
+					network.setProjectName(project.getName());
+
+					//Get the workspace name
+					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
+					network.setWorkspaceName(workspaceName);
+				}
+			}
+
+			return networkList;
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in fetching network list of editors: ",e);
+			throw new QuadrigaStorageException(e);
+		}
 	}
 
+	@Override
 	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
 		NetworkAssignedDTO newtorkAssignedDTO = networkMapper.getNetworkAssignedDTO(networkId, user.getUserName(), INetworkStatus.PENDING, INetworkStatus.NOT_ARCHIVED);
 
@@ -494,19 +530,20 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}	
 	}
 
+	@Override
 	public List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
-List<INetwork> networkList = new ArrayList<INetwork>();
-		
+		List<INetwork> networkList = new ArrayList<INetwork>();
+
 		try
 		{
 			//Create the query to get the list of networks that are not for this user and are not assigned/pending
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkid from NetworkAssignedDTO na where na.assigneduser <> :assigneduser) and status = :status");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser <> :assigneduser) and status = :status");
 			query.setParameter("assigneduser", user.getUserName());
 			query.setParameter("status", INetworkStatus.ASSIGNED);
-			
+
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
-			
+
 			//Update project name, workspace name and assigned username of the network
 			for(INetwork network : networkList)
 			{				
@@ -516,7 +553,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 				query.setParameter("status", INetworkStatus.ASSIGNED);
 				NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query.uniqueResult();
 				network.setAssignedUser(networkAssignedDTO.getNetworkAssignedDTOPK().getAssigneduser());
-				
+
 				//Get the project id associated with the workspace id
 				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", network.getWorkspaceid());
@@ -533,7 +570,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 					network.setWorkspaceName(workspaceName);
 				}
 			}
-			
+
 			return networkList;
 		}
 		catch(Exception e)
@@ -543,24 +580,25 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
-		
+
 		try
 		{
 			//Set up the roles to be used in the HQL query
 			List<String> roles = new ArrayList<String>();
 			roles.add(INetworkStatus.ASSIGNED);
 			roles.add(INetworkStatus.PENDING);
-			
+
 			//Create the query to get the list of networks that are not for this user and are not assigned/pending
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkid from NetworkAssignedDTO na where na.assigneduser <> :assigneduser) and status not in (:status)");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser <> :assigneduser) and status not in (:status)");
 			query.setParameter("assigneduser", user.getUserName());
 			query.setParameterList("status", roles);
-			
+
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
-			
+
 			//Update project name and workspace name of the network
 			for(INetwork network : networkList)
 			{				
@@ -580,7 +618,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 					network.setWorkspaceName(workspaceName);
 				}
 			}
-			
+
 			return networkList;
 		}
 		catch(Exception e)
@@ -590,25 +628,26 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public List<INetwork> getAssignNetworkOfUser(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkid from NetworkAssignedDTO na where na.assigneduser = :assigneduser) and status = :status");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser) and status = :status");
 			query.setParameter("assigneduser", user.getUserName());
 			query.setParameter("status", INetworkStatus.ASSIGNED);
-			
+
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
-			
+
 			//Update project name workspace name and old version of the network
 			for(INetwork network : networkList)
 			{
 				//Get the old version of the network
 				INetworkOldVersion networkOldVersion = this.getNetworkOldVersionDetails(network.getId());
 				network.setNetworkOldVersion(networkOldVersion);
-				
+
 				//Get the project id associated with the workspace id
 				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", network.getWorkspaceid());
@@ -625,7 +664,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 					network.setWorkspaceName(workspaceName);
 				}
 			}
-			
+
 			return networkList;
 		}
 		catch(Exception e)
@@ -635,18 +674,19 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public List<INetwork> getApprovedNetworkOfUser(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkid from NetworkAssignedDTO na where na.assigneduser = :assigneduser) and status = :status");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser) and status = :status");
 			query.setParameter("assigneduser", user.getUserName());
 			query.setParameter("status", INetworkStatus.APPROVED);
-			
+
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
-			
+
 			//Update project name and workspace name of the network
 			for(INetwork network : networkList)
 			{				
@@ -666,7 +706,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 					network.setWorkspaceName(workspaceName);
 				}
 			}
-			
+
 			return networkList;
 		}
 		catch(Exception e)
@@ -676,18 +716,19 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public List<INetwork> getRejectedNetworkOfUser(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkid from NetworkAssignedDTO na where na.assigneduser = :assigneduser) and status = :status");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser) and status = :status");
 			query.setParameter("assigneduser", user.getUserName());
 			query.setParameter("status", INetworkStatus.REJECTED);
-			
+
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
-			
+
 			//Update project name and workspace name of the network
 			for(INetwork network : networkList)
 			{				
@@ -707,7 +748,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 					network.setWorkspaceName(workspaceName);
 				}
 			}
-			
+
 			return networkList;
 		}
 		catch(Exception e)
@@ -717,6 +758,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		try
 		{
@@ -737,6 +779,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public String updateAssignedNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		try
 		{
@@ -758,6 +801,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public String addAnnotationToNetwork(String networkId, String id, String annotationText, String userId,String objectType) throws QuadrigaStorageException {
 		NetworksAnnotationsDTO networkAnnotationsDTO = networkMapper.getNetworkAnnotationDTO(networkId, id, annotationText, "ANNOT_"+generateUniqueID(), userId, objectType);
 
@@ -773,6 +817,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}	
 	}
 
+	@Override
 	public String[] getAnnotation(String type, String id,String userId) throws QuadrigaStorageException{
 		String[] annotationArray = new String[2];
 		try
@@ -794,6 +839,7 @@ List<INetwork> networkList = new ArrayList<INetwork>();
 		}
 	}
 
+	@Override
 	public String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException {
 		try
 		{

@@ -56,6 +56,7 @@ public class EditingAssignUserManager {
 			editorManager.assignNetworkToUser(networkId, user);
 			editorManager.updateNetworkStatus(networkId, INetworkStatus.ASSIGNED);
 			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.ASSIGNED);
+			System.out.println("hiiiiiii");
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
