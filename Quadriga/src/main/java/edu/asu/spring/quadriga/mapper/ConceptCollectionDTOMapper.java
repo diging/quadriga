@@ -14,7 +14,6 @@ import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
@@ -99,13 +98,26 @@ public class ConceptCollectionDTOMapper
 	public IConcept getConceptCollectionItems(ConceptcollectionsItemsDTO conceptCollectionConcept)
 	{
 		IConcept concept = null;
-		
 		concept = conceptCollectionFactory.createConcept();
 		concept.setId(conceptCollectionConcept.getConceptcollectionsItemsDTOPK().getId());
 		concept.setDescription(conceptCollectionConcept.getDescription());
 		concept.setLemma(conceptCollectionConcept.getLemma());
 		concept.setPos(conceptCollectionConcept.getPos());
 		return concept;
+	}
+	
+	public List<IConcept> getConceptCollectionItemList(List<ConceptcollectionsItemsDTO> conceptCollectionConceptList)
+	{
+		List<IConcept> conceptList = new ArrayList<IConcept>();
+		if(conceptCollectionConceptList != null && conceptCollectionConceptList.size() > 0)
+		{
+			Iterator<ConceptcollectionsItemsDTO> ccItemsIterator = conceptCollectionConceptList.iterator();
+			while(ccItemsIterator.hasNext())
+			{
+				conceptList.add(getConceptCollectionItems(ccItemsIterator.next()));
+			}	
+		}
+		return conceptList;
 	}
 	
 	public ICollaborator getConceptCollectionCollaborators(ConceptcollectionsCollaboratorDTO conceptCollectionCollaborator)
@@ -165,6 +177,7 @@ public class ConceptCollectionDTOMapper
 		conceptcollectionsDTO.setDescription(conceptCollection.getName());
 		conceptcollectionsDTO.setDescription(conceptCollection.getDescription());
 		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
+		conceptcollectionsDTO.setCollectionowner(new QuadrigaUserDTO(conceptCollection.getOwner().getUserName()));
 		return conceptcollectionsDTO;
 	}
 	

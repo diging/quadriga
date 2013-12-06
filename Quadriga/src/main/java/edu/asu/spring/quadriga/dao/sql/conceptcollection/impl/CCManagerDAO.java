@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao.sql.conceptcollection.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -11,8 +12,11 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.dao.sql.conceptcollection.ICCManagerDAO;
+import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
+import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 
@@ -105,7 +109,37 @@ public class CCManagerDAO extends DAOConnectionManager implements ICCManagerDAO 
 		try
 		{
 			ConceptcollectionsDTO conceptcollectionsDTO = conceptCollectionDTOMapper.getConceptCollectionDTO(conceptCollection);
+			conceptcollectionsDTO.setId(generateUniqueID());
 			sessionFactory.getCurrentSession().save(conceptcollectionsDTO);
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+	}
+	
+	
+	@Override
+	public void getCollectionDetails(IConceptCollection collection,String username) throws QuadrigaStorageException, QuadrigaAccessException {
+		List<IConcept> conceptList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:id and  ccItems.conceptcollectionsDTO.collectionowner.username =:username and ccItems.conceptcollectionsDTO.conceptcollectionsCollaboratorDTOList IS NULL ");
+			query.setParameter("id", collection.getId());
+			query.setParameter("userName", username);
+			
+			List<ConceptcollectionsItemsDTO> conceptcollectionsItemsDTOList = query.list();
+			
+			if(conceptcollectionsItemsDTOList != null && conceptcollectionsItemsDTOList.size() > 0)
+			{
+				Iterator<ConceptcollectionsItemsDTO> ccItemsIterator = conceptcollectionsItemsDTOList.iterator();
+				while(ccItemsIterator.hasNext())
+				{
+					collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(ccItemsIterator.next()));
+				}	
+				
+			}
 		}
 		catch(Exception e)
 		{

@@ -54,7 +54,7 @@ public class ConceptcollectionsDTO implements Serializable {
     private String id;
     @Basic(optional = false)
     @Column(name = "accessibility")
-    private short accessibility;
+    private Boolean accessibility;
     @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
@@ -84,7 +84,7 @@ public class ConceptcollectionsDTO implements Serializable {
         this.id = id;
     }
 
-    public ConceptcollectionsDTO(String id, String collectionname, short accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public ConceptcollectionsDTO(String id, String collectionname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.id = id;
         this.collectionname = collectionname;
         this.accessibility = accessibility;
@@ -118,11 +118,11 @@ public class ConceptcollectionsDTO implements Serializable {
         this.id = id;
     }
 
-    public short getAccessibility() {
+    public Boolean getAccessibility() {
         return accessibility;
     }
 
-    public void setAccessibility(short accessibility) {
+    public void setAccessibility(Boolean accessibility) {
         this.accessibility = accessibility;
     }
 
