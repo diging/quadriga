@@ -13,6 +13,7 @@ import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
+import edu.asu.spring.quadriga.domain.implementation.Network;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
@@ -23,7 +24,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
-
+/**
+ * The purpose of this class is to map the DTO class objects to the domain objects
+ * used in Quadriga
+ * 
+ * @author Ram Kumar Kumaresan
+ */
 @Service
 public class NetworkDTOMapper {
 
@@ -39,19 +45,46 @@ public class NetworkDTOMapper {
 	@Autowired
 	private IUserManager userManager;
 	
-	
+	/**
+	 * This method will return a new {@link NetworksDTO} object with the parameters set to the method input
+	 * 
+	 * @param networkid			The id of the network
+	 * @param networkName		The name of the network
+	 * @param username			The username to be associated with the network
+	 * @param workspaceid		The id of the workspace that the network belongs to.
+	 * @return
+	 */
 	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String workspaceid)
 	{
 		NetworksDTO networkDTO = new NetworksDTO(networkid, workspaceid, networkName, username, INetworkStatus.PENDING, username, new Date(), username, new Date());
 		return networkDTO;
 	}
 	
+	/**
+	 * This method will return a new {@link NetworkStatementsDTO} object with the parameters set to the method input
+	 * 
+	 * @param rowid				The rowid of the NetworkStatement
+	 * @param networkId			The id of the network
+	 * @param id				The unique id of the record
+	 * @param type				The type of the NetworkStatement
+	 * @param isTop				The number indicating the isTop
+	 * @param username			The username of the user associated with the network
+	 * @return
+	 */
 	public NetworkStatementsDTO getNetworkStatementsDTO(String rowid, String networkId,String id,String type,String isTop, String username)
 	{
 		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(rowid, networkId, id, Integer.parseInt(isTop), INetworkStatus.NOT_ARCHIVED, type, username, new Date(), username, new Date());
 		return networkStatementsDTO;
 	}
 	
+	/**
+	 * This method will convert a {@link NetworksDTO} object to {@link Network} object.
+	 * It will copy the network id, network name, workspaceid, status and owner object from the input 
+	 * 
+	 * @param networksDTO				The input record which is not null and contains the network details				
+	 * @return							The {@link Network} object containing values copied from the input
+	 * @throws QuadrigaStorageException
+	 */
 	public INetwork getNetwork(NetworksDTO networksDTO) throws QuadrigaStorageException
 	{
 		INetwork network = null;
@@ -68,6 +101,14 @@ public class NetworkDTOMapper {
 		return network;
 	}
 	
+	/**
+	 * This method will convert the list of {@link NetworksDTO} objects to a list of {@link Network} objects.
+	 * For each object it will copy the network id, network name, workspaceid, status and owner object from the input.
+	 * 
+	 * @param networksDTO				The input list of networksDTO objects
+	 * @return							The corresponding list of network objects. The input list order will be maintained
+	 * @throws QuadrigaStorageException
+	 */
 	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO) throws QuadrigaStorageException
 	{
 		List<INetwork> networkList = null;
@@ -91,6 +132,11 @@ public class NetworkDTOMapper {
 		return networkList;
 	}
 	
+	/**
+	 * 
+	 * @param networkStatementsDTOList
+	 * @return
+	 */
 	public List<INetworkNodeInfo> getListOfNetworkNodeInfo(List<NetworkStatementsDTO> networkStatementsDTOList)
 	{
 		List<INetworkNodeInfo> networkList = null;
