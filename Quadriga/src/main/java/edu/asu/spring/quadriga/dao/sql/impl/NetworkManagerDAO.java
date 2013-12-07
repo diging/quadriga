@@ -251,7 +251,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
-	//TODO: Add the admin username
 	@Override
 	public String archiveNetworkStatement(String networkId, String id) throws QuadrigaStorageException {
 
@@ -477,12 +476,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.isarchived='0') and n.workspaceid in ( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc where wc.workspaceCollaboratorDTOPK.username = :username and wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and wc.workspaceCollaboratorDTOPK.workspaceid in (select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw where pw.projectWorkspaceDTOPK.projectid in (select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in ('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in (select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.owner = :username))) or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we where we.workspaceEditorDTOPK.owner = :username))");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in ( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc where wc.workspaceCollaboratorDTOPK.username = :username and wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and wc.workspaceCollaboratorDTOPK.workspaceid in (select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw where pw.projectWorkspaceDTOPK.projectid in (select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in ('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in (select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.owner = :username))) or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we where we.workspaceEditorDTOPK.owner = :username)))");
 			query.setParameter("username", user.getUserName());
 			
 			List<NetworksDTO> listNetworksDTO = query.list();
-			System.out.println(query.toString());
-			System.out.println("______________________________"+listNetworksDTO.size());
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
 			//Update project name and workspace name of the network
