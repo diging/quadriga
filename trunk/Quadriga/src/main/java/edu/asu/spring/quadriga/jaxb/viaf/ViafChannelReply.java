@@ -1,3 +1,4 @@
+package edu.asu.spring.quadriga.jaxb.viaf;
 /*package edu.asu.spring.quadriga.profile.impl;
 
 import java.util.List;

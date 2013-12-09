@@ -169,7 +169,7 @@
 	
 	<bean id="searchResult" class="edu.asu.spring.quadriga.profile.impl.SearchResult" />
 	
-	<bean id="conceptPower" class="edu.asu.spring.quadriga.profile.impl.ConceptPower" />
+	<bean id="conceptPower" class="edu.asu.spring.quadriga.profile.impl.ConceptPowerService" />
 	
 	<bean id="viafService" class="edu.asu.spring.quadriga.profile.impl.ViafService" />
 	
@@ -177,9 +177,9 @@
 	
 	<bean id="profileFactory" class="edu.asu.spring.quadriga.domain.factories.impl.ProfileFactory"/>
 	
-	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.impl.SearchResultFactory" />
+	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultFactory" />
 	
-	<bean id="viafManager" class="edu.asu.spring.quadriga.profile.impl.ViafManager"/>
+	<bean id="viafManager" class="edu.asu.spring.quadriga.service.impl.viaf.ViafManager"/>
 	
 	<bean id="listWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.impl.ListWSManagerDAO"/>
 	
@@ -208,5 +208,7 @@
 	<bean id="database_error_msgs" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/database_error_msgs.properties" />
 	</bean>
+	
+	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
 		
 </beans>

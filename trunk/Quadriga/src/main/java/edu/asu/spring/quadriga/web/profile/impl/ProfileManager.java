@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.profile.impl;
+package edu.asu.spring.quadriga.web.profile.impl;
 
 import java.util.List;
 

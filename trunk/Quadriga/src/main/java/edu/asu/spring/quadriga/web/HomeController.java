@@ -13,13 +13,14 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.domain.implementation.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -29,14 +30,14 @@ import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
-import edu.asu.spring.quadriga.profile.impl.ProfileManager;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanFormManager;
 import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
+import edu.asu.spring.quadriga.web.profile.impl.ProfileManager;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
 
 /**
  * Handles requests for the application home page.
@@ -208,7 +209,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
-	public String addUri(@ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm,
+	public String addSearchResult(@Validated @ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm, BindingResult result,
 	@PathVariable("serviceid") String serviceid, @PathVariable("term") String term, Model model, Principal principal) throws QuadrigaStorageException
 	{
 		
@@ -221,58 +222,64 @@ public class HomeController {
 		
 		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
 		
-	
-		for( ISearchResult searchResult: originalsearchResults)
+		if(result.hasErrors())
 		{
-			for(SearchResultBackBean backBeanSearchResult:backBeanSearchResults)
-			{	
-								
-				profileid = backBeanSearchResult.getId();
-
-				if(profileid!=null)
-				{
-					
-					if( backBeanSearchResult.getId().equals(searchResult.getId()) )
-					{
-						profilebuilder = new StringBuilder();
-						String id = backBeanSearchResult.getId();
-						id = id.replace(",", " ");
-						profilebuilder.append(",");
-						profilebuilder.append(id);
-						backBeanSearchResult.setDescription(searchResult.getDescription());	
-						String desc = backBeanSearchResult.getDescription();
-						desc = desc.replace(",", " ");
-						profilebuilder.append(",");
-						profilebuilder.append(desc);
-						backBeanSearchResult.setWord(searchResult.getName());
-						String name = backBeanSearchResult.getWord();
-						name = name.replace(",", " ");
-						profilebuilder.append(",");
-						profilebuilder.append(name);
-						errmsg = userProfileManager.addUserProfile(principal.getName(), serviceid, profilebuilder.substring(1));
-					}
-				}
-			}
-		}
-		
-		if(errmsg.equals("no errors"))
-		{	
-			model.addAttribute("success",1);
-			model.addAttribute("ServiceBackBean",new ServiceBackBean());
-			model.addAttribute("serviceNameIdMap",serviceNameIdMap);
-			model.addAttribute("searchResults", backBeanSearchResults);
+			
 		}
 		
 		else
 		{
-			model.addAttribute("errmsg", errmsg);
-			model.addAttribute("ServiceBackBean",new ServiceBackBean());
-			model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
-		}
-		
-		List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
+			for( ISearchResult searchResult: originalsearchResults)
+			{
+				for(SearchResultBackBean backBeanSearchResult:backBeanSearchResults)
+				{	
+									
+					profileid = backBeanSearchResult.getId();
 	
-		model.addAttribute("resultLists", resultLists);
+					if(profileid!=null)
+					{
+						
+						if( backBeanSearchResult.getId().equals(searchResult.getId()) )
+						{
+							profilebuilder = new StringBuilder();
+							String id = backBeanSearchResult.getId();
+							id = id.replace(",", " ");
+							profilebuilder.append(",");
+							profilebuilder.append(id);
+							backBeanSearchResult.setDescription(searchResult.getDescription());	
+							String desc = backBeanSearchResult.getDescription();
+							desc = desc.replace(",", " ");
+							profilebuilder.append(",");
+							profilebuilder.append(desc);
+							backBeanSearchResult.setWord(searchResult.getName());
+							String name = backBeanSearchResult.getWord();
+							name = name.replace(",", " ");
+							profilebuilder.append(",");
+							profilebuilder.append(name);
+							errmsg = userProfileManager.addUserProfile(principal.getName(), serviceid, profilebuilder.substring(1));
+						}
+					}
+				}
+			}
+			
+			if(errmsg.equals("no errors"))
+			{	
+				model.addAttribute("success",1);
+				model.addAttribute("ServiceBackBean",new ServiceBackBean());
+				model.addAttribute("serviceNameIdMap",serviceNameIdMap);
+				model.addAttribute("searchResults", backBeanSearchResults);
+			}
+			
+			else
+			{
+				model.addAttribute("errmsg", errmsg);
+				model.addAttribute("ServiceBackBean",new ServiceBackBean());
+				model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
+			}
+			
+			List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
+			model.addAttribute("resultLists", resultLists);
+		}
 		
 		return "auth/home/showProfile";
 	}

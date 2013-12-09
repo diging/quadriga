@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.profile.impl;
+package edu.asu.spring.quadriga.web.profile.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
+import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
+import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
 
 @Service
 public class SearchResultBackBeanFormManager {
