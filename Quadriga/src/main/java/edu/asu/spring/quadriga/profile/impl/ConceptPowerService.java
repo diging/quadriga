@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
 @Service
-public class ConceptPower implements IService {
+public class ConceptPowerService implements IService {
 
 	@Autowired
 	private IConceptCollectionManager collectionManager;

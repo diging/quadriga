@@ -114,7 +114,24 @@
 			</list>
 		</property>
 	</bean>
- 
+	
+	 <bean id="restTemplateViaf" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				 <!-- <bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+				</bean>  -->
+				<bean
+					class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+					<property name="marshaller" ref="jaxbMarshaller" />
+					<property name="unmarshaller" ref="jaxbMarshaller" />
+				</bean>
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
 			
         
     

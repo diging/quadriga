@@ -63,10 +63,10 @@ $("input[name='deselectAll']").button().click(function(){
 action="${pageContext.servletContext.contextPath}/auth/profile/delete">
 
 <%-- <c:if test="${not empty resultLists}"> --%>
- 	<table class="display dataTable">
+ 	<table class="display dataTable" cellpadding="0" cellspacing="0" border="0" style="width:100%">
 			<thead>
 				<tr>
-					<th><input type="checkbox" name="selectAll"/>Select</th>
+					<th>Select</th>
 					<th>Name</th>
 					<th>ID</th>
 					<th>Description</th>

@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.profile.impl;
+package edu.asu.spring.quadriga.service.impl.viaf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import edu.asu.spring.quadriga.jaxb.viaf.Item;
+import edu.asu.spring.quadriga.profile.impl.ViafReply;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IViafManager;

@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.profile.impl;
+package edu.asu.spring.quadriga.jaxb.viaf;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
