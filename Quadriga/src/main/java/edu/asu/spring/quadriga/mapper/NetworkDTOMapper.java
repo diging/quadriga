@@ -15,6 +15,8 @@ import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.implementation.NetworkOldVersion;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
@@ -51,7 +53,7 @@ public class NetworkDTOMapper {
 	 * @param networkid			The id of the network
 	 * @param networkName		The name of the network
 	 * @param username			The username to be associated with the network
-	 * @param workspaceid		The id of the workspace that the network belongs to.
+	 * @param workspaceid		The id of the workspace that the network belongs to
 	 * @return
 	 */
 	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String workspaceid)
@@ -133,8 +135,10 @@ public class NetworkDTOMapper {
 	}
 	
 	/**
+	 * This method will convert the list of {@link NetworkStatementsDTO} objects to a list of {@link NetworkNodeInfo} objects.
+	 * For each object it will copy the id and statement type.
 	 * 
-	 * @param networkStatementsDTOList
+	 * @param networkStatementsDTOList	The input list of networkstatementsDTO objects
 	 * @return
 	 */
 	public List<INetworkNodeInfo> getListOfNetworkNodeInfo(List<NetworkStatementsDTO> networkStatementsDTOList)
@@ -155,6 +159,13 @@ public class NetworkDTOMapper {
 		return networkList;
 	}
 	
+	/**
+	 * This method will convert a {@link NetworkAssignedDTO} object to {@link NetworkOldVersion} object.
+	 * It will copy the previousAssignedUser, previousVersionStatus and updateDate from the input object.
+	 * 
+	 * @param networkAssignedDTO	The networkAssignedDTO to be converted
+	 * @return
+	 */
 	public INetworkOldVersion getNetworkOldVersion(NetworkAssignedDTO networkAssignedDTO)
 	{
 		INetworkOldVersion networkOldVersion =null;
@@ -169,6 +180,15 @@ public class NetworkDTOMapper {
 		return networkOldVersion;
 	}
 	
+	/**
+	 * This method will create a {@link NetworkAssignedDTO} from the input parameters.
+	 * 
+	 * @param networkid				The id of the network
+	 * @param assignedUsername		The username to be assigned.
+	 * @param status				The status of the network
+	 * @param archived				The archived status
+	 * @return
+	 */
 	public NetworkAssignedDTO getNetworkAssignedDTO(String networkid, String assignedUsername, String status, int archived)
 	{
 		NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
@@ -182,6 +202,17 @@ public class NetworkDTOMapper {
 		return networkAssignedDTO;
 	}
 	
+	/**
+	 * This method will create {@link NetworksAnnotationsDTO} from the input parameters.
+	 * 
+	 * @param networkid			The id of the network
+	 * @param id				The id of this unique record
+	 * @param annotationtext	The annotation text
+	 * @param annotationid		The annotation id
+	 * @param username			The username of the user to be associated with annotation
+	 * @param objecttype		The type of object
+	 * @return
+	 */
 	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String networkid, String id, String annotationtext, String annotationid, String username, String objecttype)
 	{
 		NetworksAnnotationsDTO networkAnnotationsDTO = new NetworksAnnotationsDTO();
