@@ -2,7 +2,9 @@ package edu.asu.spring.quadriga.dao.sql.conceptcollection;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -18,4 +20,10 @@ public interface ICCManagerDAO {
 
 	void getCollectionDetails(IConceptCollection collection, String username)
 			throws QuadrigaStorageException, QuadrigaAccessException;
+
+	List<IUser> showNonCollaboratorRequest(String collectionid)
+			throws QuadrigaStorageException;
+
+	List<ICollaborator> showCollaboratorRequest(String collectionid)
+			throws QuadrigaStorageException;
 }

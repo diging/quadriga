@@ -91,8 +91,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
+	@Transactional
 	public void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAccessException {
-		dbConnect.getCollectionDetails(concept,username);
+		ccManagerDAO.getCollectionDetails(concept, username);
 	}
 
 	@Override
@@ -174,8 +175,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 * @author rohit pendbhaje
 	 */
 	@Override
+	@Transactional
 	public List<IUser> showNonCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
-		List<IUser> nonCollaboratorList =  dbConnect.showNonCollaboratorRequest(collectionid);
+		List<IUser> nonCollaboratorList =  ccManagerDAO.showNonCollaboratorRequest(collectionid);
 		return nonCollaboratorList;
 	}
 
@@ -194,7 +196,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 
 	/**
 	 * @description	  retrieves collaborating users from database
-	 * @param  collectionid
+	 * @param  collectioni
 	 * @throws QuadrigaStorageException
 	 * @author rohit pendbhaje
 	 */
