@@ -174,10 +174,11 @@ public class ConceptCollectionDTOMapper
 		conceptcollectionsDTO.setUpdateddate(new Date());
 		conceptcollectionsDTO.setCreatedby(conceptCollection.getOwner().getUserName());
 		conceptcollectionsDTO.setCreateddate(new Date());
-		conceptcollectionsDTO.setDescription(conceptCollection.getName());
+		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
 		conceptcollectionsDTO.setDescription(conceptCollection.getDescription());
 		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
 		conceptcollectionsDTO.setCollectionowner(new QuadrigaUserDTO(conceptCollection.getOwner().getUserName()));
+		conceptcollectionsDTO.setAccessibility(Boolean.FALSE);
 		return conceptcollectionsDTO;
 	}
 	
