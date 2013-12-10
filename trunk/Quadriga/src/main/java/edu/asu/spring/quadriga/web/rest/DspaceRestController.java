@@ -256,9 +256,53 @@ public class DspaceRestController {
 	      return buf.toString();
 	   }
 	
-	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.GET)
-	public void addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam(value="fileid") String fileid, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
+	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.POST)
+	public void addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @PathVariable("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
 	{
 		System.out.println(workspaceid+" Inside the rest service..."+fileid);
+		String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/2004.xml?email="+email+"&password="+password;
+		
+	}
+	
+	private String getBitstreamMetadataPath(String fileid, String email, String password, String publicKey, String privateKey, String quadrigaUsername) throws NoSuchAlgorithmException, QuadrigaStorageException
+	{
+		if(publicKey!=null && privateKey!=null && !publicKey.equals("") && !privateKey.equals(""))
+		{
+			//Authenticate based on public and private key
+			String stringToHash = dspaceProperties.getProperty("dspace.bitstream_url") + fileid + dspaceProperties.getProperty(".xml") + privateKey;
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+			
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.api_key")+publicKey+dspaceProperties.getProperty("dspace.&")+
+					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
+		}
+		else if(email!=null && password!=null && !email.equals("") && !password.equals(""))
+		{				
+			//Authenticate based on email and password
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.email")+email+
+					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+password;
+		}
+		
+		//Try to get the keys from the database
+		IDspaceKeys dspacekey = dbDspaceManager.getDspaceKeys(quadrigaUsername);
+		if(dspacekey != null)
+		{
+			//User has keys stored in quadriga database
+			//Authenticate based on public and private key
+			String stringToHash = dspaceProperties.getProperty("dspace.bitstream_url") + fileid + dspaceProperties.getProperty(".xml") + dspacekey.getPrivateKey();
+			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
+			messageDigest.update(stringToHash.getBytes());
+			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+			
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("dspace.&")+
+					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
+		}
+		
+		//No authentication provided
+		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml");
 	}
 }
