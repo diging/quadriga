@@ -72,6 +72,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	@Autowired
 	private NetworkFactory networkFactory;
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String addNetworkRequest(String networkName, IUser user, String workspaceid) throws QuadrigaStorageException {
 
@@ -90,6 +93,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String addNetworkStatement(String networkId, String id, String type, String isTop, IUser user) throws QuadrigaStorageException {
 
@@ -107,6 +113,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException {
 		INetwork network = networkFactory.createNetworkObject();
@@ -146,6 +155,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException {
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -186,6 +198,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException {
 		try
@@ -206,6 +221,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public boolean hasNetworkName(String networkName, IUser user) throws QuadrigaStorageException {
 
@@ -231,6 +249,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId) throws QuadrigaStorageException {
 		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
@@ -251,6 +272,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String archiveNetworkStatement(String networkId, String id) throws QuadrigaStorageException {
 
@@ -292,6 +316,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId) throws QuadrigaStorageException {
 
@@ -316,6 +343,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String archiveNetwork(String networkId) throws QuadrigaStorageException {
 		Transaction transaction = null;
@@ -381,6 +411,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public INetworkOldVersion getNetworkOldVersionDetails(String networkId)	throws QuadrigaStorageException {
 		try
@@ -406,6 +439,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId) throws QuadrigaStorageException {
 		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
@@ -430,6 +466,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public INetwork getNetworkDetails(String networkId)	throws QuadrigaStorageException {
 		INetwork network=networkFactory.createNetworkObject();
@@ -470,6 +509,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * The following methods deal with editor section of the network module
 	 * 
 	 *******************************************************************************************************/
+	
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetwork> getEditorNetworkList(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -511,6 +554,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
 		NetworkAssignedDTO newtorkAssignedDTO = networkMapper.getNetworkAssignedDTO(networkId, user.getUserName(), INetworkStatus.PENDING, INetworkStatus.NOT_ARCHIVED);
@@ -527,6 +573,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}	
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -577,6 +626,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -625,6 +677,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetwork> getAssignNetworkOfUser(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -671,6 +726,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetwork> getApprovedNetworkOfUser(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -713,6 +771,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public List<INetwork> getRejectedNetworkOfUser(IUser user) throws QuadrigaStorageException{
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -755,6 +816,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		try
@@ -776,6 +840,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String updateAssignedNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		try
@@ -798,6 +865,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String addAnnotationToNetwork(String networkId, String id, String annotationText, String userId,String objectType) throws QuadrigaStorageException {
 		NetworksAnnotationsDTO networkAnnotationsDTO = networkMapper.getNetworkAnnotationDTO(networkId, id, annotationText, "ANNOT_"+generateUniqueID(), userId, objectType);
@@ -814,6 +884,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}	
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String[] getAnnotation(String type, String id,String userId) throws QuadrigaStorageException{
 		String[] annotationArray = new String[2];
@@ -836,6 +909,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException {
 		try
