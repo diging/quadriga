@@ -144,7 +144,7 @@ public class MockupConceptCollectionManager implements
 
 
 	@Override
-	public String getConceptCollectinId(String ccName)
+	public String getConceptCollectionId(String ccName)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		return null;
