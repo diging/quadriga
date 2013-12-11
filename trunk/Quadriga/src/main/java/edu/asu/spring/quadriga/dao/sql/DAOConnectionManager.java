@@ -43,7 +43,32 @@ public abstract class DAOConnectionManager {
 		}
 	}
 	
-
+	/**
+	 * Establishes the test environment
+	 * @param sQuery
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
+	public int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException
+	{
+		try
+		{
+			if(sQuery != null && sQuery.length > 0)
+			{
+				for(String query : sQuery)
+				{
+					Query sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(query);
+					sqlQuery.executeUpdate();
+				}
+			}
+			return SUCCESS;
+		}
+		catch(Exception ex)
+		{	
+			ex.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+	}
 	/**
 	 * Generate an unique identifier for the database field
 	 * @throws QuadrigaStorageException

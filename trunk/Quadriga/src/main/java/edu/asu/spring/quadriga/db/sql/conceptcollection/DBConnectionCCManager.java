@@ -338,17 +338,16 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 		return errmsg;
 	}
 
-	@Override
 	/**
 	 * {@inheritDoc}
 	 * @throws QuadrigaStorageException
 	 */
-	public String addCollection(IConceptCollection con)
+	public void addCollection(IConceptCollection con)
 			throws QuadrigaStorageException {
 		if(con==null)
 		{
 			logger.error("addCollection: input argument IConceptCollection is null");
-			return null;
+			//return null;
 		}
 		String name;
 		String description;
@@ -376,7 +375,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 			sqlStatement.registerOutParameter(5, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(5);
-			return errmsg;
+			//return errmsg;
 
 		} catch (SQLException e) {
 			logger.error("Exception", e);
@@ -474,7 +473,6 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * @author satya swaroop boddu
 	 * @throws QuadrigaStorageException
 	 */
-	@Override
 	public int setupTestEnvironment(String[] sQuery)
 			throws QuadrigaStorageException {
 		try {
@@ -711,7 +709,7 @@ public class DBConnectionCCManager extends ADBConnectionManager implements
 	 * 
 	 */
 	@Override
-	public String getConceptCollectinId(String ccName) throws QuadrigaStorageException
+	public String getConceptCollectionId(String ccName) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String ccId="";

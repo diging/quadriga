@@ -66,7 +66,7 @@ public interface IDBConnectionCCManager {
 		 * @return string having success or failure message
 		 * @throws QuadrigaStorageException 
 		 */
-		public abstract  String addCollection(IConceptCollection con) throws QuadrigaStorageException;
+		public abstract  void addCollection(IConceptCollection con) throws QuadrigaStorageException;
 		
 		
 		/**
@@ -126,7 +126,7 @@ public interface IDBConnectionCCManager {
 		 * 
 		 */
 		public abstract void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException;
-		public abstract  String getConceptCollectinId(String ccName)
+		public abstract  String getConceptCollectionId(String ccName)
 				throws QuadrigaStorageException;
 		
 	}

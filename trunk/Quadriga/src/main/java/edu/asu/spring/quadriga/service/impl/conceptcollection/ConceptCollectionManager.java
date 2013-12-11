@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.dao.sql.conceptcollection.ICCManagerDAO;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -39,7 +38,7 @@ import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManag
 public class ConceptCollectionManager implements IConceptCollectionManager {
 
 	@Autowired
-	@Qualifier("DBConnectionCCManagerBean")
+	@Qualifier("CCManagerDAO")
 	private IDBConnectionCCManager dbConnect;
 	
 	@Autowired
@@ -64,9 +63,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	private ICollaboratorRoleManager roleMapper ;
 	
-	@Autowired
-	private ICCManagerDAO ccManagerDAO;
-	
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.IConceptCollectionManager#getCollectionsOfUser(java.lang.String)
 	 */
@@ -76,7 +72,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	{
 		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
-		conceptList = ccManagerDAO.getConceptsOwnedbyUser(sUserId);
+		conceptList = dbConnect.getConceptsOwnedbyUser(sUserId);
 		return conceptList;
 	}
 
@@ -86,14 +82,14 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	public List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException {
 		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
-		conceptList = ccManagerDAO.getCollaboratedConceptsofUser(sUserId);
+		conceptList = dbConnect.getCollaboratedConceptsofUser(sUserId);
 		return conceptList;
 	}
 
 	@Override
 	@Transactional
 	public void getCollectionDetails(IConceptCollection concept, String username) throws QuadrigaStorageException, QuadrigaAccessException {
-		ccManagerDAO.getCollectionDetails(concept, username);
+		dbConnect.getCollectionDetails(concept, username);
 	}
 
 	@Override
@@ -157,7 +153,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Override
 	@Transactional
 	public void addConceptCollection(IConceptCollection collection) throws QuadrigaStorageException {
-		ccManagerDAO.addCollection(collection);
+		dbConnect.addCollection(collection);
 	}
 
 	@Override
@@ -177,7 +173,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Override
 	@Transactional
 	public List<IUser> showNonCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
-		List<IUser> nonCollaboratorList =  ccManagerDAO.showNonCollaboratorRequest(collectionid);
+		List<IUser> nonCollaboratorList =  dbConnect.showNonCollaboratorRequest(collectionid);
 		return nonCollaboratorList;
 	}
 
@@ -215,8 +211,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 	
 	@Override
-	public String getConceptCollectinId(String ccName) throws QuadrigaStorageException{
-		String ccId = dbConnect.getConceptCollectinId(ccName);
+	public String getConceptCollectionId(String ccName) throws QuadrigaStorageException{
+		String ccId = dbConnect.getConceptCollectionId(ccName);
 		return ccId;
 	}
 	

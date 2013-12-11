@@ -38,7 +38,6 @@ public class ModifyProjectManagerDAOTest {
 	@Autowired
 	IModifyProjectManagerDAO modifyProjectManagerDAO;
 	
-
 	@Autowired
 	IRetrieveProjectManagerDAO retrieveProjectManagerDAO;
 	
