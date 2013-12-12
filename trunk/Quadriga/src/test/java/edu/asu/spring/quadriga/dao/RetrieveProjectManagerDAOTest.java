@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.dao.workbench.impl.RetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -24,6 +23,7 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/hibernate.cfg.xml",
@@ -40,7 +40,7 @@ public class RetrieveProjectManagerDAOTest {
     private IUserManager userManager;
 	
 	@Autowired
-	IRetrieveProjectManagerDAO retrieveProjectManagerDAO;
+	IRetrieveProjectManager retrieveProjectManager;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -58,7 +58,7 @@ public class RetrieveProjectManagerDAOTest {
 		databaseQuery[2] = "INSERT INTO tbl_project VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
 		for(String query : databaseQuery)
 		{
-			((RetrieveProjectManagerDAO)retrieveProjectManagerDAO).setupTestEnvironment(query);
+			((RetrieveProjectManagerDAO)retrieveProjectManager).setupTestEnvironment(query);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class RetrieveProjectManagerDAOTest {
 		databaseQuery[1] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((RetrieveProjectManagerDAO)retrieveProjectManagerDAO).setupTestEnvironment(query);
+			((RetrieveProjectManagerDAO)retrieveProjectManager).setupTestEnvironment(query);
 		}		
 	}
 
@@ -124,9 +124,7 @@ public class RetrieveProjectManagerDAOTest {
 		project.setProjectAccess(EProjectAccessibility.valueOf("ACCESSIBLE"));
 		user = userManager.getUserDetails("projuser");
 		project.setOwner(user);
-		
-		testProject = retrieveProjectManagerDAO.getProjectDetails("PROJ_1");
-		
+		testProject = retrieveProjectManager.getProjectDetails("PROJ_1");
 		if(testProject == null)
 		{
 			fail();

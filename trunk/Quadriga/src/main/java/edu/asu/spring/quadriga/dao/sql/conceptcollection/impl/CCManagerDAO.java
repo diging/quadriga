@@ -152,26 +152,31 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 	}
 	
-	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void getCollectionDetails(IConceptCollection collection,String username) throws QuadrigaStorageException, QuadrigaAccessException {
+		IUser owner = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:id and  ccItems.conceptcollectionsDTO.collectionowner.username =:username and ccItems.conceptcollectionsDTO.conceptcollectionsCollaboratorDTOList IS NULL ");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsDTO conceptColl where conceptColl.id =:id");
 			query.setParameter("id", collection.getId());
-			query.setParameter("userName", username);
 			
-			List<ConceptcollectionsItemsDTO> conceptcollectionsItemsDTOList = query.list();
+			ConceptcollectionsDTO conceptcollectionsDTO = (ConceptcollectionsDTO) query.uniqueResult();
 			
-			if(conceptcollectionsItemsDTOList != null && conceptcollectionsItemsDTOList.size() > 0)
+			if(conceptcollectionsDTO != null)
 			{
-				Iterator<ConceptcollectionsItemsDTO> ccItemsIterator = conceptcollectionsItemsDTOList.iterator();
-				while(ccItemsIterator.hasNext())
-				{
-					collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(ccItemsIterator.next()));
-				}	
+				collection.setDescription(conceptcollectionsDTO.getDescription());
+				collection.setName(conceptcollectionsDTO.getCollectionname());
+				owner = userManager.getUserDetails(conceptcollectionsDTO.getCollectionowner().getUsername());
+				collection.setOwner(owner);
 				
+				if(conceptcollectionsDTO.getConceptcollectionsItemsDTOList() != null && conceptcollectionsDTO.getConceptcollectionsItemsDTOList().size() > 0)
+				{
+					Iterator<ConceptcollectionsItemsDTO> ccItemsIterator = conceptcollectionsDTO.getConceptcollectionsItemsDTOList().iterator();
+					while(ccItemsIterator.hasNext())
+					{
+						collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(ccItemsIterator.next()));
+					}	
+				}
 			}
 		}
 		catch(Exception e)
@@ -311,7 +316,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		String errMsg = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and user.username IN (Select quadrigaUserDTO.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id) AND user.username NOT IN (Select ccCollab.conceptcollectionsDTO.collectionowner.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id)");
+			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id) OR user.username IN (Select ccCollab.conceptcollectionsDTO.collectionowner.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id))");
 			query.setParameter("username", username);
 			query.setParameter("id", conceptId);
 			
@@ -477,34 +482,37 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			query.setParameter("id", collection.getId());
 			List<ConceptcollectionsCollaboratorDTO> ccCollabList = query.list();
 			
-			Iterator<ConceptcollectionsCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
-			HashMap<String, String> userRoleMap = new HashMap<String, String>();
-			while(ccCollabIterator.hasNext())
+			if(ccCollabList != null && ccCollabList.size() > 0)
 			{
-				ConceptcollectionsCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
-				if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
+				Iterator<ConceptcollectionsCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
+				HashMap<String, String> userRoleMap = new HashMap<String, String>();
+				while(ccCollabIterator.hasNext())
 				{
-					userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole()+",");
+					ConceptcollectionsCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
+					if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
+					{
+						userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole()+",");
+					}
+					else
+					{
+						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole());
+					}
 				}
-				else
+				
+				Iterator<Entry<String, String>> userRoleMapItr = userRoleMap.entrySet().iterator();
+				while(userRoleMapItr.hasNext())
 				{
-					userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole());
+					Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
+					ICollaborator collaborator = collaboratorFactory.createCollaborator();
+					IUser user = userFactory.createUserObject();
+					user = userManager.getUserDetails((String) pairs.getKey());
+					collaborator.setUserObj(user);
+					String userRoleList = (String) pairs.getValue();
+					collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-2));
+					collaborator.setCollaboratorRoles(collaboratorRoles);
+					collection.getCollaborators().add(collaborator);
 				}
-			}
-			
-			Iterator<Entry<String, String>> userRoleMapItr = userRoleMap.entrySet().iterator();
-			while(userRoleMapItr.hasNext())
-			{
-				Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
-				ICollaborator collaborator = collaboratorFactory.createCollaborator();
-				IUser user = userFactory.createUserObject();
-				user = userManager.getUserDetails((String) pairs.getKey());
-				collaborator.setUserObj(user);
-				String userRoleList = (String) pairs.getValue();
-				collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-2));
-				collaborator.setCollaboratorRoles(collaboratorRoles);
-				collection.getCollaborators().add(collaborator);
-			}
+			}	
 		}
 		catch(Exception e)
 		{

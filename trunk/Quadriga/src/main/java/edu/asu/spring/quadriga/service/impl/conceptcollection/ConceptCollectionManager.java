@@ -70,7 +70,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Transactional
 	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
 	{
-		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
 		conceptList = dbConnect.getConceptsOwnedbyUser(sUserId);
 		return conceptList;
@@ -110,6 +109,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 	
 	@Override
+	@Transactional
 	public void update(String id[],IConceptCollection collection, String username) throws QuadrigaStorageException {
 		
 		IConcept concept;
@@ -145,8 +145,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 	
 	@Override
+	@Transactional
 	public void addItems(String lemmma, String id, String pos, String desc, String conceptcollectionId, String username) throws QuadrigaStorageException, QuadrigaAccessException {
-		
 		dbConnect.saveItem(lemmma, id, pos, desc, conceptcollectionId,username);
 	}
 
@@ -157,8 +157,8 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	}
 
 	@Override
+	@Transactional
 	public void deleteItem(String id, String collectionId, String username) throws QuadrigaStorageException {
-		
 		dbConnect.deleteItems(id,collectionId,username);
 		
 	}
@@ -185,6 +185,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 * @author rohit pendbhaje
 	 */
 	@Override
+	@Transactional
 	public List<ICollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
 		List<ICollaborator> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
 		return collaboratorList;
@@ -197,20 +198,25 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 * @author rohit pendbhaje
 	 */
 	@Override
+	@Transactional
 	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
 		
 		dbConnect.getCollaborators(collection);
 		List<ICollaborator> collaborators = collection.getCollaborators();
-		for(ICollaborator collaborator:collaborators)
+		if(collaborators != null && collaborators.size() > 0)
 		{
-			for(ICollaboratorRole collaboratorRole: collaborator.getCollaboratorRoles())
+			for(ICollaborator collaborator:collaborators)
 			{
-				roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
+				for(ICollaboratorRole collaboratorRole: collaborator.getCollaboratorRoles())
+				{
+					roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
+				}
 			}
-		}
+		}	
 	}
 	
 	@Override
+	@Transactional
 	public String getConceptCollectionId(String ccName) throws QuadrigaStorageException{
 		String ccId = dbConnect.getConceptCollectionId(ccName);
 		return ccId;

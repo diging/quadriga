@@ -31,6 +31,7 @@ public class ModifyWSManager implements IModifyWSManager
 	private IDBConnectionModifyWSManager dbConnect;
 
 	@Autowired
+	@Qualifier("retrieveProjectManagerDAO")
 	private IDBConnectionRetrieveProjectManager dbProjectManager;
 
 	@Autowired

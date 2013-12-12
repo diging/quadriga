@@ -8,14 +8,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.workbench.IModifyProjectManagerDAO;
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -39,7 +40,8 @@ public class ModifyProjectManagerDAOTest {
 	IModifyProjectManagerDAO modifyProjectManagerDAO;
 	
 	@Autowired
-	IRetrieveProjectManagerDAO retrieveProjectManagerDAO;
+	@Qualifier("RetrieveProjectManagerDAO")
+	IDBConnectionRetrieveProjectManager retrieveProjectManager;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -87,9 +89,8 @@ public class ModifyProjectManagerDAOTest {
 		String owner;
 		
 		modifyProjectManagerDAO.transferProjectOwnerRequest("PROJ_5", "projuser", "projcollab", "collaborator_role3");
-		
 		//retrieve the project details
-		project = retrieveProjectManagerDAO.getProjectDetails("PROJ_5");
+		project = retrieveProjectManager.getProjectDetails("PROJ_5");
 		owner = project.getOwner().getUserName();
 		assertEquals("projcollab",owner);
 	}
