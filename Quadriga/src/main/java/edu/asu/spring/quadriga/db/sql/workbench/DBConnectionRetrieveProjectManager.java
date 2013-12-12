@@ -39,7 +39,6 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 	 * @throws	 QuadrigaStorageException 
 	 * @author   Rohit Sukelshwar Pendbhaje
      */
-	@Override
 	public List<IProject> getProjectList(String sUserName,String spName) throws QuadrigaStorageException
 	{
 		String dbCommand;
@@ -111,7 +110,6 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 	 * @throws	 QuadrigaStorageException 
 	 * @author   Rohit Sukelshwar Pendbhaje
      */
-	@Override
 	public List<IProject> getCollaboratorProjectList(String sUserName,String collaboratorRole) throws QuadrigaStorageException
 	{
 		String dbCommand;
@@ -245,5 +243,47 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 			closeConnection();
 		}
 		return project;
+	}
+
+	@Override
+	public List<IProject> getProjectList(String sUserName)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IProject getProjectDetailsByUnixName(String unixName)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IProject> getCollaboratorProjectList(String sUserName)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IProject> getProjectListByCollaboratorRole(String sUserName,
+			String collaboratorRole) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

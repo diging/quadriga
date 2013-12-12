@@ -10,11 +10,22 @@ public interface IDBConnectionRetrieveProjectManager {
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;
 
-	public abstract List<IProject> getProjectList(String sUserName,String spName)
+	List<IProject> getProjectList(String sUserName)
 			throws QuadrigaStorageException;
 
-	public abstract List<IProject> getCollaboratorProjectList(String sUserName, String collaboratorRole)
+	List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
 			throws QuadrigaStorageException;
 
+	List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
+			throws QuadrigaStorageException;
+
+	IProject getProjectDetailsByUnixName(String unixName)
+			throws QuadrigaStorageException;
+
+	List<IProject> getCollaboratorProjectList(String sUserName)
+			throws QuadrigaStorageException;
+
+	List<IProject> getProjectListByCollaboratorRole(String sUserName,
+			String collaboratorRole) throws QuadrigaStorageException;
 
 }

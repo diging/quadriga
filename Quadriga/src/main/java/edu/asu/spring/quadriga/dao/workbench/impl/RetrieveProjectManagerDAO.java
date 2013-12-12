@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -20,8 +20,8 @@ import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
-public class RetrieveProjectManagerDAO extends DAOConnectionManager implements IRetrieveProjectManagerDAO {
-
+public class RetrieveProjectManagerDAO extends DAOConnectionManager implements IDBConnectionRetrieveProjectManager 
+{
 	@Autowired
 	private ProjectDTOMapper projectDTOMapper;
 	
@@ -203,12 +203,14 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		}
 		catch(Exception e)
 		{
-			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			logger.info("getProjectListAsWorkspaceCollaborator method :"+e.getMessage());	
 			throw new QuadrigaStorageException(e);
 		}
 		return projectList;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<IProject> getProjectListByCollaboratorRole(String sUserName,String collaboratorRole) throws QuadrigaStorageException
 	{
 		List<IProject> projectList = new ArrayList<IProject>();

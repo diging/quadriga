@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectManagerDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -22,11 +21,8 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 public class RetrieveProjectManager implements IRetrieveProjectManager 
 {
 	@Autowired
-	@Qualifier("DBConnectionRetrieveProjectManagerBean")
+	@Qualifier("retrieveProjectManagerDAO")
 	private IDBConnectionRetrieveProjectManager dbConnect;
-	
-	@Autowired
-	private IRetrieveProjectManagerDAO retrieveProjectManagerDAO;
 	
 	@Autowired
 	@Qualifier("DBConnectionRetrieveProjCollabManagerBean")
@@ -54,9 +50,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		
-		projectList = retrieveProjectManagerDAO.getProjectList(sUserName);
-		
+		projectList = dbConnect.getProjectList(sUserName);
 		return projectList;
 	}
 	
@@ -65,9 +59,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getCollaboratorProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		
-		projectList = retrieveProjectManagerDAO.getCollaboratorProjectList(sUserName);
-		
+		projectList = dbConnect.getCollaboratorProjectList(sUserName);
 		return projectList;
 	}
 	
@@ -76,7 +68,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		projectList = retrieveProjectManagerDAO.getProjectListAsWorkspaceOwner(sUserName);
+		projectList = dbConnect.getProjectListAsWorkspaceOwner(sUserName);
 		return projectList;
 	}
 	
@@ -85,18 +77,16 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		
-		projectList = retrieveProjectManagerDAO.getProjectListAsWorkspaceCollaborator(sUserName);
+		projectList = dbConnect.getProjectListAsWorkspaceCollaborator(sUserName);
 		return projectList;
 	}
 	
 	@Override
+	@Transactional
 	public List<IProject> getProjectListByCollaboratorRole(String sUserName,String role) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		
-		projectList = dbConnect.getCollaboratorProjectList(sUserName,role);
-		
+		projectList = dbConnect.getProjectListByCollaboratorRole(sUserName,role);
 		return projectList;
 	}
 	
@@ -111,25 +101,19 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Transactional
 	public IProject getProjectDetails(String projectId) throws QuadrigaStorageException
 	{
-		return retrieveProjectManagerDAO.getProjectDetails(projectId);
+		return dbConnect.getProjectDetails(projectId);
 	}
-	
-	
-	
 
 	@Override
 	public List<ICollaborator> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
-		
 		List<ICollaborator> collaboratingUsersList = databaseConnect.getProjectCollaboratorsRequest(projectId);
-		
 		return collaboratingUsersList;
 	}
 
 	@Override
 	@Transactional
 	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
-		
-		return retrieveProjectManagerDAO.getProjectDetailsByUnixName(unixName);
+		return dbConnect.getProjectDetailsByUnixName(unixName);
 	}
 
 
