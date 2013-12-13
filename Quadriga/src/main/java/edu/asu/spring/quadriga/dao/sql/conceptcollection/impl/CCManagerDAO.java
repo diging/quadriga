@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
+import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -155,6 +156,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	@Override
 	public void getCollectionDetails(IConceptCollection collection,String username) throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser owner = null;
+		collection.setCollaborators(new ArrayList<ICollaborator>());
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsDTO conceptColl where conceptColl.id =:id");
@@ -316,7 +318,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		String errMsg = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id) OR user.username IN (Select ccCollab.conceptcollectionsDTO.collectionowner.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id))");
+			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id) OR user.username IN (Select conceptColl.collectionowner.username from ConceptcollectionsDTO conceptColl where conceptColl.id =:id))");
 			query.setParameter("username", username);
 			query.setParameter("id", conceptId);
 			
@@ -324,12 +326,12 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
 			{
 				ConceptcollectionsItemsDTO conceptcollectionsItemsDTO = new ConceptcollectionsItemsDTO();
-				conceptcollectionsItemsDTO.setConceptcollectionsDTO(new ConceptcollectionsDTO(conceptId));
 				conceptcollectionsItemsDTO.setCreateddate(new Date());
 				conceptcollectionsItemsDTO.setDescription(desc);
 				conceptcollectionsItemsDTO.setLemma(lemma);
 				conceptcollectionsItemsDTO.setPos(pos);
 				conceptcollectionsItemsDTO.setUpdateddate(new Date());
+				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptcollectionsItemsDTOPK(conceptId, generateUniqueID()));
 				sessionFactory.getCurrentSession().save(conceptcollectionsItemsDTO);
 			}
 			else
@@ -388,18 +390,18 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:id and ccItems.conceptcollectionsItemsDTOPK.item =:collectionId");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:collectionId and ccItems.conceptcollectionsItemsDTOPK.item =:id");
 			query.setParameter("id", id);
 			query.setParameter("collectionId", collectionId);
 			List<ConceptcollectionsItemsDTO> ccItemsDTOList = query.list();
 			
 			if(ccItemsDTOList != null && ccItemsDTOList.size() > 0)
 			{
-				errMsg = "collection id is invalid.";
+				sessionFactory.getCurrentSession().delete(ccItemsDTOList.get(0));
 			}
 			else
 			{
-				sessionFactory.getCurrentSession().delete(ccItemsDTOList.get(0));
+				errMsg = "collection id is invalid.";
 			}
 		}
 		catch(Exception e)

@@ -15,7 +15,11 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class ConceptcollectionsItemsDTOPK implements Serializable {
-    @Basic(optional = false)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6506634472458850085L;
+	@Basic(optional = false)
     @Column(name = "id")
     private String id;
     @Basic(optional = false)
