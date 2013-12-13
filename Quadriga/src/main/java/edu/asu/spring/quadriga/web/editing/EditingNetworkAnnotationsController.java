@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web.editing;
 
 import java.security.Principal;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,19 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
-import edu.asu.spring.quadriga.db.sql.DBConnectionEditorManager;
-import edu.asu.spring.quadriga.db.sql.DBConnectionManager;
-import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -38,9 +33,10 @@ public class EditingNetworkAnnotationsController {
 
 	@Autowired
 	INetworkManager networkManager;
-
+	
 	@Autowired
-	IDBConnectionEditorManager dbConnectionEditManager;
+	IEditingNetworkAnnotationManager editingNetworkAnnotationManager;
+	
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingNetworkAnnotationsController.class);
@@ -59,12 +55,12 @@ public class EditingNetworkAnnotationsController {
 		//String objectType = "node";
 		try {
 			String arr[] = null;
-			arr = dbConnectionEditManager.getAnnotation(objectType,id , user.getUserName());
+			arr = editingNetworkAnnotationManager.getAnnotation(objectType,id , user.getUserName());
 			if(arr[0] == null && arr[1] == null){
-			dbConnectionEditManager.addAnnotationToNetwork(networkId, id,
+				editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, id,
 					annotationText, user.getUserName(),objectType);
 			} else {
-				dbConnectionEditManager.updateAnnotationToNetwork(arr[1], annotationText);
+				editingNetworkAnnotationManager.updateAnnotationToNetwork(arr[1], annotationText);
 			}
 			
 		} catch (QuadrigaStorageException e) {
@@ -89,7 +85,7 @@ public class EditingNetworkAnnotationsController {
 		
 		try {
 			String resultArr[] = null;
-			resultArr = dbConnectionEditManager.getAnnotation(type,nodeId,user.getUserName());
+			resultArr = editingNetworkAnnotationManager.getAnnotation(type,nodeId,user.getUserName());
 			annotation = resultArr[0];
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
