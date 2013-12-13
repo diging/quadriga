@@ -237,7 +237,7 @@ public class DBConnectionModifyProjCollabManagerTest {
 		
 		project.setOwner(owner);
 		
-		dbProjectConnection.addProjectRequest(project);
+		dbProjectConnection.addProjectRequest(project,owner.getUserName());
 		
 		errmsg = dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
 		
@@ -264,7 +264,7 @@ public class DBConnectionModifyProjCollabManagerTest {
 		
 		project.setOwner(owner);
 		
-		dbProjectConnection.addProjectRequest(project);
+		dbProjectConnection.addProjectRequest(project,owner.getUserName());
 		
 		errmsg = dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
 		

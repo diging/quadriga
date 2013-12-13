@@ -3,6 +3,10 @@ package edu.asu.spring.quadriga.db.sql.workbench;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -98,7 +102,7 @@ public class DBConnectionModifyProjectManagerTest {
 		project.setOwner(owner);
 		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 		
-		dbConnect.addProjectRequest(project);
+		dbConnect.addProjectRequest(project,owner.getUserName());
 		
 		 assertTrue(true);
 
@@ -108,18 +112,14 @@ public class DBConnectionModifyProjectManagerTest {
 	public void testUpdateProject() throws QuadrigaStorageException
 	{
 		IProject project;
-		String owner;
-		
 		project = projectFactory.createProjectObject();
 		project.setName("testupdateproject");
 		project.setDescription("test case data");
 		project.setUnixName("testproject2");
 		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 		project.setInternalid("PROJ_2");
-		
-		owner = "projuser";
-        dbConnect.updateProjectRequest(project, owner);
-        
+		String owner = "projuser";
+		dbConnect.updateProjectRequest(project.getInternalid(), project.getName(), project.getDescription(), project.getProjectAccess().name(), project.getUnixName(), project.getOwner().getUserName());
         assertTrue(true);
 		
 	}
@@ -127,9 +127,8 @@ public class DBConnectionModifyProjectManagerTest {
 	@Test
 	public void testDeleteProject() throws QuadrigaStorageException
 	{
-		String projectIdList;
-		projectIdList = "PROJ_3,PROJ_4";
-		dbConnect.deleteProjectRequest(projectIdList);
+		List<String> projectIdList=  Arrays.asList("PROJ_3", "PROJ_4");
+		dbConnect.deleteProjectRequest((ArrayList<String>) projectIdList);
 		assertTrue(true);
 	}
 	

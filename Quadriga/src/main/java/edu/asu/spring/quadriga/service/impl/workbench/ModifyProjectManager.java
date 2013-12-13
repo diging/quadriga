@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import edu.asu.spring.quadriga.dao.workbench.IModifyProjectManagerDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -23,7 +23,8 @@ public class ModifyProjectManager implements IModifyProjectManager
 {
 
 	@Autowired
-	private IModifyProjectManagerDAO modifyProjectManagerDAO;
+	@Qualifier("modifyProjectManagerDAO")
+	private IDBConnectionModifyProjectManager dbConnect;
 	
 	@Autowired
 	private IUserManager userManager;
@@ -38,7 +39,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	public void addProjectRequest(IProject project, String userName) throws QuadrigaStorageException
 	{
 		logger.info("Adding project details");
-		modifyProjectManagerDAO.addProjectRequest(project,userName);
+		dbConnect.addProjectRequest(project,userName);
 	}
 	
 	/**
@@ -49,7 +50,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	public void updateProjectRequest(String projID, String projName,String projDesc,String projAccess, String unixName,String userName) throws QuadrigaStorageException
 	{
 		logger.info("Updating project details");
-		modifyProjectManagerDAO.updateProjectRequest(projID, projName, projDesc, projAccess, unixName, userName);
+		dbConnect.updateProjectRequest(projID, projName, projDesc, projAccess, unixName, userName);
 	}
 	
 	/**
@@ -64,7 +65,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	public void deleteProjectRequest(ArrayList<String> projectIdList) throws QuadrigaStorageException
 	{
 		logger.info("Deleting project details");
-		modifyProjectManagerDAO.deleteProjectRequest(projectIdList);
+		dbConnect.deleteProjectRequest(projectIdList);
 	}
 	
 	/**
@@ -80,7 +81,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Transactional
 	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
-		modifyProjectManagerDAO.transferProjectOwnerRequest(projectId, oldOwner, newOwner, collabRole);
+		dbConnect.transferProjectOwnerRequest(projectId, oldOwner, newOwner, collabRole);
 	}
 	
 	/**
@@ -93,7 +94,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Override
 	@Transactional
 	public void assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
-		 modifyProjectManagerDAO.assignProjectOwnerEditor(projectId, owner);
+		dbConnect.assignProjectOwnerEditor(projectId, owner);
 	}
 	
 	/**
@@ -106,6 +107,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Override
 	@Transactional
 	public void deleteEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
-		 modifyProjectManagerDAO.deleteProjectOwnerEditor(projectId, owner);
+		dbConnect.deleteProjectOwnerEditor(projectId, owner);
 	}
 }

@@ -497,7 +497,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 					}
 					else
 					{
-						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole());
+						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole()+",");
 					}
 				}
 				
@@ -510,7 +510,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 					user = userManager.getUserDetails((String) pairs.getKey());
 					collaborator.setUserObj(user);
 					String userRoleList = (String) pairs.getValue();
-					collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-2));
+					collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));
 					collaborator.setCollaboratorRoles(collaboratorRoles);
 					collection.getCollaborators().add(collaborator);
 				}

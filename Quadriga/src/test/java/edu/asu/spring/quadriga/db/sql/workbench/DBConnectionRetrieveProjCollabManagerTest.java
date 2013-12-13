@@ -242,7 +242,7 @@ public class DBConnectionRetrieveProjCollabManagerTest {
 		
 		project.setOwner(owner);
 		
-		dbProjectConnection.addProjectRequest(project);
+		dbProjectConnection.addProjectRequest(project,owner.getUserName());
 		
 		errmsg = dbModifyCollabConn.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
 		

@@ -13,15 +13,13 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public class DBConnectionModifyProjectManager extends ADBConnectionManager implements
-		IDBConnectionModifyProjectManager 
+public class DBConnectionModifyProjectManager extends ADBConnectionManager
 {
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionModifyProjectManager.class);
 	
 	/**
 	 *  {@inheritDoc}
 	 */
-	@Override
 	public void addProjectRequest(IProject project) throws QuadrigaStorageException
 	{
 		String name;
@@ -86,7 +84,6 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
     /**
      * {@inheritDoc}
      */
-	@Override
 	public void updateProjectRequest(IProject project,String userName) throws QuadrigaStorageException
 	{
 		String name;
@@ -155,7 +152,6 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 	 *           error in deleting the records.
 	 * @author   Kiran Kumar Batna
 	 */
-	@Override
 	public void deleteProjectRequest(String projectIdList) throws QuadrigaStorageException
 	{
 		String dbCommand;
@@ -200,7 +196,6 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
 	 * @throws QuadrigaStorageException
 	 * @author kiranbatna
 	 */
-	@Override
 	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
 		String dbCommand;
@@ -246,8 +241,6 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         }
 	}
 	
-	
-	@Override
 	public String assignProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
 	{
 		String dbCommand;
@@ -291,8 +284,6 @@ public class DBConnectionModifyProjectManager extends ADBConnectionManager imple
         }
 	}
 	
-	
-	@Override
 	public String deleteProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
 	{
 		String dbCommand;

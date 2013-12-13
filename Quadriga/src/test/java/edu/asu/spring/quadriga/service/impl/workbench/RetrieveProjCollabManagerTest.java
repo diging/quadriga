@@ -261,7 +261,7 @@ public class RetrieveProjCollabManagerTest {
 		IUser owner = userFactory.createUserObject();
 		owner.setUserName(principal.getName());
 		project.setOwner(owner);
-		dbModifyProjectConnection.addProjectRequest(project);
+		dbModifyProjectConnection.addProjectRequest(project,project.getOwner().getUserName());
 		dbModifyCollabConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), principal.getName());
 		List<IUser> collaborators = dbRetrieveCollabConnection.getProjectNonCollaborators(getProjectId(project.getName()));
 		
@@ -282,7 +282,7 @@ public class RetrieveProjCollabManagerTest {
 		owner.setUserName(principal.getName());
 		project.setOwner(owner);
 		
-		dbModifyProjectConnection.addProjectRequest(project);
+		dbModifyProjectConnection.addProjectRequest(project,project.getOwner().getUserName());
 		dbModifyCollabConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), principal.getName());
 		
 		List<ICollaborator> collaborators = dbRetrieveCollabConnection.getProjectCollaborators(getProjectId(project.getName()));
