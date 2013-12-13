@@ -249,6 +249,7 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 			ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
 			if(projectDTO!=null){
 				IProject project = projectDTOMapper.getProject(projectDTO);
+				project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
 				return project;
 			}
 			else

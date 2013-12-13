@@ -216,7 +216,33 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException(e);
 		}
 	}
-
+	
+	
+	@Override
+	public List<String> getNetworksForProjectId(String projectid) throws QuadrigaStorageException{
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
+		query.setParameter("projectid", projectid);
+		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
+		List<String> NetworkList = null;
+		if(projectWorkspaceDTOList!=null){
+				for(ProjectWorkspaceDTO projectWorkspaceDTO:projectWorkspaceDTOList)
+				{
+					String wId = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
+					Query query1 = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
+					query.setParameter("workspaceid", wId);
+					List<NetworksDTO> networksDTOList = query1.list();
+					NetworkList = new ArrayList<String>();
+					for(NetworksDTO networksDTO:networksDTOList){
+						String network = networksDTO.getNetworkname();
+						NetworkList.add(network);
+					}
+				}	
+		}
+		
+		return NetworkList;
+	}
+	
+	
 	/**
 	 * {@inheritDoc} 
 	 */

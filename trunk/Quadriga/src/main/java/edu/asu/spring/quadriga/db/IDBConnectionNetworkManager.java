@@ -133,4 +133,9 @@ public interface IDBConnectionNetworkManager {
 	 */
 	public abstract INetwork getNetworkDetails(String networkId)
 			throws QuadrigaStorageException;
+
+	public abstract List<String> getNetworksForProjectId(String projectid)
+			throws QuadrigaStorageException;
+
+	
 }

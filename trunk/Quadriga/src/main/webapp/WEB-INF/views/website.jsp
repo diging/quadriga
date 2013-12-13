@@ -79,15 +79,27 @@ h1{
 		</td>
 		<td>${project.owner.name}</td>
 	</tr>	
-	<!--  <tr>
+	<tr>
 		<td>
 			Collaborators:
 		</td>
-		<td>${project.collaborators}</td>
-	</tr>-->
+		<td>
+			<section>
+				<c:if test="${not empty project.collaborators}">
+					<ul class="collaborators">
+						<c:forEach var="projectcollaborator"
+							items="${project.collaborators}">
+							<li><c:out value="${projectcollaborator.userObj.name}"></c:out>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+			</section>
+		</td>
+	</tr>
 	<tr>
 		<td>
-			<input type="submit" value="Browse Networks"/> 
+			<input type="button" onClick="location.href='${pageContext.servletContext.contextPath}/sites/project/browsenetworks}'" value="Browse Networks"/> 
 		</td>
 		<td>
 			<input type="submit" value="Search Networks"/> 
