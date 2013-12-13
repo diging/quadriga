@@ -47,7 +47,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * 
  */
 @Controller
-public class EditingListManager {
+public class EditingListController {
 
 	@Autowired
 	INetworkManager networkManager;
@@ -59,7 +59,7 @@ public class EditingListManager {
 	IUserManager userManager;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(EditingListManager.class);
+			.getLogger(EditingListController.class);
 
 	@Autowired
 	@Qualifier("restTemplate")

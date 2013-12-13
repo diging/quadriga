@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Controller
-public class EditingNetworkAnnotationsManager {
+public class EditingNetworkAnnotationsController {
 
 	@Autowired
 	IUserManager userManager;
@@ -43,7 +43,7 @@ public class EditingNetworkAnnotationsManager {
 	IDBConnectionEditorManager dbConnectionEditManager;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(EditingNetworkAnnotationsManager.class);
+			.getLogger(EditingNetworkAnnotationsController.class);
 
 	
 	@RequestMapping(value = "/auth/editing/saveAnnotation/{networkId}", method = RequestMethod.POST)
