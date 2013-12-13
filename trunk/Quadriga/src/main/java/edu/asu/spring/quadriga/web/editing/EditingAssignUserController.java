@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * 
  */
 @Controller
-public class EditingAssignUserManager {
+public class EditingAssignUserController {
 
 	@Autowired
 	INetworkManager networkManager;
@@ -39,7 +39,7 @@ public class EditingAssignUserManager {
 	IUserManager userManager;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(EditingAssignUserManager.class);
+			.getLogger(EditingAssignUserController.class);
 
 	/**
 	 * Assign a network to User
