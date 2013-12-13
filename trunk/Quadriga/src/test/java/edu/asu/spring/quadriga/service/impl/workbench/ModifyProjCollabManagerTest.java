@@ -257,7 +257,7 @@ public class ModifyProjCollabManagerTest {
 		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 		project.setCollaborators(collaboratorList);
 
-		dbProjectConnection.addProjectRequest(project);
+		dbProjectConnection.addProjectRequest(project,project.getOwner().getUserName());
 
 		dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), principal.getName());
 		List<ICollaborator> collaborators = dbRetrieveProjectConn.getProjectCollaborators(getProjectId(project.getName()));
@@ -284,7 +284,7 @@ public class ModifyProjCollabManagerTest {
 		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
 		project.setCollaborators(collaboratorList);
 
-		dbProjectConnection.addProjectRequest(project);
+		dbProjectConnection.addProjectRequest(project,project.getOwner().getUserName());
 
 		dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), principal.getName());
 		List<ICollaborator> collaborators = dbRetrieveProjectConn.getProjectCollaborators(getProjectId(project.getName()));
