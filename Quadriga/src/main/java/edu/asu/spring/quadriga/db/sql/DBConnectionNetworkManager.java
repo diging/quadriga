@@ -810,4 +810,12 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		}
 		return errmsg;		
 	}
+
+	@Override
+	public List<String> getNetworksForProjectId(String projectid)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

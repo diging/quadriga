@@ -1102,6 +1102,14 @@ public class NetworkManager implements INetworkManager {
 		}
 		return projectid;
 	}
+	
+	@Override
+	@Transactional
+	public List<String> getNetworksForProjectId(String projectid) throws QuadrigaStorageException{
+		
+		List<String> networkList = dbConnect.getNetworksForProjectId(projectid);
+		return networkList;
+	}
 
 	/**
 	 * Check if the network name already exist

@@ -133,7 +133,7 @@ public class RetrieveProjectController
 		return model;
 	}
 	
-	@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
+	/*@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
 	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException {
 		
 		
@@ -148,5 +148,5 @@ public class RetrieveProjectController
 			return "forbidden";
 		
 		
-	}
+	}*/
 }
