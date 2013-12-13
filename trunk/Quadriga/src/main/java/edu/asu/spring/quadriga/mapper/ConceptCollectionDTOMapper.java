@@ -99,7 +99,7 @@ public class ConceptCollectionDTOMapper
 	{
 		IConcept concept = null;
 		concept = conceptCollectionFactory.createConcept();
-		concept.setId(conceptCollectionConcept.getConceptcollectionsItemsDTOPK().getId());
+		concept.setId(conceptCollectionConcept.getConceptcollectionsItemsDTOPK().getItem());
 		concept.setDescription(conceptCollectionConcept.getDescription());
 		concept.setLemma(conceptCollectionConcept.getLemma());
 		concept.setPos(conceptCollectionConcept.getPos());
