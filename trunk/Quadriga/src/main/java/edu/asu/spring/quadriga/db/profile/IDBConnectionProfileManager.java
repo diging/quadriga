@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 
 public interface IDBConnectionProfileManager {
 	
-	public abstract String addUserProfileDBRequest(String name, String serviceid, String id) throws QuadrigaStorageException;
+	public abstract String addUserProfileDBRequest(String name, String serviceId, SearchResultBackBean resultBackBean ) throws QuadrigaStorageException;
 	
 	public abstract List<SearchResultBackBean> showProfileDBRequest(String loggedinUser) throws QuadrigaStorageException;
 	

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -208,11 +209,12 @@ public class HomeController {
 		return "auth/home/profile";
 	}
 	
-	@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
+	/*@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
 	public String addSearchResult(@Validated @ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm, BindingResult result,
 	@PathVariable("serviceid") String serviceid, @PathVariable("term") String term, Model model, Principal principal) throws QuadrigaStorageException
 	{
 		
+		//String serviceId = req.getParameter("selected");
 		String profileid;
 		StringBuilder profilebuilder;
 		String errmsg = null;
@@ -221,7 +223,7 @@ public class HomeController {
 		List<ISearchResult> originalsearchResults = serviceObj.search(term);
 		
 		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
-		
+				
 		if(result.hasErrors())
 		{
 			
@@ -229,6 +231,13 @@ public class HomeController {
 		
 		else
 		{
+			for(SearchResultBackBean resultBackBean: backBeanSearchResults)
+			{
+				if(resultBackBean.getIsChecked() == true)
+				{
+					errmsg = userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);
+				}
+			}
 			for( ISearchResult searchResult: originalsearchResults)
 			{
 				for(SearchResultBackBean backBeanSearchResult:backBeanSearchResults)
@@ -278,11 +287,12 @@ public class HomeController {
 			}
 			
 			List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
-			model.addAttribute("resultLists", resultLists);
+			searchResultBackBeanForm.setSearchResultList(resultLists);
+			model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
 		}
 		
 		return "auth/home/showProfile";
-	}
+	}*/
 	
 	@RequestMapping(value="/auth/profile/delete",method = RequestMethod.POST)
 	public String deleteSearchResult(@ModelAttribute("SearchResultBackBean") SearchResultBackBeanForm searchResultBackBeanForm, 

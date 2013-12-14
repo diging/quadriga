@@ -54,10 +54,10 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class AddCCCollaboratorController {
 	
 	@Autowired
-	ICollaboratorFactory collaboratorFactory;
+	private ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
-	IUserFactory userFactory;
+	private IUserFactory userFactory;
 	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
@@ -72,7 +72,7 @@ public class AddCCCollaboratorController {
 	private IConceptCollectionManager conceptControllerManager;
 	
 	@Autowired
-	CollaboratorValidator collaboratorValidator;
+	private CollaboratorValidator collaboratorValidator;
 	
 	@Autowired
 	private IUserManager usermanager;

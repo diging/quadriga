@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 
 public interface IUserProfileManager {
 	
-	public abstract String addUserProfile(String name,String serviceid, String profileid) throws QuadrigaStorageException;
+	public abstract String addUserProfile(String name, String serviceId, SearchResultBackBean resultBackBean) throws QuadrigaStorageException;
 	
 	public abstract List<SearchResultBackBean> showUserProfile(String loggedinUser) throws QuadrigaStorageException;
 	

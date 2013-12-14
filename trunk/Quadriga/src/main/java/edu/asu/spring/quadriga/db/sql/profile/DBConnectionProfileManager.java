@@ -42,16 +42,16 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 	ISearchResultFactory searchResultFactory;
 	
 	@Override
-	public String addUserProfileDBRequest(String username, String serviceid,String profilebuilder) throws QuadrigaStorageException {
+	public String addUserProfileDBRequest(String username, String serviceId, SearchResultBackBean resultBackBean) throws QuadrigaStorageException {
 				
 		String dbCommand;
 		String errmsg;
 		CallableStatement sqlStatement;
 		
-		String[] profilStrings = profilebuilder.split(",");
+		/*String[] profilStrings = profilebuilder.split(",");
 		String id = profilStrings[0];
 		String desc = profilStrings[1];
-		String profilename = profilStrings[2];
+		String profilename = profilStrings[2];*/
 	
 		
 		dbCommand = DBConstants.SP_CALL + " "+ DBConstants.ADD_USER_PROFILE + "(?,?,?,?,?,?)";
@@ -61,10 +61,10 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 		try {
 			sqlStatement = connection.prepareCall("{" + dbCommand + "}");
 			sqlStatement.setString(1, username);
-			sqlStatement.setString(2, serviceid);
-			sqlStatement.setString(3, profilename);
-			sqlStatement.setString(4, id);
-			sqlStatement.setString(5, desc);
+			sqlStatement.setString(2, serviceId);
+			sqlStatement.setString(3, resultBackBean.getWord());
+			sqlStatement.setString(4, resultBackBean.getId());
+			sqlStatement.setString(5, resultBackBean.getDescription());
 			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(6);
