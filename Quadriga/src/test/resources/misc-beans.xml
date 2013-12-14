@@ -169,7 +169,7 @@
 	
 	<bean id="searchResult" class="edu.asu.spring.quadriga.profile.impl.SearchResult" />
 	
-	<bean id="conceptPower" class="edu.asu.spring.quadriga.profile.impl.ConceptPowerService" />
+	<bean id="conceptPowerService" class="edu.asu.spring.quadriga.profile.impl.ConceptPowerService" />
 	
 	<bean id="viafService" class="edu.asu.spring.quadriga.profile.impl.ViafService" />
 	
@@ -210,5 +210,22 @@
 	</bean>
 	
 	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
-		
+	
+	<bean id="dictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.sql.dictionary.impl.DictionaryManagerDAO"/>
+	
+	<bean id="DictionaryDTOMapper" class="edu.asu.spring.quadriga.mapper.DictionaryDTOMapper"/>
+	
+	<bean id="projectDictionaryDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ProjectDictionaryDAO"/>
+	
+	<bean id="projectConceptColletionDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ProjectConceptCollectionDAO" />
+	
+	<bean id="conceptCollectionDTOMapper" class="edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper" />
+	
+	<bean id="cCManagerDAO" class="edu.asu.spring.quadriga.dao.sql.conceptcollection.impl.CCManagerDAO" />
+	
+	<bean id="retrieveProjectCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.RetrieveProjectCollaboratorManagerDAO" />
+	
+	<bean id="projectAccessManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ProjectAccessManagerDAO" />
+	
+	<bean id="networkOldVersionFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkOldVersionFactory" />
 </beans>

@@ -22,9 +22,9 @@ public class UserProfileManager implements IUserProfileManager {
 	IDBConnectionProfileManager connectionProfileManager;
 
 	@Override
-	public String addUserProfile(String name,String serviceid,String profilebuilder) throws QuadrigaStorageException {
+	public String addUserProfile(String name, String serviceId, SearchResultBackBean resultBackBean) throws QuadrigaStorageException {
 
-		String errmsg = connectionProfileManager.addUserProfileDBRequest(name, serviceid, profilebuilder);
+		String errmsg = connectionProfileManager.addUserProfileDBRequest(name, serviceId, resultBackBean);
 		
 		return errmsg;
 	}

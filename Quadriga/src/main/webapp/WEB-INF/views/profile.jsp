@@ -23,7 +23,7 @@ $(document).ready(function() {
 		"bAutoWidth" : false
 	});
 	
-	$("form input:checkbox").prop("checked",false);
+	/* $("form input:checkbox").prop("checked",false); */
 });
 
 $(function(){
@@ -65,7 +65,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 			Service Name
 		</td>
 		<td>
-			<form:select path="id" items="${serviceNameIdMap}"/>
+			<form:select path="id" items="${serviceNameIdMap}" selected="selected" />
 		</td>
 	</tr>	
 	<tr>
@@ -108,7 +108,10 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				<tbody>
 				<c:forEach var="result" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
 					<tr>
-						<td><form:checkbox path="searchResultList[${status.index}].id" value="${result.description}" /></td>
+						<form:hidden path="searchResultList[${status.index}].word" value="${result.word}"  />
+						<form:hidden path="searchResultList[${status.index}].description" value="${result.description}"  />
+						<form:hidden path="searchResultList[${status.index}].id" value="${result.id}"  />
+						<td><form:checkbox path="searchResultList[${status.index}].isChecked"/></td>
 						<td><c:out value="${result.word}"/></td>
 						<td><c:out value="${result.id}"/></td>
 						<td><c:out value="${result.description}"/></td> 
@@ -116,7 +119,6 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				</c:forEach>
 				</tbody>
 			</table>
-			
 		 </form:form>
 	 </c:when>
 </c:choose>

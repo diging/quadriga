@@ -8,7 +8,14 @@ public class SearchResultBackBean {
 	private String word;
 	private String id;
 	private String description;
+	private boolean isChecked = false;
 	
+	public boolean getIsChecked() {
+		return isChecked;
+	}
+	public void setIsChecked(boolean isChecked) {
+		this.isChecked = isChecked;
+	}
 	public String getWord() {
 		return word;
 	}
