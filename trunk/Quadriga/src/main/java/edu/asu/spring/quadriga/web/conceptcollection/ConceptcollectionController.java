@@ -102,9 +102,9 @@ public class ConceptcollectionController {
 		UserDetails principal = (UserDetails) SecurityContextHolder
 				.getContext().getAuthentication().getPrincipal();
 		String userId = principal.getUsername();
-		list = conceptControllerManager.getCollectionsOwnedbyUser(userId);
+		List<IConceptCollection> list = conceptControllerManager.getCollectionsOwnedbyUser(userId);
 		model.addAttribute("conceptlist", list);
-		collab_list = conceptControllerManager.getUserCollaborations(userId);
+		List<IConceptCollection> collab_list = conceptControllerManager.getUserCollaborations(userId);
 		model.addAttribute("collaborationlist", collab_list);
 		user = usermanager.getUserDetails(userId);
 		username = user.getUserName();
