@@ -120,6 +120,12 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		
 		if((i!=null && !i.isEmpty())){
 			rep = restTemplate.getForObject(conceptURL+updateURL+"{name}", ConceptpowerReply.class, vars);
+			System.out.println("rep:: "+rep);
+			System.out.println("getConceptEntry:: "+rep.getConceptEntry());
+			System.out.println("conceptURL:: "+conceptURL);
+			System.out.println("updateURL:: "+updateURL);
+			System.out.println("name:: "+i);
+			
 			concept = conceptFactory.createConceptObject();
 			concept.setId(i);
 			concept = collection.getItems().get((collection.getItems().indexOf(concept)));

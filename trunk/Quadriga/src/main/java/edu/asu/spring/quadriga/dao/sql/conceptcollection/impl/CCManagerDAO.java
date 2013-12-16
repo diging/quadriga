@@ -331,7 +331,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 				conceptcollectionsItemsDTO.setLemma(lemma);
 				conceptcollectionsItemsDTO.setPos(pos);
 				conceptcollectionsItemsDTO.setUpdateddate(new Date());
-				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptcollectionsItemsDTOPK(conceptId, generateUniqueID()));
+				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptcollectionsItemsDTOPK(conceptId, id));
 				sessionFactory.getCurrentSession().save(conceptcollectionsItemsDTO);
 			}
 			else
@@ -423,16 +423,12 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:id and ccItems.conceptcollectionsItemsDTOPK.item =:collectionId");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:collectionId and ccItems.conceptcollectionsItemsDTOPK.item =:id");
 			query.setParameter("id", concept.getId());
 			query.setParameter("collectionId", collectionId);
 			List<ConceptcollectionsItemsDTO> ccItemsDTOList = query.list();
 			
 			if(ccItemsDTOList != null && ccItemsDTOList.size() > 0)
-			{
-				errMsg = "collection id is invalid.";
-			}
-			else
 			{
 				ConceptcollectionsItemsDTO ccItemsDTO = ccItemsDTOList.get(0);
 				ccItemsDTO.setLemma(concept.getLemma());
@@ -440,6 +436,10 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 				ccItemsDTO.setDescription(concept.getDescription());
 				ccItemsDTO.setUpdateddate(new Date());
 				sessionFactory.getCurrentSession().update(ccItemsDTOList.get(0));
+			}
+			else
+			{
+				errMsg = "collection id is invalid.";
 			}
 		}
 		catch(Exception e)
