@@ -187,7 +187,7 @@ public class ConceptCollectionRestController {
 	 * @throws QuadrigaStorageException
 	 * @throws RestException 
 	 */
-	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_RAD_WRITE} )})
 	@ResponseBody
 	@RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
 	public String addConceptsToConceptColleciton(

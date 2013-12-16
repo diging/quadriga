@@ -33,6 +33,11 @@ public class AuthorizationManager implements IAuthorizationManager
 	@Qualifier("conceptCollectionAuthorization")
 	private IAuthorization conceptCollectionAuthorization;
 	
+	
+	@Autowired
+	@Qualifier("conceptCollectionRestAuthorization")
+	private IAuthorization conceptCollectionRestAuthorization;
+	
 	@Autowired
 	@Qualifier("dictionaryAuthorization")
 	private IAuthorization dictionaryAuthorization;
@@ -53,6 +58,7 @@ public class AuthorizationManager implements IAuthorizationManager
 		accessManager.put(CheckedElementType.WORKSPACE, workspaceAuthorization);
 		accessManager.put(CheckedElementType.WORKSPACE_REST, workspaceRestAuthorization);
 		accessManager.put(CheckedElementType.CONCEPTCOLLECTION, conceptCollectionAuthorization);
+		accessManager.put(CheckedElementType.CONCEPTCOLLECTION_REST, conceptCollectionRestAuthorization);
 		accessManager.put(CheckedElementType.DICTIONARY, dictionaryAuthorization);
 		accessManager.put(CheckedElementType.NETWORK,networkAuthorization);
 		
