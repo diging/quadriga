@@ -2,8 +2,8 @@ var labelType, useGradients, nativeTextSupport, animate, pathName;
 
 (function() {
 	var ua = navigator.userAgent, iStuff = ua.match(/iPhone/i)
-			|| ua.match(/iPad/i), typeOfCanvas = typeof HTMLCanvasElement, nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'), textSupport = nativeCanvasSupport
-			&& (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
+	|| ua.match(/iPad/i), typeOfCanvas = typeof HTMLCanvasElement, nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'), textSupport = nativeCanvasSupport
+	&& (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
 	// I'm setting this based on the fact that ExCanvas provides text support
 	// for IE
 	// and that as of today iPhone/iPad current text support is lame
@@ -12,25 +12,25 @@ var labelType, useGradients, nativeTextSupport, animate, pathName;
 	nativeTextSupport = labelType == 'Native';
 	useGradients = nativeCanvasSupport;
 	animate = !(iStuff || !nativeCanvasSupport);
-	
-	
+
+
 
 })();
 
 var Log = {
-	elem : false,
-	write : function(text) {
-		if (!this.elem)
-			this.elem = document.getElementById('log');
-		this.elem.innerHTML = text;
-		this.elem.style.left = (500 - this.elem.offsetWidth / 2) + 'px';
-	}
+		elem : false,
+		write : function(text) {
+			if (!this.elem)
+				this.elem = document.getElementById('log');
+			this.elem.innerHTML = text;
+			this.elem.style.left = (500 - this.elem.offsetWidth / 2) + 'px';
+		}
 };
 
 function init(json, networkId, path) {
 	console.log("init");
 	pathName = path;
-	
+
 	$jit.ForceDirected.Plot.EdgeTypes.implement({
 		'labeled' : {
 			'render' : function(adj, canvas) {
@@ -55,16 +55,16 @@ function init(json, networkId, path) {
 				to = adj.nodeTo.pos.getc(true);
 				return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
 			}
-	
+
 		},
-	
-	'contains': function(adj, pos) { 
-        var from = adj.nodeFrom.pos.getc(true), 
-            to = adj.nodeTo.pos.getc(true); 
-        return this.edgeHelper.arrow.contains(from, to, pos, 
-this.edge.epsilon); 
-      } 
-	 
+
+		'contains': function(adj, pos) { 
+			var from = adj.nodeFrom.pos.getc(true), 
+			to = adj.nodeTo.pos.getc(true); 
+			return this.edgeHelper.arrow.contains(from, to, pos, 
+					this.edge.epsilon); 
+		} 
+
 	});
 
 	var fd = new $jit.ForceDirected(
@@ -79,7 +79,7 @@ this.edge.epsilon);
 					// canvas (and not a node).
 					panning : 'avoid nodes',
 					zooming : 10
-				// zoom speed. higher is more sensible
+					// zoom speed. higher is more sensible
 				},
 				// Change node and edge styles such as
 				// color and width.
@@ -102,7 +102,7 @@ this.edge.epsilon);
 				Label : {
 					type : labelType, // Native or HTML
 					size : 10
-					
+
 				},
 				// Add Tips
 				Tips : {
@@ -115,10 +115,10 @@ this.edge.epsilon);
 						});
 						// display node info in tooltip
 						tip.innerHTML = "<div class=\"tip-title\">"
-								+ node.name
-								+ "</div>"
-								+ "<div class=\"tip-text\"><b>connections:</b> "
-								+ count + "</div>";
+							+ node.name
+							+ "</div>"
+							+ "<div class=\"tip-text\"><b>connections:</b> "
+							+ count + "</div>";
 					}
 				},
 				// Add node events
@@ -142,15 +142,23 @@ this.edge.epsilon);
 					// Implement the same handler for touchscreens
 					onTouchMove : function(node, eventInfo, e) {
 						$jit.util.event.stop(e); // stop default touchmove
-													// event
+						// event
 						this.onDragMove(node, eventInfo, e);
 					},
-					// Add also a click handler to nodes
+					// Add also a left click handler to nodes or edges
 					onClick : function(edge, eventInfo,e) {
+
+						// Global variable for description 
+						// to access inside ajax calls
+						var description; 
 						if (!edge)
 							return;
-						
+
 						if(edge.nodeFrom){
+							// This is an edge
+							// we may have to check for Relation
+							// Work still incomplete
+							
 							console.log("target is a edge");
 							alert(edge.nodeFrom.name);
 							alert(edge.nodeTo.name);
@@ -161,27 +169,56 @@ this.edge.epsilon);
 							/*edge.selected = true;
 					          edge.setData('dim', 17, 'end');*/
 							fd.fx.animate({
-					        	modes: ['node-property:dim',
-					               'edge-property:lineWidth:color'],
-					          	duration: 500
-					        });
+								modes: ['node-property:dim',
+								        'edge-property:lineWidth:color'],
+								        duration: 500
+							});
 							/*edge.setDataset('end', {
 					              lineWidth: 3,
 					              color: '#36acfb'
 					            });*/
-							
-							
 
-							
-							
+
+
+
+
 						}else{
-							console.log("target is a node");
+							// Author : Lohith
+							// If the javascript flow enters here
+							// Its a node
+							// fetching description of the node
+							
+							// Get Node name
+							lemma = edge.name;
+							
+							// Ajax call for getting description of the node
+							// Note: this ajax call has async = false
+							// this allow variables to be assigned inside the ajax and 
+							// accessed outside
+							$(document).ready(function() {	
+								$.ajax({
+									url : path+"/rest/editing/getconcept/"+lemma,
+									type : "GET",
+									async: false,
+									success : function(data) {
+										desc = data;
+									},
+									error: function() {
+										alert("error");
+									}
+								});
+								description = "<h8>DESCRIPTION : </h8> "+desc
+								+" <p>";
+							});
 						}
 						// Build the right column relations list.
 						// This is done by traversing the clicked node
 						// connections.
-						var html = "<h4>" + edge.nodeFrom
-								+ "</h4><b> connections:</b><ul><li>", list = [];
+
+
+						var html = "<h4>" + edge.name
+						+ "</h4>"+ description
+						+"<h8> CONNECTIONS:</h8> <ul><li>", list = [];
 						edge.eachAdjacency(function(adj) {
 							// Adding arrow label to inner-details
 							var str2 = adj.data.$labeltext;
@@ -191,11 +228,11 @@ this.edge.epsilon);
 							str3 = str3.concat(str1);
 							list.push(str3);
 						});
-						
-						
+
+
 						// append connections information
 						$jit.id('inner-details').innerHTML = html
-								+ list.join("</li><li>") + "</li></ul>";
+						+ list.join("</li><li>") + "</li></ul>";
 					},
 
 					onRightClick : function(node) {
@@ -215,170 +252,170 @@ this.edge.epsilon);
 								html = "<div id='popup' title='Annotation'><input type='button' id='annot_relation' value='Add Annotation to Relation' /> </div>";
 							}
 							else{
-						
-						html = "<div id='popup' title='Annotation'><input type='button' id='annot_node' value='Add Annotation to Node' /> </div>";
-						   }
+
+								html = "<div id='popup' title='Annotation'><input type='button' id='annot_node' value='Add Annotation to Node' /> </div>";
+							}
 						}
-						
-					
+
+
 
 						// append connections information
 						$jit.id('inner-details').innerHTML = path + html;
 						//$jit.id('inner-details').innerHTML = html1;
-						
+
 						$('#annot_node').click(function() {
 							var type1 ="node";
-							 // alert( "Handler for .click() called." );
-							  var html1 = "<div id='popup1' title='Annotation' style='display: none'><form id='annot_form' action=" + path
-								+ "/auth/editing/saveAnnotation/";
-							  html1 += networkId + " method='POST' >";
-							  html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-							  html1 += "<input  type='hidden' name='nodename' id='nodename' value="
-								  + node.id + " />";
-							  html1 += "<input type='button' id='annot_submit' value='submit'>";
-							  html1 += "</div></form>";
-							  var lemma = node.name;
-							  var description = "";
-							  $.ajax({
-								  
-									url : path+"/rest/editing/getconcept/"+lemma,
-									type : "GET",
-									
-									success : function(data) {
-										description = data;
-										alert("done");
-										
-										
-									},
-									error: function() {
-										alert("error");
-									}
-								});
-							  
-							  $jit.id('inner-details').innerHTML =  html1 + decsription;
-							  $.ajax({
-									url : path+"/auth/editing/getAnnotation/"+networkId,
-									type : "GET",
-									//data : $('#nodename').serialize(),
-									data: "nodeid="+node.id+"&type="+type1,
-									success : function(data) {
-										//alert("done");
-										//alert("data:"+data);
-										//alert("before:" +$('#text').val());
-										//$('#text').append(data);
-										$('#text').text(data);
-										//alert("after:"+$('#text').val());
-										//$jit.id('inner-details').innerHTML = path + html1;
-										
-									},
-									error: function() {
-										alert("error");
-									}
-								});
-							  event.preventDefault();
-							  
-							  
-							  $('#annot_submit').click(function(event) {
-									var annottext = $('#text').val();  
-								    var nodename = $('#nodename').val(); 
-								    var url = path+"/auth/editing/saveAnnotation/"+networkId;
-								    alert("text:"+annottext);
-								    alert("nodename:"+nodename);
-								    alert("url:"+url);
-									$.ajax({
-										url : $('#annot_form').attr("action"),
-										type : "POST",
-										//data : $('#nodename').serialize(),
-										//data: $('#annot_form').serialize(),
-										data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
-										success : function() {
-											
-											alert("done");
-											$('#popup1').dialog('close');
-										},
-										error: function() {
-											alert("error");
-										}
-									});
+							// alert( "Handler for .click() called." );
+							var html1 = "<div id='popup1' title='Annotation' style='display: none'><form id='annot_form' action=" + path
+							+ "/auth/editing/saveAnnotation/";
+							html1 += networkId + " method='POST' >";
+							html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+							html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+								+ node.id + " />";
+							html1 += "<input type='button' id='annot_submit' value='submit'>";
+							html1 += "</div></form>";
+							var lemma = node.name;
+							var description = "";
+							$.ajax({
 
-									event.preventDefault();
+								url : path+"/rest/editing/getconcept/"+lemma,
+								type : "GET",
+
+								success : function(data) {
+									description = data;
+									alert("done");
+
+
+								},
+								error: function() {
+									alert("error");
+								}
+							});
+
+							$jit.id('inner-details').innerHTML =  html1 + decsription;
+							$.ajax({
+								url : path+"/auth/editing/getAnnotation/"+networkId,
+								type : "GET",
+								//data : $('#nodename').serialize(),
+								data: "nodeid="+node.id+"&type="+type1,
+								success : function(data) {
+									//alert("done");
+									//alert("data:"+data);
+									//alert("before:" +$('#text').val());
+									//$('#text').append(data);
+									$('#text').text(data);
+									//alert("after:"+$('#text').val());
+									//$jit.id('inner-details').innerHTML = path + html1;
+
+								},
+								error: function() {
+									alert("error");
+								}
+							});
+							event.preventDefault();
+
+
+							$('#annot_submit').click(function(event) {
+								var annottext = $('#text').val();  
+								var nodename = $('#nodename').val(); 
+								var url = path+"/auth/editing/saveAnnotation/"+networkId;
+								alert("text:"+annottext);
+								alert("nodename:"+nodename);
+								alert("url:"+url);
+								$.ajax({
+									url : $('#annot_form').attr("action"),
+									type : "POST",
+									//data : $('#nodename').serialize(),
+									//data: $('#annot_form').serialize(),
+									data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
+									success : function() {
+
+										alert("done");
+										$('#popup1').dialog('close');
+									},
+									error: function() {
+										alert("error");
+									}
 								});
-							  
-							  $( '#popup1' ).show( "slow" );
-							  
-							  /*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
+
+								event.preventDefault();
+							});
+
+							$( '#popup1' ).show( "slow" );
+
+							/*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
 							  $('#popup1').children('.ui-dialog-titlebar-close').show();*/
-							  $('#popup1').dialog({
-									  open: function(event, ui) {
-										  $('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
-										  }
-										  });
-							  /*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
+							$('#popup1').dialog({
+								open: function(event, ui) {
+									$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
+								}
+							});
+							/*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
 							  $('#popup1').children('.ui-dialog-titlebar-close').show();*/
 							//  $(".ui-dialog-titlebar").hide();
 						});
 						$('#annot_relation').click(function() {
 							//  alert( "Handler for .click() called." );
-							  var type1 = "relation";
-							  var html2 = "<div id='popup2' title='Annotation' style='display: none'><form id='annot_form' action=" + path
-								+ "/auth/editing/saveAnnotation/";
-							  html2 += networkId + " method='POST' >";
-							  html2 += "<p id='message'></p>";
-							  html2 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
-							  html2 += "<input  type='hidden' name='nodename' id='nodename' value="
+							var type1 = "relation";
+							var html2 = "<div id='popup2' title='Annotation' style='display: none'><form id='annot_form' action=" + path
+							+ "/auth/editing/saveAnnotation/";
+							html2 += networkId + " method='POST' >";
+							html2 += "<p id='message'></p>";
+							html2 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+							html2 += "<input  type='hidden' name='nodename' id='nodename' value="
 								+ node.id + " />";
-							  html2 += "<input type='submit' id='annot_submit1' value='submit'>";
-							  html2 += "</form></div>";
-							  $jit.id('inner-details').innerHTML = path + html2;
-							  $.ajax({
-									url : path+"/auth/editing/getAnnotation/"+networkId,
-									type : "GET",
-									//data : $('#nodename').serialize(),
-									data: "nodeid="+node.id+"&type="+type1,
-									success : function(data) {
+							html2 += "<input type='submit' id='annot_submit1' value='submit'>";
+							html2 += "</form></div>";
+							$jit.id('inner-details').innerHTML = path + html2;
+							$.ajax({
+								url : path+"/auth/editing/getAnnotation/"+networkId,
+								type : "GET",
+								//data : $('#nodename').serialize(),
+								data: "nodeid="+node.id+"&type="+type1,
+								success : function(data) {
+									//alert("done");
+									//alert("data:"+data);
+									//alert("before:" +$('#text').val());
+									$('#text').append(data);
+									//$('#text').text(data);
+									//alert("after:"+$('#text').val());
+									//$jit.id('inner-details').innerHTML = path + html1;
+
+								},
+								error: function() {
+									alert("error");
+								}
+							});
+							//  event.preventDefault();
+
+
+							$('#annot_submit1').click(function(event) {
+								var annottext = $('#text').val();  
+								var nodename = $('#nodename').val(); 
+								var url = path+"/auth/editing/saveAnnotation/"+networkId;
+								alert("text:"+annottext);
+								alert("nodename:"+nodename);
+								alert("url:"+url);
+								$.ajax({
+									url : $('#annot_form').attr("action"),
+									type : "POST",
+									data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
+									success : function() {
+
 										//alert("done");
-										//alert("data:"+data);
-										//alert("before:" +$('#text').val());
-										$('#text').append(data);
-										//$('#text').text(data);
-										//alert("after:"+$('#text').val());
-										//$jit.id('inner-details').innerHTML = path + html1;
-										
+										$('#popup2').dialog('close');
 									},
 									error: function() {
 										alert("error");
 									}
 								});
-							//  event.preventDefault();
-							  
-							  
-							  $('#annot_submit1').click(function(event) {
-									var annottext = $('#text').val();  
-								    var nodename = $('#nodename').val(); 
-								    var url = path+"/auth/editing/saveAnnotation/"+networkId;
-								    alert("text:"+annottext);
-								    alert("nodename:"+nodename);
-								    alert("url:"+url);
-									$.ajax({
-										url : $('#annot_form').attr("action"),
-										type : "POST",
-										data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
-										success : function() {
-											
-											//alert("done");
-											$('#popup2').dialog('close');
-										},
-										error: function() {
-											alert("error");
-										}
-									});
 
-									event.preventDefault();
-								});
-							  
+								event.preventDefault();
+							});
+
 							//  $jit.id('inner-details').innerHTML = path + html2;
-							  $( '#popup2' ).show( "slow" );
-							  /*var dialogOpts = {
+							$( '#popup2' ).show( "slow" );
+							/*var dialogOpts = {
 								      modal: true,
 								      autoOpen: false,
 								      height: 320,
@@ -387,12 +424,12 @@ this.edge.epsilon);
 								      resizeable: true,
 								      title:'Annotation'
 								   };*/
-							  $('#popup2').dialog();
+							$('#popup2').dialog();
 						});
 						/*$('#annot_form').submit(function(event) {
 							var text = $('#annotText').val();  
 						    var nodename = $('#nodename').val(); 
-						    
+
 							$.ajax({
 								url : $('#annot_form').attr("action"),
 								type : "POST",
@@ -408,10 +445,10 @@ this.edge.epsilon);
 
 							event.preventDefault();
 						});*/
-						
+
 						$('#popup').dialog();
-						
-						
+
+
 					},
 				},
 				// Number of iterations for the FD algorithm

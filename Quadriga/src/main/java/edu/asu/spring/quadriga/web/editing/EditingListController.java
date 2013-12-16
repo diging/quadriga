@@ -270,7 +270,6 @@ public class EditingListController {
 	@RequestMapping(value = "/rest/editing/getconcept/{lemma}", method = RequestMethod.GET)
 	@ResponseBody
 	public String getConceptCollectionObject(@PathVariable("lemma") String lemma,HttpServletRequest request, HttpServletResponse response, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-
 		ConceptpowerReply conceptPowerReply = conceptCollectionManager.search(lemma, "NOUN");
 		List <ConceptEntry> conceptList = conceptPowerReply.getConceptEntry();
 		Iterator <ConceptEntry> conceptListIterator = conceptList.iterator();
