@@ -26,7 +26,7 @@ var Log = {
 };
 
 
-function init1(json){
+function init1(json,path){
 	// init data
 	
 	// end
@@ -119,10 +119,43 @@ function init1(json){
 			},
 			//Add also a click handler to nodes
 			onClick: function(node) {
+				
+				var description;
+				
+				// Author : Lohith
+				// If the javascript flow enters here
+				// Its a node
+				// fetching description of the node
+				
+				// Get Node name
+				lemma = node.name;
+				
+				// Ajax call for getting description of the node
+				// Note: this ajax call has async = false
+				// this allow variables to be assigned inside the ajax and 
+				// accessed outside
+				$(document).ready(function() {	
+					$.ajax({
+						url : path+"/rest/editing/getconcept/"+lemma,
+						type : "GET",
+						async: false,
+						success : function(data) {
+							desc = data;
+						},
+						error: function() {
+							alert("error");
+						}
+					});
+					description = "<h8>DESCRIPTION : </h8> "+desc
+					+" <p>";
+				});
+				
+				
 				if(!node) return;
 				// Build the right column relations list.
 				// This is done by traversing the clicked node connections.
-				var html = "<h4>" + node.name + "</h4><b> connections:</b><ul><li>",
+				var html = "<h4>" + node.name + "</h4>"+ description
+				+"<h8> connections:</h8><ul><li>",
 				list = [];
 				node.eachAdjacency(function(adj){
 					// Adding arrow label to inner-details
