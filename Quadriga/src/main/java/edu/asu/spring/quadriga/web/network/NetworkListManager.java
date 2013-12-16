@@ -147,7 +147,7 @@ public class NetworkListManager {
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("jsonstring",jsonstring1);
 		model.addAttribute("networkid",nwId);
-		logger.info("json string:"+ jsonstring1);
+		logger.debug("json string:"+ jsonstring1);
 		logger.info("network id:"+nwId);
 		
 		//model.addAttribute("networkId",networkId);

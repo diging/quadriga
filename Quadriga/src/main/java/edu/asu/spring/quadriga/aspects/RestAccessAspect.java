@@ -43,7 +43,6 @@ public class RestAccessAspect
 		String accessObjectId;
 		IAuthorization authorization;
 		
-		
 		haveAccess = true;
 		
 		//retrieve the logged in User name
