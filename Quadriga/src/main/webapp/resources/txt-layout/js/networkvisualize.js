@@ -155,7 +155,7 @@ function init1(json,path){
 				// Build the right column relations list.
 				// This is done by traversing the clicked node connections.
 				var html = "<h4>" + node.name + "</h4>"+ description
-				+"<h8> connections:</h8><ul><li>",
+				+"<h8> CONNECTION :</h8><ul><li>",
 				list = [];
 				node.eachAdjacency(function(adj){
 					// Adding arrow label to inner-details
