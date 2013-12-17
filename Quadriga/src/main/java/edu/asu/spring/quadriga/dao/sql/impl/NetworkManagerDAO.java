@@ -943,11 +943,12 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksAnnotationsDTO.findByAnnotationId");
 			query.setParameter("annotationid", annotationId);
-
+			logger.info("came here 1" );
 			NetworksAnnotationsDTO annotation = (NetworksAnnotationsDTO) query.uniqueResult();
 			annotation.setAnnotationtext(annotationText);
-
-			sessionFactory.getCurrentSession().save(annotation);
+			logger.info("came here 2" );
+			sessionFactory.getCurrentSession().update(annotation);
+			logger.info("came here 3" );
 			return "";
 		}
 		catch(Exception e)
