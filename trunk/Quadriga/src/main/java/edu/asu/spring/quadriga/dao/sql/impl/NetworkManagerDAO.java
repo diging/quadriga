@@ -914,15 +914,18 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		String[] annotationArray = new String[2];
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksAnnotationsDTO n where n.id = :id and username = :username and objecttype =: objecttype");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksAnnotationsDTO n where n.id = :id and username = :username and objecttype = :objecttype");
 			query.setParameter("id", id);
 			query.setParameter("username", userId);
 			query.setParameter("objecttype", type);
 
 			NetworksAnnotationsDTO networkAnnotationsDTO = (NetworksAnnotationsDTO) query.uniqueResult();
-			annotationArray[0] = networkAnnotationsDTO.getAnnotationtext();
-			annotationArray[1] = networkAnnotationsDTO.getAnnotationid();
+			if(networkAnnotationsDTO !=null){
+				annotationArray[0] = networkAnnotationsDTO.getAnnotationtext();
+				annotationArray[1] = networkAnnotationsDTO.getAnnotationid();
+			}
 			return annotationArray;
+			
 		}
 		catch(Exception e)
 		{

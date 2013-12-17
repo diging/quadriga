@@ -158,7 +158,7 @@ function init(json, networkId, path) {
 							// This is an edge
 							// we may have to check for Relation
 							// Work still incomplete
-							
+
 							console.log("target is a edge");
 							alert(edge.nodeFrom.name);
 							alert(edge.nodeTo.name);
@@ -179,18 +179,15 @@ function init(json, networkId, path) {
 					            });*/
 
 
-
-
-
 						}else{
 							// Author : Lohith
 							// If the javascript flow enters here
 							// Its a node
 							// fetching description of the node
-							
+
 							// Get Node name
 							lemma = edge.name;
-							
+
 							// Ajax call for getting description of the node
 							// Note: this ajax call has async = false
 							// this allow variables to be assigned inside the ajax and 
@@ -234,26 +231,33 @@ function init(json, networkId, path) {
 						$jit.id('inner-details').innerHTML = html
 						+ list.join("</li><li>") + "</li></ul>";
 					},
-
+					//  Works on right click on any node
 					onRightClick : function(node) {
 						if (!node)
 							return;
-						// Build the right column relations list.
-						// This is done by traversing the clicked node
-						// connections.
-						// var html = "<h4>" + node.name + "</h4><b>
-						// connections:</b><ul><li>",
-						//alert(node.data.nodetype);
-						var html = "";
-						if(node.data.nodetype=="Predicate"){
-							html = "<div id='popup' title='Annotation' ><input type='button' id='annot_node' value='Add Annotation to Node' /> </br><input type='button' id='annot_relation' value='Add Annotation to Relation' /> </br></div>";
-						} else{
-							if(node.nodeFrom){
-								html = "<div id='popup' title='Annotation'><input type='button' id='annot_relation' value='Add Annotation to Relation' /> </div>";
-							}
-							else{
 
-								html = "<div id='popup' title='Annotation'><input type='button' id='annot_node' value='Add Annotation to Node' /> </div>";
+						var html = "";
+						// If the node type is Predicate
+						// We can annotate on whole relation or node
+						if(node.data.nodetype=="Predicate"){
+							html = "<div id='popup' title='Annotation' >" +
+										"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+										"</br>" +
+										"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+										"</br>" +
+									"</div>";
+						} else{
+							// Annotate on edge
+							if(node.nodeFrom){
+								html = "<div id='popup' title='Annotation'>" +
+											"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+										"</div>";
+							}
+							// Annotate on node
+							else{
+								html = "<div id='popup' title='Annotation'>" +
+											"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+										"</div>";
 							}
 						}
 
@@ -263,17 +267,21 @@ function init(json, networkId, path) {
 						$jit.id('inner-details').innerHTML = path + html;
 						//$jit.id('inner-details').innerHTML = html1;
 
+						// This function annotate for node
+						// This works on annot_node tag in the pop.
 						$('#annot_node').click(function() {
 							var type1 ="node";
-							// alert( "Handler for .click() called." );
-							var html1 = "<div id='popup1' title='Annotation' style='display: none'><form id='annot_form' action=" + path
-							+ "/auth/editing/saveAnnotation/";
+							var html1 = "<div id='popup1' title='Annotation' style='display: none'>" +
+										"<form id='annot_form' action=" + path
+										+ "/auth/editing/saveAnnotation/";
 							html1 += networkId + " method='POST' >";
 							html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
 							html1 += "<input  type='hidden' name='nodename' id='nodename' value="
 								+ node.id + " />";
 							html1 += "<input type='button' id='annot_submit' value='submit'>";
 							html1 += "</div></form>";
+							
+							// Node name
 							var lemma = node.name;
 							var description = "";
 							$.ajax({
@@ -300,7 +308,7 @@ function init(json, networkId, path) {
 								data: "nodeid="+node.id+"&type="+type1,
 								success : function(data) {
 									//alert("done");
-									//alert("data:"+data);
+									alert("data:"+data);
 									//alert("before:" +$('#text').val());
 									//$('#text').append(data);
 									$('#text').text(data);
