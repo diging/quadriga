@@ -52,14 +52,16 @@ public class EditingNetworkAnnotationsController {
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		logger.info("network ID:" + networkId);
-		//String objectType = "node";
 		try {
 			String arr[] = null;
+			logger.info("Came to Save Annotation");
 			arr = editingNetworkAnnotationManager.getAnnotation(objectType,id , user.getUserName());
 			if(arr[0] == null && arr[1] == null){
+				logger.info("There is no annotation for this object");
 				editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, id,
 					annotationText, user.getUserName(),objectType);
 			} else {
+				logger.info("Updating the annoation "+ arr.toString());
 				editingNetworkAnnotationManager.updateAnnotationToNetwork(arr[1], annotationText);
 			}
 			
