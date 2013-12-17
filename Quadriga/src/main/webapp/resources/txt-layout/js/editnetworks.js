@@ -205,7 +205,7 @@ function init(json, networkId, path) {
 									}
 								});
 								description = "<h8>DESCRIPTION : </h8> "+desc
-												+" <p>";
+								+" <p>";
 							});
 						}
 						// Build the right column relations list.
@@ -216,7 +216,7 @@ function init(json, networkId, path) {
 						var html = "<h4>" + edge.name
 						+ "</h4>"+ description
 						+"<h8> CONNECTIONS:</h8> <ul><li>", list = [];
-						
+
 						// This function gets all the adjacent nodes
 						edge.eachAdjacency(function(adj) {
 							// Adding arrow label to inner-details
@@ -243,23 +243,23 @@ function init(json, networkId, path) {
 						// We can annotate on whole relation or node
 						if(node.data.nodetype=="Predicate"){
 							html = "<div id='popup' title='Annotation' >" +
-										"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
-										"</br>" +
-										"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
-										"</br>" +
-									"</div>";
+							"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+							"</br>" +
+							"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+							"</br>" +
+							"</div>";
 						} else{
 							// Annotate on edge
 							if(node.nodeFrom){
 								html = "<div id='popup' title='Annotation'>" +
-											"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
-										"</div>";
+								"<input type='button' id='annot_relation' value='Add Annotation to Relation' /> " +
+								"</div>";
 							}
 							// Annotate on node
 							else{
 								html = "<div id='popup' title='Annotation'>" +
-											"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
-										"</div>";
+								"<input type='button' id='annot_node' value='Add Annotation to Node' /> " +
+								"</div>";
 							}
 						}
 
@@ -274,11 +274,13 @@ function init(json, networkId, path) {
 						$('#annot_node').click(function() {
 							$('#annotText').val('');
 							var type1 ="node";
+							var text1ID = "annotText_"+guid();
+							alert(text1ID);
 							var html1 = "<div id='popup1' title='Annotation' style='display: none'>" +
-										"<form id='annot_form' action=" + path
-										+ "/auth/editing/saveAnnotation/";
+							"<form id='annot_form' action=" + path
+							+ "/auth/editing/saveAnnotation/";
 							html1 += networkId + " method='POST' >";
-							html1 += "<textarea name='annotText' id='annotText' cols='15' rows='15'></textarea>";
+							html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
 							html1 += "<input  type='hidden' name='nodename' id='nodename' value="
 								+ node.id + " />";
 							html1 += "<input type='button' id='annot_submit' value='submit'>";
@@ -308,7 +310,7 @@ function init(json, networkId, path) {
 
 
 							$('#annot_submit').click(function(event) {
-								var annottext = $('#annotText').val();  
+								var annottext = $('#'+text1ID+'').val();  
 								var nodename = $('#nodename').val(); 
 								var url = path+"/auth/editing/saveAnnotation/"+networkId;
 								alert("text:"+annottext);
@@ -486,4 +488,17 @@ function init(json, networkId, path) {
 		}
 	});
 	// end
+
+
+}
+
+function s4() {
+	return Math.floor((1 + Math.random()) * 0x10000)
+	.toString(16)
+	.substring(1);
+};
+
+function guid() {
+	return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+	s4() + '-' + s4() + s4() + s4();
 }
