@@ -61,7 +61,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @return Status message
 	 * @throws QuadrigaStorageException
 	 */
-	public String addDictionaryItems(String dictinaryId, String item,
+	public String addDictionaryItems(String dictionaryId, String item,
 			String id, String pos, String owner)
 			throws QuadrigaStorageException;
 

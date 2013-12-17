@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.mapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,11 +12,14 @@ import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
+import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager;
 
@@ -24,6 +28,9 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 {
 	@Autowired
 	private DictionaryFactory dictionaryFactory;
+	
+	@Autowired
+	private DictionaryItemsFactory dictionaryItemsFactory;
 	
 	@Autowired
 	private UserDTOMapper userMapper;
@@ -116,4 +123,40 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 		return dictionaryList;
 	}
 
+	public DictionaryDTO getDictionaryDTO(IDictionary dictionary)
+	{
+		DictionaryDTO dictionaryDTO = new DictionaryDTO();
+		dictionaryDTO.setDictionaryname(dictionary.getName());
+		dictionaryDTO.setDescription(dictionary.getDescription());
+		dictionaryDTO.setAccessibility(Boolean.FALSE);
+		dictionaryDTO.setDictionaryowner(new QuadrigaUserDTO(dictionary.getOwner().getUserName()));
+		dictionaryDTO.setCreatedby(dictionary.getOwner().getUserName());
+		dictionaryDTO.setCreateddate(new Date());
+		dictionaryDTO.setUpdatedby(dictionary.getOwner().getUserName());
+		dictionaryDTO.setUpdateddate(new Date());
+		return dictionaryDTO;
+	}
+	
+	public IDictionaryItem getDictionaryItem(DictionaryItemsDTO dictionaryItemsDTO)
+	{
+		IDictionaryItem dictionaryItem = dictionaryItemsFactory.createDictionaryItemsObject();
+		dictionaryItem.setId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
+		dictionaryItem.setItems(dictionaryItemsDTO.getTerm());					
+		dictionaryItem.setPos(dictionaryItemsDTO.getPos());
+		return dictionaryItem;
+	}
+	
+	public List<IDictionaryItem> getDictionaryItemList(List<DictionaryItemsDTO> dictItemsDTOList)
+	{
+		List<IDictionaryItem> dictItemList = new ArrayList<IDictionaryItem>();
+		if(dictItemsDTOList != null && dictItemsDTOList.size() > 0)
+		{
+			Iterator<DictionaryItemsDTO> dictItemsIterator = dictItemsDTOList.iterator();
+			while(dictItemsIterator.hasNext())
+			{
+				dictItemList.add(getDictionaryItem(dictItemsIterator.next()));
+			}
+		}
+		return dictItemList;
+	}
 }
