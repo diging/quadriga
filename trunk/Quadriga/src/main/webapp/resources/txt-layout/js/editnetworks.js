@@ -205,7 +205,7 @@ function init(json, networkId, path) {
 									}
 								});
 								description = "<h8>DESCRIPTION : </h8> "+desc
-								+" <p>";
+												+" <p>";
 							});
 						}
 						// Build the right column relations list.
@@ -216,6 +216,8 @@ function init(json, networkId, path) {
 						var html = "<h4>" + edge.name
 						+ "</h4>"+ description
 						+"<h8> CONNECTIONS:</h8> <ul><li>", list = [];
+						
+						// This function gets all the adjacent nodes
 						edge.eachAdjacency(function(adj) {
 							// Adding arrow label to inner-details
 							var str2 = adj.data.$labeltext;
@@ -270,37 +272,19 @@ function init(json, networkId, path) {
 						// This function annotate for node
 						// This works on annot_node tag in the pop.
 						$('#annot_node').click(function() {
+							$('#annotText').val('');
 							var type1 ="node";
 							var html1 = "<div id='popup1' title='Annotation' style='display: none'>" +
 										"<form id='annot_form' action=" + path
 										+ "/auth/editing/saveAnnotation/";
 							html1 += networkId + " method='POST' >";
-							html1 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+							html1 += "<textarea name='annotText' id='annotText' cols='15' rows='15'></textarea>";
 							html1 += "<input  type='hidden' name='nodename' id='nodename' value="
 								+ node.id + " />";
 							html1 += "<input type='button' id='annot_submit' value='submit'>";
 							html1 += "</div></form>";
-							
-							// Node name
-							var lemma = node.name;
-							var description = "";
-							$.ajax({
 
-								url : path+"/rest/editing/getconcept/"+lemma,
-								type : "GET",
-
-								success : function(data) {
-									description = data;
-									alert("done");
-
-
-								},
-								error: function() {
-									alert("error");
-								}
-							});
-
-							$jit.id('inner-details').innerHTML =  html1 + decsription;
+							$jit.id('inner-details').innerHTML = html1;
 							$.ajax({
 								url : path+"/auth/editing/getAnnotation/"+networkId,
 								type : "GET",
@@ -308,10 +292,10 @@ function init(json, networkId, path) {
 								data: "nodeid="+node.id+"&type="+type1,
 								success : function(data) {
 									//alert("done");
-									alert("data:"+data);
+									//alert("data:"+data);
 									//alert("before:" +$('#text').val());
 									//$('#text').append(data);
-									$('#text').text(data);
+									//$('#text').text(data);
 									//alert("after:"+$('#text').val());
 									//$jit.id('inner-details').innerHTML = path + html1;
 
@@ -324,7 +308,7 @@ function init(json, networkId, path) {
 
 
 							$('#annot_submit').click(function(event) {
-								var annottext = $('#text').val();  
+								var annottext = $('#annotText').val();  
 								var nodename = $('#nodename').val(); 
 								var url = path+"/auth/editing/saveAnnotation/"+networkId;
 								alert("text:"+annottext);
@@ -337,7 +321,6 @@ function init(json, networkId, path) {
 									//data: $('#annot_form').serialize(),
 									data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
 									success : function() {
-
 										alert("done");
 										$('#popup1').dialog('close');
 									},
@@ -345,7 +328,7 @@ function init(json, networkId, path) {
 										alert("error");
 									}
 								});
-
+								//
 								event.preventDefault();
 							});
 

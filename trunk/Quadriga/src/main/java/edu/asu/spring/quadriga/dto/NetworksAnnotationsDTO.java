@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NetworksAnnotationsDTO.findByCreateddate", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.createddate = :createddate")})
 public class NetworksAnnotationsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
+    
     @Basic(optional = false)
     @Column(name = "networkid")
     private String networkid;
@@ -51,6 +51,7 @@ public class NetworksAnnotationsDTO implements Serializable {
     @Column(name = "annotationtext")
     private String annotationtext;
     
+    @Id
     @Basic(optional = false)
     @Column(name = "annotationid")
     private String annotationid;

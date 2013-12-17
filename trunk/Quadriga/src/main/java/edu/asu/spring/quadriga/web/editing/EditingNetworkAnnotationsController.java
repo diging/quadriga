@@ -54,21 +54,21 @@ public class EditingNetworkAnnotationsController {
 		logger.info("network ID:" + networkId);
 		try {
 			String arr[] = null;
-			logger.info("Came to Save Annotation");
+			logger.info("Came to Save Annotation : object type :" + objectType + " id : " +id);
 			arr = editingNetworkAnnotationManager.getAnnotation(objectType,id , user.getUserName());
 			if(arr[0] == null && arr[1] == null){
-				logger.info("There is no annotation for this object");
+				logger.debug("There is no annotation for this object");
 				editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, id,
 					annotationText, user.getUserName(),objectType);
 			} else {
-				logger.info("Updating the annoation "+ arr.toString());
+				logger.debug("Updating the annoation "+ arr.toString());
 				editingNetworkAnnotationManager.updateAnnotationToNetwork(arr[1], annotationText);
 			}
 			
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.info("Annotation added to the node:" + id);
+		logger.debug("Annotation added to the node:" + id);
 
 		return "{ success: true; }";
 	}
@@ -92,7 +92,6 @@ public class EditingNetworkAnnotationsController {
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.info("Got Annotation of :" + nodeId);
 		return annotation;
 	}
 		
