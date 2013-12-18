@@ -48,7 +48,7 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 		try
 		{
 			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-			projectCollaborator = projectDTO.getProjectCollaboratorDTOList();
+			 projectCollaborator = projectDTO.getProjectCollaboratorDTOList();
 			
 			if(!projectDTO.equals(null))
 			{
