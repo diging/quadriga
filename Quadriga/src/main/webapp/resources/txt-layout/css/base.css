@@ -34,7 +34,7 @@ a {
 }
 
 #container {
-    width: 1000px;
+    width: 1200px;
     height: 1000px;
     margin:0 auto;
     position:relative;
@@ -49,7 +49,7 @@ a {
 }
 
 #left-container, #right-container {
-    width:120px;
+    width:200px;
     color:#686c70;
     text-align: left;
     overflow: auto;
@@ -77,8 +77,10 @@ a {
     text-indent:8px;
 }
 
+/* Blue background for the infovis data*/
+
 #center-container {
-    width:800px;
+    width:1000px;
     left:100px;
     background-color:#01837C;
     color:#ccc;
@@ -102,10 +104,10 @@ a {
     color:#23A4FF;
 }
 
-
+/* this is the content length*/
 #infovis {
     position:relative;
-    width:800px;
+    width:1000px;
     height:600px;
     margin:auto;
     overflow:hidden;
