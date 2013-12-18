@@ -15,6 +15,7 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class DictionaryItemsDTOPK implements Serializable {
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "id")
     private String id;

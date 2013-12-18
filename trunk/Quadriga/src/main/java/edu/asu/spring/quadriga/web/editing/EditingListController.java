@@ -26,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -267,9 +266,27 @@ public class EditingListController {
 		return "auth/editing/visualize";
 	}
 
+	/**
+	 *  This controller method would get description of the lemma to javascript when called through a Ajax call
+	 * @author Lohith Dwaraka
+	 * @param lemma
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws JAXBException
+	 */
 	@RequestMapping(value = "/rest/editing/getconcept/{lemma}", method = RequestMethod.GET)
 	@ResponseBody
 	public String getConceptCollectionObject(@PathVariable("lemma") String lemma,HttpServletRequest request, HttpServletResponse response, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+		
+		// This is done as string with a dot (.) in between in the path variable 
+		// is not read as expected so we could replace it by $ in the javascript
+		// and revert back in our controller
+		lemma = lemma.replace('$', '.');
+		logger.info("lemma : "+lemma);
 		ConceptpowerReply conceptPowerReply = conceptCollectionManager.search(lemma, "NOUN");
 		List <ConceptEntry> conceptList = conceptPowerReply.getConceptEntry();
 		Iterator <ConceptEntry> conceptListIterator = conceptList.iterator();

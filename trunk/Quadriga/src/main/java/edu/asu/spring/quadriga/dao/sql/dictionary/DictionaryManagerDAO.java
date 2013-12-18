@@ -212,7 +212,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 				dictItemsDTO.setCreateddate(new Date());
 				dictItemsDTO.setUpdatedby(owner);
 				dictItemsDTO.setUpdateddate(new Date());
-				sessionFactory.getCurrentSession().update(dictItemsDTO);
+				sessionFactory.getCurrentSession().save(dictItemsDTO);
 			}
 		} 
 		catch (Exception e) 
@@ -598,7 +598,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String ownerUserName = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select dict.dictionaryowner.username from DictionaryDTO dict where dict.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select dict.dictionaryowner.username from DictionaryDTO dict where dict.id =:id");
 			query.setParameter("id",dictionaryId);
 			ownerUserName = (String) query.uniqueResult();
 		}
