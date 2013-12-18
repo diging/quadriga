@@ -1191,6 +1191,21 @@ public class NetworkManager implements INetworkManager {
 		}
 
 	}
+	
+	/**
+	 * Update network name when network is reuploaded
+	 * @throws QuadrigaStorageException 
+	 */
+	@Override
+	@Transactional
+	public String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException{
+		try{
+			dbConnect.updateNetworkName(networkId, networkName);
+		}catch(QuadrigaStorageException e){
+			throw new QuadrigaStorageException();
+		}
+		return "success";
+	}
 
 
 }

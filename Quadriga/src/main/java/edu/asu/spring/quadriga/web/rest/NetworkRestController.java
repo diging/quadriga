@@ -414,6 +414,9 @@ public class NetworkRestController {
 			Principal principal) throws JAXBException, QuadrigaStorageException, RestException, ParserConfigurationException, SAXException, IOException {
 		IUser user = userManager.getUserDetails(principal.getName());
 
+		String networkName = request.getParameter("networkname");
+
+		
 		if(networkId == null||networkId.isEmpty()){
 			response.setStatus(404);
 			return "Please provide network id.";
@@ -425,6 +428,7 @@ public class NetworkRestController {
 		}catch(QuadrigaStorageException e){
 			logger.error("DB Error :",e);
 		}
+		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
 		if(!(network.getStatus().equals(INetworkStatus.REJECTED))){
 			response.setStatus(500);
 			return "The Network doesn't have status : REJECTED";
@@ -442,6 +446,15 @@ public class NetworkRestController {
 					response.setStatus(500);
 					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 				}
+				String networkNameUpdateStatus="";
+				if(!(networkName == null ||networkName.equals(network.getName()) || networkName.equals(""))){
+					networkNameUpdateStatus = networkManager.updateNetworkName(networkId,networkName);
+					if(!(networkNameUpdateStatus.equals("success"))){
+						response.setStatus(500);
+						return "DB Issue, please try after sometime";
+					}
+				}
+				
 				networkManager.archiveNetwork(networkId);
 				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
 				JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);

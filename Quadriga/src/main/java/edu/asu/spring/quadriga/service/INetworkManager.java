@@ -102,4 +102,6 @@ public interface INetworkManager {
 	public abstract List<String> getNetworksForProjectId(String projectid)
 			throws QuadrigaStorageException;
 
+	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;
+
 }

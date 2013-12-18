@@ -156,6 +156,7 @@ public class EditorManager implements IEditorManager {
 	@Transactional
 	public String updateNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		String msg = "";
+		logger.info("Changing to status : "+status);
 		try{
 			msg = dbConnect.updateNetworkStatus(networkId, status);
 		}catch(QuadrigaStorageException e){
