@@ -69,9 +69,9 @@ public class DictionaryDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO",orphanRemoval=true)
     private List<DictionaryItemsDTO> dictionaryItemsDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO",orphanRemoval=true)
     private List<DictionaryCollaboratorDTO> dictionaryCollaboratorDTOList;
     @JoinColumn(name = "dictionaryowner", referencedColumnName = "username")
     @ManyToOne(optional = false)

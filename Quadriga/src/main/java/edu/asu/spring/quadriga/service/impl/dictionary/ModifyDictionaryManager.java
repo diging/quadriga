@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.service.dictionary.IModifyDictionaryManager;
 public class ModifyDictionaryManager implements IModifyDictionaryManager 
 {
 	@Autowired
-	@Qualifier("DBConnectionModifyDictionaryManagerBean")
+	@Qualifier("modifyDictionaryManagerDAO")
 	private IDBConnectionModifyDictionaryManager dbConnect;
 	
 	@Override

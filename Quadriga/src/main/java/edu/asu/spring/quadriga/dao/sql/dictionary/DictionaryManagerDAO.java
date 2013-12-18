@@ -1,9 +1,12 @@
-package edu.asu.spring.quadriga.dao.sql.dictionary.impl;
+package edu.asu.spring.quadriga.dao.sql.dictionary;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -19,6 +22,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
@@ -27,6 +31,8 @@ import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IUserManager;
 
 @Repository
 public class DictionaryManagerDAO extends DAOConnectionManager implements IDBConnectionDictionaryManager
@@ -41,10 +47,20 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	@Autowired
 	private IUserFactory userFactory;
 	
+	@Autowired
+	private ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	private IUserManager userManager;
+	
+	@Autowired
+	private ICollaboratorRoleManager collaboratorRoleManager;
+	
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryManagerDAO.class);
 
 	/**
 	 * Gets the dictionary of the user matched with his user name
+	 * @param user id id
 	 * @return List of Dictionary 
 	 * @throws QuadrigaStorageException
 	 */
@@ -72,6 +88,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 
 	/**
 	 * Save a dictionary in the database
+	 * @param dictionary object from the screen
 	 * @return Error message
 	 * @throws QuadrigaStorageException
 	 * @author karthik jayaraman
@@ -79,7 +96,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	@Override
 	public String addDictionary(IDictionary dictionary) throws QuadrigaStorageException 
 	{
-		String errmsg = "";
+		String errMsg = "";
 		try
 		{
 			if(dictionary==null)
@@ -93,14 +110,15 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		catch(Exception e)
 		{
 			logger.info("addDictionary ::"+e.getMessage());	
-			errmsg="DB Issue";
+			errMsg="DB Issue";
 			throw new QuadrigaStorageException(e);
 		}
-		return errmsg;
+		return errMsg;
 	}
 
 	/**
 	 * Get dictionary Item details with dictionary ID and owner name
+	 * @param dictionary id and owner name
 	 * @return List of IDictionaryItem
 	 * @throws QuadrigaStorageException
 	 * @author karthik jayaraman
@@ -132,6 +150,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 
 	/**
 	 * Get dictionary name with dictionary ID
+	 * @param dictionary id
 	 * @return Dictionary name as String
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
@@ -160,6 +179,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 
 	/**
 	 * Adds a dictionary item to the database
+	 * @param dictionary id, item, itemid, pos and owner name
 	 * @return Error message
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
@@ -205,7 +225,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	}
 
 	/**
-	 * Delete a dictionary item to the database corresponding to dictionary ID and Item ID
+	 * Delete a dictionary item to the database corresponding to dictionary ID,Item ID and owner name
+	 * @param dictionary id
 	 * @return Error message
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
@@ -241,18 +262,19 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 
 	/**
 	 * Update a dictionary item to the database corresponding to dictionary ID and Item ID
+	 * @param dictionary id 
 	 * @return Error message
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
 	 */
 	@Override
-	public String updateDictionaryItems(String dictinaryId, String termid,String term, String pos) throws QuadrigaStorageException {
+	public String updateDictionaryItems(String dictionaryId, String termid,String term, String pos) throws QuadrigaStorageException {
 		String errMsg = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
-			query.setParameter("id", "dictinaryId");
-			query.setParameter("termid", "termid");
+			query.setParameter("id", dictionaryId);
+			query.setParameter("termid", termid);
 			
 			DictionaryItemsDTO dictionaryItemsDTO = (DictionaryItemsDTO) query.uniqueResult();
 			if(dictionaryItemsDTO != null)
@@ -277,6 +299,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 
 	/**
 	 * Update a dictionary item to the database corresponding to dictionary ID and Item ID
+	 * @param dictionary id 
 	 * @return Error message
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
@@ -313,6 +336,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 
 	/**
 	 * Add dictionary collarborators based on the roles to the database.
+	 * @param Collaborator object, dictionary id, dictionary owner user name and logged in username
 	 * @return Error message
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
@@ -320,7 +344,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	@Override
 	public String addCollaborators(ICollaborator collaborator,String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException 
 	{
-		String errmsg = null;
+		String errMsg = null;
 		try
 		{
 			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
@@ -341,14 +365,15 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		catch(Exception e)
 		{
 			logger.error("addCollaborators method :",e);
-			errmsg = "DB Exception";
+			errMsg = "DB Exception";
 			throw new QuadrigaStorageException();
 		}
-		return errmsg;
+		return errMsg;
 	}
 
 	/**
 	 * Delete dictionary collarborators based on the dictionaryid and the collaborator user name
+	 * @param username and dictionary id 
 	 * @return void
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
@@ -374,67 +399,325 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		}
 	}
 
+	/**
+	 * Delete dictionary from the database corresponding to the dictionary ID and owner name
+	 * @param username and dictionary id 
+	 * @return Error message
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	@Override
-	public String deleteDictionary(String user, String dictionaryId)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public String deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException {
+		String errMsg = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryDTO dict where dict.id =:id and dict.dictionaryowner.username =:username");
+			query.setParameter("username", user);
+			query.setParameter("id",dictionaryId);
+			DictionaryDTO dictionaryDTO = (DictionaryDTO) query.uniqueResult();
+			
+			if(dictionaryDTO != null)
+			{
+				sessionFactory.getCurrentSession().delete(dictionaryDTO);
+			}
+			else
+			{
+				errMsg = "User don't have access to this dictionary";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteDictionary method :",e);
+			errMsg = "DB Exception";
+			throw new QuadrigaStorageException();
+		}
+		return errMsg;
 	}
 
+	/**
+	 * Get user dictionary permission from the database
+	 * @param user id and dictionary id
+	 * @return Boolean for the permission 
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	@Override
-	public boolean userDictionaryPerm(String userId, String dictionaryId)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean userDictionaryPerm(String userId, String dictionaryId) throws QuadrigaStorageException {
+		Boolean isValidUser =  Boolean.FALSE;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryDTO dict where dict.id =:id and dict.dictionaryowner.username =:username");
+			query.setParameter("username", userId);
+			query.setParameter("id",dictionaryId);
+			DictionaryDTO dictionaryDTO = (DictionaryDTO) query.uniqueResult();
+			
+			if(dictionaryDTO != null)
+			{
+				isValidUser = Boolean.TRUE;
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("userDictionaryPerm method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return isValidUser;
 	}
 
+	/**
+	 * Get user dictionary of the user with the collaborator role
+	 * @param user id
+	 * @return List of Dictionary objects
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<IDictionary> getDictionaryCollabOfUser(String userId)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
+		List<IDictionary> dictList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select dictCollab.dictionaryDTO from DictionaryCollaboratorDTO dictCollab where dictCollab.quadrigaUserDTO.username =:username");
+			query.setParameter("username", userId);
+			List<DictionaryDTO> dictDTOList = query.list();
+			
+			if(dictDTOList != null && dictDTOList.size() > 0)
+			{
+				dictList = dictionaryDTOMapper.getDictionaryList(dictDTOList);
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getDictionaryCollabOfUser method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return dictList;
 	}
 
+	/**
+	 * Get the user role of the collaborator with the user id and dictionary id
+	 * @param user id and dictionary id
+	 * @return Role of the user
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	@Override
-	public String getDictionaryCollabPerm(String userId, String dicitonaryId)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public String getDictionaryCollabPerm(String userId, String dicitonaryId) throws QuadrigaStorageException {
+		String dictCollabRole = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select dictCollab.dictionaryDTO from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
+			query.setParameter("id", dicitonaryId);
+			query.setParameter("collaboratoruser", userId);
+			DictionaryCollaboratorDTO dictCollabDTO = (DictionaryCollaboratorDTO) query.uniqueResult();
+			
+			if(dictCollabDTO != null)
+			{
+				dictCollabRole = dictCollabDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getDictionaryCollabPerm method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return dictCollabRole;
 	}
 
+	/**
+	 * Get the Dictionary Items corresponding to a dictionary ID
+	 * @param udictionary id
+	 * @return List of dictionary items
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<IDictionaryItem> getDictionaryItemsDetailsCollab(
-			String dictionaryid) throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
+		List<IDictionaryItem> dictionaryItemList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id ORDER BY dictItems.dictionaryItemsDTOPK.term");
+			query.setParameter("id",dictionaryid);
+			List<DictionaryItemsDTO> dictItemsDTOList = query.list();
+			
+			if(dictItemsDTOList != null && dictItemsDTOList.size() > 0)
+			{
+				dictionaryItemList = dictionaryDTOMapper.getDictionaryItemList(dictItemsDTOList);
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getDictionaryItemsDetailsCollab method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return dictionaryItemList;
 	}
 
+	/**
+	 * Delete Dictionary Items corresponding to a dictionary ID and Term id
+	 * @param dictionary id and term id
+	 * @return error messages if any
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	@Override
-	public String deleteDictionaryItemsCollab(String dictinaryId, String itemid)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public String deleteDictionaryItemsCollab(String dictionaryId, String itemid) throws QuadrigaStorageException {
+		String errMsg = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
+			query.setParameter("id",dictionaryId);
+			query.setParameter("termid",itemid);
+			int output = query.executeUpdate();
+			if(output == 0)
+			{
+				logger.error("Item does not exists in this dictionary");
+				errMsg = "Item does not exists in this dictionary";
+				throw new QuadrigaStorageException();
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getDictionaryItemsDetailsCollab method :",e);
+			errMsg = "Exception in the database";
+			throw new QuadrigaStorageException();
+		}
+		return errMsg;
 	}
 
+	/**
+	 * Get Dictionary owner name corresponding to a dictionary ID
+	 * @param dictionary id
+	 * @return Owner username
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	@Override
-	public String getDictionaryOwner(String dictionaryId)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public String getDictionaryOwner(String dictionaryId) throws QuadrigaStorageException {
+		String ownerUserName = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select dict.dictionaryowner.username from DictionaryDTO dict where dict.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
+			query.setParameter("id",dictionaryId);
+			ownerUserName = (String) query.uniqueResult();
+		}
+		catch(Exception e)
+		{
+			logger.error("getDictionaryOwner method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return ownerUserName;
 	}
 
+	/**
+	 * Get Dictionary ID name corresponding to a dictionary ID
+	 * @param dictionary id
+	 * @return Owner username
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	@Override
-	public String getDictionaryId(String dictName)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public String getDictionaryId(String dictName) throws QuadrigaStorageException {
+		String dictID = null;
+		DictionaryDTO dictDTO = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("DictionaryDTO.findByDictionaryname");
+			query.setParameter("dictionaryname",dictName);
+			dictDTO = (DictionaryDTO) query.uniqueResult();
+			
+			if(dictDTO != null)
+			{
+				dictID = dictDTO.getId();
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getDictionaryId method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return dictID;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException {
+		List<ICollaborator> collaboratorList = new ArrayList<ICollaborator>();
+		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		List<ICollaborator> collaborators = new ArrayList<ICollaborator>();
+		
+		String userName = null;
+		
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id");
+			query.setParameter("id", dictionaryid);
+			List<DictionaryCollaboratorDTO> dictCollabList = query.list();
+			
+			Iterator<DictionaryCollaboratorDTO> dictCollabIterator = dictCollabList.iterator();
+			HashMap<String, String> userRoleMap = new HashMap<String, String>();
+			while(dictCollabIterator.hasNext())
+			{
+				DictionaryCollaboratorDTO dictCollabDTO = dictCollabIterator.next();
+				if(userRoleMap.containsKey(dictCollabDTO.getQuadrigaUserDTO().getUsername()))
+				{
+					userRoleMap.get(dictCollabDTO.getQuadrigaUserDTO().getUsername()).concat(dictCollabDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole()+",");
+				}
+				else
+				{
+					userRoleMap.put(dictCollabDTO.getQuadrigaUserDTO().getUsername(),dictCollabDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole());
+				}
+			}
+			
+			Iterator<Entry<String, String>> userRoleMapItr = userRoleMap.entrySet().iterator();
+			while(userRoleMapItr.hasNext())
+			{
+				Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
+				ICollaborator collaborator = collaboratorFactory.createCollaborator();
+				userName = (String) pairs.getKey();
+				IUser user = userFactory.createUserObject();
+				user = userManager.getUserDetails(userName);
+				user.setUserName(userName);
+				collaborator.setUserObj(user);
+				
+				collaboratorRoles = splitAndgetCollaboratorRolesList((String) pairs.getValue());
+				collaborator.setCollaboratorRoles(collaboratorRoles);
+				
+				collaborators.add(collaborator);
+			}
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return collaboratorList;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @param role
+	 * @return List<ICollaboratorRole>
+	 */
+	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role)
+	{
+        String[] collabroles;
+		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+		ICollaboratorRole collaboratorRole = null;
+		
+		collabroles = role.split(",");
+		
+		for(int i=0;i<collabroles.length;i++)
+		{
+			collaboratorRole = collaboratorRoleManager.getDictCollaboratorRoleByDBId(collabroles[i]);
+			collaboratorRoleList.add(collaboratorRole);
+		}
+		
+		return collaboratorRoleList;
 	}
 	
 }
