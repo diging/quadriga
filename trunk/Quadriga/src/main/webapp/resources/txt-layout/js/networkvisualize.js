@@ -122,7 +122,7 @@ function init1(json,path){
 				
 				var description;
 				
-				// Author : Lohith
+				// Author : Lohith Dwaraka
 				// If the javascript flow enters here
 				// Its a node
 				// fetching description of the node
@@ -130,13 +130,19 @@ function init1(json,path){
 				// Get Node name
 				lemma = node.name;
 				
+				// This is done to replace all dot (.) with dollar ($)
+				// Since our spring controller would ignore any data after dot (.)
+				lemma = lemma.replace(".","$");
+				
+				getConceptURL = path+"/rest/editing/getconcept/"+lemma;
+				
 				// Ajax call for getting description of the node
 				// Note: this ajax call has async = false
 				// this allow variables to be assigned inside the ajax and 
 				// accessed outside
 				$(document).ready(function() {	
 					$.ajax({
-						url : path+"/rest/editing/getconcept/"+lemma,
+						url : getConceptURL,
 						type : "GET",
 						async: false,
 						success : function(data) {
