@@ -910,14 +910,15 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc} 
 	 */
 	@Override
-	public String[] getAnnotation(String type, String id,String userId) throws QuadrigaStorageException{
+	public String[] getAnnotation(String type, String id,String userId,String networkId) throws QuadrigaStorageException{
 		String[] annotationArray = new String[2];
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksAnnotationsDTO n where n.id = :id and username = :username and objecttype = :objecttype");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksAnnotationsDTO n where n.id = :id and username = :username and networkid =:networkid and objecttype = :objecttype");
 			query.setParameter("id", id);
 			query.setParameter("username", userId);
 			query.setParameter("objecttype", type);
+			query.setParameter("networkid", networkId);
 
 			NetworksAnnotationsDTO networkAnnotationsDTO = (NetworksAnnotationsDTO) query.uniqueResult();
 			if(networkAnnotationsDTO !=null){
@@ -943,12 +944,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksAnnotationsDTO.findByAnnotationId");
 			query.setParameter("annotationid", annotationId);
-			logger.info("came here 1" );
 			NetworksAnnotationsDTO annotation = (NetworksAnnotationsDTO) query.uniqueResult();
 			annotation.setAnnotationtext(annotationText);
-			logger.info("came here 2" );
 			sessionFactory.getCurrentSession().update(annotation);
-			logger.info("came here 3" );
 			return "";
 		}
 		catch(Exception e)

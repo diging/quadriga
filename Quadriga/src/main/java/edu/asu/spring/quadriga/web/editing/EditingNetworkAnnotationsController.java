@@ -54,8 +54,8 @@ public class EditingNetworkAnnotationsController {
 		logger.info("network ID:" + networkId);
 		try {
 			String arr[] = null;
-			logger.info("Came to Save Annotation : object type :" + objectType + " id : " +id);
-			arr = editingNetworkAnnotationManager.getAnnotation(objectType,id , user.getUserName());
+			logger.debug("Came to Save Annotation : object type :" + objectType + " id : " +id);
+			arr = editingNetworkAnnotationManager.getAnnotation(objectType,id , user.getUserName(),networkId);
 			if(arr[0] == null && arr[1] == null){
 				logger.debug("There is no annotation for this object");
 				editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, id,
@@ -87,7 +87,7 @@ public class EditingNetworkAnnotationsController {
 		
 		try {
 			String resultArr[] = null;
-			resultArr = editingNetworkAnnotationManager.getAnnotation(type,nodeId,user.getUserName());
+			resultArr = editingNetworkAnnotationManager.getAnnotation(type,nodeId,user.getUserName(),networkId);
 			annotation = resultArr[0];
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);

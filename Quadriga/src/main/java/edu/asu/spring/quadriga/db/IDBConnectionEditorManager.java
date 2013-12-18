@@ -114,7 +114,7 @@ public interface IDBConnectionEditorManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String[] getAnnotation(String type, String id,String userid) throws QuadrigaStorageException;
+	public abstract String[] getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException;
 	
 	/**
 	 * Update annotation of networks
