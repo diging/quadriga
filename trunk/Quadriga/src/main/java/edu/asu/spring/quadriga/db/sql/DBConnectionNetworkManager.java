@@ -818,4 +818,10 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		return null;
 	}
 
+	@Override
+	public String updateNetworkName(String networkId,String networkName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

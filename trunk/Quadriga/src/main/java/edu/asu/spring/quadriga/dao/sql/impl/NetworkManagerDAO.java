@@ -958,4 +958,25 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	@Override
+	public String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException {
+			try
+			{
+				Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByNetworkid");
+				query.setParameter("networkid", networkId);
+
+				NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
+				networksDTO.setNetworkname(networkName);
+
+				sessionFactory.getCurrentSession().update(networksDTO);
+
+				return "success";
+			}
+			catch(Exception e)
+			{
+				logger.error("Error in changing network status: ",e);
+				throw new QuadrigaStorageException(e);
+			}
+	}
+
 }

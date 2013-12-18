@@ -59,22 +59,7 @@ public class EditingAssignUserController {
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-		List<INetwork> assignedNetworkList=null;
-		try{
-			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		List<INetwork> networkList=null;
-		try{
-			networkList = editorManager.getEditorNetworkList(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		model.addAttribute("assignedNetworkList", assignedNetworkList);
-		model.addAttribute("networkList", networkList);
-		model.addAttribute("userId", user.getUserName());
-		return "auth/editing";
+		return "redirect:/auth/editing";
 	}
 
 	/**
@@ -149,25 +134,7 @@ public class EditingAssignUserController {
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-		List<INetwork> assignedNetworkList=null;
-		try{
-			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		
-		List<INetwork> networkList=null;
-		try{
-			networkList = editorManager.getEditorNetworkList(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		
-
-		model.addAttribute("assignedNetworkList", assignedNetworkList);
-		model.addAttribute("networkList", networkList);
-		model.addAttribute("userId", user.getUserName());
-		return "auth/editing";
+		return "redirect:/auth/editing";
 	}
 
 	/**
@@ -188,25 +155,8 @@ public class EditingAssignUserController {
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
-		List<INetwork> assignedNetworkList=null;
-		try{
-			assignedNetworkList = editorManager.getAssignNetworkOfUser(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
-		
 
-		List<INetwork> networkList=null;
-		try{
-			networkList = editorManager.getEditorNetworkList(user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Some issue in the DB",e);
-		}
 		
-
-		model.addAttribute("assignedNetworkList", assignedNetworkList);
-		model.addAttribute("networkList", networkList);
-		model.addAttribute("userId", user.getUserName());
-		return "auth/editing";
+		return "redirect:/auth/editing";
 	}
 }
