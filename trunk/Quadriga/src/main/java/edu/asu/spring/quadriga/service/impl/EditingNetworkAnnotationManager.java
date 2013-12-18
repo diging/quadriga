@@ -19,9 +19,9 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public String[] getAnnotation(String type, String id,String userid) throws QuadrigaStorageException{
+	public String[] getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException{
 		String arr[] = null;
-		arr = dbConnectionEditManager.getAnnotation(type,id , userid);
+		arr = dbConnectionEditManager.getAnnotation(type,id , userid,networkId);
 		return arr;
 	}
 	
@@ -44,7 +44,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException{
+	public String updateAnnotationToNetwork(String annotationId,String annotationText) throws QuadrigaStorageException{
 		String msg = dbConnectionEditManager.updateAnnotationToNetwork(annotationId, annotationText);
 		return msg;
 	}

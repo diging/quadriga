@@ -275,8 +275,9 @@ function init(json, networkId, path) {
 							$('#annotText').val('');
 							var type1 ="node";
 							var text1ID = "annotText_"+guid();
-							alert(text1ID);
-							var html1 = "<div id='popup1' title='Annotation' style='display: none'>" +
+							var popupId = "popup"+guid();
+							var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
+							var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
 							"<form id='annot_form' action=" + path
 							+ "/auth/editing/saveAnnotation/";
 							html1 += networkId + " method='POST' >";
@@ -285,22 +286,15 @@ function init(json, networkId, path) {
 								+ node.id + " />";
 							html1 += "<input type='button' id='annot_submit' value='submit'>";
 							html1 += "</div></form>";
-
+							alert(networkId);
+							alert(getAnnotationUrl);
 							$jit.id('inner-details').innerHTML = html1;
 							$.ajax({
-								url : path+"/auth/editing/getAnnotation/"+networkId,
+								url : getAnnotationUrl,
 								type : "GET",
-								//data : $('#nodename').serialize(),
 								data: "nodeid="+node.id+"&type="+type1,
 								success : function(data) {
-									//alert("done");
-									//alert("data:"+data);
-									//alert("before:" +$('#text').val());
-									//$('#text').append(data);
-									//$('#text').text(data);
-									//alert("after:"+$('#text').val());
-									//$jit.id('inner-details').innerHTML = path + html1;
-
+									alert(data);
 								},
 								error: function() {
 									alert("error");
@@ -311,44 +305,31 @@ function init(json, networkId, path) {
 
 							$('#annot_submit').click(function(event) {
 								var annottext = $('#'+text1ID+'').val();  
-								var nodename = $('#nodename').val(); 
 								var url = path+"/auth/editing/saveAnnotation/"+networkId;
-								alert("text:"+annottext);
-								alert("nodename:"+nodename);
-								alert("url:"+url);
 								$.ajax({
 									url : $('#annot_form').attr("action"),
 									type : "POST",
-									//data : $('#nodename').serialize(),
-									//data: $('#annot_form').serialize(),
 									data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
 									success : function() {
 										alert("done");
-										$('#popup1').dialog('close');
+										$('#'+popupId+'').dialog('close');
 									},
 									error: function() {
 										alert("error");
 									}
 								});
-								//
 								event.preventDefault();
 							});
 
-							$( '#popup1' ).show( "slow" );
+							$( '#'+popupId+'' ).show( "slow" );
 
-							/*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
-							  $('#popup1').children('.ui-dialog-titlebar-close').show();*/
-							$('#popup1').dialog({
+							$('#'+popupId+'').dialog({
 								open: function(event, ui) {
 									$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
 								}
 							});
-							/*$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'});
-							  $('#popup1').children('.ui-dialog-titlebar-close').show();*/
-							//  $(".ui-dialog-titlebar").hide();
 						});
 						$('#annot_relation').click(function() {
-							//  alert( "Handler for .click() called." );
 							var type1 = "relation";
 							var html2 = "<div id='popup2' title='Annotation' style='display: none'><form id='annot_form' action=" + path
 							+ "/auth/editing/saveAnnotation/";

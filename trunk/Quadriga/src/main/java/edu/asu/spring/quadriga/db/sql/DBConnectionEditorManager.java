@@ -712,7 +712,8 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 		return errmsg;
 	}
 	
-	public String[] getAnnotation(String type, String id,String userId) throws QuadrigaStorageException{
+	// Changed this won't work as expected the signature of this method changed as per req
+	public String[] getAnnotation(String type, String id,String userId,String networkId) throws QuadrigaStorageException{
 		
 		String dbCommand;
 		String errmsg="";
@@ -788,7 +789,7 @@ public class DBConnectionEditorManager extends ADBConnectionManager implements I
 	 * @author Sowjanya Ambati
 	 * 
 	 */
-
+	// Changed this won't work as expected the signature of this method changed as per req
 	@Override
 	public String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException {
 

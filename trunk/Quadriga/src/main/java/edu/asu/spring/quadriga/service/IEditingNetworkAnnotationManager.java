@@ -4,7 +4,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IEditingNetworkAnnotationManager {
 
-	public abstract String[] getAnnotation(String type, String id, String userid)
+	public abstract String[] getAnnotation(String type, String id, String userid,String networkId)
 			throws QuadrigaStorageException;
 
 	public abstract String addAnnotationToNetwork(String networkId,
