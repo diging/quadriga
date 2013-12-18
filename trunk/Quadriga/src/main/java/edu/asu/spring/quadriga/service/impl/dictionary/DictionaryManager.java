@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.dao.sql.dictionary.impl.DictionaryManagerDAO;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
@@ -60,15 +59,12 @@ public class DictionaryManager implements IDictionaryManager {
 			.getLogger(DictionaryManager.class);
 
 	@Autowired
-	@Qualifier("DBConnectionDictionaryManagerBean")
+	@Qualifier("dictionaryManagerDAO")
 	private IDBConnectionDictionaryManager dbConnect;
 
 	@Autowired
 	DictionaryItemsFactory dictionaryItemsFactory;
 
-	@Autowired
-	DictionaryManagerDAO dictionaryManagerDAO;
-	
 	/**
 	 * Gets the searchWordPowerURL
 	 * 
@@ -100,7 +96,7 @@ public class DictionaryManager implements IDictionaryManager {
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 
 		try {
-			dictionaryList = dictionaryManagerDAO.getDictionaryOfUser(userId);
+			dictionaryList = dbConnect.getDictionaryOfUser(userId);
 		} catch (Exception e) {
 			logger.error("getDictionariesList",e);
 		}
@@ -117,6 +113,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @throws QuadrigaAccessException 
 	 */
 	@Override
+	@Transactional
 	public boolean userDictionaryPerm(String userId, String dicitonaryId) throws QuadrigaStorageException, QuadrigaAccessException{
 		boolean result=dbConnect.userDictionaryPerm(userId,dicitonaryId);
 		logger.info("result of perfmission "+result);
@@ -135,12 +132,14 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @throws QuadrigaAccessException 
 	 */
 	@Override
+	@Transactional
 	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException, QuadrigaAccessException{
 		List<IDictionary> dictionaryList=dbConnect.getDictionaryCollabOfUser(userId);
 		return dictionaryList;
 	}
 	
 	@Override
+	@Transactional
 	public String getDictionaryCollabPerm(String userId,String dicitonaryId) throws QuadrigaStorageException {
 		String role=dbConnect.getDictionaryCollabPerm(userId, dicitonaryId);
 		return role;
@@ -152,6 +151,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 
 	@Override
+	@Transactional
 	public String addNewDictionary(IDictionary dictionary)
 			throws QuadrigaStorageException {
 
@@ -172,6 +172,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 
 	@Override
+	@Transactional
 	public String addNewDictionariesItems(String dictionaryId, String item,
 			String id, String pos, String owner)
 			throws QuadrigaStorageException {
@@ -193,6 +194,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return success or error message to controller
 	 */
 	@Override
+	@Transactional
 	public String deleteDictionariesItems(String dictionaryId, String itemid,
 			String ownerName) throws QuadrigaStorageException {
 		String msg = "";
@@ -207,6 +209,7 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 	
 	@Override
+	@Transactional
 	public String deleteDictionaryItemsCollab(String dictionaryId, String itemid) throws QuadrigaStorageException {
 		String msg = "";
 		try {
@@ -224,6 +227,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return error or success message to controller
 	 */
 	@Override
+	@Transactional
 	public String updateDictionariesItems(String dictionaryId, String termid,
 			String term, String pos) throws QuadrigaStorageException {
 		String msg = "";
@@ -243,6 +247,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to list of dictionary item to controller
 	 */
 	@Override
+	@Transactional
 	public List<IDictionaryItem> getDictionariesItems(String dictionaryid,
 			String ownerName) throws QuadrigaStorageException {
 
@@ -256,7 +261,9 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryItemList;
 	}
+	
 	@Override
+	@Transactional
 	public List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
 
 		List<IDictionaryItem> dictionaryItemList = null;
@@ -277,6 +284,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public String getDictionaryName(String dictionaryid)
 			throws QuadrigaStorageException {
 
@@ -291,6 +299,7 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 	
 	@Override
+	@Transactional
 	public String getDictionaryOwner(String dictionaryid)
 			throws QuadrigaStorageException {
 
@@ -311,6 +320,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return the dictionaryEntry bean to controller
 	 */
 	@Override
+	@Transactional
 	public List<WordpowerReply.DictionaryEntry> searchWordPower(String item,
 			String pos) {
 
@@ -329,6 +339,7 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
+	@Transactional
 	public String deleteDictionary(String user, String dictionaryId)
 			throws QuadrigaStorageException {
 
@@ -382,6 +393,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public String addDictionaryItems(DictionaryItem dictionartItems, String [] values,String dictionaryId) throws QuadrigaStorageException{
 		String msg="";
 		for (int i = 0; i < values.length; i++) {
@@ -433,6 +445,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @exception 	QuadrigaStorageException	
 	 */
 	@Override
+	@Transactional
 	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
 		
 		List<ICollaborator> collaborators = null;
@@ -455,6 +468,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @exception 	QuadrigaStorageException	
 	 */
 	@Override
+	@Transactional
 	public List<IUser> showNonCollaboratingUsers(String dictionaryid) {
 
 		List<IUser> nonCollabUsers = null;
@@ -474,6 +488,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @exception 	QuadrigaStorageException	
 	 */
 	@Override
+	@Transactional
 	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 		
 		String errmsg=null;
@@ -499,6 +514,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @exception 	QuadrigaStorageException	
 	 */
 	@Override
+	@Transactional
 	public void deleteCollaborator(String dictionaryid, String userName) throws QuadrigaStorageException {
 		
 		dbConnect.deleteCollaborators(dictionaryid, userName);
@@ -506,6 +522,7 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 	
 	@Override
+	@Transactional
 	public String getDictionaryId(String dictName) throws QuadrigaStorageException
 	{
 		String dictId = dbConnect.getDictionaryId(dictName);
