@@ -263,8 +263,6 @@ function init(json, networkId, path) {
 							}
 						}
 
-
-
 						// append connections information
 						$jit.id('inner-details').innerHTML = path + html;
 						//$jit.id('inner-details').innerHTML = html1;
@@ -272,11 +270,20 @@ function init(json, networkId, path) {
 						// This function annotate for node
 						// This works on annot_node tag in the pop.
 						$('#annot_node').click(function() {
-							$('#annotText').val('');
+							
+							//Type = node
 							var type1 ="node";
+							
+							// Making it unique, as getting the handle on $(#something).val() 
+							// is not working for more than one node.
 							var text1ID = "annotText_"+guid();
-							var popupId = "popup"+guid();
+							var popupId = "popup1_"+guid();
+							
+							// Get annotation URL
 							var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
+							
+							
+							// Creating popup html content to facilitate adding annotation
 							var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
 							"<form id='annot_form' action=" + path
 							+ "/auth/editing/saveAnnotation/";
@@ -286,15 +293,18 @@ function init(json, networkId, path) {
 								+ node.id + " />";
 							html1 += "<input type='button' id='annot_submit' value='submit'>";
 							html1 += "</div></form>";
-							alert(networkId);
-							alert(getAnnotationUrl);
+							
+							// Appending to jit view
 							$jit.id('inner-details').innerHTML = html1;
+							
+							// ajax Call to get annotation for a node.id
+							// Used to add the old annotation in to the popup view
 							$.ajax({
 								url : getAnnotationUrl,
 								type : "GET",
 								data: "nodeid="+node.id+"&type="+type1,
 								success : function(data) {
-									alert(data);
+									$('#'+text1ID+'').val(data); 
 								},
 								error: function() {
 									alert("error");
@@ -302,10 +312,9 @@ function init(json, networkId, path) {
 							});
 							event.preventDefault();
 
-
+							// Saves the relation annotation to DB
 							$('#annot_submit').click(function(event) {
 								var annottext = $('#'+text1ID+'').val();  
-								var url = path+"/auth/editing/saveAnnotation/"+networkId;
 								$.ajax({
 									url : $('#annot_form').attr("action"),
 									type : "POST",
@@ -321,63 +330,63 @@ function init(json, networkId, path) {
 								event.preventDefault();
 							});
 
-							$( '#'+popupId+'' ).show( "slow" );
-
+							
+							// Popup decoration effects
+							$( '#'+popupId+'' ).show( "slow" );					
 							$('#'+popupId+'').dialog({
 								open: function(event, ui) {
 									$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
 								}
 							});
 						});
+						
+						
 						$('#annot_relation').click(function() {
 							var type1 = "relation";
-							var html2 = "<div id='popup2' title='Annotation' style='display: none'><form id='annot_form' action=" + path
+							
+							// Making it unique, as getting the handle on $(#something).val() 
+							// is not working for more than one node.
+							var text1ID = "annotText_"+guid();
+							var popupId = "popup2_"+guid();
+							
+							// Creating popup html content to facilitate adding annotation
+							var html2 = "<div id='"+popupId+"' title='Annotation' style='display: none'><form id='annot_form' action=" + path
 							+ "/auth/editing/saveAnnotation/";
 							html2 += networkId + " method='POST' >";
 							html2 += "<p id='message'></p>";
-							html2 += "<textarea name='annotText' id='text' cols='15' rows='15'></textarea>";
+							html2 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
 							html2 += "<input  type='hidden' name='nodename' id='nodename' value="
 								+ node.id + " />";
 							html2 += "<input type='submit' id='annot_submit1' value='submit'>";
 							html2 += "</form></div>";
+							
+							// Sending the HTML code to jit 
 							$jit.id('inner-details').innerHTML = path + html2;
+							
+							// Ajax call to get annotation for node.id
+							// Used to add the old annotation in to the popup view
 							$.ajax({
 								url : path+"/auth/editing/getAnnotation/"+networkId,
 								type : "GET",
-								//data : $('#nodename').serialize(),
 								data: "nodeid="+node.id+"&type="+type1,
 								success : function(data) {
-									//alert("done");
-									//alert("data:"+data);
-									//alert("before:" +$('#text').val());
-									$('#text').append(data);
-									//$('#text').text(data);
-									//alert("after:"+$('#text').val());
-									//$jit.id('inner-details').innerHTML = path + html1;
-
+									$('#'+text1ID+'').append(data);
 								},
 								error: function() {
 									alert("error");
 								}
 							});
-							//  event.preventDefault();
 
-
+							// Saves the relation annotation to DB
 							$('#annot_submit1').click(function(event) {
-								var annottext = $('#text').val();  
-								var nodename = $('#nodename').val(); 
-								var url = path+"/auth/editing/saveAnnotation/"+networkId;
-								alert("text:"+annottext);
-								alert("nodename:"+nodename);
-								alert("url:"+url);
+								var annottext = $('#'+text1ID+'').val();  
 								$.ajax({
 									url : $('#annot_form').attr("action"),
 									type : "POST",
 									data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
 									success : function() {
-
-										//alert("done");
-										$('#popup2').dialog('close');
+										alert("done");
+										$('#'+popupId+'').dialog('close');
 									},
 									error: function() {
 										alert("error");
@@ -387,41 +396,17 @@ function init(json, networkId, path) {
 								event.preventDefault();
 							});
 
-							//  $jit.id('inner-details').innerHTML = path + html2;
-							$( '#popup2' ).show( "slow" );
-							/*var dialogOpts = {
-								      modal: true,
-								      autoOpen: false,
-								      height: 320,
-								      width: 480,
-								      draggable: true,
-								      resizeable: true,
-								      title:'Annotation'
-								   };*/
-							$('#popup2').dialog();
-						});
-						/*$('#annot_form').submit(function(event) {
-							var text = $('#annotText').val();  
-						    var nodename = $('#nodename').val(); 
-
-							$.ajax({
-								url : $('#annot_form').attr("action"),
-								type : "POST",
-								data: $('#annot_form').serialize(),
-
-								success : function() {
-									alert("done");
-								},
-								error: function() {
-									alert("error");
+							// Popup decoration effects
+							$( '#'+popupId+'' ).show( "slow" );
+							$('#'+popupId+'').dialog({
+								open: function(event, ui) {
+									$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
 								}
 							});
-
-							event.preventDefault();
-						});*/
+							
+						});
 
 						$('#popup').dialog();
-
 
 					},
 				},
