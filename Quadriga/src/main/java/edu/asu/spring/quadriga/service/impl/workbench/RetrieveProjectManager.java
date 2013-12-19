@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.service.impl.workbench;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +20,9 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 public class RetrieveProjectManager implements IRetrieveProjectManager 
 {
 	@Autowired
-	@Qualifier("retrieveProjectManagerDAO")
 	private IDBConnectionRetrieveProjectManager dbConnect;
 	
 	@Autowired
-	@Qualifier("DBConnectionRetrieveProjCollabManagerBean")
 	private IDBConnectionRetrieveProjCollabManager databaseConnect;
 	
 	@Autowired

@@ -25,9 +25,9 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTOPK;
+import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
+import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -143,7 +143,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		try
 		{
 			ConceptCollectionDTO conceptcollectionsDTO = conceptCollectionDTOMapper.getConceptCollectionDTO(conceptCollection);
-			conceptcollectionsDTO.setId(generateUniqueID());
+			conceptcollectionsDTO.setConceptCollectionid(generateUniqueID());
 			sessionFactory.getCurrentSession().save(conceptcollectionsDTO);
 		}
 		catch(Exception e)
@@ -170,10 +170,9 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 				collection.setName(conceptcollectionsDTO.getCollectionname());
 				owner = userManager.getUserDetails(conceptcollectionsDTO.getCollectionowner().getUsername());
 				collection.setOwner(owner);
-				
-				if(conceptcollectionsDTO.getConceptcollectionsItemsDTOList() != null && conceptcollectionsDTO.getConceptcollectionsItemsDTOList().size() > 0)
+				if(conceptcollectionsDTO.getConceptCollectionItemsDTOList() != null && conceptcollectionsDTO.getConceptCollectionItemsDTOList().size() > 0)
 				{
-					Iterator<ConceptcollectionsItemsDTO> ccItemsIterator = conceptcollectionsDTO.getConceptcollectionsItemsDTOList().iterator();
+					Iterator<ConceptCollectionItemsDTO> ccItemsIterator = conceptcollectionsDTO.getConceptCollectionItemsDTOList().iterator();
 					while(ccItemsIterator.hasNext())
 					{
 						collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(ccItemsIterator.next()));
@@ -237,20 +236,20 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id");
 			query.setParameter("id", collectionid);
-			List<ConceptcollectionsCollaboratorDTO> ccCollabList = query.list();
+			List<ConceptCollectionCollaboratorDTO> ccCollabList = query.list();
 			
-			Iterator<ConceptcollectionsCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
+			Iterator<ConceptCollectionCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
 			HashMap<String, String> userRoleMap = new HashMap<String, String>();
 			while(ccCollabIterator.hasNext())
 			{
-				ConceptcollectionsCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
+				ConceptCollectionCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
 				if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
 				{
-					userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole()+",");
+					userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
 				}
 				else
 				{
-					userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole()+",");
+					userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
 				}
 			}
 			
@@ -325,13 +324,13 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
 			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
 			{
-				ConceptcollectionsItemsDTO conceptcollectionsItemsDTO = new ConceptcollectionsItemsDTO();
+				ConceptCollectionItemsDTO conceptcollectionsItemsDTO = new ConceptCollectionItemsDTO();
 				conceptcollectionsItemsDTO.setCreateddate(new Date());
 				conceptcollectionsItemsDTO.setDescription(desc);
 				conceptcollectionsItemsDTO.setLemma(lemma);
 				conceptcollectionsItemsDTO.setPos(pos);
 				conceptcollectionsItemsDTO.setUpdateddate(new Date());
-				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptcollectionsItemsDTOPK(conceptId, id));
+				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptCollectionItemsDTOPK(conceptId, id));
 				sessionFactory.getCurrentSession().save(conceptcollectionsItemsDTO);
 			}
 			else
@@ -393,7 +392,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:collectionId and ccItems.conceptcollectionsItemsDTOPK.item =:id");
 			query.setParameter("id", id);
 			query.setParameter("collectionId", collectionId);
-			List<ConceptcollectionsItemsDTO> ccItemsDTOList = query.list();
+			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
 			
 			if(ccItemsDTOList != null && ccItemsDTOList.size() > 0)
 			{
@@ -426,11 +425,11 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:collectionId and ccItems.conceptcollectionsItemsDTOPK.item =:id");
 			query.setParameter("id", concept.getId());
 			query.setParameter("collectionId", collectionId);
-			List<ConceptcollectionsItemsDTO> ccItemsDTOList = query.list();
+			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
 			
 			if(ccItemsDTOList != null && ccItemsDTOList.size() > 0)
 			{
-				ConceptcollectionsItemsDTO ccItemsDTO = ccItemsDTOList.get(0);
+				ConceptCollectionItemsDTO ccItemsDTO = ccItemsDTOList.get(0);
 				ccItemsDTO.setLemma(concept.getLemma());
 				ccItemsDTO.setPos(concept.getPos());
 				ccItemsDTO.setDescription(concept.getDescription());
@@ -462,7 +461,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			
 			if(ccIDList != null  && ccIDList.size()> 0)
 			{
-				ccID = ccIDList.get(0).getId();
+				ccID = ccIDList.get(0).getConceptCollectionid();
 			}
 		}
 		catch(Exception e)
@@ -482,23 +481,23 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id");
 			query.setParameter("id", collection.getId());
-			List<ConceptcollectionsCollaboratorDTO> ccCollabList = query.list();
+			List<ConceptCollectionCollaboratorDTO> ccCollabList = query.list();
 			
 			if(ccCollabList != null && ccCollabList.size() > 0)
 			{
-				Iterator<ConceptcollectionsCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
+				Iterator<ConceptCollectionCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
 				HashMap<String, String> userRoleMap = new HashMap<String, String>();
 				while(ccCollabIterator.hasNext())
 				{
-					ConceptcollectionsCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
+					ConceptCollectionCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
 					if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
 					{
-						String updatedRoleStr = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole()+",");
+						String updatedRoleStr = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
 						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(), updatedRoleStr);
 					}
 					else
 					{
-						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole()+",");
+						userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
 					}
 				}
 				

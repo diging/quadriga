@@ -14,10 +14,12 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class ConceptcollectionsCollaboratorDTOPK implements Serializable {
+public class ConceptCollectionCollaboratorDTOPK implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
     @Basic(optional = false)
-    @Column(name = "collectionid")
-    private String collectionid;
+    @Column(name = "conceptcollectionid")
+    private String conceptcollectionid;
     @Basic(optional = false)
     @Column(name = "collaboratoruser")
     private String collaboratoruser;
@@ -25,24 +27,25 @@ public class ConceptcollectionsCollaboratorDTOPK implements Serializable {
     @Column(name = "collaboratorrole")
     private String collaboratorrole;
 
-    public ConceptcollectionsCollaboratorDTOPK() {
+    public ConceptCollectionCollaboratorDTOPK() {
     }
 
-    public ConceptcollectionsCollaboratorDTOPK(String collectionid, String collaboratoruser, String collaboratorrole) {
-        this.collectionid = collectionid;
+    public ConceptCollectionCollaboratorDTOPK(String conceptcollectionid, String collaboratoruser, String collaboratorrole) {
+        this.conceptcollectionid = conceptcollectionid;
         this.collaboratoruser = collaboratoruser;
         this.collaboratorrole = collaboratorrole;
     }
 
-    public String getCollectionid() {
-        return collectionid;
-    }
 
-    public void setCollectionid(String collectionid) {
-        this.collectionid = collectionid;
-    }
+    public String getConceptcollectionid() {
+		return conceptcollectionid;
+	}
 
-    public String getCollaboratoruser() {
+	public void setConceptcollectionid(String conceptcollectionid) {
+		this.conceptcollectionid = conceptcollectionid;
+	}
+
+	public String getCollaboratoruser() {
         return collaboratoruser;
     }
 
@@ -61,7 +64,7 @@ public class ConceptcollectionsCollaboratorDTOPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (collectionid != null ? collectionid.hashCode() : 0);
+        hash += (conceptcollectionid != null ? conceptcollectionid.hashCode() : 0);
         hash += (collaboratoruser != null ? collaboratoruser.hashCode() : 0);
         hash += (collaboratorrole != null ? collaboratorrole.hashCode() : 0);
         return hash;
@@ -69,12 +72,11 @@ public class ConceptcollectionsCollaboratorDTOPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ConceptcollectionsCollaboratorDTOPK)) {
+        if (!(object instanceof ConceptCollectionCollaboratorDTOPK)) {
             return false;
         }
-        ConceptcollectionsCollaboratorDTOPK other = (ConceptcollectionsCollaboratorDTOPK) object;
-        if ((this.collectionid == null && other.collectionid != null) || (this.collectionid != null && !this.collectionid.equals(other.collectionid))) {
+        ConceptCollectionCollaboratorDTOPK other = (ConceptCollectionCollaboratorDTOPK) object;
+        if ((this.conceptcollectionid == null && other.conceptcollectionid != null) || (this.conceptcollectionid != null && !this.conceptcollectionid.equals(other.conceptcollectionid))) {
             return false;
         }
         if ((this.collaboratoruser == null && other.collaboratoruser != null) || (this.collaboratoruser != null && !this.collaboratoruser.equals(other.collaboratoruser))) {
@@ -85,10 +87,4 @@ public class ConceptcollectionsCollaboratorDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ConceptcollectionsCollaboratorDTOPK[ collectionid=" + collectionid + ", collaboratoruser=" + collaboratoruser + ", collaboratorrole=" + collaboratorrole + " ]";
-    }
-    
 }

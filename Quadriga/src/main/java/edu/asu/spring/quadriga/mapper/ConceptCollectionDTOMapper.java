@@ -15,8 +15,8 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
+import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -49,12 +49,11 @@ public class ConceptCollectionDTOMapper
 		concept = conceptCollectionFactory.createConceptCollectionObject();
 		collaboratorList = new ArrayList<ICollaborator>();
 		conceptList = new ArrayList<IConcept>();
-		
 		//fetch all the input values
-		List<ConceptcollectionsCollaboratorDTO> conceptCollectionCollaborators = collection.getConceptcollectionsCollaboratorDTOList();
+		List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaborators = collection.getConceptCollectionCollaboratorDTOList();
 		
 		//loop through the collaborators
-		for(ConceptcollectionsCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
+		for(ConceptCollectionCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
 		{
 			
 			collaborator = getConceptCollectionCollaborators(conceptCollaborator);
@@ -77,15 +76,15 @@ public class ConceptCollectionDTOMapper
 		}
 		
 		//loop through all the items and add it to concept collection
-		List<ConceptcollectionsItemsDTO> collectionItems = collection.getConceptcollectionsItemsDTOList();
+		List<ConceptCollectionItemsDTO> collectionItems = collection.getConceptCollectionItemsDTOList();
 		
-		for(ConceptcollectionsItemsDTO collectionConcept : collectionItems)
+		for(ConceptCollectionItemsDTO collectionConcept : collectionItems)
 		{
 			tempConcept = getConceptCollectionItems(collectionConcept);
 			conceptList.add(tempConcept);
 		}
 		
-		concept.setId(collection.getId());
+		concept.setId(collection.getConceptCollectionid());
 		concept.setName(collection.getCollectionname());
 		concept.setDescription(collection.getDescription());
         concept.setOwner(userDTOMapper.getUser(collection.getCollectionowner()));
@@ -95,7 +94,7 @@ public class ConceptCollectionDTOMapper
 		return concept;
 	}
 	
-	public IConcept getConceptCollectionItems(ConceptcollectionsItemsDTO conceptCollectionConcept)
+	public IConcept getConceptCollectionItems(ConceptCollectionItemsDTO conceptCollectionConcept)
 	{
 		IConcept concept = null;
 		concept = conceptCollectionFactory.createConcept();
@@ -106,12 +105,12 @@ public class ConceptCollectionDTOMapper
 		return concept;
 	}
 	
-	public List<IConcept> getConceptCollectionItemList(List<ConceptcollectionsItemsDTO> conceptCollectionConceptList)
+	public List<IConcept> getConceptCollectionItemList(List<ConceptCollectionItemsDTO> conceptCollectionConceptList)
 	{
 		List<IConcept> conceptList = new ArrayList<IConcept>();
 		if(conceptCollectionConceptList != null && conceptCollectionConceptList.size() > 0)
 		{
-			Iterator<ConceptcollectionsItemsDTO> ccItemsIterator = conceptCollectionConceptList.iterator();
+			Iterator<ConceptCollectionItemsDTO> ccItemsIterator = conceptCollectionConceptList.iterator();
 			while(ccItemsIterator.hasNext())
 			{
 				conceptList.add(getConceptCollectionItems(ccItemsIterator.next()));
@@ -120,7 +119,7 @@ public class ConceptCollectionDTOMapper
 		return conceptList;
 	}
 	
-	public ICollaborator getConceptCollectionCollaborators(ConceptcollectionsCollaboratorDTO conceptCollectionCollaborator)
+	public ICollaborator getConceptCollectionCollaborators(ConceptCollectionCollaboratorDTO conceptCollectionCollaborator)
 	{
 		ICollaborator collaborator = null;
 		List<ICollaboratorRole> collaboratorRoles = null;
@@ -129,7 +128,7 @@ public class ConceptCollectionDTOMapper
 		collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		
 		QuadrigaUserDTO userName = conceptCollectionCollaborator.getQuadrigaUserDTO();
-		String role = conceptCollectionCollaborator.getConceptcollectionsCollaboratorDTOPK().getCollaboratorrole();
+		String role = conceptCollectionCollaborator.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 		
 		collaboratorRoles.add(collaboratorRoleManager.getCollectionCollabRoleByDBId(role));     
 		

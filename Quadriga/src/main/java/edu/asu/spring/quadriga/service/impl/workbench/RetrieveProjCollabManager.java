@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IRetrieveProjectCollaboratorManagerDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -24,7 +24,7 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	private ICollaboratorRoleManager roleMapper;
 	
 	@Autowired
-	private IRetrieveProjectCollaboratorManagerDAO projectCollaboratorDAO;
+	private IDBConnectionRetrieveProjCollabManager dbConnect;
 	
 	@Override
 	@Transactional
@@ -32,7 +32,7 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	{
 		List<IUser> nonCollaborators;
 		
-		nonCollaborators = projectCollaboratorDAO.getProjectNonCollaborators(projectid);
+		nonCollaborators = dbConnect.getProjectNonCollaborators(projectid);
 		
 		return nonCollaborators;
 	}
@@ -44,7 +44,7 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	{
 		List<ICollaborator> collaboratorList;
 		//retrieve the collaborators associated with project
-		collaboratorList = projectCollaboratorDAO.getProjectCollaborators(projectId);
+		collaboratorList = dbConnect.getProjectCollaborators(projectId);
 
 		//map the collaborators to UI XML values
 		for (ICollaborator collaborator : collaboratorList) 

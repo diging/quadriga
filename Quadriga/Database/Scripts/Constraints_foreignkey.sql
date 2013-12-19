@@ -1,16 +1,4 @@
 
-ALTER TABLE tbl_conceptcollections_collaborator
-ADD FOREIGN KEY(collectionid) REFERENCES tbl_conceptcollections(id);
-
-ALTER TABLE tbl_conceptcollections_collaborator
-ADD FOREIGN KEY(collaboratoruser) REFERENCES tbl_quadriga_user(username);
-
-ALTER TABLE tbl_conceptcollections_items
-ADD FOREIGN KEY(id) REFERENCES tbl_conceptcollections(id);
-
-ALTER TABLE tbl_conceptcollections
-ADD FOREIGN KEY(collectionowner) REFERENCES tbl_quadriga_user(username);
-
 ALTER TABLE tbl_dictionary_collaborator
 ADD FOREIGN KEY(id) REFERENCES tbl_dictionary(id);
 
@@ -22,21 +10,6 @@ ADD FOREIGN KEY(id) REFERENCES tbl_dictionary(id);
 
 ALTER TABLE tbl_dictionary
 ADD FOREIGN KEY(dictionaryowner) REFERENCES tbl_quadriga_user(username);
-
-ALTER TABLE tbl_project_collaborator
-ADD FOREIGN KEY(projectid) REFERENCES tbl_project(projectid);
-
-ALTER TABLE tbl_project_collaborator
-ADD FOREIGN KEY(collaboratoruser)  REFERENCES tbl_quadriga_user(username);
-
-ALTER TABLE tbl_project_workspace
-ADD FOREIGN KEY(projectid) REFERENCES tbl_project(projectid);
-
-ALTER TABLE tbl_project_workspace
-ADD FOREIGN KEY(workspaceid)REFERENCES tbl_workspace(workspaceid);
-
-ALTER TABLE tbl_project
-ADD FOREIGN KEY(projectowner)REFERENCES tbl_quadriga_user(username);
 
 ALTER TABLE tbl_quadriga_user_denied
 ADD FOREIGN KEY(deniedby) REFERENCES tbl_quadriga_user(username);
@@ -101,3 +74,20 @@ ALTER TABLE tbl_project_conceptcollection
 ALTER TABLE tbl_project_collaborator
  ADD CONSTRAINT fk_project_collaborator_projectid FOREIGN KEY(projectid)
   REFERENCES tbl_project(projectid);
+  
+ALTER TABLE tbl_conceptcollection
+ ADD CONSTRAINT fk_tbl_conceptcollection_owner FOREIGN KEY(collectionowner)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_conceptcollection_collaborator
+ ADD CONSTRAINT fk_cc_collaborator_conceptcollectionid FOREIGN KEY(conceptcollectionid)
+ REFERENCES tbl_conceptcollection(conceptcollectionid);
+
+ALTER TABLE tbl_conceptcollection_collaborator
+ ADD CONSTRAINT fk_cc_collaborator_collaboratoruser FOREIGN KEY(collaboratoruser)
+ REFERENCES tbl_quadriga_user(username);
+  
+ALTER TABLE tbl_conceptcollection_items
+ ADD CONSTRAINT fk_cc_items FOREIGN KEY(conceptcollectionid)
+ REFERENCES tbl_conceptcollection(conceptcollectionid);
+ 

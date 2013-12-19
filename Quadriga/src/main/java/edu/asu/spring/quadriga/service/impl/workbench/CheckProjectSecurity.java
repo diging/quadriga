@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManagerDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -27,7 +27,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	private IRetrieveProjCollabManager projectManager;
 	
 	@Autowired
-	private IProjectAccessManagerDAO projectAccessManagerDAO;
+	private IDBConnectionProjectAccessManager dbConnect;
 	
 	/**
 	 * This method checks if the user is Quadriga Admin
@@ -79,7 +79,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = projectAccessManagerDAO.chkProjectOwner(userName, projectId);
+		chkAccess = dbConnect.chkProjectOwner(userName, projectId);
 		
 		return chkAccess;
 		
@@ -95,7 +95,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the use is associated with any project
-		chkAccess = projectAccessManagerDAO.chkIsProjectAssociated(userName);
+		chkAccess = dbConnect.chkIsProjectAssociated(userName);
 		
 		return chkAccess;
 	}
@@ -110,7 +110,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the collaborator is associated with any project
-		chkAccess = projectAccessManagerDAO.chkIsCollaboratorProjectAssociated(userName, collaboratorRole);
+		chkAccess = dbConnect.chkIsCollaboratorProjectAssociated(userName, collaboratorRole);
 		
 		
 		return chkAccess;
@@ -134,7 +134,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = projectAccessManagerDAO.chkProjectCollaborator(userName, collaboratorRole, projectId);
+		chkAccess = dbConnect.chkProjectCollaborator(userName, collaboratorRole, projectId);
 		
 		return chkAccess;
 		
@@ -230,7 +230,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 		
 		//check if the user is project owner
-		chkAccess = projectAccessManagerDAO.chkProjectOwnerEditorRole(userName, projectId);
+		chkAccess = dbConnect.chkProjectOwnerEditorRole(userName, projectId);
 		return chkAccess;
 	}
 }

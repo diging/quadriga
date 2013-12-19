@@ -15,6 +15,8 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class ProjectConceptCollectionDTOPK implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "projectid")
     private String projectid;

@@ -71,7 +71,7 @@ public class QuadrigaUserDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<DspaceKeysDTO> dspaceKeysDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
-    private List<ConceptcollectionsCollaboratorDTO> conceptcollectionsCollaboratorDTOList;
+    private List<ConceptCollectionCollaboratorDTO> conceptcollectionsCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectowner")
     private List<ProjectDTO> projectDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceowner")
@@ -185,11 +185,11 @@ public class QuadrigaUserDTO implements Serializable {
     }
 
     @XmlTransient
-    public List<ConceptcollectionsCollaboratorDTO> getConceptcollectionsCollaboratorDTOList() {
+    public List<ConceptCollectionCollaboratorDTO> getConceptcollectionsCollaboratorDTOList() {
         return conceptcollectionsCollaboratorDTOList;
     }
 
-    public void setConceptcollectionsCollaboratorDTOList(List<ConceptcollectionsCollaboratorDTO> conceptcollectionsCollaboratorDTOList) {
+    public void setConceptcollectionsCollaboratorDTOList(List<ConceptCollectionCollaboratorDTO> conceptcollectionsCollaboratorDTOList) {
         this.conceptcollectionsCollaboratorDTOList = conceptcollectionsCollaboratorDTOList;
     }
 
