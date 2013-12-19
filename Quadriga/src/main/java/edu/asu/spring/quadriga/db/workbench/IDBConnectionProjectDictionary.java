@@ -18,13 +18,13 @@ public interface IDBConnectionProjectDictionary {
 	 * @author          Lohith Dwaraka
 	 * 
 	 */
-	public abstract String addProjectDictionary(String projectId,
+	public abstract void addProjectDictionary(String projectId,
 			String dictionaryId, String userId) throws QuadrigaStorageException;
 
 	public abstract List<IDictionary> listProjectDictionary(String projectId, String userId)
 			throws QuadrigaStorageException;
 
-	public abstract  String deleteProjectDictionary(String projectId, String userId,
+	public abstract  void deleteProjectDictionary(String projectId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException;
 
 }

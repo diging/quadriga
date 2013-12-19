@@ -31,10 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProjectCollaboratorDTO.findByProjectid", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.projectCollaboratorDTOPK.projectid = :projectid"),
     @NamedQuery(name = "ProjectCollaboratorDTO.findByCollaboratoruser", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.projectCollaboratorDTOPK.collaboratoruser = :collaboratoruser"),
     @NamedQuery(name = "ProjectCollaboratorDTO.findByCollaboratorrole", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.projectCollaboratorDTOPK.collaboratorrole = :collaboratorrole"),
-    @NamedQuery(name = "ProjectCollaboratorDTO.findByUpdatedby", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.updatedby = :updatedby"),
-    @NamedQuery(name = "ProjectCollaboratorDTO.findByUpdateddate", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.updateddate = :updateddate"),
-    @NamedQuery(name = "ProjectCollaboratorDTO.findByCreatedby", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.createdby = :createdby"),
-    @NamedQuery(name = "ProjectCollaboratorDTO.findByCreateddate", query = "SELECT p FROM ProjectCollaboratorDTO p WHERE p.createddate = :createddate")})
+    })
 public class ProjectCollaboratorDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -144,7 +141,6 @@ public class ProjectCollaboratorDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ProjectCollaboratorDTO)) {
             return false;
         }
@@ -154,10 +150,4 @@ public class ProjectCollaboratorDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectCollaboratorDTO[ projectCollaboratorDTOPK=" + projectCollaboratorDTOPK + " ]";
-    }
-    
 }

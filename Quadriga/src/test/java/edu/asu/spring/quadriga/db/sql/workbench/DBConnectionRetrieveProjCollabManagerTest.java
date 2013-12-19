@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -228,7 +228,6 @@ public class DBConnectionRetrieveProjCollabManagerTest {
 		
 		IProject project;
 		IUser owner;
-		String errmsg;
 		
 		project = projectFactory.createProjectObject();
 		project.setName("testupdateproject");
@@ -244,9 +243,10 @@ public class DBConnectionRetrieveProjCollabManagerTest {
 		
 		dbProjectConnection.addProjectRequest(project,owner.getUserName());
 		
-		errmsg = dbModifyCollabConn.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
+		dbModifyCollabConn.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
 		
-		assertEquals("",errmsg);
+
+		assertTrue(true);
 		
 		List<IUser> collaborators = dbConnection.getProjectNonCollaborators(getProjectId(project.getName()));
 		assertEquals(2,collaborators.size());

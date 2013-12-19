@@ -18,13 +18,13 @@ public interface IDBConnectionProjectConceptColleciton {
 	 * @author          Lohith Dwaraka
 	 * 
 	 */
-	public abstract String addProjectConceptCollection(String projectId,
+	public abstract void addProjectConceptCollection(String projectId,
 			String conceptCollectionId, String userId) throws QuadrigaStorageException;
 
 	public abstract List<IConceptCollection> listProjectConceptCollection(String projectId, String userId)
 			throws QuadrigaStorageException;
 
-	public abstract  String deleteProjectConceptCollection(String projectId, String userId,
+	public abstract  void deleteProjectConceptCollection(String projectId, String userId,
 			String conceptCollectionId) throws QuadrigaStorageException;
 
 }

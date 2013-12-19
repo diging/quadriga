@@ -25,17 +25,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "tbl_project_conceptcollection")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ProjectConceptcollectionDTO.findAll", query = "SELECT p FROM ProjectConceptcollectionDTO p"),
-    @NamedQuery(name = "ProjectConceptcollectionDTO.findByProjectid", query = "SELECT p FROM ProjectConceptcollectionDTO p WHERE p.projectConceptcollectionDTOPK.projectid = :projectid"),
-    @NamedQuery(name = "ProjectConceptcollectionDTO.findByConceptcollectionid", query = "SELECT p FROM ProjectConceptcollectionDTO p WHERE p.projectConceptcollectionDTOPK.conceptcollectionid = :conceptcollectionid"),
-    @NamedQuery(name = "ProjectConceptcollectionDTO.findByUpdatedby", query = "SELECT p FROM ProjectConceptcollectionDTO p WHERE p.updatedby = :updatedby"),
-    @NamedQuery(name = "ProjectConceptcollectionDTO.findByUpdateddate", query = "SELECT p FROM ProjectConceptcollectionDTO p WHERE p.updateddate = :updateddate"),
-    @NamedQuery(name = "ProjectConceptcollectionDTO.findByCreatedby", query = "SELECT p FROM ProjectConceptcollectionDTO p WHERE p.createdby = :createdby"),
-    @NamedQuery(name = "ProjectConceptcollectionDTO.findByCreateddate", query = "SELECT p FROM ProjectConceptcollectionDTO p WHERE p.createddate = :createddate")})
-public class ProjectConceptcollectionDTO implements Serializable {
+    @NamedQuery(name = "ProjectConceptCollectionDTO.findAll", query = "SELECT p FROM ProjectConceptCollectionDTO p"),
+    @NamedQuery(name = "ProjectConceptCollectionDTO.findByProjectid", query = "SELECT p FROM ProjectConceptCollectionDTO p WHERE p.projectConceptCollectionDTOPK.projectid = :projectid"),
+    @NamedQuery(name = "ProjectConceptCollectionDTO.findByConceptcollectionid", query = "SELECT p FROM ProjectConceptCollectionDTO p WHERE p.projectConceptCollectionDTOPK.conceptcollectionid = :conceptcollectionid"),
+    })
+public class ProjectConceptCollectionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected ProjectConceptcollectionDTOPK projectConceptcollectionDTOPK;
+    protected ProjectConceptCollectionDTOPK projectConceptcollectionDTOPK;
     @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
@@ -51,14 +48,14 @@ public class ProjectConceptcollectionDTO implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
 
-    public ProjectConceptcollectionDTO() {
+    public ProjectConceptCollectionDTO() {
     }
 
-    public ProjectConceptcollectionDTO(ProjectConceptcollectionDTOPK projectConceptcollectionDTOPK) {
+    public ProjectConceptCollectionDTO(ProjectConceptCollectionDTOPK projectConceptcollectionDTOPK) {
         this.projectConceptcollectionDTOPK = projectConceptcollectionDTOPK;
     }
 
-    public ProjectConceptcollectionDTO(ProjectConceptcollectionDTOPK projectConceptcollectionDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public ProjectConceptCollectionDTO(ProjectConceptCollectionDTOPK projectConceptcollectionDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectConceptcollectionDTOPK = projectConceptcollectionDTOPK;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
@@ -66,15 +63,15 @@ public class ProjectConceptcollectionDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ProjectConceptcollectionDTO(String projectid, String conceptcollectionid) {
-        this.projectConceptcollectionDTOPK = new ProjectConceptcollectionDTOPK(projectid, conceptcollectionid);
+    public ProjectConceptCollectionDTO(String projectid, String conceptcollectionid) {
+        this.projectConceptcollectionDTOPK = new ProjectConceptCollectionDTOPK(projectid, conceptcollectionid);
     }
 
-    public ProjectConceptcollectionDTOPK getProjectConceptcollectionDTOPK() {
+    public ProjectConceptCollectionDTOPK getProjectConceptcollectionDTOPK() {
         return projectConceptcollectionDTOPK;
     }
 
-    public void setProjectConceptcollectionDTOPK(ProjectConceptcollectionDTOPK projectConceptcollectionDTOPK) {
+    public void setProjectConceptcollectionDTOPK(ProjectConceptCollectionDTOPK projectConceptcollectionDTOPK) {
         this.projectConceptcollectionDTOPK = projectConceptcollectionDTOPK;
     }
 
@@ -119,20 +116,13 @@ public class ProjectConceptcollectionDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProjectConceptcollectionDTO)) {
+        if (!(object instanceof ProjectConceptCollectionDTO)) {
             return false;
         }
-        ProjectConceptcollectionDTO other = (ProjectConceptcollectionDTO) object;
+        ProjectConceptCollectionDTO other = (ProjectConceptCollectionDTO) object;
         if ((this.projectConceptcollectionDTOPK == null && other.projectConceptcollectionDTOPK != null) || (this.projectConceptcollectionDTOPK != null && !this.projectConceptcollectionDTOPK.equals(other.projectConceptcollectionDTOPK))) {
             return false;
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectConceptcollectionDTO[ projectConceptcollectionDTOPK=" + projectConceptcollectionDTOPK + " ]";
-    }
-    
 }

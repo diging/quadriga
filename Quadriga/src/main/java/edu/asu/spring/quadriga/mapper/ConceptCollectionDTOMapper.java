@@ -14,8 +14,8 @@ import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -38,7 +38,7 @@ public class ConceptCollectionDTOMapper
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
 	
-	public IConceptCollection getConceptCollection(ConceptcollectionsDTO conceptCollection)
+	public IConceptCollection getConceptCollection(ConceptCollectionDTO collection)
 	{
 		List<ICollaborator> collaboratorList = null;
 		List<IConcept> conceptList = null;
@@ -51,7 +51,7 @@ public class ConceptCollectionDTOMapper
 		conceptList = new ArrayList<IConcept>();
 		
 		//fetch all the input values
-		List<ConceptcollectionsCollaboratorDTO> conceptCollectionCollaborators = conceptCollection.getConceptcollectionsCollaboratorDTOList();
+		List<ConceptcollectionsCollaboratorDTO> conceptCollectionCollaborators = collection.getConceptcollectionsCollaboratorDTOList();
 		
 		//loop through the collaborators
 		for(ConceptcollectionsCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
@@ -77,7 +77,7 @@ public class ConceptCollectionDTOMapper
 		}
 		
 		//loop through all the items and add it to concept collection
-		List<ConceptcollectionsItemsDTO> collectionItems = conceptCollection.getConceptcollectionsItemsDTOList();
+		List<ConceptcollectionsItemsDTO> collectionItems = collection.getConceptcollectionsItemsDTOList();
 		
 		for(ConceptcollectionsItemsDTO collectionConcept : collectionItems)
 		{
@@ -85,10 +85,10 @@ public class ConceptCollectionDTOMapper
 			conceptList.add(tempConcept);
 		}
 		
-		concept.setId(conceptCollection.getId());
-		concept.setName(conceptCollection.getCollectionname());
-		concept.setDescription(conceptCollection.getDescription());
-        concept.setOwner(userDTOMapper.getUser(conceptCollection.getCollectionowner()));
+		concept.setId(collection.getId());
+		concept.setName(collection.getCollectionname());
+		concept.setDescription(collection.getDescription());
+        concept.setOwner(userDTOMapper.getUser(collection.getCollectionowner()));
         concept.setCollaborators(collaboratorList);   
         concept.setItems(conceptList);
 		
@@ -148,10 +148,10 @@ public class ConceptCollectionDTOMapper
 	 * @author Karthik Jayaraman
 	 * 
 	 */
-	public List<IConceptCollection> getConceptCollectionList(List<ConceptcollectionsDTO> conceptCollectionDTOList) throws QuadrigaException
+	public List<IConceptCollection> getConceptCollectionList(List<ConceptCollectionDTO> conceptCollectionDTOList) throws QuadrigaException
 	{
 		List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
-		Iterator<ConceptcollectionsDTO> conceptIterator = conceptCollectionDTOList.iterator();
+		Iterator<ConceptCollectionDTO> conceptIterator = conceptCollectionDTOList.iterator();
 		while(conceptIterator.hasNext())
 		{
 			conceptCollectionList.add(getConceptCollection(conceptIterator.next()));
@@ -167,9 +167,9 @@ public class ConceptCollectionDTOMapper
 	 * @author Karthik Jayaraman
 	 * 
 	 */
-	public ConceptcollectionsDTO getConceptCollectionDTO(IConceptCollection conceptCollection) throws QuadrigaStorageException
+	public ConceptCollectionDTO getConceptCollectionDTO(IConceptCollection conceptCollection) throws QuadrigaStorageException
 	{
-		ConceptcollectionsDTO conceptcollectionsDTO = new ConceptcollectionsDTO();
+		ConceptCollectionDTO conceptcollectionsDTO = new ConceptCollectionDTO();
 		conceptcollectionsDTO.setUpdatedby(conceptCollection.getOwner().getUserName());
 		conceptcollectionsDTO.setUpdateddate(new Date());
 		conceptcollectionsDTO.setCreatedby(conceptCollection.getOwner().getUserName());

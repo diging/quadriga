@@ -30,11 +30,10 @@ public class DBConnectionProjectDictionary extends ADBConnectionManager implemen
 	 * @see edu.asu.spring.quadriga.db.sql.workspace.IDBConnectionWSDictionary#addWSDictionary(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String addProjectDictionary(String projectId, String dictionaryId, String userId)throws QuadrigaStorageException
+	public void addProjectDictionary(String projectId, String dictionaryId, String userId)throws QuadrigaStorageException
 	{
 
 		String dbCommand;
-		String errmsg="";
 		CallableStatement sqlStatement;
 
 
@@ -59,26 +58,22 @@ public class DBConnectionProjectDictionary extends ADBConnectionManager implemen
 
 			sqlStatement.execute();
 
-			errmsg = sqlStatement.getString(4);
+			sqlStatement.getString(4);
 
-			return errmsg;
 
 		}
 		catch(SQLException e)
 		{
-			errmsg="DB Issue";
 			e.printStackTrace();
 			throw new QuadrigaStorageException();
 			
 		}catch(Exception e){
-			errmsg="DB Issue";
 			e.printStackTrace();
 		}
 		finally
 		{
 			closeConnection();
 		}
-		return errmsg;
 	}
 	
 	@Override
@@ -141,11 +136,10 @@ public class DBConnectionProjectDictionary extends ADBConnectionManager implemen
 	}
 	
 	@Override
-	public String deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException
+	public void deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException
 	{
 		
 		String dbCommand;
-		String errmsg="";
 		CallableStatement sqlStatement;		
 
 		//command to call the SP
@@ -165,8 +159,7 @@ public class DBConnectionProjectDictionary extends ADBConnectionManager implemen
 			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(4);
-			return errmsg;
+			sqlStatement.getString(4);
 		}catch(SQLException e){
 			logger.info(e.getMessage());
 			throw new QuadrigaStorageException();
@@ -177,6 +170,5 @@ public class DBConnectionProjectDictionary extends ADBConnectionManager implemen
 		{
 			closeConnection();
 		}
-		return "";
 	}
 }

@@ -17,14 +17,14 @@ public interface IDBConnectionModifyProjectManager {
 	public abstract void deleteProjectOwnerEditor(String projectId, String owner)
 			throws QuadrigaStorageException;
 
-	void addProjectRequest(IProject project, String userName)
+	public abstract void addProjectRequest(IProject project, String userName)
 			throws QuadrigaStorageException;
 
-	void updateProjectRequest(String projID, String projName, String projDesc,
+	public abstract void updateProjectRequest(String projID, String projName, String projDesc,
 			String projAccess, String unixName, String userName)
 			throws QuadrigaStorageException;
 
-	void deleteProjectRequest(ArrayList<String> projectIdList)
+	public abstract void deleteProjectRequest(ArrayList<String> projectIdList)
 			throws QuadrigaStorageException;
 
 }

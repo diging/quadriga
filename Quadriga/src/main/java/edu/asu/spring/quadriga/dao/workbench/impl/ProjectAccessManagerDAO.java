@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workbench.IProjectAccessManagerDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 
 @Repository
-public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IProjectAccessManagerDAO 
+public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IDBConnectionProjectAccessManager 
 {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -145,7 +145,7 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 		boolean isEditor;
 		isEditor = false;
 		int count;
-		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectEditorDTOPK.projectid) FROM ProjectEditorDTO pc WHERE pc.projectEditorDTOPK.projectid =:projectId AND pc.projectEditorDTOPK.owner =:userName");
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectEditorDTOPK.projectid) FROM ProjectEditorDTO pc WHERE pc.projectEditorDTOPK.projectid =:projectId AND pc.projectEditorDTOPK.editor =:userName");
 		query.setParameter("userName", userName);
 		query.setParameter("projectId",projectId);
 		

@@ -30,10 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProjectWorkspaceDTO.findAll", query = "SELECT p FROM ProjectWorkspaceDTO p"),
     @NamedQuery(name = "ProjectWorkspaceDTO.findByProjectid", query = "SELECT p FROM ProjectWorkspaceDTO p WHERE p.projectWorkspaceDTOPK.projectid = :projectid"),
     @NamedQuery(name = "ProjectWorkspaceDTO.findByWorkspaceid", query = "SELECT p FROM ProjectWorkspaceDTO p WHERE p.projectWorkspaceDTOPK.workspaceid = :workspaceid"),
-    @NamedQuery(name = "ProjectWorkspaceDTO.findByUpdatedby", query = "SELECT p FROM ProjectWorkspaceDTO p WHERE p.updatedby = :updatedby"),
-    @NamedQuery(name = "ProjectWorkspaceDTO.findByUpdateddate", query = "SELECT p FROM ProjectWorkspaceDTO p WHERE p.updateddate = :updateddate"),
-    @NamedQuery(name = "ProjectWorkspaceDTO.findByCreatedby", query = "SELECT p FROM ProjectWorkspaceDTO p WHERE p.createdby = :createdby"),
-    @NamedQuery(name = "ProjectWorkspaceDTO.findByCreateddate", query = "SELECT p FROM ProjectWorkspaceDTO p WHERE p.createddate = :createddate")})
+    })
+
 public class ProjectWorkspaceDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -143,7 +141,6 @@ public class ProjectWorkspaceDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ProjectWorkspaceDTO)) {
             return false;
         }
@@ -153,10 +150,4 @@ public class ProjectWorkspaceDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectWorkspaceDTO[ projectWorkspaceDTOPK=" + projectWorkspaceDTOPK + " ]";
-    }
-    
 }

@@ -14,7 +14,7 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class ProjectConceptcollectionDTOPK implements Serializable {
+public class ProjectConceptCollectionDTOPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "projectid")
     private String projectid;
@@ -22,10 +22,10 @@ public class ProjectConceptcollectionDTOPK implements Serializable {
     @Column(name = "conceptcollectionid")
     private String conceptcollectionid;
 
-    public ProjectConceptcollectionDTOPK() {
+    public ProjectConceptCollectionDTOPK() {
     }
 
-    public ProjectConceptcollectionDTOPK(String projectid, String conceptcollectionid) {
+    public ProjectConceptCollectionDTOPK(String projectid, String conceptcollectionid) {
         this.projectid = projectid;
         this.conceptcollectionid = conceptcollectionid;
     }
@@ -57,10 +57,10 @@ public class ProjectConceptcollectionDTOPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProjectConceptcollectionDTOPK)) {
+        if (!(object instanceof ProjectConceptCollectionDTOPK)) {
             return false;
         }
-        ProjectConceptcollectionDTOPK other = (ProjectConceptcollectionDTOPK) object;
+        ProjectConceptCollectionDTOPK other = (ProjectConceptCollectionDTOPK) object;
         if ((this.projectid == null && other.projectid != null) || (this.projectid != null && !this.projectid.equals(other.projectid))) {
             return false;
         }
@@ -69,10 +69,4 @@ public class ProjectConceptcollectionDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectConceptcollectionDTOPK[ projectid=" + projectid + ", conceptcollectionid=" + conceptcollectionid + " ]";
-    }
-    
 }

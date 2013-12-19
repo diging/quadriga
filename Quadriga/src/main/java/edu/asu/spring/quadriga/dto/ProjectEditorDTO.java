@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,15 +29,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ProjectEditorDTO.findAll", query = "SELECT p FROM ProjectEditorDTO p"),
     @NamedQuery(name = "ProjectEditorDTO.findByProjectid", query = "SELECT p FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.projectid = :projectid"),
-    @NamedQuery(name = "ProjectEditorDTO.findByOwner", query = "SELECT p FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.owner = :owner"),
-    @NamedQuery(name = "ProjectEditorDTO.findByUpdatedby", query = "SELECT p FROM ProjectEditorDTO p WHERE p.updatedby = :updatedby"),
-    @NamedQuery(name = "ProjectEditorDTO.findByUpdateddate", query = "SELECT p FROM ProjectEditorDTO p WHERE p.updateddate = :updateddate"),
-    @NamedQuery(name = "ProjectEditorDTO.findByCreatedby", query = "SELECT p FROM ProjectEditorDTO p WHERE p.createdby = :createdby"),
-    @NamedQuery(name = "ProjectEditorDTO.findByCreateddate", query = "SELECT p FROM ProjectEditorDTO p WHERE p.createddate = :createddate")})
+    @NamedQuery(name = "ProjectEditorDTO.findByEditor",query = "SELECT p FROM projectEditorDTO p WHERE p.projectEditorDTOPK.editor = :editor")
+    })
+
 public class ProjectEditorDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected ProjectEditorDTOPK projectEditorDTOPK;
+    @JoinColumn(name = "projectid" , referencedColumnName = "projectid" ,insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private ProjectDTO project;
+
+	@JoinColumn(name = "editor" , referencedColumnName = "username" , insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private QuadrigaUserDTO editor;
     @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
@@ -66,8 +73,8 @@ public class ProjectEditorDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ProjectEditorDTO(String projectid, String owner) {
-        this.projectEditorDTOPK = new ProjectEditorDTOPK(projectid, owner);
+    public ProjectEditorDTO(String projectid, String editor) {
+        this.projectEditorDTOPK = new ProjectEditorDTOPK(projectid, editor);
     }
 
     public ProjectEditorDTOPK getProjectEditorDTOPK() {
@@ -77,6 +84,22 @@ public class ProjectEditorDTO implements Serializable {
     public void setProjectEditorDTOPK(ProjectEditorDTOPK projectEditorDTOPK) {
         this.projectEditorDTOPK = projectEditorDTOPK;
     }
+    
+    public ProjectDTO getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectDTO project) {
+		this.project = project;
+	}
+
+	public QuadrigaUserDTO getEditor() {
+		return editor;
+	}
+
+	public void setEditor(QuadrigaUserDTO editor) {
+		this.editor = editor;
+	}
 
     public String getUpdatedby() {
         return updatedby;
@@ -119,7 +142,6 @@ public class ProjectEditorDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ProjectEditorDTO)) {
             return false;
         }
@@ -129,10 +151,4 @@ public class ProjectEditorDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectEditorDTO[ projectEditorDTOPK=" + projectEditorDTOPK + " ]";
-    }
-    
 }

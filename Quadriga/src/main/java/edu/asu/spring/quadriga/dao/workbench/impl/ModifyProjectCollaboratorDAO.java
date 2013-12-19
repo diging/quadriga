@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workbench.IModifyProjectCollaboratorDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 
 @Repository
 public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implements
-		IModifyProjectCollaboratorDAO 
+		IDBConnectionModifyProjCollabManager 
 {
 	
 	@Autowired
@@ -48,7 +48,7 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 		try
 		{
 			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-			 projectCollaborator = projectDTO.getProjectCollaboratorDTOList();
+			projectCollaborator = projectDTO.getProjectCollaboratorDTOList();
 			
 			if(!projectDTO.equals(null))
 			{
