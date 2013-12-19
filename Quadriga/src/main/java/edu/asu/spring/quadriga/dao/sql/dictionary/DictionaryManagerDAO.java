@@ -24,6 +24,7 @@ import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
@@ -55,6 +56,9 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
+	
+	@Autowired
+	private DictionaryFactory dictionaryFactory;
 	
 	private static final Logger logger = LoggerFactory.getLogger(DictionaryManagerDAO.class);
 
@@ -298,7 +302,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	}
 
 	/**
-	 * Update a dictionary item to the database corresponding to dictionary ID and Item ID
+	 * Get non collaborators for the dictionary
 	 * @param dictionary id 
 	 * @return Error message
 	 * @throws QuadrigaStorageException
@@ -471,7 +475,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
 		List<IDictionary> dictList = null;
@@ -483,7 +487,17 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 			
 			if(dictDTOList != null && dictDTOList.size() > 0)
 			{
-				dictList = dictionaryDTOMapper.getDictionaryList(dictDTOList);
+				dictList = new ArrayList<IDictionary>();
+				Iterator dictDTOIterator = dictDTOList.iterator();
+				while(dictDTOIterator.hasNext())
+				{
+					DictionaryDTO dictionaryDTO =  (DictionaryDTO) dictDTOIterator.next();
+					IDictionary dictionary = dictionaryFactory.createDictionaryObject();
+					dictionary.setName(dictionaryDTO.getDictionaryname());
+					dictionary.setDescription(dictionaryDTO.getDescription());
+					dictionary.setId(dictionaryDTO.getId());
+					dictList.add(dictionary);
+				}
 			}
 		}
 		catch(Exception e)
@@ -506,7 +520,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String dictCollabRole = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select dictCollab.dictionaryDTO from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
 			query.setParameter("id", dicitonaryId);
 			query.setParameter("collaboratoruser", userId);
 			DictionaryCollaboratorDTO dictCollabDTO = (DictionaryCollaboratorDTO) query.uniqueResult();
@@ -537,7 +551,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		List<IDictionaryItem> dictionaryItemList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id ORDER BY dictItems.dictionaryItemsDTOPK.term");
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id ORDER BY dictItems.term");
 			query.setParameter("id",dictionaryid);
 			List<DictionaryItemsDTO> dictItemsDTOList = query.list();
 			
@@ -643,7 +657,6 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException {
-		List<ICollaborator> collaboratorList = new ArrayList<ICollaborator>();
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		List<ICollaborator> collaborators = new ArrayList<ICollaborator>();
 		
@@ -662,11 +675,12 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 				DictionaryCollaboratorDTO dictCollabDTO = dictCollabIterator.next();
 				if(userRoleMap.containsKey(dictCollabDTO.getQuadrigaUserDTO().getUsername()))
 				{
-					userRoleMap.get(dictCollabDTO.getQuadrigaUserDTO().getUsername()).concat(dictCollabDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole()+",");
+					String updatedRoleStr = userRoleMap.get(dictCollabDTO.getQuadrigaUserDTO().getUsername()).concat(dictCollabDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole()+",");
+					userRoleMap.put(dictCollabDTO.getQuadrigaUserDTO().getUsername(), updatedRoleStr);
 				}
 				else
 				{
-					userRoleMap.put(dictCollabDTO.getQuadrigaUserDTO().getUsername(),dictCollabDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole());
+					userRoleMap.put(dictCollabDTO.getQuadrigaUserDTO().getUsername(),dictCollabDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole()+",");
 				}
 			}
 			
@@ -680,8 +694,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 				user = userManager.getUserDetails(userName);
 				user.setUserName(userName);
 				collaborator.setUserObj(user);
-				
-				collaboratorRoles = splitAndgetCollaboratorRolesList((String) pairs.getValue());
+				String userRoleList = (String) pairs.getValue();
+				collaboratorRoles =  splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));
 				collaborator.setCollaboratorRoles(collaboratorRoles);
 				
 				collaborators.add(collaborator);
@@ -692,7 +706,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
 			throw new QuadrigaStorageException(e);
 		}
-		return collaboratorList;
+		return collaborators;
 	}
 	
 	/**
