@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.impl.dictionary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionModifyDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
@@ -17,12 +18,14 @@ public class ModifyDictionaryManager implements IModifyDictionaryManager
 	private IDBConnectionModifyDictionaryManager dbConnect;
 	
 	@Override
+	@Transactional
 	public void updateDictionaryDetailsRequest(IDictionary dictionary,String userName) throws QuadrigaStorageException
 	{
 		dbConnect.updateDictionaryRequest(dictionary, userName);
 	}
 	
 	@Override
+	@Transactional
 	public void transferDictionaryOwner(String dictionaryId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
 		dbConnect.transferDictionaryOwner(dictionaryId, oldOwner, newOwner, collabRole);
