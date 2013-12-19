@@ -12,7 +12,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 
 @Repository
-public class ProjectDictionaryDAO implements IProjectDictionaryDAO 
+public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary 
 {
 	@Resource(name = "database_error_msgs")
 	private Properties messages;

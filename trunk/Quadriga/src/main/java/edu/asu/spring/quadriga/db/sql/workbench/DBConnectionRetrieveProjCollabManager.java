@@ -124,7 +124,6 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 	 * @return List - list of collaborator roles.
 	 * @author Rohit Sukelshwar Pendbhaje 
 	 */
-	@Override
 	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role)
 	{
         String[] collabroles;
@@ -205,7 +204,6 @@ public class DBConnectionRetrieveProjCollabManager extends ADBConnectionManager 
 		return nonCollaboratorUser;
 	}
 
-	@Override
 	public List<ICollaborator> getProjectCollaboratorsRequest(String projectid)throws QuadrigaStorageException
 	{
 		String dbCommand;

@@ -57,7 +57,7 @@ public class ConceptcollectionsItemsDTO implements Serializable {
     private Date createddate;
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private ConceptcollectionsDTO conceptcollectionsDTO;
+    private ConceptCollectionDTO conceptcollectionsDTO;
 
     public ConceptcollectionsItemsDTO() {
     }
@@ -125,11 +125,11 @@ public class ConceptcollectionsItemsDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ConceptcollectionsDTO getConceptcollectionsDTO() {
+    public ConceptCollectionDTO getConceptcollectionsDTO() {
         return conceptcollectionsDTO;
     }
 
-    public void setConceptcollectionsDTO(ConceptcollectionsDTO conceptcollectionsDTO) {
+    public void setConceptcollectionsDTO(ConceptCollectionDTO conceptcollectionsDTO) {
         this.conceptcollectionsDTO = conceptcollectionsDTO;
     }
 

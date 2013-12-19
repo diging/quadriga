@@ -27,11 +27,10 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 	private IConceptCollectionFactory conceptCollectionFactory;
 
 	@Override
-	public String addProjectConceptCollection(String projectId,
+	public void addProjectConceptCollection(String projectId,
 			String conceptCollectionId, String userId)
 			throws QuadrigaStorageException {
 		String dbCommand;
-		String errmsg="";
 		CallableStatement sqlStatement;
 
 		//command to call the SP
@@ -54,26 +53,22 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 
 					sqlStatement.execute();
 
-					errmsg = sqlStatement.getString(4);
+					sqlStatement.getString(4);
 
-					return errmsg;
 
 				}
 				catch(SQLException e)
 				{
-					errmsg="DB Issue";
 					e.printStackTrace();
 					throw new QuadrigaStorageException();
 					
 				}catch(Exception e){
-					errmsg="DB Issue";
 					e.printStackTrace();
 				}
 				finally
 				{
 					closeConnection();
 				}
-		return null;
 	}
 
 	@Override
@@ -140,11 +135,10 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 	
 
 	@Override
-	public String deleteProjectConceptCollection(String projectId,
+	public void deleteProjectConceptCollection(String projectId,
 			String userId, String conceptCollectionId)
 			throws QuadrigaStorageException {
 		String dbCommand;
-		String errmsg="";
 		CallableStatement sqlStatement;		
 
 		//command to call the SP
@@ -164,8 +158,7 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 			sqlStatement.registerOutParameter(4,Types.VARCHAR);
 
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(4);
-			return errmsg;
+			sqlStatement.getString(4);
 		}catch(SQLException e){
 			logger.info(e.getMessage());
 			throw new QuadrigaStorageException();
@@ -176,7 +169,6 @@ public class DBConnectionProjectConceptColleciton extends ADBConnectionManager i
 		{
 			closeConnection();
 		}
-		return "";
 	}
 	
 }

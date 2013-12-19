@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ConceptcollectionsDTO.findByUpdateddate", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.updateddate = :updateddate"),
     @NamedQuery(name = "ConceptcollectionsDTO.findByCreatedby", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.createdby = :createdby"),
     @NamedQuery(name = "ConceptcollectionsDTO.findByCreateddate", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.createddate = :createddate")})
-public class ConceptcollectionsDTO implements Serializable {
+public class ConceptCollectionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "collectionname")
@@ -77,14 +77,14 @@ public class ConceptcollectionsDTO implements Serializable {
     @ManyToOne(optional = false)
     private QuadrigaUserDTO collectionowner;
 
-    public ConceptcollectionsDTO() {
+    public ConceptCollectionDTO() {
     }
 
-    public ConceptcollectionsDTO(String id) {
+    public ConceptCollectionDTO(String id) {
         this.id = id;
     }
 
-    public ConceptcollectionsDTO(String id, String collectionname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public ConceptCollectionDTO(String id, String collectionname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.id = id;
         this.collectionname = collectionname;
         this.accessibility = accessibility;
@@ -194,10 +194,10 @@ public class ConceptcollectionsDTO implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ConceptcollectionsDTO)) {
+        if (!(object instanceof ConceptCollectionDTO)) {
             return false;
         }
-        ConceptcollectionsDTO other = (ConceptcollectionsDTO) object;
+        ConceptCollectionDTO other = (ConceptCollectionDTO) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

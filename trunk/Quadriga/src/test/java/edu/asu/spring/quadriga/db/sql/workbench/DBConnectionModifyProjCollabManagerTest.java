@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.db.sql.workbench;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
@@ -223,7 +222,6 @@ public class DBConnectionModifyProjCollabManagerTest {
 		
 		IProject project;
 		IUser owner;
-		String errmsg;
 		
 		project = projectFactory.createProjectObject();
 		project.setName("testupdateproject");
@@ -239,9 +237,9 @@ public class DBConnectionModifyProjCollabManagerTest {
 		
 		dbProjectConnection.addProjectRequest(project,owner.getUserName());
 		
-		errmsg = dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
+		dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
 		
-		assertEquals("",errmsg);
+		assertTrue(true);
 		
 	}
 	
@@ -250,7 +248,6 @@ public class DBConnectionModifyProjCollabManagerTest {
 		
 		IProject project;
 		IUser owner;
-		String errmsg;
 		
 		project = projectFactory.createProjectObject();
 		project.setName("testupdateproject");
@@ -266,9 +263,9 @@ public class DBConnectionModifyProjCollabManagerTest {
 		
 		dbProjectConnection.addProjectRequest(project,owner.getUserName());
 		
-		errmsg = dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
+		dbConnection.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
 		
-		assertEquals("",errmsg);
+		assertTrue(true);
 		
 		dbConnection.deleteColloratorRequest(collaborator.getUserObj().getUserName(), getProjectId(project.getName()));
 

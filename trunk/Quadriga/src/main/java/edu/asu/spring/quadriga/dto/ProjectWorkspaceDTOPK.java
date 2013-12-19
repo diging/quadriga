@@ -15,6 +15,8 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class ProjectWorkspaceDTOPK implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
     @Basic(optional = false)
     @Column(name = "projectid")
     private String projectid;
@@ -56,7 +58,6 @@ public class ProjectWorkspaceDTOPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ProjectWorkspaceDTOPK)) {
             return false;
         }
@@ -69,10 +70,4 @@ public class ProjectWorkspaceDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectWorkspaceDTOPK[ projectid=" + projectid + ", workspaceid=" + workspaceid + " ]";
-    }
-    
 }

@@ -14,18 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workbench.IProjectConceptCollectionDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectConceptColleciton;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
-import edu.asu.spring.quadriga.dto.ProjectConceptcollectionDTO;
-import edu.asu.spring.quadriga.dto.ProjectConceptcollectionDTOPK;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 
 @Repository
 public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
-		IProjectConceptCollectionDAO 
+IDBConnectionProjectConceptColleciton 
 {
 	
 	@Autowired
@@ -52,7 +52,7 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 		 }
 		  	 
 		 //check if the concept collection exists
-		 ConceptcollectionsDTO conceptCollection = (ConceptcollectionsDTO) sessionFactory.getCurrentSession().get(ConceptcollectionsDTO.class,conceptCollectionId);
+		 ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,conceptCollectionId);
 		 if(conceptCollection.equals(null))
 		 {
 			 throw new QuadrigaStorageException(messages.getProperty("conceptCollectionId_invalid"));
@@ -60,8 +60,8 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 		 
 		 //add the concept collection to the project
 		 Date date = new Date();
-		 ProjectConceptcollectionDTO projectConceptCollection = new ProjectConceptcollectionDTO();
-		 ProjectConceptcollectionDTOPK projectConceptCollectionKey = new ProjectConceptcollectionDTOPK(projectId,conceptCollectionId);
+		 ProjectConceptCollectionDTO projectConceptCollection = new ProjectConceptCollectionDTO();
+		 ProjectConceptCollectionDTOPK projectConceptCollectionKey = new ProjectConceptCollectionDTOPK(projectId,conceptCollectionId);
 		 projectConceptCollection.setProjectConceptcollectionDTOPK(projectConceptCollectionKey);
 		 projectConceptCollection.setCreatedby(userId);
 		 projectConceptCollection.setCreateddate(date);
@@ -99,13 +99,13 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 		query.setParameter("projectid", projectId);
 
 		@SuppressWarnings("unchecked")
-		List<ProjectConceptcollectionDTO> projectConceptCollection = query.list();
+		List<ProjectConceptCollectionDTO> projectConceptCollection = query.list();
 		
 		//retrieve the concept collection details for every concept collection id
-		for(ProjectConceptcollectionDTO tempProjectConceptCollection : projectConceptCollection)
+		for(ProjectConceptCollectionDTO tempProjectConceptCollection : projectConceptCollection)
 		{
-			ProjectConceptcollectionDTOPK projectConceptCollectionKey = tempProjectConceptCollection.getProjectConceptcollectionDTOPK();
-			ConceptcollectionsDTO collection = (ConceptcollectionsDTO) sessionFactory.getCurrentSession().get(ConceptcollectionsDTO.class,projectConceptCollectionKey.getConceptcollectionid());
+			ProjectConceptCollectionDTOPK projectConceptCollectionKey = tempProjectConceptCollection.getProjectConceptcollectionDTOPK();
+			ConceptCollectionDTO collection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,projectConceptCollectionKey.getConceptcollectionid());
 			conceptCollection = collectionMapper.getConceptCollection(collection);
 			conceptCollectionList.add(conceptCollection);
 		}
@@ -120,9 +120,9 @@ public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
 		try
 		{
 		//retrieve the row associated with concept collection and project id
-		ProjectConceptcollectionDTOPK projectConceptCollectionKey = new ProjectConceptcollectionDTOPK(projectId,conceptCollectionId);
+		ProjectConceptCollectionDTOPK projectConceptCollectionKey = new ProjectConceptCollectionDTOPK(projectId,conceptCollectionId);
 		
-		ProjectConceptcollectionDTO projectConceptCollection = (ProjectConceptcollectionDTO) sessionFactory.getCurrentSession().get(ProjectConceptcollectionDTO.class,projectConceptCollectionKey);
+		ProjectConceptCollectionDTO projectConceptCollection = (ProjectConceptCollectionDTO) sessionFactory.getCurrentSession().get(ProjectConceptCollectionDTO.class,projectConceptCollectionKey);
       	
 		sessionFactory.getCurrentSession().delete(projectConceptCollection);
 		}

@@ -20,7 +20,7 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
 	private static final Logger logger = LoggerFactory.getLogger(DBConnectionModifyProjCollabManager.class);
 	
 	@Override
-	public String addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
+	public void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
 	{
 		String dbCommand;
         String errmsg;
@@ -65,7 +65,6 @@ public class DBConnectionModifyProjCollabManager extends ADBConnectionManager im
         {
         	closeConnection();
         }
-    	return errmsg;
 	}
 
 	@Override

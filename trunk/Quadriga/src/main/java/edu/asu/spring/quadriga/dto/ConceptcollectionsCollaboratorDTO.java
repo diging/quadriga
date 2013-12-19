@@ -58,7 +58,7 @@ public class ConceptcollectionsCollaboratorDTO implements Serializable {
     private QuadrigaUserDTO quadrigaUserDTO;
     @JoinColumn(name = "collectionid", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private ConceptcollectionsDTO conceptcollectionsDTO;
+    private ConceptCollectionDTO conceptcollectionsDTO;
 
     public ConceptcollectionsCollaboratorDTO() {
     }
@@ -127,11 +127,11 @@ public class ConceptcollectionsCollaboratorDTO implements Serializable {
         this.quadrigaUserDTO = quadrigaUserDTO;
     }
 
-    public ConceptcollectionsDTO getConceptcollectionsDTO() {
+    public ConceptCollectionDTO getConceptcollectionsDTO() {
         return conceptcollectionsDTO;
     }
 
-    public void setConceptcollectionsDTO(ConceptcollectionsDTO conceptcollectionsDTO) {
+    public void setConceptcollectionsDTO(ConceptCollectionDTO conceptcollectionsDTO) {
         this.conceptcollectionsDTO = conceptcollectionsDTO;
     }
 

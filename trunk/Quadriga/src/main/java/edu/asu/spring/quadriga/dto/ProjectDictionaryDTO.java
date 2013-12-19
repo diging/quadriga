@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,15 +30,20 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProjectDictionaryDTO.findAll", query = "SELECT p FROM ProjectDictionaryDTO p"),
     @NamedQuery(name = "ProjectDictionaryDTO.findByProjectid", query = "SELECT p FROM ProjectDictionaryDTO p WHERE p.projectDictionaryDTOPK.projectid = :projectid"),
     @NamedQuery(name = "ProjectDictionaryDTO.findByDictionaryid", query = "SELECT p FROM ProjectDictionaryDTO p WHERE p.projectDictionaryDTOPK.dictionaryid = :dictionaryid"),
-    @NamedQuery(name = "ProjectDictionaryDTO.findByUpdatedby", query = "SELECT p FROM ProjectDictionaryDTO p WHERE p.updatedby = :updatedby"),
-    @NamedQuery(name = "ProjectDictionaryDTO.findByUpdateddate", query = "SELECT p FROM ProjectDictionaryDTO p WHERE p.updateddate = :updateddate"),
-    @NamedQuery(name = "ProjectDictionaryDTO.findByCreatedby", query = "SELECT p FROM ProjectDictionaryDTO p WHERE p.createdby = :createdby"),
-    @NamedQuery(name = "ProjectDictionaryDTO.findByCreateddate", query = "SELECT p FROM ProjectDictionaryDTO p WHERE p.createddate = :createddate")})
+    })
+
 public class ProjectDictionaryDTO implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @EmbeddedId
     protected ProjectDictionaryDTOPK projectDictionaryDTOPK;
-    @Basic(optional = false)
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private ProjectDTO project;
+    @JoinColumn(name = "dictionaryid" , referencedColumnName = "dictionaryid",insertable = false, updatable = false)
+    private DictionaryDTO dictionary;
+    
+	@Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
     @Basic(optional = false)
@@ -77,6 +84,22 @@ public class ProjectDictionaryDTO implements Serializable {
     public void setProjectDictionaryDTOPK(ProjectDictionaryDTOPK projectDictionaryDTOPK) {
         this.projectDictionaryDTOPK = projectDictionaryDTOPK;
     }
+    
+    public ProjectDTO getProject() {
+		return project;
+	}
+
+	public void setProject(ProjectDTO project) {
+		this.project = project;
+	}
+
+	public DictionaryDTO getDictionary() {
+		return dictionary;
+	}
+
+	public void setDictionary(DictionaryDTO dictionary) {
+		this.dictionary = dictionary;
+	}
 
     public String getUpdatedby() {
         return updatedby;
@@ -129,10 +152,4 @@ public class ProjectDictionaryDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectDictionaryDTO[ projectDictionaryDTOPK=" + projectDictionaryDTOPK + " ]";
-    }
-    
 }

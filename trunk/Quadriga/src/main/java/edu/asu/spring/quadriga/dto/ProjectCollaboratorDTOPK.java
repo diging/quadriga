@@ -18,7 +18,7 @@ public class ProjectCollaboratorDTOPK implements Serializable {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = -4916171768836439078L;
+	private static final long serialVersionUID = 1L;
 	@Basic(optional = false)
     @Column(name = "projectid")
     private String projectid;
@@ -73,7 +73,6 @@ public class ProjectCollaboratorDTOPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ProjectCollaboratorDTOPK)) {
             return false;
         }
@@ -89,10 +88,4 @@ public class ProjectCollaboratorDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectCollaboratorDTOPK[ projectid=" + projectid + ", collaboratoruser=" + collaboratoruser + ", collaboratorrole=" + collaboratorrole + " ]";
-    }
-    
 }

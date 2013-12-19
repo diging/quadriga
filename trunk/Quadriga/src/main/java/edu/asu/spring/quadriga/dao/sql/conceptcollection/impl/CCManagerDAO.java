@@ -24,8 +24,8 @@ import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.ConceptcollectionsDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTO;
 import edu.asu.spring.quadriga.dto.ConceptcollectionsItemsDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -81,9 +81,9 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		List<IConceptCollection> conceptCollectionList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsDTO concept where concept.collectionowner.username =:userName");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionDTO concept where concept.collectionowner.username =:userName");
 			query.setParameter("userName", userName);
-			List<ConceptcollectionsDTO> conceptcollectionsDTOList = query.list();
+			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
 			
 			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
 			{
@@ -113,9 +113,9 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		List<IConceptCollection> conceptCollectionList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select conceptCollab.conceptcollectionsDTO from ConceptcollectionsCollaboratorDTO conceptCollab where conceptCollab.quadrigaUserDTO.username =:userName");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select conceptCollab.conceptCollectionDTO from ConceptcollectionsCollaboratorDTO conceptCollab where conceptCollab.quadrigaUserDTO.username =:userName");
 			query.setParameter("userName", userName);
-			List<ConceptcollectionsDTO> conceptcollectionsDTOList = query.list();
+			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
 			
 			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
 			{
@@ -142,7 +142,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	{
 		try
 		{
-			ConceptcollectionsDTO conceptcollectionsDTO = conceptCollectionDTOMapper.getConceptCollectionDTO(conceptCollection);
+			ConceptCollectionDTO conceptcollectionsDTO = conceptCollectionDTOMapper.getConceptCollectionDTO(conceptCollection);
 			conceptcollectionsDTO.setId(generateUniqueID());
 			sessionFactory.getCurrentSession().save(conceptcollectionsDTO);
 		}
@@ -162,7 +162,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsDTO conceptColl where conceptColl.id =:id");
 			query.setParameter("id", collection.getId());
 			
-			ConceptcollectionsDTO conceptcollectionsDTO = (ConceptcollectionsDTO) query.uniqueResult();
+			ConceptCollectionDTO conceptcollectionsDTO = (ConceptCollectionDTO) query.uniqueResult();
 			
 			if(conceptcollectionsDTO != null)
 			{
@@ -360,7 +360,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("ConceptcollectionsDTO.findByCollectionname");
 			query.setParameter("collectionname", collectionname);
-			List<ConceptcollectionsDTO> conceptcollectionsDTOList = query.list();
+			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
 			
 			if(! (conceptcollectionsDTOList != null  && conceptcollectionsDTOList.size()> 0 ) )
 			{
@@ -456,9 +456,9 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		String ccID = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("ConceptcollectionsDTO.findByCollectionname");
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("ConceptCollectionDTO.findByCollectionname");
 			query.setParameter("collectionname", ccName);
-			List<ConceptcollectionsDTO> ccIDList = query.list();
+			List<ConceptCollectionDTO> ccIDList = query.list();
 			
 			if(ccIDList != null  && ccIDList.size()> 0)
 			{

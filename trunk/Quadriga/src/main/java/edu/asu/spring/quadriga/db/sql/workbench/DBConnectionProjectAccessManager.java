@@ -27,7 +27,7 @@ IDBConnectionProjectAccessManager {
 	 *  @author Kiran Kumar Batna 
 	 */
 	@Override
-	public boolean chkProjectOwner(String userName) throws QuadrigaStorageException
+	public boolean chkProjectOwner(String userName,String projectId) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		CallableStatement sqlStatement;
@@ -79,7 +79,7 @@ IDBConnectionProjectAccessManager {
 	 *  @author Kiran Kumar Batna 
 	 */
 	@Override
-	public boolean chkProjectCollaborator(String userName,String collaboratorRole) throws QuadrigaStorageException
+	public boolean chkProjectCollaborator(String userName,String collaboratorRole,String projectId) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		CallableStatement sqlStatement;
@@ -220,5 +220,17 @@ IDBConnectionProjectAccessManager {
 		}
 		return false;
 
+	}
+
+	@Override
+	public boolean chkIsProjectAssociated(String userName)
+			throws QuadrigaStorageException {
+		return false;
+	}
+
+	@Override
+	public boolean chkIsCollaboratorProjectAssociated(String userName,
+			String collaboratorRole) throws QuadrigaStorageException {
+		return false;
 	}
 }

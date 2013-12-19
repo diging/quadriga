@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.asu.spring.quadriga.dto;
 
 import java.io.Serializable;
@@ -15,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -26,8 +20,6 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import edu.asu.spring.quadriga.db.sql.DBConstants;
-
 /**
  *
  * @author Karthik
@@ -35,24 +27,19 @@ import edu.asu.spring.quadriga.db.sql.DBConstants;
 @Entity
 @Table(name = "tbl_project")
 @XmlRootElement
-@NamedNativeQueries({
-	@NamedNativeQuery(
-	name = "callStockStoreProcedure",
-	query = "CALL "+DBConstants.ADD_PROJECT_REQUEST+"(?,?,?,?,?,?)"
-	)
-})
+
 @NamedQueries({
     @NamedQuery(name = "ProjectDTO.findAll", query = "SELECT p FROM ProjectDTO p"),
     @NamedQuery(name = "ProjectDTO.findByProjectname", query = "SELECT p FROM ProjectDTO p WHERE p.projectname = :projectname"),
     @NamedQuery(name = "ProjectDTO.findByUnixname", query = "SELECT p FROM ProjectDTO p WHERE p.unixname = :unixname"),
     @NamedQuery(name = "ProjectDTO.findByProjectid", query = "SELECT p FROM ProjectDTO p WHERE p.projectid = :projectid"),
     @NamedQuery(name = "ProjectDTO.findByAccessibility", query = "SELECT p FROM ProjectDTO p WHERE p.accessibility = :accessibility"),
-    @NamedQuery(name = "ProjectDTO.findByUpdatedby", query = "SELECT p FROM ProjectDTO p WHERE p.updatedby = :updatedby"),
-    @NamedQuery(name = "ProjectDTO.findByUpdateddate", query = "SELECT p FROM ProjectDTO p WHERE p.updateddate = :updateddate"),
-    @NamedQuery(name = "ProjectDTO.findByCreatedby", query = "SELECT p FROM ProjectDTO p WHERE p.createdby = :createdby"),
-    @NamedQuery(name = "ProjectDTO.findByCreateddate", query = "SELECT p FROM ProjectDTO p WHERE p.createddate = :createddate")})
-public class ProjectDTO implements Serializable {
+    })
+
+public class ProjectDTO implements Serializable 
+{
     private static final long serialVersionUID = 1L;
+    
     @Basic(optional = false)
     @Column(name = "projectname")
     private String projectname;
@@ -88,10 +75,16 @@ public class ProjectDTO implements Serializable {
     private QuadrigaUserDTO projectowner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
+    private List<ProjectDictionaryDTO> projectDictionaryDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
+    private List<ProjectConceptCollectionDTO> projectConceptCollectionDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO",orphanRemoval=true)
     private List<ProjectCollaboratorDTO> projectCollaboratorDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
+    private List<ProjectEditorDTO> projectEditorDTOList;
 
-    public ProjectDTO() {
+	public ProjectDTO() {
     }
 
     public ProjectDTO(String projectid) {
@@ -188,6 +181,35 @@ public class ProjectDTO implements Serializable {
     public void setProjectowner(QuadrigaUserDTO projectowner) {
         this.projectowner = projectowner;
     }
+    
+    @XmlTransient
+    public List<ProjectDictionaryDTO> getProjectDictionaryDTOList() {
+ 		return projectDictionaryDTOList;
+ 	}
+
+ 	public void setProjectDictionaryDTOList(
+ 			List<ProjectDictionaryDTO> projectDictionaryDTOList) {
+ 		this.projectDictionaryDTOList = projectDictionaryDTOList;
+ 	}
+
+ 	@XmlTransient
+ 	public List<ProjectConceptCollectionDTO> getProjectConceptCollectionDTOList() {
+ 		return projectConceptCollectionDTOList;
+ 	}
+
+ 	public void setProjectConceptCollectionDTOList(
+ 			List<ProjectConceptCollectionDTO> projectConceptCollectionDTOList) {
+ 		this.projectConceptCollectionDTOList = projectConceptCollectionDTOList;
+ 	}
+
+ 	@XmlTransient
+ 	public List<ProjectEditorDTO> getProjectEditorDTOList() {
+ 		return projectEditorDTOList;
+ 	}
+
+ 	public void setProjectEditorDTOList(List<ProjectEditorDTO> projectEditorDTOList) {
+ 		this.projectEditorDTOList = projectEditorDTOList;
+ 	}
 
     @XmlTransient
     public List<ProjectWorkspaceDTO> getProjectWorkspaceDTOList() {
@@ -226,10 +248,4 @@ public class ProjectDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ProjectDTO[ projectid=" + projectid + " ]";
-    }
-    
 }
