@@ -14,35 +14,32 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class ConceptcollectionsItemsDTOPK implements Serializable {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 6506634472458850085L;
+public class ConceptCollectionItemsDTOPK implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Basic(optional = false)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "conceptcollectionid")
+    private String conceptcollectionid;
     @Basic(optional = false)
     @Column(name = "item")
     private String item;
 
-    public ConceptcollectionsItemsDTOPK() {
+    public ConceptCollectionItemsDTOPK() {
     }
 
-    public ConceptcollectionsItemsDTOPK(String id, String item) {
-        this.id = id;
+    public ConceptCollectionItemsDTOPK(String conceptcollectionid, String item) {
+        this.conceptcollectionid = conceptcollectionid;
         this.item = item;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getConceptcollectionid() {
+		return conceptcollectionid;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setConceptcollectionid(String conceptcollectionid) {
+		this.conceptcollectionid = conceptcollectionid;
+	}
 
-    public String getItem() {
+	public String getItem() {
         return item;
     }
 
@@ -53,19 +50,18 @@ public class ConceptcollectionsItemsDTOPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (conceptcollectionid != null ? conceptcollectionid.hashCode() : 0);
         hash += (item != null ? item.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ConceptcollectionsItemsDTOPK)) {
+        if (!(object instanceof ConceptCollectionItemsDTOPK)) {
             return false;
         }
-        ConceptcollectionsItemsDTOPK other = (ConceptcollectionsItemsDTOPK) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        ConceptCollectionItemsDTOPK other = (ConceptCollectionItemsDTOPK) object;
+        if ((this.conceptcollectionid == null && other.conceptcollectionid != null) || (this.conceptcollectionid != null && !this.conceptcollectionid.equals(other.conceptcollectionid))) {
             return false;
         }
         if ((this.item == null && other.item != null) || (this.item != null && !this.item.equals(other.item))) {
@@ -73,10 +69,4 @@ public class ConceptcollectionsItemsDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ConceptcollectionsItemsDTOPK[ id=" + id + ", item=" + item + " ]";
-    }
-    
 }

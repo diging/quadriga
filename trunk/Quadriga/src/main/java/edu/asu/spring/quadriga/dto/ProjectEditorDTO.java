@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ProjectEditorDTO.findAll", query = "SELECT p FROM ProjectEditorDTO p"),
     @NamedQuery(name = "ProjectEditorDTO.findByProjectid", query = "SELECT p FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.projectid = :projectid"),
-    @NamedQuery(name = "ProjectEditorDTO.findByEditor",query = "SELECT p FROM projectEditorDTO p WHERE p.projectEditorDTOPK.editor = :editor")
+    @NamedQuery(name = "ProjectEditorDTO.findByEditor",query = "SELECT p FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.editor = :editor")
     })
 
 public class ProjectEditorDTO implements Serializable {
@@ -42,7 +42,7 @@ public class ProjectEditorDTO implements Serializable {
 
 	@JoinColumn(name = "editor" , referencedColumnName = "username" , insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private QuadrigaUserDTO editor;
+    private QuadrigaUserDTO quadrigaUserDTO;
     @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
@@ -93,15 +93,16 @@ public class ProjectEditorDTO implements Serializable {
 		this.project = project;
 	}
 
-	public QuadrigaUserDTO getEditor() {
-		return editor;
+
+    public QuadrigaUserDTO getQuadrigaUserDTO() {
+		return quadrigaUserDTO;
 	}
 
-	public void setEditor(QuadrigaUserDTO editor) {
-		this.editor = editor;
+	public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
+		this.quadrigaUserDTO = quadrigaUserDTO;
 	}
 
-    public String getUpdatedby() {
+	public String getUpdatedby() {
         return updatedby;
     }
 

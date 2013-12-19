@@ -29,17 +29,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Karthik
  */
 @Entity
-@Table(name = "tbl_conceptcollections")
+@Table(name = "tbl_conceptcollection")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ConceptcollectionsDTO.findAll", query = "SELECT c FROM ConceptcollectionsDTO c"),
-    @NamedQuery(name = "ConceptcollectionsDTO.findByCollectionname", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.collectionname = :collectionname"),
-    @NamedQuery(name = "ConceptcollectionsDTO.findById", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.id = :id"),
-    @NamedQuery(name = "ConceptcollectionsDTO.findByAccessibility", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.accessibility = :accessibility"),
-    @NamedQuery(name = "ConceptcollectionsDTO.findByUpdatedby", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.updatedby = :updatedby"),
-    @NamedQuery(name = "ConceptcollectionsDTO.findByUpdateddate", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.updateddate = :updateddate"),
-    @NamedQuery(name = "ConceptcollectionsDTO.findByCreatedby", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.createdby = :createdby"),
-    @NamedQuery(name = "ConceptcollectionsDTO.findByCreateddate", query = "SELECT c FROM ConceptcollectionsDTO c WHERE c.createddate = :createddate")})
+    @NamedQuery(name = "ConceptCollectionDTO.findAll", query = "SELECT c FROM ConceptCollectionDTO c"),
+    @NamedQuery(name = "ConceptCollectionDTO.findByCollectionname", query = "SELECT c FROM ConceptCollectionDTO c WHERE c.collectionname = :collectionname"),
+    @NamedQuery(name = "ConceptCollectionDTO.findById", query = "SELECT c FROM ConceptCollectionDTO c WHERE c.conceptCollectionid = :conceptCollectionid"),
+    })
 public class ConceptCollectionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -50,8 +46,8 @@ public class ConceptCollectionDTO implements Serializable {
     private String description;
     @Id
     @Basic(optional = false)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "conceptcollectionid")
+    private String conceptCollectionid;
     @Basic(optional = false)
     @Column(name = "accessibility")
     private Boolean accessibility;
@@ -69,10 +65,10 @@ public class ConceptCollectionDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptcollectionsDTO")
-    private List<ConceptcollectionsCollaboratorDTO> conceptcollectionsCollaboratorDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptcollectionsDTO")
-    private List<ConceptcollectionsItemsDTO> conceptcollectionsItemsDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
+    private List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaboratorDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
+    private List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList;
     @JoinColumn(name = "collectionowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO collectionowner;
@@ -80,12 +76,12 @@ public class ConceptCollectionDTO implements Serializable {
     public ConceptCollectionDTO() {
     }
 
-    public ConceptCollectionDTO(String id) {
-        this.id = id;
+    public ConceptCollectionDTO(String conceptCollectionid) {
+        this.conceptCollectionid = conceptCollectionid;
     }
 
-    public ConceptCollectionDTO(String id, String collectionname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.id = id;
+    public ConceptCollectionDTO(String conceptCollectionid, String collectionname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
+        this.conceptCollectionid = conceptCollectionid;
         this.collectionname = collectionname;
         this.accessibility = accessibility;
         this.updatedby = updatedby;
@@ -110,15 +106,15 @@ public class ConceptCollectionDTO implements Serializable {
         this.description = description;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getConceptCollectionid() {
+		return conceptCollectionid;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setConceptCollectionid(String conceptCollectionid) {
+		this.conceptCollectionid = conceptCollectionid;
+	}
 
-    public Boolean getAccessibility() {
+	public Boolean getAccessibility() {
         return accessibility;
     }
 
@@ -158,25 +154,28 @@ public class ConceptCollectionDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    @XmlTransient
-    public List<ConceptcollectionsCollaboratorDTO> getConceptcollectionsCollaboratorDTOList() {
-        return conceptcollectionsCollaboratorDTOList;
-    }
-
-    public void setConceptcollectionsCollaboratorDTOList(List<ConceptcollectionsCollaboratorDTO> conceptcollectionsCollaboratorDTOList) {
-        this.conceptcollectionsCollaboratorDTOList = conceptcollectionsCollaboratorDTOList;
-    }
 
     @XmlTransient
-    public List<ConceptcollectionsItemsDTO> getConceptcollectionsItemsDTOList() {
-        return conceptcollectionsItemsDTOList;
-    }
+    public List<ConceptCollectionCollaboratorDTO> getConceptCollectionCollaboratorDTOList() {
+		return conceptCollectionCollaboratorDTOList;
+	}
 
-    public void setConceptcollectionsItemsDTOList(List<ConceptcollectionsItemsDTO> conceptcollectionsItemsDTOList) {
-        this.conceptcollectionsItemsDTOList = conceptcollectionsItemsDTOList;
-    }
+	public void setConceptCollectionCollaboratorDTOList(
+			List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaboratorDTOList) {
+		this.conceptCollectionCollaboratorDTOList = conceptCollectionCollaboratorDTOList;
+	}
 
-    public QuadrigaUserDTO getCollectionowner() {
+	@XmlTransient
+	public List<ConceptCollectionItemsDTO> getConceptCollectionItemsDTOList() {
+		return conceptCollectionItemsDTOList;
+	}
+
+	public void setConceptCollectionItemsDTOList(
+			List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList) {
+		this.conceptCollectionItemsDTOList = conceptCollectionItemsDTOList;
+	}
+
+	public QuadrigaUserDTO getCollectionowner() {
         return collectionowner;
     }
 
@@ -187,26 +186,19 @@ public class ConceptCollectionDTO implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (conceptCollectionid != null ? conceptCollectionid.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ConceptCollectionDTO)) {
             return false;
         }
         ConceptCollectionDTO other = (ConceptCollectionDTO) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.conceptCollectionid == null && other.conceptCollectionid != null) || (this.conceptCollectionid != null && !this.conceptCollectionid.equals(other.conceptCollectionid))) {
             return false;
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.ConceptcollectionsDTO[ id=" + id + " ]";
-    }
-    
 }

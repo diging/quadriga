@@ -33,6 +33,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+<!-- 
 	<bean id="DBConnectionProjectDictionaryBean"
 		class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionary">
 		<property name="dataSource" ref="dataSource" />
@@ -41,8 +42,7 @@
 		class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectConceptColleciton">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
-    <!--  Concept Collection bean -->
+	 -->
 	<bean id="DBConnectionCCManagerBean" class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionCCManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
@@ -54,8 +54,7 @@
 	    class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionCCCollaboratorManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
-	<!-- Workbench projects bean -->
+	<!-- 
 	<bean id="DBConnectionModifyProjCollabManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjCollabManager">
 		<property name="dataSource" ref="dataSource" />
@@ -76,8 +75,7 @@
 		class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectAccessManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
-	<!-- Workbench workspace bean -->
+ -->
 	<bean id="DBConnectionArchiveWSMangerBean"
 		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionArchiveWSManger">
 		<property name="dataSource" ref="dataSource" />
@@ -107,12 +105,11 @@
 		class="edu.asu.spring.quadriga.db.sql.editor.DBConnectionEditorAccessManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
-	<!-- profile page bean -->
 	<bean id="DBConnectionProfileManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
 
 	<!--  Hibernate session factory injection -->
 	<bean id = "transactionManager" class = "org.springframework.orm.hibernate4.HibernateTransactionManager">

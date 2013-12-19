@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -19,7 +18,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class ProjectValidator implements Validator {
 
 	@Autowired
-	@Qualifier("DBConnectionProjectAccessManagerBean")
 	IDBConnectionProjectAccessManager dbConnect;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProjectValidator.class);

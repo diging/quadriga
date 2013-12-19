@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -23,7 +23,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 {
 
 	@Autowired
-	@Qualifier("modifyProjectManagerDAO")
 	private IDBConnectionModifyProjectManager dbConnect;
 	
 	@Autowired
@@ -93,8 +92,8 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 */
 	@Override
 	@Transactional
-	public void assignEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
-		dbConnect.assignProjectOwnerEditor(projectId, owner);
+	public void assignEditorToOwner(String projectId, String editor) throws QuadrigaStorageException{
+		dbConnect.assignProjectOwnerEditor(projectId, editor);
 	}
 	
 	/**
@@ -106,7 +105,7 @@ public class ModifyProjectManager implements IModifyProjectManager
 	 */
 	@Override
 	@Transactional
-	public void deleteEditorToOwner(String projectId, String owner) throws QuadrigaStorageException{
-		dbConnect.deleteProjectOwnerEditor(projectId, owner);
+	public void deleteEditorToOwner(String projectId, String editor) throws QuadrigaStorageException{
+		dbConnect.deleteProjectOwnerEditor(projectId, editor);
 	}
 }

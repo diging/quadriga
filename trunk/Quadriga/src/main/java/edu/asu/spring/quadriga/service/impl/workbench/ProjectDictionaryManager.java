@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IProjectDictionaryDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 public class ProjectDictionaryManager implements IProjectDictionaryManager {
 
 	@Autowired
-	private IProjectDictionaryDAO projectDictionaryDAO; 
+	private IDBConnectionProjectDictionary dbConnect;
 	
 	/**
 	 * Add dictionary to the project  
@@ -29,7 +29,7 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	@Transactional
 	public void addProjectDictionary(String projectId, String dictionaryId,
 			String userId) throws QuadrigaStorageException {
-		projectDictionaryDAO.addProjectDictionary(projectId, dictionaryId, userId);
+		dbConnect.addProjectDictionary(projectId, dictionaryId, userId);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	@Transactional
 	public List<IDictionary> listProjectDictionary(String projectId,
 			String userId) throws QuadrigaStorageException {
-		List<IDictionary> dictionaryList = projectDictionaryDAO.listProjectDictionary(projectId, userId);
+		List<IDictionary> dictionaryList = dbConnect.listProjectDictionary(projectId, userId);
 		return dictionaryList;
 	}
 
@@ -57,6 +57,6 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	@Override
 	@Transactional
 	public void deleteProjectDictionary(String projectId,String userId,String dictioanaryId)throws QuadrigaStorageException{
-		projectDictionaryDAO.deleteProjectDictionary(projectId, userId, dictioanaryId);
+		dbConnect.deleteProjectDictionary(projectId, userId, dictioanaryId);
 	}
 }

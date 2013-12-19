@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.IModifyProjectCollaboratorDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
@@ -16,7 +16,7 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 public class ModifyProjCollabManager implements IModifyProjCollabManager 
 {
      @Autowired
-     private IModifyProjectCollaboratorDAO modifyProjectCollaboratorDAO;
+     private IDBConnectionModifyProjCollabManager dbConnect;
 	
      /**
 	 * This method adds a collaborator for the project supplied.
@@ -31,20 +31,20 @@ public class ModifyProjCollabManager implements IModifyProjCollabManager
 	public void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
 	{
 		
-		modifyProjectCollaboratorDAO.addCollaboratorRequest(collaborator, projectid, userName);
+		dbConnect.addCollaboratorRequest(collaborator, projectid, userName);
 		
 	}
 
 	@Override
 	@Transactional
 	public void deleteCollaboratorRequest(String userName, String projectid) throws QuadrigaStorageException {
-		modifyProjectCollaboratorDAO.deleteColloratorRequest(userName, projectid);
+		dbConnect.deleteColloratorRequest(userName, projectid);
 	}
 	
 	@Override
 	@Transactional
 	public void updateCollaboratorRequest(String projectid,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
 	{
-		modifyProjectCollaboratorDAO.updateCollaboratorRequest(projectid, collabUser, collaboratorRole, username);
+		dbConnect.updateCollaboratorRequest(projectid, collabUser, collaboratorRole, username);
 	}
 }
