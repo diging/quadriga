@@ -1,8 +1,11 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 
 
@@ -12,6 +15,8 @@ public class DspaceMetadataItemEntity implements IDspaceMetadataItemEntity {
 	private String id;
 	private String handle;
 	private String name;
+	
+	private IDspaceMetadataCollection collections;
 	
 	@Override
 	public String getId() {
@@ -38,10 +43,19 @@ public class DspaceMetadataItemEntity implements IDspaceMetadataItemEntity {
 		this.name = name;
 	}
 	
-	
+	@XmlElementRefs({@XmlElementRef(type=DspaceMetadataCollection.class)})
+	@Override
+	public IDspaceMetadataCollection getCollections() {
+		return collections;
+	}
+	@Override
+	public void setCollections(IDspaceMetadataCollection collections) {
+		this.collections = collections;
+	}
+
+
 	public static class Adapter extends XmlAdapter<DspaceMetadataItemEntity, IDspaceMetadataItemEntity>
 	{
-
 		@Override
 		public IDspaceMetadataItemEntity unmarshal(DspaceMetadataItemEntity v) throws Exception {
 			return v;
