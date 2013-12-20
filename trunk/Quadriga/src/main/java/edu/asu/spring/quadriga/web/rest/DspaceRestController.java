@@ -40,6 +40,11 @@ import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItems;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 
@@ -257,10 +262,21 @@ public class DspaceRestController {
 	   }
 	
 	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.POST)
-	public void addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @PathVariable("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
+	public void addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
 	{
 		System.out.println(workspaceid+" Inside the rest service..."+fileid);
-		String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/2004.xml?email="+email+"&password="+password;
+		String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/2004.xml?email=ramk@asu.edu&password="+password;
+		
+		IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
+		System.out.println("____________"+metadataBitstream.getCheckSum());
+		System.out.println(metadataBitstream.getBundles().getBundleEntity().getName());
+		List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
+		for(IDspaceMetadataItemEntity entity : itemEntities)
+		{
+			System.out.println(entity.getId());
+			System.out.println(entity.getName());
+			System.out.println(entity.getHandle());
+		}
 		
 	}
 	
