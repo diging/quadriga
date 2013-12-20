@@ -14,15 +14,6 @@ ADD FOREIGN KEY(dictionaryowner) REFERENCES tbl_quadriga_user(username) ON DELET
 ALTER TABLE tbl_quadriga_user_denied
 ADD FOREIGN KEY(deniedby) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
 
-ALTER TABLE tbl_workspace_collaborator
-ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
-
-ALTER TABLE tbl_workspace_collaborator
-ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid) ON DELETE CASCADE ;
-
-ALTER TABLE tbl_workspace
-ADD FOREIGN KEY(workspaceowner)  REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE; 
-
 /* Begin - Foreign key dependencies for Dspace data */
 ALTER TABLE tbl_workspace_dspace
 ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid) ON DELETE CASCADE ;
@@ -95,6 +86,47 @@ ALTER TABLE tbl_conceptcollection_collaborator
 ALTER TABLE tbl_conceptcollection_items
  ADD CONSTRAINT fk_cc_items FOREIGN KEY(conceptcollectionid)
  REFERENCES tbl_conceptcollection(conceptcollectionid);
+ 
+ALTER TABLE tbl_workspace
+ ADD CONSTRAINT fk_tbl_workspace_workspaceowner FOREIGN KEY(workspaceowner)
+ REFERENCES tbl_quadriga_user(username);
+
+ALTER TABLE tbl_workspace_collaborator
+ ADD CONSTRAINT fk_tbl_ws_collaborator_workspaceid FOREIGN KEY(workspaceid)
+ REFERENCES tbl_workspace(workspaceid);
+
+ALTER TABLE tbl_workspace_collaborator
+ ADD CONSTRAINT fk_tbl_ws_collaborator_collaboratoruser FOREIGN KEY(collaboratoruser)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_workspace_conceptcollection
+ ADD CONSTRAINT fk_tbl_ws_cc_workspaceid FOREIGN KEY(workspaceid)
+ REFERENCES tbl_workspace(workspaceid);
+
+ALTER TABLE tbl_workspace_conceptcollection
+ ADD CONSTRAINT fk_ws_cc_conceptcollectionid FOREIGN KEY(conceptcollectionid)
+ REFERENCES tbl_conceptcollection(conceptcollectionid);
+ 
+ALTER TABLE tbl_workspace_dictionary
+ ADD CONSTRAINT fk_tbl_ws_dictionary_workspaceid FOREIGN KEY(workspaceid)
+ REFERENCES tbl_workspace(workspaceid);
+
+ALTER TABLE tbl_workspace_dictionary
+ ADD CONSTRAINT fk_tbl_ws_dictionary_dictionaryid FOREIGN KEY(dictionaryid)
+ REFERENCES tbl_dictionary(dictionaryid);
+ 
+ALTER TABLE tbl_workspace_dspace
+ ADD CONSTRAINT fk_tbl_ws_dspace_workspaceid FOREIGN KEY(workspaceid)
+ REFERENCES tbl_workspace(workspaceid);
+ 
+ALTER TABLE tbl_workspace_editor
+ ADD CONSTRAINT fk_tbl_workspace_editor_workspaceid FOREIGN KEY(workspaceid)
+ REFERENCES tbl_workspace(workspaceid);
+
+ALTER TABLE tbl_workspace_editor
+ ADD CONSTRAINT fk_tbl_workspace_editor_editor FOREIGN KEY(editor)
+ REFERENCES tbl_quadriga_user(username);
+ 
  
 
 

@@ -14,7 +14,7 @@ DROP VIEW IF EXISTS vw_workspace_collaborator;
 
 CREATE VIEW vw_workspace_collaborator(workspaceid,username,collaboratorrole)
 AS
-  SELECT workspaceid,username,collaboratorrole
+  SELECT workspaceid,collaboratoruser,collaboratorrole
     FROM tbl_workspace_collaborator;
 
  

@@ -14,5 +14,5 @@ DROP VIEW IF EXISTS vw_workspace_editor;
 
 CREATE VIEW vw_workspace_editor(workspaceid,user)
 AS
-     SELECT workspaceid,owner
+     SELECT workspaceid,editor
       FROM tbl_workspace_editor;

@@ -12,11 +12,11 @@ Modified Date : 08/14/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_workspace_editor
 (
-   workspaceid           VARCHAR(150)   NOT NULL,
-   owner    		   VARCHAR(20)   NOT NULL,
-   updatedby           VARCHAR(10)   NOT NULL,
-   updateddate         TIMESTAMP     NOT NULL,
-   createdby           VARCHAR(10)   NOT NULL,
-   createddate         DATETIME      NOT NULL,
-   PRIMARY KEY(workspaceid,owner)
+   workspaceid         VARCHAR(150)   NOT NULL,
+   editor    		   VARCHAR(50)    NOT NULL,
+   updatedby           VARCHAR(20)    NOT NULL,
+   updateddate         TIMESTAMP      NOT NULL,
+   createdby           VARCHAR(20)    NOT NULL,
+   createddate         DATETIME       NOT NULL,
+   PRIMARY KEY(workspaceid,editor)
 )
