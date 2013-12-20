@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 
 
@@ -17,6 +18,7 @@ public class DspaceMetadataItemEntity implements IDspaceMetadataItemEntity {
 	private String name;
 	
 	private IDspaceMetadataCollection collections;
+	private IDspaceMetadataCommunity communities;
 	
 	@Override
 	public String getId() {
@@ -51,6 +53,16 @@ public class DspaceMetadataItemEntity implements IDspaceMetadataItemEntity {
 	@Override
 	public void setCollections(IDspaceMetadataCollection collections) {
 		this.collections = collections;
+	}
+
+	@XmlElementRefs({@XmlElementRef(type=DspaceMetadataCommunity.class)})
+	@Override
+	public IDspaceMetadataCommunity getCommunities() {
+		return communities;
+	}
+	@Override
+	public void setCommunities(IDspaceMetadataCommunity communities) {
+		this.communities = communities;
 	}
 
 
