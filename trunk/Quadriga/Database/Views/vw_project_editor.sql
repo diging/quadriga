@@ -12,7 +12,7 @@ Modified Date : 10/30/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_project_editor;
 
-CREATE VIEW vw_project_editor(projectid,user)
+CREATE VIEW vw_project_editor(projectid,editor)
 AS
-     SELECT projectid,owner
+     SELECT projectid,editor
       FROM tbl_project_editor;
