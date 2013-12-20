@@ -44,6 +44,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollectionEntity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunityEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItems;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream;
@@ -267,7 +268,7 @@ public class DspaceRestController {
 	public void addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
 	{
 		System.out.println(workspaceid+" Inside the rest service..."+fileid);
-		String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/18900.xml?email=ramk@asu.edu&password="+password;
+		String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/"+fileid+".xml?email=ramk@asu.edu&password="+password;
 		
 		IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
 		System.out.println("____________"+metadataBitstream.getCheckSum());
@@ -280,7 +281,12 @@ public class DspaceRestController {
 			System.out.println(entity.getHandle());
 			for(IDspaceMetadataCollectionEntity collection : entity.getCollections().getCollectionEntitites())
 			{
-				System.out.print(collection.getId() );
+				System.out.print(collection.getId()+" ");
+			}
+			System.out.println();
+			for(IDspaceMetadataCommunityEntity community : entity.getCommunities().getCommunityEntitites())
+			{
+				System.out.print(community.getId()+" ");
 			}
 		}
 		

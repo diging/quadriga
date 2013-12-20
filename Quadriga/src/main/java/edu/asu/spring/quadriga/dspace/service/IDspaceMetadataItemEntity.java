@@ -14,8 +14,12 @@ public interface IDspaceMetadataItemEntity {
 
 	public abstract String getId();
 
-	IDspaceMetadataCollection getCollections();
+	public abstract IDspaceMetadataCollection getCollections();
 
-	void setCollections(IDspaceMetadataCollection collections);
+	public abstract void setCollections(IDspaceMetadataCollection collections);
+
+	public abstract IDspaceMetadataCommunity getCommunities();
+
+	public abstract void setCommunities(IDspaceMetadataCommunity communities);
 
 }
