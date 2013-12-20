@@ -192,7 +192,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	@Override
 	public String addDictionaryItems(String dictionaryId, String item,String id, String pos, String owner) throws QuadrigaStorageException {
 		logger.debug(dictionaryId +" , "+item+" , "+id +" , "+pos+" , "+ owner);
-		String errMsg = null;
+		String errMsg = "";
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid and dictItems.term =:term and dictItems.pos =:pos");
@@ -237,7 +237,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@Override
 	public String deleteDictionaryItems(String dictionaryId, String itemid,String ownerName) throws QuadrigaStorageException {
-		String errMsg = null;
+		String errMsg = "";
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id IN ( Select dict.id from DictionaryDTO dict where dict.id =:id and dict.dictionaryowner.username =:username) and dictItems.dictionaryItemsDTOPK.termid =:termid");
@@ -273,7 +273,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@Override
 	public String updateDictionaryItems(String dictionaryId, String termid,String term, String pos) throws QuadrigaStorageException {
-		String errMsg = null;
+		String errMsg = "";
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
@@ -348,7 +348,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	@Override
 	public String addCollaborators(ICollaborator collaborator,String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException 
 	{
-		String errMsg = null;
+		String errMsg = "";
 		try
 		{
 			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
@@ -412,7 +412,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@Override
 	public String deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException {
-		String errMsg = null;
+		String errMsg = "";
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryDTO dict where dict.id =:id and dict.dictionaryowner.username =:username");
@@ -577,7 +577,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@Override
 	public String deleteDictionaryItemsCollab(String dictionaryId, String itemid) throws QuadrigaStorageException {
-		String errMsg = null;
+		String errMsg = "";
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
