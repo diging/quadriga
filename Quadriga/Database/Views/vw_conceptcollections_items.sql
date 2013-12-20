@@ -14,9 +14,9 @@ DROP VIEW IF EXISTS vw_conceptcollections_items;
 
 CREATE VIEW vw_conceptcollections_items(id, item, pos, description, lemma)
 AS
-SELECT id,
+SELECT conceptcollectionid,
        item,
        pos,
        description,
        lemma
-FROM tbl_conceptcollections_items;
+FROM tbl_conceptcollection_items;

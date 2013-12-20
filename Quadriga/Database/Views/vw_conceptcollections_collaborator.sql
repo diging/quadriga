@@ -17,4 +17,4 @@ AS
    SELECT collectionid,
           collaboratoruser,
           collaboratorrole
-     FROM tbl_conceptcollections_collaborator;
+     FROM tbl_conceptcollection_collaborator;
