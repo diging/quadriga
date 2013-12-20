@@ -97,7 +97,7 @@ public class DictionaryListController {
 			List<IDictionary> dictionaryCollabList = null;
 			logger.debug("Username "+userId);
 			try {
-;				dictionaryList = dictonaryManager.getDictionariesList(userId);
+				dictionaryList = dictonaryManager.getDictionariesList(userId);
 				dictionaryCollabList=dictonaryManager.getDictionaryCollabOfUser(userId);
 			} catch (QuadrigaStorageException e) {
 				logger.error("2Stack trace", e);

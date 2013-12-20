@@ -75,7 +75,7 @@ $(document).ready(function() {
 	<c:if test="${not empty dictionaryCollabList}">
 	You participate in these Dictionaries:
 	<ul class="style2 pagination1">
-	<c:forEach var="concept" items="${dictionaryCollabList}">
+	<c:forEach var="dictionary" items="${dictionaryCollabList}">
 	<li>
 			   <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.id}">
 			          <c:out value="${dictionary.name}"></c:out>
@@ -85,7 +85,7 @@ $(document).ready(function() {
 			</c:forEach>
 	</ul>
 		</c:if>
-			<c:if test="${empty collaborationlist}">
+			<c:if test="${empty dictionaryCollabList}">
 	      <spring:message code="empty.dictionary" />
 	   </c:if>
 	</div>
