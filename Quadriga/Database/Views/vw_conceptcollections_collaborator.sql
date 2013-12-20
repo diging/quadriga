@@ -14,7 +14,7 @@ DROP VIEW IF EXISTS vw_conceptcollections_collaborator;
 
 CREATE VIEW vw_conceptcollections_collaborator(collectionid,collaboratoruser,collaboratorrole)
 AS
-   SELECT collectionid,
+   SELECT conceptcollectionid,
           collaboratoruser,
           collaboratorrole
      FROM tbl_conceptcollection_collaborator;
