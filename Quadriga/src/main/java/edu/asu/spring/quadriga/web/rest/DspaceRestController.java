@@ -9,6 +9,7 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -38,8 +39,12 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
+import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
@@ -47,6 +52,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollectionEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunityEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItems;
+import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -67,9 +73,12 @@ public class DspaceRestController {
 
 	@Autowired
 	private IDBConnectionListWSManager dbConnect;
-	
+
 	@Autowired
 	private IDBConnectionDspaceManager dbDspaceManager;
+
+	@Autowired
+	private IDspaceManager dspaceManager;
 
 	@Autowired
 	@Qualifier("restTemplate")
@@ -77,7 +86,7 @@ public class DspaceRestController {
 
 	@Resource(name = "dspaceStrings")
 	private Properties dspaceProperties;
-	
+
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 
@@ -153,7 +162,7 @@ public class DspaceRestController {
 
 		try {
 			URL downloadUrl = new URL(getDspaceDownloadURLPath(fileid, email, password, publicKey, privateKey, principal.getName()));
-			
+
 			//Retrieve file from Dspace
 			HttpURLConnection httpConnection = (HttpURLConnection) downloadUrl.openConnection();
 			inputStream = httpConnection.getInputStream();
@@ -164,7 +173,7 @@ public class DspaceRestController {
 				fileOutputStream.write(byteChunk, 0, sizeToBeRead);
 			}
 			fileOutputStream.flush();
-			
+
 			//Pass the file to response
 			response.reset();
 			response.setHeader("Content-Disposition",httpConnection.getHeaderField("Content-Disposition"));
@@ -192,7 +201,7 @@ public class DspaceRestController {
 			}
 		}
 	}
-	
+
 	/**
 	 * This method is used to generate the dspace url for downloading the file.
 	 * Based on what authentication details are provided, the url will vary for each case.
@@ -220,7 +229,7 @@ public class DspaceRestController {
 			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
-			
+
 			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.?")+
 					dspaceProperties.getProperty("dspace.api_key")+publicKey+dspaceProperties.getProperty("dspace.&")+
 					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
@@ -232,7 +241,7 @@ public class DspaceRestController {
 					dspaceProperties.getProperty("dspace.email")+email+
 					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+password;
 		}
-		
+
 		//Try to get the keys from the database
 		IDspaceKeys dspacekey = dbDspaceManager.getDspaceKeys(quadrigaUsername);
 		if(dspacekey != null)
@@ -243,55 +252,117 @@ public class DspaceRestController {
 			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
-			
+
 			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.?")+
 					dspaceProperties.getProperty("dspace.api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("dspace.&")+
 					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 		}
-		
+
 		//No authentication provided
 		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid;
 	}
 
 	private String bytesToHex(byte[] b) {
-	      char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
-	                         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-	      StringBuffer buf = new StringBuffer();
-	      for (int j=0; j<b.length; j++) {
-	         buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
-	         buf.append(hexDigit[b[j] & 0x0f]);
-	      }
-	      return buf.toString();
-	   }
-	
-	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.POST)
-	public void addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
-	{
-		System.out.println(workspaceid+" Inside the rest service..."+fileid);
-		String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/"+fileid+".xml?email=ramk@asu.edu&password="+password;
-		
-		IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
-		System.out.println("____________"+metadataBitstream.getCheckSum());
-		System.out.println(metadataBitstream.getBundles().getBundleEntity().getName());
-		List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
-		for(IDspaceMetadataItemEntity entity : itemEntities)
-		{
-			System.out.println(entity.getId());
-			System.out.println(entity.getName());
-			System.out.println(entity.getHandle());
-			for(IDspaceMetadataCollectionEntity collection : entity.getCollections().getCollectionEntitites())
-			{
-				System.out.print(collection.getId()+" ");
-			}
-			System.out.println();
-			for(IDspaceMetadataCommunityEntity community : entity.getCommunities().getCommunityEntitites())
-			{
-				System.out.print(community.getId()+" ");
-			}
+		char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+				'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+		StringBuffer buf = new StringBuffer();
+		for (int j=0; j<b.length; j++) {
+			buf.append(hexDigit[(b[j] >> 4) & 0x0f]);
+			buf.append(hexDigit[b[j] & 0x0f]);
 		}
-		
+		return buf.toString();
 	}
-	
+
+	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.POST, produces = "application/xml")
+	@ResponseBody
+	public String addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
+	{
+		IDspaceKeys dspaceKeys = null;
+		if(privateKey != null && !privateKey.equals("") && publicKey != null && !publicKey.equals(""))
+		{
+			dspaceKeys = new DspaceKeys();
+			dspaceKeys.setPrivateKey(privateKey);
+			dspaceKeys.setPublicKey(publicKey);
+		}
+		List<ICommunity> communityList = null;
+
+		try
+		{
+			//TODO: Remove these sysouts
+			System.out.println(workspaceid+" Inside the rest service..."+fileid);
+			email = "ramk@asu.edu";
+
+			String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/"+fileid+".xml?email=ramk@asu.edu&password="+password;
+
+			IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
+			List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
+			communityList = new ArrayList<ICommunity>();
+
+			for(IDspaceMetadataItemEntity itemEntity : itemEntities)
+			{
+				List<IDspaceMetadataCommunityEntity> communityIds = itemEntity.getCommunities().getCommunityEntitites();
+				List<IDspaceMetadataCollectionEntity> collectionIds  = itemEntity.getCollections().getCollectionEntitites();
+				for(int i=0;i<communityIds.size();i++)
+				{
+					IDspaceMetadataCommunityEntity communityMetadata = communityIds.get(i);
+
+					ICommunity community = dspaceManager.getCommunity(dspaceKeys, email, password, true, communityMetadata.getId());
+					System.out.println(community.getId()+"->"+community.getName());
+
+					//Load all the collections of the particular community
+					dspaceManager.getAllCollections(dspaceKeys, email, password, community.getId());
+					System.out.println("Community has "+community.getCollections().size()+" collections");	
+
+
+					IDspaceMetadataCollectionEntity collectionMetadata = collectionIds.get(i);
+					//Get the particular collection and add it to the community
+					ICollection collection = dspaceManager.getCollection(collectionMetadata.getId(),community.getId());
+					//Wait for the collection to load
+					while(collection.getLoadStatus() == false)
+					{
+						System.out.print("");
+					};
+					IItem item = collection.getItem(itemEntity.getId());
+								
+
+					System.out.println("Loaded collection");
+					System.out.println("Collection name: "+collection.getName());
+					System.out.println("Item name: "+item.getName());
+					
+					community.setCollections(null);
+					collection.setItems(null);
+					community.addCollection(collection);
+					collection.addItem(item);
+					
+					System.out.println("Collection size: "+community.getCollections().size());
+					communityList.add(community);
+					
+				}
+			}
+			
+			//TODO: Setup the xml response
+			VelocityEngine engine = restVelocityFactory.getVelocityEngine(request);
+			Template template = null;
+			engine.init();
+			template = engine.getTemplate("velocitytemplates/bitstreamdependencylist.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			
+			context.put("fileid", fileid);
+			context.put("workspaceid", workspaceid);
+			context.put("list", communityList);
+			
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			return writer.toString();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "Error";
+
+	}
+
 	private String getBitstreamMetadataPath(String fileid, String email, String password, String publicKey, String privateKey, String quadrigaUsername) throws NoSuchAlgorithmException, QuadrigaStorageException
 	{
 		if(publicKey!=null && privateKey!=null && !publicKey.equals("") && !privateKey.equals(""))
@@ -301,7 +372,7 @@ public class DspaceRestController {
 			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
-			
+
 			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
 					dspaceProperties.getProperty("dspace.api_key")+publicKey+dspaceProperties.getProperty("dspace.&")+
 					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
@@ -313,7 +384,7 @@ public class DspaceRestController {
 					dspaceProperties.getProperty("dspace.email")+email+
 					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+password;
 		}
-		
+
 		//Try to get the keys from the database
 		IDspaceKeys dspacekey = dbDspaceManager.getDspaceKeys(quadrigaUsername);
 		if(dspacekey != null)
@@ -324,12 +395,12 @@ public class DspaceRestController {
 			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
-			
+
 			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
 					dspaceProperties.getProperty("dspace.api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("dspace.&")+
 					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 		}
-		
+
 		//No authentication provided
 		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml");
 	}

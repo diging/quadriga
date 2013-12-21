@@ -143,11 +143,11 @@
 			<list>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCommunities
 				</value>
+				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream
+				</value>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection
 				</value>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceItems
-				</value>
-				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream
 				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList
 				</value>

@@ -314,4 +314,12 @@ public class Collection implements ICollection{
 		}
 		return null;
 	}
+	
+	@Override
+	public void addItem(IItem item)
+	{
+		if(this.items == null)
+			this.items = new ArrayList<IItem>();
+		this.items.add(item);
+	}
 }

@@ -53,4 +53,6 @@ public interface ICollection extends Runnable{
 
 	public abstract IItem getItem(String itemid);
 
+	public abstract void addItem(IItem item);
+
 }

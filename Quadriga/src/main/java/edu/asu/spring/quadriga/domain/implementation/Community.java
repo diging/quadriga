@@ -129,6 +129,8 @@ public class Community implements ICommunity{
 	 */
 	@Override
 	public void addCollection(ICollection collection) {
+		if(this.collections == null)
+			this.collections = new ArrayList<ICollection>();
 		this.collections.add(collection);	
 	}
 	
