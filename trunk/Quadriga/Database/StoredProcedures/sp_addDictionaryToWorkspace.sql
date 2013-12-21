@@ -51,7 +51,7 @@ BEGIN
     END IF; 
     
     IF NOT EXISTS(SELECT 1 FROM vw_dictionary
-				   WHERE dictionaryowner = inuserid and id=indictionaryid)
+				   WHERE dictionaryowner = inuserid and dictionaryid=indictionaryid)
       THEN SET errmsg = "Dictionary ID doesn't belong to user";
     END IF; 
     

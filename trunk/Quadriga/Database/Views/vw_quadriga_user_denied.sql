@@ -12,9 +12,10 @@ Modified Date : 05/28/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_quadriga_user_denied;
 
-CREATE VIEW vw_quadriga_user_denied(fullname,username,passwd,email,deniedby)
+CREATE VIEW vw_quadriga_user_denied(actionid,fullname,username,passwd,email,deniedby)
 AS
-   SELECT fullname,
+   SELECT actionid,
+          fullname,
 		  username,
 		  passwd,
           email,

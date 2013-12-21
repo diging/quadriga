@@ -10,15 +10,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 @Service
 public class ProjectValidator implements Validator {
-
+	
 	@Autowired
-	IDBConnectionProjectAccessManager dbConnect;
+	ICheckProjectSecurity projectCheckSecurityManager;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProjectValidator.class);
 	
@@ -93,7 +93,7 @@ public class ProjectValidator implements Validator {
 		boolean isDuplicate;
 		
 		//Verifying if the Unix name already exists
-		isDuplicate = dbConnect.chkDuplicateProjUnixName(unixName,projectId);
+		isDuplicate = projectCheckSecurityManager.chkDuplicateProjUnixName(unixName,projectId);
 		if(isDuplicate)
 		{
 			err.rejectValue("unixName","projectUnixName.unique");

@@ -35,7 +35,7 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the network top node
-	 select id,statementtype
+	 select statementid,statementtype
        from tbl_network_statements
 	   where networkid = innetworkid and istop=1 and isarchived=1;
 	END IF;

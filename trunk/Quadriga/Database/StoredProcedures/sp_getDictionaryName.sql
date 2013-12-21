@@ -32,7 +32,7 @@ BEGIN
     END IF;
     
     IF NOT EXISTS (SELECT 1 FROM vw_dictionary
-                     WHERE id = inid)
+                     WHERE dictionaryid = inid)
       THEN SET errmsg = "Dictionary id is invalid.";
     END IF;
 
@@ -41,7 +41,7 @@ BEGIN
      -- retrieve the dictionary details
 	 SELECT dictionaryname
        FROM vw_dictionary
-	   WHERE id = inid;
+	   WHERE dictionaryid = inid;
 	END IF;
 END$$
 DELIMITER ;

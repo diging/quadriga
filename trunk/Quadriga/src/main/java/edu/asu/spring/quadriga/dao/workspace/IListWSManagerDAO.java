@@ -9,31 +9,31 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IListWSManagerDAO {
 
-	List<IWorkSpace> listDeactivatedWorkspace(String projectid, String user)
+	public abstract List<IWorkSpace> listDeactivatedWorkspace(String projectid, String user)
 			throws QuadrigaStorageException;
 
-	List<IWorkSpace> listActiveWorkspace(String projectid, String username)
+	public abstract List<IWorkSpace> listActiveWorkspace(String projectid, String username)
 			throws QuadrigaStorageException;
 
-	List<IWorkSpace> listWorkspace(String projectid, String username)
+	public abstract  List<IWorkSpace> listWorkspace(String projectid, String username)
 			throws QuadrigaStorageException;
 
-	List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,
+	public abstract List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,
 			String username) throws QuadrigaStorageException;
 
-	List<IWorkSpace> listActiveWorkspaceOfOwner(String projectid,
+	public abstract List<IWorkSpace> listActiveWorkspaceOfOwner(String projectid,
 			String username) throws QuadrigaStorageException;
 
-	List<IWorkSpace> listActiveWorkspaceOfCollaborator(String projectid,
+	public abstract List<IWorkSpace> listActiveWorkspaceOfCollaborator(String projectid,
 			String username) throws QuadrigaStorageException;
 
-	List<IWorkSpace> listArchivedWorkspace(String projectid, String username)
+	public abstract List<IWorkSpace> listArchivedWorkspace(String projectid, String username)
 			throws QuadrigaStorageException;
 
-	IWorkSpace getWorkspaceDetails(String workspaceId, String username)
+	public abstract IWorkSpace getWorkspaceDetails(String workspaceId, String username)
 			throws QuadrigaStorageException;
 
-	List<IBitStream> getBitStreams(String workspaceId, String username)
+	public abstract List<IBitStream> getBitStreams(String workspaceId, String username)
 			throws QuadrigaAccessException, QuadrigaStorageException;
 
 }

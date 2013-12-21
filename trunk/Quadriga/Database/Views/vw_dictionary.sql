@@ -12,11 +12,11 @@ Modified Date : 06/04/2013
 ********************************************/
 DROP VIEW IF EXISTS vw_dictionary;
 
-CREATE VIEW vw_dictionary
+CREATE VIEW vw_dictionary(dictionaryname,description,dictionaryid,dicitonaryowner,accessibility)
 AS
 SELECT dictionaryname,
        description,
-       id,
+       dictionaryid,
        dictionaryowner,
 	   accessibility
 FROM tbl_dictionary;

@@ -45,9 +45,9 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 SELECT collectionname,description,id,collectionowner
-       FROM vw_conceptcollections
-	   WHERE id IN ( select conceptcollectionid from tbl_project_conceptcollection where projectid=inprojectid );
+	 SELECT collectionname,description,conceptcollectionid,collectionowner
+       FROM vw_conceptcollection
+	   WHERE conceptcollectionid IN ( select conceptcollectionid from tbl_project_conceptcollection where projectid=inprojectid );
 	END IF;
 END$$
 DELIMITER ;

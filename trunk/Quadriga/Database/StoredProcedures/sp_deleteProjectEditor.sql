@@ -37,7 +37,7 @@ BEGIN
     END IF;
     
 	 IF NOT EXISTS(SELECT 1 FROM tbl_project_editor
-                WHERE projectid = inprojectid and owner = inowner)
+                WHERE projectid = inprojectid and editor = inowner)
       THEN SET errmsg = "Owner don't exist";
 	END IF;
 	
@@ -48,7 +48,7 @@ BEGIN
 
             DELETE 
               FROM tbl_project_editor
-			 WHERE projectid = inprojectid and owner =inowner;
+			 WHERE projectid = inprojectid and editor =inowner;
 			 
 		 IF (errmsg = "")
            THEN COMMIT;

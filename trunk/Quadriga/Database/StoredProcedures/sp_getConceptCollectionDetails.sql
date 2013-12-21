@@ -36,12 +36,12 @@ BEGIN
      THEN SET errmsg = "username cannot be empty.";
     END IF;
    
-	IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections WHERE id = incollectionid)
+	IF NOT EXISTS(SELECT 1 FROM vw_conceptcollection WHERE conceptcollectionid = incollectionid)
       THEN SET errmsg = "No such conceptcollection"; 
     END IF;
     
-    IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
-                     WHERE id = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = incollectionid and  collaboratoruser = inusername)
+    IF NOT EXISTS(SELECT 1 FROM vw_conceptcollection	
+                     WHERE conceptcollectionid = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollection_collaborator	WHERE conceptcollectionid = incollectionid and  collaboratoruser = inusername)
       THEN SET errmsg = "User dont have access to the collection"; 
     END IF;
     
@@ -51,10 +51,10 @@ BEGIN
      THEN SET errmsg = "";
      
       -- retrieve the item details
-      SELECT vw_conceptcollections_items.item, vw_conceptcollections_items.description, vw_conceptcollections_items.pos, vw_conceptcollections_items.lemma, vw_conceptcollections.id, vw_conceptcollections.collectionname, 
-            vw_conceptcollections.description,vw_conceptcollections.collectionowner
-        FROM vw_conceptcollections LEFT JOIN vw_conceptcollections_items
-	    ON vw_conceptcollections_items.id = vw_conceptcollections.id WHERE vw_conceptcollections.id = incollectionid;
+      SELECT vw_conceptcollection_items.item, vw_conceptcollection_items.description, vw_conceptcollection_items.pos, vw_conceptcollection_items.lemma, vw_conceptcollection.conceptcollectionid, vw_conceptcollection.collectionname, 
+            vw_conceptcollection.description,vw_conceptcollection.collectionowner
+        FROM vw_conceptcollection LEFT JOIN vw_conceptcollection_items
+	    ON vw_conceptcollection_items.conceptcollectionid = vw_conceptcollection.conceptcollectionid WHERE vw_conceptcollection.conceptcollectionid = incollectionid;
       
      END IF;
 END$$

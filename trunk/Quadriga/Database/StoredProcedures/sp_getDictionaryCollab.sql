@@ -35,10 +35,10 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 select DISTINCT dictionaryname,description,dict.id,accessibility,dict.dictionaryowner,
+	 select DISTINCT dictionaryname,description,dict.dictionaryid,accessibility,dict.dictionaryowner,
 	 collab.collaboratoruser
 	 from tbl_dictionary dict ,tbl_dictionary_collaborator collab where
-	(dict.id = collab.id and collaboratoruser = incollabuser);
+	(dict.dictionaryid = collab.dictionaryid and collaboratoruser = incollabuser);
 	END IF;
 END$$
 DELIMITER ;

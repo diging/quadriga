@@ -28,8 +28,8 @@ BEGIN
 		THEN SET errmsg = "collaborator role cannot be empty";
 	END IF;
 
-	IF EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator 
-				WHERE collectionid = incollectionid AND collaboratoruser = incollaboratoruser)
+	IF EXISTS(SELECT 1 FROM vw_conceptcollection_collaborator 
+				WHERE conceptcollectionid = incollectionid AND collaboratoruser = incollaboratoruser)
 		THEN SET errmsg = "collaborator already exists";
 	END IF;
 
@@ -55,7 +55,7 @@ BEGIN
 	THEN SET errmsg = "";
 	START TRANSACTION;
 	INSERT INTO
-	tbl_conceptcollections_collaborator(collectionid,collaboratoruser,collaboratorrole,
+	tbl_conceptcollection_collaborator(conceptcollectionid,collaboratoruser,collaboratorrole,
 							 updatedby,updateddate,createdby,createddate)
 	SELECT incollectionid,incollaboratoruser,role,inuser,NOW(),inuser,NOW()
 	FROM temp_tbl_role;

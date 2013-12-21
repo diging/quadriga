@@ -36,7 +36,7 @@ BEGIN
 	END IF;
     
     IF NOT EXISTS (SELECT 1 FROM vw_dictionary
-                     WHERE id IN( select id from tbl_dictionary where id=inid 
+                     WHERE dictinaryid IN( select dictionaryid from tbl_dictionary where dictionaryid=inid 
     and dictionaryowner = inowner))
       THEN SET errmsg = "Dicitonary id is invalid.";
     END IF;
@@ -47,7 +47,7 @@ BEGIN
       -- retrieve the item details
       SELECT termid , term ,pos
         FROM vw_dictionary_items
-	    WHERE id IN( select id from tbl_dictionary where id=inid 
+	    WHERE dictionaryid IN( select dictionaryid from tbl_dictionary where dictionaryid=inid 
     and dictionaryowner = inowner)
       ORDER BY term;
      END IF;

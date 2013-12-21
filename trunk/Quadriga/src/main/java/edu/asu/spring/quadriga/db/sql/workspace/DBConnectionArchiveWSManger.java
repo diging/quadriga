@@ -36,7 +36,7 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public void archiveWorkspace(String workspaceIdList,int archive,String wsUser) throws QuadrigaStorageException
+	public void archiveWorkspace(String workspaceIdList,boolean archive,String wsUser) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -54,7 +54,7 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 			
 			// add input parameters
 			sqlStatement.setString(1, workspaceIdList);
-			sqlStatement.setInt(2, archive);
+			sqlStatement.setBoolean(2, archive);
 			sqlStatement.setString(3,wsUser);
 			
 			// add output parameter
@@ -94,7 +94,7 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 	 * @author  Kiran Kumar Batna
 	 */
 	@Override
-	public void deactivateWorkspace(String workspaceIdList,int deactivate,String wsUser) throws QuadrigaStorageException
+	public void deactivateWorkspace(String workspaceIdList,boolean deactivate,String wsUser) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String dbCommand;
@@ -112,7 +112,7 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 			
 			// add input parameters
 			sqlStatement.setString(1, workspaceIdList);
-			sqlStatement.setInt(2, deactivate);
+			sqlStatement.setBoolean(2, deactivate);
 			sqlStatement.setString(3,wsUser);
 			
 			// add output parameter

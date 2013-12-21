@@ -62,7 +62,7 @@ BEGIN
     END IF; 
     
     IF EXISTS(SELECT 1 FROM vw_dictionary_items
-				   WHERE id = inid and term =interm and termid=intermid and pos=inpos)
+				   WHERE dictionaryid = inid and term =interm and termid=intermid and pos=inpos)
      
       THEN SET errmsg = "ItemExists";
     END IF; 
@@ -72,7 +72,7 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
             INSERT 
-              INTO tbl_dictionary_items(id,term,termid,pos,
+              INTO tbl_dictionary_items(dictionaryid,term,termid,pos,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (inid,interm,intermid,inpos,
                      indictionaryowner,NOW(),indictionaryowner,NOW());	

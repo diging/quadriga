@@ -46,7 +46,7 @@ BEGIN
    THEN SET errmsg = "Collaborator role cannot be empty.";
    END IF;
 
-   IF NOT EXISTS (SELECT 1 FROM vw_conceptcollections WHERE id = incollectionid)
+   IF NOT EXISTS (SELECT 1 FROM vw_conceptcollection WHERE conceptcollectionid = incollectionid)
    THEN SET errmsg = "Collection id is invalid.";
    END IF;
 
@@ -58,14 +58,14 @@ BEGIN
    THEN SET errmsg = "Username is invalid.";
    END IF;
 
-   IF NOT EXISTS (SELECT 1 FROM vw_conceptcollections WHERE collectionowner = inoldowner
-                  AND id = incollectionid)
+   IF NOT EXISTS (SELECT 1 FROM vw_conceptcollection WHERE collectionowner = inoldowner
+                  AND conceptcollectionid = incollectionid)
    THEN SET errmsg = "User does not have privileges to transfer ownership.";
    END IF;
 
-   IF NOT EXISTS (SELECT 1 FROM vw_conceptcollections_collaborator 
+   IF NOT EXISTS (SELECT 1 FROM vw_conceptcollection_collaborator 
 				   WHERE collaboratoruser = innewowner
-                 AND collectionid = incollectionid)
+                 AND conceptcollectionid = incollectionid)
    THEN SET errmsg = "Invalid user.";
    END IF;
 
@@ -95,18 +95,18 @@ BEGIN
    THEN SET errmsg = "";
    START TRANSACTION;
      -- delete the new user as a collection collaborator
-     DELETE FROM tbl_conceptcollections_collaborator WHERE collaboratoruser = innewowner
-        AND collectionid = incollectionid;
+     DELETE FROM tbl_conceptcollection_collaborator WHERE collaboratoruser = innewowner
+        AND conceptcollectionid = incollectionid;
 
 	 -- assign new owner to the project
-     UPDATE tbl_conceptcollections
+     UPDATE tbl_conceptcollection
        SET collectionowner = innewowner
 		  ,updatedby = inoldowner
           ,updateddate = NOW()
-      WHERE id = incollectionid;
+      WHERE conceptcollectionid = incollectionid;
 
     -- insert the old owner as collaborator to the concept collection
-    INSERT INTO tbl_conceptcollections_collaborator(collectionid,collaboratoruser,
+    INSERT INTO tbl_conceptcollection_collaborator(conceptcollectionid,collaboratoruser,
       collaboratorrole,updatedby,updateddate,createdby,createddate)
     SELECT incollectionid,inoldowner,role,inoldowner,NOW(),inoldowner,NOW() 
       FROM temp_tbl_collabrole;

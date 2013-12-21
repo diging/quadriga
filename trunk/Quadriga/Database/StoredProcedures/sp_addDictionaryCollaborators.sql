@@ -57,7 +57,7 @@ BEGIN
 	THEN SET errmsg = "no errors";
 	START TRANSACTION;
 	INSERT INTO
-	tbl_dictionary_collaborator(id,collaboratoruser,collaboratorrole,
+	tbl_dictionary_collaborator(dictionaryid,collaboratoruser,collaboratorrole,
 							 updatedby,updateddate,createdby,createddate)
 	SELECT indictionaryid,incollaboratoruser,role,inuser,NOW(),inuser,NOW()
 	FROM temp_tbl_role;

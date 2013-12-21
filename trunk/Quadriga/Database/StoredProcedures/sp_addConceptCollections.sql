@@ -64,7 +64,7 @@ BEGIN
          	SET uniqueId = UUID_SHORT();
             SET collectionId = CONCAT('CC_',CAST(uniqueId AS CHAR));
             INSERT 
-              INTO tbl_conceptcollections(id, collectionname,description,collectionowner,accessibility,
+              INTO tbl_conceptcollections(conceptcollectionid, collectionname,description,collectionowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (collectionId, incollectionname,indescription,incollectionowner,inaccessibility,
                      incollectionowner,NOW(),incollectionowner,NOW());	

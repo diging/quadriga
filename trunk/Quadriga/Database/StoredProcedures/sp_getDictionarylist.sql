@@ -35,7 +35,7 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 SELECT dictionaryname,description,id,dictionaryowner,accessibility
+	 SELECT dictionaryname,description,dictionaryid,dictionaryowner,accessibility
        FROM vw_dictionary
 	   WHERE dictionaryowner = indictionaryowner;
 	END IF;

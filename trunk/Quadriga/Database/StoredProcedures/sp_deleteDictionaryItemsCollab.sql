@@ -37,7 +37,7 @@ BEGIN
 	
 
     
-    IF NOT EXISTS(SELECT 1 FROM vw_dictionary_items    WHERE id IN( select id from tbl_dictionary where id=indictionaryid 
+    IF NOT EXISTS(SELECT 1 FROM vw_dictionary_items    WHERE dictionaryid IN( select dictionaryid from tbl_dictionary where dictionaryid=indictionaryid 
     ) and termid =intermid) 
      
       THEN SET errmsg = "Item doesnot exists in this dictionary";
@@ -48,7 +48,7 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
 			DELETE FROM
-			tbl_dictionary_items WHERE id IN ( select id from tbl_dictionary where id=indictionaryid)
+			tbl_dictionary_items WHERE dictionaryid IN ( select dictionaryid from tbl_dictionary where id=indictionaryid)
 				and termid =intermid;
 		 IF (errmsg = "")
            THEN COMMIT;

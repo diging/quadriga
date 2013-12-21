@@ -26,5 +26,9 @@ public interface ICheckProjectSecurity {
 
 	public abstract boolean chkIsCollaboratorProjectAssociated(String userName,
 			String collaboratorRole) throws QuadrigaStorageException;
+	
+	public abstract boolean chkDuplicateProjUnixName(String unixName, String projectId) 
+			throws QuadrigaStorageException;
+
 
 }

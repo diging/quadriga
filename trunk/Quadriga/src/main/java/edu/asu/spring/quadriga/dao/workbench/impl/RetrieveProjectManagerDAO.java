@@ -154,7 +154,7 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		List<IProject> projectList = new ArrayList<IProject>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO.workspaceowner.username =:username group by projWork.projectDTO.projectid");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO.workspaceowner.username = :username group by projWork.projectDTO.projectid");
 			query.setParameter("username", sUserName);
 			List<ProjectDTO> projectDTOList = query.list();
 			
@@ -185,7 +185,7 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		List<IProject> projectList = new ArrayList<IProject>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.quadrigaUserDTO.username =:username )");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.workspaceCollaboratorDTOPK.username = :username)");
 			query.setParameter("username", sUserName);
 			List<ProjectDTO> projectDTOList = query.list();
 			
@@ -216,7 +216,7 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		List<IProject> projectList = new ArrayList<IProject>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.quadrigaUserDTO.username =:username )");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.quadrigaUserDTO.username = :username )");
 			query.setParameter("username", sUserName);
 			List<ProjectDTO> projectDTOList = query.list();
 			
@@ -243,7 +243,7 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 	@Override
 	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
 				
-			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.unixname =:unixname");
+			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.unixname = :unixname");
 			query.setParameter("unixname", unixName);
 			//Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectDTO.findByUnixname");
 			ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();

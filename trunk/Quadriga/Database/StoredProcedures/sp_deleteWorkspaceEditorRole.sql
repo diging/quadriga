@@ -37,7 +37,7 @@ BEGIN
     END IF;
     
 	 IF NOT EXISTS(SELECT 1 FROM tbl_workspace_editor
-                WHERE workspaceid = inworkspaceid and owner = inowner)
+                WHERE workspaceid = inworkspaceid and editor = inowner)
       THEN SET errmsg = "Owner don't exist";
 	END IF;
 	
@@ -48,7 +48,7 @@ BEGIN
 
             DELETE 
               FROM tbl_workspace_editor
-			 WHERE workspaceid = inworkspaceid and owner = inowner;
+			 WHERE workspaceid = inworkspaceid and editor = inowner;
 
 			 IF (errmsg = "")
            THEN COMMIT;

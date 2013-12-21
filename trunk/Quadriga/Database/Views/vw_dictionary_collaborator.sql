@@ -14,7 +14,7 @@ DROP VIEW IF EXISTS vw_dictionary_collaborator;
 
 CREATE VIEW vw_dictionary_collaborator(dictionaryid,collaboratoruser,collaboratorrole)
 AS
-   SELECT id,
+   SELECT dictionaryid,
           collaboratoruser,
           collaboratorrole
      FROM tbl_dictionary_collaborator;

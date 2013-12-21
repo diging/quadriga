@@ -35,7 +35,7 @@ BEGIN
     IF errmsg IS NULL
       THEN SET errmsg = "";
       SELECT dictionaryname,description,dictionaryowner,id,accessibility
-        FROM vw_dictionary WHERE id = indictionaryid ;
+        FROM vw_dictionary WHERE dictionaryid = indictionaryid ;
 	END IF;
 END$$
 DELIMITER ;

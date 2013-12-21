@@ -56,18 +56,18 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
         
-           IF EXISTS(SELECT 1 FROM vw_conceptcollections_items
-				   WHERE id = inid and item =initem)
+           IF EXISTS(SELECT 1 FROM vw_conceptcollection_items
+				   WHERE conceptcollectionid = inid and item =initem)
       		THEN SET errmsg = "ItemExists";
     		END IF;
-    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
-                     WHERE id = inid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = inid and  collaboratoruser = inusername)
+    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollection	
+                     WHERE conceptcollectionid = inid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollection_collaborator	WHERE conceptcollectionid = inid and  collaboratoruser = inusername)
       THEN SET errmsg = "User dont have access to the collection"; 
     END IF;
     
     		IF (errmsg = "")
             THEN INSERT 
-              INTO tbl_conceptcollections_items(id, item, lemma, pos, description,
+              INTO tbl_conceptcollection_items(conceptcollectionid, item, lemma, pos, description,
                          updateddate,createddate)
 			 VALUES (inid, initem, inlemma, inpos, indescription
                     ,NOW(),NOW());

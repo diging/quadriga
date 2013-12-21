@@ -233,4 +233,18 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = dbConnect.chkProjectOwnerEditorRole(userName, projectId);
 		return chkAccess;
 	}
+	
+	@Override
+	@Transactional
+	public boolean chkDuplicateProjUnixName(String unixName, String projectId) throws QuadrigaStorageException
+	{
+		boolean chkAccess;
+		
+		//initialize chkAccess variable
+		chkAccess = false;
+		
+		chkAccess = dbConnect.chkDuplicateProjUnixName(unixName, projectId);
+		
+		return chkAccess;
+	}
 }

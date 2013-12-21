@@ -12,15 +12,14 @@ Modified Date : 08/06/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_network_statements
 (
-  rowid VARCHAR(100) NOT NULL,
-  networkid       varchar(100)           NOT NULL ,
-  id	  varchar(100)           NOT NULL, 
-  statementtype  varchar(10)           NOT NULL,
-  istop 	int NOT NULL,
-  isarchived int NOT NULL,
-  updatedby       VARCHAR(10)   NOT NULL,
-  updateddate     TIMESTAMP     NOT NULL,
-  createdby       VARCHAR(10)   NOT NULL,
-  createddate     DATETIME      NOT NULL,
-  PRIMARY KEY(rowid)
+  networkid       VARCHAR(100)   NOT NULL ,
+  statementid	  VARCHAR(100)   NOT NULL, 
+  statementtype   VARCHAR(10)    NOT NULL,
+  istop 	      INT            NOT NULL,
+  isarchived      INT            NOT NULL,
+  updatedby       VARCHAR(20)    NOT NULL,
+  updateddate     TIMESTAMP      NOT NULL,
+  createdby       VARCHAR(20)    NOT NULL,
+  createddate     DATETIME       NOT NULL,
+  PRIMARY KEY(networkid,statementid)
 )
