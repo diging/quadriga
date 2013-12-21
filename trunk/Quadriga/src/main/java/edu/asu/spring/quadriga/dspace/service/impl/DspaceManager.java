@@ -21,7 +21,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.dao.sql.IDspaceManagerDAO;
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
@@ -71,9 +70,6 @@ public class DspaceManager implements IDspaceManager{
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
 
-	@Autowired
-	private IDspaceManagerDAO dspaceManagerDAO;
-	
 	@Override
 	public Properties getDspaceMessages() {
 		return dspaceMessages;
@@ -390,7 +386,7 @@ public class DspaceManager implements IDspaceManager{
 	@Transactional
 	public IDspaceKeys getDspaceKeys(String username) throws QuadrigaStorageException
 	{
-		return dspaceManagerDAO.getDspaceKeys(username);
+		return dbconnectionManager.getDspaceKeys(username);
 	}
 
 	/**
@@ -469,7 +465,7 @@ public class DspaceManager implements IDspaceManager{
 		}
 		proxyCommunityManager.clearCompleteCache();
 		return SUCCESS;*/
-		return dspaceManagerDAO.saveOrUpdateDspaceKeys(dspaceKeys, username);
+		return dbconnectionManager.saveOrUpdateDspaceKeys(dspaceKeys, username);
 	}
 
 	/**
@@ -479,7 +475,7 @@ public class DspaceManager implements IDspaceManager{
 	@Transactional
 	public int deleteDspaceKeys(String username) throws QuadrigaStorageException
 	{
-		return dspaceManagerDAO.deleteDspaceKeys(username);
+		return dbconnectionManager.deleteDspaceKeys(username);
 	}
 
 	/**

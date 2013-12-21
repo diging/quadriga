@@ -10,19 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workspace.IListWSManagerDAO;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
-import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
 
 @Repository
-public class ListWSManagerDAO extends DAOConnectionManager  implements IListWSManagerDAO {
+public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnectionListWSManager {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -32,6 +34,9 @@ public class ListWSManagerDAO extends DAOConnectionManager  implements IListWSMa
 	
 	@Autowired
 	private WorkspaceDspaceDTOMapper workspaceDspaceDTOMapper;
+	
+	@Autowired
+	private NetworkDTOMapper networkDTOMapper;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ListWSManagerDAO.class);
 	
@@ -257,12 +262,20 @@ public class ListWSManagerDAO extends DAOConnectionManager  implements IListWSMa
 		}
 		catch(Exception e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("listActiveWorkspace method :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
 	}
 	
+	/**
+	 * This will list the workspace details with workspace ID and username
+	 * @param    workspaceId,username
+	 * @return   IWorkSpace list of workspaces associated 
+	 *           with the workspaceID.
+	 * @throws   QuadrigaStorageException
+	 * @author   Karthik Jayaraman
+	 */
 	@Override
 	public IWorkSpace getWorkspaceDetails(String workspaceId,String username) throws QuadrigaStorageException
 	{
@@ -286,6 +299,14 @@ public class ListWSManagerDAO extends DAOConnectionManager  implements IListWSMa
 		return workspace;
 	}
 	
+	/**
+	 * This will list the bitstreams associated with workspace ID and username
+	 * @param    workspaceId,username
+	 * @return   IBitStream list of bitstream associated 
+	 *           with the workspaceID.
+	 * @throws   QuadrigaStorageException
+	 * @author   Karthik Jayaraman
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IBitStream> getBitStreams(String workspaceId, String username) throws QuadrigaAccessException, QuadrigaStorageException
@@ -307,6 +328,94 @@ public class ListWSManagerDAO extends DAOConnectionManager  implements IListWSMa
         	throw new QuadrigaStorageException();
 		}
 		return bitstreamList;
+	}
+
+	/**
+	 * This will list the networks associated with workspace ID
+	 * @param    workspaceId,username
+	 * @return   List of networks
+	 * @throws   QuadrigaStorageException
+	 * @author   Karthik Jayaraman
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<INetwork> getWorkspaceNetworkList(String workspaceid) throws QuadrigaStorageException {
+		List<INetwork> networkList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
+			query.setParameter("workspaceid", workspaceid);
+			List<NetworksDTO> nwDTOList = query.list();
+			if(nwDTOList != null)
+			{
+				networkList = networkDTOMapper.getNetworkList(nwDTOList);
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getWorkspaceNetworkList method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return networkList;
+	}
+
+	/**
+	 * This will get the workspace name of the workspace associated with the workspace ID
+	 * @param    workspaceId
+	 * @return   workspace name
+	 * @throws   QuadrigaStorageException
+	 * @author   Karthik Jayaraman
+	 */
+	@Override
+	public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException {
+		String workspaceName = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("WorkspaceDTO.findByWorkspaceid");
+			query.setParameter("findByWorkspaceid", workspaceId);
+			WorkspaceDTO workspaceDTO = (WorkspaceDTO) query.uniqueResult();
+			if(workspaceDTO != null)
+			{
+				workspaceName = workspaceDTO.getWorkspacename();
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getWorkspaceName method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceName;
+	}
+
+	/**
+	 * This will get the rejected network list associated with the workspace ID
+	 * @param    workspaceId
+	 * @return   list of rejected networks
+	 * @throws   QuadrigaStorageException
+	 * @author   Karthik Jayaraman
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid) throws QuadrigaStorageException 
+	{
+		List<INetwork> networkList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO networks where networks.workspaceid =:workspaceid and networks.status =:status");
+			query.setParameter("workspaceid", workspaceid);
+			query.setParameter("status", "REJECTED");
+			List<NetworksDTO> networksDTOList = query.list();
+			if(networksDTOList != null && networksDTOList.size() > 0)
+			{
+				networkList = networkDTOMapper.getNetworkList(networksDTOList);
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("getWorkspaceRejectedNetworkList method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return networkList;
 	}
 	
 }

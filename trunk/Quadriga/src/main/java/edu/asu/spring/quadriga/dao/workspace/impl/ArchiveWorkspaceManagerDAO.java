@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManager;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+
 @Repository
 public class ArchiveWorkspaceManagerDAO implements IDBConnectionArchiveWSManager 
 {
-	
 	@Autowired
 	private SessionFactory sessionFactory;
 	

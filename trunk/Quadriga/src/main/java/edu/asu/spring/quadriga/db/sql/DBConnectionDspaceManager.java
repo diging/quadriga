@@ -349,5 +349,12 @@ public class DBConnectionDspaceManager extends ADBConnectionManager implements I
 			closeConnection();
 		}
 	}
+
+	@Override
+	public int saveOrUpdateDspaceKeys(IDspaceKeys dspaceKeys, String username)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

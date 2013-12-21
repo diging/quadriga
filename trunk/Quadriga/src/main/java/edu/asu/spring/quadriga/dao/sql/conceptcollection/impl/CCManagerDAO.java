@@ -68,12 +68,11 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	
 	/**
 	 * Queries the database and builds a list of concept collection objects owned by particular user
-	 * 
+	 * @param Username
 	 * @return List containing user objects of all collections of the user
 	 * @throws QuadrigaStorageException 
 	 * @author Karthik Jayaraman
 	 */
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IConceptCollection> getConceptsOwnedbyUser(String userName) throws QuadrigaStorageException 

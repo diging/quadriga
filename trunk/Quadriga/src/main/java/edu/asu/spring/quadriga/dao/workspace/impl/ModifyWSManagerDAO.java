@@ -1,8 +1,5 @@
 package edu.asu.spring.quadriga.dao.workspace.impl;
 
-import java.sql.CallableStatement;
-import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workspace.IModifyWSManagerDAO;
-import edu.asu.spring.quadriga.db.sql.DBConstants;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
@@ -31,7 +27,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 
 @Repository
-public class ModifyWSManagerDAO extends DAOConnectionManager implements IModifyWSManagerDAO {
+public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConnectionModifyWSManager {
 
 	@Autowired
 	WorkspaceDTOMapper workspaceDTOMapper;
@@ -178,15 +174,69 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IModifyW
 	{
 		try
 		{
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-		query.setParameter("username", userName);
-		return (QuadrigaUserDTO) query.uniqueResult();
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
+			query.setParameter("username", userName);
+			return (QuadrigaUserDTO) query.uniqueResult();
 		}
 		catch(Exception e)
 		{
 			logger.error("getUserDTO :",e);
         	throw new QuadrigaStorageException();
 		}
+	}
+
+	@Override
+	public String deleteWorkspaceRequest(String workspaceIdList) throws QuadrigaStorageException
+	{
+		String errMsg = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceDTO workspace where workspace.workspaceid IN (:workspaceIdList)");
+			query.setParameter("workspaceIdList", workspaceIdList);
+			int updatedRecordCount = query.executeUpdate();
+			if(! (updatedRecordCount > 0))
+			{
+				errMsg = "Error in deleting workspaces";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteWorkspaceRequest :",e);
+			errMsg = "Exception in Database";
+        	throw new QuadrigaStorageException();
+		}
+		return errMsg;
+	}
+
+	@Override
+	public String updateWorkspaceRequest(IWorkSpace workspace) throws QuadrigaStorageException {
+		String errMsg = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("WorkspaceDTO.findByWorkspaceid");
+			query.setParameter("workspaceid", workspace.getId());
+			WorkspaceDTO workspaceDTO = (WorkspaceDTO) query.uniqueResult();
+			if(workspaceDTO != null)
+			{
+				workspaceDTO.setWorkspacename(workspace.getName());
+				workspaceDTO.setDescription(workspace.getDescription());
+				workspaceDTO.setUpdateddate(new Date());
+				workspaceDTO.setUpdatedby(workspace.getOwner().getName());
+				
+				sessionFactory.getCurrentSession().update(workspaceDTO);
+			}
+			else
+			{
+				errMsg = "Workspace ID is invalid";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteWorkspaceRequest :",e);
+			errMsg = "Exception in Database";
+        	throw new QuadrigaStorageException();
+		}
+		return errMsg;
 	}
 
 }

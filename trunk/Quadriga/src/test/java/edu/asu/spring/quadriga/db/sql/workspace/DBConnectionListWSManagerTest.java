@@ -136,7 +136,7 @@ public class DBConnectionListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = dbConnect.listActiveWorkspace("PROJ_2","projuser",DBConstants.LIST_ACTIVE_WORKSPACE_AS_OWNER);
+		workspaceList = dbConnect.listActiveWorkspaceOfOwner("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");

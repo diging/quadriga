@@ -12,12 +12,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IListWSManagerDAO;
 import edu.asu.spring.quadriga.dao.workspace.impl.ListWSManagerDAO;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -36,6 +36,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class ListWSManagerTest {
 
 	@Autowired
+	@Qualifier("listWSManagerDAO")
 	IDBConnectionListWSManager dbConnect;
 	
 	@Autowired
@@ -46,9 +47,6 @@ public class ListWSManagerTest {
 	
 	@Autowired
 	IListWSManager wsManager;
-	
-	@Autowired
-	IListWSManagerDAO listWSManagerDAO;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -73,7 +71,7 @@ public class ListWSManagerTest {
 		databaseQuery[9] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			((ListWSManagerDAO)listWSManagerDAO).setupTestEnvironment(query);
+			((ListWSManagerDAO)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -86,7 +84,7 @@ public class ListWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((ListWSManagerDAO)listWSManagerDAO).setupTestEnvironment(query);
+			((ListWSManagerDAO)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -97,7 +95,7 @@ public class ListWSManagerTest {
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> testWorkspaceList = new ArrayList<IWorkSpace>();
 		
-		workspaceList = listWSManagerDAO.listWorkspace("PROJ_2","projuser");
+		workspaceList = dbConnect.listWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");

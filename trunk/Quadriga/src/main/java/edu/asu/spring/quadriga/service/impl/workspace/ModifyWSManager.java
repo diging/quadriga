@@ -1,20 +1,16 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IModifyWSManagerDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.UserManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 
 /**
@@ -27,7 +23,7 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 public class ModifyWSManager implements IModifyWSManager 
 {
 	@Autowired
-	@Qualifier("DBConnectionModifyWSManagerBean")
+	@Qualifier("modifyWSManagerDAO")
 	private IDBConnectionModifyWSManager dbConnect;
 
 	@Autowired
@@ -37,9 +33,6 @@ public class ModifyWSManager implements IModifyWSManager
 	@Autowired
 	private IEmailNotificationManager emailManager;
 
-	@Autowired
-	private IModifyWSManagerDAO modifyWSManagerDAOImpl;
-	
 	/**
 	 * This inserts a workspace for a project into database.
 	 * @param     workspace
@@ -54,7 +47,7 @@ public class ModifyWSManager implements IModifyWSManager
 	{
 		//dbConnect.addWorkSpaceRequest(workspace,projectId);
 		
-		modifyWSManagerDAOImpl.addWorkSpaceRequest(workspace, projectId);
+		dbConnect.addWorkSpaceRequest(workspace, projectId);
 		
 		//Get project owner
 		IProject project = dbProjectManager.getProjectDetails(projectId);
@@ -116,7 +109,7 @@ public class ModifyWSManager implements IModifyWSManager
 	@Transactional
 	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
-		modifyWSManagerDAOImpl.transferWSOwnerRequest(workspaceId, oldOwner, newOwner, collabRole);
+		dbConnect.transferWSOwnerRequest(workspaceId, oldOwner, newOwner, collabRole);
 	}
 
 	/**
@@ -129,7 +122,7 @@ public class ModifyWSManager implements IModifyWSManager
 	@Override
 	@Transactional
 	public void assignEditorRoleToOwner(String workspaceId,String userName) throws QuadrigaStorageException{
-		modifyWSManagerDAOImpl.assignWorkspaceOwnerEditor(workspaceId, userName);
+		dbConnect.assignWorkspaceOwnerEditor(workspaceId, userName);
 	}
 
 	/**

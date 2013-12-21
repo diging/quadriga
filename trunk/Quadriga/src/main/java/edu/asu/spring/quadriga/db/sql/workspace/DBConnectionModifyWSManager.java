@@ -34,7 +34,7 @@ public class DBConnectionModifyWSManager extends ADBConnectionManager implements
 	 * @author Kiran Kumar Batna
 	 */
 	@Override
-	public String addWorkSpaceRequest(IWorkSpace workSpace,String projectId) throws QuadrigaStorageException
+	public void addWorkSpaceRequest(IWorkSpace workSpace,String projectId) throws QuadrigaStorageException
 	{
 		String errmsg;
 		String wsName;
@@ -84,7 +84,6 @@ public class DBConnectionModifyWSManager extends ADBConnectionManager implements
 		{
 			closeConnection();
 		}
-		return errmsg;
 	}
 	
 	/**
@@ -257,8 +256,7 @@ public class DBConnectionModifyWSManager extends ADBConnectionManager implements
 		}
 	}
 	
-	@Override
-	public String assignWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
+	public void assignWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
 	{
 		String dbCommand;
 		String errmsg;
@@ -288,7 +286,6 @@ public class DBConnectionModifyWSManager extends ADBConnectionManager implements
         	{
         		logger.info("Assign Workspace editor to owner request method :"+errmsg);
         	}
-        	return errmsg;
         }
         catch(SQLException e)
         {
