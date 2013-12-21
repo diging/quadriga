@@ -198,17 +198,17 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
+		while(dspaceManager.getCollection("10" , "12") == null);
 
-		ICollection collection = dspaceManager.getCollection("10");
+		ICollection collection = dspaceManager.getCollection("10" , "12");
 		assertNotNull(collection);
 		assertEquals("10", collection.getId());
 
 		//Invalid collection id
-		assertNull(dspaceManager.getCollection("11111111111111111111"));
+		assertNull(dspaceManager.getCollection("11111111111111111111" , "12"));
 
 		//Handle null case for collection id
-		assertNull(dspaceManager.getCollection(null));
+		assertNull(dspaceManager.getCollection(null,"12"));
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
+		while(dspaceManager.getCollection("10","12") == null);
 		assertEquals("12",dspaceManager.getCommunityId("10"));
 
 		//Invalid collection id
@@ -236,7 +236,7 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 
 		//Wait for the collection to load
-		ICollection collection = dspaceManager.getCollection("10");
+		ICollection collection = dspaceManager.getCollection("10","12");
 		//Wait for the collection to load
 		while(dspaceManager.getCollectionName("10")==null);
 		//Wait for items to load
@@ -256,9 +256,9 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
+		while(dspaceManager.getCollection("10","12") == null);
 		//Wait for items to load
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 		assertNotNull(dspaceManager.getAllItems("10"));
 
 		//Check invalid ids
@@ -281,8 +281,8 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12") == null);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 		assertNotNull(dspaceManager.getItemName("10", "1217"));
 
 		//Check invalid ids
@@ -302,8 +302,8 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12") == null);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 
 		//Bitstreams are loaded from dspace
 		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
@@ -399,8 +399,8 @@ public class DspaceManagerTest {
 		//Load the community, collection, item and bitstream
 		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null,null));
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
-		while(dspaceManager.getCollection("10") == null);
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12") == null);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
 		while(dspaceManager.getBitStream("10", "1217", "3991").getLoadStatus() == false);
 
@@ -457,8 +457,8 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null,null));
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12") == null);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 		//Bitstreams are loaded from dspace
 		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
 		//Add workspace-file link in the database.
@@ -484,8 +484,8 @@ public class DspaceManagerTest {
 		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null,null));
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12") == null);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 		//Bitstreams are loaded from dspace
 		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
 		//Add workspace-file link in the database.

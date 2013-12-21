@@ -480,8 +480,8 @@ public class ListWSControllerTest {
 		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null,null));
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12") == null);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 		//Bitstreams are loaded from dspace
 		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
 		//Add workspace-file link in the database.
@@ -508,8 +508,8 @@ public class ListWSControllerTest {
 		assertNotNull(dspaceManager.getAllCommunities(dspaceKeys,null,null));
 		assertNotNull(dspaceManager.getAllCollections(dspaceKeys,null,null, "12"));
 		//Wait for the collection to load
-		while(dspaceManager.getCollection("10") == null);
-		while(dspaceManager.getCollection("10").getLoadStatus() == false);
+		while(dspaceManager.getCollection("10","12") == null);
+		while(dspaceManager.getCollection("10","12").getLoadStatus() == false);
 		//Bitstreams are loaded from dspace
 		while(dspaceManager.getAllBitStreams(dspaceKeys,null,null, "10", "1217") == null);
 		//Add workspace-file link in the database.

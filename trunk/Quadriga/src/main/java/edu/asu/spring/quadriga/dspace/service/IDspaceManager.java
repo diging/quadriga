@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dspace.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
 
@@ -101,7 +102,7 @@ public interface IDspaceManager{
 	 * @throws QuadrigaException 
 	 * @throws QuadrigaAccessException 
 	 */
-	public abstract ICollection getCollection(String sCollectionId) throws QuadrigaException, QuadrigaAccessException;
+	public abstract ICollection getCollection(String sCollectionId, String sCommunityId) throws QuadrigaException, QuadrigaAccessException;
 
 	/**
 	 * Get the community id to which the collection belongs to.
@@ -256,6 +257,20 @@ public interface IDspaceManager{
 	 * 
 	 * @return				FALSE if the provided login credentials are wrong. TRUE for any other case (including dspace down exception).
 	 */
-	public abstract boolean validateDspaceCredentials(String username, String password,	IDspaceKeys dspacekeys);	
+	public abstract boolean validateDspaceCredentials(String username, String password,	IDspaceKeys dspacekeys);
+	
+	/**
+	 * This method will return the community object.
+	 * 
+	 * @param dspaceKeys				The public and private keys for dspace.
+	 * @param username					The dspace username.
+	 * @param password					The dspace password.
+	 * @param fromCache					TRUE - if the value is to be fetched from cache. FALSE - if the cache is to be cleared and fetched again.
+	 * @param communityid				The id of the community to be found from cache
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws QuadrigaAccessException
+	 */
+	public abstract ICommunity getCommunity(IDspaceKeys dspaceKeys, String username, String password, boolean fromCache, String communityid) throws NoSuchAlgorithmException, QuadrigaAccessException;	
 
 }

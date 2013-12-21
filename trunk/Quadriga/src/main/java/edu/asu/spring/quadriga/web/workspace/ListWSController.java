@@ -536,10 +536,11 @@ public class ListWSController
 	public @ResponseBody String getCollectionStatus(@PathVariable("collectionid") String collectionid) throws QuadrigaException, QuadrigaAccessException {
 
 		//Can't find collection in any of the communities
-		if(dspaceManager.getCommunityId(collectionid) == null)
-			return getDspaceMessages().getProperty("dspace.restricted_collection");
+		String communityid = dspaceManager.getCommunityId(collectionid);
+		if(communityid == null)
+			return getDspaceMessages().getProperty("dspace.restricted_bitstream");
 
-		ICollection collection = dspaceManager.getCollection(collectionid);
+		ICollection collection = dspaceManager.getCollection(collectionid,communityid);
 		if(collection != null)
 		{
 			if(collection.getLoadStatus() == true)
@@ -557,10 +558,11 @@ public class ListWSController
 	public @ResponseBody String getItemStatus(@PathVariable("collectionid") String collectionid, @PathVariable("itemid") String itemid) throws QuadrigaException, QuadrigaAccessException {
 
 		//Can't find collection in any of the communities
-		if(dspaceManager.getCommunityId(collectionid) == null)
-			return getDspaceMessages().getProperty("dspace.restricted_item");
+		String communityid = dspaceManager.getCommunityId(collectionid);
+		if(communityid == null)
+			return getDspaceMessages().getProperty("dspace.restricted_bitstream");
 
-		ICollection collection = dspaceManager.getCollection(collectionid);
+		ICollection collection = dspaceManager.getCollection(collectionid,communityid);
 		if(collection != null)
 		{
 			if(collection.getLoadStatus() == true)
@@ -601,10 +603,11 @@ public class ListWSController
 	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid, @RequestParam("itemid") String itemid, @RequestParam("collectionid") String collectionid) throws QuadrigaException, QuadrigaAccessException {
 
 		//Can't find collection in any of the communities
-		if(dspaceManager.getCommunityId(collectionid) == null)
+		String communityid = dspaceManager.getCommunityId(collectionid);
+		if(communityid == null)
 			return getDspaceMessages().getProperty("dspace.restricted_bitstream");
 
-		ICollection collection = dspaceManager.getCollection(collectionid);
+		ICollection collection = dspaceManager.getCollection(collectionid,communityid);
 		if(collection != null)
 		{
 			if(collection.getLoadStatus() == true)

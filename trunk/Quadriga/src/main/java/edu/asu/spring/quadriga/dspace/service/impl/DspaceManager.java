@@ -196,10 +196,10 @@ public class DspaceManager implements IDspaceManager{
 	 * 
 	 */
 	@Override
-	public ICollection getCollection(String sCollectionId) throws QuadrigaException, QuadrigaAccessException
+	public ICollection getCollection(String sCollectionId, String sCommunityId) throws QuadrigaException, QuadrigaAccessException
 	{
 		try {
-			return getProxyCommunityManager().getCollection(sCollectionId,true,this.restTemplate, this.dspaceProperties,null,null,null,null);
+			return getProxyCommunityManager().getCollection(sCollectionId,true,this.restTemplate, this.dspaceProperties,null,null,null,sCommunityId);
 		} catch (NoSuchAlgorithmException e) {
 			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
 		}
@@ -212,6 +212,15 @@ public class DspaceManager implements IDspaceManager{
 	public String getCommunityId(String sCollectionId)
 	{
 		return getProxyCommunityManager().getCommunityId(sCollectionId);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ICommunity getCommunity(IDspaceKeys dspaceKeys, String username, String password,boolean fromCache, String communityid ) throws NoSuchAlgorithmException, QuadrigaAccessException
+	{
+		return getProxyCommunityManager().getCommunity(communityid, true, restTemplate, dspaceProperties, dspaceKeys, username, password);
 	}
 
 	/**
