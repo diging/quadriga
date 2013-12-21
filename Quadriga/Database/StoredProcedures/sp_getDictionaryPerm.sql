@@ -40,9 +40,9 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the dictionary details
-	 SELECT id
+	 SELECT dictionaryid
        FROM vw_dictionary
-	   WHERE dictionaryowner = indictionaryowner and id=indictionaryid;
+	   WHERE dictionaryowner = indictionaryowner and dictionaryid=indictionaryid;
 	END IF;
 END$$
 DELIMITER ;

@@ -35,8 +35,8 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the cc details
-	 SELECT id
-       FROM tbl_conceptcollections
+	 SELECT conceptcollectionid
+       FROM tbl_conceptcollection
 	   WHERE collectionname = inname;
 	END IF;
 END$$

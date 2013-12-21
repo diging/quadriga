@@ -37,7 +37,7 @@ BEGIN
     END IF;
     
 	 IF EXISTS(SELECT 1 FROM tbl_project_editor
-                WHERE projectid = inprojectid and owner = inowner)
+                WHERE projectid = inprojectid and editor = inowner)
       THEN SET errmsg = "Owner already assigned as owner";
 	END IF;
 	
@@ -47,7 +47,7 @@ BEGIN
          START TRANSACTION;
 
             INSERT 
-              INTO tbl_project_editor(projectid,owner,
+              INTO tbl_project_editor(projectid,editor,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (inprojectid,inowner,
                      inowner,NOW(),inowner,NOW());	

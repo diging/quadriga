@@ -1,33 +1,3 @@
-
-ALTER TABLE tbl_dictionary_collaborator
-ADD FOREIGN KEY(id) REFERENCES tbl_dictionary(id) ON DELETE CASCADE ;
-
-ALTER TABLE tbl_dictionary_collaborator
-ADD FOREIGN KEY(collaboratoruser)  REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
-
-ALTER TABLE tbl_dictionary_items
-ADD FOREIGN KEY(id) REFERENCES tbl_dictionary(id) ON DELETE CASCADE ;
-
-ALTER TABLE tbl_dictionary
-ADD FOREIGN KEY(dictionaryowner) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
-
-ALTER TABLE tbl_quadriga_user_denied
-ADD FOREIGN KEY(deniedby) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
-
-/* Begin - Foreign key dependencies for Dspace data */
-ALTER TABLE tbl_workspace_dspace
-ADD FOREIGN KEY(workspaceid) REFERENCES tbl_workspace(workspaceid) ON DELETE CASCADE ;
-
-ALTER TABLE tbl_dspace_keys
-ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
-/* End - Foreign key dependencies for Dspace data */
-
-/* Begin - Foreign key dependencies for user profile */
-ALTER TABLE tbl_quadriga_userprofile
-ADD FOREIGN KEY(username) REFERENCES tbl_quadriga_user(username) ON DELETE CASCADE;
-/* End - Foreign key dependencies for user profile */
-
-
 /***************************************************************
  * Foreign key dependencies
  */
@@ -127,6 +97,63 @@ ALTER TABLE tbl_workspace_editor
  ADD CONSTRAINT fk_tbl_workspace_editor_editor FOREIGN KEY(editor)
  REFERENCES tbl_quadriga_user(username);
  
+ALTER TABLE tbl_dictionary
+ ADD CONSTRAINT fk_tbl_dictionary_owner FOREIGN KEY(dictionaryowner)
+ REFERENCES tbl_quadriga_user(username);
  
+ALTER TABLE tbl_dictionary_items
+ ADD CONSTRAINT fk_tbl_dictionary_items_dictionaryid FOREIGN KEY(dictionaryid)
+ REFERENCES tbl_dictionary(dictionaryid);
+ 
+ALTER TABLE tbl_dictionary_collaborator
+ ADD CONSTRAINT fk_tbl_dictionary_cc_dictionaryid FOREIGN KEY(dictionaryid)
+ REFERENCES tbl_dictionary(dictionaryid);
 
+ALTER TABLE tbl_dictionary_collaborator
+ ADD CONSTRAINT fk_tbl_dict_cc_collaboratoruser FOREIGN KEY(collaboratoruser)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_dspace_keys
+ ADD CONSTRAINT fk_tbl_dspace_keys FOREIGN KEY(username)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_networks
+ ADD CONSTRAINT fk_tbl_networks_workspaceid FOREIGN KEY(workspaceid)
+ REFERENCES tbl_workspace(workspaceid);
+
+ALTER TABLE tbl_networks
+ ADD CONSTRAINT fk_tbl_networks_networkowner FOREIGN KEY(networkowner)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_network_statements
+ ADD CONSTRAINT fk_tbl_network_statements_networkid FOREIGN KEY(networkid)
+ REFERENCES tbl_network(networkid);
+ 
+ALTER TABLE tbl_network_assigned
+ ADD CONSTRAINT fk_tbl_network_assigned FOREIGN KEY(networkid)
+ REFERENCES tbl_networks(networkid);
+
+ALTER TABLE tbl_network_assigned
+ ADD CONSTRAINT fk_tbl_network_assigned FOREIGN KEY(assigneduser)
+ REFERENCES tbl_quadriga_user(username);
+
+ALTER TABLE tbl_network_annotations
+ ADD CONSTRAINT fk_tbl_network_annotations_networkid FOREIGN KEY(networkid)
+ REFERENCES tbl_networks(networkid);
+
+ALTER TABLE tbl_network_annotations
+ ADD CONSTRAINT fk_tbl_network_annotations_username FOREIGN KEY(username)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_quadriga_userprofile
+ ADD CONSTRAINT fk_tbl_quadriga_userprofile FOREIGN KEY(username)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_quadriga_user_role
+ ADD CONSTRAINT fk_tbl_quadriga_user_role_username FOREIGN KEY(username)
+ REFERENCES tbl_quadriga_user(username);
+ 
+ALTER TABLE tbl_quadriga_user_denied
+ ADD CONSTRAINT fk_tbl_quadriga_user_denied_deniedby FOREIGN KEY(deniedby)
+ REFERENCES tbl_quadriga_user(username);
 

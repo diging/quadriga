@@ -10,9 +10,9 @@ Create By     : SatyaSwaroop Boddu
 Modified Date : 06/04/2013
 
 ********************************************/
-DROP VIEW IF EXISTS vw_conceptcollections;
+DROP VIEW IF EXISTS vw_conceptcollection;
 
-CREATE VIEW vw_conceptcollections
+CREATE VIEW vw_conceptcollection
 AS
 SELECT collectionname,
        description,

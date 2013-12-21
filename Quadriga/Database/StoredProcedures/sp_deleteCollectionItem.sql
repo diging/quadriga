@@ -44,17 +44,17 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
          	  
-    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections_items WHERE item =initemid and id = incollectionid)
+    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollection_items WHERE item =initemid and conceptcollectionid = incollectionid)
      	 		THEN SET errmsg = "Item does not exists in this dictionary";
     		END IF;
     		
-    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections	
-                     WHERE id = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollections_collaborator	WHERE collectionid = incollectionid and  collaboratoruser = inusername)
+    		IF NOT EXISTS(SELECT 1 FROM vw_conceptcollection	
+                     WHERE conceptcollectionid = incollectionid and  collectionowner = inusername) AND NOT EXISTS(SELECT 1 FROM vw_conceptcollection_collaborator	WHERE conceptcollectionid = incollectionid and  collaboratoruser = inusername)
       THEN SET errmsg = "User dont have access to the collection"; 
     END IF;
     
           	IF (errmsg = "")
-				THEN DELETE FROM tbl_conceptcollections_items WHERE id = incollectionid AND item = initemid;
+				THEN DELETE FROM tbl_conceptcollection_items WHERE conceptcollectionid = incollectionid AND item = initemid;
 			END IF;
 		 	IF (errmsg = "")
           		 THEN COMMIT;

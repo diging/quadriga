@@ -47,7 +47,7 @@ BEGIN
          START TRANSACTION;
 
             INSERT 
-              INTO tbl_workspace_editor(workspaceid,owner,
+              INTO tbl_workspace_editor(workspaceid,editor,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (inworkspaceid,inowner,
                      inowner,NOW(),inowner,NOW());	

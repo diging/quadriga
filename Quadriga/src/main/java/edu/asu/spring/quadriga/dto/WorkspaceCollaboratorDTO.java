@@ -56,7 +56,7 @@ public class WorkspaceCollaboratorDTO implements Serializable {
     @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private WorkspaceDTO workspaceDTO;
-    @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
+    @JoinColumn(name = "collaboratoruser", referencedColumnName = "username", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
 

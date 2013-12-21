@@ -25,7 +25,7 @@ BEGIN
 	THEN SET errmsg = "";
 			START TRANSACTION;
 			DELETE FROM tbl_dictionary_collaborator
-			WHERE id = indictionaryid AND 
+			WHERE dictionaryid = indictionaryid AND 
 				  collaboratoruser = incollaboratoruser;
 		IF(errmsg = "")
 		THEN COMMIT;

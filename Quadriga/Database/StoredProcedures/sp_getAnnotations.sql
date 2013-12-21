@@ -45,7 +45,7 @@ BEGIN
     -- Inserting the record into the tbl_dictionary table
     IF(errmsg IS NULL)
       THEN SET errmsg = "";
-        SELECT annotationtext,annotationid FROM tbl_network_annotations where id = inid and userid = inuserid
+        SELECT annotationtext,annotationid FROM tbl_network_annotations where objectid = inid and userid = inuserid
          and objecttype = inobjecttype;
     END IF;
 END$$

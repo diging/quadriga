@@ -65,8 +65,8 @@ BEGIN
 	IF (errmsg IS NULL)
 	THEN SET errmsg = "";
 			START TRANSACTION;
-			DELETE FROM tbl_conceptcollections_collaborator
-			WHERE collectionid = incollectionid AND 
+			DELETE FROM tbl_conceptcollection_collaborator
+			WHERE conceptcollectionid = incollectionid AND 
 				  collaboratoruser IN (SELECT user FROM temp_tbl_collaboratoruser);
 		IF(errmsg = "")
 		THEN COMMIT;

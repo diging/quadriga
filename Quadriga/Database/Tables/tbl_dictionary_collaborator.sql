@@ -12,12 +12,12 @@ Modified Date : 06/04/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_dictionary_collaborator
 (
-   id   varchar(50) not null,
-   collaboratoruser    VARCHAR(20),
+   dictionaryid        VARCHAR(100)  NOT NULL,
+   collaboratoruser    VARCHAR(50),
    collaboratorrole    VARCHAR(100),
-   updatedby           VARCHAR(10)   NOT NULL,
+   updatedby           VARCHAR(20)   NOT NULL,
    updateddate         TIMESTAMP     NOT NULL,
-   createdby           VARCHAR(10)   NOT NULL,
+   createdby           VARCHAR(20)   NOT NULL,
    createddate         DATETIME      NOT NULL,
-   PRIMARY KEY(id,collaboratoruser,collaboratorrole)
+   PRIMARY KEY(dictionaryid,collaboratoruser,collaboratorrole)
 )

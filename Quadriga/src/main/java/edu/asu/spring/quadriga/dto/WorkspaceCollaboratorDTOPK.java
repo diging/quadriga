@@ -19,7 +19,7 @@ public class WorkspaceCollaboratorDTOPK implements Serializable {
     @Column(name = "workspaceid")
     private String workspaceid;
     @Basic(optional = false)
-    @Column(name = "username")
+    @Column(name = "collaboratoruser")
     private String username;
     @Basic(optional = false)
     @Column(name = "collaboratorrole")

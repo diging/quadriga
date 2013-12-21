@@ -10,9 +10,9 @@ Create By     : SatyaSwaroop Boddu
 Modified Date : 06/04/2013
 
 ********************************************/
-DROP VIEW IF EXISTS vw_conceptcollections_collaborator;
+DROP VIEW IF EXISTS vw_conceptcollection_collaborator;
 
-CREATE VIEW vw_conceptcollections_collaborator(collectionid,collaboratoruser,collaboratorrole)
+CREATE VIEW vw_conceptcollection_collaborator(conceptcollectionid,collaboratoruser,collaboratorrole)
 AS
    SELECT conceptcollectionid,
           collaboratoruser,

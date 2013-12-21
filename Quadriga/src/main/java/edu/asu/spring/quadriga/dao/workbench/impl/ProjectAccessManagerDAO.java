@@ -125,7 +125,7 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 		
 		ProjectDTO project = (ProjectDTO) query.uniqueResult();
 		
-		if(!project.equals(null))
+		if(project !=null)
 		{
 			if(project.getProjectid().equals(projectId))
 			{

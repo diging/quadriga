@@ -41,7 +41,7 @@ BEGIN
      THEN SET errmsg = "";
      -- retrieve the dictionary details
 	select collaboratorrole from tbl_dictionary_collaborator 
-	where id =indictionaryid and collaboratoruser=incollabuser;
+	where dictionaryid =indictionaryid and collaboratoruser=incollabuser;
 	END IF;
 END$$
 DELIMITER ;

@@ -39,8 +39,8 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the project details
-	 SELECT id, collectionname,description,collectionowner,accessibility
-       FROM vw_conceptcollections
+	 SELECT conceptcollectionid, collectionname,description,collectionowner,accessibility
+       FROM vw_conceptcollection
 	   WHERE collectionowner = inusername;
 	END IF;
 END$$

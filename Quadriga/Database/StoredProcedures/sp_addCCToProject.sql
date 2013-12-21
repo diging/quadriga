@@ -50,8 +50,8 @@ BEGIN
       THEN SET errmsg = "Project ID doesn't belong to user";
     END IF; 
     
-    IF NOT EXISTS(SELECT 1 FROM vw_conceptcollections
-				   WHERE collectionowner = inuserid and id=inccid)
+    IF NOT EXISTS(SELECT 1 FROM vw_conceptcollection
+				   WHERE collectionowner = inuserid and conceptcollectionid=inccid)
       THEN SET errmsg = "Concept collection ID doesn't belong to user";
     END IF; 
     

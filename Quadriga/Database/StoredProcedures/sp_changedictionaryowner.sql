@@ -46,7 +46,7 @@ BEGIN
    THEN SET errmsg = "Collaborator role cannot be empty.";
    END IF;
 
-   IF NOT EXISTS (SELECT 1 FROM vw_dictionary WHERE id = indictionaryid)
+   IF NOT EXISTS (SELECT 1 FROM vw_dictionary WHERE dictionaryid = indictionaryid)
      THEN SET errmsg = "Dictionary id is invalid";
    END IF;
 
@@ -59,7 +59,7 @@ BEGIN
    END IF;
 
    IF NOT EXISTS (SELECT 1 FROM vw_dictionary WHERE dictionaryowner = inoldowner
-                  AND id = indictionaryid)
+                  AND dictionaryid = indictionaryid)
    THEN SET errmsg = "User does not have privileges to transfer ownership.";
    END IF;
 
@@ -96,17 +96,17 @@ BEGIN
      START TRANSACTION;
      -- delete the new user as a dictionary collaborator
      DELETE FROM tbl_dictionary_collaborator WHERE collaboratoruser = innewowner
-        AND id = indictionaryid;
+        AND dictionaryid = indictionaryid;
 
      	 -- assign new owner to the project
      UPDATE tbl_dictionary
        SET dictionaryowner = innewowner
 		  ,updatedby = inoldowner
           ,updateddate = NOW()
-      WHERE id = indictionaryid;
+      WHERE dictionaryid = indictionaryid;
 
 	 -- insert the old owner as collaborator to the concept collection
-    INSERT INTO tbl_dictionary_collaborator(id,collaboratoruser,
+    INSERT INTO tbl_dictionary_collaborator(dictionaryid,collaboratoruser,
       collaboratorrole,updatedby,updateddate,createdby,createddate)
     SELECT indictionaryid,inoldowner,role,inoldowner,NOW(),inoldowner,NOW() 
       FROM temp_tbl_collabrole;

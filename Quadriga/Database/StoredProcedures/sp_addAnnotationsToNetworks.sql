@@ -60,7 +60,7 @@ BEGIN
          SET uniqueId = UUID_SHORT();
          SET annotationId = CONCAT('ANNOT_',CAST(uniqueId AS CHAR));
             INSERT 
-              INTO tbl_network_annotations(networkid,id,annotationtext,annotationid,userid,objecttype,
+              INTO tbl_network_annotations(networkid,objectid,annotationtext,annotationid,username,objecttype,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (innetworkid,inid,inannotaiontext,annotationId,inuserid,inobjecttype,
                      inuserid,NOW(),inuserid,NOW());	

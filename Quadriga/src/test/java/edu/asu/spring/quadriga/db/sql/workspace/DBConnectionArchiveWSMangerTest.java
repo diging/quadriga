@@ -62,28 +62,28 @@ public class DBConnectionArchiveWSMangerTest {
 	@Test
 	public void testArchiveWorkspace() throws QuadrigaStorageException 
 	{
-	    dbConnect.archiveWorkspace("WS_1", 1, "projuser");
+	    dbConnect.archiveWorkspace("WS_1", true, "projuser");
 	    assertTrue(true);
 	}
 	
 	@Test
 	public void testArchiveActivate() throws QuadrigaStorageException
 	{
-		dbConnect.archiveWorkspace("WS_1", 0, "projuser");
+		dbConnect.archiveWorkspace("WS_1", false, "projuser");
 		assertTrue(true);
 	}
 	
 	@Test
 	public void testDeactivateWorkspace() throws QuadrigaStorageException
 	{
-		dbConnect.deactivateWorkspace("WS_2", 1, "projuser");
+		dbConnect.deactivateWorkspace("WS_2", true, "projuser");
 		assertTrue(true);
 	}
 	
 	@Test
 	public void testActivateWorkspace() throws QuadrigaStorageException
 	{
-		dbConnect.deactivateWorkspace("WS_2", 0, "projuser");
+		dbConnect.deactivateWorkspace("WS_2", false, "projuser");
 		assertTrue(true);
 	}
 

@@ -54,7 +54,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
         {
         	sessionFactory.getCurrentSession().save(projectDTO);			
         }
-        catch(HibernateException e)
+        catch(Exception e)
         {
         	logger.error("getProjectOwner :",e);
         	throw new QuadrigaStorageException();

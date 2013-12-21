@@ -57,7 +57,7 @@ BEGIN
          START TRANSACTION;
 
             INSERT 
-              INTO tbl_network_statements(networkid,id,statementtype,istop,isarchived,
+              INTO tbl_network_statements(networkid,statementid,statementtype,istop,isarchived,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (innetworkid,inid,instatementtype,inistop,inisarchived,
                      inowner,NOW(),inowner,NOW());	

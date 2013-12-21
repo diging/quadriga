@@ -18,7 +18,7 @@ CREATE PROCEDURE sp_addDictionaryDetails
 (
   IN  indictionaryname    VARCHAR(50),
   IN  indescription    TEXT,
-  IN  inaccessibility  TINYINT,
+  IN  inaccessibility  VARCHAR(50),
   IN  indictionaryowner   VARCHAR(50),
   OUT errmsg           VARCHAR(255)    
 )
@@ -62,7 +62,7 @@ BEGIN
          SET uniqueId = UUID_SHORT();
          SET dictionaryId = CONCAT('DICT_',CAST(uniqueId AS CHAR));
             INSERT 
-              INTO tbl_dictionary(id,dictionaryname,description,dictionaryowner,accessibility,
+              INTO tbl_dictionary(dictionaryid,dictionaryname,description,dictionaryowner,accessibility,
                          updatedby,updateddate,createdby,createddate)
 			 VALUES (dictionaryId,indictionaryname,indescription,indictionaryowner,inaccessibility,
                      indictionaryowner,NOW(),indictionaryowner,NOW());	

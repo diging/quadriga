@@ -35,7 +35,7 @@ BEGIN
     IF (errmsg IS NULL)
      THEN SET errmsg = "";
      -- retrieve the Dictionary details
-	 SELECT id
+	 SELECT dictionaryid
        FROM tbl_dictionary
 	   WHERE dictionaryname = inname;
 	END IF;

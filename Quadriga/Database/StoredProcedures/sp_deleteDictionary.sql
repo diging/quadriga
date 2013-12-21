@@ -37,7 +37,7 @@ BEGIN
 
   
     
-    IF NOT EXISTS(SELECT 1 FROM vw_dictionary    WHERE id = indictionaryid and dictionaryowner = inuser) 
+    IF NOT EXISTS(SELECT 1 FROM vw_dictionary    WHERE dictionaryid = indictionaryid and dictionaryowner = inuser) 
       THEN SET errmsg = "User don't have access to this dictionary";
     END IF; 
 	
@@ -46,10 +46,10 @@ BEGIN
       THEN SET errmsg = "";
          START TRANSACTION;
 			DELETE FROM
-			tbl_dictionary_items WHERE id = indictionaryid;
-			DELETE FROM tbl_dictionary_Collaborator WHERE id = indictionaryid;
+			tbl_dictionary_items WHERE dictionaryid = indictionaryid;
+			DELETE FROM tbl_dictionary_Collaborator WHERE dictionaryid = indictionaryid;
 			DELETE FROM
-			tbl_dictionary WHERE id = indictionaryid and dictionaryowner = inuser;
+			tbl_dictionary WHERE dictionaryid = indictionaryid and dictionaryowner = inuser;
 		 IF (errmsg = "")
            THEN COMMIT;
          ELSE ROLLBACK;
