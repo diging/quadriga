@@ -210,7 +210,6 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 	 * @throws   QuadrigaStorageException
 	 * @author   Kiran Kumar Batna
 	 */
-	@Override
 	public List<IWorkSpace> listActiveWorkspace(String projectid,String user,String spName) throws QuadrigaStorageException
 	{
 		String errmsg;
@@ -774,5 +773,29 @@ public class DBConnectionListWSManager extends ADBConnectionManager implements I
 
 		return workspaceName;
 
+	}
+
+
+	@Override
+	public List<IWorkSpace> listActiveWorkspaceOfOwner(String projectid,
+			String username) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<IWorkSpace> listActiveWorkspaceOfCollaborator(String projectid,
+			String username) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<IWorkSpace> listActiveWorkspace(String projectid,
+			String username) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

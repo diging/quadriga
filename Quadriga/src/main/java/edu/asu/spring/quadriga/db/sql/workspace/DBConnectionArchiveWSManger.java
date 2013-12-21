@@ -35,7 +35,6 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@Override
 	public void archiveWorkspace(String workspaceIdList,boolean archive,String wsUser) throws QuadrigaStorageException
 	{
 		String errmsg;
@@ -93,7 +92,6 @@ public class DBConnectionArchiveWSManger extends ADBConnectionManager implements
 	 * @throws  QuadrigaStorageException
 	 * @author  Kiran Kumar Batna
 	 */
-	@Override
 	public void deactivateWorkspace(String workspaceIdList,boolean deactivate,String wsUser) throws QuadrigaStorageException
 	{
 		String errmsg;

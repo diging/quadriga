@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.mapper;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
-import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.implementation.NetworkOldVersion;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
@@ -228,5 +228,25 @@ public class NetworkDTOMapper {
 		networkAnnotationsDTO.setUpdateddate(new Date());
 		
 		return networkAnnotationsDTO;
+	}
+	
+	/**
+	 * This method will create list of networks from the input parameters.
+	 * 
+	 * @param networksDTOList	The list of networks DTO to be converted to Inetwork
+	 * @return
+	 */
+	public List<INetwork> getNetworkList(List<NetworksDTO> networksDTOList) throws QuadrigaStorageException
+	{
+		List<INetwork> networkList = new ArrayList<INetwork>();
+		if(networksDTOList != null && networksDTOList.size() > 0)
+		{
+			Iterator<NetworksDTO> nwDTOIterator = networksDTOList.iterator();
+			while(nwDTOIterator.hasNext())
+			{
+				networkList.add(getNetwork(nwDTOIterator.next()));
+			}
+		}
+		return networkList;
 	}
 }

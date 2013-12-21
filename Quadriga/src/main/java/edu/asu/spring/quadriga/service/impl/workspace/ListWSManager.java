@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workspace.IListWSManagerDAO;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -30,11 +29,8 @@ public class ListWSManager implements IListWSManager
 	private static final Logger logger = LoggerFactory.getLogger(ListWSManager.class);
 	
 	@Autowired
-	@Qualifier("DBConnectionListWSManagerBean")
+	@Qualifier("listWSManagerDAO")
 	private IDBConnectionListWSManager dbConnect;
-	
-	@Autowired
-	private IListWSManagerDAO listWSManagerDAO;
 	
 	/**
 	 * This will list all the workspaces associated
@@ -50,14 +46,16 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = listWSManagerDAO.listWorkspace(projectid,user);
+		workspaceList = dbConnect.listWorkspace(projectid,user);
 		return workspaceList;
 	}
 	
+	@Override
+	@Transactional
 	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = listWSManagerDAO.listWorkspaceOfCollaborator(projectid, user);
+		workspaceList = dbConnect.listWorkspaceOfCollaborator(projectid, user);
 		return workspaceList;
 	}
 	
@@ -75,7 +73,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> ownerWorkspaceList;
-		ownerWorkspaceList = listWSManagerDAO.listActiveWorkspaceOfOwner(projectid, user);
+		ownerWorkspaceList = dbConnect.listActiveWorkspaceOfOwner(projectid, user);
 		return ownerWorkspaceList;
 	}
 	
@@ -84,7 +82,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> collaboratorWorkspaceList;
-		collaboratorWorkspaceList = listWSManagerDAO.listActiveWorkspaceOfCollaborator(projectid, user);
+		collaboratorWorkspaceList = dbConnect.listActiveWorkspaceOfCollaborator(projectid, user);
 		return collaboratorWorkspaceList;
 	}
 	
@@ -102,7 +100,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listArchivedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = listWSManagerDAO.listArchivedWorkspace(projectid,user);
+		workspaceList = dbConnect.listArchivedWorkspace(projectid,user);
 		return workspaceList;
 	}
 	
@@ -120,7 +118,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listDeactivatedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = listWSManagerDAO.listDeactivatedWorkspace(projectid, user);
+		workspaceList = dbConnect.listDeactivatedWorkspace(projectid, user);
 		return workspaceList;
 	}
 	
@@ -137,9 +135,9 @@ public class ListWSManager implements IListWSManager
 	public IWorkSpace getWorkspaceDetails(String workspaceId, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		IWorkSpace workspace;
-		workspace = listWSManagerDAO.getWorkspaceDetails(workspaceId,username);
+		workspace = dbConnect.getWorkspaceDetails(workspaceId,username);
 		if(workspace!=null){
-			workspace.setBitstreams(listWSManagerDAO.getBitStreams(workspaceId, username));
+			workspace.setBitstreams(dbConnect.getBitStreams(workspaceId, username));
 		}
 		return workspace;
 	}

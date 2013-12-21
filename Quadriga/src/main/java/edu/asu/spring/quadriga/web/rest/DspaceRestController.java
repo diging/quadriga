@@ -46,12 +46,10 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
-import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollectionEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunityEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
-import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItems;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -72,9 +70,11 @@ public class DspaceRestController {
 			.getLogger(DspaceRestController.class);
 
 	@Autowired
+	@Qualifier("listWSManagerDAO")
 	private IDBConnectionListWSManager dbConnect;
 
 	@Autowired
+	@Qualifier("dspaceManagerDAO")
 	private IDBConnectionDspaceManager dbDspaceManager;
 
 	@Autowired

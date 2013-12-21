@@ -12,9 +12,6 @@ public interface IDBConnectionListWSManager {
 
 	public abstract List<IWorkSpace> listDeactivatedWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
-	
-	public abstract List<IWorkSpace> listActiveWorkspace(String projectid,String user,String spName)
-			throws QuadrigaStorageException;
 
 	public abstract List<IWorkSpace> listArchivedWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
@@ -37,6 +34,15 @@ public interface IDBConnectionListWSManager {
 			throws QuadrigaStorageException;
 
 	public abstract List<IWorkSpace> listWorkspaceOfCollaborator(String projectid, String user)
+			throws QuadrigaStorageException;
+
+	List<IWorkSpace> listActiveWorkspaceOfOwner(String projectid,
+			String username) throws QuadrigaStorageException;
+
+	List<IWorkSpace> listActiveWorkspaceOfCollaborator(String projectid,
+			String username) throws QuadrigaStorageException;
+
+	List<IWorkSpace> listActiveWorkspace(String projectid, String username)
 			throws QuadrigaStorageException;
 
 }

@@ -8,7 +8,7 @@ public interface IDBConnectionModifyWSManager {
 	public abstract String deleteWorkspaceRequest(String workspaceIdList)
 			throws QuadrigaStorageException;
 
-	public abstract String addWorkSpaceRequest(IWorkSpace workSpace, String projectId)
+	public abstract void addWorkSpaceRequest(IWorkSpace workSpace, String projectId)
 			throws QuadrigaStorageException;
 
 	public abstract String updateWorkspaceRequest(IWorkSpace workspace)
@@ -17,7 +17,7 @@ public interface IDBConnectionModifyWSManager {
 	public abstract void transferWSOwnerRequest(String projectId, String oldOwner,
 			String newOwner, String collabRole) throws QuadrigaStorageException;
 
-	public abstract String assignWorkspaceOwnerEditor(String workspaceId, String owner)
+	public abstract void assignWorkspaceOwnerEditor(String workspaceId, String owner)
 			throws QuadrigaStorageException;
 
 	public abstract String deleteWorkspaceOwnerEditor(String workspaceId, String owner)
