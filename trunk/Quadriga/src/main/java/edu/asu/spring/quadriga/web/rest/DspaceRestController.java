@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
@@ -80,7 +81,7 @@ public class DspaceRestController {
 
 	@Autowired
 	private IRestMessage restMessage;
-	
+
 	@Autowired
 	private IDspaceManager dspaceManager;
 
@@ -146,8 +147,9 @@ public class DspaceRestController {
 	/**
 	 * This controller downloads the requested file from Dspace and returns the file as a response.
 	 * 
-	 * NOTE: If the public and private keys were stored in the quadriga database then no authentication details need to be set.
-	 * Else either the key fields or the email/password fields need to be set. If both of them are set then the keys take precedence over the email/password.
+	 * Any mode of Dspace authentication(email+password or keys) can be used by the system invoking this interface. If both of them are set then the keys 
+	 * take precedence over the email/password. If none is provided then the keys stored in Quadriga will be used to access the Dspace. 
+	 * If no keys are found in Quadriga, then Dspace will be accessed as an anonymous user.
 	 * 
 	 * @param fileid			The id of the file to be downloaded
 	 * @param email				The dspace email id of the user.
@@ -207,11 +209,12 @@ public class DspaceRestController {
 	}
 
 	/**
-	 * This method is used to generate the dspace url for downloading the file.
+	 * This method is used to generate the Dspace url for downloading the file.
 	 * Based on what authentication details are provided, the url will vary for each case.
 	 * 
-	 * NOTE: If all the authentication fields are empty then this function will try to pull the keys from the quadriga database.
-	 * When even that returns empty, then the url returned will contain no authentication details.
+	 * Any mode of Dspace authentication(email+password or keys) can be used by the system invoking this interface. If both of them are set then 
+	 * the keys take precedence over the email/password. If none is provided then the keys stored in Quadriga will be used to access the Dspace. 
+	 * If no keys are found in Quadriga, then Dspace will be accessed as an anonymous user.
 	 * 
 	 * @param fileid						The id of the file.
 	 * @param email							The dspace email of the user.
@@ -277,37 +280,32 @@ public class DspaceRestController {
 		return buf.toString();
 	}
 
+	/**
+	 * This method is used to add a Dspace bitstream to a Quadriga workspace. If all the fields community id, collection id, item id and bitstream id are provided
+	 * then only a check for authorized access to the bitstream is performed and if its successful, the bistream is added to the workspace. If any of those fields are
+	 * missing then the methods finds the name of all dependent communities, collections and items and returns them in a list.
+	 * 
+	 * Any mode of Dspace authentication(email+password or keys) can be used by the system invoking this interface. If both of them are set then 
+	 * the keys take precedence over the email/password. If none is provided then the keys stored in Quadriga will be used to access the Dspace. 
+	 * If no keys are found in Quadriga, then Dspace will be accessed as an anonymous user. 
+	 * 
+	 * @param workspaceid			The id of the Quadriga workspace to which the file is to be added.
+	 * @param fileid				The Dspace id of the file to be added. 
+	 * @param communityid			The Dspace id of the community under which the file is stored.
+	 * @param collectionid			The Dspace id of the collection under which the file is stored.
+	 * @param itemid				The Dspace id of the item under which the file is stored.
+	 * @param quadrigaUsername		The Quadriga username of the user trying to add the file.
+	 * @param email					The Dspace email of the user.
+	 * @param password				The Dspace password of the user.
+	 * @param publicKey				The Dspace public key of the user.
+	 * @param privateKey			The Dspace private key of the user.
+	 * @return
+	 * @throws RestException
+	 */
 	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.POST, produces = "application/xml")
 	@ResponseBody
 	public String addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid,  @RequestParam(value="communityid", required=false) String communityid, @RequestParam(value="collectionid", required=false) String collectionid, @RequestParam(value="itemid", required=false) String itemid, @RequestParam(value="username", required=false) String quadrigaUsername, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
 	{
-		/**
-		 * If the workspaceid, fileid, communityid, collectionid, itemid and quadriga username are provided, 
-		 * then add the file to the workspace 
-		 */
-		if(workspaceid != null && !workspaceid.equals("") && quadrigaUsername != null && !quadrigaUsername.equals(""))
-		{
-			//TODO: check if its a proper workspace and also check if the user has access to it
-			if(communityid!=null && !communityid.equals("") && collectionid!=null && !collectionid.equals("") && itemid!=null && !itemid.equals("") && fileid!=null && !fileid.equals(""))
-			{
-				//TODO: Check if the file id is a valid bitstream id that the user has access
-
-				//TODO: Check if the user has access to the quadriga workspace
-				
-				try {
-					//Add the file to the workspace
-					dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, communityid, collectionid, itemid, fileid, quadrigaUsername);
-					return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
-				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (QuadrigaAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
 		IDspaceKeys dspaceKeys = null;
 		if(privateKey != null && !privateKey.equals("") && publicKey != null && !publicKey.equals(""))
 		{
@@ -317,13 +315,61 @@ public class DspaceRestController {
 		}
 		List<ICommunity> communityList = null;
 
+
+		/**
+		 * If the workspaceid, fileid, communityid, collectionid, itemid and quadriga username are provided, 
+		 * then add the file to the workspace 
+		 */
+		if(workspaceid != null && !workspaceid.equals("") && quadrigaUsername != null && !quadrigaUsername.equals(""))
+		{
+			//Check if its a proper workspace and also check if the user has access to it
+			if(communityid!=null && !communityid.equals("") && collectionid!=null && !collectionid.equals("") && itemid!=null && !itemid.equals("") && fileid!=null && !fileid.equals(""))
+			{
+				try {
+					//Check if the file id is a valid bitstream id that the user has access
+					String restURLPath = getBitstreamMetadataPath(fileid, email, password, publicKey, privateKey, quadrigaUsername);
+					System.out.println(restURLPath);
+					IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
+
+					//TODO: Check if the user has access to the quadriga workspace
+
+
+					//Add the file to the workspace
+					dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, communityid, collectionid, itemid, fileid, quadrigaUsername);
+					return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
+				} 
+				catch(HttpClientErrorException e){
+					//Thrown when the dspace username and password or dspace keys do not have access to the file. 
+					logger.error("Exception: ",e);
+					throw new RestException(401);
+				}
+				catch (QuadrigaStorageException e) {
+					//Error in the database
+					e.printStackTrace();
+					throw new RestException(405);
+				} catch (QuadrigaAccessException e) {
+					//User not allowed to access the workspace
+					e.printStackTrace();
+					throw new RestException(403);
+				} catch (NoSuchAlgorithmException e) {
+					//System error
+					e.printStackTrace();
+					throw new RestException(406);
+				}
+			}
+		}
+
+		/**
+		 * Find out the dependent community id, collection id and item id for the given file.
+		 */
+
 		try
 		{
 			//TODO: Remove these sysouts
 			System.out.println(workspaceid+" Inside the rest service..."+fileid);
-			email = "ramk@asu.edu";
 
-			String restURLPath = "http://dstools.hpsrepository.asu.edu/rest/bitstream/"+fileid+".xml?email=ramk@asu.edu&password="+password;
+			String restURLPath = getBitstreamMetadataPath(fileid, email, password, publicKey, privateKey, quadrigaUsername);
+			System.out.println(restURLPath);
 
 			IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
 			List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
@@ -371,7 +417,7 @@ public class DspaceRestController {
 				}
 			}
 
-			//Setup the xml response
+			//Setup the xml response with the bitstream dependency details
 			VelocityEngine engine = restVelocityFactory.getVelocityEngine(request);
 			Template template = null;
 			engine.init();
@@ -386,11 +432,16 @@ public class DspaceRestController {
 			template.merge(context, writer);
 			return writer.toString();
 		}
+		catch(HttpClientErrorException e)
+		{
+			logger.error("Exception: ",e);
+			throw new RestException(401);
+		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return "Error";
+		return restMessage.getErrorMsg(dspaceProperties.getProperty("dspace.file_add_error"),request);
 
 	}
 
@@ -404,14 +455,14 @@ public class DspaceRestController {
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 
-			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml")+dspaceProperties.getProperty("dspace.?")+
 					dspaceProperties.getProperty("dspace.api_key")+publicKey+dspaceProperties.getProperty("dspace.&")+
 					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 		}
 		else if(email!=null && password!=null && !email.equals("") && !password.equals(""))
 		{				
 			//Authenticate based on email and password
-			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml")+dspaceProperties.getProperty("dspace.?")+
 					dspaceProperties.getProperty("dspace.email")+email+
 					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+password;
 		}
@@ -422,17 +473,17 @@ public class DspaceRestController {
 		{
 			//User has keys stored in quadriga database
 			//Authenticate based on public and private key
-			String stringToHash = dspaceProperties.getProperty("dspace.bitstream_url") + fileid + dspaceProperties.getProperty(".xml") + dspacekey.getPrivateKey();
+			String stringToHash = dspaceProperties.getProperty("dspace.bitstream_url") + fileid + dspaceProperties.getProperty("dspace.xml") + dspacekey.getPrivateKey();
 			MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
 			messageDigest.update(stringToHash.getBytes());
 			String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
 
-			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml")+dspaceProperties.getProperty("dspace.?")+
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml")+dspaceProperties.getProperty("dspace.?")+
 					dspaceProperties.getProperty("dspace.api_key")+dspacekey.getPublicKey()+dspaceProperties.getProperty("dspace.&")+
 					dspaceProperties.getProperty("dspace.api_digest")+digestKey;
 		}
 
 		//No authentication provided
-		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty(".xml");
+		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml");
 	}
 }
