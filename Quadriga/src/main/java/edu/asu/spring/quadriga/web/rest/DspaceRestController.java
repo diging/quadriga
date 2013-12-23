@@ -74,7 +74,7 @@ public class DspaceRestController {
 	private IDBConnectionListWSManager dbConnect;
 
 	@Autowired
-	@Qualifier("dspaceManagerDAO")
+//	@Qualifier("dspaceManagerDAO")
 	private IDBConnectionDspaceManager dbDspaceManager;
 
 	@Autowired
