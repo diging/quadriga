@@ -1,0 +1,168 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package edu.asu.spring.quadriga.dto;
+
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+ *
+ * @author Karthik
+ */
+@Entity
+@Table(name = "tbl_quadriga_user_requests")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findAll", query = "SELECT q FROM QuadrigaUserRequestsDTO q"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByFullname", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.fullname = :fullname"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByUsername", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.username = :username"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByPasswd", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.passwd = :passwd"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByEmail", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.email = :email"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByUpdatedby", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.updatedby = :updatedby"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByUpdateddate", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.updateddate = :updateddate"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByCreatedby", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.createdby = :createdby"),
+    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByCreateddate", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.createddate = :createddate")})
+public class QuadrigaUserRequestsDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Column(name = "fullname")
+    private String fullname;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "username")
+    private String username;
+    @Column(name = "passwd")
+    private String passwd;
+    @Column(name = "email")
+    private String email;
+    @Basic(optional = false)
+    @Column(name = "updatedby")
+    private String updatedby;
+    @Basic(optional = false)
+    @Column(name = "updateddate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateddate;
+    @Basic(optional = false)
+    @Column(name = "createdby")
+    private String createdby;
+    @Basic(optional = false)
+    @Column(name = "createddate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createddate;
+
+    public QuadrigaUserRequestsDTO() {
+    }
+
+    public QuadrigaUserRequestsDTO(String username) {
+        this.username = username;
+    }
+
+    public QuadrigaUserRequestsDTO(String username, String updatedby, Date updateddate, String createdby, Date createddate) {
+        this.username = username;
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUpdatedby() {
+        return updatedby;
+    }
+
+    public void setUpdatedby(String updatedby) {
+        this.updatedby = updatedby;
+    }
+
+    public Date getUpdateddate() {
+        return updateddate;
+    }
+
+    public void setUpdateddate(Date updateddate) {
+        this.updateddate = updateddate;
+    }
+
+    public String getCreatedby() {
+        return createdby;
+    }
+
+    public void setCreatedby(String createdby) {
+        this.createdby = createdby;
+    }
+
+    public Date getCreateddate() {
+        return createddate;
+    }
+
+    public void setCreateddate(Date createddate) {
+        this.createddate = createddate;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (username != null ? username.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof QuadrigaUserRequestsDTO)) {
+            return false;
+        }
+        QuadrigaUserRequestsDTO other = (QuadrigaUserRequestsDTO) object;
+        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "hpsdtogeneration.QuadrigaUserRequestsDTO[ username=" + username + " ]";
+    }
+    
+}
