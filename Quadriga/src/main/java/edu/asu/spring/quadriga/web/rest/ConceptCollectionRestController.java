@@ -52,7 +52,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
-import edu.asu.spring.quadriga.service.IErrorMessageRest;
+import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -77,7 +77,7 @@ public class ConceptCollectionRestController {
 	private IUserManager usermanager;
 
 	@Autowired
-	private IErrorMessageRest errorMessageRest;
+	private IRestMessage restMessage;
 	
 	@Autowired
 	private IWorkspaceCCManager workspaceCCManager;
@@ -200,7 +200,7 @@ public class ConceptCollectionRestController {
 		IUser user = userManager.getUserDetails(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.",request);
+			String errorMsg = restMessage.getErrorMsg("Please provide XML in body of the post request.",request);
 			return errorMsg;
 		} else {
 
@@ -218,7 +218,7 @@ public class ConceptCollectionRestController {
 			} catch (Exception e) {
 				logger.error("Error in unmarshalling", e);
 				response.setStatus(404);
-				String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
+				String errorMsg = restMessage.getErrorMsg("Error in unmarshalling",request);
 				return errorMsg;
 			}
 			QuadrigaConceptReply qReply = response1.getValue();
@@ -241,7 +241,7 @@ public class ConceptCollectionRestController {
 					logger.error("Errors in adding items", e);
 					response.setStatus(500);
 					response.setContentType(accept);
-					String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
+					String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error",request);
 					return errorMsg;
 				}
 
@@ -343,7 +343,7 @@ public class ConceptCollectionRestController {
 		if (!checkWSSecurity.checkIsWorkspaceExists(workspaceId)) {
 			logger.info("Workspace ID : " + workspaceId + " doesn't exist");
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist",request);
+			String errorMsg = restMessage.getErrorMsg("Workspace ID : " + workspaceId + " doesn't exist",request);
 			return errorMsg;
 		}
 
@@ -354,12 +354,12 @@ public class ConceptCollectionRestController {
 		if (ccName == null || ccName.isEmpty()) {
 			response.setStatus(404);
 			logger.info("came here " + ccName);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection name",request);
+			String errorMsg = restMessage.getErrorMsg("Please provide concept collection name",request);
 			return errorMsg;
 		}
 		if (desc == null ||  desc.isEmpty()) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Please provide concept collection description",request);
+			String errorMsg = restMessage.getErrorMsg("Please provide concept collection description",request);
 			return errorMsg;
 		}
 		logger.debug("XML : " + xml);
@@ -376,12 +376,12 @@ public class ConceptCollectionRestController {
 		} catch (Exception e) {
 			logger.error("Error in unmarshalling", e);
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Error in unmarshalling",request);
+			String errorMsg = restMessage.getErrorMsg("Error in unmarshalling",request);
 			return errorMsg;
 		}
 		if (response1 == null) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid",request);
+			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid",request);
 			return errorMsg;
 		}
 		QuadrigaConceptReply qReply = response1.getValue();
@@ -389,7 +389,7 @@ public class ConceptCollectionRestController {
 		List<Concept> conceptList = c1.getConcepts();
 		if (conceptList.size() < 1) {
 			response.setStatus(404);
-			String errorMsg = errorMessageRest.getErrorMsg("Concepts XML is not valid",request);
+			String errorMsg = restMessage.getErrorMsg("Concepts XML is not valid",request);
 			return errorMsg;
 		}
 
@@ -416,7 +416,7 @@ public class ConceptCollectionRestController {
 				logger.error("Errors in adding items", e);
 				response.setStatus(500);
 				response.setContentType(accept);
-				String errorMsg = errorMessageRest.getErrorMsg("Failed to add due to DB Error",request);
+				String errorMsg = restMessage.getErrorMsg("Failed to add due to DB Error",request);
 				return errorMsg;				
 			}
 

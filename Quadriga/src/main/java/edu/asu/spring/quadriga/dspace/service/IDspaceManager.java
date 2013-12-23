@@ -271,6 +271,23 @@ public interface IDspaceManager{
 	 * @throws NoSuchAlgorithmException
 	 * @throws QuadrigaAccessException
 	 */
-	public abstract ICommunity getCommunity(IDspaceKeys dspaceKeys, String username, String password, boolean fromCache, String communityid) throws NoSuchAlgorithmException, QuadrigaAccessException;	
+	public abstract ICommunity getCommunity(IDspaceKeys dspaceKeys, String username, String password, boolean fromCache, String communityid) throws NoSuchAlgorithmException, QuadrigaAccessException;
+	
+
+	/**
+	 * This method will add the bistreamid to the workspace. It does not authenticate the ids provided and the onus is on the method that uses it.
+	 * In otherwords, this method assumes that all the ids supplied are valid and the user has access to the dspace ids.
+	 * 
+	 * @param workspaceId					The id of the workspace to which the file is to be added.
+	 * @param communityId					The id of the community to which the file belongs.
+	 * @param collectionId					The id of the collection to which the file belongs.
+	 * @param itemId						The id of the item to which the file belongs.
+	 * @param bitstreamId					The id of file which is to be added to the workspace.
+	 * @param username						The quadriga username of the user who has access to the workspace and the dspace file.
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
+	void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String communityId, String collectionId, String itemId, String bitstreamId, String username)
+			throws QuadrigaStorageException, QuadrigaAccessException;	
 
 }

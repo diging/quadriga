@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.exceptions.RestException;
-import edu.asu.spring.quadriga.service.IErrorMessageRest;
+import edu.asu.spring.quadriga.service.IRestMessage;
 
 @Service
-public class ErrorMessageRest implements IErrorMessageRest {
+public class RestMessage implements IRestMessage {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(ErrorMessageRest.class);
+			.getLogger(RestMessage.class);
 	
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
@@ -68,6 +68,31 @@ public class ErrorMessageRest implements IErrorMessageRest {
 			VelocityContext context = new VelocityContext(
 					restVelocityFactory.getVelocityContext());
 			context.put("errMsg", errorMsg);
+			template.merge(context, sw);
+			return sw.toString();
+		} catch (ResourceNotFoundException e) {
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (Exception e) {
+			logger.error("Exception:", e);
+			throw new RestException(405);
+		}
+	}
+	
+	@Override
+	public String getSuccessMsg(String successMessage,HttpServletRequest req) throws RestException {
+		VelocityEngine engine = null;
+		Template template = null;
+		StringWriter sw = new StringWriter();
+
+		try {
+			engine = restVelocityFactory.getVelocityEngine(req);
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/success.vm");
+			VelocityContext context = new VelocityContext(
+					restVelocityFactory.getVelocityContext());
+			context.put("successMsg", successMessage);
 			template.merge(context, sw);
 			return sw.toString();
 		} catch (ResourceNotFoundException e) {

@@ -46,14 +46,15 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
-import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollectionEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunityEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
+import edu.asu.spring.quadriga.service.IRestMessage;
 
 /**
  * This class handles the rest requests for file downloads
@@ -74,9 +75,12 @@ public class DspaceRestController {
 	private IDBConnectionListWSManager dbConnect;
 
 	@Autowired
-//	@Qualifier("dspaceManagerDAO")
+	//	@Qualifier("dspaceManagerDAO")
 	private IDBConnectionDspaceManager dbDspaceManager;
 
+	@Autowired
+	private IRestMessage restMessage;
+	
 	@Autowired
 	private IDspaceManager dspaceManager;
 
@@ -275,8 +279,35 @@ public class DspaceRestController {
 
 	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.POST, produces = "application/xml")
 	@ResponseBody
-	public String addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
+	public String addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid,  @RequestParam(value="communityid", required=false) String communityid, @RequestParam(value="collectionid", required=false) String collectionid, @RequestParam(value="itemid", required=false) String itemid, @RequestParam(value="username", required=false) String quadrigaUsername, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
 	{
+		/**
+		 * If the workspaceid, fileid, communityid, collectionid, itemid and quadriga username are provided, 
+		 * then add the file to the workspace 
+		 */
+		if(workspaceid != null && !workspaceid.equals("") && quadrigaUsername != null && !quadrigaUsername.equals(""))
+		{
+			//TODO: check if its a proper workspace and also check if the user has access to it
+			if(communityid!=null && !communityid.equals("") && collectionid!=null && !collectionid.equals("") && itemid!=null && !itemid.equals("") && fileid!=null && !fileid.equals(""))
+			{
+				//TODO: Check if the file id is a valid bitstream id that the user has access
+
+				//TODO: Check if the user has access to the quadriga workspace
+				
+				try {
+					//Add the file to the workspace
+					dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, communityid, collectionid, itemid, fileid, quadrigaUsername);
+					return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
+				} catch (QuadrigaStorageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (QuadrigaAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
 		IDspaceKeys dspaceKeys = null;
 		if(privateKey != null && !privateKey.equals("") && publicKey != null && !publicKey.equals(""))
 		{
@@ -323,34 +354,34 @@ public class DspaceRestController {
 						System.out.print("");
 					};
 					IItem item = collection.getItem(itemEntity.getId());
-								
+
 
 					System.out.println("Loaded collection");
 					System.out.println("Collection name: "+collection.getName());
 					System.out.println("Item name: "+item.getName());
-					
+
 					community.setCollections(null);
 					collection.setItems(null);
 					community.addCollection(collection);
 					collection.addItem(item);
-					
+
 					System.out.println("Collection size: "+community.getCollections().size());
 					communityList.add(community);
-					
+
 				}
 			}
-			
-			//TODO: Setup the xml response
+
+			//Setup the xml response
 			VelocityEngine engine = restVelocityFactory.getVelocityEngine(request);
 			Template template = null;
 			engine.init();
 			template = engine.getTemplate("velocitytemplates/bitstreamdependencylist.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			
+
 			context.put("fileid", fileid);
 			context.put("workspaceid", workspaceid);
 			context.put("list", communityList);
-			
+
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();

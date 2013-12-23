@@ -49,7 +49,7 @@ import edu.asu.spring.quadriga.domain.impl.workspacexml.WorkspacesList;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
-import edu.asu.spring.quadriga.service.IErrorMessageRest;
+import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
@@ -70,7 +70,7 @@ public class WorkspaceRestController {
 	private IWorkspaceFactory workspaceFactory;
 
 	@Autowired
-	private IErrorMessageRest errorMessageRest;
+	private IRestMessage errorMessageRest;
 	
 	@Autowired
 	private IWorkspaceDictionaryManager workspaceDictionaryManager;

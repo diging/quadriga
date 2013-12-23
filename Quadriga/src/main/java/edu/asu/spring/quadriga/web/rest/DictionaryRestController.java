@@ -55,7 +55,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
-import edu.asu.spring.quadriga.service.IErrorMessageRest;
+import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -89,7 +89,7 @@ public class DictionaryRestController {
 	private IUserManager usermanager;
 
 	@Autowired
-	private IErrorMessageRest errorMessageRest;
+	private IRestMessage errorMessageRest;
 	
 	@Autowired
 	private IDictionaryManager dictionaryManager;
