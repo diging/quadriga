@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.exceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.service.IErrorMessageRest;
+import edu.asu.spring.quadriga.service.IRestMessage;
 
 
 /**
@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.service.IErrorMessageRest;
 public class RestAccessException{
 	
 	@Autowired
-	private IErrorMessageRest errorMessageRest;
+	private IRestMessage errorMessageRest;
 
 	private int errorcode;
 	public int getErrorcode() {

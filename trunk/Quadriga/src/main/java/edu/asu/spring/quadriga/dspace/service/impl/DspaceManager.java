@@ -209,7 +209,7 @@ public class DspaceManager implements IDspaceManager{
 	{
 		return getProxyCommunityManager().getCommunityId(sCollectionId);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -264,7 +264,6 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException
 	{
-
 		try
 		{
 			//Passing null values for other arguments because the community details must have already been fetched from dspace
@@ -322,6 +321,29 @@ public class DspaceManager implements IDspaceManager{
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String communityId, String collectionId, String itemId, String bitstreamId, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		//Catch the Wrong or Illegal ids provided by the user.
+		if(communityId == null || collectionId == null || itemId == null)
+		{
+			logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
+			logger.info("Class Name: DspaceManager");
+			logger.info("Method Name: addBitStreamsToWorkspace");
+			logger.info("Community id: "+communityId);
+			logger.info("Collection id: "+collectionId);
+			logger.info("Item id: "+itemId);
+			logger.info("Bitstreams selected: "+bitstreamId);
+			throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
+		}
+
+		//Add bitstream to workspace. For security, the id's are gotten from Dspace Objects.
+		dbconnectionManager.addBitstreamToWorkspace(workspaceId, communityId, collectionId, itemId, bitstreamId, username);
+	}
+
 
 	/**
 	 * {@inheritDoc}
@@ -337,7 +359,7 @@ public class DspaceManager implements IDspaceManager{
 			{
 				throw new QuadrigaAccessException("Error in deleting the bitstreams. Please check back later.");
 			}
-			
+
 			for(String bitstreamid: bitstreamids)
 			{
 				for(IBitStream workspaceBitStream: workspaceBitStreams)
@@ -640,7 +662,7 @@ public class DspaceManager implements IDspaceManager{
 		}
 		catch(Exception e)
 		{
-			
+
 		}
 		return true;		
 	}

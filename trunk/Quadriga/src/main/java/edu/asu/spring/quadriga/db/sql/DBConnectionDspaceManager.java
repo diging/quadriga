@@ -30,7 +30,7 @@ public class DBConnectionDspaceManager extends ADBConnectionManager implements I
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int addBitstreamToWorkspace(String workspaceid, String communityid, String collectionid, String itemid, String bitstreamid, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	public int addBitstreamToWorkspace(String workspaceid, String communityid, String collectionid, String itemid, String bitstreamid, String username) throws QuadrigaStorageException
 	{
 		String sDBCommand;
 		String sOutErrorValue;
