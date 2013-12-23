@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DspaceDTOMapper;
 
-@Repository
+
 public class DspaceManagerDAO extends DAOConnectionManager implements IDBConnectionDspaceManager
 {
 
