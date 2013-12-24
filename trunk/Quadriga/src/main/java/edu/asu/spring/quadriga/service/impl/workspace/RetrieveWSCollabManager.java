@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -21,7 +22,7 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 	
 	@Autowired
-	@Qualifier("DBConnectionRetrieveWSCollabManagerBean")
+	@Qualifier("retrieveWSCollabManagerDAO")
 	IDBConnectionRetrieveWSCollabManager dbConnect;
 	
 	@Autowired
@@ -35,6 +36,7 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public List<ICollaborator> getWorkspaceCollaborators(String workspaceId) throws QuadrigaStorageException
 	{
 		List<ICollaborator> collaboratorList;
@@ -67,6 +69,7 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public List<IUser> getWorkspaceNonCollaborators(String workspaceId) throws QuadrigaStorageException
 	{
 		List<IUser> nonCollaboratorUser;

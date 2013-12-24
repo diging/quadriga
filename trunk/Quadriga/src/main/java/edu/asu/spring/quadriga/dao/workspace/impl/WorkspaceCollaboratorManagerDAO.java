@@ -15,21 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
-import edu.asu.spring.quadriga.dao.workspace.IWorkspaceCollaboratorManagerDAO;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSCollabManager;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
-public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager implements
-		IWorkspaceCollaboratorManagerDAO 
+public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager implements IDBConnectionModifyWSCollabManager 
 {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WorkspaceCollaboratorManagerDAO.class);
 	
 	@Autowired
-	private SessionFactory   sessionFactory;
+	private SessionFactory sessionFactory;
 	
 	@Resource(name = "database_error_msgs")
 	private Properties messages;

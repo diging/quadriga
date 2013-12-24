@@ -177,7 +177,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 	{
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ProjectEditorDTO projEditorDTO where projEditorDTO.projectEditorDTOPK.projectid =:projectid and  projEditorDTO.projectEditorDTOPK.owner =:owner");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ProjectEditorDTO projEditorDTO where projEditorDTO.projectEditorDTOPK.projectid =:projectid and projEditorDTO.projectEditorDTOPK.editor =:owner");
 			query.setParameter("projectid", projectId);
 			query.setParameter("owner", owner);
 			
