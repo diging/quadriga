@@ -14,7 +14,9 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class QuadrigaUserRoleDTOPK implements Serializable {
+public class QuadrigaUserRoleDTOPK implements Serializable 
+{
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "username")
     private String username;
@@ -56,7 +58,6 @@ public class QuadrigaUserRoleDTOPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof QuadrigaUserRoleDTOPK)) {
             return false;
         }
@@ -69,10 +70,4 @@ public class QuadrigaUserRoleDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.QuadrigaUserRoleDTOPK[ username=" + username + ", quadrigarole=" + quadrigarole + " ]";
-    }
-    
 }

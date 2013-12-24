@@ -28,14 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DictionaryItemsDTO.findAll", query = "SELECT d FROM DictionaryItemsDTO d"),
-    @NamedQuery(name = "DictionaryItemsDTO.findById", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.dictionaryItemsDTOPK.id = :id"),
+    @NamedQuery(name = "DictionaryItemsDTO.findById", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.dictionaryItemsDTOPK.dictionaryid = :dictionaryid"),
     @NamedQuery(name = "DictionaryItemsDTO.findByTerm", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.term = :term"),
     @NamedQuery(name = "DictionaryItemsDTO.findByTermid", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.dictionaryItemsDTOPK.termid = :termid"),
     @NamedQuery(name = "DictionaryItemsDTO.findByPos", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.pos = :pos"),
-    @NamedQuery(name = "DictionaryItemsDTO.findByUpdatedby", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.updatedby = :updatedby"),
-    @NamedQuery(name = "DictionaryItemsDTO.findByUpdateddate", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.updateddate = :updateddate"),
-    @NamedQuery(name = "DictionaryItemsDTO.findByCreatedby", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.createdby = :createdby"),
-    @NamedQuery(name = "DictionaryItemsDTO.findByCreateddate", query = "SELECT d FROM DictionaryItemsDTO d WHERE d.createddate = :createddate")})
+    })
 public class DictionaryItemsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -60,7 +57,7 @@ public class DictionaryItemsDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "dictionaryid", referencedColumnName = "dictionaryid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private DictionaryDTO dictionaryDTO;
 
@@ -158,7 +155,6 @@ public class DictionaryItemsDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof DictionaryItemsDTO)) {
             return false;
         }
@@ -168,10 +164,4 @@ public class DictionaryItemsDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.DictionaryItemsDTO[ dictionaryItemsDTOPK=" + dictionaryItemsDTOPK + " ]";
-    }
-    
 }

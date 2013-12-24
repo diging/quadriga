@@ -29,12 +29,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findAll", query = "SELECT w FROM WorkspaceCollaboratorDTO w"),
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.workspaceCollaboratorDTOPK.workspaceid = :workspaceid"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByUsername", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.workspaceCollaboratorDTOPK.username = :username"),
+    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByUsername", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser"),
     @NamedQuery(name = "WorkspaceCollaboratorDTO.findByCollaboratorrole", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.workspaceCollaboratorDTOPK.collaboratorrole = :collaboratorrole"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByUpdatedby", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.updatedby = :updatedby"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByUpdateddate", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.updateddate = :updateddate"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByCreatedby", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.createdby = :createdby"),
-    @NamedQuery(name = "WorkspaceCollaboratorDTO.findByCreateddate", query = "SELECT w FROM WorkspaceCollaboratorDTO w WHERE w.createddate = :createddate")})
+    })
 public class WorkspaceCollaboratorDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -154,10 +151,4 @@ public class WorkspaceCollaboratorDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceCollaboratorDTO[ workspaceCollaboratorDTOPK=" + workspaceCollaboratorDTOPK + " ]";
-    }
-    
 }

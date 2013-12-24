@@ -15,6 +15,7 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class DspaceKeysDTOPK implements Serializable {
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "username")
     private String username;
@@ -69,7 +70,6 @@ public class DspaceKeysDTOPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof DspaceKeysDTOPK)) {
             return false;
         }
@@ -85,10 +85,4 @@ public class DspaceKeysDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.DspaceKeysDTOPK[ username=" + username + ", publickey=" + publickey + ", privatekey=" + privatekey + " ]";
-    }
-    
 }

@@ -33,8 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WorkspaceDspaceDTO.findByCollectionid", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.collectionid = :collectionid"),
     @NamedQuery(name = "WorkspaceDspaceDTO.findByItemid", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.itemid = :itemid"),
     @NamedQuery(name = "WorkspaceDspaceDTO.findByBitstreamid", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.workspaceDspaceDTOPK.bitstreamid = :bitstreamid"),
-    @NamedQuery(name = "WorkspaceDspaceDTO.findByCreatedby", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.createdby = :createdby"),
-    @NamedQuery(name = "WorkspaceDspaceDTO.findByCreateddate", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.createddate = :createddate")})
+    })
 public class WorkspaceDspaceDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -144,7 +143,6 @@ public class WorkspaceDspaceDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceDspaceDTO)) {
             return false;
         }
@@ -154,10 +152,4 @@ public class WorkspaceDspaceDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceDspaceDTO[ workspaceDspaceDTOPK=" + workspaceDspaceDTOPK + " ]";
-    }
-    
 }

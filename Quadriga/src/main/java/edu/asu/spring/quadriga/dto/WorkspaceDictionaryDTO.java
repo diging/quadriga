@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,10 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WorkspaceDictionaryDTO.findAll", query = "SELECT w FROM WorkspaceDictionaryDTO w"),
     @NamedQuery(name = "WorkspaceDictionaryDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceDictionaryDTO w WHERE w.workspaceDictionaryDTOPK.workspaceid = :workspaceid"),
     @NamedQuery(name = "WorkspaceDictionaryDTO.findByDictionaryid", query = "SELECT w FROM WorkspaceDictionaryDTO w WHERE w.workspaceDictionaryDTOPK.dictionaryid = :dictionaryid"),
-    @NamedQuery(name = "WorkspaceDictionaryDTO.findByUpdatedby", query = "SELECT w FROM WorkspaceDictionaryDTO w WHERE w.updatedby = :updatedby"),
-    @NamedQuery(name = "WorkspaceDictionaryDTO.findByUpdateddate", query = "SELECT w FROM WorkspaceDictionaryDTO w WHERE w.updateddate = :updateddate"),
-    @NamedQuery(name = "WorkspaceDictionaryDTO.findByCreatedby", query = "SELECT w FROM WorkspaceDictionaryDTO w WHERE w.createdby = :createdby"),
-    @NamedQuery(name = "WorkspaceDictionaryDTO.findByCreateddate", query = "SELECT w FROM WorkspaceDictionaryDTO w WHERE w.createddate = :createddate")})
+    })
 public class WorkspaceDictionaryDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -50,8 +49,14 @@ public class WorkspaceDictionaryDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-
-    public WorkspaceDictionaryDTO() {
+    @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private WorkspaceDTO workspaceDTO;
+    @JoinColumn(name = "dictionaryid", referencedColumnName = "dictionaryid", insertable = false , updatable = false)
+    @ManyToOne(optional = false)
+    private DictionaryDTO dictionaryDTO;
+    
+	public WorkspaceDictionaryDTO() {
     }
 
     public WorkspaceDictionaryDTO(WorkspaceDictionaryDTOPK workspaceDictionaryDTOPK) {
@@ -109,6 +114,22 @@ public class WorkspaceDictionaryDTO implements Serializable {
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
     }
+    
+    public WorkspaceDTO getWorkspaceDTO() {
+		return workspaceDTO;
+	}
+
+	public void setWorkspaceDTO(WorkspaceDTO workspaceDTO) {
+		this.workspaceDTO = workspaceDTO;
+	}
+
+	public DictionaryDTO getDictionaryDTO() {
+		return dictionaryDTO;
+	}
+
+	public void setDictionaryDTO(DictionaryDTO dictionaryDTO) {
+		this.dictionaryDTO = dictionaryDTO;
+	}
 
     @Override
     public int hashCode() {
@@ -119,7 +140,6 @@ public class WorkspaceDictionaryDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceDictionaryDTO)) {
             return false;
         }
@@ -129,10 +149,4 @@ public class WorkspaceDictionaryDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceDictionaryDTO[ workspaceDictionaryDTOPK=" + workspaceDictionaryDTOPK + " ]";
-    }
-    
 }

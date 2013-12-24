@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,10 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WorkspaceConceptcollectionDTO.findAll", query = "SELECT w FROM WorkspaceConceptcollectionDTO w"),
     @NamedQuery(name = "WorkspaceConceptcollectionDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceConceptcollectionDTO w WHERE w.workspaceConceptcollectionDTOPK.workspaceid = :workspaceid"),
     @NamedQuery(name = "WorkspaceConceptcollectionDTO.findByConceptcollectionid", query = "SELECT w FROM WorkspaceConceptcollectionDTO w WHERE w.workspaceConceptcollectionDTOPK.conceptcollectionid = :conceptcollectionid"),
-    @NamedQuery(name = "WorkspaceConceptcollectionDTO.findByUpdatedby", query = "SELECT w FROM WorkspaceConceptcollectionDTO w WHERE w.updatedby = :updatedby"),
-    @NamedQuery(name = "WorkspaceConceptcollectionDTO.findByUpdateddate", query = "SELECT w FROM WorkspaceConceptcollectionDTO w WHERE w.updateddate = :updateddate"),
-    @NamedQuery(name = "WorkspaceConceptcollectionDTO.findByCreatedby", query = "SELECT w FROM WorkspaceConceptcollectionDTO w WHERE w.createdby = :createdby"),
-    @NamedQuery(name = "WorkspaceConceptcollectionDTO.findByCreateddate", query = "SELECT w FROM WorkspaceConceptcollectionDTO w WHERE w.createddate = :createddate")})
+    })
 public class WorkspaceConceptcollectionDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -50,8 +49,14 @@ public class WorkspaceConceptcollectionDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private WorkspaceDTO workspaceDTO;
+    @JoinColumn(name = "conceptcollectionid", referencedColumnName = "conceptcollectionid", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private ConceptCollectionDTO conceptCollectionDTO;
 
-    public WorkspaceConceptcollectionDTO() {
+	public WorkspaceConceptcollectionDTO() {
     }
 
     public WorkspaceConceptcollectionDTO(WorkspaceConceptcollectionDTOPK workspaceConceptcollectionDTOPK) {
@@ -109,6 +114,22 @@ public class WorkspaceConceptcollectionDTO implements Serializable {
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
     }
+    
+    public WorkspaceDTO getWorkspaceDTO() {
+		return workspaceDTO;
+	}
+
+	public void setWorkspaceDTO(WorkspaceDTO workspaceDTO) {
+		this.workspaceDTO = workspaceDTO;
+	}
+	
+	public ConceptCollectionDTO getConceptCollectionDTO() {
+		return conceptCollectionDTO;
+	}
+
+	public void setConceptCollectionDTO(ConceptCollectionDTO conceptCollectionDTO) {
+		this.conceptCollectionDTO = conceptCollectionDTO;
+	}
 
     @Override
     public int hashCode() {
@@ -119,7 +140,6 @@ public class WorkspaceConceptcollectionDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceConceptcollectionDTO)) {
             return false;
         }
@@ -129,10 +149,4 @@ public class WorkspaceConceptcollectionDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceConceptcollectionDTO[ workspaceConceptcollectionDTOPK=" + workspaceConceptcollectionDTOPK + " ]";
-    }
-    
 }

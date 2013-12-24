@@ -5,37 +5,32 @@
 package edu.asu.spring.quadriga.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Karthik
  */
 @Embeddable
-public class NetworkAssignedDTOPK implements Serializable {
+public class NetworkAssignedDTOPK implements Serializable 
+{
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "networkid")
     private String networkid;
     @Basic(optional = false)
     @Column(name = "assigneduser")
     private String assigneduser;
-    @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
 
     public NetworkAssignedDTOPK() {
     }
 
-    public NetworkAssignedDTOPK(String networkid, String assigneduser, Date createddate) {
+    public NetworkAssignedDTOPK(String networkid, String assigneduser) {
         this.networkid = networkid;
         this.assigneduser = assigneduser;
-        this.createddate = createddate;
     }
 
     public String getNetworkid() {
@@ -54,26 +49,16 @@ public class NetworkAssignedDTOPK implements Serializable {
         this.assigneduser = assigneduser;
     }
 
-    public Date getCreateddate() {
-        return createddate;
-    }
-
-    public void setCreateddate(Date createddate) {
-        this.createddate = createddate;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (networkid != null ? networkid.hashCode() : 0);
         hash += (assigneduser != null ? assigneduser.hashCode() : 0);
-        hash += (createddate != null ? createddate.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof NetworkAssignedDTOPK)) {
             return false;
         }
@@ -84,15 +69,6 @@ public class NetworkAssignedDTOPK implements Serializable {
         if ((this.assigneduser == null && other.assigneduser != null) || (this.assigneduser != null && !this.assigneduser.equals(other.assigneduser))) {
             return false;
         }
-        if ((this.createddate == null && other.createddate != null) || (this.createddate != null && !this.createddate.equals(other.createddate))) {
-            return false;
-        }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.NetworkAssignedDTOPK[ networkid=" + networkid + ", assigneduser=" + assigneduser + ", createddate=" + createddate + " ]";
-    }
-    
 }

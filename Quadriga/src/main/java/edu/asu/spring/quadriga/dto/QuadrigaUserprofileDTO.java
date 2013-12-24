@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -29,10 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "QuadrigaUserprofileDTO.findByUsername", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.username = :username"),
     @NamedQuery(name = "QuadrigaUserprofileDTO.findByServicename", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.servicename = :servicename"),
     @NamedQuery(name = "QuadrigaUserprofileDTO.findByUri", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.uri = :uri"),
-    @NamedQuery(name = "QuadrigaUserprofileDTO.findByUpdatedby", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.updatedby = :updatedby"),
-    @NamedQuery(name = "QuadrigaUserprofileDTO.findByUpdateddate", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.updateddate = :updateddate"),
-    @NamedQuery(name = "QuadrigaUserprofileDTO.findByCreatedby", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.createdby = :createdby"),
-    @NamedQuery(name = "QuadrigaUserprofileDTO.findByCreateddate", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.createddate = :createddate")})
+    })
 public class QuadrigaUserprofileDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -51,8 +50,11 @@ public class QuadrigaUserprofileDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    @JoinColumn(name = "username",referencedColumnName = "username",insertable = false,updatable = false)
+    @ManyToOne(optional = false)
+    private QuadrigaUserDTO quadrigaUserDTO;
 
-    public QuadrigaUserprofileDTO() {
+	public QuadrigaUserprofileDTO() {
     }
 
     public QuadrigaUserprofileDTO(QuadrigaUserprofileDTOPK quadrigaUserprofileDTOPK) {
@@ -110,6 +112,14 @@ public class QuadrigaUserprofileDTO implements Serializable {
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
     }
+    
+    public QuadrigaUserDTO getQuadrigaUserDTO() {
+		return quadrigaUserDTO;
+	}
+
+	public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
+		this.quadrigaUserDTO = quadrigaUserDTO;
+	}
 
     @Override
     public int hashCode() {
@@ -120,7 +130,6 @@ public class QuadrigaUserprofileDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof QuadrigaUserprofileDTO)) {
             return false;
         }
@@ -130,10 +139,4 @@ public class QuadrigaUserprofileDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.QuadrigaUserprofileDTO[ quadrigaUserprofileDTOPK=" + quadrigaUserprofileDTOPK + " ]";
-    }
-    
 }

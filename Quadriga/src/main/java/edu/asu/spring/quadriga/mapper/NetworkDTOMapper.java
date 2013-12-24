@@ -73,9 +73,9 @@ public class NetworkDTOMapper {
 	 * @param username			The username of the user associated with the network
 	 * @return
 	 */
-	public NetworkStatementsDTO getNetworkStatementsDTO(String rowid, String networkId,String id,String type,String isTop, String username)
+	public NetworkStatementsDTO getNetworkStatementsDTO(String networkId,String id,String type,String isTop, String username)
 	{
-		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(rowid, networkId, id, Integer.parseInt(isTop), INetworkStatus.NOT_ARCHIVED, type, username, new Date(), username, new Date());
+		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(networkId, id, Integer.parseInt(isTop), INetworkStatus.NOT_ARCHIVED, type, username, new Date(), username, new Date());
 		return networkStatementsDTO;
 	}
 	
@@ -151,7 +151,7 @@ public class NetworkDTOMapper {
 			for(NetworkStatementsDTO networkStatementsDTO:networkStatementsDTOList)
 			{
 				networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
-				networkNodeInfo.setId(networkStatementsDTO.getId());
+				networkNodeInfo.setId(networkStatementsDTO.getNetworkstatementsDTOPK().getNetworkid());
 				networkNodeInfo.setStatementType(networkStatementsDTO.getStatementtype());
 				networkList.add(networkNodeInfo);
 			}
@@ -192,7 +192,7 @@ public class NetworkDTOMapper {
 	public NetworkAssignedDTO getNetworkAssignedDTO(String networkid, String assignedUsername, String status, int archived)
 	{
 		NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
-		networkAssignedDTO.setNetworkAssignedDTOPK(new NetworkAssignedDTOPK(networkid, assignedUsername, new Date()));
+		networkAssignedDTO.setNetworkAssignedDTOPK(new NetworkAssignedDTOPK(networkid, assignedUsername));
 		networkAssignedDTO.setStatus(status);
 		networkAssignedDTO.setCreatedby(assignedUsername);
 		networkAssignedDTO.setUpdatedby(assignedUsername);
@@ -217,7 +217,7 @@ public class NetworkDTOMapper {
 	{
 		NetworksAnnotationsDTO networkAnnotationsDTO = new NetworksAnnotationsDTO();
 		networkAnnotationsDTO.setNetworkid(networkid);
-		networkAnnotationsDTO.setId(id);
+		networkAnnotationsDTO.setObjectid(id);
 		networkAnnotationsDTO.setAnnotationtext(annotationtext);
 		networkAnnotationsDTO.setAnnotationid(annotationid);
 		networkAnnotationsDTO.setObjecttype(objecttype);

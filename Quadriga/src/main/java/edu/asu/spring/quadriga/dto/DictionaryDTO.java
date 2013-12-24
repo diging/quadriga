@@ -34,12 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "DictionaryDTO.findAll", query = "SELECT d FROM DictionaryDTO d"),
     @NamedQuery(name = "DictionaryDTO.findByDictionaryname", query = "SELECT d FROM DictionaryDTO d WHERE d.dictionaryname = :dictionaryname"),
-    @NamedQuery(name = "DictionaryDTO.findById", query = "SELECT d FROM DictionaryDTO d WHERE d.id = :id"),
+    @NamedQuery(name = "DictionaryDTO.findById", query = "SELECT d FROM DictionaryDTO d WHERE d.dictionaryid = :dictionaryid"),
     @NamedQuery(name = "DictionaryDTO.findByAccessibility", query = "SELECT d FROM DictionaryDTO d WHERE d.accessibility = :accessibility"),
-    @NamedQuery(name = "DictionaryDTO.findByUpdatedby", query = "SELECT d FROM DictionaryDTO d WHERE d.updatedby = :updatedby"),
-    @NamedQuery(name = "DictionaryDTO.findByUpdateddate", query = "SELECT d FROM DictionaryDTO d WHERE d.updateddate = :updateddate"),
-    @NamedQuery(name = "DictionaryDTO.findByCreatedby", query = "SELECT d FROM DictionaryDTO d WHERE d.createdby = :createdby"),
-    @NamedQuery(name = "DictionaryDTO.findByCreateddate", query = "SELECT d FROM DictionaryDTO d WHERE d.createddate = :createddate")})
+    })
 public class DictionaryDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -50,8 +47,8 @@ public class DictionaryDTO implements Serializable {
     private String description;
     @Id
     @Basic(optional = false)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "dictionaryid")
+    private String dictionaryid;
     @Basic(optional = false)
     @Column(name = "accessibility")
     private Boolean accessibility;
@@ -73,19 +70,17 @@ public class DictionaryDTO implements Serializable {
     private List<DictionaryItemsDTO> dictionaryItemsDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO",orphanRemoval=true)
     private List<DictionaryCollaboratorDTO> dictionaryCollaboratorDTOList;
-    @JoinColumn(name = "dictionaryowner", referencedColumnName = "username")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO")
+    private List<WorkspaceDictionaryDTO> wsDictionaryDTOList;
+	@JoinColumn(name = "dictionaryowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO dictionaryowner;
 
     public DictionaryDTO() {
     }
 
-    public DictionaryDTO(String id) {
-        this.id = id;
-    }
-
-    public DictionaryDTO(String id, String dictionaryname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.id = id;
+    public DictionaryDTO(String dictionaryid, String dictionaryname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
+        this.dictionaryid = dictionaryid;
         this.dictionaryname = dictionaryname;
         this.accessibility = accessibility;
         this.updatedby = updatedby;
@@ -94,7 +89,24 @@ public class DictionaryDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public String getDictionaryname() {
+    public List<WorkspaceDictionaryDTO> getWsDictionaryDTOList() {
+ 		return wsDictionaryDTOList;
+ 	}
+
+ 	public void setWsDictionaryDTOList(
+ 			List<WorkspaceDictionaryDTO> wsDictionaryDTOList) {
+ 		this.wsDictionaryDTOList = wsDictionaryDTOList;
+ 	}
+ 	
+    public String getDictionaryid() {
+		return dictionaryid;
+	}
+
+	public void setDictionaryid(String dictionaryid) {
+		this.dictionaryid = dictionaryid;
+	}
+
+	public String getDictionaryname() {
         return dictionaryname;
     }
 
@@ -108,14 +120,6 @@ public class DictionaryDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Boolean getAccessibility() {
@@ -187,26 +191,19 @@ public class DictionaryDTO implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (dictionaryid != null ? dictionaryid.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof DictionaryDTO)) {
             return false;
         }
         DictionaryDTO other = (DictionaryDTO) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.dictionaryid == null && other.dictionaryid != null) || (this.dictionaryid != null && !this.dictionaryid.equals(other.dictionaryid))) {
             return false;
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.DictionaryDTO[ id=" + id + " ]";
-    }
-    
 }

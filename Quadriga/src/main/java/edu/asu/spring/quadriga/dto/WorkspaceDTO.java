@@ -37,10 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "WorkspaceDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceDTO w WHERE w.workspaceid = :workspaceid"),
     @NamedQuery(name = "WorkspaceDTO.findByIsarchived", query = "SELECT w FROM WorkspaceDTO w WHERE w.isarchived = :isarchived"),
     @NamedQuery(name = "WorkspaceDTO.findByIsdeactivated", query = "SELECT w FROM WorkspaceDTO w WHERE w.isdeactivated = :isdeactivated"),
-    @NamedQuery(name = "WorkspaceDTO.findByUpdatedby", query = "SELECT w FROM WorkspaceDTO w WHERE w.updatedby = :updatedby"),
-    @NamedQuery(name = "WorkspaceDTO.findByUpdateddate", query = "SELECT w FROM WorkspaceDTO w WHERE w.updateddate = :updateddate"),
-    @NamedQuery(name = "WorkspaceDTO.findByCreatedby", query = "SELECT w FROM WorkspaceDTO w WHERE w.createdby = :createdby"),
-    @NamedQuery(name = "WorkspaceDTO.findByCreateddate", query = "SELECT w FROM WorkspaceDTO w WHERE w.createddate = :createddate")})
+    })
 public class WorkspaceDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -73,15 +70,22 @@ public class WorkspaceDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
-    private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
-    @JoinColumn(name = "workspaceowner", referencedColumnName = "username")
+	@JoinColumn(name = "workspaceowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO workspaceowner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO", orphanRemoval=true)
     private List<WorkspaceCollaboratorDTO> workspaceCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    private List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    private List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    private List<WorkspaceEditorDTO> workspaceEditorDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
+
 
     public WorkspaceDTO() {
     }
@@ -172,6 +176,44 @@ public class WorkspaceDTO implements Serializable {
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
     }
+    
+    public QuadrigaUserDTO getWorkspaceowner() {
+        return workspaceowner;
+    }
+
+    public void setWorkspaceowner(QuadrigaUserDTO workspaceowner) {
+        this.workspaceowner = workspaceowner;
+    }
+    
+    @XmlTransient
+    public List<WorkspaceDictionaryDTO> getWorkspaceDictionaryDTOList() {
+		return workspaceDictionaryDTOList;
+	}
+
+	public void setWorkspaceDictionaryDTOList(
+			List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList) {
+		this.workspaceDictionaryDTOList = workspaceDictionaryDTOList;
+	}
+
+	@XmlTransient
+	public List<WorkspaceEditorDTO> getWorkspaceEditorDTOList() {
+		return workspaceEditorDTOList;
+	}
+
+	public void setWorkspaceEditorDTOList(
+			List<WorkspaceEditorDTO> workspaceEditorDTOList) {
+		this.workspaceEditorDTOList = workspaceEditorDTOList;
+	}
+
+	@XmlTransient
+    public List<WorkspaceConceptcollectionDTO> getWorkspaceConceptCollectionDTOList() {
+  		return workspaceConceptCollectionDTOList;
+  	}
+
+  	public void setWorkspaceConceptCollectionDTOList(
+  			List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList) {
+  		this.workspaceConceptCollectionDTOList = workspaceConceptCollectionDTOList;
+  	}
 
     @XmlTransient
     public List<WorkspaceDspaceDTO> getWorkspaceDspaceDTOList() {
@@ -180,14 +222,6 @@ public class WorkspaceDTO implements Serializable {
 
     public void setWorkspaceDspaceDTOList(List<WorkspaceDspaceDTO> workspaceDspaceDTOList) {
         this.workspaceDspaceDTOList = workspaceDspaceDTOList;
-    }
-
-    public QuadrigaUserDTO getWorkspaceowner() {
-        return workspaceowner;
-    }
-
-    public void setWorkspaceowner(QuadrigaUserDTO workspaceowner) {
-        this.workspaceowner = workspaceowner;
     }
 
     @XmlTransient
@@ -217,7 +251,6 @@ public class WorkspaceDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceDTO)) {
             return false;
         }
@@ -227,10 +260,4 @@ public class WorkspaceDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceDTO[ workspaceid=" + workspaceid + " ]";
-    }
-    
 }

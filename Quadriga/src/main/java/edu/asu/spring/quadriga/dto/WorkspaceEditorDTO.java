@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,11 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "WorkspaceEditorDTO.findAll", query = "SELECT w FROM WorkspaceEditorDTO w"),
     @NamedQuery(name = "WorkspaceEditorDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.workspaceEditorDTOPK.workspaceid = :workspaceid"),
-    @NamedQuery(name = "WorkspaceEditorDTO.findByOwner", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.workspaceEditorDTOPK.owner = :owner"),
-    @NamedQuery(name = "WorkspaceEditorDTO.findByUpdatedby", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.updatedby = :updatedby"),
-    @NamedQuery(name = "WorkspaceEditorDTO.findByUpdateddate", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.updateddate = :updateddate"),
-    @NamedQuery(name = "WorkspaceEditorDTO.findByCreatedby", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.createdby = :createdby"),
-    @NamedQuery(name = "WorkspaceEditorDTO.findByCreateddate", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.createddate = :createddate")})
+    @NamedQuery(name = "WorkspaceEditorDTO.findByOwner", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.workspaceEditorDTOPK.editor = :editor"),
+    })
 public class WorkspaceEditorDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -50,8 +49,14 @@ public class WorkspaceEditorDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private WorkspaceDTO workspaceDTO;
+    @JoinColumn(name = "editor", referencedColumnName = "username",insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private QuadrigaUserDTO quadrigaUserDTO;
 
-    public WorkspaceEditorDTO() {
+	public WorkspaceEditorDTO() {
     }
 
     public WorkspaceEditorDTO(WorkspaceEditorDTOPK workspaceEditorDTOPK) {
@@ -109,6 +114,22 @@ public class WorkspaceEditorDTO implements Serializable {
     public void setCreateddate(Date createddate) {
         this.createddate = createddate;
     }
+    
+    public WorkspaceDTO getWorkspaceDTO() {
+		return workspaceDTO;
+	}
+
+	public void setWorkspaceDTO(WorkspaceDTO workspaceDTO) {
+		this.workspaceDTO = workspaceDTO;
+	}
+
+	public QuadrigaUserDTO getQuadrigaUserDTO() {
+		return quadrigaUserDTO;
+	}
+
+	public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
+		this.quadrigaUserDTO = quadrigaUserDTO;
+	}
 
     @Override
     public int hashCode() {
@@ -119,7 +140,6 @@ public class WorkspaceEditorDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceEditorDTO)) {
             return false;
         }
@@ -129,10 +149,4 @@ public class WorkspaceEditorDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceEditorDTO[ workspaceEditorDTOPK=" + workspaceEditorDTOPK + " ]";
-    }
-    
 }

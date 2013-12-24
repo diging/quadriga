@@ -185,8 +185,8 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		List<IProject> projectList = new ArrayList<IProject>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.workspaceCollaboratorDTOPK.username = :username)");
-			query.setParameter("username", sUserName);
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser)");
+			query.setParameter("collaboratoruser", sUserName);
 			List<ProjectDTO> projectDTOList = query.list();
 			
 			if(projectDTOList != null && projectDTOList.size() >0)

@@ -14,10 +14,12 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class DictionaryItemsDTOPK implements Serializable {
+public class DictionaryItemsDTOPK implements Serializable 
+{
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "dictionaryid")
+    private String dictionaryid;
     @Basic(optional = false)
     @Column(name = "termid")
     private String termid;
@@ -25,20 +27,21 @@ public class DictionaryItemsDTOPK implements Serializable {
     public DictionaryItemsDTOPK() {
     }
 
-    public DictionaryItemsDTOPK(String id, String termid) {
-        this.id = id;
+    public DictionaryItemsDTOPK(String dictionaryid, String termid) {
+        this.dictionaryid = dictionaryid;
         this.termid = termid;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getDictionaryid() {
+		return dictionaryid;
+	}
 
-    public String getTermid() {
+	public void setDictionaryid(String dictionaryid) {
+		this.dictionaryid = dictionaryid;
+	}
+
+	public String getTermid() {
         return termid;
     }
 
@@ -49,7 +52,7 @@ public class DictionaryItemsDTOPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (dictionaryid != null ? dictionaryid.hashCode() : 0);
         hash += (termid != null ? termid.hashCode() : 0);
         return hash;
     }
@@ -61,7 +64,7 @@ public class DictionaryItemsDTOPK implements Serializable {
             return false;
         }
         DictionaryItemsDTOPK other = (DictionaryItemsDTOPK) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.dictionaryid == null && other.dictionaryid != null) || (this.dictionaryid != null && !this.dictionaryid.equals(other.dictionaryid))) {
             return false;
         }
         if ((this.termid == null && other.termid != null) || (this.termid != null && !this.termid.equals(other.termid))) {
@@ -69,10 +72,4 @@ public class DictionaryItemsDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.DictionaryItemsDTOPK[ id=" + id + ", termid=" + termid + " ]";
-    }
-    
 }
