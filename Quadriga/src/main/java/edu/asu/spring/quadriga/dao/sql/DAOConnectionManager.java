@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,8 @@ public abstract class DAOConnectionManager {
 	{
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createSQLQuery(sQuery);
+			Session session = sessionFactory.getCurrentSession();
+			Query query = session.createSQLQuery(sQuery);
 			query.executeUpdate();
 			return SUCCESS;
 		}

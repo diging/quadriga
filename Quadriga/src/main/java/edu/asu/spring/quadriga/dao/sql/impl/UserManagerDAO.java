@@ -52,6 +52,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	@Override
 	public IUser getUserDetails(String userid) throws QuadrigaStorageException
 	{
+		if(userid == null || userid.equals(""))
+			return null;
+
 		try
 		{
 			QuadrigaUserDTO userDTO = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,userid);
@@ -99,6 +102,9 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	@Override
 	public int addAccountRequest(String userName) throws QuadrigaStorageException
 	{
+		if(userName == null || userName.equals(""))
+			return FAILURE;
+
 		QuadrigaUserRequestsDTO userRequestDTO = userMapper.getUserRequestDTO(userName);
 		try
 		{
@@ -142,13 +148,14 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	@Override
 	public List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException
 	{
+
 		List<IUser> listUsers = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from QuadrigaUserDTO user where user.quadrigarole not like :quadrigarole");
 			query.setParameter("quadrigarole", "%"+userRoleId+"%");
 			List<QuadrigaUserDTO> usersDTO = query.list();
-			
+
 			if(usersDTO!=null)
 				listUsers = userMapper.getUsers(usersDTO);
 
@@ -326,30 +333,35 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 		{
 			QuadrigaUserDTO userDTO = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,deleteUser);
 
-			if(!userDTO.getQuadrigarole().contains(deactivatedRole))
-				throw new QuadrigaStorageException(messages.getProperty("delete_user_not_deactivated")); 
+			if(userDTO != null)
+			{
+				if(!userDTO.getQuadrigarole().contains(deactivatedRole))
+					throw new QuadrigaStorageException(messages.getProperty("delete_user_not_deactivated")); 
 
-			if(userDTO.getProjectDTOList().size() != 0)
-			{
-				throw new QuadrigaStorageException(messages.getProperty("delete_user_project_owner"));
-			}
-			else if(userDTO.getWorkspaceDTOList().size() != 0)
-			{
-				throw new QuadrigaStorageException(messages.getProperty("delete_user_workspace_owner"));
-			}
-			else if(userDTO.getProjectCollaboratorDTOList().size() != 0)
-			{
-				throw new QuadrigaStorageException(messages.getProperty("delete_user_project_collaborator"));
-			}
-			else if(userDTO.getWorkspaceCollaboratorDTOList().size() != 0)
-			{
-				throw new QuadrigaStorageException(messages.getProperty("delete_user_workspace_collaborator"));
+				if(userDTO.getProjectDTOList().size() != 0)
+				{
+					throw new QuadrigaStorageException(messages.getProperty("delete_user_project_owner"));
+				}
+				else if(userDTO.getWorkspaceDTOList().size() != 0)
+				{
+					throw new QuadrigaStorageException(messages.getProperty("delete_user_workspace_owner"));
+				}
+				else if(userDTO.getProjectCollaboratorDTOList().size() != 0)
+				{
+					throw new QuadrigaStorageException(messages.getProperty("delete_user_project_collaborator"));
+				}
+				else if(userDTO.getWorkspaceCollaboratorDTOList().size() != 0)
+				{
+					throw new QuadrigaStorageException(messages.getProperty("delete_user_workspace_collaborator"));
+				}
+				else
+				{
+					sessionFactory.getCurrentSession().delete(userDTO);
+					return SUCCESS;
+				}
 			}
 			else
-			{
-				sessionFactory.getCurrentSession().delete(userDTO);
-				return SUCCESS;
-			}
+				return FAILURE;
 		}
 		catch(Exception e)
 		{

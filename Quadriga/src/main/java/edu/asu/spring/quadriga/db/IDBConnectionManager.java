@@ -21,7 +21,7 @@ public interface IDBConnectionManager
 	 * Add a new account request to the quadriga.
 	 * 
 	 * @param sUserId The user id of the user who needs access to quadriga 
-	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request.
+	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - Otherwise.
 	 * 
 	 * @author Ram Kumar Kumaresan
 	 * @throws QuadrigaStorageException 
@@ -73,6 +73,7 @@ public interface IDBConnectionManager
 
 	/**
 	 * Delete a user from the quadriga database. The user must not own a project/workspace and must not be a collaborator on a project/workspace.
+	 * Also the user account in Quadriga must already be deactivated
 	 * 
 	 * @param deleteUser					The username of the user to be deleted 
 	 * @return								1 if the user was deleted successfully
