@@ -956,6 +956,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
 	public String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException {
 			try

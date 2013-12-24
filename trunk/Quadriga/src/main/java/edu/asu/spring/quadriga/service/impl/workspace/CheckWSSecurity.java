@@ -152,7 +152,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	}
 	
 	/**
-	 * This method is used to check if the user has access to modify worksapce
+	 * This method is used to check if the user has access to modify workspace
 	 * @param userName
 	 * @param workspaceId
 	 * @return boolean - TRUE if user has access else FALSE

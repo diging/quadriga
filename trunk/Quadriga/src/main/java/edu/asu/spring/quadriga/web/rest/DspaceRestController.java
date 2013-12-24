@@ -56,6 +56,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IRestMessage;
+import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 
 /**
  * This class handles the rest requests for file downloads
@@ -95,6 +96,8 @@ public class DspaceRestController {
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 
+	@Autowired
+	private ICheckWSSecurity securityCheck;
 
 	/**
 	 * Produce an xml listing all the files in a workspace
@@ -328,15 +331,20 @@ public class DspaceRestController {
 				try {
 					//Check if the file id is a valid bitstream id that the user has access
 					String restURLPath = getBitstreamMetadataPath(fileid, email, password, publicKey, privateKey, quadrigaUsername);
-					System.out.println(restURLPath);
 					IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
 
-					//TODO: Check if the user has access to the quadriga workspace
-
-
-					//Add the file to the workspace
-					dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, communityid, collectionid, itemid, fileid, quadrigaUsername);
-					return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
+					//Check if the user has access to modify the quadriga workspace
+					if(securityCheck.chkModifyWorkspaceAccess(quadrigaUsername, workspaceid))
+					{
+						//Add the file to the workspace
+						dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, communityid, collectionid, itemid, fileid, quadrigaUsername);
+						return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
+					}
+					else
+					{
+						//User not allowed to modify the workspace
+						throw new RestException(403);
+					}					
 				} 
 				catch(HttpClientErrorException e){
 					//Thrown when the dspace username and password or dspace keys do not have access to the file. 
@@ -346,7 +354,7 @@ public class DspaceRestController {
 				catch (QuadrigaStorageException e) {
 					//Error in the database
 					e.printStackTrace();
-					throw new RestException(405);
+					throw new RestException(404);
 				} catch (QuadrigaAccessException e) {
 					//User not allowed to access the workspace
 					e.printStackTrace();
@@ -365,11 +373,8 @@ public class DspaceRestController {
 
 		try
 		{
-			//TODO: Remove these sysouts
-			System.out.println(workspaceid+" Inside the rest service..."+fileid);
-
+			//Build the xml containing the community, collection and item details
 			String restURLPath = getBitstreamMetadataPath(fileid, email, password, publicKey, privateKey, quadrigaUsername);
-			System.out.println(restURLPath);
 
 			IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
 			List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
@@ -384,34 +389,24 @@ public class DspaceRestController {
 					IDspaceMetadataCommunityEntity communityMetadata = communityIds.get(i);
 
 					ICommunity community = dspaceManager.getCommunity(dspaceKeys, email, password, true, communityMetadata.getId());
-					System.out.println(community.getId()+"->"+community.getName());
 
 					//Load all the collections of the particular community
-					dspaceManager.getAllCollections(dspaceKeys, email, password, community.getId());
-					System.out.println("Community has "+community.getCollections().size()+" collections");	
-
-
+					dspaceManager.getAllCollections(dspaceKeys, email, password, community.getId());	
+					
 					IDspaceMetadataCollectionEntity collectionMetadata = collectionIds.get(i);
 					//Get the particular collection and add it to the community
 					ICollection collection = dspaceManager.getCollection(collectionMetadata.getId(),community.getId());
 					//Wait for the collection to load
 					while(collection.getLoadStatus() == false)
 					{
-						System.out.print("");
+						Thread.sleep(1000);
 					};
 					IItem item = collection.getItem(itemEntity.getId());
-
-
-					System.out.println("Loaded collection");
-					System.out.println("Collection name: "+collection.getName());
-					System.out.println("Item name: "+item.getName());
-
 					community.setCollections(null);
 					collection.setItems(null);
 					community.addCollection(collection);
 					collection.addItem(item);
 
-					System.out.println("Collection size: "+community.getCollections().size());
 					communityList.add(community);
 
 				}
