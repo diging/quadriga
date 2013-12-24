@@ -7,6 +7,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -25,13 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "QuadrigaUserDeniedDTO.findAll", query = "SELECT q FROM QuadrigaUserDeniedDTO q"),
     @NamedQuery(name = "QuadrigaUserDeniedDTO.findByFullname", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.fullname = :fullname"),
     @NamedQuery(name = "QuadrigaUserDeniedDTO.findByUsername", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.username = :username"),
-    @NamedQuery(name = "QuadrigaUserDeniedDTO.findByPasswd", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.passwd = :passwd"),
     @NamedQuery(name = "QuadrigaUserDeniedDTO.findByEmail", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.email = :email"),
     @NamedQuery(name = "QuadrigaUserDeniedDTO.findByDeniedby", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.deniedby = :deniedby"),
-    @NamedQuery(name = "QuadrigaUserDeniedDTO.findByUpdatedby", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.updatedby = :updatedby"),
-    @NamedQuery(name = "QuadrigaUserDeniedDTO.findByUpdateddate", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.updateddate = :updateddate"),
-    @NamedQuery(name = "QuadrigaUserDeniedDTO.findByCreatedby", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.createdby = :createdby"),
-    @NamedQuery(name = "QuadrigaUserDeniedDTO.findByCreateddate", query = "SELECT q FROM QuadrigaUserDeniedDTO q WHERE q.createddate = :createddate")})
+    })
 public class QuadrigaUserDeniedDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -63,6 +61,9 @@ public class QuadrigaUserDeniedDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    @JoinColumn(name = "username", referencedColumnName = "username",insertable = false,updatable = false)
+    @ManyToOne(optional = false)
+    private QuadrigaUserDTO quadrigaUserDTO;
 
 	public QuadrigaUserDeniedDTO() {
     }
@@ -161,7 +162,14 @@ public class QuadrigaUserDeniedDTO implements Serializable {
         this.createddate = createddate;
     }
 
- 
+	public QuadrigaUserDTO getQuadrigaUserDTO() {
+		return quadrigaUserDTO;
+	}
+
+	public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
+		this.quadrigaUserDTO = quadrigaUserDTO;
+	}
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -171,7 +179,6 @@ public class QuadrigaUserDeniedDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof QuadrigaUserDeniedDTO)) {
             return false;
         }
@@ -181,10 +188,4 @@ public class QuadrigaUserDeniedDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.QuadrigaUserDTO[ username=" + username + " ]";
-    }
-    
 }

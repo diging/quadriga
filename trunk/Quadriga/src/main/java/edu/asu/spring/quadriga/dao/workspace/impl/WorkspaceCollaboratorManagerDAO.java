@@ -106,7 +106,7 @@ public class WorkspaceCollaboratorManagerDAO  extends DAOConnectionManager imple
 				Iterator<WorkspaceCollaboratorDTO> iterator = collaboratorList.iterator();
 				while(iterator.hasNext())
 				{
-					String userName = iterator.next().getWorkspaceCollaboratorDTOPK().getUsername();
+					String userName = iterator.next().getWorkspaceCollaboratorDTOPK().getCollaboratoruser();
 					if(collaborators.contains(userName))
 					{
 						iterator.remove();

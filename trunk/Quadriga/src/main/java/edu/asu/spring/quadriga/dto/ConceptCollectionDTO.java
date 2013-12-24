@@ -69,7 +69,9 @@ public class ConceptCollectionDTO implements Serializable {
     private List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
     private List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList;
-    @JoinColumn(name = "collectionowner", referencedColumnName = "username")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
+    private List<WorkspaceConceptcollectionDTO> wsConceptCollectionDTOList;
+	@JoinColumn(name = "collectionowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO collectionowner;
 
@@ -89,6 +91,15 @@ public class ConceptCollectionDTO implements Serializable {
         this.createdby = createdby;
         this.createddate = createddate;
     }
+    
+    public List<WorkspaceConceptcollectionDTO> getWsConceptCollectionDTOList() {
+ 		return wsConceptCollectionDTOList;
+ 	}
+
+ 	public void setWsConceptCollectionDTOList(
+ 			List<WorkspaceConceptcollectionDTO> wsConceptCollectionDTOList) {
+ 		this.wsConceptCollectionDTOList = wsConceptCollectionDTOList;
+ 	}
 
     public String getCollectionname() {
         return collectionname;

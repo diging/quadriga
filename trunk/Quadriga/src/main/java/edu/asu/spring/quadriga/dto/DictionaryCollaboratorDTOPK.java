@@ -14,11 +14,14 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class DictionaryCollaboratorDTOPK implements Serializable {
+public class DictionaryCollaboratorDTOPK implements Serializable 
+{
+	private static final long serialVersionUID = 1L;
+	
     @Basic(optional = false)
-    @Column(name = "id")
-    private String id;
-    @Basic(optional = false)
+    @Column(name = "dictionaryid")
+    private String dictionaryid;
+	@Basic(optional = false)
     @Column(name = "collaboratoruser")
     private String collaboratoruser;
     @Basic(optional = false)
@@ -28,20 +31,20 @@ public class DictionaryCollaboratorDTOPK implements Serializable {
     public DictionaryCollaboratorDTOPK() {
     }
 
-    public DictionaryCollaboratorDTOPK(String id, String collaboratoruser, String collaboratorrole) {
-        this.id = id;
+    public DictionaryCollaboratorDTOPK(String dictionaryid, String collaboratoruser, String collaboratorrole) {
+        this.dictionaryid = dictionaryid;
         this.collaboratoruser = collaboratoruser;
         this.collaboratorrole = collaboratorrole;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getDictionaryid() {
+		return dictionaryid;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
+	public void setDictionaryid(String dictionaryid) {
+		this.dictionaryid = dictionaryid;
+	}
+	
     public String getCollaboratoruser() {
         return collaboratoruser;
     }
@@ -61,7 +64,7 @@ public class DictionaryCollaboratorDTOPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (dictionaryid != null ? dictionaryid.hashCode() : 0);
         hash += (collaboratoruser != null ? collaboratoruser.hashCode() : 0);
         hash += (collaboratorrole != null ? collaboratorrole.hashCode() : 0);
         return hash;
@@ -74,7 +77,7 @@ public class DictionaryCollaboratorDTOPK implements Serializable {
             return false;
         }
         DictionaryCollaboratorDTOPK other = (DictionaryCollaboratorDTOPK) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.dictionaryid == null && other.dictionaryid != null) || (this.dictionaryid != null && !this.dictionaryid.equals(other.dictionaryid))) {
             return false;
         }
         if ((this.collaboratoruser == null && other.collaboratoruser != null) || (this.collaboratoruser != null && !this.collaboratoruser.equals(other.collaboratoruser))) {
@@ -85,10 +88,4 @@ public class DictionaryCollaboratorDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.DictionaryCollaboratorDTOPK[ id=" + id + ", collaboratoruser=" + collaboratoruser + ", collaboratorrole=" + collaboratorrole + " ]";
-    }
-    
 }

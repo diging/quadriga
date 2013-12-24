@@ -14,7 +14,9 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class WorkspaceConceptcollectionDTOPK implements Serializable {
+public class WorkspaceConceptcollectionDTOPK implements Serializable 
+{
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "workspaceid")
     private String workspaceid;
@@ -56,7 +58,6 @@ public class WorkspaceConceptcollectionDTOPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceConceptcollectionDTOPK)) {
             return false;
         }
@@ -69,10 +70,4 @@ public class WorkspaceConceptcollectionDTOPK implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceConceptcollectionDTOPK[ workspaceid=" + workspaceid + ", conceptcollectionid=" + conceptcollectionid + " ]";
-    }
-    
 }

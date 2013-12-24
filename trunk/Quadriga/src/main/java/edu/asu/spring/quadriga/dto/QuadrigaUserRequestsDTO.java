@@ -28,12 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "QuadrigaUserRequestsDTO.findAll", query = "SELECT q FROM QuadrigaUserRequestsDTO q"),
     @NamedQuery(name = "QuadrigaUserRequestsDTO.findByFullname", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.fullname = :fullname"),
     @NamedQuery(name = "QuadrigaUserRequestsDTO.findByUsername", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.username = :username"),
-    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByPasswd", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.passwd = :passwd"),
     @NamedQuery(name = "QuadrigaUserRequestsDTO.findByEmail", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.email = :email"),
-    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByUpdatedby", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.updatedby = :updatedby"),
-    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByUpdateddate", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.updateddate = :updateddate"),
-    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByCreatedby", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.createdby = :createdby"),
-    @NamedQuery(name = "QuadrigaUserRequestsDTO.findByCreateddate", query = "SELECT q FROM QuadrigaUserRequestsDTO q WHERE q.createddate = :createddate")})
+    })
 public class QuadrigaUserRequestsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "fullname")
@@ -60,6 +56,7 @@ public class QuadrigaUserRequestsDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    
 
     public QuadrigaUserRequestsDTO() {
     }
@@ -149,7 +146,6 @@ public class QuadrigaUserRequestsDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof QuadrigaUserRequestsDTO)) {
             return false;
         }
@@ -159,10 +155,4 @@ public class QuadrigaUserRequestsDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.QuadrigaUserRequestsDTO[ username=" + username + " ]";
-    }
-    
 }

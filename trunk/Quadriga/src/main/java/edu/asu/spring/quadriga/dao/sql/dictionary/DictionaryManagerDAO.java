@@ -108,7 +108,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 				return "Dictionary object is null" ;
 			}
 			DictionaryDTO dictionaryDTO = dictionaryDTOMapper.getDictionaryDTO(dictionary);
-			dictionaryDTO.setId("DICT_"+generateUniqueID());
+			dictionaryDTO.setDictionaryid("DICT_"+generateUniqueID());
 			sessionFactory.getCurrentSession().save(dictionaryDTO);
 		}
 		catch(Exception e)
@@ -134,9 +134,9 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		List<IDictionaryItem> dictItemList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.id =:id ORDER BY dictItems.term");
+			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.dictioanryid =:dictionaryid ORDER BY dictItems.term");
 			query.setParameter("ownerName", ownerName);
-			query.setParameter("id", dictionaryid);
+			query.setParameter("dictionaryid", dictionaryid);
 			
 			List<DictionaryItemsDTO> dictItemsDTOList = query.list();
 			if(dictItemsDTOList != null && dictItemsDTOList.size() > 0)
@@ -195,8 +195,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String errMsg = "";
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid and dictItems.term =:term and dictItems.pos =:pos");
-			query.setParameter("id", dictionaryId);
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.dictionaryid =:dictionaryid and dictItems.dictionaryItemsDTOPK.termid =:termid and dictItems.term =:term and dictItems.pos =:pos");
+			query.setParameter("dictionaryid", dictionaryId);
 			query.setParameter("termid", id);
 			query.setParameter("term", item);
 			query.setParameter("pos", pos);
@@ -240,8 +240,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String errMsg = "";
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id IN ( Select dict.id from DictionaryDTO dict where dict.id =:id and dict.dictionaryowner.username =:username) and dictItems.dictionaryItemsDTOPK.termid =:termid");
-			query.setParameter("id", dictionaryId);
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.dictionaryid IN ( Select dict.dictionaryid from DictionaryDTO dict where dict.dictionaryid =:dictionaryid and dict.dictionaryowner.username =:username) and dictItems.dictionaryItemsDTOPK.termid =:termid");
+			query.setParameter("dictionaryid", dictionaryId);
 			query.setParameter("username", ownerName);
 			query.setParameter("termid", itemid);
 			
@@ -276,8 +276,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String errMsg = "";
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
-			query.setParameter("id", dictionaryId);
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.dictionaryid =:dictionaryid and dictItems.dictionaryItemsDTOPK.termid =:termid");
+			query.setParameter("dictionaryid", dictionaryId);
 			query.setParameter("termid", termid);
 			
 			DictionaryItemsDTO dictionaryItemsDTO = (DictionaryItemsDTO) query.uniqueResult();
@@ -314,8 +314,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		List<IUser> nonCollabUsersList = new ArrayList<IUser>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select quadUser.username from QuadrigaUserDTO quadUser where quadUser.username NOT IN (Select dictCollab.quadrigaUserDTO.username from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id) AND quadUser.username NOT IN (Select dict.dictionaryowner.username from DictionaryDTO dict where dict.id =:id)");
-			query.setParameter("id", dictionaryid);
+			Query query = sessionFactory.getCurrentSession().createQuery("Select quadUser.username from QuadrigaUserDTO quadUser where quadUser.username NOT IN (Select dictCollab.quadrigaUserDTO.username from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.dictionaryid =:dictionaryid) AND quadUser.username NOT IN (Select dict.dictionaryowner.username from DictionaryDTO dict where dict.dictionaryid =:dictionaryid)");
+			query.setParameter("dictionaryid", dictionaryid);
 			List<String> userNameList = query.list();
 			
 			if(userNameList != null && userNameList.size() > 0)
@@ -386,8 +386,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	public void deleteCollaborators(String dictionaryid, String userName) throws QuadrigaStorageException {
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
-			query.setParameter("id", dictionaryid);
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.dictionaryid =:dictionaryid and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
+			query.setParameter("dictionaryid", dictionaryid);
 			query.setParameter("collaboratoruser",userName);
 			int output = query.executeUpdate();
 			if(output == 0)
@@ -415,9 +415,9 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String errMsg = "";
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryDTO dict where dict.id =:id and dict.dictionaryowner.username =:username");
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryDTO dict where dict.dictionaryid =:dictionaryid and dict.dictionaryowner.username =:username");
 			query.setParameter("username", user);
-			query.setParameter("id",dictionaryId);
+			query.setParameter("dictionaryid",dictionaryId);
 			DictionaryDTO dictionaryDTO = (DictionaryDTO) query.uniqueResult();
 			
 			if(dictionaryDTO != null)
@@ -450,9 +450,9 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		Boolean isValidUser =  Boolean.FALSE;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryDTO dict where dict.id =:id and dict.dictionaryowner.username =:username");
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryDTO dict where dict.dictionaryid =:dictionaryid and dict.dictionaryowner.username =:username");
 			query.setParameter("username", userId);
-			query.setParameter("id",dictionaryId);
+			query.setParameter("dictionaryid",dictionaryId);
 			DictionaryDTO dictionaryDTO = (DictionaryDTO) query.uniqueResult();
 			
 			if(dictionaryDTO != null)
@@ -495,7 +495,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 					IDictionary dictionary = dictionaryFactory.createDictionaryObject();
 					dictionary.setName(dictionaryDTO.getDictionaryname());
 					dictionary.setDescription(dictionaryDTO.getDescription());
-					dictionary.setId(dictionaryDTO.getId());
+					dictionary.setId(dictionary.getId());
 					dictList.add(dictionary);
 				}
 			}
@@ -520,8 +520,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String dictCollabRole = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
-			query.setParameter("id", dicitonaryId);
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.dictionaryid =:dictionaryid and dictCollab.dictionaryCollaboratorDTOPK.collaboratoruser =:collaboratoruser");
+			query.setParameter("dictionaryid", dicitonaryId);
 			query.setParameter("collaboratoruser", userId);
 			DictionaryCollaboratorDTO dictCollabDTO = (DictionaryCollaboratorDTO) query.uniqueResult();
 			
@@ -551,8 +551,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		List<IDictionaryItem> dictionaryItemList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id ORDER BY dictItems.term");
-			query.setParameter("id",dictionaryid);
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.dictionaryid =:dictionaryid ORDER BY dictItems.term");
+			query.setParameter("dictionaryid",dictionaryid);
 			List<DictionaryItemsDTO> dictItemsDTOList = query.list();
 			
 			if(dictItemsDTOList != null && dictItemsDTOList.size() > 0)
@@ -580,8 +580,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String errMsg = "";
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.id =:id and dictItems.dictionaryItemsDTOPK.termid =:termid");
-			query.setParameter("id",dictionaryId);
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.dictionaryid =:dictionaryid and dictItems.dictionaryItemsDTOPK.termid =:termid");
+			query.setParameter("dictionaryid",dictionaryId);
 			query.setParameter("termid",itemid);
 			int output = query.executeUpdate();
 			if(output == 0)
@@ -612,8 +612,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		String ownerUserName = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select dict.dictionaryowner.username from DictionaryDTO dict where dict.id =:id");
-			query.setParameter("id",dictionaryId);
+			Query query = sessionFactory.getCurrentSession().createQuery("Select dict.dictionaryowner.username from DictionaryDTO dict where dict.dictionaryid =:dictionaryid");
+			query.setParameter("dictionaryid",dictionaryId);
 			ownerUserName = (String) query.uniqueResult();
 		}
 		catch(Exception e)
@@ -643,7 +643,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 			
 			if(dictDTO != null)
 			{
-				dictID = dictDTO.getId();
+				dictID = dictDTO.getDictionaryid();
 			}
 		}
 		catch(Exception e)
@@ -664,8 +664,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.id =:id");
-			query.setParameter("id", dictionaryid);
+			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryCollaboratorDTO dictCollab where dictCollab.dictionaryCollaboratorDTOPK.dictionaryid =:dictionaryid");
+			query.setParameter("dictionaryid", dictionaryid);
 			List<DictionaryCollaboratorDTO> dictCollabList = query.list();
 			
 			Iterator<DictionaryCollaboratorDTO> dictCollabIterator = dictCollabList.iterator();

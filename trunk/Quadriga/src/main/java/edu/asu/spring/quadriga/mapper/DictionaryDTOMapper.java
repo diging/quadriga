@@ -79,7 +79,7 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 		}
 		
 		
-		tempDictionary.setId(dictionary.getId());
+		tempDictionary.setId(dictionary.getDictionaryid());
 		tempDictionary.setName(dictionary.getDictionaryname());
 		tempDictionary.setDescription(dictionary.getDescription());
 		tempDictionary.setOwner(user);

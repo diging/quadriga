@@ -95,7 +95,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	@Override
 	public String addNetworkStatement(String networkId, String id, String type, String isTop, IUser user) throws QuadrigaStorageException {
 
-		NetworkStatementsDTO networkStatementsDTO = networkMapper.getNetworkStatementsDTO(generateUniqueID(), networkId, id, type, isTop, user.getUserName());
+		NetworkStatementsDTO networkStatementsDTO = networkMapper.getNetworkStatementsDTO(networkId, id, type, isTop, user.getUserName());
 
 		try
 		{

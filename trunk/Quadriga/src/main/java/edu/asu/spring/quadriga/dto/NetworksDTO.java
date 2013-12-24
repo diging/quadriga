@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -31,10 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NetworksDTO.findByNetworkname", query = "SELECT n FROM NetworksDTO n WHERE n.networkname = :networkname"),
     @NamedQuery(name = "NetworksDTO.findByNetworkowner", query = "SELECT n FROM NetworksDTO n WHERE n.networkowner = :networkowner"),
     @NamedQuery(name = "NetworksDTO.findByStatus", query = "SELECT n FROM NetworksDTO n WHERE n.status = :status"),
-    @NamedQuery(name = "NetworksDTO.findByUpdatedby", query = "SELECT n FROM NetworksDTO n WHERE n.updatedby = :updatedby"),
-    @NamedQuery(name = "NetworksDTO.findByUpdateddate", query = "SELECT n FROM NetworksDTO n WHERE n.updateddate = :updateddate"),
-    @NamedQuery(name = "NetworksDTO.findByCreatedby", query = "SELECT n FROM NetworksDTO n WHERE n.createdby = :createdby"),
-    @NamedQuery(name = "NetworksDTO.findByCreateddate", query = "SELECT n FROM NetworksDTO n WHERE n.createddate = :createddate")})
+    })
 public class NetworksDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -67,8 +66,14 @@ public class NetworksDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    @JoinColumn(name = "workspaceid",referencedColumnName = "workspaceid",insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private WorkspaceDTO workspaceDTO;
+    @JoinColumn(name = "networkowner",referencedColumnName = "username",insertable = false , updatable = false)
+    @ManyToOne(optional = false)
+    private QuadrigaUserDTO quadrigaUserDTO;
 
-    public NetworksDTO() {
+	public NetworksDTO() {
     }
 
     public NetworksDTO(String networkid) {
@@ -87,6 +92,22 @@ public class NetworksDTO implements Serializable {
         this.createddate = createddate;
     }
 
+    public WorkspaceDTO getWorkspaceDTO() {
+		return workspaceDTO;
+	}
+
+	public void setWorkspaceDTO(WorkspaceDTO workspaceDTO) {
+		this.workspaceDTO = workspaceDTO;
+	}
+
+	public QuadrigaUserDTO getQuadrigaUserDTO() {
+		return quadrigaUserDTO;
+	}
+
+	public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
+		this.quadrigaUserDTO = quadrigaUserDTO;
+	}
+	
     public String getNetworkid() {
         return networkid;
     }
@@ -168,7 +189,6 @@ public class NetworksDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof NetworksDTO)) {
             return false;
         }
@@ -178,10 +198,4 @@ public class NetworksDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.NetworksDTO[ networkid=" + networkid + " ]";
-    }
-    
 }

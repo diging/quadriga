@@ -28,13 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DictionaryCollaboratorDTO.findAll", query = "SELECT d FROM DictionaryCollaboratorDTO d"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findById", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.dictionaryCollaboratorDTOPK.id = :id"),
+    @NamedQuery(name = "DictionaryCollaboratorDTO.findById", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.dictionaryCollaboratorDTOPK.dictionaryid = :dictionaryid"),
     @NamedQuery(name = "DictionaryCollaboratorDTO.findByCollaboratoruser", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.dictionaryCollaboratorDTOPK.collaboratoruser = :collaboratoruser"),
     @NamedQuery(name = "DictionaryCollaboratorDTO.findByCollaboratorrole", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.dictionaryCollaboratorDTOPK.collaboratorrole = :collaboratorrole"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findByUpdatedby", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.updatedby = :updatedby"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findByUpdateddate", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.updateddate = :updateddate"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findByCreatedby", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.createdby = :createdby"),
-    @NamedQuery(name = "DictionaryCollaboratorDTO.findByCreateddate", query = "SELECT d FROM DictionaryCollaboratorDTO d WHERE d.createddate = :createddate")})
+    })
 public class DictionaryCollaboratorDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -56,7 +53,7 @@ public class DictionaryCollaboratorDTO implements Serializable {
     @JoinColumn(name = "collaboratoruser", referencedColumnName = "username", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "dictionaryid", referencedColumnName = "dictionaryid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private DictionaryDTO dictionaryDTO;
 
@@ -75,8 +72,8 @@ public class DictionaryCollaboratorDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public DictionaryCollaboratorDTO(String id, String collaboratoruser, String collaboratorrole) {
-        this.dictionaryCollaboratorDTOPK = new DictionaryCollaboratorDTOPK(id, collaboratoruser, collaboratorrole);
+    public DictionaryCollaboratorDTO(String dictionaryid, String collaboratoruser, String collaboratorrole) {
+        this.dictionaryCollaboratorDTOPK = new DictionaryCollaboratorDTOPK(dictionaryid, collaboratoruser, collaboratorrole);
     }
 
     public DictionaryCollaboratorDTOPK getDictionaryCollaboratorDTOPK() {
@@ -144,7 +141,6 @@ public class DictionaryCollaboratorDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof DictionaryCollaboratorDTO)) {
             return false;
         }
@@ -154,10 +150,4 @@ public class DictionaryCollaboratorDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.DictionaryCollaboratorDTO[ dictionaryCollaboratorDTOPK=" + dictionaryCollaboratorDTOPK + " ]";
-    }
-    
 }

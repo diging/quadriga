@@ -14,20 +14,22 @@ import javax.persistence.Embeddable;
  * @author Karthik
  */
 @Embeddable
-public class WorkspaceEditorDTOPK implements Serializable {
+public class WorkspaceEditorDTOPK implements Serializable 
+{
+	private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "workspaceid")
     private String workspaceid;
     @Basic(optional = false)
-    @Column(name = "owner")
-    private String owner;
+    @Column(name = "editor")
+    private String editor;
 
-    public WorkspaceEditorDTOPK() {
+	public WorkspaceEditorDTOPK() {
     }
 
-    public WorkspaceEditorDTOPK(String workspaceid, String owner) {
+    public WorkspaceEditorDTOPK(String workspaceid, String editor) {
         this.workspaceid = workspaceid;
-        this.owner = owner;
+        this.editor = editor;
     }
 
     public String getWorkspaceid() {
@@ -38,25 +40,24 @@ public class WorkspaceEditorDTOPK implements Serializable {
         this.workspaceid = workspaceid;
     }
 
-    public String getOwner() {
-        return owner;
-    }
+    public String getEditor() {
+		return editor;
+	}
 
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
+	public void setEditor(String editor) {
+		this.editor = editor;
+	}
+	
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (workspaceid != null ? workspaceid.hashCode() : 0);
-        hash += (owner != null ? owner.hashCode() : 0);
+        hash += (editor != null ? editor.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceEditorDTOPK)) {
             return false;
         }
@@ -64,15 +65,9 @@ public class WorkspaceEditorDTOPK implements Serializable {
         if ((this.workspaceid == null && other.workspaceid != null) || (this.workspaceid != null && !this.workspaceid.equals(other.workspaceid))) {
             return false;
         }
-        if ((this.owner == null && other.owner != null) || (this.owner != null && !this.owner.equals(other.owner))) {
+        if ((this.editor == null && other.editor != null) || (this.editor != null && !this.editor.equals(other.editor))) {
             return false;
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.WorkspaceEditorDTOPK[ workspaceid=" + workspaceid + ", owner=" + owner + " ]";
-    }
-    
 }

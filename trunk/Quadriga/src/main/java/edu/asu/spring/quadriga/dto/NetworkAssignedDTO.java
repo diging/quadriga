@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -29,11 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NetworkAssignedDTO.findByNetworkid", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid"),
     @NamedQuery(name = "NetworkAssignedDTO.findByAssigneduser", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.assigneduser = :assigneduser"),
     @NamedQuery(name = "NetworkAssignedDTO.findByStatus", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.status = :status"),
-    @NamedQuery(name = "NetworkAssignedDTO.findByUpdatedby", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.updatedby = :updatedby"),
-    @NamedQuery(name = "NetworkAssignedDTO.findByUpdateddate", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.updateddate = :updateddate"),
-    @NamedQuery(name = "NetworkAssignedDTO.findByCreatedby", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.createdby = :createdby"),
-    @NamedQuery(name = "NetworkAssignedDTO.findByCreateddate", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.createddate = :createddate"),
-    @NamedQuery(name = "NetworkAssignedDTO.findByIsarchived", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.isarchived = :isarchived")})
+    @NamedQuery(name = "NetworkAssignedDTO.findByIsarchived", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.isarchived = :isarchived")
+    })
 public class NetworkAssignedDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -54,8 +53,14 @@ public class NetworkAssignedDTO implements Serializable {
     @Basic(optional = false)
     @Column(name = "isarchived")
     private int isarchived;
+    @JoinColumn(name = "networkid", referencedColumnName = "networkid",insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private NetworksDTO networksDTO;
+    @JoinColumn(name = "assigneduser", referencedColumnName = "username",insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private QuadrigaUserDTO quadrigaUserDTO;
 
-    public NetworkAssignedDTO() {
+	public NetworkAssignedDTO() {
     }
 
     public NetworkAssignedDTO(NetworkAssignedDTOPK networkAssignedDTOPK) {
@@ -71,8 +76,8 @@ public class NetworkAssignedDTO implements Serializable {
         this.isarchived = isarchived;
     }
 
-    public NetworkAssignedDTO(String networkid, String assigneduser, Date createddate) {
-        this.networkAssignedDTOPK = new NetworkAssignedDTOPK(networkid, assigneduser, createddate);
+    public NetworkAssignedDTO(String networkid, String assigneduser) {
+        this.networkAssignedDTOPK = new NetworkAssignedDTOPK(networkid, assigneduser);
     }
 
     public NetworkAssignedDTOPK getNetworkAssignedDTOPK() {
@@ -122,6 +127,22 @@ public class NetworkAssignedDTO implements Serializable {
     public void setIsarchived(int isarchived) {
         this.isarchived = isarchived;
     }
+    
+    public NetworksDTO getNetworksDTO() {
+		return networksDTO;
+	}
+
+	public void setNetworksDTO(NetworksDTO networksDTO) {
+		this.networksDTO = networksDTO;
+	}
+
+	public QuadrigaUserDTO getQuadrigaUserDTO() {
+		return quadrigaUserDTO;
+	}
+
+	public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
+		this.quadrigaUserDTO = quadrigaUserDTO;
+	}
 
     @Override
     public int hashCode() {
@@ -132,7 +153,6 @@ public class NetworkAssignedDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof NetworkAssignedDTO)) {
             return false;
         }
@@ -142,10 +162,4 @@ public class NetworkAssignedDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.NetworkAssignedDTO[ networkAssignedDTOPK=" + networkAssignedDTOPK + " ]";
-    }
-    
 }

@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,15 +29,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "NetworksAnnotationsDTO.findAll", query = "SELECT n FROM NetworksAnnotationsDTO n"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByNetworkid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.networkid = :networkid"),
-    @NamedQuery(name = "NetworksAnnotationsDTO.findByid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.id = :id"),
+    @NamedQuery(name = "NetworksAnnotationsDTO.findByid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.objectid = :objectid"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByAnnotationText", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.annotationtext = :annotationtext"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByAnnotationId", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.annotationid = :annotationid"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByUsername", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.username = :username"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByObjectType", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.objecttype = :objecttype"),
-    @NamedQuery(name = "NetworksAnnotationsDTO.findByUpdatedby", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.updatedby = :updatedby"),
-    @NamedQuery(name = "NetworksAnnotationsDTO.findByUpdateddate", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.updateddate = :updateddate"),
-    @NamedQuery(name = "NetworksAnnotationsDTO.findByCreatedby", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.createdby = :createdby"),
-    @NamedQuery(name = "NetworksAnnotationsDTO.findByCreateddate", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.createddate = :createddate")})
+    })
 public class NetworksAnnotationsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -44,8 +43,8 @@ public class NetworksAnnotationsDTO implements Serializable {
     private String networkid;
     
     @Basic(optional = false)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "objectid")
+    private String objectid;
     
     @Basic(optional = false)
     @Column(name = "annotationtext")
@@ -81,17 +80,25 @@ public class NetworksAnnotationsDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    
+    @JoinColumn(name = "networkid",referencedColumnName = "networkid",insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private NetworksDTO networksDTO;
+    
+    @JoinColumn(name = "username", referencedColumnName = "username",insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private QuadrigaUserDTO quadrigaUserDTO;
 
-    public NetworksAnnotationsDTO() {
+	public NetworksAnnotationsDTO() {
     }
 
     public NetworksAnnotationsDTO(String networkid) {
         this.networkid = networkid;
     }
 
-    public NetworksAnnotationsDTO(String networkid, String id, String annotationtext, String annotationid, String username, String objecttype, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public NetworksAnnotationsDTO(String networkid, String objectid, String annotationtext, String annotationid, String username, String objecttype, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.networkid = networkid;
-        this.id = id;
+        this.objectid = objectid;
         this.annotationtext = annotationtext;
         this.annotationid = annotationid;
         this.username = username;
@@ -107,16 +114,16 @@ public class NetworksAnnotationsDTO implements Serializable {
 		return networkid;
 	}
 
+	public String getObjectid() {
+		return objectid;
+	}
+
+	public void setObjectid(String objectid) {
+		this.objectid = objectid;
+	}
+
 	public void setNetworkid(String networkid) {
 		this.networkid = networkid;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getAnnotationtext() {
@@ -182,9 +189,21 @@ public class NetworksAnnotationsDTO implements Serializable {
 	public void setCreateddate(Date createddate) {
 		this.createddate = createddate;
 	}
+	
+    public NetworksDTO getNetworksDTO() {
+		return networksDTO;
+	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public void setNetworksDTO(NetworksDTO networksDTO) {
+		this.networksDTO = networksDTO;
+	}
+
+	public QuadrigaUserDTO getQuadrigaUserDTO() {
+		return quadrigaUserDTO;
+	}
+
+	public void setQuadrigaUserDTO(QuadrigaUserDTO quadrigaUserDTO) {
+		this.quadrigaUserDTO = quadrigaUserDTO;
 	}
 
 	@Override
@@ -196,7 +215,6 @@ public class NetworksAnnotationsDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof NetworksAnnotationsDTO)) {
             return false;
         }
@@ -206,10 +224,4 @@ public class NetworksAnnotationsDTO implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "hpsdtogeneration.NetworksAnnotationsDTO[ networkid=" + networkid + " ]";
-    }
-    
 }
