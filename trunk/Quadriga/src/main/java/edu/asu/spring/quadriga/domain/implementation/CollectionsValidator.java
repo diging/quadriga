@@ -14,7 +14,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class CollectionsValidator implements Validator {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CollectionsValidator.class);
 	@Autowired
-	@Qualifier("DBConnectionCCManagerBean")
 	private IDBConnectionCCManager dbConnect;
 	@Override
 	public boolean supports(Class<?> arg0) {
