@@ -17,6 +17,7 @@ public interface RoleNames {
 	public static final String ROLE_QUADRIGA_RESTRICTED = "ROLE_QUADRIGA_USER_RESTRICTED_USER";
 	public static final String ROLE_QUADRIGA_ADMIN = "ROLE_QUADRIGA_USER_ADMIN";
 	public static final String DB_ROLE_QUADRIGA_NOACCOUNT = "role_noaccount";
+	public static final String ROLE_QUADRIGA_USER_STANDARD = "ROLE_QUADRIGA_USER_STANDARD";
 	
 	//project collaborator roles constants
 	public static final String ROLE_COLLABORATOR_ADMIN = "ADMIN";
