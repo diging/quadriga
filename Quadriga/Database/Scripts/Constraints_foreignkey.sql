@@ -127,14 +127,14 @@ ALTER TABLE tbl_networks
  
 ALTER TABLE tbl_network_statements
  ADD CONSTRAINT fk_tbl_network_statements_networkid FOREIGN KEY(networkid)
- REFERENCES tbl_network(networkid);
+ REFERENCES tbl_networks(networkid);
  
 ALTER TABLE tbl_network_assigned
  ADD CONSTRAINT fk_tbl_network_assigned FOREIGN KEY(networkid)
  REFERENCES tbl_networks(networkid);
 
 ALTER TABLE tbl_network_assigned
- ADD CONSTRAINT fk_tbl_network_assigned FOREIGN KEY(assigneduser)
+ ADD CONSTRAINT fk_tbl_network_assigneduser FOREIGN KEY(assigneduser)
  REFERENCES tbl_quadriga_user(username);
  
 ALTER TABLE tbl_network_annotations
