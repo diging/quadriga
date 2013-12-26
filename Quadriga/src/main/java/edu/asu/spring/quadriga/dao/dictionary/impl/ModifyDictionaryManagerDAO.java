@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.sql.dictionary;
+package edu.asu.spring.quadriga.dao.dictionary.impl;
 
 import java.util.Date;
 import java.util.Iterator;

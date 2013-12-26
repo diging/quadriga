@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.sql.conceptcollection.impl;
+package edu.asu.spring.quadriga.dao.conceptcollection.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
