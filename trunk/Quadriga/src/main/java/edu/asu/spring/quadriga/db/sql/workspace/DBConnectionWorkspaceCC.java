@@ -169,7 +169,7 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String deleteWorkspaceCC(String workspaceId, String userId,
+	public void deleteWorkspaceCC(String workspaceId, String userId,
 			String CCId) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		String dbCommand;
@@ -194,7 +194,6 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(4);
-			return errmsg;
 		}catch(SQLException e){
 			logger.info(e.getMessage());
 			throw new QuadrigaStorageException();
@@ -205,7 +204,6 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 		{
 			closeConnection();
 		}
-		return "";
 	}
 
 }

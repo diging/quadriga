@@ -231,7 +231,7 @@ public class ConceptCollectionWorkspaceController {
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				try {
-					msg=workspaceCCManager.deleteWorkspaceCC(workspaceId, userId, values[i]);
+			       workspaceCCManager.deleteWorkspaceCC(workspaceId, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

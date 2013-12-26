@@ -39,7 +39,7 @@ public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implem
 	 * @author          Lohith Dwaraka
 	 */
 	@Override
-	public String addWorkspaceDictionary(String workspaceId,
+	public void addWorkspaceDictionary(String workspaceId,
 			String dictionaryId, String userId) throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
@@ -67,8 +67,6 @@ public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implem
 
 			errmsg = sqlStatement.getString(4);
 
-			return errmsg;
-
 		}
 		catch(SQLException e)
 		{
@@ -84,7 +82,6 @@ public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implem
 		{
 			closeConnection();
 		}
-		return errmsg;
 	}
 
 	/**
@@ -161,7 +158,7 @@ public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implem
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String deleteWorkspaceDictionary(String workspaceId, String userId,
+	public void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException {
 		String dbCommand;
 		String errmsg="";
@@ -185,7 +182,6 @@ public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implem
 
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(4);
-			return errmsg;
 		}catch(SQLException e){
 			logger.info(e.getMessage());
 			throw new QuadrigaStorageException();
@@ -196,7 +192,6 @@ public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implem
 		{
 			closeConnection();
 		}
-		return "";
 	}
 
 }

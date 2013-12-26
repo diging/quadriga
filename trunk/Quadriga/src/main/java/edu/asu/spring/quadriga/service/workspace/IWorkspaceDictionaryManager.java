@@ -15,7 +15,7 @@ public interface IWorkspaceDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addWorkspaceDictionary(String workspaceId, String dictionaryId, String userId)throws QuadrigaStorageException;
+	public abstract void addWorkspaceDictionary(String workspaceId, String dictionaryId, String userId)throws QuadrigaStorageException;
 	
 	/**
 	 * List the dictionary in a project for a user - userId
@@ -33,6 +33,6 @@ public interface IWorkspaceDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteWorkspaceDictionary(String workspaceId, String userId,
+	public abstract void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException;
 }

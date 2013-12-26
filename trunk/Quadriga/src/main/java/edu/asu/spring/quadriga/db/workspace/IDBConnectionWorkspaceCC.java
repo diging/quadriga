@@ -35,7 +35,7 @@ public interface IDBConnectionWorkspaceCC {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract  String deleteWorkspaceCC(String workspaceId, String userId,
+	public abstract  void deleteWorkspaceCC(String workspaceId, String userId,
 			String CCId) throws QuadrigaStorageException;
 
 }

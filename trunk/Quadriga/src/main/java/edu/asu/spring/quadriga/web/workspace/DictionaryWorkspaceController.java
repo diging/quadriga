@@ -109,7 +109,7 @@ public class DictionaryWorkspaceController {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("values " + values[i]);
 				try {
-					msg=workspaceDictionaryManager.addWorkspaceDictionary(workspaceId,
+					workspaceDictionaryManager.addWorkspaceDictionary(workspaceId,
 							values[i], userId);
 					if(!msg.equals("")){
 						flag=1;
@@ -222,7 +222,7 @@ public class DictionaryWorkspaceController {
 		} else {
 			for (int i = 0; i < values.length; i++) {
 				try {
-					msg=workspaceDictionaryManager.deleteWorkspaceDictionary(workspaceId, userId, values[i]);
+					workspaceDictionaryManager.deleteWorkspaceDictionary(workspaceId, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

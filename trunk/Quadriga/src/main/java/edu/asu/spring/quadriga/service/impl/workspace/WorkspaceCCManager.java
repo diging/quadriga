@@ -33,10 +33,9 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	}
 
 	@Override
-	public String deleteWorkspaceCC(String workspaceId, String userId,
+	public void deleteWorkspaceCC(String workspaceId, String userId,
 			String CCId) throws QuadrigaStorageException {
-		String msg=dbConnect.deleteWorkspaceCC(workspaceId, userId, CCId);
-		return msg;
+		dbConnect.deleteWorkspaceCC(workspaceId, userId, CCId);
 	}
 
 }
