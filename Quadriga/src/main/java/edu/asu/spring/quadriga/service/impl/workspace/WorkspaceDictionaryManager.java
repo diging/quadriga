@@ -41,10 +41,9 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String addWorkspaceDictionary(String workspaceId,
+	public void addWorkspaceDictionary(String workspaceId,
 			String dictionaryId, String userId) throws QuadrigaStorageException {
-		String msg = dbConnect.addWorkspaceDictionary(workspaceId, dictionaryId, userId);
-		return msg;
+		dbConnect.addWorkspaceDictionary(workspaceId, dictionaryId, userId);
 	}
 
 	/**
@@ -69,10 +68,9 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public String deleteWorkspaceDictionary(String workspaceId, String userId,
+	public void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException {
-		String msg=dbConnect.deleteWorkspaceDictionary(workspaceId, userId, dictioanaryId);
-		return msg;
+	     dbConnect.deleteWorkspaceDictionary(workspaceId, userId, dictioanaryId);
 	}
 
 }

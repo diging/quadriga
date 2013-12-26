@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.dao.workspace.impl;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +18,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
+@Repository
 public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectionWorkspaceCC {
 	
 	@Autowired
@@ -98,8 +98,21 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 	}
 
 	@Override
-	public String deleteWorkspaceCC(String workspaceId, String userId, String CCId) throws QuadrigaStorageException {
-		return null;
+	public void deleteWorkspaceCC(String workspaceId, String userId, String CCId) throws QuadrigaStorageException 
+	{
+		try
+		{
+		//retrieve the concept collection associated with the workspace
+		WorkspaceConceptcollectionDTOPK workspaceConceptCollectionKey = new WorkspaceConceptcollectionDTOPK(workspaceId,CCId);
+		
+		WorkspaceConceptcollectionDTO workspaceConceptCollection = (WorkspaceConceptcollectionDTO) sessionFactory.getCurrentSession().get(WorkspaceConceptcollectionDTO.class,workspaceConceptCollectionKey);
+		
+		sessionFactory.getCurrentSession().delete(workspaceConceptCollection);
+		}
+		catch(Exception ex)
+		{
+			throw new QuadrigaStorageException();
+		}
 	}
 	
 	

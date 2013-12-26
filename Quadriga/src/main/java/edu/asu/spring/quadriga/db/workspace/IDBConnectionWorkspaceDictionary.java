@@ -14,7 +14,7 @@ public interface IDBConnectionWorkspaceDictionary {
 	 * @throws			SQLException
 	 * @author          Lohith Dwaraka
 	 */
-	public abstract String addWorkspaceDictionary(String workspaceId,
+	public abstract void addWorkspaceDictionary(String workspaceId,
 			String dictionaryId, String userId) throws QuadrigaStorageException;
 
 	/**
@@ -35,7 +35,7 @@ public interface IDBConnectionWorkspaceDictionary {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract  String deleteWorkspaceDictionary(String workspaceId, String userId,
+	public abstract  void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException;
 
 }
