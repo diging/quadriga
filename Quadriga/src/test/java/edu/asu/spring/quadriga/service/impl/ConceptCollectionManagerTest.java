@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -64,6 +65,7 @@ public class ConceptCollectionManagerTest {
 
 	
 	@Autowired
+	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnection;
 	
 	@Autowired
@@ -192,8 +194,8 @@ public class ConceptCollectionManagerTest {
 				//Setup the database with the proper data in the tables;
 				sDatabaseSetup = new String[]{
 						"delete from tbl_conceptcollections_collaborator",
-						"delete from tbl_conceptcollections_items",
-						"delete from tbl_conceptcollections",						
+						"delete from tbl_conceptcollection_items",
+						"delete from tbl_conceptcollection",						
 						"delete from tbl_quadriga_user",
 						"delete from tbl_quadriga_user_requests",
 						"delete from tbl_quadriga_user_denied",

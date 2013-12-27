@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -59,6 +60,7 @@ public class WorkspaceCCManagerTest {
 	private IDBConnectionWorkspaceCC dbConnectionWorkspaceConceptColleciton;
 	
 	@Autowired
+	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnect;
 
 	@Autowired
@@ -142,8 +144,8 @@ public class WorkspaceCCManagerTest {
 
 			// Setup the database with the proper data in the tables;
 			sDatabaseSetup = new String[] {
-					"delete from tbl_conceptcollections_items",
-					"delete from tbl_conceptcollections",
+					"delete from tbl_conceptcollection_items",
+					"delete from tbl_conceptcollection",
 					"delete from tbl_workspace_conceptcollection",
 					"delete from tbl_project_workspace",
 					"delete from tbl_project",

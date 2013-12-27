@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -62,6 +63,7 @@ public class DBConnectionProjectConceptCollectionTest {
 	IDBConnectionDictionaryManager dbConnection;
 	
 	@Autowired
+	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnect;
 
 
@@ -143,8 +145,8 @@ public class DBConnectionProjectConceptCollectionTest {
 			sDatabaseSetup = new String[] {
 					"delete from tbl_project_conceptcollection",
 					"delete from tbl_project",
-					"delete from tbl_conceptcollections_items",
-					"delete from tbl_conceptcollections",
+					"delete from tbl_conceptcollection_items",
+					"delete from tbl_conceptcollection",
 					"delete from tbl_quadriga_user_denied",
 					"delete from tbl_quadriga_user",
 					"delete from tbl_quadriga_user_requests",
