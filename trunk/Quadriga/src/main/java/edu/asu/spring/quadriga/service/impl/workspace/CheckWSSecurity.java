@@ -3,8 +3,8 @@ package edu.asu.spring.quadriga.service.impl.workspace;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -36,6 +36,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean chkCreateWSAccess(String userName,String projectId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -74,6 +75,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean chkWorkspaceAccess(String userName,String projectId,String workspaceId) throws QuadrigaStorageException
 	{
 	    boolean chkAccess;
@@ -115,6 +117,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean chkCollabWorkspaceAccess(String userName,String workspaceId,String collaboratorRole) throws QuadrigaStorageException
 	{
 		List<ICollaborator> collaboratorList;
@@ -159,6 +162,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean chkModifyWorkspaceAccess(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -179,6 +183,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	}
 	
 	@Override
+	@Transactional
 	public boolean checkWorkspaceOwner(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -194,6 +199,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	}
 	
 	@Override
+	@Transactional
 	public boolean checkIsWorkspaceAssociated(String userName) throws QuadrigaStorageException
 	{
 		boolean isAssociated;
@@ -204,6 +210,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	}
 	
 	@Override
+	@Transactional
 	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,String role) throws QuadrigaStorageException
 	{
 		boolean isAssociated;
@@ -221,6 +228,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean checkWorkspaceOwnerEditorAccess(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -241,6 +249,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public boolean checkWorkspaceProjectInheritOwnerEditorAccess(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
@@ -254,6 +263,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	}
 	
 	@Override
+	@Transactional
 	public boolean checkIsWorkspaceExists(String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;

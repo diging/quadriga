@@ -40,6 +40,7 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		}
 		catch(Exception ex)
 		{
+			System.out.println(ex.getMessage());
 			throw new QuadrigaStorageException();
 		}
 		return isOwner;
