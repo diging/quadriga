@@ -25,7 +25,6 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	private IRetrieveWSCollabManager workspaceManager;
 	
 	@Autowired
-	@Qualifier("DBConnectionWSAccessManagerBean")
 	private IDBConnectionWSAccessManager dbConnect;
 	
 	/**

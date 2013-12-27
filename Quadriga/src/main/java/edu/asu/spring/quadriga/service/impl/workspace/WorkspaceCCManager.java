@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.service.impl.workspace;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
@@ -15,7 +14,6 @@ import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
 public class WorkspaceCCManager implements IWorkspaceCCManager {
 
 	@Autowired
-	@Qualifier("DBConnectionWorkspaceCCBean")
 	private IDBConnectionWorkspaceCC dbConnect;
 	
 	@Override
