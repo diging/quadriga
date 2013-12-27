@@ -150,13 +150,13 @@
 		<property name="location" value="classpath:locale/messages_en_US.properties" />
 	</bean>
 	
-	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.RetrieveProjectManagerDAO"/>
+	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO"/>
 	
 	<bean id="projectDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectDTOMapper"/>
 	
 	<bean id="projectCollaboratorDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper"/>
 	
-	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectManagerDAO"/>
+	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.ModifyProjectManagerDAO"/>
 	
 	<bean id="serviceRegistry" class="edu.asu.spring.quadriga.profile.impl.ServiceRegistry" />
 	
@@ -174,11 +174,11 @@
 	
 	<bean id="viafManager" class="edu.asu.spring.quadriga.service.impl.viaf.ViafManager"/>
 	
-	<bean id="listWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.impl.ListWSManagerDAO"/>
+	<bean id="listWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.ListWSManagerDAO"/>
 	
-	<bean id="usermanagerDAO" class="edu.asu.spring.quadriga.dao.sql.impl.UserManagerDAO"/>
+	<bean id="usermanagerDAO" class="edu.asu.spring.quadriga.dao.UserManagerDAO"/>
 	
-	<bean id="networkmanagerDAO" class="edu.asu.spring.quadriga.dao.sql.impl.NetworkManagerDAO"/>
+	<bean id="networkmanagerDAO" class="edu.asu.spring.quadriga.dao.NetworkManagerDAO"/>
 	
 	<bean id="userMapper" class="edu.asu.spring.quadriga.mapper.UserDTOMapper"/>
 	
@@ -186,17 +186,17 @@
 	
 	<bean id="dspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.DspaceDTOMapper"/>
 	
-	<bean id="archiveWorkspaceManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.impl.ArchiveWorkspaceManagerDAO"/>
+	<bean id="archiveWorkspaceManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.ArchiveWorkspaceManagerDAO"/>
 	
 	<bean id="workspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper"/>
 	
 	<bean id="workspaceDspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper"/>
 	
-	<bean id="dspaceManagerDAO" class="edu.asu.spring.quadriga.dao.sql.impl.DspaceManagerDAO"/>
+	<bean id="dspaceManagerDAO" class="edu.asu.spring.quadriga.dao.DspaceManagerDAO"/>
 	
-	<bean id="modifyWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.impl.ModifyWSManagerDAO"/>
+	<bean id="modifyWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.ModifyWSManagerDAO"/>
 	
-	<bean id="modifyProjectCollaboratorDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ModifyProjectCollaboratorDAO"/>
+	<bean id="modifyProjectCollaboratorDAO" class="edu.asu.spring.quadriga.dao.workbench.ModifyProjectCollaboratorDAO"/>
 	
 	<bean id="database_error_msgs" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:locale/database_error_msgs.properties" />
@@ -204,23 +204,30 @@
 	
 	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
 	
-	<bean id="dictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.sql.dictionary.DictionaryManagerDAO"/>
+	<bean id="dictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.dictionary.DictionaryManagerDAO"/>
 	
 	<bean id="DictionaryDTOMapper" class="edu.asu.spring.quadriga.mapper.DictionaryDTOMapper"/>
 	
-	<bean id="projectDictionaryDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ProjectDictionaryDAO"/>
+	<bean id="projectDictionaryDAO" class="edu.asu.spring.quadriga.dao.workbench.ProjectDictionaryDAO"/>
 	
-	<bean id="projectConceptColletionDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ProjectConceptCollectionDAO" />
+	<bean id="projectConceptColletionDAO" class="edu.asu.spring.quadriga.dao.workbench.ProjectConceptCollectionDAO" />
 	
 	<bean id="conceptCollectionDTOMapper" class="edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper" />
 	
-	<bean id="CCManagerDAO" class="edu.asu.spring.quadriga.dao.sql.conceptcollection.impl.CCManagerDAO" />
+	<bean id="CCManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.CCManagerDAO" />
 	
-	<bean id="retrieveProjectCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.RetrieveProjectCollaboratorManagerDAO" />
+	<bean id="retrieveProjectCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.RetrieveProjectCollaboratorManagerDAO" />
 	
-	<bean id="projectAccessManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.impl.ProjectAccessManagerDAO" />
+	<bean id="projectAccessManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.ProjectAccessManagerDAO" />
 	
 	<bean id="networkOldVersionFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkOldVersionFactory" />
 	
-	<bean id="retrieveWSCollabManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.impl.RetrieveWSCollabManagerDAO" />
+	<bean id="retrieveWSCollabManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.RetrieveWSCollabManagerDAO" />
+	
+	<bean id="workspaceCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.WorkspaceCollaboratorManagerDAO" />
+	
+	<bean id="ModifyWSCollabManager" class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager" />
+	
+	
+	
 </beans>

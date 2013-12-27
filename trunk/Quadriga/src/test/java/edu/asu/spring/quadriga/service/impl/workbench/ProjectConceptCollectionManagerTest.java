@@ -24,8 +24,10 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
@@ -67,6 +69,7 @@ public class ProjectConceptCollectionManagerTest {
 	IDBConnectionDictionaryManager dbConnection;
 	
 	@Autowired
+	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnect;
 
 	@Autowired
@@ -156,13 +159,13 @@ public class ProjectConceptCollectionManagerTest {
 
 					// Setup the database with the proper data in the tables;
 					sDatabaseSetup = new String[] {
-							"delete from tbl_quadriga_user_denied",
-							"delete from tbl_quadriga_user",
+							"delete from tbl_conceptcollection_items",
+							"delete from tbl_conceptcollection",
 							"delete from tbl_quadriga_user_requests",
 							"delete from tbl_project_conceptcollection",
 							"delete from tbl_project",
-							"delete from tbl_conceptcollections_items",
-							"delete from tbl_conceptcollections",
+							"delete from tbl_quadriga_user_denied",
+							"delete from tbl_quadriga_user",
 							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
 							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
@@ -221,6 +224,7 @@ public class ProjectConceptCollectionManagerTest {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Test
+	@Transactional
 	public void testAddProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
@@ -323,6 +327,7 @@ public class ProjectConceptCollectionManagerTest {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Test
+	@Transactional
 	public void testListProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
@@ -425,6 +430,7 @@ public class ProjectConceptCollectionManagerTest {
 	 * @throws QuadrigaStorageException 
 	 */
 	@Test
+	@Transactional
 	public void testDeleteProjectConceptCollection() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 		{
