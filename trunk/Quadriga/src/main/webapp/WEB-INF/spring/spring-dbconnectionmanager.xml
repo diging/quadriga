@@ -7,6 +7,7 @@
 		class="edu.asu.spring.quadriga.db.sql.DBConnectionDspaceManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	<!-- 
 	<bean id="DBConnectionDictionaryManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.dictionary.DBConnectionDictionaryManager">
 		<property name="dataSource" ref="dataSource" />
@@ -32,7 +33,7 @@
 		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionWorkspaceCC">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
+ -->
 <!-- 
 	<bean id="DBConnectionProjectDictionaryBean"
 		class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionary">
@@ -47,7 +48,7 @@
 	<bean id="DBConnectionCCManagerBean" class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionCCManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	 -->
+	 
 	<bean id="DBConnectionModifyCCManagerBean" 
 	    class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionModifyCCManager">
 		<property name="dataSource" ref="dataSource" />
@@ -56,7 +57,7 @@
 	    class="edu.asu.spring.quadriga.db.sql.conceptcollection.DBConnectionCCCollaboratorManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
+	-->
 	<!-- 
 	<bean id="DBConnectionModifyProjCollabManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjCollabManager">
@@ -79,6 +80,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
  -->
+ <!-- 
 	<bean id="DBConnectionArchiveWSMangerBean"
 		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionArchiveWSManger">
 		<property name="dataSource" ref="dataSource" />
@@ -103,7 +105,7 @@
 		class="edu.asu.spring.quadriga.db.sql.workspace.DBConnectionModifyWSCollabManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
+	 -->
 	<bean id="DBConnectionEditorAccessManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.editor.DBConnectionEditorAccessManager">
 		<property name="dataSource" ref="dataSource" />

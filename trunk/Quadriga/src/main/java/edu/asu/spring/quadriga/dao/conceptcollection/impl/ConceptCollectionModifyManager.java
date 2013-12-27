@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.sql.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager;
@@ -15,6 +16,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
+@Repository
 public class ConceptCollectionModifyManager extends DAOConnectionManager implements IDBConnectionModifyCCManager
 {
 	@Autowired

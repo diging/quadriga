@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +22,9 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 public class ModifyWSManager implements IModifyWSManager 
 {
 	@Autowired
-	@Qualifier("modifyWSManagerDAO")
 	private IDBConnectionModifyWSManager dbConnect;
 
 	@Autowired
-	@Qualifier("retrieveProjectManagerDAO")
 	private IDBConnectionRetrieveProjectManager dbProjectManager;
 
 	@Autowired

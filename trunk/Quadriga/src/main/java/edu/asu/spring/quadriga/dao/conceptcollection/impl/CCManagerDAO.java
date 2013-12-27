@@ -112,7 +112,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		List<IConceptCollection> conceptCollectionList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select conceptCollab.conceptCollectionDTO from ConceptcollectionsCollaboratorDTO conceptCollab where conceptCollab.quadrigaUserDTO.username =:userName");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select conceptCollab.conceptCollectionDTO from ConceptCollectionCollaboratorDTO conceptCollab where conceptCollab.quadrigaUserDTO.username =:userName");
 			query.setParameter("userName", userName);
 			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
 			
@@ -158,8 +158,8 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		collection.setCollaborators(new ArrayList<ICollaborator>());
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsDTO conceptColl where conceptColl.id =:id");
-			query.setParameter("id", collection.getId());
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid");
+			query.setParameter("conceptCollectionid", collection.getId());
 			
 			ConceptCollectionDTO conceptcollectionsDTO = (ConceptCollectionDTO) query.uniqueResult();
 			
@@ -199,8 +199,8 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		List<IUser> userList = new ArrayList<IUser>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username NOT IN (Select quadrigaUserDTO.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id)  AND user.username NOT IN (Select ccCollab.conceptcollectionsDTO.collectionowner.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id)");
-			query.setParameter("id", collectionid);
+			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username NOT IN (Select quadrigaUserDTO.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid)  AND user.username NOT IN (Select ccCollab.conceptCollectionDTO.collectionowner.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid)");
+			query.setParameter("conceptCollectionid", collectionid);
 			
 			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
 			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
@@ -233,8 +233,8 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id");
-			query.setParameter("id", collectionid);
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid");
+			query.setParameter("conceptCollectionid", collectionid);
 			List<ConceptCollectionCollaboratorDTO> ccCollabList = query.list();
 			
 			Iterator<ConceptCollectionCollaboratorDTO> ccCollabIterator = ccCollabList.iterator();
@@ -316,9 +316,9 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		String errMsg = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id) OR user.username IN (Select conceptColl.collectionowner.username from ConceptcollectionsDTO conceptColl where conceptColl.id =:id))");
+			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid) OR user.username IN (Select conceptColl.collectionowner.username from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid))");
 			query.setParameter("username", username);
-			query.setParameter("id", conceptId);
+			query.setParameter("conceptCollectionid", conceptId);
 			
 			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
 			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
@@ -356,7 +356,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		String errMsg = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("ConceptcollectionsDTO.findByCollectionname");
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("ConceptCollectionDTO.findByCollectionname");
 			query.setParameter("collectionname", collectionname);
 			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
 			
@@ -388,7 +388,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:collectionId and ccItems.conceptcollectionsItemsDTOPK.item =:id");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionDTO.conceptCollectionid =:collectionId and ccItems.conceptCollectionItemsDTOPK.item =:id");
 			query.setParameter("id", id);
 			query.setParameter("collectionId", collectionId);
 			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
@@ -421,7 +421,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsItemsDTO ccItems where ccItems.conceptcollectionsDTO.id =:collectionId and ccItems.conceptcollectionsItemsDTOPK.item =:id");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionDTO.conceptCollectionid =:collectionId and ccItems.conceptCollectionItemsDTOPK.item =:id");
 			query.setParameter("id", concept.getId());
 			query.setParameter("collectionId", collectionId);
 			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
@@ -478,8 +478,8 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptcollectionsCollaboratorDTO ccCollab where ccCollab.conceptcollectionsDTO.id =:id");
-			query.setParameter("id", collection.getId());
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid");
+			query.setParameter("conceptCollectionid", collection.getId());
 			List<ConceptCollectionCollaboratorDTO> ccCollabList = query.list();
 			
 			if(ccCollabList != null && ccCollabList.size() > 0)

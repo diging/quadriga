@@ -5,7 +5,6 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
@@ -17,7 +16,6 @@ import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 
 	@Autowired
-	@Qualifier("DBConnectionWorkspaceDictionaryBean")
 	private IDBConnectionWorkspaceDictionary dbConnect;
 	
 	@Autowired
