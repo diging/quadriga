@@ -10,10 +10,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
 
 @Repository
-public class ProfileManagerDAO extends DAOConnectionManager implements IDBConnectionProfileManager
+public class ProfileManagerDAO extends DAOConnectionManager
+//implements IDBConnectionProfileManager
 {
 
-	@Override
+	//@Override
 	public String addUserProfileDBRequest(String name, String serviceId,
 			SearchResultBackBean resultBackBean)
 			throws QuadrigaStorageException {
@@ -21,14 +22,14 @@ public class ProfileManagerDAO extends DAOConnectionManager implements IDBConnec
 		return null;
 	}
 
-	@Override
+	//@Override
 	public List<SearchResultBackBean> showProfileDBRequest(String loggedinUser)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	//@Override
 	public String deleteUserProfileDBRequest(String id, String username)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
