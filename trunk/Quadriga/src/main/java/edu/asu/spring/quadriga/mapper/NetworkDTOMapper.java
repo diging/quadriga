@@ -151,7 +151,7 @@ public class NetworkDTOMapper {
 			for(NetworkStatementsDTO networkStatementsDTO:networkStatementsDTOList)
 			{
 				networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
-				networkNodeInfo.setId(networkStatementsDTO.getNetworkstatementsDTOPK().getNetworkid());
+				networkNodeInfo.setId(networkStatementsDTO.getNetworkstatementsDTOPK().getStatementid());
 				networkNodeInfo.setStatementType(networkStatementsDTO.getStatementtype());
 				networkList.add(networkNodeInfo);
 			}

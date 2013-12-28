@@ -51,7 +51,8 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 			String workspaceId) throws QuadrigaStorageException 
 	{
 		//TODO : Require clarification on the logic
-		throw new NotYetImplementedException();
+		//throw new NotYetImplementedException();
+		return true;
 	}
 
 	@Override
@@ -59,7 +60,8 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 			String workspaceId) throws QuadrigaStorageException
 	{
 		//TODO : Require clarification on the logic
-		throw new NotYetImplementedException();
+		//throw new NotYetImplementedException();
+		return true;
 	}
 
 	@Override
