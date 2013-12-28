@@ -55,11 +55,6 @@ public class DBConnectionCCManagerTest {
 	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnection;
 	
-	
-	
-	@Autowired
-	private IConceptCollectionFactory collectionFactory;
-	
 	@Autowired
 	private IUserFactory userFactory;
 	

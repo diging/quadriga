@@ -44,7 +44,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration
 @Transactional
-public class CCManagerDAOTest {
+public class ConceptCollectionCollaboratorManagerDAOTest {
 	
 	@Autowired
 	@Qualifier("CCManagerDAO")
@@ -218,7 +218,6 @@ public class CCManagerDAOTest {
 	}
 	
 	@Test
-	@Transactional
 	public void testDeleteItem() throws QuadrigaStorageException, QuadrigaAccessException {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
