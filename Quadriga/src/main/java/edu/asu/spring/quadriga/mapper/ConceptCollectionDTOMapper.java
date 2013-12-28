@@ -49,41 +49,44 @@ public class ConceptCollectionDTOMapper
 		concept = conceptCollectionFactory.createConceptCollectionObject();
 		collaboratorList = new ArrayList<ICollaborator>();
 		conceptList = new ArrayList<IConcept>();
-		//fetch all the input values
 		List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaborators = collection.getConceptCollectionCollaboratorDTOList();
 		
-		//loop through the collaborators
-		for(ConceptCollectionCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
+		if(conceptCollectionCollaborators != null)
 		{
-			
-			collaborator = getConceptCollectionCollaborators(conceptCollaborator);
-			
-			if(collaboratorList.contains(collaborator))
+			for(ConceptCollectionCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
 			{
-				int index = collaboratorList.indexOf(collaborator);
-				ICollaborator tempCollaborator = collaboratorList.get(index);
-				List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
-				tempRoles.addAll(collaborator.getCollaboratorRoles());
-				tempCollaborator.setCollaboratorRoles(tempRoles);
 				
-				//set the collaborator with the roles
-				collaboratorList.set(index, tempCollaborator);
-			}
-			else
-			{
-				collaboratorList.add(collaborator);
+				collaborator = getConceptCollectionCollaborators(conceptCollaborator);
+				
+				if(collaboratorList.contains(collaborator))
+				{
+					int index = collaboratorList.indexOf(collaborator);
+					ICollaborator tempCollaborator = collaboratorList.get(index);
+					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
+					tempRoles.addAll(collaborator.getCollaboratorRoles());
+					tempCollaborator.setCollaboratorRoles(tempRoles);
+					
+					//set the collaborator with the roles
+					collaboratorList.set(index, tempCollaborator);
+				}
+				else
+				{
+					collaboratorList.add(collaborator);
+				}
 			}
 		}
 		
 		//loop through all the items and add it to concept collection
 		List<ConceptCollectionItemsDTO> collectionItems = collection.getConceptCollectionItemsDTOList();
 		
-		for(ConceptCollectionItemsDTO collectionConcept : collectionItems)
+		if(collectionItems != null)
 		{
-			tempConcept = getConceptCollectionItems(collectionConcept);
-			conceptList.add(tempConcept);
+			for(ConceptCollectionItemsDTO collectionConcept : collectionItems)
+			{
+				tempConcept = getConceptCollectionItems(collectionConcept);
+				conceptList.add(tempConcept);
+			}
 		}
-		
 		concept.setId(collection.getConceptCollectionid());
 		concept.setName(collection.getCollectionname());
 		concept.setDescription(collection.getDescription());

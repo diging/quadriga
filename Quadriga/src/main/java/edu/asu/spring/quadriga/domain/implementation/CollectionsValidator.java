@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -36,6 +37,7 @@ public class CollectionsValidator implements Validator {
 		
 	}
 
+	@Transactional
 	private void validateId(String id, Errors errors) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		String ret=dbConnect.validateId(id);
