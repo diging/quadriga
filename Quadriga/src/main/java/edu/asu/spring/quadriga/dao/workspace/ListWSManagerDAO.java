@@ -372,12 +372,12 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("WorkspaceDTO.findByWorkspaceid");
-			query.setParameter("findByWorkspaceid", workspaceId);
+			query.setParameter("workspaceid", workspaceId);
 			WorkspaceDTO workspaceDTO = (WorkspaceDTO) query.uniqueResult();
 			if(workspaceDTO != null)
 			{
 				workspaceName = workspaceDTO.getWorkspacename();
-			}
+			} 
 		}
 		catch(Exception e)
 		{
