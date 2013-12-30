@@ -558,23 +558,64 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try {
-			Query query = sessionFactory
-					.getCurrentSession()
-					.createQuery(
-							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
-							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
+//			Query query = sessionFactory
+//					.getCurrentSession()
+//					.createQuery(
+//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
+//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
+//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
+//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
+//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and " +
+//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
+//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
+//							"where pw.projectWorkspaceDTOPK.projectid in " +
+//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
+//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
+//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
+//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
+//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
+//							"where we.workspaceEditorDTOPK.editor = :username)))");
+//			Query query = sessionFactory
+//					.getCurrentSession()
+//					.createQuery(
+//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
+//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
+//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
+//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
+//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') or " +
+//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
+//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
+//							"where pw.projectWorkspaceDTOPK.projectid in " +
+//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
+//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
+//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
+//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
+//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
+//							"where we.workspaceEditorDTOPK.editor = :username)))");
+			
+			String query1 = "Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
+							"NetworkAssignedDTO na where na.isarchived=0) and";
+			query1 += "((n.workspaceid in  " ;
+			query1 += "(select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
 							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
-							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and " +
-							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
-							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
+							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1'))) OR ";
+			query1 += "(n.workspaceid in  " ;
+			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
 							"where pw.projectWorkspaceDTOPK.projectid in " +
 							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
 							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
-							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
-							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
+							"('collaborator_role4')))) OR ";
+			query1 += "(n.workspaceid in  " ;
+			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
+					"where pw.projectWorkspaceDTOPK.projectid in " +
+					"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
 							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
-							"where we.workspaceEditorDTOPK.editor = :username)))");
+							"where we.workspaceEditorDTOPK.editor = :username)))))"
+							+ "";
+			Query query = sessionFactory
+					.getCurrentSession()
+					.createQuery(query1);
+			
 			query.setParameter("username", user.getUserName());
 
 			List<NetworksDTO> listNetworksDTO = query.list();
@@ -982,7 +1023,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							"from NetworksAnnotationsDTO n where n.id = :id and username = :username and networkid =:networkid and objecttype = :objecttype");
+							"from NetworksAnnotationsDTO n where n.objectid = :id and username = :username and networkid =:networkid and objecttype = :objecttype");
 			query.setParameter("id", id);
 			query.setParameter("username", userId);
 			query.setParameter("objecttype", type);
