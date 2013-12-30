@@ -198,6 +198,7 @@ public class NetworkDTOMapper {
 		networkAssignedDTO.setUpdatedby(assignedUsername);
 		networkAssignedDTO.setUpdateddate(new Date());
 		networkAssignedDTO.setIsarchived(archived);
+		networkAssignedDTO.setCreateddate(new Date());
 		
 		return networkAssignedDTO;
 	}

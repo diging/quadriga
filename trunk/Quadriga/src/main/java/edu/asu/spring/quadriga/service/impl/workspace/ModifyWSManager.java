@@ -68,6 +68,7 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @author  kiranbatna
 	 */
 	@Override
+	@Transactional
 	public String deleteWorkspaceRequest(String workspaceIdList) throws QuadrigaStorageException
 	{
 		String errmsg;
@@ -84,6 +85,7 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @author kiranbatna
 	 */
 	@Override
+	@Transactional
 	public String updateWorkspaceRequest(IWorkSpace workspace ) throws QuadrigaStorageException 
 	{
 		String errmsg;
@@ -130,6 +132,7 @@ public class ModifyWSManager implements IModifyWSManager
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public String deleteEditorRoleToOwner(String workspaceId,String userName) throws QuadrigaStorageException{
 
 		String msg =dbConnect.deleteWorkspaceOwnerEditor(workspaceId, userName);
