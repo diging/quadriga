@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -50,18 +49,61 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 	public boolean chkWorkspaceOwnerEditorRole(String userName,
 			String workspaceId) throws QuadrigaStorageException 
 	{
-		//TODO : Require clarification on the logic
-		//throw new NotYetImplementedException();
-		return true;
+		
+	    int count;
+	    boolean isEditor;
+	    isEditor = false;
+	    Query query = null;
+	    
+	    //check if he is a project editor
+		query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(p.projectEditorDTOPK.projectid) FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.projectid IN" +
+				" (SELECT ws.projectWorkspaceDTOPK.projectid FROM ProjectWorkspaceDTO ws WHERE ws.projectWorkspaceDTOPK.workspaceid =:workspaceid) " +
+				" AND p.quadrigaUserDTO.username =:username");
+		query.setParameter("username", userName);
+		query.setParameter("workspaceid", workspaceId);
+		count = ((Number) query.iterate().next()).intValue();
+		if(count > 0)
+		{
+			isEditor = true;
+		}
+		
+		//check if the user is workspace editor
+		if(!isEditor)
+		{
+			query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(ws.workspaceEditorDTOPK.workspaceid) FROM WorkspaceEditorDTO ws " +
+					" WHERE ws.workspaceEditorDTOPK.workspaceid =:workspaceid AND ws.quadrigaUserDTO.username =:username");
+			query.setParameter("username",userName);
+			query.setParameter("workspaceid", workspaceId);
+			count = ((Number)query.iterate().next()).intValue();
+			if(count > 0)
+			{
+				isEditor = true;
+			}
+		}
+		
+		return isEditor;
 	}
 
 	@Override
 	public boolean chkWorkspaceProjectInheritOwnerEditorRole(String userName,
 			String workspaceId) throws QuadrigaStorageException
 	{
-		//TODO : Require clarification on the logic
-		//throw new NotYetImplementedException();
-		return true;
+		boolean isEditor;
+		int count;
+		
+		isEditor = false;
+		 //check if he is a workspace editor
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(p.projectEditorDTOPK.projectid) FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.projectid IN" +
+				" (SELECT ws.projectWorkspaceDTOPK.projectid FROM ProjectWorkspaceDTO ws WHERE ws.projectWorkspaceDTOPK.workspaceid =:workspaceid) " +
+				" AND p.quadrigaUserDTO.username =:username");
+		query.setParameter("username", userName);
+		query.setParameter("workspaceid", workspaceId);
+		count = ((Number) query.iterate().next()).intValue();
+		if(count > 0)
+		{
+			isEditor = true;
+		}
+		return isEditor;
 	}
 
 	@Override

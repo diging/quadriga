@@ -14,22 +14,23 @@ public class ProfileManagerDAO extends DAOConnectionManager
 //implements IDBConnectionProfileManager
 {
 
-	//@Override
+//	@Override
 	public String addUserProfileDBRequest(String name, String serviceId,
 			SearchResultBackBean resultBackBean)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
+			throws QuadrigaStorageException
+	{
+		
 		return null;
 	}
 
-	//@Override
+//	@Override
 	public List<SearchResultBackBean> showProfileDBRequest(String loggedinUser)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	//@Override
+//	@Override
 	public String deleteUserProfileDBRequest(String id, String username)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
