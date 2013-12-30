@@ -14,15 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.db.sql.ADBConnectionManager;
 import edu.asu.spring.quadriga.db.sql.DBConstants;
-import edu.asu.spring.quadriga.domain.IProfile;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IProfileFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
-import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 public class DBConnectionProfileManager extends ADBConnectionManager implements IDBConnectionProfileManager {
