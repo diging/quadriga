@@ -192,6 +192,7 @@ public class CCManagerDAOTest {
 	 * 
 	 */
 	@Test
+	@Transactional
 	public void testSaveItem() throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
