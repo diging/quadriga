@@ -38,6 +38,7 @@ import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManag
 public class ConceptCollectionManager implements IConceptCollectionManager {
 
 	@Autowired
+	@Qualifier("CCManagerDAO")
 	private IDBConnectionCCManager dbConnect;
 	
 	@Autowired

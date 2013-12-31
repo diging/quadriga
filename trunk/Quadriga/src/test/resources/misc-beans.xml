@@ -228,6 +228,8 @@
 	
 	<bean id="ModifyWSCollabManager" class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager" />
 	
+	<bean id="conceptCollectionCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionCollaboratorManagerDAO" />
 	
-	
+	<bean id="collaboratorMapper" class="edu.asu.spring.quadriga.mapper.ConceptCollectionCollaboratorDTOMapper" />
+		
 </beans>
