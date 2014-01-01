@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.sql.conceptcollection;
+package edu.asu.spring.quadriga.dao.dictionary;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

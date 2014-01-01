@@ -231,5 +231,6 @@
 	<bean id="conceptCollectionCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionCollaboratorManagerDAO" />
 	
 	<bean id="collaboratorMapper" class="edu.asu.spring.quadriga.mapper.ConceptCollectionCollaboratorDTOMapper" />
-		
+	
+	<bean id="conceptCollectionModifyManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionModifyManagerDAO"/>	
 </beans>

@@ -1,10 +1,7 @@
-package edu.asu.spring.quadriga.dao.sql.conceptcollection;
+package edu.asu.spring.quadriga.dao.conceptcollection;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +10,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,32 +19,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.CCManagerDAO;
 import edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionCollaboratorManagerDAO;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCCollaboratorManager;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
-import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.Collaborator;
-import edu.asu.spring.quadriga.domain.implementation.CollaboratorRole;
-import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
-import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/hibernate.cfg.xml",
@@ -60,9 +43,6 @@ public class ConceptCollectionCollaboratorManagerDAOTest {
 	
 	@Autowired
 	private IUserFactory userFactory;
-	
-	@Autowired
-	private IQuadrigaRoleManager rolemanager;
 
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
@@ -203,24 +183,12 @@ public class ConceptCollectionCollaboratorManagerDAOTest {
 		collaborator.setUserObj(user);
 		collaborator.setCollaboratorRoles(collaboratorRoleList);
 		dbConnect.addCollaboratorRequest(collaborator,"37ad9abc-9e88-4d55-8a98-fac829a583f9","projuser");
-		
-		List<IConceptCollection> conceptCollectionList = ccManagerDAO.getCollaboratedConceptsofUser("projuser");
-		List<ICollaborator> collaboratorList =  conceptCollectionList.get(0).getCollaborators();
-		List<ICollaboratorRole> collabRoleList = collaboratorList.get(0).getCollaboratorRoles();
-		
-		
-		ICollaboratorRole collaboratorRole2 = collaboratorRoleFactory.createCollaboratorRoleObject();
-		collaboratorRole2.setDisplayName("Write");
-		collaboratorRole2.setRoleDBid("cc_role3");
-		collaboratorRole2.setRoledescription("Test Desc");
-		collaboratorRole2.setRoleid("CC_WRITE_ACCESS");
-		collaboratorRole2.setRolename("cc_write_access");
-		
+
 		//TO DO - Pending work
 /*		List<ICollaboratorRole> collaboratorRoleList2 = new ArrayList<ICollaboratorRole>();
 		collaboratorRoleList2.add(collaboratorRole2);*/
-		
-		dbConnect.deleteCollaboratorRequest("projuser", "37ad9abc-9e88-4d55-8a98-fac829a583f9");
-		assertTrue(true);
+		dbConnect.updateCollaboratorRequest("37ad9abc-9e88-4d55-8a98-fac829a583f9", "projuser", "cc_role3", "projuser");
+		List<IConceptCollection> conceptCollectionList = ccManagerDAO.getCollaboratedConceptsofUser("projuser");
+		assertEquals("cc_read/write_access",conceptCollectionList.get(0).getCollaborators().get(0).getCollaboratorRoles().get(0).getRolename());
 	}
 }
