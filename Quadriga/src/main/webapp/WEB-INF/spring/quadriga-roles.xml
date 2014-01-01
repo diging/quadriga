@@ -8,7 +8,6 @@
 		<property name="userManager" ref="userManager"></property>
 	</bean>
 	
-	
 	<bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
 		<property name="DBid" value="role1"></property>
 		<property name="id" value="ROLE_QUADRIGA_DEACTIVATED"></property>

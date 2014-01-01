@@ -3,33 +3,30 @@ package edu.asu.spring.quadriga.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
-import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
-import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 
 @Service
 public class UserProfileManager implements IUserProfileManager {
 	
 	@Autowired
-	@Qualifier("DBConnectionProfileManagerBean")
 	IDBConnectionProfileManager connectionProfileManager;
 
 	@Override
-	public String addUserProfile(String name, String serviceId, SearchResultBackBean resultBackBean) throws QuadrigaStorageException {
+	@Transactional
+	public void addUserProfile(String name, String serviceId, SearchResultBackBean resultBackBean) throws QuadrigaStorageException {
 
-		String errmsg = connectionProfileManager.addUserProfileDBRequest(name, serviceId, resultBackBean);
+		connectionProfileManager.addUserProfileDBRequest(name, serviceId, resultBackBean);
 		
-		return errmsg;
 	}
 
 	@Override
+	@Transactional
 	public List<SearchResultBackBean> showUserProfile(String loggedinUser) throws QuadrigaStorageException {
 		
 		List<SearchResultBackBean> searchResultList = connectionProfileManager.showProfileDBRequest(loggedinUser);
@@ -38,12 +35,12 @@ public class UserProfileManager implements IUserProfileManager {
 	}
 
 	@Override
-	public String deleteUserProfile(String id, String username)
+	@Transactional
+	public void deleteUserProfile(String profileId,String serviceid, String username)
 			throws QuadrigaStorageException {
 		
-		String errmsg = connectionProfileManager.deleteUserProfileDBRequest(id, username);
+		connectionProfileManager.deleteUserProfileDBRequest(profileId,serviceid, username);
 		
-		return errmsg;
 	} 
 	
 	

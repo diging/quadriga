@@ -49,7 +49,6 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		try {
 			fillAuthorityList(authorityList, username);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

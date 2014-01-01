@@ -38,10 +38,9 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 	ISearchResultFactory searchResultFactory;
 	
 	@Override
-	public String addUserProfileDBRequest(String username, String serviceId, SearchResultBackBean resultBackBean) throws QuadrigaStorageException {
+	public void addUserProfileDBRequest(String username, String serviceId, SearchResultBackBean resultBackBean) throws QuadrigaStorageException {
 				
 		String dbCommand;
-		String errmsg;
 		CallableStatement sqlStatement;
 		
 		/*String[] profilStrings = profilebuilder.split(",");
@@ -63,12 +62,8 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 			sqlStatement.setString(5, resultBackBean.getDescription());
 			sqlStatement.registerOutParameter(6, Types.VARCHAR);
 			sqlStatement.execute();
-			errmsg = sqlStatement.getString(6);
+			sqlStatement.getString(6);
 			
-			if(!errmsg.equals("no errors"))
-			{
-				return errmsg;
-			}
 		} catch (SQLException e) {
 			
 			throw new QuadrigaStorageException(e);
@@ -79,7 +74,6 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 			closeConnection();
 		}
 
-		return errmsg;
 	}
 	
 	@Override
@@ -121,7 +115,7 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 	}
 
 	@Override
-	public String deleteUserProfileDBRequest(String id, String username) throws QuadrigaStorageException {
+	public void deleteUserProfileDBRequest(String id,String serviceid, String username) throws QuadrigaStorageException {
 		
 		String dbCommand;
 		String errmsg;
@@ -138,11 +132,7 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 			sqlStatement.registerOutParameter(3, Types.VARCHAR);
 			sqlStatement.execute();
 			errmsg = sqlStatement.getString(3);
-			if(errmsg.equals("no errors"))
-			{
-				return errmsg;
-			}
-			else
+			if(!errmsg.equals("no errors"))
 			{
 				throw new QuadrigaStorageException();
 			}
@@ -151,10 +141,6 @@ public class DBConnectionProfileManager extends ADBConnectionManager implements 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		return null;
 	}
 
 }

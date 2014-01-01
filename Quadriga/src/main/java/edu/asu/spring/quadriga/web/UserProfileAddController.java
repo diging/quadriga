@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
@@ -85,6 +83,8 @@ public class UserProfileAddController {
 		
 		String errmsg = null;
 		IService serviceObj = serviceRegistry.getServiceObject(serviceid);
+		
+		errmsg = "";
 				
 		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
 				
@@ -100,11 +100,11 @@ public class UserProfileAddController {
 			{
 				if(resultBackBean.getIsChecked() == true)
 				{
-					errmsg = userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);
+					userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);
 				}
 			}
 			
-			if(errmsg.equals("no errors"))
+			if(errmsg.equals(""))
 			{	
 				
 				model.addAttribute("success",1);

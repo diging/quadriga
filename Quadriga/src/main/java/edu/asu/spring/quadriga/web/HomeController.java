@@ -9,17 +9,13 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -28,7 +24,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
-import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
@@ -299,6 +294,7 @@ public class HomeController {
 			Principal principal, Model model) throws QuadrigaStorageException
 	{
 		String errmsg = null;
+		String serviceid = null;
 //		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
 //		
 //		searchResultBackBeanForm.setSearchResultList(resultLists);
@@ -313,8 +309,10 @@ public class HomeController {
 		for(SearchResultBackBean searchResultBackBean : backBeanList)
 		{
 			if(searchResultBackBean.getId() != null)
-			errmsg = profileManager.deleteUserProfile(searchResultBackBean.getId(), principal.getName());
+		      profileManager.deleteUserProfile(searchResultBackBean.getId(),serviceid, principal.getName());
 		}
+		
+		errmsg = "";
 		
 		if(errmsg.equals("no errors"))
 		{
