@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,6 +93,7 @@ public class UserController {
 	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value = "auth/users/access/{accessRights}", method = RequestMethod.GET)
+	@Transactional
 	public String userAccessHandler(@PathVariable("accessRights") String sAccessRights, ModelMap model, Principal principal) throws QuadrigaStorageException
 	{
 		String[] sAccessSelected = sAccessRights.split("-");

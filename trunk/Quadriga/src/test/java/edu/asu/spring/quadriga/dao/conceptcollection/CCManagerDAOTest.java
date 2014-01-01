@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.sql.conceptcollection;
+package edu.asu.spring.quadriga.dao.conceptcollection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

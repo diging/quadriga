@@ -57,27 +57,29 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 		//fetch the collaborators
 		dictionaryCollaboratorList = dictionary.getDictionaryCollaboratorDTOList();
 		
-		for(DictionaryCollaboratorDTO dictionaryCollaborator : dictionaryCollaboratorList)
+		if(dictionaryCollaboratorList != null)
 		{
-			collaborator = getDictionaryCollaborators(dictionaryCollaborator);
-			
-			if(collaboratorList.contains(collaborator))
+			for(DictionaryCollaboratorDTO dictionaryCollaborator : dictionaryCollaboratorList)
 			{
-				int index = collaboratorList.indexOf(collaborator);
-				ICollaborator tempCollaborator = collaboratorList.get(index);
-				List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
-				tempRoles.addAll(collaborator.getCollaboratorRoles());
-				tempCollaborator.setCollaboratorRoles(tempRoles);
+				collaborator = getDictionaryCollaborators(dictionaryCollaborator);
 				
-				//set the collaborator with the roles
-				collaboratorList.set(index, tempCollaborator);
-			}
-			else
-			{
-				collaboratorList.add(collaborator);
+				if(collaboratorList.contains(collaborator))
+				{
+					int index = collaboratorList.indexOf(collaborator);
+					ICollaborator tempCollaborator = collaboratorList.get(index);
+					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
+					tempRoles.addAll(collaborator.getCollaboratorRoles());
+					tempCollaborator.setCollaboratorRoles(tempRoles);
+					
+					//set the collaborator with the roles
+					collaboratorList.set(index, tempCollaborator);
+				}
+				else
+				{
+					collaboratorList.add(collaborator);
+				}
 			}
 		}
-		
 		
 		tempDictionary.setId(dictionary.getDictionaryid());
 		tempDictionary.setName(dictionary.getDictionaryname());

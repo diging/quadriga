@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.sql.impl;
+package edu.asu.spring.quadriga.dao;
 
 import static org.junit.Assert.*;
 

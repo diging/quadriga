@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.sql.impl;
+package edu.asu.spring.quadriga.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class UserManagerDAOTest {
 	public final static int SUCCESS = 1;
 	public final static int FAILURE = 0;
@@ -88,7 +89,6 @@ public class UserManagerDAOTest {
 		}
 	}
 
-	@Transactional
 	@Test
 	public void testGetUserDetails() throws QuadrigaStorageException {
 
@@ -105,7 +105,6 @@ public class UserManagerDAOTest {
 		assertNull(dbConnection.getUserDetails(null));
 	}
 
-	@Transactional
 	@Test
 	public void testGetUsers() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -117,7 +116,6 @@ public class UserManagerDAOTest {
 		assertEquals(0, users.size());
 	}
 
-	@Transactional
 	@Test
 	public void testAddAccountRequest() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -135,7 +133,6 @@ public class UserManagerDAOTest {
 
 	}
 
-	@Transactional
 	@Test
 	public void testGetUserRequests() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -150,7 +147,6 @@ public class UserManagerDAOTest {
 		assertEquals(0, userRequests.size());
 	}
 
-	@Transactional
 	@Test
 	public void testGetUsersNotInRole() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -172,7 +168,6 @@ public class UserManagerDAOTest {
 		assertEquals(3, users.size());
 	}
 
-	@Transactional
 	@Test
 	public void testDeactivateUser() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -187,7 +182,6 @@ public class UserManagerDAOTest {
 		assertEquals(0,dbConnection.deactivateUser("jdoe", sDeactiveRoleDBId, "test"));
 	}
 
-	@Transactional
 	@Test
 	public void testUpdateUserRoles() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -228,7 +222,6 @@ public class UserManagerDAOTest {
 		assertEquals(0, dbConnection.updateUserRoles("bob", user.getQuadrigaRolesDBId(),"test"));
 	}
 
-	@Transactional
 	@Test
 	public void testApproveUserRequest() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -249,7 +242,6 @@ public class UserManagerDAOTest {
 		assertEquals(0, dbConnection.approveUserRequest("dexter", "role3", "test"));
 	}
 
-	@Transactional
 	@Test
 	public void testDenyUserRequest() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
@@ -265,7 +257,6 @@ public class UserManagerDAOTest {
 		assertEquals(0, dbConnection.denyUserRequest("deb", "test"));
 	}
 
-	@Transactional
 	@Test
 	public void testDeleteUser() throws QuadrigaStorageException {
 		testSetupTestEnvironment();

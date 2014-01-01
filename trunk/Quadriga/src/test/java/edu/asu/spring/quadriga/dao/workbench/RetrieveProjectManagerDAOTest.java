@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao;
+package edu.asu.spring.quadriga.dao.workbench;
 
 
 import static org.junit.Assert.assertTrue;
