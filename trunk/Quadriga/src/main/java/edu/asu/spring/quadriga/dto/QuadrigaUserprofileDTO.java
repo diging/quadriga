@@ -29,13 +29,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "QuadrigaUserprofileDTO.findAll", query = "SELECT q FROM QuadrigaUserprofileDTO q"),
     @NamedQuery(name = "QuadrigaUserprofileDTO.findByUsername", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.username = :username"),
-    @NamedQuery(name = "QuadrigaUserprofileDTO.findByServicename", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.servicename = :servicename"),
-    @NamedQuery(name = "QuadrigaUserprofileDTO.findByUri", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.uri = :uri"),
+    @NamedQuery(name = "QuadrigaUserprofileDTO.findByServiceid", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.serviceid = :serviceid"),
+    @NamedQuery(name = "QuadrigaUserprofileDTO.findByProfileid", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.profileid = :profileid"),
     })
 public class QuadrigaUserprofileDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected QuadrigaUserprofileDTOPK quadrigaUserprofileDTOPK;
+    @Basic(optional = false)
+    @Column(name = "profilename")
+    private String profilename;
+    @Basic(optional = false)
+    @Column(name = "description")
+    private String description;
     @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
@@ -61,16 +67,18 @@ public class QuadrigaUserprofileDTO implements Serializable {
         this.quadrigaUserprofileDTOPK = quadrigaUserprofileDTOPK;
     }
 
-    public QuadrigaUserprofileDTO(QuadrigaUserprofileDTOPK quadrigaUserprofileDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public QuadrigaUserprofileDTO(QuadrigaUserprofileDTOPK quadrigaUserprofileDTOPK,String profileName,String description, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.quadrigaUserprofileDTOPK = quadrigaUserprofileDTOPK;
+        this.profilename = profileName;
+        this.description = description;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
         this.createddate = createddate;
     }
 
-    public QuadrigaUserprofileDTO(String username, String servicename, String uri) {
-        this.quadrigaUserprofileDTOPK = new QuadrigaUserprofileDTOPK(username, servicename, uri);
+    public QuadrigaUserprofileDTO(String username, String serviceid, String profileid) {
+        this.quadrigaUserprofileDTOPK = new QuadrigaUserprofileDTOPK(username, serviceid,profileid);
     }
 
     public QuadrigaUserprofileDTOPK getQuadrigaUserprofileDTOPK() {
@@ -81,7 +89,23 @@ public class QuadrigaUserprofileDTO implements Serializable {
         this.quadrigaUserprofileDTOPK = quadrigaUserprofileDTOPK;
     }
 
-    public String getUpdatedby() {
+    public String getProfilename() {
+		return profilename;
+	}
+
+	public void setProfilename(String profilename) {
+		this.profilename = profilename;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getUpdatedby() {
         return updatedby;
     }
 

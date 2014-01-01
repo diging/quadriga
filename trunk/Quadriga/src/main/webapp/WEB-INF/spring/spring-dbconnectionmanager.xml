@@ -106,16 +106,19 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	 -->
+	 <!-- 
 	<bean id="DBConnectionEditorAccessManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.editor.DBConnectionEditorAccessManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	 -->
+	<!-- 
 	<bean id="DBConnectionProfileManagerBean"
 		class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-
+ -->
 	<!--  Hibernate session factory injection -->
 	<bean id = "transactionManager" class = "org.springframework.orm.hibernate4.HibernateTransactionManager">
     	<property name = "sessionFactory" ref = "sessionFactory" />

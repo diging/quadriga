@@ -21,19 +21,19 @@ public class QuadrigaUserprofileDTOPK implements Serializable
     @Column(name = "username")
     private String username;
     @Basic(optional = false)
-    @Column(name = "servicename")
-    private String servicename;
+    @Column(name = "serviceid")
+    private String serviceid;
     @Basic(optional = false)
-    @Column(name = "uri")
-    private String uri;
+    @Column(name = "profileid")
+    private String profileid;
 
     public QuadrigaUserprofileDTOPK() {
     }
 
-    public QuadrigaUserprofileDTOPK(String username, String servicename, String uri) {
+    public QuadrigaUserprofileDTOPK(String username, String serviceid, String profileid) {
         this.username = username;
-        this.servicename = servicename;
-        this.uri = uri;
+        this.serviceid = serviceid;
+        this.profileid = profileid;
     }
 
     public String getUsername() {
@@ -44,28 +44,29 @@ public class QuadrigaUserprofileDTOPK implements Serializable
         this.username = username;
     }
 
-    public String getServicename() {
-        return servicename;
-    }
 
-    public void setServicename(String servicename) {
-        this.servicename = servicename;
-    }
+    public String getServiceid() {
+		return serviceid;
+	}
 
-    public String getUri() {
-        return uri;
-    }
+	public void setServiceid(String serviceid) {
+		this.serviceid = serviceid;
+	}
 
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
+	public String getProfileid() {
+		return profileid;
+	}
 
-    @Override
+	public void setProfileid(String profileid) {
+		this.profileid = profileid;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (username != null ? username.hashCode() : 0);
-        hash += (servicename != null ? servicename.hashCode() : 0);
-        hash += (uri != null ? uri.hashCode() : 0);
+        hash += (serviceid != null ? serviceid.hashCode() : 0);
+        hash += (profileid != null ? profileid.hashCode() : 0);
         return hash;
     }
 
@@ -78,10 +79,10 @@ public class QuadrigaUserprofileDTOPK implements Serializable
         if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
             return false;
         }
-        if ((this.servicename == null && other.servicename != null) || (this.servicename != null && !this.servicename.equals(other.servicename))) {
+        if ((this.serviceid == null && other.serviceid != null) || (this.serviceid != null && !this.serviceid.equals(other.serviceid))) {
             return false;
         }
-        if ((this.uri == null && other.uri != null) || (this.uri != null && !this.uri.equals(other.uri))) {
+        if ((this.profileid == null && other.profileid != null) || (this.profileid != null && !this.profileid.equals(other.profileid))) {
             return false;
         }
         return true;
