@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -236,7 +235,6 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	@Override
 	public int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException
 	{		
-		Transaction transaction = null;
 		try
 		{
 			QuadrigaUserRequestsDTO userRequestDTO = (QuadrigaUserRequestsDTO) sessionFactory.getCurrentSession().get(QuadrigaUserRequestsDTO.class,sUserId);
@@ -255,10 +253,8 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 				userDTO.setUpdateddate(new Date());
 
 				Session session = sessionFactory.getCurrentSession();
-				transaction = session.beginTransaction();
 				session.save(userDTO);
 				session.delete(userRequestDTO);
-				transaction.commit();
 
 				return SUCCESS;
 			}
@@ -267,9 +263,6 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 		}
 		catch(Exception e)
 		{
-			if(transaction != null)
-				transaction.rollback();
-
 			logger.error("Error in deactivating user account: ",e);
 			throw new QuadrigaStorageException(e);
 		}
@@ -281,7 +274,6 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	@Override
 	public int denyUserRequest(String sUserId,String sAdminId) throws QuadrigaStorageException
 	{
-		Transaction transaction = null;
 		try
 		{
 			QuadrigaUserRequestsDTO userRequestDTO = (QuadrigaUserRequestsDTO) sessionFactory.getCurrentSession().get(QuadrigaUserRequestsDTO.class,sUserId);
@@ -301,10 +293,8 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 				userDeniedDTO.setCreateddate(new Date());
 
 				Session session = sessionFactory.getCurrentSession();
-				transaction = session.beginTransaction();
 				session.save(userDeniedDTO);
 				session.delete(userRequestDTO);				
-				transaction.commit();
 
 				return SUCCESS;
 			}
@@ -314,9 +304,6 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 		}
 		catch(Exception e)
 		{
-			if(transaction != null)
-				transaction.rollback();
-
 			logger.error("Error in deactivating user account: ",e);
 			throw new QuadrigaStorageException(e);
 		}
