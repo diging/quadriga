@@ -25,7 +25,7 @@ public class EditorAccessManagerDAO extends DAOConnectionManager implements IDBC
 		
 		//check if he is a project editor
 		query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(p.projectEditorDTOPK.projectid) FROM ProjectEditorDTO p WHERE p.projectEditorDTOPK.editor =:userName");
-		query.setParameter("username", userName);
+		query.setParameter("userName", userName);
 		count = ((Number)query.iterate().next()).intValue();
 		if(count > 0)
 		{

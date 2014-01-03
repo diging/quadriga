@@ -232,5 +232,12 @@
 	
 	<bean id="collaboratorMapper" class="edu.asu.spring.quadriga.mapper.ConceptCollectionCollaboratorDTOMapper" />
 	
-	<bean id="conceptCollectionModifyManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionModifyManagerDAO"/>	
+	<bean id="conceptCollectionModifyManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionModifyManagerDAO"/>
+	
+	<bean id="modifyDictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.dictionary.ModifyDictionaryManagerDAO"/>
+	
+	<bean id="retrieveDictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.dictionary.RetrieveDictionaryManagerDAO"/>
+	
+	<bean id="editorAccessManagerDAO" class="edu.asu.spring.quadriga.dao.editor.EditorAccessManagerDAO"/>
+	
 </beans>

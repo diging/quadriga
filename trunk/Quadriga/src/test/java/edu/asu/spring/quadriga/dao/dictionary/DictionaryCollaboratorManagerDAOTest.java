@@ -52,9 +52,6 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @Transactional
 public class DictionaryCollaboratorManagerDAOTest {
 
-	@Autowired
-	@Qualifier("dictionaryManagerDAO")
-	private IDBConnectionDictionaryManager dictionaryManagerDAO;
 	
 	@Autowired
 	@Qualifier("dictionaryManagerDAO")
@@ -72,33 +69,6 @@ public class DictionaryCollaboratorManagerDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//Setup a user object to compare with the object produced from usermanager
-	/*	user = userFactory.createUserObject();
-		user.setUserName("jdoe");
-		user.setName("John Doe");
-
-		List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-		IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
-		role.setDBid("role3");
-		roles.add(role);
-		role = quadrigaRoleFactory.createQuadrigaRoleObject();
-		role.setDBid("role4");
-		roles.add(role);
-
-		IQuadrigaRole quadrigaRole = null;
-		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-		for(int i=0;i<roles.size();i++)
-		{
-			quadrigaRole = rolemanager.getQuadrigaRole(roles.get(i).getDBid());
-
-			//If user account is deactivated remove other roles 
-			if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
-			{
-				rolesList.clear();
-			}
-			rolesList.add(quadrigaRole);
-		}
-		user.setQuadrigaRoles(rolesList);*/
 
 		String[] databaseQuery = new String[8];
 		databaseQuery[0] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
