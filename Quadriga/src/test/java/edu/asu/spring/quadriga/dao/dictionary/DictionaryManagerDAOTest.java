@@ -28,7 +28,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -69,7 +68,7 @@ public class DictionaryManagerDAOTest {
 	@Autowired
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
-	private static final Logger logger = LoggerFactory.getLogger(DBConnectionDictionaryManagerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryManagerDAOTest.class);
 
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
@@ -134,6 +133,13 @@ public class DictionaryManagerDAOTest {
 	}
 	@After
 	public void tearDown() throws Exception {
+		String[] databaseQuery = new String[1];
+		databaseQuery[0] = "DELETE FROM tbl_quadriga_user WHERE username IN ('bob','test,'jdoe','dexter','deb','harrison')";
+		
+		for(String query : databaseQuery)
+		{
+			((DictionaryManagerDAO)dbConnection).setupTestEnvironment(query);
+		}
 	}
 
 	/**
