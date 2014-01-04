@@ -169,6 +169,7 @@ public class UserManagerDAOTest {
 	}
 
 	@Test
+	@Transactional
 	public void testDeactivateUser() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 
@@ -178,7 +179,7 @@ public class UserManagerDAOTest {
 		assertEquals(inactiveUsersList.size(), 2);
 
 		//Check if no user is present
-		dbConnection.setupTestEnvironment("delete from tbl_quadriga_user");
+		dbConnection.deleteUser("jdoe", sDeactiveRoleDBId);
 		assertEquals(0,dbConnection.deactivateUser("jdoe", sDeactiveRoleDBId, "test"));
 	}
 
