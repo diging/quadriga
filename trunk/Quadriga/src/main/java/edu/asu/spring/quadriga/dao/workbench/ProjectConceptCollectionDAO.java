@@ -37,6 +37,9 @@ IDBConnectionProjectConceptColleciton
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addProjectConceptCollection(String projectId,
 			String conceptCollectionId, String userId) throws QuadrigaStorageException
@@ -76,7 +79,9 @@ IDBConnectionProjectConceptColleciton
 		}
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IConceptCollection> listProjectConceptCollection(String projectId,
 			String userId) throws QuadrigaStorageException
@@ -95,7 +100,7 @@ IDBConnectionProjectConceptColleciton
 		conceptCollectionList = new ArrayList<IConceptCollection>();
 		
 		//retrieve the concept collection id for the given project id
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectConceptcollectionDTO.findByProjectid");
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectConceptCollectionDTO.findByProjectid");
 		query.setParameter("projectid", projectId);
 
 		@SuppressWarnings("unchecked")
@@ -113,6 +118,9 @@ IDBConnectionProjectConceptColleciton
 		return conceptCollectionList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteProjectConceptCollection(String projectId,
 			String userId, String conceptCollectionId) throws QuadrigaStorageException

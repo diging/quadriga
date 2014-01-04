@@ -37,11 +37,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 	
 	
 	/**
-	 * This method saves a new project
-	 * @param project
-	 * @return void
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void addProjectRequest(IProject project, String userName) throws QuadrigaStorageException
@@ -61,15 +57,9 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
         }
 	}
 	
+
 	/**
-	 * This method Updates the project information
-	 * @param projID Project ID of the project
-	 * @param projName Project Name
-	 * @param projDesc Project Description
-	 * @param projAccess Project Access
-	 * @param projID Project unix name
-	 * @param userName - Username of the user updating the project.
-	 * @author Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void updateProjectRequest(String projID,String projName,String projDesc,String projAccess, String unixName,String userName) throws QuadrigaStorageException
@@ -93,11 +83,9 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 		
 	}
 	
+
 	/**
-	 * This method deletes the project and its associations from database.
-	 * @param    projectIdList - Project internal id's in a comma 
-	 *           separated string.
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void deleteProjectRequest(ArrayList<String> projectIdList) throws QuadrigaStorageException
@@ -112,19 +100,16 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 		}
 		catch(HibernateException e)
 		{
-			logger.error("Add project request method :",e);
+			logger.error("Delete project details request method :",e);
+			System.out.println("PRINTING ERROR");
+			System.out.println(e);
 			throw new QuadrigaStorageException();
 		}
 	}
 	
+
 	/**
-	 * This method transfers the project ownership to another user
-	 * @param projectId
-	 * @param oldOwner
-	 * @param newOwner
-	 * @param collabRole
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void transferProjectOwnerRequest(String projectId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
@@ -166,11 +151,9 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 		
 	}
 	
+
 	/**
-	 * This method assigns editor role to the owner
-	 * @param projID Project ID of the project
-	 * @param owner Project Owner
-	 * @author Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void assignProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
@@ -201,11 +184,9 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 		}
 	}
 	
+
 	/**
-	 * This method deletes the editor role from the owner
-	 * @param projID Project ID of the project
-	 * @param owner Project Owner
-	 * @author Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void deleteProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException

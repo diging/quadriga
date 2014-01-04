@@ -29,6 +29,9 @@ public class RetrieveProjectCollaboratorManagerDAO implements IDBConnectionRetri
 	@Autowired
 	private ProjectCollaboratorDTOMapper projectCollaboratorMapper;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<ICollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
 	{
@@ -46,6 +49,9 @@ public class RetrieveProjectCollaboratorManagerDAO implements IDBConnectionRetri
 		return collaborator;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IUser> getProjectNonCollaborators(String projectid) 
 	{
