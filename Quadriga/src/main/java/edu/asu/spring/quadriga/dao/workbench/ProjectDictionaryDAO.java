@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -33,6 +32,9 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 	@Autowired
 	private DictionaryDTOMapper dictionaryMapper;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addProjectDictionary(String projectId, String dictionaryId, String userId) throws QuadrigaStorageException
 	{
@@ -57,6 +59,8 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 		Date date = new Date();
 		ProjectDictionaryDTOPK projectDictionaryKey = new ProjectDictionaryDTOPK(projectId,dictionaryId);
 		projectDictionary.setProjectDictionaryDTOPK(projectDictionaryKey);
+		projectDictionary.setProject(project);
+		projectDictionary.setDictionary(dictionary);
 		projectDictionary.setCreatedby(userId);
 		projectDictionary.setCreateddate(date);
 		projectDictionary.setUpdatedby(userId);
@@ -67,12 +71,15 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<IDictionary> listProjectDictionary(String projectId,String userId) throws QuadrigaStorageException
 	{
-		List<DictionaryDTO> dictionaryDTOList = null;
 		List<IDictionary> dictionaryList = null;
+		List<ProjectDictionaryDTO> projectDictionaryDTOList;
+		DictionaryDTO dictionaryDTO = null;
 		IDictionary dictionary = null;
 		
 		dictionaryList = new ArrayList<IDictionary>();
@@ -85,20 +92,21 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 			throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
 		}
 		
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectDictionaryDTO.findByProjectid");
-		query.setParameter("projectid", projectId);
+		projectDictionaryDTOList = project.getProjectDictionaryDTOList();
 		
-		dictionaryDTOList = query.list();
-		
-	    for(DictionaryDTO tempDictionary: dictionaryDTOList)	
+	    for(ProjectDictionaryDTO projectDictionary: projectDictionaryDTOList)	
 	    {
-	    	dictionary = dictionaryMapper.getDictionary(tempDictionary);
+	    	dictionaryDTO = projectDictionary.getDictionary();
+	    	dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
 	    	dictionaryList.add(dictionary);
 	    }
 		
 		return dictionaryList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteProjectDictionary(String projectId,String userId,String dictionaryId)
 	{

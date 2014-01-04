@@ -11,7 +11,7 @@
 <style>
 .ui-menu {
 	width: 150px;
-	font-size:14px;
+	font-size:13px;
 	position:relative;
     z-index:9999;
 }

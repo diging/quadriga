@@ -41,6 +41,9 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectCollaboratorDAO.class);
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
 	{
@@ -66,6 +69,9 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException
 	{
@@ -109,6 +115,9 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void updateCollaboratorRequest(String projectid,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException 
 	{

@@ -2,11 +2,18 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<script>
+$(document).ready(function() {
+	$("input[type=submit]").button().click(function(event) {
+
+	});
+});
+</script>
 <span onload='document.f.j_username.focus();'>
 	<h3>Login</h3>
  
 	<c:if test="${not empty error}">
-		<div class="errorblock">
+		<div class="ui-state-error-text">
 			Your login attempt was not successful, try again.<br /> Caused :
 			${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
 		</div>
@@ -17,7 +24,6 @@ Language : <a href="${pageContext.servletContext.contextPath}/login?siteLanguage
 </span>
 	<form name='f' action="<c:url value='j_spring_security_check' />"
 		method='POST'>
- 
 		<table>
 			<tr>
 				<td><spring:message code="label.user" />:</td>

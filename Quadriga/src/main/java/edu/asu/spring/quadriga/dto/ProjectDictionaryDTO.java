@@ -41,6 +41,7 @@ public class ProjectDictionaryDTO implements Serializable {
     @ManyToOne(optional = false)
     private ProjectDTO project;
     @JoinColumn(name = "dictionaryid" , referencedColumnName = "dictionaryid",insertable = false, updatable = false)
+    @ManyToOne(optional = false)
     private DictionaryDTO dictionary;
     
 	@Basic(optional = false)

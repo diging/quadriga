@@ -19,6 +19,9 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 	
 	public static final Logger logger = LoggerFactory.getLogger(ProjectAccessManagerDAO.class);
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkProjectOwner(String userName,String projectId)
 	{
@@ -42,6 +45,9 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 		return isProjectOwner;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkIsProjectAssociated(String userName)
 	{
@@ -64,7 +70,9 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 		return isUserAssociated;
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkIsCollaboratorProjectAssociated(String userName,String collaboratorRole)
 	{
@@ -89,6 +97,9 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 		return isCollaborator;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkProjectCollaborator(String userName,String collaboratorRole,String projectId)
 	{
@@ -114,6 +125,9 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 		return isCollaborator;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkDuplicateProjUnixName(String unixName,String projectId)
 	{
@@ -139,6 +153,9 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 		return isDuplicate;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkProjectOwnerEditorRole(String userName,String projectId)
 	{

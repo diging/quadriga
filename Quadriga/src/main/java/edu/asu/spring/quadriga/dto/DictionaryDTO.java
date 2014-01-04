@@ -72,6 +72,8 @@ public class DictionaryDTO implements Serializable {
     private List<DictionaryCollaboratorDTO> dictionaryCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO")
     private List<WorkspaceDictionaryDTO> wsDictionaryDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionary")
+    private List<ProjectDictionaryDTO> projectDictionaryDTOList;
 	@JoinColumn(name = "dictionaryowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO dictionaryowner;
@@ -89,6 +91,17 @@ public class DictionaryDTO implements Serializable {
         this.createddate = createddate;
     }
 
+    @XmlTransient
+	public List<ProjectDictionaryDTO> getProjectDictionaryDTOList() {
+		return projectDictionaryDTOList;
+	}
+
+	public void setProjectDictionaryDTOList(
+			List<ProjectDictionaryDTO> projectDictionaryDTOList) {
+		this.projectDictionaryDTOList = projectDictionaryDTOList;
+	}
+	
+	@XmlTransient
     public List<WorkspaceDictionaryDTO> getWsDictionaryDTOList() {
  		return wsDictionaryDTOList;
  	}

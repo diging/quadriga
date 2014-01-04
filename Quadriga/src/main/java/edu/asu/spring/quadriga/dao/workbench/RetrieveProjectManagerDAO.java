@@ -170,6 +170,9 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		return projectList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
@@ -201,6 +204,9 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		return projectList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IProject> getProjectListByCollaboratorRole(String sUserName,String collaboratorRole) throws QuadrigaStorageException
@@ -232,6 +238,9 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		return projectList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
 				
