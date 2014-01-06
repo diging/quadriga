@@ -218,9 +218,8 @@ public class UserManagerDAOTest {
 		List<IUser> activeUsersList = dbConnection.getUsersNotInRole(sDeactiveRoleDBId);
 		assertEquals(activeUsersList.size(), 3);
 
-		//Remove all users from the database
-		dbConnection.setupTestEnvironment("delete from tbl_quadriga_user");
-		assertEquals(0, dbConnection.updateUserRoles("bob", user.getQuadrigaRolesDBId(),"test"));
+		//Invalid user
+		assertEquals(0, dbConnection.updateUserRoles("invalidUser", user.getQuadrigaRolesDBId(),"test"));
 	}
 
 	@Test
