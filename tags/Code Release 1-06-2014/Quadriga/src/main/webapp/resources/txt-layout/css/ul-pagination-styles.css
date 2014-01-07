@@ -1,0 +1,38 @@
+h1, h2,ul {
+	clear: both;
+}
+
+
+
+ul.simplePagerNav li{
+    display:block;
+    float: left;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-family: georgia;
+	font-size:14px;
+}
+
+ul.simplePagerNav li a{
+    color: #333;
+    text-decoration: none;
+}
+
+li.currentPage {
+	
+    background: #6b7770;	
+}
+
+ul.simplePagerNav li.currentPage a {
+	color: #fff;	
+}
+
+table.pageme {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}  
+
+table.pageme td {
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}

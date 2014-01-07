@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="QuadrigaRoleMapper"
+		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">
+		<property name="userManager" ref="userManager"></property>
+	</bean>
+	
+	<bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
+		<property name="DBid" value="role1"></property>
+		<property name="id" value="ROLE_QUADRIGA_DEACTIVATED"></property>
+		<property name="name" value="Inactive User"></property>
+		<property name="description" value="User account is deactivated in Quadriga"></property>
+	</bean>
+
+	<bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
+		<property name="DBid" value="role_noaccount"></property>
+		<property name="id" value="ROLE_QUADRIGA_NOACCOUNT"></property>
+		<property name="name" value="Invalid User"></property>
+		<property name="description" value="No such user found in Quadriga"></property>
+	</bean>
+
+	<bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
+		<property name="DBid" value="role3"></property>
+		<property name="id" value="ROLE_QUADRIGA_USER_ADMIN"></property>
+		<property name="name" value="Quadriga Admin"></property>
+		<property name="description"
+			value="Can manage users and change Quadriga settings"></property>
+	</bean>
+
+	<bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
+		<property name="DBid" value="role4"></property>
+		<property name="id" value="ROLE_QUADRIGA_USER_STANDARD"></property>
+		<property name="name" value="Quadriga Standard User"></property>
+		<property name="description"
+			value="A Standard Quadriga User can create projects, concept collections, and dictionaries, collaborate on projects, and can do any action related to projects (according to the project permissions)."></property>
+	</bean>
+
+	<bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
+		<property name="DBid" value="role5"></property>
+		<property name="id" value="ROLE_QUADRIGA_USER_COLLABORATOR"></property>
+		<property name="name" value="Quadriga Collaborating User"></property>
+		<property name="description"
+			value="A Quadriga Collaborating User is not allowed to create projects, concept collections, or dictionaries. However, s/he is allowed to collaborate on projects (including being Project Admin)."></property>
+	</bean>
+
+	<bean class="edu.asu.spring.quadriga.domain.implementation.QuadrigaRole">
+		<property name="DBid" value="role6"></property>
+		<property name="id" value="ROLE_QUADRIGA_USER_RESTRICTED_USER"></property>
+		<property name="name" value="Quadriga Restricted User"></property>
+		<property name="description"
+			value="A Quadriga Restricted User is not allowed to create projects, concept collections, or dictionaries, and cannot collaborate on projects. However, Project Admins can set the view permissions of networks in a way that any Quadriga user (including Quadriga Restricted Users) can view them."></property>
+	</bean>
+
+
+</beans>
