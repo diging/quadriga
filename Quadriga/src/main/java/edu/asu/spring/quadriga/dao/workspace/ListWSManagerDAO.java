@@ -42,12 +42,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	
 	
 	/**
-	 * This will list all the active workspaces associated with the project.
-	 * @param    projectid
-	 * @return   List<IWorkSpace> - list of workspaces associated 
-	 *           with the project.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -73,6 +68,9 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		return workspaceList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String username) throws QuadrigaStorageException
@@ -99,12 +97,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	
 	
 	/**
-	 * This will list all the active workspaces associated with the project.
-	 * @param    projectid
-	 * @return   List<IWorkSpace> - list of workspaces associated 
-	 *           with the project.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -134,12 +127,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 	
 	/**
-	 * This will list all the active workspaces associated with the project.
-	 * @param    projectid
-	 * @return   List<IWorkSpace> - list of workspaces associated 
-	 *           with the project.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -170,12 +158,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	
 	
 	/**
-	 * This will list all the archive workspaces associated with the project.
-	 * @param    projectid
-	 * @return   List<IWorkSpace> - list of workspaces associated 
-	 *           with the project.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -204,12 +187,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 	
 	/**
-	 * This will list all the deactivated workspaces associated with the project.
-	 * @param    projectid
-	 * @return   List<IWorkSpace> - list of workspaces associated 
-	 *           with the project.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -237,12 +215,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 	
 	/**
-	 * This will list all the active workspaces associated with the project.
-	 * @param    projectid
-	 * @return   List<IWorkSpace> - list of workspaces associated 
-	 *           with the project.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -269,12 +242,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 	
 	/**
-	 * This will list the workspace details with workspace ID and username
-	 * @param    workspaceId,username
-	 * @return   IWorkSpace list of workspaces associated 
-	 *           with the workspaceID.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public IWorkSpace getWorkspaceDetails(String workspaceId,String username) throws QuadrigaStorageException
@@ -300,12 +268,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 	
 	/**
-	 * This will list the bitstreams associated with workspace ID and username
-	 * @param    workspaceId,username
-	 * @return   IBitStream list of bitstream associated 
-	 *           with the workspaceID.
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -331,11 +294,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 
 	/**
-	 * This will list the networks associated with workspace ID
-	 * @param    workspaceId,username
-	 * @return   List of networks
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -360,11 +319,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 
 	/**
-	 * This will get the workspace name of the workspace associated with the workspace ID
-	 * @param    workspaceId
-	 * @return   workspace name
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException {
@@ -388,11 +343,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	}
 
 	/**
-	 * This will get the rejected network list associated with the workspace ID
-	 * @param    workspaceId
-	 * @return   list of rejected networks
-	 * @throws   QuadrigaStorageException
-	 * @author   Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

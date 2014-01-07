@@ -28,6 +28,9 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addWorkspaceDictionary(String workspaceId,
 			String dictionaryId, String userId) throws QuadrigaStorageException 
@@ -67,6 +70,9 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<IDictionary> listWorkspaceDictionary(String workspaceId,
 			String userId) throws QuadrigaStorageException 
@@ -96,6 +102,9 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 		return dictionaryList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictionaryId) throws QuadrigaStorageException 

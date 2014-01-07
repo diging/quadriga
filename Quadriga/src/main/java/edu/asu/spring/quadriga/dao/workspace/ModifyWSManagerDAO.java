@@ -39,11 +39,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	private static final Logger logger = LoggerFactory.getLogger(ModifyWSManagerDAO.class);
 	
 	/**
-	 * This adds a workspace record into the database.
-	 * @param  workSpace
-	 * @return errmsg - blank when success and error message on failure.
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void addWorkSpaceRequest(IWorkSpace workSpace,String projectId) throws QuadrigaStorageException
@@ -79,7 +75,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		}
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void transferWSOwnerRequest(String workspaceId,String oldOwner,String newOwner,String collabRole) throws QuadrigaStorageException
 	{
@@ -125,6 +123,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void assignWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
 	{
@@ -145,6 +146,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
 	{
@@ -169,6 +173,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return result;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
 	{
@@ -185,6 +192,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteWorkspaceRequest(String workspaceIdList) throws QuadrigaStorageException
 	{
@@ -208,6 +218,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return errMsg;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String updateWorkspaceRequest(IWorkSpace workspace) throws QuadrigaStorageException {
 		String errMsg = "";
