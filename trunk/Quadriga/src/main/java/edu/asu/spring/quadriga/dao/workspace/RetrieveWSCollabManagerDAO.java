@@ -54,6 +54,9 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 	
 	private static final Logger logger = LoggerFactory.getLogger(RetrieveWSCollabManagerDAO.class);
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<ICollaborator> getWorkspaceCollaborators(String workspaceId)
@@ -107,6 +110,9 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 		return wrkspaceCollabList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IUser> getWorkspaceNonCollaborators(String workspaceId) throws QuadrigaStorageException {
@@ -130,6 +136,9 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 		return userList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<ICollaboratorRole> getCollaboratorDBRoleIdList(
 			String collabRoles) {
@@ -150,13 +159,7 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 	}
 
 	/**
-	 * splits the comma seperated roles string coming from database and converts
-	 * into list of roles
-	 * 
-	 * @param role
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
-	 * 
+	 * {@inheritDoc}
 	 */
 	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role) {
 		if(role == null || role.isEmpty())

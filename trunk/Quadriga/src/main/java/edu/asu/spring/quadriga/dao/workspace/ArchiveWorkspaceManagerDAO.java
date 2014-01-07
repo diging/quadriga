@@ -15,6 +15,9 @@ public class ArchiveWorkspaceManagerDAO implements IDBConnectionArchiveWSManager
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void archiveWorkspace(String workspaceIdList,boolean archive,String wsUser)
 	{
@@ -30,6 +33,9 @@ public class ArchiveWorkspaceManagerDAO implements IDBConnectionArchiveWSManager
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deactivateWorkspace(String workspaceIdList,boolean deactivate,String wsUser)
 	{

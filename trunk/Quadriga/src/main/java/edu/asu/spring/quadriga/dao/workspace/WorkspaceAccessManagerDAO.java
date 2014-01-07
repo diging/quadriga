@@ -17,6 +17,9 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkWorkspaceOwner(String userName, String workspaceId)
 			throws QuadrigaStorageException 
@@ -45,6 +48,9 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		return isOwner;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkWorkspaceOwnerEditorRole(String userName,
 			String workspaceId) throws QuadrigaStorageException 
@@ -84,6 +90,9 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		return isEditor;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkWorkspaceProjectInheritOwnerEditorRole(String userName,
 			String workspaceId) throws QuadrigaStorageException
@@ -106,6 +115,9 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		return isEditor;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkWorkspaceExists(String workspaceId)
 			throws QuadrigaStorageException 
@@ -128,6 +140,9 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		return isExists;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkIsWorkspaceAssocaited(String userName)
 			throws QuadrigaStorageException
@@ -159,6 +174,9 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		return isAssociated;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,
 			String role) throws QuadrigaStorageException 

@@ -27,11 +27,7 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 	private static final Logger logger = LoggerFactory.getLogger(WorkspaceCCDAO.class);
 
 	/**
-	 *  Method add a Concept collection to a workspace        
-	 * @param			Workspace ID, Concept collection ID, user id           
-	 * @returns         path of list workspace Concept collection page
-	 * @throws			QuadrigaStorageException
-	 * @author          Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String addWorkspaceCC(String workspaceId, String CCId, String userId) throws QuadrigaStorageException {
@@ -66,13 +62,9 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 	}
 
 	/**
-	 * Method to list the Concept collection in workspace
-	 * @param workspaceId
-	 * @param userId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @author Karthik Jayaraman
+	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<IConceptCollection> listWorkspaceCC(String workspaceId, String userId) throws QuadrigaStorageException {
 		List<IConceptCollection> conceptCollList = null;
@@ -97,6 +89,9 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 		return conceptCollList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteWorkspaceCC(String workspaceId, String userId, String CCId) throws QuadrigaStorageException 
 	{
