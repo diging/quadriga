@@ -18,6 +18,8 @@
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/jquery.dataTables_themeroller.css" />
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/demo_table_jui.css" />
 <link rel="stylesheet"	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ul-pagination-styles.css" />
+<link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css" rel="stylesheet" />
+
 <link	href="http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700"	rel="stylesheet" />
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-1.9.1.min.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/config.js"></script>
@@ -29,6 +31,9 @@
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-ui.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.dataTables.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
+<!--  script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script-->
+<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script> 
 <script
 	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.quick.pagination.min.js"></script>
 <noscript>

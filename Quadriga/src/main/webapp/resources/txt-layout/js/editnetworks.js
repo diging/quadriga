@@ -162,22 +162,37 @@ function init(json, networkId, path) {
 							console.log("target is a edge");
 							alert(edge.nodeFrom.name);
 							alert(edge.nodeTo.name);
+							
 							var node1 = edge.nodeTo;
 							var node2 = edge.nodeFrom;
-							node1.setData('dim', 10, 'end');
-							node2.setData('dim', 10, 'end');
-							/*edge.selected = true;
-					          edge.setData('dim', 17, 'end');*/
-							fd.fx.animate({
-								modes: ['node-property:dim',
-								        'edge-property:lineWidth:color'],
-								        duration: 500
+							//var node1 = {id:edge.nodeTo.id,name:edge.nodeTo.name};
+							//var node2 = {id:edge.nodeFrom.id,name:edge.nodeFrom.name};
+							
+							//var truenode1 = fd.graph.getNode(node1 );
+							//alert(truenode1);
+						  //  truenode1.setData('dim', 15, 'end');
+						    //var truenode2 = fd.graph.getNode(node2 );
+						   // truenode2.setData('dim', 15, 'end');
+							
+							fd.graph.eachNode(function(node) {  
+								if(node.id != node1.id || node.id != node2.id){
+							    node.setData('color', '#23A4FF');
+								}
 							});
-							/*edge.setDataset('end', {
-					              lineWidth: 3,
-					              color: '#36acfb'
-					            });*/
-
+							
+						    node1.setData('dim', 12, 'end');
+						    node2.setData('dim', 12, 'end');
+						    
+						    
+						    
+						       fd.fx.animate({
+									modes: ['node-property:dim',
+									        'edge-property:lineWidth:color'],
+									        duration: 500
+								});
+							
+							
+					       
 
 						}else{
 							// Author : Lohith Dwaraka
