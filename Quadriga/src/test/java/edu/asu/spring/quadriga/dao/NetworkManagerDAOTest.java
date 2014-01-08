@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
@@ -21,10 +23,14 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class NetworkManagerDAOTest {
 
 	@Autowired
-	private IDBConnectionNetworkManager dbConnect;
+	private IDBConnectionManager dbConnection;
+	
+	@Autowired
+	private IDBConnectionNetworkManager dbConnectNetwork;
 	
 	private IUser user;
 	private String sDatabaseSetup;
@@ -40,24 +46,46 @@ public class NetworkManagerDAOTest {
 	@Before
 	public void setUp() throws Exception {
 		user = userFactory.createUserObject();
-		user.setUserName("jdoe");
-		user.setName("John Doe");
-		user.setEmail("jdoe@lsa.asu.edu");
+		user.setUserName("test");
+		user.setName("Tet User");
+		user.setEmail("test@lsa.asu.edu");
 		
 		//Setup the database with the proper data in the tables;
-		sDatabaseSetup = "delete from tbl_conceptcollection&delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())";
+		sDatabaseSetup = "delete from tbl_conceptcollection&delete from tbl_quadriga_user&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())";
 		
-		/**
-		 * Yet to perfect this query.
-		 * 
-		 * insert into tbl_project values("proj1", "proj desc", "proj1","p1","test","","test",CURTIME(),"test",CURTIME());
-		 * insert into tbl_project_workspace values("p1","w1","test",curtime(),"test",curtime());
-		 */
+		//Create a new project, workspace and link them together.
+		sDatabaseSetup += "&delete from tbl_project_workspace&delete from tbl_workspace&delete from tbl_project&insert into tbl_project values(\"proj1\", \"proj desc\", \"proj1\",\"f651d817-8c47-4ec6-8f7c-0df5dddc9841\",\"jdoe\",\"ACCESSIBLE\",\"jdoe\",CURTIME(),\"jdoe\",CURTIME())&insert into tbl_workspace values(\"workspace1\",\"workspace1\",\"ad905f5f-14bf-4405-a612-f1bb2a3077a7\",\"jdoe\",0,0,\"jdoe\",CURTIME(),\"jdoe\",CURTIME())&insert into tbl_project_workspace values(\"f651d817-8c47-4ec6-8f7c-0df5dddc9841\",\"ad905f5f-14bf-4405-a612-f1bb2a3077a7\",\"test\",curtime(),\"test\",curtime())";
+	}
+	
+	public void testSetupTestEnvironment() throws QuadrigaStorageException
+	{
+		String[] sQuery = sDatabaseSetup.split("&");
+		for(String singleQuery: sQuery)
+		{
+			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
+		}
 	}
 	
 	@Test
-	public void testAddNetworkRequest() throws QuadrigaStorageException {
-		dbConnect.addNetworkRequest("n1", user, "");
+	public void testAddNetworkRequestValid() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
+		
+		assertNotNull(dbConnectNetwork.addNetworkRequest("n1", user, "ad905f5f-14bf-4405-a612-f1bb2a3077a7"));
+	}
+	
+	@Test(expected=QuadrigaStorageException.class)
+	public void testAddNetworkRequestInValidUser() throws QuadrigaStorageException {
+		dbConnectNetwork.addNetworkRequest("n1", null, "ad905f5f-14bf-4405-a612-f1bb2a3077a7");		
+	}
+	
+	@Test(expected=QuadrigaStorageException.class)
+	public void testAddNetworkRequestInValidWorkspace() throws QuadrigaStorageException {
+		dbConnectNetwork.addNetworkRequest("n1", user, null);		
+	}
+	
+	@Test(expected=QuadrigaStorageException.class)
+	public void testAddNetworkRequestInValidNetworkName() throws QuadrigaStorageException {
+		dbConnectNetwork.addNetworkRequest(null, user, "ad905f5f-14bf-4405-a612-f1bb2a3077a7");		
 	}
 
 	@Test
@@ -76,8 +104,17 @@ public class NetworkManagerDAOTest {
 	}
 
 	@Test
-	public void testGetProjectIdForWorkspaceId() {
-		fail("Not yet implemented");
+	public void testGetProjectIdForWorkspaceId() throws QuadrigaStorageException {
+		testSetupTestEnvironment();
+		
+		//Check for a valid workspace
+		assertEquals("f651d817-8c47-4ec6-8f7c-0df5dddc9841", dbConnectNetwork.getProjectIdForWorkspaceId("ad905f5f-14bf-4405-a612-f1bb2a3077a7"));
+		
+		//Check for a invalid workspace
+		assertNull(dbConnectNetwork.getProjectIdForWorkspaceId("invalid"));
+		
+		//Check for null handling
+		assertNull(dbConnectNetwork.getProjectIdForWorkspaceId(null));
 	}
 
 	@Test

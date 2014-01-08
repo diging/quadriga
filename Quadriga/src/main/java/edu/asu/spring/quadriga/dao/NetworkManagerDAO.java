@@ -72,12 +72,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String addNetworkRequest(String networkName, IUser user,
-			String workspaceid) throws QuadrigaStorageException {
+	public String addNetworkRequest(String networkName, IUser user,	String workspaceid) throws QuadrigaStorageException {
 
+		if(networkName == null || user == null || workspaceid == null)
+			throw new QuadrigaStorageException("Error in adding a network");
+		
 		String networkid = generateUniqueID();
-		NetworksDTO networksDTO = networkMapper.getNetworksDTO(networkid,
-				networkName, user.getUserName(), workspaceid);
+		NetworksDTO networksDTO = networkMapper.getNetworksDTO(networkid, networkName, user.getUserName(), workspaceid);
 
 		try {
 			sessionFactory.getCurrentSession().save(networksDTO);
@@ -92,12 +93,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String addNetworkStatement(String networkId, String id, String type,
-			String isTop, IUser user) throws QuadrigaStorageException {
+	public String addNetworkStatement(String networkId, String id, String type,	String isTop, IUser user) throws QuadrigaStorageException {
 
-		NetworkStatementsDTO networkStatementsDTO = networkMapper
-				.getNetworkStatementsDTO(networkId, id, type, isTop,
-						user.getUserName());
+		NetworkStatementsDTO networkStatementsDTO = networkMapper.getNetworkStatementsDTO(networkId, id, type, isTop, user.getUserName());
 
 		try {
 			sessionFactory.getCurrentSession().save(networkStatementsDTO);
