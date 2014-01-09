@@ -131,7 +131,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 	}
 
 	@Override
-	public String addNetworkStatement(String networkId,String id,String type,String isTop, IUser user) throws QuadrigaStorageException{
+	public String addNetworkStatement(String rowid,String networkId,String id,String type,String isTop, IUser user) throws QuadrigaStorageException{
 		IUser owner = user;
 		String dbCommand;
 		String errmsg="";

@@ -51,10 +51,6 @@ public class NetworkAssignedDTO implements Serializable {
     @Column(name = "createdby")
     private String createdby;
     @Basic(optional = false)
-    @Column(name = "createddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createddate;
-    @Basic(optional = false)
     @Column(name = "isarchived")
     private int isarchived;
     @JoinColumn(name = "networkid", referencedColumnName = "networkid",insertable = false, updatable = false)
@@ -80,8 +76,8 @@ public class NetworkAssignedDTO implements Serializable {
         this.isarchived = isarchived;
     }
 
-    public NetworkAssignedDTO(String networkid, String assigneduser) {
-        this.networkAssignedDTOPK = new NetworkAssignedDTOPK(networkid, assigneduser);
+    public NetworkAssignedDTO(String networkid, String assigneduser,Date date) {
+        this.networkAssignedDTOPK = new NetworkAssignedDTOPK(networkid, assigneduser,date);
     }
 
     public NetworkAssignedDTOPK getNetworkAssignedDTOPK() {
@@ -123,14 +119,6 @@ public class NetworkAssignedDTO implements Serializable {
     public void setCreatedby(String createdby) {
         this.createdby = createdby;
     }
-
-    public Date getCreateddate() {
-		return createddate;
-	}
-
-	public void setCreateddate(Date createddate) {
-		this.createddate = createddate;
-	}
 
 	public int getIsarchived() {
         return isarchived;
