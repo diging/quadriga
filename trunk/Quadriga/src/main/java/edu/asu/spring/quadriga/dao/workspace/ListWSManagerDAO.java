@@ -150,7 +150,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		}
 		catch(Exception e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("retrieve active workspace of collaborator :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
@@ -167,7 +167,11 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		List<IWorkSpace> workspaceList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where (workcollab.quadrigaUserDTO.username =:username or projWork.workspaceDTO.workspaceowner.username =:username) and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated"); 
+			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
+		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated  AND projWork.workspaceDTO.isarchived = :isarchived" +
+					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
+					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+			Query query = sessionFactory.getCurrentSession().createQuery(value);
 			query.setParameter("username", username);
 			query.setParameter("projectid", projectid);
 			query.setParameter("isdeactivated", false);
@@ -196,7 +200,11 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		List<IWorkSpace> workspaceList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where (workcollab.quadrigaUserDTO.username =:username or projWork.workspaceDTO.workspaceowner.username =:username) and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isdeactivated =:isdeactivated"); 
+			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
+		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated " +
+					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
+					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+			Query query = sessionFactory.getCurrentSession().createQuery(value);
 			query.setParameter("username", username);
 			query.setParameter("projectid", projectid);
 			query.setParameter("isdeactivated", true);
@@ -208,7 +216,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		}
 		catch(Exception e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("retrieve deactive workspace method :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;

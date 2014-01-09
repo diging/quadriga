@@ -152,10 +152,10 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	@Override
 	public String deleteWorkspaceOwnerEditor(String workspaceId,String owner) throws QuadrigaStorageException
 	{
-		String result = null;
+		String result = "";
 		try
 		{
-			WorkspaceEditorDTO workspaceEditorDTO = (WorkspaceEditorDTO) sessionFactory.getCurrentSession().get(WorkspaceEditorDTO.class, new WorkspaceEditorDTO(workspaceId, owner));
+			WorkspaceEditorDTO workspaceEditorDTO = (WorkspaceEditorDTO) sessionFactory.getCurrentSession().get(WorkspaceEditorDTO.class, new WorkspaceEditorDTOPK(workspaceId, owner));
 			if(workspaceEditorDTO != null)
 			{
 				sessionFactory.getCurrentSession().delete(workspaceEditorDTO);

@@ -35,4 +35,7 @@ public interface IWorkspaceDictionaryManager {
 	 */
 	public abstract void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException;
+
+	public abstract List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId,
+			String userId) throws QuadrigaStorageException;
 }

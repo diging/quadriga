@@ -60,7 +60,8 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<ICollaborator> getWorkspaceCollaborators(String workspaceId)
-			throws QuadrigaStorageException {
+			throws QuadrigaStorageException 
+	{
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		List<ICollaborator> wrkspaceCollabList = new ArrayList<ICollaborator>();
 		try
@@ -119,7 +120,7 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 		List<IUser> userList = new ArrayList<IUser>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username NOT IN (Select quadrigaUserDTO.username from WorkspaceCollaboratorDTO wrkCollab where wrkCollab.workspaceDTO.workspaceid =:workspaceid)  AND user.username NOT IN (Select ccCollab.conceptcollectionsDTO.collectionowner.username from WorkspaceCollaboratorDTO wrkCollab where wrkCollab.workspaceDTO.workspaceid =:workspaceid)");
+			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username NOT IN (Select quadrigaUserDTO.username from WorkspaceCollaboratorDTO wrkCollab where wrkCollab.workspaceDTO.workspaceid =:workspaceid)");
 			query.setParameter("workspaceid", workspaceId);
 			
 			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
@@ -174,7 +175,7 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 		collabroles = role.split(",");
 
 		for (int i = 0; i < collabroles.length; i++) {
-			collaboratorRole = collaboratorRoleManager.getCollectionCollabRoleByDBId(collabroles[i]);
+			collaboratorRole = collaboratorRoleManager.getWSCollaboratorRoleByDBId(collabroles[i]);
 			collaboratorRoleList.add(collaboratorRole);
 		}
 

@@ -56,8 +56,8 @@ public class DictionaryWorkspaceController {
 					+ " trying to add dictionary into workspace");
 			List<IDictionary> dictionaryList = null;
 			try {
-				dictionaryList = dictonaryManager.getDictionariesList(user
-						.getUsername());
+				dictionaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(
+						workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				throw new QuadrigaStorageException(
 						"Oops the DB is an hard hangover, please try later");
@@ -87,11 +87,12 @@ public class DictionaryWorkspaceController {
 		String userId = user.getUsername();
 
 		String[] values = req.getParameterValues("selected");
-		if (values == null) {
+		if (values == null)
+		{
 			model.addAttribute("deletesuccess", 0);
 			List<IDictionary> dicitonaryList = null;
 			try {
-				dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
+				dicitonaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(
 						workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
@@ -127,7 +128,7 @@ public class DictionaryWorkspaceController {
 		}
 		List<IDictionary> dicitonaryList = null;
 		try {
-			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
+			dicitonaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(
 					workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block

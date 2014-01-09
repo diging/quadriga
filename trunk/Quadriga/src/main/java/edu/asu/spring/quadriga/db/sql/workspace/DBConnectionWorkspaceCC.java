@@ -206,4 +206,9 @@ public class DBConnectionWorkspaceCC extends ADBConnectionManager implements IDB
 		}
 	}
 
+	public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId, String userId)
+			throws QuadrigaStorageException {
+		return null;
+	}
+
 }

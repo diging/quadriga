@@ -89,6 +89,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * @return Return to list dictionary to controller
 	 * @throws QuadrigaStorageException
 	 */
+	@Override
 	@Transactional
 	public List<IDictionary> getDictionariesList(String userId)
 			throws QuadrigaStorageException {
