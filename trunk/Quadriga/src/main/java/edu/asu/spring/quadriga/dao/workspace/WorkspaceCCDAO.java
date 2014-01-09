@@ -46,7 +46,8 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 			Query query = sessionFactory.getCurrentSession().createQuery("from WorkspaceConceptcollectionDTO wrkConceptColl where wrkConceptColl.workspaceConceptcollectionDTOPK.workspaceid =:workspaceid and wrkConceptColl.workspaceConceptcollectionDTOPK.conceptcollectionid =:conceptcollectionid");
 			query.setParameter("workspaceid", workspaceId);
 			query.setParameter("conceptcollectionid", CCId);
-			if(query.list()!= null)
+			System.out.println("Query list:"+query.list().size());
+			if(query.list().size() > 0)
 			{
 				errMsg = "Concept Collection already exists";
 			}

@@ -3,14 +3,18 @@ package edu.asu.spring.quadriga.aspects;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
@@ -27,7 +31,14 @@ public class WorkspaceAuthorization implements IAuthorization
 	@Autowired
 	private ICheckWSSecurity wsSecurityManager;
 	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private WorkspaceDTOMapper workspaceMapper;
+	
 	@Override
+	@Transactional
 	public boolean chkAuthorization(String userName,String workspaceId,String[] userRoles) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		boolean haveAccess;
@@ -35,6 +46,7 @@ public class WorkspaceAuthorization implements IAuthorization
 		String collaboratorName;
 		String collaboratorRoleId;
 		IWorkSpace workspace;
+		WorkspaceDTO workspaceDTO;
 		List<ICollaborator> collaboratorList;
 		List<ICollaboratorRole> collaboratorRoles;
 		ArrayList<String> roles;
@@ -42,10 +54,11 @@ public class WorkspaceAuthorization implements IAuthorization
 		haveAccess = false;
 		
 		//fetch the details of the workspace
-		workspace = wsManager.getWorkspaceDetails(workspaceId, userName);
+		workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+	    workspace = workspaceMapper.getWorkSpace(workspaceDTO);
 		
 		//check if the logged in user is workspace owner
-		if(workspace.getOwner()!=null)
+		if(workspace!=null)
 		{
 			workspaceOwner = workspace.getOwner().getUserName();
 			
@@ -91,6 +104,7 @@ public class WorkspaceAuthorization implements IAuthorization
 	 * check if the user as the given role has any workspaces associated
 	 */
 	@Override
+	@Transactional
 	public boolean chkAuthorizationByRole(String userName,String[] userRoles )
 			throws QuadrigaStorageException, QuadrigaAccessException
 	{
