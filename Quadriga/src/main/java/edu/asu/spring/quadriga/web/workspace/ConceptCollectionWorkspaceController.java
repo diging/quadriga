@@ -159,7 +159,7 @@ public class ConceptCollectionWorkspaceController {
 		}
 		List<IConceptCollection> conceptCollectionList = null;
 		try {
-			conceptCollectionList = workspaceCCManager.getNonAssociatedWorkspaceConcepts(workspaceId, userId);
+			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

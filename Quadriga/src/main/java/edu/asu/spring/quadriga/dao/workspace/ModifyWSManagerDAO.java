@@ -104,13 +104,14 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		}
 		
 		//add the current owner as a collaborator
+		Date date = new Date();
 		collaborator = new WorkspaceCollaboratorDTO();
 		collaborator.setWorkspaceDTO(workspaceDTO);
 		collaborator.setWorkspaceCollaboratorDTOPK(new WorkspaceCollaboratorDTOPK(workspaceId,oldOwner,collabRole));
 		collaborator.setQuadrigaUserDTO(getUserDTO(oldOwner));
 		collaborator.setCreatedby(oldOwner);
-		collaborator.setUpdateddate(new Date());
-		collaborator.setUpdateddate(new Date());
+		collaborator.setUpdateddate(date);
+		collaborator.setCreateddate(date);
 		collaborator.setUpdatedby(oldOwner);
 		workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
 		
