@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
@@ -39,6 +40,7 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public void addWorkspaceDictionary(String workspaceId,
 			String dictionaryId, String userId) throws QuadrigaStorageException {
 		dbConnect.addWorkspaceDictionary(workspaceId, dictionaryId, userId);
@@ -52,9 +54,23 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public List<IDictionary> listWorkspaceDictionary(String workspaceId,
 			String userId) throws QuadrigaStorageException {
 		List<IDictionary> dictionaryList = dbConnect.listWorkspaceDictionary(workspaceId, userId);
+		return dictionaryList;
+	}
+	
+	/**
+	 * List the dictionaries which are not associated to a workspace for a user -UserId
+	 * @throws QuadrigaStorageException 
+	 * 
+	 */
+	@Override
+	@Transactional
+	public List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId,String userId) throws QuadrigaStorageException
+	{
+		List<IDictionary> dictionaryList = dbConnect.getNonAssociatedWorkspaceDictionaries(workspaceId,userId);
 		return dictionaryList;
 	}
 
@@ -66,6 +82,7 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
+	@Transactional
 	public void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException {
 	     dbConnect.deleteWorkspaceDictionary(workspaceId, userId, dictioanaryId);

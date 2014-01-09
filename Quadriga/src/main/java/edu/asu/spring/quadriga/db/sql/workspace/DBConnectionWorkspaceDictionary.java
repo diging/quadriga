@@ -194,4 +194,9 @@ public class DBConnectionWorkspaceDictionary extends ADBConnectionManager implem
 		}
 	}
 
+	public List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId,
+			String userId) {
+		return null;
+	}
+
 }

@@ -86,7 +86,7 @@ public class ConceptCollectionWorkspaceController {
 
 			List<IConceptCollection> conceptCollectionList = null;
 			try {
-				conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
+				conceptCollectionList = workspaceCCManager.getNonAssociatedWorkspaceConcepts(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -125,7 +125,7 @@ public class ConceptCollectionWorkspaceController {
 			model.addAttribute("deletesuccess", 0);
 			List<IConceptCollection> conceptCollectionList = null;
 			try {
-				conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
+				conceptCollectionList = workspaceCCManager.getNonAssociatedWorkspaceConcepts(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -159,7 +159,7 @@ public class ConceptCollectionWorkspaceController {
 		}
 		List<IConceptCollection> conceptCollectionList = null;
 		try {
-			conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
+			conceptCollectionList = workspaceCCManager.getNonAssociatedWorkspaceConcepts(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
