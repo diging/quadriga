@@ -12,7 +12,8 @@ Modified Date : 08/06/2013
 ********************************************/
 CREATE TABLE IF NOT EXISTS tbl_network_statements
 (
-  networkid       VARCHAR(100)   NOT NULL ,
+  rowid           VARCHAR(100)   NOT NULL,
+  networkid       VARCHAR(100)   NOT NULL,
   statementid	  VARCHAR(100)   NOT NULL, 
   statementtype   VARCHAR(10)    NOT NULL,
   istop 	      INT            NOT NULL,
@@ -21,5 +22,5 @@ CREATE TABLE IF NOT EXISTS tbl_network_statements
   updateddate     TIMESTAMP      NOT NULL,
   createdby       VARCHAR(20)    NOT NULL,
   createddate     DATETIME       NOT NULL,
-  PRIMARY KEY(networkid,statementid)
+  PRIMARY KEY(rowid)
 )

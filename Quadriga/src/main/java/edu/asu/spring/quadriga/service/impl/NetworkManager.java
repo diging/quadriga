@@ -42,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -77,7 +78,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
  */
 
 @Service
-public class NetworkManager implements INetworkManager {
+public class NetworkManager extends DAOConnectionManager implements INetworkManager {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManager.class);
@@ -289,7 +290,8 @@ public class NetworkManager implements INetworkManager {
 		// Add network statements for networks
 		for(String node[] : networkDetailsCache){
 			try{
-				dbConnect.addNetworkStatement(networkId,node[0],node[1], node[2], user);
+				String rowid = generateUniqueID();
+				dbConnect.addNetworkStatement(rowid,networkId,node[0],node[1], node[2], user);
 			}catch(QuadrigaStorageException e1){
 				logger.error("DB error while adding network statment",e1);
 			}

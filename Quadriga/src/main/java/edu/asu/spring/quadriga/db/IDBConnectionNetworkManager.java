@@ -32,7 +32,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addNetworkStatement(String networkId, String id, String type,
+	public abstract String addNetworkStatement(String rowid,String networkId, String id, String type,
 			String isTop, IUser user) throws QuadrigaStorageException;
 
 	/**

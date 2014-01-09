@@ -93,9 +93,12 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String addNetworkStatement(String networkId, String id, String type,	String isTop, IUser user) throws QuadrigaStorageException {
+	public String addNetworkStatement(String rowid,String networkId, String id, String type,
+			String isTop, IUser user) throws QuadrigaStorageException {
 
-		NetworkStatementsDTO networkStatementsDTO = networkMapper.getNetworkStatementsDTO(networkId, id, type, isTop, user.getUserName());
+		NetworkStatementsDTO networkStatementsDTO = networkMapper
+				.getNetworkStatementsDTO(rowid,networkId, id, type, isTop,
+						user.getUserName());
 
 		try {
 			sessionFactory.getCurrentSession().save(networkStatementsDTO);
@@ -287,7 +290,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							" from NetworkStatementsDTO network where network.networkstatementsDTOPK.networkid = :networkid and network.istop = 1 and isarchived = 0");
+							" from NetworkStatementsDTO network where network.networkid = :networkid and network.istop = 1 and isarchived = 0");
 			query.setParameter("networkid", networkId);
 			List<NetworkStatementsDTO> networkStatementsDTOList = query.list();
 

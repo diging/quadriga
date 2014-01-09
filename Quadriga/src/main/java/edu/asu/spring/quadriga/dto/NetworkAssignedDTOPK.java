@@ -5,10 +5,13 @@
 package edu.asu.spring.quadriga.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -24,13 +27,18 @@ public class NetworkAssignedDTOPK implements Serializable
     @Basic(optional = false)
     @Column(name = "assigneduser")
     private String assigneduser;
+    @Basic(optional = false)
+    @Column(name = "createddate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createddate;
 
     public NetworkAssignedDTOPK() {
     }
 
-    public NetworkAssignedDTOPK(String networkid, String assigneduser) {
+    public NetworkAssignedDTOPK(String networkid, String assigneduser,Date date) {
         this.networkid = networkid;
         this.assigneduser = assigneduser;
+        this.createddate = date;
     }
 
     public String getNetworkid() {
@@ -48,12 +56,21 @@ public class NetworkAssignedDTOPK implements Serializable
     public void setAssigneduser(String assigneduser) {
         this.assigneduser = assigneduser;
     }
+    
+    public Date getCreateddate() {
+		return createddate;
+	}
 
-    @Override
+	public void setCreateddate(Date createddate) {
+		this.createddate = createddate;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (networkid != null ? networkid.hashCode() : 0);
         hash += (assigneduser != null ? assigneduser.hashCode() : 0);
+        hash += (createddate != null ? createddate.hashCode() : 0);
         return hash;
     }
 
@@ -67,6 +84,9 @@ public class NetworkAssignedDTOPK implements Serializable
             return false;
         }
         if ((this.assigneduser == null && other.assigneduser != null) || (this.assigneduser != null && !this.assigneduser.equals(other.assigneduser))) {
+            return false;
+        }
+        if ((this.createddate == null && other.createddate != null) || (this.createddate != null && !this.createddate.equals(other.createddate))) {
             return false;
         }
         return true;
