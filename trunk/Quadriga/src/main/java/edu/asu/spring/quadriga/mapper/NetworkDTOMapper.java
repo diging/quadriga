@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import sun.awt.image.ImageWatched.Link;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
@@ -15,6 +16,7 @@ import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
+import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.implementation.NetworkOldVersion;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
@@ -54,7 +56,7 @@ public class NetworkDTOMapper {
 	 * @param networkName		The name of the network
 	 * @param username			The username to be associated with the network
 	 * @param workspaceid		The id of the workspace that the network belongs to
-	 * @return
+	 * @return					Return a {@link NetworksDTO} object created using the input parameters
 	 */
 	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String workspaceid)
 	{
@@ -71,7 +73,7 @@ public class NetworkDTOMapper {
 	 * @param type				The type of the NetworkStatement
 	 * @param isTop				The number indicating the isTop
 	 * @param username			The username of the user associated with the network
-	 * @return
+	 * @return					Return a {@link NetworkStatementsDTO} object created using the input parameters
 	 */
 	public NetworkStatementsDTO getNetworkStatementsDTO(String rowid,String networkId,String id,String type,String isTop, String username)
 	{
@@ -85,7 +87,7 @@ public class NetworkDTOMapper {
 	 * 
 	 * @param networksDTO				The input record which is not null and contains the network details				
 	 * @return							The {@link Network} object containing values copied from the input
-	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public INetwork getNetwork(NetworksDTO networksDTO) throws QuadrigaStorageException
 	{
@@ -109,7 +111,7 @@ public class NetworkDTOMapper {
 	 * 
 	 * @param networksDTO				The input list of networksDTO objects
 	 * @return							The corresponding list of network objects. The input list order will be maintained
-	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO) throws QuadrigaStorageException
 	{
@@ -139,7 +141,7 @@ public class NetworkDTOMapper {
 	 * For each object it will copy the id and statement type.
 	 * 
 	 * @param networkStatementsDTOList	The input list of networkstatementsDTO objects
-	 * @return
+	 * @return Return a list of network nodes created from the input list. The list order will be maintained
 	 */
 	public List<INetworkNodeInfo> getListOfNetworkNodeInfo(List<NetworkStatementsDTO> networkStatementsDTOList)
 	{
@@ -164,7 +166,7 @@ public class NetworkDTOMapper {
 	 * It will copy the previousAssignedUser, previousVersionStatus and updateDate from the input object.
 	 * 
 	 * @param networkAssignedDTO	The networkAssignedDTO to be converted
-	 * @return
+	 * @return	A {@link INetworkOldVersion} object will be created from the input parameters. 
 	 */
 	public INetworkOldVersion getNetworkOldVersion(NetworkAssignedDTO networkAssignedDTO)
 	{
@@ -187,7 +189,7 @@ public class NetworkDTOMapper {
 	 * @param assignedUsername		The username to be assigned.
 	 * @param status				The status of the network
 	 * @param archived				The archived status
-	 * @return
+	 * @return A {@link NetworkAssignedDTO} object will be created from the input parameters.
 	 */
 	public NetworkAssignedDTO getNetworkAssignedDTO(String networkid, String assignedUsername, String status, int archived)
 	{
@@ -211,7 +213,7 @@ public class NetworkDTOMapper {
 	 * @param annotationid		The annotation id
 	 * @param username			The username of the user to be associated with annotation
 	 * @param objecttype		The type of object
-	 * @return
+	 * @return A {@link NetworksAnnotationsDTO} object will be created from the input parameters; 
 	 */
 	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String networkid, String id, String annotationtext, String annotationid, String username, String objecttype)
 	{
@@ -233,8 +235,9 @@ public class NetworkDTOMapper {
 	/**
 	 * This method will create list of networks from the input parameters.
 	 * 
-	 * @param networksDTOList	The list of networks DTO to be converted to Inetwork
-	 * @return
+	 * @param networksDTOList	The list of networks DTO to be converted to {@link INetwork} 
+	 * @return					List of {@link INetwork} which will be created from the input list. The list order will be maintained
+	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public List<INetwork> getNetworkList(List<NetworksDTO> networksDTOList) throws QuadrigaStorageException
 	{
