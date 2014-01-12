@@ -200,29 +200,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getProjectIdForWorkspaceId(String workspaceid)
-			throws QuadrigaStorageException {
-		try {
-			Query query = sessionFactory.getCurrentSession().getNamedQuery(
-					"ProjectWorkspaceDTO.findByWorkspaceid");
-			query.setParameter("workspaceid", workspaceid);
-			ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
-					.uniqueResult();
-
-			if (projectWorkspaceDTO != null)
-				return projectWorkspaceDTO.getProjectWorkspaceDTOPK()
-						.getProjectid();
-			else
-				return null;
-		} catch (Exception e) {
-			logger.error("Error in fetching project id from workspace: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
 
 	@Override
 	public List<String> getNetworksForProjectId(String projectid)

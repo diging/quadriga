@@ -7,6 +7,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -249,41 +250,48 @@ public class DBConnectionRetrieveProjectManager extends ADBConnectionManager imp
 	public List<IProject> getProjectList(String sUserName)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotYetImplementedException("Method yet to be implemented without hibernate");
 	}
 
 	@Override
 	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotYetImplementedException("Method yet to be implemented without hibernate");
 	}
 
 	@Override
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotYetImplementedException("Method yet to be implemented without hibernate");
 	}
 
 	@Override
 	public IProject getProjectDetailsByUnixName(String unixName)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotYetImplementedException("Method yet to be implemented without hibernate");
 	}
 
 	@Override
 	public List<IProject> getCollaboratorProjectList(String sUserName)
 			throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotYetImplementedException("Method yet to be implemented without hibernate");
 	}
 
 	@Override
 	public List<IProject> getProjectListByCollaboratorRole(String sUserName,
 			String collaboratorRole) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
-		return null;
+		throw new NotYetImplementedException("Method yet to be implemented without hibernate");
+	}
+
+	@Override
+	public IProject getProject(String workspaceid)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		throw new NotYetImplementedException("Method yet to be implemented without hibernate");
 	}
 }

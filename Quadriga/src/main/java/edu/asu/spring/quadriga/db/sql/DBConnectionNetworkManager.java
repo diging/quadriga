@@ -380,7 +380,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		return networkList;		
 	}
 
-	@Override
+//	@Override
 	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException{
 		String dbCommand;
 		String errmsg="";
