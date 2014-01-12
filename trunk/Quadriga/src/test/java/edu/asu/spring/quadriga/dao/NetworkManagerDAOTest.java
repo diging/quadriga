@@ -104,20 +104,6 @@ public class NetworkManagerDAOTest {
 	}
 
 	@Test
-	public void testGetProjectIdForWorkspaceId() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
-		
-		//Check for a valid workspace
-		assertEquals("f651d817-8c47-4ec6-8f7c-0df5dddc9841", dbConnectNetwork.getProjectIdForWorkspaceId("ad905f5f-14bf-4405-a612-f1bb2a3077a7"));
-		
-		//Check for a invalid workspace
-		assertNull(dbConnectNetwork.getProjectIdForWorkspaceId("invalid"));
-		
-		//Check for null handling
-		assertNull(dbConnectNetwork.getProjectIdForWorkspaceId(null));
-	}
-
-	@Test
 	public void testGetNetworksForProjectId() {
 		fail("Not yet implemented");
 	}

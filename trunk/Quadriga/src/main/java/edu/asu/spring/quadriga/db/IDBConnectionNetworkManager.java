@@ -59,8 +59,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String getProjectIdForWorkspaceId(String workspaceid)
-			throws QuadrigaStorageException;
+//	public abstract String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException;
 
 	/**
 	 * Check if the network name is already used

@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -120,5 +122,11 @@ public abstract class DAOConnectionManager {
 		   usersList.add(user);	
 		}
 		return usersList;
+	}
+
+	public IProject getProject(IWorkSpace workspace)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

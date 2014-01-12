@@ -169,7 +169,6 @@ public class UserManagerDAOTest {
 	}
 
 	@Test
-	@Transactional
 	public void testDeactivateUser() throws QuadrigaStorageException {
 		testSetupTestEnvironment();
 

@@ -95,12 +95,9 @@ public class User implements IUser, Serializable
 		int result = 1;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((password == null) ? 0 : password.hashCode());
-		result = prime * result
-				+ ((quadrigaRoles == null) ? 0 : quadrigaRoles.hashCode());
-		result = prime * result
-				+ ((userName == null) ? 0 : userName.hashCode());
+		result = prime * result	+ ((password == null) ? 0 : password.hashCode());
+		result = prime * result	+ ((quadrigaRoles == null) ? 0 : quadrigaRoles.hashCode());
+		result = prime * result	+ ((userName == null) ? 0 : userName.hashCode());
 		return result;
 	}
 	

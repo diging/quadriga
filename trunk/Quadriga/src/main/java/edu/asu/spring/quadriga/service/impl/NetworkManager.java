@@ -44,9 +44,11 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
@@ -95,7 +97,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Autowired
 	private	IListWSManager wsManager;
-	
+
 	@Autowired
 	@Qualifier("qStoreURL_Add")
 	private String qStoreURL_Add;
@@ -120,8 +122,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Autowired
 	private INetworkFactory networkFactory;
 
+	@Autowired
+	private IDBConnectionRetrieveProjectManager projectManager;
+
 	boolean fileExist=true;
-	
+
 	@Autowired
 	private IDBConnectionNetworkManager dbConnect;
 
@@ -141,11 +146,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public boolean getFileExist(){
 		return this.fileExist;
 	}
-	
+
 	public void setFileExist(boolean fileExist){
 		this.fileExist = fileExist;
 	}
-	
+
 	/* 
 	 * Prepare a QStore Add URL to add new networks to QStore
 	 */
@@ -197,8 +202,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
-		
-		
+
+
 		// Get DSpace of the workspace
 		List<IBitStream> bitStreamList = workspace.getBitstreams();
 		logger.info("list of bitstream");
@@ -207,7 +212,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			logger.info(I2.next().getId()+"");
 		}
 		// Below code reads the top level Appelation events 
-		
+
 		ElementEventsType e = response.getValue();
 		List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> I= c.iterator();
@@ -278,7 +283,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			return "";
 		}
 		logger.debug("File Exist paramete value : "+getFileExist());
-		
+
 		// Add network into DB 
 		if(updateStatus == "NEW"){
 			try{
@@ -378,7 +383,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		messageConverters.add(new MarshallingHttpMessageConverter(marshaler,unmarshaler));
 
 		restTemplate.setMessageConverters(messageConverters);
-		
+
 		// Setting up the http header accept type
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
@@ -410,7 +415,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(response ==null){
 			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
 		}else{
-			
+
 			String responseText = response.getBody().toString();
 			// Try to unmarshall the XML got from QStore to an ElementEventsType object
 			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
@@ -500,7 +505,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		nodeObject.setPredicate(appellationEventObject.getNode());
 		nodeObject.setPredicateId(appellationEventObject.getTermId());
 		logger.debug("Predicate : "+appellationEventObject.getNode() );
-		
+
 		// Get subject/Object into temp structure 
 		SubjectObject subjectObject = relationEventObject.getSubjectObject();
 		ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
@@ -575,7 +580,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		this.jsonString.append("\"$dim\": 13");
 		this.jsonString.append("},");
 		this.jsonString.append("\"id\": \""+predicateNameId+"\",");
-		
+
 		this.jsonString.append("\"name\": \""+predicateName+"\"");
 		this.jsonString.append("},");
 	}
@@ -846,9 +851,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Relation Event ID subject: "+element1.getValue().toString());
-											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
-											String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
-											networkDetailsCache.add(networkNodeInfo);
+										//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+										String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
+										networkDetailsCache.add(networkNodeInfo);
 									}
 									if(element1.getName().toString().contains("source_reference")){
 										logger.debug("Dspace file : "+element1.getValue().toString());
@@ -873,9 +878,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-											String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
-											networkDetailsCache.add(networkNodeInfo);
+										//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+										String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
+										networkDetailsCache.add(networkNodeInfo);
 									}
 									if(element1.getName().toString().contains("source_reference")){
 										logger.debug("Dspace file : "+element1.getValue().toString());
@@ -903,9 +908,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 										if(element1.getName().toString().contains("id")){
 											logger.debug("Relation Event ID object: "+element1.getValue().toString());
-												//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
-												String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
-												networkDetailsCache.add(networkNodeInfo);
+											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
+											String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
+											networkDetailsCache.add(networkNodeInfo);
 										}
 										if(element1.getName().toString().contains("source_reference")){
 											logger.debug("Dspace file : "+element1.getValue().toString());
@@ -929,9 +934,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 										if(element1.getName().toString().contains("id")){
 											logger.debug("Appellation Event ID : "+element1.getValue().toString());
-												//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-												String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
-												networkDetailsCache.add(networkNodeInfo);
+											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+											String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
+											networkDetailsCache.add(networkNodeInfo);
 										}
 										if(element1.getName().toString().contains("source_reference")){
 											logger.debug("Dspace file : "+element1.getValue().toString());
@@ -963,9 +968,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
 									if(element1.getName().toString().contains("id")){
 										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-											String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
-											networkDetailsCache.add(networkNodeInfo);
+										//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
+										String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
+										networkDetailsCache.add(networkNodeInfo);
 									}
 									if(element1.getName().toString().contains("source_reference")){
 										logger.debug("Dspace file : "+element1.getValue().toString());
@@ -1096,19 +1101,20 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	@Transactional
 	public String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException{
-		String projectid="";
-		try{
-			projectid=dbConnect.getProjectIdForWorkspaceId(workspaceid);
-		}catch(QuadrigaStorageException e){
-			logger.error("Something went wrong in DB",e);
-		}
-		return projectid;
+		if(workspaceid == null || workspaceid.equals(""))
+			return null;
+		//Get the project object associated with the workspace
+		IProject project = projectManager.getProject(workspaceid);
+		if(project != null)
+			return project.getInternalid();
+		else 
+			return null;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<String> getNetworksForProjectId(String projectid) throws QuadrigaStorageException{
-		
+
 		List<String> networkList = dbConnect.getNetworksForProjectId(projectid);
 		return networkList;
 	}
@@ -1139,8 +1145,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		return networkTopNodeList;
 	}
-	
-	
+
+
 	/**
 	 * Get network detail object
 	 * @param networkId
@@ -1151,7 +1157,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public INetwork getNetworkDetails(String networkId){
 		INetwork network =null;
 		try{
-		network = dbConnect.getNetworkDetails(networkId);
+			network = dbConnect.getNetworkDetails(networkId);
 		}catch(QuadrigaStorageException e){
 			logger.error("DB error ",e);
 		}
@@ -1193,7 +1199,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 
 	}
-	
+
 	/**
 	 * Update network name when network is reuploaded
 	 * @throws QuadrigaStorageException 
