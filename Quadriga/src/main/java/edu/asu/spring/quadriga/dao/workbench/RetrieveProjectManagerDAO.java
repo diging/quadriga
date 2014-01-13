@@ -14,9 +14,7 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
-import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
@@ -270,7 +268,7 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		
 		try {
 			//Find the project id from the workspace
-			Query query = sessionFactory.getCurrentSession().getNamedQuery("Select pw.projectDTO ProjectWorkspaceDTO pw where pw.workspaceDTO.workspaceid =: workspaceid");
+			Query query = sessionFactory.getCurrentSession().createQuery("Select pw.projectDTO FROM ProjectWorkspaceDTO pw where pw.workspaceDTO.workspaceid =:workspaceid");
 			query.setParameter("workspaceid", workspaceid);
 			ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
 			if(projectDTO != null)
