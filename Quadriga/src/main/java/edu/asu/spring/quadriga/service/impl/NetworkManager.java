@@ -1168,7 +1168,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public INetwork getNetworkDetails(String networkId){
 		INetwork network =null;
 		try{
-			network = dbConnect.getNetworkDetails(networkId);
+			network = dbConnect.getNetwork(networkId);
 		}catch(QuadrigaStorageException e){
 			logger.error("DB error ",e);
 		}

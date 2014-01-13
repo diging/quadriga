@@ -250,7 +250,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 
 	
 	@Override
-	public INetwork getNetworkDetails(String networkId) throws QuadrigaStorageException{
+	public INetwork getNetwork(String networkId) throws QuadrigaStorageException{
 		String dbCommand;
 		String errmsg="";
 		INetwork network=networkFactory.createNetworkObject();
