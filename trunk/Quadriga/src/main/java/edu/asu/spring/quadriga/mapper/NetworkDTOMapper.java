@@ -58,9 +58,9 @@ public class NetworkDTOMapper {
 	 * @param workspaceid		The id of the workspace that the network belongs to
 	 * @return					Return a {@link NetworksDTO} object created using the input parameters
 	 */
-	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String workspaceid)
+	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String status, String workspaceid)
 	{
-		NetworksDTO networkDTO = new NetworksDTO(networkid, workspaceid, networkName, username, INetworkStatus.PENDING, username, new Date(), username, new Date());
+		NetworksDTO networkDTO = new NetworksDTO(networkid, workspaceid, networkName, username, status, username, new Date(), username, new Date());
 		return networkDTO;
 	}
 	
@@ -129,7 +129,6 @@ public class NetworkDTOMapper {
 				network.setStatus(networkDTO.getStatus());
 				if(networkDTO.getNetworkowner() != null)
 					network.setCreator(userManager.getUserDetails(networkDTO.getNetworkowner()));
-				
 				networkList.add(network);
 			}
 		}		

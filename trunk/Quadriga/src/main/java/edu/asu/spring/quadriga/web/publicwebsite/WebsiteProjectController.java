@@ -56,7 +56,7 @@ public class WebsiteProjectController {
 	
 	@RequestMapping(value="sites/project/browsenetworks", method=RequestMethod.GET)
 	public String browseNetworks(Model model) throws QuadrigaStorageException{
-		List<String> Networks = networkmanager.getNetworksForProjectId(projectid);
+		List<String> Networks = networkmanager.getNetworkNamesInProject(projectid);
 		if(Networks!=null){
 			model.addAttribute("networks", Networks);
 			return "browseNetworks";

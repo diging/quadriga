@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import sun.rmi.runtime.NewThreadAction;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -25,6 +26,7 @@ import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
+import edu.asu.spring.quadriga.dto.DspaceKeysDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
@@ -45,7 +47,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  */
 @Repository
 public class NetworkManagerDAO extends DAOConnectionManager implements
-		IDBConnectionNetworkManager, IDBConnectionEditorManager {
+IDBConnectionNetworkManager, IDBConnectionEditorManager {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -76,9 +78,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 
 		if(networkName == null || user == null || workspaceid == null)
 			throw new QuadrigaStorageException("Error in adding a network");
-		
+
 		String networkid = generateUniqueID();
-		NetworksDTO networksDTO = networkMapper.getNetworksDTO(networkid, networkName, user.getUserName(), workspaceid);
+		NetworksDTO networksDTO = networkMapper.getNetworksDTO(networkid, networkName, user.getUserName(), INetworkStatus.PENDING, workspaceid);
 
 		try {
 			sessionFactory.getCurrentSession().save(networksDTO);
@@ -200,34 +202,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 		}
 	}
 
-
-	@Override
-	public List<String> getNetworksForProjectId(String projectid)
-			throws QuadrigaStorageException {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(
-				"ProjectWorkspaceDTO.findByProjectid");
-		query.setParameter("projectid", projectid);
-		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
-		List<String> NetworkList = null;
-		if (projectWorkspaceDTOList != null) {
-			for (ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList) {
-				String wId = projectWorkspaceDTO.getProjectWorkspaceDTOPK()
-						.getWorkspaceid();
-				Query query1 = sessionFactory.getCurrentSession()
-						.getNamedQuery("NetworksDTO.findByWorkspaceid");
-				query.setParameter("workspaceid", wId);
-				List<NetworksDTO> networksDTOList = query1.list();
-				NetworkList = new ArrayList<String>();
-				for (NetworksDTO networksDTO : networksDTOList) {
-					String network = networksDTO.getNetworkname();
-					NetworkList.add(network);
-				}
-			}
-		}
-
-		return NetworkList;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -273,7 +247,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 
 			if (networkStatementsDTOList != null)
 				networkNodeList = networkMapper
-						.getListOfNetworkNodeInfo(networkStatementsDTOList);
+				.getListOfNetworkNodeInfo(networkStatementsDTOList);
 			return networkNodeList;
 		} catch (Exception e) {
 			logger.error("Error in fetching a network top nodes: ", e);
@@ -299,8 +273,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 			ScrollableResults scrollableDTO = session
 					.createQuery(
 							"  FROM NetworkStatementsDTO n WHERE n.networkid = :networkid and n.id = :id")
-					.setParameter("networkid", networkId)
-					.setParameter("id", id).scroll(ScrollMode.FORWARD_ONLY);
+							.setParameter("networkid", networkId)
+							.setParameter("id", id).scroll(ScrollMode.FORWARD_ONLY);
 
 			while (scrollableDTO.next()) {
 				// Update the rows with archive id 1 or 0
@@ -308,11 +282,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 						.get(0);
 				if (networkStatementDTO.getIsarchived() == INetworkStatus.NOT_ARCHIVED) {
 					networkStatementDTO
-							.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
+					.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
 					session.update(networkStatementDTO);
 				} else if (networkStatementDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE) {
 					networkStatementDTO
-							.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
+					.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
 					session.update(networkStatementDTO);
 				}
 			}
@@ -366,43 +340,32 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 
 			// Select only the rows matching the network id and obtain a
 			// scrollable list
-			Query query = session
-					.getNamedQuery("NetworkStatementsDTO.findByNetworkid");
+			Query query = session.getNamedQuery("NetworkStatementsDTO.findByNetworkid");
 			query.setParameter("networkid", networkId);
-			ScrollableResults scrollableDTO = query
-					.scroll(ScrollMode.FORWARD_ONLY);
+			ScrollableResults scrollableDTO = query.scroll(ScrollMode.FORWARD_ONLY);
 
 			while (scrollableDTO.next()) {
 				// Update the rows with archive id 1 or 0
-				NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO
-						.get(0);
+				NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO.get(0);
 				if (networkStatementDTO.getIsarchived() == INetworkStatus.NOT_ARCHIVED) {
-					networkStatementDTO
-							.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
+					networkStatementDTO.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
 					session.update(networkStatementDTO);
 				} else if (networkStatementDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE) {
-					networkStatementDTO
-							.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
+					networkStatementDTO.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
 					session.update(networkStatementDTO);
 				}
 			}
 
-			scrollableDTO = session
-					.getNamedQuery("NetworkAssignedDTO.findByNetworkid")
-					.setParameter("networkid", networkId)
-					.scroll(ScrollMode.FORWARD_ONLY);
+			scrollableDTO = session.getNamedQuery("NetworkAssignedDTO.findByNetworkid").setParameter("networkid", networkId).scroll(ScrollMode.FORWARD_ONLY);
 			while (scrollableDTO.next()) {
 				// Update the rows with archive id 1 or 0
-				NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) scrollableDTO
-						.get(0);
+				NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) scrollableDTO.get(0);
 				if (networkAssignedDTO.getIsarchived() == INetworkStatus.NOT_ARCHIVED) {
-					networkAssignedDTO
-							.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
+					networkAssignedDTO.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
 					session.update(networkAssignedDTO);
 
 				} else if (networkAssignedDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE) {
-					networkAssignedDTO
-							.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
+					networkAssignedDTO.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
 					session.update(networkAssignedDTO);
 				}
 			}
@@ -413,7 +376,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 			return "";
 		} catch (Exception e) {
 			System.out
-					.println("Exception occurred.....................................");
+			.println("Exception occurred.....................................");
 			if (transaction != null)
 				transaction.rollback();
 
@@ -536,64 +499,64 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try {
-//			Query query = sessionFactory
-//					.getCurrentSession()
-//					.createQuery(
-//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
-//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
-//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
-//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and " +
-//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
-//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
-//							"where pw.projectWorkspaceDTOPK.projectid in " +
-//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
-//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
-//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
-//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
-//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
-//							"where we.workspaceEditorDTOPK.editor = :username)))");
-//			Query query = sessionFactory
-//					.getCurrentSession()
-//					.createQuery(
-//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
-//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
-//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
-//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') or " +
-//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
-//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
-//							"where pw.projectWorkspaceDTOPK.projectid in " +
-//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
-//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
-//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
-//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
-//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
-//							"where we.workspaceEditorDTOPK.editor = :username)))");
-			
+			//			Query query = sessionFactory
+			//					.getCurrentSession()
+			//					.createQuery(
+			//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
+			//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
+			//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
+			//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
+			//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and " +
+			//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
+			//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
+			//							"where pw.projectWorkspaceDTOPK.projectid in " +
+			//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
+			//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
+			//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
+			//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
+			//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
+			//							"where we.workspaceEditorDTOPK.editor = :username)))");
+			//			Query query = sessionFactory
+			//					.getCurrentSession()
+			//					.createQuery(
+			//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
+			//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
+			//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
+			//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
+			//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') or " +
+			//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
+			//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
+			//							"where pw.projectWorkspaceDTOPK.projectid in " +
+			//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
+			//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
+			//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
+			//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
+			//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
+			//							"where we.workspaceEditorDTOPK.editor = :username)))");
+
 			String query1 = "Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-							"NetworkAssignedDTO na where na.isarchived=0) and";
+					"NetworkAssignedDTO na where na.isarchived=0) and";
 			query1 += "((n.workspaceid in  " ;
 			query1 += "(select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
-							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
-							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1'))) OR ";
+					"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
+					"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1'))) OR ";
 			query1 += "(n.workspaceid in  " ;
 			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
-							"where pw.projectWorkspaceDTOPK.projectid in " +
-							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
-							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
-							"('collaborator_role4')))) OR ";
+					"where pw.projectWorkspaceDTOPK.projectid in " +
+					"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
+					"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
+					"('collaborator_role4')))) OR ";
 			query1 += "(n.workspaceid in  " ;
 			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
 					"where pw.projectWorkspaceDTOPK.projectid in " +
 					"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
-							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
-							"where we.workspaceEditorDTOPK.editor = :username)))))"
-							+ "";
+					"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
+					"where we.workspaceEditorDTOPK.editor = :username)))))"
+					+ "";
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(query1);
-			
+
 			query.setParameter("username", user.getUserName());
 
 			List<NetworksDTO> listNetworksDTO = query.list();
@@ -976,7 +939,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 	@Override
 	public String addAnnotationToNetwork(String networkId, String id,
 			String annotationText, String userId, String objectType)
-			throws QuadrigaStorageException {
+					throws QuadrigaStorageException {
 		NetworksAnnotationsDTO networkAnnotationsDTO = networkMapper
 				.getNetworkAnnotationDTO(networkId, id, annotationText,
 						"ANNOT_" + generateUniqueID(), userId, objectType);
@@ -1061,6 +1024,63 @@ public class NetworkManagerDAO extends DAOConnectionManager implements
 			return "success";
 		} catch (Exception e) {
 			logger.error("Error in changing network status: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+
+	@Override
+	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
+		if(projectid == null || projectid.equals(""))
+			return null;
+				
+		//Create a query to get all projects
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
+		query.setParameter("projectid", projectid);
+		
+		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
+		List<INetwork> networkList = null;
+
+		//If there are a list of projects, get all the networks using the workspace ids
+		if (projectWorkspaceDTOList != null) {
+			for (ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList) {
+				String workspaceid = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
+				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
+				query.setParameter("workspaceid", workspaceid);
+
+				List<NetworksDTO> networksDTOList = queryNetworks.list();
+				
+				//Initialize array for the firt time
+				if(networksDTOList != null && networkList == null)
+				{
+					networkList = new ArrayList<INetwork>();
+				}
+				
+				//Add the networks to the list
+				if(networksDTOList != null)
+				{
+					networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
+				}
+			}
+		}
+
+		return networkList;
+	}
+	
+	public int updateNetwork(INetwork network, String username) throws QuadrigaStorageException
+	{
+		if(network == null || username == null || username.equals(""))
+			return FAILURE;
+		
+		try
+		{
+			NetworksDTO networksDTO = networkMapper.getNetworksDTO(network.getId(), network.getName(), username, network.getStatus(), network.getWorkspaceid());
+			sessionFactory.getCurrentSession().saveOrUpdate(networksDTO);
+			return SUCCESS;
+		}
+		catch(Exception e)
+		{
+			logger.error("update network method :",e);
 			throw new QuadrigaStorageException(e);
 		}
 	}

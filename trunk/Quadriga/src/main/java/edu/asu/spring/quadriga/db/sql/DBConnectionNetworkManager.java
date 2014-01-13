@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -811,17 +812,15 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		return errmsg;		
 	}
 
-	@Override
-	public List<String> getNetworksForProjectId(String projectid)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String updateNetworkName(String networkId,String networkName) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotYetImplementedException("Method not yet implemented in DBConnectionNetworkManager but implemented in DAO");
+	}
+
+	@Override
+	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
+		throw new NotYetImplementedException("Method not yet implemented in DBConnectionNetworkManager but implemented in DAO");
 	}
 
 }
