@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean
+		class="edu.asu.spring.quadriga.service.impl.workspace.RetrieveWSCollabManager"></bean>
+	<bean
+		class="edu.asu.spring.quadriga.dspace.service.impl.ProxyCommunityManager"></bean>
+
+	<bean class="edu.asu.spring.quadriga.validator.DspaceKeysValidator"></bean>
+
+	<bean id="QuadrigaRoleMapper"
+		class="edu.asu.spring.quadriga.web.login.QuadrigaUserRoleMapper">
+		<property name="userManager" ref="UserManager"></property>
+	</bean>
+
+	<bean id="UserManager" class="edu.asu.spring.quadriga.service.impl.UserManager">
+		<property name="userFactory" ref="userFactory"></property>
+	</bean>
+
+	<bean id="DictionaryManager" class="edu.asu.spring.quadriga.service.impl.dictionary.DictionaryManager">
+	</bean>
+
+
+	<bean id="WorkspaceDictionaryManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.WorkspaceDictionaryManager">
+	</bean>
+	<bean id="ProjectDictionaryManager"
+		class="edu.asu.spring.quadriga.service.impl.workbench.ProjectDictionaryManager">
+	</bean>
+	<bean id="ProjectConceptCollectionManager"
+		class="edu.asu.spring.quadriga.service.impl.workbench.ProjectConceptCollectionManager">
+	</bean>
+	<bean id="WorkspaceConceptCollectionManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.WorkspaceCCManager">
+	</bean>
+	<bean id="ModifyProjectManager"
+		class="edu.asu.spring.quadriga.service.impl.workbench.ModifyProjectManager">
+	</bean>
+
+	<bean id="ConceptcollectionController"
+		class="edu.asu.spring.quadriga.web.conceptcollection.ConceptcollectionController">
+	</bean>
+
+	<bean id="RetrieveProjectManager"
+		class="edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjectManager">
+	</bean>
+
+
+	<bean id="ArchiveWSManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.ArchiveWSManager">
+	</bean>
+
+	<bean id="ListWSManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.ListWSManager">
+	</bean>
+	<bean class="edu.asu.spring.quadriga.dspace.service.impl.DspaceManager"></bean>
+
+	<bean id="ModifyWSManager"
+		class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSManager">
+	</bean>
+
+	<bean id="ConceptCollectionManager"
+		class="edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager" />
+	<bean id="searchConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/ConceptLookup/</value>
+		</constructor-arg>
+	</bean>
+	<bean id="updateConceptPowerURL" class="java.lang.String">
+		<constructor-arg>
+			<value>http://chps.asu.edu/conceptpower/rest/Concept?id=</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="userFactory"
+		class="edu.asu.spring.quadriga.domain.factories.impl.UserFactory">
+	</bean>
+
+	<bean
+		class="edu.asu.spring.quadriga.domain.factories.impl.CollaboratorRoleFactory">
+	</bean>
+
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ProjectFactory">
+	</bean>
+	<bean
+		class="edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory"></bean>
+
+	<bean id="RetrieveProjCollabManagerBean"
+		class="edu.asu.spring.quadriga.service.impl.workbench.RetrieveProjCollabManager"></bean>
+	<bean id="ModifyProjCollabManagerBean"
+		class="edu.asu.spring.quadriga.service.impl.workbench.ModifyProjCollabManager"></bean>
+	<bean
+		class="edu.asu.spring.quadriga.web.workbench.DeleteProjectCollaboratorController"></bean>
+	<bean
+		class="edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager"></bean>
+	<bean
+		class="edu.asu.spring.quadriga.service.impl.workbench.CheckProjectSecurity">
+	</bean>
+	<bean
+		class="edu.asu.spring.quadriga.domain.factories.impl.QuadrigaRoleFactory">
+	</bean>
+
+	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager"></bean>
+
+	<bean id="CollaboratorRole"
+		class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
+
+
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DspaceKeysFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory" />
+	<bean class="edu.asu.spring.quadriga.email.impl.EmailNotificationManager" />
+	<bean class="edu.asu.spring.quadriga.email.impl.EmailNotificationSender" />
+
+	<bean
+		class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory" />
+	<bean
+		class="edu.asu.spring.quadriga.domain.factories.impl.ConceptCollectionFactory" />
+
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.BitStreamFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.CollectionFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ItemFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory" />
+
+	<bean class="edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager" />
+	
+	<bean class="edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator" />
+
+
+	<bean
+		class="edu.asu.spring.quadriga.domain.implementation.CollectionsValidator" />
+	<bean class="edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFactory" />
+	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
+
+	
+	
+	<bean id="dspaceStrings"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:dspacestrings.properties" />
+	</bean>
+	
+	<bean id="uiMessages"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/messages_en_US.properties" />
+	</bean>
+	
+	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO"/>
+	
+	<bean id="projectDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectDTOMapper"/>
+	
+	<bean id="projectCollaboratorDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper"/>
+	
+	<bean id="modifyProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.ModifyProjectManagerDAO"/>
+	
+	<bean id="serviceRegistry" class="edu.asu.spring.quadriga.profile.impl.ServiceRegistry" />
+	
+	<bean id="searchResult" class="edu.asu.spring.quadriga.profile.impl.SearchResult" />
+	
+	<bean id="conceptPowerService" class="edu.asu.spring.quadriga.profile.impl.ConceptPowerService" />
+	
+	<bean id="viafService" class="edu.asu.spring.quadriga.profile.impl.ViafService" />
+	
+	<bean id="dbConnectionProfileManager" class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager"/>
+	
+	<bean id="profileFactory" class="edu.asu.spring.quadriga.domain.factories.impl.ProfileFactory"/>
+	
+	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultFactory" />
+	
+	<bean id="viafManager" class="edu.asu.spring.quadriga.service.impl.viaf.ViafManager"/>
+	
+	<bean id="listWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.ListWSManagerDAO"/>
+	
+	<bean id="usermanagerDAO" class="edu.asu.spring.quadriga.dao.UserManagerDAO"/>
+	
+	<bean id="networkmanagerDAO" class="edu.asu.spring.quadriga.dao.NetworkManagerDAO"/>
+	
+	<bean id="userMapper" class="edu.asu.spring.quadriga.mapper.UserDTOMapper"/>
+	
+	<bean id="networkMapper" class="edu.asu.spring.quadriga.mapper.NetworkDTOMapper"/>
+	
+	<bean id="dspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.DspaceDTOMapper"/>
+	
+	<bean id="archiveWorkspaceManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.ArchiveWorkspaceManagerDAO"/>
+	
+	<bean id="workspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper"/>
+	
+	<bean id="workspaceDspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper"/>
+	
+	<bean id="dspaceManagerDAO" class="edu.asu.spring.quadriga.dao.DspaceManagerDAO"/>
+	
+	<bean id="modifyWSManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.ModifyWSManagerDAO"/>
+	
+	<bean id="modifyProjectCollaboratorDAO" class="edu.asu.spring.quadriga.dao.workbench.ModifyProjectCollaboratorDAO"/>
+	
+	<bean id="database_error_msgs" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:locale/database_error_msgs.properties" />
+	</bean>
+	
+	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
+	
+	<bean id="dictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.dictionary.DictionaryManagerDAO"/>
+	
+	<bean id="DictionaryDTOMapper" class="edu.asu.spring.quadriga.mapper.DictionaryDTOMapper"/>
+	
+	<bean id="projectDictionaryDAO" class="edu.asu.spring.quadriga.dao.workbench.ProjectDictionaryDAO"/>
+	
+	<bean id="projectConceptColletionDAO" class="edu.asu.spring.quadriga.dao.workbench.ProjectConceptCollectionDAO" />
+	
+	<bean id="conceptCollectionDTOMapper" class="edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper" />
+	
+	<bean id="CCManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.CCManagerDAO" />
+	
+	<bean id="retrieveProjectCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.RetrieveProjectCollaboratorManagerDAO" />
+	
+	<bean id="projectAccessManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.ProjectAccessManagerDAO" />
+	
+	<bean id="networkOldVersionFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkOldVersionFactory" />
+	
+	<bean id="retrieveWSCollabManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.RetrieveWSCollabManagerDAO" />
+	
+	<bean id="workspaceCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.workspace.WorkspaceCollaboratorManagerDAO" />
+	
+	<bean id="ModifyWSCollabManager" class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager" />
+	
+	<bean id="conceptCollectionCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionCollaboratorManagerDAO" />
+	
+	<bean id="collaboratorMapper" class="edu.asu.spring.quadriga.mapper.ConceptCollectionCollaboratorDTOMapper" />
+	
+	<bean id="conceptCollectionModifyManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionModifyManagerDAO"/>
+	
+	<bean id="modifyDictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.dictionary.ModifyDictionaryManagerDAO"/>
+	
+	<bean id="retrieveDictionaryManagerDAO" class="edu.asu.spring.quadriga.dao.dictionary.RetrieveDictionaryManagerDAO"/>
+	
+	<bean id="editorAccessManagerDAO" class="edu.asu.spring.quadriga.dao.editor.EditorAccessManagerDAO"/>
+	
+</beans>
