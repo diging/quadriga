@@ -122,7 +122,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract INetwork getNetworkDetails(String networkId)
+	public abstract INetwork getNetwork(String networkId)
 			throws QuadrigaStorageException;
 
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;

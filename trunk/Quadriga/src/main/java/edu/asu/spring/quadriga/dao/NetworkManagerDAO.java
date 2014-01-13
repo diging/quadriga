@@ -448,32 +448,25 @@ IDBConnectionNetworkManager, IDBConnectionEditorManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public INetwork getNetworkDetails(String networkId)
-			throws QuadrigaStorageException {
+	public INetwork getNetwork(String networkId) throws QuadrigaStorageException {
 		INetwork network = networkFactory.createNetworkObject();
 		try {
-			NetworksDTO networkDTO = (NetworksDTO) sessionFactory
-					.getCurrentSession().get(NetworksDTO.class, networkId);
+			NetworksDTO networkDTO = (NetworksDTO) sessionFactory.getCurrentSession().get(NetworksDTO.class, networkId);
 			if (networkDTO != null) {
 				network = networkMapper.getNetwork(networkDTO);
 
 				// Get the project id associated with the workspace id
-				Query query = sessionFactory.getCurrentSession().getNamedQuery(
-						"ProjectWorkspaceDTO.findByWorkspaceid");
+				Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", networkDTO.getWorkspaceid());
-				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
-						.uniqueResult();
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
+					IProject project = retrieveProjectDetails.getProjectDetails(projectWorkspaceDTO.getProjectWorkspaceDTOPK().getProjectid());
 					network.setProjectName(project.getName());
 
 					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
+					String workspaceName = wsManager.getWorkspaceName(network.getWorkspaceid());
 					network.setWorkspaceName(workspaceName);
 				}
 			}
