@@ -1113,10 +1113,21 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Override
 	@Transactional
-	public List<String> getNetworksForProjectId(String projectid) throws QuadrigaStorageException{
+	public List<String> getNetworkNamesInProject(String projectid) throws QuadrigaStorageException{
 
-		List<String> networkList = dbConnect.getNetworksForProjectId(projectid);
-		return networkList;
+		//Fetch the list of networks in the project
+		List<INetwork> networksList = dbConnect.getNetworks(projectid);
+		List<String> networkNames = null;
+
+		if(networksList != null)
+		{
+			networkNames = new ArrayList<String>();
+			for(INetwork network : networksList)
+				networkNames.add(network.getName());
+		}
+		
+		
+		return networkNames;
 	}
 
 	/**

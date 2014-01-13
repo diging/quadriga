@@ -54,14 +54,6 @@ public interface IDBConnectionNetworkManager {
 	public abstract List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException;
 
 	/**
-	 * Get the project id for a workspace id
-	 * @param workspaceid
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-//	public abstract String getProjectIdForWorkspaceId(String workspaceid) throws QuadrigaStorageException;
-
-	/**
 	 * Check if the network name is already used
 	 * @param networkName
 	 * @param user
@@ -133,9 +125,17 @@ public interface IDBConnectionNetworkManager {
 	public abstract INetwork getNetworkDetails(String networkId)
 			throws QuadrigaStorageException;
 
-	public abstract List<String> getNetworksForProjectId(String projectid)
-			throws QuadrigaStorageException;
-
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;
+
+	/**
+	 * Get the list of networks associated with a project id. If the project id is null or the project does not contain any
+	 * workspaces or networks then the return will be null.
+	 * 
+	 * @param projectid						The id of the project in which you need to find the list of networks.
+	 * @author Ram Kumar Kumaresan
+	 * @return								List of networks belonging to the given project id.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	public abstract List<INetwork> getNetworks(String projectid) throws QuadrigaStorageException;
 	
 }

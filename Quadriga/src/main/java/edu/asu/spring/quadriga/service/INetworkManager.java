@@ -99,7 +99,7 @@ public interface INetworkManager {
 
 	public abstract INetwork getNetworkDetails(String networkId);
 
-	public abstract List<String> getNetworksForProjectId(String projectid)
+	public abstract List<String> getNetworkNamesInProject(String projectid)
 			throws QuadrigaStorageException;
 
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;
