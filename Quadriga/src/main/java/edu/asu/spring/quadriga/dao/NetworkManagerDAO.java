@@ -46,8 +46,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
  * 
  */
 @Repository
-public class NetworkManagerDAO extends DAOConnectionManager implements
-IDBConnectionNetworkManager, IDBConnectionEditorManager {
+public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnectionNetworkManager, IDBConnectionEditorManager {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -1031,12 +1030,11 @@ IDBConnectionNetworkManager, IDBConnectionEditorManager {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
 		query.setParameter("projectid", projectid);
 		
-		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
+		ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 		List<INetwork> networkList = null;
 
 		//If there are a list of projects, get all the networks using the workspace ids
-		if (projectWorkspaceDTOList != null) {
-			for (ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList) {
+		if (projectWorkspaceDTO != null) {
 				String workspaceid = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
 				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", workspaceid);
@@ -1055,7 +1053,6 @@ IDBConnectionNetworkManager, IDBConnectionEditorManager {
 					networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
 				}
 			}
-		}
 
 		return networkList;
 	}
@@ -1074,6 +1071,32 @@ IDBConnectionNetworkManager, IDBConnectionEditorManager {
 		catch(Exception e)
 		{
 			logger.error("update network method :",e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+	
+	public List<INetworkOldVersion> getNetworkVersion(String networkId, String archiveLevel) throws QuadrigaStorageException {
+		try {
+			List<INetworkOldVersion> networkOldVersionsList = null;
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
+			query.setParameter("networkid", networkId);
+			query.setParameter("isarchived", archiveLevel);
+
+			List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
+
+			for(NetworkAssignedDTO networkAssignedDTO : networkAssignedDTOList)
+			{
+				if(networkOldVersionsList == null)
+				{
+					networkOldVersionsList = new ArrayList<INetworkOldVersion>();
+				}
+				
+				networkOldVersionsList.add(networkMapper.getNetworkOldVersion(networkAssignedDTO));
+			}
+
+			return networkOldVersionsList;
+		} catch (Exception e) {
+			logger.error("Error in fetching	 old version details: ", e);
 			throw new QuadrigaStorageException(e);
 		}
 	}
