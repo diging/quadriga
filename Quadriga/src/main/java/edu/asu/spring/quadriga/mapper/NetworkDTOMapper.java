@@ -154,6 +154,8 @@ public class NetworkDTOMapper {
 				networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
 				networkNodeInfo.setId(networkStatementsDTO.getStatementid());
 				networkNodeInfo.setStatementType(networkStatementsDTO.getStatementtype());
+				networkNodeInfo.setIsArchived(networkStatementsDTO.getIsarchived());
+				networkNodeInfo.setIsTop(networkStatementsDTO.getIstop());
 				networkList.add(networkNodeInfo);
 			}
 		}

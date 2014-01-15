@@ -5,7 +5,9 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 
 /**
@@ -22,9 +24,6 @@ public class Network implements INetwork
 	private Date creationTime;
 	private String textUrl;
 	private String workspaceid;
-	private String projectid;
-	private String workspaceName;
-	private String projectName;
 	private String name;
 	private String status;
 	private String assignedUser;
@@ -32,7 +31,25 @@ public class Network implements INetwork
 	private List<String> appellationIds;
 	private List<String> relationIds;
 	private ENetworkAccessibility networksAccess;
+	private IProject project;
+	private IWorkSpace workspace;
 	
+	@Override
+	public IProject getProject() {
+		return project;
+	}
+	@Override
+	public void setProject(IProject project) {
+		this.project = project;
+	}
+	@Override
+	public IWorkSpace getWorkspace() {
+		return workspace;
+	}
+	@Override
+	public void setWorkspace(IWorkSpace workspace) {
+		this.workspace = workspace;
+	}
 	@Override
 	public List<String> getAppellationIds() {
 		return appellationIds;
@@ -118,33 +135,6 @@ public class Network implements INetwork
 	@Override
 	public void setWorkspaceid(String workspaceid) {
 		this.workspaceid = workspaceid;
-	}
-	
-	@Override
-	public String getProjectid() {
-		return projectid;
-	}
-	@Override
-	public void setProjectid(String projectid) {
-		this.projectid = projectid;
-	}
-
-	@Override
-	public String getWorkspaceName() {
-		return workspaceName;
-	}
-	@Override
-	public void setWorkspaceName(String workspaceName) {
-		this.workspaceName = workspaceName;
-	}
-	
-	@Override
-	public String getProjectName() {
-		return projectName;
-	}
-	@Override
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
 	}
 	
 	@Override

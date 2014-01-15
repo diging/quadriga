@@ -183,7 +183,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 	
 
 	@Override
-	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException{
+	public INetwork getNetwork(String networkId, IUser user) throws QuadrigaStorageException{
 		IUser owner = user;
 		String dbCommand;
 		String errmsg="";
@@ -216,11 +216,12 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 					network.setName(resultSet.getString(3));
 					network.setStatus(resultSet.getString(4));
 					
-					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
-					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
-					network.setProjectName(project.getName());
-					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					//Deprecated. Should be replaced by set project and workspace
+//					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
+//					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
+//					network.setProjectName(project.getName());
+//					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
+//					network.setWorkspaceName(workspaceName);
 				} 
 			}
 			errmsg = sqlStatement.getString(3);
@@ -248,72 +249,7 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		return network;		
 	}
 
-	
-	@Override
-	public INetwork getNetwork(String networkId) throws QuadrigaStorageException{
-		String dbCommand;
-		String errmsg="";
-		INetwork network=networkFactory.createNetworkObject();
-		CallableStatement sqlStatement;
 		
-		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_NETWORK_DETAILS  + "(?,?)";
-		//get the connection
-		getConnection();
-		//establish the connection with the database
-		try
-		{
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-
-			//adding the input variables to the SP
-			sqlStatement.setString(1, networkId);
-
-			//adding output variables to the SP
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
-
-			sqlStatement.execute();
-			ResultSet resultSet = sqlStatement.getResultSet();
-			if(resultSet !=null){ 
-				while (resultSet.next()) { 
-					
-					network.setId(resultSet.getString(1));
-					network.setWorkspaceid(resultSet.getString(2));
-					network.setName(resultSet.getString(3));
-					network.setStatus(resultSet.getString(4));
-					IUser user = userManager.getUserDetails(resultSet.getString(5));
-					network.setCreator(user);
-					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
-					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
-					network.setProjectName(project.getName());
-					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
-				} 
-			}
-			errmsg = sqlStatement.getString(2);
-			if(errmsg.isEmpty()){
-				return network;
-			}else{
-				throw new QuadrigaStorageException("Something went wrong on DB side");
-			}
-
-		}
-		catch(SQLException e)
-		{
-			errmsg="DB Issue";
-			logger.error(errmsg,e);
-			throw new QuadrigaStorageException();
-
-		}catch(Exception e){
-			errmsg="DB Issue";
-			logger.error(errmsg,e);
-		}
-		finally
-		{
-			closeConnection();
-		}
-		return network;		
-	}
-	
 	@Override
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
 		IUser owner = user;
@@ -347,11 +283,12 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 					network.setName(resultSet.getString(3));
 					network.setStatus(resultSet.getString(4));
 					
-					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
-					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
-					network.setProjectName(project.getName());
-					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					//Deprecated. Should be replaced by set project and workspace
+//					network.setProjectid(networkManager.getProjectIdForWorkspaceId(network.getWorkspaceid()));
+//					IProject project =retrieveProjectDetails.getProjectDetails(network.getProjectid());
+//					network.setProjectName(project.getName());
+//					String workspaceName=wsManager.getWorkspaceName(network.getWorkspaceid());
+//					network.setWorkspaceName(workspaceName);
 					networkList.add(network);
 				} 
 			}
@@ -492,7 +429,6 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		return true;		
 	}
 	
-	@Override
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkTopNodeList = new ArrayList<INetworkNodeInfo>();
 		String dbCommand;
@@ -550,65 +486,9 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 	}
 	
 	
-	@Override
-	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkTopNodeList = new ArrayList<INetworkNodeInfo>();
-		String dbCommand;
-		String errmsg="";
-		CallableStatement sqlStatement;
-		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_NETWORK_OLD_VERSION_TOP_NODES_LIST  + "(?,?)";
-		//get the connection
-		getConnection();
-		//establish the connection with the database
-		try
-		{
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-
-			//adding the input variables to the SP
-			sqlStatement.setString(1, networkId);
-
-			//adding output variables to the SP
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
-
-			sqlStatement.execute();
-			ResultSet resultSet = sqlStatement.getResultSet();
-			if(resultSet !=null){ 
-				while (resultSet.next()) {
-					INetworkNodeInfo networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
-					networkNodeInfo.setId(resultSet.getString(1));
-					networkNodeInfo.setStatementType(resultSet.getString(2));
-					networkTopNodeList.add(networkNodeInfo);
-				} 
-			}
-			errmsg = sqlStatement.getString(2);
-			if(errmsg.isEmpty()){
-				return networkTopNodeList;
-			}else{
-				throw new QuadrigaStorageException("Something went wrong on DB side");
-			}
-
-		}
-		catch(SQLException e)
-		{
-			errmsg="DB Issue";
-			logger.error(errmsg,e);
-			throw new QuadrigaStorageException();
-
-		}catch(Exception e){
-			errmsg="DB Issue";
-			logger.error(errmsg,e);
-		}
-		finally
-		{
-			closeConnection();
-		}
-		
-		return networkTopNodeList;
-	}
 	
 	@Override
-	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)throws QuadrigaStorageException{
+	public List<INetworkNodeInfo> getNetworkNodes(String networkId)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
 		String dbCommand;
 		String errmsg="";
@@ -665,62 +545,6 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 	}
 	
 	
-	@Override
-	public INetworkOldVersion getNetworkOldVersionDetails(String networkId)throws QuadrigaStorageException{
-		INetworkOldVersion networkOldVersion =null;
-		String dbCommand;
-		String errmsg="";
-		CallableStatement sqlStatement;
-		//command to call the SP
-		dbCommand = DBConstants.SP_CALL+ " " + DBConstants.GET_NETWORK_OLD_VERSION_DETAILS  + "(?,?)";
-		//get the connection
-		getConnection();
-		//establish the connection with the database
-		try
-		{
-			sqlStatement = connection.prepareCall("{"+dbCommand+"}");
-
-			//adding the input variables to the SP
-			sqlStatement.setString(1, networkId);
-
-			//adding output variables to the SP
-			sqlStatement.registerOutParameter(2,Types.VARCHAR);
-
-			sqlStatement.execute();
-			ResultSet resultSet = sqlStatement.getResultSet();
-			if(resultSet !=null){ 
-				while (resultSet.next()) {
-					networkOldVersion =networkOldVersionFactory.createNetworkOldVersionObject();
-					networkOldVersion.setPreviousVersionAssignedUser(resultSet.getString(1)); 
-					networkOldVersion.setPreviousVersionStatus(resultSet.getString(2));
-					networkOldVersion.setUpdateDate(resultSet.getString(3));
-				} 
-			}
-			errmsg = sqlStatement.getString(2);
-			if(errmsg.isEmpty()){
-				return networkOldVersion;
-			}else{
-				throw new QuadrigaStorageException("Something went wrong on DB side");
-			}
-
-		}
-		catch(SQLException e)
-		{
-			errmsg="DB Issue";
-			logger.error(errmsg,e);
-			throw new QuadrigaStorageException();
-
-		}catch(Exception e){
-			errmsg="DB Issue";
-			logger.error(errmsg,e);
-		}
-		finally
-		{
-			closeConnection();
-		}
-		
-		return networkOldVersion;
-	}
 	
 	@Override
 	public String archiveNetworkStatement(String networkId,String id) throws QuadrigaStorageException{
@@ -820,6 +644,11 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 
 	@Override
 	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
+		throw new NotYetImplementedException("Method not yet implemented in DBConnectionNetworkManager but implemented in DAO");
+	}
+
+	@Override
+	public List<INetworkOldVersion> getNetworkVersions(String networkId,int archiveLevel) throws QuadrigaStorageException {
 		throw new NotYetImplementedException("Method not yet implemented in DBConnectionNetworkManager but implemented in DAO");
 	}
 

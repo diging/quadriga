@@ -72,6 +72,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * This class acts as a Network manager which handles the networks object
@@ -1059,7 +1060,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
-			network = dbConnect.getNetworkStatus(networkId, user);
+			network = dbConnect.getNetwork(networkId, user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -1090,9 +1091,20 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Transactional
 	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
 			throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getAllNetworkNodes(networkId);
+		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId);
 
-		return networkTopNodeList;
+		if(networkNodeList != null)
+		{
+			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
+			while(iterator.hasNext())
+			{
+				INetworkNodeInfo networkNodeInfo = iterator.next();
+				if(networkNodeInfo.getIsArchived() != 0)
+					iterator.remove();
+			}
+		}
+
+		return networkNodeList;
 	}
 
 	/* 
@@ -1125,8 +1137,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			for(INetwork network : networksList)
 				networkNames.add(network.getName());
 		}
-		
-		
+
+
 		return networkNames;
 	}
 
@@ -1152,27 +1164,19 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	@Transactional
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkTopNodes(networkId);
-
-		return networkTopNodeList;
-	}
-
-
-	/**
-	 * Get network detail object
-	 * @param networkId
-	 * @return
-	 */
-	@Override
-	@Transactional
-	public INetwork getNetworkDetails(String networkId){
-		INetwork network =null;
-		try{
-			network = dbConnect.getNetwork(networkId);
-		}catch(QuadrigaStorageException e){
-			logger.error("DB error ",e);
+		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId);
+		if(networkNodeList != null)
+		{
+			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
+			while(iterator.hasNext())
+			{
+				INetworkNodeInfo networkNodeInfo = iterator.next();
+				if(networkNodeInfo.getIsTop() != 1 )
+					iterator.remove();
+			}
 		}
-		return network;
+
+		return networkNodeList;
 	}
 
 
@@ -1182,9 +1186,19 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	@Transactional
 	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkTopNodeList = dbConnect.getNetworkOldVersionTopNodes(networkId);
+		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId);
+		if(networkNodeList != null)
+		{
+			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
+			while(iterator.hasNext())
+			{
+				INetworkNodeInfo networkNodeInfo = iterator.next();
+				if(networkNodeInfo.getIsTop() != 1 || networkNodeInfo.getIsArchived() != INetworkStatus.ARCHIVE_LEVEL_ONE)
+					iterator.remove();
+			}
+		}
 
-		return networkTopNodeList;
+		return networkNodeList;
 	}
 	/**
 	 * Archive network Statements
