@@ -54,17 +54,6 @@ public interface INetwork
 
 	public abstract void setWorkspaceid(String workspaceid);
 
-	public abstract String getProjectid();
-
-	public abstract void setProjectid(String projectid);
-
-	public abstract String getWorkspaceName();
-
-	public abstract void setWorkspaceName(String workspaceName);
-
-	public abstract String getProjectName();
-
-	public abstract void setProjectName(String projectName);
 
 	public abstract String getAssignedUser();
 
@@ -73,6 +62,14 @@ public interface INetwork
 	public abstract void setNetworkOldVersion(INetworkOldVersion networkOldVersion);
 
 	public abstract INetworkOldVersion getNetworkOldVersion();
+
+	public abstract IProject getProject();
+
+	public abstract void setProject(IProject project);
+
+	public abstract IWorkSpace getWorkspace();
+
+	public abstract void setWorkspace(IWorkSpace workspace);
 
 
 

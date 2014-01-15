@@ -10,4 +10,12 @@ public interface INetworkNodeInfo {
 
 	public abstract void setStatementType(String statementType);
 
+	public abstract void setIsArchived(int isArchived);
+
+	public abstract int getIsArchived();
+
+	public abstract void setIsTop(int isTop);
+
+	public abstract int getIsTop();
+
 }

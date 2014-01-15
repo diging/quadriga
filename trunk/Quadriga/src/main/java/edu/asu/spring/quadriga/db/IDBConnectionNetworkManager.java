@@ -35,15 +35,8 @@ public interface IDBConnectionNetworkManager {
 	public abstract String addNetworkStatement(String rowid,String networkId, String id, String type,
 			String isTop, IUser user) throws QuadrigaStorageException;
 
-	/**
-	 * Get network status for vogon
-	 * @param networkName
-	 * @param user
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract INetwork getNetworkStatus(String networkName, IUser user)
-			throws QuadrigaStorageException;
+
+	public abstract INetwork getNetwork(String networkid, IUser user) throws QuadrigaStorageException;
 
 	/**
 	 * Get network list for a User
@@ -63,15 +56,6 @@ public interface IDBConnectionNetworkManager {
 	public abstract boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException;
 
 	/**
-	 * Get the Relation events and appellation event in the outer part
-	 * @param networkId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
-			throws QuadrigaStorageException;
-
-	/**
 	 * Archive the network statements when rejected and reuploaded networks
 	 * @param networkId
 	 * @param id
@@ -87,7 +71,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
+	public abstract List<INetworkNodeInfo> getNetworkNodes(String networkId)
 			throws QuadrigaStorageException;
 
 	/**
@@ -98,32 +82,7 @@ public interface IDBConnectionNetworkManager {
 	 */
 	public abstract String archiveNetwork(String networkId) throws QuadrigaStorageException;
 
-	/**
-	 * Get the previous version on network
-	 * @param networkId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract INetworkOldVersion getNetworkOldVersionDetails(String networkId)
-			throws QuadrigaStorageException;
-
-	/**
-	 * Get the top nodes of previous version of networks
-	 * @param networkId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
-			throws QuadrigaStorageException;
-
-	/**
-	 * Get network details based on network id
-	 * @param networkId
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract INetwork getNetwork(String networkId)
-			throws QuadrigaStorageException;
+	
 
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;
 
@@ -137,5 +96,7 @@ public interface IDBConnectionNetworkManager {
 	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public abstract List<INetwork> getNetworks(String projectid) throws QuadrigaStorageException;
+
+	public abstract List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException;
 	
 }

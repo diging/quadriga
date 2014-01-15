@@ -34,6 +34,8 @@ import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
+import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -58,6 +60,12 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	private Properties messages;
 
 	@Autowired
+	private ProjectDTOMapper projectMapper;
+
+	@Autowired
+	private WorkspaceDTOMapper workspaceMapper;
+
+	@Autowired
 	private IRetrieveProjectManager retrieveProjectDetails;
 
 	@Autowired
@@ -66,8 +74,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManagerDAO.class);
 
-	@Autowired
-	private NetworkFactory networkFactory;
+
 
 	/**
 	 * {@inheritDoc}
@@ -114,14 +121,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public INetwork getNetworkStatus(String networkId, IUser user)
-			throws QuadrigaStorageException {
-		INetwork network = networkFactory.createNetworkObject();
+	public INetwork getNetwork(String networkId, IUser user) throws QuadrigaStorageException {
+		INetwork network = null;
 		try {
-			Query query = sessionFactory
-					.getCurrentSession()
-					.createQuery(
-							" from NetworksDTO network where network.networkowner = :networkowner and network.networkid = :networkid");
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworksDTO network where network.networkowner = :networkowner and network.networkid = :networkid");
 			query.setParameter("networkowner", user.getUserName());
 			query.setParameter("networkid", networkId);
 
@@ -130,23 +133,19 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				network = networkMapper.getNetwork(networksDTO);
 
 				// Get the project id associated with the workspace id
-				query = sessionFactory.getCurrentSession().getNamedQuery(
-						"ProjectWorkspaceDTO.findByWorkspaceid");
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", networksDTO.getWorkspaceid());
-				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
-						.uniqueResult();
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 			return network;
@@ -182,15 +181,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 
@@ -227,31 +224,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException(e);
 		}
 
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
-			throws QuadrigaStorageException {
-		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
-		try {
-			Query query = sessionFactory
-					.getCurrentSession()
-					.createQuery(
-							" from NetworkStatementsDTO network where network.networkid = :networkid and network.istop = 1 and isarchived = 0");
-			query.setParameter("networkid", networkId);
-			List<NetworkStatementsDTO> networkStatementsDTOList = query.list();
-
-			if (networkStatementsDTOList != null)
-				networkNodeList = networkMapper
-				.getListOfNetworkNodeInfo(networkStatementsDTOList);
-			return networkNodeList;
-		} catch (Exception e) {
-			logger.error("Error in fetching a network top nodes: ", e);
-			throw new QuadrigaStorageException(e);
-		}
 	}
 
 	/**
@@ -301,22 +273,18 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
+	public List<INetworkNodeInfo> getNetworkNodes(String networkId)
 			throws QuadrigaStorageException {
 
 		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
 
 		try {
-			Query query = sessionFactory
-					.getCurrentSession()
-					.createQuery(
-							" from NetworkStatementsDTO n WHERE n.networkid = :networkid and n.isarchived = 0");
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkStatementsDTO n WHERE n.networkid = :networkid");
 			query.setParameter("networkid", networkId);
 
 			List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
 			if (listNetworkStatementsDTO != null) {
-				networkNodeList = networkMapper
-						.getListOfNetworkNodeInfo(listNetworkStatementsDTO);
+				networkNodeList = networkMapper.getListOfNetworkNodeInfo(listNetworkStatementsDTO);
 			}
 			return networkNodeList;
 		} catch (Exception e) {
@@ -385,97 +353,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public INetworkOldVersion getNetworkOldVersionDetails(String networkId)
-			throws QuadrigaStorageException {
-		try {
-			INetworkOldVersion networkOldVersion = null;
-			Query query = sessionFactory
-					.getCurrentSession()
-					.createQuery(
-							" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
-			query.setParameter("networkid", networkId);
-			query.setParameter("isarchived", INetworkStatus.ARCHIVE_LEVEL_ONE);
-
-			NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query
-					.uniqueResult();
-
-			if (networkAssignedDTO != null) {
-				networkOldVersion = networkMapper
-						.getNetworkOldVersion(networkAssignedDTO);
-			}
-			return networkOldVersion;
-
-		} catch (Exception e) {
-			logger.error("Error in fetching	 old version details: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
-			throws QuadrigaStorageException {
-		List<INetworkNodeInfo> networkNodeList = new ArrayList<INetworkNodeInfo>();
-		try {
-			Query query = sessionFactory
-					.getCurrentSession()
-					.createQuery(
-							" from NetworkStatementsDTO n WHERE n.networkid = :networkid and istop = 1 and n.isarchived = :isarchived");
-			query.setParameter("networkid", networkId);
-			query.setParameter("isarchived", INetworkStatus.ARCHIVE_LEVEL_ONE);
-
-			List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
-			if (listNetworkStatementsDTO != null) {
-				networkNodeList = networkMapper
-						.getListOfNetworkNodeInfo(listNetworkStatementsDTO);
-			}
-			return networkNodeList;
-
-		} catch (Exception e) {
-			logger.error("Error in fetching	 old version details: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public INetwork getNetwork(String networkId) throws QuadrigaStorageException {
-		INetwork network = networkFactory.createNetworkObject();
-		try {
-			NetworksDTO networkDTO = (NetworksDTO) sessionFactory.getCurrentSession().get(NetworksDTO.class, networkId);
-			if (networkDTO != null) {
-				network = networkMapper.getNetwork(networkDTO);
-
-				// Get the project id associated with the workspace id
-				Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
-				query.setParameter("workspaceid", networkDTO.getWorkspaceid());
-				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
-
-				if (projectWorkspaceDTO != null) {
-					// Get the project details
-					IProject project = retrieveProjectDetails.getProjectDetails(projectWorkspaceDTO.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
-
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
-				}
-			}
-			return network;
-		} catch (Exception e) {
-			logger.error("Error in fetching	 network details: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
 	/******************************************************************************************************
 	 * 
 	 * The following methods deal with editor section of the network module
@@ -491,40 +368,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try {
-			//			Query query = sessionFactory
-			//					.getCurrentSession()
-			//					.createQuery(
-			//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-			//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
-			//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
-			//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
-			//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') and " +
-			//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
-			//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
-			//							"where pw.projectWorkspaceDTOPK.projectid in " +
-			//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
-			//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
-			//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
-			//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
-			//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
-			//							"where we.workspaceEditorDTOPK.editor = :username)))");
-			//			Query query = sessionFactory
-			//					.getCurrentSession()
-			//					.createQuery(
-			//							"Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-			//							"NetworkAssignedDTO na where na.isarchived='0') and (n.workspaceid in " +
-			//							"( select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
-			//							"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
-			//							"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1') or " +
-			//							"wc.workspaceCollaboratorDTOPK.workspaceid in " +
-			//							"(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
-			//							"where pw.projectWorkspaceDTOPK.projectid in " +
-			//							"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
-			//							"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
-			//							"('collaborator_role4')) or pw.projectWorkspaceDTOPK.projectid in " +
-			//							"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
-			//							"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
-			//							"where we.workspaceEditorDTOPK.editor = :username)))");
 
 			String query1 = "Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
 					"NetworkAssignedDTO na where na.isarchived=0) and";
@@ -565,15 +408,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 
@@ -648,15 +489,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 
@@ -704,15 +543,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 
@@ -727,8 +564,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<INetwork> getAssignNetworkOfUser(IUser user)
-			throws QuadrigaStorageException {
+	public List<INetwork> getAssignNetworkOfUser(IUser user) throws QuadrigaStorageException {
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try {
@@ -745,9 +581,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			// Update project name workspace name and old version of the network
 			for (INetwork network : networkList) {
 				// Get the old version of the network
-				INetworkOldVersion networkOldVersion = this
-						.getNetworkOldVersionDetails(network.getId());
-				network.setNetworkOldVersion(networkOldVersion);
+				List<INetworkOldVersion> networkOldVersionList = this.getNetworkVersions(network.getId(), INetworkStatus.ARCHIVE_LEVEL_ONE);
+				if(networkOldVersionList != null)
+				{
+					network.setNetworkOldVersion(networkOldVersionList.get(0));
+				}
 
 				// Get the project id associated with the workspace id
 				query = sessionFactory.getCurrentSession().getNamedQuery(
@@ -758,15 +596,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 
@@ -807,15 +643,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 
@@ -848,23 +682,19 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			// Update project name and workspace name of the network
 			for (INetwork network : networkList) {
 				// Get the project id associated with the workspace id
-				query = sessionFactory.getCurrentSession().getNamedQuery(
-						"ProjectWorkspaceDTO.findByWorkspaceid");
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", network.getWorkspaceid());
-				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
-						.uniqueResult();
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
-					IProject project = retrieveProjectDetails
-							.getProjectDetails(projectWorkspaceDTO
-									.getProjectWorkspaceDTOPK().getProjectid());
-					network.setProjectName(project.getName());
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
-					// Get the workspace name
-					String workspaceName = wsManager.getWorkspaceName(network
-							.getWorkspaceid());
-					network.setWorkspaceName(workspaceName);
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
 				}
 			}
 
@@ -1025,43 +855,142 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
 		if(projectid == null || projectid.equals(""))
 			return null;
-				
+
 		//Create a query to get all projects
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
 		query.setParameter("projectid", projectid);
-		
+
 		ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
 		List<INetwork> networkList = null;
 
 		//If there are a list of projects, get all the networks using the workspace ids
 		if (projectWorkspaceDTO != null) {
-				String workspaceid = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
-				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
-				query.setParameter("workspaceid", workspaceid);
+			String workspaceid = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
+			Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
+			query.setParameter("workspaceid", workspaceid);
 
-				List<NetworksDTO> networksDTOList = queryNetworks.list();
-				
-				//Initialize array for the firt time
-				if(networksDTOList != null && networkList == null)
-				{
-					networkList = new ArrayList<INetwork>();
-				}
-				
-				//Add the networks to the list
-				if(networksDTOList != null)
-				{
-					networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
-				}
+			List<NetworksDTO> networksDTOList = queryNetworks.list();
+
+			//Add the networks to the list
+			if(networksDTOList != null)
+			{
+				networkList = new ArrayList<INetwork>();
+				networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
 			}
+		}
 
 		return networkList;
 	}
+
+	@Override
+	public List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException {
+		try {
+			List<INetworkOldVersion> networkOldVersionsList = null;
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
+			query.setParameter("networkid", networkId);
+			query.setParameter("isarchived", archiveLevel);
+
+			List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
+
+			if(networkAssignedDTOList != null)
+			{
+				networkOldVersionsList = new ArrayList<INetworkOldVersion>();
+				for(NetworkAssignedDTO networkAssignedDTO : networkAssignedDTOList)
+				{
+					networkOldVersionsList.add(networkMapper.getNetworkOldVersion(networkAssignedDTO));
+				}
+			}
+
+			return networkOldVersionsList;
+		} catch (Exception e) {
+			logger.error("Error in fetching	 old version details: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+	public List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException {
+		List<INetwork> networkList = null;
+
+		try {
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser) and status = :status");
+			query.setParameter("assigneduser", user.getUserName());
+			query.setParameter("status", networkStatus);
+
+			List<NetworksDTO> listNetworksDTO = query.list();
+			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
+
+			// Update project name and workspace name of the network
+			for (INetwork network : networkList) {
+				// Get the project id associated with the workspace id
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
+				query.setParameter("workspaceid", network.getWorkspaceid());
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
+
+				if (projectWorkspaceDTO != null) {
+					// Get the project details
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
+				}
+			}
+
+			return networkList;
+		} catch (Exception e) {
+			logger.error("Error in fetching network of user: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+	public List<INetwork> getNetworkListOfOtherEditors(IUser user, List<String> networkStatus)	throws QuadrigaStorageException {
+		List<INetwork> networkList = new ArrayList<INetwork>();
+
+		try {
+
+			// Create the query to get the list of networks
+			Query query = sessionFactory.getCurrentSession().createQuery(
+					"from NetworksDTO n where n.networkid in (Select na.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser <> :assigneduser) and status in (:status)");
+			query.setParameter("assigneduser", user.getUserName());
+			query.setParameterList("status", networkStatus);
+
+			List<NetworksDTO> listNetworksDTO = query.list();
+			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
+
+			// Update project name and workspace name of the network
+			for (INetwork network : networkList) {
+				// Get the project id associated with the workspace id
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
+				query.setParameter("workspaceid", network.getWorkspaceid());
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
+
+				if (projectWorkspaceDTO != null) {
+					// Get the project details
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
+				}
+			}
+
+			return networkList;
+		} catch (Exception e) {
+			logger.error("Error in fetching network of user: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+	
 	
 	public int updateNetwork(INetwork network, String username) throws QuadrigaStorageException
 	{
 		if(network == null || username == null || username.equals(""))
 			return FAILURE;
-		
+
 		try
 		{
 			NetworksDTO networksDTO = networkMapper.getNetworksDTO(network.getId(), network.getName(), username, network.getStatus(), network.getWorkspaceid());
@@ -1071,32 +1000,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		catch(Exception e)
 		{
 			logger.error("update network method :",e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-	
-	public List<INetworkOldVersion> getNetworkVersion(String networkId, String archiveLevel) throws QuadrigaStorageException {
-		try {
-			List<INetworkOldVersion> networkOldVersionsList = null;
-			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
-			query.setParameter("networkid", networkId);
-			query.setParameter("isarchived", archiveLevel);
-
-			List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
-
-			for(NetworkAssignedDTO networkAssignedDTO : networkAssignedDTOList)
-			{
-				if(networkOldVersionsList == null)
-				{
-					networkOldVersionsList = new ArrayList<INetworkOldVersion>();
-				}
-				
-				networkOldVersionsList.add(networkMapper.getNetworkOldVersion(networkAssignedDTO));
-			}
-
-			return networkOldVersionsList;
-		} catch (Exception e) {
-			logger.error("Error in fetching	 old version details: ", e);
 			throw new QuadrigaStorageException(e);
 		}
 	}
