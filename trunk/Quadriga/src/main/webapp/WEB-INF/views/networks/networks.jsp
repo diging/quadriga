@@ -67,9 +67,9 @@
 								type="hidden" value="<c:out value="${network.name}"></c:out>" />
 								<c:out value="${network.name}"></c:out></td>
 							<td width="25%" align="center"><c:out
-									value="${network.projectName}"></c:out></td>
+									value="${network.project.name}"></c:out></td>
 							<td width="25%" align="center"><c:out
-									value="${network.workspaceName}"></c:out></td>
+									value="${network.workspace.name}"></c:out></td>
 							<td width="25%" align="center"><c:out
 									value="${network.status}"></c:out></td>
 							<td width="25%" align="center"><input type=button

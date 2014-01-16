@@ -65,8 +65,8 @@
 							</a>
 						</summary>
 						<ul>
-							<li>Project : <c:out value="${network.projectName}"></c:out></li>
-							<li>Workspace : <c:out value="${network.workspaceName}"></c:out></li>
+							<li>Project : <c:out value="${network.project.name}"></c:out></li>
+							<li>Workspace : <c:out value="${network.workspace.name}"></c:out></li>
 							<c:choose>
 								<c:when test="${not empty network.networkOldVersion}">
 									<li>Old Version : 
@@ -133,9 +133,9 @@
 							type="hidden" value="<c:out value="${network.name}"></c:out>" />
 							<c:out value="${network.name}"></c:out></td>
 						<td width="15%" align="center"><c:out
-								value="${network.projectName}"></c:out></td>
+								value="${network.project.name}"></c:out></td>
 						<td width="15%" align="center"><c:out
-								value="${network.workspaceName}"></c:out></td>
+								value="${network.workspace.name}"></c:out></td>
 						<td width="15%" align="center"><c:out
 								value="${network.status}"></c:out></td>
 						<td width="15%" align="center"><input type=button
