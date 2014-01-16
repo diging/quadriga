@@ -10,6 +10,13 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItems;
 
+/**
+ * This class is used by JAXB to unmarshall the xml stream from Dspace.
+ * Wrapper class for the list of items.
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @XmlRootElement(name="items")
 public class DspaceMetadataItems implements IDspaceMetadataItems {
 

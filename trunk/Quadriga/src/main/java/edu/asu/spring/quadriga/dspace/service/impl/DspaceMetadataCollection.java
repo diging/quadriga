@@ -10,6 +10,13 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollectionEntity;
 
+/**
+ * This class is used by JAXB to unmarshall the xml stream from Dspace.
+ * A wrapper class for the list of collections.
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @XmlRootElement(name="collections")
 public class DspaceMetadataCollection implements IDspaceMetadataCollection {
 

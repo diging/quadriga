@@ -9,7 +9,13 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 
-
+/**
+ * This class is used by JAXB to unmarshall the xml stream from Dspace.
+ * Class contains the id of the item.
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @XmlRootElement(name="itementity")
 public class DspaceMetadataItemEntity implements IDspaceMetadataItemEntity {
 
