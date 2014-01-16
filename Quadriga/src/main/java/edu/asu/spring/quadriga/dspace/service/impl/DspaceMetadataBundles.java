@@ -9,6 +9,8 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundles;
 
 /**
+ * This class is used by JAXB to unmarshall the xml stream from Dspace.
+ * A wrapper class for the list of bitstreams.
  * 
  * @author Ram Kumar Kumaresan
  */

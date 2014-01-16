@@ -9,6 +9,8 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItems;
 
 /**
+ * This class is used by JAXB to unmarshall the xml stream from Dspace.
+ * It will store the list of items.
  * 
  * @author Ram Kumar Kumaresan
  */

@@ -10,6 +10,13 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunityEntity;
 
+/**
+ * This class is used by JAXB to unmarshall the xml stream from Dspace.
+ * Wrapper class for the list of communities.
+ * 
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @XmlRootElement(name="communities")
 public class DspaceMetadataCommunity implements IDspaceMetadataCommunity {
 	
