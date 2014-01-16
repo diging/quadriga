@@ -249,7 +249,6 @@ public class DBConnectionNetworkManager extends ADBConnectionManager implements 
 		return network;		
 	}
 
-		
 	@Override
 	public List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException{
 		IUser owner = user;

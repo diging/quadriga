@@ -26,16 +26,6 @@ public interface IDBConnectionEditorManager {
 	 */
 	public abstract String assignNetworkToUser(String networkId, IUser user)
 			throws QuadrigaStorageException;
-
-	/**
-	 * Get all the assigned networks of the editor
-	 * @param user
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<INetwork> getAssignNetworkOfUser(IUser user)
-			throws QuadrigaStorageException;
-
 	/**
 	 * Update the network status based on REJECT/APPEND/APPROVE
 	 * @param networkId
@@ -44,42 +34,6 @@ public interface IDBConnectionEditorManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String updateNetworkStatus(String networkId, String status)
-			throws QuadrigaStorageException;
-
-	/**
-	 * Get all rejected networks of the user
-	 * @param user
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<INetwork> getRejectedNetworkOfUser(IUser user)
-			throws QuadrigaStorageException;
-
-	/**
-	 * Get all approved networks of the user
-	 * @param user
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<INetwork> getApprovedNetworkOfUser(IUser user)
-			throws QuadrigaStorageException;
-
-	/**
-	 * Get network list of other editors which has status finalized
-	 * @param user
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user)
-			throws QuadrigaStorageException;
-
-	/**
-	 * Get assigned networks of other editors
-	 * @param user
-	 * @return
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user)
 			throws QuadrigaStorageException;
 
 	/**
@@ -124,6 +78,10 @@ public interface IDBConnectionEditorManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String updateAnnotationToNetwork(String annotationId,String annotationText ) throws QuadrigaStorageException;
+
+	public abstract List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException;
+
+	public abstract List<INetwork> getNetworkListOfOtherEditors(IUser user,	List<String> networkStatus) throws QuadrigaStorageException;
 
 
 }

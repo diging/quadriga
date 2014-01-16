@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * This class acts as a Network manager which handles the networks object
@@ -33,7 +34,7 @@ public class EditorManager implements IEditorManager {
 	private INetworkFactory networkFactory;
 
 	@Autowired
-//	@Qualifier("DBConnectionEditorManagerBean")
+	//	@Qualifier("DBConnectionEditorManagerBean")
 	private IDBConnectionEditorManager dbConnect;
 
 
@@ -79,7 +80,7 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = null;
 
 		try{
-			networkList=dbConnect.getAssignNetworkOfUser(user);
+			networkList=dbConnect.getNetworksOfUser(user, INetworkStatus.ASSIGNED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -93,7 +94,11 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = null;
 
 		try{
-			networkList=dbConnect.getfinishedNetworkListOfOtherEditors(user);
+			
+			List<String> networkStatus = new ArrayList<String>();
+			networkStatus.add(INetworkStatus.APPROVED);
+			
+			networkList = dbConnect.getNetworkListOfOtherEditors(user, networkStatus);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -107,7 +112,12 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = null;
 
 		try{
-			networkList=dbConnect.getAssignedNetworkListOfOtherEditors(user);
+
+			List<String> networkStatus = new ArrayList<String>();
+			networkStatus.add(INetworkStatus.ASSIGNED);
+			
+			networkList = dbConnect.getNetworkListOfOtherEditors(user, networkStatus);
+			
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -124,7 +134,7 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = null;
 
 		try{
-			networkList=dbConnect.getRejectedNetworkOfUser(user);
+			networkList=dbConnect.getNetworksOfUser(user, INetworkStatus.REJECTED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -141,7 +151,7 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try{
-			networkList=dbConnect.getApprovedNetworkOfUser(user);
+			networkList=dbConnect.getNetworksOfUser(user, INetworkStatus.APPROVED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -164,7 +174,7 @@ public class EditorManager implements IEditorManager {
 		}
 		return msg;
 	}
-	
+
 	/**
 	 * Update the status of the assigned network
 	 * PENDING / ASSIGNED / REJECTED / APPROVED

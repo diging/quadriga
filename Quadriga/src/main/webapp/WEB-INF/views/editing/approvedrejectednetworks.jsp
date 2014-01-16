@@ -56,8 +56,8 @@
 								<c:out value="${network.name}"></c:out>
 						</a></summary>
 						<ul>
-						<li>Project : <c:out value="${network.projectName}"></c:out></li>
-						<li>Workspace : <c:out value="${network.workspaceName}"></c:out></li>
+						<li>Project : <c:out value="${network.project.name}"></c:out></li>
+						<li>Workspace : <c:out value="${network.workspace.name}"></c:out></li>
 						<li>Submitted by : <c:out value="${network.creator.userName}"></c:out> </li>
 						<li>Status : <c:out value="${network.status}"></c:out></li>
 						
@@ -85,8 +85,8 @@
 								<c:out value="${network.name}"></c:out>
 						</a></summary>
 						<ul>
-						<li>Project : <c:out value="${network.projectName}"></c:out></li>
-						<li>Workspace : <c:out value="${network.workspaceName}"></c:out></li>
+						<li>Project : <c:out value="${network.project.name}"></c:out></li>
+						<li>Workspace : <c:out value="${network.workspace.name}"></c:out></li>
 						<li>Submitted by : <c:out value="${network.creator.userName}"></c:out> </li>
 						<li>Status : <c:out value="${network.status}"></c:out></li>
 						
