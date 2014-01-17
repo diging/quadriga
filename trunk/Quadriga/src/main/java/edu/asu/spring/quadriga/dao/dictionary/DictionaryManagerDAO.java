@@ -166,7 +166,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("DictionaryDTO.findById");
-			query.setParameter("id", dictionaryId);
+			query.setParameter("dictionaryid", dictionaryId);
 			dictionaryDTO = (DictionaryDTO) query.uniqueResult();
 			if(dictionaryDTO != null)
 			{

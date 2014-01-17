@@ -117,7 +117,6 @@ public class DictionaryManager implements IDictionaryManager {
 	@Transactional
 	public boolean userDictionaryPerm(String userId, String dicitonaryId) throws QuadrigaStorageException, QuadrigaAccessException{
 		boolean result=dbConnect.userDictionaryPerm(userId,dicitonaryId);
-		logger.info("result of perfmission "+result);
 		if(result == false){
 			throw new QuadrigaAccessException();
 		}
