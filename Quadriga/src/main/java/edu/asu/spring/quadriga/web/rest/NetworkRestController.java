@@ -425,10 +425,17 @@ public class NetworkRestController {
 		INetwork network = null;
 		try{
 			network = networkManager.getNetworkStatus(networkId,user);
+			if(network==null){
+				logger.info("network is null");
+				response.setStatus(404);
+				return "Please provide correct network id.";
+			}else{
+				logger.info(network.getName());
+			}
 		}catch(QuadrigaStorageException e){
 			logger.error("DB Error :",e);
 		}
-		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
+//		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
 		if(!(network.getStatus().equals(INetworkStatus.REJECTED))){
 			response.setStatus(500);
 			return "The Network doesn't have status : REJECTED";

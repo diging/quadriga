@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sun.awt.image.ImageWatched.Link;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
@@ -16,7 +17,6 @@ import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
-import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.implementation.NetworkOldVersion;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
@@ -42,6 +42,8 @@ public class NetworkDTOMapper {
 	
 	@Autowired
 	private INetworkOldVersionFactory networkOldVersionFactory;
+	
+	private static final Logger logger = LoggerFactory.getLogger(NetworkDTOMapper.class);
 	
 	@Autowired
 	private NetworkFactory networkFactory;
@@ -135,6 +137,30 @@ public class NetworkDTOMapper {
 		return networkList;
 	}
 	
+	
+	public List<INetwork> getListOfNetworks(List<NetworksDTO> networksDTO,String assignedUser) throws QuadrigaStorageException
+	{
+		List<INetwork> networkList = null;
+		if(networksDTO != null)
+		{
+			networkList = new ArrayList<INetwork>();
+			INetwork network = null;
+			for(NetworksDTO networkDTO: networksDTO)
+			{
+				network = networkFactory.createNetworkObject();
+				network.setId(networkDTO.getNetworkid());
+				network.setName(networkDTO.getNetworkname());
+				network.setWorkspaceid(networkDTO.getWorkspaceid());
+				network.setStatus(networkDTO.getStatus());
+				network.setNetworkOldVersion(getNetworkOldVersion(getNetworkAssignedDTO(networkDTO.getNetworkid(), assignedUser, networkDTO.getStatus(), INetworkStatus.ARCHIVE_LEVEL_ONE )));
+				if(networkDTO.getNetworkowner() != null)
+					network.setCreator(userManager.getUserDetails(networkDTO.getNetworkowner()));
+				networkList.add(network);
+			}
+		}		
+		return networkList;
+	}
+	
 	/**
 	 * This method will convert the list of {@link NetworkStatementsDTO} objects to a list of {@link NetworkNodeInfo} objects.
 	 * For each object it will copy the id and statement type.
@@ -178,6 +204,14 @@ public class NetworkDTOMapper {
 			networkOldVersion.setPreviousVersionAssignedUser(networkAssignedDTO.getNetworkAssignedDTOPK().getAssigneduser());
 			networkOldVersion.setPreviousVersionStatus(networkAssignedDTO.getStatus());
 			networkOldVersion.setUpdateDate(networkAssignedDTO.getUpdateddate().toString());
+		}else{
+			logger.info("network Assigned DTO is null");
+		}
+		if(networkOldVersion == null){
+			logger.info("networkOldVersion is null");
+			logger.info("networkOldVersion.getPreviousVersionAssignedUser()");
+			logger.info("networkOldVersion.getPreviousVersionStatus()");
+			logger.info("networkOldVersion.getUpdateDate()");
 		}
 		
 		return networkOldVersion;

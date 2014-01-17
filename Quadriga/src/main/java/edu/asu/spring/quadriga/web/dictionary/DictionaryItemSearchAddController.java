@@ -152,7 +152,7 @@ public class DictionaryItemSearchAddController {
 		IUser user = usermanager.getUserDetails(principal.getName());
 		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
 		try {
-			dictionaryEntryList = null;
+			List<DictionaryEntry> dictionaryEntryList = null;
 			if (!item.equals("")) {
 				logger.debug("Query for Item :" + item + " and pos :" + pos);
 				dictionaryEntryList = dictonaryManager.searchWordPower(item,
@@ -160,16 +160,17 @@ public class DictionaryItemSearchAddController {
 			}
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
-
-			List<IDictionaryItem> dictionaryItemList = dictonaryManager
-					.getDictionariesItems(dictionaryid,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryid);
-			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictionaryid", dictionaryid);
-			if (dictionaryEntryList == null) {
+			if (dictionaryEntryList == null ||dictionaryEntryList.size()==0 ) {
 				model.addAttribute("errorstatus", 1);
+			}else{
+				logger.info("dict size returned : "+dictionaryEntryList.size());
+				for(DictionaryEntry de : dictionaryEntryList){
+					logger.info(de.getLemma());
+				}
 			}
 			
 

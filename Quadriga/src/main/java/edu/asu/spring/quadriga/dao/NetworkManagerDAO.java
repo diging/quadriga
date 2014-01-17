@@ -17,16 +17,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import sun.rmi.runtime.NewThreadAction;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
-import edu.asu.spring.quadriga.dto.DspaceKeysDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
@@ -147,7 +143,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
 
 				}
+			}else{
+				logger.info(" networksDTO is null ");
 			}
+			
 			return network;
 		} catch (Exception e) {
 			logger.error("Error in fetching a network status: ", e);
@@ -658,7 +657,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			query.setParameter("status", networkStatus);
 
 			List<NetworksDTO> listNetworksDTO = query.list();
-			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
+			networkList = networkMapper.getListOfNetworks(listNetworksDTO,user.getUserName());
 
 			// Update project name and workspace name of the network
 			for (INetwork network : networkList) {
