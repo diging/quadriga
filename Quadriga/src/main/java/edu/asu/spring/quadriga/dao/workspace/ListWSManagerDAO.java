@@ -258,10 +258,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		IWorkSpace workspace = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO.workspaceid =:workspaceid and projWork.workspaceDTO.workspaceowner.username =:username"); 
-			query.setParameter("username", username);
-			query.setParameter("workspaceid", workspaceId);
-			WorkspaceDTO workspaceDTO = (WorkspaceDTO) query.uniqueResult();
+			WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
 			if(workspaceDTO != null)
 			{
 				workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);

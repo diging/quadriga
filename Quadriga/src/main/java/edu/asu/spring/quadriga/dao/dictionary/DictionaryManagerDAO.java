@@ -134,7 +134,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		List<IDictionaryItem> dictItemList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.dictioanryid =:dictionaryid ORDER BY dictItems.term");
+			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.dictionaryid =:dictionaryid ORDER BY dictItems.term");
 			query.setParameter("ownerName", ownerName);
 			query.setParameter("dictionaryid", dictionaryid);
 			
