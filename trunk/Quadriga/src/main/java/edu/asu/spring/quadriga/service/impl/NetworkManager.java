@@ -7,8 +7,10 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
@@ -46,11 +48,16 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.ID3Constant;
+import edu.asu.spring.quadriga.domain.ID3Link;
+import edu.asu.spring.quadriga.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.ID3LinkFactory;
+import edu.asu.spring.quadriga.domain.factories.ID3NodeFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
@@ -90,10 +97,67 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
+
+	@Autowired
+	private ID3NodeFactory d3NodeFactory;
+
+	@Autowired
+	private ID3LinkFactory d3LinkFactory;
+
 	@Autowired
 	IConceptCollectionManager conceptCollectionManager;
 
 	public StringBuffer jsonString= new StringBuffer("");
+
+	private List<ID3Node> d3NodeList = new ArrayList<ID3Node>();
+	
+	private Map<String,Integer> d3NodeIdMap = new HashMap<String, Integer>();
+
+	private List<ID3Link> d3LinkList  = new ArrayList<ID3Link>();
+
+	private int nodeIndex =1;
+	
+
+	@Override
+	public void setIntialValueForD3JSon(){
+		setD3NodeList(new ArrayList<ID3Node>());
+		setD3LinkList(new ArrayList<ID3Link>());
+		setNodeIndex(1);
+		setD3NodeIdMap(new HashMap<String, Integer>());
+	}
+	
+	public List<ID3Node> getD3NodeList() {
+		return d3NodeList;
+	}
+
+	public void setD3NodeList(List<ID3Node> d3NodeList) {
+		this.d3NodeList = d3NodeList;
+	}
+
+	public Map<String, Integer> getD3NodeIdMap() {
+		return d3NodeIdMap;
+	}
+
+	public void setD3NodeIdMap(Map<String, Integer> d3NodeIdMap) {
+		this.d3NodeIdMap = d3NodeIdMap;
+	}
+
+	public List<ID3Link> getD3LinkList() {
+		return d3LinkList;
+	}
+
+	public void setD3LinkList(List<ID3Link> d3LinkList) {
+		this.d3LinkList = d3LinkList;
+	}
+
+	public int getNodeIndex() {
+		return nodeIndex;
+	}
+
+	public void setNodeIndex(int nodeIndex) {
+		this.nodeIndex = nodeIndex;
+	}
+
 
 
 	@Autowired
@@ -452,6 +516,17 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 							logger.debug(tt.getTermInterpertation(tt));
 							// Appending and building JSON for appellation event
 							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
+
+							// Adding appellation event node.
+							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
+							String nodeId=termId+"_"+shortUUID();
+							d3Node.setNodeId(nodeId);
+							d3Node.setNodeName(node);
+							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
+							d3NodeList.add(d3Node);
+							d3NodeIdMap.put(nodeId, nodeIndex);
+							nodeIndex++;
+
 						}
 					}
 					// Check if event is Relation event
@@ -477,6 +552,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				logger.error("",e);
 			}
 		}
+		
 		return this.jsonString.toString();
 	}
 
@@ -519,6 +595,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
 				updateJsonStringForRENode(nodeObject);
+				updateNodeLinkForD3JSON(nodeObject);
 				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 			}else{
 
@@ -526,6 +603,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				nodeObject.setObject(appellationEventObject1.getNode());
 				nodeObject.setObjectId(appellationEventObject1.getTermId());
 				updateJsonStringForRENode(nodeObject);
+				updateNodeLinkForD3JSON(nodeObject);
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
 			printJsonObjectRE(subjectObject.getRelationEventObject());
@@ -544,8 +622,130 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			nodeObject.setObject(appellationEventObject1.getNode());
 			nodeObject.setObjectId(appellationEventObject1.getTermId());
 			updateJsonStringForRENode(nodeObject);
+			updateNodeLinkForD3JSON(nodeObject);
 			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 		}
+	}
+
+	/**
+	 * Method to add nodes and links into List, which can be used to make a JSON object later.
+	 * @param nodeObject
+	 */
+	public void updateNodeLinkForD3JSON(NodeObject nodeObject){
+		
+		String predicateNameId = nodeObject.getPredicate();
+		String subjectNodeId=nodeObject.getSubject()+"_"+shortUUID();
+		String objectNodeId = nodeObject.getObject()+"_"+shortUUID();
+
+		// Check for reference to relation
+		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
+		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
+		if(!(temp.equals(""))){
+			predicateNameId = temp;
+		}
+
+		// Add Nodes for D3 JSon
+		{
+			// Adding Subject into node list 
+			ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
+			d3NodeSubject.setNodeName(nodeObject.getSubject());
+			d3NodeSubject.setNodeId(subjectNodeId);
+			d3NodeSubject.setGroupId(ID3Constant.RELATION_EVENT_SUBJECT_TERM);
+			d3NodeList.add(d3NodeSubject);
+			d3NodeIdMap.put(subjectNodeId,nodeIndex);
+			nodeIndex++;
+
+			// Adding Object into node list 
+			ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
+			d3NodeObject.setNodeName(nodeObject.getObject());
+			d3NodeObject.setNodeId(objectNodeId);
+			d3NodeObject.setGroupId(ID3Constant.RELATION_EVENT_OBJECT_TERM);
+			d3NodeList.add(d3NodeObject);
+			d3NodeIdMap.put(objectNodeId,nodeIndex);
+			nodeIndex++;
+
+			// Adding Subject into node list 
+
+			if(!d3NodeIdMap.containsKey(predicateNameId)){
+				ID3Node d3NodePredicate = d3NodeFactory.createD3NodeObject();
+				d3NodePredicate.setNodeName(predicateName);
+				d3NodePredicate.setNodeId(predicateNameId);
+				d3NodePredicate.setGroupId(ID3Constant.RELATION_EVENT_PREDICATE_TERM);
+				d3NodeList.add(d3NodePredicate);
+				d3NodeIdMap.put(predicateNameId,nodeIndex);
+				nodeIndex++;
+			}
+
+		}
+
+		// Add Links for D3 JSon
+		{
+
+			ID3Link d3LinkSubject = d3LinkFactory.createD3LinkObject();
+			d3LinkSubject.setSource(d3NodeIdMap.get(predicateNameId));
+			d3LinkSubject.setTarget(d3NodeIdMap.get(subjectNodeId));
+			d3LinkList.add(d3LinkSubject);
+
+			ID3Link d3LinkObject = d3LinkFactory.createD3LinkObject();
+			d3LinkObject.setSource(d3NodeIdMap.get(predicateNameId));
+			d3LinkObject.setTarget(d3NodeIdMap.get(objectNodeId));
+			d3LinkList.add(d3LinkObject);
+		}
+
+	}
+
+	@Override
+	public String getD3JSon(){
+		StringBuffer d3JsonString= new StringBuffer("");
+		
+		d3JsonString.append("{\n\"nodes\":[");
+		
+		for(int i =0;i<d3NodeList.size()-2;i++){
+			ID3Node d3Node =d3NodeList.get(i);
+			d3JsonString.append("{\"name\":\"");
+			d3JsonString.append(d3Node.getNodeName());
+			d3JsonString.append("\",");
+			d3JsonString.append("\"id\":\"");
+			d3JsonString.append(d3Node.getNodeId());
+			d3JsonString.append("\",");
+			d3JsonString.append("\"group\":");
+			d3JsonString.append(d3Node.getGroupId());
+			d3JsonString.append("},\n");
+		}
+		ID3Node d3Node =d3NodeList.get(d3NodeList.size()-1);
+		d3JsonString.append("{\"name\":\"");
+		d3JsonString.append(d3Node.getNodeName());
+		d3JsonString.append("\",");
+		d3JsonString.append("\"id\":\"");
+		d3JsonString.append(d3Node.getNodeId());
+		d3JsonString.append("\",");
+		d3JsonString.append("\"group\":");
+		d3JsonString.append(d3Node.getGroupId());
+		
+		
+		d3JsonString.append("}\n],\n\"links\":[\n");
+		
+		
+		for(int i =0;i<d3LinkList.size()-2;i++){
+			ID3Link d3Link =d3LinkList.get(i);
+			d3JsonString.append("{\"source\":");
+			d3JsonString.append(d3Link.getSource());
+			d3JsonString.append(",");
+			d3JsonString.append("\"target\":");
+			d3JsonString.append(d3Link.getTarget());
+			d3JsonString.append("},\n");
+		}
+		ID3Link d3Link =d3LinkList.get(d3LinkList.size()-1);
+		d3JsonString.append("{\"source\":");
+		d3JsonString.append(d3Link.getSource());
+		d3JsonString.append(",");
+		d3JsonString.append("\"target\":");
+		d3JsonString.append(d3Link.getTarget());
+		d3JsonString.append("}\n]\n}");
+		
+		
+
+		return d3JsonString.toString();
 	}
 
 	/**
@@ -560,6 +760,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(!(temp.equals(""))){
 			predicateNameId = temp;
 		}
+
 		// Forming the JSON object
 		this.jsonString.append("{\"adjacencies\":[");
 		this.jsonString.append("{");

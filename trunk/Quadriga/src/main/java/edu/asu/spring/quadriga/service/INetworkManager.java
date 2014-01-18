@@ -102,4 +102,8 @@ public interface INetworkManager {
 
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;
 
+	public abstract void setIntialValueForD3JSon();
+
+	public abstract String getD3JSon();
+
 }

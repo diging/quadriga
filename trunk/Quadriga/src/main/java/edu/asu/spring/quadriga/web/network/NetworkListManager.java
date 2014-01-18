@@ -121,6 +121,7 @@ public class NetworkListManager {
 		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
 		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
 		jsonstring.append("[");
+		networkManager.setIntialValueForD3JSon();
 		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
 		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
 		while(I.hasNext()){
@@ -129,6 +130,7 @@ public class NetworkListManager {
 			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
 			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
 		}
+		logger.info(networkManager.getD3JSon());
 		String jsonstring1 = jsonstring.toString();
 		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
 			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
