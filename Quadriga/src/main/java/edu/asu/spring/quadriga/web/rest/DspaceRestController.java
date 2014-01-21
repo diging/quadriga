@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,7 +78,6 @@ public class DspaceRestController {
 	private IDBConnectionListWSManager dbConnect;
 
 	@Autowired
-	//	@Qualifier("dspaceManagerDAO")
 	private IDBConnectionDspaceManager dbDspaceManager;
 
 	@Autowired
@@ -118,7 +118,7 @@ public class DspaceRestController {
 			engine.init();
 
 			// Retrieve the list of bitstreams for this workspace
-			List<IBitStream> bitstreams = dbConnect.getBitStreams(workspaceid, principal.getName());
+			List<IBitStream> bitstreams = dspaceManager.getBitstreamsInWorkspace(workspaceid, principal.getName());
 
 			template = engine.getTemplate("velocitytemplates/dspacefiles.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());

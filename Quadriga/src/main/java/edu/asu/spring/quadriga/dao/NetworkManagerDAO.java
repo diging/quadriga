@@ -657,7 +657,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			query.setParameter("status", networkStatus);
 
 			List<NetworksDTO> listNetworksDTO = query.list();
-			networkList = networkMapper.getListOfNetworks(listNetworksDTO,user.getUserName());
+			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
 			// Update project name and workspace name of the network
 			for (INetwork network : networkList) {

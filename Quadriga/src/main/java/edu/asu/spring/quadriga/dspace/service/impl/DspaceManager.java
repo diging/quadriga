@@ -22,6 +22,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
@@ -69,6 +70,9 @@ public class DspaceManager implements IDspaceManager{
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
+	
+	@Autowired
+	private IDBConnectionListWSManager dbconnectListWSManager;
 
 	@Override
 	public Properties getDspaceMessages() {
@@ -253,6 +257,13 @@ public class DspaceManager implements IDspaceManager{
 	{
 
 		return getProxyCommunityManager().getBitStream(sCollectionId, sItemId, sBitStreamId);
+	}
+	
+	@Override
+	@Transactional
+	public List<IBitStream> getBitstreamsInWorkspace(String workspaceid, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		return dbconnectListWSManager.getBitStreams(workspaceid, username);
 	}
 
 
