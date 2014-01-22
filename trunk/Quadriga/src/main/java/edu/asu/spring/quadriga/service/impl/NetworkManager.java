@@ -115,14 +115,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	private List<ID3Link> d3LinkList  = new ArrayList<ID3Link>();
 
-	private int nodeIndex =1;
+	private int nodeIndex =0;
 	
 
 	@Override
 	public void setIntialValueForD3JSon(){
 		setD3NodeList(new ArrayList<ID3Node>());
 		setD3LinkList(new ArrayList<ID3Link>());
-		setNodeIndex(1);
+		setNodeIndex(0);
 		setD3NodeIdMap(new HashMap<String, Integer>());
 	}
 	
@@ -700,7 +700,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		
 		d3JsonString.append("{\n\"nodes\":[");
 		
-		for(int i =0;i<d3NodeList.size()-2;i++){
+		for(int i =0;i<d3NodeList.size()-1;i++){
 			ID3Node d3Node =d3NodeList.get(i);
 			d3JsonString.append("{\"name\":\"");
 			d3JsonString.append(d3Node.getNodeName());
