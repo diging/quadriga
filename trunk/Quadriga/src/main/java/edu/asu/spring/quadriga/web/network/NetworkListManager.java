@@ -183,6 +183,7 @@ public class NetworkListManager {
 			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
 			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
 		}
+		
 		String jsonstring1 = jsonstring.toString();
 		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
 			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
@@ -218,6 +219,7 @@ public class NetworkListManager {
 		String qstoreGetURL = getQStoreGetURL();
 		logger.debug("Qstore Get URL : "+qstoreGetURL);
 		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
+		networkManager.setIntialValueForD3JSon();
 		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
 		jsonstring.append("[");
 		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
@@ -232,6 +234,8 @@ public class NetworkListManager {
 		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
 			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
 		}
+		logger.info("--------------------");
+		logger.info(networkManager.getD3JSon());
 		jsonstring1 = jsonstring1+"]";
 		logger.debug(jsonstring1);
 		

@@ -1,7 +1,7 @@
 //Author : Sowjanya Ambati
 
 
-function d3init(json1, networkId, path) {
+function d3init(graph, networkId, path) {
 	console.log("init");
 
 	// Layout size
@@ -21,7 +21,9 @@ function d3init(json1, networkId, path) {
 	.attr("width", width)
 	.attr("height", height);
 
-	d3.json(path+"/resources/txt-layout/data.json", function(error, graph) {
+	//d3.json(path+"/resources/txt-layout/data1.json", function(error, graph) {
+		d3.json(graph, function(error, graph) {
+			alert(graph);
 		force
 		.nodes(graph.nodes)
 		.links(graph.links)
@@ -101,8 +103,8 @@ function d3init(json1, networkId, path) {
 		var node = gnodes.append("circle")
 		.attr("class", "node")
 		.attr("r", 5)
-		.style("fill", function(d) { return color(d.group); })
-		.on("click", function(d)
+		.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
+		.on("RightClick", function(d)
 {
 //	$('#txtGroupModalTitle').html(d.label);				
 //	$('inner-details').modal('show');
@@ -173,7 +175,7 @@ function d3init(json1, networkId, path) {
 			
 })
 		.call(node_drag)
-	//	.on("mouseover", fade(.1)).on("mouseout", fade(1));;
+	.on("mouseover", fade(.1)).on("mouseout", fade(1));;
 		//.call(force.drag);
 
 		// Appending labels to the nodes
