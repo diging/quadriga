@@ -22,7 +22,7 @@ function d3init(graph, networkId, path) {
 	.attr("height", height);
 
 	//d3.json(path+"/resources/txt-layout/data1.json", function(error, graph) {
-		d3.json(graph, function(error, graph) {
+		//d3.json(graph, function(error, graph) {
 			alert(graph);
 		force
 		.nodes(graph.nodes)
@@ -262,7 +262,7 @@ function d3init(graph, networkId, path) {
 	        };
 		};
 		
-	});
+	//});
 	function s4() {
 		return Math.floor((1 + Math.random()) * 0x10000)
 		.toString(16)
