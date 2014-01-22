@@ -1,0 +1,90 @@
+package edu.asu.spring.quadriga.domain.implementation;
+
+import java.util.List;
+
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IUser;
+
+/**
+ * @description : Collaborator class describing the properties 
+ *                of a Collaborator object
+ * 
+ * @author      : Kiran Kumar Batna
+ *
+ */
+public class Collaborator implements ICollaborator 
+{
+	private IUser userObj;
+	private String description;
+	private List<ICollaboratorRole> collaboratorRoles;
+	
+	public IUser getUserObj() {
+		return userObj;
+	}
+	public void setUserObj(IUser userObj) {
+		this.userObj = userObj;
+	}
+	@Override
+	public String getDescription() {
+		return description;
+	}
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	@Override
+	public List<ICollaboratorRole> getCollaboratorRoles() {
+		return collaboratorRoles;
+	}
+	@Override
+	public void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles) {
+		this.collaboratorRoles = collaboratorRoles;
+	}
+	/*@Override
+	public void setProjectCollaborator(String collaborator) {
+		
+		this.collaborator = collaborator;
+		
+	} */
+	@Override
+	public void setCollaboratorName(String collaborator) {
+		
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((collaboratorRoles == null) ? 0 : collaboratorRoles
+						.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Collaborator other = (Collaborator) obj;
+		if (collaboratorRoles == null) {
+			if (other.collaboratorRoles != null)
+				return false;
+		} else if (!collaboratorRoles.equals(other.collaboratorRoles))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		return true;
+	}
+	
+	
+	
+}
