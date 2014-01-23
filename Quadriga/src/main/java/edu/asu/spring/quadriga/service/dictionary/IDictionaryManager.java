@@ -39,7 +39,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addNewDictionariesItems(String dictionaryId,
+	public abstract void addNewDictionariesItems(String dictionaryId,
 			String item, String id, String pos, String owner)
 			throws QuadrigaStorageException;
 
@@ -49,7 +49,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addNewDictionary(IDictionary newDictionary)
+	public abstract void addNewDictionary(IDictionary newDictionary)
 			throws QuadrigaStorageException;
 
 	/**
@@ -88,7 +88,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteDictionariesItems(String dictionaryId,
+	public abstract void deleteDictionariesItems(String dictionaryId,
 			String itemid, String ownerName) throws QuadrigaStorageException;
 
 	/**
@@ -100,7 +100,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String updateDictionariesItems(String dictionaryId,
+	public abstract void updateDictionariesItems(String dictionaryId,
 			String itemid, String term, String pos)
 			throws QuadrigaStorageException;
 
@@ -151,7 +151,7 @@ public interface IDictionaryManager {
 	 * @param sessionUser
 	 * @return String
 	 */
-	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser);
+	public abstract void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser);
 	
 	
 	/**
@@ -171,7 +171,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteDictionary(String user, String dictionaryId)throws QuadrigaStorageException;
+	public abstract void deleteDictionary(String user, String dictionaryId)throws QuadrigaStorageException;
 
 	/**
 	 * Check for user permission on the dictionary
@@ -187,19 +187,19 @@ public interface IDictionaryManager {
 	public abstract List<IDictionary> getDictionaryCollabOfUser(String userId)
 			throws QuadrigaStorageException, QuadrigaAccessException;
 
-	public abstract String getDictionaryCollabPerm(String userId, String dicitonaryId)
+	public abstract List<String> getDictionaryCollabPerm(String userId, String dicitonaryId)
 			throws QuadrigaStorageException;
 
 	public abstract List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
-	public abstract String deleteDictionaryItemsCollab(String dictionaryId, String itemid)
+	public abstract void deleteDictionaryItemsCollab(String dictionaryId, String itemid)
 			throws QuadrigaStorageException;
 
 	public abstract String getDictionaryOwner(String dictionaryid)
 			throws QuadrigaStorageException;
 
-	public abstract String addDictionaryItems(DictionaryItem dictionartItems, String[] values,
+	public abstract void addDictionaryItems(DictionaryItem dictionartItems, String[] values,
 			String dictionaryId) throws QuadrigaStorageException;
 
 	public abstract String getDictionaryId(String dictName) throws QuadrigaStorageException;

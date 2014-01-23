@@ -68,9 +68,8 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 		return 1;
 	}
 	
-	public String addNewDictionary(IDictionary newDictionary){
+	public void addNewDictionary(IDictionary newDictionary){
 		
-		return "";
 		
 	}
 
@@ -90,18 +89,16 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 
 
 	@Override
-	public String addNewDictionariesItems(String dictionaryId, String item,
+	public void addNewDictionariesItems(String dictionaryId, String item,
 			String id, String pos,			String owner) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 
 	@Override
-	public String updateDictionariesItems(String dictionaryId, String itemid,
+	public void updateDictionariesItems(String dictionaryId, String itemid,
 			String term, String pos) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 
@@ -128,10 +125,9 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public String deleteDictionariesItems(String dictionaryId, String itemid,
+	public void deleteDictionariesItems(String dictionaryId, String itemid,
 			String ownerName) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -148,16 +144,14 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
+	public void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	
 	@Override
-	public String deleteDictionary(String user, String dictionaryId) {
+	public void deleteDictionary(String user, String dictionaryId) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	

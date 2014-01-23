@@ -15,7 +15,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * This class represents the column mappings for
+ * dspace keys table.
  * @author Karthik
  */
 @Entity

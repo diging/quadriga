@@ -355,4 +355,27 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 			throw new QuadrigaStorageException(e);
 		}
 	}
+	
+	/**
+	 * This method returns the User DAO object for the given userName
+	 * @param userName
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @author Kiran Batna
+	 */
+	@Override
+	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
+	{
+		try
+		{
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
+		query.setParameter("username", userName);
+		return (QuadrigaUserDTO) query.uniqueResult();
+		}
+		catch(Exception e)
+		{
+			logger.error("getProjectOwner :",e);
+        	throw new QuadrigaStorageException();
+		}
+	}
 }

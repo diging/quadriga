@@ -350,7 +350,7 @@ public class DictionaryRestController {
 		dictionary.setOwner(user);
 		dictionary.setName(dictName);
 		
-		String reponse = dictionaryManager.addNewDictionary(dictionary);
+		dictionaryManager.addNewDictionary(dictionary);
 		String dictId = dictionaryManager.getDictionaryId(dictName);
 		
 		Iterator<DictionaryItem> I = dictionaryList.iterator();

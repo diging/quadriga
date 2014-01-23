@@ -26,7 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
@@ -187,7 +186,7 @@ public class RetrieveProjCollabManagerTest {
 		
 		for(String query : databaseQuery)
 		{
-			((DBConnectionRetrieveProjCollabManager)dbConnection).setupTestEnvironment(query);
+//			((DBConnectionRetrieveProjCollabManager)dbConnection).setupTestEnvironment(query);
 		}
 		
 		principal = new Principal() {
@@ -246,7 +245,7 @@ public class RetrieveProjCollabManagerTest {
 		databaseQuery[2] = "DELETE FROM tbl_quadriga_user";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionRetrieveProjCollabManager)dbConnection).setupTestEnvironment(query);
+//			((DBConnectionRetrieveProjCollabManager)dbConnection).setupTestEnvironment(query);
 		}
 	}
 

@@ -42,7 +42,7 @@ public class DBConnectionArchiveWSMangerTest {
 		databaseQuery[5] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_2','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionArchiveWSManger)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionArchiveWSManger)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class DBConnectionArchiveWSMangerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionArchiveWSManger)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionArchiveWSManger)dbConnect).setupTestEnvironment(query);
 		}
 	}
 

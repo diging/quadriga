@@ -4,7 +4,7 @@
 
 use Cwd qw();
 
-my ($line, $userName,$dbName);
+my ($line, $userName,$dbName,$mysqlLocation);
 system(">dbCreation.log");
 #	Read the username and database name to create a database
 open (MYFILE, 'database.props');
@@ -16,6 +16,9 @@ while($line=<MYFILE>){
 	}
 	if($line=~/dbname/){
 		$dbName=$values[1];
+	}
+    if($line=~/mysqllocation/){
+		$mysqlLocation=$values[1];
 	}
 }
 close(MYFILE);
@@ -46,38 +49,22 @@ foreach $file (@files) {
 }
 close(OUTFILE);
 
-#	Creates a file for creating views
+
+#	Creates a file for executing the foreign key constraint script
 open (OUTFILE, '>>createDBSchema.txt');
-@files = <./Views/*>;
+@files = <./Scripts/*>;
 
 foreach $file (@files) {
-  print  OUTFILE "source ".$loc."/".$file . "\n";
+    print OUTFILE "source ".$loc."/".$file . "\n";
 }
 close(OUTFILE);
 
-#	Creates a file for creating stored procedures
-open (OUTFILE, '>>createDBSchema.txt');
-@files = <./StoredProcedures/*>;
-
-foreach $file (@files) {
-  print  OUTFILE "source ".$loc."/".$file . "\n";
-}
-close(OUTFILE);
-
-#	Creates a file for creating sfunctions
-open (OUTFILE, '>>createDBSchema.txt');
-@files = <./Functions/*>;
-
-foreach $file (@files) {
-  print  OUTFILE "source ".$loc."/".$file . "\n";
-}
-close(OUTFILE);
 
 print "Creating Database : $dbName schema\n";
-system("sudo mysql < ./createDB.txt >> dbCreation.log 2>&1");
+system("sudo $mysqlLocation < ./createDB.txt >> dbCreation.log 2>&1");
 print "Creating tables on the database : $dbName\n";
 print "Please enter your [$userName] user password when prompted\n";
-system("sudo mysql --user=$userName --password $dbName < ./createDBSchema.txt  >> dbCreation.log 2>&1" );
+system("sudo $mysqlLocation --user=$userName --password $dbName < ./createDBSchema.txt  >> dbCreation.log 2>&1" );
 
 # Cleaning the file created by the script
 

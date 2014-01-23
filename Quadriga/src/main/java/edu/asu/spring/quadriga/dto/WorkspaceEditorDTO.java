@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * This class represents the column mapping for workspace editor table.
  * @author Karthik
  */
 @Entity
@@ -59,10 +59,6 @@ public class WorkspaceEditorDTO implements Serializable {
 	public WorkspaceEditorDTO() {
     }
 
-    public WorkspaceEditorDTO(WorkspaceEditorDTOPK workspaceEditorDTOPK) {
-        this.workspaceEditorDTOPK = workspaceEditorDTOPK;
-    }
-
     public WorkspaceEditorDTO(WorkspaceEditorDTOPK workspaceEditorDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceEditorDTOPK = workspaceEditorDTOPK;
         this.updatedby = updatedby;
@@ -71,8 +67,12 @@ public class WorkspaceEditorDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public WorkspaceEditorDTO(String workspaceid, String owner) {
+    public WorkspaceEditorDTO(String workspaceid, String owner,String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceEditorDTOPK = new WorkspaceEditorDTOPK(workspaceid, owner);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public WorkspaceEditorDTOPK getWorkspaceEditorDTOPK() {

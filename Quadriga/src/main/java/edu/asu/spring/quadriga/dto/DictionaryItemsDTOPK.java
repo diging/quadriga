@@ -10,7 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- *
+ * This class represents the primary variable mappings
+ * with the column names of dictionary items table.
  * @author Karthik
  */
 @Embeddable
@@ -59,7 +60,6 @@ public class DictionaryItemsDTOPK implements Serializable
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof DictionaryItemsDTOPK)) {
             return false;
         }

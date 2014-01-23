@@ -168,7 +168,7 @@ public class DBConnectionRetrieveProjCollabManagerTest {
 
 		for(String query : databaseQuery)
 		{
-			 ((DBConnectionRetrieveProjCollabManager) dbConnection).setupTestEnvironment(query);
+//			 ((DBConnectionRetrieveProjCollabManager) dbConnection).setupTestEnvironment(query);
 		}
 	}
 	
@@ -218,7 +218,7 @@ public class DBConnectionRetrieveProjCollabManagerTest {
 		databaseQuery[2] = "DELETE FROM tbl_quadriga_user";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionRetrieveProjCollabManager)dbConnection).setupTestEnvironment(query);
+//			((DBConnectionRetrieveProjCollabManager)dbConnection).setupTestEnvironment(query);
 		}	
 	}
 

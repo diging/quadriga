@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for network assigned 
+ *table.
  * @author Karthik
  */
 @Entity
@@ -76,8 +77,14 @@ public class NetworkAssignedDTO implements Serializable {
         this.isarchived = isarchived;
     }
 
-    public NetworkAssignedDTO(String networkid, String assigneduser,Date date) {
-        this.networkAssignedDTOPK = new NetworkAssignedDTOPK(networkid, assigneduser,date);
+    public NetworkAssignedDTO(String networkid, String assigneduser,String status, String updatedby, Date updateddate, String createdby,Date createdDate, int isarchived) {
+        this.networkAssignedDTOPK = new NetworkAssignedDTOPK(networkid, assigneduser,createdDate);
+        this.status = status;
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.isarchived = isarchived;
+        
     }
 
     public NetworkAssignedDTOPK getNetworkAssignedDTOPK() {

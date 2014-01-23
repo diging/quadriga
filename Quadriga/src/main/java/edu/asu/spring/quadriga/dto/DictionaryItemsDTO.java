@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents dictionary items table 
+ *column mappings.
  * @author Karthik
  */
 @Entity
@@ -78,8 +79,13 @@ public class DictionaryItemsDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public DictionaryItemsDTO(String id, String termid) {
+    public DictionaryItemsDTO(String id, String termid,String pos, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.dictionaryItemsDTOPK = new DictionaryItemsDTOPK(id, termid);
+        this.pos = pos;
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public DictionaryItemsDTOPK getDictionaryItemsDTOPK() {

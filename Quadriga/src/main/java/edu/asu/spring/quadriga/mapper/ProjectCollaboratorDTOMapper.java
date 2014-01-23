@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
@@ -24,7 +26,6 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
-//@Repository
 public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 
 	@Autowired
@@ -40,6 +41,8 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ProjectCollaboratorDTOMapper.class);
 	
 	public List<ICollaborator> getProjectCollaboratorList(ProjectDTO projectDTO) throws QuadrigaStorageException
 	{
@@ -89,34 +92,76 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 		return collabMap;
 	}
 	
-	public void getProjectCollaboratorDAO(List<ProjectCollaboratorDTO> collaboratorList,ICollaborator collaborator,String projectId,String loggedInUser) throws QuadrigaStorageException
+	/**
+	 * This method assigns a collaborator to the given project
+	 * @param project
+	 * @param collaborator
+	 * @param loggedInUser
+	 * @throws QuadrigaStorageException
+	 */
+	public void getProjectCollaboratorDAO(ProjectDTO project,ICollaborator collaborator,String loggedInUser) throws QuadrigaStorageException
 	{
 		try
 		{
+			String projectId = project.getProjectid();
+			List<ProjectCollaboratorDTO> projectCollaborator;
 			String collabUser = collaborator.getUserObj().getUserName();
 			List<ICollaboratorRole> collaboratorRoles = collaborator.getCollaboratorRoles();
 			QuadrigaUserDTO userDTO = getUserDTO(collabUser);
 			
-			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+			projectCollaborator = project.getProjectCollaboratorDTOList();
+			
 			for(ICollaboratorRole role : collaboratorRoles)
 			{
 				ProjectCollaboratorDTO collaboratorDTO = new ProjectCollaboratorDTO();
 				ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectId,collabUser,role.getRoleDBid());
-				collaboratorDTO.setProjectDTO(projectDTO);
+				collaboratorDTO.setProjectDTO(project);
 				collaboratorDTO.setQuadrigaUserDTO(userDTO);
 				collaboratorDTO.setProjectCollaboratorDTOPK(collaboratorKey);
 				collaboratorDTO.setCreatedby(loggedInUser);
 				collaboratorDTO.setCreateddate(new Date());
 				collaboratorDTO.setUpdatedby(loggedInUser);
 				collaboratorDTO.setUpdateddate(new Date());
-				collaboratorList.add(collaboratorDTO);
+				projectCollaborator.add(collaboratorDTO);
 			}
+			project.setProjectCollaboratorDTOList(projectCollaborator);
 		}
 		catch(QuadrigaStorageException ex)
 		{
+			logger.error("Retrieving project collaborators :",ex);
 			throw new QuadrigaStorageException();
 		}
+	}
 	
-		
+	/**
+	 * This method returns new collaborator object associated for the
+	 * given project
+	 * @param project
+	 * @param userName
+	 * @param collaboratorRole
+	 * @return ProjectCollaboratorDTO object
+	 * @throws QuadrigaStorageException
+	 */
+	public ProjectCollaboratorDTO getProjectCollaborator(ProjectDTO project,String userName,String collaboratorRole) throws QuadrigaStorageException
+	{
+		ProjectCollaboratorDTO collaborator = null;
+		try
+		{
+			Date date = new Date();
+			collaborator = new ProjectCollaboratorDTO();
+            collaborator.setProjectDTO(project);
+            collaborator.setProjectCollaboratorDTOPK(new ProjectCollaboratorDTOPK(project.getProjectid(),userName,collaboratorRole));
+            collaborator.setQuadrigaUserDTO(getUserDTO(userName));
+            collaborator.setCreatedby(userName);
+            collaborator.setCreateddate(date);
+            collaborator.setUpdatedby(userName);
+            collaborator.setUpdateddate(date);
+		}
+		catch(HibernateException ex)
+		{
+			logger.error("Retieving project collaborator :",ex);
+			throw new QuadrigaStorageException();
+		}
+		return collaborator;
 	}
 }

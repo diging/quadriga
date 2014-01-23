@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for project dictionary table.
  * @author Karthik
  */
 @Entity
@@ -62,10 +62,6 @@ public class ProjectDictionaryDTO implements Serializable {
     public ProjectDictionaryDTO() {
     }
 
-    public ProjectDictionaryDTO(ProjectDictionaryDTOPK projectDictionaryDTOPK) {
-        this.projectDictionaryDTOPK = projectDictionaryDTOPK;
-    }
-
     public ProjectDictionaryDTO(ProjectDictionaryDTOPK projectDictionaryDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectDictionaryDTOPK = projectDictionaryDTOPK;
         this.updatedby = updatedby;
@@ -74,8 +70,12 @@ public class ProjectDictionaryDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ProjectDictionaryDTO(String projectid, String dictionaryid) {
+    public ProjectDictionaryDTO(String projectid, String dictionaryid,String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectDictionaryDTOPK = new ProjectDictionaryDTOPK(projectid, dictionaryid);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public ProjectDictionaryDTOPK getProjectDictionaryDTOPK() {

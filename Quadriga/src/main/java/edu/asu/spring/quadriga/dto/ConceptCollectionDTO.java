@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * This class represents the column mapping for concept collection table.
  * @author Karthik
  */
 @Entity
@@ -69,6 +69,8 @@ public class ConceptCollectionDTO implements Serializable {
     private List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaboratorDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
     private List<ConceptCollectionItemsDTO> conceptCollectionItemsDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollection")
+    private List<ProjectConceptCollectionDTO> projConceptCollectionDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
     private List<WorkspaceConceptcollectionDTO> wsConceptCollectionDTOList;
 	@JoinColumn(name = "collectionowner", referencedColumnName = "username")
@@ -76,10 +78,6 @@ public class ConceptCollectionDTO implements Serializable {
     private QuadrigaUserDTO collectionowner;
 
     public ConceptCollectionDTO() {
-    }
-
-    public ConceptCollectionDTO(String conceptCollectionid) {
-        this.conceptCollectionid = conceptCollectionid;
     }
 
     public ConceptCollectionDTO(String conceptCollectionid, String collectionname, Boolean accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {
@@ -92,7 +90,18 @@ public class ConceptCollectionDTO implements Serializable {
         this.createddate = createddate;
     }
     
-    public List<WorkspaceConceptcollectionDTO> getWsConceptCollectionDTOList() {
+	@XmlTransient
+    public List<ProjectConceptCollectionDTO> getProjConceptCollectionDTOList() {
+		return projConceptCollectionDTOList;
+	}
+
+	public void setProjConceptCollectionDTOList(
+			List<ProjectConceptCollectionDTO> projConceptCollectionDTOList) {
+		this.projConceptCollectionDTOList = projConceptCollectionDTOList;
+	}
+
+	@XmlTransient
+	public List<WorkspaceConceptcollectionDTO> getWsConceptCollectionDTOList() {
  		return wsConceptCollectionDTOList;
  	}
 

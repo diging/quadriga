@@ -28,7 +28,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mysql.jdbc.log.Log;
 
 import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionModifyProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
@@ -181,7 +180,7 @@ public class ModifyProjCollabManagerTest {
 	
 		for(String query : databaseQuery)
 		{
-			((DBConnectionModifyProjCollabManager)dbConnection).setupTestEnvironment(query);
+//			((DBConnectionModifyProjCollabManager)dbConnection).setupTestEnvironment(query);
 		}
 		
 		principal = new Principal() {

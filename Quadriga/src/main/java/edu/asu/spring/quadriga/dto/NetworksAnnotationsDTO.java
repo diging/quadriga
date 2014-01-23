@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents column mappings for 
+ *network annotations table.
  * @author Ram Kumar Kumaresan
  */
 @Entity
@@ -92,10 +93,6 @@ public class NetworksAnnotationsDTO implements Serializable {
 	public NetworksAnnotationsDTO() {
     }
 
-    public NetworksAnnotationsDTO(String networkid) {
-        this.networkid = networkid;
-    }
-
     public NetworksAnnotationsDTO(String networkid, String objectid, String annotationtext, String annotationid, String username, String objecttype, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.networkid = networkid;
         this.objectid = objectid;
@@ -108,7 +105,6 @@ public class NetworksAnnotationsDTO implements Serializable {
         this.createdby = createdby;
         this.createddate = createddate;
     }
-
 
     public String getNetworkid() {
 		return networkid;

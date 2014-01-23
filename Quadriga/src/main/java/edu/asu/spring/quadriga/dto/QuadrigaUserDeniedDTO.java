@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for quadriga user denied table.
  * @author Ram Kumar Kumaresan
  */
 @Entity
@@ -61,20 +61,16 @@ public class QuadrigaUserDeniedDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @JoinColumn(name = "username", referencedColumnName = "username",insertable = false,updatable = false)
+    @JoinColumn(name = "deniedby", referencedColumnName = "username",insertable = false,updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
 
 	public QuadrigaUserDeniedDTO() {
     }
 
-    public QuadrigaUserDeniedDTO(String username) {
+    public QuadrigaUserDeniedDTO(String username, String deniedby, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.username = username;
-    }
-
-    public QuadrigaUserDeniedDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.username = username;
-        this.setDeniedby(quadrigarole);
+        this.deniedby = deniedby;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;

@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * This class represents the column mappings for
+ * workspace dictionary table.
  * @author Karthik
  */
 @Entity
@@ -59,10 +60,6 @@ public class WorkspaceDictionaryDTO implements Serializable {
 	public WorkspaceDictionaryDTO() {
     }
 
-    public WorkspaceDictionaryDTO(WorkspaceDictionaryDTOPK workspaceDictionaryDTOPK) {
-        this.workspaceDictionaryDTOPK = workspaceDictionaryDTOPK;
-    }
-
     public WorkspaceDictionaryDTO(WorkspaceDictionaryDTOPK workspaceDictionaryDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceDictionaryDTOPK = workspaceDictionaryDTOPK;
         this.updatedby = updatedby;
@@ -71,8 +68,12 @@ public class WorkspaceDictionaryDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public WorkspaceDictionaryDTO(String workspaceid, String dictionaryid) {
+    public WorkspaceDictionaryDTO(String workspaceid, String dictionaryid,String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceDictionaryDTOPK = new WorkspaceDictionaryDTOPK(workspaceid, dictionaryid);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public WorkspaceDictionaryDTOPK getWorkspaceDictionaryDTOPK() {

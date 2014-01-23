@@ -26,7 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.db.sql.dictionary.DBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
@@ -194,7 +193,8 @@ public class DBConnectionDictionaryManagerTest {
 		dictionary.setName("testDictionary");
 		dictionary.setDescription("description");
 		dictionary.setOwner(user);
-		String msg =dbConnection.addDictionary(dictionary);
+		String msg = "";
+         dbConnection.addDictionary(dictionary);
 		logger.info(" message : "+msg);
 		if(msg.equals("")){
 			logger.info("Getting dictionary for user :"+user.getUserName());
@@ -249,20 +249,22 @@ public class DBConnectionDictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg ="";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((msg.equals("")), true);
 			String id= getDictionaryID("testDictionary");
 			logger.info("Dictionary ID : "+id);
 			try {
-				msg= dbConnection.addDictionaryItems(id, 
+				
+						dbConnection.addDictionaryItems(id, 
 						"dog", "9999999999999999999999999999999999999999999999999999999999999999999", "noun", "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals((msg.equals("")), true);
-			msg= dbConnection.deleteDictionary("jdoe", id);
+			dbConnection.deleteDictionary("jdoe", id);
 			assertEquals((msg.equals("")), true);
 		}
 //		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
@@ -279,20 +281,21 @@ public class DBConnectionDictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg = "";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((msg.equals("")), true);
 			String id= getDictionaryID("testDictionary");
 			logger.info("Dictionary ID : "+id);
 			try {
-				msg= dbConnection.addDictionaryItems(id, 
+				dbConnection.addDictionaryItems(id, 
 						"dog", "9999999999999999999999999999999999999999999999999999999999999999999", "noun", "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals((msg.equals("")), true);
-			msg=dbConnection.deleteDictionaryItems(id, "9999999999999999999999999999999999999999999999999999999999999999999", "jdoe");
+			dbConnection.deleteDictionaryItems(id, "9999999999999999999999999999999999999999999999999999999999999999999", "jdoe");
 			assertEquals((msg.equals("")), true);
 		}
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
@@ -307,20 +310,21 @@ public class DBConnectionDictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg ="";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((msg.equals("")), true);
 			String id= getDictionaryID("testDictionary");
 			logger.info("Dictionary ID : "+id);
 			try {
-				msg= dbConnection.addDictionaryItems(id, 
+				dbConnection.addDictionaryItems(id, 
 						"dog", "9999999999999999999999999999999999999999999999999999999999999999999", "noun", "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals((msg.equals("")), true);
-			msg=dbConnection.updateDictionaryItems(id, "9999999999999999999999999999999999999999999999999999999999999999999", "dog1", "noun");
+			dbConnection.updateDictionaryItems(id, "9999999999999999999999999999999999999999999999999999999999999999999", "dog1", "noun");
 			assertEquals((msg.equals("")), true);
 		}
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
@@ -335,7 +339,8 @@ public class DBConnectionDictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg = "";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((msg.equals("")), true);
 
@@ -343,7 +348,8 @@ public class DBConnectionDictionaryManagerTest {
 		{
 			testSetupTestEnvironment();
 			IDictionary dictionary = null;
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg = "";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((!msg.equals("")), true);
 		}
@@ -358,13 +364,14 @@ public class DBConnectionDictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg = "";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((msg.equals("")), true);
 			String id= getDictionaryID("testDictionary");
 			logger.info("Dictionary ID : "+id);
 			try {
-				msg= dbConnection.addDictionaryItems(id, 
+				dbConnection.addDictionaryItems(id, 
 						"dog", "Dog id", "noun", "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block
@@ -400,7 +407,8 @@ public class DBConnectionDictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg = "";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((msg.equals("")), true);
 			String id= getDictionaryID("testDictionary");
@@ -421,13 +429,14 @@ public class DBConnectionDictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dbConnection.addDictionary(dictionary);
+			String msg = "";
+					dbConnection.addDictionary(dictionary);
 			logger.info(" message : "+msg);
 			assertEquals((msg.equals("")), true);
 			String id= getDictionaryID("testDictionary");
 			logger.info("Dictionary ID : "+id);
 			try {
-				msg= dbConnection.addDictionaryItems(id, 
+				dbConnection.addDictionaryItems(id, 
 						"dog", "9999999999999999999999999999999999999999999999999999999999999999999", "noun", "jdoe");
 			} catch (QuadrigaStorageException e) {
 				// TODO Auto-generated catch block

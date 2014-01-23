@@ -23,8 +23,6 @@ public interface ICollaborator
 
 	public abstract IUser getUserObj();
 	
-	//public abstract void setProjectCollaborator(String collaborator);
-	
 	public abstract void setCollaboratorName(String collaborator);
 
 }

@@ -10,7 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- *
+ *This class represents the mapping for the primary key 
+ *variables for concept collection items.
  * @author Karthik
  */
 @Embeddable

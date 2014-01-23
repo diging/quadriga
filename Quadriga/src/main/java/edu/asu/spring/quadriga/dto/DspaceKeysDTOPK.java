@@ -10,7 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- *
+ * This class represents the primary key
+ * variable mappings for dspace keys table.
  * @author Karthik
  */
 @Embeddable

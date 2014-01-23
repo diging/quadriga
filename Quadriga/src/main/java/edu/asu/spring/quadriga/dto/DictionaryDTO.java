@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ *This class represents the column mappings for dictionary table.
  * @author Karthik
  */
 @Entity

@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * This class represents the column mappings for project editor table.
  * @author Karthik
  */
 @Entity
@@ -61,10 +61,6 @@ public class ProjectEditorDTO implements Serializable {
     public ProjectEditorDTO() {
     }
 
-    public ProjectEditorDTO(ProjectEditorDTOPK projectEditorDTOPK) {
-        this.projectEditorDTOPK = projectEditorDTOPK;
-    }
-
     public ProjectEditorDTO(ProjectEditorDTOPK projectEditorDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectEditorDTOPK = projectEditorDTOPK;
         this.updatedby = updatedby;
@@ -73,8 +69,12 @@ public class ProjectEditorDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ProjectEditorDTO(String projectid, String editor) {
+    public ProjectEditorDTO(String projectid, String editor, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectEditorDTOPK = new ProjectEditorDTOPK(projectid, editor);
+        this.createdby = createdby;
+        this.createddate = createddate;
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
     }
 
     public ProjectEditorDTOPK getProjectEditorDTOPK() {

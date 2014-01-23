@@ -33,7 +33,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @return Status message
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addDictionary(IDictionary dictionary)
+	public abstract void addDictionary(IDictionary dictionary)
 			throws QuadrigaStorageException;
 
 	/**
@@ -61,7 +61,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @return Status message
 	 * @throws QuadrigaStorageException
 	 */
-	public String addDictionaryItems(String dictionaryId, String item,
+	public void addDictionaryItems(String dictionaryId, String item,
 			String id, String pos, String owner)
 			throws QuadrigaStorageException;
 
@@ -71,7 +71,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @return Status message
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteDictionaryItems(String dictinaryId,
+	public abstract void deleteDictionaryItems(String dictinaryId,
 			String itemid, String ownerName) throws QuadrigaStorageException;
 
 	/**
@@ -80,7 +80,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @return Status message
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String updateDictionaryItems(String dictinaryId,
+	public abstract void updateDictionaryItems(String dictinaryId,
 			String termid, String term, String pos)
 			throws QuadrigaStorageException;
 	
@@ -117,7 +117,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 * @author rohit pendbhaje
 	 */
-	public abstract String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException;
+	public abstract void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) throws QuadrigaStorageException;
 
 	/**
 	 * makes db call to delete collaborator in dictionary
@@ -136,7 +136,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @return 
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException;
+	public abstract void deleteDictionary(String user, String dictionaryId) throws QuadrigaStorageException;
 
 	/**
 	 * Checks if user has permission to dictionary
@@ -152,13 +152,13 @@ public interface IDBConnectionDictionaryManager {
 	public abstract List<IDictionary> getDictionaryCollabOfUser(String userId)
 			throws QuadrigaStorageException;
 
-	public abstract String getDictionaryCollabPerm(String userId, String dicitonaryId)
+	public abstract List<String> getDictionaryCollaboratorRoles(String userId, String dicitonaryId)
 			throws QuadrigaStorageException;
 
 	public abstract List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
-	public abstract String deleteDictionaryItemsCollab(String dictinaryId, String itemid)
+	public abstract void deleteDictionaryItemsCollab(String dictinaryId, String itemid)
 			throws QuadrigaStorageException;
 
 	public abstract String getDictionaryOwner(String dictionaryId)

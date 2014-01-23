@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * This class represents the column mapping for workspace dspace table.
  * @author Karthik
  */
 @Entity
@@ -61,10 +61,6 @@ public class WorkspaceDspaceDTO implements Serializable {
     public WorkspaceDspaceDTO() {
     }
 
-    public WorkspaceDspaceDTO(WorkspaceDspaceDTOPK workspaceDspaceDTOPK) {
-        this.workspaceDspaceDTOPK = workspaceDspaceDTOPK;
-    }
-
     public WorkspaceDspaceDTO(WorkspaceDspaceDTOPK workspaceDspaceDTOPK, String communityid, String collectionid, String itemid, String createdby, Date createddate) {
         this.workspaceDspaceDTOPK = workspaceDspaceDTOPK;
         this.communityid = communityid;
@@ -74,8 +70,13 @@ public class WorkspaceDspaceDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public WorkspaceDspaceDTO(String workspaceid, String bitstreamid) {
+    public WorkspaceDspaceDTO(String workspaceid, String bitstreamid,String communityid, String collectionid, String itemid, String createdby, Date createddate) {
         this.workspaceDspaceDTOPK = new WorkspaceDspaceDTOPK(workspaceid, bitstreamid);
+        this.communityid = communityid;
+        this.collectionid = collectionid;
+        this.itemid = itemid;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public WorkspaceDspaceDTOPK getWorkspaceDspaceDTOPK() {

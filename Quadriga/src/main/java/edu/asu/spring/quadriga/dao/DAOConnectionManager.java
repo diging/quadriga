@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.dao;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,11 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
+/**
+ * This class contains the common methods used in 
+ * data access object classes.
+ * @author kbatna
+ */
 public abstract class DAOConnectionManager {
 
 	public final static int SUCCESS = 1;
@@ -78,17 +82,9 @@ public abstract class DAOConnectionManager {
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
 	 */
-	public String generateUniqueID() throws QuadrigaStorageException
+	public String generateUniqueID()
 	{
-		try
-		{
 			return UUID.randomUUID().toString();
-		}
-		catch(Exception ex)
-		{	
-			ex.printStackTrace();
-			throw new QuadrigaStorageException();
-		}
 	}
 	
 	/**
@@ -100,17 +96,17 @@ public abstract class DAOConnectionManager {
 	 */
 	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
 	{
+		QuadrigaUserDTO quadrigaUser = null;
 		try
 		{
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-		query.setParameter("username", userName);
-		return (QuadrigaUserDTO) query.uniqueResult();
+		quadrigaUser = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.error("getProjectOwner :",e);
+			logger.error("retrieving Quadriga user DTO :",e);
         	throw new QuadrigaStorageException();
 		}
+		return quadrigaUser;
 	}
 	
 	public ArrayList<String> getList(String users)
@@ -122,11 +118,5 @@ public abstract class DAOConnectionManager {
 		   usersList.add(user);	
 		}
 		return usersList;
-	}
-
-	public IProject getProject(IWorkSpace workspace)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

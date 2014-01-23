@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for workspace collaborator table.
  * @author Karthik
  */
 @Entity
@@ -60,10 +60,6 @@ public class WorkspaceCollaboratorDTO implements Serializable {
     public WorkspaceCollaboratorDTO() {
     }
 
-    public WorkspaceCollaboratorDTO(WorkspaceCollaboratorDTOPK workspaceCollaboratorDTOPK) {
-        this.workspaceCollaboratorDTOPK = workspaceCollaboratorDTOPK;
-    }
-
     public WorkspaceCollaboratorDTO(WorkspaceCollaboratorDTOPK workspaceCollaboratorDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceCollaboratorDTOPK = workspaceCollaboratorDTOPK;
         this.updatedby = updatedby;
@@ -72,8 +68,12 @@ public class WorkspaceCollaboratorDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public WorkspaceCollaboratorDTO(String workspaceid, String username, String collaboratorrole) {
+    public WorkspaceCollaboratorDTO(String workspaceid, String username, String collaboratorrole,String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceCollaboratorDTOPK = new WorkspaceCollaboratorDTOPK(workspaceid, username, collaboratorrole);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public WorkspaceCollaboratorDTOPK getWorkspaceCollaboratorDTOPK() {
@@ -141,7 +141,6 @@ public class WorkspaceCollaboratorDTO implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof WorkspaceCollaboratorDTO)) {
             return false;
         }

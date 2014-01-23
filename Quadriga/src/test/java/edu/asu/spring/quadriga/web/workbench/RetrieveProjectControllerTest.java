@@ -19,7 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
@@ -118,7 +117,7 @@ public class RetrieveProjectControllerTest {
 		databaseQuery[19] = "INSERT INTO tbl_workspace_collaborator(workspaceid,username,collaboratorrole,updatedby,updateddate,createdby,createddate) VALUES ('WS_4','user1','wscollab_role1','user2',CURDATE(),'user2',CURDATE())";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -134,7 +133,7 @@ public class RetrieveProjectControllerTest {
 		databaseQuery[5] = "DELETE FROM tbl_quadriga_user WHERE username IN ('user1','user2')";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 	

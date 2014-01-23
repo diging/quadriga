@@ -246,16 +246,13 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 
 		Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.unixname = :unixname");
 		query.setParameter("unixname", unixName);
-		//Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectDTO.findByUnixname");
 		ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
+		IProject project = null;
 		if(projectDTO!=null){
-			IProject project = projectDTOMapper.getProject(projectDTO);
+			project = projectDTOMapper.getProject(projectDTO);
 			project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
-			return project;
 		}
-		else
-			return null;
-
+		return project;
 	}
 
 	/**

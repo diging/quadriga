@@ -130,8 +130,8 @@ public class HomeController {
 	@RequestMapping(value="auth/profile", method = RequestMethod.GET)
 	public String showProfile(Model model, Principal principal) throws QuadrigaException, QuadrigaStorageException
 	{
-		List<ISearchResult> userProfile = profilemanager.getUserProfile();
-		model.addAttribute("userProfile", userProfile);
+		//List<ISearchResult> userProfile = profilemanager.getUserProfile();
+	//	model.addAttribute("userProfile", userProfile);
 		
 		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
 		

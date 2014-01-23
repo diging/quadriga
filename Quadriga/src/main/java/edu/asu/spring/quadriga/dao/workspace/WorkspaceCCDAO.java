@@ -58,8 +58,9 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 				conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, CCId);
 				
 				workspaceConceptCollectionDTOList = workspace.getWorkspaceConceptCollectionDTOList();
-				
-				WorkspaceConceptcollectionDTO wrkspaceCCDTO  = new WorkspaceConceptcollectionDTO(new WorkspaceConceptcollectionDTOPK(workspaceId,CCId));
+				WorkspaceConceptcollectionDTOPK wrkspaceCCDTOKey = new WorkspaceConceptcollectionDTOPK(workspaceId,CCId);
+				WorkspaceConceptcollectionDTO wrkspaceCCDTO  = new WorkspaceConceptcollectionDTO();
+				wrkspaceCCDTO.setWorkspaceConceptcollectionDTOPK(wrkspaceCCDTOKey);
 				wrkspaceCCDTO.setCreatedby(userId);
 				wrkspaceCCDTO.setCreateddate(new Date());
 				wrkspaceCCDTO.setUpdatedby(userId);

@@ -3,9 +3,11 @@ package edu.asu.spring.quadriga.dao.workbench;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +18,19 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTOPK;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
+/**
+ * This class add/update/delete a project details and 
+ * add/delete project editor role.
+ * @author kbatna
+ *
+ */
 @Repository
 public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDBConnectionModifyProjectManager {
 	
@@ -32,6 +39,12 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 	
 	@Autowired
 	private ProjectDTOMapper projectDTOMapper;
+	
+	@Autowired
+	private ProjectCollaboratorDTOMapper collaboratorMapper;
+	
+	@Resource(name = "projectconstants")
+	private Properties messages;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectManagerDAO.class);
 	
@@ -42,17 +55,17 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 	@Override
 	public void addProjectRequest(IProject project, String userName) throws QuadrigaStorageException
 	{
-		project.setInternalid(generateUniqueID());
+		String projectId = messages.getProperty("project_internalid.name") + generateUniqueID();
+		project.setInternalid(projectId);
 		ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project,userName);
-		projectDTO.setCreatedby(userName);
 		
         try
         {
         	sessionFactory.getCurrentSession().save(projectDTO);			
         }
-        catch(Exception e)
+        catch(HibernateException e)
         {
-        	logger.error("getProjectOwner :",e);
+        	logger.error("Add project details :",e);
         	throw new QuadrigaStorageException();
         }
 	}
@@ -101,8 +114,6 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 		catch(HibernateException e)
 		{
 			logger.error("Delete project details request method :",e);
-			System.out.println("PRINTING ERROR");
-			System.out.println(e);
 			throw new QuadrigaStorageException();
 		}
 	}
@@ -131,15 +142,9 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 				}
 			}
 			
-			ProjectCollaboratorDTO projectCollaboratorDTO = new ProjectCollaboratorDTO();
-			projectCollaboratorDTO.setProjectDTO(projectDTO);
-			projectCollaboratorDTO.setProjectCollaboratorDTOPK(new ProjectCollaboratorDTOPK(projectId,oldOwner,collabRole));
-			projectCollaboratorDTO.setQuadrigaUserDTO(new QuadrigaUserDTO(oldOwner));
-			projectCollaboratorDTO.setCreatedby(oldOwner);
-			projectCollaboratorDTO.setCreateddate(new Date());
-			projectCollaboratorDTO.setUpdatedby(oldOwner);
-			projectCollaboratorDTO.setUpdateddate(new Date());
-			projectDTO.getProjectCollaboratorDTOList().add(projectCollaboratorDTO);
+			ProjectCollaboratorDTO collaborator = collaboratorMapper.getProjectCollaborator(projectDTO, oldOwner, collabRole);
+			
+			projectDTO.getProjectCollaboratorDTOList().add(collaborator);
 			
 			sessionFactory.getCurrentSession().update(projectDTO);
 		}
@@ -158,23 +163,20 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 	@Override
 	public void assignProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
 	{
+		ProjectEditorDTO projectEditor = null;
+		ProjectEditorDTOPK projectEditorKey = null;
+		ProjectDTO project = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ProjectEditorDTO projEditorDTO where projEditorDTO.projectEditorDTOPK.projectid =:projectid and projEditorDTO.projectEditorDTOPK.editor =:owner");
-			query.setParameter("projectid", projectId);
-			query.setParameter("owner", owner);
+			projectEditorKey = new ProjectEditorDTOPK(projectId,owner);
+			projectEditor = (ProjectEditorDTO) sessionFactory.getCurrentSession().get(ProjectEditorDTO.class, projectEditorKey);
 			
-			ProjectEditorDTO projectEditorDTO = (ProjectEditorDTO) query.uniqueResult();
-			
-			if( projectEditorDTO == null)
+			if( projectEditor == null)
 			{
-				projectEditorDTO = new ProjectEditorDTO();
-				projectEditorDTO.setProjectEditorDTOPK(new ProjectEditorDTOPK(projectId, owner));
-				projectEditorDTO.setUpdatedby(owner);
-				projectEditorDTO.setUpdateddate(new Date());
-				projectEditorDTO.setCreatedby(owner);
-				projectEditorDTO.setCreateddate(new Date());
-				sessionFactory.getCurrentSession().save(projectEditorDTO);
+				project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+				projectEditor = projectDTOMapper.getProjectEditor(project, owner);
+				
+				sessionFactory.getCurrentSession().save(projectEditor);
 			}
 		}
 		catch(HibernateException e)
@@ -191,19 +193,20 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 	@Override
 	public void deleteProjectOwnerEditor(String projectId,String owner) throws QuadrigaStorageException
 	{
+		ProjectEditorDTO projectEditor = null;
+		ProjectEditorDTOPK projectEditorKey = null;
+		
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ProjectEditorDTO projEditorDTO where projEditorDTO.projectEditorDTOPK.projectid =:projectid and  projEditorDTO.projectEditorDTOPK.owner =:owner");
-			query.setParameter("projectid", projectId);
-			query.setParameter("owner", owner);
-			
-			ProjectEditorDTO projectEditorDTO = (ProjectEditorDTO) query.uniqueResult();
-			if(!projectEditorDTO.equals(null))
+			projectEditorKey = new ProjectEditorDTOPK(projectId,owner);
+			projectEditor = (ProjectEditorDTO) sessionFactory.getCurrentSession().get(ProjectEditorDTO.class, projectEditorKey);
+
+			if(projectEditor!=null)
 			{
-				sessionFactory.getCurrentSession().delete(projectEditorDTO);
+				sessionFactory.getCurrentSession().delete(projectEditor);
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("deleteProjectOwnerEditor method : "+e);
 			throw new QuadrigaStorageException();  

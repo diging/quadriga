@@ -6,7 +6,10 @@ package edu.asu.spring.quadriga.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,13 +17,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * This class represents the column mappings for networks table.
  * @author Karthik
  */
 @Entity
@@ -66,18 +71,20 @@ public class NetworksDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
+    private List<NetworkAssignedDTO> networksAssignedDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
+    private List<NetworksAnnotationsDTO> networksAnnotationsDTOList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "networkDTO")
+    private List<NetworkStatementsDTO> networkStamentesDTOList;
     @JoinColumn(name = "workspaceid",referencedColumnName = "workspaceid",insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private WorkspaceDTO workspaceDTO;
     @JoinColumn(name = "networkowner",referencedColumnName = "username",insertable = false , updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
-
+   
 	public NetworksDTO() {
-    }
-
-    public NetworksDTO(String networkid) {
-        this.networkid = networkid;
     }
 
     public NetworksDTO(String networkid, String workspaceid, String networkname, String networkowner, String status, String updatedby, Date updateddate, String createdby, Date createddate) {
@@ -92,7 +99,37 @@ public class NetworksDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public WorkspaceDTO getWorkspaceDTO() {
+    @XmlTransient
+    public List<NetworkAssignedDTO> getNetworksAssignedDTOList() {
+		return networksAssignedDTOList;
+	}
+
+	public void setNetworksAssignedDTOList(
+			List<NetworkAssignedDTO> networksAssignedDTOList) {
+		this.networksAssignedDTOList = networksAssignedDTOList;
+	}
+
+	@XmlTransient
+	public List<NetworksAnnotationsDTO> getNetworksAnnotationsDTOList() {
+		return networksAnnotationsDTOList;
+	}
+
+	public void setNetworksAnnotationsDTOList(
+			List<NetworksAnnotationsDTO> networksAnnotationsDTOList) {
+		this.networksAnnotationsDTOList = networksAnnotationsDTOList;
+	}
+
+	@XmlTransient
+	public List<NetworkStatementsDTO> getNetworkStamentesDTOList() {
+		return networkStamentesDTOList;
+	}
+
+	public void setNetworkStamentesDTOList(
+			List<NetworkStatementsDTO> networkStamentesDTOList) {
+		this.networkStamentesDTOList = networkStamentesDTOList;
+	}
+
+	public WorkspaceDTO getWorkspaceDTO() {
 		return workspaceDTO;
 	}
 
