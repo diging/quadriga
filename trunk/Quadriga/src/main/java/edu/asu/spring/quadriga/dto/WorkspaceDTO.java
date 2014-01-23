@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ *This class represents the column mappings for workspace table.
  * @author Karthik
  */
 @Entity
@@ -88,10 +88,6 @@ public class WorkspaceDTO implements Serializable {
 
 
     public WorkspaceDTO() {
-    }
-
-    public WorkspaceDTO(String workspaceid) {
-        this.workspaceid = workspaceid;
     }
 
     public WorkspaceDTO(String workspaceid, String workspacename, Boolean isarchived, Boolean isdeactivated, String updatedby, Date updateddate, String createdby, Date createddate) {

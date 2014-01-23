@@ -21,7 +21,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This is the hibernate mapping class for concept 
+ *collection items.
  * @author Karthik
  */
 @Entity
@@ -72,8 +73,11 @@ public class ConceptCollectionItemsDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ConceptCollectionItemsDTO(String conceptCollectionId, String item) {
+    public ConceptCollectionItemsDTO(String conceptCollectionId, String item,String lemma, Date updateddate, Date createddate) {
         this.conceptCollectionItemsDTOPK = new ConceptCollectionItemsDTOPK(conceptCollectionId, item);
+        this.lemma = lemma;
+        this.updateddate = updateddate;
+        this.createddate = createddate;
     }
 
     public ConceptCollectionItemsDTOPK getConceptcollectionsItemsDTOPK() {

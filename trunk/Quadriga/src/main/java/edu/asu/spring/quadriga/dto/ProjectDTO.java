@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ *This class represents the column mappings for project table.
  * @author Karthik
  */
 @Entity
@@ -85,10 +85,6 @@ public class ProjectDTO implements Serializable
     private List<ProjectEditorDTO> projectEditorDTOList;
 
 	public ProjectDTO() {
-    }
-
-    public ProjectDTO(String projectid) {
-        this.projectid = projectid;
     }
 
     public ProjectDTO(String projectid, String projectname, String unixname, String accessibility, String updatedby, Date updateddate, String createdby, Date createddate) {

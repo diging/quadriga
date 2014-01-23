@@ -86,12 +86,15 @@ public class DictionaryItemCollabController {
 		}
 		String dictionaryName = "";
 		dictionaryName = dictonaryManager.getDictionaryName(dictionaryid);
-		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryid);
-		String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(role);
-		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
-			
-			model.addAttribute("roleAccess", 1);
+		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryid);
+		for(String tempRole : role)
+		{
+			String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(tempRole);
+			logger.info("Role :"+role+"  role type : "+roleType);
+			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
+				
+				model.addAttribute("roleAccess", 1);
+			}
 		}
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
@@ -129,19 +132,23 @@ public class DictionaryItemCollabController {
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
-			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
-			String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(role);
-			logger.info("Role :"+role+"  role type : "+roleType);
-			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
-				model.addAttribute("roleAccess", 1);
+			List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
+			for(String tempRole : role)
+			{
+				String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(tempRole);
+				logger.info("Role :"+role+"  role type : "+roleType);
+				if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
+					model.addAttribute("roleAccess", 1);
+				}
 			}
+			
 			model.addAttribute("dictID", dictionaryId);
 			return "auth/dictionary/dictionarycollab";
 		}else {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("Deleting item for dictionary id: " + dictionaryId
 						+ " and term id : " + i + " : " + values[i]);
-				msg = dictonaryManager.deleteDictionaryItemsCollab(dictionaryId,
+				dictonaryManager.deleteDictionaryItemsCollab(dictionaryId,
 						values[i]);
 				if (!msg.equals("")) {
 					flag = 1;
@@ -169,11 +176,14 @@ public class DictionaryItemCollabController {
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
-		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
-		String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(role);
-		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
-			model.addAttribute("roleAccess", 1);
+		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
+		for(String tempRole : role)
+		{
+			String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(tempRole);
+			logger.info("Role :"+role+"  role type : "+roleType);
+			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
+				model.addAttribute("roleAccess", 1);
+			}
 		}
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
@@ -205,12 +215,16 @@ public class DictionaryItemCollabController {
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
-			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
-			String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(role);
-			logger.info("Role :"+role+"  role type : "+roleType);
-			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
-				model.addAttribute("roleAccess", 1);
+			List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
+			for(String tempRole : role)
+			{
+				String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(tempRole);
+				logger.info("Role :"+role+"  role type : "+roleType);
+				if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
+					model.addAttribute("roleAccess", 1);
+				}
 			}
+			
 			model.addAttribute("collab", 1);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
@@ -224,7 +238,7 @@ public class DictionaryItemCollabController {
 				Iterator<DictionaryEntry> I = dictionaryEntryList.iterator();
 				if (I.hasNext()) {
 					DictionaryEntry dictionaryEntry = I.next();
-					msg = dictonaryManager.updateDictionariesItems(
+					dictonaryManager.updateDictionariesItems(
 							dictionaryId, values[i],
 							dictionaryEntry.getLemma(),
 							dictionaryEntry.getPos());
@@ -263,12 +277,16 @@ public class DictionaryItemCollabController {
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
-		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
-		String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(role);
-		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
-			model.addAttribute("roleAccess", 1);
+		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
+		for(String tempRole : role)
+		{
+			String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(tempRole);
+			logger.info("Role :"+role+"  role type : "+roleType);
+			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
+				model.addAttribute("roleAccess", 1);
+			}
 		}
+		
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
 
@@ -287,7 +305,7 @@ public class DictionaryItemCollabController {
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
-			msg = dictonaryManager.addDictionaryItems(dictionaryItems, values, dictionaryId);
+			dictonaryManager.addDictionaryItems(dictionaryItems, values, dictionaryId);
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
@@ -295,12 +313,16 @@ public class DictionaryItemCollabController {
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
-			String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
-			String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(role);
-			logger.info("Role :"+role+"  role type : "+roleType);
-			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
-				model.addAttribute("roleAccess", 1);
+			List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
+			for(String tempRole : role)
+			{
+				String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(tempRole);
+				logger.info("Role :"+role+"  role type : "+roleType);
+				if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
+					model.addAttribute("roleAccess", 1);
+				}
 			}
+			
 			model.addAttribute("collab", 1);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
@@ -326,11 +348,14 @@ public class DictionaryItemCollabController {
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
-		String role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
-		String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(role);
-		logger.info("Role :"+role+"  role type : "+roleType);
-		if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
-			model.addAttribute("roleAccess", 1);
+		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
+		for(String tempRole : role)
+		{
+			String roleType=collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(tempRole);
+			logger.info("Role :"+role+"  role type : "+roleType);
+			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
+				model.addAttribute("roleAccess", 1);
+			}
 		}
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);

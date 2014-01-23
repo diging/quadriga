@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import javax.annotation.Resource;
 
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,24 +48,21 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 	@Override
 	public void addCollaboratorRequest(ICollaborator collaborator, String projectid,String userName) throws QuadrigaStorageException
 	{
-		List<ProjectCollaboratorDTO> projectCollaborator;
 		try
 		{
 			ProjectDTO projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-			projectCollaborator = projectDTO.getProjectCollaboratorDTOList();
 			
 			if(!projectDTO.equals(null))
 			{
 				
-				projectMapper.getProjectCollaboratorDAO(projectCollaborator,collaborator, projectid, userName);
-				projectDTO.setProjectCollaboratorDTOList(projectCollaborator);
+				projectMapper.getProjectCollaboratorDAO(projectDTO,collaborator,userName);
 				sessionFactory.getCurrentSession().update(projectDTO);
 				
 			}
 		}
-		catch(Exception ex)
+		catch(HibernateException ex)
 		{
-			logger.error("Adding project collaborator",ex);
+			logger.error("Adding project collaborator :",ex);
 			throw new QuadrigaStorageException();
 		}
 	}

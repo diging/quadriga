@@ -8,15 +8,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceEditorDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
-public class WorkspaceDTOMapper {
+public class WorkspaceDTOMapper extends DAOConnectionManager{
 
 	@Autowired
 	private IWorkspaceFactory workspaceFactory;
@@ -24,12 +26,12 @@ public class WorkspaceDTOMapper {
 	@Autowired
     private IUserManager userManager;
 	
-	public WorkspaceDTO getWorkspaceDTO(IWorkSpace iWorkSpace)
+	public WorkspaceDTO getWorkspaceDTO(IWorkSpace iWorkSpace) throws QuadrigaStorageException
 	{
 		WorkspaceDTO workspaceDTO = new WorkspaceDTO();
 		workspaceDTO.setWorkspacename(iWorkSpace.getName());
 		workspaceDTO.setDescription(iWorkSpace.getDescription());
-		workspaceDTO.setWorkspaceowner(new QuadrigaUserDTO(iWorkSpace.getOwner().getUserName()));
+		workspaceDTO.setWorkspaceowner((getUserDTO(iWorkSpace.getOwner().getUserName())));
 		workspaceDTO.setIsarchived(false);
 		workspaceDTO.setIsdeactivated(false);
 		workspaceDTO.setUpdatedby(iWorkSpace.getOwner().getUserName());
@@ -59,5 +61,30 @@ public class WorkspaceDTOMapper {
 			workspaceList.add(getWorkSpace(workspaceDTO));
 		}
 		return workspaceList;
+	}
+	
+	/**
+	 * This method associates editor with the workspace supplied
+	 * @param workspace
+	 * @param userName
+	 * @return WorkspaceEditorDTO object
+	 * @throws QuadrigaStorageException
+	 */
+	public WorkspaceEditorDTO getWorkspaceEditor(WorkspaceDTO workspace, String userName) throws QuadrigaStorageException
+	{
+		WorkspaceEditorDTO workspaceEditor = null;
+		WorkspaceEditorDTOPK workspaceEditorKey = null;
+		Date date = new Date();
+		workspaceEditor = new WorkspaceEditorDTO();
+		workspaceEditorKey = new WorkspaceEditorDTOPK(workspace.getWorkspaceid(),userName);
+		workspaceEditor.setWorkspaceEditorDTOPK(workspaceEditorKey);
+		workspaceEditor.setWorkspaceDTO(workspace);
+		workspaceEditor.setQuadrigaUserDTO(getUserDTO(userName));
+		workspaceEditor.setCreatedby(userName);
+		workspaceEditor.setCreateddate(date);
+		workspaceEditor.setUpdatedby(userName);
+		workspaceEditor.setUpdateddate(date);
+		
+		return workspaceEditor;
 	}
 }

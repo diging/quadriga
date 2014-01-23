@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.dao.workbench;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,6 +18,7 @@ import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
+import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
 public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary 
@@ -31,6 +31,9 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 	
 	@Autowired
 	private DictionaryDTOMapper dictionaryMapper;
+	
+	@Autowired
+	private ProjectDTOMapper projectMapper;
 	
 	/**
 	 * {@inheritDoc}
@@ -55,17 +58,7 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 		}
 		
 		//create a new ProjectDictionaryDTO object
-		ProjectDictionaryDTO projectDictionary = new ProjectDictionaryDTO();
-		Date date = new Date();
-		ProjectDictionaryDTOPK projectDictionaryKey = new ProjectDictionaryDTOPK(projectId,dictionaryId);
-		projectDictionary.setProjectDictionaryDTOPK(projectDictionaryKey);
-		projectDictionary.setProject(project);
-		projectDictionary.setDictionary(dictionary);
-		projectDictionary.setCreatedby(userId);
-		projectDictionary.setCreateddate(date);
-		projectDictionary.setUpdatedby(userId);
-		projectDictionary.setUpdatedby(userId);
-		projectDictionary.setUpdateddate(date);
+		ProjectDictionaryDTO projectDictionary = projectMapper.getProjectDictionary(project, dictionary, userId);
 		
 		sessionFactory.getCurrentSession().save(projectDictionary);
 		

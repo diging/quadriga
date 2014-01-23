@@ -50,8 +50,9 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 			workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
 			
 			WorkspaceDictionaryDTOPK workspaceDictionaryKey = new WorkspaceDictionaryDTOPK(workspaceId,dictionaryId);
-			WorkspaceDictionaryDTO workspaceDictionary = new WorkspaceDictionaryDTO(workspaceDictionaryKey);
+			WorkspaceDictionaryDTO workspaceDictionary = new WorkspaceDictionaryDTO();
 			Date date = new Date();
+			workspaceDictionary.setWorkspaceDictionaryDTOPK(workspaceDictionaryKey);
 			workspaceDictionary.setCreatedby(userId);
 			workspaceDictionary.setCreateddate(date);
 			workspaceDictionary.setUpdatedby(userId);

@@ -183,11 +183,12 @@ public class DictionaryManagerTest {
 	public void getDictionariesListTest() throws QuadrigaStorageException{
 		testSetupTestEnvironment();
 		{
+			String msg = "";
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
@@ -245,7 +246,8 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg = "";
+			dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
@@ -284,7 +286,8 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg = "";
+			dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
@@ -332,7 +335,8 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg = "";
+					dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
@@ -368,7 +372,8 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg = "";
+					dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
@@ -410,7 +415,8 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg = "";
+					dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Getting dictionary for user :"+user.getUserName());
@@ -469,7 +475,9 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg = "";
+			
+					dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
@@ -509,7 +517,8 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg ="";
+			dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());
@@ -531,7 +540,8 @@ public class DictionaryManagerTest {
 				WordpowerReply.DictionaryEntry dictionaryEntry=I1.next();
 				assertEquals(dictionaryEntry.getLemma(),"dog");
 				assertEquals(dictionaryEntry.getPos(),"noun");
-				String msg1=dictionaryManager.updateDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n", dictionaryEntry.getLemma(), dictionaryEntry.getPos());
+				String msg1= "";
+						dictionaryManager.updateDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n", dictionaryEntry.getLemma(), dictionaryEntry.getPos());
 				assertEquals(msg1.equals(""), true);
 				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				I = dictionaryItemsList.iterator();
@@ -560,7 +570,8 @@ public class DictionaryManagerTest {
 			dictionary.setName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
-			String msg =dictionaryManager.addNewDictionary(dictionary);
+			String msg ="";
+					dictionaryManager.addNewDictionary(dictionary);
 			logger.info(" message : "+msg);
 			if(msg.equals("")){
 				logger.info("Adding dictionary for user :"+user.getUserName());

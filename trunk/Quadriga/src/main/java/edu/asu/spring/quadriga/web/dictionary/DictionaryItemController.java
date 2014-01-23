@@ -155,7 +155,7 @@ public class DictionaryItemController {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("Deleting item for dictionary id: " + dictionaryId
 						+ " and term id : " + i + " : " + values[i]);
-				msg = dictonaryManager.deleteDictionariesItems(dictionaryId,
+				dictonaryManager.deleteDictionariesItems(dictionaryId,
 						values[i],user.getUserName());
 				if (!msg.equals("")) {
 					flag = 1;
@@ -225,7 +225,7 @@ public class DictionaryItemController {
 				Iterator<DictionaryEntry> I = dictionaryEntryList.iterator();
 				if (I.hasNext()) {
 					DictionaryEntry dictionaryEntry = I.next();
-					msg = dictonaryManager.updateDictionariesItems(
+				dictonaryManager.updateDictionariesItems(
 							dictionaryId, values[i],
 							dictionaryEntry.getLemma(),
 							dictionaryEntry.getPos());

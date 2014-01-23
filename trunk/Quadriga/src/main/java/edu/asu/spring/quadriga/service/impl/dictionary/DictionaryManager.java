@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.impl.dictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,8 +141,8 @@ public class DictionaryManager implements IDictionaryManager {
 	
 	@Override
 	@Transactional
-	public String getDictionaryCollabPerm(String userId,String dicitonaryId) throws QuadrigaStorageException {
-		String role=dbConnect.getDictionaryCollabPerm(userId, dicitonaryId);
+	public List<String> getDictionaryCollabPerm(String userId,String dicitonaryId) throws QuadrigaStorageException {
+		List<String> role=dbConnect.getDictionaryCollaboratorRoles(userId, dicitonaryId);
 		return role;
 	}
 	/**
@@ -152,17 +153,14 @@ public class DictionaryManager implements IDictionaryManager {
 
 	@Override
 	@Transactional
-	public String addNewDictionary(IDictionary dictionary)
+	public void addNewDictionary(IDictionary dictionary)
 			throws QuadrigaStorageException {
 
-		String msg = "";
 		try {
-			msg = dbConnect.addDictionary(dictionary);
+			dbConnect.addDictionary(dictionary);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-
-		return msg;
 	}
 
 	/**
@@ -173,19 +171,15 @@ public class DictionaryManager implements IDictionaryManager {
 
 	@Override
 	@Transactional
-	public String addNewDictionariesItems(String dictionaryId, String item,
+	public void addNewDictionariesItems(String dictionaryId, String item,
 			String id, String pos, String owner)
 			throws QuadrigaStorageException {
-		String msg = "";
 		try {
-			msg = dbConnect.addDictionaryItems(dictionaryId, item, id, pos,
+			dbConnect.addDictionaryItems(dictionaryId, item, id, pos,
 					owner);
-		} catch (Exception e) {
+		} catch (HibernateException e) {
 			logger.error(e.getMessage());
 		}
-
-		return msg;
-
 	}
 
 	/**
@@ -195,30 +189,25 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public String deleteDictionariesItems(String dictionaryId, String itemid,
+	public void deleteDictionariesItems(String dictionaryId, String itemid,
 			String ownerName) throws QuadrigaStorageException {
-		String msg = "";
 		try {
-			msg = dbConnect.deleteDictionaryItems(dictionaryId, itemid,
+			dbConnect.deleteDictionaryItems(dictionaryId, itemid,
 					ownerName);
-		} catch (Exception e) {
+		} catch (HibernateException e) {
 			logger.error(e.getMessage());
 		}
-
-		return msg;
 	}
 	
 	@Override
 	@Transactional
-	public String deleteDictionaryItemsCollab(String dictionaryId, String itemid) throws QuadrigaStorageException {
-		String msg = "";
+	public void deleteDictionaryItemsCollab(String dictionaryId, String itemid) throws QuadrigaStorageException {
 		try {
-			msg = dbConnect.deleteDictionaryItemsCollab(dictionaryId, itemid);
-		} catch (Exception e) {
+			dbConnect.deleteDictionaryItemsCollab(dictionaryId, itemid);
+		} catch (HibernateException e) {
 			logger.error(e.getMessage());
 		}
 
-		return msg;
 	}
 	
 	/**
@@ -228,17 +217,14 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public String updateDictionariesItems(String dictionaryId, String termid,
+	public void updateDictionariesItems(String dictionaryId, String termid,
 			String term, String pos) throws QuadrigaStorageException {
-		String msg = "";
 		try {
-			msg = dbConnect.updateDictionaryItems(dictionaryId, termid, term,
+			dbConnect.updateDictionaryItems(dictionaryId, termid, term,
 					pos);
-		} catch (Exception e) {
+		} catch (HibernateException e) {
 			logger.error(e.getMessage());
 		}
-
-		return msg;
 	}
 
 	/**
@@ -340,18 +326,15 @@ public class DictionaryManager implements IDictionaryManager {
 
 	@Override
 	@Transactional
-	public String deleteDictionary(String user, String dictionaryId)
+	public void deleteDictionary(String user, String dictionaryId)
 			throws QuadrigaStorageException {
 
-		String msg = "";
 		try {
 			logger.debug("deleting from dictionary manager");
-			msg = dbConnect.deleteDictionary(user, dictionaryId);
-		} catch (Exception e) {
+			dbConnect.deleteDictionary(user, dictionaryId);
+		} catch (HibernateException e) {
 			logger.error(e.getMessage());
 		}
-
-		return msg;
 	}
 
 	/**
@@ -394,16 +377,14 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public String addDictionaryItems(DictionaryItem dictionartItems, String [] values,String dictionaryId) throws QuadrigaStorageException{
-		String msg="";
+	public void addDictionaryItems(DictionaryItem dictionartItems, String [] values,String dictionaryId) throws QuadrigaStorageException{
 		for (int i = 0; i < values.length; i++) {
 
 			DictionaryItem di = getDictionaryItemIndex(
 					values[i], dictionartItems);
-			msg = addNewDictionariesItems(dictionaryId,
+			addNewDictionariesItems(dictionaryId,
 					di.getItems(), di.getId(), di.getPos(), getDictionaryOwner(dictionaryId));
 		}
-		return msg;
 	}
 	
 	
@@ -489,19 +470,13 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public String addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
-		
-		String errmsg=null;
-		
+	public void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 		try {
-			
-		 errmsg =	dbConnect.addCollaborators(collaborator, dictionaryid, userName, sessionUser);
+		 dbConnect.addCollaborators(collaborator, dictionaryid, userName, sessionUser);
 			
 		} catch (QuadrigaStorageException e) {
 			e.printStackTrace();
 		}
-		
-		return errmsg;
 	}
 	
 	

@@ -1,15 +1,16 @@
 package edu.asu.spring.quadriga.dao.dictionary;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
@@ -18,12 +19,14 @@ import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryCollaborator
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.DictionaryCollaboratorDTOMapper;
 
 @Repository
 public class DictionaryCollaboratorManagerDAO extends DAOConnectionManager implements IDBConnectionDictionaryCollaboratorManager
 {
+	@Autowired
+	private DictionaryCollaboratorDTOMapper collaboratorMapper;
 
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
@@ -39,10 +42,8 @@ public class DictionaryCollaboratorManagerDAO extends DAOConnectionManager imple
 		List<DictionaryCollaboratorDTO> collaboratorList = null;
 		List<String> roles = null;
 		List<String> existingRoles = null;
-		QuadrigaUserDTO user = null;
 		String collaborator;
 		String collabRole;
-		Date date = null;
 		try
 		{
 			dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
@@ -74,22 +75,11 @@ public class DictionaryCollaboratorManagerDAO extends DAOConnectionManager imple
 				}
 				
 				//add the new roles to the collaborator
-				user = getUserDTO(collabUser);
-				
 				for(String role : roles)
 				{
 					if(!existingRoles.contains(role))
 					{
-						date = new Date();
-						dictCollaboratorDTO = new DictionaryCollaboratorDTO();
-						collaboratorKey = new DictionaryCollaboratorDTOPK(dictionaryId,collabUser,role);
-						dictCollaboratorDTO.setDictionaryDTO(dictionaryDTO);
-						dictCollaboratorDTO.setDictionaryCollaboratorDTOPK(collaboratorKey);
-						dictCollaboratorDTO.setQuadrigaUserDTO(user);
-						dictCollaboratorDTO.setCreatedby(username);
-						dictCollaboratorDTO.setCreateddate(date);
-						dictCollaboratorDTO.setUpdatedby(username);
-						dictCollaboratorDTO.setUpdateddate(date);
+						dictCollaboratorDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionaryDTO, collabUser, role);
 						collaboratorList.add(dictCollaboratorDTO);
 					}
 				}
@@ -102,7 +92,7 @@ public class DictionaryCollaboratorManagerDAO extends DAOConnectionManager imple
 				 throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
 			}
 		}
-		catch(Exception ex)
+		catch(HibernateException ex)
 		{
 			logger.error("Error while updating dictionary collaborators",ex);
 			throw new QuadrigaStorageException();

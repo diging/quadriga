@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents column mappings for project workspace table.
  * @author Karthik
  */
 @Entity
@@ -60,10 +60,6 @@ public class ProjectWorkspaceDTO implements Serializable {
     public ProjectWorkspaceDTO() {
     }
 
-    public ProjectWorkspaceDTO(ProjectWorkspaceDTOPK projectWorkspaceDTOPK) {
-        this.projectWorkspaceDTOPK = projectWorkspaceDTOPK;
-    }
-
     public ProjectWorkspaceDTO(ProjectWorkspaceDTOPK projectWorkspaceDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectWorkspaceDTOPK = projectWorkspaceDTOPK;
         this.updatedby = updatedby;
@@ -72,8 +68,12 @@ public class ProjectWorkspaceDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ProjectWorkspaceDTO(String projectid, String workspaceid) {
+    public ProjectWorkspaceDTO(String projectid, String workspaceid,String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectWorkspaceDTOPK = new ProjectWorkspaceDTOPK(projectid, workspaceid);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public ProjectWorkspaceDTOPK getProjectWorkspaceDTOPK() {

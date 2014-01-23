@@ -68,7 +68,7 @@ public class DBConnectionModifyProjectManagerTest {
 		
 		for(String query : databaseQuery)
 		{
-			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class DBConnectionModifyProjectManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username IN ('projuser','projcollab')";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
 		}	
 	}
 

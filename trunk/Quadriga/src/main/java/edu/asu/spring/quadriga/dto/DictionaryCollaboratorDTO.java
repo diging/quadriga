@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This contains the column mappings for 
+ *dictionary collaborator table
  * @author Karthik
  */
 @Entity
@@ -72,8 +73,12 @@ public class DictionaryCollaboratorDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public DictionaryCollaboratorDTO(String dictionaryid, String collaboratoruser, String collaboratorrole) {
+    public DictionaryCollaboratorDTO(String dictionaryid, String collaboratoruser, String collaboratorrole,String updatedby, Date updateddate, String createdby, Date createddate) {
         this.dictionaryCollaboratorDTOPK = new DictionaryCollaboratorDTOPK(dictionaryid, collaboratoruser, collaboratorrole);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public DictionaryCollaboratorDTOPK getDictionaryCollaboratorDTOPK() {

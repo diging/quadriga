@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for quadriga user requests table.
  * @author Karthik
  */
 @Entity
@@ -59,10 +59,6 @@ public class QuadrigaUserRequestsDTO implements Serializable {
     
 
     public QuadrigaUserRequestsDTO() {
-    }
-
-    public QuadrigaUserRequestsDTO(String username) {
-        this.username = username;
     }
 
     public QuadrigaUserRequestsDTO(String username, String updatedby, Date updateddate, String createdby, Date createddate) {

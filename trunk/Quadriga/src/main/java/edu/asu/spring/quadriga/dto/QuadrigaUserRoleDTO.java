@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represent the column mappings for
+ *quadriga user role table.
  * @author Karthik
  */
 @Entity
@@ -56,10 +57,6 @@ public class QuadrigaUserRoleDTO implements Serializable {
 	public QuadrigaUserRoleDTO() {
     }
 
-    public QuadrigaUserRoleDTO(QuadrigaUserRoleDTOPK quadrigaUserRoleDTOPK) {
-        this.quadrigaUserRoleDTOPK = quadrigaUserRoleDTOPK;
-    }
-
     public QuadrigaUserRoleDTO(QuadrigaUserRoleDTOPK quadrigaUserRoleDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.quadrigaUserRoleDTOPK = quadrigaUserRoleDTOPK;
         this.updatedby = updatedby;
@@ -68,8 +65,12 @@ public class QuadrigaUserRoleDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public QuadrigaUserRoleDTO(String username, String quadrigarole) {
+    public QuadrigaUserRoleDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.quadrigaUserRoleDTOPK = new QuadrigaUserRoleDTOPK(username, quadrigarole);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public QuadrigaUserRoleDTOPK getQuadrigaUserRoleDTOPK() {

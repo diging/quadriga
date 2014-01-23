@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.dao.dictionary;
 
-import org.hibernate.Query;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,22 +26,23 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 	
 	private static final Logger logger = LoggerFactory.getLogger(RetrieveDictionaryManagerDAO.class);
 
+	/**
+	 * This method retrieves the dictionary details for the specified dictionaryid.
+	 * @param dictionaryId
+	 * @return IDictinary object
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException 
 	{
 		IDictionary dictionary = null;
+		DictionaryDTO dictionaryDTO = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryDTO dictionary where dictionary.id =:id");
-			query.setParameter("id", dictionaryId);
-			
-			DictionaryDTO dictionaryDTO = (DictionaryDTO) query.uniqueResult();
-			if(dictionaryDTO != null)
-			{
-				dictionary = dictionaryDTOMapper.getDictionary(dictionaryDTO);
-			}
+			dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
+			dictionary = dictionaryDTOMapper.getDictionary(dictionaryDTO);
 		} 
-		catch (Exception e) 
+		catch (HibernateException e) 
 		{
 			logger.error("getDictionaryDetails method :",e);
 			throw new QuadrigaStorageException();

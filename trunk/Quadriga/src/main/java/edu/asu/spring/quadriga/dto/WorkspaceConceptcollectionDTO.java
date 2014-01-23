@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for workspace 
+ *concept collection table.
  * @author Karthik
  */
 @Entity
@@ -59,10 +60,6 @@ public class WorkspaceConceptcollectionDTO implements Serializable {
 	public WorkspaceConceptcollectionDTO() {
     }
 
-    public WorkspaceConceptcollectionDTO(WorkspaceConceptcollectionDTOPK workspaceConceptcollectionDTOPK) {
-        this.workspaceConceptcollectionDTOPK = workspaceConceptcollectionDTOPK;
-    }
-
     public WorkspaceConceptcollectionDTO(WorkspaceConceptcollectionDTOPK workspaceConceptcollectionDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceConceptcollectionDTOPK = workspaceConceptcollectionDTOPK;
         this.updatedby = updatedby;
@@ -71,8 +68,12 @@ public class WorkspaceConceptcollectionDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public WorkspaceConceptcollectionDTO(String workspaceid, String conceptcollectionid) {
+    public WorkspaceConceptcollectionDTO(String workspaceid, String conceptcollectionid,String updatedby, Date updateddate, String createdby, Date createddate) {
         this.workspaceConceptcollectionDTOPK = new WorkspaceConceptcollectionDTOPK(workspaceid, conceptcollectionid);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public WorkspaceConceptcollectionDTOPK getWorkspaceConceptcollectionDTOPK() {

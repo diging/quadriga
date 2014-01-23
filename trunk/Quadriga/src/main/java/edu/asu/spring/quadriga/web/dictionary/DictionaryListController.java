@@ -146,7 +146,7 @@ public class DictionaryListController {
 
 		String msg = "";
 		try {
-			msg = dictonaryManager.addNewDictionary(dictionary);
+			dictonaryManager.addNewDictionary(dictionary);
 		} catch (QuadrigaStorageException e1) {
 			msg = "DB Error";
 			e1.printStackTrace();
@@ -218,7 +218,7 @@ public class DictionaryListController {
 			for (int i = 0; i < values.length; i++) {
 				try {
 					logger.info("Deleting dictionary id : " + values[i]);
-					msg = dictonaryManager.deleteDictionary(
+					dictonaryManager.deleteDictionary(
 							user.getUserName(), values[i]);
 					if (!msg.equals("")) {
 						flag = 1;

@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
@@ -23,7 +24,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
 @Service
-public class ConceptCollectionDTOMapper 
+public class ConceptCollectionDTOMapper extends DAOConnectionManager
 {
 	
 	@Autowired
@@ -179,7 +180,7 @@ public class ConceptCollectionDTOMapper
 		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
 		conceptcollectionsDTO.setDescription(conceptCollection.getDescription());
 		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
-		conceptcollectionsDTO.setCollectionowner(new QuadrigaUserDTO(conceptCollection.getOwner().getUserName()));
+		conceptcollectionsDTO.setCollectionowner(getUserDTO(conceptCollection.getOwner().getUserName()));
 		conceptcollectionsDTO.setAccessibility(Boolean.FALSE);
 		return conceptcollectionsDTO;
 	}

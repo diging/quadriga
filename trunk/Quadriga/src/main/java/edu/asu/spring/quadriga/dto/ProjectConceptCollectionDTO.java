@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for project concept collection table.
  * @author Karthik
  */
 @Entity
@@ -57,10 +57,6 @@ public class ProjectConceptCollectionDTO implements Serializable {
     private ConceptCollectionDTO conceptCollection;
 
 	public ProjectConceptCollectionDTO() {
-    }
-
-    public ProjectConceptCollectionDTO(ProjectConceptCollectionDTOPK projectConceptcollectionDTOPK) {
-        this.projectConceptcollectionDTOPK = projectConceptcollectionDTOPK;
     }
 
     public ProjectConceptCollectionDTO(ProjectConceptCollectionDTOPK projectConceptcollectionDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {

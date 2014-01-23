@@ -14,10 +14,9 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionModifyDictionaryManager;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
-import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.DictionaryCollaboratorDTOMapper;
 
 @Repository
 public class ModifyDictionaryManagerDAO extends DAOConnectionManager implements IDBConnectionModifyDictionaryManager
@@ -25,6 +24,9 @@ public class ModifyDictionaryManagerDAO extends DAOConnectionManager implements 
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private DictionaryCollaboratorDTOMapper collaboratorMapper;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyDictionaryManagerDAO.class);
 	
@@ -47,9 +49,9 @@ public class ModifyDictionaryManagerDAO extends DAOConnectionManager implements 
 			dictionaryDTO.setUpdateddate(new Date());
 			sessionFactory.getCurrentSession().update(dictionaryDTO);
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.info("updateDictionaryRequest ::"+e.getMessage());	
+			logger.error("Update dictionary request :",e);	
 			throw new QuadrigaStorageException(e);
 		}
 	}
@@ -80,14 +82,7 @@ public class ModifyDictionaryManagerDAO extends DAOConnectionManager implements 
 				}
 			}
 			
-			DictionaryCollaboratorDTO dictCollaboratorDTO = new DictionaryCollaboratorDTO();
-			dictCollaboratorDTO.setDictionaryDTO(dictionaryDTO);
-			dictCollaboratorDTO.setDictionaryCollaboratorDTOPK(new DictionaryCollaboratorDTOPK(dictionaryId,oldOwner,collabRole));
-			dictCollaboratorDTO.setQuadrigaUserDTO(new QuadrigaUserDTO(oldOwner));
-			dictCollaboratorDTO.setCreatedby(oldOwner);
-			dictCollaboratorDTO.setCreateddate(new Date());
-			dictCollaboratorDTO.setUpdatedby(oldOwner);
-			dictCollaboratorDTO.setUpdateddate(new Date());
+			DictionaryCollaboratorDTO dictCollaboratorDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionaryDTO, oldOwner, collabRole);
 			dictionaryDTO.getDictionaryCollaboratorDTOList().add(dictCollaboratorDTO);
 			
 			sessionFactory.getCurrentSession().update(dictionaryDTO);

@@ -19,7 +19,6 @@ import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
-import edu.asu.spring.quadriga.db.sql.workspace.DBConnectionModifyWSManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
@@ -59,7 +58,7 @@ public class ModifyWSManagerTest {
 		databaseQuery[7] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionModifyWSManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionModifyWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -73,7 +72,7 @@ public class ModifyWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionModifyWSManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionModifyWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 

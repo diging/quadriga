@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.asu.spring.quadriga.db.sql.DBConstants;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -60,7 +59,7 @@ public class DBConnectionListWSManagerTest {
 		databaseQuery[9] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -73,7 +72,7 @@ public class DBConnectionListWSManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionListWSManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 

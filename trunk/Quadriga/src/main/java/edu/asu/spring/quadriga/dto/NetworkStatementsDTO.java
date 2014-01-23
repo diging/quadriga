@@ -20,9 +20,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 /**
- *
+ *This class represents the column mappings for 
+ *network statements table.
  * @author Karthik
  */
 @Entity
@@ -80,11 +80,6 @@ public class NetworkStatementsDTO implements Serializable {
 	public NetworkStatementsDTO() {
     }
 	
-	public NetworkStatementsDTO(String rowid)
-	{
-		this.rowid = rowid;
-	}
-
     public NetworkStatementsDTO(String rowid,String networkid,String statementid, int istop, int isarchived, String statementtype, String updatedby, Date updateddate, String createdby, Date createddate) {
     	this.rowid = rowid;
     	this.networkid = networkid;

@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -82,7 +81,7 @@ public class RetrieveProjectManagerTest {
 		
 		for(String query : databaseQuery)
 		{
-			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -94,7 +93,7 @@ public class RetrieveProjectManagerTest {
 		databaseQuery[2] = "DELETE FROM tbl_quadriga_user WHERE username IN ('projuser','projuser1','projuser2','projuser3')";
 		for(String query : databaseQuery)
 		{
-			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
+//			((DBConnectionRetrieveProjectManager)dbConnect).setupTestEnvironment(query);
 		}
 	}
 

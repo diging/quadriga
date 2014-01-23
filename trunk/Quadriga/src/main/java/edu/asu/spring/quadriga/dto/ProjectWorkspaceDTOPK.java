@@ -10,7 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- *
+ *This class represents the primary key column mappings for
+ *project workspace table.
  * @author Karthik
  */
 @Embeddable

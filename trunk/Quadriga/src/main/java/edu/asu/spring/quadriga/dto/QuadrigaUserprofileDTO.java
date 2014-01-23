@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for quadriga user profile table.
  * @author Karthik
  */
 @Entity
@@ -63,10 +63,6 @@ public class QuadrigaUserprofileDTO implements Serializable {
 	public QuadrigaUserprofileDTO() {
     }
 
-    public QuadrigaUserprofileDTO(QuadrigaUserprofileDTOPK quadrigaUserprofileDTOPK) {
-        this.quadrigaUserprofileDTOPK = quadrigaUserprofileDTOPK;
-    }
-
     public QuadrigaUserprofileDTO(QuadrigaUserprofileDTOPK quadrigaUserprofileDTOPK,String profileName,String description, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.quadrigaUserprofileDTOPK = quadrigaUserprofileDTOPK;
         this.profilename = profileName;
@@ -77,8 +73,14 @@ public class QuadrigaUserprofileDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public QuadrigaUserprofileDTO(String username, String serviceid, String profileid) {
+    public QuadrigaUserprofileDTO(String username, String serviceid, String profileid,String profileName,String description, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.quadrigaUserprofileDTOPK = new QuadrigaUserprofileDTOPK(username, serviceid,profileid);
+        this.profilename = profileName;
+        this.description = description;
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public QuadrigaUserprofileDTOPK getQuadrigaUserprofileDTOPK() {

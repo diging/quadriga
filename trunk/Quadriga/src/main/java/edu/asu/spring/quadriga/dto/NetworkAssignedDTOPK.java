@@ -14,7 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
+ *This class represents primary key column mappings 
+ *for network assigned table
  * @author Karthik
  */
 @Embeddable

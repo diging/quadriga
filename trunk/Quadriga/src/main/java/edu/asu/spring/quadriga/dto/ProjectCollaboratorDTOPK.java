@@ -10,14 +10,12 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- *
+ *This class represents the primary key column mappings
+ *for project collaborator table
  * @author Karthik
  */
 @Embeddable
 public class ProjectCollaboratorDTOPK implements Serializable {
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	@Basic(optional = false)
     @Column(name = "projectid")

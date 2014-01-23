@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.dao.workbench;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -10,6 +9,8 @@ import javax.annotation.Resource;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
+import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
 public class ProjectConceptCollectionDAO extends DAOConnectionManager implements
@@ -34,8 +36,13 @@ IDBConnectionProjectConceptColleciton
 	@Autowired
 	private ConceptCollectionDTOMapper collectionMapper;
 	
+	@Autowired
+	private ProjectDTOMapper projectMapper;
+	
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ProjectConceptCollectionDAO.class);
 	
 	/**
 	 * {@inheritDoc}
@@ -62,19 +69,13 @@ IDBConnectionProjectConceptColleciton
 		 }
 		 
 		 //add the concept collection to the project
-		 Date date = new Date();
-		 ProjectConceptCollectionDTO projectConceptCollection = new ProjectConceptCollectionDTO();
-		 ProjectConceptCollectionDTOPK projectConceptCollectionKey = new ProjectConceptCollectionDTOPK(projectId,conceptCollectionId);
-		 projectConceptCollection.setProjectConceptcollectionDTOPK(projectConceptCollectionKey);
-		 projectConceptCollection.setCreatedby(userId);
-		 projectConceptCollection.setCreateddate(date);
-		 projectConceptCollection.setUpdatedby(userId);
-		 projectConceptCollection.setUpdateddate(date);
+		 ProjectConceptCollectionDTO projectConceptCollection = projectMapper.getProjectConceptCollection(project, conceptCollection, userId);
 		 
 		 sessionFactory.getCurrentSession().save(projectConceptCollection);
 		}
 		catch(HibernateException ex)
 		{
+			logger.error("Add concept collection to project method:",ex);
 			throw new QuadrigaStorageException();
 		}
 	}
@@ -136,6 +137,7 @@ IDBConnectionProjectConceptColleciton
 		}
 		catch(HibernateException ex)
 		{
+			logger.error("Delete project and concept collection association :",ex);
 			throw new QuadrigaStorageException();
 		}
 	}

@@ -270,7 +270,7 @@ public class DBConnectionWorkspaceDictionaryTest {
 			dictionary.setOwner(user);
 			String msg = "";
 			try {
-				msg = dictionaryManager.addNewDictionary(dictionary);
+				dictionaryManager.addNewDictionary(dictionary);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -391,7 +391,7 @@ public class DBConnectionWorkspaceDictionaryTest {
 			dictionary.setOwner(user);
 			String msg = "";
 			try {
-				msg = dictionaryManager.addNewDictionary(dictionary);
+				dictionaryManager.addNewDictionary(dictionary);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -512,7 +512,7 @@ public class DBConnectionWorkspaceDictionaryTest {
 			dictionary.setOwner(user);
 			String msg = "";
 			try {
-				msg = dictionaryManager.addNewDictionary(dictionary);
+				dictionaryManager.addNewDictionary(dictionary);
 			} catch (QuadrigaStorageException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

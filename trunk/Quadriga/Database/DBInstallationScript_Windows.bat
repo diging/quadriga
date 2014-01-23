@@ -2,16 +2,12 @@
 
 REM Assinging folder names to local variables
  SET DB_TABLES=\tables
- SET DB_VIEWS=\views
- SET DB_PROC=\storedprocedures
  SET DB_SCRIPTS=\scripts
- SET DB_FUNC=\functions
 
 REM Assigning file names to local variables
  SET DB_SCHEMA_FILE=DB_Schema.txt
  SET DB_OBJECTS_FILE=DB_Objects.txt
  SET DB_LOG_FILE=DB_InstallLog.log
- SET DB_FOREIGN_KEY_SCRIPT=Constraints_foreignkey.sql
 
 REM Checking if the file exists
  IF EXIST %DB_LOG_FILE% (
@@ -73,25 +69,11 @@ REM Checking if the objects file exists
   FOR /F %%G IN ('dir .\%DB_TABLES% /b /a-d') DO (
    ECHO SOURCE %CURRENT_DIR%%DB_TABLES%\%%G >> %DB_OBJECTS_FILE%
  )
-
-REM Loop through all the views and write it to a file
- FOR /F %%G IN ('dir .\%DB_VIEWS% /b /a-d') DO (
-  ECHO SOURCE %CURRENT_DIR%%DB_VIEWS%\%%G >> %DB_OBJECTS_FILE%
- )
-
-REM Loop through all the stored procedures and write it to a file 
- FOR /F %%G IN ('dir .\%DB_PROC% /b /a-d') DO (
-  ECHO SOURCE %CURRENT_DIR%%DB_PROC%\%%G >> %DB_OBJECTS_FILE%
- )
  
- 
- REM Loop through all the functions and write it to a file 
- FOR /F %%G IN ('dir .\%DB_FUNC% /b /a-d') DO (
-  ECHO SOURCE %CURRENT_DIR%%DB_FUNC%\%%G >> %DB_OBJECTS_FILE%
+ REM Loop through scripts and write it to a file 
+ FOR /F %%G IN ('dir .\%DB_SCRIPTS% /b /a-d') DO (
+  ECHO SOURCE %CURRENT_DIR%%DB_SCRIPTS%\%%G >> %DB_OBJECTS_FILE%
  )
- 
-REM Writing the foreign key constrain script to file
- ECHO SOURCE %CURRENT_DIR%%DB_SCRIPTS%\%DB_FOREIGN_KEY_SCRIPT% >> %DB_OBJECTS_FILE%
 
 REM Creating database and granting privilege to User
  ECHO Creating database

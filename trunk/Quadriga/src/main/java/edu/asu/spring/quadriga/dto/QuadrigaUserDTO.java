@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ *This table represents the column mappings for quadriga user table.
  * @author Karthik
  */
 @Entity
@@ -95,12 +95,7 @@ public class QuadrigaUserDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<QuadrigaUserRoleDTO> quadrigaUserRoleDTOList;
 
-   
     public QuadrigaUserDTO() {
-    }
-
-    public QuadrigaUserDTO(String username) {
-        this.username = username;
     }
 
 	public QuadrigaUserDTO(String username, String quadrigarole, String updatedby, Date updateddate, String createdby, Date createddate) {

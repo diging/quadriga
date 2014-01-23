@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -15,15 +16,16 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
-import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 
 @Repository
@@ -33,9 +35,14 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	WorkspaceDTOMapper workspaceDTOMapper;
 	
 	@Autowired
+	ProjectDTOMapper projectMapper;
+	
+	@Autowired
 	SessionFactory sessionFactory;
 	
-
+	@Autowired
+	WorkspaceCollaboratorDTOMapper collaboratorMapper;
+	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyWSManagerDAO.class);
 	
 	/**
@@ -46,19 +53,13 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	{
 		try
 		{
+			ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,projectId);
 			WorkspaceDTO workspaceDTO = workspaceDTOMapper.getWorkspaceDTO(workSpace);
 			workspaceDTO.setWorkspaceid(generateUniqueID());
 			
 			List<ProjectWorkspaceDTO> projectWorkspaceList = workspaceDTO.getProjectWorkspaceDTOList();
 			
-			ProjectWorkspaceDTO projectWorkspaceDTO = new ProjectWorkspaceDTO();
-			projectWorkspaceDTO.setProjectWorkspaceDTOPK(new ProjectWorkspaceDTOPK(projectId, workspaceDTO.getWorkspaceid()));
-			/*projectWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
-			projectWorkspaceDTO.setProjectDTO((ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId));*/
-			projectWorkspaceDTO.setCreatedby(workspaceDTO.getCreatedby());
-			projectWorkspaceDTO.setCreateddate(new Date());
-			projectWorkspaceDTO.setUpdatedby(workspaceDTO.getUpdatedby());
-			projectWorkspaceDTO.setUpdateddate(new Date());
+			ProjectWorkspaceDTO projectWorkspaceDTO = projectMapper.getProjectWorkspace(project, workspaceDTO);
 			
 			if(projectWorkspaceList == null)
 			{
@@ -68,7 +69,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 			workspaceDTO.setProjectWorkspaceDTOList(projectWorkspaceList);
 			sessionFactory.getCurrentSession().save(workspaceDTO);
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("addWorkSpaceRequest method :",e);
         	throw new QuadrigaStorageException();
@@ -104,15 +105,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		}
 		
 		//add the current owner as a collaborator
-		Date date = new Date();
-		collaborator = new WorkspaceCollaboratorDTO();
-		collaborator.setWorkspaceDTO(workspaceDTO);
-		collaborator.setWorkspaceCollaboratorDTOPK(new WorkspaceCollaboratorDTOPK(workspaceId,oldOwner,collabRole));
-		collaborator.setQuadrigaUserDTO(getUserDTO(oldOwner));
-		collaborator.setCreatedby(oldOwner);
-		collaborator.setUpdateddate(date);
-		collaborator.setCreateddate(date);
-		collaborator.setUpdatedby(oldOwner);
+		collaborator = collaboratorMapper.getWorkspaceCollaborator(workspaceDTO, oldOwner, collabRole);
 		workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
 		
 		sessionFactory.getCurrentSession().update(workspaceDTO);
@@ -132,12 +125,8 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	{
 		try
 		{
-			WorkspaceEditorDTO workspaceEditorDTO = new WorkspaceEditorDTO();
-			workspaceEditorDTO.setWorkspaceEditorDTOPK(new WorkspaceEditorDTOPK(workspaceId, owner));
-			workspaceEditorDTO.setCreatedby(owner);
-			workspaceEditorDTO.setCreateddate(new Date());
-			workspaceEditorDTO.setUpdatedby(owner);
-			workspaceEditorDTO.setUpdateddate(new Date());
+			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,workspaceId);
+			WorkspaceEditorDTO workspaceEditorDTO = workspaceDTOMapper.getWorkspaceEditor(workspace, owner);
 			sessionFactory.getCurrentSession().save(workspaceEditorDTO);
 		}
 		catch(Exception e)

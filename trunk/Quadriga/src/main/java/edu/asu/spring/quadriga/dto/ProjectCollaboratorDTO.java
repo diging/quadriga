@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This class represents the column mappings for project collaborator 
+ *table.
  * @author Karthik
  */
 @Entity
@@ -60,10 +61,6 @@ public class ProjectCollaboratorDTO implements Serializable {
     public ProjectCollaboratorDTO() {
     }
 
-    public ProjectCollaboratorDTO(ProjectCollaboratorDTOPK projectCollaboratorDTOPK) {
-        this.projectCollaboratorDTOPK = projectCollaboratorDTOPK;
-    }
-
     public ProjectCollaboratorDTO(ProjectCollaboratorDTOPK projectCollaboratorDTOPK, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectCollaboratorDTOPK = projectCollaboratorDTOPK;
         this.updatedby = updatedby;
@@ -72,8 +69,12 @@ public class ProjectCollaboratorDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public ProjectCollaboratorDTO(String projectid, String collaboratoruser, String collaboratorrole) {
+    public ProjectCollaboratorDTO(String projectid, String collaboratoruser, String collaboratorrole, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.projectCollaboratorDTOPK = new ProjectCollaboratorDTOPK(projectid, collaboratoruser, collaboratorrole);
+        this.updatedby = updatedby;
+        this.updateddate = updateddate;
+        this.createdby = createdby;
+        this.createddate = createddate;
     }
 
     public ProjectCollaboratorDTOPK getProjectCollaboratorDTOPK() {

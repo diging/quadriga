@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -60,9 +61,9 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList); 
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("List workspace method :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
@@ -87,9 +88,9 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList); 
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("List workspace associated with collaborator  :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
@@ -118,9 +119,9 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList); 
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("Retrieve active workspace method :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
@@ -148,7 +149,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList); 
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("retrieve active workspace of collaborator :",e);
         	throw new QuadrigaStorageException();
@@ -182,9 +183,9 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList); 
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("Retrieve archived workspace method :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
@@ -214,7 +215,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList); 
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("retrieve deactive workspace method :",e);
         	throw new QuadrigaStorageException();
@@ -241,7 +242,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceList = workspaceDTOMapper.getWorkSpaceList(workspaceDTOList); 
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("listActiveWorkspace method :",e);
         	throw new QuadrigaStorageException();
@@ -264,9 +265,9 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("Retrieve workspace details method :",e);
         	throw new QuadrigaStorageException();
 		}
 		return workspace;
@@ -290,9 +291,9 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				bitstreamList = workspaceDspaceDTOMapper.getBitstreamList(workspaceDspaceDTOList);
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
-			logger.error("getDspaceKeys method :",e);
+			logger.error("Retrieve bit streams method :",e);
         	throw new QuadrigaStorageException();
 		}
 		return bitstreamList;
@@ -315,7 +316,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				networkList = networkDTOMapper.getNetworkList(nwDTOList);
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("getWorkspaceNetworkList method :",e);
         	throw new QuadrigaStorageException();
@@ -339,7 +340,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				workspaceName = workspaceDTO.getWorkspacename();
 			} 
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("getWorkspaceName method :",e);
         	throw new QuadrigaStorageException();
@@ -366,7 +367,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 				networkList = networkDTOMapper.getNetworkList(networksDTOList);
 			}
 		}
-		catch(Exception e)
+		catch(HibernateException e)
 		{
 			logger.error("getWorkspaceRejectedNetworkList method :",e);
         	throw new QuadrigaStorageException();

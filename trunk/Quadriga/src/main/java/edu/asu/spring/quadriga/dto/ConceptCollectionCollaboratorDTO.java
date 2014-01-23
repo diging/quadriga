@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ *This is mapping class for concept collection collaborator table
  * @author Karthik
  */
 @Entity

@@ -2,8 +2,8 @@ package edu.asu.spring.quadriga.db;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -143,6 +143,9 @@ public interface IDBConnectionManager
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
+
+	public abstract QuadrigaUserDTO getUserDTO(String userName)
+			throws QuadrigaStorageException;
 
 
 }
