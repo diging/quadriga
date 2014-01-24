@@ -97,7 +97,7 @@ public interface INetworkManager {
 	public abstract void setRelationEventPredicateMapping(
 			List<List<Object>> relationEventPredicateMapping);
 
-	public abstract List<String> getNetworkNamesInProject(String projectid)
+	public abstract List<INetwork> getNetworksInProject(String projectid)
 			throws QuadrigaStorageException;
 
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;

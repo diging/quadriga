@@ -599,26 +599,37 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
 		query.setParameter("projectid", projectid);
 
-		ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
-		List<INetwork> networkList = null;
+		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
+		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
+			System.out.println(projectWorkspaceDTO.getProjectDTO().getProjectname());
+		}
+		
+		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		//If there are a list of projects, get all the networks using the workspace ids
-		if (projectWorkspaceDTO != null) {
-			String workspaceid = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
-			Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
-			query.setParameter("workspaceid", workspaceid);
+		
+		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
+			if (projectWorkspaceDTO != null) {
+				//String workspaceid1 = projectWorkspaceDTO.getWorkspaceDTO().getWorkspaceid();
+				//System.out.println(workspaceid1);
+				String workspaceid1 = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
+				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
+				queryNetworks.setParameter("workspaceid", workspaceid1);
 
-			List<NetworksDTO> networksDTOList = queryNetworks.list();
+				List<NetworksDTO> networksDTOList = queryNetworks.list();
 
-			//Add the networks to the list
-			if(networksDTOList != null)
-			{
-				networkList = new ArrayList<INetwork>();
-				networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
+				//Add the networks to the list
+				if(networksDTOList != null)
+				{
+					//networkList = new ArrayList<INetwork>();
+					networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
+				}
 			}
 		}
-
+		
 		return networkList;
+		
+		
 	}
 
 	@Override

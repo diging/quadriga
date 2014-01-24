@@ -99,7 +99,7 @@ h1{
 	</tr>
 	<tr>
 		<td>
-			<input type="button" onClick="location.href='${pageContext.servletContext.contextPath}/sites/project/browsenetworks}'" value="Browse Networks"/> 
+			<input type="button" onClick="location.href='${pageContext.servletContext.contextPath}/sites/${project.unixName}/browsenetworks'" value="Browse Networks"/> 
 		</td>
 		<td>
 			<input type="submit" value="Search Networks"/> 
