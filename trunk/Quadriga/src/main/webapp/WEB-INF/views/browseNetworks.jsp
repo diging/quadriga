@@ -41,7 +41,8 @@
 
 <br />
 <div class="container">
-		<c:when test="${not empty networkList}">
+<c:choose>
+		<c:when test="${not empty networks}">
 			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
 				class="display dataTable">
 				<thead>
@@ -52,14 +53,16 @@
 				</thead>
 
 				<tbody>
-					<c:forEach var="network" items="${networkList}">
+					<c:forEach var="network" items="${networks}">
 						<tr>
-							<td><c:out value="${network}" /></td>
-							<td width="25%" align="center"><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'" value='Visualize'></td>
+							<td width="25%" align="left"><img style="vertical-align: middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png" > <input name="items"
+								type="hidden" value="<c:out value="${network.name}"></c:out>" />
+								<c:out value="${network.name}"></c:out></td>
+							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/sites/networks/visualize/${network.id}'" value='Visualize'></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 		</c:when>	
+</c:choose>
 </div>

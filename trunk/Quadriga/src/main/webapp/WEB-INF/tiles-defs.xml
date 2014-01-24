@@ -624,6 +624,21 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/networks/networkvisual.jsp" />
 	</definition>
+	
+	<!-- external website -->
+	<definition name="sites/website" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/website.jsp"/>
+	</definition>
+	
+	<definition name="sites/browseNetworks" extends="base.definition">
+		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp"/>
+	</definition>
+	
+	<definition name="sites/networks/visualize" extends="base.definition.networks">
+		<put-attribute name="title" value="Quadriga Networks visualize" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/networks/networkvisual.jsp" />
+	</definition>
 
 
 	<!-- editing -->
@@ -662,14 +677,6 @@
 	
 	<definition name="auth/home/showProfile" extends="base.definition">
 		<put-attribute name="content" value="/WEB-INF/views/showProfile.jsp"/>
-	</definition>
-	
-	<definition name="website" extends="base.definition">
-		<put-attribute name="content" value="/WEB-INF/views/website.jsp"/>
-	</definition>
-	
-	<definition name="browseNetworks" extends="base.definition">
-		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp"/>
 	</definition>
 	
 	<definition name="auth/home/profile/adduri" extends="base.definition">
