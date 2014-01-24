@@ -101,7 +101,7 @@
 	</c:if>
 
 	<br> <br>
-
+	
 	<c:if test="${not empty activeUserList}">
 		<h3>Current Active Users</h3>
 		<table class="display dataTable" width="100%">
@@ -120,10 +120,47 @@
 					<tr>
 						<td width="20%"><font size="3"><c:out
 									value="${user.userName}"></c:out></font></td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
+						<td class="center">
+						<c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Admin')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center"><c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Standard User')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center"><c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Restricted User')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center"><c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Collaborating User')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
 						<td class="center"><font size="1"> <input
 								type="submit"
 								onclick="location.href='${pageContext.servletContext.contextPath}/auth/users/deactivate/${user.userName}'"
@@ -166,10 +203,47 @@
 					<tr>
 						<td width="20%"><font size="3"><c:out
 									value="${user.userName}"></c:out></font></td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
+						<td class="center">
+						<c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Admin')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if>
+    					</td>
+						<td class="center">
+						<c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+            					<c:if test="${role.name eq ('Quadriga Standard User')}">
+            						<c:set var="flag" value="1" />  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center">
+						<c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+            					<c:if test="${role.name eq ('Quadriga Restricted User')}">
+            						<c:set var="flag" value="1" />  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center"><c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+            					<c:if test="${role.name eq ('Quadriga Collaborating User')}">
+            						<c:set var="flag" value="1" />  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if> </td>
 						<td class="center"><font size="1"> <input
 								type="submit"
 								onclick="location.href='${pageContext.servletContext.contextPath}/auth/users/activate/${user.userName}'"
@@ -206,12 +280,49 @@
 			<tbody>
 				<c:forEach var="user" items="${inactiveUserList}">
 					<tr>
-						<td width="20%"><c:out
+						<td width="20%"><font size="3"><c:out
 									value="${user.userName}"></c:out></font></td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
-						<td class="center">NA</td>
+						<td class="center">
+						<c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Admin')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center"><c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Standard User')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center"><c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Restricted User')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
+						<td class="center"><c:set var="flag" value="0" />
+						
+						<c:forEach items="${user.quadrigaRoles}" var="role">
+							
+            					<c:if test="${role.name eq ('Quadriga Collaborating User')}">
+            						<c:set var="flag" value="1" scope="page"/>  
+            					</c:if>
+    					</c:forEach>
+    					<c:if test="${flag==0}">No</c:if>
+    					<c:if test="${flag==1}">Yes</c:if></td>
 						<td class="center"> <input
 								type="submit"
 								onclick="location.href='${pageContext.servletContext.contextPath}/auth/users/delete/${user.userName}'"
