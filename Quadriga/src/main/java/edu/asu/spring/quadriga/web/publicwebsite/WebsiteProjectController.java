@@ -116,12 +116,12 @@ public class WebsiteProjectController {
 				 
 		}*/
 		
-		if(Networks!=null){
+		if(!Networks.isEmpty()){
 			model.addAttribute("networks", Networks);
 			return "sites/browseNetworks";
 		}
 		
-		return "forbidden";
+		return "NoNetworks";
 	}
 	
 	@RequestMapping(value = "sites/networks/visualize/{networkId}", method = RequestMethod.GET)

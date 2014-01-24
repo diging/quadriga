@@ -34,7 +34,7 @@
 
 <header>
 	<h2>Networks</h2>
-	<span class="byline">View your Networks here.</span>
+	<span class="byline">View all the Networks here.</span>
 </header>
 
 

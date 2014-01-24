@@ -56,16 +56,18 @@ h1{
 </style>
 </head>
 
+
+
 <c:if test="${not empty project}">
-<h3> Details of the project </h3>
+<header><h2> Details of the project </h2></header>
 <form:form method="GET">
 
 <table>
 	<tr>
 		<td>
-			Name of project:
+			<h3>Project Name</h3>
 		</td>
-		<td>${project.name}</td>
+		<td><h3>${project.name}</h3></td>
 	</tr>	
 	<tr>
 		<td>
