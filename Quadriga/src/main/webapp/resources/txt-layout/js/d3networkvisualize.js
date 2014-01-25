@@ -98,84 +98,88 @@ function d3init(graph, networkId, path) {
 		.enter()
 		.append('g')
 		.classed('gnode', true);
-
-		//Constructing circle shape for the nodes
-		var node = gnodes.append("circle")
+	//var node = getShape(gnodes);
+//		//Constructing circle shape for the nodes
+//		var node = gnodes.append(function(d){
+//			alert(getShape(d));
+//			return getShape(d);})
+	var node = gnodes.append('circle')
 		.attr("class", "node")
+		.attr("width", 10)
+      .attr("height", 10)
 		.attr("r", 5)
 		.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
-		.on("RightClick", function(d)
-{
-//	$('#txtGroupModalTitle').html(d.label);				
-//	$('inner-details').modal('show');
-			
-			
-			var type1 ="node";
-
-			// Making it unique, as getting the handle on $(#something).val() 
-			// is not working for more than one node.
-			var text1ID = "annotText_"+guid();
-			var popupId = "popup1_"+guid();
-
-			// Get annotation URL
-			var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
-
-
-			// Creating popup html content to facilitate adding annotation
-			var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
-			"<form id='annot_form' action=" + path
-			+ "/auth/editing/saveAnnotation/";
-			html1 += networkId + " method='POST' >";
-			html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
-			html1 += "<input  type='hidden' name='nodename' id='nodename' value="
-				+ node.id + " />";
-			html1 += "<input type='button' id='annot_submit' value='submit'>";
-			html1 += "</div></form>";
-			
-			$('#inner-details').html(html1);	
-			$.ajax({
-				url : getAnnotationUrl,
-				type : "GET",
-				data: "nodeid="+node.id+"&type="+type1,
-				success : function(data) {
-					$('#'+text1ID+'').val(data); 
-				},
-				error: function() {
-					alert("error");
-				}
-			});
-			event.preventDefault();
-
-			// Saves the relation annotation to DB
-			$('#annot_submit').click(function(event) {
-				var annottext = $('#'+text1ID+'').val();  
-				$.ajax({
-					url : $('#annot_form').attr("action"),
-					type : "POST",
-					data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
-					success : function() {
-						alert("done");
-						$('#'+popupId+'').dialog('close');
-					},
-					error: function() {
-						alert("error");
-					}
-				});
-				event.preventDefault();
-			});
-
-
-			// Popup decoration effects
-			$( '#'+popupId+'' ).show( "slow" );					
-			$('#'+popupId+'').dialog({
-				open: function(event, ui) {
-					$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
-				}
-			});
-			
-})
-		.call(node_drag)
-	.on("mouseover", fade(.1)).on("mouseout", fade(1));;
+//		.on("RightClick", function(d)
+//{
+//
+//			
+//			
+//			var type1 ="node";
+//
+//			// Making it unique, as getting the handle on $(#something).val() 
+//			// is not working for more than one node.
+//			var text1ID = "annotText_"+guid();
+//			var popupId = "popup1_"+guid();
+//
+//			// Get annotation URL
+//			var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
+//
+//
+//			// Creating popup html content to facilitate adding annotation
+//			var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
+//			"<form id='annot_form' action=" + path
+//			+ "/auth/editing/saveAnnotation/";
+//			html1 += networkId + " method='POST' >";
+//			html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
+//			html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+//				+ node.id + " />";
+//			html1 += "<input type='button' id='annot_submit' value='submit'>";
+//			html1 += "</div></form>";
+//			
+//			$('#inner-details').html(html1);	
+//			$.ajax({
+//				url : getAnnotationUrl,
+//				type : "GET",
+//				data: "nodeid="+node.id+"&type="+type1,
+//				success : function(data) {
+//					$('#'+text1ID+'').val(data); 
+//				},
+//				error: function() {
+//					alert("error");
+//				}
+//			});
+//			event.preventDefault();
+//
+//			// Saves the relation annotation to DB
+//			$('#annot_submit').click(function(event) {
+//				var annottext = $('#'+text1ID+'').val();  
+//				$.ajax({
+//					url : $('#annot_form').attr("action"),
+//					type : "POST",
+//					data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
+//					success : function() {
+//						alert("done");
+//						$('#'+popupId+'').dialog('close');
+//					},
+//					error: function() {
+//						alert("error");
+//					}
+//				});
+//				event.preventDefault();
+//			});
+//
+//
+//			// Popup decoration effects
+//			$( '#'+popupId+'' ).show( "slow" );					
+//			$('#'+popupId+'').dialog({
+//				open: function(event, ui) {
+//					$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
+//				}
+//			});
+//			
+//})
+		//.call(node_drag)
+	//.on("mouseover", fade(.1)).on("mouseout", fade(1));;
 		//.call(force.drag);
 
 		// Appending labels to the nodes
@@ -272,6 +276,16 @@ function d3init(graph, networkId, path) {
 	function guid() {
 		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
 		s4() + '-' + s4() + s4() + s4();
+	}
+	function getShape(d){
+		alert(d.group);
+		 if(d.group == 0) {
+			 return 'rect';
+		 }else {
+			 return 'circle';
+		 }
+		
+		
 	}
 	
 
