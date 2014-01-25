@@ -627,6 +627,27 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			}
 		}
 		
+		for (INetwork network : networkList) {
+			// Get the project id associated with the workspace id
+			query = sessionFactory.getCurrentSession().getNamedQuery(
+					"ProjectWorkspaceDTO.findByWorkspaceid");
+			query.setParameter("workspaceid", network.getWorkspaceid());
+			ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
+					.uniqueResult();
+
+			if (projectWorkspaceDTO != null) {
+				// Get the project details
+				if(projectWorkspaceDTO.getProjectDTO() != null)
+					network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+
+				// Get the workspace details
+				if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+					network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
+			}
+		}
+
+		
 		return networkList;
 		
 		
