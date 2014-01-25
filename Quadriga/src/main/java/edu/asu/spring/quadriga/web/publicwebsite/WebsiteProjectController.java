@@ -104,17 +104,17 @@ public class WebsiteProjectController {
 		String projectid = project.getInternalid();
 		List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
 		
-		/*List<String> networkNames = null;
+		//List<String> networkNames = null;
 
 		if(Networks != null)
 		{
-			networkNames = new ArrayList<String>();
+			//networkNames = new ArrayList<String>();
 			for(INetwork network : Networks){
 				System.out.println(network.getWorkspace().getName());
 			}
 				//networkNames.add(network.getName());
 				 
-		}*/
+		}
 		
 		if(!Networks.isEmpty()){
 			model.addAttribute("networks", Networks);
