@@ -118,6 +118,7 @@ public class WebsiteProjectController {
 		
 		if(!Networks.isEmpty()){
 			model.addAttribute("networks", Networks);
+			model.addAttribute("project", project);
 			return "sites/browseNetworks";
 		}
 		
