@@ -634,8 +634,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public void updateNodeLinkForD3JSON(NodeObject nodeObject){
 		
 		String predicateNameId = nodeObject.getPredicate();
-		String subjectNodeId=nodeObject.getSubject()+"_"+shortUUID();
-		String objectNodeId = nodeObject.getObject()+"_"+shortUUID();
+//		String subjectNodeId=nodeObject.getSubject()+"_"+shortUUID();
+//		String objectNodeId = nodeObject.getObject()+"_"+shortUUID();
+		
+		String subjectNodeId=nodeObject.getSubject();
+		String objectNodeId = nodeObject.getObject();
 
 		// Check for reference to relation
 		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
@@ -647,22 +650,26 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		// Add Nodes for D3 JSon
 		{
 			// Adding Subject into node list 
-			ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
-			d3NodeSubject.setNodeName(nodeObject.getSubject());
-			d3NodeSubject.setNodeId(subjectNodeId);
-			d3NodeSubject.setGroupId(ID3Constant.RELATION_EVENT_SUBJECT_TERM);
-			d3NodeList.add(d3NodeSubject);
-			d3NodeIdMap.put(subjectNodeId,nodeIndex);
-			nodeIndex++;
+			if(!d3NodeIdMap.containsKey(subjectNodeId)){
+				ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
+				d3NodeSubject.setNodeName(nodeObject.getSubject());
+				d3NodeSubject.setNodeId(subjectNodeId);
+				d3NodeSubject.setGroupId(ID3Constant.RELATION_EVENT_SUBJECT_TERM);
+				d3NodeList.add(d3NodeSubject);
+				d3NodeIdMap.put(subjectNodeId,nodeIndex);
+				nodeIndex++;
+			}
 
-			// Adding Object into node list 
-			ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
-			d3NodeObject.setNodeName(nodeObject.getObject());
-			d3NodeObject.setNodeId(objectNodeId);
-			d3NodeObject.setGroupId(ID3Constant.RELATION_EVENT_OBJECT_TERM);
-			d3NodeList.add(d3NodeObject);
-			d3NodeIdMap.put(objectNodeId,nodeIndex);
-			nodeIndex++;
+			// Adding Object into node list
+			if(!d3NodeIdMap.containsKey(objectNodeId)){
+				ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
+				d3NodeObject.setNodeName(nodeObject.getObject());
+				d3NodeObject.setNodeId(objectNodeId);
+				d3NodeObject.setGroupId(ID3Constant.RELATION_EVENT_OBJECT_TERM);
+				d3NodeList.add(d3NodeObject);
+				d3NodeIdMap.put(objectNodeId,nodeIndex);
+				nodeIndex++;
+			}
 
 			// Adding Subject into node list 
 

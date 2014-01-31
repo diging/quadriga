@@ -24,11 +24,11 @@ div.node {
 }
 
 .link {
-  stroke: #aaa;
+  stroke: #000;
   stroke-width: 1.5px;
 }
 link {
-  stroke: #aaa;
+  stroke: #000;
   stroke-width: 1.5px;
 }
 path.link {
