@@ -305,7 +305,7 @@ public class DspaceRestController {
 	 * @return
 	 * @throws RestException
 	 */
-	@RequestMapping(value = "rest/workspace/{workspaceid}", method = RequestMethod.POST, produces = "application/xml")
+	@RequestMapping(value = "rest/workspace/{workspaceid}/uploadfile", method = RequestMethod.POST, produces = "application/xml")
 	@ResponseBody
 	public String addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid,  @RequestParam(value="communityid", required=false) String communityid, @RequestParam(value="collectionid", required=false) String collectionid, @RequestParam(value="itemid", required=false) String itemid, @RequestParam(value="username", required=false) String quadrigaUsername, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
 	{
