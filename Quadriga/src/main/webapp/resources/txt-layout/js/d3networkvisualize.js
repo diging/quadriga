@@ -21,7 +21,7 @@ function d3init(graph, networkId, path) {
 	.attr("width", width)
 	.attr("height", height);
 
-	//d3.json(path+"/resources/txt-layout/data1.json", function(error, graph) {
+	//d3.json(path+"/resources/txt-layout/data1.json", function(error,graph) {
 		//d3.json(graph, function(error, graph) {
 			alert(graph);
 		force
@@ -45,15 +45,7 @@ function d3init(graph, networkId, path) {
 		  .append("path")
 			.attr("d", "M0,-5L10,0L0,5");
 		
-//		svg.append("defs").selectAll("marker")
-//		.data(["arrow"])
-//		.enter().append("marker")
-//		.attr("id", "arrow")
-//		.attr("viewBox", "0 -5 10 10")
-//		.attr("refX", 10)
-//		.attr("refY", -1.5)
-//		.append("path")
-//		.attr("d", "M0,-5L10,0L0,5");
+
 
 		// Draw links between the nodes
 		var link = svg.selectAll(".link")
@@ -93,22 +85,40 @@ function d3init(graph, networkId, path) {
 		}
 
 		// Properties for the nodes
+		
+		
+		
+		
+		
 		var gnodes = svg.selectAll('g.gnode')
 		.data(graph.nodes)
-		.enter()
-		.append('g')
-		.classed('gnode', true);
-	//var node = getShape(gnodes);
-//		//Constructing circle shape for the nodes
-//		var node = gnodes.append(function(d){
-//			alert(getShape(d));
-//			return getShape(d);})
-	var node = gnodes.append('circle')
-		.attr("class", "node")
-		.attr("width", 10)
-      .attr("height", 10)
-		.attr("r", 5)
-		.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
+		.enter();
+	
+		//.classed('gnode', true);
+	
+//	var node = gnodes.append('path')
+//	attr("d", d3.svg.symbol().type(function(d) { return d3.svg.symbolTypes[d.group]; }))
+//		.attr("class", "node")
+//		.attr("width", 10)
+//      .attr("height", 10)
+//		.attr("r", 5)
+//		.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
+		
+		
+		var node = gnodes.append('path')
+	    .attr("class", "node")
+	    .attr("d", d3.svg.symbol()
+	        .type(function(d) {
+	        	var type = d.group;
+	        	if (type == 0){
+	        		type = 2;
+	        	}
+	        	else{
+	        		type = 0;
+	        	}
+	        	return d3.svg.symbolTypes[type]; }))
+	    .style("fill", function(d) { return color(d.group); })
+	    .call(node_drag)
 		.on("click", function(d)
 {
 
