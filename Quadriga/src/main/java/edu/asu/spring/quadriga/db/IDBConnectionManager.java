@@ -24,7 +24,7 @@ public interface IDBConnectionManager
 	 * @return Integer value that specifies the status of the operation. 1 - Successfully place the request. 0 - Otherwise.
 	 * 
 	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public abstract int addAccountRequest(String sUserId) throws QuadrigaStorageException;
 
@@ -34,7 +34,7 @@ public interface IDBConnectionManager
 	 * @return Returns the list of user objects whose request are to be approved/denied.
 	 * 
 	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles. 
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles. 
 	 */	
 	public abstract List<IUser> getUserRequests() throws QuadrigaStorageException;
 
@@ -47,7 +47,7 @@ public interface IDBConnectionManager
 	 *                 IUser - User object containing the user details.
 	 * @throws QuadrigaStorageException 
 	 *                 
-	 *  @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 *  @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public abstract IUser getUserDetails(String userid) throws QuadrigaStorageException;
 
@@ -56,7 +56,7 @@ public interface IDBConnectionManager
 	 * 
 	 * @param userRoleId	The roleid of the Quadriga Role for which the list of users are to be fetched.
 	 * @return				The list of users who are assigned the roleid.
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract List<IUser> getUsers(String userRoleId) throws QuadrigaStorageException;
@@ -66,7 +66,7 @@ public interface IDBConnectionManager
 	 * 
 	 * @param userRoleId					The roleid of the Quadriga Role based on which the user list is to be filtered.
 	 * @return								The list of users who don't have the given role
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException;
@@ -77,7 +77,7 @@ public interface IDBConnectionManager
 	 * 
 	 * @param deleteUser					The username of the user to be deleted 
 	 * @return								1 if the user was deleted successfully
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract int deleteUser(String deleteUser, String deactivatedRole) throws QuadrigaStorageException;
@@ -91,7 +91,7 @@ public interface IDBConnectionManager
 	 * @param 	sAdminId 				The userid of the admin who is changing the user setting
 	 * 
 	 * @return	Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 * 
 	 */
@@ -105,7 +105,7 @@ public interface IDBConnectionManager
 	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Operation Success. 0 - Error occurred.
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract int updateUserRoles(String sUserId, String sRoles, String sAdminId)	throws QuadrigaStorageException;
@@ -118,7 +118,7 @@ public interface IDBConnectionManager
 	 * @param sAdminId The userid of the admin who is changing the user setting
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract int approveUserRequest(String sUserId, String sRoles, String sAdminId) throws QuadrigaStorageException;
@@ -130,7 +130,7 @@ public interface IDBConnectionManager
 	 * @param sAdminId 		The admin-userid who rejected the request
 	 * 
 	 * @return Returns the status of the operation. 1 - Deactivated. 0 - Error occurred.
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract int denyUserRequest(String sUserId, String sAdminId) throws QuadrigaStorageException;
@@ -139,7 +139,7 @@ public interface IDBConnectionManager
 	 * Method used to execute a given INSERT, UPDATE and DELETE statement in the database.
 	 * 
 	 * @return Success - 1
-	 * @throws QuadrigaStorageException Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;

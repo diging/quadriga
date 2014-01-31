@@ -273,6 +273,7 @@ public class DspaceManager implements IDspaceManager{
 	 * 
 	 */
 	@Override
+	@Transactional
 	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException
 	{
 		try
@@ -336,6 +337,7 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String communityId, String collectionId, String itemId, String bitstreamId, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		//Catch the Wrong or Illegal ids provided by the user.
@@ -360,6 +362,7 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, List<IBitStream> workspaceBitStreams, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		try
@@ -426,6 +429,7 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public IDspaceKeys getMaskedDspaceKeys(String username) throws QuadrigaStorageException
 	{
 		IDspaceKeys dspaceKeys = dbconnectionManager.getDspaceKeys(username);
