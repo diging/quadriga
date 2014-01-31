@@ -518,14 +518,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
 
 							// Adding appellation event node.
-							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
-							String nodeId=termId+"_"+shortUUID();
-							d3Node.setNodeId(nodeId);
-							d3Node.setNodeName(node);
-							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
-							d3NodeList.add(d3Node);
-							d3NodeIdMap.put(nodeId, nodeIndex);
-							nodeIndex++;
+//							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
+//							String nodeId=termId+"_"+shortUUID();
+//							d3Node.setNodeId(nodeId);
+//							d3Node.setNodeName(node);
+//							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
+//							d3NodeList.add(d3Node);
+//							d3NodeIdMap.put(nodeId, nodeIndex);
+//							nodeIndex++;
 
 						}
 					}
