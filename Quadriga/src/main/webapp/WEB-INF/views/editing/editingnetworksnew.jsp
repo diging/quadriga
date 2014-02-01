@@ -24,22 +24,10 @@
 
 <div id="container">
 
-<div id="left-container">
 
-
-       
-
-        <div id="id-list"></div>
-
-
-</div>
 <div id="chart"></div>
-<!-- <div id="center-container">
-     div id="infovis"></div   
-    <div id="chart"></div> 
-</div> -->
 
-<div id="right-container">
+
 
 <div id="inner-details"></div>
 
