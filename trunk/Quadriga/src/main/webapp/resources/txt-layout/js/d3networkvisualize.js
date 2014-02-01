@@ -1,32 +1,51 @@
-//Author : Sowjanya Ambati
+
+/**
+ * @Author : Sowjanya Ambati
+ * @Author : Dwaraka Lohith
+ * 
+ * Data visualization in D3 JQuery.
+ * This javascript should work on displaying different layouts.
+ * 
+ */
 
 
-function d3init(graph, networkId, path) {
+function d3init(graph, networkId, path,type) {
 	console.log("init");
-
+	
 	// Layout size
 	var width = 1000,
 	height = 900;
-
+	var layout;
 	var color = d3.scale.category20();
-
 	// Preparing the force directed graph
-	var force = d3.layout.force()
-	.charge(-150)
-	.linkDistance(200)
-	.size([width, height]);
-
+	if(type=="force"){
+		layout = d3.layout.force()
+		.charge(-150)
+		.linkDistance(200)
+		.size([width, height]);
+		layout
+		.nodes(graph.nodes)
+		.links(graph.links)
+		.start();
+	}else if(type=="tree"){
+		layout = d3.layout.tree()
+		.charge(-150)
+		.linkDistance(200)
+		.size([width, height]);
+		layout
+		.nodes(graph.nodes)
+		.links(graph.links)
+		.start();
+	}
+	
 
 	var svg = d3.select("#chart").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
 
-	alert(graph);
-	force
-	.nodes(graph.nodes)
-	.links(graph.links)
-	.start();
+
+	
 
 
 	// Prepare the arrow
@@ -217,7 +236,7 @@ function d3init(graph, networkId, path) {
 						+" <p>";
 					});
 					var html = "<h4>" + d.name
-					+ "</h4>"+ description
+					+ "</h4>"+ description;
 					$('#inner-details').html(html);
 
 
@@ -254,13 +273,14 @@ function d3init(graph, networkId, path) {
 				};
 
 //				Works on loading the network and placing the nodes randomly for view
-				force.on("tick", tick);
+				
+				layout.on("tick", tick);
 
 				function neighboring(a, b) {
 
 					//	return linkedByIndex[a.index + "," + b.index];
 					return link.some(function(d) {
-						return (d.source === a && d.target === b)
+						return (d.source === a && d.target === b);
 
 					});
 				}
@@ -337,7 +357,6 @@ function d3init(graph, networkId, path) {
 				}
 				
 				function rightClick(d){
-					alert("right click");
 					var html = "";
 					// If the node type is Predicate
 					// We can annotate on whole relation or node
@@ -496,8 +515,6 @@ function d3init(graph, networkId, path) {
 
 					});
 					$('#popup').dialog();
-					
-					
 					
 				}
 
