@@ -5,15 +5,15 @@ function d3init(graph, networkId, path) {
 	console.log("init");
 
 	// Layout size
-	var width = 960,
-	height = 700;
+	var width = 1000,
+	height = 900;
 
 	var color = d3.scale.category20();
 
 	// Preparing the force directed graph
 	var force = d3.layout.force()
-	.charge(-120)
-	.linkDistance(100)
+	.charge(-150)
+	.linkDistance(200)
 	.size([width, height]);
 
 
@@ -29,7 +29,7 @@ function d3init(graph, networkId, path) {
 		.links(graph.links)
 		.start();
 
-		d3.select("body").append("p").html("Look at me, I'm a paragraph.")
+		
 		// Prepare the arrow
 		svg.append("defs").selectAll("marker")
 		.data(["arrow"])
@@ -90,9 +90,7 @@ function d3init(graph, networkId, path) {
 		
 		
 		
-		var gnodes = svg.selectAll('g.gnode')
-		.data(graph.nodes)
-		.enter();
+		
 	
 		//.classed('gnode', true);
 	
@@ -103,7 +101,9 @@ function d3init(graph, networkId, path) {
 //      .attr("height", 10)
 //		.attr("r", 5)
 //		.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
-		
+		var gnodes = svg.selectAll('g.gnode')
+		.data(graph.nodes)
+		.enter();
 		
 		var node = gnodes.append('path')
 	    .attr("class", "node")
@@ -117,8 +117,10 @@ function d3init(graph, networkId, path) {
 	        		type = 0;
 	        	}
 	        	return d3.svg.symbolTypes[type]; }))
+	        	.attr("r", 20)
 	    .style("fill", function(d) { return color(d.group); })
 	    .call(node_drag)
+		
 		.on("click", function(d)
 {
 
@@ -238,10 +240,16 @@ function d3init(graph, networkId, path) {
 			link.attr("x1", function(d) { return d.source.x; })
 			.attr("y1", function(d) { return d.source.y; })
 			.attr("x2", function(d) { return d.target.x; })
-			.attr("y2", function(d) { return d.target.y; });
-
-			node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-			text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			.attr("y2", function(d) { return d.target.y; })
+			.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+			.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+			
+			node.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; })
+			.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+			.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+			text.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; })
+			.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+			.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
 		};
 		
 		// Works on loading the network and placing the nodes randomly for view
