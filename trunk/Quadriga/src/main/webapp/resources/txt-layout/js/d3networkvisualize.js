@@ -27,11 +27,9 @@ function d3init(graph, networkId, path,type) {
 		.nodes(graph.nodes)
 		.links(graph.links)
 		.start();
-	}else if(type=="tree"){
-		layout = d3.layout.tree()
-		.charge(-150)
-		.linkDistance(200)
-		.size([width, height]);
+	} //  tree layout if need we can change the layout
+	else if(type=="tree"){
+		layout = d3.layout.tree();
 		layout
 		.nodes(graph.nodes)
 		.links(graph.links)
