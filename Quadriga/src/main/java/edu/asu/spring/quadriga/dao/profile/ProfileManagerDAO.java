@@ -62,7 +62,7 @@ implements IDBConnectionProfileManager
 		  SearchResultBackBean searchResultBackBean = null;
 		  
 		  userProfileSearchList = new ArrayList<SearchResultBackBean>();
-		  Query query = sessionFactory.getCurrentSession().createQuery("QuadrigaUserprofileDTO.findByUsername");
+		  Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserprofileDTO.findByUsername");
 		  query.setParameter("username", loggedinUser);
 		  List<QuadrigaUserprofileDTO> userProfileList = query.list();
 		  for(QuadrigaUserprofileDTO userProfile : userProfileList)

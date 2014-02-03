@@ -75,6 +75,10 @@ public class AddWSCollabController
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyWSCollabManager.class);
 	
+	/*
+	 * This method binds the selected input by the user and validates the 
+	 * input.
+	 */
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
 		
@@ -110,6 +114,15 @@ public class AddWSCollabController
 		}); 
 	}
 	
+	/**
+	 * This method displays the form to add collaborators to
+	 * workspace.
+	 * @param workspaceid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.GET)
 	public ModelAndView addWorkspaceCollaboratorForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -171,6 +184,16 @@ public class AddWSCollabController
 		return model;
 	}
 	
+	/**
+	 * This method adds collaborator to given workspace.
+	 * @param collaborator
+	 * @param result
+	 * @param workspaceid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addcollaborators", method = RequestMethod.POST)
 	public ModelAndView addWorkspaceCollaborator(@Validated @ModelAttribute("collaborator") Collaborator collaborator,BindingResult result,
