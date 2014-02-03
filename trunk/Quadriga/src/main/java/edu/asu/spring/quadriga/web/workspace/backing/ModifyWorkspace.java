@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.web.workspace.backing;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * This is domain class containing the workspace object variables 
+ * required for displaying in the UI pages.
+ * @author Kiran Batna
+ *
+ */
 @Service
 public class ModifyWorkspace 
 {

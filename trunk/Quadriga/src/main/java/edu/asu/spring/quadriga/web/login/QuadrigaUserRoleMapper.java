@@ -54,6 +54,7 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 
 		UserDetails details = super.mapUserFromContext(ctx, username,
 				authorityList);
+		
 
 		return details;
 	}

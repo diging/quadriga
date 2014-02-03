@@ -17,6 +17,14 @@ public class ModifyWorkspaceFormManager
 	@Autowired
 	IListWSManager wsManager;
     
+	/**
+	 * This method retrieves the active workspace list for the given
+	 * project and user.
+	 * @param projectId
+	 * @param userName
+	 * @return List<ModifyWorkspace> - list of workspace objects.
+	 * @throws QuadrigaStorageException
+	 */
 	public List<ModifyWorkspace> getActiveWorkspaceList(String projectId,String userName) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
@@ -38,6 +46,14 @@ public class ModifyWorkspaceFormManager
 		return modifyWorkspaceList;
 	}
 	
+	/**
+	 * This method retrieves all the deactivated workspaces associated with
+	 * the given project.
+	 * @param projectId
+	 * @param userName
+	 * @return List<ModifyWorkspace> - list of workspace objects.
+	 * @throws QuadrigaStorageException
+	 */
 	public List<ModifyWorkspace> getDeactivatedWorkspaceList(String projectId,String userName) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
@@ -62,6 +78,14 @@ public class ModifyWorkspaceFormManager
 		return modifyWorkspaceList;
 	}
 	
+	/**
+	 * This method retrieves the archived workspaces for given
+	 * project and user.
+	 * @param projectId
+	 * @param userName
+	 * @return List<ModifyWorkspace> - list of workspace objects.
+	 * @throws QuadrigaStorageException
+	 */
 	public List<ModifyWorkspace> getArchivedWorkspaceList(String projectId,String userName) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
