@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.web;
 
 import java.security.Principal;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -141,10 +142,11 @@ public class HomeController {
 		
 		//model.addAttribute("SearchResultBackBeanForm", new SearchResultBackBeanForm());
 		
-		if(!resultLists.isEmpty()){
-			
-			model.addAttribute("resultLists", resultLists);
+		if(resultLists == null)
+		{
+			resultLists = new ArrayList<SearchResultBackBean>();
 		}
+			model.addAttribute("resultLists", resultLists);
 		
 		
 		//model.addAttribute("SearchResultBackBean",new SearchResultBackBean());
@@ -196,10 +198,12 @@ public class HomeController {
 		
 		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
 		
-		if(!resultLists.isEmpty()){
-			
-			model.addAttribute("resultLists", resultLists);
+		if(resultLists == null)
+		{
+			resultLists = new ArrayList<SearchResultBackBean>();
 		}
+		
+			model.addAttribute("resultLists", resultLists);
 		
 		return "auth/home/profile";
 	}
