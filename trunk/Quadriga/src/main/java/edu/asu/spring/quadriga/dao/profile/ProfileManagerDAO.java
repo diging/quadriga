@@ -41,8 +41,7 @@ implements IDBConnectionProfileManager
 			userProfile.setCreatedby(name);
 			userProfile.setCreateddate(date);
 			userProfile.setUpdatedby(name);
-			userProfile.setCreateddate(date);
-			
+			userProfile.setUpdateddate(date);
 			sessionFactory.getCurrentSession().save(userProfile);
 		}
 		catch(Exception ex)
