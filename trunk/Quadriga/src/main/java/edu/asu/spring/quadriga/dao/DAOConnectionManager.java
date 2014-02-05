@@ -109,6 +109,11 @@ public abstract class DAOConnectionManager {
 		return quadrigaUser;
 	}
 	
+	/**
+	 * This methods splits the comma seperated string into a list
+	 * @param users
+	 * @return ArrayList<String>
+	 */
 	public ArrayList<String> getList(String users)
 	{
 		ArrayList<String> usersList = new ArrayList<String>();

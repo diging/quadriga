@@ -23,6 +23,16 @@ public class ConceptCollectionRestAuthorization implements IAuthorization
 	@Autowired
 	private IConceptCollectionFactory collectionFactory;
 
+	/**
+	 * This method checks the access permission for the logged in user for given
+	 * concept collection for rest methods.
+	 * @param userName - username submitted for rest authentication.
+	 * @param conceptCollectionId - Concept collection id.
+	 * @param userRoles - Roles for which the user should be checked for access.
+	 * @return - if has access - true
+	 *           no access - false
+	 * @author Lohith Dwaraka.
+	 */
 	@Override
 	public boolean chkAuthorization(String userName, String conceptCollectionId,
 			String[] userRoles) throws QuadrigaStorageException,
@@ -84,6 +94,14 @@ public class ConceptCollectionRestAuthorization implements IAuthorization
 		return haveAccess;
 	}
 	
+	/**
+	 * This method checks the access for the user in the concept collection
+	 * present in the system.
+	 * @param userName - User credentials entered for rest authentication.
+	 * @userRoles - Roles for which the user should be possessing for access.
+	 * @throws - QuadrigaStorageException, QuadrigaAccessException
+	 * @author Lohith Dwaraka
+	 */
 	@Override
 	public boolean chkAuthorizationByRole(String userName,String[] userRoles )
 			throws QuadrigaStorageException, QuadrigaAccessException
@@ -92,6 +110,11 @@ public class ConceptCollectionRestAuthorization implements IAuthorization
 		
 	}
 	
+	/**
+	 * This method converts String array into a list
+	 * @param userRoles
+	 * @return ArrayList<String>
+	 */
 	public ArrayList<String> getAccessRoleList(String[] userRoles)
 	{
 		ArrayList<String> rolesList = new ArrayList<String>();

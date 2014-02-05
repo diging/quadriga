@@ -20,6 +20,14 @@ public class AccessAspect
 	@Autowired
 	private IAuthorizationManager authorizationManager;
 	
+	/**
+	 * This method prevents the access permissions check for the web package methods
+	 * annotated with 'noCheck'.
+	 * @param pjp
+	 * @param noCheck
+	 * @return ProceedingJoinPoint object
+	 * @throws Throwable
+	 */
 	@Around("within(edu.asu.spring.quadriga.web..*) && @annotation(noCheck)")
 	public Object chkProjectAuthorization(ProceedingJoinPoint pjp, NoAuthorizationCheck noCheck) throws Throwable 
 	{
@@ -27,6 +35,16 @@ public class AccessAspect
 	}
 	
 
+	/**
+	 * This method checks the access permissions for the objects before executing the 
+	 * methods.This provides run time access permission check to the methods in the 
+	 * web package and annotated with 'checks'.
+	 * @param pjp
+	 * @param checks
+	 * @return - no access it throws Access Denied exception.
+	 *           if he have access returns ProceedingJointPoint object
+	 * @throws Throwable
+	 */
 	@Around("within(edu.asu.spring.quadriga.web..*) && @annotation(checks)")
 	public Object chkAuthorization(ProceedingJoinPoint pjp, AccessPolicies checks) throws Throwable  
 	{

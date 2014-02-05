@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.aspects;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,19 +20,33 @@ public class RestAccessAspect
 	@Autowired
 	private RestAccessException restAccessException;
 	
-	private static final Logger logger = LoggerFactory
-			.getLogger(RestAccessAspect.class);
-	
 	@Autowired
 	private IAuthorizationManager authorizationManager;
 	
+	/**
+	 * This method prevents the access permissions check for the web package methods
+	 * annotated with 'noCheck' for rest interfaces
+	 * @param pjp
+	 * @param noCheck
+	 * @return ProceedingJoinPoint object
+	 * @throws Throwable
+	 */
 	@Around("within(edu.asu.spring.quadriga.web..*) && @annotation(noCheck)")
 	public Object chkProjectAuthorization(ProceedingJoinPoint pjp, NoAuthorizationCheck noCheck) throws Throwable 
 	{
 		return pjp.proceed();
 	}
 	
-
+	/**
+	 * This method checks the access permissions for the objects before executing the 
+	 * methods.This provides run time access permission check to the methods in the 
+	 * web package and annotated with 'checks' during rest interface access.
+	 * @param pjp
+	 * @param checks
+	 * @return - no access it throws Access Denied exception.
+	 *           if he have access returns ProceedingJointPoint object
+	 * @throws Throwable
+	 */
 	@Around("within(edu.asu.spring.quadriga.web..*) && @annotation(checks)")
 	public Object chkAuthorization(ProceedingJoinPoint pjp, RestAccessPolicies checks) throws Throwable  
 	{
