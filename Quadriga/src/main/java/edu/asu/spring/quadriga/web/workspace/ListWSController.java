@@ -587,59 +587,24 @@ public class ListWSController
 		return getDspaceMessages().getProperty("dspace.loading");
 	}
 
-	/**
-	 * Check the access rights of the bitstream. 
-	 * 
-	 * @param bitstreamid			The id of the bitstream.
-	 * @param itemid				The id of the item to which the bitstream belongs.
-	 * @param collectionid			The id of the collection to which the bitstream belongs.
-	 * @return						The bitstream name if it is loaded. Else Loading status. If the user does not have access to the bitstream
-	 * 								it returns 'No Access to File'
-	 * @throws QuadrigaException	Thrown when any unexpected exceptions happens when communicating with Dspace.
-	 * @throws QuadrigaAccessException 
-	 */
+	
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamaccessstatus", method = RequestMethod.GET)
-	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid, @RequestParam("itemid") String itemid, @RequestParam("collectionid") String collectionid) throws QuadrigaException, QuadrigaAccessException {
+	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid) throws QuadrigaException, QuadrigaAccessException {
 
-		//Can't find collection in any of the communities
-		String communityid = dspaceManager.getCommunityId(collectionid);
-		if(communityid == null)
+		System.out.println("AJAX request received");
+		IBitStream bitstream = null;
+		try {
+			bitstream = dspaceManager.getWorkspaceItems(bitstreamid, dspaceKeys, dspaceUsername, dspacePassword);
+			System.out.println("Completed rest call");
+		} catch (QuadrigaStorageException e) {
 			return getDspaceMessages().getProperty("dspace.restricted_bitstream");
-
-		ICollection collection = dspaceManager.getCollection(collectionid,communityid);
-		if(collection != null)
+		}
+		if(bitstream != null)
 		{
-			if(collection.getLoadStatus() == true)
+			if(bitstream.getName() != null)
 			{
-				if(collection.getName() != null)
-				{
-					//Collection has been loaded.
-					IItem item = collection.getItem(itemid);
-					if(item != null)
-					{
-						if(!item.getBitids().contains(bitstreamid))
-						{
-							//The item does not contain the bitstream
-							return getDspaceMessages().getProperty("dspace.restricted_bitstream");
-						}
-						else
-						{
-							IBitStream bitstream = item.getBitStream(bitstreamid);
-							if(bitstream!=null)
-							{
-								if(bitstream.getName() != null)
-									return bitstream.getName();
-							}
-						}						
-					}
-					else
-					{
-						//No item found in the collection
-						return getDspaceMessages().getProperty("dspace.restricted_bitstream");
-					}
-				}
-				else
-					return getDspaceMessages().getProperty("dspace.restricted_bitstream");
+				System.out.println("Got the name->"+bitstream.getName());
+				return bitstream.getName();
 			}
 		}
 		return getDspaceMessages().getProperty("dspace.loading");

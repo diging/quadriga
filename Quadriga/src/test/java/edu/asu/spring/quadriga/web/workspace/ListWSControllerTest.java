@@ -424,26 +424,6 @@ public class ListWSControllerTest {
 		assertEquals("auth/workbench/workspace/community/collection/item", listWSController.workspaceBitStreamListRequest(null, "1217", "10", model, principal));
 		//Wait for the bitstream to load
 		while(listWSController.getBitStreamStatus("3991", "1217", "10").equals("Loading..."));
-
-		//Valid bitstream, item and collection id
-		assertNotSame("Loading...", listWSController.getBitStreamAccessStatus("3991", "1217", "10"));
-		assertNotSame("No Access to File", listWSController.getBitStreamAccessStatus("3991", "1217", "10"));
-
-		//Invalid bitstream, Valid item and collection id
-		assertEquals("No Access to File", listWSController.getBitStreamAccessStatus("11111111111111", "1217", "10"));
-		//Invalid item id, Valid bitstream and collection id
-		assertEquals("No Access to File", listWSController.getBitStreamAccessStatus("3991", "1111111111111111111", "10"));
-		//Invalid collection id, Valid bitstream and item id
-		assertEquals("No Access to File", listWSController.getBitStreamAccessStatus("3991", "1217", "111111111111111111"));
-
-		//Handle null bitstream id
-		assertEquals("No Access to File", listWSController.getBitStreamAccessStatus(null, "1217", "10"));
-		//Handle null item id
-		assertEquals("No Access to File", listWSController.getBitStreamAccessStatus("3991", null, "10"));
-		//Handle null bitstream
-		assertEquals("No Access to File", listWSController.getBitStreamAccessStatus("3991", "1217", null));
-		//Handle null for all ids
-		assertEquals("No Access to File", listWSController.getBitStreamAccessStatus(null, null, null));
 	}
 
 	@Test
