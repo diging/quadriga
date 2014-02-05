@@ -119,10 +119,14 @@ function d3init(graph, networkId, path,type) {
 //	.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
 	var gnodes = svg.selectAll('g.gnode')
 	.data(graph.nodes)
+	.attr("width",50)
+	.attr("height",50)
+	.attr("r",10)
 	.enter();
 
 	var node = gnodes.append('path')
 	.attr("class", "node")
+	.attr("r",10) 	
 	.attr("d", d3.svg.symbol()
 			.type(function(d) {
 				var type = d.group;
@@ -133,14 +137,13 @@ function d3init(graph, networkId, path,type) {
 					type = 0;
 				}
 				return d3.svg.symbolTypes[type]; }))
-				.attr("r", 20)
 				.style("fill", function(d) { return color(d.group); })
 				.call(node_drag)
 				// works on right click
 				.on("contextmenu", function(data, index) {
 					
 					rightClick(data);
-					
+					d3.event.preventDefault();
 				})
 				// Works on left click
 				.on("click", function(d){
