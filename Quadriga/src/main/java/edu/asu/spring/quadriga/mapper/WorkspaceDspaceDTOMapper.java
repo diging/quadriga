@@ -28,8 +28,6 @@ public class WorkspaceDspaceDTOMapper {
 		if(workspaceDspaceDTO != null)
 		{
 			bitstream = bitstreamFactory.createBitStreamObject();
-			bitstream.setCommunityid(workspaceDspaceDTO.getCommunityid());
-			bitstream.setCollectionid(workspaceDspaceDTO.getCollectionid());
 			bitstream.setItemid(workspaceDspaceDTO.getItemid());					
 			bitstream.setId(workspaceDspaceDTO.getWorkspaceDspaceDTOPK().getBitstreamid());
 		}
