@@ -13,6 +13,17 @@ public class NetworkAuthorization implements IAuthorization {
 	@Autowired
 	private IEditorAccessManager accessManager;
 
+	/**
+	 * This method checks the access permissions for the logged in user
+	 * for given Network id.
+	 * @param - userName : Logged in user
+	 * @param - accessObjectId - networkId
+	 * @param - userRoles - set of roles for which the user should be checked 
+	 * for access.
+	 * @throws - QuadrigaStorageException, QuadrigaAccessException
+	 * @return - hasAccess - true
+	 *           no Access - false
+	 */
 	@Override
 	public boolean chkAuthorization(String userName, String accessObjectId,
 			String[] userRoles) throws QuadrigaStorageException,
@@ -27,6 +38,16 @@ public class NetworkAuthorization implements IAuthorization {
 		return haveAccess;
 	}
 
+	/**
+	 * This method checks if the logged in user is associated with any
+	 * network and possessing the given roles.
+	 * @param : userName - logged in User.
+	 * @param : userRoles - set of roles for which the user should be 
+	 *          checked for access.
+	 * @throws : QuadrigatorageException, QuadrigaAccessException
+	 * @return : hasAccess - true
+	 *           no Access - false
+	 */
 	@Override
 	public boolean chkAuthorizationByRole(String userName, String[] userRoles)
 			throws QuadrigaStorageException, QuadrigaAccessException 

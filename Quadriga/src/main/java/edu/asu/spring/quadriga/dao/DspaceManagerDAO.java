@@ -62,6 +62,13 @@ public class DspaceManagerDAO extends DAOConnectionManager implements IDBConnect
 		}
 	}
 	
+	/**
+	 * This method save or update the DSpace keys
+	 * @param : IDspaceKeys - dspace keys object
+	 * @param : username - logged in user
+	 * @return : Success - 0
+	 *           Failure - 1 
+	 */
 	@Override
 	public int saveOrUpdateDspaceKeys(IDspaceKeys dspaceKeys, String username) throws QuadrigaStorageException
 	{
@@ -81,6 +88,13 @@ public class DspaceManagerDAO extends DAOConnectionManager implements IDBConnect
 		return result;
 	}
 	
+	/**
+	 * This method deletes the DSpace keys associated with
+	 * the given user
+	 * @param : username - logged in user
+	 * @return : Success - 1
+	 *           Failure - 0
+	 */
 	@Override
 	public int deleteDspaceKeys(String username) throws QuadrigaStorageException
 	{

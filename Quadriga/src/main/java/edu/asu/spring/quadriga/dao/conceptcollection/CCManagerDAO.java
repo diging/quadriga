@@ -152,6 +152,12 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 	}
 	
+	/**
+	 * This method retrieves the collection details for the 
+	 * given concept collection
+	 * @param : IConceptCollection - concept collection object
+	 * @param : username - logged in user
+	 */
 	@Override
 	public void getCollectionDetails(IConceptCollection collection,String username) throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser owner = null;

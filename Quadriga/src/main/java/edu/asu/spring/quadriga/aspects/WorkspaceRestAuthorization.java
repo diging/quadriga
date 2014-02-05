@@ -27,6 +27,17 @@ public class WorkspaceRestAuthorization implements IAuthorization
 	@Autowired
 	private ICheckWSSecurity wsSecurityManager;
 	
+	/**
+	 * This checks the access permissions for the logged in user for the 
+	 * given workspace id
+	 * @param : userName - logged in user
+	 * @param : userRoles - set of roles for which the user should be checked 
+	 * for access.
+	 * @param : workspaceid 
+	 * @throws : QuadrigaStorageException, QuadrigaAccessException
+	 * @return : hasAccess - true
+	 *           no Access - false
+	 */
 	@Override
 	public boolean chkAuthorization(String userName,String workspaceId,String[] userRoles) throws QuadrigaStorageException, QuadrigaAccessException
 	{
@@ -92,6 +103,12 @@ public class WorkspaceRestAuthorization implements IAuthorization
 	/**
 	 * check if the user as a owner has any workspaces associated
 	 * check if the user as the given role has any workspaces associated
+	 * @param : userName - logged in user
+	 * @param : userRoles - set of roles for which the user should be checked 
+	 * for access.
+	 * @throws : QuadrigaStorageException, QuadrigaAccessException
+	 * @return : hasAccess - true
+	 *           no Access - false
 	 */
 	@Override
 	public boolean chkAuthorizationByRole(String userName,String[] userRoles )
@@ -125,6 +142,11 @@ public class WorkspaceRestAuthorization implements IAuthorization
 		
 	}
 	
+	/**
+	 * This method converts the the string array into a list
+	 * @param userRoles
+	 * @return ArrayList<String>
+	 */
 	public ArrayList<String> getAccessRoleList(String[] userRoles)
 	{
 		ArrayList<String> rolesList = new ArrayList<String>();
