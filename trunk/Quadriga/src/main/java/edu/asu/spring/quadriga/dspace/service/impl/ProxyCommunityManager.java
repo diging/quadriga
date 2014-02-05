@@ -18,12 +18,16 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
+import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.domain.implementation.Community;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * The purpose of the class is to implement proxy pattern for the community class
@@ -38,6 +42,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 	private List<ICommunity> communities;
 	private List<ICollection> collections;
+	private List<IBitStream> workspaceBitStreamList;
 
 	@Autowired
 	private ICollectionFactory collectionFactory;
@@ -88,6 +93,38 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 	}
 
+
+	@Override
+	public IBitStream getWorkspaceItems(String fileid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
+	{
+		IBitStream bitstream = null;
+		
+		//Check if the list was created
+		if(workspaceBitStreamList == null)
+		{
+			workspaceBitStreamList = new ArrayList<IBitStream>();
+		}
+		
+		//Check for the file in the existing list
+		for(IBitStream workspaceBitStream: workspaceBitStreamList)
+		{
+			if(workspaceBitStream.getId().equals(fileid))
+				bitstream = workspaceBitStream;
+		}
+
+		//File not found in the existing list. So make a REST call to the Dspace.
+		if(bitstream == null)
+		{
+			//Create a bitstream object that will load its metadata information
+			bitstream = new BitStream(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+			Thread bitstreamThread = new Thread(bitstream);
+			bitstreamThread.start();
+
+			//Add the bitstream to the list of bitstreams that the user has access
+			workspaceBitStreamList.add(bitstream);
+		}
+		return bitstream;
+	}
 
 	/**
 	 * {@inheritDoc} 

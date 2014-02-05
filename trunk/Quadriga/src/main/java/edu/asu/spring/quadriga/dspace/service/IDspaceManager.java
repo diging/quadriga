@@ -290,6 +290,7 @@ public interface IDspaceManager{
 	public abstract void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String communityId, String collectionId, String itemId, String bitstreamId, String username)
 			throws QuadrigaStorageException, QuadrigaAccessException;
 	
-	public abstract List<IBitStream> getBitstreamsInWorkspace(String workspaceid, String username) throws QuadrigaStorageException,	QuadrigaAccessException;	
+	public abstract List<IBitStream> getBitstreamsInWorkspace(String workspaceid, String username) throws QuadrigaStorageException,	QuadrigaAccessException;
+	IBitStream getWorkspaceItems(String fileid, IDspaceKeys dspaceKeys,	String sUserName, String sPassword)	throws QuadrigaStorageException;	
 
 }

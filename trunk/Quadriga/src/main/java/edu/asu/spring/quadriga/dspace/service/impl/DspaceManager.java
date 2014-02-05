@@ -279,12 +279,10 @@ public class DspaceManager implements IDspaceManager{
 		try
 		{
 			//Passing null values for other arguments because the community details must have already been fetched from dspace
-			ICommunity community = getProxyCommunityManager().getCommunity(communityId,true, this.restTemplate, this.dspaceProperties, null, null, null);
-			ICollection collection = getProxyCommunityManager().getCollection(collectionId,true,this.restTemplate, this.dspaceProperties,null,null,null,null);
 			IItem item = getProxyCommunityManager().getItem(collectionId, itemId);
 
 			//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
-			if(community == null || collection == null || item == null)
+			if(item == null)
 			{
 				logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
 				throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
@@ -318,8 +316,6 @@ public class DspaceManager implements IDspaceManager{
 			logger.info("Bitstreams selected: "+bitstreamIds.length);
 			logger.error("The logged exception is: ",e);
 			throw e;
-		} catch (NoSuchAlgorithmException e) {
-			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
 		}
 		catch(HttpClientErrorException e)
 		{
@@ -680,5 +676,11 @@ public class DspaceManager implements IDspaceManager{
 
 		}
 		return true;		
+	}
+	
+	@Override
+	public IBitStream getWorkspaceItems(String fileid, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
+	{
+		return  proxyCommunityManager.getWorkspaceItems(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
 	}
 }

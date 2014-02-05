@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
  * The interface to the CommunityManager which handles the request for 
@@ -179,4 +180,6 @@ public interface ICommunityManager {
 	public abstract ICollectionFactory getCollectionFactory();
 
 	public abstract void setCollectionFactory(ICollectionFactory collectionFactory);
+
+	public abstract IBitStream getWorkspaceItems(String itemid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException;
 }

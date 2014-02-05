@@ -5,7 +5,7 @@ package edu.asu.spring.quadriga.domain;
  * 
  * @author Ram Kumar Kumaresan
  */
-public interface IBitStream {
+public interface IBitStream extends Runnable{
 
 	public abstract String getName();
 
