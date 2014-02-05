@@ -110,7 +110,7 @@ public class DspaceManagerDAO extends DAOConnectionManager implements IDBConnect
 	 * @author Karthik Jayaraman
 	 */
 	@Override
-	public int addBitstreamToWorkspace(String workspaceid, String communityid,String collectionid, String itemid, String bitstreamid,
+	public int addBitstreamToWorkspace(String workspaceid, String itemid, String bitstreamid,
 									   String username) throws QuadrigaStorageException 
 	{
 		int result = FAILURE;
@@ -118,8 +118,6 @@ public class DspaceManagerDAO extends DAOConnectionManager implements IDBConnect
 		{
 			WorkspaceDspaceDTO workspaceDspaceDTO = new WorkspaceDspaceDTO();
 			workspaceDspaceDTO.setWorkspaceDspaceDTOPK(new WorkspaceDspaceDTOPK(workspaceid, bitstreamid));
-			workspaceDspaceDTO.setCommunityid(communityid);
-			workspaceDspaceDTO.setCollectionid(collectionid);
 			workspaceDspaceDTO.setItemid(itemid);
 			workspaceDspaceDTO.setCreatedby(username);
 			workspaceDspaceDTO.setCreateddate(new Date());
