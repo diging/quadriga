@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.db.workbench;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionRetrieveProjectManager 

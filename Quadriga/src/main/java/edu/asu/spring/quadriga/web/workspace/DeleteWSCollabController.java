@@ -38,6 +38,14 @@ public class DeleteWSCollabController
 	@Autowired
 	private IListWSManager retrieveWSManager;
 	
+	/**
+	 * Retrieve the collaborators associated with the workspace for deletion
+	 * @param workspaceid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletecollaborators", method = RequestMethod.GET)
 	public ModelAndView deleteWorkspaceCollaboratorForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -63,6 +71,15 @@ public class DeleteWSCollabController
 		return model;
 	}
 
+	/**
+	 * Deletes the selected collaborators association from the workspace
+	 * @param workspaceid
+	 * @param req
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletecollaborators", method = RequestMethod.POST)
 	public ModelAndView deleteWorkspaceCollaborator(@PathVariable("workspaceid") String workspaceid,HttpServletRequest req,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException

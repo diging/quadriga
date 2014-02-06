@@ -5,6 +5,12 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 
+/**
+ * This class holds the list of collaborators to display 
+ * as a Model attribute in the UI page
+ * @author Kiran Kumar Batna
+ *
+ */
 public class CollaboratorsBackBean {
 	
 	private List<ICollaborator> collaboratorList;

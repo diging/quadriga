@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * Interface to represent the version management in network
+ *
+ */
 public interface INetworkOldVersion {
 
 	public abstract String getPreviousVersionStatus();

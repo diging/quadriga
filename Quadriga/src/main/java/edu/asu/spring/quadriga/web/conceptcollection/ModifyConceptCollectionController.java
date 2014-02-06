@@ -48,6 +48,14 @@ public class ModifyConceptCollectionController
 		binder.setValidator(validator);
 	}
 	
+	/**
+	 * This method retrieves the concept collection details for updation.
+	 * @param collectionid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.GET)
 	public ModelAndView updateConceptCollectionDetials(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -70,6 +78,15 @@ public class ModifyConceptCollectionController
 		return model;
 	}
 	
+	/**
+	 * This method updates the concept collection details.
+	 * @param collection
+	 * @param result
+	 * @param collectionid
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 3, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/conceptcollections/updatecollection/{collectionid}", method = RequestMethod.POST)
 	public ModelAndView updateConceptCollectionDetails(@Validated @ModelAttribute("collection")ConceptCollection collection,BindingResult result,

@@ -41,7 +41,18 @@ public class EditingNetworkAnnotationsController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingNetworkAnnotationsController.class);
 
-	
+	/**
+	 * This method saves the annotation entered to the node
+	 * @param request
+	 * @param response
+	 * @param networkId
+	 * @param annotationText
+	 * @param id
+	 * @param objectType
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "/auth/editing/saveAnnotation/{networkId}", method = RequestMethod.POST)
 	public @ResponseBody String saveAnnotationtoToNode(HttpServletRequest request,
 			HttpServletResponse response,
@@ -73,6 +84,17 @@ public class EditingNetworkAnnotationsController {
 		return "{ success: true; }";
 	}
 	
+	/**
+	 * This method retrieves the annotations associated with the node
+	 * @param request
+	 * @param response
+	 * @param networkId
+	 * @param nodeId
+	 * @param type
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "/auth/editing/getAnnotation/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String getAnnotationtoToNode(HttpServletRequest request,
 			HttpServletResponse response,

@@ -38,6 +38,14 @@ public interface IDBConnectionWorkspaceCC {
 	public abstract  void deleteWorkspaceCC(String workspaceId, String userId,
 			String CCId) throws QuadrigaStorageException;
 
+	/**
+	 * Retrieve the concept collection in the system that are not associated 
+	 * with the given workspace
+	 * @param workspaceId
+	 * @param userId
+	 * @return List<IConceptCollection>
+	 * @throws QuadrigaStorageException
+	 */
 	public abstract List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId,
 			String userId) throws QuadrigaStorageException;
 

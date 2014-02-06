@@ -42,6 +42,13 @@ public class ModifyDictionaryManagerController
 		validateBinder.setValidator(validator);
 	}
 	
+	/**
+	 * This method retrieves the dictionary details for updation
+	 * @param dictionaryid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/updatedictionary/{dictionaryid}", method = RequestMethod.GET)
      public ModelAndView updateDictionaryDetails(@PathVariable("dictionaryid") String dictionaryid,Principal principal) throws QuadrigaStorageException
@@ -58,6 +65,15 @@ public class ModifyDictionaryManagerController
     	 return model;
      }
 	
+	/**
+	 * This method updates the dictionary details associated with the specified dictioanry id
+	 * @param dictionary
+	 * @param result
+	 * @param dictionaryid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 3, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/updatedictionary/{dictionaryid}", method = RequestMethod.POST)
 	public ModelAndView updateDictionaryDetails(@Validated @ModelAttribute("dictionary")Dictionary dictionary,BindingResult result,

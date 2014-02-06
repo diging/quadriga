@@ -60,6 +60,15 @@ public class TransferCCOwnerController
 		validateBinder.setValidator(validator);
 	}
 	
+	/**
+	 * This method retrieves the collaborators associated with the concept collection
+	 * for change of ownership to any one of the collaborator.
+	 * @param collectionId
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value = "auth/conceptcollections/transferconceptcollectionowner/{collectionid}", method = RequestMethod.GET)
 	public ModelAndView transferConceptCollectionOwner(@PathVariable("collectionid") String collectionId,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -99,6 +108,17 @@ public class TransferCCOwnerController
 		return model;
 	}
 	
+	/**
+	 * This method transfer the ownership of given concept collection to the selected
+	 * collaborator and assigns the old owner as collaborator to the concept collection.
+	 * @param collaboratorUser
+	 * @param result
+	 * @param collectionId
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value = "auth/conceptcollections/transferconceptcollectionowner/{collectionid}", method = RequestMethod.POST)
 	public ModelAndView transferConceptCollectionOwner(@Validated @ModelAttribute("user")User collaboratorUser,BindingResult result,

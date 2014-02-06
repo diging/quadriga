@@ -109,6 +109,9 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 		return conceptCollList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId, String userId) throws QuadrigaStorageException

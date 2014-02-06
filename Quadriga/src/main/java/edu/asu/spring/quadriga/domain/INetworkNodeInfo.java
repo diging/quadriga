@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * Interface to extract the node info from a network
+ *
+ */
 public interface INetworkNodeInfo {
 
 	public abstract String getId();

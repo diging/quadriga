@@ -311,8 +311,15 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager#saveItem(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+
+	/**
+	 * This method saves the item associated with the concept collection
+	 * @param : lemma
+	 * @param : pos
+	 * @param : desc
+	 * @param : conceptId - concept collection id
+	 * @param : username - logged in user
+	 * @throws : QuadrigaStorageException, QuadrigaAccessException
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -353,8 +360,12 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager#validateId(java.lang.String)
+
+	/**
+	 * This method checks if the given collection name exits in the system
+	 * @param : collectionname - concept collection name
+	 * @throws : QuadrigaStorageException
+	 * @return : String
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -380,8 +391,12 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	}
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager#deleteItems(java.lang.String, java.lang.String, java.lang.String)
+
+	/**
+	 * This method deletes the given items associated with the specified concept collection
+	 * @param : id - concept collection associated item ids.
+	 * @param : collectionid - concept collection id
+	 * @param : username - logged in user
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -416,6 +431,14 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		return errMsg;
 	}
 
+	/**
+	 * This method updates the concepts associated with the concept collection
+	 * @param : concept - concept associated with the concept collection
+	 * @param : collectionid - concept collection id
+	 * @param : username - logged in user
+	 * @return : String
+	 * @throws : QuadrigaStorageException
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public String updateItem(IConcept concept, String collectionId,String username) throws QuadrigaStorageException {
@@ -454,6 +477,13 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		return errMsg;
 	}
 
+	/**
+	 * This method retrieves the concept collection id associated with the given
+	 * concept collection name
+	 * @param : ccName - concept collection name
+	 * @return : String - concept collection id
+	 * @throws : QuadrigaStorageException
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public String getConceptCollectionId(String ccName) throws QuadrigaStorageException {
@@ -478,6 +508,12 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	}
 
 
+	/**
+	 * This method retrieves the collaborators associated with the given 
+	 * concept collection
+	 * @param : collection - Concept collection object
+	 * @throws : QuadrigaStorageEXception
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {

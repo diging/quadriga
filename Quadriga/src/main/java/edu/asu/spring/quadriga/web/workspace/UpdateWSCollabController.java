@@ -62,6 +62,13 @@ public class UpdateWSCollabController
 	@Autowired
 	private IListWSManager retrieveWSManager;
 	
+	/**
+	 * Custom validator to validate the input selection form the user
+	 * @param request
+	 * @param binder
+	 * @param validateBinder
+	 * @throws Exception
+	 */
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
 		
@@ -82,6 +89,15 @@ public class UpdateWSCollabController
 		}); 
 	}
 	
+	/**
+	 * Retrieve all the collaborators associated to the workspace to update their 
+	 * roles
+	 * @param workspaceid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.GET)
 	public ModelAndView updateWorkspaceCollaboratorForm(@PathVariable("workspaceid")String workspaceid,Principal principal) throws QuadrigaStorageException,QuadrigaAccessException
@@ -117,6 +133,17 @@ public class UpdateWSCollabController
 		return model;
 	}
 	
+	/**
+	 * This method updates the roles of collaborators associated to the
+	 * workspace
+	 * @param collaboratorForm
+	 * @param result
+	 * @param workspaceid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 3, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/updatecollaborators", method = RequestMethod.POST)
 	public ModelAndView updateWorkspaceCollaborator(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,

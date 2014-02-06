@@ -100,30 +100,28 @@ public interface IDBConnectionCCManager {
 		public abstract int setupTestEnvironment(String[] sQuery) throws QuadrigaStorageException;
 		
 		/**
+		 * retrieves data from database to retrieve collaborators
 		 * 
-		 * 
-		 * @author rohit
-		 * @throws QuadrigaStorageException 
+		 * @param collectionid
+		 * @throws QuadrigaStorageException
+		 * @author rohit pendbhaje
 		 * 
 		 */
 		public abstract List<ICollaborator> showCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
 		
 		/**
-		 * 
-		 * 
-		 * @return 
-		 * @author rohit
-		 * @throws QuadrigaStorageException 
-		 * 
+		 * Get the user list of non owners and collaborators
+		 * @param collectionid
+		 * @return List of users
+		 * @throws QuadrigaStorageException
 		 */
 		public abstract List<IUser> showNonCollaboratorRequest(String collectionid) throws QuadrigaStorageException;
 		
 		/**
-		 * Method used to  get colloborators of a particular collection.
-		 * 
-		 * 
-		 * @author Rohit
-		 * 
+		 * This method retrieves the collaborators associated with the given 
+		 * concept collection
+		 * @param : collection - Concept collection object
+		 * @throws : QuadrigaStorageEXception
 		 */
 		public abstract void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException;
 		public abstract  String getConceptCollectionId(String ccName)

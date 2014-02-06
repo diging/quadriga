@@ -58,6 +58,13 @@ public class TransferDictionaryOwnerController
 		validateBinder.setValidator(validator);
 	}
 	
+	/**
+	 * This method retrieves the collaborators associated for given dictionary to transfer the
+	 * ownership to one of the collaborators
+	 * @param dictionaryid
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value="auth/dictionaries/changedictionaryowner/{dictionaryid}", method = RequestMethod.GET)
 	public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException
@@ -93,6 +100,16 @@ public class TransferDictionaryOwnerController
 		return model;
 	}
 	
+	/**
+	 * This method transfer the ownership of the dictionary to the selected collaborator
+	 * and assign the old owner as collaborator to the dictionary
+	 * @param dictionaryid
+	 * @param principal
+	 * @param collaboratorUser
+	 * @param result
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value="auth/dictionaries/changedictionaryowner/{dictionaryid}", method = RequestMethod.POST)
     public ModelAndView transferDictionaryOwner(@PathVariable("dictionaryid") String dictionaryid,Principal principal,

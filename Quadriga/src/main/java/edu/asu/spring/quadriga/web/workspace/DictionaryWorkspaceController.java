@@ -42,6 +42,15 @@ public class DictionaryWorkspaceController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryWorkspaceController.class);
 
+	/**
+	 * Retrieve dictionaries from the system to associate the selected dictionaries
+	 * with the given workspace
+	 * @param workspaceId
+	 * @param model
+	 * @return String - URL to redirect on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionary", method = RequestMethod.GET)
 	public String addWorkspaceDictionary(
@@ -76,6 +85,15 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/adddictionaries";
 	}
 
+	/**
+	 * Associates the selected dictionaries with the given workspace
+	 * @param req
+	 * @param workspaceId
+	 * @param model
+	 * @return String - URL to redirect on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/adddictionaries", method = RequestMethod.POST)
 	public String addWorkspaceDictionary(HttpServletRequest req,
@@ -144,6 +162,15 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/dictionaries";
 	}
 
+	/**
+	 * Retrieve all the dictionaries associated with the workspace
+	 * @param req
+	 * @param workspaceId
+	 * @param model
+	 * @return String - URL to redirect on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/dictionaries", method = RequestMethod.GET)
 	public String listWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -168,6 +195,14 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/dictionaries";
 	}
 	
+	/**
+	 * Retrieve all the dictionaries associated with workspace for deletion
+	 * @param workspaceId
+	 * @param model
+	 * @return Stirng - URL to redirect on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionary", method = RequestMethod.GET)
 	public String deleteWorkspaceDictionary(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -192,6 +227,15 @@ public class DictionaryWorkspaceController {
 		return "auth/workbench/workspace/deletedictionaries";
 	}
 	
+	/**
+	 * Delete the association of selected dictionaries from the workspace.
+	 * @param req
+	 * @param workspaceId
+	 * @param model
+	 * @return String - URL to redirect the page on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN } )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deletedictionaries", method = RequestMethod.POST)
 	public String deleteWorkspaceDictionary(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {

@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 
+/**
+ * This class acts as a domain object to hold collaborator  to display 
+ * as a Model attribute in the UI page
+ * @author Kiran Kumar Batna
+ */
 @Service
 public class ModifyCollaborator  
 {

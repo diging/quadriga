@@ -67,6 +67,17 @@ public class DictionaryDeleteCollabController {
 		validateBinder.setValidator(validator);
 }
 	
+	/**
+	 * This method deletes the selected collaborators associated with the given workspace
+	 * @param dictionaryId
+	 * @param collaboratorForm
+	 * @param result
+	 * @param model
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/deleteCollaborators", method = RequestMethod.POST)
 	public ModelAndView deleteCollaborators(@PathVariable("dictionaryid") String dictionaryId, 
@@ -113,6 +124,14 @@ public class DictionaryDeleteCollabController {
 		return modelAndView;
 	}
 	
+	/**
+	 * This method retrieves the collaborators associated with given workspace
+	 * @param dictionaryId
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showDeleteCollaborators" , method = RequestMethod.GET)
 	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException
