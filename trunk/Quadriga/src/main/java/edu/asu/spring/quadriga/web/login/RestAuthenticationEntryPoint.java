@@ -18,6 +18,9 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint{
 	
 	private static final Logger logger = LoggerFactory.getLogger(RestAuthenticationEntryPoint.class);
 
+	/**
+	 * This is the rest authentication entry point
+	 */
 	@Override
 	public void commence(HttpServletRequest arg0, HttpServletResponse response,
 			AuthenticationException arg2) throws IOException, ServletException {

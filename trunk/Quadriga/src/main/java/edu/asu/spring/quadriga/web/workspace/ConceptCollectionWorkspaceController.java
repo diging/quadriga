@@ -43,7 +43,14 @@ public class ConceptCollectionWorkspaceController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ConceptCollectionWorkspaceController.class);
 
-	
+	/**
+	 * Retrieves the concept collections associated with the given workspace
+	 * @param workspaceId
+	 * @param model
+	 * @return String - Url to redirect the page on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/conceptcollections", method = RequestMethod.GET)
 	public String listProjectConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) throws QuadrigaStorageException, QuadrigaAccessException {
@@ -73,6 +80,14 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/conceptcollections";
 	}
 	
+	/**
+	 * Retrieve the concept collections which are not associated to the given workspace
+	 * @param workspaceId
+	 * @param model
+	 * @return String - String - Url to redirect the page on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.GET)
 	public String addWorkspaceConceptCollection(
@@ -110,6 +125,15 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/addconceptcollections";
 	}
 	
+	/**
+	 * Associate the concept collection with the given workspace
+	 * @param req
+	 * @param workspaceId
+	 * @param model
+	 * @return String - URL to direct the page on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/addconceptcollection", method = RequestMethod.POST)
 	public String addWorkspaceConceptCollection(HttpServletRequest req,
@@ -174,7 +198,15 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/conceptcollections";
 	}
 
-	
+
+	/**
+	 * Retrieve the concept collection associated to the given workspace for deletion
+	 * @param workspaceId
+	 * @param model
+	 * @return String - URL to redirect on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.GET)
 	public String deleteWorkspaceConceptCollection(@PathVariable("workspaceid") String workspaceId, Model model) 
@@ -200,6 +232,15 @@ public class ConceptCollectionWorkspaceController {
 		return "auth/workbench/workspace/deleteconceptcollections";
 	}
 	
+	/**
+	 * Deletes the association of the selected concept collections from the workspace
+	 * @param req
+	 * @param workspaceId
+	 * @param model
+	 * @return String - URL to redirect on success or failure
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 2, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/deleteconceptcollections", method = RequestMethod.POST)
 	public String deleteWorkspaceConceptCollection(HttpServletRequest req,@PathVariable("workspaceid") String workspaceId, Model model)

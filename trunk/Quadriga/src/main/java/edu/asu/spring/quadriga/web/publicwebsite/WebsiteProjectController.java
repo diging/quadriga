@@ -13,23 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.network.NetworkListManager;
 
@@ -97,6 +93,13 @@ public class WebsiteProjectController {
 		
 	}
 	
+	/**
+	 * Retrieves all the networks associated with the project based on the project unix name
+	 * @param unixName
+	 * @param model
+	 * @return 
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value="sites/{ProjectUnixName}/browsenetworks", method=RequestMethod.GET)
 	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException{
 		System.out.println("browse");
@@ -125,6 +128,16 @@ public class WebsiteProjectController {
 		return "NoNetworks";
 	}
 	
+	/**
+	 * Retrieve the network for visualization of the 
+	 * given network id 
+	 * @param networkId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws JAXBException
+	 */
 	@RequestMapping(value = "sites/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		StringBuffer jsonstring=new StringBuffer();

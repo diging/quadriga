@@ -57,12 +57,26 @@ public class TransferWSOwnerController
 	
 	@Autowired
 	IUserFactory userFactory;
-	
+    
+	/**
+	 * Custom validator to validate the input
+	 * @param validateBinder
+	 * @throws Exception
+	 */
 	@InitBinder
 	protected void initBinder(WebDataBinder validateBinder) throws Exception {
 		validateBinder.setValidator(validator);
 	}
 	
+	/**
+	 * Retrieve all the collaborators associated to the workspace
+	 * to transfer the ownership to the selected collaborator
+	 * @param workspaceid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.GET)
 	public ModelAndView transferWSOwnerRequestForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -102,6 +116,17 @@ public class TransferWSOwnerController
 		return model;
 	}
 	
+	/**
+	 * This method transfer the owner of workspace to another user and adds the 
+	 * old owner as collaborator to the workspace
+	 * @param workspaceid
+	 * @param principal
+	 * @param collaboratorUser
+	 * @param result
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE,paramIndex = 1, userRole = {} )})
 	@RequestMapping(value = "auth/workbench/workspace/{workspaceid}/transferworkspaceowner", method = RequestMethod.POST)
 	public ModelAndView transferWSOwnerRequest(@PathVariable("workspaceid") String workspaceid,Principal principal,

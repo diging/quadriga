@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.Principal;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,14 +34,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
-import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
-import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
-import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.QuadrigaWorkspaceDetailsReply;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.Workspace;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.WorkspacesList;

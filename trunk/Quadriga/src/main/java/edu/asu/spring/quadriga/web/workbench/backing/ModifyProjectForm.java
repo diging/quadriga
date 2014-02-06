@@ -2,6 +2,10 @@ package edu.asu.spring.quadriga.web.workbench.backing;
 
 import java.util.List;
 
+/**
+ * This class holds the list of projects to act as a Model attribute
+ * to display in the UI pages
+ */
 public class ModifyProjectForm 
 {
 	private List<ModifyProject> projectList;

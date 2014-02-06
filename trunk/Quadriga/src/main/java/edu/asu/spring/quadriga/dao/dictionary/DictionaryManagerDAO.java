@@ -579,6 +579,11 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		return dictID;
 	}
 	
+	/**
+	 * This method retrieves the collaborators associated with given dictionary
+	 * @param : dictionaryid - dictionary id
+	 * @throws : QuadrigaStorageException
+	 */
 	@Override
 	public List<ICollaborator> showCollaboratingUsersRequest(String dictionaryid) throws QuadrigaStorageException {
 		List<ICollaborator> collaborators = new ArrayList<ICollaborator>();

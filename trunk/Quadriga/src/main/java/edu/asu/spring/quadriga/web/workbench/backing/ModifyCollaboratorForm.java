@@ -2,7 +2,11 @@ package edu.asu.spring.quadriga.web.workbench.backing;
 
 import java.util.List;
 
-
+/**
+ * This class holds the list of Collaborators to act as a Model
+ * attribute to display in the UI pages.
+ *
+ */
 public class ModifyCollaboratorForm 
 {
 	private List<ModifyCollaborator> collaborators;

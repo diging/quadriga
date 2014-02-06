@@ -113,6 +113,9 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 		return dictionaryList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId, String userId) throws QuadrigaStorageException

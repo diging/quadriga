@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * Interface to implement user profile
+ *
+ */
 public interface IProfile {
 	
 	public abstract String getServiceName();

@@ -1,5 +1,8 @@
 package edu.asu.spring.quadriga.web.network;
 
+/**
+ * Interface to hold constants specifying the network status
+ */
 public interface INetworkStatus {
 
 	public final static String PENDING = "PENDING";

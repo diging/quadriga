@@ -79,6 +79,14 @@ public class ModifyDictionaryCollaboratorController
 		
 	}
 	
+	/**
+	 * This method retrieves the collaborators associated with a dictionary for updating
+	 * the selected collaborator roles
+	 * @param dictionaryid
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 1, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/dictionaries/{dictionaryid}/updatecollaborators", method=RequestMethod.GET)
 	 public ModelAndView updateCollaboratorForm(@PathVariable("dictionaryid") String dictionaryid) throws QuadrigaStorageException,QuadrigaAccessException
@@ -113,6 +121,16 @@ public class ModifyDictionaryCollaboratorController
 		 return model;
 	 }
 
+	/**
+	 * This method updates the roles of selected collaborator associated 
+	 * with the given dictionary
+	 * @param collaboratorForm
+	 * @param result
+	 * @param dictionaryid
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	 @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 3, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/dictionaries/{dictionaryid}/updatecollaborators", method=RequestMethod.POST)
 	 public ModelAndView updateCollaboratorForm(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,

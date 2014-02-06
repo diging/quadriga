@@ -88,7 +88,6 @@ public class DictionaryListController {
 	 * 
 	 * @return Return to the dictionary home page of the Quadriga
 	 */
-
 	@RequestMapping(value = "auth/dictionaries", method = RequestMethod.GET)
 	public String listDictionary(ModelMap model, Principal principal) {
 		try {
@@ -167,6 +166,12 @@ public class DictionaryListController {
 		}
 	}
 
+	/**
+	 * This method retrieves the dictionaries associated with
+	 * the logged in user for deletion
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "auth/dictionaries/deleteDictionary", method = RequestMethod.GET)
 	public String deleteDictionaryGet(Model model) {
 		try {
@@ -190,6 +195,14 @@ public class DictionaryListController {
 		return "auth/dictionaries/deleteDictionary";
 	}
 
+	/**
+	 * This method deletes the selected dictionaries.
+	 * @param req
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value = "auth/dictionaries/deleteDictionary", method = RequestMethod.POST)
 	public String deleteDictionary(HttpServletRequest req, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {

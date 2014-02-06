@@ -83,6 +83,15 @@ public class ModifyCCCollaboratorController
 		
 	}
 	
+	/**
+	 * This method retrieves the collaborators associated with given concept collection for updation the
+	 * collaborator roles.
+	 * @param collectionid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/updatecollaborators", method=RequestMethod.GET)
 	 public ModelAndView updateCollaboratorForm(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
@@ -122,6 +131,17 @@ public class ModifyCCCollaboratorController
 		 return model;
 	 }
 	 
+	/**
+	 * This method updated the roles of selected collaborator associated with
+	 * the given concept collection
+	 * @param collaboratorForm
+	 * @param result
+	 * @param collectionid
+	 * @param principal
+	 * @return ModelAndView
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 3, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/updatecollaborators", method=RequestMethod.POST)
 	 public ModelAndView updateCollaboratorForm(@Validated @ModelAttribute("collaboratorform") ModifyCollaboratorForm collaboratorForm,

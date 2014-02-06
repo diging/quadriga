@@ -2,6 +2,12 @@ package edu.asu.spring.quadriga.web.workbench.backing;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * Domain class to hold the project variables to display in the
+ * UI pages
+ * @author Kiran Kumar Batna
+ *
+ */
 @Service
 public class ModifyProject 
 {

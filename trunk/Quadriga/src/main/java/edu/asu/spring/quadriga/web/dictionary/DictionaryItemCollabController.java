@@ -76,6 +76,15 @@ public class DictionaryItemCollabController {
 		this.collaboratorRoleManager = collaboratorRoleManager;
 	}
 	
+	/**
+	 * Retrieve the dictionary items associated with the logged in user
+	 * @param dictionaryid
+	 * @param model
+	 * @param principal
+	 * @return 
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@RequestMapping(value = "auth/dictionaries/collab/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryCollabPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model,Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException{
@@ -293,6 +302,17 @@ public class DictionaryItemCollabController {
 		return "auth/dictionary/dictionarycollab";
 	}
 	
+	/**
+	 * This methods adds the selected items to the dictionary.
+	 * @param req
+	 * @param dictionaryId
+	 * @param dictionaryItems
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaAccessException
+	 */
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.DICTIONARY,paramIndex = 2, userRole = {RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN,
             RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE} )})
 	@RequestMapping(value = "auth/dictionaries/addDictionaryItemsCollab/{dictionaryid}", method = RequestMethod.POST)

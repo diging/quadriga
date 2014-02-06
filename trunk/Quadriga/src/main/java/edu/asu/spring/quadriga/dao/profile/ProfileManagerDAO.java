@@ -51,6 +51,7 @@ implements IDBConnectionProfileManager
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<SearchResultBackBean> showProfileDBRequest(String loggedinUser)
 			throws QuadrigaStorageException 

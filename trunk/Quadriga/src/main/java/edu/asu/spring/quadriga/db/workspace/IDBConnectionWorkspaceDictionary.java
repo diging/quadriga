@@ -38,6 +38,14 @@ public interface IDBConnectionWorkspaceDictionary {
 	public abstract  void deleteWorkspaceDictionary(String workspaceId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException;
 
+	/**
+	 * Retrieve the dictionaries in the system that are not associated 
+	 * with the given workspace
+	 * @param workspaceId
+	 * @param userId
+	 * @return List<IDictionary>
+	 * @throws QuadrigaStorageException
+	 */
 	public abstract List<IDictionary> getNonAssociatedWorkspaceDictionaries(String workspaceId,
 			String userId) throws QuadrigaStorageException;
 

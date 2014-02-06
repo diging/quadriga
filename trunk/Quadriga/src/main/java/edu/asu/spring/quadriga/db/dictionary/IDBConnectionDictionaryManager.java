@@ -149,23 +149,65 @@ public interface IDBConnectionDictionaryManager {
 			throws QuadrigaStorageException;
 
 
+	/**
+	 * Get user dictionary of the user with the collaborator role
+	 * @param user id
+	 * @return List of Dictionary objects
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	public abstract List<IDictionary> getDictionaryCollabOfUser(String userId)
 			throws QuadrigaStorageException;
 
+	/**
+	 * Get the user role of the collaborator with the user id and dictionary id
+	 * @param user id and dictionary id
+	 * @return Role of the user
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	public abstract List<String> getDictionaryCollaboratorRoles(String userId, String dicitonaryId)
 			throws QuadrigaStorageException;
 
+	/**
+	 * Get the Dictionary Items corresponding to a dictionary ID
+	 * @param udictionary id
+	 * @return List of dictionary items
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	public abstract List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
+	/**
+	 * Delete Dictionary Items corresponding to a dictionary ID and Term id
+	 * @param dictionary id and term id
+	 * @return error messages if any
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	public abstract void deleteDictionaryItemsCollab(String dictinaryId, String itemid)
 			throws QuadrigaStorageException;
 
+	/**
+	 * Get Dictionary owner name corresponding to a dictionary ID
+	 * @param dictionary id
+	 * @return Owner username
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	public abstract String getDictionaryOwner(String dictionaryId)
 			throws QuadrigaStorageException;
 	
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
+	/**
+	 * Get Dictionary ID name corresponding to a dictionary ID
+	 * @param dictionary id
+	 * @return Owner username
+	 * @throws QuadrigaStorageException
+	 * @author Karthik Jayaraman
+	 */
 	public abstract String getDictionaryId(String dictName) throws QuadrigaStorageException;
 
 }

@@ -33,6 +33,14 @@ public class DictionaryCollaboratorManagerDAO extends DAOConnectionManager imple
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyProjectCollaboratorDAO.class);
 	
+	/**
+	 * This method update the roles associated with the collaborator for dictionary
+	 * @param : dictionaryId - dictionary id
+	 * @param : collabUser - collaborator user
+	 * @param : collaboratorRole - roles associated with the collaborator
+	 * @param : userName - logged in user
+	 * @throws : QuadrigatorageException
+	 */
 	@Override
 	public void updateCollaboratorRoles(String dictionaryId, String collabUser,String collaboratorRole, String username) throws QuadrigaStorageException 
 	{

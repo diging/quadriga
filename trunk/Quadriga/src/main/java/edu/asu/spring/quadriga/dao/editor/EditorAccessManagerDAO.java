@@ -15,6 +15,13 @@ public class EditorAccessManagerDAO extends DAOConnectionManager implements IDBC
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	/**
+	 * This method checks if the logged in user has an editor role
+	 * @param : userName - logged in user
+	 * @throws : QuadrigaStorageException
+	 * @return : has editor role - true
+	 *           no editor role - false
+	 */
 	@Override
 	public boolean chkIsEditor(String userName) throws QuadrigaStorageException 
 	{
@@ -48,6 +55,15 @@ public class EditorAccessManagerDAO extends DAOConnectionManager implements IDBC
 		return isEditor;
 	}
 
+	/**
+	 * This method checks if the logged in user has an editor role for
+	 * the given network
+	 * @param : networkId - network id
+	 * @param : userName - logged in user
+	 * @throws : QuadrigaStorageException
+	 * @return : has network editor role - true
+	 *           no network editor role - false
+	 */
 	@Override
 	public boolean chkIsNetworkEditor(String networkId, String userName)
 			throws QuadrigaStorageException 

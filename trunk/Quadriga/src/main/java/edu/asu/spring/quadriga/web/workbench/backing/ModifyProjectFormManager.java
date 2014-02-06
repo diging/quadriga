@@ -20,6 +20,12 @@ public class ModifyProjectFormManager
 		@Autowired
 		private ICollaboratorRoleManager collaboratorRoleManager;
 		
+		/**
+		 * Retrieve the projects associated with the given user
+		 * @param userName
+		 * @return Lit<ModifyProject>
+		 * @throws QuadrigaStorageException
+		 */
 		public List<ModifyProject> getUserProjectList(String userName) throws QuadrigaStorageException
 		{
 			List<IProject> projectList;
@@ -43,6 +49,14 @@ public class ModifyProjectFormManager
 			return modifyProjectList;
 		}
 		
+		/**
+		 * Retrieve the projects associated with the collaborator posessing the 
+		 * specified role
+		 * @param userName - collaborator user name
+		 * @param role - collaborator role
+		 * @return List<ModifyProject>
+		 * @throws QuadrigaStorageException
+		 */
 		public List<ModifyProject> getProjectList(String userName,String role) throws QuadrigaStorageException
 		{
 			String collaboratorRole;

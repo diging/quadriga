@@ -75,7 +75,7 @@ public class AddWSCollabController
 	
 	private static final Logger logger = LoggerFactory.getLogger(ModifyWSCollabManager.class);
 	
-	/*
+	/**
 	 * This method binds the selected input by the user and validates the 
 	 * input.
 	 */

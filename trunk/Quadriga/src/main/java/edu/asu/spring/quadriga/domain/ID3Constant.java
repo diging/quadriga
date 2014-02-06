@@ -1,5 +1,9 @@
 package edu.asu.spring.quadriga.domain;
 
+/**
+ * Interface to store the D3 Constants used in networks
+ *
+ */
 public interface ID3Constant {
 
 	public static final int APPELATION_EVENT_TERM=0;
