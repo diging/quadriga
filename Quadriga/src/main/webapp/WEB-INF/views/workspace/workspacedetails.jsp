@@ -23,7 +23,7 @@
 	}
 	
 	$(document).ready(function() {		
-		
+				
 		function loadItemName() {
 			var divIDs = $("div[class^='item']") // find divs with ID attribute
 			.map(function() {
@@ -42,7 +42,7 @@
 			
 			$.each($.unique(IDs), function() {
 				var collectionid = this.split("_");
-				var ajaxCallback = getItemName(collectionid[1],collectionid[2]);
+				var ajaxCallback = getItemName(collectionid[1]);
 				
 				
 				//Do this once the data is available
@@ -50,14 +50,50 @@
 					//Load the new text in the corresponding div tag
 					if(data != 'Loading...'){
 						data = '<font size="1">'+data+'</font>';
-						$('.item_' + collectionid[1]+ '_' + collectionid[2]).html(data);
-						
+						$('.item_' + collectionid[1]).html(data);
 					}
 				});//End of ajax callback
 			});
 		}
 		
 		loadItemName();
+		
+		function loadBitStreamName() {
+			var divIDs = $("div[class^='bitstream']") // find divs with ID attribute
+			.map(function() {
+				return this.id;
+			}) // convert to set of IDs
+			.get();
+			
+			var i = 0;
+			var IDs = [];
+			for (i = 0; i < divIDs.length; i++) {
+				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_bitstream" />') {
+					IDs.push(divIDs[i]);
+				}
+			}	
+			
+			$.each($.unique(IDs), function() {
+				var collectionid = this.split("_");
+				var ajaxCallback = getBitStreamName(collectionid[1]);
+				
+				
+				//Do this once the data is available
+				ajaxCallback.success(function(data) {
+					//Load the new text in the corresponding div tag
+					if(data != 'Loading...'){
+						if(data != 'No Access to File'){
+							$('.checkbox_' + collectionid[1]).html('<input type="checkbox" class="checkbox" name="bitstreamids" value="'+collectionid[1]+'" />');
+						}
+						data = '<font size="1">'+data+'</font>';
+						$('.bitstream_' + collectionid[1]).html(data);
+						
+					}
+				});//End of ajax callback
+			});
+		}
+		
+		loadBitStreamName();
 		
 		/**
 		* Function to check if there is any item name yet to be loaded.
@@ -85,45 +121,8 @@
 		}
 		setTimeout(checkItemDiv, 1000);
 		
-		function loadBitStreamName() {
-			var divIDs = $("div[class^='bitstream']") // find divs with ID attribute
-			.map(function() {
-				return this.id;
-			}) // convert to set of IDs
-			.get();
-			
-			var i = 0;
-			var IDs = [];
-			for (i = 0; i < divIDs.length; i++) {
-				if ($('#' + divIDs[i]).text() == '<spring:message code="dspace.access_check_bitstream" />') {
-					IDs.push(divIDs[i]);
-				}
-			}	
-			
-			$.each($.unique(IDs), function() {
-				var collectionid = this.split("_");
-				var ajaxCallback = getBitStreamName(collectionid[1],collectionid[2],collectionid[3]);
-				
-				
-				//Do this once the data is available
-				ajaxCallback.success(function(data) {
-					//Load the new text in the corresponding div tag
-					if(data != 'Loading...'){
-						if(data != 'No Access to File'){
-							$('.checkbox_' + collectionid[3]).html('<input type="checkbox" class="checkbox" name="bitstreamids" value="'+collectionid[3]+'" />');
-						}
-						data = '<font size="1">'+data+'</font>';
-						$('.bitstream_' + collectionid[1] + '_' + collectionid[2] + '_' + collectionid[3]).html(data);
-						
-					}
-				});//End of ajax callback
-			});
-		}
-		
-		loadBitStreamName();
-		
 		/**
-		* Function to check if there is any item name yet to be loaded.
+		* Function to check if there is any bitstream name yet to be loaded.
 		* If yes, then it will invoke the loadItemName() after a wait period of 5 seconds.
 		* Author: Ram Kumar Kumaresan
 		*/
@@ -149,17 +148,18 @@
 		setTimeout(checkBitStreamDiv, 1000);
 	});
 	
+	
 	/*
 	* Function used to make an ajax call to the controller, inorder to get the item name
 	*/
-	function getItemName(collectionid,itemid) {
+	function getItemName(bitstreamid) {
+		alert('Make an ajax call for '+bitstreamid);
 		return $
 				.ajax({
 					type : 'GET',
-					url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/itemstatus/'
-							+ collectionid+'/'+itemid,
+					url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/itemstatus?bitstreamid='+bitstreamid,
 					error : function(jqXHR, textStatus, errorThrown) {
-						$('#item_' + collectionid + "_" + itemid)
+						$('#item_' + bitstreamid)
 								.html(
 										"Server not responding...");
 					}
@@ -169,13 +169,13 @@
 	/*
 	* Function used to make an ajax call to the controller, inorder to get the bitstream name
 	*/
-	function getBitStreamName(collectionid,itemid,bitstreamid) {
+	function getBitStreamName(bitstreamid) {
 		return $
 				.ajax({
 					type : 'GET',
-					url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/bitstreamaccessstatus?collectionid='+collectionid+'&itemid='+itemid+'&bitstreamid='+bitstreamid,
+					url : '${pageContext.servletContext.contextPath}/auth/workbench/workspace/bitstreamaccessstatus?bitstreamid='+bitstreamid,
 					error : function(jqXHR, textStatus, errorThrown) {
-						$('#bitstream_' + collectionid + "_" + itemid + "_" + bitstreamid)
+						$('#bitstream_' + bitstreamid)
 								.html(
 										"Server not responding...");
 					}
@@ -414,8 +414,8 @@ $(document).ready(function(){
         						</c:choose>
     						</div>
 						</td>
-						<td><div class='item_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>' id='item_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>'><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></div></td>
-						<td><div class='bitstream_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>_<c:out value="${bitstream.id}"/>' id='bitstream_<c:out value="${bitstream.collectionid}"/>_<c:out value="${bitstream.itemid}"/>_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.name}"></c:out></font></div></td>
+						<td><div class='item_<c:out value="${bitstream.id}"/>' id='item_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></div></td>
+						<td><div class='bitstream_<c:out value="${bitstream.id}"/>' id='bitstream_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.name}"></c:out></font></div></td>
 					</tr>
 				</c:forEach>
 				</tbody>

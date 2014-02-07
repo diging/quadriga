@@ -181,5 +181,7 @@ public interface ICommunityManager {
 
 	public abstract void setCollectionFactory(ICollectionFactory collectionFactory);
 
-	public abstract IBitStream getWorkspaceItems(String itemid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException;
+	public abstract IBitStream getBitStream(String itemid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException;
+
+	public abstract void addBitStreamToCache(IBitStream bitstream);
 }

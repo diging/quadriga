@@ -24,7 +24,7 @@ public interface IDBConnectionDspaceManager {
 	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation.
 	 * @throws QuadrigaAccessException  Thrown when the user tries to modify a workspace to which he/she does not have access to.
 	 */
-	public abstract int addBitstreamToWorkspace(String workspaceid, String itemid, String bitstreamid, String username) throws QuadrigaStorageException;
+	public abstract int addBitstreamToWorkspace(String workspaceid, String bitstreamid, String username) throws QuadrigaStorageException;
 
 	/**
 	 * Delete a bitstream from a workspace in Quadriga.

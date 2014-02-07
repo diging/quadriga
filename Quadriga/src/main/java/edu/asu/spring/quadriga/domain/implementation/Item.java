@@ -45,6 +45,8 @@ public class Item implements IItem{
 	private String userName;
 	private String password;
 	private IDspaceKeys dspaceKeys;
+	private String communityid;
+	private String collectionid;
 
 	private IBitStreamFactory bitstreamFactory;
 
@@ -61,8 +63,10 @@ public class Item implements IItem{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setRestConnectionDetails(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
+	public void setRestConnectionDetails(String communityid, String collectionid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
 	{
+		this.communityid = communityid;
+		this.collectionid = collectionid;
 		this.restTemplate = restTemplate;
 		this.dspaceProperties = dspaceProperties;
 		this.userName = userName;
@@ -96,6 +100,9 @@ public class Item implements IItem{
 			{
 				bitstream = bitstreamFactory.createBitStreamObject();
 				bitstream.setId(bitid);
+				bitstream.setItemName(this.name);
+				bitstream.addCommunityId(this.communityid);
+				bitstream.addCollectionId(this.collectionid);
 				this.bitstreams.add(bitstream);
 			}
 

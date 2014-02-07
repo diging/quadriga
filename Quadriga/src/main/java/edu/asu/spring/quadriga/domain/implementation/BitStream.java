@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.domain.implementation;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -10,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollectionEntity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunityEntity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -25,36 +29,44 @@ public class BitStream implements IBitStream{
 	private String name;
 	private String size;
 	private String mimeType;
-	private String communityid;
-	private String collectionid;
-	private String itemid;
-	private String communityName;
-	private String collectionName;
-	private String itemName;
 	private boolean isloaded;
-	
+	private String itemName;
+	private List<String> communityIds;
+	private List<String> collectionIds;
+
 	private RestTemplate restTemplate;
 	private Properties dspaceProperties;
 	private String userName;
 	private String password;
 	private IDspaceKeys dspaceKeys;
-	
+
 	public BitStream()
 	{
+		setCommunityIds(Collections.synchronizedList(new ArrayList<String>()));
+		setCollectionIds(Collections.synchronizedList(new ArrayList<String>()));
 		isloaded = false;
 	}
-	
-	public BitStream(String id, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
+
+	public BitStream(String communityid, String collectionid, String itemid, String bitstreamid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
 	{
-		this.id = id;
+		this.id = bitstreamid;
 		this.restTemplate = restTemplate;
 		this.dspaceProperties = dspaceProperties;
 		this.userName = userName;
 		this.password = password;
 		this.dspaceKeys = dspaceKeys;
 		this.isloaded = false;
+		setCommunityIds(new ArrayList<String>());
+		setCollectionIds(new ArrayList<String>());
+		
+		if(communityid != null)
+		this.communityIds.add(communityid);
+		
+		if(collectionid != null)
+		this.collectionIds.add(collectionid);
+		
 	}
-	
+
 	private String getBitstreamMetadataPath(Properties dspaceProperties, String fileid, String email, String password, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException
 	{
 		if(dspaceKeys != null)
@@ -83,7 +95,7 @@ public class BitStream implements IBitStream{
 		//No authentication provided
 		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml");
 	}
-	
+
 	@Override
 	public boolean getLoadStatus() {
 		return isloaded;
@@ -92,66 +104,6 @@ public class BitStream implements IBitStream{
 	@Override
 	public void setLoadStatus(boolean isloaded) {
 		this.isloaded = isloaded;
-	}
-	
-	@Override
-	public String getCommunityid() {
-		return communityid;
-	}
-
-	@Override
-	public void setCommunityid(String communityid) {
-		this.communityid = communityid;
-	}
-
-	@Override
-	public String getCollectionid() {
-		return collectionid;
-	}
-
-	@Override
-	public void setCollectionid(String collectionid) {
-		this.collectionid = collectionid;
-	}
-
-	@Override
-	public String getItemid() {
-		return itemid;
-	}
-
-	@Override
-	public void setItemid(String itemid) {
-		this.itemid = itemid;
-	}
-
-	@Override
-	public String getCommunityName() {
-		return communityName;
-	}
-
-	@Override
-	public void setCommunityName(String communityName) {
-		this.communityName = communityName;
-	}
-
-	@Override
-	public String getCollectionName() {
-		return collectionName;
-	}
-
-	@Override
-	public void setCollectionName(String collectionName) {
-		this.collectionName = collectionName;
-	}
-
-	@Override
-	public String getItemName() {
-		return itemName;
-	}
-
-	@Override
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
 	}
 
 	@Override
@@ -194,31 +146,104 @@ public class BitStream implements IBitStream{
 		this.size = size;
 	}
 
+	
+	@Override
+	public String getItemName() {
+		return itemName;
+	}
+
+	@Override
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	@Override
+	public List<String> getCommunityIds() {
+		return communityIds;
+	}
+
+	@Override
+	public void setCommunityIds(List<String> communityIds) {
+		this.communityIds = communityIds;
+	}
+	
+	@Override
+	public void addCommunityId(String communityId) {
+		this.communityIds.add(communityId);
+	}
+
+	@Override
+	public List<String> getCollectionIds() {
+		return collectionIds;
+	}
+
+	@Override
+	public void setCollectionIds(List<String> collectionIds) {
+		this.collectionIds = collectionIds;
+	}
+	
+	@Override
+	public void addCollectionId(String collectionId) {
+		this.collectionIds.add(collectionId);
+	}
+
+	public boolean copy(IDspaceMetadataBitStream metadataBitstream)
+	{
+		if(metadataBitstream != null)
+		{		
+			this.id = metadataBitstream.getId();
+			this.name = metadataBitstream.getName();
+			this.size = metadataBitstream.getSize();
+			List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
+			
+			//Assumption: Bitstream belongs to only one item
+			if(itemEntities != null && itemEntities.size() > 0)
+			{
+				IDspaceMetadataItemEntity itemEntity = itemEntities.get(0);
+				this.itemName = itemEntity.getName();
+				
+				//Get all the dependent community ids
+				List<IDspaceMetadataCommunityEntity> communityIds = itemEntity.getCommunities().getCommunityEntitites();
+				for(IDspaceMetadataCommunityEntity communityEntity: communityIds)
+				{
+					System.out.println("Adding community->"+communityEntity.getId());
+					this.communityIds.add(communityEntity.getId());
+				}
+				System.out.println("Community size: "+this.communityIds.size());
+				
+				//Get all the dependent collection ids
+				List<IDspaceMetadataCollectionEntity> collectionIds  = itemEntity.getCollections().getCollectionEntitites();
+				for(IDspaceMetadataCollectionEntity collectionEntity: collectionIds)
+				{
+					System.out.println("Adding collection->"+collectionEntity.getId());
+					this.collectionIds.add(collectionEntity.getId());
+				}
+				System.out.println("Collection size: "+this.collectionIds.size());
+			}
+			
+			return true;
+		}	
+
+		return false;
+	}
+
 	@Override
 	public void run() {
-		
+
 		try {
 			String restURLPath = getBitstreamMetadataPath(dspaceProperties, id, userName, password, dspaceKeys);
 			IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
-			List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
-			
-			for(IDspaceMetadataItemEntity itemEntity : itemEntities)
-			{
-				System.out.println("---------------------------------------------");
-				System.out.println(itemEntity.getId());
-				System.out.println(itemEntity.getName());
-				System.out.println("---------------------------------------------");
-			}
-			
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.copy(metadataBitstream);
+
+		} catch (Exception e){
+			//Can be caused for multiple reasons. Dspace is down or wrong authentication details.
+		}
+		finally
+		{
+			isloaded = true;
 		}
 	}
-	
+
 	private String bytesToHex(byte[] b) {
 		char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
 				'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};

@@ -46,6 +46,7 @@ public class Collection implements ICollection{
 	private String userName;
 	private String password;
 	private IDspaceKeys dspaceKeys;
+	private String communityid;
 
 	private IItemFactory itemFactory;
 	private static final Logger logger = LoggerFactory
@@ -60,17 +61,18 @@ public class Collection implements ICollection{
 
 	/**
 	 * Initialize the required details to make a REST service call to Dspace
-	 * @param id				The id of the collection.
+	 * @param colletionid		The id of the collection.
 	 * @param restTemplate		The RestTemplate object containing the details about the parser.
 	 * @param dspaceProperties	The property strings related to dspace REST service connection.
 	 * @param dspaceKeys		The Dspace Access keys used by the user.
 	 * @param userName			The username of the authorized user.
 	 * @param password			The password of the authorized user.
 	 */
-	public Collection(String id, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
+	public Collection(String colletionid, String communityid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
 	{
 		this.dspaceProperties = dspaceProperties;
-		this.id = id;
+		this.id = colletionid;
+		this.communityid = communityid;
 		this.userName = userName;
 		this.password = password;
 		this.restTemplate = restTemplate;
@@ -193,7 +195,7 @@ public class Collection implements ICollection{
 				{
 					for(IDspaceItem dspaceItem: dspaceCollection.getItemsEntity().getItems()){
 						item = itemFactory.createItemObject();
-						item.setRestConnectionDetails(restTemplate, dspaceProperties, dspaceKeys, userName, password);
+						item.setRestConnectionDetails(this.communityid, this.id, restTemplate, dspaceProperties, dspaceKeys, userName, password);
 						if(item.copy(dspaceItem))
 						{
 							item.setLoadStatus(true);
@@ -321,5 +323,15 @@ public class Collection implements ICollection{
 		if(this.items == null)
 			this.items = new ArrayList<IItem>();
 		this.items.add(item);
+	}
+
+	@Override
+	public String getCommunityid() {
+		return communityid;
+	}
+
+	@Override
+	public void setCommunityid(String communityid) {
+		this.communityid = communityid;
 	}
 }

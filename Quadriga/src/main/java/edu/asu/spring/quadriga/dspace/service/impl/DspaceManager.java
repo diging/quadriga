@@ -70,7 +70,7 @@ public class DspaceManager implements IDspaceManager{
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DspaceManager.class);
-	
+
 	@Autowired
 	private IDBConnectionListWSManager dbconnectListWSManager;
 
@@ -258,7 +258,7 @@ public class DspaceManager implements IDspaceManager{
 
 		return getProxyCommunityManager().getBitStream(sCollectionId, sItemId, sBitStreamId);
 	}
-	
+
 	@Override
 	@Transactional
 	public List<IBitStream> getBitstreamsInWorkspace(String workspaceid, String username) throws QuadrigaStorageException, QuadrigaAccessException
@@ -288,12 +288,15 @@ public class DspaceManager implements IDspaceManager{
 				throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
 			}
 
-			/**	The supplied community, collection and item are valid.
+			/**	The supplied item is valid.
 			 *  Check if each supplied bitstream is valid.
 			 */
 			for(String bitstreamId: bitstreamIds)
 			{			
 				IBitStream bitstream = getProxyCommunityManager().getBitStream(collectionId, itemId, bitstreamId);;
+				//Cache the bitstream
+				getProxyCommunityManager().addBitStreamToCache(bitstream);
+				
 				//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
 				if(bitstream == null)
 				{
@@ -303,7 +306,7 @@ public class DspaceManager implements IDspaceManager{
 				}
 
 				//Add bitstream to workspace. For security, the id's are gotten from Dspace Objects.
-				dbconnectionManager.addBitstreamToWorkspace(workspaceId,  item.getId(), bitstream.getId(), username);
+				dbconnectionManager.addBitstreamToWorkspace(workspaceId,  bitstream.getId(), username);
 			}
 		}
 		catch(QuadrigaAccessException e)
@@ -350,7 +353,7 @@ public class DspaceManager implements IDspaceManager{
 		}
 
 		//Add bitstream to workspace. For security, the id's are gotten from Dspace Objects.
-		dbconnectionManager.addBitstreamToWorkspace(workspaceId, itemId, bitstreamId, username);
+		dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
 	}
 
 
@@ -514,141 +517,54 @@ public class DspaceManager implements IDspaceManager{
 	/**
 	 * {@inheritDoc}
 	 * @throws QuadrigaAccessException 
+	 * @throws QuadrigaStorageException 
 	 */
 	@Override
-	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException, QuadrigaAccessException
+	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException, QuadrigaAccessException, QuadrigaStorageException
 	{
 		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
 
-		IBitStream restrictedBitStream = getBitstreamFactory().createBitStreamObject();
-		restrictedBitStream.setCommunityName(getDspaceMessages().getProperty("dspace.restricted_community"));
-		restrictedBitStream.setCollectionName(getDspaceMessages().getProperty("dspace.restricted_collection"));
-		restrictedBitStream.setItemName(getDspaceMessages().getProperty("dspace.restricted_item"));
-		restrictedBitStream.setName(getDspaceMessages().getProperty("dspace.restricted_bitstream"));
 
-		try
+		for(IBitStream bitstream: bitstreams)
 		{
-			for(IBitStream bitstream: bitstreams)
+			//TODO: Check if the bitstream was already loaded.
+			IBitStream bitstreamFromDspace = proxyCommunityManager.getBitStream(bitstream.getId(), restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+			if(bitstreamFromDspace.getName() == null)
 			{
-				boolean isloading = false;
-				IBitStream loadingBitStream = null;
-
-				//Check access rights for community
-				ICommunity community = proxyCommunityManager.getCommunity(bitstream.getCommunityid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
-				if(community != null)
+				if(bitstreamFromDspace.getLoadStatus() == false)
 				{
-					//The user can access the community
-					//Check access rights for collection
-					isloading = true;
-					loadingBitStream = getBitstreamFactory().createBitStreamObject();
-
-					loadingBitStream.setId(bitstream.getId());
-					loadingBitStream.setCommunityid(bitstream.getCommunityid());
-					loadingBitStream.setCollectionid(bitstream.getCollectionid());
-					loadingBitStream.setItemid(bitstream.getItemid());
-					loadingBitStream.setCommunityName(community.getName());
-
-					ICollection collection = proxyCommunityManager.getCollection(bitstream.getCollectionid(), true, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, community.getId());
-					if(collection!=null)
-					{
-						if(collection.getName()!=null)
-						{
-							//User has access to the collection and the collection is loaded from dspace.
-							loadingBitStream.setCollectionName(collection.getName());
-							//Check access rights for item
-							IItem item = proxyCommunityManager.getItem(collection.getId(), bitstream.getItemid());
-							if(item != null)
-							{
-								if(item.getName()!=null)
-								{
-									//User has access to the item and the item is loaded from dspace.
-									loadingBitStream.setItemName(item.getName());
-									//Check access rights for bitstream
-									IBitStream dspaceBitstream = proxyCommunityManager.getBitStream(collection.getId(), item.getId(), bitstream.getId());
-									if(dspaceBitstream != null)
-									{
-										if(dspaceBitstream.getName() != null)
-										{
-											//User has access to the bitstream and the bitstream is loaded from dspace.
-											loadingBitStream.setName(dspaceBitstream.getName());
-											checkedBitStreams.add(loadingBitStream);
-											isloading = false;
-										}
-									}
-								} //End of if item name is null	
-							} //End of if item is null
-						} //End of if collection name is null
-					} //End of if collection is null
+					//Rest call is not yet serviced
+					bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.access_check_bitstream"));
+					bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.access_check_item"));
 				}
 				else
 				{
-					//User does not have access to the community
-					checkedBitStreams.add(restrictedBitStream);
-					isloading = false;
+					//Rest call was serviced and the action threw an exception 
+					bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.restricted_bitstream"));
+					bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.restricted_item"));
 				}
-
-				// The complete hierarchy is yet to be loaded.
-				if(isloading)
+			}
+			else
+			{
+				System.out.println("Inside else.....");
+				//The bitstream was loaded without any problem
+				if(bitstreamFromDspace.getLoadStatus() == true)
 				{
-					/*
-					 * The collection/item/bitstream data is to be loaded from dspace. 
-					 * Separate threads are still working on loading them.
-					 */
-					loadingBitStream.setCollectionName(getDspaceMessages().getProperty("dspace.access_check_collection"));
-					loadingBitStream.setItemName(getDspaceMessages().getProperty("dspace.access_check_item"));
-					loadingBitStream.setName(getDspaceMessages().getProperty("dspace.access_check_bitstream"));
-
-					checkedBitStreams.add(loadingBitStream);
+					System.out.println("Bitstream loaded->"+bitstreamFromDspace.getId());
+					System.out.println(bitstream.getCommunityIds().size());
+					//Load all the associated communities and collections
+					for(String communityid: bitstream.getCommunityIds())
+					{
+						System.out.println("Loading community->"+communityid);
+						proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
+					}
 				}
-			} //End of for each loop for bitstream
-		} catch (NoSuchAlgorithmException e) {
-			throw new QuadrigaException("Error in Dspace Access. We got our best minds working on it. Please check back later");
-		}
-		catch(ResourceAccessException e)
-		{
-			logger.error("Dspace is not accessible. Check the url used and also if dspace is down!");
-			checkedBitStreams.clear();
-			IBitStream dspaceDownBitStream = getBitstreamFactory().createBitStreamObject();
-			dspaceDownBitStream.setCommunityName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			dspaceDownBitStream.setCollectionName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			dspaceDownBitStream.setItemName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			dspaceDownBitStream.setName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			for(int i=0;i<bitstreams.size();i++)
-			{
-				checkedBitStreams.add(dspaceDownBitStream);
 			}
-		}
-		catch(HttpServerErrorException e)
-		{
-			logger.error("Dspace is not accessible. Check the url used and also if dspace is down!");
-			checkedBitStreams.clear();
-			IBitStream dspaceDownBitStream = getBitstreamFactory().createBitStreamObject();
-			dspaceDownBitStream.setCommunityName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			dspaceDownBitStream.setCollectionName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			dspaceDownBitStream.setItemName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			dspaceDownBitStream.setName(getDspaceMessages().getProperty("dspace.dspace_down"));
-			for(int i=0;i<bitstreams.size();i++)
-			{
-				checkedBitStreams.add(dspaceDownBitStream);
-			}
-		}
-		catch(HttpClientErrorException qe)
-		{
-			/* 
-			 * This exception happens for wrong username and password.
-			 * Also thrown for wrong public/private key 
-			 */
-			checkedBitStreams.clear();
-			IBitStream inaccessibleBitStream = getBitstreamFactory().createBitStreamObject();
-			inaccessibleBitStream.setCommunityName(getDspaceMessages().getProperty("dspace.wrong_authentication"));
-			inaccessibleBitStream.setCollectionName(getDspaceMessages().getProperty("dspace.wrong_authentication"));
-			inaccessibleBitStream.setItemName(getDspaceMessages().getProperty("dspace.wrong_authentication"));
-			inaccessibleBitStream.setName(getDspaceMessages().getProperty("dspace.wrong_authentication"));
-			for(int i=0;i<bitstreams.size();i++)
-			{
-				checkedBitStreams.add(inaccessibleBitStream);
-			}
-		}
+			//Bitstream loaded successfully
+			checkedBitStreams.add(bitstreamFromDspace);
+
+		} //End of for each loop for bitstream
+
 		return checkedBitStreams;		
 	}
 
@@ -677,10 +593,25 @@ public class DspaceManager implements IDspaceManager{
 		}
 		return true;		
 	}
-	
+
 	@Override
 	public IBitStream getWorkspaceItems(String fileid, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
 	{
-		return  proxyCommunityManager.getWorkspaceItems(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+		IBitStream bitstream = proxyCommunityManager.getBitStream(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+		if(bitstream.getLoadStatus() == true)
+		{
+			try {
+				//Load all the communities
+				proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+
+				//TODO: Load all the collections in the community
+				for(String communityid: bitstream.getCommunityIds())
+					proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
+
+			} catch (NoSuchAlgorithmException e) {
+				logger.debug("Error in loading bitstream for a workspace",e);
+			}
+		}
+		return bitstream;
 	}
 }

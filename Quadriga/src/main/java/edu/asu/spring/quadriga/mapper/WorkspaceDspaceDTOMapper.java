@@ -27,8 +27,7 @@ public class WorkspaceDspaceDTOMapper {
 		IBitStream bitstream = new BitStream();
 		if(workspaceDspaceDTO != null)
 		{
-			bitstream = bitstreamFactory.createBitStreamObject();
-			bitstream.setItemid(workspaceDspaceDTO.getItemid());					
+			bitstream = bitstreamFactory.createBitStreamObject();					
 			bitstream.setId(workspaceDspaceDTO.getWorkspaceDspaceDTOPK().getBitstreamid());
 		}
 		return bitstream;
