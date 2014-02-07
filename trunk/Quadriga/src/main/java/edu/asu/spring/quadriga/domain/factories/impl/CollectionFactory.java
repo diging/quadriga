@@ -32,8 +32,8 @@ public class CollectionFactory implements ICollectionFactory {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ICollection createCollectionObject(String id, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
+	public ICollection createCollectionObject(String collectionid, String communityid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String userName, String password)
 	{
-		return new Collection(id, restTemplate, dspaceProperties, dspaceKeys, userName, password);
+		return new Collection(collectionid, communityid, restTemplate, dspaceProperties, dspaceKeys, userName, password);
 	}
 }

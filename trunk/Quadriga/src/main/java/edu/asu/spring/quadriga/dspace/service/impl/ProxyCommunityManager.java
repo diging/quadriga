@@ -25,7 +25,6 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
-import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -93,18 +92,29 @@ public class ProxyCommunityManager implements ICommunityManager {
 		}
 	}
 
-
 	@Override
-	public IBitStream getWorkspaceItems(String fileid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
+	public void addBitStreamToCache(IBitStream bitstream)
 	{
-		IBitStream bitstream = null;
-		
 		//Check if the list was created
 		if(workspaceBitStreamList == null)
 		{
 			workspaceBitStreamList = new ArrayList<IBitStream>();
 		}
-		
+
+		workspaceBitStreamList.add(bitstream);
+	}
+
+	@Override
+	public IBitStream getBitStream(String fileid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
+	{
+		IBitStream bitstream = null;
+
+		//Check if the list was created
+		if(workspaceBitStreamList == null)
+		{
+			workspaceBitStreamList = new ArrayList<IBitStream>();
+		}
+
 		//Check for the file in the existing list
 		for(IBitStream workspaceBitStream: workspaceBitStreamList)
 		{
@@ -116,7 +126,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 		if(bitstream == null)
 		{
 			//Create a bitstream object that will load its metadata information
-			bitstream = new BitStream(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+			bitstream = new BitStream(null,null,null,fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
 			Thread bitstreamThread = new Thread(bitstream);
 			bitstreamThread.start();
 
@@ -124,6 +134,29 @@ public class ProxyCommunityManager implements ICommunityManager {
 			workspaceBitStreamList.add(bitstream);
 		}
 		return bitstream;
+	}
+
+	public boolean hasAccessToBitStream(String fileid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
+	{
+		//Check for the file in the existing list
+		for(IBitStream workspaceBitStream: workspaceBitStreamList)
+		{
+			if(workspaceBitStream.getId().equals(fileid))
+				return true;
+		}
+
+		//Try to make a rest service call to the bitstream
+		try {
+			String restURLPath = getBitstreamMetadataPath(dspaceProperties, fileid, sUserName, sPassword, dspaceKeys);
+			IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream) restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
+
+		} catch (Exception e) {
+			//Any exception occurred - Can be due to unauthorized access or dspace is down
+			return false;
+		} 
+
+		return false;
+
 	}
 
 	/**
@@ -178,7 +211,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 					if(community.getCollections().size() == 0)
 					{
 						for(String collectionId :community.getCollectionIds()){
-							collection = getCollectionFactory().createCollectionObject(collectionId,restTemplate,dspaceProperties,dspaceKeys,sUserName,sPassword);
+							collection = getCollectionFactory().createCollectionObject(collectionId, sCommunityId, restTemplate,dspaceProperties,dspaceKeys,sUserName,sPassword);
 							Thread collectionThread = new Thread(collection);
 							collectionThread.start();
 
@@ -487,6 +520,8 @@ public class ProxyCommunityManager implements ICommunityManager {
 		this.collections = null;		
 	}
 
+
+
 	private String bytesToHex(byte[] b) {
 		char hexDigit[] = {'0', '1', '2', '3', '4', '5', '6', '7',
 				'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -498,5 +533,33 @@ public class ProxyCommunityManager implements ICommunityManager {
 		return buf.toString();
 	}
 
+	private String getBitstreamMetadataPath(Properties dspaceProperties, String fileid, String email, String password, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException
+	{
+		if(dspaceKeys != null)
+		{
+			if(dspaceKeys.getPublicKey()!=null && dspaceKeys.getPrivateKey()!=null && !dspaceKeys.getPublicKey().equals("") && !dspaceKeys.getPrivateKey().equals(""))
+			{
+				//Authenticate based on public and private key
+				String stringToHash = dspaceProperties.getProperty("dspace.bitstream_url") + fileid + dspaceProperties.getProperty(".xml") + dspaceKeys.getPrivateKey();
+				MessageDigest messageDigest = MessageDigest.getInstance(dspaceProperties.getProperty("dspace.algorithm"));
+				messageDigest.update(stringToHash.getBytes());
+				String digestKey = bytesToHex(messageDigest.digest()).substring(0, 8);
+
+				return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml")+dspaceProperties.getProperty("dspace.?")+
+						dspaceProperties.getProperty("dspace.api_key")+dspaceKeys.getPublicKey()+dspaceProperties.getProperty("dspace.&")+
+						dspaceProperties.getProperty("dspace.api_digest")+digestKey;
+			}
+		}
+		else if(email!=null && password!=null && !email.equals("") && !password.equals(""))
+		{				
+			//Authenticate based on email and password
+			return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml")+dspaceProperties.getProperty("dspace.?")+
+					dspaceProperties.getProperty("dspace.email")+email+
+					dspaceProperties.getProperty("dspace.&")+dspaceProperties.getProperty("dspace.password")+password;
+		}
+
+		//No authentication provided
+		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml");
+	}
 
 }

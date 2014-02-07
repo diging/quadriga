@@ -289,6 +289,7 @@ public class ListWSController
 			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), null, null, null);
 		}
 		workspace.setBitstreams(workspaceBitStreams);
+		
 
 		//retrieve the collaborators associated with the workspace
 		collaboratorList = getWsCollabManager().getWorkspaceCollaborators(workspaceid);
@@ -553,35 +554,20 @@ public class ListWSController
 		return getDspaceMessages().getProperty("dspace.loading");		
 	}
 
-	@RequestMapping(value = "/auth/workbench/workspace/itemstatus/{collectionid}/{itemid}", method = RequestMethod.GET)
-	public @ResponseBody String getItemStatus(@PathVariable("collectionid") String collectionid, @PathVariable("itemid") String itemid) throws QuadrigaException, QuadrigaAccessException {
+	@RequestMapping(value = "/auth/workbench/workspace/itemstatus", method = RequestMethod.GET)
+	public @ResponseBody String getItemStatus(@RequestParam("bitstreamid") String bitstreamid) throws QuadrigaException, QuadrigaAccessException {
 
-		//Can't find collection in any of the communities
-		String communityid = dspaceManager.getCommunityId(collectionid);
-		if(communityid == null)
-			return getDspaceMessages().getProperty("dspace.restricted_bitstream");
-
-		ICollection collection = dspaceManager.getCollection(collectionid,communityid);
-		if(collection != null)
+		IBitStream bitstream = null;
+		try {
+			bitstream = dspaceManager.getWorkspaceItems(bitstreamid, dspaceKeys, dspaceUsername, dspacePassword);
+		} catch (QuadrigaStorageException e) {
+			return getDspaceMessages().getProperty("dspace.restricted_item");
+		}
+		if(bitstream != null)
 		{
-			if(collection.getLoadStatus() == true)
+			if(bitstream.getName() != null)
 			{
-				if(collection.getName() != null)
-				{
-					//Collection has been loaded.
-					IItem item = collection.getItem(itemid);
-					if(item != null)
-					{
-						return item.getName();
-					}
-					else
-					{
-						//No item found in the collection
-						return getDspaceMessages().getProperty("dspace.restricted_item");
-					}
-				}
-				else
-					return getDspaceMessages().getProperty("dspace.restricted_item");
+				return bitstream.getItemName();
 			}
 		}
 		return getDspaceMessages().getProperty("dspace.loading");
@@ -591,21 +577,16 @@ public class ListWSController
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamaccessstatus", method = RequestMethod.GET)
 	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid) throws QuadrigaException, QuadrigaAccessException {
 
-		System.out.println("AJAX request received");
 		IBitStream bitstream = null;
 		try {
 			bitstream = dspaceManager.getWorkspaceItems(bitstreamid, dspaceKeys, dspaceUsername, dspacePassword);
-			System.out.println("Completed rest call");
 		} catch (QuadrigaStorageException e) {
 			return getDspaceMessages().getProperty("dspace.restricted_bitstream");
 		}
 		if(bitstream != null)
 		{
 			if(bitstream.getName() != null)
-			{
-				System.out.println("Got the name->"+bitstream.getName());
 				return bitstream.getName();
-			}
 		}
 		return getDspaceMessages().getProperty("dspace.loading");
 	}

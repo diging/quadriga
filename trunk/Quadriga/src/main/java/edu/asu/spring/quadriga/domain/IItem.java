@@ -58,8 +58,7 @@ public interface IItem  extends Runnable{
 	 * @param userName				The username of the authorized user.
 	 * @param password				The password of the authorized user.
 	 */
-	public abstract void setRestConnectionDetails(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, 
-			String userName, String password);
+	public abstract void setRestConnectionDetails(String communityid, String collectionid,	RestTemplate restTemplate, Properties dspaceProperties,	IDspaceKeys dspaceKeys, String userName, String password);
 	
 	/**
 	 * Copy the information retrieved from dspace into the this item object. The dspaceItem object should not be null.
@@ -73,5 +72,7 @@ public interface IItem  extends Runnable{
 	public abstract void setLoadStatus(boolean isloaded);
 
 	public abstract IBitStream getBitStream(String bitstreamid);
+
+	
 	
 }

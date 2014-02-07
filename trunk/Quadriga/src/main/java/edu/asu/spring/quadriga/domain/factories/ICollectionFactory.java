@@ -30,7 +30,7 @@ public interface ICollectionFactory {
 	 * @param userName			The username of the authorized user.
 	 * @param password			The password of the authorized user.
 	 */
-	public abstract ICollection createCollectionObject(String id,
+	public abstract ICollection createCollectionObject(String collectionid, String communityid,
 			RestTemplate restTemplate, Properties dspaceProperties,
 			IDspaceKeys dspaceKeys, String userName, String password);
 

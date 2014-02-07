@@ -29,16 +29,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "WorkspaceDspaceDTO.findAll", query = "SELECT w FROM WorkspaceDspaceDTO w"),
     @NamedQuery(name = "WorkspaceDspaceDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.workspaceDspaceDTOPK.workspaceid = :workspaceid"),
-    @NamedQuery(name = "WorkspaceDspaceDTO.findByItemid", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.itemid = :itemid"),
     @NamedQuery(name = "WorkspaceDspaceDTO.findByBitstreamid", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.workspaceDspaceDTOPK.bitstreamid = :bitstreamid"),
     })
 public class WorkspaceDspaceDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected WorkspaceDspaceDTOPK workspaceDspaceDTOPK;
-    @Basic(optional = false)
-    @Column(name = "itemid")
-    private String itemid;
     @Basic(optional = false)
     @Column(name = "createdby")
     private String createdby;
@@ -53,16 +49,14 @@ public class WorkspaceDspaceDTO implements Serializable {
     public WorkspaceDspaceDTO() {
     }
 
-    public WorkspaceDspaceDTO(WorkspaceDspaceDTOPK workspaceDspaceDTOPK, String itemid, String createdby, Date createddate) {
+    public WorkspaceDspaceDTO(WorkspaceDspaceDTOPK workspaceDspaceDTOPK, String createdby, Date createddate) {
         this.workspaceDspaceDTOPK = workspaceDspaceDTOPK;
-        this.itemid = itemid;
         this.createdby = createdby;
         this.createddate = createddate;
     }
 
-    public WorkspaceDspaceDTO(String workspaceid, String bitstreamid, String itemid, String createdby, Date createddate) {
+    public WorkspaceDspaceDTO(String workspaceid, String bitstreamid, String createdby, Date createddate) {
         this.workspaceDspaceDTOPK = new WorkspaceDspaceDTOPK(workspaceid, bitstreamid);
-        this.itemid = itemid;
         this.createdby = createdby;
         this.createddate = createddate;
     }
@@ -73,14 +67,6 @@ public class WorkspaceDspaceDTO implements Serializable {
 
     public void setWorkspaceDspaceDTOPK(WorkspaceDspaceDTOPK workspaceDspaceDTOPK) {
         this.workspaceDspaceDTOPK = workspaceDspaceDTOPK;
-    }
-
-    public String getItemid() {
-        return itemid;
-    }
-
-    public void setItemid(String itemid) {
-        this.itemid = itemid;
     }
 
     public String getCreatedby() {

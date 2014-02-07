@@ -55,4 +55,8 @@ public interface ICollection extends Runnable{
 
 	public abstract void addItem(IItem item);
 
+	public abstract String getCommunityid();
+
+	public abstract void setCommunityid(String communityid);
+
 }

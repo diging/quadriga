@@ -234,8 +234,9 @@ public interface IDspaceManager{
 	 * 							If the cache is yet to be populated then the bitstream names will be 'Checking BitStream Access...'
 	 * @throws QuadrigaException 
 	 * @throws QuadrigaAccessException 
+	 * @throws QuadrigaStorageException 
 	 */
-	public abstract List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String username, String password) throws QuadrigaException, QuadrigaAccessException;
+	public abstract List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String username, String password) throws QuadrigaException, QuadrigaAccessException, QuadrigaStorageException;
 
 	/**
 	 * Delete the dspace keys stored in dspace for this user.
