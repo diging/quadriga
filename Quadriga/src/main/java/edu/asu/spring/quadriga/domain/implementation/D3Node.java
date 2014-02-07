@@ -1,11 +1,25 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import java.util.List;
+
 import edu.asu.spring.quadriga.domain.ID3Node;
 
 public class D3Node implements ID3Node {
 
 	private String nodeName;
 	private String nodeId;
+	private List<String> statementIdList;
+	
+
+	@Override
+	public List<String> getStatementIdList() {
+		return statementIdList;
+	}
+
+	@Override
+	public void setStatementIdList(List<String> statementIdList) {
+		this.statementIdList = statementIdList;
+	}
 	
 	@Override
 	public String getNodeId() {
