@@ -106,4 +106,8 @@ public interface INetworkManager {
 
 	public abstract String getD3JSon();
 
+	String getStatementId();
+
+	void setStatementId(String statementId);
+
 }
