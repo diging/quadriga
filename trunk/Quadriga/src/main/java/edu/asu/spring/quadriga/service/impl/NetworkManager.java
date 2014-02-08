@@ -196,12 +196,25 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	private IDBConnectionNetworkManager dbConnect;
 
 	private List<List<Object>> relationEventPredicateMapping;
+	
+	private String statementId ;
+
+	@Override
+	public String getStatementId() {
+		return statementId;
+	}
+
+	@Override
+	public void setStatementId(String statementId) {
+		this.statementId = statementId;
+	}
 
 	@Override
 	public List<List<Object>> getRelationEventPredicateMapping(){
 		return this.relationEventPredicateMapping;
 	}
-
+	
+	
 	@Override
 	public void setRelationEventPredicateMapping( List<List<Object>> relationEventPredicateMapping){
 		this.relationEventPredicateMapping=relationEventPredicateMapping;
@@ -639,6 +652,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		
 		String subjectNodeId=nodeObject.getSubject();
 		String objectNodeId = nodeObject.getObject();
+		String stmtId = statementId;
+		
 
 		// Check for reference to relation
 		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
@@ -652,6 +667,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			// Adding Subject into node list 
 			if(!d3NodeIdMap.containsKey(subjectNodeId)){
 				ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
+				List<String> stmtList = d3NodeSubject.getStatementIdList();
+				stmtList.add(stmtId);
+				d3NodeSubject.setStatementIdList(stmtList);
 				d3NodeSubject.setNodeName(nodeObject.getSubject());
 				d3NodeSubject.setNodeId(subjectNodeId);
 				d3NodeSubject.setGroupId(ID3Constant.RELATION_EVENT_SUBJECT_TERM);
@@ -663,6 +681,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			// Adding Object into node list
 			if(!d3NodeIdMap.containsKey(objectNodeId)){
 				ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
+				List<String> stmtList = d3NodeObject.getStatementIdList();
+				stmtList.add(stmtId);
+				d3NodeObject.setStatementIdList(stmtList);
 				d3NodeObject.setNodeName(nodeObject.getObject());
 				d3NodeObject.setNodeId(objectNodeId);
 				d3NodeObject.setGroupId(ID3Constant.RELATION_EVENT_OBJECT_TERM);
@@ -675,6 +696,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 			if(!d3NodeIdMap.containsKey(predicateNameId)){
 				ID3Node d3NodePredicate = d3NodeFactory.createD3NodeObject();
+				List<String> stmtList = d3NodePredicate.getStatementIdList();
+				stmtList.add(stmtId);
+				d3NodePredicate.setStatementIdList(stmtList);
 				d3NodePredicate.setNodeName(predicateName);
 				d3NodePredicate.setNodeId(predicateNameId);
 				d3NodePredicate.setGroupId(ID3Constant.RELATION_EVENT_PREDICATE_TERM);
@@ -717,7 +741,18 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			d3JsonString.append("\",");
 			d3JsonString.append("\"group\":");
 			d3JsonString.append(d3Node.getGroupId());
+			d3JsonString.append(",");
+			d3JsonString.append("\"statementid\":[\"");
+			for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
+				if(j == d3Node.getStatementIdList().size()-1){
+					d3JsonString.append(d3Node.getStatementIdList().get(j));
+				}else{
+				d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+				}
+			}
+			d3JsonString.append("\"]");
 			d3JsonString.append("},\n");
+			
 		}
 		ID3Node d3Node =d3NodeList.get(d3NodeList.size()-1);
 		d3JsonString.append("{\"name\":\"");
@@ -728,7 +763,17 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		d3JsonString.append("\",");
 		d3JsonString.append("\"group\":");
 		d3JsonString.append(d3Node.getGroupId());
-		
+		d3JsonString.append(",");
+		d3JsonString.append("\"statementid\":[\"");
+		for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
+			if(j == d3Node.getStatementIdList().size()-1){
+				d3JsonString.append(d3Node.getStatementIdList().get(j));
+			}else{
+			d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+			}
+			
+		}
+		d3JsonString.append("\"]");
 		
 		d3JsonString.append("}\n],\n\"links\":[\n");
 		

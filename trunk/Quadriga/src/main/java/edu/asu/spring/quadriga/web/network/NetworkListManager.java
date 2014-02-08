@@ -220,6 +220,9 @@ public class NetworkListManager {
 			INetworkNodeInfo networkNodeInfo = I.next();
 			logger.debug("Node id "+networkNodeInfo.getId());
 			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
+			if(networkNodeInfo.getStatementType().equals("RE")){
+			networkManager.setStatementId(networkNodeInfo.getId());
+			}
 			networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType());
 		}
 
