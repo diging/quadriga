@@ -101,6 +101,14 @@ public class ProxyCommunityManager implements ICommunityManager {
 			workspaceBitStreamList = new ArrayList<IBitStream>();
 		}
 
+		//Check for the file in the existing list
+		for(IBitStream workspaceBitStream: workspaceBitStreamList)
+		{
+			if(workspaceBitStream.getId().equals(bitstream.getId()))
+				return;
+		}
+		
+		//File not in the cache, so add it.
 		workspaceBitStreamList.add(bitstream);
 	}
 
@@ -114,6 +122,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 		{
 			workspaceBitStreamList = new ArrayList<IBitStream>();
 		}
+
 
 		//Check for the file in the existing list
 		for(IBitStream workspaceBitStream: workspaceBitStreamList)
@@ -507,6 +516,7 @@ public class ProxyCommunityManager implements ICommunityManager {
 	public boolean validateDspaceCredentials(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException {
 		String sRestServicePath = getCompleteUrlPath(dspaceProperties, dspaceKeys, sUserName, sPassword);
 		IDspaceCommunities dsapceCommunities = (DspaceCommunities)restTemplate.getForObject(sRestServicePath, DspaceCommunities.class);
+		System.out.println("--------------------------------------------------------");
 		return true;
 	}
 
