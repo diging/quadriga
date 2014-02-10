@@ -119,6 +119,14 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		
 	}
 
+	/**
+	 * @description: maps roleDBid of the collaborator roles from database to xml 
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public void fillCollectionCollaboratorRole(ICollaboratorRole collaboratorRole) {
 		
@@ -136,6 +144,14 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		
 	}
 	
+	/**
+	 * @description: maps roleDBid of the collaborator roles from database to xml 
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public void fillDictCollaboratorRole(ICollaboratorRole collaboratorRole) {
 
@@ -154,7 +170,7 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	} 
 	
 /**
- * @description  maps roleid of the collaborator roles from database to xml 
+ * @description retrieve the workspace collaborator for given collaborator database id. 
  * 
  * @param collaboratorRoleId incoming collaborator id from the database
  * 
@@ -177,6 +193,14 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return null;
 	}
 	
+	/**
+	 * @description: retrieve workspace collaborator for given collaborator role
+	 * 
+	 * @param collaboratorRoleId incoming collaborator id from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public ICollaboratorRole getWSCollaboratorRoleById(String collaboratorRoleId)
 	{
@@ -190,6 +214,14 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return null;
 	}
 
+	/**
+	 * @description: retrieve project collaborator by collaborator database id 
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public ICollaboratorRole getProjectCollaboratorRoleById(
 			String collaboratorRoleId) {
@@ -205,6 +237,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return null;	
 	}
 
+	/**
+	 * @description: retrieve the concept collection collaborator role object from
+	 * collaborator role id
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public ICollaboratorRole getCCCollaboratorRoleById(String collaboratorRoleId) {
 
@@ -219,6 +260,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return null;	
 	}
 
+	/**
+	 * @description: retrieve the dictionary collaborator role object
+	 * when collaborator role id is submitted 
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public ICollaboratorRole getDictCollaboratorRoleById(String collaboratorRoleId) {
 		for(ICollaboratorRole role: dictCollabRoles)
@@ -232,6 +282,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return null;
 	}
 
+	/**
+	 * @description: retrieve the project collaborator role object when the 
+	 * collaborator role database id is submitted
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public String getProjectCollaboratorRoleByDBId(String collaboratorRoleDBId) {
 		
@@ -247,7 +306,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 	}
 	
 	
-
+	/**
+	 * @description: retrieve dictionary collaborator role object when 
+	 * collaborator database role id is submitted
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public ICollaboratorRole getDictCollaboratorRoleByDBId(String collaboratorRoleDBId) {
 		
@@ -262,6 +329,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return null;
 	}
 	
+	/**
+	 * @description: retrieve dictionary collaborator role object when 
+	 * collaborator database role id is submitted
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public String getDictCollaboratorRoleIdByDBId(String collaboratorRoleDBId) {
 		
@@ -276,6 +352,15 @@ public class CollaboratorRoleManager implements ICollaboratorRoleManager{
 		return "";
 	}
 
+	/**
+	 * @description: retrieve concept collection collaborator role object when 
+	 * collaborator database role id is submitted
+	 * 
+	 * @param collaboratorRoleId incoming collaborator DBid from the database
+	 * 
+	 * @author rohit pendbhaje
+	 * 
+	 */
 	@Override
 	public ICollaboratorRole getCollectionCollabRoleByDBId(String collaboratorRoleDBId) {
 

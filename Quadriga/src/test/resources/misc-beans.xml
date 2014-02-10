@@ -150,6 +150,11 @@
 		<property name="location" value="classpath:locale/messages_en_US.properties" />
 	</bean>
 	
+	<bean id="projectconstants"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean" >
+		<property name="location" value="classpath:locale/projectconstants.properties"></property>
+	</bean>
+	
 	<bean id="retrieveProjectManagerDAO" class="edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO"/>
 	
 	<bean id="projectDTOMapper" class="edu.asu.spring.quadriga.mapper.ProjectDTOMapper"/>
@@ -166,7 +171,7 @@
 	
 	<bean id="viafService" class="edu.asu.spring.quadriga.profile.impl.ViafService" />
 	
-	<bean id="dbConnectionProfileManager" class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager"/>
+<!-- 	<bean id="dbConnectionProfileManager" class="edu.asu.spring.quadriga.db.sql.profile.DBConnectionProfileManager"/> -->
 	
 	<bean id="profileFactory" class="edu.asu.spring.quadriga.domain.factories.impl.ProfileFactory"/>
 	

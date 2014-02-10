@@ -18,6 +18,14 @@ public class DictionaryCollaboratorManager implements
 	@Qualifier("dictionaryCollaboratorManagerDAO")
 	private IDBConnectionDictionaryCollaboratorManager dbConnect;
 	
+	/**
+	 * This method updates the collaborator roles for dictionary collaborators
+	 * @param dictionaryId - dictionary id
+	 * @param collabUser - collaborator user name
+	 * @param collaboratorRole - collaborator role
+	 * @param username - logged in user name
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public void updateCollaboratorRoles(String dictionaryId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException

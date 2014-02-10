@@ -6,7 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +43,10 @@ public class EditorManager implements IEditorManager {
 
 
 	/**
-	 * Get network list for a editor
+	 * This method retrieves the list of networks associated with the user.
+	 * @param IUser - logged in user object
+	 * @return List<INetwork> - list of networks associated with the user.
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
@@ -60,7 +62,11 @@ public class EditorManager implements IEditorManager {
 	}
 
 	/**
-	 * Assign a network to user
+	 * This method assigns a network to the user
+	 * @param networkId - networkId
+	 * @param user - logged in user object
+	 * @return String - message after assigning the network to the user
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
@@ -75,7 +81,10 @@ public class EditorManager implements IEditorManager {
 	}
 
 	/**
-	 * Get assigned network list of the user
+	 * This method retrieve the assigned networks of the user
+	 * @param user - logged in user object
+	 * @return List<INetwork> - list of assigned networks
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
@@ -103,6 +112,12 @@ public class EditorManager implements IEditorManager {
 		return networkList;
 	}
 
+	/**
+	 * This method retrieves the networks of all other editors
+	 * @param IUser - logged in user object
+	 * @return List<INetwork> - list of networks assigned to other editors
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public List<INetwork> getfinishedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
@@ -121,6 +136,12 @@ public class EditorManager implements IEditorManager {
 		return networkList;
 	}
 
+	/**
+	 * This method retrieves the assigned list of networks for other editors
+	 * @param IUser - logged in user object
+	 * @return List<INetwork> - list of assigned networks of other editors
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public List<INetwork> getAssignedNetworkListOfOtherEditors(IUser user) throws QuadrigaStorageException{
@@ -141,7 +162,10 @@ public class EditorManager implements IEditorManager {
 	}
 
 	/**
-	 * Get Rejected network list of user
+	 * This method retrieves the list of reject networks for the user
+	 * @param IUser - logged in user object
+	 * @return List<INetwork> - list of rejected networks for the user
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
@@ -158,7 +182,10 @@ public class EditorManager implements IEditorManager {
 	}
 
 	/**
-	 * Get Approved network list of a user
+	 * This method retrieves the approved networks of the user
+	 * @param IUser - logged in user object
+	 * @return List<INetwork> - list of approved networks for the user.
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
@@ -175,8 +202,11 @@ public class EditorManager implements IEditorManager {
 	}
 
 	/**
-	 * Update the status of the network
-	 * PENDING / ASSIGNED / REJECTED / APPROVED
+	 * This method update the status of the network
+	 * @param networkId - network id
+	 * @param status - status of the network
+	 * @throws QuadrigaStorageException
+	 * @return String - message after updating the network status
 	 */
 	@Override
 	@Transactional
@@ -192,8 +222,11 @@ public class EditorManager implements IEditorManager {
 	}
 
 	/**
-	 * Update the status of the assigned network
-	 * PENDING / ASSIGNED / REJECTED / APPROVED
+	 * This method updates the assigned network status
+	 * @param networkId - network id of assigned network
+	 * @param status - status of the network
+	 * @throws QuadrigaStorageException
+	 * @return String - message after updating the assigned network status
 	 */
 	@Override
 	@Transactional
@@ -201,8 +234,6 @@ public class EditorManager implements IEditorManager {
 		String msg = "";
 		try{
 			msg = dbConnect.updateAssignedNetworkStatus(networkId, status);
-			//TODO: Get the network owner details based on network id
-			//TODO: Send email to owner
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
