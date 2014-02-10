@@ -556,7 +556,6 @@ public class ListWSController
 
 	@RequestMapping(value = "/auth/workbench/workspace/itemstatus", method = RequestMethod.GET)
 	public @ResponseBody String getItemStatus(@RequestParam("bitstreamid") String bitstreamid) throws QuadrigaException, QuadrigaAccessException {
-
 		IBitStream bitstream = null;
 		try {
 			bitstream = dspaceManager.getWorkspaceItems(bitstreamid, dspaceKeys, dspaceUsername, dspacePassword);
@@ -576,7 +575,6 @@ public class ListWSController
 	
 	@RequestMapping(value = "/auth/workbench/workspace/bitstreamaccessstatus", method = RequestMethod.GET)
 	public @ResponseBody String getBitStreamAccessStatus(@RequestParam("bitstreamid") String bitstreamid) throws QuadrigaException, QuadrigaAccessException {
-
 		IBitStream bitstream = null;
 		try {
 			bitstream = dspaceManager.getWorkspaceItems(bitstreamid, dspaceKeys, dspaceUsername, dspacePassword);

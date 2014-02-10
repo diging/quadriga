@@ -58,13 +58,17 @@ public class BitStream implements IBitStream{
 		this.isloaded = false;
 		setCommunityIds(new ArrayList<String>());
 		setCollectionIds(new ArrayList<String>());
-		
+
+		if(communityid == null)
+			setCommunityIds(Collections.synchronizedList(new ArrayList<String>()));
 		if(communityid != null)
-		this.communityIds.add(communityid);
-		
+			this.communityIds.add(communityid);
+
+		if(collectionid == null)
+			setCollectionIds(Collections.synchronizedList(new ArrayList<String>()));
 		if(collectionid != null)
-		this.collectionIds.add(collectionid);
-		
+			this.collectionIds.add(collectionid);
+
 	}
 
 	private String getBitstreamMetadataPath(Properties dspaceProperties, String fileid, String email, String password, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException
@@ -146,7 +150,7 @@ public class BitStream implements IBitStream{
 		this.size = size;
 	}
 
-	
+
 	@Override
 	public String getItemName() {
 		return itemName;
@@ -166,9 +170,11 @@ public class BitStream implements IBitStream{
 	public void setCommunityIds(List<String> communityIds) {
 		this.communityIds = communityIds;
 	}
-	
+
 	@Override
 	public void addCommunityId(String communityId) {
+		if(this.communityIds == null)
+			this.communityIds = Collections.synchronizedList(new ArrayList<String>());
 		this.communityIds.add(communityId);
 	}
 
@@ -181,9 +187,11 @@ public class BitStream implements IBitStream{
 	public void setCollectionIds(List<String> collectionIds) {
 		this.collectionIds = collectionIds;
 	}
-	
+
 	@Override
 	public void addCollectionId(String collectionId) {
+		if(this.collectionIds == null)
+			this.collectionIds = Collections.synchronizedList(new ArrayList<String>());
 		this.collectionIds.add(collectionId);
 	}
 
@@ -195,32 +203,25 @@ public class BitStream implements IBitStream{
 			this.name = metadataBitstream.getName();
 			this.size = metadataBitstream.getSize();
 			List<IDspaceMetadataItemEntity> itemEntities = metadataBitstream.getBundles().getBundleEntity().getItems().getItementities();
-			
+
 			//Assumption: Bitstream belongs to only one item
 			if(itemEntities != null && itemEntities.size() > 0)
 			{
 				IDspaceMetadataItemEntity itemEntity = itemEntities.get(0);
 				this.itemName = itemEntity.getName();
-				
+
 				//Get all the dependent community ids
 				List<IDspaceMetadataCommunityEntity> communityIds = itemEntity.getCommunities().getCommunityEntitites();
 				for(IDspaceMetadataCommunityEntity communityEntity: communityIds)
-				{
-					System.out.println("Adding community->"+communityEntity.getId());
 					this.communityIds.add(communityEntity.getId());
-				}
-				System.out.println("Community size: "+this.communityIds.size());
-				
+
 				//Get all the dependent collection ids
 				List<IDspaceMetadataCollectionEntity> collectionIds  = itemEntity.getCollections().getCollectionEntitites();
 				for(IDspaceMetadataCollectionEntity collectionEntity: collectionIds)
-				{
-					System.out.println("Adding collection->"+collectionEntity.getId());
 					this.collectionIds.add(collectionEntity.getId());
-				}
-				System.out.println("Collection size: "+this.collectionIds.size());
+
 			}
-			
+
 			return true;
 		}	
 

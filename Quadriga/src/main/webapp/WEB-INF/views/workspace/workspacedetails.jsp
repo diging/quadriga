@@ -153,7 +153,6 @@
 	* Function used to make an ajax call to the controller, inorder to get the item name
 	*/
 	function getItemName(bitstreamid) {
-		alert('Make an ajax call for '+bitstreamid);
 		return $
 				.ajax({
 					type : 'GET',

@@ -28,6 +28,8 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.BitStreamFactory;
+import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
@@ -296,7 +298,7 @@ public class DspaceManager implements IDspaceManager{
 				IBitStream bitstream = getProxyCommunityManager().getBitStream(collectionId, itemId, bitstreamId);;
 				//Cache the bitstream
 				getProxyCommunityManager().addBitStreamToCache(bitstream);
-				
+
 				//Catch the Wrong or Illegal ids provided by the user. This will never happen through the system UI.
 				if(bitstream == null)
 				{
@@ -524,46 +526,41 @@ public class DspaceManager implements IDspaceManager{
 	{
 		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
 
-
-		for(IBitStream bitstream: bitstreams)
-		{
-			//TODO: Check if the bitstream was already loaded.
-			IBitStream bitstreamFromDspace = proxyCommunityManager.getBitStream(bitstream.getId(), restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
-			if(bitstreamFromDspace.getName() == null)
-			{
-				if(bitstreamFromDspace.getLoadStatus() == false)
+				for(IBitStream bitstream: bitstreams)
 				{
-					//Rest call is not yet serviced
-					bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.access_check_bitstream"));
-					bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.access_check_item"));
-				}
-				else
-				{
-					//Rest call was serviced and the action threw an exception 
-					bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.restricted_bitstream"));
-					bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.restricted_item"));
-				}
-			}
-			else
-			{
-				System.out.println("Inside else.....");
-				//The bitstream was loaded without any problem
-				if(bitstreamFromDspace.getLoadStatus() == true)
-				{
-					System.out.println("Bitstream loaded->"+bitstreamFromDspace.getId());
-					System.out.println(bitstream.getCommunityIds().size());
-					//Load all the associated communities and collections
-					for(String communityid: bitstream.getCommunityIds())
+					//Check if the bitstream was already loaded.
+					System.out.println("Checking for "+bitstream.getId());
+					IBitStream bitstreamFromDspace = proxyCommunityManager.getBitStream(bitstream.getId(), restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+					System.out.println("Got from cache "+bitstreamFromDspace.getId());
+					if(bitstreamFromDspace != null)
 					{
-						System.out.println("Loading community->"+communityid);
-						proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
+						if(bitstreamFromDspace.getName() == null)
+						{
+							System.out.println("Cannot find bitstream name ");
+							if(bitstreamFromDspace.getLoadStatus() == false)
+							{
+								System.out.println("Not loaded yet...");
+								//Rest call is not yet serviced
+								bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.access_check_bitstream"));
+								bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.access_check_item"));
+							}
+							else
+							{
+								//Rest call was serviced and the action threw an exception 
+								bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.restricted_bitstream"));
+								bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.restricted_item"));
+							}
+							checkedBitStreams.add(bitstreamFromDspace);
+						}
+						else
+						{
+							System.out.println("Loaded name from cache "+bitstreamFromDspace.getName());
+							//The bitstream was loaded without any problem. Add the bitstreams to cache
+							loadCache(bitstreamFromDspace, dspaceKeys, sUserName, sPassword);
+							checkedBitStreams.add(bitstreamFromDspace);
+						}						
 					}
-				}
-			}
-			//Bitstream loaded successfully
-			checkedBitStreams.add(bitstreamFromDspace);
-
-		} //End of for each loop for bitstream
+				} //End of for each loop for bitstream
 
 		return checkedBitStreams;		
 	}
@@ -597,21 +594,33 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public IBitStream getWorkspaceItems(String fileid, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
 	{
+		//Get the bitstream and load it into the cache before returning it.
 		IBitStream bitstream = proxyCommunityManager.getBitStream(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+		loadCache(bitstream, dspaceKeys, sUserName, sPassword);
+		return bitstream;
+	}
+
+	private void loadCache(IBitStream bitstream, IDspaceKeys dspaceKeys, String sUserName, String sPassword)
+	{
+		System.out.println("--------------------------------Inside load cache");
 		if(bitstream.getLoadStatus() == true)
 		{
 			try {
+				System.out.println("-------------------------------- bitstream loaded");
 				//Load all the communities
 				proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+				System.out.println("-------------------------------- all communities loaded");
 
-				//TODO: Load all the collections in the community
+				//Load all the collections in the community
 				for(String communityid: bitstream.getCommunityIds())
+				{
+					System.out.println("Back-end loading of community: "+communityid);
 					proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
+				}
 
 			} catch (NoSuchAlgorithmException e) {
 				logger.debug("Error in loading bitstream for a workspace",e);
 			}
 		}
-		return bitstream;
 	}
 }
