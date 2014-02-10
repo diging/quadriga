@@ -14,8 +14,14 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	@Autowired
 	IDBConnectionEditorManager dbConnectionEditManager;
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.IEditingNetworkAnnotationManager#getAnnotation(java.lang.String, java.lang.String, java.lang.String)
+
+	/**
+	 * This method retrieves the annotation entered by the user for the network node.
+	 * @param type : specifies it is a relation or an appellation
+	 * @param id : it is the relation event id or the appelation id.
+	 * @param userid : logged in user
+	 * @param networkId : network id
+	 * @return String[] - array of string containing the annotations entered by the user
 	 */
 	@Override
 	@Transactional
@@ -25,9 +31,15 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		return arr;
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.IEditingNetworkAnnotationManager#addAnnotationToNetwork(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	/**
+	 * This method adds annotation to the node of a network
+	 * @param networkId - network id
+	 * @param nodeName - node in the network for which annotation needs to be added
+	 * @param annotationText - annotation text value
+	 * @param userId - logged in user
+	 * @param objectType
+	 * @return String - message after adding the annotation to a node of network.
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
@@ -39,8 +51,13 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		return msg;
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.IEditingNetworkAnnotationManager#updateAnnotationToNetwork(java.lang.String, java.lang.String)
+
+	/**
+	 * This method updates the annotation associated to a node of network
+	 * @param annotationId - annotation id
+	 * @param annotationText - annotated script
+	 * @return String - message after updating annotation to a node if network.
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional

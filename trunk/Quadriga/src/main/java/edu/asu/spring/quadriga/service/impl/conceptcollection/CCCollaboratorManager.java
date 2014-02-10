@@ -15,6 +15,13 @@ public class CCCollaboratorManager implements ICCCollaboratorManager
 	@Autowired
 	private IDBConnectionCCCollaboratorManager dbConnect;
 	
+	/**
+	 * This method associated a collaborator to concept collection
+	 * @param collaborator - collaborator object containing details of collaborator
+	 * @param collectionid - Concept Collection id.
+	 * @param userName - logged in user name
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public void addCollaborators(ICollaborator collaborator, String collectionid, String userName)
@@ -23,6 +30,12 @@ public class CCCollaboratorManager implements ICCCollaboratorManager
 		dbConnect.addCollaboratorRequest(collaborator, collectionid, userName);
 	}
 	
+	/**
+	 * This methods removes the association of collaborator to the concept collection.
+	 * @param userName - logged in user
+	 * @param collectionid - concept collection id
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public void deleteCollaborators(String userName, String collectionid) throws QuadrigaStorageException 
@@ -30,6 +43,14 @@ public class CCCollaboratorManager implements ICCCollaboratorManager
 		dbConnect.deleteCollaboratorRequest(userName, collectionid);
 	}
 	
+	/**
+	 * This method updated the roles of the collaborator
+	 * @param collectionId - concept collection id
+	 * @param collabUser - collaborator user
+	 * @param collaboratorRole - collaborator roles
+	 * @param username - logged in user name
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public void  updateCollaboratorRequest(String collectionId,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
