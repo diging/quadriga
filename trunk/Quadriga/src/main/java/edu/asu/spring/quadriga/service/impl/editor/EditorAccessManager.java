@@ -14,6 +14,13 @@ public class EditorAccessManager implements IEditorAccessManager
 	@Autowired
 	private IDBConnectionEditorAccessManager dbConnect;
 	
+	/**
+	 * This method checks if the given user has an editor role
+	 * @param userName - logged in user
+	 * @return boolean - true - if he has an editor role.
+	 *                   false - if he doesn't have an editor role.
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public boolean checkIsEditor(String userName) throws QuadrigaStorageException
@@ -27,6 +34,14 @@ public class EditorAccessManager implements IEditorAccessManager
 		return isEditor;
 	}
 	
+	/**
+	 * This method checks if the user has an editor role for given network.
+	 * @param userName - logged in user.
+	 * @param networkId - network id.
+	 * @throws QuadrigaStorageException
+	 * @return boolean - true if the user has editor role for the network.
+	 *                   false if the user has no editor role for the network.
+	 */
 	@Override
 	@Transactional
 	public boolean checkIsNetworkEditor(String networkId,String userName) throws QuadrigaStorageException

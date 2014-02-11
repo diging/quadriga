@@ -284,6 +284,12 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryName;
 	}
 	
+	/**
+	 * This method retrieves the dictionary owner for the given dictionary id
+	 * @param dictionaryid - dictionary id
+	 * @return String - dictionary owner associated with the given dictionary id
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public String getDictionaryOwner(String dictionaryid)
@@ -324,6 +330,12 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryEntry;
 	}
 
+	/**
+	 * This method deletes the dictionary associated with the given dictionary id.
+	 * @param user - logged in user
+	 * @param dictionaryId - dictionary id
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public void deleteDictionary(String user, String dictionaryId)
@@ -496,6 +508,12 @@ public class DictionaryManager implements IDictionaryManager {
 		
 	}
 	
+	/**
+	 * This method retrieves the dictionary id for the given dictionary name
+	 * @param dictName - dictionary name
+	 * @return String - dictionary id associated with the given dictionary name
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public String getDictionaryId(String dictName) throws QuadrigaStorageException

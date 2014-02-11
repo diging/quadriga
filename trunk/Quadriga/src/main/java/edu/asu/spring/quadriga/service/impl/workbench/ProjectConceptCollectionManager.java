@@ -17,8 +17,13 @@ public class ProjectConceptCollectionManager implements IProjectConceptCollectio
 	@Autowired
 	private IDBConnectionProjectConceptColleciton dbConnect;
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.workbench.IProjectConceptCollectionManager#addProjectDictionary(java.lang.String, java.lang.String, java.lang.String)
+
+	/**
+	 * This method associates the concept collection with the project.
+	 * @param - projectId - project id
+	 * @param - conceptCollectionId - concept collection id
+	 * @param - userId - logged in user name.
+	 * @throws QuarigaStorageException
 	 */
 	@Override
 	@Transactional
@@ -28,9 +33,14 @@ public class ProjectConceptCollectionManager implements IProjectConceptCollectio
 		dbConnect.addProjectConceptCollection(projectId, conceptCollectionId, userId);
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.workbench.IProjectConceptCollectionManager#listProjectDictionary(java.lang.String, java.lang.String)
-	 */
+
+    /**
+     * This method retrieves the concept collection associated with the project.
+     * @param - projectId project id
+     * @param - userId - logged in user name.
+     * @throws QuadrigaStorageException
+     * @return List<IConceptCollection> - list of concept collection associated with the project.
+     */
 	@Override
 	@Transactional
 	public List<IConceptCollection> listProjectConceptCollection(String projectId,
@@ -39,8 +49,13 @@ public class ProjectConceptCollectionManager implements IProjectConceptCollectio
 		return conceptCollectionList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.impl.workbench.IProjectConceptCollectionManager#deleteProjectDictionary(java.lang.String, java.lang.String, java.lang.String)
+
+	/**
+	 * This method removes the association between the project and the concept collection.
+	 * @param projectId - project id
+	 * @param userId - logged in user name.
+	 * @param conceptCollectionId - concept collection id.
+	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional

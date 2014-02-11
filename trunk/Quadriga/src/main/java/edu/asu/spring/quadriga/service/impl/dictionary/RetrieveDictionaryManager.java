@@ -18,6 +18,12 @@ public class RetrieveDictionaryManager implements IRetrieveDictionaryManager
 	private IDBConnectionRetrieveDictionaryManager dbConnect;
 	
 	
+	/**
+	 * This method retrieves the dictionary details.
+	 * @param dictionaryId - dictionary id
+	 * @throws QuadrigaStorageException
+	 * @return IDictionary - dictionary object contating the details
+	 */
 	@Override
 	@Transactional
 	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException

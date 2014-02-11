@@ -51,6 +51,12 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return projectList;
 	}
 	
+	/**
+	 * This method retrieves the list of projects associated with the logged in user as a collaborator.
+	 * @param sUserName - logged in user name.
+	 * @return List<IProject> - list of projects associated with the logged in user as collaborator.
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public List<IProject> getCollaboratorProjectList(String sUserName) throws QuadrigaStorageException
@@ -60,6 +66,14 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return projectList;
 	}
 	
+	/**
+	 * This method retrieves the list of projects associated with the logged in user as a owner
+	 * of associated workspaces.
+	 * @param sUserName - logged in user name.
+	 * @return List<IProject> list of projects associated with the logged in user as one of its workspaces.
+	 * @throws QuadrigaStorageException
+	 * 
+	 */
 	@Override
 	@Transactional
 	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
@@ -69,6 +83,14 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return projectList;
 	}
 	
+	/**
+	 * This method retrieves the list of projects associated with the logged in user as a collaborator
+	 * of associated workspaces.
+	 * @param sUserName - logged in user name.
+	 * @return List<IProject> list of projects associated with the logged in user as one of its workspaces.
+	 * @throws QuadrigaStorageException
+	 * 
+	 */
 	@Override
 	@Transactional
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
@@ -78,6 +100,14 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return projectList;
 	}
 	
+	/**
+	 * This method retrieves the list of projects associated with the logged in user as a collaborator
+	 * of associated workspaces.
+	 * @param sUserName - logged in user name.
+	 * @return List<IProject> list of projects associated with the logged in user as one of its workspaces.
+	 * @throws QuadrigaStorageException
+	 * 
+	 */
 	@Override
 	@Transactional
 	public List<IProject> getProjectListByCollaboratorRole(String sUserName,String role) throws QuadrigaStorageException
@@ -101,6 +131,12 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return dbConnect.getProjectDetails(projectId);
 	}
 
+	/**
+	 * This method retrieves the collaborators associated with the project
+	 * @param projectId - project id.
+	 * @return List<ICollaborator> list of collaborators associated with the project.
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public List<ICollaborator> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
@@ -108,6 +144,12 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		return collaboratingUsersList;
 	}
 
+	/**
+	 * Retrieves the project details by its unix name
+	 * @param unixName - unix name associated with the project.
+	 * @return IProject - project object containing the details.
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {

@@ -26,6 +26,12 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	@Autowired
 	private IDBConnectionRetrieveProjCollabManager dbConnect;
 	
+	/**
+	 * This method retrieves the users who are not collaborators to the project.
+	 * @param projectid - project id
+	 * @return List<IUser> - list of users who are not collaborators to the project.
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public List<IUser> getProjectNonCollaborators(String projectid) throws QuadrigaStorageException
@@ -37,7 +43,12 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 		return nonCollaborators;
 	}
 	
-	
+	/**
+	 * This method retrieves the collaborators associated with the project
+	 * @param projectId - project id
+	 * @return List<ICollaborator> - list of collaborators associated with the project.
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public List<ICollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
