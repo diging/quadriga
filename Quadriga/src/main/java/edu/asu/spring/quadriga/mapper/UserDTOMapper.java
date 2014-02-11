@@ -66,6 +66,7 @@ public class UserDTOMapper{
 		{
 			userRequestDTO = new QuadrigaUserRequestsDTO();
 			userRequestDTO.setUsername(username);
+			userRequestDTO.setFullname(username);
 			userRequestDTO.setCreatedby(username);
 			userRequestDTO.setCreateddate(new Date());
 			userRequestDTO.setUpdatedby(username);
