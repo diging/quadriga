@@ -529,17 +529,13 @@ public class DspaceManager implements IDspaceManager{
 				for(IBitStream bitstream: bitstreams)
 				{
 					//Check if the bitstream was already loaded.
-					System.out.println("Checking for "+bitstream.getId());
 					IBitStream bitstreamFromDspace = proxyCommunityManager.getBitStream(bitstream.getId(), restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
-					System.out.println("Got from cache "+bitstreamFromDspace.getId());
 					if(bitstreamFromDspace != null)
 					{
 						if(bitstreamFromDspace.getName() == null)
 						{
-							System.out.println("Cannot find bitstream name ");
 							if(bitstreamFromDspace.getLoadStatus() == false)
 							{
-								System.out.println("Not loaded yet...");
 								//Rest call is not yet serviced
 								bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.access_check_bitstream"));
 								bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.access_check_item"));
@@ -554,9 +550,6 @@ public class DspaceManager implements IDspaceManager{
 						}
 						else
 						{
-							System.out.println("Loaded name from cache "+bitstreamFromDspace.getName());
-							//The bitstream was loaded without any problem. Add the bitstreams to cache
-							loadCache(bitstreamFromDspace, dspaceKeys, sUserName, sPassword);
 							checkedBitStreams.add(bitstreamFromDspace);
 						}						
 					}
@@ -596,31 +589,7 @@ public class DspaceManager implements IDspaceManager{
 	{
 		//Get the bitstream and load it into the cache before returning it.
 		IBitStream bitstream = proxyCommunityManager.getBitStream(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
-		loadCache(bitstream, dspaceKeys, sUserName, sPassword);
 		return bitstream;
 	}
 
-	private void loadCache(IBitStream bitstream, IDspaceKeys dspaceKeys, String sUserName, String sPassword)
-	{
-		System.out.println("--------------------------------Inside load cache");
-		if(bitstream.getLoadStatus() == true)
-		{
-			try {
-				System.out.println("-------------------------------- bitstream loaded");
-				//Load all the communities
-				proxyCommunityManager.getAllCommunities(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
-				System.out.println("-------------------------------- all communities loaded");
-
-				//Load all the collections in the community
-				for(String communityid: bitstream.getCommunityIds())
-				{
-					System.out.println("Back-end loading of community: "+communityid);
-					proxyCommunityManager.getAllCollections(restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword, communityid);
-				}
-
-			} catch (NoSuchAlgorithmException e) {
-				logger.debug("Error in loading bitstream for a workspace",e);
-			}
-		}
-	}
 }
