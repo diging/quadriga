@@ -48,6 +48,15 @@ public class ListWSManager implements IListWSManager
 		return workspaceList;
 	}
 	
+	/**
+	 * This method retrieves all the workspace associated with the given having the user as
+	 * a collaborator.
+	 * @param    projectid
+	 * @return   List<IWorkSpace> - list of workspaces associated 
+	 *           with the project.
+	 * @throws   QuadrigaStorageException
+	 * @author   Kiran Kumar Batna
+	 */
 	@Override
 	@Transactional
 	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String user) throws QuadrigaStorageException

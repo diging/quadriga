@@ -35,12 +35,26 @@ public class ModifyProjCollabManager implements IModifyProjCollabManager
 		
 	}
 
+	/**
+	 * This method deletes the collaborator associated with the project
+	 * @param userName - collaborator user name
+	 * @param projectid - project id
+	 * @throws QuarigaStorageException
+	 */
 	@Override
 	@Transactional
 	public void deleteCollaboratorRequest(String userName, String projectid) throws QuadrigaStorageException {
 		dbConnect.deleteColloratorRequest(userName, projectid);
 	}
 	
+	/**
+	 * This method updates the roles associated with the collaborator.
+	 * @param projectid - project id
+	 * @param collabUser - collaborator user name
+	 * @param collaboratorRole - roles associated with the collaborator.
+	 * @param userName - logged in user
+	 * @throws QuadrigaStorageException
+	 */
 	@Override
 	@Transactional
 	public void updateCollaboratorRequest(String projectid,String collabUser,String collaboratorRole,String username) throws QuadrigaStorageException
