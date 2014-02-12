@@ -6,11 +6,11 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-				$('#conceptSearch').dataTable({
-					"bJQueryUI" : true,
-					"sPaginationType" : "full_numbers",
-					"bAutoWidth": false
-				});
+	activeTable = $('.dataTable').dataTable({
+		"bJQueryUI" : true,
+		"sPaginationType" : "full_numbers",
+		"bAutoWidth" : false
+	});
 				
 			});
 
@@ -80,7 +80,7 @@ function resetSelectAll() {
 		<h3>Results Of the search</h3>
 		<form action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addItems" method="post">
 		<input type="submit"  value="Select & Save" /><br><br>
-		<table cellpadding="0" cellspacing="0"	class="display dataTable"  id="conceptSearch">
+		<table   style="width: 100%" class="display dataTable"  id="conceptSearch">
 			<thead>
 				<tr>
 					<th><input type="checkbox" id="selectall"></input></th>
@@ -96,23 +96,20 @@ function resetSelectAll() {
 			<tbody>
 			
 				<c:forEach var="concept" items="${result}">
-					<tr class="gradeX">
-						<td> <input type="checkbox"  class="selected" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
-						<td  align="justify"><font size="2"><c:out
+					<tr>
+						<td width="5%" > <input type="checkbox"  class="selected" name = "selected" value='<c:out value="${concept.id}"></c:out>' /></td>
+						<td width="10%"  align="justify"><font size="2"><c:out
 									value="${concept.lemma}"></c:out></font></td>
 						<td width="25%"  align="justify"><font size="2"><c:out
 									value="${concept.id}"></c:out></font></td>
-						<td  class="center" align="justify"><font size="2"><c:out
+						<td width="5%"  class="center" align="justify"><font size="2"><c:out
 									value="${concept.pos}"></c:out></font></td>
 						<td width="30%" align="justify"><font size="2"><c:out
 									value="${concept.description}"></c:out></font></td>
-						<td class="center" align="justify"><font size="2"><c:out
+						<td width="10%" class="center" align="justify"><font size="2"><c:out
 									value="${concept.type}"></c:out></font></td>
-						<td class="center" align="justify"><font size="2"><c:out
-									value="${concept.conceptList}"></c:out></font></td>
-						
-						
-								
+						<td width="15%" class="center" align="justify"><font size="2"><c:out
+									value="${concept.conceptList}"></c:out></font></td>		
 					</tr>
 				</c:forEach>
 				

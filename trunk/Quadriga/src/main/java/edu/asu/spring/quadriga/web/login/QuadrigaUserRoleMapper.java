@@ -8,6 +8,7 @@ import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.ldap.userdetails.PersonContextMapper;
+import org.springframework.transaction.CannotCreateTransactionException;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -49,7 +50,7 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		try {
 			fillAuthorityList(authorityList, username);
 		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
+				e.printStackTrace();
 		}
 
 		UserDetails details = super.mapUserFromContext(ctx, username,
@@ -63,6 +64,8 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 			String username) throws QuadrigaStorageException {
 		// Check the status of the user in the Quadriga DB
 		IUser user = null;
+		try
+		{
 		user = userManager.getUserDetails(username);
 
 		// add QuadrigaGrantedAuthorities with roles of user
@@ -70,6 +73,11 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 			for (IQuadrigaRole role : user.getQuadrigaRoles()) {
 				authorities.add(new QuadrigaGrantedAuthority(role.getId()));
 			}
+		}
+		}
+		catch(CannotCreateTransactionException ex)
+		{
+			throw new QuadrigaStorageException();
 		}
 	}
 

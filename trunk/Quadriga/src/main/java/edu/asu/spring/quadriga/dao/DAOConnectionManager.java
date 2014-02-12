@@ -46,7 +46,6 @@ public abstract class DAOConnectionManager {
 		}
 		catch(Exception ex)
 		{	
-			ex.printStackTrace();
 			throw new QuadrigaStorageException();
 		}
 	}
