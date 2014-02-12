@@ -5,7 +5,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-				$('#conceptSearch').dataTable({
+				$('.dataTable').dataTable({
 					"bJQueryUI" : true,
 					"sPaginationType" : "full_numbers",
 					"bAutoWidth": false
