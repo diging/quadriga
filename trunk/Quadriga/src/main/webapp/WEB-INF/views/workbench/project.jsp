@@ -151,4 +151,7 @@
 			</section>
 		</td>
 	</tr>
+	<tr>
+	<td>To go to the public site, click this link <a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">http://quadriga.asu.edu/sites/${project.unixName}</a></td>
+	</tr>
 </table>
