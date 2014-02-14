@@ -48,7 +48,7 @@ public class ConceptCollectionItemsDTO implements Serializable {
     private ConceptCollectionDTO conceptCollectionDTO;
     @JoinColumn(name = "concept", referencedColumnName = "item", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private ConceptsDTO concept;
+    private ConceptsDTO conceptDTO;
     
     public ConceptCollectionItemsDTO() {
     }
@@ -101,12 +101,30 @@ public class ConceptCollectionItemsDTO implements Serializable {
         this.conceptCollectionDTO = conceptCollectionDTO;
     }
 
-    public ConceptsDTO getConcept() {
-		return concept;
+
+	public ConceptCollectionItemsDTOPK getConceptCollectionItemsDTOPK() {
+		return conceptCollectionItemsDTOPK;
 	}
 
-	public void setConcept(ConceptsDTO concept) {
-		this.concept = concept;
+	public void setConceptCollectionItemsDTOPK(
+			ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK) {
+		this.conceptCollectionItemsDTOPK = conceptCollectionItemsDTOPK;
+	}
+
+	public ConceptCollectionDTO getConceptCollectionDTO() {
+		return conceptCollectionDTO;
+	}
+
+	public void setConceptCollectionDTO(ConceptCollectionDTO conceptCollectionDTO) {
+		this.conceptCollectionDTO = conceptCollectionDTO;
+	}
+
+	public ConceptsDTO getConceptDTO() {
+		return conceptDTO;
+	}
+
+	public void setConceptDTO(ConceptsDTO conceptDTO) {
+		this.conceptDTO = conceptDTO;
 	}
 
 	@Override
