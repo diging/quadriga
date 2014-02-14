@@ -182,7 +182,8 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 					
 					while(ccItemsIterator.hasNext())
 					{
-						collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(ccItemsIterator.next()));
+						ConceptsDTO concept = ccItemsIterator.next().getConceptDTO();
+						collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(concept));
 					}	
 				}
 			}

@@ -16,12 +16,13 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import org.hibernate.annotations.CascadeType;
 
 /**
  *This is the hibernate mapping class for concept items.
@@ -58,8 +59,8 @@ public class ConceptsDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "concept")
-    private List<ConceptsDTO> conceptItemsDTOList;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptDTO")
+    private List<ConceptCollectionItemsDTO> conceptItemsDTOList;
 
     public ConceptsDTO() {
     }
@@ -68,8 +69,16 @@ public class ConceptsDTO implements Serializable {
     	this.item = item;
     }
 
-   
-    public ConceptsDTO(String item,String lemma, Date updateddate, Date createddate) {
+	@XmlTransient
+    public List<ConceptCollectionItemsDTO> getConceptItemsDTOList() {
+		return conceptItemsDTOList;
+	}
+
+	public void setConceptItemsDTOList(List<ConceptCollectionItemsDTO> conceptItemsDTOList) {
+		this.conceptItemsDTOList = conceptItemsDTOList;
+	}
+
+	public ConceptsDTO(String item,String lemma, Date updateddate, Date createddate) {
         this.item = item;
         this.lemma = lemma;
         this.updateddate = updateddate;

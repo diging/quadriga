@@ -142,9 +142,9 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		
 		if(collectionItems != null)
 		{
-			for(ConceptCollectionItemsDTO collectionConcept : collectionItems)
+			for(ConceptCollectionItemsDTO tempCollectionConcept : collectionItems)
 			{
-				
+				ConceptsDTO collectionConcept = tempCollectionConcept.getConceptDTO();
 				tempConcept = getConceptCollectionItems(collectionConcept);
 				conceptList.add(tempConcept);
 			}
