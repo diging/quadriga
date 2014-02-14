@@ -4,10 +4,14 @@ import java.util.Date;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
@@ -133,11 +137,12 @@ public class DspaceManagerDAO extends DAOConnectionManager implements IDBConnect
 			workspaceDspaceDTO.setWorkspaceDspaceDTOPK(new WorkspaceDspaceDTOPK(workspaceid, bitstreamid));
 			workspaceDspaceDTO.setCreatedby(username);
 			workspaceDspaceDTO.setCreateddate(new Date());
-			sessionFactory.getCurrentSession().save(workspaceDspaceDTO);
+			sessionFactory.getCurrentSession().saveOrUpdate(workspaceDspaceDTO);
 			result = SUCCESS;
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			logger.error("addBitstreamToWorkspace method :",e);
 			result = FAILURE;
         	throw new QuadrigaStorageException();
