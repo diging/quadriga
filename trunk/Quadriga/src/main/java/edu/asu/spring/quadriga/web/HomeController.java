@@ -100,6 +100,7 @@ public class HomeController {
 
 		String formattedDate = dateFormat.format(date);
 
+		System.out.println("Testing principal object :"+principal.toString());
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();		
 		model.addAttribute("username", sUserId);
@@ -119,7 +120,6 @@ public class HomeController {
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 
 		String formattedDate = dateFormat.format(date);
-
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();		
 		model.addAttribute("username", sUserId);
