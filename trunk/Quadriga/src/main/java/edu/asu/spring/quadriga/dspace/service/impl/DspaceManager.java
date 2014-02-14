@@ -339,22 +339,8 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	@Transactional
-	public void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String communityId, String collectionId, String itemId, String bitstreamId, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	public void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String bitstreamId, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		//Catch the Wrong or Illegal ids provided by the user.
-		if(communityId == null || collectionId == null || itemId == null)
-		{
-			logger.info("The user "+username+" tried to hack into the dspace system with the following values:");
-			logger.info("Class Name: DspaceManager");
-			logger.info("Method Name: addBitStreamsToWorkspace");
-			logger.info("Community id: "+communityId);
-			logger.info("Collection id: "+collectionId);
-			logger.info("Item id: "+itemId);
-			logger.info("Bitstreams selected: "+bitstreamId);
-			throw new QuadrigaAccessException("This action has been logged. Please don't try to hack into the system !!!");
-		}
-
-		//Add bitstream to workspace. For security, the id's are gotten from Dspace Objects.
 		dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
 	}
 
@@ -522,6 +508,7 @@ public class DspaceManager implements IDspaceManager{
 	 * @throws QuadrigaStorageException 
 	 */
 	@Override
+	@Transactional
 	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException, QuadrigaAccessException, QuadrigaStorageException
 	{
 		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
@@ -562,6 +549,7 @@ public class DspaceManager implements IDspaceManager{
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public boolean validateDspaceCredentials(String username, String password, IDspaceKeys dspacekeys)
 	{
 		try
@@ -585,6 +573,7 @@ public class DspaceManager implements IDspaceManager{
 	}
 
 	@Override
+	@Transactional
 	public IBitStream getWorkspaceItems(String fileid, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
 	{
 		//Get the bitstream and load it into the cache before returning it.
