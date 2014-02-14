@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,23 +29,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConceptCollectionItemsDTO.findAll", query = "SELECT c FROM ConceptCollectionItemsDTO c"),
-    @NamedQuery(name = "ConceptCollectionItemsDTO.findById", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.conceptCollectionItemsDTOPK.conceptcollectionid = :conceptcollectionid"),
-    @NamedQuery(name = "ConceptCollectionItemsDTO.findByLemma", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.lemma = :lemma"),
-    @NamedQuery(name = "ConceptCollectionItemsDTO.findByItem", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.conceptCollectionItemsDTOPK.item = :item"),
-    @NamedQuery(name = "ConceptCollectionItemsDTO.findByPos", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.pos = :pos"),
+    @NamedQuery(name = "ConceptCollectionItemsDTO.findById", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.conceptCollectionItemsDTOPK.conceptId = :conceptId"),
     })
 public class ConceptCollectionItemsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK;
-    @Basic(optional = false)
-    @Column(name = "lemma")
-    private String lemma;
-    @Column(name = "pos")
-    private String pos;
-    @Lob
-    @Column(name = "description")
-    private String description;
     @Basic(optional = false)
     @Column(name = "updateddate")
     @Temporal(TemporalType.TIMESTAMP)
@@ -55,10 +43,13 @@ public class ConceptCollectionItemsDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @JoinColumn(name = "conceptcollectionid", referencedColumnName = "conceptcollectionid", insertable = false, updatable = false)
+	@JoinColumn(name = "conceptcollectionid", referencedColumnName = "conceptcollectionid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private ConceptCollectionDTO conceptCollectionDTO;
-
+    @JoinColumn(name = "concept", referencedColumnName = "item", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private ConceptsDTO concept;
+    
     public ConceptCollectionItemsDTO() {
     }
 
@@ -66,16 +57,14 @@ public class ConceptCollectionItemsDTO implements Serializable {
         this.conceptCollectionItemsDTOPK = conceptCollectionItemsDTOPK;
     }
 
-    public ConceptCollectionItemsDTO(ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK, String lemma, Date updateddate, Date createddate) {
+    public ConceptCollectionItemsDTO(ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK,Date updateddate, Date createddate) {
         this.conceptCollectionItemsDTOPK = conceptCollectionItemsDTOPK;
-        this.lemma = lemma;
         this.updateddate = updateddate;
         this.createddate = createddate;
     }
 
-    public ConceptCollectionItemsDTO(String conceptCollectionId, String item,String lemma, Date updateddate, Date createddate) {
-        this.conceptCollectionItemsDTOPK = new ConceptCollectionItemsDTOPK(conceptCollectionId, item);
-        this.lemma = lemma;
+    public ConceptCollectionItemsDTO(String conceptCollectionId, String conceptId,Date updateddate, Date createddate) {
+        this.conceptCollectionItemsDTOPK = new ConceptCollectionItemsDTOPK(conceptCollectionId, conceptId);
         this.updateddate = updateddate;
         this.createddate = createddate;
     }
@@ -86,30 +75,6 @@ public class ConceptCollectionItemsDTO implements Serializable {
 
     public void setConceptcollectionsItemsDTOPK(ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK) {
         this.conceptCollectionItemsDTOPK = conceptCollectionItemsDTOPK;
-    }
-
-    public String getLemma() {
-        return lemma;
-    }
-
-    public void setLemma(String lemma) {
-        this.lemma = lemma;
-    }
-
-    public String getPos() {
-        return pos;
-    }
-
-    public void setPos(String pos) {
-        this.pos = pos;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Date getUpdateddate() {
@@ -136,7 +101,15 @@ public class ConceptCollectionItemsDTO implements Serializable {
         this.conceptCollectionDTO = conceptCollectionDTO;
     }
 
-    @Override
+    public ConceptsDTO getConcept() {
+		return concept;
+	}
+
+	public void setConcept(ConceptsDTO concept) {
+		this.concept = concept;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (conceptCollectionItemsDTOPK != null ? conceptCollectionItemsDTOPK.hashCode() : 0);

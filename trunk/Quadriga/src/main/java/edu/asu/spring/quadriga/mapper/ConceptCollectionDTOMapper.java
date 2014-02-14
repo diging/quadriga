@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
+import edu.asu.spring.quadriga.dto.ConceptsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -39,6 +40,65 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
 	
+//	public IConceptCollection getConceptCollection(ConceptCollectionDTO collection)
+//	{
+//		List<ICollaborator> collaboratorList = null;
+//		List<IConcept> conceptList = null;
+//		IConceptCollection concept = null;
+//		ICollaborator collaborator= null;
+//		IConcept tempConcept = null;
+//		
+//		concept = conceptCollectionFactory.createConceptCollectionObject();
+//		collaboratorList = new ArrayList<ICollaborator>();
+//		conceptList = new ArrayList<IConcept>();
+//		List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaborators = collection.getConceptCollectionCollaboratorDTOList();
+//		
+//		if(conceptCollectionCollaborators != null)
+//		{
+//			for(ConceptCollectionCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
+//			{
+//				
+//				collaborator = getConceptCollectionCollaborators(conceptCollaborator);
+//				
+//				if(collaboratorList.contains(collaborator))
+//				{
+//					int index = collaboratorList.indexOf(collaborator);
+//					ICollaborator tempCollaborator = collaboratorList.get(index);
+//					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
+//					tempRoles.addAll(collaborator.getCollaboratorRoles());
+//					tempCollaborator.setCollaboratorRoles(tempRoles);
+//					
+//					//set the collaborator with the roles
+//					collaboratorList.set(index, tempCollaborator);
+//				}
+//				else
+//				{
+//					collaboratorList.add(collaborator);
+//				}
+//			}
+//		}
+//		
+//		//loop through all the items and add it to concept collection
+//		List<ConceptCollectionItemsDTO> collectionItems = collection.getConceptCollectionItemsDTOList();
+//		
+//		if(collectionItems != null)
+//		{
+//			for(ConceptCollectionItemsDTO collectionConcept : collectionItems)
+//			{
+//				tempConcept = getConceptCollectionItems(collectionConcept);
+//				conceptList.add(tempConcept);
+//			}
+//			
+//		}
+//		concept.setId(collection.getConceptCollectionid());
+//		concept.setName(collection.getCollectionname());
+//		concept.setDescription(collection.getDescription());
+//        concept.setOwner(userDTOMapper.getUser(collection.getCollectionowner()));
+//        concept.setCollaborators(collaboratorList);   
+//        concept.setItems(conceptList);
+//		
+//		return concept;
+//	}
 	public IConceptCollection getConceptCollection(ConceptCollectionDTO collection)
 	{
 		List<ICollaborator> collaboratorList = null;
@@ -84,9 +144,11 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		{
 			for(ConceptCollectionItemsDTO collectionConcept : collectionItems)
 			{
+				
 				tempConcept = getConceptCollectionItems(collectionConcept);
 				conceptList.add(tempConcept);
 			}
+			
 		}
 		concept.setId(collection.getConceptCollectionid());
 		concept.setName(collection.getCollectionname());
@@ -98,23 +160,32 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		return concept;
 	}
 	
-	public IConcept getConceptCollectionItems(ConceptCollectionItemsDTO conceptCollectionConcept)
+//	public IConcept getConceptCollectionItems(ConceptCollectionItemsDTO conceptCollectionConcept)
+//	{
+//		IConcept concept = null;
+//		concept = conceptCollectionFactory.createConcept();
+//		concept.setId(conceptCollectionConcept.getConceptcollectionsItemsDTOPK().getItem());
+//		concept.setDescription(conceptCollectionConcept.getDescription());
+//		concept.setLemma(conceptCollectionConcept.getLemma());
+//		concept.setPos(conceptCollectionConcept.getPos());
+//		return concept;
+//	}
+	public IConcept getConceptCollectionItems(ConceptsDTO conceptDTO)
 	{
 		IConcept concept = null;
 		concept = conceptCollectionFactory.createConcept();
-		concept.setId(conceptCollectionConcept.getConceptcollectionsItemsDTOPK().getItem());
-		concept.setDescription(conceptCollectionConcept.getDescription());
-		concept.setLemma(conceptCollectionConcept.getLemma());
-		concept.setPos(conceptCollectionConcept.getPos());
+		concept.setId(conceptDTO.getItem());
+		concept.setDescription(conceptDTO.getDescription());
+		concept.setLemma(conceptDTO.getLemma());
+		concept.setPos(conceptDTO.getPos());
 		return concept;
 	}
-	
-	public List<IConcept> getConceptCollectionItemList(List<ConceptCollectionItemsDTO> conceptCollectionConceptList)
+	public List<IConcept> getConceptCollectionItemList(List<ConceptsDTO> conceptsList)
 	{
 		List<IConcept> conceptList = new ArrayList<IConcept>();
-		if(conceptCollectionConceptList != null && conceptCollectionConceptList.size() > 0)
+		if(conceptsList != null && conceptsList.size() > 0)
 		{
-			Iterator<ConceptCollectionItemsDTO> ccItemsIterator = conceptCollectionConceptList.iterator();
+			Iterator<ConceptsDTO> ccItemsIterator = conceptsList.iterator();
 			while(ccItemsIterator.hasNext())
 			{
 				conceptList.add(getConceptCollectionItems(ccItemsIterator.next()));
@@ -122,6 +193,19 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		}
 		return conceptList;
 	}
+//	public List<IConcept> getConceptCollectionItemList(List<ConceptCollectionItemsDTO> conceptCollectionConceptList)
+//	{
+//		List<IConcept> conceptList = new ArrayList<IConcept>();
+//		if(conceptCollectionConceptList != null && conceptCollectionConceptList.size() > 0)
+//		{
+//			Iterator<ConceptCollectionItemsDTO> ccItemsIterator = conceptCollectionConceptList.iterator();
+//			while(ccItemsIterator.hasNext())
+//			{
+//				conceptList.add(getConceptCollectionItems(ccItemsIterator.next()));
+//			}	
+//		}
+//		return conceptList;
+//	}
 	
 	public ICollaborator getConceptCollectionCollaborators(ConceptCollectionCollaboratorDTO conceptCollectionCollaborator)
 	{
