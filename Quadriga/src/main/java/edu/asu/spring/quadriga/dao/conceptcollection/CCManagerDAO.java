@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
+import edu.asu.spring.quadriga.dto.ConceptsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -178,6 +179,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 				if(conceptcollectionsDTO.getConceptCollectionItemsDTOList() != null && conceptcollectionsDTO.getConceptCollectionItemsDTOList().size() > 0)
 				{
 					Iterator<ConceptCollectionItemsDTO> ccItemsIterator = conceptcollectionsDTO.getConceptCollectionItemsDTOList().iterator();
+					
 					while(ccItemsIterator.hasNext())
 					{
 						collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(ccItemsIterator.next()));
@@ -312,38 +314,95 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 
 	
 
-	/**
-	 * This method saves the item associated with the concept collection
-	 * @param : lemma
-	 * @param : pos
-	 * @param : desc
-	 * @param : conceptId - concept collection id
-	 * @param : username - logged in user
-	 * @throws : QuadrigaStorageException, QuadrigaAccessException
-	 */
+//	/**
+//	 * This method saves the item associated with the concept collection
+//	 * @param : lemma
+//	 * @param : pos
+//	 * @param : desc
+//	 * @param : conceptId - concept collection id
+//	 * @param : username - logged in user
+//	 * @throws : QuadrigaStorageException, QuadrigaAccessException
+//	 */
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void saveItem(String lemma, String id, String pos, String desc,
+//			String conceptId, String username) throws QuadrigaStorageException,
+//			QuadrigaAccessException {
+//		String errMsg = null;
+//		try
+//		{
+//			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid) OR user.username IN (Select conceptColl.collectionowner.username from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid))");
+//			query.setParameter("username", username);
+//			query.setParameter("conceptCollectionid", conceptId);
+//			
+//			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
+//			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
+//			{
+//				ConceptCollectionItemsDTO conceptcollectionsItemsDTO = new ConceptCollectionItemsDTO();
+//				conceptcollectionsItemsDTO.setCreateddate(new Date());
+//				conceptcollectionsItemsDTO.setDescription(desc);
+//				conceptcollectionsItemsDTO.setLemma(lemma);
+//				conceptcollectionsItemsDTO.setPos(pos);
+//				conceptcollectionsItemsDTO.setUpdateddate(new Date());
+//				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptCollectionItemsDTOPK(conceptId, id));
+//				sessionFactory.getCurrentSession().save(conceptcollectionsItemsDTO);
+//			}
+//			else
+//			{
+//				errMsg = "User dont have access to the collection";
+//				logger.error(errMsg);
+//				throw new QuadrigaAccessException("Hmmm!!  Need to try much more hard to get into this");
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logger.info("saveItem method :"+e.getMessage());	
+//			throw new QuadrigaStorageException(e);
+//		}
+//	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public void saveItem(String lemma, String id, String pos, String desc,
-			String conceptId, String username) throws QuadrigaStorageException,
+	public void saveItem(String lemma, String item, String pos, String desc,
+			String collectionId, String username) throws QuadrigaStorageException,
 			QuadrigaAccessException {
 		String errMsg = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid) OR user.username IN (Select conceptColl.collectionowner.username from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid))");
 			query.setParameter("username", username);
-			query.setParameter("conceptCollectionid", conceptId);
+			query.setParameter("conceptCollectionid", collectionId);
 			
+			ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, collectionId);
+			
+			if(conceptCollection ==null)
+			{
+				throw new QuadrigaStorageException();
+			}
 			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
 			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
 			{
-				ConceptCollectionItemsDTO conceptcollectionsItemsDTO = new ConceptCollectionItemsDTO();
-				conceptcollectionsItemsDTO.setCreateddate(new Date());
-				conceptcollectionsItemsDTO.setDescription(desc);
-				conceptcollectionsItemsDTO.setLemma(lemma);
-				conceptcollectionsItemsDTO.setPos(pos);
-				conceptcollectionsItemsDTO.setUpdateddate(new Date());
-				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptCollectionItemsDTOPK(conceptId, id));
-				sessionFactory.getCurrentSession().save(conceptcollectionsItemsDTO);
+				ConceptsDTO conceptsDTO =  (ConceptsDTO) sessionFactory.getCurrentSession().get(ConceptsDTO.class, item);
+				if(conceptsDTO == null)
+				{
+				//create a new concept	
+				conceptsDTO = new ConceptsDTO();
+				conceptsDTO.setItem(item);
+				conceptsDTO.setCreateddate(new Date());
+				conceptsDTO.setDescription(desc);
+				conceptsDTO.setLemma(lemma);
+				conceptsDTO.setPos(pos);
+				conceptsDTO.setUpdateddate(new Date());
+				sessionFactory.getCurrentSession().save(conceptsDTO);
+				} 
+				
+				//map the concept to the concept collection
+				ConceptCollectionItemsDTO conceptCollectionMapping = new ConceptCollectionItemsDTO();
+				ConceptCollectionItemsDTOPK conceptCollectionItemsDTOPK = new ConceptCollectionItemsDTOPK();
+				conceptCollectionItemsDTOPK.setConcept(item);
+				conceptCollectionItemsDTOPK.setConceptcollectionid(collectionId);
+				conceptCollectionMapping.setConceptcollectionsItemsDTOPK(conceptCollectionItemsDTOPK);
+				
 			}
 			else
 			{
@@ -358,7 +417,6 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			throw new QuadrigaStorageException(e);
 		}
 	}
-
 	
 
 	/**
@@ -439,8 +497,44 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	 * @return : String
 	 * @throws : QuadrigaStorageException
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public String updateItem(IConcept concept, String collectionId,String username) throws QuadrigaStorageException {
+//		String errMsg = null;
+//		if(concept == null || collectionId==null || username==null ||  collectionId.isEmpty() || username.isEmpty())
+//		{
+//			logger.error("updateItem: input argument IConceptCollection is null");
+//			return null;
+//		}
+//		try
+//		{
+//			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionDTO.conceptCollectionid =:collectionId and ccItems.conceptCollectionItemsDTOPK.item =:id");
+//			query.setParameter("id", concept.getId());
+//			query.setParameter("collectionId", collectionId);
+//			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
+//			
+//			if(ccItemsDTOList != null && ccItemsDTOList.size() > 0)
+//			{
+//				ConceptCollectionItemsDTO ccItemsDTO = ccItemsDTOList.get(0);
+//				ccItemsDTO.setLemma(concept.getLemma());
+//				ccItemsDTO.setPos(concept.getPos());
+//				ccItemsDTO.setDescription(concept.getDescription());
+//				ccItemsDTO.setUpdateddate(new Date());
+//				sessionFactory.getCurrentSession().update(ccItemsDTOList.get(0));
+//			}
+//			else
+//			{
+//				errMsg = "collection id is invalid.";
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logger.info("deleteItems method :"+e.getMessage());	
+//			throw new QuadrigaStorageException(e);
+//		}
+//		return errMsg;
+//	}
+//	
 	public String updateItem(IConcept concept, String collectionId,String username) throws QuadrigaStorageException {
 		String errMsg = null;
 		if(concept == null || collectionId==null || username==null ||  collectionId.isEmpty() || username.isEmpty())
@@ -450,23 +544,22 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionDTO.conceptCollectionid =:collectionId and ccItems.conceptCollectionItemsDTOPK.item =:id");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptsDTO c where c.item =:id");
 			query.setParameter("id", concept.getId());
-			query.setParameter("collectionId", collectionId);
-			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
+			List<ConceptsDTO> conceptsDTOList = query.list();
 			
-			if(ccItemsDTOList != null && ccItemsDTOList.size() > 0)
+			if(conceptsDTOList != null && conceptsDTOList.size() > 0)
 			{
-				ConceptCollectionItemsDTO ccItemsDTO = ccItemsDTOList.get(0);
-				ccItemsDTO.setLemma(concept.getLemma());
-				ccItemsDTO.setPos(concept.getPos());
-				ccItemsDTO.setDescription(concept.getDescription());
-				ccItemsDTO.setUpdateddate(new Date());
-				sessionFactory.getCurrentSession().update(ccItemsDTOList.get(0));
+				ConceptsDTO conceptsDTO = conceptsDTOList.get(0);
+				conceptsDTO.setLemma(concept.getLemma());
+				conceptsDTO.setPos(concept.getPos());
+				conceptsDTO.setDescription(concept.getDescription());
+				conceptsDTO.setUpdateddate(new Date());
+				sessionFactory.getCurrentSession().update(conceptsDTO);
 			}
 			else
 			{
-				errMsg = "collection id is invalid.";
+				errMsg = "concept id is invalid.";
 			}
 		}
 		catch(Exception e)

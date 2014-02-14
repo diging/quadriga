@@ -21,15 +21,15 @@ public class ConceptCollectionItemsDTOPK implements Serializable {
     @Column(name = "conceptcollectionid")
     private String conceptcollectionid;
     @Basic(optional = false)
-    @Column(name = "item")
-    private String item;
+    @Column(name = "concept")
+    private String concept;
 
     public ConceptCollectionItemsDTOPK() {
     }
 
-    public ConceptCollectionItemsDTOPK(String conceptcollectionid, String item) {
+    public ConceptCollectionItemsDTOPK(String conceptcollectionid, String concept) {
         this.conceptcollectionid = conceptcollectionid;
-        this.item = item;
+        this.concept = concept;
     }
 
     public String getConceptcollectionid() {
@@ -40,19 +40,19 @@ public class ConceptCollectionItemsDTOPK implements Serializable {
 		this.conceptcollectionid = conceptcollectionid;
 	}
 
-	public String getItem() {
-        return item;
-    }
+    public String getConcept() {
+		return concept;
+	}
 
-    public void setItem(String item) {
-        this.item = item;
-    }
+	public void setConcept(String concept) {
+		this.concept = concept;
+	}
 
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (conceptcollectionid != null ? conceptcollectionid.hashCode() : 0);
-        hash += (item != null ? item.hashCode() : 0);
+        hash += (concept != null ? concept.hashCode() : 0);
         return hash;
     }
 
@@ -65,7 +65,7 @@ public class ConceptCollectionItemsDTOPK implements Serializable {
         if ((this.conceptcollectionid == null && other.conceptcollectionid != null) || (this.conceptcollectionid != null && !this.conceptcollectionid.equals(other.conceptcollectionid))) {
             return false;
         }
-        if ((this.item == null && other.item != null) || (this.item != null && !this.item.equals(other.item))) {
+        if ((this.concept == null && other.concept != null) || (this.concept != null && !this.concept.equals(other.concept))) {
             return false;
         }
         return true;
