@@ -87,7 +87,7 @@ function resetSelectAll() {
 		</thead>
 		<tbody>
 			<c:forEach var="conceptItem" items="${concept.items}">
-				<tr class="gradeX">
+				<tr>
 					<td><input type="checkbox" class="selected" name="selected" value="${conceptItem.id}"/></td>
 					<td align="justify"><font size="2"><c:out
 								value="${conceptItem.lemma}"></c:out></font></td>
