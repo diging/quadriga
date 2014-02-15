@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConceptCollectionItemsDTO.findAll", query = "SELECT c FROM ConceptCollectionItemsDTO c"),
-    @NamedQuery(name = "ConceptCollectionItemsDTO.findById", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.conceptCollectionItemsDTOPK.conceptId = :conceptId"),
+    @NamedQuery(name = "ConceptCollectionItemsDTO.findById", query = "SELECT c FROM ConceptCollectionItemsDTO c WHERE c.conceptCollectionItemsDTOPK.concept = :concept"),
     })
 public class ConceptCollectionItemsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
