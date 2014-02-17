@@ -403,6 +403,9 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 				conceptCollectionItemsDTOPK.setConcept(item);
 				conceptCollectionItemsDTOPK.setConceptcollectionid(collectionId);
 				conceptCollectionMapping.setConceptcollectionsItemsDTOPK(conceptCollectionItemsDTOPK);
+				conceptCollectionMapping.setCreateddate(new Date());
+				conceptCollectionMapping.setUpdateddate(new Date());
+				sessionFactory.getCurrentSession().save(conceptCollectionMapping);
 				
 			}
 			else
@@ -468,7 +471,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		}
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionDTO.conceptCollectionid =:collectionId and ccItems.conceptCollectionItemsDTOPK.item =:id");
+			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionItemsDTOPK.conceptcollectionid =:collectionId and ccItems.conceptCollectionItemsDTOPK.concept =:id");
 			query.setParameter("id", id);
 			query.setParameter("collectionId", collectionId);
 			List<ConceptCollectionItemsDTO> ccItemsDTOList = query.list();
@@ -481,6 +484,19 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			{
 				errMsg = "collection id is invalid.";
 			}
+			Query query1 = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionItemsDTO ccItems where ccItems.conceptCollectionItemsDTOPK.concept =:id");
+			query1.setParameter("id", id);
+			List<ConceptCollectionItemsDTO> ccItemsDTOList1 = query1.list();
+			if(ccItemsDTOList1 == null || ccItemsDTOList1.size() == 0){
+				Query query2 = sessionFactory.getCurrentSession().createQuery("from ConceptsDTO concepts where concepts.item =:id");
+				query2.setParameter("id", id);
+				List<ConceptsDTO> conceptsList = query2.list();
+				if(conceptsList != null && conceptsList.size() > 0)
+				{
+					sessionFactory.getCurrentSession().delete(conceptsList.get(0));
+				}
+			}
+			
 		}
 		catch(Exception e)
 		{
