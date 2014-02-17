@@ -37,8 +37,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
-import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
+import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
+import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
@@ -52,6 +53,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * This class handles the rest requests for file downloads
@@ -291,6 +293,7 @@ public class DspaceRestController {
 	 */
 	@RequestMapping(value = "rest/workspace/{workspaceid}/uploadfile", method = RequestMethod.POST, produces = "application/xml")
 	@ResponseBody
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = {RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN,RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR} )})
 	public String addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid, @RequestParam(value="username") String quadrigaUsername, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
 	{
 		IDspaceKeys dspaceKeys = null;
@@ -308,42 +311,30 @@ public class DspaceRestController {
 		 */
 		if(workspaceid != null && !workspaceid.equals("") && quadrigaUsername != null && !quadrigaUsername.equals("") && fileid!=null && !fileid.equals(""))
 		{
-			try
-			{
-				//Check if its a proper workspace and also check if the user has access to it
-				if(securityCheck.chkModifyWorkspaceAccess(quadrigaUsername, workspaceid))
-				{
-					try {
-						//Make a rest call to check if the user has access to dspace fileid.
-						String restURLPath = getBitstreamMetadataPath(fileid, email, password, publicKey, privateKey, quadrigaUsername);
-						IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
+			try {
+				//Make a rest call to check if the user has access to dspace fileid.
+				String restURLPath = getBitstreamMetadataPath(fileid, email, password, publicKey, privateKey, quadrigaUsername);
+				IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
 
-						//Add the file to the workspace
-						dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, fileid, quadrigaUsername);
-						response.setStatus(201);
-						return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
-					} 
-					catch(HttpClientErrorException e){
-						//Thrown when the dspace username and password or dspace keys do not have access to the file. 
-						logger.error("Exception: ",e);
-						throw new RestException(401);
-					}
-					catch(HttpServerErrorException e){
-						//No such file name was found. 
-						logger.error("Exception: ",e);
-						throw new RestException(404);
-					}
-					catch (NoSuchAlgorithmException e) {
-						//System error
-						e.printStackTrace();
-						throw new RestException(406);
-					}
-				}
-				else
-				{
-					//User not allowed to modify the workspace
-					throw new RestException(403);
-				}
+				//Add the file to the workspace
+				dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, fileid, quadrigaUsername);
+				response.setStatus(201);
+				return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
+			} 
+			catch(HttpClientErrorException e){
+				//Thrown when the dspace username and password or dspace keys do not have access to the file. 
+				logger.error("Exception: ",e);
+				throw new RestException(401);
+			}
+			catch(HttpServerErrorException e){
+				//No such file name was found. 
+				logger.error("Exception: ",e);
+				throw new RestException(404);
+			}
+			catch (NoSuchAlgorithmException e) {
+				//System error
+				e.printStackTrace();
+				throw new RestException(406);
 			}
 			catch (QuadrigaStorageException e) {
 				//Error in the database
