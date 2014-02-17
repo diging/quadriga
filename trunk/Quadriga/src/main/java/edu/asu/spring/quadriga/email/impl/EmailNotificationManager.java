@@ -14,6 +14,10 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 
+/**
+ * This class manages all the outgoing emails from the Quadriga system.
+ * @author Ram Kumar Kumaresan
+ */
 @Service
 public class EmailNotificationManager implements IEmailNotificationManager{
 
@@ -26,6 +30,9 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 	@Resource(name = "uiMessages")
 	private Properties emailMessages;
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendAccountDeactivationEmail(IUser user, String adminid) {
 		if(user.getEmail()!= null && !user.getEmail().equals(""))
@@ -35,6 +42,9 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		}	
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendAccountActivationEmail(IUser user, String adminid) {
 		if(user.getEmail()!= null && !user.getEmail().equals(""))
@@ -44,6 +54,9 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendNewAccountRequestPlacementEmail(IUser admin, String userid) {
 		if(admin.getEmail()!=null && !admin.getEmail().equals("") && userid!=null && !userid.equals(""))
@@ -55,6 +68,9 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendNewWorkspaceAddedToProject(IProject project, IWorkSpace workspace){
 		IUser projectOwner = project.getOwner();
