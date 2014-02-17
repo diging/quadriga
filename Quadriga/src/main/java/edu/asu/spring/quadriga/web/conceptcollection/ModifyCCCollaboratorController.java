@@ -201,8 +201,14 @@ public class ModifyCCCollaboratorController
 						collabRoles.append(role.getRoleDBid());
 					}
 					
-					collaboratorManager.updateCollaboratorRequest(collectionid, collabUser, collabRoles.toString().substring(1),
-							                                                 userName);
+					//adding the logic to retrieve the user name of full name is empty
+					if(!collabUser.isEmpty())
+					{
+						collaboratorManager.updateCollaboratorRequest(collectionid, collabUser, collabRoles.toString().substring(1),
+                                userName);
+					}
+					
+					
 					
 					model.getModelMap().put("success", 1);
 				}
