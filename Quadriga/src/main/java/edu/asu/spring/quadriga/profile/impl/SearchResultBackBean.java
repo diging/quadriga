@@ -1,13 +1,17 @@
 package edu.asu.spring.quadriga.profile.impl;
 
-import org.springframework.stereotype.Service;
+import org.hibernate.validator.constraints.NotEmpty;
 
-@Service
+
+
 public class SearchResultBackBean {
 	
+	@NotEmpty
 	private String word;
+	
 	private String id;
 	private String description;
+	
 	private boolean isChecked = false;
 	
 	public boolean getIsChecked() {

@@ -58,9 +58,8 @@ public class ConceptPowerService implements IService {
 	public List<ISearchResult> search(String term) {
 
 		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
-		String pos = "noun";
 		
-		ConceptpowerReply conceptReply = collectionManager.search(term, pos);
+		ConceptpowerReply conceptReply = collectionManager.search(term, IService.pos);
 		if(conceptReply!=null)
 		{
 			List<ConceptEntry> conceptEntries = conceptReply.getConceptEntry();

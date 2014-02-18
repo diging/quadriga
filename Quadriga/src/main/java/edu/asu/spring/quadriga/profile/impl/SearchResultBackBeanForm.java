@@ -2,10 +2,12 @@ package edu.asu.spring.quadriga.profile.impl;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SearchResultBackBeanForm {
+	
 	
 	private List<SearchResultBackBean> searchResultList;
 

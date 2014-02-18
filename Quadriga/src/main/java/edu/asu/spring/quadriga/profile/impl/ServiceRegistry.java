@@ -13,6 +13,13 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
 
+/***
+ * @description this class registers all the services and creates one time objects 
+ * 				for each service implemented by IService interface
+ * 
+ * @author rohit pendbhaje
+ *
+ */
 @Service
 public class ServiceRegistry implements IServiceRegistry {
 
@@ -50,13 +57,20 @@ public class ServiceRegistry implements IServiceRegistry {
 		
 	}
 	
+	
 	@Override
 	public IService getServiceObject(String serviceId) {
 		
 		return newServiceMap.get(serviceId);
 	}
 
-
+/**
+ * 
+ * creates hashmap of name, id as key, value pair
+ * 
+ * @author rohit pendbhaje
+ * 
+ */
 	@Override
 	public Map<String, String> getServiceNameIdMap() {
 

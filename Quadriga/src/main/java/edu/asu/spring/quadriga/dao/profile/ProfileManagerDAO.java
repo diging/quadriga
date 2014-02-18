@@ -56,11 +56,11 @@ implements IDBConnectionProfileManager
 	public List<SearchResultBackBean> showProfileDBRequest(String loggedinUser)
 			throws QuadrigaStorageException 
 	{
+		List<SearchResultBackBean> userProfileSearchList = null;
+
 		try
 		{
-		  List<SearchResultBackBean> userProfileSearchList = null;
 		  SearchResultBackBean searchResultBackBean = null;
-		  
 		  userProfileSearchList = new ArrayList<SearchResultBackBean>();
 		  Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserprofileDTO.findByUsername");
 		  query.setParameter("username", loggedinUser);
@@ -79,7 +79,7 @@ implements IDBConnectionProfileManager
 			throw new QuadrigaStorageException();
 		}
 		
-		return null;
+		return userProfileSearchList;
 	}
 
 	@Override
@@ -98,6 +98,29 @@ implements IDBConnectionProfileManager
 		{
 			throw new QuadrigaStorageException();
 		}
+	}
+
+	@Override
+	public String retrieveServiceIdRequest(String profileid) throws QuadrigaStorageException {
+		
+		String serviceid = null;
+		
+		try
+		{
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserprofileDTO.findByProfileid");
+		query.setParameter("profileid", profileid);
+		List<QuadrigaUserprofileDTO> userprofileList = query.list();
+		
+		for(QuadrigaUserprofileDTO userprofile: userprofileList )
+		{
+			serviceid = userprofile.getQuadrigaUserprofileDTOPK().getServiceid();
+		}
+	}
+		
+		catch(Exception e){
+			throw new QuadrigaStorageException("sorry");
+		}
+		return serviceid;
 	}
 
 }

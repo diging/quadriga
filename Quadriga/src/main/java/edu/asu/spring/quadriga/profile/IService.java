@@ -13,5 +13,9 @@ public interface IService {
 	public abstract String getName();
 	
 	public abstract List<ISearchResult> search(String word);
+	
+	public static final String pos = "noun";
+	
+	public static final String startIndex = "1";
 
 }

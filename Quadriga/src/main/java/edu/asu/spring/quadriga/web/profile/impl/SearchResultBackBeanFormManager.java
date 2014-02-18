@@ -12,6 +12,13 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
 
+/**
+ * this class takes items returned by viaf service and copies it in the searchresultbackbean 
+ * 
+ * @author rohit pendbhaje
+ *
+ */
+
 @Service
 public class SearchResultBackBeanFormManager {
 	
@@ -21,6 +28,15 @@ public class SearchResultBackBeanFormManager {
 	
 	@Autowired
 	private SearchResultBackBeanForm backBeanForm;
+
+/**
+ * this method takes results from viafservice method and copy it in the SearchResultBackBean 
+ * 
+ * 	
+ * @param serviceId		id of the service selected by the user
+ * @param term			term entered by the user
+ * @return	list of copied searchresults of SearchResultBackBean class returned from viaf service
+ */
 	
 	public List<SearchResultBackBean> getsearchResultBackBeanList(String serviceId, String term){
 		

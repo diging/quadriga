@@ -16,6 +16,7 @@ public class UserProfileManager implements IUserProfileManager {
 	
 	@Autowired
 	IDBConnectionProfileManager connectionProfileManager;
+	
 
 	@Override
 	@Transactional
@@ -41,7 +42,18 @@ public class UserProfileManager implements IUserProfileManager {
 		
 		connectionProfileManager.deleteUserProfileDBRequest(profileId,serviceid, username);
 		
+	}
+
+	@Override
+	@Transactional
+	public String retrieveServiceId(String profileid) throws QuadrigaStorageException  {
+
+		String serviceid = connectionProfileManager.retrieveServiceIdRequest(profileid);
+		
+		return serviceid;
 	} 
+	
+	
 	
 	
 	

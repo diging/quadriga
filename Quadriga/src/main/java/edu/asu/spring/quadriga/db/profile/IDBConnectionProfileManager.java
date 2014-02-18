@@ -11,6 +11,8 @@ public interface IDBConnectionProfileManager {
 	
 	public abstract List<SearchResultBackBean> showProfileDBRequest(String loggedinUser) throws QuadrigaStorageException;
 	
-	public abstract void deleteUserProfileDBRequest(String profileId,String serviceid, String username) throws QuadrigaStorageException;
+	public abstract void deleteUserProfileDBRequest(String profileid,String serviceid, String username) throws QuadrigaStorageException;
+	
+	public abstract String retrieveServiceIdRequest(String profileid) throws QuadrigaStorageException;
 
 }
