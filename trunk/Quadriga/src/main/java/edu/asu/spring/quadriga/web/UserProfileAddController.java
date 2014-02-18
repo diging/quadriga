@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,11 +29,8 @@ import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.profile.validator.ProfileAddValidator;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
-import edu.asu.spring.quadriga.validator.ProfileValidator;
 import edu.asu.spring.quadriga.web.profile.impl.ProfileManager;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
-
-
 
 @Controller
 public class UserProfileAddController {
@@ -46,7 +45,7 @@ public class UserProfileAddController {
 	private IUserManager userManager;
 	
 	@Autowired
-	private ProfileValidator profileValidator;
+	private ProfileAddValidator profileValidator;
 	
 	@Autowired
 	private IServiceRegistry serviceRegistry;
@@ -65,35 +64,41 @@ public class UserProfileAddController {
 	
 	@Autowired
 	private SearchResultBackBeanFormManager backBeanFormManager;
-	
-	@Autowired
-	private ProfileAddValidator validator;
-	
-	@InitBinder
-	protected void initBinder(WebDataBinder validateBinder) throws Exception {
-		validateBinder.setValidator(validator);
-}
 
+	/*@InitBinder
+	protected void initBinder(WebDataBinder validateBinder) throws Exception {
+		validateBinder.setValidator(profileValidator);
+}*/
+
+	/**
+	 * this method is used to add searchresults returned from the service to the own profile
+	 * 
+	 * @param searchResultBackBeanForm
+	 * @param result	error thrown through validation
+	 * @param serviceid	id of the service selected by user	
+	 * @param term		term entered by user
+	 * @param model
+	 * @param principal
+	 * @return	path of the jsp page
+	 * @throws QuadrigaStorageException
+	 */
+	
 	@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
-	public String addSearchResult(@Validated @ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm, BindingResult result,
+	public String addSearchResult(@Valid @ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm, BindingResult result,
 	@PathVariable("serviceid") String serviceid, @PathVariable("term") String term, Model model, Principal principal) throws QuadrigaStorageException
 	{
 		
 		Map<String, String> serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
-		
-		String errmsg = null;
 		IService serviceObj = serviceRegistry.getServiceObject(serviceid);
-		
-		errmsg = "";
-				
+						
 		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
 				
 		if(result.hasErrors())
 		{
 			searchResultBackBeanForm.setSearchResultList(backBeanSearchResults);
 			model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
+			return "auth/home/profile";
 		}
-		
 		else
 		{
 			for(SearchResultBackBean resultBackBean: backBeanSearchResults)
@@ -104,7 +109,7 @@ public class UserProfileAddController {
 				}
 			}
 			
-			if(errmsg.equals(""))
+			/*if(errmsg.equals(""))
 			{	
 				
 				model.addAttribute("success",1);
@@ -119,7 +124,7 @@ public class UserProfileAddController {
 				model.addAttribute("ServiceBackBean",new ServiceBackBean());
 				model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
 			}
-			
+			*/
 			List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
 			searchResultBackBeanForm.setSearchResultList(resultLists);
 			model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);

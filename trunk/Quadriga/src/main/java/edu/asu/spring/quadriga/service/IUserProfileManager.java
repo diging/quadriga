@@ -13,4 +13,5 @@ public interface IUserProfileManager {
 	
 	public abstract void deleteUserProfile(String profileId,String serviceid, String username) throws QuadrigaStorageException;
 
+	public abstract String retrieveServiceId(String profileid) throws QuadrigaStorageException;
 }

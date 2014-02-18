@@ -112,6 +112,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 						<form:hidden path="searchResultList[${status.index}].description" value="${result.description}"  />
 						<form:hidden path="searchResultList[${status.index}].id" value="${result.id}"  />
 						<td><form:checkbox path="searchResultList[${status.index}].isChecked"/></td>
+						<form:errors path="searchResultList[${status.index}].isChecked" cssClass="error"></form:errors>
 						<td><c:out value="${result.word}"/></td>
 						<td><c:out value="${result.id}"/></td>
 						<td><c:out value="${result.description}"/></td> 

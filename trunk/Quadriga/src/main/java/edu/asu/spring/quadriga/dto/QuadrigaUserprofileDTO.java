@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "QuadrigaUserprofileDTO.findByUsername", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.username = :username"),
     @NamedQuery(name = "QuadrigaUserprofileDTO.findByServiceid", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.serviceid = :serviceid"),
     @NamedQuery(name = "QuadrigaUserprofileDTO.findByProfileid", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.profileid = :profileid"),
+    /*@NamedQuery(name = "QuadrigaUserprofileDTO.findByUsernameAndProfileid", query = "SELECT q FROM QuadrigaUserprofileDTO q WHERE q.quadrigaUserprofileDTOPK.profileid = :profileid "
+    		+ " AND q.quadrigaUserprofileDTOPK.username = :username"),*/
     })
 public class QuadrigaUserprofileDTO implements Serializable {
     private static final long serialVersionUID = 1L;

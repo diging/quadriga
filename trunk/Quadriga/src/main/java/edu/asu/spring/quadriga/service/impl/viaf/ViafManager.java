@@ -45,7 +45,7 @@ public class ViafManager implements IViafManager {
 	private ISearchResultFactory searchResultFactory;
 	
 	
-	
+
 	@Override
 	public List<ISearchResult> search (String item, String startIndex) {
 		
@@ -54,17 +54,8 @@ public class ViafManager implements IViafManager {
 		
 
 			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + item.trim() + searchViafURLPath1.trim() + startIndex.trim() + searchViafURLPath2.trim();
-			 
-			//fullUrl = fullUrl.replaceAll("\n", "");
-			//fullUrl = fullUrl.replaceAll("\t", "");
-
-			
 
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
-			//String ex = restTemplate.getForObject(fullUrl, String.class);
-			//System.out.println(ex);
-			//String rep = restTemplate.getForObject(fullUrl, String.class);
-			//System.out.println(rep);
 			items = rep.getChannel().getItems();
 			
 			List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
@@ -76,7 +67,6 @@ public class ViafManager implements IViafManager {
 				searchResult.setName(i.getTitle());
 				searchResults.add(searchResult);
 			}
-			
 			
 		return searchResults;
 	}

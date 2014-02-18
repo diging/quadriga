@@ -19,6 +19,13 @@ import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IViafManager;
 
+/**
+ * this class sends request to viaf service and gets back object in response
+ * 
+ * @author rohit
+ *
+ */
+
 @Service
 public class ViafService implements IService {
 
@@ -84,79 +91,28 @@ public class ViafService implements IService {
 
 		return "Viaf";
 	}
+	
+	/**
+	 * this method searches for the term user entered in viaf service and returns result
+	 * @param item			term enterd by user
+	 * 		  startindex	index in the REST api of viaf service
+	 * 
+	 * @return list of searchresults responded by viaf
+	 * 
+	 * @author rohit pendbhaje
+	 * 	
+	 */
 
 	@Override
 	public List<ISearchResult> search(String word) {
-		
-		
-		String startIndex="1";
-
-/*
-		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
-
-		String si = "1";
-
-		
-		
-
-		List<Item> viafEntries = viafmanager.search(word, si);
-		
-
-		//List<ViafReply.Items> viafEntries = viafmanager.search(word, si);
-
-		
-		//List<HashMap<String,String>> viafEntries = viafmanager.search(word);
-		
-		
-		if(viafEntries!=null){
-
-			for(HashMap<String,String> entries : viafEntries)
-			{
-				ISearchResult searchResult =searchResultFactory.getSearchResultObject();
-				searchResult.setName(entries.get("title"));
-				searchResult.setId(entries.get("link"));
-				searchResult.setDescription(entries.get("pubDate"));
-				//searchResult.setDescription(ce.getDescription());
-				searchResults.add(searchResult);
-			}
-			
-		
-		}
-		
-		return searchResults;
-		
-		if(viafEntries!=null)
-		{
-			
-			for(Item vi : viafEntries)
-			{
-				ISearchResult searchResult =searchResultFactory.getSearchResultObject();
-//				searchResult.setName(vi.getTitle());
-//				searchResult.setId(vi.getLink());
-				searchResult.setDescription(vi.getPubDate());
-				//searchResult.setDescription(ce.getDescription());
-				searchResults.add(searchResult);
-			}
-			
-		}
-		return searchResults;*/
-		
+				
 		List<Item> items = null;
 		String fullUrl;
 		
 
-			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + word.trim() + searchViafURLPath1.trim() + startIndex.trim() + searchViafURLPath2.trim();
+			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + word.trim() + searchViafURLPath1.trim() + IService.startIndex.trim() + searchViafURLPath2.trim();
 			 
-			//fullUrl = fullUrl.replaceAll("\n", "");
-			//fullUrl = fullUrl.replaceAll("\t", "");
-
-			
-
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
-			//String ex = restTemplate.getForObject(fullUrl, String.class);
-			//System.out.println(ex);
-			//String rep = restTemplate.getForObject(fullUrl, String.class);
-			//System.out.println(rep);
 			items = rep.getChannel().getItems();
 			
 			List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
