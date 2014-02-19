@@ -227,7 +227,7 @@ public class DBConnectionModifyProjCollabManagerTest {
 		project.setName("testupdateproject");
 		project.setDescription("test case data");
 		project.setUnixName("testproject2");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setInternalid("PROJ_2");
 
 		owner = userFactory.createUserObject();
@@ -253,7 +253,7 @@ public class DBConnectionModifyProjCollabManagerTest {
 		project.setName("testupdateproject");
 		project.setDescription("test case data");
 		project.setUnixName("testproject2");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setInternalid("PROJ_2");
 
 		owner = userFactory.createUserObject();

@@ -99,7 +99,7 @@ public class ModifyProjectManagerTest {
 		owner = userFactory.createUserObject();
 		owner.setUserName("projuser");
 		project.setOwner(owner);
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		
 		projectManager.addProjectRequest(project,"projuser");
 		
@@ -115,11 +115,11 @@ public class ModifyProjectManagerTest {
 		project.setName("testupdateproject");
 		project.setDescription("test case data");
 		project.setUnixName("testproject2");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setInternalid("PROJ_2");
 		
 		owner = "projuser";
-        projectManager.updateProjectRequest("PROJ_2","testupdateproject","test case data",EProjectAccessibility.ACCESSIBLE.name(),"testproject2",owner);
+        projectManager.updateProjectRequest("PROJ_2","testupdateproject","test case data",EProjectAccessibility.PUBLIC.name(),"testproject2",owner);
         assertTrue(true);
 	}
 

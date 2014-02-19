@@ -255,7 +255,7 @@ public class RetrieveProjCollabManagerTest {
 		IProject project = projectFactory.createProjectObject();
 		project.setName("test project");
 		project.setCollaborators(collaboratorList);
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setUnixName("123");
 		IUser owner = userFactory.createUserObject();
 		owner.setUserName(principal.getName());
@@ -274,7 +274,7 @@ public class RetrieveProjCollabManagerTest {
 		IProject project = projectFactory.createProjectObject();
 		project.setName("test project");
 		project.setCollaborators(collaboratorList);
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setUnixName("123");
 		
 		IUser owner = userFactory.createUserObject();

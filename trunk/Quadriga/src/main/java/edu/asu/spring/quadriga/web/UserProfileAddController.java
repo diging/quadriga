@@ -25,11 +25,9 @@ import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
-import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.profile.validator.ProfileAddValidator;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
-import edu.asu.spring.quadriga.web.profile.impl.ProfileManager;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
 
 @Controller
@@ -37,9 +35,6 @@ public class UserProfileAddController {
 	
 	@Autowired
 	private IUserProfileManager profileManager;
-	
-	@Autowired
-	private ProfileManager profilemanager;
 	
 	@Autowired
 	private IUserManager userManager;

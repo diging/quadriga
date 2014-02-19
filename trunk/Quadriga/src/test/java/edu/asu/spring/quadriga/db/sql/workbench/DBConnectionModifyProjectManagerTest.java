@@ -100,7 +100,7 @@ public class DBConnectionModifyProjectManagerTest {
 		owner = userFactory.createUserObject();
 		owner.setUserName("projuser");
 		project.setOwner(owner);
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		
 		dbConnect.addProjectRequest(project,owner.getUserName());
 		
@@ -116,7 +116,7 @@ public class DBConnectionModifyProjectManagerTest {
 		project.setName("testupdateproject");
 		project.setDescription("test case data");
 		project.setUnixName("testproject2");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setInternalid("PROJ_2");
 		String owner = "projuser";
 		dbConnect.updateProjectRequest(project.getInternalid(), project.getName(), project.getDescription(), project.getProjectAccess().name(), project.getUnixName(), project.getOwner().getUserName());
