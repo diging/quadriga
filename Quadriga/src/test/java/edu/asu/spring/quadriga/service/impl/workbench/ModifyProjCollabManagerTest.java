@@ -253,7 +253,7 @@ public class ModifyProjCollabManagerTest {
 		owner.setUserName(principal.getName());
 		project.setOwner(owner);
 
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setCollaborators(collaboratorList);
 
 		dbProjectConnection.addProjectRequest(project,project.getOwner().getUserName());
@@ -280,7 +280,7 @@ public class ModifyProjCollabManagerTest {
 		owner.setUserName(principal.getName());
 		project.setOwner(owner);
 
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		project.setCollaborators(collaboratorList);
 
 		dbProjectConnection.addProjectRequest(project,project.getOwner().getUserName());

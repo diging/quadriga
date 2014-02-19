@@ -160,7 +160,7 @@ public class RetrieveProjectControllerTest {
 		project.setName("proj1");
 		project.setDescription("test project");
 		project.setUnixName("proj1");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		user = userManager.getUserDetails("user1");
 		project.setOwner(user);
 		tempProjectList.add(project);
@@ -170,7 +170,7 @@ public class RetrieveProjectControllerTest {
 		project.setName("proj2");
 		project.setDescription("test project");
 		project.setUnixName("proj2");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		user = userManager.getUserDetails("user1");
 		project.setOwner(user);
 		tempProjectList.add(project);
@@ -218,7 +218,7 @@ public class RetrieveProjectControllerTest {
 		project.setName("proj3");
 		project.setDescription("test project");
 		project.setUnixName("proj3");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		user = userManager.getUserDetails("user2");
 		project.setOwner(user);
 		tempProjectList.add(project);
@@ -228,7 +228,7 @@ public class RetrieveProjectControllerTest {
 		project.setName("proj4");
 		project.setDescription("test project");
 		project.setUnixName("proj4");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		user = userManager.getUserDetails("user2");
 		project.setOwner(user);
 		tempProjectList.add(project);
@@ -276,7 +276,7 @@ public class RetrieveProjectControllerTest {
 				project.setName("proj5");
 				project.setDescription("test project");
 				project.setUnixName("proj5");
-				project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+				project.setProjectAccess(EProjectAccessibility.PUBLIC);
 				user = userManager.getUserDetails("user2");
 				project.setOwner(user);
 				tempProjectList.add(project);
@@ -324,7 +324,7 @@ public class RetrieveProjectControllerTest {
 		project.setName("proj6");
 		project.setDescription("test project");
 		project.setUnixName("proj6");
-		project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+		project.setProjectAccess(EProjectAccessibility.PUBLIC);
 		user = userManager.getUserDetails("user2");
 		project.setOwner(user);
 		tempProjectList.add(project);
@@ -371,7 +371,7 @@ public class RetrieveProjectControllerTest {
 			project.setName("proj5");
 			project.setDescription("test project");
 			project.setUnixName("proj5");
-			project.setProjectAccess(EProjectAccessibility.ACCESSIBLE);
+			project.setProjectAccess(EProjectAccessibility.PUBLIC);
 			user = userManager.getUserDetails("user2");
 			project.setOwner(user);
 			

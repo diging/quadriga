@@ -8,8 +8,8 @@ package edu.asu.spring.quadriga.domain.enums;
  */
 public enum EProjectAccessibility 
 {
-	ACCESSIBLE("project_accessibility_accessible"),
-	NOT_ACCESSIBLE("project_accessibility_accessible");
+	PUBLIC("project_accessibility_accessible"),
+	PRIVATE("project_accessibility_accessible");
 	private String id;
 	
 	private EProjectAccessibility(String id)
