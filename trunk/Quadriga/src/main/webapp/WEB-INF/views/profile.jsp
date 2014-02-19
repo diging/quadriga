@@ -86,8 +86,10 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 </table>
 </form:form>  
 
- <c:choose>
-	<c:when test="${not empty searchResultList}">
+<c:choose>
+<c:when test="${success == '1'}">
+
+	<c:if test="${not empty searchResultList}">
 		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
 		 Results of the Search
@@ -100,10 +102,10 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				
 				<thead>
 					<tr>
-						<th>select</th>
-						<th>Name</th>
-						<th>ID</th>
-						<th>Description</th>
+						<th><h1>select</h1></th>
+						<th><h1>Name</h1></th>
+						<th><h1>ID</h1></th>
+						<th><h1>Description</h1></th>
 					</tr>
 				</thead>
 			
@@ -114,7 +116,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 						<form:hidden path="searchResultList[${status.index}].description" value="${result.description}"  />
 						<form:hidden path="searchResultList[${status.index}].id" value="${result.id}"  />
 						<td><form:checkbox path="searchResultList[${status.index}].isChecked"/></td>
-						<form:errors path="searchResultList[${status.index}].isChecked" cssClass="error"></form:errors>
+						<form:errors path="searchResultList[${status.index}].isChecked" cssClass="error" />
 						<td><c:out value="${result.word}"/></td>
 						<td><c:out value="${result.id}"/></td>
 						<td><c:out value="${result.description}"/></td> 
@@ -123,10 +125,40 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 				</tbody>
 			</table>
 		 </form:form>
-	 </c:when>
+	 </c:if>
+</c:when>
+
+<c:otherwise>
+	<c:if test="${success == '2'}">
+	<font color="red">${errmsg}</font>
+	</c:if>
+</c:otherwise>
 </c:choose>
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <c:choose>
 		<c:when test="${success == '1'}">
 			<font color="blue"><spring:message code="add_profile_success"/></font>

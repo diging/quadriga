@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import edu.asu.spring.quadriga.domain.implementation.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -26,18 +27,21 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
 import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
+
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanForm;
+
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
+@SessionAttributes("serviceBackBean")
 public class HomeController {
 	
 	@Autowired
@@ -63,7 +67,7 @@ public class HomeController {
 	
 	@Autowired
 	private SearchResultBackBeanForm searchResultBackBeanForm;
-	
+		
 	@Autowired
 	private SearchResultBackBeanFormManager backBeanFormManager;
 	
@@ -136,9 +140,7 @@ public class HomeController {
 	{
 		
 		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
-		
 		searchResultBackBeanForm.setSearchResultList(resultLists);
-		
 		model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
 				
 		if(resultLists == null)
@@ -148,7 +150,6 @@ public class HomeController {
 			model.addAttribute("resultLists", resultLists);
 				
 		return "auth/home/showProfile";
-		
 	}
 	
 	/**
@@ -201,7 +202,8 @@ public class HomeController {
 			
 			searchResultBackBeanForm.setSearchResultList(searchResultList);
 			model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
-			model.addAttribute("searchResultList",searchResultList);		
+			model.addAttribute("searchResultList",searchResultList);
+			model.addAttribute("success", 1);
 		}
 		
 		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
@@ -259,16 +261,6 @@ public class HomeController {
 		}
 		else
 			model.addAttribute("result", "sorry can't delete");
-		
-		
-		/*String errmsg = profileManager.deleteUserProfile(searchResultBackBean.getId());
-		
-		if(errmsg.equals("no errors"))
-		{
-			model.addAttribute("result", "profile deleted successfully");
-		}
-		else
-			model.addAttribute("result", "sorry can't add");*/
 		
 		return "auth/home/showProfile";
 	}

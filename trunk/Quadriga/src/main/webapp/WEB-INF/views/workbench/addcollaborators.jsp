@@ -5,7 +5,7 @@
     
 <style>
 
-div.ex {color:blue;
+div.ex {color:#01A9DB;
 font-style: italic
 }
 </style>
@@ -42,17 +42,17 @@ function onSubmit(){
 <div>${projectdesc}</div>
 <c:if test="${not empty notCollaboratingUsers}">
 <hr>
-<div class="ex">select collaborator</div>
+<div class="ex" style="float:left;">select collaborator</div>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="--- Select ---"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
  	<form:errors path="userObj" class="ui-state-error-text"></form:errors>  
-<br>
-<div class="ex">select access rights</div>	
+<br/>
+<div class="ex" style="float:left;">select access rights</div>
 	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
 	<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
-<br />
+<br/>
 <input type="submit" value="Add">
 <input type="button" value="Cancel" onClick="onSubmit()">
 </c:if>

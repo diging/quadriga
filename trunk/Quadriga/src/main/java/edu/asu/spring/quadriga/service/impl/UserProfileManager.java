@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 @Service
 public class UserProfileManager implements IUserProfileManager {

@@ -54,6 +54,13 @@ $("input[name='deselectAll']").button().click(function(){
 
 <br>
 
+<form:form method="GET" action="${pageContext.servletContext.contextPath}/auth/profile/addnew" >
+ 
+<input type="submit" value="Add new Entries" style="float:left;">
+
+</form:form>
+<br>
+
 <c:choose>
 	<c:when test="${success == '1'}">
 		<font color="blue" style="font-family: inherit;"><c:out value="${result}" /></font>
@@ -88,15 +95,12 @@ action="${pageContext.servletContext.contextPath}/auth/profile/delete">
 			</tbody>
 	</table>	
 <%--  </c:if> --%> 
-<input type="submit" value="Delete" id='ischeck' style="float:left;">
+<input type="submit" value="Delete" id='ischeck'>
+
 
 </form:form>
 	
-<form:form method="GET" action="${pageContext.servletContext.contextPath}/auth/profile/addnew" >
- 
-<input type="submit" value="Add new Entries" style="float:left;">
 
-</form:form>
 
 
 

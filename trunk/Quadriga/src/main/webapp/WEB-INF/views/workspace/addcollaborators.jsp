@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <style type="text/css">
-div.ex {color:blue;
+div.ex {color:#01A9DB;
 font-style: italic
 }
 </style>
@@ -33,14 +33,14 @@ function onSubmit(){
 <div>${workspacedesc}</div>
 		<c:if test="${not empty noncollabusers}">
 		<hr>
-		<div class="ex">select collaborator</div>
+		<div class="ex" style="float: left;">select collaborator</div>
 		<form:select path="userObj" id="userName">
 	    	<form:option value="NONE" label="--- Select ---"/>
 	   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="name" /> 
 		</form:select>
 		<form:errors path="userObj" class="ui-state-error-text"></form:errors>
 		<br>
-		<div class="ex">select access rights</div>	
+		<div class="ex" style="float: left;">select access rights</div>	
 		<form:checkboxes path="collaboratorRoles" class="roles" items="${wscollabroles}" itemValue="roleDBid" itemLabel="displayName" />
 		<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
 		<br/>

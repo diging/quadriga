@@ -1,8 +1,14 @@
-package edu.asu.spring.quadriga.profile.impl;
+package edu.asu.spring.quadriga.web.profile.impl;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-
+/**
+ * this class is used as a backing bean for the search results retrieved 
+ * through various services like viaf, conceptpower in the user profile page
+ * 
+ * @author rohit pendbhaje
+ *
+ */
 
 public class SearchResultBackBean {
 	
@@ -38,7 +44,5 @@ public class SearchResultBackBean {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	
 
 }
