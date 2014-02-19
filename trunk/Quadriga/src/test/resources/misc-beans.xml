@@ -158,7 +158,7 @@
 	<bean id="networkManagerDAO" class="edu.asu.spring.quadriga.dao.NetworkManagerDAO"/>
 	<bean id="userManagerDAO" class="edu.asu.spring.quadriga.dao.UserManagerDAO"/>
 	<!-- Concept collection DAO -->
-	<bean id="cCManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.CCManagerDAO"/>
+	<bean id="CCManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.CCManagerDAO"/>
 	<bean id="conceptCollectionCollaboratorManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionCollaboratorManagerDAO"/>
 	<bean id="conceptCollectionModifyManagerDAO" class="edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionModifyManagerDAO"/>
 	<!-- Dictionary DAO -->

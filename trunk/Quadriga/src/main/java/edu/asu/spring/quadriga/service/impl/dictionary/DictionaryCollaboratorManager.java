@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.service.impl.dictionary;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,6 @@ public class DictionaryCollaboratorManager implements
 {
 	
 	@Autowired
-	@Qualifier("dictionaryCollaboratorManagerDAO")
 	private IDBConnectionDictionaryCollaboratorManager dbConnect;
 	
 	/**

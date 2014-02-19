@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -41,10 +43,10 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class UserManagerTest {
 
 	@Autowired
-	@Qualifier("UserManager")
 	IUserManager usermanager;
 
 	@Autowired

@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,7 +42,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
@@ -62,7 +60,6 @@ public class DBConnectionWorkspaceCCTest {
 	private IDBConnectionWorkspaceCC dbConnectionWorkspaceConceptColleciton;
 	
 	@Autowired
-	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnect;
 
 	@Autowired

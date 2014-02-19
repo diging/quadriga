@@ -3,7 +3,8 @@
  */
 package edu.asu.spring.quadriga.service.impl.workbench;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,7 +25,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,23 +32,18 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
@@ -69,7 +64,6 @@ public class ProjectConceptCollectionManagerTest {
 	IDBConnectionDictionaryManager dbConnection;
 	
 	@Autowired
-	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnect;
 
 	@Autowired
@@ -205,7 +199,7 @@ public class ProjectConceptCollectionManagerTest {
 		String id = null;
 		try {
 			Statement stmt = connection.createStatement();
-			stmt.execute("select id from tbl_conceptcollections where collectionname='"
+			stmt.execute("select conceptcollectionid from tbl_conceptcollection where collectionname='"
 					+ name + "'");
 			ResultSet rs = stmt.getResultSet();
 			if (rs != null) {
@@ -229,7 +223,7 @@ public class ProjectConceptCollectionManagerTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -319,7 +313,7 @@ public class ProjectConceptCollectionManagerTest {
 		}
 		dbConnection.setupTestEnvironment("delete from tbl_project_conceptcollection");
 		dbConnection.setupTestEnvironment("delete from tbl_project");
-		dbConnection.setupTestEnvironment("delete from tbl_conceptcollections");
+		dbConnection.setupTestEnvironment("delete from tbl_conceptcollection");
 	}
 
 	/**
@@ -332,7 +326,7 @@ public class ProjectConceptCollectionManagerTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -422,7 +416,7 @@ public class ProjectConceptCollectionManagerTest {
 		}
 		dbConnection.setupTestEnvironment("delete from tbl_project_conceptcollection");
 		dbConnection.setupTestEnvironment("delete from tbl_project");
-		dbConnection.setupTestEnvironment("delete from tbl_conceptcollections");
+		dbConnection.setupTestEnvironment("delete from tbl_conceptcollection");
 	}
 
 	/**
@@ -435,7 +429,7 @@ public class ProjectConceptCollectionManagerTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -542,7 +536,7 @@ public class ProjectConceptCollectionManagerTest {
 		
 		dbConnection.setupTestEnvironment("delete from tbl_project_conceptcollection");
 		dbConnection.setupTestEnvironment("delete from tbl_project");
-		dbConnection.setupTestEnvironment("delete from tbl_conceptcollections");
+		dbConnection.setupTestEnvironment("delete from tbl_conceptcollection");
 	}
 
 }

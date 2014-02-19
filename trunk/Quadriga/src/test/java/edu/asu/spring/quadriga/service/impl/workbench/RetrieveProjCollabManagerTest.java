@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.security.Principal;
 import java.sql.Connection;
@@ -21,9 +21,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
@@ -50,6 +50,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class RetrieveProjCollabManagerTest {
 	
 	@Autowired
@@ -65,7 +66,6 @@ public class RetrieveProjCollabManagerTest {
 	IDBConnectionModifyProjectManager dbModifyProjectConnection;
 	
 	@Autowired
-	@Qualifier("RetrieveProjectManagerDAO")
 	IDBConnectionRetrieveProjectManager dbRetrieveProjectConnection;
 	
 	

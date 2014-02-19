@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mysql.jdbc.log.Log;
 
@@ -51,6 +52,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class ModifyProjCollabManagerTest {
 	
 	@Autowired

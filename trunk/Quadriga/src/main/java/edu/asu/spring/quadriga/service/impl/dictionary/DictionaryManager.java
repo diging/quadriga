@@ -60,7 +60,6 @@ public class DictionaryManager implements IDictionaryManager {
 			.getLogger(DictionaryManager.class);
 
 	@Autowired
-	@Qualifier("dictionaryManagerDAO")
 	private IDBConnectionDictionaryManager dbConnect;
 
 	@Autowired
