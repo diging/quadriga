@@ -28,8 +28,6 @@ import edu.asu.spring.quadriga.domain.ICollection;
 import edu.asu.spring.quadriga.domain.ICommunity;
 import edu.asu.spring.quadriga.domain.IItem;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.BitStreamFactory;
-import edu.asu.spring.quadriga.domain.implementation.BitStream;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
