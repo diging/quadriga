@@ -54,8 +54,10 @@ h1{
 
 </style>
 </head>
-<h1>Search Your Profile In Following Services</h1>
-
+<header>
+		<h2>Profile Search</h2>
+		<span class="byline">Search Your Profile In Following Services</span>
+	</header>
 <form:form method="GET" modelAttribute="ServiceBackBean"
 action="${pageContext.servletContext.contextPath}/auth/profile/search">
 
