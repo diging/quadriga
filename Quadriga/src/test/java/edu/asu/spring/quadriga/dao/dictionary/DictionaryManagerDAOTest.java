@@ -170,7 +170,7 @@ public class DictionaryManagerDAOTest {
 		String id=null;
 		try{
 			Statement stmt = connection.createStatement();
-			stmt.execute("select id from tbl_dictionary where dictionaryName='"+name+"'");
+			stmt.execute("select dictionaryid from tbl_dictionary where dictionaryName='"+name+"'");
 			ResultSet rs =stmt.getResultSet();
 			if(rs!=null){
 				while (rs.next()) { 

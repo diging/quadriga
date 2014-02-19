@@ -13,13 +13,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.conceptcollection.ConceptCollectionCollaboratorManagerDAO;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCCollaboratorManager;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -58,11 +56,9 @@ public class ConceptCollectionCollaboratorManagerDAOTest {
 	String sDatabaseSetup;
 
 	@Autowired
-	@Qualifier("CCManagerDAO")
 	private IDBConnectionCCManager ccManagerDAO;
 	
 	@Autowired
-	@Qualifier("conceptCollectionCollaboratorManagerDAO")
 	private IDBConnectionCCCollaboratorManager dbConnect;
 	
 	@BeforeClass

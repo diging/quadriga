@@ -22,7 +22,6 @@ import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 	
 	@Autowired
-	@Qualifier("retrieveWSCollabManagerDAO")
 	IDBConnectionRetrieveWSCollabManager dbConnect;
 	
 	@Autowired

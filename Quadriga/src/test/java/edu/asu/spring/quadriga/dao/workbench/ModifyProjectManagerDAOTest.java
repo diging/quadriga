@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.dao.workbench;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -8,13 +9,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.ModifyProjectManagerDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -40,7 +39,6 @@ public class ModifyProjectManagerDAOTest {
 	IDBConnectionModifyProjectManager modifyProjectManagerDAO;
 	
 	@Autowired
-	@Qualifier("RetrieveProjectManagerDAO")
 	IDBConnectionRetrieveProjectManager retrieveProjectManager;
 	
 	@BeforeClass

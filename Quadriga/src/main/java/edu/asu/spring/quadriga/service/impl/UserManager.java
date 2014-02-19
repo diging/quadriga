@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @author 		 Ram Kumar Kumaresan
  * 
  */
-@Service("userManager")
+@Service
 public class UserManager implements IUserManager {
 
 	private static final Logger logger = LoggerFactory

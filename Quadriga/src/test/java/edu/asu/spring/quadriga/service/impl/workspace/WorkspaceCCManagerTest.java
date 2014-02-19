@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -60,7 +60,6 @@ public class WorkspaceCCManagerTest {
 	private IDBConnectionWorkspaceCC dbConnectionWorkspaceConceptColleciton;
 	
 	@Autowired
-	@Qualifier("cCManagerDAO")
 	IDBConnectionCCManager dbConnect;
 
 	@Autowired

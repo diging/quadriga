@@ -28,6 +28,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
@@ -53,6 +54,7 @@ import edu.asu.spring.quadriga.web.manageusers.UserController;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class DictionaryItemSearchAddControllerTest {
 
 	UserController userContoller;
@@ -202,7 +204,7 @@ public class DictionaryItemSearchAddControllerTest {
 		String id=null;
 		try{
 			Statement stmt = connection.createStatement();
-			stmt.execute("select id from tbl_dictionary where dictionaryName='"+name+"'");
+			stmt.execute("select dictionaryid from tbl_dictionary where dictionaryName='"+name+"'");
 			ResultSet rs =stmt.getResultSet();
 			if(rs!=null){
 				while (rs.next()) { 
