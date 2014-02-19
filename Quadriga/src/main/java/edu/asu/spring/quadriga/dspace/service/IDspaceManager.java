@@ -134,7 +134,7 @@ public interface IDspaceManager{
 
 	/**
 	 * Add a list of bitstreams to a workspace. The user must have access to the workspace.
-	 * All the fields are required.
+	 * All the fields are not required. 
 	 * 
 	 * @param workspaceId					The id of the workspace to which the bitstream(s) are to be added.
 	 * @param communityId					The id of the community to which the bitstream(s) belong to.
