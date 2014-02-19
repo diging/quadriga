@@ -590,6 +590,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
 		if(projectid == null || projectid.equals(""))
@@ -653,6 +656,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException {
 		try {
@@ -679,6 +685,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException {
 		List<INetwork> networkList = null;
@@ -717,6 +726,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<INetwork> getNetworkListOfOtherEditors(IUser user, List<String> networkStatus)	throws QuadrigaStorageException {
 		List<INetwork> networkList = new ArrayList<INetwork>();
@@ -767,7 +779,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
-
+	/**
+	 * 
+	 * @param network
+	 * @param username
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	public int updateNetwork(INetwork network, String username) throws QuadrigaStorageException
 	{
 		if(network == null || username == null || username.equals(""))
