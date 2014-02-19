@@ -7,8 +7,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanForm;
 
 @Service
 public class ProfileAddValidator implements Validator {

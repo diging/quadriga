@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
+import edu.asu.spring.quadriga.service.profile.ISearchResultBackBeanFormManager;
 
 /**
  * this class takes items returned by viaf service and copies it in the searchresultbackbean 
@@ -20,7 +19,7 @@ import edu.asu.spring.quadriga.profile.impl.SearchResultBackBeanForm;
  */
 
 @Service
-public class SearchResultBackBeanFormManager {
+public class SearchResultBackBeanFormManager implements ISearchResultBackBeanFormManager {
 	
 	
 	@Autowired
@@ -37,7 +36,7 @@ public class SearchResultBackBeanFormManager {
  * @param term			term entered by the user
  * @return	list of copied searchresults of SearchResultBackBean class returned from viaf service
  */
-	
+	@Override
 	public List<SearchResultBackBean> getsearchResultBackBeanList(String serviceId, String term){
 		
 		
