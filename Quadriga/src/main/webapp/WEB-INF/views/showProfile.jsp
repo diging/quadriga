@@ -47,7 +47,11 @@ $("input[name='deselectAll']").button().click(function(){
 
 </script> 
 
-<h1>CURRENT ADDED PROFILES</h1>
+<header>
+		<h2>Existing Profiles</h2>
+		<span class="byline">Profiles you have added</span>
+	</header>
+
 <br>
 
 <c:choose>
