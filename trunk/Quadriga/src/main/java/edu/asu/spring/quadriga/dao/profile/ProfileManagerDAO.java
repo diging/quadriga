@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.dto.QuadrigaUserprofileDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserprofileDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 @Repository
 public class ProfileManagerDAO extends DAOConnectionManager

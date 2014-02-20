@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.db.profile;
 import java.util.List;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.impl.SearchResultBackBean;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 public interface IDBConnectionProfileManager {
 	
