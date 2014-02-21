@@ -126,14 +126,6 @@ public class NetworkRestController {
 		if(networkName == null ||  networkName.isEmpty()){
 			response.setStatus(404);
 			return "Please provide network name as a part of post parameters";
-		}else{
-
-			boolean result=networkManager.hasNetworkName(networkName,user);
-			logger.debug(" Network name status : "+result);
-			if(result){
-				response.setStatus(409);
-				return "Network Name already Exist";
-			}
 		}
 
 
