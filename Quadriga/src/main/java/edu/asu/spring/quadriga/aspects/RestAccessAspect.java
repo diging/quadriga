@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.aspects;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,9 @@ public class RestAccessAspect
 	@Autowired
 	private RestAccessException restAccessException;
 	
+	private static final Logger logger = LoggerFactory
+			.getLogger(RestAccessAspect.class);
+	
 	@Autowired
 	private IAuthorizationManager authorizationManager;
 	
@@ -31,7 +36,7 @@ public class RestAccessAspect
 	 * @return ProceedingJoinPoint object
 	 * @throws Throwable
 	 */
-	@Around("within(edu.asu.spring.quadriga.web..*) && @annotation(noCheck)")
+	@Around("within(edu.asu.spring.quadriga.rest..*) && @annotation(noCheck)")
 	public Object chkProjectAuthorization(ProceedingJoinPoint pjp, NoAuthorizationCheck noCheck) throws Throwable 
 	{
 		return pjp.proceed();
@@ -47,7 +52,7 @@ public class RestAccessAspect
 	 *           if he have access returns ProceedingJointPoint object
 	 * @throws Throwable
 	 */
-	@Around("within(edu.asu.spring.quadriga.web..*) && @annotation(checks)")
+	@Around("within(edu.asu.spring.quadriga.rest..*) && @annotation(checks)")
 	public Object chkAuthorization(ProceedingJoinPoint pjp, RestAccessPolicies checks) throws Throwable  
 	{
 		boolean haveAccess;

@@ -37,6 +37,7 @@ public interface RoleNames {
 	
 	//concept collection roles constants
 	public static final String ROLE_CC_COLLABORATOR_ADMIN = "ADMIN";
-	public static final String ROLE_CC_COLLABORATOR_RAD_WRITE = "CC_READ_WRITE_ACCESS";
+	public static final String ROLE_CC_COLLABORATOR_READ_WRITE = "CC_READ_WRITE_ACCESS";
+	public static final String ROLE_CC_COLLABORATOR_READ = "CC_READ_ACCESS";
 	
 }

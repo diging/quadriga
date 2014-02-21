@@ -187,7 +187,7 @@ public class ConceptCollectionRestController {
 	 * @throws QuadrigaStorageException
 	 * @throws RestException 
 	 */
-	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_RAD_WRITE} )})
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION_REST,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE} )})
 	@ResponseBody
 	@RequestMapping(value = "rest/syncconcepts/{conceptCollectionID}", method = RequestMethod.POST)
 	public String addConceptsToConceptColleciton(
@@ -266,6 +266,7 @@ public class ConceptCollectionRestController {
 	 * @throws RestException
 	 * @throws Exception
 	 */
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@RequestMapping(value = "rest/workspace/{workspaceId}/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String listWorkspaceConceptCollections(
@@ -326,7 +327,7 @@ public class ConceptCollectionRestController {
 	 * @throws QuadrigaAccessException
 	 * @throws Exception
 	 */
-	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
+	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR} )})
 	@ResponseBody
 	@RequestMapping(value = "rest/workspace/{workspaceId}/createcc", method = RequestMethod.POST)
 	public String addConceptCollectionsToWorkspace(
