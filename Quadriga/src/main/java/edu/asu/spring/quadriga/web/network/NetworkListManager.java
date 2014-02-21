@@ -136,15 +136,11 @@ public class NetworkListManager {
 			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
 		}
 		jsonstring1 = jsonstring1+"]";
-		logger.info(jsonstring1);
-	
-		logger.info("Json object formed and sent to the JSP");
 
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("jsonstring",jsonstring1);
 		model.addAttribute("networkid",nwId);
-		logger.debug("json string:"+ jsonstring1);
-		logger.info("network id:"+nwId);
+
 		
 		return "auth/networks/visualize";
 	}

@@ -667,9 +667,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			// Adding Subject into node list 
 			if(!d3NodeIdMap.containsKey(subjectNodeId)){
 				ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
-				List<String> stmtList = d3NodeSubject.getStatementIdList();
-				stmtList.add(stmtId);
-				d3NodeSubject.setStatementIdList(stmtList);
+				//List<String> stmtList = d3NodeSubject.getStatementIdList();
+				//stmtList.add(stmtId);
+				//d3NodeSubject.setStatementIdList(stmtList);
 				d3NodeSubject.setNodeName(nodeObject.getSubject());
 				d3NodeSubject.setNodeId(subjectNodeId);
 				d3NodeSubject.setGroupId(ID3Constant.RELATION_EVENT_SUBJECT_TERM);
@@ -681,9 +681,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			// Adding Object into node list
 			if(!d3NodeIdMap.containsKey(objectNodeId)){
 				ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
-				List<String> stmtList = d3NodeObject.getStatementIdList();
-				stmtList.add(stmtId);
-				d3NodeObject.setStatementIdList(stmtList);
+				//List<String> stmtList = d3NodeObject.getStatementIdList();
+				//stmtList.add(stmtId);
+				//d3NodeObject.setStatementIdList(stmtList);
 				d3NodeObject.setNodeName(nodeObject.getObject());
 				d3NodeObject.setNodeId(objectNodeId);
 				d3NodeObject.setGroupId(ID3Constant.RELATION_EVENT_OBJECT_TERM);

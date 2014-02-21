@@ -136,8 +136,7 @@ public class NetworkRestController {
 			}
 		}
 
-		logger.info(" Network Name : "+ networkName);
-		logger.info(" Workspace id : "+ workspaceid);
+
 		xml=xml.trim();
 		if (xml.isEmpty()) {
 			response.setStatus(406);
@@ -158,7 +157,7 @@ public class NetworkRestController {
 
 			if(networkId.isEmpty()){
 				response.setStatus(404);
-				return "Text files doesn't belongs to this workspace.";
+				return "Text files don't belongs to this workspace.";
 			}
 
 			//			Below code would help in printing XML from qstore
