@@ -21,7 +21,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceItem;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
-import edu.asu.spring.quadriga.web.rest.DspaceRestController;
+import edu.asu.spring.quadriga.rest.DspaceRestController;
 
 /**
  * The class representation of the Collection got from Dspace repostiory. It also loads the dependent items within this collection.

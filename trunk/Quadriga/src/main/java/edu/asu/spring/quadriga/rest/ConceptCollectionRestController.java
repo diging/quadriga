@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.rest;
+package edu.asu.spring.quadriga.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -422,7 +422,7 @@ public class ConceptCollectionRestController {
 
 		}
 
-		String msg = workspaceCCManager.addWorkspaceCC(workspaceId, ccId,
+		workspaceCCManager.addWorkspaceCC(workspaceId, ccId,
 				user.getUserName());
 
 		response.setStatus(200);

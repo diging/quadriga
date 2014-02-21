@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.asu.spring.quadriga.web.rest;
+package edu.asu.spring.quadriga.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
