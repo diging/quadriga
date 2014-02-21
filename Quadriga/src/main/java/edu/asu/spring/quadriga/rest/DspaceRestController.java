@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.web.rest;
+package edu.asu.spring.quadriga.rest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
