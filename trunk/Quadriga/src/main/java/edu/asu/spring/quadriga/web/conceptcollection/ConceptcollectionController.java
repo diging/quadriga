@@ -150,7 +150,7 @@ public class ConceptcollectionController {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_RAD_WRITE} )})
+	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE} )})
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/searchitems", method = RequestMethod.GET)
 	public String conceptSearchHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model)
 			throws QuadrigaStorageException {
@@ -175,7 +175,7 @@ public class ConceptcollectionController {
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException
 	 */
-	@AccessPolicies({@ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1,userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_RAD_WRITE})})
+	@AccessPolicies({@ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1,userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN,RoleNames.ROLE_CC_COLLABORATOR_READ_WRITE})})
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
 	public String saveItemsHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
