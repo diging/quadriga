@@ -26,5 +26,7 @@ public interface IDBConnectionRetrieveProjCollabManager
 	 */
 	public abstract List<ICollaborator> getProjectCollaborators(String projectId)
 			throws QuadrigaStorageException;
+	
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
 }

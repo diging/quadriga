@@ -24,4 +24,6 @@ public interface IDBConnectionArchiveWSManager
 	 */
 	public abstract void archiveWorkspace(String workspaceIdList, boolean archive,
 			String wsUser) throws QuadrigaStorageException;
+	
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 }
