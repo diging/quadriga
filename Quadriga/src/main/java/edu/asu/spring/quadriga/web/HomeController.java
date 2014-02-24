@@ -14,9 +14,11 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -25,23 +27,22 @@ import edu.asu.spring.quadriga.domain.implementation.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
+import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
-
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanForm;
-
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
-@SessionAttributes("serviceBackBean")
+@SessionAttributes("ServiceBackBean")
 public class HomeController {
 	
 	@Autowired
@@ -88,6 +89,13 @@ public class HomeController {
 		}
 		
 	}
+	
+	@ModelAttribute("ServiceBackBean")
+	public ServiceBackBean getServiceBackBean() {
+	return new ServiceBackBean();
+
+	}
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -161,7 +169,7 @@ public class HomeController {
 	 */
 	
 	@RequestMapping(value="auth/profile/addnew", method = RequestMethod.GET)
-	public String showSearchForm(Model model, Principal principal) throws QuadrigaStorageException
+	public String showSearchForm(Model model, Principal principal, @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean) throws QuadrigaStorageException
 	{
 		
 		model.addAttribute("ServiceBackBean",new ServiceBackBean());
@@ -228,7 +236,7 @@ public class HomeController {
 	 * @throws QuadrigaStorageException
 	 */
 	@RequestMapping(value="/auth/profile/delete",method = RequestMethod.POST)
-	public String deleteSearchResult(@ModelAttribute("SearchResultBackBean") SearchResultBackBeanForm searchResultBackBeanForm, 
+	public String deleteSearchResult(@ModelAttribute("SearchResultBackBean") SearchResultBackBeanForm searchResultBackBeanForm,  
 			Principal principal, Model model) throws QuadrigaStorageException
 	{
 		String errmsg = null;	
@@ -264,6 +272,55 @@ public class HomeController {
 		
 		return "auth/home/showProfile";
 	}
+	
+	@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
+	public String addSearchResult( @ModelAttribute("ServiceBackBean") ServiceBackBean serviceBackBean, @ModelAttribute("SearchResultBackBeanForm")  SearchResultBackBeanForm searchResultBackBeanForm, BindingResult result,
+	@PathVariable("serviceid") String serviceid, @PathVariable("term") String term, Model model, Principal principal) throws QuadrigaStorageException
+	{
+		
+		Map<String, String> serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
+		IService serviceObj = serviceRegistry.getServiceObject(serviceid);
+						
+		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
+				
+		if(result.hasErrors())
+		{
+			searchResultBackBeanForm.setSearchResultList(backBeanSearchResults);
+			model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
+			return "auth/home/profile";
+		}
+		else
+		{
+			for(SearchResultBackBean resultBackBean: backBeanSearchResults)
+			{
+				if(resultBackBean.getIsChecked() == true)
+				{
+					userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);
+					
+				}
+				else
+				{
+					model.addAttribute("ServiceBackBean", serviceBackBean);
+					model.addAttribute("serviceNameIdMap", serviceRegistry.getServiceNameIdMap());
+					
+					//List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
+					searchResultBackBeanForm.setSearchResultList(backBeanSearchResults);
+					model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
+					model.addAttribute("success",2);
+					model.addAttribute("errmsg", "please select some record");
+					return "auth/home/profile";
+				}
+			}
+			
+			List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
+			searchResultBackBeanForm.setSearchResultList(resultLists);
+			model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
+			
+		}
+		
+		return "auth/home/showProfile";
+	}
+
 	
 
 }

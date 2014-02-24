@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
 @Controller
 public class UserProfileAddController {
 	
-	@Autowired
+	/*@Autowired
 	private IUserProfileManager profileManager;
 	
 	@Autowired
@@ -58,7 +58,7 @@ public class UserProfileAddController {
 	
 	@Autowired
 	private ServiceBackBean serviceBackBean;
-
+*/
 	/*@InitBinder
 	protected void initBinder(WebDataBinder validateBinder) throws Exception {
 		validateBinder.setValidator(profileValidator);
@@ -78,7 +78,7 @@ public class UserProfileAddController {
 	 * @throws QuadrigaStorageException
 	 */
 	
-	@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
+	/*@RequestMapping(value = "auth/profile/{serviceid}/{term}/add", method = RequestMethod.POST)
 	public String addSearchResult( @ModelAttribute("SearchResultBackBeanForm")  SearchResultBackBeanForm searchResultBackBeanForm, BindingResult result,
 	@PathVariable("serviceid") String serviceid, @PathVariable("term") String term, Model model, Principal principal) throws QuadrigaStorageException
 	{
@@ -123,7 +123,7 @@ public class UserProfileAddController {
 		
 		return "auth/home/showProfile";
 	}
-}
+}*/
 
 
 /*if(errmsg.equals(""))
@@ -142,3 +142,4 @@ else
 	model.addAttribute("serviceNameIdMap",serviceNameIdMap);	
 }
 */
+}
