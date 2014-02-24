@@ -204,6 +204,7 @@
 	<bean id="workspaceDTOMapper" class="edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper"/>
 	<!-- DTO mapper class beans END -->
 	
+	<!-- user profile package -->
 	<bean id="serviceRegistry" class="edu.asu.spring.quadriga.profile.impl.ServiceRegistry" />
 	
 	<bean id="searchResult" class="edu.asu.spring.quadriga.profile.impl.SearchResult" />
@@ -217,6 +218,11 @@
 	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultFactory" />
 	
 	<bean id="viafManager" class="edu.asu.spring.quadriga.service.impl.viaf.ViafManager"/>
+	
+	<bean id="userProfileManager" class="edu.asu.spring.quadriga.service.impl.UserProfileManager" />
+	
+	<bean id="searchResultBackBeanFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultBackBeanFactory" />
+	<!-- user profile package beans END -->
 	
 	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
 	
