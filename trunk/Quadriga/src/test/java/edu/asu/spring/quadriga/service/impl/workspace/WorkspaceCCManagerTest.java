@@ -27,7 +27,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectConceptCollectionTest;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -89,7 +88,7 @@ public class WorkspaceCCManagerTest {
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(DBConnectionProjectConceptCollectionTest.class);
+			.getLogger(WorkspaceCCManagerTest.class);
 
 	private Connection connection;
 

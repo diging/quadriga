@@ -6,11 +6,12 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManager;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 
 @Repository
-public class ArchiveWorkspaceManagerDAO implements IDBConnectionArchiveWSManager 
+public class ArchiveWorkspaceManagerDAO extends DAOConnectionManager implements IDBConnectionArchiveWSManager 
 {
 	@Autowired
 	private SessionFactory sessionFactory;

@@ -25,7 +25,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.db.sql.workbench.DBConnectionProjectDictionaryTest;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -84,7 +83,7 @@ public class WorkspaceDictionaryManagerTest {
 	private IQuadrigaRoleFactory quadrigaRoleFactory;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(DBConnectionProjectDictionaryTest.class);
+			.getLogger(WorkspaceDictionaryManagerTest.class);
 	
 	
 	private Connection connection;
@@ -231,7 +230,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(project1.getDescription().equals("description"), true);
@@ -251,7 +249,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(workspace1.getDescription().equals("description"), true);
@@ -314,7 +311,6 @@ public class WorkspaceDictionaryManagerTest {
 				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
 						getDictionaryID("testDictionary"), "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -323,7 +319,6 @@ public class WorkspaceDictionaryManagerTest {
 				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Iterator<IDictionary> I = dictList.iterator();
@@ -351,7 +346,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(project1.getDescription().equals("description"), true);
@@ -371,7 +365,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(workspace1.getDescription().equals("description"), true);
@@ -387,7 +380,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 				dictionaryManager.addNewDictionary(dictionary);
 			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
@@ -399,7 +391,6 @@ public class WorkspaceDictionaryManagerTest {
 					dictionaryList = dbConnection.getDictionaryOfUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				Iterator<IDictionary> I = dictionaryList.iterator();
@@ -434,7 +425,6 @@ public class WorkspaceDictionaryManagerTest {
 				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
 						getDictionaryID("testDictionary"), "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -443,7 +433,6 @@ public class WorkspaceDictionaryManagerTest {
 				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Iterator<IDictionary> I = dictList.iterator();
@@ -471,7 +460,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(project1.getDescription().equals("description"), true);
@@ -491,7 +479,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(workspace1.getDescription().equals("description"), true);
@@ -507,7 +494,6 @@ public class WorkspaceDictionaryManagerTest {
 			try {
 			  dictionaryManager.addNewDictionary(dictionary);
 			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
@@ -519,7 +505,6 @@ public class WorkspaceDictionaryManagerTest {
 					dictionaryList = dbConnection.getDictionaryOfUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				Iterator<IDictionary> I = dictionaryList.iterator();
@@ -554,7 +539,6 @@ public class WorkspaceDictionaryManagerTest {
 				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
 						getDictionaryID("testDictionary"), "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -581,7 +565,6 @@ public class WorkspaceDictionaryManagerTest {
 				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			I = dictList.iterator();

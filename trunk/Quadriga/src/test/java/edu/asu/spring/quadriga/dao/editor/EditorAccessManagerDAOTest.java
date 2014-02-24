@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.dao.dictionary.editor;
+package edu.asu.spring.quadriga.dao.editor;
 
 import static org.junit.Assert.assertEquals;
 

@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -18,7 +19,7 @@ import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 @Repository
-public class RetrieveProjectCollaboratorManagerDAO implements IDBConnectionRetrieveProjCollabManager
+public class RetrieveProjectCollaboratorManagerDAO extends DAOConnectionManager implements IDBConnectionRetrieveProjCollabManager
 {
 	@Autowired
 	private SessionFactory sessionFactory;
