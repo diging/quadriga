@@ -16,12 +16,25 @@ function changeLayout(json,networkid,path,type)
 	d3init(json,networkid,path,type);
 }
 </script>
-
-<button onclick="changeLayout(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'tree')">Tree layout</button>
+<script type="text/javascript">
+  $(function() {
+	  
+	var availableTags = [];
+	<c:forEach var="node" items="${nodeList}">
+		availableTags.push("${node.nodeName}");                                  
+	</c:forEach>
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  });
+  </script>
 
 <body onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />  
 
-   
+  <div class="ui-widget">
+  <label for="tags">Tags: </label> 
+  <input id="tags">  <button>Search</button>
+</div> 
     
   
 

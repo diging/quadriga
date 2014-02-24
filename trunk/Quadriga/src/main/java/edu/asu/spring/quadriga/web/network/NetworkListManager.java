@@ -230,6 +230,7 @@ public class NetworkListManager {
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		model.addAttribute("jsonstring",networkManager.getD3JSon());
+		model.addAttribute("nodeList",networkManager.getD3NodeList());
 		return "auth/editing/editnetworksnew";
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -109,5 +110,8 @@ public interface INetworkManager {
 	String getStatementId();
 
 	void setStatementId(String statementId);
+
+	List<ID3Node> getD3NodeList();
+
 
 }
