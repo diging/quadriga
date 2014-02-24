@@ -126,6 +126,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		setD3NodeIdMap(new HashMap<String, Integer>());
 	}
 	
+	@Override
 	public List<ID3Node> getD3NodeList() {
 		return d3NodeList;
 	}
