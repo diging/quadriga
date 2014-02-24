@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -23,13 +24,14 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Repository
-public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollabManager {
+public class RetrieveWSCollabManagerDAO extends DAOConnectionManager implements IDBConnectionRetrieveWSCollabManager {
 
 	@Autowired
 	SessionFactory sessionFactory;
@@ -120,11 +122,22 @@ public class RetrieveWSCollabManagerDAO implements IDBConnectionRetrieveWSCollab
 		List<IUser> userList = new ArrayList<IUser>();
 		try
 		{
+			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+			
 			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username NOT IN (Select quadrigaUserDTO.username from WorkspaceCollaboratorDTO wrkCollab where wrkCollab.workspaceDTO.workspaceid =:workspaceid)");
 			query.setParameter("workspaceid", workspaceId);
 			
 			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
-			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
+			
+			//remove the logged in user name
+			QuadrigaUserDTO workspaceOwner = workspace.getWorkspaceowner();
+			
+			if(quadrigaUserDTOList != null)
+			{
+				quadrigaUserDTOList.remove(workspaceOwner);
+			}
+			
+			if(quadrigaUserDTOList.size() > 0)
 			{
 				userList = userDTOMapper.getUsers(quadrigaUserDTOList);
 			}
