@@ -32,7 +32,7 @@ function changeLayout(json,networkid,path,type)
 <body onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>,'force');" />  
 
   <div class="ui-widget">
-  <label for="tags">Tags: </label> 
+  <label for="tags"></label> 
   <input id="tags">  <button>Search</button>
 </div> 
     

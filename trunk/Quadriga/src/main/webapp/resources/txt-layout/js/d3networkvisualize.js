@@ -324,7 +324,6 @@ function d3init(graph, networkId, path,type) {
 					// This function annotate for node
 					// This works on annot_node tag in the pop.
 					$('#annot_node').click(function() {
-						alert("node id:"+d.id);
 						//Type = node
 						var type1 ="node";
 
@@ -351,7 +350,7 @@ function d3init(graph, networkId, path,type) {
 						// Appending to D3 view
 						$('#inner-details').html(html1);
 						var content = "<h3>Annotations</h3>";
-						 content += "<div><ul>";
+						 
 						// ajax Call to get annotation for a node.id
 						// Used to add the old annotation in to the popup view
 						$.ajax({
@@ -360,24 +359,20 @@ function d3init(graph, networkId, path,type) {
 							data: "nodeid="+d.id+"&type="+type1,
 							dataType: 'json',
 							success : function(data) {
-								//alert(data);
-								
+								var cnt = 0;
+								content += "<ol>";
 							$.each(data.text, function(key,value){
-									alert(value);
-				                    content += '<li>'+value+'</li>';    
-			                   // $(content).appendTo("#annot_details");
+				                    content += ++cnt +'.<li>'+value.name+'</li>';  
 			                });
-								
-								//$('#'+text1ID+'').val(data); 
-									
+								content += "</ol>"
+								$('#annot_details').html(content);
 							},
 							error: function() {
 								alert("error");
 							}
 							
 						});
-						content += '<li >hi</li>';
-						content += "</ul></div>"
+						
 						$('#annot_details').html(content);
 						event.preventDefault();
 
@@ -432,23 +427,22 @@ function d3init(graph, networkId, path,type) {
 						// Sending the HTML code to D3 
 						$('#inner-details').html(html2);
 						var content = "<h3>Annotations</h3>";
-						$('#annot_details').html(content);
+						
 						// Ajax call to get annotation for node.id
 						// Used to add the old annotation in to the popup view
 						$.ajax({
 							url : path+"/auth/editing/getAnnotation/"+networkId,
 							type : "GET",
-							data: "nodeid="+node.id+"&type="+type1,
+							data: "nodeid="+d.id+"&type="+type1,
+							dataType: 'json',
 							success : function(data) {
-								
-								 content += "<div><ul>";
-								$.each(data.returned_val, function(value){
-				                    content += '<li id='+value+'>'+value+'</li>';    
-				                   // $(content).appendTo("#annot_details");
-				                });
-								content += "</ul></div>"
-								//	$('#annot_details').html(content);
-								//$('#'+text1ID+'').append(data);
+								var cnt = 0;
+								content += "<ol>";
+							$.each(data.text, function(key,value){
+				                    content += ++cnt +'.<li>'+value.name+'</li>';  
+			                });
+								content += "</ol>"
+								$('#annot_details').html(content);
 							},
 							error: function() {
 								alert("error");
