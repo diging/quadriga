@@ -74,6 +74,7 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
+import edu.asu.spring.quadriga.domain.implementation.D3Node;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
@@ -116,48 +117,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	private List<ID3Link> d3LinkList  = new ArrayList<ID3Link>();
 
 	private int nodeIndex =0;
-	
-
-	@Override
-	public void setIntialValueForD3JSon(){
-		setD3NodeList(new ArrayList<ID3Node>());
-		setD3LinkList(new ArrayList<ID3Link>());
-		setNodeIndex(0);
-		setD3NodeIdMap(new HashMap<String, Integer>());
-	}
-	
-	@Override
-	public List<ID3Node> getD3NodeList() {
-		return d3NodeList;
-	}
-
-	public void setD3NodeList(List<ID3Node> d3NodeList) {
-		this.d3NodeList = d3NodeList;
-	}
-
-	public Map<String, Integer> getD3NodeIdMap() {
-		return d3NodeIdMap;
-	}
-
-	public void setD3NodeIdMap(Map<String, Integer> d3NodeIdMap) {
-		this.d3NodeIdMap = d3NodeIdMap;
-	}
-
-	public List<ID3Link> getD3LinkList() {
-		return d3LinkList;
-	}
-
-	public void setD3LinkList(List<ID3Link> d3LinkList) {
-		this.d3LinkList = d3LinkList;
-	}
-
-	public int getNodeIndex() {
-		return nodeIndex;
-	}
-
-	public void setNodeIndex(int nodeIndex) {
-		this.nodeIndex = nodeIndex;
-	}
 
 
 
@@ -200,32 +159,129 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	
 	private String statementId ;
 
+	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setIntialValueForD3JSon(){
+		setD3NodeList(new ArrayList<ID3Node>());
+		setD3LinkList(new ArrayList<ID3Link>());
+		setNodeIndex(0);
+		setD3NodeIdMap(new HashMap<String, Integer>());
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<ID3Node> getD3NodeList() {
+		return d3NodeList;
+	}
+
+	/**
+	 * Setter for {@link List} of {@link ID3Node}, used to access when there is need for other classes classes to use networkManager and D3 JQuery
+	 * @param d3NodeList 		List of type {@link ID3Node}
+	 */
+	public void setD3NodeList(List<ID3Node> d3NodeList) {
+		this.d3NodeList = d3NodeList;
+	}
+
+	/**
+	 * Getter for Map of node details. Used to add unique values in the json builder for D3 JSon 
+	 * @return 			A map of {@link D3Node}.name occurances and index
+	 */
+	public Map<String, Integer> getD3NodeIdMap() {
+		return d3NodeIdMap;
+	}
+
+	/**
+	 * Setter for Map of node details. Used to add unique values in the json builder for D3 JSon
+	 * @param d3NodeIdMap		A map of {@link D3Node}.name occurances and index
+	 */
+	public void setD3NodeIdMap(Map<String, Integer> d3NodeIdMap) {
+		this.d3NodeIdMap = d3NodeIdMap;
+	}
+
+	/**
+	 * Getter for {@link List} of {@link ID3Link} , used to access when there is need for other classes classes to use networkManager and D3 JQuery
+	 * return 		 List of type {@link ID3Link}
+	 */
+	public List<ID3Link> getD3LinkList() {
+		return d3LinkList;
+	}
+
+	/**
+	 * Setter for {@link List} of {@link ID3Link}, used to access when there is need for other classes classes to use networkManager and D3 JQuery
+	 * @param d3LinkList 		List of type {@link ID3Link}
+	 */
+	public void setD3LinkList(List<ID3Link> d3LinkList) {
+		this.d3LinkList = d3LinkList;
+	}
+
+	/**
+	 * Getter for {@link ID3Node} index in the map 
+	 * @return			Returns the index of the node in the map
+	 */
+	public int getNodeIndex() {
+		return nodeIndex;
+	}
+
+	/**
+	 * Setter for {@link ID3Node} index in the map
+	 * @param nodeIndex			Node index in the map
+	 */
+	public void setNodeIndex(int nodeIndex) {
+		this.nodeIndex = nodeIndex;
+	}
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getStatementId() {
 		return statementId;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setStatementId(String statementId) {
 		this.statementId = statementId;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<List<Object>> getRelationEventPredicateMapping(){
 		return this.relationEventPredicateMapping;
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setRelationEventPredicateMapping( List<List<Object>> relationEventPredicateMapping){
 		this.relationEventPredicateMapping=relationEventPredicateMapping;
 	}
 
 
+	/**
+	 * Getter for DSpace file existance in the network XML	
+	 * @return				Returns boolean value of DSpace existance
+	 */
 	public boolean getFileExist(){
 		return this.fileExist;
 	}
 
+	/**
+	 * Setter for DSpace file existance in the network XML	
+	 * @param fileExist				boolean value of DSpace existance
+	 */
 	public void setFileExist(boolean fileExist){
 		this.fileExist = fileExist;
 	}
