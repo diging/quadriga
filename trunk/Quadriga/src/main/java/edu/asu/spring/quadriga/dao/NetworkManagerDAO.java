@@ -524,7 +524,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				String networkId) throws QuadrigaStorageException {
 		//String[] annotationArray = new String[2];
 		try {
-			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<>();
+			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworksAnnotationsDTO>();
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
