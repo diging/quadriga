@@ -69,17 +69,7 @@ public class EditingNetworkAnnotationsController {
 		IUser user = userManager.getUserDetails(principal.getName());
 		logger.info("network ID:" + networkId);
 		try {
-			String arr[] = null;
 			logger.debug("Came to Save Annotation : object type :" + objectType + " id : " +id);
-			//arr = editingNetworkAnnotationManager.getAnnotation(objectType,id , user.getUserName(),networkId);
-//			if(arr[0] == null && arr[1] == null){
-//				logger.debug("There is no annotation for this object");
-//				editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, id,
-//					annotationText, user.getUserName(),objectType);
-//			} else {
-//				logger.debug("Updating the annoation "+ arr.toString());
-//				editingNetworkAnnotationManager.updateAnnotationToNetwork(arr[1], annotationText);
-//			}
 			editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, id,
 					annotationText, user.getUserName(),objectType);
 			
@@ -121,12 +111,12 @@ public class EditingNetworkAnnotationsController {
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){
-				JSONObject j = new JSONObject();
+				
 				for (int i = 0; i < resultList.size(); i++) {
-					j.put(resultList.get(i).getAnnotationid(), resultList.get(i).getAnnotationtext());
-					
+					JSONObject j = new JSONObject();
+					j.put("name", resultList.get(i).getAnnotationtext());
+					ja.put(j);
 				}
-				ja.put(j);
 				j1.put("text", ja);
 			annotation = j1.toString();
 			}
