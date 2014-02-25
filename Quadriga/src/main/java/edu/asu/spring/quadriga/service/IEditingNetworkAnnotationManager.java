@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.service;
 
+import java.util.List;
+
+import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IEditingNetworkAnnotationManager {
 
-	public abstract String[] getAnnotation(String type, String id, String userid,String networkId)
+	public abstract List<NetworksAnnotationsDTO> getAnnotation(String type, String id, String userid,String networkId)
 			throws QuadrigaStorageException;
 
 	public abstract String addAnnotationToNetwork(String networkId,

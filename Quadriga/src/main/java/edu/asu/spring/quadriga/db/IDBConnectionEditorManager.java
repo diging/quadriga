@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionEditorManager {
@@ -68,7 +69,7 @@ public interface IDBConnectionEditorManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String[] getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException;
+	public abstract List<NetworksAnnotationsDTO> getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException;
 	
 	/**
 	 * Update annotation of networks

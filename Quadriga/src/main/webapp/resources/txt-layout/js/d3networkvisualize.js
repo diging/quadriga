@@ -70,7 +70,7 @@ function d3init(graph, networkId, path,type) {
 	.attr("class", "link")
 	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
 	.attr("marker-end", "url(#arrow)")
-	.on("mouseover", fade(.1)).on("mouseout", fade(1));;
+	.on("mouseover", fadeLinks(.1)).on("mouseout", fadeLinks(1));;
 	// Dragging the nodes
 	var node_drag = d3.behavior.drag()
 	.on("dragstart", dragstart)
@@ -119,24 +119,21 @@ function d3init(graph, networkId, path,type) {
 //	.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
 	var gnodes = svg.selectAll('g.gnode')
 	.data(graph.nodes)
-	.attr("width",50)
-	.attr("height",50)
-	.attr("r",10)
 	.enter();
 
-	var node = gnodes.append('path')
+	var node = gnodes.append('circle')
 	.attr("class", "node")
 	.attr("r",10) 	
-	.attr("d", d3.svg.symbol()
-			.type(function(d) {
-				var type = d.group;
-				if (type == 0){
-					type = 2;
-				}
-				else{
-					type = 0;
-				}
-				return d3.svg.symbolTypes[type]; }))
+//	.attr("d", d3.svg.symbol()
+//			.type(function(d) {
+//				var type = d.group;
+//				if (type == 0){
+//					type = 2;
+//				}
+//				else{
+//					type = 0;
+//				}
+//				return d3.svg.symbolTypes[type]; }))
 				.style("fill", function(d) { return color(d.group); })
 				.call(node_drag)
 				// works on right click
@@ -154,6 +151,10 @@ function d3init(graph, networkId, path,type) {
 				.on("mouseover", fade(.1)).on("mouseout", fade(1));;
 //				.call(force.drag);
 
+				node.append("svg:circle")
+			      .attr("r", 10)
+			      
+				
 //				Appending labels to the nodes
 				var text = gnodes.append("text")
 				.call(node_drag)
@@ -174,11 +175,11 @@ function d3init(graph, networkId, path,type) {
 					.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
 
 					node.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; })
-					.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
-					.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+					//.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+					//.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
 					text.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; })
-					.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
-					.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+//					.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+//					.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
 				};
 
 //				Works on loading the network and placing the nodes randomly for view
@@ -220,26 +221,61 @@ function d3init(graph, networkId, path,type) {
 					};
 
 				}
-				function fadeLinks(opacity) {
+				
+				function highlightStmt(opacity) {
 					return function(d, i) {
 						//fade all elements
+//						d3.select(d.source).style("opacity", opacity);
+//						d3.select(d.target).style("opacity", opacity);
 						//fade all elements
 						svg.selectAll("circle, line").style("opacity", opacity);
-						alert(d.source);
-						alert(d.target);
-						alert(i);
+
 						var associated_links = svg.selectAll("line").filter(function(d) {
-							//   return  d.source.index == i;
-							return d.source.index == i || d.target.index == i;
+							return  d.source.index == i;
+							// return d.source.index == i || d.target.index == i;
 						}).each(function(d) {
 							//unfade links and nodes connected to the current node
-							// d3.select(this).style("opacity", 1);
+							d3.select(this).style("opacity", 1);
 							//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
 							//  d3.select(d.source).style("opacity", 1);
 							//  d3.select(d.target).style("opacity", 1);
 							node.style("opacity", function(o) {
 								d3.select(o.source).style("opacity", 1);
 							});
+						});
+
+					};
+
+				}
+				
+				function fadeLinks(opacity) {
+					return function(d, i) {
+						//fade all elements
+						//fade all elements
+						svg.selectAll("circle, link").style("opacity", opacity);
+//						alert(d.source);
+//						alert(d.target);
+//						alert(i);
+						//alert("source:"+d.source.index);
+						//alert("target:"+d.target.index);
+					//	alert(i);
+						var associated_links = svg.selectAll("link").filter(function(d) {
+							//   return  d.source.index == i;
+							return d.source.index == i || d.target.index == i;
+						}).each(function(d) {
+							alert("here");
+							var stmtid = d.statementid;
+							alert(stmtid);
+							
+							//unfade links and nodes connected to the current node
+							// d3.select(this).style("opacity", 1);
+							//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
+							//  d3.select(d.source).style("opacity", 1);
+							//  d3.select(d.target).style("opacity", 1);
+//							node.style("opacity", function(o) {
+//								d3.select(o.source).style("opacity", 1);
+//							});
+							
 						});
 
 					};
@@ -288,7 +324,7 @@ function d3init(graph, networkId, path,type) {
 					// This function annotate for node
 					// This works on annot_node tag in the pop.
 					$('#annot_node').click(function() {
-
+						alert("node id:"+d.id);
 						//Type = node
 						var type1 ="node";
 
@@ -308,26 +344,41 @@ function d3init(graph, networkId, path,type) {
 						html1 += networkId + " method='POST' >";
 						html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
 						html1 += "<input  type='hidden' name='nodename' id='nodename' value="
-							+ node.id + " />";
+							+ d.id + " />";
 						html1 += "<input type='button' id='annot_submit' value='submit'>";
 						html1 += "</div></form>";
 
 						// Appending to D3 view
 						$('#inner-details').html(html1);
-						
+						var content = "<h3>Annotations</h3>";
+						 content += "<div><ul>";
 						// ajax Call to get annotation for a node.id
 						// Used to add the old annotation in to the popup view
 						$.ajax({
 							url : getAnnotationUrl,
 							type : "GET",
-							data: "nodeid="+node.id+"&type="+type1,
+							data: "nodeid="+d.id+"&type="+type1,
+							dataType: 'json',
 							success : function(data) {
-								$('#'+text1ID+'').val(data); 
+								//alert(data);
+								
+							$.each(data.text, function(key,value){
+									alert(value);
+				                    content += '<li>'+value+'</li>';    
+			                   // $(content).appendTo("#annot_details");
+			                });
+								
+								//$('#'+text1ID+'').val(data); 
+									
 							},
 							error: function() {
 								alert("error");
 							}
+							
 						});
+						content += '<li >hi</li>';
+						content += "</ul></div>"
+						$('#annot_details').html(content);
 						event.preventDefault();
 
 						// Saves the relation annotation to DB
@@ -336,7 +387,7 @@ function d3init(graph, networkId, path,type) {
 							$.ajax({
 								url : $('#annot_form').attr("action"),
 								type : "POST",
-								data :"nodename="+node.id+"&annotText="+annottext+"&type=node",
+								data :"nodename="+d.id+"&annotText="+annottext+"&type=node",
 								success : function() {
 									alert("done");
 									$('#'+popupId+'').dialog('close');
@@ -379,8 +430,9 @@ function d3init(graph, networkId, path,type) {
 						html2 += "</form></div>";
 
 						// Sending the HTML code to D3 
-						$('#inner-details').html(html2);;
-
+						$('#inner-details').html(html2);
+						var content = "<h3>Annotations</h3>";
+						$('#annot_details').html(content);
 						// Ajax call to get annotation for node.id
 						// Used to add the old annotation in to the popup view
 						$.ajax({
@@ -388,13 +440,21 @@ function d3init(graph, networkId, path,type) {
 							type : "GET",
 							data: "nodeid="+node.id+"&type="+type1,
 							success : function(data) {
-								$('#'+text1ID+'').append(data);
+								
+								 content += "<div><ul>";
+								$.each(data.returned_val, function(value){
+				                    content += '<li id='+value+'>'+value+'</li>';    
+				                   // $(content).appendTo("#annot_details");
+				                });
+								content += "</ul></div>"
+								//	$('#annot_details').html(content);
+								//$('#'+text1ID+'').append(data);
 							},
 							error: function() {
 								alert("error");
 							}
 						});
-
+						
 						// Saves the relation annotation to DB
 						$('#annot_submit1').click(function(event) {
 							var annottext = $('#'+text1ID+'').val();  

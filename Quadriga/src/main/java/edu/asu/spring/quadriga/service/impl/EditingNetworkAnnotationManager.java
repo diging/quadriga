@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
+import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 
@@ -23,12 +26,22 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 * @param networkId : network id
 	 * @return String[] - array of string containing the annotations entered by the user
 	 */
+	@SuppressWarnings("null")
 	@Override
 	@Transactional
-	public String[] getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException{
-		String arr[] = null;
-		arr = dbConnectionEditManager.getAnnotation(type,id , userid,networkId);
-		return arr;
+	public List<NetworksAnnotationsDTO> getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException{
+		String[] arr = null;
+		List<NetworksAnnotationsDTO> list = null;
+	//	arr = dbConnectionEditManager.getAnnotation(type,id , userid,networkId);
+		list = dbConnectionEditManager.getAnnotation(type,id , userid,networkId);
+//		if(list != null && list.size() > 0){
+//			arr = new String[list.size()];
+//			for (int i = 0; i < list.size(); i++) {
+//				NetworksAnnotationsDTO networksAnnotationsDTO = list.get(i);
+//				arr[i] = networksAnnotationsDTO.getAnnotationtext();
+//			}
+//		}
+		return list;
 	}
 	
 	/**

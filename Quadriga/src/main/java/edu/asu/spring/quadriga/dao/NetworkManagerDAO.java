@@ -518,10 +518,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String[] getAnnotation(String type, String id, String userId,
-			String networkId) throws QuadrigaStorageException {
-		String[] annotationArray = new String[2];
+//	public String[] getAnnotation(String type, String id, String userId,
+//			String networkId) throws QuadrigaStorageException {
+		public List<NetworksAnnotationsDTO> getAnnotation(String type, String id, String userId,
+				String networkId) throws QuadrigaStorageException {
+		//String[] annotationArray = new String[2];
 		try {
+			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<>();
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
@@ -531,13 +534,15 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			query.setParameter("objecttype", type);
 			query.setParameter("networkid", networkId);
 
-			NetworksAnnotationsDTO networkAnnotationsDTO = (NetworksAnnotationsDTO) query
-					.uniqueResult();
-			if (networkAnnotationsDTO != null) {
-				annotationArray[0] = networkAnnotationsDTO.getAnnotationtext();
-				annotationArray[1] = networkAnnotationsDTO.getAnnotationid();
-			}
-			return annotationArray;
+//			NetworksAnnotationsDTO networkAnnotationsDTO = (NetworksAnnotationsDTO) query
+//					.uniqueResult();
+//			if (networkAnnotationsDTO != null) {
+//				annotationArray[0] = networkAnnotationsDTO.getAnnotationtext();
+//				annotationArray[1] = networkAnnotationsDTO.getAnnotationid();
+//			}
+//			return annotationArray;
+			 networkAnnotationsDTOList =  query.list();
+			return networkAnnotationsDTOList;
 
 		} catch (Exception e) {
 			logger.error("Error in fetching annotation: ", e);
