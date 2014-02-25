@@ -10,11 +10,17 @@
 <!-- CSS Files -->
 <link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/base.css" rel="stylesheet" />
 <link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/ForceDirected.css" rel="stylesheet" />
+<link type="text/css" href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/d3.css" rel="stylesheet" />
+
 </head>
 
 
 
-<body onload="init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>);" /> 
+<body onload="d3init(<c:out value='${jsonstring}'></c:out>,<c:out value='${networkid}'></c:out>,<c:out value='"${pageContext.servletContext.contextPath}"'></c:out>);" />  
+
+   
+    
+  
 
 <div id="container">
 
@@ -27,10 +33,11 @@
 
 
 </div>
-
-<div id="center-container">
-    <div id="infovis"></div>    
-</div>
+<div id="chart"></div>
+<!-- <div id="center-container">
+     div id="infovis"></div   
+    <div id="chart"></div> 
+</div> -->
 
 <div id="right-container">
 
