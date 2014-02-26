@@ -155,7 +155,7 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 			
 			Query query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(ws.workspaceid) FROM WorkspaceDTO ws WHERE ws.workspaceowner.username =:username");
 			query.setParameter("username",userName);
-			count = ((Integer) query.iterate().next()).intValue();
+			count = ((Long) query.iterate().next()).intValue();
 			if(count > 0)
 			{
 				isAssociated = true;
@@ -189,7 +189,7 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 			Query query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(w.workspaceid) FROM WorkspaceCollaboratorDTO w" +
 					" WHERE w.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser AND " +
 					" w.workspaceCollaboratorDTOPK.collaboratorrole = :collaboratorrole");
-			count = ((Integer)query.iterate().next()).intValue();
+			count = ((Long)query.iterate().next()).intValue();
 			if(count > 0)
 			{
 				isAssociated = true;
