@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.workspace;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface ICheckWSSecurity {
@@ -32,6 +33,6 @@ public interface ICheckWSSecurity {
 			throws QuadrigaStorageException;
 
 	public abstract boolean chkIsCollaboratorWorkspaceAssociated(String userName,
-			String role) throws QuadrigaStorageException;
+			String role) throws QuadrigaStorageException,QuadrigaAccessException;
 
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
@@ -211,7 +212,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	
 	@Override
 	@Transactional
-	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,String role) throws QuadrigaStorageException
+	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,String role) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		boolean isAssociated;
 		isAssociated = false;

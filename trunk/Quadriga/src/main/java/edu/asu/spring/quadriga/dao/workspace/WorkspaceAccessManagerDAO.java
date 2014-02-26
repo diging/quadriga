@@ -9,6 +9,7 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @Repository
@@ -176,10 +177,11 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 
 	/**
 	 * {@inheritDoc}
+	 * @throws QuadrigaAccessException 
 	 */
 	@Override
 	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,
-			String role) throws QuadrigaStorageException 
+			String role) throws QuadrigaStorageException, QuadrigaAccessException 
 	{
 		int count;
 		boolean isAssociated;
@@ -201,7 +203,7 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		}
 		catch(Exception ex)
 		{
-			throw new QuadrigaStorageException();
+			throw new QuadrigaAccessException();
 		}
 		return isAssociated;
 	}
