@@ -48,8 +48,8 @@ $("input[name='deselectAll']").button().click(function(){
 </script> 
 
 <header>
-		<h2>Existing Profiles</h2>
-		<span class="byline">Profiles you have added</span>
+		<h2>Your Profile</h2>
+		<span class="byline">You linked your profile to the following authority file entries</span>
 	</header>
 
 <br>
