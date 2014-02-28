@@ -18,12 +18,18 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 @Service
 public class ConceptCollectionFactory implements IConceptCollectionFactory {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IConceptCollection createConceptCollectionObject() {
 		// TODO Auto-generated method stub
 		return new ConceptCollection();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IConcept createConcept()
 	{
