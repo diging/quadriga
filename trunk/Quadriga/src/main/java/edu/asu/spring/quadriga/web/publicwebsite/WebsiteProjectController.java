@@ -77,6 +77,14 @@ public class WebsiteProjectController {
 		return project;
 	}
 
+	
+	/**
+	 * This method displays the public or external Website for the particular project 
+	 * @param unixName
+	 * @param model
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
 	@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
 	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException {
 		
@@ -94,7 +102,7 @@ public class WebsiteProjectController {
 	}
 	
 	/**
-	 * Retrieves all the networks associated with the project based on the project unix name
+	 * This method retrieves all the networks associated with the project based on the project unix name
 	 * @param unixName
 	 * @param model
 	 * @return 
@@ -129,8 +137,7 @@ public class WebsiteProjectController {
 	}
 	
 	/**
-	 * Retrieve the network for visualization of the 
-	 * given network id 
+	 * This method gives the visualization of the network with the given network id 
 	 * @param networkId
 	 * @param model
 	 * @param principal
