@@ -48,6 +48,8 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
+import edu.asu.spring.quadriga.domain.impl.workspacexml.Workspace;
+import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -116,12 +118,11 @@ public class ConceptCollectionRestController {
 	 * http://<<URL>:<PORT>>/quadriga/rest/conceptcollections
 	 * http://localhost:8080/quadriga/rest/conceptcollections
 	 * 
-	 * @author SatyaSwaroop Boddu
-	 * @param userId
-	 * @param model
-	 * @return
+	 * @param model				ModelMap to handle the requests of client	
+	 * @param principal			{@link Principal} object to access authenticated user
+	 * @param req				{@link HttpServletRequest} object to access request param
+	 * @return					Produces XML of list of concept collection details
 	 * @throws RestException
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "rest/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
@@ -173,11 +174,11 @@ public class ConceptCollectionRestController {
 	 * hhttp://localhost:8080/quadriga/rest/syncconcepts/
 	 * 
 	 * @author Lohith Dwaraka
-	 * @param request
-	 * @param response
-	 * @param xml
-	 * @param accept
-	 * @return
+	 * @param request					{@link HttpServletRequest} object to access request URL param
+	 * @param response					{@link HttpServletResponse} object to access response and setting status or/and header details
+	 * @param xml						POST data in terms of XML from the client
+	 * @param accept					Accepts data of type Application/XML
+	 * @return							Returns of Application/XML to the client. XML contains concept which client doesn't have. It helps in syncing the concept at client and Quadriga.
 	 * @throws QuadrigaException
 	 * @throws IOException
 	 * @throws SAXException
@@ -253,18 +254,17 @@ public class ConceptCollectionRestController {
 	}
 
 	/**
+	 *
 	 * Rest interface for the getting list of concept collections of a user
-	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/
-	 * conceptcollections
-	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949
-	 * /conceptcollections
+	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/conceptcollections
+	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/conceptcollections
 	 * 
-	 * @author Lohith Dwaraka
-	 * @param userId
-	 * @param model
-	 * @return
+	 * @param workspaceId			{@link Workspace} ID , access this parameter to get concept collection of the {@link Workspace}
+	 * @param model					{@link ModelMap} object to access any user request
+	 * @param principal				{@link Principal} object to access logged in client.
+	 * @param req					{@link HttpServletRequest} object to access the request params
+	 * @return						Returns the Application/XML of concept collections belongs to {@link Workspace}						
 	 * @throws RestException
-	 * @throws Exception
 	 */
 	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN, RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR , RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR} )})
 	@RequestMapping(value = "rest/workspace/{workspaceId}/conceptcollections", method = RequestMethod.GET, produces = "application/xml")
@@ -313,19 +313,21 @@ public class ConceptCollectionRestController {
 	}
 
 	/**
-	 * Rest interface add a new Concept collection with a list of concepts
+	 * Rest interface add a new {@link ConceptCollection} to the {@link Workspace}
 	 * http://<<URL>:<PORT>>/quadriga/rest/workspace/<workspaceid>/createcc
-	 * http:
-	 * //localhost:8080/quadriga/rest/workspace/WS_22992652874022949/createcc
+	 * http://localhost:8080/quadriga/rest/workspace/WS_22992652874022949/createcc
 	 * 
-	 * @author Lohith Dwaraka
-	 * @param userId
-	 * @param model
-	 * @return
+	 * @param workspaceId					{@link Workspace} ID , access this parameter to get concept collection of the {@link Workspace}
+	 * @param request						{@link HttpServletRequest} object to access the request params	
+	 * @param response						{@link HttpServletResponse} object to access response and setting status or/and header details
+	 * @param xml							POST data in terms of XML from the client
+	 * @param accept						Accepts data of type Application/XML
+	 * @param model							{@link ModelMap} object to access any user request
+	 * @param principal						{@link Principal} object to access logged in client.
+	 * @return								Response of XML of success in creating the concept collection in the workspace.
 	 * @throws RestException
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException
-	 * @throws Exception
 	 */
 	@RestAccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.WORKSPACE_REST,paramIndex = 1, userRole = { RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN , RoleNames.ROLE_WORKSPACE_COLLABORATOR_CONTRIBUTOR} )})
 	@ResponseBody
@@ -438,9 +440,9 @@ public class ConceptCollectionRestController {
 	 * http://localhost:8080/quadriga/rest/conceptdetails/167
 	 * 
 	 * @author SatyaSwaroop Boddu
-	 * @param collectionID
-	 * @param model
-	 * @return
+	 * @param collectionID				{@link ConceptCollection} ID to access the object details from the DB 
+	 * @param model						{@link ModelMap} object to access any user request
+	 * @return							Response would be the XML containing the concepts belonging to {@link ConceptCollection} ID.
 	 * @throws RestException
 	 * @throws Exception
 	 */

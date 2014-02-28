@@ -331,10 +331,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		try {
 			workspace = wsManager.getWorkspaceDetails(workspaceid, user.getUserName());
 		} catch (QuadrigaStorageException e3) {
-			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		} catch (QuadrigaAccessException e3) {
-			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
 

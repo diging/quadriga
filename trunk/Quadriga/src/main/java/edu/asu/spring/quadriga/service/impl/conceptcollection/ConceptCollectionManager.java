@@ -31,6 +31,9 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
 /**
+ * 
+ * This class has all the Concept collection service layer functions.
+ * It includes the handling DB and controller services.  
  * @author satyaswaroop
  *
  */

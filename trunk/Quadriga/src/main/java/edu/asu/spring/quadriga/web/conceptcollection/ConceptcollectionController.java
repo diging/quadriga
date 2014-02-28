@@ -92,8 +92,7 @@ public class ConceptcollectionController {
 	/**
 	 * This is used to fetch the user related concept collections from database.
 	 * @param model
-	 * @return
-	 * 				Returns the list of concept collections of user to the view
+	 * @return 					Returns the list of concept collections of user to the view
 	 * @throws QuadrigaStorageException
 	 */
 	@RequestMapping(value = "auth/conceptcollections", method = RequestMethod.GET)
