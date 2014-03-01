@@ -251,14 +251,17 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			while(ccCollabIterator.hasNext())
 			{
 				ConceptCollectionCollaboratorDTO ccCollaboratorDTO = ccCollabIterator.next();
+				String roles= "";
 				if(userRoleMap.containsKey(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()))
 				{
-					userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
+					roles = userRoleMap.get(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername()).concat(ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
 				}
 				else
 				{
-					userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(),ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",");
+					roles = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole()+",";
 				}
+				
+				userRoleMap.put(ccCollaboratorDTO.getQuadrigaUserDTO().getUsername(), roles);
 			}
 			
 			Iterator<Entry<String, String>> userRoleMapItr = userRoleMap.entrySet().iterator();
@@ -271,7 +274,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 				collaborator.setUserObj(user);
 				//fetch the collaborator roles
 				String userRoleList = (String) pairs.getValue();
-				collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-2));
+				collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));
 				collaborator.setCollaboratorRoles(collaboratorRoles);
 				collaboratorList.add(collaborator);
 			}
