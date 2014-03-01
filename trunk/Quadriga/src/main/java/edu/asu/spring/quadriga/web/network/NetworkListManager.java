@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
+import org.codehaus.jettison.json.JSONException;
+import org.omg.CORBA.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.INetwork;
@@ -26,6 +30,8 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
  * This class will handle list dictionaries controller for the dictionary
@@ -48,8 +54,14 @@ public class NetworkListManager {
 	Jaxb2Marshaller jaxbMarshaller;
 
 	@Autowired
+	IListWSManager wsManager;
+
+	@Autowired
 	@Qualifier("marshallingConverter")
 	MarshallingHttpMessageConverter marshallingConverter;
+
+	@Autowired
+	IRetrieveProjectManager projectManager;
 
 	@Autowired
 	IUserManager userManager;
@@ -83,18 +95,22 @@ public class NetworkListManager {
 	 * @param principal
 	 * @return
 	 * @throws QuadrigaStorageException
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value = "auth/networks", method = RequestMethod.GET)
-	public String listNetworks(ModelMap model, Principal principal) throws QuadrigaStorageException {
+	public String listNetworks(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		List<INetwork> networkList=null;
+		List<INetwork> networkList = null;
+		String jsTreeData = null;
 		try{
+			jsTreeData = networkManager.getNetworkTree(user.getUserName());
+
 			networkList=networkManager.getNetworkList(user);
 
 		}catch(QuadrigaStorageException e){
 			logger.error("Something wrong on DB Side",e);
 		}
-
+		model.addAttribute("core", jsTreeData);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
 
@@ -141,10 +157,10 @@ public class NetworkListManager {
 		model.addAttribute("jsonstring",jsonstring1);
 		model.addAttribute("networkid",nwId);
 
-		
+
 		return "auth/networks/visualize";
 	}
-	
+
 	/**
 	 * Get the network displayed  on to JSP by passing JSON string and allow to add annotations 
 	 * @author Sowjanya Ambati
@@ -172,25 +188,25 @@ public class NetworkListManager {
 			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
 			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
 		}
-		
+
 		String jsonstring1 = jsonstring.toString();
 		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
 			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
 		}
 		jsonstring1 = jsonstring1+"]";
 		logger.debug(jsonstring1);
-		
+
 		logger.info("Json object formed and sent to the JSP");
-		
+
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("jsonstring",jsonstring1);
 		model.addAttribute("networkid",nwId);
 		logger.info("json string:"+jsonstring1);
 		logger.info("network id:"+nwId);
-		
+
 		return "auth/editing/editnetworks";
 	}
-	
+
 	/**
 	 * Get the network displayed  on to JSP by passing JSON string and allow to add annotations 
 	 * @author Sowjanya Ambati
@@ -217,16 +233,16 @@ public class NetworkListManager {
 			logger.debug("Node id "+networkNodeInfo.getId());
 			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
 			if(networkNodeInfo.getStatementType().equals("RE")){
-			networkManager.setStatementId(networkNodeInfo.getId());
+				networkManager.setStatementId(networkNodeInfo.getId());
 			}
 			networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType());
 		}
 
 		logger.info("--------------------");
 		logger.info(networkManager.getD3JSon());
-		
+
 		logger.info("Json object formed and sent to the JSP");
-		
+
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		model.addAttribute("jsonstring",networkManager.getD3JSon());
@@ -234,6 +250,25 @@ public class NetworkListManager {
 		return "auth/editing/editnetworksnew";
 	}
 
-	
-	
+
+	/**
+	 * Method for ajax call to generate the JSON for JStree to show the networks under project and workspace hiearchy  
+	 * @param model							Use to fetch the {@link ModelMap} object
+	 * @param principal						Used to fetch {@link IUser} details
+	 * @param res							Set the status of response			
+	 * @return								Returns the JStree JSON to the client
+	 * @throws QuadrigaStorageException
+	 * @throws JSONException
+	 */
+	@RequestMapping(value = "auth/networks/jstree", method = RequestMethod.GET)
+	public @ResponseBody String listNetworksJson(ModelMap model, Principal principal, HttpServletResponse res) throws QuadrigaStorageException, JSONException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		String jsTreeData = null;
+		jsTreeData = networkManager.getNetworkTree(user.getUserName());
+		logger.info("JSon : "+ jsTreeData);
+		res.setStatus(200);
+		return jsTreeData;
+	}
+
+
 }

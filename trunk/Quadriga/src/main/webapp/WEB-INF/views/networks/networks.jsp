@@ -4,6 +4,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<script
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 
 <!--  
 	Author Lohith Dwaraka  
@@ -34,6 +38,14 @@
 			event.preventDefault();
 		});
 	});
+
+	$(function() {
+		$('#html1').jstree();
+		$('#html2').jstree();
+		var data = ${core};
+		$('#html3').jstree(data
+		);
+	});
 </script>
 
 
@@ -42,7 +54,9 @@
 	<span class="byline">View your Networks here.</span>
 </header>
 
-
+<div id="html3"> </div>
+<br />
+<br />
 
 <br />
 <div class="container">
@@ -63,9 +77,12 @@
 				<tbody>
 					<c:forEach var="network" items="${networkList}">
 						<tr>
-							<td width="25%" align="left"><img style="vertical-align: middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png" > <input name="items"
-								type="hidden" value="<c:out value="${network.name}"></c:out>" />
-								<c:out value="${network.name}"></c:out></td>
+							<td width="25%" align="left"><img
+								style="vertical-align: middle;"
+								src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png">
+								<input name="items" type="hidden"
+								value="<c:out value="${network.name}"></c:out>" /> <c:out
+									value="${network.name}"></c:out></td>
 							<td width="25%" align="center"><c:out
 									value="${network.project.name}"></c:out></td>
 							<td width="25%" align="center"><c:out
@@ -73,7 +90,8 @@
 							<td width="25%" align="center"><c:out
 									value="${network.status}"></c:out></td>
 							<td width="25%" align="center"><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'" value='Visualize'></td>
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
+								value='Visualize'></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -84,3 +102,10 @@
 		</c:otherwise>
 	</c:choose>
 </div>
+
+
+
+
+
+
+

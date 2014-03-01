@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 
 import java.security.Principal;
 
+import javax.sql.DataSource;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,15 +20,28 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.web.conceptcollection.ConceptcollectionController;
+import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ConceptcollectionControllerTest {
+
 	@Autowired
-	ConceptcollectionController collectionContoller;
+	IDictionaryManager dictonaryManager;
+	
+	@Autowired
+	IUserManager userManager;
+	
+	@Autowired
+	private DataSource dataSource;
+
+	@Autowired
+	IDBConnectionCCManager dbConnection;
 
 	
 	Principal principal;	
