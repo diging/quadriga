@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.rest;
 
 import java.io.StringWriter;
 import java.security.Principal;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +25,8 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.IUserProfileManager;
+import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 /**
  * Controller for dictionary related rest apis exposed to other clients
@@ -36,7 +39,9 @@ import edu.asu.spring.quadriga.service.IUserManager;
 @Controller
 public class UserRestController {
 
-
+	@Autowired
+	private IUserProfileManager profileManager;
+	
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
 	
@@ -59,14 +64,14 @@ public class UserRestController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "rest/user", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/userdetails", method = RequestMethod.GET, produces = "application/xml")
 	@ResponseBody
 	public String getUserDetails( ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
 		
 		IUser userDetails = userManager.getUserDetails(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
-		
+		List<SearchResultBackBean> authFiles = profileManager.showUserProfile(userDetails.getUserName());
 		Template template = null;
 		try {
 			engine.init();
@@ -74,6 +79,7 @@ public class UserRestController {
 					.getTemplate("velocitytemplates/userDetails.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("userdetails", userDetails);
+			context.put("list", authFiles);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			return writer.toString();
