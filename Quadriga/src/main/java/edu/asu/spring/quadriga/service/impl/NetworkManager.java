@@ -25,6 +25,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1548,6 +1551,57 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			throw new QuadrigaStorageException();
 		}
 		return "success";
+	}
+	
+	@Override
+	@Transactional
+	public String getNetworkTree(String userName) throws JSONException{
+		List<IProject> projectList = null;
+		JSONObject core = new JSONObject();
+		try{
+			projectList = projectManager.getProjectList(userName);
+			JSONArray dataArray = new JSONArray();
+			
+			for(IProject project : projectList){
+				// Each data
+				JSONObject data = new JSONObject();
+				data.put("id",project.getInternalid());
+				data.put("parent","#");
+				data.put("text",project.getName());
+				dataArray.put(data);
+				String wsParent = project.getInternalid();
+
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getInternalid(), userName);
+				for(IWorkSpace ws : wsList){
+					//workspace json
+					JSONObject data1 = new JSONObject();
+					data1.put("id",ws.getId());
+					data1.put("parent",wsParent);
+					data1.put("text",ws.getName());
+					dataArray.put(data1);
+					String networkParent = ws.getId();
+
+					List<INetwork> networkList1 = wsManager.getWorkspaceNetworkList(ws.getId());
+					for(INetwork network : networkList1){
+						JSONObject data2 = new JSONObject();
+						data2.put("id",network.getId());
+						data2.put("parent",networkParent);
+						data2.put("text",network.getName()+"  - (Right click and open in new tab or window)");
+						JSONObject data2href = new JSONObject();
+						data2href.put("href", "networks/visualize/"+network.getId());
+						data2.put("a_attr", data2href);
+						dataArray.put(data2);
+					}
+				}
+			}
+			JSONObject dataList = new JSONObject();
+			dataList.put("data", dataArray);
+			
+			core.put("core", dataList);
+		}catch(QuadrigaStorageException e) {
+			logger.error("DB Error while fetching project, Workspace and network details",e);
+		}
+		return core.toString(SUCCESS);
 	}
 
 

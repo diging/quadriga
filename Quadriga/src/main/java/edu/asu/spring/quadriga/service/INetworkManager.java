@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.xml.sax.SAXException;
 
@@ -112,6 +113,8 @@ public interface INetworkManager {
 	void setStatementId(String statementId);
 
 	List<ID3Node> getD3NodeList();
+
+	String getNetworkTree(String userName) throws JSONException;
 
 
 }
