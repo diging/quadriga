@@ -1586,10 +1586,13 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 						JSONObject data2 = new JSONObject();
 						data2.put("id",network.getId());
 						data2.put("parent",networkParent);
-						data2.put("text",network.getName()+"  - (Right click and open in new tab or window)");
+						String s = "<input type=button	onClick=\"location.href='networks/visualize/"+network.getId()+"'\" value='"+network.getName()+"'>";
+						//data2.put("text","<a href=\"networks/visualize/"+network.getId()+"\">"+network.getName()+"</a>  - (Right click and open in new tab or window)");
+						data2.put("text", s);
+						data2.put("href", "networks/visualize/"+network.getId());
 						JSONObject data2href = new JSONObject();
 						data2href.put("href", "networks/visualize/"+network.getId());
-						data2.put("a_attr", data2href);
+//						data2.put("a_attr", data2href);
 						dataArray.put(data2);
 					}
 				}
