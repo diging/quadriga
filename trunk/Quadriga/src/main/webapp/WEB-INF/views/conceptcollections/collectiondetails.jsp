@@ -60,7 +60,7 @@ function resetSelectAll() {
     <br />
     <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections'"
-		value='Okay'>
+		value='Done'>
 	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.id}'"
 	   value = "Edit">
 	</div>
