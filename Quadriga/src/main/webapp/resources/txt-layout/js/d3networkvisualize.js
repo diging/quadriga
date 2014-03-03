@@ -145,7 +145,7 @@ function d3init(graph, networkId, path,type) {
 				// Works on left click
 				.on("click", function(d){
 
-
+					display_annotations(d);
 				})
 				.call(node_drag)
 				.on("mouseover", fade(.1)).on("mouseout", fade(1));;
@@ -481,5 +481,34 @@ function d3init(graph, networkId, path,type) {
 					
 				}
 
-
+				function display_annotations(d){
+					var type1= "node";
+					var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
+					var content = "<h3>Annotations</h3>";
+					 alert("here")
+					// ajax Call to get annotation for a node.id
+					// Used to add the old annotation in to the popup view
+					$.ajax({
+						url : getAnnotationUrl,
+						type : "GET",
+						data: "nodeid="+d.id+"&type="+type1,
+						dataType: 'json',
+						success : function(data) {
+							var cnt = 0;
+							content += "<ol>";
+						$.each(data.text, function(key,value){
+			                    content += ++cnt +'.<li>'+value.name+'</li>';  
+		                });
+							content += "</ol>"
+							$('#annot_details').html(content);
+						},
+						error: function() {
+							alert("error");
+						}
+						
+					});
+					
+					$('#annot_details').html(content);
+					
+				}
 }

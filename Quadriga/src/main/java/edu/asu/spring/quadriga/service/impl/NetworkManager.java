@@ -788,6 +788,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		StringBuffer d3JsonString= new StringBuffer("");
 		
 		d3JsonString.append("{\n\"nodes\":[");
+		if(d3NodeList.size() > 0) {
 		
 		for(int i =0;i<d3NodeList.size()-1;i++){
 			ID3Node d3Node =d3NodeList.get(i);
@@ -853,7 +854,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		d3JsonString.append(d3Link.getTarget());
 		d3JsonString.append("}\n]\n}");
 		
-		
+		}
 
 		return d3JsonString.toString();
 	}
