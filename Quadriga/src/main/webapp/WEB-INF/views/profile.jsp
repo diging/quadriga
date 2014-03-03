@@ -55,8 +55,8 @@ h1{
 </style>
 </head>
 <header>
-		<h2>Profile Search</h2>
-		<span class="byline">Search Your Profile In Following Services</span>
+		<h2>Query authority file</h2>
+		<span class="byline">Find yourself in an authority file</span>
 	</header>
 <form:form method="GET" modelAttribute="ServiceBackBean"
 action="${pageContext.servletContext.contextPath}/auth/profile/search">
@@ -131,7 +131,44 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 <c:otherwise>
 	<c:if test="${success == '2'}">
 	<font color="red">${errmsg}</font>
-	</c:if>
+	<%--<c:if test="${not empty searchResultList}">   why after putting this condition error message gets displayed twice--%>   
+		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
+		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
+		 Results of the Search
+		 <br>
+		 <input type="button" value="Select All" name="selectAll"> 
+		 <input type="button" value="Deselect All" name="deselectAll">
+		
+		 <input type="submit" value="Select & Save">
+			 <table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
+				
+				<thead>
+					<tr>
+						<th><h1>select</h1></th>
+						<th><h1>Name</h1></th>
+						<th><h1>ID</h1></th>
+						<th><h1>Description</h1></th>
+					</tr>
+				</thead>
+			
+				<tbody>
+				<c:forEach var="result" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
+					<tr>
+						<form:hidden path="searchResultList[${status.index}].word" value="${result.word}"  />
+						<form:hidden path="searchResultList[${status.index}].description" value="${result.description}"  />
+						<form:hidden path="searchResultList[${status.index}].id" value="${result.id}"  />
+						<td><form:checkbox path="searchResultList[${status.index}].isChecked"/></td>
+						<form:errors path="searchResultList[${status.index}].isChecked" cssClass="error" />
+						<td><c:out value="${result.word}"/></td>
+						<td><c:out value="${result.id}"/></td>
+						<td><c:out value="${result.description}"/></td> 
+					</tr>
+				</c:forEach>
+				</tbody>
+			</table>
+		 </form:form>
+	 </c:if>
+	<%-- </c:if> --%>
 </c:otherwise>
 </c:choose>
 
