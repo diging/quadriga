@@ -335,7 +335,7 @@ $('a.login-window').click(function() {
     </fieldset>
     <label><input type="checkbox" name="dspacePublicAccess" id="dspacePublicAccess" value="public" /><font size="2">Use Public Access</font></label>
 </form>
-<font size="1">We recommend setting up Dspace Access keys <a href="${pageContext.servletContext.contextPath}/auth/workbench/keys">here</a>. Its more secure !</font>
+<font size="1">We recommend setting up Dspace Access keys <a href="${pageContext.servletContext.contextPath}/auth/workbench/keys">here</a>. It's more secure !</font>
 </div>
 <script>
 $(document).ready(function(){
