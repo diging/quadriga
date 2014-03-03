@@ -42,6 +42,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
@@ -87,6 +88,10 @@ public class DspaceRestController {
 
 	@Autowired
 	private ICheckWSSecurity securityCheck;
+	
+	@Autowired
+	private IDspaceKeysFactory dspaceKeysFactory;
+	
 
 	/**
 	 * Produce an xml listing all the files in a workspace
@@ -134,6 +139,25 @@ public class DspaceRestController {
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		}
+	}
+	
+	
+	@RequestMapping(value = "rest/dspace/validate", method = RequestMethod.GET)
+	public void validateDspaceCredentials(@RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
+	{
+		IDspaceKeys dspaceKeys = null;
+		if(privateKey != null && !privateKey.equals("") && publicKey != null && !publicKey.equals(""))
+		{
+			dspaceKeys = dspaceKeysFactory.createDspaceKeysObject();
+			dspaceKeys.setPrivateKey(privateKey);
+			dspaceKeys.setPublicKey(publicKey);
+		}
+		
+		if(dspaceManager.validateDspaceCredentials(email, password, dspaceKeys))
+			response.setStatus(200);
+		else 
+			response.setStatus(401);
+		
 	}
 
 	/**
@@ -297,12 +321,7 @@ public class DspaceRestController {
 	public String addFileToWorkspace(@PathVariable("workspaceid") String workspaceid, @RequestParam("fileid") String fileid, @RequestParam(value="username") String quadrigaUsername, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletRequest request, HttpServletResponse response) throws RestException
 	{
 		IDspaceKeys dspaceKeys = null;
-		if(privateKey != null && !privateKey.equals("") && publicKey != null && !publicKey.equals(""))
-		{
-			dspaceKeys = new DspaceKeys();
-			dspaceKeys.setPrivateKey(privateKey);
-			dspaceKeys.setPublicKey(publicKey);
-		}
+		
 		List<ICommunity> communityList = null;
 
 
