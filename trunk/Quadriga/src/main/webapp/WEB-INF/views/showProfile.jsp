@@ -56,18 +56,56 @@ $("input[name='deselectAll']").button().click(function(){
 
 <form:form method="GET" action="${pageContext.servletContext.contextPath}/auth/profile/addnew" >
  
-<input type="submit" value="Add new Entries" style="float:left;">
+<input type="submit" value="add new authority file entry" style="float:left;">
 
 </form:form>
 <br>
 
-<c:choose>
-	<c:when test="${success == '1'}">
-		<font color="blue" style="font-family: inherit;"><c:out value="${result}" /></font>
-	</c:when>
-</c:choose>
-<br>
+<%-- if no record is selected --%>
 
+<c:if test="${success == '0'}">
+<font color="red">${errmsg}</font>
+<br>
+<input type="button" value="Select All" name="selectAll"> <input type="button" value="Deselect All" name="deselectAll">
+<form:form method="POST" modelAttribute="SearchResultBackBeanForm" 
+action="${pageContext.servletContext.contextPath}/auth/profile/delete">
+
+ 	<table class="display dataTable" cellpadding="0" cellspacing="0" border="0" style="width:100%">
+			<thead>
+				<tr>
+					<th>Select</th>
+					<th>Name</th>
+					<th>ID</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+				<c:forEach var="entry" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
+					<tr>
+						<form:hidden path="searchResultList[${status.index}].word" value="${entry.word}"  />
+						<form:hidden path="searchResultList[${status.index}].description" value="${entry.description}"  />
+						<form:hidden path="searchResultList[${status.index}].id" value="${entry.id}"  />
+						<td><form:checkbox path="searchResultList[${status.index}].isChecked" /></td>
+						<td><c:out value="${entry.word}" /></td>
+						<td><c:out value="${entry.id}" /></td>
+						<td><c:out value="${entry.description}" /></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+	</table>	
+
+<input type="submit" value="Delete" id='ischeck'>
+</form:form>
+
+</c:if>
+<br>
+<%-- if no record selected END --%>
+
+
+
+<%-- if at least one record is selected --%>
+<c:if test="${success == '1'}">
 <input type="button" value="Select All" name="selectAll"> <input type="button" value="Deselect All" name="deselectAll">
 <form:form method="POST" modelAttribute="SearchResultBackBeanForm" 
 action="${pageContext.servletContext.contextPath}/auth/profile/delete">
@@ -82,11 +120,14 @@ action="${pageContext.servletContext.contextPath}/auth/profile/delete">
 					<th>Description</th>
 				</tr>
 			</thead>
-			
+	
 			<tbody>
 				<c:forEach var="entry" items="${SearchResultBackBeanForm.searchResultList}" varStatus="status">
 					<tr>
-						<td><form:checkbox path="searchResultList[${status.index}].id" value="${entry.id}"/></td>
+					    <form:hidden path="searchResultList[${status.index}].word" value="${entry.word}"  />
+						<form:hidden path="searchResultList[${status.index}].description" value="${entry.description}"  />
+						<form:hidden path="searchResultList[${status.index}].id" value="${entry.id}"  />
+						<td><form:checkbox path="searchResultList[${status.index}].isChecked" /></td>
 						<td><c:out value="${entry.word}" /></td>
 						<td><c:out value="${entry.id}" /></td>
 						<td><c:out value="${entry.description}" /></td>
@@ -94,12 +135,15 @@ action="${pageContext.servletContext.contextPath}/auth/profile/delete">
 				</c:forEach>
 			</tbody>
 	</table>	
-<%--  </c:if> --%> 
+
 <input type="submit" value="Delete" id='ischeck'>
-
-
 </form:form>
-	
+</c:if>
+
+<%-- at least one record is selected to delete END --%>
+
+
+
 
 
 
