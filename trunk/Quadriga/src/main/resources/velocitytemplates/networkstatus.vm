@@ -5,10 +5,10 @@
 		<Quadriga:networkAnnotationList>
 			#foreach ($networkAnno in $networkAnnoList)
 			<Quadriga:networkAnnotation>
-				<Quadriga:annotationId>$networkAnno.annotationid</Quadriga:annotationId>
-				<Quadriga:nodeName>$networkAnno.objectid</Quadriga:nodeName>
-				<Quadriga:annotationText>$networkAnno.annotationtext</Quadriga:annotationText>
-				<Quadriga:createdBy>$networkAnno.username</Quadriga:createdBy>
+				<Quadriga:annotationId>$networkAnno.annotationId</Quadriga:annotationId>
+				<Quadriga:nodeName>$networkAnno.nodeName</Quadriga:nodeName>
+				<Quadriga:annotationText>$networkAnno.annotationText</Quadriga:annotationText>
+				<Quadriga:createdBy>$networkAnno.userId</Quadriga:createdBy>
 			</Quadriga:networkAnnotation>
 			#end
 		</Quadriga:networkAnnotationList>

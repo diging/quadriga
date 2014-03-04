@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
+import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -68,6 +71,35 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	public String updateAnnotationToNetwork(String annotationId,String annotationText) throws QuadrigaStorageException{
 		String msg = dbConnectionEditManager.updateAnnotationToNetwork(annotationId, annotationText);
 		return msg;
+	}
+	
+
+	/**
+	 * This method gets all the annotation of the network.
+	 * @param networkId				Network id to fetch all the annotation related to that network
+	 * returns 						{@link List} of {@link NetworksAnnotationsDTO} which contains all the Network Annotaions of {@link INetwork}
+	 */
+	@Override
+	@Transactional
+	public List<NetworkAnnotation> getAllAnnotationOfNetwork(String username, String networkId) throws QuadrigaStorageException {
+		
+		List<NetworksAnnotationsDTO> networkAnnoDTOList = dbConnectionEditManager.getAllAnnotationOfNetwork(username,networkId);
+		
+		List<NetworkAnnotation> networkAnnoList = null;
+		
+		for(NetworksAnnotationsDTO dto :networkAnnoDTOList){
+			NetworkAnnotation n = new NetworkAnnotation();
+			n.setAnnotationId(dto.getAnnotationid());
+			n.setAnnotationText(dto.getAnnotationtext());
+			n.setNodeName(dto.getObjectid());
+			n.setUserId(dto.getCreatedby());
+			if(networkAnnoList==null){
+				networkAnnoList=new ArrayList<NetworkAnnotation>();
+			}
+			networkAnnoList.add(n);
+		}
+		
+		return networkAnnoList;
 	}
 	
 	
