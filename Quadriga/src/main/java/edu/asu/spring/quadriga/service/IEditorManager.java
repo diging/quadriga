@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IEditorManager {
@@ -36,6 +35,4 @@ public interface IEditorManager {
 	public abstract String updateAssignedNetworkStatus(String networkId, String status)
 			throws QuadrigaStorageException;
 
-	List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
-			String networkId) throws QuadrigaStorageException;
 }
