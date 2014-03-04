@@ -41,9 +41,7 @@ public class SearchResultBackBeanFormManager implements ISearchResultBackBeanFor
 		
 		
 		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
-		
 		List<ISearchResult> searchResults = serviceObj.search(term);
-		
 		List<SearchResultBackBean> searchResultBackBeansList = new ArrayList<SearchResultBackBean>();
 		
 		for(ISearchResult searchResult:searchResults){

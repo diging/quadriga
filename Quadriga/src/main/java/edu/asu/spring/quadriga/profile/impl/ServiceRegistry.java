@@ -36,7 +36,11 @@ public class ServiceRegistry implements IServiceRegistry {
 	
 	private Map<String,String> serviceIdNameMap;
 		
-	
+/**
+ * instantiates all the services under IService interface
+ * 
+ * @author rohit pendbhaje
+ */
 	@PostConstruct
 	public void init(){
 		
@@ -56,7 +60,14 @@ public class ServiceRegistry implements IServiceRegistry {
 		}
 		
 	}
-	
+
+/**
+ * used for returning service object
+ * @param serviceId  id of the service of which object is required
+ * @return service object
+ * @author rohit pendbhaje
+ * 
+ */
 	
 	@Override
 	public IService getServiceObject(String serviceId) {
@@ -67,7 +78,7 @@ public class ServiceRegistry implements IServiceRegistry {
 /**
  * 
  * creates hashmap of name, id as key, value pair
- * 
+ * @return map of id and name
  * @author rohit pendbhaje
  * 
  */

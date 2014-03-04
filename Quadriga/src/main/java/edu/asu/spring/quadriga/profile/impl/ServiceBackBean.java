@@ -2,6 +2,11 @@ package edu.asu.spring.quadriga.profile.impl;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * this is a backing bean for the service bean on the profile page
+ * 
+ * @author rohit pendbhaje
+ */
 @Service
 public class ServiceBackBean {
 

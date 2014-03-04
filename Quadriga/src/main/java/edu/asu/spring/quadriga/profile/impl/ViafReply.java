@@ -9,7 +9,7 @@ import edu.asu.spring.quadriga.jaxb.viaf.Channel;
 
 /**
  * 
- * jaxb class for xml 
+ * jaxb class for parsing viaf service xml 
  * 
  * @author rohit pendbhaje
  *

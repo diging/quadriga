@@ -149,6 +149,7 @@ public class HomeController {
 		
 		List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
 		searchResultBackBeanForm.setSearchResultList(resultLists);
+		model.addAttribute("success", 1);
 		model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
 				
 		if(resultLists == null)
@@ -236,7 +237,7 @@ public class HomeController {
 	 * @throws QuadrigaStorageException
 	 */
 	@RequestMapping(value="/auth/profile/delete",method = RequestMethod.POST)
-	public String deleteSearchResult(@ModelAttribute("SearchResultBackBean") SearchResultBackBeanForm searchResultBackBeanForm,  
+	public String deleteSearchResult(@ModelAttribute("SearchResultBackBeanForm") SearchResultBackBeanForm searchResultBackBeanForm,  
 			Principal principal, Model model) throws QuadrigaStorageException
 	{
 		String errmsg = null;	
@@ -244,6 +245,7 @@ public class HomeController {
 			
 		String profileid = null;
 		String serviceid = null;
+		boolean isAtLeastOneChecked = false;
 		
 		List<SearchResultBackBean> backBeanList = searchResultBackBeanForm.getSearchResultList();
 		
@@ -252,23 +254,28 @@ public class HomeController {
 			profileid = searchResultBackBean.getId();
 			serviceid = profileManager.retrieveServiceId(profileid);
 			
-			if(searchResultBackBean.getId() != null)
-		    profileManager.deleteUserProfile(searchResultBackBean.getId(), serviceid, principal.getName());
-		}
-		
-		errmsg = "";
-		
-		if(errmsg.equals("no errors"))
-		{
-			model.addAttribute("success", 1);
-			model.addAttribute("result", "profile deleted successfully");
-			List<SearchResultBackBean> resultLists = profileManager.showUserProfile(principal.getName());
-			searchResultBackBeanForm.setSearchResultList(resultLists);
-			model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
+			if(searchResultBackBean.getIsChecked() == true)
+			{
+				isAtLeastOneChecked = true;
+			    profileManager.deleteUserProfile(principal.getName(), serviceid, searchResultBackBean.getId());
+			}
 			
 		}
+		
+		if(!isAtLeastOneChecked)
+		{
+			model.addAttribute("success", 0);
+			model.addAttribute("errmsg","please select at least one record to delete" );
+		}
 		else
-			model.addAttribute("result", "sorry can't delete");
+		{
+			model.addAttribute("success", 1);
+			List<SearchResultBackBean> listAfterDeletion = profileManager.showUserProfile(principal.getName());
+			searchResultBackBeanForm.setSearchResultList(listAfterDeletion);
+			model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
+		}
+		
+		
 		
 		return "auth/home/showProfile";
 	}
@@ -280,44 +287,43 @@ public class HomeController {
 		
 		Map<String, String> serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
 		IService serviceObj = serviceRegistry.getServiceObject(serviceid);
+		
+		boolean atLeastOneTrue = false;
+		int count = 0;
 						
 		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
 				
-		if(result.hasErrors())
-		{
-			searchResultBackBeanForm.setSearchResultList(backBeanSearchResults);
-			model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
-			return "auth/home/profile";
-		}
-		else
-		{
 			for(SearchResultBackBean resultBackBean: backBeanSearchResults)
 			{
 				if(resultBackBean.getIsChecked() == true)
 				{
-					userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);
-					
+					userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);					
+					atLeastOneTrue = true;
+					//count++;
 				}
-				else
+				//else
+					//atLeastOneTrue = false;
+				
+				/*if(atLeastOneTrue)
 				{
-					model.addAttribute("ServiceBackBean", serviceBackBean);
-					model.addAttribute("serviceNameIdMap", serviceRegistry.getServiceNameIdMap());
-					
-					//List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
-					searchResultBackBeanForm.setSearchResultList(backBeanSearchResults);
-					model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
-					model.addAttribute("success",2);
-					model.addAttribute("errmsg", "please select some record");
-					return "auth/home/profile";
-				}
+					userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);					
+				}*/
 			}
 			
-			List<SearchResultBackBean> resultLists =  profileManager.showUserProfile(principal.getName());
-			searchResultBackBeanForm.setSearchResultList(resultLists);
+			if(!atLeastOneTrue)
+			{
+				model.addAttribute("ServiceBackBean", serviceBackBean);
+				model.addAttribute("serviceNameIdMap", serviceRegistry.getServiceNameIdMap());
+				model.addAttribute("success",2);
+				model.addAttribute("errmsg", "please select some record");
+				return "auth/home/profile";
+			}
+		
+			model.addAttribute("success", 1);
+			List<SearchResultBackBean> backBeans = profileManager.showUserProfile(principal.getName());
+			searchResultBackBeanForm.setSearchResultList(backBeans);
 			model.addAttribute("searchResultBackBeanForm", searchResultBackBeanForm);
 			
-		}
-		
 		return "auth/home/showProfile";
 	}
 
