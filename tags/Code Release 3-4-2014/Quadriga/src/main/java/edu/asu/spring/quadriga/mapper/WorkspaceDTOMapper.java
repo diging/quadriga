@@ -1,0 +1,90 @@
+package edu.asu.spring.quadriga.mapper;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.asu.spring.quadriga.dao.DAOConnectionManager;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceEditorDTOPK;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IUserManager;
+
+@Service
+public class WorkspaceDTOMapper extends DAOConnectionManager{
+
+	@Autowired
+	private IWorkspaceFactory workspaceFactory;
+	
+	@Autowired
+    private IUserManager userManager;
+	
+	public WorkspaceDTO getWorkspaceDTO(IWorkSpace iWorkSpace) throws QuadrigaStorageException
+	{
+		WorkspaceDTO workspaceDTO = new WorkspaceDTO();
+		workspaceDTO.setWorkspacename(iWorkSpace.getName());
+		workspaceDTO.setDescription(iWorkSpace.getDescription());
+		workspaceDTO.setWorkspaceowner((getUserDTO(iWorkSpace.getOwner().getUserName())));
+		workspaceDTO.setIsarchived(false);
+		workspaceDTO.setIsdeactivated(false);
+		workspaceDTO.setUpdatedby(iWorkSpace.getOwner().getUserName());
+		workspaceDTO.setUpdateddate(new Date());
+		workspaceDTO.setCreatedby(iWorkSpace.getOwner().getUserName());
+		workspaceDTO.setCreateddate(new Date());
+		return workspaceDTO;
+	}
+	
+	public IWorkSpace getWorkSpace(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException
+	{
+		IWorkSpace workSpace = workspaceFactory.createWorkspaceObject();
+		workSpace.setName(workspaceDTO.getWorkspacename());
+		workSpace.setDescription(workspaceDTO.getDescription());
+		workSpace.setId(workspaceDTO.getWorkspaceid());
+		workSpace.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+		return workSpace;
+	}
+	
+	public List<IWorkSpace> getWorkSpaceList(List<WorkspaceDTO> workspaceDTOList) throws QuadrigaStorageException
+	{
+		Iterator<WorkspaceDTO> workspaceItr = workspaceDTOList.listIterator();
+		List<IWorkSpace> workspaceList = new ArrayList<IWorkSpace>();
+		while(workspaceItr.hasNext())
+		{
+			WorkspaceDTO workspaceDTO = workspaceItr.next();
+			workspaceList.add(getWorkSpace(workspaceDTO));
+		}
+		return workspaceList;
+	}
+	
+	/**
+	 * This method associates editor with the workspace supplied
+	 * @param workspace
+	 * @param userName
+	 * @return WorkspaceEditorDTO object
+	 * @throws QuadrigaStorageException
+	 */
+	public WorkspaceEditorDTO getWorkspaceEditor(WorkspaceDTO workspace, String userName) throws QuadrigaStorageException
+	{
+		WorkspaceEditorDTO workspaceEditor = null;
+		WorkspaceEditorDTOPK workspaceEditorKey = null;
+		Date date = new Date();
+		workspaceEditor = new WorkspaceEditorDTO();
+		workspaceEditorKey = new WorkspaceEditorDTOPK(workspace.getWorkspaceid(),userName);
+		workspaceEditor.setWorkspaceEditorDTOPK(workspaceEditorKey);
+		workspaceEditor.setWorkspaceDTO(workspace);
+		workspaceEditor.setQuadrigaUserDTO(getUserDTO(userName));
+		workspaceEditor.setCreatedby(userName);
+		workspaceEditor.setCreateddate(date);
+		workspaceEditor.setUpdatedby(userName);
+		workspaceEditor.setUpdateddate(date);
+		
+		return workspaceEditor;
+	}
+}
