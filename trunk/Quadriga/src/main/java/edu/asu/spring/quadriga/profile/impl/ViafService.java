@@ -22,8 +22,7 @@ import edu.asu.spring.quadriga.profile.IViafManager;
 /**
  * this class sends request to viaf service and gets back object in response
  * 
- * @author rohit
- *
+ * @author rohit pendbhaje
  */
 
 @Service

@@ -16,6 +16,13 @@ import edu.asu.spring.quadriga.dto.QuadrigaUserprofileDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
+/**
+ * this class manages addition, deletion, retrieval of the records for
+ * user profile table
+ * 
+ * @author rohit pendbhaje
+ *
+ */
 @Repository
 public class ProfileManagerDAO extends DAOConnectionManager
 implements IDBConnectionProfileManager
@@ -23,6 +30,15 @@ implements IDBConnectionProfileManager
 	@Autowired
 	private SessionFactory sessionFactory;
 
+/**
+ * adds records in database table for the profile page
+ * @param  name			    name of the loggedin user
+ * 		   serviceId    	id of the service from which records are added
+ * 		   resultBackBean	this instance contains all the searchresult information selected by user
+ * @throws QuadrigaStorageException
+ * @author rohit pendbhaje
+ * 
+ */
 	@Override
 	public void addUserProfileDBRequest(String name, String serviceId,
 			SearchResultBackBean resultBackBean)
@@ -51,6 +67,14 @@ implements IDBConnectionProfileManager
 
 	}
 
+/**
+ * retrieves records from database
+ * @param loggedinUser	
+ * @return list of searchresultbackbeans
+ * @throws QuadrigaStorageException
+ * @author rohit pendbhaje
+ * 
+ */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SearchResultBackBean> showProfileDBRequest(String loggedinUser)
@@ -82,8 +106,17 @@ implements IDBConnectionProfileManager
 		return userProfileSearchList;
 	}
 
+/**
+ * deletes profile record from table for particular profileid
+ * @param	username	name of loggedin user
+ * 			serviceid	id of the service corresponding to the record
+ * 			profileId	id of the profile for which record is to be deleted
+ * @throws	QuadrigaStorageException
+ * @author rohit pendbhaje
+ * 		
+ */
 	@Override
-	public void deleteUserProfileDBRequest(String profileId,String serviceid,String username)
+	public void deleteUserProfileDBRequest(String username,String serviceid,String profileId)
 			throws QuadrigaStorageException 
 	{
 		
@@ -99,6 +132,14 @@ implements IDBConnectionProfileManager
 			throw new QuadrigaStorageException();
 		}
 	}
+
+/**
+ * retrieves serviceid from table of particular profileid
+ * @param	profileId	id of the profile for which record is to be deleted
+ * @throws	QuadrigaStorageException
+ * @author  rohit pendbhaje
+ * 		
+ */
 
 	@Override
 	public String retrieveServiceIdRequest(String profileid) throws QuadrigaStorageException {
