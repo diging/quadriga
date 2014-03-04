@@ -42,6 +42,7 @@ import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -198,6 +199,7 @@ public class NetworkRestController {
 		status = network.getStatus();
 		try {
 			engine.init();
+			
 			template = engine
 					.getTemplate("velocitytemplates/networkstatus.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
@@ -205,6 +207,8 @@ public class NetworkRestController {
 				context.put("status", "UNKNOWN");
 			else
 				context.put("status", status);
+			List<NetworksAnnotationsDTO>  networkAnnoList= editorManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);;
+			context.put("networkAnnoList",networkAnnoList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			response.setStatus(200);

@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
+import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -238,6 +239,19 @@ public class EditorManager implements IEditorManager {
 			logger.error("Something went wrong in DB",e);
 		}
 		return msg;
+	}
+
+	/**
+	 * This method gets all the annotation of the network.
+	 * @param networkId				Network id to fetch all the annotation related to that network
+	 * returns 						{@link List} of {@link NetworksAnnotationsDTO} which contains all the Network Annotaions of {@link INetwork}
+	 */
+	@Override
+	@Transactional
+	public List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String username, String networkId) throws QuadrigaStorageException {
+		
+		List<NetworksAnnotationsDTO> networkAnnoDTOList = dbConnect.getAllAnnotationOfNetwork(username,networkId);
+		return networkAnnoDTOList;
 	}
 
 }
