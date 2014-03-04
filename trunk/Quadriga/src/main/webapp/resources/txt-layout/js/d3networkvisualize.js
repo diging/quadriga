@@ -108,15 +108,7 @@ function d3init(graph, networkId, path,type) {
 
 
 
-	//.classed('gnode', true);
 
-//	var node = gnodes.append('path')
-//	attr("d", d3.svg.symbol().type(function(d) { return d3.svg.symbolTypes[d.group]; }))
-//	.attr("class", "node")
-//	.attr("width", 10)
-//	.attr("height", 10)
-//	.attr("r", 5)
-//	.style("fill", function(d) { return color(d.group); },"size",function(d) { return size(d.group); })
 	var gnodes = svg.selectAll('g.gnode')
 	.data(graph.nodes)
 	.enter();
@@ -384,7 +376,6 @@ function d3init(graph, networkId, path,type) {
 								type : "POST",
 								data :"nodename="+d.id+"&annotText="+annottext+"&type=node",
 								success : function() {
-									alert("done");
 									$('#'+popupId+'').dialog('close');
 								},
 								error: function() {
@@ -457,7 +448,6 @@ function d3init(graph, networkId, path,type) {
 								type : "POST",
 								data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
 								success : function() {
-									alert("done");
 									$('#'+popupId+'').dialog('close');
 								},
 								error: function() {
@@ -485,7 +475,6 @@ function d3init(graph, networkId, path,type) {
 					var type1= "node";
 					var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
 					var content = "<h3>Annotations</h3>";
-					 alert("here")
 					// ajax Call to get annotation for a node.id
 					// Used to add the old annotation in to the popup view
 					$.ajax({
@@ -510,5 +499,8 @@ function d3init(graph, networkId, path,type) {
 					
 					$('#annot_details').html(content);
 					
+					
 				}
+				
+				
 }
