@@ -84,5 +84,8 @@ public interface IDBConnectionEditorManager {
 
 	public abstract List<INetwork> getNetworkListOfOtherEditors(IUser user,	List<String> networkStatus) throws QuadrigaStorageException;
 
+	List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
+			String networkId) throws QuadrigaStorageException;
+
 
 }
