@@ -150,7 +150,7 @@ public class NetworkRestController {
 
 			if(networkId.isEmpty()){
 				response.setStatus(404);
-				return "Text files don't belongs to this workspace.";
+				return "Text files don't belong to this workspace.";
 			}
 
 			//			Below code would help in printing XML from qstore
