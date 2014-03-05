@@ -763,6 +763,19 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				d3NodeList.add(d3NodePredicate);
 				d3NodeIdMap.put(predicateNameId,nodeIndex);
 				nodeIndex++;
+			}else{
+				int index= d3NodeIdMap.get(predicateNameId);
+				ID3Node d3NodePredicate = d3NodeList.get(index);
+				List<String> stmtList = d3NodePredicate.getStatementIdList();
+				boolean flag=false;
+				for(String stmt: stmtList){
+					if(stmt.equals(stmtId)){
+						flag=true;
+					}
+				}
+				if(!flag){
+					stmtList.add(stmtId);
+				}
 			}
 
 		}
