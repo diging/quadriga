@@ -3,24 +3,38 @@ package edu.asu.spring.quadriga.d3.domain.impl;
 import java.util.List;
 
 import edu.asu.spring.quadriga.d3.domain.ID3Node;
-
+/**
+ * Implemenation of {@link ID3Node} domain interface.
+ * Used specifically for D3 Jquery JSON building.
+ * @author Lohith Dwaraka
+ *
+ */
 public class D3Node implements ID3Node {
 
 	private String nodeName;
 	private String nodeId;
 	private List<String> statementIdList;
-	
+	private int groupId;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<String> getStatementIdList() {
 		return statementIdList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setStatementIdList(List<String> statementIdList) {
 		this.statementIdList = statementIdList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getNodeId() {
 		return nodeId;
@@ -29,34 +43,38 @@ public class D3Node implements ID3Node {
 	public void setNodeId(String nodeId) {
 		this.nodeId = nodeId;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ID3Nodes#getNodeName()
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getNodeName() {
 		return nodeName;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ID3Nodes#setNodeName(java.lang.String)
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ID3Nodes#getGroupId()
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int getGroupId() {
 		return groupId;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.ID3Nodes#setGroupId(int)
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
-	private int groupId;
+	
 	
 }

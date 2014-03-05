@@ -3,16 +3,14 @@ package edu.asu.spring.quadriga.d3.domain.factory.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.d3.domain.factory.ID3NodeFactory;
 import edu.asu.spring.quadriga.d3.domain.impl.D3Node;
 
-import org.springframework.stereotype.Service;
-
 /**
- * Factory for {@link ID3Node}
- * Used to form the JSON object for D3 JQuery
- * 
+ * Implementation of {@link ID3NodeFactory}. Creates the factory object of {@link ID3Node} * 
  * @author Dwaraka Lohith
  */
 

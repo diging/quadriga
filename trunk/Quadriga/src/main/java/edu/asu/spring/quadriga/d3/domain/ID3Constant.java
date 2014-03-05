@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.d3.domain;
 
 /**
  * Interface to store the D3 Constants used in networks
+ * 
+ * @author Lohith Dwaraka
  *
  */
 public interface ID3Constant {
