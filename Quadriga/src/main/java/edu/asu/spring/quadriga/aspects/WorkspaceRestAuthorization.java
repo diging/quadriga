@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -15,6 +16,12 @@ import edu.asu.spring.quadriga.service.workspace.ICheckWSSecurity;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 
+/**
+ * Service level Implementation of {@link IAuthorization} for {@link IWorkSpace} for REST APIs.
+ * This class specifically works on authorization check of user for {@link IWorkSpace} access. 
+ * @author Kiran kumar
+ *
+ */
 @Service("workspaceRestAuthorization")
 public class WorkspaceRestAuthorization implements IAuthorization 
 {

@@ -14,6 +14,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
+/**
+ * Service level Implementation of {@link IAuthorization} for {@link IConceptCollection} for REST APIs.
+ * This class specifically works on authorization check of user for {@link IConceptCollection} access. 
+ * @author Lohith Dwaraka
+ *
+ */
 @Service("conceptCollectionRestAuthorization")
 public class ConceptCollectionRestAuthorization implements IAuthorization 
 {

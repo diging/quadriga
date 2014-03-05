@@ -11,6 +11,15 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 
+/**
+ * Service class Implementation of {@link IAuthorizationManager} 
+ * We can get {@link IAuthorization} object for particular type like
+ * {@link ProjectAuthorization}, {@link WorkspaceAuthorization} etc. 
+ * So the Authorization can be handled by the appropriate service class.
+ * 
+ * @author Kiran kumar
+ *
+ */
 @Service
 public class AuthorizationManager implements IAuthorizationManager
 {
@@ -48,6 +57,10 @@ public class AuthorizationManager implements IAuthorizationManager
 	
 	private HashMap<CheckedElementType,IAuthorization> accessManager;
 	
+	/**
+	 * Init class which runs after the class is loaded in the tomcat container
+	 * Adds the autowired {@link IAuthorization} type of objects in the {@link HashMap}
+	 */
 	@PostConstruct
 	public void init() {
 		
@@ -64,6 +77,9 @@ public class AuthorizationManager implements IAuthorizationManager
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IAuthorization getAuthorizationObject(CheckedElementType type)
 	{
