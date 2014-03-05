@@ -29,9 +29,8 @@ import edu.asu.spring.quadriga.service.IUserProfileManager;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 /**
- * Controller for dictionary related rest apis exposed to other clients
+ * Controller for {@link IUser} related rest APIs exposed to other clients
  * 
- * @author SatyaSwaroop Boddu
  * @author LohithDwaraka
  * 
  */
@@ -84,7 +83,6 @@ public class UserRestController {
 			template.merge(context, writer);
 			return writer.toString();
 		} catch (ResourceNotFoundException e) {
-			
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (ParseErrorException e) {

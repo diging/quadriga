@@ -5,14 +5,14 @@
 	<Quadriga:userid>$userdetails.userName</Quadriga:userid>
 	<Quadriga:email>$userdetails.email</Quadriga:email>
 	<Quadriga:uri>$url/rest/userDetails/$userdetails.userName</Quadriga:uri>
-	<Quadriga:authorityFileList>
+	<Quadriga:authorityFileEntryList>
 		#foreach ($authFileList in $list)
-		<Quadriga:authorityFile>
+		<Quadriga:authorityFileEntry type="$authFileList">
 			<Quadriga:name>$authFileList.word</Quadriga:name>
 			<Quadriga:url>$authFileList.id</Quadriga:url>
 			<Quadriga:description>$authFileList.description</Quadriga:description>
-		</Quadriga:authorityFile>
+		</Quadriga:authorityFileEntry>
 		#end
-	</Quadriga:authorityFileList>
+	</Quadriga:authorityFileEntryList>
 </Quadriga:userDetails> 	
 </Quadriga:QuadrigaReply>

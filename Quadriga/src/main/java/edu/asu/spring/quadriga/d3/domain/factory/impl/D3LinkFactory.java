@@ -1,10 +1,10 @@
-package edu.asu.spring.quadriga.domain.factories.impl;
+package edu.asu.spring.quadriga.d3.domain.factory.impl;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.ID3Link;
-import edu.asu.spring.quadriga.domain.factories.ID3LinkFactory;
-import edu.asu.spring.quadriga.domain.implementation.D3Link;
+import edu.asu.spring.quadriga.d3.domain.ID3Link;
+import edu.asu.spring.quadriga.d3.domain.factory.ID3LinkFactory;
+import edu.asu.spring.quadriga.d3.domain.impl.D3Link;
 
 @Service
 public class D3LinkFactory implements ID3LinkFactory  {

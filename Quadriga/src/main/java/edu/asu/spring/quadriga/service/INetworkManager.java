@@ -11,8 +11,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.xml.sax.SAXException;
 
+import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.IBitStream;
-import edu.asu.spring.quadriga.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;

@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.d3.domain;
 
 /**
  * Interface to hold the link variables and methods in the network
