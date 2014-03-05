@@ -15,6 +15,12 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 
+/**
+ * Service level Implementation of {@link IAuthorization} for {@link IDictionary}
+ * This class specifically works on authorization check of user for {@link IDictionary} access. 
+ * @author Kiran Kumar
+ *
+ */
 @Service("dictionaryAuthorization")
 public class DictionaryAuthorization implements IAuthorization 
 {

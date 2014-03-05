@@ -8,12 +8,19 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
+/**
+ * Service level Implementation of {@link IAuthorization} for {@link IProject}.
+ * This class specifically works on authorization check of user for {@link IProject} access. 
+ * @author Kiran kumar
+ *
+ */
 @Service("projectAuthorization")
 public class ProjectAuthorization implements IAuthorization
 {	

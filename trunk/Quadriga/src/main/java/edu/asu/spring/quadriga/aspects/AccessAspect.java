@@ -13,6 +13,12 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.NoAuthorizationCheck;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 
+/**
+ * Aspect based Access authentication through UI.
+ * Can be used around a method in any controllers to authenticate the user accessing through UI.
+ * @author Kiran Kumar
+ *
+ */
 @Aspect
 @Component
 public class AccessAspect 
