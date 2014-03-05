@@ -1,6 +1,6 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.d3.domain.impl;
 
-import edu.asu.spring.quadriga.domain.ID3Link;
+import edu.asu.spring.quadriga.d3.domain.ID3Link;
 
 
 public class D3Link implements ID3Link {

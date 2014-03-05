@@ -1,8 +1,8 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.d3.domain.impl;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ID3Node;
+import edu.asu.spring.quadriga.d3.domain.ID3Node;
 
 public class D3Node implements ID3Node {
 

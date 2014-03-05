@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.d3.domain;
 
 /**
  * Interface to store the D3 Constants used in networks
