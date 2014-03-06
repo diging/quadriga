@@ -255,10 +255,12 @@ public class DspaceManager implements IDspaceManager{
 	@Override
 	public IBitStream getBitStream(String sCollectionId, String sItemId, String sBitStreamId)
 	{
-
 		return getProxyCommunityManager().getBitStream(sCollectionId, sItemId, sBitStreamId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@Transactional
 	public List<IBitStream> getBitstreamsInWorkspace(String workspaceid, String username) throws QuadrigaStorageException, QuadrigaAccessException
@@ -570,6 +572,9 @@ public class DspaceManager implements IDspaceManager{
 		return true;		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@Transactional
 	public IBitStream getWorkspaceItems(String fileid, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
