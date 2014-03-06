@@ -8,7 +8,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.omg.CORBA.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,9 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -65,6 +69,9 @@ public class NetworkListManager {
 
 	@Autowired
 	IUserManager userManager;
+	
+	@Autowired
+	IEditingNetworkAnnotationManager editingNetworkAnnotationManager;
 
 	@Autowired
 	@Qualifier("qStoreURL")
@@ -216,9 +223,11 @@ public class NetworkListManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 * @throws JAXBException
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value = "auth/editing/editnetworksnew/{networkId}", method = RequestMethod.GET)
-	public String visualizeAndEditNetworksNew(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+	public String visualizeAndEditNetworksNew(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
+		IUser user = userManager.getUserDetails(principal.getName());
 		StringBuffer jsonstring=new StringBuffer();
 		logger.debug("Network id "+networkId);
 		String qstoreGetURL = getQStoreGetURL();
@@ -242,7 +251,7 @@ public class NetworkListManager {
 		logger.info(networkManager.getD3JSon());
 
 		logger.info("Json object formed and sent to the JSP");
-
+		
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		model.addAttribute("jsonstring",networkManager.getD3JSon());

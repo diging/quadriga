@@ -27,6 +27,7 @@ function d3init(graph, networkId, path,type) {
 		.nodes(graph.nodes)
 		.links(graph.links)
 		.start();
+		displayAllAnnotations();
 	} //  tree layout if need we can change the layout
 	else if(type=="tree"){
 		layout = d3.layout.tree();
@@ -70,7 +71,8 @@ function d3init(graph, networkId, path,type) {
 	.attr("class", "link")
 	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
 	.attr("marker-end", "url(#arrow)")
-	.on("mouseover", fadeLinks(.1)).on("mouseout", fadeLinks(1));;
+	//.on("mouseover", fadeLinks(.1)).on("mouseout", fadeLinks(1));;
+	.on("click", highlightStmt(.1)).on("mouseout", fadeLinks(1));;
 	// Dragging the nodes
 	var node_drag = d3.behavior.drag()
 	.on("dragstart", dragstart)
@@ -214,11 +216,59 @@ function d3init(graph, networkId, path,type) {
 
 				}
 				
+				
 				function highlightStmt(opacity) {
 					return function(d, i) {
-						//fade all elements
-//						d3.select(d.source).style("opacity", opacity);
-//						d3.select(d.target).style("opacity", opacity);
+					//fade all elements
+					// d3.select(d.source).style("opacity", opacity);
+					// d3.select(d.target).style("opacity", opacity);
+					//fade all elements
+
+					svg.selectAll(".node, line").style("opacity", opacity);
+					var source = d.source;
+					var array = [];
+					//alert(source);
+					var statementId = source.statementid;
+					//alert(statementId);
+					//var selection = d3.select("#"+statementId);
+					//var selection = d3.selectAll("#statementId").each(function(d,i) { alert(this); });
+					//var selection = d3.select('circle[statementid="'+statementId+'"]');
+					//var selection = d3.selectAll([statementid="statementId"]);
+					//var selection = d3.select([statementid]);
+					//var selection = d3.filter(function(d) { return d.statementid==statementId; });
+					//var snodes = svg.selectAll("circle").filter(function(d) { return d.statementid==statementId;});
+					var snodes = svg.selectAll(".node");
+					snodes.each(function(d){
+						if(indexOf(d.statementid,statementId)>0)
+							{array.push(d);
+							}
+					});
+					console.log(array);		
+												
+					var filtered = snodes.filter(function(d) { return $.contains(d.statementid,statementId);});
+					alert(filtered.size());
+
+
+					var filterednew = snodes.filter(function(d) { return d.statementid[0]==statementId;}).each(function(d) {
+							node.style("stroke-opacity", function(o) {
+									return neighboring(d, o) ? 1 : opacity;
+							});
+
+							link.style("stroke-opacity", opacity).style("stroke-opacity", function(o) {
+									return o.source === d || o.target === d ? 1 : opacity;
+							});
+					});
+
+					};
+
+					}
+				
+				
+				/*function highlightStmt(opacity) {
+					return function(d, i) {
+						fade all elements
+						d3.select(d.source).style("opacity", opacity);
+						d3.select(d.target).style("opacity", opacity);
 						//fade all elements
 						svg.selectAll("circle, line").style("opacity", opacity);
 
@@ -238,7 +288,7 @@ function d3init(graph, networkId, path,type) {
 
 					};
 
-				}
+				}*/
 				
 				function fadeLinks(opacity) {
 					return function(d, i) {
@@ -293,6 +343,45 @@ function d3init(graph, networkId, path,type) {
 					}
 				}
 				
+				function displayAllAnnotations(){
+					var output = "<h3>All Annotations of Network</h3>";
+					output+="<h5>Node/Relation Name --> Annotation Text</h5>";
+					output+="</br>";
+					$.ajax({
+					url : path+"/auth/editing/getAllAnnotations/"+networkId,
+					type : "GET",
+					dataType: 'json',
+					success : function(data) {
+					/*var tr;
+
+					$.each(data.text, function(key,value){
+
+					            tr = $('<tr/>');
+
+					            tr.append("<td>" + json[i].User_Name + "</td>");
+
+					            tr.append("<td>" + json[i].score + "</td>");
+
+					            tr.append("<td>" + json[i].team + "</td>");
+
+					            $('annot_table').append(tr);
+
+					        });*/
+					var cnt = 0;
+					output += "<ol>";
+					$.each(data.text, function(key,value){
+						//content += ++cnt +'.<li>'+value.name+'</li>'+value.text+'</li>'; 
+					    output+="<li>" + ++cnt + ")"+ " " + value.name + " "+ "-->" +" "+ value.text+"</li>"; 
+					                });
+					output += "</ol>"
+					$('#allannot_details').html(output);
+					},
+					error: function() {
+					alert("error");
+					}
+					});
+				}
+
 				function rightClick(d){
 					var html = "";
 					// If the node type is Predicate
@@ -367,7 +456,8 @@ function d3init(graph, networkId, path,type) {
 						
 						$('#annot_details').html(content);
 						event.preventDefault();
-
+						
+						
 						// Saves the relation annotation to DB
 						$('#annot_submit').click(function(event) {
 							var annottext = $('#'+text1ID+'').val();  
@@ -377,12 +467,14 @@ function d3init(graph, networkId, path,type) {
 								data :"nodename="+d.id+"&annotText="+annottext+"&type=node",
 								success : function() {
 									$('#'+popupId+'').dialog('close');
+									displayAllAnnotations();
 								},
 								error: function() {
 									alert("error");
 								}
 							});
 							event.preventDefault();
+						
 						});
 
 
@@ -440,6 +532,7 @@ function d3init(graph, networkId, path,type) {
 							}
 						});
 						
+						
 						// Saves the relation annotation to DB
 						$('#annot_submit1').click(function(event) {
 							var annottext = $('#'+text1ID+'').val();  
@@ -449,6 +542,7 @@ function d3init(graph, networkId, path,type) {
 								data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
 								success : function() {
 									$('#'+popupId+'').dialog('close');
+									displayAllAnnotations();
 								},
 								error: function() {
 									alert("error");
@@ -456,6 +550,7 @@ function d3init(graph, networkId, path,type) {
 							});
 
 							event.preventDefault();
+							
 						});
 
 						// Popup decoration effects

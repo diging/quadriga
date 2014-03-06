@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -130,8 +131,41 @@ public class EditingNetworkAnnotationsController {
 	}
 		
 	
-	
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/auth/editing/getAllAnnotations/{networkId}", method = RequestMethod.GET)
+	public @ResponseBody String getAllAnnotationsInNetwork(HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable("networkId") String networkId,
+			Principal principal) throws QuadrigaStorageException, JSONException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		logger.info("network ID:" + networkId);
+		String annotation = "";
+		
+		try {
+			List<NetworkAnnotation> resultList = editingNetworkAnnotationManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
+			JSONArray ja = new JSONArray();
+			JSONObject j1 = new JSONObject();
+			if(resultList != null || resultList.size() > 0){
+				
+				for (int i = 0; i < resultList.size(); i++) {
+					JSONObject j = new JSONObject();
+					j.put("name", resultList.get(i).getNodeName());
+					j.put("text", resultList.get(i).getAnnotationText());
+					ja.put(j);
+				}
+				j1.put("text", ja);
+			annotation = j1.toString();
+			}
+			
+		
+		} catch (QuadrigaStorageException e) {
+			logger.error("Some issue in the DB", e);
+		}
+		logger.info("json::" +annotation);
+		return annotation;
+	}
 	
 	
 
 }
+
