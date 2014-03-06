@@ -7,6 +7,7 @@ package edu.asu.spring.quadriga.dto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,6 +24,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *This class represents the column mappings for workspace table.
@@ -83,7 +88,8 @@ public class WorkspaceDTO implements Serializable {
     private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceEditorDTO> workspaceEditorDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "workspaceDTO")
+    @OnDelete(action=OnDeleteAction.NO_ACTION)
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
 
 

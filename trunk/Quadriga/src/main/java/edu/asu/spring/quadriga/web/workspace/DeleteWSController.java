@@ -111,8 +111,7 @@ public class DeleteWSController
 		String wsInternalId;
 		ModelAndView model;
 		List<ModifyWorkspace> deleteWSList;
-		
-		model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
+		//model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
 		
 		//fetch the user name
 		userName = principal.getName();
@@ -120,8 +119,11 @@ public class DeleteWSController
 		deleteWSList = new ArrayList<ModifyWorkspace>();
 		workspaceId = new StringBuilder();
 		
+		model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
+		
 		if(result.hasErrors())
 		{
+//			model = new ModelAndView("auth/workbench/workspace/deleteworkspace");
 			// retrieve the workspaces associated with the projects
 			deleteWSList = workspaceFormManager.getDeactivatedWorkspaceList(projectid,userName);
 			
@@ -131,10 +133,13 @@ public class DeleteWSController
 			model.getModelMap().put("success", 0);
 			model.getModelMap().put("error", 1);
 			model.getModelMap().put("workspaceform", workspaceForm);
-			model.getModelMap().put("wsprojectid", projectid);
+			//model.getModelMap().put("wsprojectid", projectid);
+			model.getModelMap().put("projectid", projectid);
+			
 		}
 		else
 		{
+//			model = new ModelAndView("auth/workbench/project");
 			deleteWSList = workspaceForm.getWorkspaceList();
 			
 			//loop through the selected workspace
@@ -152,7 +157,9 @@ public class DeleteWSController
 			
 			//frame the model objects
 			model.getModelMap().put("success", 1);
-			model.getModelMap().put("wsprojectid", projectid);			
+			model.getModelMap().put("wsprojectid", projectid);	
+//			model.getModelMap().put("projectid", projectid);
+			
 		}
 		return model;
 	}
