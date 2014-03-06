@@ -191,6 +191,13 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		String errMsg = "";
 		try
 		{
+			deleteProjectWorkspace(workspaceIdList);
+			deleteWorkspaceConceptcollection(workspaceIdList);
+			deleteWorkspaceDictionary(workspaceIdList);
+			deleteWorkspaceDspace(workspaceIdList);
+			deleteWorkspaceEditor(workspaceIdList);
+			deleteWorkspaceNetwork(workspaceIdList);
+			
 			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceDTO workspace where workspace.workspaceid IN (:workspaceIdList)");
 			query.setParameter("workspaceIdList", workspaceIdList);
 			int updatedRecordCount = query.executeUpdate();
@@ -236,6 +243,144 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		catch(Exception e)
 		{
 			logger.error("deleteWorkspaceRequest :",e);
+			errMsg = "Exception in Database";
+        	throw new QuadrigaStorageException();
+		}
+		return errMsg;
+	}
+	
+	
+	@Override
+	public String deleteProjectWorkspace(String workspaceIdList) throws QuadrigaStorageException
+	{
+		String errMsg = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from ProjectWorkspaceDTO workspace where workspace.workspaceDTO.workspaceid IN (:workspaceIdList)");
+			query.setParameter("workspaceIdList", workspaceIdList);
+			int updatedRecordCount = query.executeUpdate();
+			if(! (updatedRecordCount > 0))
+			{
+				errMsg = "Error in deleting workspaces";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteProjectWorkspace :",e);
+			errMsg = "Exception in Database";
+        	throw new QuadrigaStorageException();
+		}
+		return errMsg;
+	}
+
+	@Override
+	public String deleteWorkspaceDictionary(String workspaceIdList) throws QuadrigaStorageException
+	{
+		String errMsg = "";
+		try {
+			Query query = sessionFactory
+					.getCurrentSession()
+					.createQuery(
+							"Delete from WorkspaceDictionaryDTO workspace where workspace.workspaceDTO.workspaceid IN (:workspaceIdList)");
+			query.setParameter("workspaceIdList", workspaceIdList);
+			int updatedRecordCount = query.executeUpdate();
+			if (!(updatedRecordCount > 0)) {
+				errMsg = "Error in deleting workspaces";
+			}
+		} catch (Exception e) {
+			logger.error("deleteWorkspaceDictionary :", e);
+			errMsg = "Exception in Database";
+			throw new QuadrigaStorageException();
+		}
+		return errMsg;
+	}
+
+	@Override
+	public String deleteWorkspaceConceptcollection(String workspaceIdList)
+			throws QuadrigaStorageException {
+		String errMsg = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceConceptcollectionDTO workspace where workspace.workspaceDTO.workspaceid IN (:workspaceIdList)");
+			query.setParameter("workspaceIdList", workspaceIdList);
+			int updatedRecordCount = query.executeUpdate();
+			if(! (updatedRecordCount > 0))
+			{
+				errMsg = "Error in deleting workspaces";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteWorkspaceConceptcollection :",e);
+			errMsg = "Exception in Database";
+        	throw new QuadrigaStorageException();
+		}
+		return errMsg;
+	}
+
+	@Override
+	public String deleteWorkspaceDspace(String workspaceIdList)
+			throws QuadrigaStorageException {
+		String errMsg = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceDspaceDTO workspace where workspace.workspaceDTO.workspaceid IN (:workspaceIdList)");
+			query.setParameter("workspaceIdList", workspaceIdList);
+			int updatedRecordCount = query.executeUpdate();
+			if(! (updatedRecordCount > 0))
+			{
+				errMsg = "Error in deleting workspaces";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteWorkspaceDspace :",e);
+			errMsg = "Exception in Database";
+        	throw new QuadrigaStorageException();
+		}
+		return errMsg;
+	}
+
+	@Override
+	public String deleteWorkspaceEditor(String workspaceIdList)
+			throws QuadrigaStorageException {
+		String errMsg = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceEditorDTO workspace where workspace.workspaceDTO.workspaceid IN (:workspaceIdList)");
+			query.setParameter("workspaceIdList", workspaceIdList);
+			int updatedRecordCount = query.executeUpdate();
+			if(! (updatedRecordCount > 0))
+			{
+				errMsg = "Error in deleting workspaces";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteWorkspaceEditor :",e);
+			errMsg = "Exception in Database";
+        	throw new QuadrigaStorageException();
+		}
+		return errMsg;
+	}
+
+	@Override
+	public String deleteWorkspaceNetwork(String workspaceIdList)
+			throws QuadrigaStorageException {
+		String errMsg = "";
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Delete from NetworksDTO networks where networks.workspaceDTO.workspaceid IN (:workspaceIdList)");
+			query.setParameter("workspaceIdList", workspaceIdList);
+			int updatedRecordCount = query.executeUpdate();
+			if(! (updatedRecordCount > 0))
+			{
+				errMsg = "Error in deleting workspaces";
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("deleteWorkspaceNetwork :",e);
 			errMsg = "Exception in Database";
         	throw new QuadrigaStorageException();
 		}

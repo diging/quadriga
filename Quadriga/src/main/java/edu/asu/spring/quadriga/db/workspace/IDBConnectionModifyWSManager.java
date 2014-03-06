@@ -62,4 +62,54 @@ public interface IDBConnectionModifyWSManager
 	 */
 	public abstract String deleteWorkspaceOwnerEditor(String workspaceId, String owner)
 			throws QuadrigaStorageException;
+	/**
+	 * Delete the given workspace.
+	 * @param workspaceIdList
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract String deleteProjectWorkspace(String workspaceIdList)
+			throws QuadrigaStorageException;
+	/**
+	 * Delete the project workspace for given workspace.
+	 * @param workspaceIdList
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	
+	public abstract String deleteWorkspaceDictionary(String workspaceIdList)
+			throws QuadrigaStorageException;
+	/**
+	 * Delete the workspace dictionary for given workspace.
+	 * @param workspaceIdList
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract String deleteWorkspaceConceptcollection(String workspaceIdList)
+			throws QuadrigaStorageException;
+	/**
+	 * Delete the workspace COncept Collection for given workspace.
+	 * @param workspaceIdList
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract String deleteWorkspaceDspace(String workspaceIdList)
+			throws QuadrigaStorageException;
+	/**
+	 * Delete the workspace editor for given workspace.
+	 * @param workspaceIdList
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract String deleteWorkspaceEditor(String workspaceIdList)
+			throws QuadrigaStorageException;
+	
+	/**
+	 * Delete the workspace netowrk for given workspace.
+	 * @param workspaceIdList
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract String deleteWorkspaceNetwork(String workspaceIdList)
+			throws QuadrigaStorageException;
 }
