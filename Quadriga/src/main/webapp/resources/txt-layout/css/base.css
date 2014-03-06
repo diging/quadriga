@@ -35,17 +35,32 @@ a {
 
 #container {
     width: 1200px;
-    height: 1000px;
+    height: 1200px;
     margin:0 auto;
     position:relative;
 }
 
 #left-container, 
 #right-container, 
+#bottom-container,
 #center-container {
     height:600px;
     position:absolute;
     top:0;
+}
+
+#bottom-container{
+	position: absolute;
+    top:800px;
+    background-image:url('bottom.png');
+    height:400px;
+    width:1000px;
+    color:#686c70;
+    text-align: left;
+    overflow: auto;
+    background-color:#fff;
+    background-repeat:no-repeat;
+    border-bottom:1px solid #ddd;
 }
 
 #left-container, #right-container {
@@ -80,6 +95,7 @@ a {
 /* Blue background for the infovis data*/
 
 #center-container {
+    height:1000px;
     width:1000px;
     left:100px;
     background-color:#01837C;
