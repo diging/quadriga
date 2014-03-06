@@ -73,7 +73,14 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 
 	/**
-	 * {@inheritDoc}
+	 * Add a new network into a workspace. Creates a unique Network ID  and assigns the user as owner to the network object. 
+	 * It then adds the network into the Workspace. The method uses Hibernate Framework to perform the database operations.
+	 *  
+	 * @param networkName 					Name of the newly added network.
+	 * @param user							Owner of the network.
+	 * @param workspaceid					Workspace id to which the network would be assigned.
+	 * @return								Network id if the operation was successful. Exception for all other cases.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public String addNetworkRequest(String networkName, IUser user,	String workspaceid) throws QuadrigaStorageException {
@@ -94,7 +101,17 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Add Network statements (like AE, RE ) associated to networks. This method would also add more info of the network statement like top node, type of node.
+	 * Also adds all the statements in the XML for further use cases.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param networkId						ID of network.
+	 * @param id							ID of network statement.
+	 * @param type							Type of network statement, AE - Appellation event, RE - Relation event.
+	 * @param isTop							{@link Boolean} To whether the network statement is in starting point xml. 
+	 * @param user							Owner of the network.
+	 * @return								Null if the operation was successful. Exception for all other cases.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public String addNetworkStatement(String rowid,String networkId, String id, String type,
@@ -114,7 +131,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Get {@link INetwork} object for which the user is an owner, using the network ID. 
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param networkid							ID of network.
+	 * @param user								Owner of the network.
+	 * @return									return {@link INetwork} object associated to the networkid, user. Null if the there are no networks for the input constraints.
+	 * @throws QuadrigaStorageException			Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public INetwork getNetwork(String networkId, IUser user) throws QuadrigaStorageException {
@@ -155,7 +178,12 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * This would give the list of {@link INetwork} belonging to the {@link IUser}.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 *  
+	 * @param user							Owner of the network.
+	 * @return								returns {@link List} of {@link INetwork} belonging to owner. The list will be empty (not null) if there are no networks matching the input constraints.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public List<INetwork> getNetworkList(IUser user)
@@ -198,7 +226,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Check if the network name is already used.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param networkName					Name for the network.
+	 * @param user							{@link IUser} object for searching network name.
+	 * @return								TRUE - If the network name is already in use. FALSE - If the network name is not already taken.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public boolean hasNetworkName(String networkName, IUser user)
@@ -226,7 +260,17 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Archive the network statements when network is re-uploaded after the network is rejected by admin.
+	 * The network statement has isarchived field as metadata to understand whether network is archived.
+	 * isarchived = 0 is network is active.
+	 * isarchived = 1 is network is archived as is most recently archived.
+	 * isarchived = 2 is network is archived and never used again. Stored in DB for future references.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param networkId						ID of network.
+	 * @param id							ID of network statement.
+	 * @return								Empty string if the operation was successful. Exception for all other cases.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public String archiveNetworkStatement(String networkId, String id)
@@ -269,7 +313,13 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Get all the network statements {@link INetworkNodeInfo} for a network.
+	 * Function can get Network statements with isTop =1 and not the archived versions.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param networkId						ID of network.
+	 * @return								returns {@link List} of {@link INetworkNodeInfo}. The list will be empty (not null) if there are no network statements matching the input constraints.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public List<INetworkNodeInfo> getNetworkNodes(String networkId)
@@ -293,7 +343,15 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * This method should be called when network is reuploaded after admin has rejected the network.
+	 * Archive the network, would mark the network statements with isarchived =1 or isarchived=2.
+	 * isarchived = 1 is network is archived as is most recently archived.
+	 * isarchived = 2 is network is archived and never used again. kept in DB for future references.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param networkId						ID of network.
+	 * @return								Empty string if the operation was successful. Exception for all other cases.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
 	public String archiveNetwork(String networkId)
@@ -350,6 +408,145 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException(e);
 		}
 
+	}
+	
+	
+	/**
+	 * Update the network name for an existing network
+	 * This method could be called if User's network has been rejected and user prefers to store the network with an alternative name (Like version name).
+	 * The method uses Hibernate Framework to perform the database operations.
+	 *  
+	 * @param networkId						ID of an existing network.
+	 * @param networkName					New name for the network.
+	 * @return								"success" string if the operation was successful. Exception for all other cases.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	@Override
+	public String updateNetworkName(String networkId, String networkName)
+			throws QuadrigaStorageException {
+		try {
+			Query query = sessionFactory.getCurrentSession().getNamedQuery(
+					"NetworksDTO.findByNetworkid");
+			query.setParameter("networkid", networkId);
+
+			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
+			networksDTO.setNetworkname(networkName);
+
+			sessionFactory.getCurrentSession().update(networksDTO);
+
+			return "success";
+		} catch (Exception e) {
+			logger.error("Error in changing network status: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+
+	/**
+	 * Get the list of networks associated with a project id. If the project id is null or the project does not contain any
+	 * workspaces or networks then the return will be null.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param projectid						The id of the project in which you need to find the list of networks.
+	 * @return								List of networks belonging to the given project id. The list will be empty (not null) if there are no networks matching the input constraints.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	@Override
+	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
+		if(projectid == null || projectid.equals(""))
+			return null;
+
+		//Create a query to get all projects
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
+		query.setParameter("projectid", projectid);
+
+		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
+		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
+			System.out.println(projectWorkspaceDTO.getProjectDTO().getProjectname());
+		}
+
+		List<INetwork> networkList = new ArrayList<INetwork>();
+
+		//If there are a list of projects, get all the networks using the workspace ids
+
+		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
+			if (projectWorkspaceDTO != null) {
+				//String workspaceid1 = projectWorkspaceDTO.getWorkspaceDTO().getWorkspaceid();
+				//System.out.println(workspaceid1);
+				String workspaceid1 = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
+				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
+				queryNetworks.setParameter("workspaceid", workspaceid1);
+
+				List<NetworksDTO> networksDTOList = queryNetworks.list();
+
+				//Add the networks to the list
+				if(networksDTOList != null)
+				{
+					//networkList = new ArrayList<INetwork>();
+					networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
+				}
+			}
+		}
+
+		for (INetwork network : networkList) {
+			// Get the project id associated with the workspace id
+			query = sessionFactory.getCurrentSession().getNamedQuery(
+					"ProjectWorkspaceDTO.findByWorkspaceid");
+			query.setParameter("workspaceid", network.getWorkspaceid());
+			ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
+					.uniqueResult();
+
+			if (projectWorkspaceDTO != null) {
+				// Get the project details
+				if(projectWorkspaceDTO.getProjectDTO() != null)
+					network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+
+				// Get the workspace details
+				if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+					network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
+			}
+		}
+
+
+		return networkList;
+
+
+	}
+
+	/**
+	 * Get the old versions of the network that were archived.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param networkId						ID of network.
+	 * @param archiveLevel					Archive level would be from 0 or 1 or 2 - levels of old versions.
+	 * @return								returns {@link List} of {@link INetworkOldVersion}. Null if there are no networks matching the input constraints.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	@Override
+	public List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException {
+		try {
+			List<INetworkOldVersion> networkOldVersionsList = null;
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
+			query.setParameter("networkid", networkId);
+			query.setParameter("isarchived", archiveLevel);
+
+			List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
+
+			if(networkAssignedDTOList != null)
+			{
+				networkOldVersionsList = new ArrayList<INetworkOldVersion>();
+				for(NetworkAssignedDTO networkAssignedDTO : networkAssignedDTOList)
+				{
+					networkOldVersionsList.add(networkMapper.getNetworkOldVersion(networkAssignedDTO));
+				}
+			}
+
+			return networkOldVersionsList;
+		} catch (Exception e) {
+			logger.error("Error in fetching	 old version details: ", e);
+			throw new QuadrigaStorageException(e);
+		}
 	}
 
 	/******************************************************************************************************
@@ -586,124 +783,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String updateNetworkName(String networkId, String networkName)
-			throws QuadrigaStorageException {
-		try {
-			Query query = sessionFactory.getCurrentSession().getNamedQuery(
-					"NetworksDTO.findByNetworkid");
-			query.setParameter("networkid", networkId);
-
-			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
-			networksDTO.setNetworkname(networkName);
-
-			sessionFactory.getCurrentSession().update(networksDTO);
-
-			return "success";
-		} catch (Exception e) {
-			logger.error("Error in changing network status: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
-		if(projectid == null || projectid.equals(""))
-			return null;
-
-		//Create a query to get all projects
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
-		query.setParameter("projectid", projectid);
-
-		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
-		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
-			System.out.println(projectWorkspaceDTO.getProjectDTO().getProjectname());
-		}
-
-		List<INetwork> networkList = new ArrayList<INetwork>();
-
-		//If there are a list of projects, get all the networks using the workspace ids
-
-		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
-			if (projectWorkspaceDTO != null) {
-				//String workspaceid1 = projectWorkspaceDTO.getWorkspaceDTO().getWorkspaceid();
-				//System.out.println(workspaceid1);
-				String workspaceid1 = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
-				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
-				queryNetworks.setParameter("workspaceid", workspaceid1);
-
-				List<NetworksDTO> networksDTOList = queryNetworks.list();
-
-				//Add the networks to the list
-				if(networksDTOList != null)
-				{
-					//networkList = new ArrayList<INetwork>();
-					networkList.addAll(networkMapper.getListOfNetworks(networksDTOList));
-				}
-			}
-		}
-
-		for (INetwork network : networkList) {
-			// Get the project id associated with the workspace id
-			query = sessionFactory.getCurrentSession().getNamedQuery(
-					"ProjectWorkspaceDTO.findByWorkspaceid");
-			query.setParameter("workspaceid", network.getWorkspaceid());
-			ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query
-					.uniqueResult();
-
-			if (projectWorkspaceDTO != null) {
-				// Get the project details
-				if(projectWorkspaceDTO.getProjectDTO() != null)
-					network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
-
-				// Get the workspace details
-				if(projectWorkspaceDTO.getWorkspaceDTO() != null)
-					network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
-
-			}
-		}
-
-
-		return networkList;
-
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException {
-		try {
-			List<INetworkOldVersion> networkOldVersionsList = null;
-			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
-			query.setParameter("networkid", networkId);
-			query.setParameter("isarchived", archiveLevel);
-
-			List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
-
-			if(networkAssignedDTOList != null)
-			{
-				networkOldVersionsList = new ArrayList<INetworkOldVersion>();
-				for(NetworkAssignedDTO networkAssignedDTO : networkAssignedDTOList)
-				{
-					networkOldVersionsList.add(networkMapper.getNetworkOldVersion(networkAssignedDTO));
-				}
-			}
-
-			return networkOldVersionsList;
-		} catch (Exception e) {
-			logger.error("Error in fetching	 old version details: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
+	
 
 	/**
 	 * {@inheritDoc}
