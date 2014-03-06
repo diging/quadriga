@@ -142,8 +142,18 @@ public class DspaceRestController {
 	}
 	
 	
+	/**
+	 * Rest Api to validate a dspace credential. When the combination of both email+password and public key + private key are provided,
+	 * the keys take precedence over the traditional email-password authentication. 
+	 * 
+	 * @param email				The dspace username of the user.
+	 * @param password			The dspace password of the user account.
+	 * @param publicKey			The dspace public key of the user.
+	 * @param privateKey		The dspace private key of the user.
+	 * @param response			The response of this rest call. If the dspace credentials are valid then the response code is 200 else its 401.
+	 */
 	@RequestMapping(value = "rest/dspace/validate", method = RequestMethod.GET)
-	public void validateDspaceCredentials(@RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response) throws RestException
+	public void validateDspaceCredentials(@RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password, @RequestParam(value="public_key", required=false) String publicKey, @RequestParam(value="private_key", required=false) String privateKey, ModelMap model, Principal principal, HttpServletResponse response)
 	{
 		IDspaceKeys dspaceKeys = null;
 		if(privateKey != null && !privateKey.equals("") && publicKey != null && !publicKey.equals(""))
@@ -170,7 +180,7 @@ public class DspaceRestController {
 	 * @param fileid			The id of the file to be downloaded
 	 * @param email				The dspace email id of the user.
 	 * @param password			The dspace password of the user.
-	 * @param publicKey			The dspae public key of the user.
+	 * @param publicKey			The dspace public key of the user.
 	 * @param privateKey		The dspace private key of the user.
 	 * @param principal			This is used to retrieve the logged in username.
 	 * @param response			The response of this method which will contain the file and its metadata.
