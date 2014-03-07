@@ -226,33 +226,49 @@ function d3init(graph, networkId, path,type) {
 
 					svg.selectAll(".node, line").style("opacity", opacity);
 					var source = d.source;
-					var array = [];
+					var nodearray = [];
+					var found = [];
+					var statementId = [];
+				
 					//alert(source);
-					var statementId = source.statementid;
-					//alert(statementId);
-					//var selection = d3.select("#"+statementId);
-					//var selection = d3.selectAll("#statementId").each(function(d,i) { alert(this); });
-					//var selection = d3.select('circle[statementid="'+statementId+'"]');
-					//var selection = d3.selectAll([statementid="statementId"]);
-					//var selection = d3.select([statementid]);
-					//var selection = d3.filter(function(d) { return d.statementid==statementId; });
-					//var snodes = svg.selectAll("circle").filter(function(d) { return d.statementid==statementId;});
-					var snodes = svg.selectAll(".node");
-					snodes.each(function(d){
-						if(indexOf(d.statementid,statementId)>0)
-							{array.push(d);
+					statementId = source.statementid;
+					/*var snodes = svg.selectAll(".node").each(function(d){
+						
+						for(var i in statementId){
+							for(var j in d.statementid){
+								if(statementId[i] == d.statementid[j]){
+									nodearray.push(d);
+									//alert(nodearray.length);
+								}
 							}
-					});
-					console.log(array);		
+						}
+						
+						/*found = $.intersection(statementId, d.statementid);
+						if(found.size()>0){
+							nodearray.push(d);
+						}*/
+						
+						/*var found = $.inArray(statementId, d.statementid);
+						if(found > -1){
+							nodearray.push(d);
+							alert(nodearray.size());
+							}*/
+						
+						/*if((d.statementid.indexOf(statementId))>0)
+							{array.push(d);
+							console.log(d.name);
+							}
+					});*/
+							
 												
-					var filtered = snodes.filter(function(d) { return $.contains(d.statementid,statementId);});
-					alert(filtered.size());
+					//var filtered = snodes.filter(function(d) { return d.statementid[0]==statementId;});
+					//alert(filtered.size());
 
-
-					var filterednew = snodes.filter(function(d) { return d.statementid[0]==statementId;}).each(function(d) {
-							node.style("stroke-opacity", function(o) {
+					var snodes = svg.selectAll(".node").each(function(d) {
+							d3.select(this).style("opacity", 1);
+							/*node.style("stroke-opacity", function(o) {
 									return neighboring(d, o) ? 1 : opacity;
-							});
+							});*/
 
 							link.style("stroke-opacity", opacity).style("stroke-opacity", function(o) {
 									return o.source === d || o.target === d ? 1 : opacity;

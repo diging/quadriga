@@ -80,7 +80,10 @@ public class WebsiteProjectController {
 	
 	/**
 	 * This method displays the public or external Website for the particular project 
-	 * @param unixName
+	 * 
+	 * If the project has been set to 'accessible', then the public website page is displayed. If the project does not exist
+	 * then an error page is shown.
+	 * @param unixName unix name that is given to the project at the time of its creation
 	 * @param model
 	 * @return
 	 * @throws QuadrigaStorageException
@@ -103,7 +106,11 @@ public class WebsiteProjectController {
 	
 	/**
 	 * This method retrieves all the networks associated with the project based on the project unix name
-	 * @param unixName
+	 * 
+	 * If the project contains networks, it displays all of the networks along with the names of the workspaces
+	 * that contain the networks. If no networks have been created for that
+	 * particular project, then an appropriate error page is displayed.
+	 * @param unixName unix name that is given to the project at the time of its creation
 	 * @param model
 	 * @return 
 	 * @throws QuadrigaStorageException
@@ -138,7 +145,7 @@ public class WebsiteProjectController {
 	
 	/**
 	 * This method gives the visualization of the network with the given network id 
-	 * @param networkId
+	 * @param networkId network id of the network that has to be visualized
 	 * @param model
 	 * @param principal
 	 * @return
