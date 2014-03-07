@@ -53,6 +53,7 @@ public class ConceptcollectionController {
 
 	@Autowired
 	IConceptCollectionManager conceptControllerManager;
+	
 	private List<IConceptCollection> list;
 
 	private List<IConceptCollection> collab_list;
@@ -74,6 +75,7 @@ public class ConceptcollectionController {
 
 	private ConceptpowerReply c;
 
+	
 	@Autowired
 	private IUserManager usermanager;
 
@@ -88,6 +90,63 @@ public class ConceptcollectionController {
 		binder.setValidator(validator);
 	}
 
+	public ConceptpowerReply getC() {
+		return c;
+	}
+
+	public void setC(ConceptpowerReply c) {
+		this.c = c;
+	}
+	public IConceptCollectionManager getConceptControllerManager() {
+		return conceptControllerManager;
+	}
+
+
+	public void setConceptControllerManager(
+			IConceptCollectionManager conceptControllerManager) {
+		this.conceptControllerManager = conceptControllerManager;
+	}
+
+
+	public CollectionsValidator getValidator() {
+		return validator;
+	}
+
+
+	public void setValidator(CollectionsValidator validator) {
+		this.validator = validator;
+	}
+
+
+	public IConceptCollectionFactory getCollectionFactory() {
+		return collectionFactory;
+	}
+
+
+	public void setCollectionFactory(IConceptCollectionFactory collectionFactory) {
+		this.collectionFactory = collectionFactory;
+	}
+
+
+
+	public IConceptFactory getConceptFactory() {
+		return conceptFactory;
+	}
+
+
+	public void setConceptFactory(IConceptFactory conceptFactory) {
+		this.conceptFactory = conceptFactory;
+	}
+
+
+	public IUserManager getUsermanager() {
+		return usermanager;
+	}
+
+
+	public void setUsermanager(IUserManager usermanager) {
+		this.usermanager = usermanager;
+	}
 	
 	/**
 	 * This is used to fetch the user related concept collections from database.
@@ -96,11 +155,9 @@ public class ConceptcollectionController {
 	 * @throws QuadrigaStorageException
 	 */
 	@RequestMapping(value = "auth/conceptcollections", method = RequestMethod.GET)
-	public String conceptCollectionHandler(ModelMap model)
+	public String conceptCollectionHandler(ModelMap model,Principal principal)
 			throws QuadrigaStorageException {
-		UserDetails principal = (UserDetails) SecurityContextHolder
-				.getContext().getAuthentication().getPrincipal();
-		String userId = principal.getUsername();
+		String userId = principal.getName();
 		list = conceptControllerManager.getCollectionsOwnedbyUser(userId);
 		model.addAttribute("conceptlist", list);
 		collab_list = conceptControllerManager.getUserCollaborations(userId);
@@ -138,6 +195,14 @@ public class ConceptcollectionController {
 		List<ICollaborator>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
 		model.addAttribute("collaboratingUsers", collaboratingUsers);
 		return "auth/conceptcollections/details";
+	}
+
+	public IConceptCollection getCollection() {
+		return collection;
+	}
+
+	public void setCollection(IConceptCollection collection) {
+		this.collection = collection;
 	}
 
 	/**
@@ -178,6 +243,7 @@ public class ConceptcollectionController {
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}/addItems", method = RequestMethod.POST)
 	public String saveItemsHandler(@PathVariable("collection_id") String collection_id, HttpServletRequest req, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
+		
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
 			for (String id : values) {
@@ -190,8 +256,9 @@ public class ConceptcollectionController {
 			}
 		}
 		int index;
-		if ((index = list.indexOf(collection)) >= 0)
+		if ((index = list.indexOf(collection)) >= 0)			
 			collection = list.get(index);
+		
 		else if ((index = collab_list.indexOf(collection)) >= 0)
 			collection = collab_list.get(index);
 		conceptControllerManager.getCollectionDetails(collection, principal.getName());
