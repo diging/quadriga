@@ -289,4 +289,8 @@ public class MockupUserManager implements IUserManager {
 		return false;
 	}
 
+	public void updateUserQuadrigaRoles(String userName, String quadrigaRoles, String loggedInUser)
+			throws QuadrigaStorageException {
+	}
+
 }

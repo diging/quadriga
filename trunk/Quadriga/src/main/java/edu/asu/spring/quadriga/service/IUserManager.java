@@ -97,4 +97,15 @@ public interface IUserManager {
 
 	public abstract void deleteUser(String sUserId, String sAdminId) throws QuadrigaStorageException;
 
+
+	/**
+	 * Updates the quadriga roles associated with the user
+	 * @param userName
+	 * @param quadrigaRoles
+	 * @param loggedInUser
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract void updateUserQuadrigaRoles(String userName, String quadrigaRoles,
+			String loggedInUser) throws QuadrigaStorageException;
+
 }
