@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.db.IModifyUserRoles;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -36,6 +37,9 @@ public class UserManager implements IUserManager {
 
 	@Autowired
 	private IQuadrigaRoleManager rolemanager;
+	
+	@Autowired
+	private IModifyUserRoles modifyUserRoleManager;
 
 	@Autowired
 	private IUserFactory userFactory;
@@ -382,6 +386,23 @@ public class UserManager implements IUserManager {
 				}
 		}
 		return iUserStatus;
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateUserQuadrigaRoles(String userName,String quadrigaRoles, String loggedInUser) throws QuadrigaStorageException 
+	{
+		try
+		{
+		modifyUserRoleManager.updateUserQuadrigaRoles(userName, quadrigaRoles, loggedInUser);
+		}
+		catch(Exception ex)
+		{
+			throw new QuadrigaStorageException();
+		}
 	}
 
 }

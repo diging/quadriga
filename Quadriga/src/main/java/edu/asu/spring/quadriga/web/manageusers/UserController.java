@@ -207,5 +207,4 @@ public class UserController {
 		
 		return model;
 	}
-
 }
