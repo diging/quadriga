@@ -43,8 +43,7 @@
 		$('#html1').jstree();
 		$('#html2').jstree();
 		var data = ${core};
-		$('#html3').jstree(data
-		);
+		$('#html3').jstree(data);
 	});
 </script>
 
@@ -54,54 +53,64 @@
 	<span class="byline">View your Networks here.</span>
 </header>
 
-<div id="html3"> </div>
-<br />
-<br />
+<input type="button"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks'"
+	value='Tree View'>
 
+<input type="button"
+	onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/table'"
+	value='Table View'>
 <br />
-<div class="container">
-	<c:choose>
-		<c:when test="${not empty networkList}">
-			<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
-				class="display dataTable">
-				<thead>
-					<tr>
-						<th align="left">Name</th>
-						<th>Project</th>
-						<th>Workspace</th>
-						<th>Status</th>
-						<th>Action</th>
-					</tr>
-				</thead>
+<br />
+<div id="html3"></div>
 
-				<tbody>
-					<c:forEach var="network" items="${networkList}">
-						<tr>
-							<td width="25%" align="left"><img
-								style="vertical-align: middle;"
-								src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png">
-								<input name="items" type="hidden"
-								value="<c:out value="${network.name}"></c:out>" /> <c:out
-									value="${network.name}"></c:out></td>
-							<td width="25%" align="center"><c:out
-									value="${network.project.name}"></c:out></td>
-							<td width="25%" align="center"><c:out
-									value="${network.workspace.name}"></c:out></td>
-							<td width="25%" align="center"><c:out
-									value="${network.status}"></c:out></td>
-							<td width="25%" align="center"><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
-								value='Visualize'></td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</c:when>
-		<c:otherwise>
-			<spring:message code="empty.networks" />
-		</c:otherwise>
-	</c:choose>
-</div>
+<c:choose>
+	<c:when test="${tableview=='1'}">
+		<div class="container">
+			<c:choose>
+				<c:when test="${not empty networkList}">
+					<table style="width: 100%" cellpadding="0" cellspacing="0"
+						border="0" class="display dataTable">
+						<thead>
+							<tr>
+								<th align="left">Name</th>
+								<th>Project</th>
+								<th>Workspace</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<c:forEach var="network" items="${networkList}">
+								<tr>
+									<td width="25%" align="left"><img
+										style="vertical-align: middle;"
+										src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png">
+										<input name="items" type="hidden"
+										value="<c:out value="${network.name}"></c:out>" /> <c:out
+											value="${network.name}"></c:out></td>
+									<td width="25%" align="center"><c:out
+											value="${network.project.name}"></c:out></td>
+									<td width="25%" align="center"><c:out
+											value="${network.workspace.name}"></c:out></td>
+									<td width="25%" align="center"><c:out
+											value="${network.status}"></c:out></td>
+									<td width="25%" align="center"><input type=button
+										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
+										value='Visualize'></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<spring:message code="empty.networks" />
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</c:when>
+</c:choose>
 
 
 

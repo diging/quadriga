@@ -8,10 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.omg.CORBA.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.INetworkManager;
@@ -69,7 +65,7 @@ public class NetworkListManager {
 
 	@Autowired
 	IUserManager userManager;
-	
+
 	@Autowired
 	IEditingNetworkAnnotationManager editingNetworkAnnotationManager;
 
@@ -96,7 +92,7 @@ public class NetworkListManager {
 	}
 
 	/**
-	 * Get the list of network belonging to the user
+	 * This method helps in listing of network belonging to the user in tree view. 
 	 * @author Lohith Dwaraka
 	 * @param model
 	 * @param principal
@@ -105,25 +101,44 @@ public class NetworkListManager {
 	 * @throws JSONException 
 	 */
 	@RequestMapping(value = "auth/networks", method = RequestMethod.GET)
-	public String listNetworks(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
+	public String listNetworksTreeView(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		String jsTreeData = null;
+		jsTreeData = networkManager.getNetworkTree(user.getUserName());
+		model.addAttribute("tableview",0);
+		model.addAttribute("core", jsTreeData);
+		model.addAttribute("userId", user.getUserName());
+
+		return "auth/networks";
+	}
+
+	/**
+	 * Get the list of network belonging to the user
+	 * @author Lohith Dwaraka
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws JSONException 
+	 */
+	@RequestMapping(value = "auth/networks/table", method = RequestMethod.GET)
+	public String listNetworksTableView(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		List<INetwork> networkList = null;
-		String jsTreeData = null;
 		try{
-			jsTreeData = networkManager.getNetworkTree(user.getUserName());
 
 			networkList=networkManager.getNetworkList(user);
 
 		}catch(QuadrigaStorageException e){
 			logger.error("Something wrong on DB Side",e);
 		}
-		model.addAttribute("core", jsTreeData);
+		model.addAttribute("core", "{\"core\": {\"data\": []}}");
+		model.addAttribute("tableview",1);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("userId", user.getUserName());
 
 		return "auth/networks";
 	}
-
 
 	/**
 	 * Get the network displayed on to JSP by passing JSON string
@@ -251,7 +266,7 @@ public class NetworkListManager {
 		logger.info(networkManager.getD3JSon());
 
 		logger.info("Json object formed and sent to the JSP");
-		
+
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		model.addAttribute("jsonstring",networkManager.getD3JSon());
