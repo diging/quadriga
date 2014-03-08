@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,8 +38,10 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.impl.NetworkManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -78,6 +81,7 @@ public class ConceptcollectionController {
 	
 	@Autowired
 	private IUserManager usermanager;
+	
 
 	private IUser user;
 
@@ -178,19 +182,24 @@ public class ConceptcollectionController {
 	 * 				Returns the list of concept collections of user to the view
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value = "auth/conceptcollections/{collection_id}", method = RequestMethod.GET)
 	public String conceptDetailsHandler(
 			@PathVariable("collection_id") String collection_id, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAccessException {
-
+			throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
+		
 		collection = collectionFactory.createConceptCollectionObject();
 		collection.setId(collection_id);
 		conceptControllerManager.getCollectionDetails(collection,principal.getName());
 		model.addAttribute("concept", collection);
 		conceptControllerManager.getCollaborators(collection);
-		
 		model.addAttribute("collectionid", collection_id);
+		
+		
+		String userName = principal.getName();
+		String jsTreeData = conceptControllerManager.getProjectsTree(userName);
+		model.addAttribute("core", jsTreeData);
 		
 		List<ICollaborator>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
 		model.addAttribute("collaboratingUsers", collaboratingUsers);

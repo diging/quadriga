@@ -5,6 +5,8 @@ package edu.asu.spring.quadriga.service.conceptcollection;
 
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -125,6 +127,9 @@ public interface IConceptCollectionManager {
 
 
 	public abstract String getConceptCollectionId(String ccName) throws QuadrigaStorageException;
+
+
+	public abstract String getProjectsTree(String userName) throws JSONException;
 
 	
 	

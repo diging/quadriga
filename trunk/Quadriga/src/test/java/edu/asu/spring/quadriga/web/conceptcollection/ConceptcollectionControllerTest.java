@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
+import org.codehaus.jettison.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -192,7 +193,7 @@ public class ConceptcollectionControllerTest {
 	}
 
 	@Test
-	public void testConceptDetailsHandler() throws QuadrigaStorageException, QuadrigaAccessException {
+	public void testConceptDetailsHandler() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
 		c.setName("test");
 		c.setDescription("Description ");
@@ -248,7 +249,7 @@ public class ConceptcollectionControllerTest {
 	}
 
 	@Test
-	public void testSaveItemsHandler() throws QuadrigaStorageException, QuadrigaAccessException {
+	public void testSaveItemsHandler() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
 		c.setName("test");
 		c.setDescription("Description ");
@@ -288,7 +289,7 @@ public class ConceptcollectionControllerTest {
 	}
 
 	@Test
-	public void testDeleteItems() throws QuadrigaStorageException, QuadrigaAccessException {
+	public void testDeleteItems() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
 		c.setName("test");
 		c.setDescription("Description ");
@@ -319,7 +320,7 @@ public class ConceptcollectionControllerTest {
 	}
 
 	@Test
-	public void testConceptUpdateHandler() throws QuadrigaStorageException, QuadrigaAccessException {
+	public void testConceptUpdateHandler() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
 		c.setName("test");
 		c.setDescription("Description ");

@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.service.develop;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -146,6 +148,14 @@ public class MockupConceptCollectionManager implements
 	@Override
 	public String getConceptCollectionId(String ccName)
 			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public String getProjectsTree(String userName) throws JSONException {
 		// TODO Auto-generated method stub
 		return null;
 	}
