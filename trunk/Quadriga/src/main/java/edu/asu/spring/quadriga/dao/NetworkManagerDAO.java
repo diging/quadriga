@@ -716,7 +716,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@Override
 
-	public List<NetworksAnnotationsDTO> getAnnotation(String type, String id, String userId,
+	public List<NetworksAnnotationsDTO> getAnnotationByNodeType(String type, String id, String userId,
 			String networkId) throws QuadrigaStorageException {
 		try {
 			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworksAnnotationsDTO>();
