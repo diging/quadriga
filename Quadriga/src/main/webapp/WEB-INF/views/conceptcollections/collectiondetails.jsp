@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<script
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 				$('.dataTable').dataTable({
@@ -48,6 +50,49 @@ function resetSelectAll() {
     }
 }
 
+$(function() {
+	
+	var data = ${core};
+	console.log(data);
+	$('#html').jstree(data
+	);
+});
+
+function addCCtoProjects(id,name){
+
+	
+	$.ajax({
+		url : "${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/addconceptcollection",
+		type : "POST",
+		data :"selected="+$('#hidden').val(),
+		success : function() {
+			alert("done");
+		},
+		error: function() {
+			alert("error");
+		}
+	});
+
+	event.preventDefault();
+}
+function addCCtoWorkspace(id,name){
+	
+	$.ajax({
+		url : "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+id+"/addconceptcollection",
+		type : "POST",
+		data :"selected="+$('#hidden').val(),
+		success : function() {
+			alert("done");
+		},
+		error: function() {
+			alert("error");
+		}
+	});
+
+	event.preventDefault();
+}
+
+
 </script>
 <table style="width:100%">
 <tr>
@@ -58,11 +103,13 @@ function resetSelectAll() {
     <br>
     <div class="user">Owned by: ${concept.owner.name}</div>
     <br />
+    <div id="html"> hi</div>
     <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections'"
 		value='Done'>
 	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.id}'"
 	   value = "Edit">
+	   <input type="hidden" id="hidden" value="${concept.id}" />
 	</div>
 	<hr>
 	<c:choose >

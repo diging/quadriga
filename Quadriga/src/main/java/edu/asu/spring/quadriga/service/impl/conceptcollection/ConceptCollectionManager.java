@@ -11,6 +11,11 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,17 +23,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.impl.NetworkManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
  * 
@@ -39,6 +50,9 @@ import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManag
  */
 @Service
 public class ConceptCollectionManager implements IConceptCollectionManager {
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(ConceptCollectionManager.class);
 
 	@Autowired
 	private IDBConnectionCCManager dbConnect;
@@ -65,7 +79,11 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	private ICollaboratorRoleManager roleMapper ;
 	
-
+	@Autowired
+	private	IListWSManager wsManager;
+	
+	@Autowired
+	private IDBConnectionRetrieveProjectManager projectManager;
 
 	/**
 	 * This method retrieves the concept collection owner by the submitted user
@@ -293,6 +311,67 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	public String getConceptCollectionId(String ccName) throws QuadrigaStorageException{
 		String ccId = dbConnect.getConceptCollectionId(ccName);
 		return ccId;
+	}
+	
+	@Override
+	@Transactional
+	public String getProjectsTree(String userName) throws JSONException{
+		List<IProject> projectList = null;
+		JSONObject core = new JSONObject();
+		try{
+			projectList = projectManager.getProjectList(userName);
+			JSONArray dataArray = new JSONArray();
+			
+			for(IProject project : projectList){
+				// Each data
+				JSONObject data = new JSONObject();
+				data.put("id",project.getInternalid());
+				data.put("parent","#");
+				String projectLink = "<a href='#' id='"+project.getInternalid()+"' name='"+project.getName()+"' onclick='javascript:addCCtoProjects(this.id,this.name);' > "+project.getName()+"</a>";
+				//data.put("text",project.getName());
+				data.put("text",projectLink);
+				dataArray.put(data);
+				String wsParent = project.getInternalid();
+
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getInternalid(), userName);
+				for(IWorkSpace ws : wsList){
+					//workspace json
+					JSONObject data1 = new JSONObject();
+					data1.put("id",ws.getId());
+					data1.put("parent",wsParent);
+				//	data1.put("text",ws.getName());
+					String wsLink = "<a href='#' id='"+ws.getId()+"' name='"+ws.getName()+"' onclick='javascript:addCCtoWorkspace(this.id,this.name);' >"+ws.getName()+"</a>";
+					data1.put("text",wsLink);
+					dataArray.put(data1);
+					//String networkParent = ws.getId();
+
+//					List<INetwork> networkList1 = wsManager.getWorkspaceNetworkList(ws.getId());
+//					for(INetwork network : networkList1){
+//						JSONObject data2 = new JSONObject();
+//						data2.put("id",network.getId());
+//						data2.put("parent",networkParent);
+//						String s = "<input type=button	onClick=\"location.href='networks/visualize/"+network.getId()+"'\" value='"+network.getName()+"'>";
+//						//data2.put("text","<a href=\"networks/visualize/"+network.getId()+"\">"+network.getName()+"</a>  - (Right click and open in new tab or window)");
+//						data2.put("text", s);
+//						data2.put("href", "networks/visualize/"+network.getId());
+//						JSONObject data2href = new JSONObject();
+//						data2href.put("href", "networks/visualize/"+network.getId());
+////						data2.put("a_attr", data2href);
+//						dataArray.put(data2);
+//					}
+				}
+			}
+			JSONObject dataList = new JSONObject();
+			dataList.put("data", dataArray);
+			
+			core.put("core", dataList);
+			logger.info(core.toString(1));
+			
+		}catch(QuadrigaStorageException e) {
+			logger.error("DB Error while fetching project, Workspace  details",e);
+		}
+		//return core.toString(SUCCESS);
+		return core.toString(1);
 	}
 	
 }
