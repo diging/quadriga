@@ -34,7 +34,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	@Transactional
 	public List<NetworksAnnotationsDTO> getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException{
 		List<NetworksAnnotationsDTO> list = null;
-		list = dbConnectionEditManager.getAnnotation(type,id , userid,networkId);
+		list = dbConnectionEditManager.getAnnotationByNodeType(type,id , userid,networkId);
 		return list;
 	}
 	
