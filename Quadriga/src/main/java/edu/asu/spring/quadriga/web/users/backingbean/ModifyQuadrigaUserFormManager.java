@@ -21,7 +21,15 @@ public class ModifyQuadrigaUserFormManager
 	@Autowired
 	private IQuadrigaRoleManager rolemanager;
 	
-	public ModifyQuadrigaUserForm modifyUserQuadrigaRolesManager() throws QuadrigaStorageException
+	/**
+	 * This method converts the IUser objects into the backing bean format 
+	 * to display the result in the UI for updating the roles.
+	 * @param activeUserList
+	 * @return ModifyQuadrigaUserForm object
+	 * @throws QuadrigaStorageException
+	 * @author kiran batna
+	 */
+	public ModifyQuadrigaUserForm modifyUserQuadrigaRolesManager(List<IUser> activeUserList) throws QuadrigaStorageException
 	{
 		
 		ModifyQuadrigaUserForm userForm;
@@ -33,8 +41,6 @@ public class ModifyQuadrigaUserFormManager
 		try
 		{
 		//Get all Active Users
-		List<IUser> activeUserList = usermanager.getAllActiveUsers();
-		
 		for(IUser activeUser : activeUserList)
 		{
 			quadrigaUser = new ModifyQuadrigaUser();
@@ -52,7 +58,8 @@ public class ModifyQuadrigaUserFormManager
 			throw new QuadrigaStorageException();
 		}
 		return userForm;
-		
 	}
+	
+	
 
 }
