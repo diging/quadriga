@@ -46,9 +46,9 @@ function resetSelectAll() {
 }
 
 </script>
-	<h3>
+	<h2>
 			Concept Search
-		</h3><hr>
+		</h2><hr>
 <form  action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/searchitems" method="get">
 <table>
 <tr>
