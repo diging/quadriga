@@ -10,6 +10,12 @@ import org.springframework.validation.Validator;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+
+/**
+ * This class validates if the concept collection name is unique and valid.
+ * @author Satya swaroop
+ *
+ */
 @Service
 public class CollectionsValidator implements Validator {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CollectionsValidator.class);
@@ -18,7 +24,6 @@ public class CollectionsValidator implements Validator {
 	private IDBConnectionCCManager dbConnect;
 	@Override
 	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
 		return arg0.isAssignableFrom(ConceptCollection.class);
 	}
 
@@ -30,7 +35,6 @@ public class CollectionsValidator implements Validator {
 			try {
 				validateId(id, errors);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		

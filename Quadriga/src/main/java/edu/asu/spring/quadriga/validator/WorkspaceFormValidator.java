@@ -9,6 +9,11 @@ import org.springframework.validation.Validator;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspace;
 import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
 
+/**
+ * This class validates if any workspace is selected
+ * @author kiran batna
+ *
+ */
 @Service
 public class WorkspaceFormValidator implements Validator {
 

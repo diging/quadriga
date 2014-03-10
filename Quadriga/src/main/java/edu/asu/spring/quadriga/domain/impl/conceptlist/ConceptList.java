@@ -6,6 +6,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Class representing concepts list
+ * @author Lohith Dwaraka
+ *
+ */
 @XmlRootElement(namespace=XMLConstants.QUADRIGA_NAMESPACE)
 public class ConceptList {
 

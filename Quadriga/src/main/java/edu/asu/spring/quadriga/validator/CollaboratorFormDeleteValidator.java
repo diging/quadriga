@@ -11,6 +11,11 @@ import org.springframework.validation.Validator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 
+/**
+ * This class validates the collaborator form used for deletion.
+ * @author kiran batna
+ *
+ */
 @Service
 public class CollaboratorFormDeleteValidator implements Validator {
 

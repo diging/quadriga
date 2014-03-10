@@ -7,6 +7,11 @@ import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.implementation.User;
 
+/**
+ * This method validates if any user is selected
+ * @author kiran batna
+ *
+ */
 @Service
 public class UserValidator implements Validator {
 
@@ -32,6 +37,12 @@ public class UserValidator implements Validator {
 
 	}
 	
+	/**
+	 * This method validates if the user name is empty
+	 * @param userName
+	 * @param err
+	 * @author kiran batna
+	 */
 	public void validateUserName(String userName,Errors err)
 	{
 		if(userName.equals(null))

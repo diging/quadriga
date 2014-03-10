@@ -8,6 +8,12 @@ import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProject;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyProjectForm;
+
+/**
+ * This method validates if any project is selected.
+ * @author kiran batna
+ *
+ */
 @Service
 public class ProjectFormValidator implements Validator {
 

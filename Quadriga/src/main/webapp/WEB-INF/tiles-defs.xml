@@ -597,6 +597,12 @@
 		<put-attribute name="content" value="/WEB-INF/views/users/manage.jsp" />
 		<put-attribute name="currentPage" value="admin" />
 	</definition>
+	
+	<definition name="auth/users/updateroles" extends="base.definition.nonav">
+		<put-attribute name="title" value="Quadriga - Manage User Roles" />
+		<put-attribute name="content" value="/WEB-INF/views/users/updatequadrigaroles.jsp" />
+		<put-attribute name="currentPage" value="admin" />
+	</definition>
 
 	<!-- Error pages -->
 	<definition name="auth/notImplemented" extends="base.definition">

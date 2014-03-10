@@ -30,6 +30,12 @@ public class CollaboratorFormValidator implements Validator {
         
 	}
 	
+	/**
+	 * This method checks if any of the collaborator role is marked for updating and also
+	 * if any collaborator roles are associated with the user
+	 * @param collaboratorList
+	 * @param err
+	 */
 	public void collaboratorFormValidation(List<ModifyCollaborator> collaboratorList,Errors err)
 	{
 		List<ICollaboratorRole> collaboratorRoles;

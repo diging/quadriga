@@ -7,6 +7,11 @@ import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 
+/**
+ * This class validates if the dictionary name and description are empty.
+ * @author kiran batna
+ *
+ */
 @Service
 public class DictionaryValidator implements Validator {
 

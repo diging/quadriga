@@ -1,5 +1,10 @@
 package edu.asu.spring.quadriga.domain.impl.networks.jsonobject;
 
+/**
+ * Class representing appellation event
+ * @author Lohith Dwaraka
+ *
+ */
 public class AppellationEventObject {
 
 	String node;

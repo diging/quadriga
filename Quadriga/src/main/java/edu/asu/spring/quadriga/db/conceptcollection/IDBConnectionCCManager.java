@@ -124,6 +124,14 @@ public interface IDBConnectionCCManager {
 		 * @throws : QuadrigaStorageEXception
 		 */
 		public abstract void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException;
+		
+		/**
+		 * This method retrieves the concept collection id associated with the given
+		 * concept collection name
+		 * @param : ccName - concept collection name
+		 * @return : String - concept collection id
+		 * @throws : QuadrigaStorageException
+		 */
 		public abstract  String getConceptCollectionId(String ccName)
 				throws QuadrigaStorageException;
 		

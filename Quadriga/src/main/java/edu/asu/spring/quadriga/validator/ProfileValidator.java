@@ -5,9 +5,14 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.implementation.Profile;
 
+/**
+ * This class validates if the service name and uri in profile page
+ * are empty
+ * @author kiran batna
+ *
+ */
 @Service
 public class ProfileValidator implements Validator {
 

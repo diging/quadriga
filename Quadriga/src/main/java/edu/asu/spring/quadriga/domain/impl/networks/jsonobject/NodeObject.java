@@ -1,5 +1,10 @@
 package edu.asu.spring.quadriga.domain.impl.networks.jsonobject;
 
+/**
+ * Class representing individual node object
+ * @author Lohith Dwaraka
+ *
+ */
 public class NodeObject {
 
 	String relationEventId;

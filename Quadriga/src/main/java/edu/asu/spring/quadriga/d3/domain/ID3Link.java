@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.d3.domain;
 
 import java.util.HashMap;
-import java.util.List;
 
 import edu.asu.spring.quadriga.d3.domain.impl.D3Node;
 

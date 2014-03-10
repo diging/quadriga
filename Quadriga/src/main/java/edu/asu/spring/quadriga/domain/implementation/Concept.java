@@ -57,17 +57,11 @@ public class Concept implements IConcept {
 		this.lemma = lemma;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.IConcept#getName()
-	 */
 	@Override
 	public String getId() {
 		return id;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.IConcept#getPOS()
-	 */
 	@Override
 	public String getPos() {
 		return pos;
@@ -76,9 +70,6 @@ public class Concept implements IConcept {
 	
 	
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.IConcept#getDiscription()
-	 */
 	@Override
 	public String getDescription() {
 		return description;
