@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -14,8 +15,13 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -374,5 +380,34 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		}
 		return networkList;
 	}
+	
+	@Override
+	public List<IWorkSpace> getWorkspaceByConceptCollection(String ccId) throws QuadrigaStorageException{
+		List<IWorkSpace>  workspaceList = new ArrayList<>();
+		if(ccId ==  null || ccId.equals("")){
+			return null;
+		}
+		try {
+			ConceptCollectionDTO conceptCollections = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, ccId);
+			List<WorkspaceConceptcollectionDTO> wsConceptCollection = conceptCollections.getWsConceptCollectionDTOList();
+			for (WorkspaceConceptcollectionDTO ws: wsConceptCollection ) {
+				
+				WorkspaceDTO workspaceDTO = ws.getWorkspaceDTO();
+				if(workspaceDTO != null) {
+					IWorkSpace workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
+					workspaceList.add (workspace);
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error("Error in fetching workspace id from concept collection: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+		
+		return workspaceList;
+		
+	}
+	
+	
 	
 }

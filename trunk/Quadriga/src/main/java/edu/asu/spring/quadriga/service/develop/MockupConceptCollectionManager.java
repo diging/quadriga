@@ -155,16 +155,11 @@ public class MockupConceptCollectionManager implements
 
 
 	@Override
-	public String getProjectsTree(String userName) throws JSONException {
+	public String getProjectsTree(String userName,String ccId) throws JSONException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
-
-	
-	
-
-	
 
 }

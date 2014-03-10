@@ -88,4 +88,7 @@ public interface IDBConnectionRetrieveProjectManager
 	 */
 	public abstract IProject getProject(String workspaceid) throws QuadrigaStorageException;
 
+	public abstract List<IProject> getProjectsByConceptCollection(String ccId)
+			throws QuadrigaStorageException;
+
 }

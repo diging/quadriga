@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
@@ -84,6 +85,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 	@Autowired
 	private IDBConnectionRetrieveProjectManager projectManager;
+	
+	@Autowired
+	private IDBConnectionListWSManager wsListManger;
 
 	/**
 	 * This method retrieves the concept collection owner by the submitted user
@@ -315,62 +319,76 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 	@Override
 	@Transactional
-	public String getProjectsTree(String userName) throws JSONException{
+	public String getProjectsTree(String userName,String ccId) throws JSONException{
 		List<IProject> projectList = null;
 		JSONObject core = new JSONObject();
-		try{
+		try {
 			projectList = projectManager.getProjectList(userName);
 			JSONArray dataArray = new JSONArray();
-			
-			for(IProject project : projectList){
+			List<IProject> ccProjectsList = projectManager
+					.getProjectsByConceptCollection(ccId);
+			List<IWorkSpace> ccWorkspaceList = wsListManger
+					.getWorkspaceByConceptCollection(ccId);
+			for (IProject project : projectList) {
 				// Each data
-				JSONObject data = new JSONObject();
-				data.put("id",project.getInternalid());
-				data.put("parent","#");
-				String projectLink = "<a href='#' id='"+project.getInternalid()+"' name='"+project.getName()+"' onclick='javascript:addCCtoProjects(this.id,this.name);' > "+project.getName()+"</a>";
-				//data.put("text",project.getName());
-				data.put("text",projectLink);
-				dataArray.put(data);
-				String wsParent = project.getInternalid();
+				//if (!ccProjectsList.contains(project)) {
+					JSONObject data = new JSONObject();
+					data.put("id", project.getInternalid());
+					data.put("parent", "#");
+					String projectLink = null;
+					if(ccProjectsList.contains(project)){
+						projectLink = project.getName();
+					}
+					else {
+					projectLink = "<a href='#' id='"
+							+ project.getInternalid()
+							+ "' name='"
+							+ project.getName()
+							+ "' onclick='javascript:addCCtoProjects(this.id,this.name);' > "
+							+ project.getName() + "</a>";
+					}
+					data.put("text", projectLink);
+					dataArray.put(data);
+					String wsParent = project.getInternalid();
 
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getInternalid(), userName);
-				for(IWorkSpace ws : wsList){
-					//workspace json
-					JSONObject data1 = new JSONObject();
-					data1.put("id",ws.getId());
-					data1.put("parent",wsParent);
-				//	data1.put("text",ws.getName());
-					String wsLink = "<a href='#' id='"+ws.getId()+"' name='"+ws.getName()+"' onclick='javascript:addCCtoWorkspace(this.id,this.name);' >"+ws.getName()+"</a>";
-					data1.put("text",wsLink);
-					dataArray.put(data1);
-					//String networkParent = ws.getId();
+					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+							project.getInternalid(), userName);
+					for (IWorkSpace ws : wsList) {
+						// workspace json
+					//	if(!ccWorkspaceList.contains(ws)) {
+							JSONObject data1 = new JSONObject();
+							data1.put("id", ws.getId());
+							data1.put("parent", wsParent);
+							String wsLink = null;
+							if(ccWorkspaceList.contains(ws)){
+								wsLink = ws.getName();
+							}
+							else {
+							 wsLink = "<a href='#' id='"
+									+ ws.getId()
+									+ "' name='"
+									+ ws.getName()
+									+ "' onclick='javascript:addCCtoWorkspace(this.id,this.name);' >"
+									+ ws.getName() + "</a>";
+							}
+							data1.put("text", wsLink);
+							dataArray.put(data1);
+					//}
+					}
 
-//					List<INetwork> networkList1 = wsManager.getWorkspaceNetworkList(ws.getId());
-//					for(INetwork network : networkList1){
-//						JSONObject data2 = new JSONObject();
-//						data2.put("id",network.getId());
-//						data2.put("parent",networkParent);
-//						String s = "<input type=button	onClick=\"location.href='networks/visualize/"+network.getId()+"'\" value='"+network.getName()+"'>";
-//						//data2.put("text","<a href=\"networks/visualize/"+network.getId()+"\">"+network.getName()+"</a>  - (Right click and open in new tab or window)");
-//						data2.put("text", s);
-//						data2.put("href", "networks/visualize/"+network.getId());
-//						JSONObject data2href = new JSONObject();
-//						data2href.put("href", "networks/visualize/"+network.getId());
-////						data2.put("a_attr", data2href);
-//						dataArray.put(data2);
-//					}
-				}
+				//}
 			}
 			JSONObject dataList = new JSONObject();
 			dataList.put("data", dataArray);
-			
+
 			core.put("core", dataList);
 			logger.info(core.toString(1));
-			
-		}catch(QuadrigaStorageException e) {
-			logger.error("DB Error while fetching project, Workspace  details",e);
+
+		} catch (QuadrigaStorageException e) {
+			logger.error("DB Error while fetching project, Workspace  details",
+					e);
 		}
-		//return core.toString(SUCCESS);
+		// return core.toString(SUCCESS);
 		return core.toString(1);
 	}
 	
