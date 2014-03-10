@@ -21,9 +21,10 @@
 	<bean id="UserManager" class="edu.asu.spring.quadriga.service.impl.UserManager">
 		<property name="userFactory" ref="userFactory"></property>
 	</bean>
+	
+	<bean id="modifyUserRoles" class="edu.asu.spring.quadriga.dao.ModifyUserRoles" />
 
-	<bean id="DictionaryManager" class="edu.asu.spring.quadriga.service.impl.dictionary.DictionaryManager">
-	</bean>
+	<bean id="DictionaryManager" class="edu.asu.spring.quadriga.service.impl.dictionary.DictionaryManager" />
 
 	<bean id="WorkspaceDictionaryManager"
 		class="edu.asu.spring.quadriga.service.impl.workspace.WorkspaceDictionaryManager">
@@ -206,22 +207,16 @@
 	
 	<!-- user profile package -->
 	<bean id="serviceRegistry" class="edu.asu.spring.quadriga.profile.impl.ServiceRegistry" />
-	
 	<bean id="searchResult" class="edu.asu.spring.quadriga.profile.impl.SearchResult" />
-	
 	<bean id="conceptPowerService" class="edu.asu.spring.quadriga.profile.impl.ConceptPowerService" />
-	
 	<bean id="viafService" class="edu.asu.spring.quadriga.profile.impl.ViafService" />
-	
 	<bean id="profileFactory" class="edu.asu.spring.quadriga.domain.factories.impl.ProfileFactory"/>
-	
 	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultFactory" />
-	
 	<bean id="viafManager" class="edu.asu.spring.quadriga.service.impl.viaf.ViafManager"/>
-	
 	<bean id="userProfileManager" class="edu.asu.spring.quadriga.service.impl.UserProfileManager" />
-	
 	<bean id="searchResultBackBeanFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultBackBeanFactory" />
+	<bean id="searchResultBackBeanFormManager" class="edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager" />
+	<bean id="searchResultBackBeanForm" class="edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanForm" />
 	<!-- user profile package beans END -->
 	
 	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
