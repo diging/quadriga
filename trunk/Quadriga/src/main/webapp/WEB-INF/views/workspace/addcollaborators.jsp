@@ -2,11 +2,32 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <style type="text/css">
-div.ex {color:#01A9DB;
-font-style: italic
-}
+
+div.wrap {
+		 overflow: auto;
+		 margin-bottom:-30px; 
+	}
+	
+div.ex {	
+		width:200px;
+		float:left;
+	}
+	
+div.ex1 {
+		width:200px;
+		margin-top:-29px;
+		float:left;
+		overflow: auto;
+	}
+	
+div.rolesError{	
+	float:left;
+	}
+
 </style>
+
 <script>
 $(document).ready(function() {
 	
@@ -33,17 +54,25 @@ function onSubmit(){
 <div>${workspacedesc}</div>
 		<c:if test="${not empty noncollabusers}">
 		<hr>
-		<div class="ex" style="float: left;">select collaborator</div>
-		<form:select path="userObj" id="userName">
-	    	<form:option value="NONE" label="--- Select ---"/>
-	   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="name" /> 
-		</form:select>
-		<form:errors path="userObj" class="ui-state-error-text"></form:errors>
-		<br>
-		<div class="ex" style="float: left;">select access rights</div>	
-		<form:checkboxes path="collaboratorRoles" class="roles" items="${wscollabroles}" itemValue="roleDBid" itemLabel="displayName" />
-		<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
+		
+	<div class="wrap">
+		<div class="ex">
+	        <h5>select collaborator</h5>
+			<form:select path="userObj" id="userName">
+		    	<form:option value="NONE" label="----- Select -----"/>
+		   		<form:options items="${noncollabusers}"  itemValue="userName" itemLabel="name" /> 
+			</form:select>
+			<form:errors path="userObj" class="ui-state-error-text"></form:errors>
+			<br>
+		</div>
 		<br/>
+		<div class="ex1">
+			<h5>select access rights</h5>	
+			<ul><form:checkboxes path="collaboratorRoles" class="roles" items="${wscollabroles}" itemValue="roleDBid" itemLabel="displayName" element="li" /></ul>
+			<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
+			<br/>
+		</div>
+	</div>
 	<td><input type="submit" value="Add"></td>
 	<input type="button" value="Cancel" onClick="onSubmit()">
 		</c:if>
