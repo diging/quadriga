@@ -6,12 +6,14 @@ import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 
+/**
+ * Factory method to create DSpaceKey object
+ * @author Ram Kumar Kumaresan
+ *
+ */
 @Service
 public class DspaceKeysFactory implements IDspaceKeysFactory {
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.factories.impl.IDspaceKeysFactory#createDspaceKeysObject()
-	 */
 	@Override
 	public IDspaceKeys createDspaceKeysObject()
 	{

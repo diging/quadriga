@@ -39,7 +39,11 @@
 				$("input." + name).attr("disabled", true);
 			}
 		}
-
+		
+	/* 	function submitClick(id){
+			location.href = '${pageContext.servletContext.contextPath}/auth/users/updateroles';
+		} */
+		
 		function submitClick(id) {
 
 			//Check if Allow or Deny is selected
@@ -66,8 +70,13 @@
 			//Create a path for the user to be passed to the Controller
 			var path = id + "-" + selectedAccess + "-" + checkedVals.join("-");
 			location.href = '${pageContext.servletContext.contextPath}/auth/users/access/' + path;
-		}
+		} 
+		
 	</script>
+	
+		<br> <br>
+		<a href='${pageContext.servletContext.contextPath}/auth/users/updateroles'>Update Roles</a>
+	<br><br>
 
 		<sec:authorize
 				access="hasAnyRole('ROLE_QUADRIGA_USER_ADMIN')">
@@ -99,8 +108,8 @@
 			<br>
 		</c:forEach>
 	</c:if>
-
 	<br> <br>
+	
 	
 	<c:if test="${not empty activeUserList}">
 		<h3>Current Active Users</h3>

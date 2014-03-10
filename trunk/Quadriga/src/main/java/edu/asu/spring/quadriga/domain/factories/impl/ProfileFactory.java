@@ -9,6 +9,9 @@ import edu.asu.spring.quadriga.domain.implementation.Profile;
 @Service
 public class ProfileFactory implements IProfileFactory {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IProfile createProfileObject() {
 		

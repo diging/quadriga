@@ -15,15 +15,19 @@ import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
 @Service
 public class QuadrigaRoleFactory implements IQuadrigaRoleFactory {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IQuadrigaRole createQuadrigaRoleObject() {
-		// TODO Auto-generated method stub
 		return new QuadrigaRole();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IQuadrigaRole cloneQuadrigaRoleObject(IQuadrigaRole quadrigaRole) {
-		// TODO Auto-generated method stub
 		IQuadrigaRole clone = createQuadrigaRoleObject();
 		
 		clone.setDBid(quadrigaRole.getDBid());

@@ -249,7 +249,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return errMsg;
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteProjectWorkspace(String workspaceIdList) throws QuadrigaStorageException
 	{
@@ -273,6 +275,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return errMsg;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteWorkspaceDictionary(String workspaceIdList) throws QuadrigaStorageException
 	{
@@ -295,6 +300,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return errMsg;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteWorkspaceConceptcollection(String workspaceIdList)
 			throws QuadrigaStorageException {
@@ -318,6 +326,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return errMsg;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteWorkspaceDspace(String workspaceIdList)
 			throws QuadrigaStorageException {
@@ -341,6 +352,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return errMsg;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteWorkspaceEditor(String workspaceIdList)
 			throws QuadrigaStorageException {
@@ -364,6 +378,9 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		return errMsg;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String deleteWorkspaceNetwork(String workspaceIdList)
 			throws QuadrigaStorageException {

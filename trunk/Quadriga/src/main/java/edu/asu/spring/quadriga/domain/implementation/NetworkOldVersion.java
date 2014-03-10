@@ -9,16 +9,18 @@ public class NetworkOldVersion implements INetworkOldVersion {
 	private String updateDate;
 
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#getPreviousVersionStatus()
+	/**
+	 * This method retrieves the previous version status
+	 * @author Lohith Dwaraka
 	 */
 	@Override
 	public String getPreviousVersionStatus() {
 		return previousVersionStatus;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#setPreviousVersionStatus(java.lang.String)
+	/**
+	 * This method assigns the previous version status
+	 * @author Lohith Dwaraka
 	 */
 	@Override
 	public void setPreviousVersionStatus(String previousVersionStatus) {
@@ -26,32 +28,36 @@ public class NetworkOldVersion implements INetworkOldVersion {
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#getPreviousVersionStatus()
+	/**
+	 * The method retrieves the update date
+	 * @author Lohith Dwaraka
 	 */
 	@Override
 	public String getUpdateDate() {
 		return updateDate;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#setPreviousVersionStatus(java.lang.String)
+	/**
+	 * This method assigns the update date
+	 * @author Lohith Dwaraka
 	 */
 	@Override
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#getPreviousVersionAssignedUser()
+	/**
+	 * This method retrieve the assigned user of previous network version
+	 * @author Lohith Dwaraka
 	 */
 	@Override
 	public String getPreviousVersionAssignedUser() {
 		return previousVersionAssignedUser;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.implementation.INetworkOldVersion#setPreviousVersionAssignedUser(java.lang.String)
+	/**
+	 * This method assigns the user to the previous network version
+	 * @author Lohith Dwaraka
 	 */
 	@Override
 	public void setPreviousVersionAssignedUser(String previousVersionAssignedUser) {

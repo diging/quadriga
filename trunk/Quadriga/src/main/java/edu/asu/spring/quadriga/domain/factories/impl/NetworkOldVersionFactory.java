@@ -16,8 +16,8 @@ import edu.asu.spring.quadriga.domain.implementation.NetworkOldVersion;
 @Service
 public class NetworkOldVersionFactory implements INetworkOldVersionFactory  {
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.factories.impl.INetworkOldVersionFactory#createNetworkOldVersionObject()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public INetworkOldVersion createNetworkOldVersionObject() {

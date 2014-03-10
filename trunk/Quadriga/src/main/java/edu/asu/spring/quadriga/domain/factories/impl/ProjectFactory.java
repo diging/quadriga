@@ -7,7 +7,8 @@ import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
 
 /**
- * Javadoc missing
+ * Factory class to create Project object
+ * @author kiran batna
  * 
  */
 @Service

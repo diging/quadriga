@@ -6,6 +6,13 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.implementation.WorkSpace;
+
+/**
+ * This method validates if the workspace name and description
+ * is empty
+ * @author kbatna
+ *
+ */
 @Service
 public class WorkspaceValidator implements Validator {
 

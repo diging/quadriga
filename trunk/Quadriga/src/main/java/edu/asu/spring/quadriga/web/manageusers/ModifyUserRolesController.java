@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -25,15 +26,17 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
+import edu.asu.spring.quadriga.validator.UserRolesFormValidator;
+import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.users.backingbean.ModifyQuadrigaUser;
 import edu.asu.spring.quadriga.web.users.backingbean.ModifyQuadrigaUserForm;
 import edu.asu.spring.quadriga.web.users.backingbean.ModifyQuadrigaUserFormManager;
 
+@Controller
 public class ModifyUserRolesController 
 {
 	@Autowired
-	private CollaboratorFormValidator validator;
+	private UserRolesFormValidator validator;
 	
 	@Autowired
 	private IQuadrigaRoleManager rolemanager;
@@ -48,7 +51,7 @@ public class ModifyUserRolesController
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
         validateBinder.setValidator(validator);
 		
-		binder.registerCustomEditor(List.class, "user.quadrigaRoles", new PropertyEditorSupport() {
+		binder.registerCustomEditor(List.class, "users.quadrigaRoles", new PropertyEditorSupport() {
 
 			@Override
 			public void setAsText(String text) {
@@ -73,13 +76,13 @@ public class ModifyUserRolesController
 	 * @author kiran batna
 	 */
 	//TODO : request mapping should be updated
-	@RequestMapping(value = "auth/users/access", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/users/updateroles", method = RequestMethod.GET)
 	public ModelAndView updateQuadrigaRolesRequest()
 			throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
 		ModifyQuadrigaUserForm userForm;
-		model = new ModelAndView();
+		model = new ModelAndView("auth/users/updateroles");
 		
 		//Get all Active Users
 		List<IUser> activeUserList = userManager.getAllActiveUsers();
@@ -88,6 +91,11 @@ public class ModifyUserRolesController
 		
 		//Get all Quadriga roles
 		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles();
+		
+		//remove the invalid quadriga role object
+		IQuadrigaRole role = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+		if(quadrigaRoles.contains(role))
+			quadrigaRoles.remove(role);
 				
 		model.getModelMap().put("userrolesform", userForm);
 		model.getModelMap().put("quadrigaroles",quadrigaRoles);
@@ -107,7 +115,7 @@ public class ModifyUserRolesController
 	 * @author kiran batna
 	 */
 	//TODO : request mapping should be updated
-	@RequestMapping(value = "auth/users/acces", method = RequestMethod.POST)
+	@RequestMapping(value = "auth/users/updateroles", method = RequestMethod.POST)
 	public ModelAndView updateCollaboratorRequest(@Validated @ModelAttribute("userrolesform") ModifyQuadrigaUserForm userForm,
 			BindingResult result,Principal principal) 
 					throws QuadrigaStorageException, QuadrigaAccessException
@@ -125,7 +133,7 @@ public class ModifyUserRolesController
 			quadrigaRoles = new ArrayList<IQuadrigaRole>();
 			
 			//create model view
-			model = new ModelAndView("auth/users/acces/");
+			model = new ModelAndView("auth/users/updateroles");
 			
 			if(result.hasErrors())
 			{
@@ -136,6 +144,11 @@ public class ModifyUserRolesController
 				
 				//Get all Quadriga roles
 				quadrigaRoles = rolemanager.getQuadrigaRoles();
+				
+				//remove the invalid quadriga role object
+				IQuadrigaRole role = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+				if(quadrigaRoles.contains(role))
+					quadrigaRoles.remove(role);
 						
 				model.getModelMap().put("userrolesform", userForm);
 				model.getModelMap().put("quadrigaroles",quadrigaRoles);

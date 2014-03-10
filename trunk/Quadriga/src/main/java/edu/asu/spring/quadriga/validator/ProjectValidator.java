@@ -77,6 +77,13 @@ public class ProjectValidator implements Validator {
 		
 	}
 	
+	/**
+	 * This method validates if the Unix name contains letters other than the
+	 * mentioned value in the regular expression
+	 * @param unixName
+	 * @param err
+	 * @author kiran batna
+	 */
 	public void validateUnixNameExp(String unixName,Errors err)
 	{
 		String regex = "^[a-zA-Z0-9-_.+!*'()]*$";
@@ -88,6 +95,14 @@ public class ProjectValidator implements Validator {
 		}
 	}
 
+	/**
+	 * This method validates if the entered Unix name is duplicate or not
+	 * @param unixName
+	 * @param projectId
+	 * @param err
+	 * @throws QuadrigaStorageException
+	 * @author kiran batna
+	 */
 	public void validateUnixName(String unixName,String projectId,Errors err) throws QuadrigaStorageException
 	{
 		boolean isDuplicate;

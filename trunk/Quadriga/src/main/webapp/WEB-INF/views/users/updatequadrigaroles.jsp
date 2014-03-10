@@ -4,7 +4,7 @@
 <!-- Content -->
 <script>
 function submitClick(id){
-	location.href = '${pageContext.servletContext.contextPath}/auth/users/access/';
+	location.href = '${pageContext.servletContext.contextPath}/auth/users/updateroles';
 }
 
 	$(document).ready(function() {
@@ -24,7 +24,7 @@ function submitClick(id){
 </script>
 <article class="is-page-content">
 	<form:form commandName="userrolesform" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/users/access/"
+		action="${pageContext.servletContext.contextPath}/auth/users/updateroles"
 		id="updatequadrigarolesform">
 <c:choose> 
     <c:when test="${success == '0'}">
@@ -56,8 +56,8 @@ function submitClick(id){
 										
 							<td align="left"><font size="3"> <form:checkboxes
 										path="users[${status.index}].quadrigaRoles"
-										class="roles" items="${quadrigaroles}" itemValue="roleDBid"
-										itemLabel="displayName" /></font>
+										class="roles" items="${quadrigaroles}" itemValue="DBid"
+										itemLabel="name" /></font>
 							<form:errors path="users[${status.index}].quadrigaRoles" class="ui-state-error-text"></form:errors>
 							</td>			
 						</tr>

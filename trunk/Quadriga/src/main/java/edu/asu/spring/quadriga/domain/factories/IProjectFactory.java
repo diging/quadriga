@@ -3,7 +3,8 @@ package edu.asu.spring.quadriga.domain.factories;
 import edu.asu.spring.quadriga.domain.IProject;
 
 /**
- * Javadoc missing
+ * Factory interface to create project object
+ * @author kiran batna
  * 
  */
 public interface IProjectFactory {

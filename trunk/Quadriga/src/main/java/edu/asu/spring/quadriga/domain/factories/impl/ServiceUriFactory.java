@@ -6,6 +6,11 @@ import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.factories.IServiceUriFactory;
 import edu.asu.spring.quadriga.domain.implementation.Profile;
 
+/**
+ * Factory method to create Profile object
+ * @author Kiran batna
+ *
+ */
 @Service
 public class ServiceUriFactory implements IServiceUriFactory {
 

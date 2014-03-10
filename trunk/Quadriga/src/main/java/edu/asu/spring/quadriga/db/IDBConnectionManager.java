@@ -144,6 +144,13 @@ public interface IDBConnectionManager
 	 */
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
+	/**
+	 * This method returns the user object for the given username
+	 * @param userName
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @author kiran batna
+	 */
 	public abstract QuadrigaUserDTO getUserDTO(String userName)
 			throws QuadrigaStorageException;
 

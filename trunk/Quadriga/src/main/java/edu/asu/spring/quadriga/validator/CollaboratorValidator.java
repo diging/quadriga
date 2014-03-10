@@ -9,6 +9,11 @@ import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+/**
+ * This class checks if the collaborator user name and roles are empty
+ * @author kiran batna
+ *
+ */
 @Service
 public class CollaboratorValidator implements Validator {
 
@@ -41,6 +46,12 @@ public class CollaboratorValidator implements Validator {
 		}
 	}
 	
+	/**
+	 * This method checks if username is empty
+	 * @param UserName
+	 * @param err
+	 * @author kiran batna
+	 */
 	public void validateUserName(String UserName,Errors err)
 	{
 
@@ -49,6 +60,12 @@ public class CollaboratorValidator implements Validator {
 		}
 	}
 	
+	/**
+	 * This methods validates if the roles are empty
+	 * @param roles
+	 * @param err
+	 * @author kiran batna
+	 */
 	public void validateCollaboratorRoles(List<ICollaboratorRole> roles,Errors err)
 	{
 

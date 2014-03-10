@@ -2,6 +2,11 @@ package edu.asu.spring.quadriga.domain.impl.conceptlist;
 
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * Class representing individual concept
+ * @author Lohith Dwaraka
+ *
+ */
 public class Concept {
 
 	private String name;

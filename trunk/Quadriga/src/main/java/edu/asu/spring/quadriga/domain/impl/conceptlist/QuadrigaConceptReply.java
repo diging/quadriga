@@ -3,6 +3,12 @@ package edu.asu.spring.quadriga.domain.impl.conceptlist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Class that would contains the response data for individual
+ * vocabularies.
+ * @author Lohith Dwaraka
+ *
+ */
 @XmlRootElement(name="QuadrigaReply", namespace=XMLConstants.QUADRIGA_NAMESPACE)
 public class QuadrigaConceptReply {
 

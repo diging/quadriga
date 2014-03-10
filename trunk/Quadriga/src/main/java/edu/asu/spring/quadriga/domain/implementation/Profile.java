@@ -3,6 +3,11 @@ package edu.asu.spring.quadriga.domain.implementation;
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.IUser;
 
+/**
+ * This class represents the profile object variables and methods.
+ * @author Rohith
+ *
+ */
 public class Profile implements IProfile {
 
 	String serviceName;

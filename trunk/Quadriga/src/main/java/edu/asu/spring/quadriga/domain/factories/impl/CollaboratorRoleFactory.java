@@ -9,6 +9,9 @@ import edu.asu.spring.quadriga.domain.implementation.CollaboratorRole;
 @Service
 public class CollaboratorRoleFactory implements ICollaboratorRoleFactory {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ICollaboratorRole createCollaboratorRoleObject() {
 		return new CollaboratorRole();

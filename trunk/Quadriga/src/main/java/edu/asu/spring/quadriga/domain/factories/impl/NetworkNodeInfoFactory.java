@@ -15,8 +15,9 @@ import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
  */
 @Service
 public class NetworkNodeInfoFactory implements INetworkNodeInfoFactory  {
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.domain.factories.impl.INetworkNodeInfoFactory#createNetworkNodeInfoObject()
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public INetworkNodeInfo createNetworkNodeInfoObject() {
