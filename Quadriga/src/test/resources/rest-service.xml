@@ -75,7 +75,7 @@
 	
 	<bean id="searchViafURLPath" class="java.lang.String">
 		<constructor-arg>
-			<value>?query=cql.any+all+%22
+			<value>?query=cql.any all
 			</value>
 		</constructor-arg>
 	</bean>
@@ -83,7 +83,7 @@
 	<bean id="searchViafURLPath1" class="java.lang.String">
 		<constructor-arg>
 			<value>
-			%22+&amp;maximumRecords=100&amp;startRecord=
+			+&amp;maximumRecords=100&amp;startRecord=
 			</value>
 		</constructor-arg>
 	</bean>
@@ -91,14 +91,12 @@
 	<bean id="searchViafURLPath2" class="java.lang.String">
 		<constructor-arg>
 			<value>
-			&amp;sortKeys=holdingscount&amp;httpAccept=application/rss%2bxml
+		    &amp;sortKeys=holdingscount&amp;httpAccept=application/rss+xml
 			</value>
 		</constructor-arg>
 	</bean>
 	
 	
-	
-
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
 			<list>
@@ -118,7 +116,7 @@
 	 <bean id="restTemplateViaf" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
 			<list>
-				 <!-- <bean
+				 <!--  <bean
 					class="org.springframework.http.converter.StringHttpMessageConverter">
 				</bean>  -->
 				<bean
@@ -133,9 +131,6 @@
 		</property>
 	</bean>
 			
-        
-    
-        
 	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 		<property name="classesToBeBound">
 			<list>
@@ -149,6 +144,9 @@
 				</value>
 				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
 				</value>
+				<value>edu.asu.spring.quadriga.profile.impl.ViafReply
+				</value>
+				<value>java.lang.String</value>
 			</list>
 		</property>
 	</bean>

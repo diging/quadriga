@@ -113,7 +113,6 @@ public class ModifyProjCollabManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		
 		user = userFactory.createUserObject();
 		user.setUserName("projuser1");
 		
