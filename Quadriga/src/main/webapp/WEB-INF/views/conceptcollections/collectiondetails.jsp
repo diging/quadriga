@@ -59,41 +59,90 @@ $(function() {
 });
 
 function addCCtoProjects(id,name){
-
 	
-	$.ajax({
-		url : "${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/addconceptcollection",
-		type : "POST",
-		data :"selected="+$('#hidden').val(),
-		success : function() {
-			alert("done");
-		},
-		error: function() {
-			alert("error");
+	var e = document.getElementById("dlgConfirm");
+    if(e.style.display == 'block')
+       e.style.display = 'none';
+    else
+       e.style.display = 'block';
+	
+	event.preventDefault();
+	$("#dlgConfirm").dialog({
+		resizable : false,
+		height : 'auto',
+		width : 350,
+		modal : true,
+		buttons : {
+			Submit : function() {
+				$(this).dialog("close");
+				//$("#deletewsform")[0].submit();
+				$.ajax({
+					url : "${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/addconceptcollection",
+					type : "POST",
+					data :"selected="+$('#hidden').val(),
+					success : function() {
+						location.reload();
+						//alert("done");
+					},
+					error: function() {
+						alert("error");
+					}
+				});
+				event.preventDefault();
+			},
+			Cancel : function() {
+				$(this).dialog("close");
+			}
 		}
 	});
 
-	event.preventDefault();
 }
 function addCCtoWorkspace(id,name){
 	
-	$.ajax({
-		url : "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+id+"/addconceptcollection",
-		type : "POST",
-		data :"selected="+$('#hidden').val(),
-		success : function() {
-			alert("done");
-		},
-		error: function() {
-			alert("error");
+	
+	var e = document.getElementById("dlgConfirm1");
+    if(e.style.display == 'block')
+       e.style.display = 'none';
+    else
+       e.style.display = 'block';
+	
+	event.preventDefault();
+	$("#dlgConfirm1").dialog({
+		resizable : false,
+		height : 'auto',
+		width : 350,
+		modal : true,
+		buttons : {
+			Submit : function() {
+				$(this).dialog("close");
+				//$("#deletewsform")[0].submit();
+				$.ajax({
+					url : "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+id+"/addconceptcollection",
+					type : "POST",
+					data :"selected="+$('#hidden').val(),
+					success : function() {
+						location.reload();
+						//alert("done");
+					},
+					error: function() {
+						alert("error");
+					}
+				});
+
+				event.preventDefault();
+			},
+			Cancel : function() {
+				$(this).dialog("close");
+			}
 		}
 	});
-
-	event.preventDefault();
+	
+	
 }
 
 
 </script>
+ 
 <table style="width:100%">
 <tr>
 <td style="width:90%">
@@ -103,7 +152,8 @@ function addCCtoWorkspace(id,name){
     <br>
     <div class="user">Owned by: ${concept.owner.name}</div>
     <br />
-    <div id="html"> hi</div>
+   
+    <div id="html"> </div>
     <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections'"
 		value='Done'>
@@ -174,3 +224,9 @@ function addCCtoWorkspace(id,name){
 </td>
 </tr>
 </table>
+<div id="dlgConfirm" title="Confirmation" style="display: none">
+			 <p> Do you wanna add concept collection to this project? </p>
+		</div>
+		<div id="dlgConfirm1" title="Confirmation" style="display: none">
+			 <p> Do you wanna add concept collection to this workspace? </p>
+		</div>

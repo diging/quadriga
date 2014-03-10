@@ -129,7 +129,10 @@ public interface IConceptCollectionManager {
 	public abstract String getConceptCollectionId(String ccName) throws QuadrigaStorageException;
 
 
-	public abstract String getProjectsTree(String userName) throws JSONException;
+	public abstract String getProjectsTree(String userName,String ccId) throws JSONException;
+
+
+	
 
 	
 	

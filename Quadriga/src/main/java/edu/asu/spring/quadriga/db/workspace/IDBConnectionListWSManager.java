@@ -134,4 +134,7 @@ public interface IDBConnectionListWSManager {
 	List<IWorkSpace> listActiveWorkspace(String projectid, String username)
 			throws QuadrigaStorageException;
 
+	public abstract List<IWorkSpace> getWorkspaceByConceptCollection(String ccId)
+			throws QuadrigaStorageException;
+
 }

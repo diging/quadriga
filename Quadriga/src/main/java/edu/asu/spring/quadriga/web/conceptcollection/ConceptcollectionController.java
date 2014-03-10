@@ -152,6 +152,14 @@ public class ConceptcollectionController {
 		this.usermanager = usermanager;
 	}
 	
+	public IConceptCollection getCollection() {
+		return collection;
+	}
+
+	public void setCollection(IConceptCollection collection) {
+		this.collection = collection;
+	}
+	
 	/**
 	 * This is used to fetch the user related concept collections from database.
 	 * @param model
@@ -198,7 +206,7 @@ public class ConceptcollectionController {
 		
 		
 		String userName = principal.getName();
-		String jsTreeData = conceptControllerManager.getProjectsTree(userName);
+		String jsTreeData = conceptControllerManager.getProjectsTree(userName,collection_id);
 		model.addAttribute("core", jsTreeData);
 		
 		List<ICollaborator>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
@@ -206,13 +214,7 @@ public class ConceptcollectionController {
 		return "auth/conceptcollections/details";
 	}
 
-	public IConceptCollection getCollection() {
-		return collection;
-	}
-
-	public void setCollection(IConceptCollection collection) {
-		this.collection = collection;
-	}
+	
 
 	/**
 	 * This method is used to search the conceptpower for items and will also give options to add it. 

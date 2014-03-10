@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
@@ -277,5 +279,34 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		}
 
 		return null;
+	}
+	
+	
+	@Override
+	public List<IProject> getProjectsByConceptCollection(String ccId) throws QuadrigaStorageException{
+		List<IProject>  projectsList = new ArrayList<>();
+		if(ccId ==  null || ccId.equals("")){
+			return null;
+		}
+		try {
+			ConceptCollectionDTO conceptCollections = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, ccId);
+			List<ProjectConceptCollectionDTO> projectConceptCollection = conceptCollections.getProjConceptCollectionDTOList();
+			for (ProjectConceptCollectionDTO projectCC: projectConceptCollection ) {
+				
+				ProjectDTO projectDTO = projectCC.getProjectDTO();
+				if(projectDTO != null) {
+					IProject project = projectDTOMapper.getProject(projectDTO);
+					project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+				projectsList.add (project);
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error("Error in fetching project id from concept collection: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+		
+		return projectsList;
+		
 	}
 }
