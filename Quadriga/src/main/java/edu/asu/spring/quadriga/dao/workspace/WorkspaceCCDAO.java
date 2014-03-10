@@ -76,7 +76,7 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 		}
 		catch(Exception e)
 		{
-			errMsg = "OOPS ! Error from DB";
+			errMsg = "Oops! Error from DB";
 			logger.error("addWorkspaceCC method :",e);
         	throw new QuadrigaStorageException();
 		}
