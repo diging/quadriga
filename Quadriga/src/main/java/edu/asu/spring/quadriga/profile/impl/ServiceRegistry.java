@@ -28,7 +28,6 @@ public class ServiceRegistry implements IServiceRegistry {
 	
 	@Autowired
 	private ApplicationContext ctx;
-
 	
 	private Map<String, IService> serviceMap;
 	

@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.jaxb.viaf.Item;
-import edu.asu.spring.quadriga.profile.impl.ViafReply;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
@@ -46,9 +45,9 @@ public class ViafService implements IService {
 	private String serviceid;
 	private String name;
 		
-	@Inject
+	@Autowired
 	@Named("restTemplateViaf")
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Autowired
 	@Qualifier("viafURL")
@@ -75,14 +74,12 @@ public class ViafService implements IService {
 
 	@Override
 	public String getServiceId() {
-		
 		return "edu.asu.viaf";
 	}
 
 	@Override
 	public void setName(String name) {
-		this.name = name;
-		
+		this.name = name;	
 	}
 
 	@Override
@@ -97,7 +94,6 @@ public class ViafService implements IService {
 	 * 		  startindex	index in the REST api of viaf service
 	 * 
 	 * @return list of searchresults responded by viaf
-	 * 
 	 * @author rohit pendbhaje
 	 * 	
 	 */
@@ -107,10 +103,8 @@ public class ViafService implements IService {
 				
 		List<Item> items = null;
 		String fullUrl;
-		
 
 			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + word.trim() + searchViafURLPath1.trim() + IService.startIndex.trim() + searchViafURLPath2.trim();
-			 
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
 			items = rep.getChannel().getItems();
 			
@@ -128,7 +122,4 @@ public class ViafService implements IService {
 	
 	}
 	
-		
-	
-
 }

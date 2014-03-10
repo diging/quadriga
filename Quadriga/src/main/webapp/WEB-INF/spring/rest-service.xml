@@ -185,6 +185,4 @@
 		<property name="location" value="classpath:dspacestrings.properties" />
 	</bean>
 	
-	
-	
 </beans>

@@ -275,8 +275,6 @@ public class HomeController {
 			model.addAttribute("SearchResultBackBeanForm", searchResultBackBeanForm);
 		}
 		
-		
-		
 		return "auth/home/showProfile";
 	}
 	

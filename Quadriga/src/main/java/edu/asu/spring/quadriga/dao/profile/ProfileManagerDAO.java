@@ -148,15 +148,15 @@ implements IDBConnectionProfileManager
 		
 		try
 		{
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserprofileDTO.findByProfileid");
-		query.setParameter("profileid", profileid);
-		List<QuadrigaUserprofileDTO> userprofileList = query.list();
-		
-		for(QuadrigaUserprofileDTO userprofile: userprofileList )
-		{
-			serviceid = userprofile.getQuadrigaUserprofileDTOPK().getServiceid();
-		}
-	}
+			Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserprofileDTO.findByProfileid");
+			query.setParameter("profileid", profileid);
+			List<QuadrigaUserprofileDTO> userprofileList = query.list();
+			
+			for(QuadrigaUserprofileDTO userprofile: userprofileList )
+			{
+				serviceid = userprofile.getQuadrigaUserprofileDTOPK().getServiceid();
+			}
+	    }
 		
 		catch(Exception e){
 			throw new QuadrigaStorageException("sorry");
