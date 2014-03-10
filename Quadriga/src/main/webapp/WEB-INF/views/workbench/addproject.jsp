@@ -54,7 +54,7 @@
 						<td><form:errors path="projectAccess" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
-						<td>Unix name:</td>
+						<td>Custom URL:</td>
 						<td><form:input path="unixName" size="60" id="unixName" /></td>
 						<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
 					</tr>

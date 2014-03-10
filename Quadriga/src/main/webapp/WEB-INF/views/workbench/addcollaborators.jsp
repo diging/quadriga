@@ -5,9 +5,31 @@
     
 <style>
 
-div.ex {color:#01A9DB;
-font-style: italic
-}
+	div.wrap {
+	  
+		 overflow: auto;
+		 margin-bottom:-30px; 
+	}
+	
+	div.ex {
+	
+		width:200px;
+		float:left;
+	}
+	
+	div.ex1{
+	
+		width:200px;
+		margin-top:-29px;
+		float:left;
+		overflow: auto;
+	}
+	
+	div.rolesError{
+	float:left;
+	
+	}
+	
 </style>
 
 <script>
@@ -42,16 +64,26 @@ function onSubmit(){
 <div>${projectdesc}</div>
 <c:if test="${not empty notCollaboratingUsers}">
 <hr>
-<div class="ex" style="float:left;">select collaborator</div>
+
+<div class="wrap">
+
+<div class="ex" >
+    <h5>select collaborator</h5>
 	<form:select path="userObj" id="userName">
-	    <form:option value="NONE" label="--- Select ---"/>
+	    <form:option value="NONE" label="----- Select -----"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
 	</form:select> 
- 	<form:errors path="userObj" class="ui-state-error-text"></form:errors>  
+ 	<div class="userError"><form:errors path="userObj" class="ui-state-error-text"></form:errors></div>
+</div> 	 
 <br/>
-<div class="ex" style="float:left;">select access rights</div>
-	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
+
+<div class="ex1">
+    <h5>select access rights</h5>
+	<ul><form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" element="li" /> </ul>	
+	<div class="rolesError"><form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors></div>
+</div>
+
+</div>
 <br/>
 <input type="submit" value="Add">
 <input type="button" value="Cancel" onClick="onSubmit()">
