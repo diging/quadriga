@@ -23,7 +23,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.asu.spring.quadriga.service.impl.NetworkManager;
+import edu.asu.spring.quadriga.service.impl.network.NetworkManager;
 
 
 

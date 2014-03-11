@@ -39,7 +39,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.impl.NetworkManager;
+import edu.asu.spring.quadriga.service.impl.network.NetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**

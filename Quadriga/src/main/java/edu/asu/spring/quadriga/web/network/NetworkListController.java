@@ -274,6 +274,46 @@ public class NetworkListController {
 		return "auth/editing/editnetworksnew";
 	}
 
+	/**
+	 * Get the network displayed  on to JSP by passing JSON string and allow to add annotations 
+	 * @author Sowjanya Ambati
+	 * @param networkId
+	 * @param model
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws JAXBException
+	 * @throws JSONException 
+	 */
+	@RequestMapping(value = "auth/editing/editnetworksnew1/{networkId}", method = RequestMethod.GET)
+	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
+		logger.debug("Network id "+networkId);
+		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
+		networkManager.setIntialValueForD3JSon();
+		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
+		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
+		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
+		while(I.hasNext()){
+			INetworkNodeInfo networkNodeInfo = I.next();
+			logger.debug("Node id "+networkNodeInfo.getId());
+			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
+			if(networkNodeInfo.getStatementType().equals("RE")){
+				networkManager.setStatementId(networkNodeInfo.getId());
+			}
+			networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType());
+		}
+
+		logger.info("--------------------");
+		logger.info(networkManager.getD3JSon());
+
+		logger.info("Json object formed and sent to the JSP");
+
+		String nwId = "\""+networkId+"\"";
+		model.addAttribute("networkid",nwId);
+		model.addAttribute("jsonstring",networkManager.getD3JSon());
+		model.addAttribute("nodeList",networkManager.getD3NodeList());
+		return "auth/editing/editnetworksnew";
+	}
 
 	/**
 	 * Method for ajax call to generate the JSON for JStree to show the networks under project and workspace hiearchy  
