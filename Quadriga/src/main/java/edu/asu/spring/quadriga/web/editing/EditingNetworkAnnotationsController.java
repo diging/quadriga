@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.web.editing;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -140,12 +141,12 @@ public class EditingNetworkAnnotationsController {
 		IUser user = userManager.getUserDetails(principal.getName());
 		logger.info("network ID:" + networkId);
 		String annotation = "";
-		
+		List<NetworkAnnotation> resultList = new ArrayList<NetworkAnnotation>();
 		try {
-			List<NetworkAnnotation> resultList = editingNetworkAnnotationManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
+			resultList = editingNetworkAnnotationManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
-			if(resultList != null || resultList.size() > 0){
+			if(resultList != null){
 				
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
