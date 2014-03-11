@@ -211,6 +211,7 @@ public class NetworkRestController {
 				context.put("status", "UNKNOWN");
 			else
 				context.put("status", status);
+			context.put("networkid",networkId);
 			List<NetworkAnnotation>  networkAnnoList= editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
 			context.put("networkAnnoList",networkAnnoList);
 			StringWriter writer = new StringWriter();
