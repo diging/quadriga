@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl;
+package edu.asu.spring.quadriga.service.impl.network;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -114,7 +114,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public StringBuffer jsonString= new StringBuffer("");
 
 	private List<ID3Node> d3NodeList = new ArrayList<ID3Node>();
-	
+
 	private Map<String,Integer> d3NodeIdMap = new HashMap<String, Integer>();
 
 	private List<ID3Link> d3LinkList  = new ArrayList<ID3Link>();
@@ -159,10 +159,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	private IDBConnectionNetworkManager dbConnect;
 
 	private List<List<Object>> relationEventPredicateMapping;
-	
+
 	private String statementId ;
 
-	
+
 
 	/**
 	 * {@inheritDoc}
@@ -174,7 +174,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		setNodeIndex(0);
 		setD3NodeIdMap(new HashMap<String, Integer>());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -239,7 +239,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		this.nodeIndex = nodeIndex;
 	}
 
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -263,7 +263,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public List<List<Object>> getRelationEventPredicateMapping(){
 		return this.relationEventPredicateMapping;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -589,14 +589,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
 
 							// Adding appellation event node.
-//							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
-//							String nodeId=termId+"_"+shortUUID();
-//							d3Node.setNodeId(nodeId);
-//							d3Node.setNodeName(node);
-//							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
-//							d3NodeList.add(d3Node);
-//							d3NodeIdMap.put(nodeId, nodeIndex);
-//							nodeIndex++;
+							//							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
+							//							String nodeId=termId+"_"+shortUUID();
+							//							d3Node.setNodeId(nodeId);
+							//							d3Node.setNodeName(node);
+							//							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
+							//							d3NodeList.add(d3Node);
+							//							d3NodeIdMap.put(nodeId, nodeIndex);
+							//							nodeIndex++;
 
 						}
 					}
@@ -623,7 +623,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				logger.error("",e);
 			}
 		}
-		
+
 		return this.jsonString.toString();
 	}
 
@@ -703,15 +703,15 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @param nodeObject
 	 */
 	public void updateNodeLinkForD3JSON(NodeObject nodeObject){
-		
+
 		String predicateNameId = nodeObject.getPredicate();
-//		String subjectNodeId=nodeObject.getSubject()+"_"+shortUUID();
-//		String objectNodeId = nodeObject.getObject()+"_"+shortUUID();
-		
+		//		String subjectNodeId=nodeObject.getSubject()+"_"+shortUUID();
+		//		String objectNodeId = nodeObject.getObject()+"_"+shortUUID();
+
 		String subjectNodeId=nodeObject.getSubject();
 		String objectNodeId = nodeObject.getObject();
 		String stmtId = statementId;
-		
+
 
 		// Check for reference to relation
 		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
@@ -799,12 +799,34 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	public String getD3JSon(){
 		StringBuffer d3JsonString= new StringBuffer("");
-		
+
 		d3JsonString.append("{\n\"nodes\":[");
 		if(d3NodeList.size() > 0) {
-		
-		for(int i =0;i<d3NodeList.size()-1;i++){
-			ID3Node d3Node =d3NodeList.get(i);
+
+			for(int i =0;i<d3NodeList.size()-1;i++){
+				ID3Node d3Node =d3NodeList.get(i);
+				d3JsonString.append("{\"name\":\"");
+				d3JsonString.append(d3Node.getNodeName());
+				d3JsonString.append("\",");
+				d3JsonString.append("\"id\":\"");
+				d3JsonString.append(d3Node.getNodeId());
+				d3JsonString.append("\",");
+				d3JsonString.append("\"group\":");
+				d3JsonString.append(d3Node.getGroupId());
+				d3JsonString.append(",");
+				d3JsonString.append("\"statementid\":[\"");
+				for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
+					if(j == d3Node.getStatementIdList().size()-1){
+						d3JsonString.append(d3Node.getStatementIdList().get(j));
+					}else{
+						d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+					}
+				}
+				d3JsonString.append("\"]");
+				d3JsonString.append("},\n");
+
+			}
+			ID3Node d3Node =d3NodeList.get(d3NodeList.size()-1);
 			d3JsonString.append("{\"name\":\"");
 			d3JsonString.append(d3Node.getNodeName());
 			d3JsonString.append("\",");
@@ -819,54 +841,32 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				if(j == d3Node.getStatementIdList().size()-1){
 					d3JsonString.append(d3Node.getStatementIdList().get(j));
 				}else{
-				d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+					d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
 				}
+
 			}
 			d3JsonString.append("\"]");
-			d3JsonString.append("},\n");
-			
-		}
-		ID3Node d3Node =d3NodeList.get(d3NodeList.size()-1);
-		d3JsonString.append("{\"name\":\"");
-		d3JsonString.append(d3Node.getNodeName());
-		d3JsonString.append("\",");
-		d3JsonString.append("\"id\":\"");
-		d3JsonString.append(d3Node.getNodeId());
-		d3JsonString.append("\",");
-		d3JsonString.append("\"group\":");
-		d3JsonString.append(d3Node.getGroupId());
-		d3JsonString.append(",");
-		d3JsonString.append("\"statementid\":[\"");
-		for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
-			if(j == d3Node.getStatementIdList().size()-1){
-				d3JsonString.append(d3Node.getStatementIdList().get(j));
-			}else{
-			d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+
+			d3JsonString.append("}\n],\n\"links\":[\n");
+
+
+			for(int i =0;i<d3LinkList.size()-2;i++){
+				ID3Link d3Link =d3LinkList.get(i);
+				d3JsonString.append("{\"source\":");
+				d3JsonString.append(d3Link.getSource());
+				d3JsonString.append(",");
+				d3JsonString.append("\"target\":");
+				d3JsonString.append(d3Link.getTarget());
+				d3JsonString.append("},\n");
 			}
-			
-		}
-		d3JsonString.append("\"]");
-		
-		d3JsonString.append("}\n],\n\"links\":[\n");
-		
-		
-		for(int i =0;i<d3LinkList.size()-2;i++){
-			ID3Link d3Link =d3LinkList.get(i);
+			ID3Link d3Link =d3LinkList.get(d3LinkList.size()-1);
 			d3JsonString.append("{\"source\":");
 			d3JsonString.append(d3Link.getSource());
 			d3JsonString.append(",");
 			d3JsonString.append("\"target\":");
 			d3JsonString.append(d3Link.getTarget());
-			d3JsonString.append("},\n");
-		}
-		ID3Link d3Link =d3LinkList.get(d3LinkList.size()-1);
-		d3JsonString.append("{\"source\":");
-		d3JsonString.append(d3Link.getSource());
-		d3JsonString.append(",");
-		d3JsonString.append("\"target\":");
-		d3JsonString.append(d3Link.getTarget());
-		d3JsonString.append("}\n]\n}");
-		
+			d3JsonString.append("}\n]\n}");
+
 		}
 
 		return d3JsonString.toString();
@@ -1566,7 +1566,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return "success";
 	}
-	
+
 	@Override
 	@Transactional
 	public String getNetworkTree(String userName) throws JSONException{
@@ -1575,7 +1575,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		try{
 			projectList = projectManager.getProjectList(userName);
 			JSONArray dataArray = new JSONArray();
-			
+
 			for(IProject project : projectList){
 				// Each data
 				JSONObject data = new JSONObject();
@@ -1606,14 +1606,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 						data2.put("href", "networks/visualize/"+network.getId());
 						JSONObject data2href = new JSONObject();
 						data2href.put("href", "networks/visualize/"+network.getId());
-//						data2.put("a_attr", data2href);
+						//						data2.put("a_attr", data2href);
 						dataArray.put(data2);
 					}
 				}
 			}
 			JSONObject dataList = new JSONObject();
 			dataList.put("data", dataArray);
-			
+
 			core.put("core", dataList);
 		}catch(QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace and network details",e);
@@ -1621,5 +1621,127 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return core.toString(SUCCESS);
 	}
 
+	public String getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException{
 
+		List<INetworkNodeInfo> networkTopNodesList = null;
+
+		try{
+			networkTopNodesList = getNetworkTopNodes(networkId);
+		}catch(QuadrigaStorageException e){
+			logger.error("DB Error while getting network top nodes",e);
+		}
+		
+		if(jqueryType.equals(INetworkManager.D3JQUERY)){
+			
+		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
+			
+		}else{
+			return "";
+		}
+		
+		Iterator <INetworkNodeInfo> topNodeIterator = networkTopNodesList.iterator();
+		while(topNodeIterator.hasNext()){
+			INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
+			logger.debug("Node id "+networkNodeInfo.getId());
+			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
+			if(networkNodeInfo.getStatementType().equals("RE")){
+				try{
+					String statementId = networkNodeInfo.getId();
+					parseThroughStatement(networkNodeInfo.getId(), networkNodeInfo.getStatementType(),statementId);
+				}catch(QuadrigaStorageException e){
+					logger.error("DB error",e);
+				}catch(JAXBException e){
+					logger.error("Issue while parsing the JAXB object",e);
+				}
+			}
+
+		}
+
+		return null;
+	}
+
+
+	public String parseThroughStatement(String relationEventId,String statementType, String statementId) throws JAXBException, QuadrigaStorageException{
+		JsonObject jsonObject = new JsonObject();
+		this.jsonString.delete(0, this.jsonString.length());
+		// Get Node based XML from QStore
+		ResponseEntity<String> response = getNodeXmlFromQstore(relationEventId);
+		if(response ==null){
+			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
+		}else{
+
+			String responseText = response.getBody().toString();
+			// Try to unmarshall the XML got from QStore to an ElementEventsType object
+			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
+			Unmarshaller unmarshaller1 = context.createUnmarshaller();
+			unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+			InputStream is = new ByteArrayInputStream(responseText.getBytes());
+			JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
+			logger.debug("Respose bytes : "+responseText);
+			// Dig in the ElementEventsType object for relation and appellation events
+			try{
+				ElementEventsType e = response1.getValue();
+				List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
+				Iterator <CreationEvent> I= c.iterator();
+				while(I.hasNext()){
+					CreationEvent ce = I.next();
+					// Check if event is Appellation event
+					if(ce instanceof AppellationEventType)
+					{
+						// Trying to get a list of terms in the appellation event type object
+						AppellationEventType aet = (AppellationEventType) ce;
+						// Get the term part of Appellation event, to display on UI
+						List<TermType> termTypeList= aet.getTerms(aet);
+						Iterator <TermType> I2 = termTypeList.iterator();
+						while(I2.hasNext()){
+							TermType tt = I2.next();
+							// Fetch concept name from concept power
+							String node = conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt));
+							// add random string to concept name 
+							// so it will handle repeated nodes in different relations
+							// this is required for Json builder
+							String termId = tt.getTermID(tt)+"_"+shortUUID();
+							//String node = tt.getTermInterpertation(tt);
+							logger.debug(tt.getTermInterpertation(tt));
+							// Appending and building JSON for appellation event
+							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
+
+							// Adding appellation event node.
+							//							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
+							//							String nodeId=termId+"_"+shortUUID();
+							//							d3Node.setNodeId(nodeId);
+							//							d3Node.setNodeName(node);
+							//							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
+							//							d3NodeList.add(d3Node);
+							//							d3NodeIdMap.put(nodeId, nodeIndex);
+							//							nodeIndex++;
+
+						}
+					}
+					// Check if event is Relation event
+					if(ce instanceof RelationEventType){
+						// Trying to get a list of objects in the relations event type object
+						// First get PredicateType
+						// Then go recursively to subject and object
+						RelationEventType re = (RelationEventType) ce;
+						this.jsonString.delete(0, this.jsonString.length());
+						jsonObject.setIsRelationEventObject(true);
+						RelationEventObject relationEventObject = new RelationEventObject();
+						jsonObject.setRelationEventObject(relationEventObject);
+						jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
+
+
+						// This would help us in forming the json string as per requirement.
+						printJsonObjectRE(jsonObject.getRelationEventObject());
+
+					}
+				}
+
+			}catch(Exception e){
+				logger.error("",e);
+			}
+		}
+
+		return this.jsonString.toString();
+	}
 }

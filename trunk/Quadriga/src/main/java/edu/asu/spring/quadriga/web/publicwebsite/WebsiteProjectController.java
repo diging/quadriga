@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,7 +26,6 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.web.network.NetworkListManager;
 
 
 @Controller
@@ -54,7 +52,7 @@ public class WebsiteProjectController {
 	private String qStoreURL_Get;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(NetworkListManager.class);
+			.getLogger(WebsiteProjectController.class);
 
 	/*
 	 * Prepare the QStore GET URL
