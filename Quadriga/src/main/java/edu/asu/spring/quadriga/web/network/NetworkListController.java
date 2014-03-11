@@ -40,7 +40,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
  * 
  */
 @Controller
-public class NetworkListManager {
+public class NetworkListController {
 
 	@Autowired
 	INetworkManager networkManager;
@@ -82,7 +82,7 @@ public class NetworkListManager {
 	private String qStoreURL_Get;
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(NetworkListManager.class);
+			.getLogger(NetworkListController.class);
 
 	/*
 	 * Prepare the QStore GET URL

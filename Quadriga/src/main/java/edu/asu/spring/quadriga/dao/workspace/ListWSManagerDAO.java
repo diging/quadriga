@@ -29,6 +29,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDspaceDTOMapper;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 @Repository
 public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnectionListWSManager {
@@ -366,7 +367,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO networks where networks.workspaceid =:workspaceid and networks.status =:status");
 			query.setParameter("workspaceid", workspaceid);
-			query.setParameter("status", "REJECTED");
+			query.setParameter("status", INetworkStatus.REJECTED);
 			List<NetworksDTO> networksDTOList = query.list();
 			if(networksDTOList != null && networksDTOList.size() > 0)
 			{
