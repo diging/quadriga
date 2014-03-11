@@ -284,7 +284,7 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 	
 	@Override
 	public List<IProject> getProjectsByConceptCollection(String ccId) throws QuadrigaStorageException{
-		List<IProject>  projectsList = new ArrayList<>();
+		List<IProject>  projectsList = new ArrayList<IProject>();
 		if(ccId ==  null || ccId.equals("")){
 			return null;
 		}

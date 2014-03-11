@@ -383,7 +383,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	
 	@Override
 	public List<IWorkSpace> getWorkspaceByConceptCollection(String ccId) throws QuadrigaStorageException{
-		List<IWorkSpace>  workspaceList = new ArrayList<>();
+		List<IWorkSpace>  workspaceList = new ArrayList<IWorkSpace>();
 		if(ccId ==  null || ccId.equals("")){
 			return null;
 		}
