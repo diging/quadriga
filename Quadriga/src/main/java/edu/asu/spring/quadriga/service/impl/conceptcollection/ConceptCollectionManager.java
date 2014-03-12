@@ -198,7 +198,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 * @return String - lemma associated with concept
 	 */
 	@Override
-	public String getCocneptLemmaFromConceptId(String id){
+	public String getConceptLemmaFromConceptId(String id){
 		
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("name", id);

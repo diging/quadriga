@@ -537,6 +537,38 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return response;
 	}
+	
+	@Override
+	public String getNodeXmlStringFromQstore(String id)throws JAXBException{
+		// Message converters for JAXb to understand the xml
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+		List<MediaType> mediaTypes = new ArrayList<MediaType>();
+		mediaTypes.add(MediaType.APPLICATION_XML);
+		messageConverters.add(new StringHttpMessageConverter());
+		org.springframework.oxm.Marshaller marshaler = jaxbMarshaller;
+		org.springframework.oxm.Unmarshaller unmarshaler = jaxbMarshaller;
+		messageConverters.add(new MarshallingHttpMessageConverter(marshaler,unmarshaler));
+
+		restTemplate.setMessageConverters(messageConverters);
+
+		// Setting up the http header accept type
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		headers.setAccept(mediaTypes);
+		ResponseEntity<String> response = null;
+		try{
+			logger.debug("URL : "+getQStoreGetURL()+id);
+			// Get the XML from QStore
+			response = restTemplate.exchange(getQStoreGetURL()+id,
+					HttpMethod.GET,
+					new HttpEntity<String[]>(headers),
+					String.class);
+		}catch(Exception e){
+			e.getMessage();
+		}
+		return response.getBody().toString();
+	}
+
 
 
 	/**
@@ -578,7 +610,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 						while(I2.hasNext()){
 							TermType tt = I2.next();
 							// Fetch concept name from concept power
-							String node = conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt));
+							String node = conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt));
 							// add random string to concept name 
 							// so it will handle repeated nodes in different relations
 							// this is required for Json builder
@@ -1033,7 +1065,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			while(I2.hasNext()){
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
+				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
 				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 				PredicateObject predicateObject = new PredicateObject();
 				predicateObject.setAppellationEventObject(appellationEventObject);
@@ -1087,7 +1119,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			while(I2.hasNext()){
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
 				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 				subjectObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
@@ -1131,7 +1163,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			while(I2.hasNext()){
 				TermType tt = I2.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
 				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 				objectTypeObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("objectType Term : "+tt.getTermInterpertation(tt));
@@ -1639,23 +1671,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			return "";
 		}
 		
-		Iterator <INetworkNodeInfo> topNodeIterator = networkTopNodesList.iterator();
-		while(topNodeIterator.hasNext()){
-			INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			if(networkNodeInfo.getStatementType().equals("RE")){
-				try{
-					String statementId = networkNodeInfo.getId();
-					parseThroughStatement(networkNodeInfo.getId(), networkNodeInfo.getStatementType(),statementId);
-				}catch(QuadrigaStorageException e){
-					logger.error("DB error",e);
-				}catch(JAXBException e){
-					logger.error("Issue while parsing the JAXB object",e);
-				}
-			}
-
-		}
+		
 
 		return null;
 	}
@@ -1696,7 +1712,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 						while(I2.hasNext()){
 							TermType tt = I2.next();
 							// Fetch concept name from concept power
-							String node = conceptCollectionManager.getCocneptLemmaFromConceptId(tt.getTermInterpertation(tt));
+							String node = conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt));
 							// add random string to concept name 
 							// so it will handle repeated nodes in different relations
 							// this is required for Json builder

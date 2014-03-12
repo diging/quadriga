@@ -138,7 +138,7 @@ public class MockupConceptCollectionManager implements
 	}
 
 	@Override
-	public String getCocneptLemmaFromConceptId(String id) {
+	public String getConceptLemmaFromConceptId(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
