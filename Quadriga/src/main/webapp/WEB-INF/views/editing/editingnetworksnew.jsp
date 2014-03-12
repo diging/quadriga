@@ -51,6 +51,11 @@ function changeLayout(json,networkid,path,type)
 
 </div>
 
+<div id="left-container">
+<div id="concept_desc">
+</div>
+</div>
+
 <div id="bottom-container">
 <div id="allannot_details">
 </div>
