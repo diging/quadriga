@@ -140,6 +140,7 @@ function d3init(graph, networkId, path,type) {
 				.on("click", function(d){
 
 					display_annotations(d);
+					conceptDescription(d);
 				})
 				.call(node_drag)
 				.on("mouseover", fade(.1)).on("mouseout", fade(1));;
@@ -224,7 +225,7 @@ function d3init(graph, networkId, path,type) {
 					// d3.select(d.target).style("opacity", opacity);
 					//fade all elements
 
-					svg.selectAll(".node, line").style("opacity", opacity);
+					var snodes = svg.selectAll(".node, line").style("opacity", opacity);
 					var source = d.source;
 					var nodearray = [];
 					var found = [];
@@ -264,15 +265,17 @@ function d3init(graph, networkId, path,type) {
 					//var filtered = snodes.filter(function(d) { return d.statementid[0]==statementId;});
 					//alert(filtered.size());
 
-					var snodes = svg.selectAll(".node").each(function(d) {
-							d3.select(this).style("opacity", 1);
-							/*node.style("stroke-opacity", function(o) {
+					var filtered = snodes.filter(function(d) { return d.statementid[0]==statementId;}).each(function(d) {
+							//d3.select(this).style("opacity", 1);
+							node.style("stroke-opacity", function(o) {
 									return neighboring(d, o) ? 1 : opacity;
-							});*/
+							});
 
-							link.style("stroke-opacity", opacity).style("stroke-opacity", function(o) {
+							//link.style("stroke-opacity", opacity).style("stroke-opacity", function(o) {
+							link.style("stroke-opacity", function(o) {
 									return o.source === d || o.target === d ? 1 : opacity;
 							});
+							
 					});
 
 					};
@@ -613,5 +616,32 @@ function d3init(graph, networkId, path,type) {
 					
 				}
 				
-				
+				function conceptDescription(d){
+					lemma = d.name;
+					
+					// This is done to replace all dot (.) with dollar ($)
+					// Since our spring controller would ignore any data after dot (.)
+					lemma = lemma.replace(".","$");
+					
+					var output = "<h3>Description of Node</h3>";
+					output+="<h5>"+lemma+"</h5>";
+					
+					// Ajax call for getting description of the node
+					// Note: this ajax call has async = false
+					// this allow variables to be assigned inside the ajax and 
+					// accessed outside
+						$.ajax({
+							url : path+"/rest/editing/getconcept/"+lemma,
+							//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
+							type : "GET",
+							success : function(data) {
+								output+="<h8>" + data + "</h8>";
+								$('#concept_desc').html(output);
+							},
+							error: function() {
+								alert("error");
+							}
+						});
+						
+				}
 }
