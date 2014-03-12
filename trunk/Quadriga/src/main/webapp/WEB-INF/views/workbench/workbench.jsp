@@ -12,6 +12,22 @@
 		    $( "#tabs" ).tabs();
 	});
 	
+	$('input[type="checkbox"]').bind('click', function(){
+		alert("OK");
+		})
+	
+	$('#chkboxall').click(function() {
+		alert("here");
+		var opt = $(this).parent().find('input[type=checkbox]');
+        opt.prop('checked', $(this).is(':checked') ? true : false);
+	  
+	});
+	function chkAll(id){
+		//alert("here");
+		var opt = $("#"+id).parent().find('input[type=checkbox]');
+        opt.prop('checked', $(this).is(':checked') ? true : false);
+	}
+	
 </script>
 <style>
    .tabs
@@ -23,6 +39,14 @@
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>
 	</header>
+	<div id="users">
+	<input type="checkbox"  id="chkboxall" checked > All 
+	<!-- <input type="checkbox"  id="chkboxall" onclick="javascript:chkAll(this.id);" checked > All -->
+	<input type="checkbox"  id="chkboxowner" checked> Owner 
+	<input type="checkbox"  id="chkboxcollaborator" checked> Collaborator
+	<input type="checkbox"  id="chkboxawowner" checked> Workspace Owner 
+	<input type="checkbox" id="chkboxwcollaborator" checked> Workspace Collaborator 
+	</div>
 	<div id = "tabs" class="tabs">
 	<ul>
 	  <li><a href="#asowner">Owner</a></li>
@@ -30,6 +54,7 @@
 	  <li><a href="#aswsowner">Workspace Owner</a></li>
 	  <li><a href="#aswscollaborator">Workspace Collaborator</a></li>
 	</ul>
+	
 	<div id=asowner>
 		<c:if test="${not empty projectlistasowner}">
 	  You are the owner of the following projects:
