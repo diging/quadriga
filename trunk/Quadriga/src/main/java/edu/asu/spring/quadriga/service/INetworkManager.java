@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface INetworkManager {
 
 	public static String D3JQUERY = "D3JQUERY";
-	public static String JITJQUERY="JITJQUERY";
+	public static String JITJQUERY= "JITJQUERY";
 	/**
 	 * Gets the QStrore Add URL
 	 * 
