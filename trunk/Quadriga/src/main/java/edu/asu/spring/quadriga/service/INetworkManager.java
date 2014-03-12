@@ -119,4 +119,5 @@ public interface INetworkManager {
 	String getNetworkTree(String userName) throws JSONException;
 
 
+	public String getNodeXmlStringFromQstore(String id)throws JAXBException;
 }

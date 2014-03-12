@@ -285,7 +285,7 @@ public class NetworkListController {
 	 * @throws JAXBException
 	 * @throws JSONException 
 	 */
-	@RequestMapping(value = "auth/editing/editnetworksnew1/{networkId}", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/editing/editnetworks/{networkId}/D3", method = RequestMethod.GET)
 	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
 		logger.debug("Network id "+networkId);
 		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);

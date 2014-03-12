@@ -123,7 +123,7 @@ public interface IConceptCollectionManager {
 	
 	public abstract void getCollaborators(IConceptCollection collection)throws QuadrigaStorageException;
 	
-	public abstract String getCocneptLemmaFromConceptId(String id);
+	public abstract String getConceptLemmaFromConceptId(String id);
 
 
 	public abstract String getConceptCollectionId(String ccName) throws QuadrigaStorageException;
