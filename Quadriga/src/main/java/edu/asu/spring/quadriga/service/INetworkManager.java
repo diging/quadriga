@@ -80,9 +80,6 @@ public interface INetworkManager {
 
 	public abstract ResponseEntity<String> getNodeXmlFromQstore(String id) throws JAXBException;
 
-	public abstract String archiveNetworkStatement(String networkId, String id)
-			throws QuadrigaStorageException;
-
 	public abstract List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
 			throws QuadrigaStorageException;
 

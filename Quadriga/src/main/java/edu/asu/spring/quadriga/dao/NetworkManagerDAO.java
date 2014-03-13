@@ -194,6 +194,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 					"NetworksDTO.findByNetworkowner");
 			query.setParameter("networkowner", user.getUserName());
 
+			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
@@ -245,6 +246,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 							" from NetworksDTO network where network.networkowner = :networkowner and network.networkname = :networkname");
 			query.setParameter("networkowner", user.getUserName());
 			query.setParameter("networkname", networkName);
+			@SuppressWarnings("unchecked")
 			List<NetworksDTO> networksDTO = query.list();
 
 			if (networksDTO != null) {
@@ -257,59 +259,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException(e);
 		}
 
-	}
-
-	/**
-	 * Archive the network statements when network is re-uploaded after the network is rejected by admin.
-	 * The network statement has isarchived field as metadata to understand whether network is archived.
-	 * isarchived = 0 is network is active.
-	 * isarchived = 1 is network is archived as is most recently archived.
-	 * isarchived = 2 is network is archived and never used again. Stored in DB for future references.
-	 * The method uses Hibernate Framework to perform the database operations.
-	 * 
-	 * @param networkId						ID of network.
-	 * @param id							ID of network statement.
-	 * @return								Empty string if the operation was successful. Exception for all other cases.
-	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
-	 */
-	@Override
-	public String archiveNetworkStatement(String networkId, String id)
-			throws QuadrigaStorageException {
-
-		Transaction transaction = null;
-		try {
-			// Obtain a stateless session to overcome OutOfMemory Exception
-			StatelessSession session = sessionFactory.openStatelessSession();
-			transaction = session.beginTransaction();
-
-			// Select only the rows matching the network id and obtain a
-			// scrollable list
-			ScrollableResults scrollableDTO = session
-					.createQuery(
-							"  FROM NetworkStatementsDTO n WHERE n.networkid = :networkid and n.id = :id")
-							.setParameter("networkid", networkId)
-							.setParameter("id", id).scroll(ScrollMode.FORWARD_ONLY);
-
-			while (scrollableDTO.next()) {
-				// Update the rows with archive id 1 or 0
-				NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO
-						.get(0);
-				if (networkStatementDTO.getIsarchived() == INetworkStatus.NOT_ARCHIVED) {
-					networkStatementDTO
-					.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
-					session.update(networkStatementDTO);
-				} else if (networkStatementDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE) {
-					networkStatementDTO
-					.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
-					session.update(networkStatementDTO);
-				}
-			}
-
-			return "";
-		} catch (Exception e) {
-			logger.error("Error in archiving a network statement: ", e);
-			throw new QuadrigaStorageException(e);
-		}
 	}
 
 	/**
@@ -331,6 +280,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkStatementsDTO n WHERE n.networkid = :networkid");
 			query.setParameter("networkid", networkId);
 
+			@SuppressWarnings("unchecked")
 			List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
 			if (listNetworkStatementsDTO != null) {
 				networkNodeList = networkMapper.getListOfNetworkNodeInfo(listNetworkStatementsDTO);
@@ -344,9 +294,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 	/**
 	 * This method should be called when network is reuploaded after admin has rejected the network.
-	 * Archive the network, would mark the network statements with isarchived =1 or isarchived=2.
-	 * isarchived = 1 is network is archived as is most recently archived.
-	 * isarchived = 2 is network is archived and never used again. kept in DB for future references.
+	 * Archive the network, would mark the network statements with isarchived >0 
+	 * isarchived = 0 the network is active.
+	 * isarchived > 0 the network is archived with the version number (0 or 1 or 2 ..) when the same network
+	 * is uploaded after admin has rejected the previous ones.
 	 * The method uses Hibernate Framework to perform the database operations.
 	 * 
 	 * @param networkId						ID of network.
@@ -361,6 +312,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			// Obtain a stateless session to overcome OutOfMemory Exception
 			StatelessSession session = sessionFactory.openStatelessSession();
 			transaction = session.beginTransaction();
+			
+			int archiveNumber = 0;
 
 			// Select only the rows matching the network id and obtain a
 			// scrollable list
@@ -369,29 +322,20 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			ScrollableResults scrollableDTO = query.scroll(ScrollMode.FORWARD_ONLY);
 
 			while (scrollableDTO.next()) {
-				// Update the rows with archive id 1 or 0
+				// Update the network statements
 				NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO.get(0);
-				if (networkStatementDTO.getIsarchived() == INetworkStatus.NOT_ARCHIVED) {
-					networkStatementDTO.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
-					session.update(networkStatementDTO);
-				} else if (networkStatementDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE) {
-					networkStatementDTO.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
-					session.update(networkStatementDTO);
-				}
+				archiveNumber = networkStatementDTO.getIsarchived();
+				networkStatementDTO.setIsarchived(archiveNumber+1);
+				session.update(networkStatementDTO);
 			}
 
 			scrollableDTO = session.getNamedQuery("NetworkAssignedDTO.findByNetworkid").setParameter("networkid", networkId).scroll(ScrollMode.FORWARD_ONLY);
 			while (scrollableDTO.next()) {
-				// Update the rows with archive id 1 or 0
+				// update the network assigned rows
 				NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) scrollableDTO.get(0);
-				if (networkAssignedDTO.getIsarchived() == INetworkStatus.NOT_ARCHIVED) {
-					networkAssignedDTO.setIsarchived(INetworkStatus.ARCHIVE_LEVEL_ONE);
-					session.update(networkAssignedDTO);
-
-				} else if (networkAssignedDTO.getIsarchived() == INetworkStatus.ARCHIVE_LEVEL_ONE) {
-					networkAssignedDTO.setIsarchived(INetworkStatus.NOT_REACHABLE_ARCHIVE);
-					session.update(networkAssignedDTO);
-				}
+				archiveNumber = networkAssignedDTO.getIsarchived();
+				networkAssignedDTO.setIsarchived(archiveNumber+1);
+				session.update(networkAssignedDTO);
 			}
 
 			transaction.commit();
@@ -460,6 +404,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
 		query.setParameter("projectid", projectid);
 
+		@SuppressWarnings("unchecked")
 		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
 		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
 			System.out.println(projectWorkspaceDTO.getProjectDTO().getProjectname());
@@ -477,6 +422,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
 				queryNetworks.setParameter("workspaceid", workspaceid1);
 
+				@SuppressWarnings("unchecked")
 				List<NetworksDTO> networksDTOList = queryNetworks.list();
 
 				//Add the networks to the list
@@ -531,6 +477,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			query.setParameter("networkid", networkId);
 			query.setParameter("isarchived", archiveLevel);
 
+			@SuppressWarnings("unchecked")
 			List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
 
 			if(networkAssignedDTOList != null)
@@ -590,6 +537,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 			query.setParameter("username", user.getUserName());
 
+			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
@@ -714,8 +662,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-
 	public List<NetworksAnnotationsDTO> getAnnotationByNodeType(String type, String id, String userId,
 			String networkId) throws QuadrigaStorageException {
 		try {
@@ -741,6 +689,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
 			String networkId) throws QuadrigaStorageException {
@@ -793,10 +742,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		List<INetwork> networkList = null;
 
 		try {
-			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser) and status = :status");
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser ) and status = :status");
 			query.setParameter("assigneduser", user.getUserName());
 			query.setParameter("status", networkStatus);
 
+			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
@@ -841,6 +791,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			query.setParameter("assigneduser", user.getUserName());
 			query.setParameterList("status", networkStatus);
 
+			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
 			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 

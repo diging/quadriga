@@ -75,7 +75,6 @@ public class ModifyUserRolesController
 	 * @throws QuadrigaAccessException
 	 * @author kiran batna
 	 */
-	//TODO : request mapping should be updated
 	@RequestMapping(value = "auth/users/updateroles", method = RequestMethod.GET)
 	public ModelAndView updateQuadrigaRolesRequest()
 			throws QuadrigaStorageException, QuadrigaAccessException
@@ -114,7 +113,6 @@ public class ModifyUserRolesController
 	 * @throws QuadrigaAccessException
 	 * @author kiran batna
 	 */
-	//TODO : request mapping should be updated
 	@RequestMapping(value = "auth/users/updateroles", method = RequestMethod.POST)
 	public ModelAndView updateCollaboratorRequest(@Validated @ModelAttribute("userrolesform") ModifyQuadrigaUserForm userForm,
 			BindingResult result,Principal principal) 
