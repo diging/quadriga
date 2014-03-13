@@ -664,6 +664,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * 
 	 * @return short UUID
 	 */
+	@Override
 	public String shortUUID() {
 		UUID uuid = UUID.randomUUID();
 		long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
