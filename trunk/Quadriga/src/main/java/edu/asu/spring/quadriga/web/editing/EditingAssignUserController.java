@@ -126,8 +126,6 @@ public class EditingAssignUserController {
 	 */
 	@RequestMapping(value = "auth/editing/approvenetwork/{networkid}", method = RequestMethod.GET)
 	public String approveNetwork(@PathVariable ( "networkid") String networkId  ,ModelMap model, Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUserDetails(principal.getName());
-
 		try{
 			editorManager.updateNetworkStatus(networkId, INetworkStatus.APPROVED);
 			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.APPROVED);
@@ -147,8 +145,6 @@ public class EditingAssignUserController {
 	 */
 	@RequestMapping(value = "auth/editing/rejectnetwork/{networkid}", method = RequestMethod.GET)
 	public String rejectNetwork(@PathVariable ( "networkid") String networkId  ,ModelMap model, Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUserDetails(principal.getName());
-
 		try{
 			editorManager.updateNetworkStatus(networkId, INetworkStatus.REJECTED);
 			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.REJECTED);

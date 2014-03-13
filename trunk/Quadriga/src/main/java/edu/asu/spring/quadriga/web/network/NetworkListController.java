@@ -242,8 +242,6 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/editing/editnetworksnew/{networkId}", method = RequestMethod.GET)
 	public String visualizeAndEditNetworksNew(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
-		StringBuffer jsonstring=new StringBuffer();
 		logger.debug("Network id "+networkId);
 		String qstoreGetURL = getQStoreGetURL();
 		logger.debug("Qstore Get URL : "+qstoreGetURL);

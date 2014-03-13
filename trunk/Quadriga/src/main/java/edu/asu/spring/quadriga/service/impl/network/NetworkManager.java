@@ -1365,7 +1365,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
-		HttpEntity request = new HttpEntity(XML,headers);
+		HttpEntity<String> request = new HttpEntity<String>(XML,headers);
 
 		try{
 			// add xml in QStore
@@ -1396,7 +1396,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
-		HttpEntity request = new HttpEntity(XML,headers);
+		HttpEntity<String> request = new HttpEntity<String>(XML,headers);
 
 		try{
 			// Get complete network xml from QStore
@@ -1558,15 +1558,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 
 		return networkNodeList;
-	}
-	/**
-	 * Archive network Statements
-	 */
-	@Override
-	@Transactional
-	public String archiveNetworkStatement(String networkId,String id) throws QuadrigaStorageException{
-		String msg = dbConnect.archiveNetworkStatement(networkId, id);
-		return msg;
 	}
 
 	/**

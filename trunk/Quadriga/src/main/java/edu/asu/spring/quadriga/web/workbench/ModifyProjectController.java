@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -95,6 +96,7 @@ public class ModifyProjectController
 	 * @return model -  model object
 	 * @author Kiran Kumar Batna
 	 */
+	@PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
 	@RequestMapping(value="auth/workbench/addproject", method=RequestMethod.GET)
 	public ModelAndView addProjectRequestForm()
 	{
@@ -116,6 +118,7 @@ public class ModifyProjectController
 	 * @throws QuadrigaStorageException 
 	 * @author Kiran Kumar Batna
 	 */
+	@PreAuthorize("hasRole('ROLE_QUADRIGA_USER_ADMIN') OR hasRole('ROLE_QUADRIGA_USER_STANDARD')")
 	@RequestMapping(value = "auth/workbench/addproject", method = RequestMethod.POST)
 	public ModelAndView addProjectRequest(@Validated @ModelAttribute("project")Project project, 
 			BindingResult result,Principal principal) throws QuadrigaStorageException

@@ -71,20 +71,6 @@ public interface IDBConnectionNetworkManager {
 	public abstract boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException;
 
 	/**
-	 * Archive the network statements when network is re-uploaded after the network is rejected by admin.
-	 * The network statement has isarchived field as metadata to understand whether network is archived.
-	 * isarchived = 0 is network is active
-	 * isarchived = 1 is network is archived as is most recently archived
-	 * isarchived = 2 is network is archived and never used again. kept in DB for future references.
-	 * @param networkId			ID of network
-	 * @param id				ID of network statement
-	 * @return					return success/error message
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract String archiveNetworkStatement(String networkId, String id)
-			throws QuadrigaStorageException;
-
-	/**
 	 * Get all the network statements {@link INetworkNodeInfo} for a network.
 	 * Function can get Network statements with isTop =1, 
 	 * means only the top node ID so we can fetch the whole Node from QStore.

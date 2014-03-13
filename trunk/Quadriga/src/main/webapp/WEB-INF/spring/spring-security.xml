@@ -11,6 +11,7 @@
 		<http-basic/>		
 		<!-- <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" /> -->
 	</http>
+	<global-method-security pre-post-annotations="enabled"/>
 	
 	<http auto-config="true" use-expressions="true" access-denied-page="/forbidden" disable-url-rewriting="true">
 	<headers />

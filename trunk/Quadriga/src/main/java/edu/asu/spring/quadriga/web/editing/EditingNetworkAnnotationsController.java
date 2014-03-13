@@ -132,7 +132,6 @@ public class EditingNetworkAnnotationsController {
 	}
 		
 	
-	@SuppressWarnings("null")
 	@RequestMapping(value = "/auth/editing/getAllAnnotations/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String getAllAnnotationsInNetwork(HttpServletRequest request,
 			HttpServletResponse response,
