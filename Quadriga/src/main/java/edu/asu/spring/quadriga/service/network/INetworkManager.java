@@ -11,15 +11,24 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
+import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
+import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 
 public interface INetworkManager {
 
@@ -77,9 +86,6 @@ public interface INetworkManager {
 	public abstract List<INetworkNodeInfo> getNetworkTopNodes(String networkId)
 			throws QuadrigaStorageException;
 
-	public abstract String generateJsontoJQuery(String id, String statementType)
-			throws JAXBException, QuadrigaStorageException;
-
 	public abstract String getQStoreGetURL();
 
 	public abstract ResponseEntity<String> getNodeXmlFromQstore(String id) throws JAXBException;
@@ -97,25 +103,11 @@ public interface INetworkManager {
 	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
 			throws QuadrigaStorageException;
 
-	public abstract List<List<Object>> getRelationEventPredicateMapping();
-
-	public abstract void setRelationEventPredicateMapping(
-			List<List<Object>> relationEventPredicateMapping);
-
 	public abstract List<INetwork> getNetworksInProject(String projectid)
 			throws QuadrigaStorageException;
 
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;
 
-	public abstract void setIntialValueForD3JSon();
-
-	public abstract String getD3JSon();
-
-	String getStatementId();
-
-	void setStatementId(String statementId);
-
-	List<ID3Node> getD3NodeList();
 
 	String getNetworkTree(String userName) throws JSONException;
 
@@ -124,6 +116,56 @@ public interface INetworkManager {
 	String shortUUID();
 	
 	public INetworkJSon getJsonForNetworks(String networkId, String jqueryType)  throws QuadrigaStorageException;
+
+	NodeObject getPredicateNodeObjectContent(PredicateObject predicateObject,
+			NodeObject nodeObject);
+
+	List<INodeObjectWithStatement> parseEachStatement(String relationEventId,
+			String statementType, String statementId,
+			List<List<Object>> relationEventPredicateMapping,
+			List<INodeObjectWithStatement> nodeObjectWithStatementList)
+			throws JAXBException, QStoreStorageException;
+
+	ElementEventsType getElementEventTypeFromRelationEvent(
+			String relationEventId) throws JAXBException,
+			QStoreStorageException;
+
+	ElementEventsType unMarshalXmlToElementEventsType(String xml)
+			throws JAXBException;
+
+	RelationEventObject parseThroughRelationEvent(
+			RelationEventType relationEventType,
+			RelationEventObject relationEventObject,
+			List<List<Object>> relationEventPredicateMapping);
+
+	String stackRelationEventPredicateAppellationObject(String relationEventId,
+			String predicateName,
+			AppellationEventObject appellationEventObject,
+			List<List<Object>> relationEventPredicateMapping);
+
+	PredicateObject parseThroughPredicate(RelationEventType relationEventType,
+			PredicateType predicateType,
+			List<List<Object>> relationEventPredicateMapping);
+
+	AppellationEventObject checkRelationEventInStack(String relationEventId,
+			List<List<Object>> relationEventPredicateMapping);
+
+	SubjectObject parseThroughSubject(RelationEventType relationEventType,
+			SubjectObjectType subjectObjectType,
+			List<List<Object>> relationEventPredicateMapping);
+
+	ObjectTypeObject parseThroughObject(RelationEventType relationEventType,
+			SubjectObjectType subjectObjectType,
+			List<List<Object>> relationEventPredicateMapping);
+
+	List<INodeObjectWithStatement> prepareNodeObjectContent(
+			RelationEventObject relationEventObject,
+			List<INodeObjectWithStatement> nodeObjectWithStatementList,
+			String statementId);
+
+	String checkRelationEventRepeatation(String relationEventId,
+			String predicateName,
+			List<List<Object>> relationEventPredicateMapping);
 	
 	
 	

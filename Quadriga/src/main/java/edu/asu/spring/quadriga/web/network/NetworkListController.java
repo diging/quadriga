@@ -1,8 +1,6 @@
 package edu.asu.spring.quadriga.web.network;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.INetwork;
-import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -153,33 +150,11 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		StringBuffer jsonstring=new StringBuffer();
-		logger.debug("Network id "+networkId);
-		String qstoreGetURL = getQStoreGetURL();
-		logger.debug("Qstore Get URL : "+qstoreGetURL);
-		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
-		jsonstring.append("[");
-		networkManager.setIntialValueForD3JSon();
-		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
-		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
-		}
-		logger.info(networkManager.getD3JSon());
-		String jsonstring1 = jsonstring.toString();
-		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
-			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
-		}
-		jsonstring1 = jsonstring1+"]";
-
+		
+		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 		String nwId = "\""+networkId+"\"";
-		model.addAttribute("jsonstring",jsonstring1);
+		model.addAttribute("jsonstring",networkJSon.getJson());
 		model.addAttribute("networkid",nwId);
-
 
 		return "auth/networks/visualize";
 	}
@@ -196,82 +171,16 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/editing/editnetworks/{networkId}", method = RequestMethod.GET)
 	public String visualizeAndEditNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		StringBuffer jsonstring=new StringBuffer();
-		logger.debug("Network id "+networkId);
-		String qstoreGetURL = getQStoreGetURL();
-		logger.debug("Qstore Get URL : "+qstoreGetURL);
-		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
-		jsonstring.append("[");
-		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
-		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
-		}
 
-		String jsonstring1 = jsonstring.toString();
-		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
-			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
-		}
-		jsonstring1 = jsonstring1+"]";
-		logger.debug(jsonstring1);
-
-		logger.info("Json object formed and sent to the JSP");
+		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 
 		String nwId = "\""+networkId+"\"";
-		model.addAttribute("jsonstring",jsonstring1);
+		model.addAttribute("jsonstring",networkJSon.getJson());
 		model.addAttribute("networkid",nwId);
-		logger.info("json string:"+jsonstring1);
-		logger.info("network id:"+nwId);
 
 		return "auth/editing/editnetworks";
 	}
 
-	/**
-	 * Get the network displayed  on to JSP by passing JSON string and allow to add annotations 
-	 * @author Sowjanya Ambati
-	 * @param networkId
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws JAXBException
-	 * @throws JSONException 
-	 */
-	@RequestMapping(value = "auth/editing/editnetworksnew/{networkId}", method = RequestMethod.GET)
-	public String visualizeAndEditNetworksNew(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
-		logger.debug("Network id "+networkId);
-		String qstoreGetURL = getQStoreGetURL();
-		logger.debug("Qstore Get URL : "+qstoreGetURL);
-		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-		networkManager.setIntialValueForD3JSon();
-		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
-		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
-		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			if(networkNodeInfo.getStatementType().equals("RE")){
-				networkManager.setStatementId(networkNodeInfo.getId());
-			}
-			networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType());
-		}
-
-		logger.info("--------------------");
-		logger.info(networkManager.getD3JSon());
-
-		logger.info("Json object formed and sent to the JSP");
-
-		String nwId = "\""+networkId+"\"";
-		model.addAttribute("networkid",nwId);
-		model.addAttribute("jsonstring",networkManager.getD3JSon());
-		model.addAttribute("nodeList",networkManager.getD3NodeList());
-		return "auth/editing/editnetworksnew";
-	}
 
 	/**
 	 * Get the network displayed on to JSP by passing JSON string and allow to add annotations 
