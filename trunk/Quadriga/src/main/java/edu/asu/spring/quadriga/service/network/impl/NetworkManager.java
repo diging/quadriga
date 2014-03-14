@@ -7,10 +7,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
@@ -47,12 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.d3.domain.ID3Constant;
-import edu.asu.spring.quadriga.d3.domain.ID3Link;
-import edu.asu.spring.quadriga.d3.domain.ID3Node;
-import edu.asu.spring.quadriga.d3.domain.factory.ID3LinkFactory;
-import edu.asu.spring.quadriga.d3.domain.factory.ID3NodeFactory;
-import edu.asu.spring.quadriga.d3.domain.impl.D3Node;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
@@ -78,6 +70,7 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -85,7 +78,9 @@ import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.IJITNetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
+import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -106,31 +101,16 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	private String qStoreURL;
 
 	@Autowired
+	private INodeObjectWithStatementFactory nodeObjectWithStatementFactory;
+	
+	@Autowired
 	private IJITNetworkManager jitNetworkManager;
 	
 	@Autowired
 	private ID3NetworkManager d3NetworkManager;
 
 	@Autowired
-	private ID3NodeFactory d3NodeFactory;
-
-	@Autowired
-	private ID3LinkFactory d3LinkFactory;
-
-	@Autowired
 	IConceptCollectionManager conceptCollectionManager;
-
-	public StringBuffer jsonString= new StringBuffer("");
-
-	private List<ID3Node> d3NodeList = new ArrayList<ID3Node>();
-
-	private Map<String,Integer> d3NodeIdMap = new HashMap<String, Integer>();
-
-	private List<ID3Link> d3LinkList  = new ArrayList<ID3Link>();
-
-	private int nodeIndex =0;
-
-
 
 	@Autowired
 	private	IListWSManager wsManager;
@@ -167,121 +147,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Autowired
 	private IDBConnectionNetworkManager dbConnect;
 
-	private List<List<Object>> relationEventPredicateMapping;
-
-	private String statementId ;
-
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setIntialValueForD3JSon(){
-		setD3NodeList(new ArrayList<ID3Node>());
-		setD3LinkList(new ArrayList<ID3Link>());
-		setNodeIndex(0);
-		setD3NodeIdMap(new HashMap<String, Integer>());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<ID3Node> getD3NodeList() {
-		return d3NodeList;
-	}
-
-	/**
-	 * Setter for {@link List} of {@link ID3Node}, used to access when there is need for other classes classes to use networkManager and D3 JQuery
-	 * @param d3NodeList 		List of type {@link ID3Node}
-	 */
-	public void setD3NodeList(List<ID3Node> d3NodeList) {
-		this.d3NodeList = d3NodeList;
-	}
-
-	/**
-	 * Getter for Map of node details. Used to add unique values in the json builder for D3 JSon 
-	 * @return 			A map of {@link D3Node}.name occurances and index
-	 */
-	public Map<String, Integer> getD3NodeIdMap() {
-		return d3NodeIdMap;
-	}
-
-	/**
-	 * Setter for Map of node details. Used to add unique values in the json builder for D3 JSon
-	 * @param d3NodeIdMap		A map of {@link D3Node}.name occurances and index
-	 */
-	public void setD3NodeIdMap(Map<String, Integer> d3NodeIdMap) {
-		this.d3NodeIdMap = d3NodeIdMap;
-	}
-
-	/**
-	 * Getter for {@link List} of {@link ID3Link} , used to access when there is need for other classes classes to use networkManager and D3 JQuery
-	 * return 		 List of type {@link ID3Link}
-	 */
-	public List<ID3Link> getD3LinkList() {
-		return d3LinkList;
-	}
-
-	/**
-	 * Setter for {@link List} of {@link ID3Link}, used to access when there is need for other classes classes to use networkManager and D3 JQuery
-	 * @param d3LinkList 		List of type {@link ID3Link}
-	 */
-	public void setD3LinkList(List<ID3Link> d3LinkList) {
-		this.d3LinkList = d3LinkList;
-	}
-
-	/**
-	 * Getter for {@link ID3Node} index in the map 
-	 * @return			Returns the index of the node in the map
-	 */
-	public int getNodeIndex() {
-		return nodeIndex;
-	}
-
-	/**
-	 * Setter for {@link ID3Node} index in the map
-	 * @param nodeIndex			Node index in the map
-	 */
-	public void setNodeIndex(int nodeIndex) {
-		this.nodeIndex = nodeIndex;
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getStatementId() {
-		return statementId;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setStatementId(String statementId) {
-		this.statementId = statementId;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<List<Object>> getRelationEventPredicateMapping(){
-		return this.relationEventPredicateMapping;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setRelationEventPredicateMapping( List<List<Object>> relationEventPredicateMapping){
-		this.relationEventPredicateMapping=relationEventPredicateMapping;
-	}
-
-
 	/**
 	 * Getter for DSpace file existance in the network XML	
 	 * @return				Returns boolean value of DSpace existance
@@ -306,8 +171,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return qStoreURL+qStoreURL_Add;
 	}
 
-
-
 	/* 
 	 * Prepare a QStore Get URL to fetch element of networks from Qstore
 	 */
@@ -324,7 +187,432 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return qStoreURL+qStoreURL_Get_POST;
 	}
 
+	@Override
+	@Transactional
+	public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException{
 
+		INetworkJSon networkJSon=null;
+
+		List<INetworkNodeInfo> networkTopNodesList = null;
+
+		try{
+			networkTopNodesList = getNetworkTopNodes(networkId);
+		}catch(QuadrigaStorageException e){
+			logger.error("DB Error while getting network top nodes",e);
+		}
+
+		if(jqueryType.equals(INetworkManager.D3JQUERY)){
+			networkJSon = d3NetworkManager.parseNetworkForD3Jquery(networkTopNodesList);
+		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
+			String jitJSon = jitNetworkManager.parseNetworkForJITJquery(networkTopNodesList);
+			if(networkJSon ==null){
+				networkJSon = new NetworkJSon(jitJSon, null);
+			}
+		}		
+
+		return networkJSon;
+	}
+	
+	@Override
+	public List<INodeObjectWithStatement> parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping, List<INodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException{
+		ElementEventsType elementEventType =getElementEventTypeFromRelationEvent(relationEventId);
+		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
+		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
+		
+		while(creationEventIterator.hasNext()){
+			CreationEvent creationEvent = creationEventIterator.next();
+			// Check if event is Appellation event
+			if(creationEvent instanceof AppellationEventType)
+			{
+				// Do nothing, we no need to display appellation events on UI.
+			}
+			// Check if event is Relation event
+			if(creationEvent instanceof RelationEventType){
+				// Trying to get a list of objects in the relations event type object
+				// First get PredicateType
+				// Then go recursively to subject and object
+				JsonObject jsonObject = new JsonObject();
+				RelationEventType relationEventType = (RelationEventType) creationEvent;
+				jsonObject.setIsRelationEventObject(true);
+				jsonObject.setRelationEventObject(parseThroughRelationEvent(relationEventType,new RelationEventObject(),relationEventPredicateMapping));
+				
+				
+
+				// This would help us in forming the json string as per requirement.
+				nodeObjectWithStatementList = prepareNodeObjectContent(jsonObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
+
+			}
+		}
+		
+				
+		return nodeObjectWithStatementList;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#getElementEventTypeFromRelationEvent(java.lang.String)
+	 */
+	@Override
+	public ElementEventsType getElementEventTypeFromRelationEvent(String relationEventId) throws JAXBException, QStoreStorageException{
+		String xml = getNodeXmlStringFromQstore(relationEventId);
+		ElementEventsType elementEventType = null;
+		if(xml ==null){
+			throw new QStoreStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
+		}else{
+
+			// Initialize ElementEventsType object for relation event
+			elementEventType = unMarshalXmlToElementEventsType(xml);
+		}	
+		return elementEventType;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#unMarshalXmlToElementEventsType(java.lang.String)
+	 */
+	@Override
+	public ElementEventsType unMarshalXmlToElementEventsType(String xml) throws JAXBException{
+		ElementEventsType elementEventType = null;
+
+		// Try to unmarshall the XML got from QStore to an ElementEventsType object
+		JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
+		Unmarshaller unmarshaller1 = context.createUnmarshaller();
+		unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
+		InputStream is = new ByteArrayInputStream(xml.getBytes());
+		JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
+		elementEventType = response1.getValue();
+
+		return elementEventType;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughRelationEvent(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject, java.util.List)
+	 */
+	@Override
+	public RelationEventObject parseThroughRelationEvent(RelationEventType relationEventType,RelationEventObject relationEventObject,List<List<Object>> relationEventPredicateMapping){
+
+		// Get RelationType of the RelationEventType
+		RelationType relationType = relationEventType.getRelation(relationEventType);
+
+		// Handle Predicate of the RelationType
+		PredicateType predicateType = relationType.getPredicateType(relationType);
+		relationEventObject.setPredicateObject(parseThroughPredicate(relationEventType, predicateType, relationEventPredicateMapping));
+		
+		// Handle Subject of the RelationType
+		SubjectObjectType subjectType = relationType.getSubjectType(relationType);
+		SubjectObject subjectObject = parseThroughSubject(relationEventType, subjectType, relationEventPredicateMapping);
+		relationEventObject.setSubjectObject(subjectObject);		
+		
+		// Handle Object of the RelationType
+		SubjectObjectType objectType = relationType.getObjectType(relationType);
+		ObjectTypeObject objectTypeObject = parseThroughObject(relationEventType, objectType, relationEventPredicateMapping);
+		relationEventObject.setObjectTypeObject(objectTypeObject);
+		
+		
+		return relationEventObject;
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#stackRelationEventPredicateAppellationObject(java.lang.String, java.lang.String, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject, java.util.List)
+	 */
+	@Override
+	public String stackRelationEventPredicateAppellationObject(String relationEventId,String predicateName,AppellationEventObject appellationEventObject,List<List<Object>> relationEventPredicateMapping){
+		Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
+
+		while(relationEventPredicateMappingIterator.hasNext()){
+			List<Object> objectList = relationEventPredicateMappingIterator.next();
+			Iterator<Object> objectIterator = objectList.iterator();
+			while(objectIterator.hasNext()){
+				Object object = objectIterator.next();
+				if(object instanceof String[]){
+					String pairs[] = (String [])object;
+					if(pairs[0].equals(relationEventId)){
+						String predicateNameLocal = pairs[1];
+						return predicateNameLocal;
+					}
+				}
+			}
+		}
+		String[] pairs = new String [2];
+		pairs[0]=(relationEventId);
+		pairs[1]=(predicateName);
+		List<Object> objectList = new ArrayList<Object>();
+		objectList.add(pairs);
+		objectList.add(appellationEventObject);
+		relationEventPredicateMapping.add(objectList);
+
+		return null;
+
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughPredicate(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.PredicateType, java.util.List)
+	 */
+	@Override
+	public PredicateObject parseThroughPredicate(RelationEventType relationEventType, PredicateType predicateType,List<List<Object>> relationEventPredicateMapping){
+		//	Predicate has only appellation event, so get appellation event inside the predicate
+		AppellationEventType appellationEvent = predicateType.getAppellationEvent();
+		PredicateObject predicateObject = null;
+		List<TermType> termTypeList= appellationEvent.getTerms(appellationEvent);
+		Iterator <TermType> termTypeIterator = termTypeList.iterator();
+		while(termTypeIterator.hasNext()){
+			TermType tt = termTypeIterator.next();
+			AppellationEventObject appellationEventObject = new AppellationEventObject();
+			appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
+			appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+			predicateObject = new PredicateObject();
+			predicateObject.setAppellationEventObject(appellationEventObject);
+
+			predicateObject.setRelationEventID(relationEventType.getRelationEventId(relationEventType));
+			stackRelationEventPredicateAppellationObject(relationEventType.getRelationEventId(relationEventType),predicateObject.getAppellationEventObject().getNode(),appellationEventObject, relationEventPredicateMapping);
+			return predicateObject;
+		}
+		return predicateObject;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#checkRelationEventInStack(java.lang.String, java.util.List)
+	 */
+	@Override
+	public AppellationEventObject checkRelationEventInStack(String relationEventId,List<List<Object>> relationEventPredicateMapping){
+
+		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
+		int flag=0;
+		AppellationEventObject appellationEventObject=null;
+		while(I.hasNext()){
+			List<Object> objectList = I.next();
+			Iterator<Object> I1 = objectList.iterator();
+
+			while(I1.hasNext()){
+				Object object = I1.next();
+
+				if(object instanceof String[]){
+					String pairs[] = (String [])object;
+					if(pairs[0].equals(relationEventId)){
+						String predicateNameLocal = pairs[1];
+						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
+						flag=1;
+					}
+				}
+				if(object instanceof AppellationEventObject){
+					appellationEventObject=(AppellationEventObject)object;
+				}
+			}
+			if(flag==1){
+				return appellationEventObject;
+			}
+		}
+
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughSubject(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType, java.util.List)
+	 */
+	@Override
+	public SubjectObject parseThroughSubject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,List<List<Object>> relationEventPredicateMapping){
+
+		//	Check for relation event inside subject and add if any
+		RelationEventType subjectRelationEventType = subjectObjectType.getRelationEvent();
+
+		SubjectObject subjectObject = new SubjectObject();
+
+		if(subjectRelationEventType == null){
+			subjectObject.setIsRelationEventObject(false);
+		}else{
+			AppellationEventObject temp = checkRelationEventInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
+			/*
+			 * I am trying to fool subject as Appellation event
+			 * when we find a existing relation event been referred here
+			 * I will give appellation event with predicate of referred relation event
+			 */
+			if(!(temp == null)){
+				subjectObject.setIsRelationEventObject(false);
+				subjectObject.setAppellationEventObject(temp);
+			}else{
+				subjectObject.setIsRelationEventObject(true);
+				RelationEventObject relationEventObject   = new RelationEventObject();
+				checkRelationEventInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
+				relationEventObject=parseThroughRelationEvent(subjectRelationEventType,relationEventObject,relationEventPredicateMapping);
+				subjectObject.setRelationEventObject(relationEventObject);
+			}
+		}
+		//	Check for Appellation event inside subject and add if any
+		AppellationEventType appellationEventType = subjectObjectType.getAppellationEvent();
+		if(appellationEventType == null){
+			
+		}else{
+			List<TermType> termTypeList= appellationEventType.getTerms(appellationEventType);
+			Iterator <TermType> termTypeIterator = termTypeList.iterator();
+			while(termTypeIterator.hasNext()){
+				TermType tt = termTypeIterator.next();
+				AppellationEventObject appellationEventObject = new AppellationEventObject();
+				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+				subjectObject.setAppellationEventObject(appellationEventObject);
+				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
+			}
+		}
+		return subjectObject;
+		
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughObject(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType, java.util.List)
+	 */
+	@Override
+	public ObjectTypeObject parseThroughObject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,List<List<Object>> relationEventPredicateMapping){
+
+		//	Check for relation event inside subject and add if any
+		RelationEventType objectRelationEventType = subjectObjectType.getRelationEvent();
+
+		ObjectTypeObject objectTypeObject = new ObjectTypeObject();
+
+		if(objectRelationEventType == null){
+			objectTypeObject.setIsRelationEventObject(false);
+		}else{
+			AppellationEventObject temp = checkRelationEventInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
+			/*
+			 * I am trying to fool subject as Appellation event
+			 * when we find a existing relation event been referred here
+			 * I will give appellation event with predicate of referred relation event
+			 */
+			if(!(temp == null)){
+				objectTypeObject.setIsRelationEventObject(false);
+				objectTypeObject.setAppellationEventObject(temp);
+			}else{
+				objectTypeObject.setIsRelationEventObject(true);
+				RelationEventObject relationEventObject   = new RelationEventObject();
+				checkRelationEventInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
+				relationEventObject=parseThroughRelationEvent(objectRelationEventType,relationEventObject,relationEventPredicateMapping);
+				objectTypeObject.setRelationEventObject(relationEventObject);
+			}
+		}
+		//	Check for Appellation event inside subject and add if any
+		AppellationEventType appellationEventType = subjectObjectType.getAppellationEvent();
+		if(appellationEventType == null){
+			
+		}else{
+			List<TermType> termTypeList= appellationEventType.getTerms(appellationEventType);
+			Iterator <TermType> termTypeIterator = termTypeList.iterator();
+			while(termTypeIterator.hasNext()){
+				TermType tt = termTypeIterator.next();
+				AppellationEventObject appellationEventObject = new AppellationEventObject();
+				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
+				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+				objectTypeObject.setAppellationEventObject(appellationEventObject);
+				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
+			}
+		}
+		return objectTypeObject;
+		
+	}
+	
+	
+	/**
+	 * Use temp structure to allow our json builder work easily.
+	 * {@link NodeObject} is used to build this temp structure. {@link NodeObject} has a predicate, subject object structure in it.
+	 * I am recursively filling the {@link NodeObject}.
+	 * @param relationEventObject
+	 */
+	@Override
+	public List<INodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,List<INodeObjectWithStatement> nodeObjectWithStatementList, String statementId){
+		
+		// Get predicate Object structure
+		PredicateObject predicateObject = relationEventObject.getPredicateObject();
+		NodeObject nodeObject = getPredicateNodeObjectContent(predicateObject,new NodeObject());
+
+
+		// Get Subject Object into temp structure 
+		SubjectObject subjectObject = relationEventObject.getSubjectObject();
+		ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
+		if(subjectObject.getIsRelationEventObject()){
+			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
+			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			
+			// Get Object into temp structure 
+			if(objectTypeObject.getIsRelationEventObject()){
+				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
+				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
+				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+			}else{
+
+				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+				nodeObject.setObject(appellationEventObject1.getNode());
+				nodeObject.setObjectId(appellationEventObject1.getTermId());
+				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
+				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
+			}
+			
+			nodeObjectWithStatementList = prepareNodeObjectContent(subjectObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
+			
+		}else{
+
+			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
+			nodeObject.setSubject(appellationEventObject1.getNode());
+			nodeObject.setSubjectId(appellationEventObject1.getTermId());
+			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
+		}
+		
+		// Get Object into temp structure 
+		if(objectTypeObject.getIsRelationEventObject()){
+			nodeObjectWithStatementList = prepareNodeObjectContent(objectTypeObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
+		}else{
+			AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+			nodeObject.setObject(appellationEventObject1.getNode());
+			nodeObject.setObjectId(appellationEventObject1.getTermId());
+			nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
+			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
+		}
+		
+		return nodeObjectWithStatementList;
+	}
+	
+	
+	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#getPredicateNodeObjectContent(edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject)
+	 */
+	@Override
+	public NodeObject getPredicateNodeObjectContent (PredicateObject predicateObject, NodeObject nodeObject){
+		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
+		// Store predicate detail in our temporary structure
+		nodeObject.setRelationEventId(predicateObject.getRelationEventID());
+
+		nodeObject.setPredicate(appellationEventObject.getNode());
+		nodeObject.setPredicateId(appellationEventObject.getTermId());
+		logger.debug("Predicate : "+appellationEventObject.getNode() );
+		
+		return nodeObject;
+	}
+
+	@Override
+	public String checkRelationEventRepeatation(String relationEventId,String predicateName,List<List<Object>> relationEventPredicateMapping){
+		Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
+
+		while(relationEventPredicateMappingIterator.hasNext()){
+			List<Object> objectList = relationEventPredicateMappingIterator.next();
+			Iterator<Object> I1 = objectList.iterator();
+			while(I1.hasNext()){
+				Object object = I1.next();
+				if(object instanceof String[]){
+					String pairs[] = (String [])object;
+					if(pairs[0].equals(relationEventId)){
+						String predicateNameLocal = pairs[1];
+						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
+						return predicateNameLocal;
+					}
+				}
+			}
+		}
+		return "";
+
+	}
+	
 	/**
 	 * Store the top network RE and AE IDs into DB by parsing through the XML and object goes through the event types 
 	 * @param response
@@ -579,95 +867,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 
-
-	/**
-	 * Generate JSON string of the network to JIT jquery
-	 */
-	@Override
-	public String generateJsontoJQuery(String id,String statementType) throws JAXBException, QuadrigaStorageException{
-		JsonObject jsonObject = new JsonObject();
-		this.jsonString.delete(0, this.jsonString.length());
-		// Get Node based XML from QStore
-		ResponseEntity<String> response = getNodeXmlFromQstore(id);
-		if(response ==null){
-			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
-		}else{
-
-			String responseText = response.getBody().toString();
-			// Try to unmarshall the XML got from QStore to an ElementEventsType object
-			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
-			Unmarshaller unmarshaller1 = context.createUnmarshaller();
-			unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-			InputStream is = new ByteArrayInputStream(responseText.getBytes());
-			JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
-			logger.debug("Respose bytes : "+responseText);
-			// Dig in the ElementEventsType object for relation and appellation events
-			try{
-				ElementEventsType e = response1.getValue();
-				List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
-				Iterator <CreationEvent> I= c.iterator();
-				while(I.hasNext()){
-					CreationEvent ce = I.next();
-					// Check if event is Appellation event
-					if(ce instanceof AppellationEventType)
-					{
-						// Trying to get a list of terms in the appellation event type object
-						AppellationEventType aet = (AppellationEventType) ce;
-						// Get the term part of Appellation event, to display on UI
-						List<TermType> termTypeList= aet.getTerms(aet);
-						Iterator <TermType> I2 = termTypeList.iterator();
-						while(I2.hasNext()){
-							TermType tt = I2.next();
-							// Fetch concept name from concept power
-							String node = conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt));
-							// add random string to concept name 
-							// so it will handle repeated nodes in different relations
-							// this is required for Json builder
-							String termId = tt.getTermID(tt)+"_"+shortUUID();
-							//String node = tt.getTermInterpertation(tt);
-							logger.debug(tt.getTermInterpertation(tt));
-							// Appending and building JSON for appellation event
-							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
-
-							// Adding appellation event node.
-							//							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
-							//							String nodeId=termId+"_"+shortUUID();
-							//							d3Node.setNodeId(nodeId);
-							//							d3Node.setNodeName(node);
-							//							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
-							//							d3NodeList.add(d3Node);
-							//							d3NodeIdMap.put(nodeId, nodeIndex);
-							//							nodeIndex++;
-
-						}
-					}
-					// Check if event is Relation event
-					if(ce instanceof RelationEventType){
-						// Trying to get a list of objects in the relations event type object
-						// First get PredicateType
-						// Then go recursively to subject and object
-						RelationEventType re = (RelationEventType) ce;
-						this.jsonString.delete(0, this.jsonString.length());
-						jsonObject.setIsRelationEventObject(true);
-						RelationEventObject relationEventObject = new RelationEventObject();
-						jsonObject.setRelationEventObject(relationEventObject);
-						jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
-
-
-						// This would help us in forming the json string as per requirement.
-						printJsonObjectRE(jsonObject.getRelationEventObject());
-
-					}
-				}
-
-			}catch(Exception e){
-				logger.error("",e);
-			}
-		}
-
-		return this.jsonString.toString();
-	}
-
 	/**
 	 * Generate short UUID (13 characters)
 	 * 
@@ -679,509 +878,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
 		return Long.toString(l, Character.MAX_RADIX);
 	}
-	/**
-	 * Helper funtions to create a JSon object
-	 * @param relationEventObject
-	 */
-	public void printJsonObjectRE(RelationEventObject relationEventObject){
-		// Use temp structure to allow our json builder work easily.
-		// First get predicate
-		PredicateObject predicateObject = relationEventObject.getPredicateObject();
-		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
-		NodeObject nodeObject = new NodeObject();
-		// Store into a our temp structure
-		nodeObject.setRelationEventId(predicateObject.getRelationEventID());
+	
 
-		nodeObject.setPredicate(appellationEventObject.getNode());
-		nodeObject.setPredicateId(appellationEventObject.getTermId());
-		logger.debug("Predicate : "+appellationEventObject.getNode() );
-
-		// Get subject/Object into temp structure 
-		SubjectObject subjectObject = relationEventObject.getSubjectObject();
-		ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
-		if(subjectObject.getIsRelationEventObject()){
-			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
-			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-			// Get Object into temp structure 
-			if(objectTypeObject.getIsRelationEventObject()){
-				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
-				updateJsonStringForRENode(nodeObject);
-				updateNodeLinkForD3JSON(nodeObject);
-				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
-			}else{
-
-				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-				nodeObject.setObject(appellationEventObject1.getNode());
-				nodeObject.setObjectId(appellationEventObject1.getTermId());
-				updateJsonStringForRENode(nodeObject);
-				updateNodeLinkForD3JSON(nodeObject);
-				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
-			}
-			printJsonObjectRE(subjectObject.getRelationEventObject());
-		}else{
-
-			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
-			nodeObject.setSubject(appellationEventObject1.getNode());
-			nodeObject.setSubjectId(appellationEventObject1.getTermId());
-			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
-		}
-		// Get Object into temp structure 
-		if(objectTypeObject.getIsRelationEventObject()){
-			printJsonObjectRE(objectTypeObject.getRelationEventObject());
-		}else{
-			AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
-			nodeObject.setObject(appellationEventObject1.getNode());
-			nodeObject.setObjectId(appellationEventObject1.getTermId());
-			updateJsonStringForRENode(nodeObject);
-			updateNodeLinkForD3JSON(nodeObject);
-			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
-		}
-	}
-
-	/**
-	 * Method to add nodes and links into List, which can be used to make a JSON object later.
-	 * @param nodeObject
-	 */
-	public void updateNodeLinkForD3JSON(NodeObject nodeObject){
-
-		String predicateNameId = nodeObject.getPredicate();
-		//		String subjectNodeId=nodeObject.getSubject()+"_"+shortUUID();
-		//		String objectNodeId = nodeObject.getObject()+"_"+shortUUID();
-
-		String subjectNodeId=nodeObject.getSubject();
-		String objectNodeId = nodeObject.getObject();
-		String stmtId = statementId;
-
-
-		// Check for reference to relation
-		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
-		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
-		if(!(temp.equals(""))){
-			predicateNameId = temp;
-		}
-
-		// Add Nodes for D3 JSon
-		{
-			// Adding Subject into node list 
-			if(!d3NodeIdMap.containsKey(subjectNodeId)){
-				ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
-				//List<String> stmtList = d3NodeSubject.getStatementIdList();
-				//stmtList.add(stmtId);
-				//d3NodeSubject.setStatementIdList(stmtList);
-				d3NodeSubject.setNodeName(nodeObject.getSubject());
-				d3NodeSubject.setNodeId(subjectNodeId);
-				d3NodeSubject.setGroupId(ID3Constant.RELATION_EVENT_SUBJECT_TERM);
-				d3NodeList.add(d3NodeSubject);
-				d3NodeIdMap.put(subjectNodeId,nodeIndex);
-				nodeIndex++;
-			}
-
-			// Adding Object into node list
-			if(!d3NodeIdMap.containsKey(objectNodeId)){
-				ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
-				//List<String> stmtList = d3NodeObject.getStatementIdList();
-				//stmtList.add(stmtId);
-				//d3NodeObject.setStatementIdList(stmtList);
-				d3NodeObject.setNodeName(nodeObject.getObject());
-				d3NodeObject.setNodeId(objectNodeId);
-				d3NodeObject.setGroupId(ID3Constant.RELATION_EVENT_OBJECT_TERM);
-				d3NodeList.add(d3NodeObject);
-				d3NodeIdMap.put(objectNodeId,nodeIndex);
-				nodeIndex++;
-			}
-
-			// Adding Subject into node list 
-
-			if(!d3NodeIdMap.containsKey(predicateNameId)){
-				ID3Node d3NodePredicate = d3NodeFactory.createD3NodeObject();
-				List<String> stmtList = d3NodePredicate.getStatementIdList();
-				stmtList.add(stmtId);
-				d3NodePredicate.setStatementIdList(stmtList);
-				d3NodePredicate.setNodeName(predicateName);
-				d3NodePredicate.setNodeId(predicateNameId);
-				d3NodePredicate.setGroupId(ID3Constant.RELATION_EVENT_PREDICATE_TERM);
-				d3NodeList.add(d3NodePredicate);
-				d3NodeIdMap.put(predicateNameId,nodeIndex);
-				nodeIndex++;
-			}else{
-				int index= d3NodeIdMap.get(predicateNameId);
-				ID3Node d3NodePredicate = d3NodeList.get(index);
-				List<String> stmtList = d3NodePredicate.getStatementIdList();
-				boolean flag=false;
-				for(String stmt: stmtList){
-					if(stmt.equals(stmtId)){
-						flag=true;
-					}
-				}
-				if(!flag){
-					stmtList.add(stmtId);
-				}
-			}
-
-		}
-
-		// Add Links for D3 JSon
-		{
-
-			ID3Link d3LinkSubject = d3LinkFactory.createD3LinkObject();
-			d3LinkSubject.setSource(d3NodeIdMap.get(predicateNameId));
-			d3LinkSubject.setTarget(d3NodeIdMap.get(subjectNodeId));
-			d3LinkList.add(d3LinkSubject);
-
-			ID3Link d3LinkObject = d3LinkFactory.createD3LinkObject();
-			d3LinkObject.setSource(d3NodeIdMap.get(predicateNameId));
-			d3LinkObject.setTarget(d3NodeIdMap.get(objectNodeId));
-			d3LinkList.add(d3LinkObject);
-		}
-
-	}
-
-	@Override
-	public String getD3JSon(){
-		StringBuffer d3JsonString= new StringBuffer("");
-
-		d3JsonString.append("{\n\"nodes\":[");
-		if(d3NodeList.size() > 0) {
-
-			for(int i =0;i<d3NodeList.size()-1;i++){
-				ID3Node d3Node =d3NodeList.get(i);
-				d3JsonString.append("{\"name\":\"");
-				d3JsonString.append(d3Node.getNodeName());
-				d3JsonString.append("\",");
-				d3JsonString.append("\"id\":\"");
-				d3JsonString.append(d3Node.getNodeId());
-				d3JsonString.append("\",");
-				d3JsonString.append("\"group\":");
-				d3JsonString.append(d3Node.getGroupId());
-				d3JsonString.append(",");
-				d3JsonString.append("\"statementid\":[\"");
-				for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
-					if(j == d3Node.getStatementIdList().size()-1){
-						d3JsonString.append(d3Node.getStatementIdList().get(j));
-					}else{
-						d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
-					}
-				}
-				d3JsonString.append("\"]");
-				d3JsonString.append("},\n");
-
-			}
-			ID3Node d3Node =d3NodeList.get(d3NodeList.size()-1);
-			d3JsonString.append("{\"name\":\"");
-			d3JsonString.append(d3Node.getNodeName());
-			d3JsonString.append("\",");
-			d3JsonString.append("\"id\":\"");
-			d3JsonString.append(d3Node.getNodeId());
-			d3JsonString.append("\",");
-			d3JsonString.append("\"group\":");
-			d3JsonString.append(d3Node.getGroupId());
-			d3JsonString.append(",");
-			d3JsonString.append("\"statementid\":[\"");
-			for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
-				if(j == d3Node.getStatementIdList().size()-1){
-					d3JsonString.append(d3Node.getStatementIdList().get(j));
-				}else{
-					d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
-				}
-
-			}
-			d3JsonString.append("\"]");
-
-			d3JsonString.append("}\n],\n\"links\":[\n");
-
-
-			for(int i =0;i<d3LinkList.size()-2;i++){
-				ID3Link d3Link =d3LinkList.get(i);
-				d3JsonString.append("{\"source\":");
-				d3JsonString.append(d3Link.getSource());
-				d3JsonString.append(",");
-				d3JsonString.append("\"target\":");
-				d3JsonString.append(d3Link.getTarget());
-				d3JsonString.append("},\n");
-			}
-			ID3Link d3Link =d3LinkList.get(d3LinkList.size()-1);
-			d3JsonString.append("{\"source\":");
-			d3JsonString.append(d3Link.getSource());
-			d3JsonString.append(",");
-			d3JsonString.append("\"target\":");
-			d3JsonString.append(d3Link.getTarget());
-			d3JsonString.append("}\n]\n}");
-
-		}
-
-		return d3JsonString.toString();
-	}
-
-	/**
-	 * Update JSON with every new triplet node
-	 * @param nodeObject
-	 */
-	public void updateJsonStringForRENode(NodeObject nodeObject){
-		String predicateNameId = nodeObject.getPredicate();
-		// Check for reference to relation
-		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
-		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
-		if(!(temp.equals(""))){
-			predicateNameId = temp;
-		}
-
-		// Forming the JSON object
-		this.jsonString.append("{\"adjacencies\":[");
-		this.jsonString.append("{");
-		this.jsonString.append("\"nodeTo\": \""+nodeObject.getSubject()+"\",");
-		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",\"dim\" : \"15\", ");
-		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\",\"$labelid\": \"arrow1\",\"$labeltext\": \"Subject\"}");
-		this.jsonString.append("},");
-
-		this.jsonString.append("{");
-		this.jsonString.append("\"nodeTo\": \""+nodeObject.getObject()+"\",");
-		this.jsonString.append("\"nodeFrom\": \""+predicateName+"\",");
-		this.jsonString.append("\"data\": {\"$color\": \"#FFFFFF\",\"$labelid\": \"arrow1\",\"dim\":\"8\",\"$labeltext\": \"Object\"}");
-		this.jsonString.append("}],");
-
-		this.jsonString.append("\"data\": {");
-		this.jsonString.append("\"$color\": \"#CC0066\",");
-		this.jsonString.append("\"$type\": \"circle\",");
-		this.jsonString.append("\"nodetype\": \"Predicate\",");
-		this.jsonString.append("\"$dim\": 13");
-		this.jsonString.append("},");
-		this.jsonString.append("\"id\": \""+predicateNameId+"\",");
-
-		this.jsonString.append("\"name\": \""+predicateName+"\"");
-		this.jsonString.append("},");
-	}
-
-	/**
-	 * Check for repeats in the XML to avoid any repeated reference
-	 * @param relationEventId
-	 * @param predicateName
-	 * @return
-	 */
-
-	public String checkRelationEventRepeatation(String relationEventId,String predicateName){
-		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
-
-		while(I.hasNext()){
-			List<Object> objectList = I.next();
-			Iterator<Object> I1 = objectList.iterator();
-			while(I1.hasNext()){
-				Object object = I1.next();
-				if(object instanceof String[]){
-					String pairs[] = (String [])object;
-					if(pairs[0].equals(relationEventId)){
-						String predicateNameLocal = pairs[1];
-						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
-						return predicateNameLocal;
-					}
-				}
-			}
-		}
-		return "";
-
-	}
-
-	/**
-	 * Making a cache of relation predicate objects for checking references
-	 * @param relationEventId
-	 * @param predicateName
-	 * @param appellationEventObject
-	 * @return
-	 */
-	public String stackRelationEventPredicateAppellationObject(String relationEventId,String predicateName,AppellationEventObject appellationEventObject){
-		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
-
-		while(I.hasNext()){
-			List<Object> objectList = I.next();
-			Iterator<Object> I1 = objectList.iterator();
-			while(I1.hasNext()){
-				Object object = I1.next();
-				if(object instanceof String[]){
-					String pairs[] = (String [])object;
-					if(pairs[0].equals(relationEventId)){
-						String predicateNameLocal = pairs[1];
-						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
-						return predicateNameLocal;
-					}
-				}
-			}
-		}
-		String[] pairs = new String [2];
-		pairs[0]=(relationEventId);
-		pairs[1]=(predicateName);
-		List<Object> objectList = new ArrayList<Object>();
-		objectList.add(pairs);
-		objectList.add(appellationEventObject);
-		relationEventPredicateMapping.add(objectList);
-
-		return "";
-
-	}
-
-
-	/**
-	 * Get Appellation associated to relation event
-	 * @param relationEventId
-	 * @return
-	 */
-	public AppellationEventObject checkRelationEventStack(String relationEventId){
-
-		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
-		int flag=0;
-		AppellationEventObject appellationEventObject=null;
-		while(I.hasNext()){
-			List<Object> objectList = I.next();
-			Iterator<Object> I1 = objectList.iterator();
-
-			while(I1.hasNext()){
-				Object object = I1.next();
-
-				if(object instanceof String[]){
-					String pairs[] = (String [])object;
-					if(pairs[0].equals(relationEventId)){
-						String predicateNameLocal = pairs[1];
-						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
-						flag=1;
-					}
-				}
-				if(object instanceof AppellationEventObject){
-					appellationEventObject=(AppellationEventObject)object;
-				}
-			}
-			if(flag==1){
-				return appellationEventObject;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Get all the terms recursively from the relation event
-	 * 
-	 * @param re : RelationEventType
-	 */
-	public RelationEventObject getAllObjectFromRelationEvent(RelationEventType re,RelationEventObject relationEventObject){
-
-		RelationType relationType = re.getRelation(re);
-
-		PredicateType predicateType = relationType.getPredicateType(relationType);
-		//		Check for Appellation event inside subject and add if any
-		AppellationEventType ae = predicateType.getAppellationEvent();
-		{
-			List<TermType> termTypeList= ae.getTerms(ae);
-			Iterator <TermType> I2 = termTypeList.iterator();
-			while(I2.hasNext()){
-				TermType tt = I2.next();
-				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
-				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
-				PredicateObject predicateObject = new PredicateObject();
-				predicateObject.setAppellationEventObject(appellationEventObject);
-
-				predicateObject.setRelationEventID(getRelationEventId(re));
-				stackRelationEventPredicateAppellationObject(getRelationEventId(re),predicateObject.getAppellationEventObject().getNode(),appellationEventObject);
-				relationEventObject.setPredicateObject(predicateObject);
-				logger.debug("Predicate Term : "+ tt.getTermInterpertation(tt));
-			}
-		}
-
-		SubjectObjectType subjectType = relationType.getSubjectType(relationType);
-		//		Check for relation event inside subject and add if any
-		logger.debug("Came to Subject, Now checking RE or AE");
-		RelationEventType re1 = subjectType.getRelationEvent();
-
-		SubjectObject subjectObject = new SubjectObject();
-
-		if(re1 == null){
-			subjectObject.setIsRelationEventObject(false);
-			logger.debug("Subject : RE1 is null");
-		}else{
-			AppellationEventObject temp = checkRelationEventStack(getRelationEventId(re1));
-			/*
-			 * I am trying to fool subject as Appellation event
-			 * when we find a existing relation event been referred here
-			 * I will give appellation event with predicate of referred relation event
-			 */
-			if(!(temp == null)){
-				subjectObject.setIsRelationEventObject(false);
-				subjectObject.setAppellationEventObject(temp);
-			}else{
-				logger.debug("Subject : Its RE, now Recursive move");
-				subjectObject.setIsRelationEventObject(true);
-				RelationEventObject relationEventObject1   = new RelationEventObject();
-				checkRelationEventStack(getRelationEventId(re1));
-				relationEventObject1=getAllObjectFromRelationEvent(re1,relationEventObject1);
-				subjectObject.setRelationEventObject(relationEventObject1);
-			}
-		}
-		//	Check for Appellation event inside subject and add if any
-		AppellationEventType ae1 = subjectType.getAppellationEvent();
-		if(ae1 == null){
-			logger.debug("Subject : AE1 is null");
-		}else{
-
-
-			logger.debug("Subject : Its AE , now printing the terms");
-			List<TermType> termTypeList= ae1.getTerms(ae1);
-			Iterator <TermType> I2 = termTypeList.iterator();
-			while(I2.hasNext()){
-				TermType tt = I2.next();
-				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
-				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
-				subjectObject.setAppellationEventObject(appellationEventObject);
-				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
-			}
-		}
-		relationEventObject.setSubjectObject(subjectObject);
-		SubjectObjectType objectType = relationType.getObjectType(relationType);
-		ObjectTypeObject objectTypeObject = new ObjectTypeObject();
-		//		Check for relation event inside subject and add if any
-		logger.debug("Came to Object, Now checking RE or AE");
-		RelationEventType re2 = objectType.getRelationEvent();
-		if(re2 == null){
-			objectTypeObject.setIsRelationEventObject(false);
-			logger.debug("Object : RE2 is null");
-		}else{
-			AppellationEventObject temp = checkRelationEventStack(getRelationEventId(re1));
-			/*
-			 * I am trying to fool subject as Appellation event
-			 * when we find a existing relation event been referred here
-			 * I will give appellation event with predicate of referred relation event
-			 */
-			if(!(temp == null)){
-				objectTypeObject.setIsRelationEventObject(false);
-				objectTypeObject.setAppellationEventObject(temp);
-			}else{
-				objectTypeObject.setIsRelationEventObject(true);
-				RelationEventObject relationEventObject1   = new RelationEventObject();
-				logger.debug("Object : Its RE, now Recursive move");
-				relationEventObject1=getAllObjectFromRelationEvent(re2,relationEventObject1);
-				objectTypeObject.setRelationEventObject(relationEventObject1);
-			}
-		}
-		//	Check for Appellation event inside subject and add if any
-		AppellationEventType ae2 = objectType.getAppellationEvent();
-		if(ae2 == null){
-			logger.debug("Object : AE2 is null");
-		}else{
-			logger.debug("Object : Its AE , now printing the terms");
-			List<TermType> termTypeList= ae2.getTerms(ae2);
-			Iterator <TermType> I2 = termTypeList.iterator();
-			while(I2.hasNext()){
-				TermType tt = I2.next();
-				AppellationEventObject appellationEventObject = new AppellationEventObject();
-				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
-				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
-				objectTypeObject.setAppellationEventObject(appellationEventObject);
-				logger.debug("objectType Term : "+tt.getTermInterpertation(tt));
-			}
-		}
-		relationEventObject.setObjectTypeObject(objectTypeObject);
-		return relationEventObject;
-	}
 
 
 
@@ -1496,14 +1194,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		//Fetch the list of networks in the project
 		List<INetwork> networksList = dbConnect.getNetworks(projectid);
-		/*List<String> networkNames = null;
-
-		if(networksList != null)
-		{
-			networkNames = new ArrayList<String>();
-			for(INetwork network : networksList)
-				networkNames.add(network.getName());
-		}*/
 
 		if(networksList != null){
 			return networksList;
@@ -1655,34 +1345,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return core.toString(SUCCESS);
 	}
 
-	
-	@Override
-	@Transactional
-	public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException{
 
-		INetworkJSon networkJSon=null;
-
-		List<INetworkNodeInfo> networkTopNodesList = null;
-
-		try{
-			networkTopNodesList = getNetworkTopNodes(networkId);
-		}catch(QuadrigaStorageException e){
-			logger.error("DB Error while getting network top nodes",e);
-		}
-
-		if(jqueryType.equals(INetworkManager.D3JQUERY)){
-			networkJSon = d3NetworkManager.parseNetworkForD3Jquery(networkTopNodesList);
-		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
-			String jitJSon = jitNetworkManager.parseNetworkForJITJquery(networkTopNodesList);
-			if(networkJSon ==null){
-				networkJSon = new NetworkJSon(jitJSon, null);
-			}
-		}		
-
-		return networkJSon;
-	}
-
-	
 
 
 }
