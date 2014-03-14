@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.network;
+package edu.asu.spring.quadriga.service.network.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
