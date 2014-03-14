@@ -42,10 +42,13 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObje
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
 
 @Service
-public class D3NetworkManager {
+public class D3NetworkManager implements ID3NetworkManager {
 
 	@Autowired
 	private INetworkManager networkManager;
@@ -65,6 +68,10 @@ public class D3NetworkManager {
 
 
 
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#generateJSonForD3Jquery(java.util.List)
+	 */
+	@Override
 	public String generateJSonForD3Jquery(List<INetworkNodeInfo> networkTopNodesList){
 
 
@@ -72,7 +79,11 @@ public class D3NetworkManager {
 		return null;
 	}
 
-	public String parseNetwork(List<INetworkNodeInfo> networkTopNodesList){
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseNetwork(java.util.List)
+	 */
+	@Override
+	public INetworkJSon parseNetwork(List<INetworkNodeInfo> networkTopNodesList){
 		Iterator <INetworkNodeInfo> topNodeIterator = networkTopNodesList.iterator();
 		List<List<Object>> relationEventPredicateMapping = new ArrayList<List<Object>>();
 		List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList = new ArrayList<D3NetworkManager.NodeObjectWithStatement>();
@@ -93,7 +104,14 @@ public class D3NetworkManager {
 		}
 
 		D3Map d3Map = new D3Map();
-		return getD3JSon(d3Map, nodeObjectWithStatementList, relationEventPredicateMapping);
+		d3Map = prepareD3Map(d3Map, nodeObjectWithStatementList, relationEventPredicateMapping);
+		
+		// D3Map to String
+		String d3Json =getD3JSonString(d3Map);
+		
+		INetworkJSon networkJson = new NetworkJSon(d3Json, d3Map.getD3NodeList());
+		return networkJson;
+		
 	}
 
 	public List<D3NetworkManager.NodeObjectWithStatement> parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping, List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException{
@@ -131,6 +149,10 @@ public class D3NetworkManager {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#getElementEventTypeFromRelationEvent(java.lang.String)
+	 */
+	@Override
 	public ElementEventsType getElementEventTypeFromRelationEvent(String relationEventId) throws JAXBException, QStoreStorageException{
 		String xml = networkManager.getNodeXmlStringFromQstore(relationEventId);
 		ElementEventsType elementEventType = null;
@@ -144,6 +166,10 @@ public class D3NetworkManager {
 		return elementEventType;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#unMarshalXmlToElementEventsType(java.lang.String)
+	 */
+	@Override
 	public ElementEventsType unMarshalXmlToElementEventsType(String xml) throws JAXBException{
 		ElementEventsType elementEventType = null;
 
@@ -158,6 +184,10 @@ public class D3NetworkManager {
 		return elementEventType;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughRelationEvent(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject, java.util.List)
+	 */
+	@Override
 	public RelationEventObject parseThroughRelationEvent(RelationEventType relationEventType,RelationEventObject relationEventObject,List<List<Object>> relationEventPredicateMapping){
 
 		// Get RelationType of the RelationEventType
@@ -182,6 +212,10 @@ public class D3NetworkManager {
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#stackRelationEventPredicateAppellationObject(java.lang.String, java.lang.String, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject, java.util.List)
+	 */
+	@Override
 	public String stackRelationEventPredicateAppellationObject(String relationEventId,String predicateName,AppellationEventObject appellationEventObject,List<List<Object>> relationEventPredicateMapping){
 		Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
 
@@ -211,6 +245,10 @@ public class D3NetworkManager {
 
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughPredicate(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.PredicateType, java.util.List)
+	 */
+	@Override
 	public PredicateObject parseThroughPredicate(RelationEventType relationEventType, PredicateType predicateType,List<List<Object>> relationEventPredicateMapping){
 		//	Predicate has only appellation event, so get appellation event inside the predicate
 		AppellationEventType appellationEvent = predicateType.getAppellationEvent();
@@ -233,11 +271,10 @@ public class D3NetworkManager {
 	}
 	
 	
-	/**
-	 * Get Appellation associated to relation event
-	 * @param relationEventId
-	 * @return
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#checkRelationEventInStack(java.lang.String, java.util.List)
 	 */
+	@Override
 	public AppellationEventObject checkRelationEventInStack(String relationEventId,List<List<Object>> relationEventPredicateMapping){
 
 		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
@@ -270,6 +307,10 @@ public class D3NetworkManager {
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughSubject(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType, java.util.List)
+	 */
+	@Override
 	public SubjectObject parseThroughSubject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,List<List<Object>> relationEventPredicateMapping){
 
 		//	Check for relation event inside subject and add if any
@@ -318,6 +359,10 @@ public class D3NetworkManager {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughObject(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType, java.util.List)
+	 */
+	@Override
 	public ObjectTypeObject parseThroughObject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,List<List<Object>> relationEventPredicateMapping){
 
 		//	Check for relation event inside subject and add if any
@@ -423,12 +468,10 @@ public class D3NetworkManager {
 	
 	
 	
-	/**
-	 * prepare Predicate Object content for 
-	 * @param predicateObject
-	 * @param nodeObject
-	 * @return
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#getPredicateNodeObjectContent(edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject)
 	 */
+	@Override
 	public NodeObject getPredicateNodeObjectContent (PredicateObject predicateObject, NodeObject nodeObject){
 		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
 		// Store predicate detail in our temporary structure
@@ -442,7 +485,7 @@ public class D3NetworkManager {
 	}
 
 	
-	private String getD3JSon(D3Map d3Map, List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList, List<List<Object>> relationEventPredicateMapping) {
+	private D3Map prepareD3Map(D3Map d3Map, List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList, List<List<Object>> relationEventPredicateMapping) {
 		
 		Iterator<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementIterator =  nodeObjectWithStatementList.iterator();
 		
@@ -450,10 +493,7 @@ public class D3NetworkManager {
 			D3NetworkManager.NodeObjectWithStatement nodeObjectWithStatement =  nodeObjectWithStatementIterator.next();
 			d3Map = prepareD3JSonPerNode(nodeObjectWithStatement,d3Map,relationEventPredicateMapping);
 		}
-		
-		
-		
-		return null;
+		return d3Map;
 	}
 	
 	public String getD3JSonString(D3Map d3Map){
@@ -709,13 +749,11 @@ public class D3NetworkManager {
 		return d3Map;
 	}
 
-	/**
-	 * Check for repeats in the XML to avoid any repeated reference
-	 * @param relationEventId
-	 * @param predicateName
-	 * @return
+	/* (non-Javadoc)
+	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#checkRelationEventRepeatation(java.lang.String, java.lang.String, java.util.List)
 	 */
 
+	@Override
 	public String checkRelationEventRepeatation(String relationEventId,String predicateName,List<List<Object>> relationEventPredicateMapping){
 		Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
 
