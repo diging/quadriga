@@ -24,6 +24,9 @@ public interface INetworkManager {
 
 	public static String D3JQUERY = "D3JQUERY";
 	public static String JITJQUERY= "JITJQUERY";
+	
+	public static String RELATIONEVENT = "RE";
+	public static String APPELLATIONEVENT = "AE";
 	/**
 	 * Gets the QStrore Add URL
 	 * 
