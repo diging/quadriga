@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType;
 import edu.asu.spring.quadriga.domain.impl.networks.TermType;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
@@ -80,7 +81,7 @@ public class D3NetworkManager {
 		return null;
 	}
 
-	public String parseEachStatement(String relationEventId,String statementType, String statementId,List<List<Object>> relationEventPredicateMapping) throws JAXBException, QStoreStorageException{
+	public String parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping) throws JAXBException, QStoreStorageException{
 		ElementEventsType elementEventType =getElementEventTypeFromRelationEvent(relationEventId);
 		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
@@ -100,10 +101,11 @@ public class D3NetworkManager {
 				RelationEventType relationEventType = (RelationEventType) creationEvent;
 				jsonObject.setIsRelationEventObject(true);
 				jsonObject.setRelationEventObject(parseThroughRelationEvent(relationEventType,new RelationEventObject(),relationEventPredicateMapping));
-
+				
+				List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList = new ArrayList<D3NetworkManager.NodeObjectWithStatement>();
 
 				// This would help us in forming the json string as per requirement.
-				//printJsonObjectRE(jsonObject.getRelationEventObject());
+				nodeObjectWithStatementList = prepareNodeObjectContent(jsonObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
 
 			}
 		}
@@ -345,5 +347,203 @@ public class D3NetworkManager {
 		
 	}
 	
+	
+	/**
+	 * Use temp structure to allow our json builder work easily.
+	 * {@link NodeObject} is used to build this temp structure. {@link NodeObject} has a predicate, subject object structure in it.
+	 * I am recursively filling the {@link NodeObject}.
+	 * @param relationEventObject
+	 */
+	public List<D3NetworkManager.NodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList, String statementId){
+		
+		// Get predicate Object structure
+		PredicateObject predicateObject = relationEventObject.getPredicateObject();
+		NodeObject nodeObject = getPredicateNodeObjectContent(predicateObject,new NodeObject());
 
+
+		// Get Subject Object into temp structure 
+		SubjectObject subjectObject = relationEventObject.getSubjectObject();
+		ObjectTypeObject objectTypeObject = relationEventObject.getObjectTypeObject();
+		if(subjectObject.getIsRelationEventObject()){
+			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
+			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			// Get Object into temp structure 
+			if(objectTypeObject.getIsRelationEventObject()){
+				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
+				nodeObjectWithStatementList.add(new NodeObjectWithStatement(nodeObject,statementId));
+				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
+			}else{
+
+				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+				nodeObject.setObject(appellationEventObject1.getNode());
+				nodeObject.setObjectId(appellationEventObject1.getTermId());
+				nodeObjectWithStatementList.add(new NodeObjectWithStatement(nodeObject,statementId));
+				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
+			}
+			nodeObjectWithStatementList = prepareNodeObjectContent(subjectObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
+		}else{
+
+			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
+			nodeObject.setSubject(appellationEventObject1.getNode());
+			nodeObject.setSubjectId(appellationEventObject1.getTermId());
+			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
+		}
+		// Get Object into temp structure 
+		if(objectTypeObject.getIsRelationEventObject()){
+			nodeObjectWithStatementList = prepareNodeObjectContent(objectTypeObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
+		}else{
+			AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
+			nodeObject.setObject(appellationEventObject1.getNode());
+			nodeObject.setObjectId(appellationEventObject1.getTermId());
+			nodeObjectWithStatementList.add(new NodeObjectWithStatement(nodeObject,statementId));
+			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
+		}
+		return nodeObjectWithStatementList;
+	}
+	
+	
+	
+	/**
+	 * prepare Predicate Object content for 
+	 * @param predicateObject
+	 * @param nodeObject
+	 * @return
+	 */
+	public NodeObject getPredicateNodeObjectContent (PredicateObject predicateObject, NodeObject nodeObject){
+		AppellationEventObject appellationEventObject = predicateObject.getAppellationEventObject();
+		// Store predicate detail in our temporary structure
+		nodeObject.setRelationEventId(predicateObject.getRelationEventID());
+
+		nodeObject.setPredicate(appellationEventObject.getNode());
+		nodeObject.setPredicateId(appellationEventObject.getTermId());
+		logger.debug("Predicate : "+appellationEventObject.getNode() );
+		
+		return nodeObject;
+	}
+
+	/**
+	 * Method to add nodes and links into List, which can be used to make a JSON object later.
+	 * @param nodeObject
+	 */
+//	public void updateNodeLinkForD3JSON(NodeObject nodeObject){
+//
+//		String predicateNameId = nodeObject.getPredicate();
+//
+//		String subjectNodeId=nodeObject.getSubject();
+//		String objectNodeId = nodeObject.getObject();
+//		String stmtId = statementId;
+//
+//
+//		// Check for reference to relation
+//		String temp=checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate());
+//		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
+//		if(!(temp.equals(""))){
+//			predicateNameId = temp;
+//		}
+//
+//		// Add Nodes for D3 JSon
+//		{
+//			// Adding Subject into node list 
+//			if(!d3NodeIdMap.containsKey(subjectNodeId)){
+//				ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
+//				//List<String> stmtList = d3NodeSubject.getStatementIdList();
+//				//stmtList.add(stmtId);
+//				//d3NodeSubject.setStatementIdList(stmtList);
+//				d3NodeSubject.setNodeName(nodeObject.getSubject());
+//				d3NodeSubject.setNodeId(subjectNodeId);
+//				d3NodeSubject.setGroupId(ID3Constant.RELATION_EVENT_SUBJECT_TERM);
+//				d3NodeList.add(d3NodeSubject);
+//				d3NodeIdMap.put(subjectNodeId,nodeIndex);
+//				nodeIndex++;
+//			}
+//
+//			// Adding Object into node list
+//			if(!d3NodeIdMap.containsKey(objectNodeId)){
+//				ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
+//				//List<String> stmtList = d3NodeObject.getStatementIdList();
+//				//stmtList.add(stmtId);
+//				//d3NodeObject.setStatementIdList(stmtList);
+//				d3NodeObject.setNodeName(nodeObject.getObject());
+//				d3NodeObject.setNodeId(objectNodeId);
+//				d3NodeObject.setGroupId(ID3Constant.RELATION_EVENT_OBJECT_TERM);
+//				d3NodeList.add(d3NodeObject);
+//				d3NodeIdMap.put(objectNodeId,nodeIndex);
+//				nodeIndex++;
+//			}
+//
+//			// Adding Subject into node list 
+//
+//			if(!d3NodeIdMap.containsKey(predicateNameId)){
+//				ID3Node d3NodePredicate = d3NodeFactory.createD3NodeObject();
+//				List<String> stmtList = d3NodePredicate.getStatementIdList();
+//				stmtList.add(stmtId);
+//				d3NodePredicate.setStatementIdList(stmtList);
+//				d3NodePredicate.setNodeName(predicateName);
+//				d3NodePredicate.setNodeId(predicateNameId);
+//				d3NodePredicate.setGroupId(ID3Constant.RELATION_EVENT_PREDICATE_TERM);
+//				d3NodeList.add(d3NodePredicate);
+//				d3NodeIdMap.put(predicateNameId,nodeIndex);
+//				nodeIndex++;
+//			}else{
+//				int index= d3NodeIdMap.get(predicateNameId);
+//				ID3Node d3NodePredicate = d3NodeList.get(index);
+//				List<String> stmtList = d3NodePredicate.getStatementIdList();
+//				boolean flag=false;
+//				for(String stmt: stmtList){
+//					if(stmt.equals(stmtId)){
+//						flag=true;
+//					}
+//				}
+//				if(!flag){
+//					stmtList.add(stmtId);
+//				}
+//			}
+//
+//		}
+//
+//		// Add Links for D3 JSon
+//		{
+//
+//			ID3Link d3LinkSubject = d3LinkFactory.createD3LinkObject();
+//			d3LinkSubject.setSource(d3NodeIdMap.get(predicateNameId));
+//			d3LinkSubject.setTarget(d3NodeIdMap.get(subjectNodeId));
+//			d3LinkList.add(d3LinkSubject);
+//
+//			ID3Link d3LinkObject = d3LinkFactory.createD3LinkObject();
+//			d3LinkObject.setSource(d3NodeIdMap.get(predicateNameId));
+//			d3LinkObject.setTarget(d3NodeIdMap.get(objectNodeId));
+//			d3LinkList.add(d3LinkObject);
+//		}
+//
+//	}
+	
+	/**
+	 * Inner class to store {@link NodeObject} with statement ID it belongs to.
+	 * @author Lohith Dwaraka
+	 *
+	 */
+	class NodeObjectWithStatement{
+		private NodeObject nodeObject;
+		private String statementId;
+		
+		public NodeObjectWithStatement(NodeObject nodeObject,String statementId) {
+			this.nodeObject = nodeObject;
+			this.statementId = statementId;
+		}
+		
+		public NodeObject getNodeObject() {
+			return nodeObject;
+		}
+		public void setNodeObject(NodeObject nodeObject) {
+			this.nodeObject = nodeObject;
+		}
+		public String getStatementId() {
+			return statementId;
+		}
+		public void setStatementId(String statementId) {
+			this.statementId = statementId;
+		}		
+	}
 }
