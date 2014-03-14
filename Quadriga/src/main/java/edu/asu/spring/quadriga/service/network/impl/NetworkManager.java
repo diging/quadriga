@@ -82,6 +82,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
+import edu.asu.spring.quadriga.service.network.IJITNetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
@@ -104,6 +105,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
+	@Autowired
+	private IJITNetworkManager jitNetworkManager;
+	
 	@Autowired
 	private ID3NetworkManager d3NetworkManager;
 
@@ -1595,6 +1599,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return "success";
 	}
+	
 
 	@Override
 	@Transactional
@@ -1650,6 +1655,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return core.toString(SUCCESS);
 	}
 
+	
 	@Override
 	@Transactional
 	public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException{
@@ -1665,9 +1671,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 
 		if(jqueryType.equals(INetworkManager.D3JQUERY)){
-			networkJSon = d3NetworkManager.parseNetwork(networkTopNodesList);
+			networkJSon = d3NetworkManager.parseNetworkForD3Jquery(networkTopNodesList);
 		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
-
+			String jitJSon = jitNetworkManager.parseNetworkForJITJquery(networkTopNodesList);
+			if(networkJSon ==null){
+				networkJSon = new NetworkJSon(jitJSon, null);
+			}
 		}		
 
 		return networkJSon;
