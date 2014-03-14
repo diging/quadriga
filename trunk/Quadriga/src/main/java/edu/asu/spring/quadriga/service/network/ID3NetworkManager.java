@@ -17,13 +17,11 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObje
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 
 public interface ID3NetworkManager {
 
-	public abstract String generateJSonForD3Jquery(
-			List<INetworkNodeInfo> networkTopNodesList);
-
-	public abstract INetworkJSon parseNetwork(
+	public abstract INetworkJSon parseNetworkForD3Jquery(
 			List<INetworkNodeInfo> networkTopNodesList);
 
 	public abstract ElementEventsType getElementEventTypeFromRelationEvent(
@@ -85,5 +83,16 @@ public interface ID3NetworkManager {
 	public abstract String checkRelationEventRepeatation(
 			String relationEventId, String predicateName,
 			List<List<Object>> relationEventPredicateMapping);
+
+	public abstract List<INodeObjectWithStatement> prepareNodeObjectContent(
+			RelationEventObject relationEventObject,
+			List<INodeObjectWithStatement> nodeObjectWithStatementList,
+			String statementId);
+
+	public abstract List<INodeObjectWithStatement> parseEachStatement(String relationEventId,
+			String statementType, String statementId,
+			List<List<Object>> relationEventPredicateMapping,
+			List<INodeObjectWithStatement> nodeObjectWithStatementList)
+			throws JAXBException, QStoreStorageException;
 
 }

@@ -274,8 +274,8 @@ public class NetworkListController {
 	}
 
 	/**
-	 * Get the network displayed  on to JSP by passing JSON string and allow to add annotations 
-	 * @author Sowjanya Ambati
+	 * Get the network displayed on to JSP by passing JSON string and allow to add annotations 
+	 * @author Lohith Dwaraka
 	 * @param networkId
 	 * @param model
 	 * @param principal

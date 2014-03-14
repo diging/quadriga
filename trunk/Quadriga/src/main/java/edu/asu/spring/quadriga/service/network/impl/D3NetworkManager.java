@@ -45,7 +45,9 @@ import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManag
 import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
+import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
 
 @Service
 public class D3NetworkManager implements ID3NetworkManager {
@@ -53,6 +55,9 @@ public class D3NetworkManager implements ID3NetworkManager {
 	@Autowired
 	private INetworkManager networkManager;
 
+	@Autowired
+	private INodeObjectWithStatementFactory nodeObjectWithStatementFactory;
+	
 	@Autowired
 	IConceptCollectionManager conceptCollectionManager;
 	
@@ -66,27 +71,14 @@ public class D3NetworkManager implements ID3NetworkManager {
 			.getLogger(D3NetworkManager.class);
 
 
-
-
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#generateJSonForD3Jquery(java.util.List)
-	 */
-	@Override
-	public String generateJSonForD3Jquery(List<INetworkNodeInfo> networkTopNodesList){
-
-
-
-		return null;
-	}
-
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseNetwork(java.util.List)
 	 */
 	@Override
-	public INetworkJSon parseNetwork(List<INetworkNodeInfo> networkTopNodesList){
+	public INetworkJSon parseNetworkForD3Jquery(List<INetworkNodeInfo> networkTopNodesList){
 		Iterator <INetworkNodeInfo> topNodeIterator = networkTopNodesList.iterator();
 		List<List<Object>> relationEventPredicateMapping = new ArrayList<List<Object>>();
-		List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList = new ArrayList<D3NetworkManager.NodeObjectWithStatement>();
+		List<INodeObjectWithStatement> nodeObjectWithStatementList = new ArrayList<INodeObjectWithStatement>();
 		while(topNodeIterator.hasNext()){
 			INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
 			logger.debug("Node id "+networkNodeInfo.getId());
@@ -114,7 +106,8 @@ public class D3NetworkManager implements ID3NetworkManager {
 		
 	}
 
-	public List<D3NetworkManager.NodeObjectWithStatement> parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping, List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException{
+	@Override
+	public List<INodeObjectWithStatement> parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping, List<INodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException{
 		ElementEventsType elementEventType =getElementEventTypeFromRelationEvent(relationEventId);
 		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
@@ -417,7 +410,8 @@ public class D3NetworkManager implements ID3NetworkManager {
 	 * I am recursively filling the {@link NodeObject}.
 	 * @param relationEventObject
 	 */
-	public List<D3NetworkManager.NodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList, String statementId){
+	@Override
+	public List<INodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,List<INodeObjectWithStatement> nodeObjectWithStatementList, String statementId){
 		
 		// Get predicate Object structure
 		PredicateObject predicateObject = relationEventObject.getPredicateObject();
@@ -431,21 +425,24 @@ public class D3NetworkManager implements ID3NetworkManager {
 			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
 			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
+			
 			// Get Object into temp structure 
 			if(objectTypeObject.getIsRelationEventObject()){
 				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
-				nodeObjectWithStatementList.add(new NodeObjectWithStatement(nodeObject,statementId));
+				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
 				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 			}else{
 
 				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
 				nodeObject.setObject(appellationEventObject1.getNode());
 				nodeObject.setObjectId(appellationEventObject1.getTermId());
-				nodeObjectWithStatementList.add(new NodeObjectWithStatement(nodeObject,statementId));
+				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
+			
 			nodeObjectWithStatementList = prepareNodeObjectContent(subjectObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
+			
 		}else{
 
 			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
@@ -453,6 +450,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 			nodeObject.setSubjectId(appellationEventObject1.getTermId());
 			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
 		}
+		
 		// Get Object into temp structure 
 		if(objectTypeObject.getIsRelationEventObject()){
 			nodeObjectWithStatementList = prepareNodeObjectContent(objectTypeObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
@@ -460,9 +458,10 @@ public class D3NetworkManager implements ID3NetworkManager {
 			AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
 			nodeObject.setObject(appellationEventObject1.getNode());
 			nodeObject.setObjectId(appellationEventObject1.getTermId());
-			nodeObjectWithStatementList.add(new NodeObjectWithStatement(nodeObject,statementId));
+			nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
 			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 		}
+		
 		return nodeObjectWithStatementList;
 	}
 	
@@ -484,13 +483,12 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return nodeObject;
 	}
 
-	
-	private D3Map prepareD3Map(D3Map d3Map, List<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementList, List<List<Object>> relationEventPredicateMapping) {
+	private D3Map prepareD3Map(D3Map d3Map, List<INodeObjectWithStatement> nodeObjectWithStatementList, List<List<Object>> relationEventPredicateMapping) {
 		
-		Iterator<D3NetworkManager.NodeObjectWithStatement> nodeObjectWithStatementIterator =  nodeObjectWithStatementList.iterator();
+		Iterator<INodeObjectWithStatement> nodeObjectWithStatementIterator =  nodeObjectWithStatementList.iterator();
 		
 		while(nodeObjectWithStatementIterator.hasNext()){
-			D3NetworkManager.NodeObjectWithStatement nodeObjectWithStatement =  nodeObjectWithStatementIterator.next();
+			INodeObjectWithStatement nodeObjectWithStatement =  nodeObjectWithStatementIterator.next();
 			d3Map = prepareD3JSonPerNode(nodeObjectWithStatement,d3Map,relationEventPredicateMapping);
 		}
 		return d3Map;
@@ -593,7 +591,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 	 * Method to add nodes and links into List, which can be used to make a JSON object later.
 	 * @param nodeObject
 	 */
-	public D3Map prepareD3JSonPerNode(D3NetworkManager.NodeObjectWithStatement nodeObjectWithStatement,D3Map d3Map, List<List<Object>> relationEventPredicateMapping){
+	public D3Map prepareD3JSonPerNode(INodeObjectWithStatement nodeObjectWithStatement,D3Map d3Map, List<List<Object>> relationEventPredicateMapping){
 
 		
 		NodeObject nodeObject = nodeObjectWithStatement.getNodeObject();
@@ -776,33 +774,6 @@ public class D3NetworkManager implements ID3NetworkManager {
 
 	}
 	
-	/**
-	 * Inner class to store {@link NodeObject} with statement ID it belongs to.
-	 * @author Lohith Dwaraka
-	 *
-	 */
-	class NodeObjectWithStatement{
-		private NodeObject nodeObject;
-		private String statementId;
-		
-		public NodeObjectWithStatement(NodeObject nodeObject,String statementId) {
-			this.nodeObject = nodeObject;
-			this.statementId = statementId;
-		}
-		
-		public NodeObject getNodeObject() {
-			return nodeObject;
-		}
-		public void setNodeObject(NodeObject nodeObject) {
-			this.nodeObject = nodeObject;
-		}
-		public String getStatementId() {
-			return statementId;
-		}
-		public void setStatementId(String statementId) {
-			this.statementId = statementId;
-		}		
-	}
 	
 	/**
 	 * Inner class to store D3 related {@link ID3Node} and {@link ID3Link} connectivity

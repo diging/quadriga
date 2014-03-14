@@ -95,7 +95,7 @@
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
 								value='Edit Network'>
 								<input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworksnew/${network.id}'"
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}/D3'"
 								value='Edit Network new'>
 								</li>
 						</ul>
