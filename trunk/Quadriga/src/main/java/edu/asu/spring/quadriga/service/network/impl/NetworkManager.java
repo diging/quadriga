@@ -81,7 +81,10 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
+import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -101,6 +104,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Qualifier("qStoreURL")
 	private String qStoreURL;
 
+	@Autowired
+	private ID3NetworkManager d3NetworkManager;
 
 	@Autowired
 	private ID3NodeFactory d3NodeFactory;
@@ -537,7 +542,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return response;
 	}
-	
+
 	@Override
 	public String getNodeXmlStringFromQstore(String id)throws JAXBException{
 		// Message converters for JAXb to understand the xml
@@ -1645,7 +1650,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return core.toString(SUCCESS);
 	}
 
-	public String getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException{
+	@Override
+	@Transactional
+	public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException{
+
+		INetworkJSon networkJSon=null;
 
 		List<INetworkNodeInfo> networkTopNodesList = null;
 
@@ -1654,20 +1663,17 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}catch(QuadrigaStorageException e){
 			logger.error("DB Error while getting network top nodes",e);
 		}
-		
-		if(jqueryType.equals(INetworkManager.D3JQUERY)){
-			
-		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
-			
-		}else{
-			return "";
-		}
-		
-		
 
-		return null;
+		if(jqueryType.equals(INetworkManager.D3JQUERY)){
+			networkJSon = d3NetworkManager.parseNetwork(networkTopNodesList);
+		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
+
+		}		
+
+		return networkJSon;
 	}
 
-
 	
+
+
 }

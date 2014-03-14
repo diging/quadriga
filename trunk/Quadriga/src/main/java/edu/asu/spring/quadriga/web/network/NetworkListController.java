@@ -30,6 +30,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -285,31 +286,13 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/editing/editnetworks/{networkId}/D3", method = RequestMethod.GET)
 	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
-		logger.debug("Network id "+networkId);
-		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-		networkManager.setIntialValueForD3JSon();
-		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
-		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
-		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			if(networkNodeInfo.getStatementType().equals("RE")){
-				networkManager.setStatementId(networkNodeInfo.getId());
-			}
-			networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType());
-		}
-
-		logger.info("--------------------");
-		logger.info(networkManager.getD3JSon());
-
-		logger.info("Json object formed and sent to the JSP");
+		
+		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
-		model.addAttribute("jsonstring",networkManager.getD3JSon());
-		model.addAttribute("nodeList",networkManager.getD3NodeList());
+		model.addAttribute("jsonstring",networkJSon.getJson());
+		model.addAttribute("nodeList",networkJSon.getNodeList());
 		return "auth/editing/editnetworksnew";
 	}
 

@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.RelationEventType;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 
 public interface INetworkManager {
 
@@ -121,6 +122,9 @@ public interface INetworkManager {
 	public String getNodeXmlStringFromQstore(String id)throws JAXBException;
 
 	String shortUUID();
+	
+	public INetworkJSon getJsonForNetworks(String networkId, String jqueryType)  throws QuadrigaStorageException;
+	
 	
 	
 }
