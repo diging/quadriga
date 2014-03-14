@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service;
+package edu.asu.spring.quadriga.service.network;
 
 import java.io.IOException;
 import java.util.List;

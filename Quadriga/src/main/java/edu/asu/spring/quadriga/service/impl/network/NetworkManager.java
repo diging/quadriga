@@ -80,8 +80,8 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObje
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
@@ -1669,87 +1669,5 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 
-	public String parseThroughStatement(String relationEventId,String statementType, String statementId) throws JAXBException, QuadrigaStorageException{
-		JsonObject jsonObject = new JsonObject();
-		this.jsonString.delete(0, this.jsonString.length());
-		// Get Node based XML from QStore
-		ResponseEntity<String> response = getNodeXmlFromQstore(relationEventId);
-		if(response ==null){
-			throw new QuadrigaStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
-		}else{
-
-			String responseText = response.getBody().toString();
-			// Try to unmarshall the XML got from QStore to an ElementEventsType object
-			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
-			Unmarshaller unmarshaller1 = context.createUnmarshaller();
-			unmarshaller1.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-			InputStream is = new ByteArrayInputStream(responseText.getBytes());
-			JAXBElement<ElementEventsType> response1 =  unmarshaller1.unmarshal(new StreamSource(is), ElementEventsType.class);
-			logger.debug("Respose bytes : "+responseText);
-			// Dig in the ElementEventsType object for relation and appellation events
-			try{
-				ElementEventsType e = response1.getValue();
-				List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
-				Iterator <CreationEvent> I= c.iterator();
-				while(I.hasNext()){
-					CreationEvent ce = I.next();
-					// Check if event is Appellation event
-					if(ce instanceof AppellationEventType)
-					{
-						// Trying to get a list of terms in the appellation event type object
-						AppellationEventType aet = (AppellationEventType) ce;
-						// Get the term part of Appellation event, to display on UI
-						List<TermType> termTypeList= aet.getTerms(aet);
-						Iterator <TermType> I2 = termTypeList.iterator();
-						while(I2.hasNext()){
-							TermType tt = I2.next();
-							// Fetch concept name from concept power
-							String node = conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt));
-							// add random string to concept name 
-							// so it will handle repeated nodes in different relations
-							// this is required for Json builder
-							String termId = tt.getTermID(tt)+"_"+shortUUID();
-							//String node = tt.getTermInterpertation(tt);
-							logger.debug(tt.getTermInterpertation(tt));
-							// Appending and building JSON for appellation event
-							this.jsonString .append("{\"adjacencies\": [],\"data\": {\"$color\": \"#85BB65\",\"$type\": \"square\",\"$dim\": 11},\"id\": \""+termId+"_"+shortUUID()+"\",\"name\": \""+node+"\"},");
-
-							// Adding appellation event node.
-							//							ID3Node d3Node = d3NodeFactory.createD3NodeObject();
-							//							String nodeId=termId+"_"+shortUUID();
-							//							d3Node.setNodeId(nodeId);
-							//							d3Node.setNodeName(node);
-							//							d3Node.setGroupId(ID3Constant.APPELATION_EVENT_TERM);
-							//							d3NodeList.add(d3Node);
-							//							d3NodeIdMap.put(nodeId, nodeIndex);
-							//							nodeIndex++;
-
-						}
-					}
-					// Check if event is Relation event
-					if(ce instanceof RelationEventType){
-						// Trying to get a list of objects in the relations event type object
-						// First get PredicateType
-						// Then go recursively to subject and object
-						RelationEventType re = (RelationEventType) ce;
-						this.jsonString.delete(0, this.jsonString.length());
-						jsonObject.setIsRelationEventObject(true);
-						RelationEventObject relationEventObject = new RelationEventObject();
-						jsonObject.setRelationEventObject(relationEventObject);
-						jsonObject.setRelationEventObject(getAllObjectFromRelationEvent(re,jsonObject.getRelationEventObject()));
-
-
-						// This would help us in forming the json string as per requirement.
-						printJsonObjectRE(jsonObject.getRelationEventObject());
-
-					}
-				}
-
-			}catch(Exception e){
-				logger.error("",e);
-			}
-		}
-
-		return this.jsonString.toString();
-	}
+	
 }
