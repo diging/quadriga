@@ -393,6 +393,7 @@ public class UserManager implements IUserManager {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public void updateUserQuadrigaRoles(String userName,String quadrigaRoles, String loggedInUser) throws QuadrigaStorageException 
 	{
 		try
