@@ -41,8 +41,8 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
-import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 
 @Service
 public class D3NetworkManager {
@@ -451,10 +451,104 @@ public class D3NetworkManager {
 			d3Map = prepareD3JSonPerNode(nodeObjectWithStatement,d3Map,relationEventPredicateMapping);
 		}
 		
+		
+		
 		return null;
 	}
 	
+	public String getD3JSonString(D3Map d3Map){
+		StringBuffer d3JsonString= new StringBuffer("");
+
+		d3JsonString.append("{\n\"nodes\":[");
+		d3JsonString.append(addNodesToD3JSonString(d3Map));
+		d3JsonString.append("\"]");
+		
+		d3JsonString.append("}\n],\n\"links\":[\n");
+		d3JsonString.append(addLinksToD3JSonString(d3Map));
+		d3JsonString.append("}\n]\n}");
+
+		return d3JsonString.toString();
+	}
 	
+	private Object addLinksToD3JSonString(D3Map d3Map) {
+
+		List<ID3Node> d3NodeList = d3Map.getD3NodeList();
+		List<ID3Link> d3LinkList = d3Map.getD3LinkList();
+		StringBuffer d3JsonString = new StringBuffer("");
+		
+		if(d3NodeList.size() > 0) {
+			for(int i =0;i<d3LinkList.size()-2;i++){
+				ID3Link d3Link =d3LinkList.get(i);
+				d3JsonString.append("{\"source\":");
+				d3JsonString.append(d3Link.getSource());
+				d3JsonString.append(",");
+				d3JsonString.append("\"target\":");
+				d3JsonString.append(d3Link.getTarget());
+				d3JsonString.append("},\n");
+			}
+			ID3Link d3Link =d3LinkList.get(d3LinkList.size()-1);
+			d3JsonString.append("{\"source\":");
+			d3JsonString.append(d3Link.getSource());
+			d3JsonString.append(",");
+			d3JsonString.append("\"target\":");
+			d3JsonString.append(d3Link.getTarget());
+		}
+		return d3JsonString.toString();
+	}
+
+	private Object addNodesToD3JSonString(D3Map d3Map) {
+		List<ID3Node> d3NodeList = d3Map.getD3NodeList();
+		StringBuffer d3JsonString = new StringBuffer("");
+		
+		if(d3NodeList.size() > 0) {
+
+			for(int i =0;i<d3NodeList.size()-1;i++){
+				ID3Node d3Node =d3NodeList.get(i);
+				d3JsonString.append("{\"name\":\"");
+				d3JsonString.append(d3Node.getNodeName());
+				d3JsonString.append("\",");
+				d3JsonString.append("\"id\":\"");
+				d3JsonString.append(d3Node.getNodeId());
+				d3JsonString.append("\",");
+				d3JsonString.append("\"group\":");
+				d3JsonString.append(d3Node.getGroupId());
+				d3JsonString.append(",");
+				d3JsonString.append("\"statementid\":[\"");
+				for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
+					if(j == d3Node.getStatementIdList().size()-1){
+						d3JsonString.append(d3Node.getStatementIdList().get(j));
+					}else{
+						d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+					}
+				}
+				d3JsonString.append("\"]");
+				d3JsonString.append("},\n");
+
+			}
+			ID3Node d3Node =d3NodeList.get(d3NodeList.size()-1);
+			d3JsonString.append("{\"name\":\"");
+			d3JsonString.append(d3Node.getNodeName());
+			d3JsonString.append("\",");
+			d3JsonString.append("\"id\":\"");
+			d3JsonString.append(d3Node.getNodeId());
+			d3JsonString.append("\",");
+			d3JsonString.append("\"group\":");
+			d3JsonString.append(d3Node.getGroupId());
+			d3JsonString.append(",");
+			d3JsonString.append("\"statementid\":[\"");
+			for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
+				if(j == d3Node.getStatementIdList().size()-1){
+					d3JsonString.append(d3Node.getStatementIdList().get(j));
+				}else{
+					d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+				}
+
+			}
+		}
+			
+		return d3JsonString.toString();
+	}
+
 	/**
 	 * Method to add nodes and links into List, which can be used to make a JSON object later.
 	 * @param nodeObject

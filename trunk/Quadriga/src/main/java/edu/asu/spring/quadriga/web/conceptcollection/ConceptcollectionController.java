@@ -38,10 +38,10 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.impl.network.NetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**

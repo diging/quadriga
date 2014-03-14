@@ -28,8 +28,8 @@ import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
-import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 

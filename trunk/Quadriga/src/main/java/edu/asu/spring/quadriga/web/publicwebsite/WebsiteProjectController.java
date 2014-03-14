@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.INetworkManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 

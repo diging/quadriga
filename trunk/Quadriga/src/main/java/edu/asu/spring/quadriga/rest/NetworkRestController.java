@@ -49,8 +49,8 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IEditorManager;
-import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 

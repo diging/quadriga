@@ -26,8 +26,8 @@ import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IEditorManager;
-import edu.asu.spring.quadriga.service.INetworkManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 
 @Controller
 public class EditingNetworkAnnotationsController {
