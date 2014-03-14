@@ -2,6 +2,9 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
+
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -11,17 +14,27 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManager;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class ArchiveWorkspaceManagerDAOTest {
 
 	@Autowired
 	IDBConnectionArchiveWSManager  dbConnect;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -33,58 +46,145 @@ public class ArchiveWorkspaceManagerDAOTest {
 
 	@Before
 	public void setUp() throws Exception {
-		String[] databaseQuery = new String[6];
-		databaseQuery[0] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[1] = "INSERT INTO tbl_project VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[2] = "INSERT INTO tbl_workspace VALUES('testprojws1','test workspace','WS_1','projuser',0,0,'projuser',NOW(),'projuser',NOW())";
-		databaseQuery[3] = "INSERT INTO tbl_workspace VALUES('testprojws2','test workspace','WS_2','projuser',0,0,'projuser',NOW(),'projuser',NOW())";
-		databaseQuery[4] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_1','projuser',NOW(),'projuser',NOW())";
-		databaseQuery[5] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_2','projuser',NOW(),'projuser',NOW())";
-		for(String query : databaseQuery)
-		{
-			((ArchiveWorkspaceManagerDAO)dbConnect).setupTestEnvironment(query);
-		}
+		//create a quadriga user
+		Date date = new Date();
+		QuadrigaUserDTO user = new QuadrigaUserDTO();
+		user.setUsername("projuser");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
+		
+		//create a project
+		ProjectDTO project = new ProjectDTO();
+		project.setProjectid("PROJ_1_Test");
+		project.setProjectname("testproject1");
+		project.setAccessibility("PUBLIC");
+		project.setCreatedby("projuser");
+		project.setCreateddate(date);
+		project.setUpdatedby("projuser");
+		project.setUpdateddate(date);
+		project.setUnixname("PROJ_1");
+		project.setProjectowner(user);
+		sessionFactory.getCurrentSession().save(project);
+		
+		//create a workspace
+		WorkspaceDTO workspace = new WorkspaceDTO();
+		workspace.setWorkspaceid("WS_1_Test");
+		workspace.setWorkspacename("WS_1");
+		workspace.setWorkspaceowner(user);
+		workspace.setCreatedby("projuser");
+		workspace.setCreateddate(date);
+		workspace.setUpdatedby("projuser");
+		workspace.setUpdateddate(date);
+		workspace.setIsarchived(false);
+		workspace.setIsdeactivated(false);
+        sessionFactory.getCurrentSession().save(workspace);
+        
+		workspace = new WorkspaceDTO();
+		workspace.setWorkspaceid("WS_2_Test");
+		workspace.setWorkspacename("WS_2");
+		workspace.setWorkspaceowner(user);
+		workspace.setCreatedby("projuser");
+		workspace.setCreateddate(date);
+		workspace.setUpdatedby("projuser");
+		workspace.setUpdateddate(date);
+		workspace.setIsarchived(false);
+		workspace.setIsdeactivated(false);
+        sessionFactory.getCurrentSession().save(workspace);
+        
+        ProjectWorkspaceDTO projectWorkspace = new ProjectWorkspaceDTO();
+        ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
+        projectWorkspace.setProjectWorkspaceDTOPK(projectWorkspaceKey);
+        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, "PROJ_1_Test");
+        projectWorkspace.setProjectDTO(project);
+        workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_1_Test");
+        projectWorkspace.setWorkspaceDTO(workspace);
+        projectWorkspace.setCreatedby("projuser");
+        projectWorkspace.setCreateddate(date);
+        projectWorkspace.setUpdatedby("projuser");
+        projectWorkspace.setUpdateddate(date);
+        sessionFactory.getCurrentSession().save(projectWorkspace);
+        
+        projectWorkspace = new ProjectWorkspaceDTO();
+        projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_2_Test");
+        projectWorkspace.setProjectWorkspaceDTOPK(projectWorkspaceKey);
+        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, "PROJ_1_Test");
+        projectWorkspace.setProjectDTO(project);
+        workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_2_Test");
+        projectWorkspace.setWorkspaceDTO(workspace);
+        projectWorkspace.setCreatedby("projuser");
+        projectWorkspace.setCreateddate(date);
+        projectWorkspace.setUpdatedby("projuser");
+        projectWorkspace.setUpdateddate(date);
+        sessionFactory.getCurrentSession().save(projectWorkspace);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		String[] databaseQuery = new String[4];
-		databaseQuery[0] = "DELETE FROM tbl_project_workspace WHERE workspaceid IN ('WS_1','WS_2')";
-		databaseQuery[1] = "DELETE FROM tbl_workspace WHERE workspaceid IN ('WS_1','WS_2')";
-		databaseQuery[2] = "DELETE FROM tbl_project WHERE projectid = 'PROJ_2'";
-		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
-		for(String query : databaseQuery)
-		{
-			((ArchiveWorkspaceManagerDAO)dbConnect).setupTestEnvironment(query);
-		}
+		
+		ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
+		ProjectWorkspaceDTO projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspaceKey);
+		sessionFactory.getCurrentSession().delete(projectWorkspace);
+		
+		projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_2_Test");
+		projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspaceKey);
+		sessionFactory.getCurrentSession().delete(projectWorkspace);
+		
+		WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+		sessionFactory.getCurrentSession().delete(workspace);
+		workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_2_Test");
+		sessionFactory.getCurrentSession().delete(workspace);
+		
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		sessionFactory.getCurrentSession().delete(project);
+		
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,"projuser");
+		sessionFactory.getCurrentSession().delete(user);
 	}
 
 	@Test
 	public void testArchiveWorkspace() throws QuadrigaStorageException 
 	{
-	    dbConnect.archiveWorkspace("WS_1", Boolean.TRUE, "projuser");
-	    assertTrue(true);
+		WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+		workspace.setIsarchived(true);
+	    dbConnect.archiveWorkspace("WS_1_Test", Boolean.TRUE, "projuser");
+	    WorkspaceDTO modifiedWorkspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+	    assertEquals(workspace,modifiedWorkspace);
 	}
 	
 	@Test
 	public void testArchiveActivate() throws QuadrigaStorageException
 	{
-		dbConnect.archiveWorkspace("WS_1", Boolean.FALSE, "projuser");
-		assertTrue(true);
+		WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+		workspace.setIsarchived(false);
+		dbConnect.archiveWorkspace("WS_1_Test", Boolean.FALSE, "projuser");
+		WorkspaceDTO modifiedWorkspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+		assertEquals(workspace,modifiedWorkspace);
 	}
 	
 	@Test
 	public void testDeactivateWorkspace() throws QuadrigaStorageException
 	{
-		dbConnect.deactivateWorkspace("WS_2", Boolean.TRUE, "projuser");
-		assertTrue(true);
+		WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_2_Test");
+		workspace.setIsdeactivated(true);
+		dbConnect.deactivateWorkspace("WS_2_Test", Boolean.TRUE, "projuser");
+		WorkspaceDTO modifiedWorkspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_2_Test");
+	    assertEquals(workspace,modifiedWorkspace);
 	}
 	
 	@Test
 	public void testActivateWorkspace() throws QuadrigaStorageException
 	{
-		dbConnect.deactivateWorkspace("WS_2", Boolean.FALSE, "projuser");
-		assertTrue(true);
+		WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_2_Test");
+		workspace.setIsdeactivated(false);
+		dbConnect.deactivateWorkspace("WS_2_Test", Boolean.FALSE, "projuser");
+		WorkspaceDTO modifiedWorkspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_2_Test");
+		assertEquals(workspace,modifiedWorkspace);
 	}
 
 }

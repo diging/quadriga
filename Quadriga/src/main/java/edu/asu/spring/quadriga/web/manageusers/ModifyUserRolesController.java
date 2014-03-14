@@ -49,7 +49,7 @@ public class ModifyUserRolesController
 
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
-        validateBinder.setValidator(validator);
+      //  validateBinder.setValidator(validator);
 		
 		binder.registerCustomEditor(List.class, "users.quadrigaRoles", new PropertyEditorSupport() {
 
@@ -161,15 +161,15 @@ public class ModifyUserRolesController
 					userRoles = new StringBuilder();
 					userName = user.getUserName();
 					quadrigaRoles =  user.getQuadrigaRoles();
+					
+					for(IQuadrigaRole role : quadrigaRoles)
+					{
+						userRoles.append(",");
+						userRoles.append(role.getDBid());
+					}
+					
+					userManager.updateUserQuadrigaRoles(userName, userRoles.toString().substring(1), loggedInUser);
 				}
-				
-				for(IQuadrigaRole role : quadrigaRoles)
-				{
-					userRoles.append(",");
-					userRoles.append(role.getDBid());
-				}
-				
-				userManager.updateUserQuadrigaRoles(userName, userRoles.toString().substring(1), loggedInUser);
 				
 				model.getModelMap().put("success", 1);
 			}
