@@ -37,6 +37,7 @@ import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -199,34 +200,16 @@ public class EditingListController {
 	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=1,userRole={})})
 	@RequestMapping(value = "auth/editing/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		StringBuffer jsonstring=new StringBuffer();
-		logger.debug("Network id "+networkId);
-		String qstoreGetURL = getQStoreGetURL();
-		logger.debug("Qstore Get URL : "+qstoreGetURL);
-		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkTopNodes(networkId);
-		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
-		jsonstring.append("[");
-		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
-		networkManager.setRelationEventPredicateMapping(relationEventPredicateMapping);
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
-		}
-		String jsonstring1 = jsonstring.toString();
-		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
-			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
-		}
-		jsonstring1 = jsonstring1+"]";
-		logger.debug(jsonstring1);
-		logger.info("Json object formed and sent to the JSP");
-		//model.addAttribute("json", "[{\"adjacencies\": [\"1\",{\"nodeTo\": \"5\",\"nodeFrom\": \"3\",\"data\": {\"$color\": \"#557EAA\"}},],\"data\": {\"$color\": \"#83548B\",\"$type\": \"circle\",\"$dim\": 10},\"id\": \"3\",\"name\": \"3\"},{\"adjacencies\": [\"2\",{\"nodeTo\": \"5\",\"nodeFrom\": \"3\",\"data\": {\"$color\": \"#557EAA\"}},],\"data\": {\"$color\": \"#83548B\",\"$type\": \"circle\",\"$dim\": 10},\"id\": \"3\",\"name\": \"3\"},{\"adjacencies\": [{\"nodeTo\": \"4\",\"nodeFrom\": \"5\",\"data\": {\"$color\": \"#557EAA\"}},{\"nodeTo\": \"3\",\"nodeFrom\": \"5\",\"data\": {\"$color\": \"#557EAA\"}}],\"data\": {\"$color\": \"#EBB056\",\"$type\": \"circle\",\"$dim\": 11},\"id\": \"5\",\"name\": \"5\"}, {\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"4\",\"name\": \"4\"},{\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"1\",\"name\": \"1\"},{\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"2\",\"name\": \"2\"}]");
-		model.addAttribute("jsonstring",jsonstring1);
+		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
+		String nwId = "\""+networkId+"\"";
+		model.addAttribute("jsonstring",networkJSon.getJson());
+		model.addAttribute("networkid",nwId);
+
 		return "auth/editing/visualize";
 	}
 
 
+	//TODO Fix this error next time.
 
 	/**
 	 * Visualize old version of network
