@@ -2,7 +2,9 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.junit.After;
@@ -26,8 +28,11 @@ import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
@@ -53,6 +58,9 @@ public class ModifyWSManagerDAOTest {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private WorkspaceDTOMapper workspaceDTOMapper;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -90,6 +98,7 @@ public class ModifyWSManagerDAOTest {
 		sessionFactory.getCurrentSession().save(user);
 		
 		//create a project
+		List<ProjectWorkspaceDTO> projectWorkspaceList = new ArrayList<ProjectWorkspaceDTO>();
 		ProjectDTO project = new ProjectDTO();
 		project.setProjectid("PROJ_1_Test");
 		project.setProjectname("testproject1");
@@ -99,6 +108,18 @@ public class ModifyWSManagerDAOTest {
 		project.setUpdatedby("projuser");
 		project.setUpdateddate(date);
 		project.setUnixname("PROJ_1");
+		project.setProjectowner(user);
+		sessionFactory.getCurrentSession().save(project);
+		
+		project = new ProjectDTO();
+		project.setProjectid("PROJ_2_Test");
+		project.setProjectname("testproject2");
+		project.setAccessibility("PUBLIC");
+		project.setCreatedby("projuser");
+		project.setCreateddate(date);
+		project.setUpdatedby("projuser");
+		project.setUpdateddate(date);
+		project.setUnixname("PROJ_2");
 		project.setProjectowner(user);
 		sessionFactory.getCurrentSession().save(project);
 		
@@ -139,6 +160,30 @@ public class ModifyWSManagerDAOTest {
 		workspace.setIsdeactivated(false);
         sessionFactory.getCurrentSession().save(workspace);
         
+    	workspace = new WorkspaceDTO();
+		workspace.setWorkspaceid("WS_4_Test");
+		workspace.setWorkspacename("WS_4");
+		workspace.setWorkspaceowner(user);
+		workspace.setCreatedby("projuser");
+		workspace.setCreateddate(date);
+		workspace.setUpdatedby("projuser");
+		workspace.setUpdateddate(date);
+		workspace.setIsarchived(false);
+		workspace.setIsdeactivated(false);
+        sessionFactory.getCurrentSession().save(workspace);
+        
+    	workspace = new WorkspaceDTO();
+		workspace.setWorkspaceid("WS_5_Test");
+		workspace.setWorkspacename("WS_5");
+		workspace.setWorkspaceowner(user);
+		workspace.setCreatedby("projuser");
+		workspace.setCreateddate(date);
+		workspace.setUpdatedby("projuser");
+		workspace.setUpdateddate(date);
+		workspace.setIsarchived(false);
+		workspace.setIsdeactivated(false);
+        sessionFactory.getCurrentSession().save(workspace);
+        
         //create project workspace mapping
         ProjectWorkspaceDTO projectWorkspace = new ProjectWorkspaceDTO();
         ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
@@ -152,6 +197,7 @@ public class ModifyWSManagerDAOTest {
         projectWorkspace.setUpdatedby("projuser");
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
         
         projectWorkspace = new ProjectWorkspaceDTO();
         projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_2_Test");
@@ -165,6 +211,7 @@ public class ModifyWSManagerDAOTest {
         projectWorkspace.setUpdatedby("projuser");
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
         
         projectWorkspace = new ProjectWorkspaceDTO();
         projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_3_Test");
@@ -178,51 +225,112 @@ public class ModifyWSManagerDAOTest {
         projectWorkspace.setUpdatedby("projuser");
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
         
+        projectWorkspace = new ProjectWorkspaceDTO();
+        projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_4_Test");
+        projectWorkspace.setProjectWorkspaceDTOPK(projectWorkspaceKey);
+        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, "PROJ_1_Test");
+        projectWorkspace.setProjectDTO(project);
+        workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_4_Test");
+        projectWorkspace.setWorkspaceDTO(workspace);
+        projectWorkspace.setCreatedby("projuser");
+        projectWorkspace.setCreateddate(date);
+        projectWorkspace.setUpdatedby("projuser");
+        projectWorkspace.setUpdateddate(date);
+        sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
         
-		
-		
-		String[] databaseQuery = new String[14];
-		databaseQuery[0] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[1] = "INSERT INTO tbl_project VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[2] = "INSERT INTO tbl_workspace VALUES('testprojws1','test workspace','WS_1','projuser',0,0,'projuser',NOW(),'projuser',NOW())";
-		databaseQuery[3] = "INSERT INTO tbl_workspace VALUES('testprojws3','test workspace','WS_3','projuser',0,0,'projuser',NOW(),'projuser',NOW())";
-		databaseQuery[4] = "INSERT INTO tbl_workspace VALUES('testprojws4','test workspace','WS_4','projuser',0,0,'projuser',NOW(),'projuser',NOW())";
-		databaseQuery[5] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_1','projuser',NOW(),'projuser',NOW())";
-		databaseQuery[6] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_3','projuser',NOW(),'projuser',NOW())";
-		databaseQuery[7] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_4','projuser',NOW(),'projuser',NOW())";
-		databaseQuery[8] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projcollab',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[9] = "INSERT INTO tbl_workspace VALUES('testprojws5','test workspace','WS_5','projuser',0,0,'projuser',NOW(),'projuser',NOW())";
-		databaseQuery[10] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_5','projuser',NOW(),'projuser',NOW())";
-		databaseQuery[11] = "INSERT INTO tbl_workspace VALUES('testprojws6','test workspace','WS_6','projuser',0,0,'projuser',NOW(),'projuser',NOW())";
-		databaseQuery[12] = "INSERT INTO tbl_project_workspace VALUES('PROJ_2','WS_6','projuser',NOW(),'projuser',NOW())";
-		databaseQuery[13] = "INSERT INTO tbl_workspace_collaborator(workspaceid,username,collaboratorrole,updatedby,updateddate,createdby,createddate) VALUES('WS_6','projcollab','wscollab_role1','projuser',NOW(),'proj_user',NOW())";
-		
-		for(String query : databaseQuery)
-		{
-			((ModifyWSManagerDAO)dbConnect).setupTestEnvironment(query);
-		}
+        projectWorkspace = new ProjectWorkspaceDTO();
+        projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_5_Test");
+        projectWorkspace.setProjectWorkspaceDTOPK(projectWorkspaceKey);
+        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, "PROJ_1_Test");
+        projectWorkspace.setProjectDTO(project);
+        workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_5_Test");
+        projectWorkspace.setWorkspaceDTO(workspace);
+        projectWorkspace.setCreatedby("projuser");
+        projectWorkspace.setCreateddate(date);
+        projectWorkspace.setUpdatedby("projuser");
+        projectWorkspace.setUpdateddate(date);
+        sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
+        
+        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+        project.setProjectWorkspaceDTOList(projectWorkspaceList);
+        sessionFactory.getCurrentSession().update(project);
+        
+        List<WorkspaceCollaboratorDTO> workspaceCollaboratorList = new ArrayList<WorkspaceCollaboratorDTO>();
+        WorkspaceCollaboratorDTO workspaceCollaborator = new WorkspaceCollaboratorDTO(); 
+        WorkspaceCollaboratorDTOPK workspaceCollaboratorKey = new WorkspaceCollaboratorDTOPK("WS_5_Test","projcollab","wscollab_role1");
+        workspaceCollaborator.setWorkspaceCollaboratorDTOPK(workspaceCollaboratorKey);
+        workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_5_Test");
+        workspaceCollaborator.setWorkspaceDTO(workspace);
+        user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,"projcollab");
+        workspaceCollaborator.setQuadrigaUserDTO(user);
+        workspaceCollaborator.setCreatedby("projuser");
+        workspaceCollaborator.setCreateddate(date);
+        workspaceCollaborator.setUpdatedby("projuser");
+        workspaceCollaborator.setUpdateddate(date);
+        sessionFactory.getCurrentSession().save(workspaceCollaborator);
+        workspaceCollaboratorList.add(workspaceCollaborator);
+        
+        workspace.setWorkspaceCollaboratorDTOList(workspaceCollaboratorList);
+        sessionFactory.getCurrentSession().update(workspace);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		String[] databaseQuery = new String[6];
-		databaseQuery[0] = "DELETE FROM tbl_workspace_collaborator WHERE workspaceid = 'WS_6'";
-		databaseQuery[1] = "DELETE FROM tbl_project_workspace WHERE projectid = 'PROJ_2'";
-		databaseQuery[2] = "DELETE FROM tbl_workspace WHERE workspaceid IN ('WS_1','WS_3','WS_4','WS_5','WS_6')";
-		databaseQuery[3] = "DELETE FROM tbl_workspace where workspaceowner IN ('projuser','projcollab')";
-		databaseQuery[4] = "DELETE FROM tbl_project WHERE projectid = 'PROJ_2'";
-		databaseQuery[5] = "DELETE FROM tbl_quadriga_user WHERE username IN ('projuser','projcollab')";
-		for(String query : databaseQuery)
-		{
-			((ModifyWSManagerDAO)dbConnect).setupTestEnvironment(query);
-		}
+		
+		WorkspaceCollaboratorDTOPK workspaceCollaboratorKey = new WorkspaceCollaboratorDTOPK("WS_5_Test","projcollab","wscollab_role1");
+		WorkspaceCollaboratorDTO workspaceCollaborator = (WorkspaceCollaboratorDTO) sessionFactory.getCurrentSession().get(WorkspaceCollaboratorDTO.class, workspaceCollaboratorKey);
+		sessionFactory.getCurrentSession().delete(workspaceCollaborator);
+		
+		ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
+		ProjectWorkspaceDTO projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspaceKey);
+		sessionFactory.getCurrentSession().delete(projectWorkspace);
+		
+		projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_2_Test");
+		projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspaceKey);
+		sessionFactory.getCurrentSession().delete(projectWorkspace);
+		
+		projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_3_Test");
+		projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspaceKey);
+		sessionFactory.getCurrentSession().delete(projectWorkspace);
+		
+		projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_4_Test");
+		projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspaceKey);
+		sessionFactory.getCurrentSession().delete(projectWorkspace);
+		
+		projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_5_Test");
+		projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspaceKey);
+		sessionFactory.getCurrentSession().delete(projectWorkspace);
+		
+		WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+		sessionFactory.getCurrentSession().delete(workspace);
+		workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_2_Test");
+		sessionFactory.getCurrentSession().delete(workspace);
+		workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_3_Test");
+		sessionFactory.getCurrentSession().delete(workspace);
+		workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_4_Test");
+		sessionFactory.getCurrentSession().delete(workspace);
+		workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_5_Test");
+		sessionFactory.getCurrentSession().delete(workspace);
+		
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		sessionFactory.getCurrentSession().delete(project);
+		
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,"projuser");
+		sessionFactory.getCurrentSession().delete(user);
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,"projcollab");
+		sessionFactory.getCurrentSession().delete(user);
 	}
 
 	@Test
 	public void testAddWorkSpace() throws QuadrigaStorageException {
+		boolean isExists = false;
 		IUser user;
 		IWorkSpace workspace;
+		IWorkSpace testWorkspace;
 		
 		//create workspace objects
 		user = userManager.getUserDetails("projuser");
@@ -232,7 +340,20 @@ public class ModifyWSManagerDAOTest {
 		workspace.setDescription("test workspace");
 		workspace.setOwner(user);
 		
-		dbConnect.addWorkSpaceRequest(workspace, "PROJ_2");
+		dbConnect.addWorkSpaceRequest(workspace, "PROJ_2_Test");
+		
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, "PROJ_2_Test");
+		List<ProjectWorkspaceDTO> projectWorkspace = project.getProjectWorkspaceDTOList();
+		for(ProjectWorkspaceDTO tempProjectWorkspace : projectWorkspace)
+		{
+			testWorkspace = workspaceDTOMapper.getWorkSpace(tempProjectWorkspace.getWorkspaceDTO());
+			if(testWorkspace.equals(workspace))
+			{
+				isExists = true;
+			}
+		}
+		
+		assertTrue(isExists);
 	}
 	
 	@Test
@@ -240,7 +361,7 @@ public class ModifyWSManagerDAOTest {
 	{
 		String errmsg;
 		
-		errmsg = dbConnect.deleteWorkspaceRequest("WS_3,WS_4");
+		errmsg = dbConnect.deleteWorkspaceRequest("WS_1_Test,WS_2_Test");
 		assertEquals("",errmsg);
 		
 	}
@@ -249,13 +370,9 @@ public class ModifyWSManagerDAOTest {
 	public void testUpdateWorkspace() throws QuadrigaStorageException
 	{
 		String errmsg;
-		IWorkSpace workspace = workspaceFactory.createWorkspaceObject();
-		IUser user = userFactory.createUserObject();
-		user.setUserName("projuser");
-		workspace.setName("testprojws51");
-		workspace.setDescription("test workspace");
-		workspace.setOwner(user);
-		workspace.setId("WS_5");
+		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_2_Test");
+		IWorkSpace workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
+		workspace.setName("Test Updating workspace");
 		errmsg = dbConnect.updateWorkspaceRequest(workspace);
 	    assertEquals("",errmsg);
 	}
@@ -264,10 +381,10 @@ public class ModifyWSManagerDAOTest {
 	{
 		IWorkSpace workspace;
 		String owner;
-		dbConnect.transferWSOwnerRequest("WS_6", "projuser", "projcollab", "wscollab_role1");
+		dbConnect.transferWSOwnerRequest("WS_6_Test", "projuser", "projcollab", "wscollab_role1");
 		
 		//retrieve the workspace details
-		workspace = dbRetrieveConnect.getWorkspaceDetails("WS_6", "projuser");
+		workspace = dbRetrieveConnect.getWorkspaceDetails("WS_6_Test", "projuser");
 		
 		owner = workspace.getOwner().getUserName();
 		
