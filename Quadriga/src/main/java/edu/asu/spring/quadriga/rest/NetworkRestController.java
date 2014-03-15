@@ -197,7 +197,7 @@ public class NetworkRestController {
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String status="UNKNOWN";
-		INetwork network =networkManager.getNetworkStatus(networkId,user);
+		INetwork network =networkManager.getNetwork(networkId,user);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		status = network.getStatus();
@@ -363,7 +363,7 @@ public class NetworkRestController {
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			logger.debug("XML : "+ writer.toString());
-			networkXML = networkManager.getWholeXMLQStore(writer.toString());
+			networkXML = networkManager.getWholeNetworkXMLFromQStore(writer.toString());
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -424,7 +424,7 @@ public class NetworkRestController {
 		
 		INetwork network = null;
 		try{
-			network = networkManager.getNetworkStatus(networkId,user);
+			network = networkManager.getNetwork(networkId,user);
 			if(network==null){
 				logger.info("network is null");
 				response.setStatus(404);

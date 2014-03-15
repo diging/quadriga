@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.service.network.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,11 +14,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -254,7 +247,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	public ElementEventsType getElementEventTypeFromRelationEvent(String relationEventId) throws JAXBException, QStoreStorageException{
-		String xml = getNodeXmlStringFromQstore(relationEventId);
+		String xml = getRelationEventXmlStringFromQstore(relationEventId);
 		ElementEventsType elementEventType = null;
 		if(xml ==null){
 			throw new QStoreStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
@@ -779,64 +772,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return "";
 	}
 
-	/**
-	 * Formats the input XML with nice intendation
-	 */
 	@Override
-	public String prettyFormat(String input, int indent) {
-		String result="";
-		try{
-			Source xmlInput = new StreamSource(new StringReader(input));
-			StringWriter stringWriter = new StringWriter();
-			StreamResult xmlOutput = new StreamResult(stringWriter);
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			transformerFactory.setAttribute("indent-number", indent);
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.transform(xmlInput, xmlOutput);
-			result= xmlOutput.getWriter().toString();
-		}catch(Exception e){
-			logger.error("Error in formating the XML " ,e );
-		}
-		return result;
-	}
-
-	/**
-	 * Gets the network element xml for a particular ID
-	 */
-	@Override
-	public ResponseEntity<String> getNodeXmlFromQstore(String id)throws JAXBException{
-		// Message converters for JAXb to understand the xml
-		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-		List<MediaType> mediaTypes = new ArrayList<MediaType>();
-		mediaTypes.add(MediaType.APPLICATION_XML);
-		messageConverters.add(new StringHttpMessageConverter());
-		org.springframework.oxm.Marshaller marshaler = jaxbMarshaller;
-		org.springframework.oxm.Unmarshaller unmarshaler = jaxbMarshaller;
-		messageConverters.add(new MarshallingHttpMessageConverter(marshaler,unmarshaler));
-
-		restTemplate.setMessageConverters(messageConverters);
-
-		// Setting up the http header accept type
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
-		headers.setAccept(mediaTypes);
-		ResponseEntity<String> response = null;
-		try{
-			logger.debug("URL : "+getQStoreGetURL()+id);
-			// Get the XML from QStore
-			response = restTemplate.exchange(getQStoreGetURL()+id,
-					HttpMethod.GET,
-					new HttpEntity<String[]>(headers),
-					String.class);
-		}catch(Exception e){
-			e.getMessage();
-		}
-		return response;
-	}
-
-	@Override
-	public String getNodeXmlStringFromQstore(String id)throws JAXBException{
+	public String getRelationEventXmlStringFromQstore(String id)throws JAXBException{
 		// Message converters for JAXb to understand the xml
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -1090,7 +1027,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * Get whole network XML from QStore
 	 */
 	@Override
-	public String getWholeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
+	public String getWholeNetworkXMLFromQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
 		String res="";
 		// Add message converters for JAxb
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -1122,7 +1059,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	@Transactional
-	public INetwork getNetworkStatus(String networkId, IUser user) throws QuadrigaStorageException{
+	public INetwork getNetwork(String networkId, IUser user) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
 			network = dbConnect.getNetwork(networkId, user);
@@ -1201,21 +1138,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return null;
 	}
 
-	/**
-	 * Check if the network name already exist
-	 */
-	@Override
-	@Transactional
-	public boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException{
-
-		boolean result=true;
-		try{
-			result=dbConnect.hasNetworkName(networkName,user);
-		}catch(QuadrigaStorageException e){
-			logger.error("Something went wrong in DB",e);
-		}
-		return result;
-	}
 
 	/**
 	 * Get only the Top Nodes of the network
