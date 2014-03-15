@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.dao.workspace;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,6 +75,7 @@ public class ListWSManagerDAOTest {
 		sessionFactory.getCurrentSession().save(user);
 		
 		//create a project
+		List<ProjectWorkspaceDTO> projectWorkspaceList = new ArrayList<ProjectWorkspaceDTO>();
 		ProjectDTO project = new ProjectDTO();
 		project.setProjectid("PROJ_1_Test");
 		project.setProjectname("testproject1");
@@ -147,6 +150,7 @@ public class ListWSManagerDAOTest {
         projectWorkspace.setUpdatedby("projuser");
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
         
         projectWorkspace = new ProjectWorkspaceDTO();
         projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_2_Test");
@@ -160,6 +164,7 @@ public class ListWSManagerDAOTest {
         projectWorkspace.setUpdatedby("projuser");
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
         
         projectWorkspace = new ProjectWorkspaceDTO();
         projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_3_Test");
@@ -173,6 +178,7 @@ public class ListWSManagerDAOTest {
         projectWorkspace.setUpdatedby("projuser");
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
         
         projectWorkspace = new ProjectWorkspaceDTO();
         projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_4_Test");
@@ -186,6 +192,10 @@ public class ListWSManagerDAOTest {
         projectWorkspace.setUpdatedby("projuser");
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
+        
+        project.setProjectWorkspaceDTOList(projectWorkspaceList);
+        sessionFactory.getCurrentSession().update(project);
 	}
 
 	@After
