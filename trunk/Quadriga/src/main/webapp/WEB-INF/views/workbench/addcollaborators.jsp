@@ -59,7 +59,7 @@ function onSubmit(){
 
 <form:form method="POST" name="myForm" commandName="collaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
-  <h2>Associate collaborators to project:</h2>
+  <h2>Project Collaborators:</h2>
 <h3>Project: ${projectname}</h3>
 <div>${projectdesc}</div>
 <c:if test="${not empty notCollaboratingUsers}">
@@ -90,13 +90,13 @@ function onSubmit(){
 </c:if>
 <c:if test="${empty notCollaboratingUsers}">
 <hr>
- <span class="byline">All collaborators are associated to the project</span>
+ <span>All collaborators are associated to the project are added</span>
  <input type="button" value="Done" onClick="onSubmit()">
 </c:if>
 <br>
 <c:if test="${not empty collaboratingUsers}">
 <hr>
-<span class="byline">Associated project collaborators :</span>
+<span class="byline">List of Project Collaborators :</span>
 <table style="width:100%" class="display dataTable">					
 	<thead>
 		<tr>	
