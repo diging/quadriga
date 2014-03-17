@@ -49,7 +49,7 @@ public class ModifyUserRolesController
 
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
-      //  validateBinder.setValidator(validator);
+        validateBinder.setValidator(validator);
 		
 		binder.registerCustomEditor(List.class, "users.quadrigaRoles", new PropertyEditorSupport() {
 
