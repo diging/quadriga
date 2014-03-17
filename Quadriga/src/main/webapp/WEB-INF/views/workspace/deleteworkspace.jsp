@@ -63,6 +63,9 @@ $(function() {
 });
 </script>
 <article class="is-page-content">
+	<header>
+	<h2>Delete workspace</h2>
+	</header>
 	<form:form modelAttribute="workspaceform" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/${wsprojectid}/deleteworkspace" id="deletewsform">
 		<c:choose>
