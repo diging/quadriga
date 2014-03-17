@@ -15,17 +15,34 @@
 	$('input[type="checkbox"]').bind('click', function(){
 		alert("OK");
 		})
-	
-	$('#chkboxall').click(function() {
+	$("#chkboxall").bind('change',function(e){
+      alert("here");
+      alert($(this).is(":checked"));
+    });
+	/* $("#chkboxall").click(function() {
 		alert("here");
 		var opt = $(this).parent().find('input[type=checkbox]');
         opt.prop('checked', $(this).is(':checked') ? true : false);
 	  
-	});
+	}); */
 	function chkAll(id){
-		//alert("here");
+		alert("here");
 		var opt = $("#"+id).parent().find('input[type=checkbox]');
         opt.prop('checked', $(this).is(':checked') ? true : false);
+        
+       /*  $.ajax({
+			url : "${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/addconceptcollection",
+			type : "POST",
+			data :"selected="+$('#hidden').val(),
+			success : function(data) {
+				location.reload();
+				//alert("done");
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+		event.preventDefault(); */
 	}
 	
 </script>
@@ -40,12 +57,12 @@
 		<span class="byline">Manage projects and workspaces</span>
 	</header>
 	<div id="users">
-	<input type="checkbox"  id="chkboxall" checked > All 
-	<!-- <input type="checkbox"  id="chkboxall" onclick="javascript:chkAll(this.id);" checked > All -->
-	<input type="checkbox"  id="chkboxowner" checked> Owner 
-	<input type="checkbox"  id="chkboxcollaborator" checked> Collaborator
-	<input type="checkbox"  id="chkboxawowner" checked> Workspace Owner 
-	<input type="checkbox" id="chkboxwcollaborator" checked> Workspace Collaborator 
+	<!-- <input type="checkbox"  id="chkboxall" checked > All  -->
+	<input type="checkbox"  id="chkboxall" onclick="javascript:chkAll(this.id);" checked > All
+	<input type="checkbox"  id="chkboxowner" > Owner 
+	<input type="checkbox"  id="chkboxcollaborator" > Collaborator
+	<input type="checkbox"  id="chkboxawowner" > Workspace Owner 
+	<input type="checkbox" id="chkboxwcollaborator" > Workspace Collaborator 
 	</div>
 	<div id = "tabs" class="tabs">
 	<ul>
