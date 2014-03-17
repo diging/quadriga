@@ -26,7 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -42,7 +41,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
@@ -281,7 +279,6 @@ public class WorkspaceDictionaryDAOTest {
 				Iterator<IDictionary> I = dictionaryList.iterator();
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IDictionary dictionaryTest = dictionaryFactory
@@ -291,7 +288,6 @@ public class WorkspaceDictionaryDAOTest {
 					if (dictionaryTest != null) {
 						name = dictionaryTest.getName();
 						desc = dictionaryTest.getDescription();
-						userTest = dictionaryTest.getOwner();
 					}
 				}
 
@@ -396,7 +392,6 @@ public class WorkspaceDictionaryDAOTest {
 				Iterator<IDictionary> I = dictionaryList.iterator();
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IDictionary dictionaryTest = dictionaryFactory
@@ -406,7 +401,6 @@ public class WorkspaceDictionaryDAOTest {
 					if (dictionaryTest != null) {
 						name = dictionaryTest.getName();
 						desc = dictionaryTest.getDescription();
-						userTest = dictionaryTest.getOwner();
 					}
 				}
 
@@ -511,7 +505,6 @@ public class WorkspaceDictionaryDAOTest {
 				Iterator<IDictionary> I = dictionaryList.iterator();
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IDictionary dictionaryTest = dictionaryFactory
@@ -521,7 +514,6 @@ public class WorkspaceDictionaryDAOTest {
 					if (dictionaryTest != null) {
 						name = dictionaryTest.getName();
 						desc = dictionaryTest.getDescription();
-						userTest = dictionaryTest.getOwner();
 					}
 				}
 

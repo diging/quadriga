@@ -208,7 +208,6 @@ public class DBConnectionDictionaryManagerTest {
 			Iterator<IDictionary> I = dictionaryList.iterator();
 			String name=null;
 			String desc=null;
-			IUser userTest=null;
 
 			while(I.hasNext()){
 				IDictionary dictionaryTest = dictionaryFactory.createDictionaryObject();
@@ -217,7 +216,6 @@ public class DBConnectionDictionaryManagerTest {
 				if(dictionaryTest!=null){
 					name =dictionaryTest.getName();
 					desc =dictionaryTest.getDescription();
-					userTest =dictionaryTest.getOwner();
 				}
 			}
 

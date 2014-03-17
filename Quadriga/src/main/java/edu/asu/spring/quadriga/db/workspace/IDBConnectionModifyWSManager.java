@@ -112,4 +112,6 @@ public interface IDBConnectionModifyWSManager
 	 */
 	public abstract String deleteWorkspaceNetwork(String workspaceIdList)
 			throws QuadrigaStorageException;
+	
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 }

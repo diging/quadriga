@@ -263,7 +263,6 @@ public class WorkspaceCCManagerTest {
 				
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IConceptCollection conceptCollection = conceptCollectionFactory
@@ -273,7 +272,6 @@ public class WorkspaceCCManagerTest {
 					if (conceptCollection != null) {
 						name = conceptCollection.getName();
 						desc = conceptCollection.getDescription();
-						userTest = conceptCollection.getOwner();
 					}
 				}
 
@@ -381,7 +379,6 @@ public class WorkspaceCCManagerTest {
 				
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IConceptCollection conceptCollection = conceptCollectionFactory
@@ -391,7 +388,6 @@ public class WorkspaceCCManagerTest {
 					if (conceptCollection != null) {
 						name = conceptCollection.getName();
 						desc = conceptCollection.getDescription();
-						userTest = conceptCollection.getOwner();
 					}
 				}
 
@@ -499,7 +495,6 @@ public class WorkspaceCCManagerTest {
 				
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IConceptCollection conceptCollection = conceptCollectionFactory
@@ -509,7 +504,6 @@ public class WorkspaceCCManagerTest {
 					if (conceptCollection != null) {
 						name = conceptCollection.getName();
 						desc = conceptCollection.getDescription();
-						userTest = conceptCollection.getOwner();
 					}
 				}
 

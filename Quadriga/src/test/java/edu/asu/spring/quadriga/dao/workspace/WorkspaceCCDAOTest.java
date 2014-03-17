@@ -211,7 +211,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(project1.getDescription().equals("description"), true);
@@ -229,7 +228,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(workspace1.getDescription().equals("description"), true);
@@ -244,7 +242,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
@@ -256,7 +253,6 @@ public class WorkspaceCCDAOTest {
 					ccList = dbConnect.getConceptsOwnedbyUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -264,7 +260,6 @@ public class WorkspaceCCDAOTest {
 				
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IConceptCollection conceptCollection = conceptCollectionFactory
@@ -274,7 +269,6 @@ public class WorkspaceCCDAOTest {
 					if (conceptCollection != null) {
 						name = conceptCollection.getName();
 						desc = conceptCollection.getDescription();
-						userTest = conceptCollection.getOwner();
 					}
 				}
 
@@ -292,7 +286,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				dbConnectionWorkspaceConceptColleciton.addWorkspaceCC("1", getCCID("Test CC"), "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -301,7 +294,6 @@ public class WorkspaceCCDAOTest {
 				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Iterator<IConceptCollection> I = ccList1.iterator();
@@ -329,7 +321,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(project1.getDescription().equals("description"), true);
@@ -347,7 +338,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(workspace1.getDescription().equals("description"), true);
@@ -362,7 +352,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
@@ -374,7 +363,6 @@ public class WorkspaceCCDAOTest {
 					ccList = dbConnect.getConceptsOwnedbyUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -382,7 +370,6 @@ public class WorkspaceCCDAOTest {
 				
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IConceptCollection conceptCollection = conceptCollectionFactory
@@ -392,7 +379,6 @@ public class WorkspaceCCDAOTest {
 					if (conceptCollection != null) {
 						name = conceptCollection.getName();
 						desc = conceptCollection.getDescription();
-						userTest = conceptCollection.getOwner();
 					}
 				}
 
@@ -410,7 +396,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				dbConnectionWorkspaceConceptColleciton.addWorkspaceCC("1", getCCID("Test CC"), "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -419,7 +404,6 @@ public class WorkspaceCCDAOTest {
 				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Iterator<IConceptCollection> I = ccList1.iterator();
@@ -447,7 +431,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(project1.getDescription().equals("description"), true);
@@ -465,7 +448,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			assertEquals(workspace1.getDescription().equals("description"), true);
@@ -480,7 +462,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				conceptCollectionManager.addConceptCollection(conceptColleciton);
 			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			logger.info(" message : " + msg);
@@ -492,7 +473,6 @@ public class WorkspaceCCDAOTest {
 					ccList = dbConnect.getConceptsOwnedbyUser(user
 							.getUserName());
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -500,7 +480,6 @@ public class WorkspaceCCDAOTest {
 				
 				String name = null;
 				String desc = null;
-				IUser userTest = null;
 
 				while (I.hasNext()) {
 					IConceptCollection conceptCollection = conceptCollectionFactory
@@ -510,7 +489,6 @@ public class WorkspaceCCDAOTest {
 					if (conceptCollection != null) {
 						name = conceptCollection.getName();
 						desc = conceptCollection.getDescription();
-						userTest = conceptCollection.getOwner();
 					}
 				}
 
@@ -528,7 +506,6 @@ public class WorkspaceCCDAOTest {
 			try {
 				dbConnectionWorkspaceConceptColleciton.addWorkspaceCC("1", getCCID("Test CC"), "jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -537,7 +514,6 @@ public class WorkspaceCCDAOTest {
 				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Iterator<IConceptCollection> I = ccList1.iterator();
@@ -553,7 +529,6 @@ public class WorkspaceCCDAOTest {
 				ccList1 = workspaceConceptCollectionManager.listWorkspaceCC("1",
 						"jdoe");
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			I = ccList1.iterator();
