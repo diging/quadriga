@@ -168,43 +168,12 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 			</table>
 		 </form:form>
 	 </c:if>
-	<%-- </c:if> --%>
 </c:otherwise>
 </c:choose>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<c:choose>
-		<c:when test="${success == '1'}">
-			<font color="blue"><spring:message code="add_profile_success"/></font>
-	 	</c:when>
-	 	<c:otherwise>
-				<font color="red">${errmsg}</font>
-		</c:otherwise>
-</c:choose> 
-
+<c:if test="${success == '2'}">
+	<font color="red">${errmsg}</font>
+</c:if>
 
 			
 
