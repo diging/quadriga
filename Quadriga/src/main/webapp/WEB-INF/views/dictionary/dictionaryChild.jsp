@@ -65,39 +65,39 @@
 	});
 	
 	
-$(function(){
+	$(function() {
 		
 		var data = ${core};
 		console.log(data);
 		$('#html').jstree(data
 		);
-});
+	});
 
 	function addDictToProjects(id,name){
 		
 		var e = document.getElementById("dlgConfirm");
-		if(e.style.display == 'block')
-		       e.style.display = 'none';
-		    else
-		       e.style.display = 'block';
+	    if(e.style.display == 'block')
+	       e.style.display = 'none';
+	    else
+	       e.style.display = 'block';
 		
 		event.preventDefault();
-		
 		$("#dlgConfirm").dialog({
 			resizable : false,
 			height : 'auto',
 			width : 350,
 			modal : true,
 			buttons : {
-				Submit : function(){
+				Submit : function() {
 					$(this).dialog("close");
-					
+					//$("#deletewsform")[0].submit();
 					$.ajax({
-						url:"${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/adddictionaries",
+						url : "${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/adddictionaries",
 						type : "POST",
 						data :"selected="+$('#hidden').val(),
 						success : function() {
 							location.reload();
+							//alert("done");
 						},
 						error: function() {
 							alert("error");
@@ -105,55 +105,53 @@ $(function(){
 					});
 					event.preventDefault();
 				},
-				
 				Cancel : function() {
 					$(this).dialog("close");
 				}
 			}
 		});
+
 	}
+	function addDictToWorkspace(id,name){
 		
-	function addDicttoWorkspace(id,name){
-			
-			var e = document.getElementById("dlgConfirm1");
-			if(e.style.display == 'block')
-			       e.style.display = 'none';
-			    else
-			       e.style.display = 'block';
-			
-			event.preventDefault();
-			
-			$("#dlgConfirm1").dialog({
-				resizable : false,
-				height : 'auto',
-				width : 350,
-				modal : true,
-				buttons : {
-					Submit : function(){
-						$(this).dialog("close");
-						
-						$.ajax({
-							
-							url:"${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+id+"/adddictionaries",
-							type : "POST",
-							data :"selected="+$('#hidden').val(),
-							success : function() {
-								location.reload();
-							},
-							error: function() {
-								alert("error");
-							}
-						});
-						event.preventDefault();
-					},
-					
-					Cancel : function() {
-						$(this).dialog("close");
-					}
+		
+		var e = document.getElementById("dlgConfirm1");
+	    if(e.style.display == 'block')
+	       e.style.display = 'none';
+	    else
+	       e.style.display = 'block';
+		
+		event.preventDefault();
+		$("#dlgConfirm1").dialog({
+			resizable : false,
+			height : 'auto',
+			width : 350,
+			modal : true,
+			buttons : {
+				Submit : function() {
+					$(this).dialog("close");
+					//$("#deletewsform")[0].submit();
+					$.ajax({
+						url : "${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+id+"/adddictionaries",
+						type : "POST",
+						data :"selected="+$('#hidden').val(),
+						success : function() {
+							location.reload();
+							//alert("done");
+						},
+						error: function() {
+							alert("error");
+						}
+					});
+
+					event.preventDefault();
+				},
+				Cancel : function() {
+					$(this).dialog("close");
 				}
-			});			
+			}
+		});	
 	}
-			
 </script>
 
 <script>
@@ -229,16 +227,21 @@ $(function(){
 <table style="width:100%">
   <tr>
 	<td style="width:90%">
+	<div>
     <h2>Dictionary: ${dictionary.name}</h2>
     <div>${dictionary.description}</div>
     <br />
     <div class="user">Owned by: ${dictionary.owner.name}</div>
     <br />
+    <div id="html"></div>
     <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
 		value='Okay'>
 	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.id}'"
 	   value = "Edit">
+	   
+	   <input type="hidden" id="hidden" value="${dictionary.id}" />
+	</div>
 	<hr>
 <c:choose>
 	<c:when test="${additemsuccess=='1'}">
