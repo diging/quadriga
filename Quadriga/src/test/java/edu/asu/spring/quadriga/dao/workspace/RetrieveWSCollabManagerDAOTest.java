@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +22,6 @@ import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
@@ -33,7 +32,9 @@ import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
+import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
@@ -55,6 +56,12 @@ public class RetrieveWSCollabManagerDAOTest {
 	
 	@Autowired
 	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	
+	@Autowired
+	private WorkspaceCollaboratorDTOMapper collaboratorMapper;
+	
+	@Autowired
+	private ICollaboratorRoleManager collaboratorRoleManager;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -242,10 +249,12 @@ public class RetrieveWSCollabManagerDAOTest {
 		boolean isValid = true;
 		List<ICollaborator> collaborators;
 		List<ICollaborator> testCollaborators;
+		List<WorkspaceCollaboratorDTO> wrkCollabList;
+		
 		collaborators = dbConnect.getWorkspaceCollaborators("WS_1_Test");
 		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
-		IWorkSpace workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
-		testCollaborators = workspace.getCollaborators();
+		wrkCollabList = workspaceDTO.getWorkspaceCollaboratorDTOList();
+		testCollaborators = collaboratorMapper.getWorkspaceCollaborators(wrkCollabList);
 		for(ICollaborator collaborator : collaborators)
 		{
 			if(!testCollaborators.contains(collaborator))
@@ -266,7 +275,7 @@ public class RetrieveWSCollabManagerDAOTest {
 		nonCollaborators = dbConnect.getWorkspaceNonCollaborators("WS_1_Test");
 		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser4");
 		testNonCollaborators.add(userDTOMapper.getUser(user));
-		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser5");
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
 		testNonCollaborators.add(userDTOMapper.getUser(user));
 		for(IUser testUser : nonCollaborators)
 		{
@@ -285,11 +294,9 @@ public class RetrieveWSCollabManagerDAOTest {
 		List<ICollaboratorRole> collaboratorRoleList = dbConnect.getCollaboratorDBRoleIdList("wscollab_role1,wscollab_role2");
 		List<ICollaboratorRole> testCollaboratorRoleList = new ArrayList<ICollaboratorRole>();
 		ICollaboratorRole collaboratorRole;
-		collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-		collaboratorRole.setRoleDBid("wscollab_role1");
+		collaboratorRole = collaboratorRoleManager.getWSCollaboratorRoleByDBId("wscollab_role1");
 		testCollaboratorRoleList.add(collaboratorRole);
-		collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-		collaboratorRole.setRoleDBid("wscollab_role2");
+		collaboratorRole = collaboratorRoleManager.getWSCollaboratorRoleByDBId("wscollab_role2");
 		testCollaboratorRoleList.add(collaboratorRole);
 		for(ICollaboratorRole role : testCollaboratorRoleList)
 		{

@@ -68,6 +68,8 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 			projectWorkspaceList.add(projectWorkspaceDTO);
 			workspaceDTO.setProjectWorkspaceDTOList(projectWorkspaceList);
 			sessionFactory.getCurrentSession().save(workspaceDTO);
+			project.setProjectWorkspaceDTOList(projectWorkspaceList);
+			sessionFactory.getCurrentSession().update(project);
 		}
 		catch(HibernateException e)
 		{
@@ -105,7 +107,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		}
 		
 		//add the current owner as a collaborator
-		collaborator = collaboratorMapper.getWorkspaceCollaborator(workspaceDTO, oldOwner, collabRole);
+		collaborator = collaboratorMapper.getWorkspaceCollaboratorDTO(workspaceDTO, oldOwner, collabRole);
 		workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
 		
 		sessionFactory.getCurrentSession().update(workspaceDTO);
@@ -200,11 +202,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 			
 			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceDTO workspace where workspace.workspaceid IN (:workspaceIdList)");
 			query.setParameter("workspaceIdList", workspaceIdList);
-			int updatedRecordCount = query.executeUpdate();
-			if(! (updatedRecordCount > 0))
-			{
-				errMsg = "Error in deleting workspaces";
-			}
+			query.executeUpdate();
 		}
 		catch(Exception e)
 		{

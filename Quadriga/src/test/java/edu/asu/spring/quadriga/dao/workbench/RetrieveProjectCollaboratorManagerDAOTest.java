@@ -2,89 +2,53 @@ package edu.asu.spring.quadriga.dao.workbench;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.sql.DataSource;
-
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjCollabManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
-import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
-import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
+import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class RetrieveProjectCollaboratorManagerDAOTest {
-	
+@Transactional
+public class RetrieveProjectCollaboratorManagerDAOTest 
+{
 	@Autowired
-	IProjectFactory projectFactory;
-	
-	@Autowired
-	IUserFactory userFactory;
-	
-	@Autowired
-	ICollaboratorFactory collaboratorFactory;
-	
-	@Autowired
-	ICollaboratorRoleFactory collaboratorRoleFactory;
-	
-	@Autowired
-	IQuadrigaRoleFactory quadrigaRoleFactory;
+	private SessionFactory sessionFactory;
 	
 	@Autowired
 	IDBConnectionRetrieveProjCollabManager dbConnection;
 	
 	@Autowired
-	IDBConnectionModifyProjectManager dbProjectConnection;
+	private ProjectCollaboratorDTOMapper projectCollaboratorMapper;
 	
 	@Autowired
-	IDBConnectionModifyProjCollabManager dbModifyCollabConn;
+	private UserDTOMapper userMapper;
 	
-	@Autowired
-	IQuadrigaRoleManager rolemanager;
-	
-	
-	@Autowired
-	private DataSource dataSource;
-	
-	private Connection connection;
-	private static final Logger logger = LoggerFactory.getLogger(RetrieveProjectCollaboratorManagerDAOTest.class);
-	private IUser user,user1;
-	private ICollaborator collaborator,collaborator1;
-	List<ICollaborator> collaboratorList;
-
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -96,159 +60,135 @@ public class RetrieveProjectCollaboratorManagerDAOTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		user = userFactory.createUserObject();
-		user.setUserName("projuser1");
+		//create a quadriga user
+		Date date = new Date();
+		QuadrigaUserDTO user = new QuadrigaUserDTO();
+		user.setUsername("projuser1");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser1");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser1");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
 		
-		user1 = userFactory.createUserObject();
-		user1.setUserName("projuser2");
+		user = new QuadrigaUserDTO();
+		user.setUsername("projuser2");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser2");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser2");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
 		
-		List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-		IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
-		role.setDBid("role3");
-		roles.add(role);
-		IQuadrigaRole role1 = quadrigaRoleFactory.createQuadrigaRoleObject();
-		role1.setDBid("role4");
-		roles.add(role1);
+		user = new QuadrigaUserDTO();
+		user.setUsername("projuser3");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser3");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser3");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
 		
-		IQuadrigaRole quadrigaRole = null;
-		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-		for(int i=0;i<roles.size();i++)
-		{
-			quadrigaRole = rolemanager.getQuadrigaRole(roles.get(i).getDBid());
-			
-			//If user account is deactivated remove other roles 
-			if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
-			{
-				rolesList.clear();
-			}
-			
-			rolesList.add(quadrigaRole);
-		}
-			
-		user.setQuadrigaRoles(rolesList);
+		//create a project
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
+		ProjectDTO project = new ProjectDTO();
+		project.setProjectid("PROJ_1_Test");
+		project.setProjectname("testproject1");
+		project.setAccessibility("PUBLIC");
+		project.setCreatedby("projuser");
+		project.setCreateddate(date);
+		project.setUpdatedby("projuser");
+		project.setUpdateddate(date);
+		project.setUnixname("PROJ_1");
+		project.setProjectowner(user);
+		sessionFactory.getCurrentSession().save(project);
 		
-		//setting roles for collaborator
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-		ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-		collaboratorRole.setRoleDBid("cc_role1");
-		collaboratorRoles.add(collaboratorRole);
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser2");
+		List<ProjectCollaboratorDTO> projectCollaboratorList = new ArrayList<ProjectCollaboratorDTO>();
+		ProjectCollaboratorDTOPK projectCollaboratorKey = new ProjectCollaboratorDTOPK("PROJ_1_Test","projuser2","collaborator_role1");
+		ProjectCollaboratorDTO projectCollaborator = new ProjectCollaboratorDTO();
+		projectCollaborator.setProjectCollaboratorDTOPK(projectCollaboratorKey);
+		projectCollaborator.setQuadrigaUserDTO(user);
+		projectCollaborator.setProjectDTO(project);
+		projectCollaborator.setCreatedby("projuser2");
+		projectCollaborator.setCreateddate(date);
+		projectCollaborator.setUpdatedby("projuser2");
+		projectCollaborator.setUpdateddate(date);
+		sessionFactory.getCurrentSession().save(projectCollaborator);
 		
-		collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-		collaboratorRole.setRoleDBid("cc_role2");
-		collaboratorRoles.add(collaboratorRole);
-		
-		//setting collaborator object
-	    collaborator = collaboratorFactory.createCollaborator();
-		collaborator.setCollaboratorRoles(collaboratorRoles);
-		collaborator.setUserObj(user);
-		
-		//setting roles for collaborator
-		List<ICollaboratorRole> collaboratorRoles1 = new ArrayList<ICollaboratorRole>();
-		ICollaboratorRole collaboratorRole1 = collaboratorRoleFactory.createCollaboratorRoleObject();
-		collaboratorRole1.setRoleDBid("cc_role2");
-		collaboratorRoles1.add(collaboratorRole);
-		
-		//setting collaborator object
-		collaborator1 = collaboratorFactory.createCollaborator();
-		collaborator1.setCollaboratorRoles(collaboratorRoles1);
-		collaborator1.setUserObj(user1);
-		
-		//adding both collaborators in list
-		collaboratorList = new ArrayList<ICollaborator>(); 
-		collaboratorList.add(collaborator);
-		collaboratorList.add(collaborator1);
-		
-		
-		String[] databaseQuery = new String[4];
-		databaseQuery[0] = "INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,updatedby,updateddate,createdby,createddate) VALUES('test project user','projuser',null,'tpu@test.com','role3',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[1] = "INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,updatedby,updateddate,createdby,createddate) VALUES('test project user1','projuser1',null,'tpu@test.com','role3,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[2] = "INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,updatedby,updateddate,createdby,createddate) VALUES('test project user2','projuser2',null,'tpu@test.com','role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[3] = "INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,updatedby,updateddate,createdby,createddate) VALUES('test project user3','projuser3',null,'tpu@test.com','role2,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-
-		for(String query : databaseQuery)
-		{
-			 ((RetrieveProjectCollaboratorManagerDAO) dbConnection).setupTestEnvironment(query);
-		}
+		projectCollaboratorList.add(projectCollaborator);
+		project.setProjectCollaboratorDTOList(projectCollaboratorList);
+		sessionFactory.getCurrentSession().update(project);
 	}
 	
-	public void getConnection(){
-		try
-		{
-			connection = dataSource.getConnection();
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public String getProjectId(String name){
-		
-		getConnection();
-		String id=null;
-		
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.execute("select projectid from tbl_project where projectname='"+name+"'");
-			ResultSet resultSet = stmt.getResultSet();
-			if(resultSet!=null)
-			{
-				while(resultSet.next())
-				{
-					id = resultSet.getString(1);
-				}
-			}
-		logger.info("id "+id);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return id;
-	}
-		
-
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws Exception 
+	{
 		
-		String[] databaseQuery = new String[3];
-		databaseQuery[0] = "DELETE FROM tbl_project_collaborator";
-		databaseQuery[1] = "DELETE FROM tbl_project";
-		databaseQuery[2] = "DELETE FROM tbl_quadriga_user";
-		for(String query : databaseQuery)
+		ProjectCollaboratorDTOPK projectCollaboratorKey = new ProjectCollaboratorDTOPK("PROJ_1_Test","projuser2","collaborator_role1");
+		ProjectCollaboratorDTO projectCollaborator = (ProjectCollaboratorDTO) sessionFactory.getCurrentSession().get(ProjectCollaboratorDTO.class, projectCollaboratorKey);
+		sessionFactory.getCurrentSession().delete(projectCollaborator);
+		
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		sessionFactory.getCurrentSession().delete(project);
+		
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
+		sessionFactory.getCurrentSession().delete(user);
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser2");
+		sessionFactory.getCurrentSession().delete(user);
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
+		sessionFactory.getCurrentSession().delete(user);
+	}
+	
+	@Test
+	public void testGetProjectCollaborators() throws QuadrigaStorageException
+	{
+		int numberOfCollaborators = 0;
+		List<ICollaborator> collaborators = dbConnection.getProjectCollaborators("PROJ_1_Test");
+		
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		
+		List<ICollaborator> testCollaborators = projectCollaboratorMapper.getProjectCollaboratorList(project);
+		
+		for(ICollaborator user : collaborators)
 		{
-			((RetrieveProjectCollaboratorManagerDAO)dbConnection).setupTestEnvironment(query);
-		}	
+			if(testCollaborators.contains(user))
+			{
+				numberOfCollaborators = numberOfCollaborators + 1;
+			}
+		}
+		
+		int size = collaborators.size();
+		
+		assertEquals(size,numberOfCollaborators);
 	}
 
 	@Test
-	@Ignore
 	public void getProjectNonCollaboratorsTest() throws QuadrigaStorageException {
 		
-		IProject project;
-		IUser owner;
+		boolean isNonCollaborator  = false;
+		List<IUser> nonCollaborators = dbConnection.getProjectNonCollaborators("PROJ_1_Test");
 		
-		project = projectFactory.createProjectObject();
-		project.setName("testupdateproject");
-		project.setDescription("test case data");
-		project.setUnixName("testproject2");
-		project.setProjectAccess(EProjectAccessibility.PUBLIC);
-		project.setInternalid("PROJ_2");
-
-		owner = userFactory.createUserObject();
-		owner.setUserName("projuser");
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
+		IUser testUser = userMapper.getUser(user);
 		
-		project.setOwner(owner);
+		if(nonCollaborators.size() > 1)
+		{
+			fail();
+		}
 		
-		dbProjectConnection.addProjectRequest(project,owner.getUserName());
-		
-		dbModifyCollabConn.addCollaboratorRequest(collaborator, getProjectId(project.getName()), owner.getUserName());
-		
-
-		assertTrue(true);
-		
-		List<IUser> collaborators = dbConnection.getProjectNonCollaborators(getProjectId(project.getName()));
-		assertEquals(2,collaborators.size());
-		
+		for(IUser tempUser : nonCollaborators)
+		{
+			if(tempUser.equals(testUser))
+				isNonCollaborator = true;
+		}
+		assertTrue(isNonCollaborator);
 		
 	}
 

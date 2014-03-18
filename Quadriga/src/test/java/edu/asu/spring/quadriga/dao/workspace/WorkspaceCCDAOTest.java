@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
@@ -50,6 +51,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class WorkspaceCCDAOTest {
 
 	@Autowired
@@ -206,7 +208,7 @@ public class WorkspaceCCDAOTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -316,7 +318,7 @@ public class WorkspaceCCDAOTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -426,7 +428,7 @@ public class WorkspaceCCDAOTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -504,7 +506,9 @@ public class WorkspaceCCDAOTest {
 
 		{
 			try {
-				dbConnectionWorkspaceConceptColleciton.addWorkspaceCC("1", getCCID("Test CC"), "jdoe");
+				String conceptCollectionId =  getCCID("Test CC");
+				System.out.println("Testing :"+conceptCollectionId);
+				dbConnectionWorkspaceConceptColleciton.addWorkspaceCC("1",conceptCollectionId , "jdoe");
 			} catch (QuadrigaStorageException e) {
 				e.printStackTrace();
 			}

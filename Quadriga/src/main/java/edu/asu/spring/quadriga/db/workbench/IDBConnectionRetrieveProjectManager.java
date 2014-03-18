@@ -90,5 +90,13 @@ public interface IDBConnectionRetrieveProjectManager
 
 	public abstract List<IProject> getProjectsByConceptCollection(String ccId)
 			throws QuadrigaStorageException;
+	
+	/**
+	 * This method executes the query utilized in setting up test environment
+	 * @param sQuery
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 
 }

@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.db.workspace;
 
-import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionWSAccessManager 
@@ -70,7 +69,7 @@ public interface IDBConnectionWSAccessManager
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract boolean chkIsCollaboratorWorkspaceAssociated(String userName,
-			String role) throws QuadrigaStorageException,QuadrigaAccessException;
+			String role) throws QuadrigaStorageException;
 	
 
 }
