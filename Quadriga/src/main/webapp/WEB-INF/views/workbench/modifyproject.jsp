@@ -29,9 +29,31 @@ $(document).ready(function(){
 		location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
 	}
 	
+	function cancel(){
+		
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
+	}
+	
 </script>
-<article class="is-page-content">
 
+<style>
+div.projectDiv {
+    position:relative;
+    width:300px;
+    height:30px;
+    border:1px solid;
+    text-align:center;
+}
+
+input {
+    position:relative;
+    width:125px;
+    height:30px;
+}
+</style>
+
+<article class="is-page-content">
+<div id="projectDiv">
 	<form:form commandName="project" method="POST"
 		action="/auth/workbench/modifyproject/${project.internalid}">
 				<c:choose>
@@ -61,7 +83,7 @@ $(document).ready(function(){
 						<td><form:errors path="projectAccess" class="ui-state-error-text"></form:errors></td>
 					</tr>
 			<tr>
-				<td>Unix name:</td>
+				<td>Custom URL:</td>
 				<td><form:input path="unixName" size="60" id="unixName" /></td>
 				<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
 			</tr>
@@ -84,7 +106,9 @@ $(document).ready(function(){
 			</c:choose>
 
 	</form:form>
-
+	<input type="submit" value="Cancel" onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench'">
+</div>
 </article>
+
 
 <!-- /Content -->

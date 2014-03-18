@@ -49,7 +49,7 @@ function onSubmit(){
 </script>
 	<form:form commandName="collaborator" method="POST"
 		action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspaceid}/addcollaborators">
-  <h2>Associate collaborators to workspace:</h2>
+  <h2>Project collaborators:</h2>
 <h3>Workspace: ${workspacename}</h3>
 <div>${workspacedesc}</div>
 		<c:if test="${not empty noncollabusers}">
@@ -79,14 +79,14 @@ function onSubmit(){
 		
 		<c:if test="${empty noncollabusers}">
 		<hr>
-          <span class="byline">All collaborators are associated to the workspace</span>	
+          <span class="byline">All Quadriga users are already added to workspace</span>	
           <input type="button" value="Done" onClick="onSubmit()">	   
 		</c:if>
 		</form:form>
 		
 		<c:if test="${not empty collaboratingusers}">
 		<hr>
-		<span class="byline">Associated workspace collaborators :</span>
+		<span class="byline">List of workspace collaborators:</span>
 		<table style="width: 100%" class="display dataTable" id="collabaratinguserlist">
 		   <thead>
 		<tr>	

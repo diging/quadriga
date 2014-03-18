@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -53,6 +55,9 @@ public class DictionaryItemController {
 	
 	@Autowired
 	IRetrieveDictionaryManager retrieveDictionaryManager;
+	
+	@Autowired
+	IDictionaryFactory dictionaryFactory;
 
 	public IRetrieveDictionaryManager getRetrieveDictionaryManager() {
 		return retrieveDictionaryManager;
@@ -94,12 +99,13 @@ public class DictionaryItemController {
 	 * @return Return to the list dictionary items page of the Quadriga
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException 
+	 * @throws JSONException 
 	 */
 
 	@RequestMapping(value = "auth/dictionaries/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryPage(
 			@PathVariable("dictionaryid") String dictionaryid, ModelMap model, Principal principal)
-					throws QuadrigaStorageException, QuadrigaAccessException {
+					throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		
 		//fetch the dictionary details
 		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
@@ -115,7 +121,16 @@ public class DictionaryItemController {
 		List<ICollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
 		model.addAttribute("collaboratingUsers", existingCollaborators);
 
-		return "auth/dictionary/dictionary";
+		
+	    IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
+	    dictionaryObj.setId(dictionaryid);
+	    dictionaryObj = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
+	   
+	    String jsonTreeData = dictonaryManager.getProjectsTree(userName, dictionaryid);
+	    model.addAttribute("core", jsonTreeData);
+
+	  
+	   return "auth/dictionary/dictionary";
 	}
 
 	

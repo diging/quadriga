@@ -12,12 +12,15 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 
 @Repository
 public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBConnectionWorkspaceDictionary 
@@ -25,6 +28,12 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 	
 	@Autowired
 	DictionaryDTOMapper dictionaryMapper;
+	
+	@Autowired
+	WorkspaceDTOMapper workspaceDTOMapper;
+	
+	@Autowired
+	WorkspaceCollaboratorDTOMapper collaboratorDTOMapper;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -192,6 +201,29 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 			throw new QuadrigaStorageException();
 		}
 		
+	}
+
+	@Override
+	public List<IWorkSpace> getWorkspaceByDictId(String dictionaryId) throws QuadrigaStorageException {
+
+		List<IWorkSpace> workspaces = new ArrayList<IWorkSpace>();
+		
+		DictionaryDTO dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
+		
+		List<WorkspaceDictionaryDTO> workspaceDTOList = dictionaryDTO.getWsDictionaryDTOList();
+		
+		for(WorkspaceDictionaryDTO workspaceDictionaryDTO : workspaceDTOList)
+		{
+			WorkspaceDTO workspaceDTO = workspaceDictionaryDTO.getWorkspaceDTO();
+			
+			if(workspaceDTO != null)
+			{
+				IWorkSpace workSpace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
+				workspaces.add(workSpace);
+			}
+		}
+		
+		return workspaces;
 	}
 
 }

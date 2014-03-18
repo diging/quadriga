@@ -3,6 +3,9 @@ package edu.asu.spring.quadriga.service.impl.dictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,16 +16,25 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
+import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 /**
  * This class acts as a Dictionary manager which adds list of Dictionary words
@@ -63,7 +75,19 @@ public class DictionaryManager implements IDictionaryManager {
 	private IDBConnectionDictionaryManager dbConnect;
 
 	@Autowired
-	DictionaryItemsFactory dictionaryItemsFactory;
+	private DictionaryItemsFactory dictionaryItemsFactory;
+	
+	@Autowired
+	private IDBConnectionProjectDictionary connectProjectDictionary;
+	
+	@Autowired
+	private IRetrieveProjectManager retrieveProjectManager;
+	
+	@Autowired
+	private IDBConnectionWorkspaceDictionary connectWorkspaceDictionary;
+	
+	@Autowired
+	private IListWSManager wsManager;
 
 	/**
 	 * Gets the searchWordPowerURL
@@ -520,4 +544,80 @@ public class DictionaryManager implements IDictionaryManager {
 		String dictId = dbConnect.getDictionaryId(dictName);
 		return dictId;
 	}
+	
+	
+	@Override
+	@Transactional
+	public String getProjectsTree(String userName, String dictionaryId) throws QuadrigaStorageException, JSONException {
+		
+		JSONObject core = new JSONObject();
+		
+		List<IProject> projectList = retrieveProjectManager.getProjectList(userName);
+		JSONArray dataArray = new JSONArray();
+        
+        List<IProject> dictProjectList = connectProjectDictionary.getprojectsByDictId(dictionaryId);
+        List<IWorkSpace> dictWorkspaceList = connectWorkspaceDictionary.getWorkspaceByDictId(dictionaryId);
+
+        for(IProject project : projectList)
+        {
+        	JSONObject data = new JSONObject();
+        	String projectlink = null;
+        	data.put("id", project.getInternalid());
+        	data.put("parent", "#");
+        	
+        	if(dictProjectList.contains(project))
+        	{
+        		projectlink = project.getName();
+        	}
+        	else
+        	{
+        		projectlink = "<a href='#' id='"
+        				     +project.getInternalid()
+        				     +"'name= '"
+        				     +project.getName()
+        				     +"'onclick='javascript:addDictToProjects(this.id,this.name);'>"
+        				     +project.getName()
+        				     +"</a>";
+        	}
+        	
+        	data.put("text", projectlink);
+        	dataArray.put(data);
+        	
+        	String wsParent = project.getInternalid();
+        	List<IWorkSpace> wsList = wsManager.listActiveWorkspace(wsParent, userName);
+        	
+        	for(IWorkSpace workSpace: wsList)
+        	{
+        		JSONObject data1 = new JSONObject();
+				data1.put("id", workSpace.getId());
+				data1.put("parent", wsParent);
+				String wsLink = null;
+				if(dictWorkspaceList.contains(workSpace))
+				{
+					wsLink = workSpace.getName();
+				}
+				else{
+					
+					wsLink = "<a href ='#' id='"
+					         + workSpace.getId()
+					         + "' name='"
+					         + workSpace.getName()
+					         + "' onclick='javascript:addDicttoWorkspace(this.id,this.name);' >"
+					         + workSpace.getName() + "</a>";
+				   }
+				
+				data1.put("text", wsLink);
+				dataArray.put(data1);
+        	}
+        	
+        }
+        
+        JSONObject dataList = new JSONObject();
+		dataList.put("data", dataArray);
+		
+		core.put("core", dataList);
+      
+		return core.toString(1);
+	}
+
 }

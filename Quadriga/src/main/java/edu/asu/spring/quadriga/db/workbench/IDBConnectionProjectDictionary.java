@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.db.workbench;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionProjectDictionary {
@@ -36,5 +37,7 @@ public interface IDBConnectionProjectDictionary {
 	 */
 	public abstract  void deleteProjectDictionary(String projectId, String userId,
 			String dictioanaryId) throws QuadrigaStorageException;
+	
+	public abstract List<IProject> getprojectsByDictId(String dictionaryId) throws QuadrigaStorageException;
 
 }

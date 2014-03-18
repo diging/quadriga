@@ -7,5 +7,5 @@ public interface IRetrieveDictionaryManager {
 
 	public abstract IDictionary getDictionaryDetails(String dictionaryId)
 			throws QuadrigaStorageException;
-
+	
 }

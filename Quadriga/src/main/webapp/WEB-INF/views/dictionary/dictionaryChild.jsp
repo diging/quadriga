@@ -10,8 +10,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 
-<script type="text/javascript" charset="utf8">
+<script type="text/javascript">
 	$(document).ready(function() {
 		$('#selectall').click(function() {
 			$('.selected').prop('checked', isChecked('selectall'));
@@ -60,6 +63,97 @@
 
 		});
 	});
+	
+	
+$(function(){
+		
+		var data = ${core};
+		console.log(data);
+		$('#html').jstree(data
+		);
+});
+
+	function addDictToProjects(id,name){
+		
+		var e = document.getElementById("dlgConfirm");
+		if(e.style.display == 'block')
+		       e.style.display = 'none';
+		    else
+		       e.style.display = 'block';
+		
+		event.preventDefault();
+		
+		$("#dlgConfirm").dialog({
+			resizable : false,
+			height : 'auto',
+			width : 350,
+			modal : true,
+			buttons : {
+				Submit : function(){
+					$(this).dialog("close");
+					
+					$.ajax({
+						url:"${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/adddictionaries",
+						type : "POST",
+						data :"selected="+$('#hidden').val(),
+						success : function() {
+							location.reload();
+						},
+						error: function() {
+							alert("error");
+						}
+					});
+					event.preventDefault();
+				},
+				
+				Cancel : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+		
+	function addDicttoWorkspace(id,name){
+			
+			var e = document.getElementById("dlgConfirm1");
+			if(e.style.display == 'block')
+			       e.style.display = 'none';
+			    else
+			       e.style.display = 'block';
+			
+			event.preventDefault();
+			
+			$("#dlgConfirm1").dialog({
+				resizable : false,
+				height : 'auto',
+				width : 350,
+				modal : true,
+				buttons : {
+					Submit : function(){
+						$(this).dialog("close");
+						
+						$.ajax({
+							
+							url:"${pageContext.servletContext.contextPath}/auth/workbench/workspace/"+id+"/adddictionaries",
+							type : "POST",
+							data :"selected="+$('#hidden').val(),
+							success : function() {
+								location.reload();
+							},
+							error: function() {
+								alert("error");
+							}
+						});
+						event.preventDefault();
+					},
+					
+					Cancel : function() {
+						$(this).dialog("close");
+					}
+				}
+			});			
+	}
+			
 </script>
 
 <script>
@@ -115,6 +209,8 @@
 							}
 						});
 	}
+	
+
 </script>
 
 <div id="dialog-message" title="Confirm ?"></div>
@@ -262,3 +358,10 @@
 </td>
 </tr>
 </table>
+
+<div id="dlgConfirm" title="Confirmation" style="display: none">
+			 <p> Do you wanna add concept collection to this project? </p>
+		</div>
+		<div id="dlgConfirm1" title="Confirmation" style="display: none">
+			 <p> Do you wanna add concept collection to this workspace? </p>
+		</div>
