@@ -602,7 +602,7 @@ public class DictionaryManager implements IDictionaryManager {
 					         + workSpace.getId()
 					         + "' name='"
 					         + workSpace.getName()
-					         + "' onclick='javascript:addDicttoWorkspace(this.id,this.name);' >"
+					         + "' onclick='javascript:addDictToWorkspace(this.id,this.name);' >"
 					         + workSpace.getName() + "</a>";
 				   }
 				
