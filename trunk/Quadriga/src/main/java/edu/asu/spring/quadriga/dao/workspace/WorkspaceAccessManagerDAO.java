@@ -181,16 +181,18 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 	 */
 	@Override
 	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,
-			String role) throws QuadrigaStorageException, QuadrigaAccessException 
+			String role) throws QuadrigaStorageException 
 	{
 		int count;
 		boolean isAssociated;
 		try
 		{
 			isAssociated = false;
-			Query query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(w.workspaceid) FROM WorkspaceCollaboratorDTO w" +
+			Query query = sessionFactory.getCurrentSession().createQuery("SELECT COUNT(w.workspaceCollaboratorDTOPK.workspaceid) FROM WorkspaceCollaboratorDTO w" +
 					" WHERE w.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser AND " +
 					" w.workspaceCollaboratorDTOPK.collaboratorrole = :collaboratorrole");
+			query.setParameter("collaboratoruser", userName);
+			query.setParameter("collaboratorrole", role);
 			count = ((Long)query.iterate().next()).intValue();
 			if(count > 0)
 			{
@@ -203,7 +205,7 @@ public class WorkspaceAccessManagerDAO extends DAOConnectionManager implements I
 		}
 		catch(Exception ex)
 		{
-			throw new QuadrigaAccessException();
+			throw new QuadrigaStorageException();
 		}
 		return isAssociated;
 	}

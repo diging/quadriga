@@ -1,11 +1,7 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -27,6 +23,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -35,6 +32,9 @@ public class RetrieveWSCollabManagerDAO extends DAOConnectionManager implements 
 
 	@Autowired
 	SessionFactory sessionFactory;
+	
+	@Autowired
+	private WorkspaceCollaboratorDTOMapper wsCollaboratorMapper;
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
@@ -59,51 +59,18 @@ public class RetrieveWSCollabManagerDAO extends DAOConnectionManager implements 
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<ICollaborator> getWorkspaceCollaborators(String workspaceId)
 			throws QuadrigaStorageException 
 	{
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		List<ICollaborator> wrkspaceCollabList = new ArrayList<ICollaborator>();
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from WorkspaceCollaboratorDTO wrkspaceCollab where wrkspaceCollab.workspaceCollaboratorDTOPK.workspaceid =:id");
 			query.setParameter("id", workspaceId);
+			@SuppressWarnings("unchecked")
 			List<WorkspaceCollaboratorDTO> wrkCollabList = query.list();
-			
-			if(wrkCollabList != null && wrkCollabList.size() > 0)
-			{
-				Iterator<WorkspaceCollaboratorDTO> wrkCollabIterator = wrkCollabList.iterator();
-				HashMap<String, String> userRoleMap = new HashMap<String, String>();
-				while(wrkCollabIterator.hasNext())
-				{
-					WorkspaceCollaboratorDTO workCollabDTO = wrkCollabIterator.next();
-					if(userRoleMap.containsKey(workCollabDTO.getQuadrigaUserDTO().getUsername()))
-					{
-						String updatedRoleStr = userRoleMap.get(workCollabDTO.getQuadrigaUserDTO().getUsername()).concat(workCollabDTO.getWorkspaceCollaboratorDTOPK().getCollaboratorrole()+",");
-						userRoleMap.put(workCollabDTO.getQuadrigaUserDTO().getUsername(), updatedRoleStr);
-					}
-					else
-					{
-						userRoleMap.put(workCollabDTO.getQuadrigaUserDTO().getUsername(),workCollabDTO.getWorkspaceCollaboratorDTOPK().getCollaboratorrole()+",");
-					}
-				}
-				
-				Iterator<Entry<String, String>> userRoleMapItr = userRoleMap.entrySet().iterator();
-				while(userRoleMapItr.hasNext())
-				{
-					Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
-					ICollaborator collaborator = collaboratorFactory.createCollaborator();
-					IUser user = userFactory.createUserObject();
-					user = userManager.getUserDetails((String) pairs.getKey());
-					collaborator.setUserObj(user);
-					String userRoleList = (String) pairs.getValue();
-					collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));
-					collaborator.setCollaboratorRoles(collaboratorRoles);
-					wrkspaceCollabList.add(collaborator);
-				}
-			}	
+			wrkspaceCollabList = wsCollaboratorMapper.getWorkspaceCollaborators(wrkCollabList);
 		}
 		catch(Exception e)
 		{
@@ -165,34 +132,9 @@ public class RetrieveWSCollabManagerDAO extends DAOConnectionManager implements 
 		
 		for(String dbRoleId : roleList)
 		{
-			role = collaboratorRoleFactory.createCollaboratorRoleObject();
-			role.setRoleDBid(dbRoleId);
+			role = collaboratorRoleManager.getWSCollaboratorRoleByDBId(dbRoleId);
 			collaboratorRole.add(role);
 		}
 		return collaboratorRole;
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role) {
-		if(role == null || role.isEmpty())
-		{
-			logger.error("splitAndgetCollaboratorRolesList: input argument role is null");
-			return null;
-		}
-		String[] collabroles;
-		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
-		ICollaboratorRole collaboratorRole = null;
-
-		collabroles = role.split(",");
-
-		for (int i = 0; i < collabroles.length; i++) {
-			collaboratorRole = collaboratorRoleManager.getWSCollaboratorRoleByDBId(collabroles[i]);
-			collaboratorRoleList.add(collaboratorRole);
-		}
-
-		return collaboratorRoleList;
-	}
-	
 }

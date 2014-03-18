@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.dao.workbench.RetrieveProjectManagerDAO;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
@@ -40,6 +40,9 @@ public class RetrieveProjectManagerDAOTest {
     private IUserManager userManager;
 	
 	@Autowired
+	IDBConnectionRetrieveProjectManager dbConnect;
+	
+	@Autowired
 	IRetrieveProjectManager retrieveProjectManager;
 	
 	@BeforeClass
@@ -54,11 +57,11 @@ public class RetrieveProjectManagerDAOTest {
 	public void setUp() throws Exception {
 		String[] databaseQuery = new String[3];
 		databaseQuery[0] = "INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,updatedby,updateddate,createdby,createddate) VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[1] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject1','test case data','testproject1','PROJ_1','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[2] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[1] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject1','test case data','testproject1','PROJ_1','projuser','PUBLIC',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[2] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','PUBLIC',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
 		for(String query : databaseQuery)
 		{
-			((RetrieveProjectManagerDAO)retrieveProjectManager).setupTestEnvironment(query);
+			dbConnect.setupTestEnvironment(query);
 		}
 	}
 
@@ -69,7 +72,7 @@ public class RetrieveProjectManagerDAOTest {
 		databaseQuery[1] = "DELETE FROM tbl_quadriga_user WHERE username = 'projuser'";
 		for(String query : databaseQuery)
 		{
-			((RetrieveProjectManagerDAO)retrieveProjectManager).setupTestEnvironment(query);
+			dbConnect.setupTestEnvironment(query);
 		}		
 	}
 
@@ -121,7 +124,7 @@ public class RetrieveProjectManagerDAOTest {
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
 		project.setInternalid("PROJ_1");
-		project.setProjectAccess(EProjectAccessibility.valueOf("ACCESSIBLE"));
+		project.setProjectAccess(EProjectAccessibility.valueOf("PUBLIC"));
 		user = userManager.getUserDetails("projuser");
 		project.setOwner(user);
 		testProject = retrieveProjectManager.getProjectDetails("PROJ_1");

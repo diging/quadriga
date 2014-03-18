@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
@@ -47,6 +48,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class ProjectDictionaryDAOTest {
 
 	@Autowired
@@ -169,7 +171,7 @@ public class ProjectDictionaryDAOTest {
 		String id = null;
 		try {
 			Statement stmt = connection.createStatement();
-			stmt.execute("select id from tbl_dictionary where dictionaryName='"
+			stmt.execute("select dictionaryid from tbl_dictionary where dictionaryName='"
 					+ name + "'");
 			ResultSet rs = stmt.getResultSet();
 			if (rs != null) {
@@ -201,7 +203,7 @@ public class ProjectDictionaryDAOTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -298,7 +300,7 @@ public class ProjectDictionaryDAOTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");
@@ -392,7 +394,7 @@ public class ProjectDictionaryDAOTest {
 		testSetupTestEnvironment();
 		{
 			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','ACCESSIBLE','jdoe',NOW(),'jdoe',NOW());");
+					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
 			IProject project1 = null;
 			try {
 				project1 = retrieveProjectManager.getProjectDetails("1");

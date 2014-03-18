@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -23,6 +24,7 @@ import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class ModifyWSManagerTest {
 
 	@Autowired
@@ -77,6 +79,7 @@ public class ModifyWSManagerTest {
 	}
 
 	@Test
+	@Transactional
 	public void testAddWorkSpaceRequest() throws QuadrigaStorageException {
 		IUser user;
 		IWorkSpace workspace;
@@ -94,6 +97,7 @@ public class ModifyWSManagerTest {
 	}
 
 	@Test
+	@Transactional
 	public void testDeleteWorkspaceRequest() throws QuadrigaStorageException {
 		String errmsg;
 		

@@ -108,7 +108,7 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 		isCollaborator = false;
 		int count;
 		
-		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole AND pc.projectid =:projectId");
+		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole AND pc.projectCollaboratorDTOPK.projectid =:projectId");
 		query.setParameter("userName", userName);
 		query.setParameter("collaboratorRole", collaboratorRole);
 		query.setParameter("projectId",projectId);

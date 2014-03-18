@@ -12,13 +12,16 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSCollabManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
@@ -27,8 +30,13 @@ import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+"file:src/test/resources/root-context.xml" })
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class WorkspaceCollaboratorManagerDAOTest {
 	
 	@Autowired
@@ -42,6 +50,9 @@ public class WorkspaceCollaboratorManagerDAOTest {
 	
 	@Autowired
 	private IDBConnectionRetrieveWSCollabManager dbRetrieveConnect;
+	
+	@Autowired
+	private WorkspaceCollaboratorDTOMapper collaboratorMapper;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -57,11 +68,11 @@ public class WorkspaceCollaboratorManagerDAOTest {
 		//create a quadriga user
 		Date date = new Date();
 		QuadrigaUserDTO user = new QuadrigaUserDTO();
-		user.setUsername("projuser");
+		user.setUsername("projuser1");
 		user.setFullname("test project user");
-		user.setCreatedby("projuser");
+		user.setCreatedby("projuser1");
 		user.setCreateddate(date);
-		user.setUpdatedby("projuser");
+		user.setUpdatedby("projuser1");
 		user.setUpdateddate(date);
 		user.setEmail("tpu@test.com");
 		user.setQuadrigarole("role1,role4");
@@ -180,14 +191,16 @@ public class WorkspaceCollaboratorManagerDAOTest {
 	}
 
 	@Test
-	public void testAddWorkspaceCollaborator(String collaborator,String collabRoleList,String workspaceid,String userName) throws QuadrigaStorageException 
+	public void testAddWorkspaceCollaborator() throws QuadrigaStorageException 
 	{
 		boolean isSuccessful = true;
+		List<WorkspaceCollaboratorDTO> wrkCollabList;
+		
 		dbConnect.addWorkspaceCollaborator("projuser3","wscollab_role1", "WS_1_Test", "projuser1");
 		List<ICollaborator> collaborators = dbRetrieveConnect.getWorkspaceCollaborators("WS_1_Test");
 		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
-		IWorkSpace workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
-		List<ICollaborator> testCollaborators = workspace.getCollaborators();
+		wrkCollabList = workspaceDTO.getWorkspaceCollaboratorDTOList();
+		List<ICollaborator> testCollaborators = collaboratorMapper.getWorkspaceCollaborators(wrkCollabList);
 		for(ICollaborator user : testCollaborators)
 		{
 			if(!collaborators.contains(user))
@@ -200,13 +213,14 @@ public class WorkspaceCollaboratorManagerDAOTest {
 	}
 	
 	@Test
-	public void testDeleteWorkspaceCollaborator(String collaborator,String workspaceid) throws QuadrigaStorageException 
+	public void testDeleteWorkspaceCollaborator() throws QuadrigaStorageException 
 	{
 		boolean isSuccessful = true;
+		List<WorkspaceCollaboratorDTO> wrkCollabList;
 		dbConnect.deleteWorkspaceCollaborator("projuser2","WS_1_Test");
 		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
-		IWorkSpace workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
-		List<ICollaborator> testCollaborators = workspace.getCollaborators();
+		wrkCollabList = workspaceDTO.getWorkspaceCollaboratorDTOList();
+		List<ICollaborator> testCollaborators = collaboratorMapper.getWorkspaceCollaborators(wrkCollabList);
 		for(ICollaborator collabUser : testCollaborators)
 		{
 			if(collabUser.getUserObj().getUserName().equals("projuser2"))
@@ -218,13 +232,14 @@ public class WorkspaceCollaboratorManagerDAOTest {
 	}
 	
 	@Test
-	public void updateWorkspaceCollaborator(String workspaceId,String collabUser,String collaboratorRole,String userName) throws QuadrigaStorageException 
+	public void updateWorkspaceCollaborator() throws QuadrigaStorageException 
 	{
 		boolean isSuccessful = false;
+		List<WorkspaceCollaboratorDTO> wrkCollabList;
 		dbConnect.updateWorkspaceCollaborator("WS_1_Test", "projuser3","wscollab_role2", "projuser1");
 		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
-		IWorkSpace workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
-		List<ICollaborator> testCollaborators = workspace.getCollaborators();
+		wrkCollabList = workspaceDTO.getWorkspaceCollaboratorDTOList();
+		List<ICollaborator> testCollaborators = collaboratorMapper.getWorkspaceCollaborators(wrkCollabList);
 		for(ICollaborator user : testCollaborators)
 		{
 			if(user.getUserObj().getUserName().equals("projuser3")) 

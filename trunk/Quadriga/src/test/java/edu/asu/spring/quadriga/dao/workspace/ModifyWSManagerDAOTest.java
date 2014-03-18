@@ -254,7 +254,6 @@ public class ModifyWSManagerDAOTest {
         projectWorkspace.setUpdateddate(date);
         sessionFactory.getCurrentSession().save(projectWorkspace);
         projectWorkspaceList.add(projectWorkspace);
-        
         project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
         project.setProjectWorkspaceDTOList(projectWorkspaceList);
         sessionFactory.getCurrentSession().update(project);
@@ -347,7 +346,7 @@ public class ModifyWSManagerDAOTest {
 		for(ProjectWorkspaceDTO tempProjectWorkspace : projectWorkspace)
 		{
 			testWorkspace = workspaceDTOMapper.getWorkSpace(tempProjectWorkspace.getWorkspaceDTO());
-			if(testWorkspace.equals(workspace))
+			if(testWorkspace.getName().equals(workspace.getName()) && testWorkspace.getOwner().equals(user))
 			{
 				isExists = true;
 			}

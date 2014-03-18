@@ -57,11 +57,11 @@ public class WorkspaceAccessManagerDAOTest {
 		//create a quadriga user
 		Date date = new Date();
 		QuadrigaUserDTO user = new QuadrigaUserDTO();
-		user.setUsername("projuser");
+		user.setUsername("projuser1");
 		user.setFullname("test project user");
-		user.setCreatedby("projuser");
+		user.setCreatedby("projuse1r");
 		user.setCreateddate(date);
-		user.setUpdatedby("projuser");
+		user.setUpdatedby("projuser1");
 		user.setUpdateddate(date);
 		user.setEmail("tpu@test.com");
 		user.setQuadrigarole("role1,role4");
@@ -90,6 +90,7 @@ public class WorkspaceAccessManagerDAOTest {
 		sessionFactory.getCurrentSession().save(user);
 		
 		//create a project
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
 		List<ProjectWorkspaceDTO> projectWorkspaceList = new ArrayList<ProjectWorkspaceDTO>();
 		ProjectDTO project = new ProjectDTO();
 		project.setProjectid("PROJ_1_Test");
@@ -204,15 +205,14 @@ public class WorkspaceAccessManagerDAOTest {
 	}
 
 	@Test
-	public void testchkWorkspaceOwner(String userName, String workspaceId) throws QuadrigaStorageException{
+	public void testchkWorkspaceOwner() throws QuadrigaStorageException{
 		boolean isOwner = false;
 		isOwner = dbConnect.chkWorkspaceOwner("projuser1", "WS_1_Test");
 		assertTrue(isOwner);
 	}
 	
 	@Test
-	public void testChkWorkspaceOwnerEditorRole(String userName,
-			String workspaceId) throws QuadrigaStorageException 
+	public void testChkWorkspaceOwnerEditorRole() throws QuadrigaStorageException 
 	{
 		boolean isEditor = false;
 		isEditor = dbConnect.chkWorkspaceOwnerEditorRole("projuser1", "WS_1_Test");
@@ -220,8 +220,7 @@ public class WorkspaceAccessManagerDAOTest {
 	}
 	
 	@Test
-	public void testChkWorkspaceProjectInheritOwnerEditorRole(String userName,
-			String workspaceId) throws QuadrigaStorageException
+	public void testChkWorkspaceProjectInheritOwnerEditorRole() throws QuadrigaStorageException
 	{
 		boolean isEditor = false;
 		isEditor = dbConnect.chkWorkspaceProjectInheritOwnerEditorRole("projuser1", "WS_1_Test");
@@ -229,7 +228,7 @@ public class WorkspaceAccessManagerDAOTest {
 	}
 	
 	@Test
-	public void testChkWorkspaceExists(String workspaceId) throws QuadrigaStorageException
+	public void testChkWorkspaceExists() throws QuadrigaStorageException
 	{
 		boolean isExists = false;
 		isExists = dbConnect.chkWorkspaceExists("WS_1_Test");
@@ -237,7 +236,7 @@ public class WorkspaceAccessManagerDAOTest {
 	}
 	
 	@Test
-	public void testChkIsWorkspaceAssocaited(String userName) throws QuadrigaStorageException
+	public void testChkIsWorkspaceAssocaited() throws QuadrigaStorageException
 	{
 		boolean isAssociated = false;
 		isAssociated = dbConnect.chkIsWorkspaceAssocaited("projuser1");
@@ -246,8 +245,7 @@ public class WorkspaceAccessManagerDAOTest {
 	}
 	
 	@Test
-	public void testChkIsCollaboratorWorkspaceAssociated(String userName,
-			String role) throws QuadrigaStorageException, QuadrigaAccessException
+	public void testChkIsCollaboratorWorkspaceAssociated() throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		boolean isAssociated = false;
 		isAssociated = dbConnect.chkIsCollaboratorWorkspaceAssociated("projuser2","wscollab_role1");

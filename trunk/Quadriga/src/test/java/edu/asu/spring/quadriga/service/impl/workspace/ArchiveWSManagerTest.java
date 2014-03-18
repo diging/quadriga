@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionArchiveWSManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -19,6 +20,7 @@ import edu.asu.spring.quadriga.service.workspace.IArchiveWSManager;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
 public class ArchiveWSManagerTest {
 
 	@Autowired
@@ -64,24 +66,28 @@ public class ArchiveWSManagerTest {
 	}
 
 	@Test
+	@Transactional
 	public void testArchiveWorkspace() throws QuadrigaStorageException {
 		wsManager.archiveWorkspace("WS_1", "projuser");
 		assertTrue(true);
 	}
 
 	@Test
+	@Transactional
 	public void testUnArchiveWorkspace() throws QuadrigaStorageException {
 		wsManager.unArchiveWorkspace("WS_1", "projuser");
 		assertTrue(true);
 	}
 
 	@Test
+	@Transactional
 	public void testDeactivateWorkspace() throws QuadrigaStorageException {
 		wsManager.deactivateWorkspace("WS_2","projuser");
 		assertTrue(true);
 	}
 
 	@Test
+	@Transactional
 	public void testActivateWorkspace() throws QuadrigaStorageException {
 		wsManager.activateWorkspace("WS_2","projuser");
 		assertTrue(true);

@@ -12,7 +12,12 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
@@ -23,6 +28,12 @@ import edu.asu.spring.quadriga.dto.ProjectEditorDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
+@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
+"file:src/test/resources/hibernate.cfg.xml",
+"file:src/test/resources/root-context.xml" })
+@RunWith(SpringJUnit4ClassRunner.class)
+@TransactionConfiguration
+@Transactional
 public class ProjectAccessManagerDAOTest {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -44,11 +55,11 @@ public class ProjectAccessManagerDAOTest {
 		//create a quadriga user
 		Date date = new Date();
 		QuadrigaUserDTO user = new QuadrigaUserDTO();
-		user.setUsername("projuser");
+		user.setUsername("projuser1");
 		user.setFullname("test project user");
-		user.setCreatedby("projuser");
+		user.setCreatedby("projuser1");
 		user.setCreateddate(date);
-		user.setUpdatedby("projuser");
+		user.setUpdatedby("projuser1");
 		user.setUpdateddate(date);
 		user.setEmail("tpu@test.com");
 		user.setQuadrigarole("role1,role4");
@@ -77,6 +88,7 @@ public class ProjectAccessManagerDAOTest {
 		sessionFactory.getCurrentSession().save(user);
 		
 		//create a project
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,"projuser1");
 		ProjectDTO project = new ProjectDTO();
 		project.setProjectid("PROJ_1_Test");
 		project.setProjectname("testproject1");
@@ -187,7 +199,7 @@ public class ProjectAccessManagerDAOTest {
 	public void testChkDuplicateProjUnixName() throws QuadrigaStorageException
 	{
 		boolean isDuplicate = false;
-		isDuplicate = dbConnect.chkDuplicateProjUnixName("PROJ_11","PROJ_1_Test");
+		isDuplicate = dbConnect.chkDuplicateProjUnixName("PROJ_1","PROJ_11_Test");
 		assertTrue(isDuplicate);
 	}
 	
