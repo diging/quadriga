@@ -93,6 +93,8 @@ input {
 			</tr>
 			<tr>
 			<td><input class="command" type="submit" value="Modify Project"> </td>
+			<td><input type="button" value="Cancel" 
+			onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench'"></td>
 			</tr>
 		</table>
 			</c:when>
@@ -104,9 +106,7 @@ input {
 				</ul>
 			</c:when>
 			</c:choose>
-
 	</form:form>
-	<input type="submit" value="Cancel" onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench'">
 </div>
 </article>
 
