@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 
 /***
  * @description this class registers all the services and creates one time objects 
- * 				for each service implemented by IService interface
+ * 				for each service which implements IService interface
  * 
  * @author rohit pendbhaje
  *
@@ -30,10 +30,16 @@ public class ServiceRegistry implements IServiceRegistry {
 	private ApplicationContext ctx;
 	
 	private Map<String, IService> serviceMap;
-	
 	private Map<String, IService> newServiceMap;
-	
 	private Map<String,String> serviceIdNameMap;
+	
+	public Map<String, String> getServiceIdNameMap() {
+		return serviceIdNameMap;
+	}
+
+	public void setServiceIdNameMap(Map<String, String> serviceIdNameMap) {
+		this.serviceIdNameMap = serviceIdNameMap;
+	} 
 		
 /**
  * instantiates all the services under IService interface
@@ -44,9 +50,7 @@ public class ServiceRegistry implements IServiceRegistry {
 	public void init(){
 		
 		newServiceMap = new HashMap<String, IService>();
-
 		serviceMap = ctx.getBeansOfType(IService.class);
-		
 		Iterator<?> serviceIter = serviceMap.entrySet().iterator();
 		
 		while(serviceIter.hasNext()){
@@ -54,14 +58,12 @@ public class ServiceRegistry implements IServiceRegistry {
 			@SuppressWarnings("rawtypes")
 			Map.Entry mEntry = (Map.Entry) serviceIter.next();
 			IService serviceObject = (IService) mEntry.getValue();
-			newServiceMap.put(serviceObject.getServiceId(), serviceObject);
-			
+			newServiceMap.put(serviceObject.getServiceId(), serviceObject);	
 		}
-		
 	}
 
 /**
- * used for returning service object
+ * this method takes serviceId as argument and returns the service object associated with it 
  * @param serviceId  id of the service of which object is required
  * @return service object
  * @author rohit pendbhaje
@@ -76,8 +78,8 @@ public class ServiceRegistry implements IServiceRegistry {
 
 /**
  * 
- * creates hashmap of name, id as key, value pair
- * @return map of id and name
+ * returns hashmap of serviceId, serviceName as key, value pair
+ * @return hashmap of serviceId and serviceName
  * @author rohit pendbhaje
  * 
  */
@@ -92,19 +94,8 @@ public class ServiceRegistry implements IServiceRegistry {
 			@SuppressWarnings("rawtypes")
 			Map.Entry entry = (Map.Entry)iterator.next();
 			IService serviceObj = (IService)entry.getValue();
-			serviceIdNameMap.put(serviceObj.getServiceId(), serviceObj.getName());
-				
+			serviceIdNameMap.put(serviceObj.getServiceId(), serviceObj.getName());	
 		}
-		
 		return serviceIdNameMap;
 	}
-
-	public Map<String, String> getServiceIdNameMap() {
-		return serviceIdNameMap;
-	}
-
-	public void setServiceIdNameMap(Map<String, String> serviceIdNameMap) {
-		this.serviceIdNameMap = serviceIdNameMap;
-	} 
-
 }

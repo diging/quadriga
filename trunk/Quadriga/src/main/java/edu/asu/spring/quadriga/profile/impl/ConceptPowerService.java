@@ -72,7 +72,7 @@ public class ConceptPowerService implements IService {
 
 		List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
 		
-		ConceptpowerReply conceptReply = collectionManager.search(term, IService.pos);
+		ConceptpowerReply conceptReply = collectionManager.search(term, IService.POS);
 		if(conceptReply!=null)
 		{
 			List<ConceptEntry> conceptEntries = conceptReply.getConceptEntry();

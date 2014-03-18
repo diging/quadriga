@@ -33,6 +33,11 @@ public class ProjectDictionaryDTOPK implements Serializable {
         this.projectid = projectid;
         this.dictionaryid = dictionaryid;
     }
+    
+    public ProjectDictionaryDTOPK(String dictionaryid){
+    	this.dictionaryid = dictionaryid;
+    }
+    
 
     public String getProjectid() {
         return projectid;

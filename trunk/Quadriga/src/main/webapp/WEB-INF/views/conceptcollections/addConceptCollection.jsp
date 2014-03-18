@@ -11,14 +11,14 @@
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
 			if (!$.trim($("#name").val())) {
-					$.alert("Please enter a conceptcollection name","Oops !!!");
+					$.alert("Please enter a conceptcollection name","Oops!");
 					$("#name").val("");		            
 					event.preventDefault();
 					return;
 			}
 			
 			if (!$.trim($("#description").val())) {
-				$.alert("Please enter a conceptcollection description","Oops !!!");
+				$.alert("Please enter a conceptcollection description","Oops!");
 				$("#description").val("");
 				event.preventDefault();
 				return;

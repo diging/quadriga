@@ -12,12 +12,14 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
+import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 
 @Repository
@@ -34,6 +36,9 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 	
 	@Autowired
 	private ProjectDTOMapper projectMapper;
+	
+	@Autowired
+	private ProjectCollaboratorDTOMapper collaboratorDTOMapper;
 	
 	/**
 	 * {@inheritDoc}
@@ -109,6 +114,38 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 		ProjectDictionaryDTO projectDcitionary = (ProjectDictionaryDTO) sessionFactory.getCurrentSession().get(ProjectDictionaryDTO.class,projectDictionaryKey); 
 		
 		sessionFactory.getCurrentSession().delete(projectDcitionary);
+	}
+
+	@Override
+	public List<IProject> getprojectsByDictId(String dictionaryId)
+			throws QuadrigaStorageException {
+		
+		List<IProject> projects = new ArrayList<IProject>();
+				
+		try
+		{
+	        DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
+	        List<ProjectDictionaryDTO> projectDictionaryDTOList = dictionary.getProjectDictionaryDTOList();
+	        
+	        for(ProjectDictionaryDTO projectDictionaryDTO : projectDictionaryDTOList)
+	        {
+	        	ProjectDTO projectDTO = projectDictionaryDTO.getProject();
+	        	
+	        	if(projectDTO != null)
+	        	{
+	        		IProject project = projectMapper.getProject(projectDTO);
+	        		project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+	        		projects.add(project);
+	        	}
+	        	
+	        }
+		}
+		catch(Exception e)
+		{
+			throw new QuadrigaStorageException(e);
+		}
+		
+		return projects;
 	}
 
 }

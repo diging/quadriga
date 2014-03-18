@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.profile.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import edu.asu.spring.quadriga.jaxb.viaf.Item;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
-import edu.asu.spring.quadriga.profile.IViafManager;
 
 /**
  * this class sends request to viaf service and gets back object in response
@@ -27,12 +25,6 @@ import edu.asu.spring.quadriga.profile.IViafManager;
 @Service
 public class ViafService implements IService {
 
-	@Autowired
-	private IViafManager viafmanager;
-	
-	/*@Autowired
-	private ViafManager1 viafmanager;*/
-	
 	@Autowired
 	private ISearchResult searchResult;
 	
@@ -89,11 +81,10 @@ public class ViafService implements IService {
 	}
 	
 	/**
-	 * this method searches for the term user entered in viaf service and returns result
-	 * @param item			term enterd by user
-	 * 		  startindex	index in the REST api of viaf service
-	 * 
-	 * @return list of searchresults responded by viaf
+	 * this method takes user entered term and calls viaf REST API to retrieve search results
+	 * @param item			term entered by user
+	 * 		  startindex	index in the REST API of viaf service
+	 * @return list of searchresults retrieved from viaf 
 	 * @author rohit pendbhaje
 	 * 	
 	 */
@@ -104,7 +95,7 @@ public class ViafService implements IService {
 		List<Item> items = null;
 		String fullUrl;
 
-			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + word.trim() + searchViafURLPath1.trim() + IService.startIndex.trim() + searchViafURLPath2.trim();
+			fullUrl = viafURL.trim() + searchViafURLPath.trim() + " " + word.trim() + searchViafURLPath1.trim() + IService.STARTINDEX.trim() + searchViafURLPath2.trim();
 			ViafReply rep = (ViafReply) restTemplate.getForObject(fullUrl, ViafReply.class);
 			items = rep.getChannel().getItems();
 			
@@ -119,7 +110,6 @@ public class ViafService implements IService {
 			}
 			
 		return searchResults;
-	
 	}
 	
 }

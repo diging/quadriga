@@ -31,4 +31,6 @@ public class RetrieveDictionaryManager implements IRetrieveDictionaryManager
 		return dictionary;
 	}
 
+
+	
 }

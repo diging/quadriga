@@ -38,8 +38,7 @@ public class SearchResultBackBeanFormManager implements ISearchResultBackBeanFor
  */
 	@Override
 	public List<SearchResultBackBean> getsearchResultBackBeanList(String serviceId, String term){
-		
-		
+		 	
 		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
 		List<ISearchResult> searchResults = serviceObj.search(term);
 		List<SearchResultBackBean> searchResultBackBeansList = new ArrayList<SearchResultBackBean>();

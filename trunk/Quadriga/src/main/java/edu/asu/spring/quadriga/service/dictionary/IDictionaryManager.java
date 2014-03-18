@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.service.dictionary;
 
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
@@ -203,5 +205,8 @@ public interface IDictionaryManager {
 			String dictionaryId) throws QuadrigaStorageException;
 
 	public abstract String getDictionaryId(String dictName) throws QuadrigaStorageException;
+	
+	public abstract String getProjectsTree(String userName, String dictionaryId) throws QuadrigaStorageException, JSONException;
+
 
 }

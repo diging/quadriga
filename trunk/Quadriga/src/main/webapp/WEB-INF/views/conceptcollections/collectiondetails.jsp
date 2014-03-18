@@ -135,12 +135,8 @@ function addCCtoWorkspace(id,name){
 				$(this).dialog("close");
 			}
 		}
-	});
-	
-	
+	});	
 }
-
-
 </script>
  
 <table style="width:100%">

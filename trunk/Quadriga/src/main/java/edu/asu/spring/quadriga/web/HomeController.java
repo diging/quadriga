@@ -325,6 +325,4 @@ public class HomeController {
 		return "auth/home/showProfile";
 	}
 
-	
-
 }
