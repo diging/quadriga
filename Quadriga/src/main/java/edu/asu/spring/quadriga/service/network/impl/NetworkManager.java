@@ -156,30 +156,39 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		this.fileExist = fileExist;
 	}
 
-	/* 
-	 * Prepare a QStore Add URL to add new networks to QStore
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getQStoreAddURL() {
 		return qStoreURL+qStoreURL_Add;
 	}
 
-	/* 
-	 * Prepare a QStore Get URL to fetch element of networks from Qstore
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getQStoreGetURL() {
 		return qStoreURL+qStoreURL_Get;
 	}
 
-	/* 
-	 * Prepare a QStore Get URL to fetch all the element of networks from Qstore
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getQStoreGetPOSTURL() {
 		return qStoreURL+qStoreURL_Get_POST;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
+	 */
 	@Override
 	@Transactional
 	public INetworkJSon getJsonForNetworks(String networkId, String jqueryType) throws QuadrigaStorageException{
@@ -206,6 +215,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return networkJSon;
 	}
 	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<INodeObjectWithStatement> parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping, List<INodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException{
 		ElementEventsType elementEventType =getElementEventTypeFromRelationEventTypeID(relationEventId);
@@ -242,8 +255,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#getElementEventTypeFromRelationEvent(java.lang.String)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public ElementEventsType getElementEventTypeFromRelationEventTypeID(String relationEventId) throws JAXBException, QStoreStorageException{
@@ -259,8 +273,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return elementEventType;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#unMarshalXmlToElementEventsType(java.lang.String)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public ElementEventsType unMarshalXmlToElementEventsType(String xml) throws JAXBException{
@@ -277,8 +292,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return elementEventType;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughRelationEvent(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.RelationEventObject, java.util.List)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public RelationEventObject parseThroughRelationEvent(RelationEventType relationEventType,RelationEventObject relationEventObject,List<List<Object>> relationEventPredicateMapping){
@@ -304,42 +320,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return relationEventObject;
 	}
 
+
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#stackRelationEventPredicateAppellationObject(java.lang.String, java.lang.String, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject, java.util.List)
-	 */
-	@Override
-	public String getPredicateNameFromStackOfAE(String relationEventId,String predicateName,AppellationEventObject appellationEventObject,List<List<Object>> relationEventPredicateMapping){
-		Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
-
-		while(relationEventPredicateMappingIterator.hasNext()){
-			List<Object> objectList = relationEventPredicateMappingIterator.next();
-			Iterator<Object> objectIterator = objectList.iterator();
-			while(objectIterator.hasNext()){
-				Object object = objectIterator.next();
-				if(object instanceof String[]){
-					String pairs[] = (String [])object;
-					if(pairs[0].equals(relationEventId)){
-						String predicateNameLocal = pairs[1];
-						return predicateNameLocal;
-					}
-				}
-			}
-		}
-		String[] pairs = new String [2];
-		pairs[0]=(relationEventId);
-		pairs[1]=(predicateName);
-		List<Object> objectList = new ArrayList<Object>();
-		objectList.add(pairs);
-		objectList.add(appellationEventObject);
-		relationEventPredicateMapping.add(objectList);
-
-		return null;
-
-	}
-	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughPredicate(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.PredicateType, java.util.List)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public PredicateObject parseThroughPredicate(RelationEventType relationEventType, PredicateType predicateType,List<List<Object>> relationEventPredicateMapping){
@@ -357,15 +342,15 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			predicateObject.setAppellationEventObject(appellationEventObject);
 
 			predicateObject.setRelationEventID(relationEventType.getRelationEventId(relationEventType));
-			getPredicateNameFromStackOfAE(relationEventType.getRelationEventId(relationEventType),predicateObject.getAppellationEventObject().getNode(),appellationEventObject, relationEventPredicateMapping);
 			return predicateObject;
 		}
 		return predicateObject;
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#checkRelationEventInStack(java.lang.String, java.util.List)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public AppellationEventObject isRelationEventPresentInStack(String relationEventId,List<List<Object>> relationEventPredicateMapping){
@@ -400,8 +385,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughSubject(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType, java.util.List)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public SubjectObject parseThroughSubject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,List<List<Object>> relationEventPredicateMapping){
@@ -452,8 +438,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseThroughObject(edu.asu.spring.quadriga.domain.impl.networks.RelationEventType, edu.asu.spring.quadriga.domain.impl.networks.SubjectObjectType, java.util.List)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public ObjectTypeObject parseThroughObject(RelationEventType relationEventType, SubjectObjectType subjectObjectType,List<List<Object>> relationEventPredicateMapping){
@@ -505,10 +492,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	
 	
 	/**
-	 * Use temp structure to allow our json builder work easily.
-	 * {@link NodeObject} is used to build this temp structure. {@link NodeObject} has a predicate, subject object structure in it.
-	 * I am recursively filling the {@link NodeObject}.
-	 * @param relationEventObject
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<INodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,List<INodeObjectWithStatement> nodeObjectWithStatementList, String statementId){
@@ -567,8 +552,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	
 	
 	
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#getPredicateNodeObjectContent(edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public NodeObject getPredicateNodeObjectContent (PredicateObject predicateObject, NodeObject nodeObject){
@@ -583,8 +569,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return nodeObject;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
-	public String checkRelationEventRepeatation(String relationEventId,String predicateName,List<List<Object>> relationEventPredicateMapping){
+	public String getPredicateNameFromStackOfAE(String relationEventId,String predicateName,List<List<Object>> relationEventPredicateMapping){
 		Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
 
 		while(relationEventPredicateMappingIterator.hasNext()){
@@ -607,12 +597,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 	
 	/**
-	 * Store the top network RE and AE IDs into DB by parsing through the XML and object goes through the event types 
-	 * @param response
-	 * @param user
-	 * @param networkName
-	 * @param workspaceid
-	 * @author Lohith Dwaraka
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -733,9 +721,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	/**
 	 * Check if we have bit streams in the network XML
-	 * @param uri
-	 * @param bitStreamList
-	 * @return
+	 * @param uri							URI is for DSpace based URI of type {@link String}
+	 * @param bitStreamList					{@link List} of {@link IBitStream} objects
+	 * @return								Returns boolean values true or false
 	 * @author Lohith Dwaraka
 	 */
 	public boolean hasBitStream(String uri,List<IBitStream> bitStreamList){
@@ -754,24 +742,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return false;
 	}
 
-	/**
-	 * Helper class to get relation event ID
-	 * @param re
-	 * @return
-	 */
-	public String getRelationEventId(RelationEventType re){
-		List<JAXBElement<?>> e2 = re.getIdOrCreatorOrCreationDate();
-		Iterator <JAXBElement<?>> I1 = e2.iterator();
-		while(I1.hasNext()){
-			JAXBElement<?> element = (JAXBElement<?>) I1.next();
-			if(element.getName().toString().contains("id")){
-				logger.debug("Relation Event ID : "+element.getValue().toString());
-				return element.getValue().toString();
-			}
-		}
-		return "";
-	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getRelationEventXmlStringFromQstore(String id)throws JAXBException{
 		// Message converters for JAXb to understand the xml
@@ -805,9 +780,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 
 	/**
-	 * Generate short UUID (13 characters)
 	 * 
-	 * @return short UUID
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String shortUUID() {
@@ -819,11 +793,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 
 
-
-
-	/** 
-	 * Get all the objects recursively for JSON creation
+	/**
 	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<String[]> getRelationEventElements(RelationEventType re,List<String[]> networkDetailsCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
@@ -992,8 +964,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 
-	/** 
-	 * Store XML into QStore
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String storeXMLQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
@@ -1023,8 +996,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return res;
 	}
 
-	/** 
-	 * Get whole network XML from QStore
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getWholeNetworkXMLFromQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
@@ -1055,7 +1029,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 	/**
-	 * Get Network Status from DB
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1070,8 +1047,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 
-	/* 
-	 * Get Network list belonging to users
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1087,7 +1067,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 	/**
-	 * Get All the nodes of the networks
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1109,8 +1092,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return networkNodeList;
 	}
 
-	/* 
-	 * Get Project ID associated to workspace id
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1125,6 +1111,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			return null;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
+	 */
 	@Override
 	@Transactional
 	public List<INetwork> getNetworksInProject(String projectid) throws QuadrigaStorageException{
@@ -1140,7 +1132,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 
 	/**
-	 * Get only the Top Nodes of the network
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1162,7 +1157,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 
 	/**
-	 * Get only the Top Nodes of the network's old version
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1183,7 +1181,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 	/**
-	 * Archive network elements
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1198,8 +1199,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 	/**
-	 * Update network name when network is reuploaded
-	 * @throws QuadrigaStorageException 
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
 	 */
 	@Override
 	@Transactional
@@ -1213,6 +1216,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 	
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
+	 */
 	@Override
 	@Transactional
 	public String getNetworkJSTreeJson(String userName) throws JSONException{
