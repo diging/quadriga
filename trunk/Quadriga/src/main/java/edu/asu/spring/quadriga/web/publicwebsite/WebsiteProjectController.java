@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -152,8 +153,12 @@ public class WebsiteProjectController {
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 		String nwId = "\""+networkId+"\"";
-		model.addAttribute("jsonstring",networkJSon.getJson());
-		model.addAttribute("networkid",nwId);		
+		model.addAttribute("networkid",nwId);
+		String json = null;
+		if(networkJSon!=null){
+			json = networkJSon.getJson();
+		}
+		model.addAttribute("jsonstring",json);
 		return "sites/networks/visualize";
 	}
 }
