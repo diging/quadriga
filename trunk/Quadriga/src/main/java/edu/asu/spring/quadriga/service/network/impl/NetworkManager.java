@@ -208,7 +208,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	
 	@Override
 	public List<INodeObjectWithStatement> parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping, List<INodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException{
-		ElementEventsType elementEventType =getElementEventTypeFromRelationEvent(relationEventId);
+		ElementEventsType elementEventType =getElementEventTypeFromRelationEventTypeID(relationEventId);
 		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
 		
@@ -246,7 +246,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#getElementEventTypeFromRelationEvent(java.lang.String)
 	 */
 	@Override
-	public ElementEventsType getElementEventTypeFromRelationEvent(String relationEventId) throws JAXBException, QStoreStorageException{
+	public ElementEventsType getElementEventTypeFromRelationEventTypeID(String relationEventId) throws JAXBException, QStoreStorageException{
 		String xml = getRelationEventXmlStringFromQstore(relationEventId);
 		ElementEventsType elementEventType = null;
 		if(xml ==null){
@@ -1215,7 +1215,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Override
 	@Transactional
-	public String getNetworkTree(String userName) throws JSONException{
+	public String getNetworkJSTreeJson(String userName) throws JSONException{
 		List<IProject> projectList = null;
 		JSONObject core = new JSONObject();
 		try{

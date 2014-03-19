@@ -102,7 +102,7 @@ public class NetworkListController {
 	public String listNetworksTreeView(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String jsTreeData = null;
-		jsTreeData = networkManager.getNetworkTree(user.getUserName());
+		jsTreeData = networkManager.getNetworkJSTreeJson(user.getUserName());
 		model.addAttribute("tableview",0);
 		model.addAttribute("core", jsTreeData);
 		model.addAttribute("userId", user.getUserName());
@@ -218,7 +218,7 @@ public class NetworkListController {
 	public @ResponseBody String listNetworksJson(ModelMap model, Principal principal, HttpServletResponse res) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String jsTreeData = null;
-		jsTreeData = networkManager.getNetworkTree(user.getUserName());
+		jsTreeData = networkManager.getNetworkJSTreeJson(user.getUserName());
 		logger.info("JSon : "+ jsTreeData);
 		res.setStatus(200);
 		return jsTreeData;
