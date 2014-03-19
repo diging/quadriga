@@ -309,7 +309,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#stackRelationEventPredicateAppellationObject(java.lang.String, java.lang.String, edu.asu.spring.quadriga.domain.impl.networks.jsonobject.AppellationEventObject, java.util.List)
 	 */
 	@Override
-	public String stackRelationEventPredicateAppellationObject(String relationEventId,String predicateName,AppellationEventObject appellationEventObject,List<List<Object>> relationEventPredicateMapping){
+	public String getPredicateNameFromStackOfAE(String relationEventId,String predicateName,AppellationEventObject appellationEventObject,List<List<Object>> relationEventPredicateMapping){
 		Iterator<List<Object>> relationEventPredicateMappingIterator = relationEventPredicateMapping.iterator();
 
 		while(relationEventPredicateMappingIterator.hasNext()){
@@ -357,7 +357,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			predicateObject.setAppellationEventObject(appellationEventObject);
 
 			predicateObject.setRelationEventID(relationEventType.getRelationEventId(relationEventType));
-			stackRelationEventPredicateAppellationObject(relationEventType.getRelationEventId(relationEventType),predicateObject.getAppellationEventObject().getNode(),appellationEventObject, relationEventPredicateMapping);
+			getPredicateNameFromStackOfAE(relationEventType.getRelationEventId(relationEventType),predicateObject.getAppellationEventObject().getNode(),appellationEventObject, relationEventPredicateMapping);
 			return predicateObject;
 		}
 		return predicateObject;
@@ -368,7 +368,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#checkRelationEventInStack(java.lang.String, java.util.List)
 	 */
 	@Override
-	public AppellationEventObject checkRelationEventInStack(String relationEventId,List<List<Object>> relationEventPredicateMapping){
+	public AppellationEventObject isRelationEventPresentInStack(String relationEventId,List<List<Object>> relationEventPredicateMapping){
 
 		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
 		int flag=0;
@@ -414,7 +414,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(subjectRelationEventType == null){
 			subjectObject.setIsRelationEventObject(false);
 		}else{
-			AppellationEventObject temp = checkRelationEventInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
+			AppellationEventObject temp = isRelationEventPresentInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
 			/*
 			 * I am trying to fool subject as Appellation event
 			 * when we find a existing relation event been referred here
@@ -426,7 +426,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			}else{
 				subjectObject.setIsRelationEventObject(true);
 				RelationEventObject relationEventObject   = new RelationEventObject();
-				checkRelationEventInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
+				isRelationEventPresentInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
 				relationEventObject=parseThroughRelationEvent(subjectRelationEventType,relationEventObject,relationEventPredicateMapping);
 				subjectObject.setRelationEventObject(relationEventObject);
 			}
@@ -466,7 +466,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(objectRelationEventType == null){
 			objectTypeObject.setIsRelationEventObject(false);
 		}else{
-			AppellationEventObject temp = checkRelationEventInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
+			AppellationEventObject temp = isRelationEventPresentInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
 			/*
 			 * I am trying to fool subject as Appellation event
 			 * when we find a existing relation event been referred here
@@ -478,7 +478,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			}else{
 				objectTypeObject.setIsRelationEventObject(true);
 				RelationEventObject relationEventObject   = new RelationEventObject();
-				checkRelationEventInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
+				isRelationEventPresentInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
 				relationEventObject=parseThroughRelationEvent(objectRelationEventType,relationEventObject,relationEventPredicateMapping);
 				objectTypeObject.setRelationEventObject(relationEventObject);
 			}

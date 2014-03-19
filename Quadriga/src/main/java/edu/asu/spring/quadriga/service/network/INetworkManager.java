@@ -11,6 +11,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
+import com.sun.corba.se.impl.orbutil.graph.Node;
+
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
@@ -302,14 +304,14 @@ public interface INetworkManager {
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * This method helps in returning the {@link PredicateObject} name if the {@link PredicateObject} is already present in the Stack of {@link PredicateObject}
+	 * This method helps in returning the {@link PredicateObject} name if the {@link PredicateObject} is already present in the Stack of {@link AppellationEventObject}
 	 * @param relationEventTypeId					{@link RelationEventType} ID in the form of {@link String}
 	 * @param predicateName							{@link PredicateObject} name in the form of {@link String}
 	 * @param appellationEventObject				{@link AppellationEventObject} object
 	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
 	 * @return										Returns predicate name in the form of {@link String}
 	 */	
-	public abstract String stackRelationEventPredicateAppellationObject(String relationEventTypeId,
+	public abstract String getPredicateNameFromStackOfAE(String relationEventTypeId,
 			String predicateName,
 			AppellationEventObject appellationEventObject,
 			List<List<Object>> relationEventPredicateMapping);
@@ -327,42 +329,46 @@ public interface INetworkManager {
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * 
-	 * @param relationEventId
-	 * @param relationEventPredicateMapping
-	 * @return
+	 * This method should help in checking if {@link RelationEventType} is already parsed earlier.
+	 * We could have foreign reference to another {@link RelationEventType} in the {@link SubjectObjectType} part of the {@link RelationEventType}.
+	 * We should not parse through the foreign reference since it would be redundant.
+	 * @param relationEventId						{@link RelationEventType} ID in the form of {@link String}
+	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return										Returns {@link AppellationEventObject} if we have found earlier, else it would return null
 	 */
-	public abstract AppellationEventObject checkRelationEventInStack(String relationEventId,
+	public abstract AppellationEventObject isRelationEventPresentInStack(String relationEventId,
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * 
-	 * @param relationEventType
-	 * @param subjectObjectType
-	 * @param relationEventPredicateMapping
-	 * @return
+	 * This method should help in parsing through the {@link SubjectObjectType} of a particular {@link RelationEventType} for SubjectType of Relation.
+	 * We could parse the {@link SubjectObjectType} object for any required variables or objects in it.
+	 * @param relationEventType						Target {@link RelationEventType} object 
+	 * @param subjectObjectType						Target {@link SubjectObjectType} object
+	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return										Returns {@link SubjectObject} with filled in required data
 	 */
 	public abstract SubjectObject parseThroughSubject(RelationEventType relationEventType,
 			SubjectObjectType subjectObjectType,
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * 
-	 * @param relationEventType
-	 * @param subjectObjectType
-	 * @param relationEventPredicateMapping
-	 * @return
+	 * This method should help in parsing through the {@link SubjectObjectType} of a particular {@link RelationEventType} for ObjectType of Relation.
+	 * @param relationEventType						Target {@link RelationEventType} object 
+	 * @param subjectObjectType						Target {@link SubjectObjectType} object
+	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return										Returns {@link ObjectTypeObject} with filled in required data
 	 */
 	public abstract ObjectTypeObject parseThroughObject(RelationEventType relationEventType,
 			SubjectObjectType subjectObjectType,
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * 
-	 * @param relationEventObject
-	 * @param nodeObjectWithStatementList
-	 * @param statementId
-	 * @return
+	 * This method should help in preparing the {@link NodeObject} content.
+	 * Preparse {@link NodeObject} with the contents of {@link PredicateObject}, {@link SubjectObject}, {@link ObjectTypeObject}. 
+	 * @param relationEventObject					{@link RelationEventObject} object
+	 * @param nodeObjectWithStatementList			{@link List} of {@link INodeObjectWithStatement} object 
+	 * @param statementId							Statement ID of the Relation in form of {@link String}
+	 * @return										Returns updated {@link List} of {@link INodeObjectWithStatement} object
 	 */
 	public abstract List<INodeObjectWithStatement> prepareNodeObjectContent(
 			RelationEventObject relationEventObject,
