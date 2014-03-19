@@ -212,7 +212,7 @@
 	<bean id="viafService" class="edu.asu.spring.quadriga.profile.impl.ViafService" />
 	<bean id="profileFactory" class="edu.asu.spring.quadriga.domain.factories.impl.ProfileFactory"/>
 	<bean id="searchResultFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultFactory" />
-	<bean id="viafManager" class="edu.asu.spring.quadriga.service.impl.viaf.ViafManager"/>
+<!--  	<bean id="viafManager" class="edu.asu.spring.quadriga.service.impl.viaf.ViafManager"/> -->
 	<bean id="userProfileManager" class="edu.asu.spring.quadriga.service.impl.UserProfileManager" />
 	<bean id="searchResultBackBeanFactory" class="edu.asu.spring.quadriga.profile.factory.impl.SearchResultBackBeanFactory" />
 	<bean id="searchResultBackBeanFormManager" class="edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager" />

@@ -67,6 +67,27 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 		
 		sessionFactory.getCurrentSession().save(projectDictionary);
 		
+		//add the project dictionary to the Project DTO
+		List<ProjectDictionaryDTO> projectDictionaryList;
+		projectDictionaryList = project.getProjectDictionaryDTOList();
+		if(projectDictionaryList == null)
+		{
+			projectDictionaryList = new ArrayList<ProjectDictionaryDTO>();
+		}
+		projectDictionaryList.add(projectDictionary);
+		project.setProjectDictionaryDTOList(projectDictionaryList);
+		sessionFactory.getCurrentSession().update(project);
+		
+		//add the project dictionary mapping to the dictionary object
+		projectDictionaryList = dictionary.getProjectDictionaryDTOList();
+		if(projectDictionaryList == null)
+		{
+			projectDictionaryList = new ArrayList<ProjectDictionaryDTO>();
+		}
+		projectDictionaryList.add(projectDictionary);
+		dictionary.setProjectDictionaryDTOList(projectDictionaryList);
+		sessionFactory.getCurrentSession().update(dictionary);
+		
 	}
 	
 	/**
@@ -76,11 +97,8 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 	public List<IDictionary> listProjectDictionary(String projectId,String userId) throws QuadrigaStorageException
 	{
 		List<IDictionary> dictionaryList = null;
-		List<ProjectDictionaryDTO> projectDictionaryDTOList;
 		DictionaryDTO dictionaryDTO = null;
 		IDictionary dictionary = null;
-		
-		dictionaryList = new ArrayList<IDictionary>();
 		
 		//verify project id
 		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
@@ -90,11 +108,14 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 			throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
 		}
 		
-		projectDictionaryDTOList = project.getProjectDictionaryDTOList();
+		dictionaryList = new ArrayList<IDictionary>();
+		
+		List<ProjectDictionaryDTO> projectDictionaryDTOList = project.getProjectDictionaryDTOList();
 		
 	    for(ProjectDictionaryDTO projectDictionary: projectDictionaryDTOList)	
 	    {
-	    	dictionaryDTO = projectDictionary.getDictionary();
+	    	ProjectDictionaryDTOPK projectDictionaryKey = projectDictionary.getProjectDictionaryDTOPK();
+	    	dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, projectDictionaryKey.getDictionaryid());
 	    	dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
 	    	dictionaryList.add(dictionary);
 	    }
@@ -108,11 +129,32 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 	@Override
 	public void deleteProjectDictionary(String projectId,String userId,String dictionaryId)
 	{
+		List<ProjectDictionaryDTO> projectDictionaryList;
 		
 		ProjectDictionaryDTOPK projectDictionaryKey = new ProjectDictionaryDTOPK(projectId,dictionaryId);
 		
 		ProjectDictionaryDTO projectDcitionary = (ProjectDictionaryDTO) sessionFactory.getCurrentSession().get(ProjectDictionaryDTO.class,projectDictionaryKey); 
 		
+		//delete the project dictionary mapping from the project DTO
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,projectId);
+		projectDictionaryList = project.getProjectDictionaryDTOList();
+		if((projectDictionaryList != null)&&(projectDictionaryList.contains(projectDcitionary)))
+		{
+			projectDictionaryList.remove(projectDcitionary);
+		}
+        project.setProjectDictionaryDTOList(projectDictionaryList);
+        sessionFactory.getCurrentSession().update(project);
+        
+        //delete the project dictionary mapping from the dictionary DTO
+        DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
+		projectDictionaryList = dictionary.getProjectDictionaryDTOList();
+		if((projectDictionaryList != null)&&(projectDictionaryList.contains(projectDcitionary)))
+		{
+			projectDictionaryList.remove(projectDcitionary);
+		}
+		dictionary.setProjectDictionaryDTOList(projectDictionaryList);
+		sessionFactory.getCurrentSession().update(dictionary);
+        
 		sessionFactory.getCurrentSession().delete(projectDcitionary);
 	}
 
