@@ -1275,6 +1275,36 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
+	 */
+	@Override
+	@Transactional
+	public INetworkJSon getJsonForOldNetworks(String networkId, String jqueryType,String versionID) throws QuadrigaStorageException{
 
+		INetworkJSon networkJSon=null;
+
+		List<INetworkNodeInfo> oldNetworkTopNodesList = null;
+
+		try{
+			oldNetworkTopNodesList = getNetworkOldVersionTopNodes(networkId, Integer.parseInt(versionID));
+		}catch(QuadrigaStorageException e){
+			logger.error("DB Error while getting network top nodes",e);
+		}
+
+		if(jqueryType.equals(INetworkManager.D3JQUERY)){
+			networkJSon = d3NetworkManager.parseNetworkForD3Jquery(oldNetworkTopNodesList);
+		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
+			String jitJSon = jitNetworkManager.parseNetworkForJITJquery(oldNetworkTopNodesList);
+			if(networkJSon ==null){
+				networkJSon = new NetworkJSon(jitJSon, null);
+			}
+		}		
+
+		return networkJSon;
+	}
 
 }
