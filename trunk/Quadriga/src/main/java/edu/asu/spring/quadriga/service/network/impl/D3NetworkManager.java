@@ -207,7 +207,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 
 
 		// Check for reference to relation
-		String temp=networkManager.checkRelationEventRepeatation(nodeObject.getRelationEventId(),nodeObject.getPredicate(),relationEventPredicateMapping);
+		String temp=networkManager.getPredicateNameFromStackOfAE(nodeObject.getRelationEventId(),nodeObject.getPredicate(),relationEventPredicateMapping);
 		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
 		if(!(temp.equals(""))){
 			predicateNameId = temp;

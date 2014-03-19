@@ -11,8 +11,6 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
-import com.sun.corba.se.impl.orbutil.graph.Node;
-
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
@@ -304,19 +302,6 @@ public interface INetworkManager {
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * This method helps in returning the {@link PredicateObject} name if the {@link PredicateObject} is already present in the Stack of {@link AppellationEventObject}
-	 * @param relationEventTypeId					{@link RelationEventType} ID in the form of {@link String}
-	 * @param predicateName							{@link PredicateObject} name in the form of {@link String}
-	 * @param appellationEventObject				{@link AppellationEventObject} object
-	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
-	 * @return										Returns predicate name in the form of {@link String}
-	 */	
-	public abstract String getPredicateNameFromStackOfAE(String relationEventTypeId,
-			String predicateName,
-			AppellationEventObject appellationEventObject,
-			List<List<Object>> relationEventPredicateMapping);
-
-	/**
 	 * This method should help in parsing through the {@link PredicateType} of a particular {@link RelationEventType}.
 	 * We could parse the {@link PredicateType} object for any required variables or objects in it.
 	 * @param relationEventType						Target {@link RelationEventType} object
@@ -376,13 +361,13 @@ public interface INetworkManager {
 			String statementId);
 
 	/**
-	 * 
-	 * @param relationEventId
-	 * @param predicateName
-	 * @param relationEventPredicateMapping
-	 * @return
+	 * This method should help in parsing through the {@link SubjectObjectType} of a particular {@link RelationEventType} for SubjectType of Relation.
+	 * @param relationEventTypeId						{@link RelationEventType} ID in the form of {@link String}
+	 * @param predicateName								{@link PredicateObject} name in the form of {@link String}
+	 * @param relationEventPredicateMapping				{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return											Returns predicate name in the form of {@link String}
 	 */
-	public abstract String checkRelationEventRepeatation(String relationEventId,
+	public abstract String getPredicateNameFromStackOfAE(String relationEventTypeId,
 			String predicateName,
 			List<List<Object>> relationEventPredicateMapping);
 	
