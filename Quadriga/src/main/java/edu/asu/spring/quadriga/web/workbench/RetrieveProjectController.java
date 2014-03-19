@@ -4,6 +4,9 @@ package edu.asu.spring.quadriga.web.workbench;
 import java.security.Principal;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.impl.workbench.RetrieveJsonProjectsManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -23,9 +28,14 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 @Controller
 public class RetrieveProjectController 
 {
+	private static final Logger logger = LoggerFactory
+			.getLogger(RetrieveProjectController.class);
 	
 	@Autowired 
 	IRetrieveProjectManager projectManager;
+	
+	@Autowired 
+	IRetrieveJsonProjectManager jsonProjectManager;
 	
 	@Autowired
 	ICheckProjectSecurity projectSecurity;
@@ -64,37 +74,61 @@ public class RetrieveProjectController
 	 * @return 	string for workbench url 
 	 * @throws  QuadrigaStorageException
 	 * @author 		rohit sukleshwar pendbhaje
+	 * @throws JSONException 
 	 */
 	@RequestMapping(value="auth/workbench", method = RequestMethod.GET)
-	public ModelAndView getProjectList(Principal principal) throws QuadrigaStorageException
+	public ModelAndView getProjectList(Principal principal) throws QuadrigaStorageException, JSONException
 	{
-		String username;
+		String userName;
 		ModelAndView model;
 		List<IProject> projectListAsOwner;
 		List<IProject> projectListAsCollaborator;
 		List<IProject> projectListAsWorkspaceOwner;
 		List<IProject> projectListAsWSCollaborator;
+		String projectListAsOwnerJson ;
+		String allProjectListJson ;
+		String projectListAsCollaboratorJson ;
+		String projectListAsWorkspaceOwnerJson ;
+		String projectListAsWSCollaboratorJson ;
 		
-		username = principal.getName();
+		
+		userName = principal.getName();
 		
 		//Fetch all the projects for which the user is owner
-		projectListAsOwner = projectManager.getProjectList(username);
+		projectListAsOwner = projectManager.getProjectList(userName);
 		
 		//Fetch all the projects for which the user is collaborator
-		projectListAsCollaborator = projectManager.getCollaboratorProjectList(username);
+		projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
 		
 		//Fetch all the projects for which the user is associated workspace owner
-		projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(username);
+		projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
 		
 		//Fetch all the projects for which the user is associated workspace collaborator
-		projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(username);
+		projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
 		
+		projectListAsOwnerJson = jsonProjectManager.getProjectList(userName);
+		
+		allProjectListJson = jsonProjectManager.getAllProjects(userName);
+		
+		projectListAsCollaboratorJson = jsonProjectManager.getCollaboratorProjectList(userName);
+		
+		projectListAsWorkspaceOwnerJson = jsonProjectManager.getProjectListAsWorkspaceOwner(userName);
+		
+		projectListAsWSCollaboratorJson = jsonProjectManager.getProjectListAsWorkspaceCollaborator(userName);
+		
+		logger.info(projectListAsOwnerJson);
 		
 		model = new ModelAndView("auth/workbench");
 		model.getModelMap().put("projectlistasowner", projectListAsOwner);
         model.getModelMap().put("projectlistascollaborator", projectListAsCollaborator);
         model.getModelMap().put("projectlistaswsowner", projectListAsWorkspaceOwner);
         model.getModelMap().put("projectlistaswscollaborator", projectListAsWSCollaborator);
+        
+        model.getModelMap().put("owner", projectListAsOwnerJson);
+        model.getModelMap().put("allprojects", allProjectListJson);
+        model.getModelMap().put("collaborator", projectListAsCollaboratorJson);
+        model.getModelMap().put("wsowner", projectListAsWorkspaceOwnerJson);
+        model.getModelMap().put("wscolloborator", projectListAsWSCollaboratorJson);
 		
 		return model;
 	}
