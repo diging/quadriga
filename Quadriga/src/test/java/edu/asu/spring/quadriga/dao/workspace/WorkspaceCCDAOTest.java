@@ -8,11 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -31,12 +33,19 @@ import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTOPK;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -45,14 +54,16 @@ import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @ContextConfiguration(locations = {
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class WorkspaceCCDAOTest {
+public class WorkspaceCCDAOTest 
+{
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Autowired
 	private IWorkspaceCCManager workspaceConceptCollectionManager;
@@ -112,55 +123,184 @@ public class WorkspaceCCDAOTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
-		try {
-			user = userFactory.createUserObject();
-			user.setUserName("jdoe");
-			user.setName("John Doe");
-
-			List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-			IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
-			role.setDBid("role3");
-			roles.add(role);
-			role = quadrigaRoleFactory.createQuadrigaRoleObject();
-			role.setDBid("role4");
-			roles.add(role);
-
-			IQuadrigaRole quadrigaRole = null;
-			List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-			for (int i = 0; i < roles.size(); i++) {
-				quadrigaRole = rolemanager.getQuadrigaRole(roles.get(i)
-						.getDBid());
-
-				// If user account is deactivated remove other roles
-				if (quadrigaRole.getId().equals(
-						RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
-					rolesList.clear();
+	public void setUp() throws Exception
+	{
+		//create a quadriga user
+				Date date = new Date();
+				QuadrigaUserDTO user = new QuadrigaUserDTO();
+				user.setUsername("projuser1");
+				user.setFullname("test project user");
+				user.setCreatedby("projuser1");
+				user.setCreateddate(date);
+				user.setUpdatedby("projuser1");
+				user.setUpdateddate(date);
+				user.setEmail("tpu@test.com");
+				user.setQuadrigarole("role1,role4");
+				sessionFactory.getCurrentSession().save(user);
+				
+				user = new QuadrigaUserDTO();
+				user.setUsername("projuser2");
+				user.setFullname("test project user");
+				user.setCreatedby("projuser2");
+				user.setCreateddate(date);
+				user.setUpdatedby("projuser2");
+				user.setUpdateddate(date);
+				user.setEmail("tpu2@test.com");
+				user.setQuadrigarole("role1,role4");
+				sessionFactory.getCurrentSession().save(user);
+				
+				user = new QuadrigaUserDTO();
+				user.setUsername("projuser3");
+				user.setFullname("test project user");
+				user.setCreatedby("projuser3");
+				user.setCreateddate(date);
+				user.setUpdatedby("projuser3");
+				user.setUpdateddate(date);
+				user.setEmail("tpu3@test.com");
+				user.setQuadrigarole("role1,role4");
+				sessionFactory.getCurrentSession().save(user);
+				
+				//create a project
+				List<ProjectWorkspaceDTO> projectWorkspaceList = new ArrayList<ProjectWorkspaceDTO>();
+				ProjectDTO project = new ProjectDTO();
+				project.setProjectid("PROJ_1_Test");
+				project.setProjectname("testproject1");
+				project.setAccessibility("PUBLIC");
+				project.setCreatedby("projuser1");
+				project.setCreateddate(date);
+				project.setUpdatedby("projuser1");
+				project.setUpdateddate(date);
+				project.setUnixname("PROJ_1");
+				project.setProjectowner(user);
+				sessionFactory.getCurrentSession().save(project);
+				
+				//create a workspace
+				WorkspaceDTO workspace = new WorkspaceDTO();
+				workspace.setWorkspaceid("WS_1_Test");
+				workspace.setWorkspacename("WS_1");
+				workspace.setWorkspaceowner(user);
+				workspace.setCreatedby("projuser1");
+				workspace.setCreateddate(date);
+				workspace.setUpdatedby("projuser1");
+				workspace.setUpdateddate(date);
+				workspace.setIsarchived(false);
+				workspace.setIsdeactivated(false);
+		        sessionFactory.getCurrentSession().save(workspace);
+		        
+		        //create project workspace mapping
+		        ProjectWorkspaceDTO projectWorkspace = new ProjectWorkspaceDTO();
+		        ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
+		        projectWorkspace.setProjectWorkspaceDTOPK(projectWorkspaceKey);
+		        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, "PROJ_1_Test");
+		        projectWorkspace.setProjectDTO(project);
+		        workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_1_Test");
+		        projectWorkspace.setWorkspaceDTO(workspace);
+		        projectWorkspace.setCreatedby("projuser1");
+		        projectWorkspace.setCreateddate(date);
+		        projectWorkspace.setUpdatedby("projuser1");
+		        projectWorkspace.setUpdateddate(date);
+		        sessionFactory.getCurrentSession().save(projectWorkspace);
+		        projectWorkspaceList.add(projectWorkspace);
+		        
+		        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		        project.setProjectWorkspaceDTOList(projectWorkspaceList);
+		        sessionFactory.getCurrentSession().update(project);
+		        
+		        ConceptCollectionDTO conceptCollection = new ConceptCollectionDTO();
+				conceptCollection.setCollectionname("conceptCollection1");
+				conceptCollection.setCollectionowner(user);
+				conceptCollection.setConceptCollectionid("CC_1_Test");
+				conceptCollection.setCreatedby("projuser1");
+				conceptCollection.setCreateddate(date);
+				sessionFactory.getCurrentSession().save(conceptCollection);
+				
+				conceptCollection = new ConceptCollectionDTO();
+				conceptCollection.setCollectionname("conceptCollection2");
+				conceptCollection.setCollectionowner(user);
+				conceptCollection.setConceptCollectionid("CC_2_Test");
+				conceptCollection.setCreatedby("projuser1");
+				conceptCollection.setCreateddate(date);
+				sessionFactory.getCurrentSession().save(conceptCollection);
+				
+				List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionList;
+				WorkspaceConceptcollectionDTOPK workspaceConceptCollectionKey = new WorkspaceConceptcollectionDTOPK("WS_1_Test","CC_1_Test");
+				WorkspaceConceptcollectionDTO workspaceConceptCollection = new WorkspaceConceptcollectionDTO();
+				workspaceConceptCollection.setWorkspaceConceptcollectionDTOPK(workspaceConceptCollectionKey);
+				conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_1_Test");
+				workspaceConceptCollection.setConceptCollectionDTO(conceptCollection);
+				workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_1_Test");
+				workspaceConceptCollection.setWorkspaceDTO(workspace);
+				workspaceConceptCollection.setCreatedby("projuser1");
+				workspaceConceptCollection.setCreateddate(date);
+				workspaceConceptCollection.setUpdatedby("projuser1");
+				workspaceConceptCollection.setUpdateddate(date);
+				sessionFactory.getCurrentSession().update(workspaceConceptCollection);
+				
+				workspaceConceptCollectionList = workspace.getWorkspaceConceptCollectionDTOList();
+				if(workspaceConceptCollectionList ==null)
+				{
+					workspaceConceptCollectionList = new ArrayList<WorkspaceConceptcollectionDTO>();
 				}
-				rolesList.add(quadrigaRole);
-			}
-			user.setQuadrigaRoles(rolesList);
-
-			// Setup the database with the proper data in the tables;
-			sDatabaseSetup = new String[] {
-					"delete from tbl_conceptcollection_items",
-					"delete from tbl_conceptcollection",
-					"delete from tbl_workspace_conceptcollection",
-					"delete from tbl_project_workspace",
-					"delete from tbl_project",
-					"delete from tbl_workspace",
-					"delete from tbl_quadriga_user_denied",
-					"delete from tbl_quadriga_user",
-					"delete from tbl_quadriga_user_requests",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())", };
-		} catch (Exception e) {
-			e.printStackTrace();
+				workspace.setWorkspaceConceptCollectionDTOList(workspaceConceptCollectionList);
+				sessionFactory.getCurrentSession().update(workspace);
+	}
+	
+	@After
+	public void tearDown() throws Exception 
+	{
+		WorkspaceConceptcollectionDTOPK workspaceConceptCollectionKey = new WorkspaceConceptcollectionDTOPK("WS_1_Test","CC_1_Test");
+		WorkspaceConceptcollectionDTO workspaceConceptCollection = (WorkspaceConceptcollectionDTO) sessionFactory.getCurrentSession().get(WorkspaceConceptcollectionDTO.class, workspaceConceptCollectionKey);
+		if(workspaceConceptCollection !=null)
+		{
+			sessionFactory.getCurrentSession().delete(workspaceConceptCollection);
 		}
+		
+		ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_1_Test");
+	    if(conceptCollection !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(conceptCollection);
+	    }
+	    conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_2_Test");
+	    if(conceptCollection !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(conceptCollection);
+	    }
+	    
+	    ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
+	    ProjectWorkspaceDTO projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class, projectWorkspaceKey);
+	    if(projectWorkspace !=null)
+	    {
+	    	sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,projectWorkspace);
+	    }
+	    
+	    WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+	    if(workspace !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(workspace);
+	    }
+	    
+	    ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+	    if(project !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(project);
+	    }
+	    
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+	    user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser2");
+	    if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+	    
 	}
 
 	public void getConnection() {
@@ -191,9 +331,7 @@ public class WorkspaceCCDAOTest {
 		return id;
 	}
 	
-	@After
-	public void tearDown() throws Exception {
-	}
+
 
 
 	@Test

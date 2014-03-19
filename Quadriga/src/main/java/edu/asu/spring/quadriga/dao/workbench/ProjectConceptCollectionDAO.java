@@ -7,7 +7,6 @@ import java.util.Properties;
 import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +52,7 @@ IDBConnectionProjectConceptColleciton
 	{
 		try
 		{
+	     List<ProjectConceptCollectionDTO> projectConceptCollectionList;
 		  //check if the project id exists
 		 ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
 		 
@@ -60,7 +60,7 @@ IDBConnectionProjectConceptColleciton
 		 {
 			 throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
 		 }
-		  	 
+		 
 		 //check if the concept collection exists
 		 ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,conceptCollectionId);
 		 if(conceptCollection.equals(null))
@@ -72,6 +72,26 @@ IDBConnectionProjectConceptColleciton
 		 ProjectConceptCollectionDTO projectConceptCollection = projectMapper.getProjectConceptCollection(project, conceptCollection, userId);
 		 
 		 sessionFactory.getCurrentSession().save(projectConceptCollection);
+		 
+		 //Adding the project concept collection to a project DTO
+		 projectConceptCollectionList = project.getProjectConceptCollectionDTOList();
+		 if(projectConceptCollectionList == null)
+		 {
+			 projectConceptCollectionList = new ArrayList<ProjectConceptCollectionDTO>();
+		 }
+		 projectConceptCollectionList.add(projectConceptCollection);
+		 project.setProjectConceptCollectionDTOList(projectConceptCollectionList);
+		 sessionFactory.getCurrentSession().update(project);
+		 
+		 //Adding the project concept collection mapping to the Concept collection DTO
+		 projectConceptCollectionList = conceptCollection.getProjConceptCollectionDTOList();
+		 if(projectConceptCollectionList == null)
+		 {
+			 projectConceptCollectionList = new ArrayList<ProjectConceptCollectionDTO>();
+		 }
+		 projectConceptCollectionList.add(projectConceptCollection);
+		 conceptCollection.setProjConceptCollectionDTOList(projectConceptCollectionList);
+		 sessionFactory.getCurrentSession().update(conceptCollection);
 		}
 		catch(HibernateException ex)
 		{
@@ -100,12 +120,7 @@ IDBConnectionProjectConceptColleciton
 		
 		conceptCollectionList = new ArrayList<IConceptCollection>();
 		
-		//retrieve the concept collection id for the given project id
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectConceptCollectionDTO.findByProjectid");
-		query.setParameter("projectid", projectId);
-
-		@SuppressWarnings("unchecked")
-		List<ProjectConceptCollectionDTO> projectConceptCollection = query.list();
+		List<ProjectConceptCollectionDTO> projectConceptCollection = project.getProjectConceptCollectionDTOList();
 		
 		//retrieve the concept collection details for every concept collection id
 		for(ProjectConceptCollectionDTO tempProjectConceptCollection : projectConceptCollection)
@@ -133,7 +148,27 @@ IDBConnectionProjectConceptColleciton
 		
 		ProjectConceptCollectionDTO projectConceptCollection = (ProjectConceptCollectionDTO) sessionFactory.getCurrentSession().get(ProjectConceptCollectionDTO.class,projectConceptCollectionKey);
       	
+		//delete the project concept collection mapping form the project DTO
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+		List<ProjectConceptCollectionDTO> projectConceptCollectionList = project.getProjectConceptCollectionDTOList();
+		if((projectConceptCollectionList!=null)&&(projectConceptCollectionList.contains(projectConceptCollection)))
+		{
+			projectConceptCollectionList.remove(projectConceptCollection);
+		}
+		sessionFactory.getCurrentSession().update(project);
+		
+		//delete the project concept collection mapping from the concept collection
+		ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, conceptCollectionId);
+		projectConceptCollectionList = conceptCollection.getProjConceptCollectionDTOList();
+		if((projectConceptCollectionList!=null)&&(projectConceptCollectionList.contains(projectConceptCollection)))
+		{
+			projectConceptCollectionList.remove(projectConceptCollection);
+		}
+		
+		sessionFactory.getCurrentSession().update(conceptCollection);
+		
 		sessionFactory.getCurrentSession().delete(projectConceptCollection);
+		
 		}
 		catch(HibernateException ex)
 		{

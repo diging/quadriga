@@ -104,9 +104,9 @@ public class ProjectConceptCollectionDAOTest {
 		project.setProjectid("PROJ_1_Test");
 		project.setProjectname("testproject1");
 		project.setAccessibility("PUBLIC");
-		project.setCreatedby("projuser");
+		project.setCreatedby("projuser1");
 		project.setCreateddate(date);
-		project.setUpdatedby("projuser");
+		project.setUpdatedby("projuser1");
 		project.setUpdateddate(date);
 		project.setUnixname("PROJ_1");
 		project.setProjectowner(user);
@@ -138,6 +138,7 @@ public class ProjectConceptCollectionDAOTest {
 		projectConceptCollection.setCreateddate(date);
 		projectConceptCollection.setUpdatedby("projuser1");
 		projectConceptCollection.setUpdateddate(date);
+		sessionFactory.getCurrentSession().save(projectConceptCollection);
 		
 		projectConceptCollectionList.add(projectConceptCollection);
 		project.setProjectConceptCollectionDTOList(projectConceptCollectionList);
@@ -152,22 +153,43 @@ public class ProjectConceptCollectionDAOTest {
 	{
 		ProjectConceptCollectionDTOPK projectConceptCollectionKey = new ProjectConceptCollectionDTOPK("PROJ_1_Test","CC_1_Test");
 		ProjectConceptCollectionDTO projectConceptCollection = (ProjectConceptCollectionDTO) sessionFactory.getCurrentSession().get(ProjectConceptCollectionDTO.class, projectConceptCollectionKey);
-		sessionFactory.getCurrentSession().delete(projectConceptCollection);
+		if(projectConceptCollection !=null)
+		{
+			sessionFactory.getCurrentSession().delete(projectConceptCollection);
+		}
 		
 		ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_1_Test");
-	    sessionFactory.getCurrentSession().delete(conceptCollection);
+	    if(conceptCollection !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(conceptCollection);
+	    }
 	    conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_2_Test");
-	    sessionFactory.getCurrentSession().delete(conceptCollection);
+	    if(conceptCollection !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(conceptCollection);
+	    }
 	    
 	    ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
-		sessionFactory.getCurrentSession().delete(project);
+		if(project!=null)
+		{
+	      sessionFactory.getCurrentSession().delete(project);
+		}
 		
 		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
-		sessionFactory.getCurrentSession().delete(user);
-		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser2");
-		sessionFactory.getCurrentSession().delete(user);
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+	    user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser2");
+	    if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
 		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
-		sessionFactory.getCurrentSession().delete(user);
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
 	}
 	
 	@Test
@@ -237,7 +259,6 @@ public class ProjectConceptCollectionDAOTest {
 		
 		ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_1_Test");
 		List<ProjectConceptCollectionDTO> testProjectConceptCollection =  conceptCollection.getProjConceptCollectionDTOList();
-		
 		
 		for(ProjectConceptCollectionDTO tempProjectConceptCollection : testProjectConceptCollection )
 		{
