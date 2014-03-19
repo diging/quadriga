@@ -1076,7 +1076,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Transactional
 	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
 			throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId);
+		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,INetworkManager.VERSION_ZERO);
 
 		if(networkNodeList != null)
 		{
@@ -1140,7 +1140,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	@Transactional
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId);
+		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,INetworkManager.VERSION_ZERO);
 		if(networkNodeList != null)
 		{
 			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
@@ -1164,8 +1164,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	@Transactional
-	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId);
+	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId, int versionNo)throws QuadrigaStorageException{
+		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,versionNo);
 		if(networkNodeList != null)
 		{
 			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
@@ -1256,12 +1256,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 						data2.put("id",network.getId());
 						data2.put("parent",networkParent);
 						String s = "<input type=button	onClick=\"location.href='networks/visualize/"+network.getId()+"'\" value='"+network.getName()+"'>";
-						//data2.put("text","<a href=\"networks/visualize/"+network.getId()+"\">"+network.getName()+"</a>  - (Right click and open in new tab or window)");
 						data2.put("text", s);
 						data2.put("href", "networks/visualize/"+network.getId());
 						JSONObject data2href = new JSONObject();
 						data2href.put("href", "networks/visualize/"+network.getId());
-						//						data2.put("a_attr", data2href);
 						dataArray.put(data2);
 					}
 				}

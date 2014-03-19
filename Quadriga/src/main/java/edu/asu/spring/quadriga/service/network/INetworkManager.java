@@ -47,6 +47,9 @@ public interface INetworkManager {
 	// Constants to mention type of event in the QStore XML
 	public static String RELATIONEVENT = "RE";
 	public static String APPELLATIONEVENT = "AE";
+	
+	//Latest Version number for Network
+	public static int VERSION_ZERO = 0;
 
 	/**
 	 * Getter for QStore network adding URL. 
@@ -174,10 +177,11 @@ public interface INetworkManager {
 	 * This method should help in getting the network's previous version network statements.
 	 * We could use this to view different versions of the networks. 
 	 * @param networkId							{@link INetwork} ID of type {@link String}
+	 * @param versionNo							Version number of network. 
 	 * @return									Returns the {@link List} of {@link INetworkNodeInfo}
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
-	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
+	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId, int versionNo)
 			throws QuadrigaStorageException;
 
 	/**
