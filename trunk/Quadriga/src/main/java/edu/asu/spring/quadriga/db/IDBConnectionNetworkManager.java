@@ -81,7 +81,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return					returns {@link List} of {@link INetworkNodeInfo}	
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<INetworkNodeInfo> getNetworkNodes(String networkId,String versionId)
+	public abstract List<INetworkNodeInfo> getNetworkNodes(String networkId,int versionId)
 			throws QuadrigaStorageException;
 
 	/**

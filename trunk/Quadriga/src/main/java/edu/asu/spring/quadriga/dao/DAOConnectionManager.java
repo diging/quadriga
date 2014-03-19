@@ -1,10 +1,7 @@
 package edu.asu.spring.quadriga.dao;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-
-import javax.xml.bind.JAXBException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -15,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 
 /**
  * This class contains the common methods used in 
