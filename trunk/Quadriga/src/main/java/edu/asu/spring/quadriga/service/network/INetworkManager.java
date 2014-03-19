@@ -374,6 +374,18 @@ public interface INetworkManager {
 	public abstract String getPredicateNameFromStackOfAE(String relationEventTypeId,
 			String predicateName,
 			List<List<Object>> relationEventPredicateMapping);
+
+	/**
+	 * This method should help to get JSon of selected JQuery Type based on version number.
+	 * Our System would store version num for each network and network statement. Based on the version number we need to form the JSon String. for view  
+	 * @param networkId									{@link INetwork} ID of type {@link String}
+	 * @param jqueryType								JQuery type could be D3JQUERY or JITJQUERY of type {@link String}
+	 * @param versionNo									Version number of the {@link INetwork} in form of String
+	 * @return											Returns {@link INetworkJSon} object which contains the JSon String and {@link List} of network Name of type {@link String}
+	 * @throws QuadrigaStorageException					Database storage exception thrown
+	 */
+	public abstract INetworkJSon getJsonForOldNetworks(String networkId, String jqueryType,
+			String versionNo) throws QuadrigaStorageException;
 	
 	
 	

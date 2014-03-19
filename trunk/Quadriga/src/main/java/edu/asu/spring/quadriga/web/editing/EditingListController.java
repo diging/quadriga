@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.web.editing;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.INetwork;
-import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
@@ -202,17 +200,19 @@ public class EditingListController {
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 		String nwId = "\""+networkId+"\"";
-		model.addAttribute("jsonstring",networkJSon.getJson());
 		model.addAttribute("networkid",nwId);
+		String json = null;
+		if(networkJSon!=null){
+			json = networkJSon.getJson();
+		}
+		model.addAttribute("jsonstring",json);
 
 		return "auth/editing/visualize";
 	}
 
 
-	//TODO Fix this error next time.
-
 	/**
-	 * Visualize old version of network
+	 * Visualize old version of network based on the version number
 	 * Get the network displayed on to JSP by passing JSON string on editing page
 	 * @author Lohith Dwaraka
 	 * @param networkId
@@ -222,30 +222,16 @@ public class EditingListController {
 	 * @throws QuadrigaStorageException
 	 * @throws JAXBException
 	 */
-	@RequestMapping(value = "/auth/editing/oldversionvisualize/{networkId}", method = RequestMethod.GET)
-	public String visualizeNetworksOldVersion(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		StringBuffer jsonstring=new StringBuffer();
-		logger.debug("Network id "+networkId);
-		String qstoreGetURL = getQStoreGetURL();
-		logger.debug("Qstore Get URL : "+qstoreGetURL);
-		List<INetworkNodeInfo> networkTopNodesList = networkManager.getNetworkOldVersionTopNodes(networkId);
-		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
-		jsonstring.append("[");
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			jsonstring.append(networkManager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
+	@RequestMapping(value = "/auth/editing/oldversionvisualize/{networkId}/{versionNo}", method = RequestMethod.GET)
+	public String visualizeNetworksOldVersion(@PathVariable("networkId") String networkId, @PathVariable("versionNo") String versionNo, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+		INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
+		String nwId = "\""+networkId+"\"";
+		model.addAttribute("networkid",nwId);
+		String json = null;
+		if(networkJSon!=null){
+			json = networkJSon.getJson();
 		}
-		String jsonstring1 = jsonstring.toString();
-		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
-			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
-		}
-		jsonstring1 = jsonstring1+"]";
-		logger.debug(jsonstring1);
-		logger.info("Json object formed and sent to the JSP");
-		//model.addAttribute("json", "[{\"adjacencies\": [\"1\",{\"nodeTo\": \"5\",\"nodeFrom\": \"3\",\"data\": {\"$color\": \"#557EAA\"}},],\"data\": {\"$color\": \"#83548B\",\"$type\": \"circle\",\"$dim\": 10},\"id\": \"3\",\"name\": \"3\"},{\"adjacencies\": [\"2\",{\"nodeTo\": \"5\",\"nodeFrom\": \"3\",\"data\": {\"$color\": \"#557EAA\"}},],\"data\": {\"$color\": \"#83548B\",\"$type\": \"circle\",\"$dim\": 10},\"id\": \"3\",\"name\": \"3\"},{\"adjacencies\": [{\"nodeTo\": \"4\",\"nodeFrom\": \"5\",\"data\": {\"$color\": \"#557EAA\"}},{\"nodeTo\": \"3\",\"nodeFrom\": \"5\",\"data\": {\"$color\": \"#557EAA\"}}],\"data\": {\"$color\": \"#EBB056\",\"$type\": \"circle\",\"$dim\": 11},\"id\": \"5\",\"name\": \"5\"}, {\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"4\",\"name\": \"4\"},{\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"1\",\"name\": \"1\"},{\"adjacencies\": [],\"data\": {\"$color\": \"#83548B\",\"$type\": \"square\",\"$dim\": 11},\"id\": \"2\",\"name\": \"2\"}]");
-		model.addAttribute("jsonstring",jsonstring1);
+		model.addAttribute("jsonstring",json);
 		return "auth/editing/visualize";
 	}
 
