@@ -167,116 +167,130 @@ public interface INetworkManager {
 
 
 	/**
-	 * 
-	 * @param networkId
-	 * @return
+	 * This method should help in getting the network's previous version network statements.
+	 * We could use this to view different versions of the networks. 
+	 * @param networkId							{@link INetwork} ID of type {@link String}
+	 * @return									Returns the {@link List} of {@link INetworkNodeInfo}
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId)
 			throws QuadrigaStorageException;
 
 	/**
-	 * 
-	 * @param projectid
-	 * @return
+	 * This method should help in getting {@link List} of {@link INetwork} in the {@link IProject}.
+	 * We could use this to list Networks belonging to a {@link IProject}. 
+	 * @param projectid							{@link IProject} ID of type {@link String}
+	 * @return									Returns {@link List} of {@link INetwork}
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	public abstract List<INetwork> getNetworksInProject(String projectid)
 			throws QuadrigaStorageException;
 
 	/**
-	 * 
-	 * @param networkId
-	 * @param networkName
-	 * @return
+	 * This method should help in renaming the {@link INetwork}. 
+	 * We could use this while we have a network been rejected and we add a new {@link INetwork} based on editor annotation.
+	 * We could prefer to change the name of the {@link INetwork} while reuploading the {@link INetwork} through clients. 
+	 * @param networkId							{@link INetwork} ID of type {@link String}
+	 * @param networkName						New {@link INetwork} name of type {@link String}
+	 * @return									Returns success or error message in form of {@link String}.
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	public abstract String updateNetworkName(String networkId,String networkName) throws QuadrigaStorageException;
 
 
 	/**
-	 * 
-	 * @param userName
-	 * @return
-	 * @throws JSONException
+	 * This method should help in getting the JSTree JSon for the a {@link IUser} name.
+	 * This tree JSon would contain the {@link List} of {@link IProject}. 
+	 * Under each {@link IProject} there could a {@link List} of {@link IWorkSpace}. 
+	 * Under each {@link IWorkSpace} there could a {@link List} of {@link INetwork}  
+	 * @param userName							{@link IUser} name of the logged in {@link IUser}
+	 * @return									Returns the JSTree JSon in the form of {@link String}
+	 * @throws JSONException					Throws the JSon Exception in case we have any exception while forming the JSon object
 	 */
-	public abstract String getNetworkTree(String userName) throws JSONException;
+	public abstract String getNetworkJSTreeJson(String userName) throws JSONException;
 
 	/**
-	 * Get Relation Event XML from QStore for a particular {@link RelationEventType} ID.
-	 * @param relationID				{@link RelationEventType} ID of type {@link String}
-	 * @return							
-	 * @throws JAXBException
+	 * This method should help in getting {@link ElementEventsType} XML for a particular {@link RelationEventType} ID.
+	 * Usually our source of XML would be from QStore for a particular {@link RelationEventType} ID.
+	 * This function would return nothing if the {@link RelationEventType} ID is not present in QStore.
+	 * @param relationEventTypeID				{@link RelationEventType} ID of type {@link String}
+	 * @return									Returns the {@link ElementEventsType} Object in form of XML.
+	 * @throws JAXBException					JAXB exception are thrown during unmarshalling the object into XML.
 	 */
-	public abstract  String getRelationEventXmlStringFromQstore(String id)throws JAXBException;
+	public abstract  String getRelationEventXmlStringFromQstore(String relationEventTypeID)throws JAXBException;
 
 	/**
-	 * 
-	 * @return
+	 * This method should help in returning the UUID in the form of {@link String}.
+	 * Usually used to append to a String to make it more unique, as UUID gives a unique ID all the time.
+	 * @return									Returns the UUID in form of {@link String}
 	 */
 	public abstract String shortUUID();
 	
 	/**
-	 * 
-	 * @param networkId
-	 * @param jqueryType
-	 * @return
+	 * This method should help in returning the JSon String for a {@link INetwork} for a particualr JQuery Type
+	 * @param networkId							{@link INetwork} ID of type {@link String}
+	 * @param jqueryType						JQuery type could be D3JQUERY or JITJQUERY
+	 * @return									Returns {@link INetworkJSon} object which contains the JSon String and {@link List} of network Name of type {@link String} 
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	public abstract  INetworkJSon getJsonForNetworks(String networkId, String jqueryType)  throws QuadrigaStorageException;
 
 	/**
-	 * 
-	 * @param predicateObject
-	 * @param nodeObject
-	 * @return
+	 * This method would help in getting the Predicate details from the {@link PredicateObject} in {@link NodeObject}.
+	 * We would be parsing through the {@link RelationEventType} object, where we would encounter {@link PredicateObject}.
+	 * @param predicateObject					Target {@link PredicateObject} 
+	 * @param nodeObject						Target {@link NodeObject}
+	 * @return									Returns the modified {@link NodeObject}
 	 */
 	public abstract NodeObject getPredicateNodeObjectContent(PredicateObject predicateObject,
 			NodeObject nodeObject);
 
 	/**
-	 * 
-	 * @param relationEventId
-	 * @param statementType
-	 * @param statementId
-	 * @param relationEventPredicateMapping
-	 * @param nodeObjectWithStatementList
-	 * @return
-	 * @throws JAXBException
+	 * This method would help in parsing through a statement of type {@link RelationEventType}.
+	 * A Network would contain a {@link List} of Network Statements, while Iterating through each statement we could call this method. 
+	 * @param relationEventId					{@link RelationEventType} ID in form of {@link String}	
+	 * @param statementType						Statement Type could be RE or AE constant
+	 * @param statementId						Usually {@link RelationEventType} ID which should be assigned to each node for highlighting.
+	 * @param relationEventPredicateMapping		{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network. 
+	 * @param nodeObjectWithStatementList		{@link List} of {@link INodeObjectWithStatement} containing the details of {@link NodeObject}
+	 * @return									Returns the updated {@link List} of {@link INodeObjectWithStatement}
+	 * @throws JAXBException					Throws JAXB exception in case we have issues while parsing JAXB element object.
 	 * @throws QStoreStorageException			Database storage exception thrown
 	 */
-	public abstract List<INodeObjectWithStatement> parseEachStatement(String relationEventId,
+	public abstract List<INodeObjectWithStatement> parseEachStatement(String relationEventTypeId,
 			String statementType, String statementId,
 			List<List<Object>> relationEventPredicateMapping,
 			List<INodeObjectWithStatement> nodeObjectWithStatementList)
 			throws JAXBException, QStoreStorageException;
 
 	/**
-	 * 
-	 * @param relationEventId
-	 * @return
-	 * @throws JAXBException
+	 * This method should help in getting the {@link ElementEventsType} object using a {@link RelationEventType} ID.
+	 * Usually the source of the data for {@link RelationEventType} is QStore, We could get the XML from QStore and Marshall it into a {@link ElementEventsType} object.
+	 * @param relationEventId					{@link RelationEventType} ID in form of {@link String}	
+	 * @return									Returns the {@link ElementEventsType} object for a particular {@link RelationEventType} ID
+	 * @throws JAXBException					Throws JAXB exception in case we have issues while unmarshalling.
 	 * @throws QStoreStorageException			Database storage exception thrown
 	 */
-	public abstract ElementEventsType getElementEventTypeFromRelationEvent(
+	public abstract ElementEventsType getElementEventTypeFromRelationEventTypeID(
 			String relationEventId) throws JAXBException,
 			QStoreStorageException;
 
 	/**
-	 * 
-	 * @param xml
-	 * @return
-	 * @throws JAXBException
+	 * This method shoud help in Unmarshalling XML {@link String} into {@link ElementEventsType} object.
+	 * @param xml								XML in the form of {@link String}	
+	 * @return									Returns the {@link ElementEventsType} object for a particular QStore XML
+	 * @throws JAXBException					Throws JAXB exception in case we have issues while unmarshalling.
 	 */
 	public abstract ElementEventsType unMarshalXmlToElementEventsType(String xml)
 			throws JAXBException;
 
 	/**
-	 * 
-	 * @param relationEventType
-	 * @param relationEventObject
-	 * @param relationEventPredicateMapping
-	 * @return
+	 * This method should help in parsing a {@link RelationEventType} object to get the details of the {@link RelationEventObject}.
+	 * It could fetch information of the {@link PredicateObject} , {@link SubjectObject}, {@link ObjectTypeObject} of the {@link RelationEventObject}
+	 * @param relationEventType					{@link RelationEventType} object
+	 * @param relationEventObject				{@link RelationEventObject} object
+	 * @param relationEventPredicateMapping		{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return									Returns the {@link RelationEventObject} object with parsed details.
 	 */
 	public abstract RelationEventObject parseThroughRelationEvent(
 			RelationEventType relationEventType,
