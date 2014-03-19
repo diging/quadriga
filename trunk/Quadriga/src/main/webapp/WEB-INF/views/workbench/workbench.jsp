@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<script
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("ul.pagination1").quickPagination({
@@ -9,41 +13,121 @@
 	});
 	$(function() 
 	{
-		    $( "#tabs" ).tabs();
+		  $( "#tabs" ).tabs();
+		  
+		  allprojects();
+		  ownerprojects();
+		  collaboratorprojects();
+		  wsownerprojects();
+		  wscollaboratorprojects();
+		  
+		    $("#chkboxall").click(function() {
+		    	$("#chkboxall").trigger("change");
+		   
+				allprojects();
+			});
+		   
+		   $("#chkboxowner").click(function() {
+		    	//alert("here");
+		    	$("#chkboxowner").trigger("change");
+		    	ownerprojects();
+		    	
+			});
+		   
+		   
+		   $("#chkboxcollaborator").click(function() {
+				$("#chkboxcollaborator").trigger("change");
+				collaboratorprojects();
+		    	
+		    	
+			});
+		   $("#chkboxwsowner").click(function() {
+				$("#chkboxwsowner").trigger("change");
+				wsownerprojects();
+			});
+			
+			
+			$("#chkboxwscollaborator").click(function() {
+				$("#chkboxwscollaborator").trigger("change");
+				wscollaboratorprojects();
+				
+			});
 	});
 	
-	$('input[type="checkbox"]').bind('click', function(){
-		alert("OK");
-		})
-	$("#chkboxall").bind('change',function(e){
-      alert("here");
-      alert($(this).is(":checked"));
-    });
+	function allprojects(){
+		if ($('#chkboxall').prop('checked')){
+			  $("#chkboxall").trigger("change");
+			  var data = ${allprojects};
+		    	console.log(data);
+		    	//$('#alljstree').show();
+		    	$('#alljstree').jstree(data);
+		    	$('#alljstree').show();
+		  } else {
+			  $('#alljstree').hide();
+			  $("#chkboxall").trigger("change");
+		  
+		  }
+	}
+	function ownerprojects(){
+		 if ($('#chkboxowner').prop('checked')){
+			  $("#chkboxowner").trigger("change");
+			  var data = ${allprojects};
+		    	console.log(data);
+		    	//$('#alljstree').show();
+		    	$('#asownerjstree').jstree(data);
+		    	$('#asownerjstree').show();
+		  } else {
+			  $('#asownerjstree').hide();
+			  $("#chkboxowner").trigger("change");
+		  }
+	}
+	function collaboratorprojects(){
+		if ($('#chkboxcollaborator').prop('checked')){
+			  $("#chkboxcollaborator").trigger("change");
+			  var data = ${collaborator};
+		    	console.log(data);
+		    	//$('#alljstree').show();
+		    	$('#ascollaboratorjstree').jstree(data);
+		    	$('#ascollaboratorjstree').show();
+		  } else {
+			  $('#ascollaboratorjstree').hide();
+			  $("#chkboxcollaborator").trigger("change");
+		  }
+	}
+	function wsownerprojects(){
+		if ($('#chkboxwsowner').prop('checked')){
+			  $("#chkboxwsowner").trigger("change");
+			  var data = ${wsowner};
+		    	console.log(data);
+		    	//$('#alljstree').show();
+		    	$('#aswsownerjstree').jstree(data);
+		    	$('#aswsownerjstree').show();
+		  } else {
+			  $('#aswsownerjstree').hide();
+			  $("#chkboxwsowner").trigger("change");
+		  }
+	}
+	function wscollaboratorprojects(){
+		if ($('#chkboxwscollaborator').prop('checked')){
+			  $("#chkboxwscollaborator").trigger("change");
+			  var data = ${wscolloborator};
+		    	console.log(data);
+		    	//$('#alljstree').show();
+		    	$('#aswscollaboratorjstree  ').jstree(data);
+		    	$('#aswscollaboratorjstree').show();
+		  } else {
+			  $('#aswscollaboratorjstree').hide();
+			  $("#chkboxwscollaborator").trigger("change");
+		  }
+	}
+	
 	/* $("#chkboxall").click(function() {
 		alert("here");
 		var opt = $(this).parent().find('input[type=checkbox]');
         opt.prop('checked', $(this).is(':checked') ? true : false);
 	  
 	}); */
-	function chkAll(id){
-		alert("here");
-		var opt = $("#"+id).parent().find('input[type=checkbox]');
-        opt.prop('checked', $(this).is(':checked') ? true : false);
-        
-       /*  $.ajax({
-			url : "${pageContext.servletContext.contextPath}/auth/workbench/"+id+"/addconceptcollection",
-			type : "POST",
-			data :"selected="+$('#hidden').val(),
-			success : function(data) {
-				location.reload();
-				//alert("done");
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-		event.preventDefault(); */
-	}
+	
 	
 </script>
 <style>
@@ -56,14 +140,22 @@
 		<h2>Quadriga Workbench</h2>
 		<span class="byline">Manage projects and workspaces</span>
 	</header>
+	
 	<div id="users">
 	<!-- <input type="checkbox"  id="chkboxall" checked > All  -->
-	<input type="checkbox"  id="chkboxall" onclick="javascript:chkAll(this.id);" checked > All
+	<input type="checkbox"  id="chkboxall" checked > All
 	<input type="checkbox"  id="chkboxowner" > Owner 
 	<input type="checkbox"  id="chkboxcollaborator" > Collaborator
-	<input type="checkbox"  id="chkboxawowner" > Workspace Owner 
-	<input type="checkbox" id="chkboxwcollaborator" > Workspace Collaborator 
+	<input type="checkbox"  id="chkboxwsowner" > Workspace Owner 
+	<input type="checkbox" id="chkboxwscollaborator" > Workspace Collaborator 
 	</div>
+	
+	<div id="alljstree"></div>
+	<div id="asownerjstree"></div>
+	<div id="ascollaboratorjstree"></div>
+	<div id="aswsownerjstree"></div>
+	<div id="aswscollaboratorjstree"></div>
+	
 	<div id = "tabs" class="tabs">
 	<ul>
 	  <li><a href="#asowner">Owner</a></li>

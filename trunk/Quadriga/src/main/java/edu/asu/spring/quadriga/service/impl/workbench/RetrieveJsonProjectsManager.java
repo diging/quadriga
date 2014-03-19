@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjects;
+import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 
 @Service
-public class RetrieveJsonProjectsManager implements IRetrieveJsonProjects {
+public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager {
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger(RetrieveJsonProjectsManager.class);
@@ -64,7 +64,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjects {
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
 
-		core.put("owner", dataList);
+		core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
@@ -108,7 +108,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjects {
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
 
-		core.put("wscollboarator", dataList);
+		core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
@@ -153,7 +153,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjects {
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
 
-		core.put("wsowner", dataList);
+		core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
@@ -198,7 +198,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjects {
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
 
-		core.put("collaborator", dataList);
+		core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
@@ -267,7 +267,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjects {
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
 
-		core.put("allprojects", dataList);
+		core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);

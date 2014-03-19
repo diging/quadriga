@@ -4,7 +4,7 @@ import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IRetrieveJsonProjects {
+public interface IRetrieveJsonProjectManager {
 	
 	public abstract String getAllProjects(String sUserName)
 			throws QuadrigaStorageException, JSONException;
