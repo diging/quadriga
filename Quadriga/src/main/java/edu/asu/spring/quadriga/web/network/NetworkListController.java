@@ -154,8 +154,12 @@ public class NetworkListController {
 		
 		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 		String nwId = "\""+networkId+"\"";
-		model.addAttribute("jsonstring",networkJSon.getJson());
 		model.addAttribute("networkid",nwId);
+		String json = null;
+		if(networkJSon!=null){
+			json = networkJSon.getJson();
+		}
+		model.addAttribute("jsonstring",json);
 
 		return "auth/networks/visualize";
 	}
@@ -176,8 +180,12 @@ public class NetworkListController {
 		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 
 		String nwId = "\""+networkId+"\"";
-		model.addAttribute("jsonstring",networkJSon.getJson());
 		model.addAttribute("networkid",nwId);
+		String json = null;
+		if(networkJSon!=null){
+			json = networkJSon.getJson();
+		}
+		model.addAttribute("jsonstring",json);
 
 		return "auth/editing/editnetworks";
 	}
