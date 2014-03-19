@@ -33,7 +33,11 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
-
+/**
+ * 
+ * @author Lohith Dwaraka
+ *
+ */
 public interface INetworkManager {
 
 	// Constants to request for type of JQuery JSon 
@@ -298,24 +302,25 @@ public interface INetworkManager {
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * 
-	 * @param relationEventId
-	 * @param predicateName
-	 * @param appellationEventObject
-	 * @param relationEventPredicateMapping
-	 * @return
-	 */
-	public abstract String stackRelationEventPredicateAppellationObject(String relationEventId,
+	 * This method helps in returning the {@link PredicateObject} name if the {@link PredicateObject} is already present in the Stack of {@link PredicateObject}
+	 * @param relationEventTypeId					{@link RelationEventType} ID in the form of {@link String}
+	 * @param predicateName							{@link PredicateObject} name in the form of {@link String}
+	 * @param appellationEventObject				{@link AppellationEventObject} object
+	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return										Returns predicate name in the form of {@link String}
+	 */	
+	public abstract String stackRelationEventPredicateAppellationObject(String relationEventTypeId,
 			String predicateName,
 			AppellationEventObject appellationEventObject,
 			List<List<Object>> relationEventPredicateMapping);
 
 	/**
-	 * 
-	 * @param relationEventType
-	 * @param predicateType
-	 * @param relationEventPredicateMapping
-	 * @return
+	 * This method should help in parsing through the {@link PredicateType} of a particular {@link RelationEventType}.
+	 * We could parse the {@link PredicateType} object for any required variables or objects in it.
+	 * @param relationEventType						Target {@link RelationEventType} object
+	 * @param predicateType							Target {@link PredicateType} object	
+	 * @param relationEventPredicateMapping			{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.	
+	 * @return										Returns the {@link PredicateObject} object with needed info. 
 	 */
 	public abstract PredicateObject parseThroughPredicate(RelationEventType relationEventType,
 			PredicateType predicateType,
