@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.web.publicwebsite;
 
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -21,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import edu.asu.spring.quadriga.domain.INetwork;
-import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 
@@ -152,40 +150,10 @@ public class WebsiteProjectController {
 	 */
 	@RequestMapping(value = "sites/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		StringBuffer jsonstring=new StringBuffer();
-		logger.debug("Network id "+networkId);
-		String qstoreGetURL = getQStoreGetURL();
-		logger.debug("Qstore Get URL : "+qstoreGetURL);
-		List<INetworkNodeInfo> networkTopNodesList = networkmanager.getNetworkTopNodes(networkId);
-		Iterator <INetworkNodeInfo> I = networkTopNodesList.iterator();
-		jsonstring.append("[");
-		networkmanager.setIntialValueForD3JSon();
-		List<List<Object>>relationEventPredicateMapping = new ArrayList<List<Object>>();
-		networkmanager.setRelationEventPredicateMapping(relationEventPredicateMapping);
-		while(I.hasNext()){
-			INetworkNodeInfo networkNodeInfo = I.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
-			jsonstring.append(networkmanager.generateJsontoJQuery(networkNodeInfo.getId(), networkNodeInfo.getStatementType()));
-		}
-		logger.info(networkmanager.getD3JSon());
-		String jsonstring1 = jsonstring.toString();
-		if(jsonstring1.charAt(jsonstring1.length()-1) == ','){
-			jsonstring1 = jsonstring1.substring(0, jsonstring1.length()-1);
-		}
-		jsonstring1 = jsonstring1+"]";
-	//	String newJson = jsonstring1+"#"+networkId;
-		logger.info(jsonstring1);
-	
-		logger.info("Json object formed and sent to the JSP");
-		
+		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 		String nwId = "\""+networkId+"\"";
-		model.addAttribute("jsonstring",jsonstring1);
-		model.addAttribute("networkid",nwId);
-		logger.debug("json string:"+ jsonstring1);
-		logger.info("network id:"+nwId);
-		
-		//model.addAttribute("networkId",networkId);
+		model.addAttribute("jsonstring",networkJSon.getJson());
+		model.addAttribute("networkid",nwId);		
 		return "sites/networks/visualize";
 	}
 }
