@@ -136,7 +136,7 @@ public class NetworkRestController {
 				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 			}
 			
-			networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, "NEW",networkId);
+			networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,networkId);
 
 			if(networkId.endsWith(INetworkManager.DSPACEERROR)){
 				response.setStatus(404);
@@ -441,7 +441,7 @@ public class NetworkRestController {
 				networkManager.archiveNetwork(networkId);
 				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
 				
-				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getWorkspaceid(), "UPDATE", networkId);
+				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getWorkspaceid(), INetworkManager.UPDATENETWORK, networkId);
 
 				if(networkId.endsWith(INetworkManager.DSPACEERROR)){
 					response.setStatus(404);
