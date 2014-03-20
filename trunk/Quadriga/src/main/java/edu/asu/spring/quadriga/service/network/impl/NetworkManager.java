@@ -136,26 +136,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Autowired
 	private IDBConnectionRetrieveProjectManager projectManager;
 
-	boolean fileExist=true;
-
 	@Autowired
 	private IDBConnectionNetworkManager dbConnect;
-
-	/**
-	 * Getter for DSpace file existance in the network XML	
-	 * @return				Returns boolean value of DSpace existance
-	 */
-	public boolean getFileExist(){
-		return this.fileExist;
-	}
-
-	/**
-	 * Setter for DSpace file existance in the network XML	
-	 * @param fileExist				boolean value of DSpace existance
-	 */
-	public void setFileExist(boolean fileExist){
-		this.fileExist = fileExist;
-	}
 
 	/**
 	 * 

@@ -194,4 +194,23 @@ public class ListWSManager implements IListWSManager
 		}
 		return networkList;
 	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * We are using Hibernate DAO to fetch data from DB.
+	 */
+	@Override
+	@Transactional
+	public List<INetwork> getWorkspaceApprovedNetworkList(String workspaceid)
+			throws QuadrigaStorageException {
+		List<INetwork> networkList=null;
+		try{
+			networkList=dbConnect.getWorkspaceApprovedNetworkList(workspaceid);
+		}catch(QuadrigaStorageException e){
+			logger.error("",e);
+		}
+		return networkList;
+	}
 }

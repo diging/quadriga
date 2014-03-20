@@ -7,9 +7,13 @@
 		<Quadriga:conceptcollections>
 			$url/rest/workspace/$workspaceid/conceptcollections
 		</Quadriga:conceptcollections>
-		<Quadriga:networks>
+		<Quadriga:approvednetworks>
+			$url/rest/workspace/$workspaceid/approvednetworks
+		</Quadriga:approvednetworks>
+		<Quadriga:rejectednetworks>
 			$url/rest/workspace/$workspaceid/rejectednetworks
-		</Quadriga:networks>
+		</Quadriga:rejectednetworks>
+
 		<Quadriga:files>
 			$url/rest/workspace/$workspaceid/files
 		</Quadriga:files>
