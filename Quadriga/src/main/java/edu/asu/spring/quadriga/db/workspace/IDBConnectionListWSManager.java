@@ -86,6 +86,15 @@ public interface IDBConnectionListWSManager {
 	 */
 	public abstract List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid)
 			throws QuadrigaStorageException;
+	
+	/**
+	 * Retrieve list of accepted networks for a given workspace.
+	 * @param workspaceid						{@link IWorkSpace} ID in form of {@link String}
+	 * @return									{@link List} of {@link INetwork}
+	 * @throws QuadrigaStorageException			Throws Storage Exception if there is any issue while accessing Database
+	 */
+	public abstract List<INetwork> getWorkspaceApprovedNetworkList(String workspaceid)
+			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieve list of workspace associated to a project for which the user is collaborator.

@@ -405,6 +405,34 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		return workspaceList;
 		
 	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<INetwork> getWorkspaceApprovedNetworkList(String workspaceid)
+			throws QuadrigaStorageException {
+		List<INetwork> networkList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO networks where networks.workspaceid =:workspaceid and networks.status =:status");
+			query.setParameter("workspaceid", workspaceid);
+			query.setParameter("status", INetworkStatus.APPROVED);
+			List<NetworksDTO> networksDTOList = query.list();
+			if(networksDTOList != null && networksDTOList.size() > 0)
+			{
+				networkList = networkDTOMapper.getNetworkList(networksDTOList);
+			}
+		}
+		catch(HibernateException e)
+		{
+			logger.error("getWorkspaceRejectedNetworkList method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return networkList;
+	}
 	
 	
 	

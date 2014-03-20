@@ -130,11 +130,9 @@ public class WorkspaceRestController {
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		}
@@ -188,11 +186,9 @@ public class WorkspaceRestController {
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(403);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		}
