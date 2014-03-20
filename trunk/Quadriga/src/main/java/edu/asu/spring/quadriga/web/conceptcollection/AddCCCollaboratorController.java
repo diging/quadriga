@@ -152,12 +152,13 @@ public class AddCCCollaboratorController {
 				List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
 				for(IQuadrigaRole role : userQuadrigaRole)
 				{
-					if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+					if( (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) || (user.getUserName().equals(principal.getName())) )
 					{
 						userIterator.remove();
 						break;
 					}
 				}
+				
 			}
 			model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 			
