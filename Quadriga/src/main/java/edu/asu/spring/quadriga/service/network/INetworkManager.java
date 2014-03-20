@@ -104,11 +104,10 @@ public interface INetworkManager {
 	 * Get {@link INetwork} object for a given networkId and {@link IUser}.
 	 * We could access workspace, project details, network status and other information through this method  
 	 * param networkID					{@link INetwork} ID of type {@link String} parameter
-	 * @param user						{@link IUser} object 
 	 * @return							{@link INetwork} object is returned
 	 * @throws QuadrigaStorageException 	Database storage exception thrown
 	 */
-	public abstract INetwork getNetwork(String networkId, IUser user)
+	public abstract INetwork getNetwork(String networkId)
 			throws QuadrigaStorageException;
 
 	/**
@@ -409,5 +408,15 @@ public interface INetworkManager {
 			String workspaceId, String uploadStatus, String networkId) throws JAXBException;
 	
 	
+	
+	/**
+	 * This method should help in getting the Network details.
+	 * The network details would include the name, network XML from QStore, annotations of Network. 
+	 * @param xml										XML of list of statement IDs belonging to a particular {@link INetwork}
+	 * @param networkId									{@link INetwork} ID in form of {@link String}
+	 * @return											Returns XML in form of {@link String} which contains Network XML QStore, Network Status and annotation.
+	 * @throws QuadrigaStorageException					Database storage exception thrown
+	 */
+	public abstract String getNetworkDetails(String xml, String networkId)  throws QuadrigaStorageException;
 	
 }

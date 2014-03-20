@@ -572,11 +572,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String assignNetworkToUser(String networkId, IUser user)
+	public String assignNetworkToUser(String networkId, IUser user, String networkName)
 			throws QuadrigaStorageException {
 		NetworkAssignedDTO newtorkAssignedDTO = networkMapper
-				.getNetworkAssignedDTO(networkId, user.getUserName(),
-						INetworkStatus.PENDING, INetworkStatus.NOT_ARCHIVED);
+				.getNetworkAssignedDTOWithNetworkName(networkId, user.getUserName(),
+						INetworkStatus.PENDING, INetworkStatus.NOT_ARCHIVED, networkName);
 
 		try {
 			sessionFactory.getCurrentSession().save(newtorkAssignedDTO);

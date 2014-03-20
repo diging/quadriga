@@ -42,6 +42,9 @@ public class NetworkAssignedDTO implements Serializable {
     @Column(name = "status")
     private String status;
     @Basic(optional = false)
+    @Column(name = "networkname")
+    private String networkname;
+    @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
     @Basic(optional = false)
@@ -151,6 +154,14 @@ public class NetworkAssignedDTO implements Serializable {
 		this.quadrigaUserDTO = quadrigaUserDTO;
 	}
 
+	public String getNetworkname() {
+		return networkname;
+	}
+
+	public void setNetworkname(String networkname) {
+		this.networkname = networkname;
+	}
+	
     @Override
     public int hashCode() {
         int hash = 0;
@@ -169,4 +180,6 @@ public class NetworkAssignedDTO implements Serializable {
         }
         return true;
     }
+    
+    
 }
