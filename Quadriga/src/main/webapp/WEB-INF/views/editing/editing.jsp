@@ -97,6 +97,9 @@
 								<input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}/D3'"
 								value='Edit Network new'>
+								<input type=button
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/versionhistory/${network.id}'"
+								value='View History'>
 								</li>
 						</ul>
 					</details></li>

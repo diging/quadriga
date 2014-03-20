@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
+import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
+import edu.asu.spring.quadriga.domain.factories.INetworkVersionsFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
@@ -42,6 +44,9 @@ public class NetworkDTOMapper {
 	
 	@Autowired
 	private INetworkOldVersionFactory networkOldVersionFactory;
+	
+	@Autowired
+	private INetworkVersionsFactory networkVersionsFactory;
 	
 	private static final Logger logger = LoggerFactory.getLogger(NetworkDTOMapper.class);
 	
@@ -215,6 +220,26 @@ public class NetworkDTOMapper {
 		}
 		
 		return networkOldVersion;
+	}
+	
+	public List<INetworkVersions> getNetworkVersions(List<NetworkAssignedDTO> networkAssignedDTOList){
+		List<INetworkVersions> networkVersions = null;
+		if(networkAssignedDTOList!=null){
+			networkVersions = new ArrayList<INetworkVersions>();
+			
+			INetworkVersions version = null;
+			for(NetworkAssignedDTO networkAssignedDTO: networkAssignedDTOList)
+			{
+				version = networkVersionsFactory.createNetworkVersionsObject();
+				version.setNetworkname(networkAssignedDTO.getNetworkname());
+				version.setAssigneduser(networkAssignedDTO.getUpdatedby());
+				version.setStatus(networkAssignedDTO.getStatus());
+				version.setVersionnumber(networkAssignedDTO.getIsarchived());
+				networkVersions.add(version);
+			}
+			
+		}
+		return networkVersions;
 	}
 	
 	/**
