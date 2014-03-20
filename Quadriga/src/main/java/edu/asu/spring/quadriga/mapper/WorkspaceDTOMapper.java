@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceEditorDTOPK;
@@ -86,5 +89,30 @@ public class WorkspaceDTOMapper extends DAOConnectionManager{
 		workspaceEditor.setUpdateddate(date);
 		
 		return workspaceEditor;
+	}
+	
+	
+	/**
+	 * This method associates the concept collection to the given workspace.
+	 * @param workspace
+	 * @param conceptCollection
+	 * @param userName
+	 * @return WorkspaceConceptCollectionDTO object
+	 */
+	public WorkspaceConceptcollectionDTO getWorkspaceConceptCollection(WorkspaceDTO workspace, ConceptCollectionDTO conceptCollection,String userName)
+	{
+		WorkspaceConceptcollectionDTO workspaceConceptCollection = null;
+        WorkspaceConceptcollectionDTOPK workspaceConceptCollectionKey = null;
+        Date date = new Date();
+        workspaceConceptCollectionKey = new WorkspaceConceptcollectionDTOPK(workspace.getWorkspaceid(),conceptCollection.getConceptCollectionid());
+        workspaceConceptCollection = new WorkspaceConceptcollectionDTO();
+        workspaceConceptCollection.setWorkspaceConceptcollectionDTOPK(workspaceConceptCollectionKey);
+        workspaceConceptCollection.setWorkspaceDTO(workspace);
+        workspaceConceptCollection.setConceptCollectionDTO(conceptCollection);
+        workspaceConceptCollection.setCreatedby(userName);
+        workspaceConceptCollection.setCreateddate(date);
+        workspaceConceptCollection.setUpdatedby(userName);
+        workspaceConceptCollection.setUpdateddate(date);
+		return workspaceConceptCollection;
 	}
 }

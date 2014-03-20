@@ -40,39 +40,56 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 		String errMsg = "";
 		ConceptCollectionDTO conceptCollection = null;
 		WorkspaceDTO workspace = null;
-		List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList = null;
+		List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionList = null;
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("from WorkspaceConceptcollectionDTO wrkConceptColl where wrkConceptColl.workspaceConceptcollectionDTOPK.workspaceid =:workspaceid and wrkConceptColl.workspaceConceptcollectionDTOPK.conceptcollectionid =:conceptcollectionid");
-			query.setParameter("workspaceid", workspaceId);
-			query.setParameter("conceptcollectionid", CCId);
-			System.out.println("Query list:"+query.list().size());
-			if(query.list().size() > 0)
+			workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+			if(workspace == null)
 			{
-				errMsg = "Concept Collection already exists";
+				throw new QuadrigaStorageException("Invalid workspace id");
 			}
 			
-			else
+			conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, CCId);
+			if(conceptCollection == null)
 			{
-				workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-				conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, CCId);
-				
-				workspaceConceptCollectionDTOList = workspace.getWorkspaceConceptCollectionDTOList();
-				WorkspaceConceptcollectionDTOPK wrkspaceCCDTOKey = new WorkspaceConceptcollectionDTOPK(workspaceId,CCId);
-				WorkspaceConceptcollectionDTO wrkspaceCCDTO  = new WorkspaceConceptcollectionDTO();
-				wrkspaceCCDTO.setWorkspaceConceptcollectionDTOPK(wrkspaceCCDTOKey);
-				wrkspaceCCDTO.setCreatedby(userId);
-				wrkspaceCCDTO.setCreateddate(new Date());
-				wrkspaceCCDTO.setUpdatedby(userId);
-				wrkspaceCCDTO.setUpdateddate(new Date());
-				wrkspaceCCDTO.setConceptCollectionDTO(conceptCollection);
-				wrkspaceCCDTO.setWorkspaceDTO(workspace);
-				
-				workspaceConceptCollectionDTOList.add(wrkspaceCCDTO);
-				
-				sessionFactory.getCurrentSession().save(wrkspaceCCDTO);
-				sessionFactory.getCurrentSession().update(workspace);
+				throw new QuadrigaStorageException("Invalid concept collection");
 			}
+			
+			WorkspaceConceptcollectionDTOPK wrkspaceCCDTOKey = new WorkspaceConceptcollectionDTOPK(workspaceId,CCId);
+			WorkspaceConceptcollectionDTO wrkspaceCCDTO  = (WorkspaceConceptcollectionDTO) sessionFactory.getCurrentSession().get(WorkspaceConceptcollectionDTO.class, wrkspaceCCDTOKey);
+			if(wrkspaceCCDTO!=null)
+			{
+				throw new QuadrigaStorageException("Workspace is already associated with the concept collection");
+			}
+			
+			Date date = new Date();
+			wrkspaceCCDTO = new WorkspaceConceptcollectionDTO();
+			wrkspaceCCDTO.setWorkspaceConceptcollectionDTOPK(wrkspaceCCDTOKey);
+			wrkspaceCCDTO.setCreatedby(userId);
+			wrkspaceCCDTO.setCreateddate(date);
+			wrkspaceCCDTO.setUpdatedby(userId);
+			wrkspaceCCDTO.setUpdateddate(date);
+			wrkspaceCCDTO.setConceptCollectionDTO(conceptCollection);
+			wrkspaceCCDTO.setWorkspaceDTO(workspace);
+			sessionFactory.getCurrentSession().save(wrkspaceCCDTO);
+			
+			//add the workspace concept collection mapping to workspace DTO
+			workspaceConceptCollectionList = workspace.getWorkspaceConceptCollectionDTOList();
+			if(workspaceConceptCollectionList == null)
+			{
+				workspaceConceptCollectionList = new ArrayList<WorkspaceConceptcollectionDTO>();
+			}
+			workspaceConceptCollectionList.add(wrkspaceCCDTO);
+			sessionFactory.getCurrentSession().update(workspace);
+			
+			//add the workspace concept collection mapping to the concept collection DTO
+			workspaceConceptCollectionList = conceptCollection.getWsConceptCollectionDTOList();
+			if(workspaceConceptCollectionList == null)
+			{
+				workspaceConceptCollectionList = new ArrayList<WorkspaceConceptcollectionDTO>();
+			}
+			workspaceConceptCollectionList.add(wrkspaceCCDTO);
+			sessionFactory.getCurrentSession().update(conceptCollection);
 		}
 		catch(Exception e)
 		{
@@ -86,20 +103,29 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<IConceptCollection> listWorkspaceCC(String workspaceId, String userId) throws QuadrigaStorageException {
 		List<IConceptCollection> conceptCollList = new ArrayList<IConceptCollection>();
 		try
 		{
-			Query query = sessionFactory.getCurrentSession().createQuery("Select wrkConceptColl.conceptCollectionDTO from WorkspaceConceptcollectionDTO wrkConceptColl where wrkConceptColl.workspaceConceptcollectionDTOPK.workspaceid =:workspaceid");
-			query.setParameter("workspaceid", workspaceId);
-			List<ConceptCollectionDTO> conceptCollDTOList = query.list();
-				for(ConceptCollectionDTO conceptCollectionDTO : conceptCollDTOList)
-				{
-					IConceptCollection conceptCollection = collectionMapper.getConceptCollection(conceptCollectionDTO);
-					conceptCollList.add(conceptCollection);
-				}
+			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+			if(workspace == null)
+			{
+				return null;
+			}
+			List<WorkspaceConceptcollectionDTO> workspaceConceptCollection = workspace.getWorkspaceConceptCollectionDTOList();
+			
+			if(workspaceConceptCollection == null)
+			{
+				return null;
+			}
+			
+			for(WorkspaceConceptcollectionDTO tempWSConceptCollection : workspaceConceptCollection)
+			{
+				ConceptCollectionDTO conceptCollectionDTO = tempWSConceptCollection.getConceptCollectionDTO();
+				IConceptCollection conceptCollection = collectionMapper.getConceptCollection(conceptCollectionDTO);
+				conceptCollList.add(conceptCollection);
+			}
 		}
 		catch(Exception e)
 		{
@@ -155,28 +181,53 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 	public void deleteWorkspaceCC(String workspaceId, String userId, String CCId) throws QuadrigaStorageException 
 	{
 		WorkspaceDTO workspace = null;
-		List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList = null;
+		List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionList = null;
 		try
 		{
 		
 		workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
 		
-		workspaceConceptCollectionDTOList = workspace.getWorkspaceConceptCollectionDTOList();
+		if(workspace == null)
+		{
+			throw new QuadrigaStorageException("workspaceid is invalid");
+		}
+		
+		ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, CCId);
+		
+		if(conceptCollection == null)
+		{
+			throw new QuadrigaStorageException("ConceptCollection id is invalid");
+		}
 		
 		//retrieve the concept collection associated with the workspace
 		WorkspaceConceptcollectionDTOPK workspaceConceptCollectionKey = new WorkspaceConceptcollectionDTOPK(workspaceId,CCId);
 		
 		WorkspaceConceptcollectionDTO workspaceConceptCollection = (WorkspaceConceptcollectionDTO) sessionFactory.getCurrentSession().get(WorkspaceConceptcollectionDTO.class,workspaceConceptCollectionKey);
 		
-		if(workspaceConceptCollectionDTOList.contains(workspaceConceptCollection))
+		if(workspaceConceptCollection == null)
 		{
-			workspaceConceptCollectionDTOList.remove(workspaceConceptCollection);
+			throw new QuadrigaStorageException("Workspace is not mapped to the given concept collection");
 		}
 		
-		workspace.setWorkspaceConceptCollectionDTOList(workspaceConceptCollectionDTOList);
-		
 		sessionFactory.getCurrentSession().delete(workspaceConceptCollection);
+		
+		
+		//remove the mapping from the workspace DTO object
+		workspaceConceptCollectionList = workspace.getWorkspaceConceptCollectionDTOList();
+		if((workspaceConceptCollectionList !=null)&&(workspaceConceptCollectionList.contains(workspaceConceptCollection)))
+		{
+			workspaceConceptCollectionList.remove(workspaceConceptCollection);
+		}
 		sessionFactory.getCurrentSession().update(workspace);
+		
+		//remove the mapping from the Concept Collection DTO object
+		workspaceConceptCollectionList = conceptCollection.getWsConceptCollectionDTOList();
+		if((workspaceConceptCollectionList !=null)&&(workspaceConceptCollectionList.contains(workspaceConceptCollection)))
+		{
+			workspaceConceptCollectionList.remove(workspaceConceptCollection);
+		}
+		sessionFactory.getCurrentSession().update(conceptCollection);
+		
 		}
 		catch(Exception ex)
 		{
