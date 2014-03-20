@@ -173,7 +173,7 @@ public class NetworkRestController {
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String status="UNKNOWN";
-		INetwork network =networkManager.getNetwork(networkId,user);
+		INetwork network =networkManager.getNetwork(networkId);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		status = network.getStatus();
@@ -447,7 +447,7 @@ public class NetworkRestController {
 		
 		INetwork network = null;
 		try{
-			network = networkManager.getNetwork(networkId,user);
+			network = networkManager.getNetwork(networkId);
 			if(network==null){
 				logger.info("network is null");
 				response.setStatus(404);

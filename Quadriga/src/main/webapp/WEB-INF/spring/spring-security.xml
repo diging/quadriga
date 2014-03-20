@@ -42,7 +42,7 @@
 	</http>
 	
 	<ldap-server url="ldap://diging.asu.edu:10389" manager-dn="uid=admin,ou=system"
-		manager-password="" /> 
+		manager-password="Adm1nLDAP!" /> 
 
 	<authentication-manager alias="authenticationManager" erase-credentials="false">
 		<authentication-provider>

@@ -140,11 +140,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * @throws QuadrigaStorageException			Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
-	public INetwork getNetwork(String networkId, IUser user) throws QuadrigaStorageException {
+	public INetwork getNetwork(String networkId) throws QuadrigaStorageException {
 		INetwork network = null;
 		try {
-			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworksDTO network where network.networkowner = :networkowner and network.networkid = :networkid");
-			query.setParameter("networkowner", user.getUserName());
+			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworksDTO network where network.networkid = :networkid");
 			query.setParameter("networkid", networkId);
 
 			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();

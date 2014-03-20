@@ -50,7 +50,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return					return {@link INetwork} object associated to the networkid, user
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract INetwork getNetwork(String networkid, IUser user) throws QuadrigaStorageException;
+	public abstract INetwork getNetwork(String networkid) throws QuadrigaStorageException;
 
 	/**
 	 * This would give the list of {@link INetwork} belonging the {@link IUser}.
