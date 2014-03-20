@@ -58,6 +58,10 @@ public interface INetworkManager {
 	
 	// DSpace error
 	public static String DSPACEERROR = "DSPACEERROR";
+	
+	// New network
+	public static String NEWNETWORK= "NEW";
+	public static String UPDATENETWORK= "UPDATE";
 
 	/**
 	 * Getter for QStore network adding URL. 

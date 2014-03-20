@@ -1059,7 +1059,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 
 		// Add network into database 
-		if(uploadStatus == "NEW"){
+		if(uploadStatus == INetworkManager.NEWNETWORK){
 			try{
 				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceId);
 			}catch(QuadrigaStorageException e1){

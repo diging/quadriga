@@ -348,8 +348,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 			return "";
 		} catch (Exception e) {
-			System.out
-			.println("Exception occurred.....................................");
 			if (transaction != null)
 				transaction.rollback();
 
@@ -411,9 +409,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 		@SuppressWarnings("unchecked")
 		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
-		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
-			System.out.println(projectWorkspaceDTO.getProjectDTO().getProjectname());
-		}
+
 
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
@@ -421,8 +417,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
 			if (projectWorkspaceDTO != null) {
-				//String workspaceid1 = projectWorkspaceDTO.getWorkspaceDTO().getWorkspaceid();
-				//System.out.println(workspaceid1);
+
 				String workspaceid1 = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
 				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworksDTO.findByWorkspaceid");
 				queryNetworks.setParameter("workspaceid", workspaceid1);
