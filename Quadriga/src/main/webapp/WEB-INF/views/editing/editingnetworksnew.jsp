@@ -40,9 +40,9 @@ function changeLayout(json,networkid,path,type)
 
 <div id="container">
 
-
+<div id="center-container">
 <div id="chart"></div>
-
+</div>
 
 
 <div id="right-container">
