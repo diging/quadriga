@@ -78,7 +78,8 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
- * This class acts as a Network manager which handles the networks object
+ * This class Implements the {@link INetworkManager}. 
+ * It implemented all the methods required to work on storing, displaying or manipulating {@link INetwork}
  * 
  * @author : Lohith Dwaraka
  */
@@ -95,10 +96,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Autowired
 	private INodeObjectWithStatementFactory nodeObjectWithStatementFactory;
-	
+
 	@Autowired
 	private IJITNetworkManager jitNetworkManager;
-	
+
 	@Autowired
 	private ID3NetworkManager d3NetworkManager;
 
@@ -214,7 +215,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		return networkJSon;
 	}
-	
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -224,7 +225,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		ElementEventsType elementEventType =getElementEventTypeFromRelationEventTypeID(relationEventId);
 		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
-		
+
 		while(creationEventIterator.hasNext()){
 			CreationEvent creationEvent = creationEventIterator.next();
 			// Check if event is Appellation event
@@ -241,16 +242,16 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				RelationEventType relationEventType = (RelationEventType) creationEvent;
 				jsonObject.setIsRelationEventObject(true);
 				jsonObject.setRelationEventObject(parseThroughRelationEvent(relationEventType,new RelationEventObject(),relationEventPredicateMapping));
-				
-				
+
+
 
 				// This would help us in forming the json string as per requirement.
 				nodeObjectWithStatementList = prepareNodeObjectContent(jsonObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
 
 			}
 		}
-		
-				
+
+
 		return nodeObjectWithStatementList;
 	}
 
@@ -305,23 +306,23 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		// Handle Predicate of the RelationType
 		PredicateType predicateType = relationType.getPredicateType(relationType);
 		relationEventObject.setPredicateObject(parseThroughPredicate(relationEventType, predicateType, relationEventPredicateMapping));
-		
+
 		// Handle Subject of the RelationType
 		SubjectObjectType subjectType = relationType.getSubjectType(relationType);
 		SubjectObject subjectObject = parseThroughSubject(relationEventType, subjectType, relationEventPredicateMapping);
 		relationEventObject.setSubjectObject(subjectObject);		
-		
+
 		// Handle Object of the RelationType
 		SubjectObjectType objectType = relationType.getObjectType(relationType);
 		ObjectTypeObject objectTypeObject = parseThroughObject(relationEventType, objectType, relationEventPredicateMapping);
 		relationEventObject.setObjectTypeObject(objectTypeObject);
-		
-		
+
+
 		return relationEventObject;
 	}
 
 
-	
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -346,8 +347,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return predicateObject;
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -384,7 +385,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -420,7 +421,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		//	Check for Appellation event inside subject and add if any
 		AppellationEventType appellationEventType = subjectObjectType.getAppellationEvent();
 		if(appellationEventType == null){
-			
+
 		}else{
 			List<TermType> termTypeList= appellationEventType.getTerms(appellationEventType);
 			Iterator <TermType> termTypeIterator = termTypeList.iterator();
@@ -434,10 +435,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			}
 		}
 		return subjectObject;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -473,7 +474,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		//	Check for Appellation event inside subject and add if any
 		AppellationEventType appellationEventType = subjectObjectType.getAppellationEvent();
 		if(appellationEventType == null){
-			
+
 		}else{
 			List<TermType> termTypeList= appellationEventType.getTerms(appellationEventType);
 			Iterator <TermType> termTypeIterator = termTypeList.iterator();
@@ -487,17 +488,17 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			}
 		}
 		return objectTypeObject;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * {@inheritDoc}
 	 */
 	@Override
 	public List<INodeObjectWithStatement> prepareNodeObjectContent(RelationEventObject relationEventObject,List<INodeObjectWithStatement> nodeObjectWithStatementList, String statementId){
-		
+
 		// Get predicate Object structure
 		PredicateObject predicateObject = relationEventObject.getPredicateObject();
 		NodeObject nodeObject = getPredicateNodeObjectContent(predicateObject,new NodeObject());
@@ -510,7 +511,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
 			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
-			
+
 			// Get Object into temp structure 
 			if(objectTypeObject.getIsRelationEventObject()){
 				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
@@ -525,9 +526,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
-			
+
 			nodeObjectWithStatementList = prepareNodeObjectContent(subjectObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
-			
+
 		}else{
 
 			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
@@ -535,7 +536,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			nodeObject.setSubjectId(appellationEventObject1.getTermId());
 			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
 		}
-		
+
 		// Get Object into temp structure 
 		if(objectTypeObject.getIsRelationEventObject()){
 			nodeObjectWithStatementList = prepareNodeObjectContent(objectTypeObject.getRelationEventObject(),nodeObjectWithStatementList,statementId);
@@ -546,12 +547,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
 			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 		}
-		
+
 		return nodeObjectWithStatementList;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -565,7 +566,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		nodeObject.setPredicate(appellationEventObject.getNode());
 		nodeObject.setPredicateId(appellationEventObject.getTermId());
 		logger.debug("Predicate : "+appellationEventObject.getNode() );
-		
+
 		return nodeObject;
 	}
 
@@ -594,128 +595,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return "";
 
-	}
-	
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * This implementation uses the hibernate for dataaccess from the database
-	 */
-	@Override
-	@Transactional
-	public String receiveNetworkSubmitRequest(JAXBElement<ElementEventsType> response,IUser user,String networkName,String workspaceid,String updateStatus,String networkId){
-
-		setFileExist(true);
-		List <String[]> networkDetailsCache = new ArrayList<String[]>();
-		IWorkSpace workspace = null;
-		try {
-			workspace = wsManager.getWorkspaceDetails(workspaceid, user.getUserName());
-		} catch (QuadrigaStorageException e3) {
-			e3.printStackTrace();
-		} catch (QuadrigaAccessException e3) {
-			e3.printStackTrace();
-		}
-
-
-		// Get DSpace of the workspace
-		List<IBitStream> bitStreamList = workspace.getBitstreams();
-		logger.info("list of bitstream");
-		Iterator <IBitStream> I2 = bitStreamList.iterator();
-		while(I2.hasNext()){
-			logger.info(I2.next().getId()+"");
-		}
-		// Below code reads the top level Appelation events 
-
-		ElementEventsType e = response.getValue();
-		List<CreationEvent> c =e.getRelationEventOrAppellationEvent();
-		Iterator <CreationEvent> I= c.iterator();
-		while(I.hasNext()){
-			CreationEvent ce = I.next();
-			if(ce instanceof AppellationEventType)
-			{
-				List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
-				Iterator <JAXBElement<?>> I1 = e2.iterator();
-				while(I1.hasNext()){
-					JAXBElement<?> element = (JAXBElement<?>) I1.next();
-					// get id
-					if(element.getName().toString().contains("id")){
-						logger.info("Appellation Event ID : "+element.getValue().toString());
-						//dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "AE", "1", user);
-						String networkNodeInfo[] = { element.getValue().toString(),"AE", "1"};
-						networkDetailsCache.add(networkNodeInfo);
-					}
-					// get dspace quadriga URL
-					if(element.getName().toString().contains("source_reference")){
-						logger.debug("Dspace file : "+element.getValue().toString());
-						boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
-						if(dspaceFileExists == false){
-							setFileExist(false);
-						}
-					}
-				}
-
-			}
-			// Below code reads the top level Relation events 
-			if(ce instanceof RelationEventType){
-				List<JAXBElement<?>> e2 = ce.getIdOrCreatorOrCreationDate();
-				Iterator <JAXBElement<?>> I1 = e2.iterator();
-				while(I1.hasNext()){
-					JAXBElement<?> element = (JAXBElement<?>) I1.next();
-					// get id
-					if(element.getName().toString().contains("id")){
-						logger.info("Relation Event ID : "+element.getValue().toString());
-						//dbConnect.addNetworkStatement(networkId, element.getValue().toString(), "RE", "1", user);
-						String networkNodeInfo[] = { element.getValue().toString(),"RE", "1"};
-						networkDetailsCache.add(networkNodeInfo);
-
-					}
-					// get dspace quadriga URL
-					if(element.getName().toString().contains("source_reference")){
-						logger.debug("Dspace file : "+element.getValue().toString());
-						boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
-						if(dspaceFileExists == false){
-							setFileExist(false);
-						}
-					}
-				}
-				RelationEventType re = (RelationEventType) (ce);
-				try{
-					// Go Recursively and check for Relation event within a relation events
-					// and add it to DB
-					getRelationEventElements(re,networkDetailsCache,bitStreamList);
-				}catch(QuadrigaStorageException se){
-					logger.error("DB Storage issue",se);
-				}
-
-			}
-		}
-		// Check if it DSpace is present in the XML
-		if(!getFileExist()){
-			logger.info("Network not uploaded");
-			logger.info("Some of the text files in the uploaded network were not present in the workspace");
-			return "";
-		}
-		logger.debug("File Exist paramete value : "+getFileExist());
-
-		// Add network into DB 
-		if(updateStatus == "NEW"){
-			try{
-				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceid);
-			}catch(QuadrigaStorageException e1){
-				logger.error("DB action error ",e1);
-			}
-		}
-		// Add network statements for networks
-		for(String node[] : networkDetailsCache){
-			try{
-				String rowid = generateUniqueID();
-				dbConnect.addNetworkStatement(rowid,networkId,node[0],node[1], node[2], user);
-			}catch(QuadrigaStorageException e1){
-				logger.error("DB error while adding network statment",e1);
-			}
-		}
-		return networkId;
 	}
 
 
@@ -789,179 +668,13 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
 		return Long.toString(l, Character.MAX_RADIX);
 	}
-	
 
 
 
-	/**
-	 * 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<String[]> getRelationEventElements(RelationEventType re,List<String[]> networkDetailsCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
-		List <?> ee = re.getRelationCreatorOrRelation();
-		Iterator <?> Iee=ee.iterator();
-		while(Iee.hasNext()){
-			Object o = Iee.next();
-			if(o instanceof RelationType){
-				RelationType rt = (RelationType) o;
-				List<JAXBElement<?>> e3 =rt.getIdOrCreatorOrCreationDate();
-				Iterator <JAXBElement<?>> I2 = e3.iterator();
-				while(I2.hasNext()){
-					JAXBElement<?> element = (JAXBElement<?>) I2.next();
 
-					if(element.getValue().toString().contains("SubjectObjectType")){
-						//	Handles the subject part of the relation
-						if(element.getName().toString().contains("subject")){
-							SubjectObjectType  subject= (SubjectObjectType) element.getValue();
 
-							//	Check for relation event inside subject and add if any
-							RelationEventType re1 = subject.getRelationEvent();
-							if(re1 == null){
-								logger.debug("RE1 is null");
-							}else{
-								List<JAXBElement<?>> e2 = re1.getIdOrCreatorOrCreationDate();
-								Iterator <JAXBElement<?>> I1 = e2.iterator();
-								while(I1.hasNext()){
-									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
-									if(element1.getName().toString().contains("id")){
-										logger.debug("Relation Event ID subject: "+element1.getValue().toString());
-										//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
-										String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
-										networkDetailsCache.add(networkNodeInfo);
-									}
-									if(element1.getName().toString().contains("source_reference")){
-										logger.debug("Dspace file : "+element1.getValue().toString());
-										boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
-										if(dspaceFileExists == false){
-											setFileExist(false);
-										}
-									}
-								}
-								networkDetailsCache=getRelationEventElements(re1,networkDetailsCache,bitStreamList);
-							}
 
-							//	Check for Appellation event inside subject and add if any
-							AppellationEventType ae1 = subject.getAppellationEvent();
-							if(ae1 == null){
-								logger.debug("AE1 is null");
-							}else{
-								logger.debug("AE1 found subject");
-								List<JAXBElement<?>> e2 = ae1.getIdOrCreatorOrCreationDate();
-								Iterator <JAXBElement<?>> I1 = e2.iterator();
-								while(I1.hasNext()){
-									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
-									if(element1.getName().toString().contains("id")){
-										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-										//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-										String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
-										networkDetailsCache.add(networkNodeInfo);
-									}
-									if(element1.getName().toString().contains("source_reference")){
-										logger.debug("Dspace file : "+element1.getValue().toString());
-										boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
-										if(dspaceFileExists == false){
-											setFileExist(false);
-										}
-									}
-								}
-							}
-						}else 
-							//	Handles the object part of the relation
-							if(element.getName().toString().contains("object")){
 
-								SubjectObjectType  object= (SubjectObjectType) element.getValue();
-
-								//	Check for Relation event inside object and add if any
-								RelationEventType re1 = object.getRelationEvent();
-								if(re1 == null){
-									logger.debug("RE1 is null");
-								}else{
-									List<JAXBElement<?>> e2 = re1.getIdOrCreatorOrCreationDate();
-									Iterator <JAXBElement<?>> I1 = e2.iterator();
-									while(I1.hasNext()){
-										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
-										if(element1.getName().toString().contains("id")){
-											logger.debug("Relation Event ID object: "+element1.getValue().toString());
-											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "RE", "0", user);
-											String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
-											networkDetailsCache.add(networkNodeInfo);
-										}
-										if(element1.getName().toString().contains("source_reference")){
-											logger.debug("Dspace file : "+element1.getValue().toString());
-											boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
-											if(dspaceFileExists == false){
-												setFileExist(false);
-											}
-										}
-									}
-									networkDetailsCache=getRelationEventElements(re1,networkDetailsCache,bitStreamList);
-								}
-								//	Check for Appellation event inside object and add if any
-								AppellationEventType ae1 = object.getAppellationEvent();
-								if(ae1 == null){
-									logger.debug("AE1 is null");
-								}else{
-									logger.debug("AE1 found object");
-									List<JAXBElement<?>> e2 = ae1.getIdOrCreatorOrCreationDate();
-									Iterator <JAXBElement<?>> I1 = e2.iterator();
-									while(I1.hasNext()){
-										JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
-										if(element1.getName().toString().contains("id")){
-											logger.debug("Appellation Event ID : "+element1.getValue().toString());
-											//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-											String networkNodeInfo[] = { element1.getValue().toString(),"AE", "0"};
-											networkDetailsCache.add(networkNodeInfo);
-										}
-										if(element1.getName().toString().contains("source_reference")){
-											logger.debug("Dspace file : "+element1.getValue().toString());
-											boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
-											if(dspaceFileExists == false){
-												setFileExist(false);
-											}
-										}
-									}
-								}
-
-							}
-					}else 
-						//	Handles the predicate part of the relation
-
-						if(element.getValue().toString().contains("PredicateType")){
-
-							PredicateType  predicate= (PredicateType) element.getValue();
-
-							//	Check for Appellation event inside predicate and add if any
-							AppellationEventType ae1 = predicate.getAppellationEvent();
-							if(ae1 == null){
-								logger.debug("AE1 is null");
-							}else{
-								logger.debug("AE1 found object");
-								List<JAXBElement<?>> e2 = ae1.getIdOrCreatorOrCreationDate();
-								Iterator <JAXBElement<?>> I1 = e2.iterator();
-								while(I1.hasNext()){
-									JAXBElement<?> element1 = (JAXBElement<?>) I1.next();
-									if(element1.getName().toString().contains("id")){
-										logger.debug("Appellation Event ID : "+element1.getValue().toString());
-										//dbConnect.addNetworkStatement(networkId, element1.getValue().toString(), "AE", "0", user);
-										String networkNodeInfo[] = { element1.getValue().toString(),"RE", "0"};
-										networkDetailsCache.add(networkNodeInfo);
-									}
-									if(element1.getName().toString().contains("source_reference")){
-										logger.debug("Dspace file : "+element1.getValue().toString());
-										boolean dspaceFileExists = hasBitStream(element1.getValue().toString(), bitStreamList);
-										if(dspaceFileExists == false){
-											setFileExist(false);
-										}
-									}
-								}
-							}
-						}
-				}
-			}
-		}
-		return networkDetailsCache;
-	}
 
 
 	/**
@@ -1214,7 +927,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return "success";
 	}
-	
+
 
 	/**
 	 * 
@@ -1305,6 +1018,333 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}		
 
 		return networkJSon;
+	}
+
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * This implementation uses the hibernate for dataaccess from the database
+	 */
+	@Override
+	@Transactional
+	public String storeNetworkDetails(String xml, IUser user, String networkName,String workspaceId, String uploadStatus, String networkId) throws JAXBException{
+		ElementEventsType elementEventType = unMarshalXmlToElementEventsType(xml);
+		
+		// Get Workspace details.
+		IWorkSpace workspace = null;
+		try {
+			workspace = wsManager.getWorkspaceDetails(workspaceId, user.getUserName());
+		} catch (QuadrigaStorageException e3) {
+			logger.error("Error while getting workspace details",e3);
+		} catch (QuadrigaAccessException e3) {
+			logger.error("User doesn't have access to workspace",e3);
+		}
+
+		// Get DSpace of the workspace
+		List<IBitStream> bitStreamList = workspace.getBitstreams();
+
+		NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
+
+		// Below code reads the top level Appelation events 
+
+		newNetworkDetailCache = parseNewNetworkStatement(elementEventType,bitStreamList,newNetworkDetailCache);
+
+		// Check if it DSpace is present in the XML
+		if(!newNetworkDetailCache.isFileExists()){
+			logger.info("Network not uploaded");
+			logger.info("Some of the text files in the uploaded network were not present in the workspace");
+			return INetworkManager.DSPACEERROR;
+		}
+
+		// Add network into database 
+		if(uploadStatus == "NEW"){
+			try{
+				networkId=dbConnect.addNetworkRequest(networkName, user,workspaceId);
+			}catch(QuadrigaStorageException e1){
+				logger.error("DB action error ",e1);
+			}
+		}
+
+		List<String []> networkDetailsCache = newNetworkDetailCache.getNetworkDetailsCache();
+		// Add network statements for networks
+		for(String node[] : networkDetailsCache){
+			try{
+				String rowid = generateUniqueID();
+				dbConnect.addNetworkStatement(rowid,networkId,node[0],node[1], node[2], user);
+			}catch(QuadrigaStorageException e1){
+				logger.error("DB error while adding network statment",e1);
+			}
+		}
+		return networkId;
+	}
+
+	/**
+	 * Parsing each network statement of the request network input. Network would contain Appellation Event and Relation Event
+	 * @param elementEventType						{@link ElementEventsType} object
+	 * @param bitStreamList							{@link List} of {@link IBitStream}
+	 * @param newNetworkDetailCache					{@link NewNetworkDetailsCache} object to hold the cache of network details
+	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
+	 */
+	private NewNetworkDetailsCache parseNewNetworkStatement(
+			ElementEventsType elementEventType, List<IBitStream> bitStreamList,
+			NewNetworkDetailsCache newNetworkDetailCache) {	
+
+		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
+		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
+		while(creationEventIterator.hasNext()){
+			CreationEvent creationEvent = creationEventIterator.next();
+			// Cache Appellation Events
+			if(creationEvent instanceof AppellationEventType){
+				newNetworkDetailCache =  parseNewAppellationEvent(newNetworkDetailCache, creationEvent, bitStreamList);
+			}
+			// Cache Relation Events
+			if(creationEvent instanceof RelationEventType){
+				newNetworkDetailCache =  parseNewRelationEvent(newNetworkDetailCache, creationEvent, bitStreamList);
+
+			}
+		}
+		return newNetworkDetailCache;
+	}
+
+	/**
+	 * Parses the Appellation Event and stores the Appellation event in the cache.
+	 * @param newNetworkDetailCache					{@link NewNetworkDetailsCache} object to hold the cache of network details
+	 * @param creationEvent							{@link CreationEvent} object of {@link AppellationEventType} type.
+	 * @param bitStreamList							{@link List} of {@link IBitStream} object
+	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
+	 */
+	public NewNetworkDetailsCache parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,CreationEvent creationEvent,List<IBitStream> bitStreamList){
+
+
+		List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
+		while(elementsIterator.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
+			if(element.getName().toString().contains("id")){
+				String networkNodeInfo[] = { element.getValue().toString(),INetworkManager.APPELLATIONEVENT, INetworkManager.TOPNODE};
+				newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+			}
+			// Check if dspace file exists. 
+			if(element.getName().toString().contains("source_reference")){
+				logger.debug("Dspace file : "+element.getValue().toString());
+				boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+				if(dspaceFileExists == false){
+					newNetworkDetailCache.setFileExists(false);
+				}
+			}
+		}
+
+		return newNetworkDetailCache;
+	}
+
+
+	/**
+	 * Parses the Relation Event and stores the Relation event in the cache.
+	 * @param newNetworkDetailCache					{@link NewNetworkDetailsCache} object to hold the cache of network details
+	 * @param creationEvent							{@link CreationEvent} object of {@link RelationEventType} type.
+	 * @param bitStreamList							{@link List} of {@link IBitStream} object
+	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
+	 */
+	public NewNetworkDetailsCache parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,CreationEvent creationEvent,List<IBitStream> bitStreamList){
+
+
+		List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
+		while(elementsIterator.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
+
+			// get relation event id
+			if(element.getName().toString().contains("id")){
+				String networkNodeInfo[] = { element.getValue().toString(),INetworkManager.RELATIONEVENT, INetworkManager.TOPNODE};
+				newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+			}
+
+			// get dspace quadriga URL
+			if(element.getName().toString().contains("source_reference")){
+				boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+				if(dspaceFileExists == false){
+					newNetworkDetailCache.setFileExists(false);
+				}
+			}
+
+		}
+		RelationEventType relationEventType = (RelationEventType) (creationEvent);
+		try{
+			// Go Recursively and check for Relation event within a relation events
+			newNetworkDetailCache = parseIntoRelationEventElement(relationEventType,newNetworkDetailCache,bitStreamList);
+		}catch(QuadrigaStorageException se){
+			logger.error("DB Storage issue",se);
+		}
+
+
+		return newNetworkDetailCache;
+	}
+
+
+	/**
+	 * Parse into the Relation Events by searches for subject, object and predicate.
+	 * @param relationEventType								{@link RelationEventType} object
+	 * @param newNetworkDetailCache							{@link NewNetworkDetailsCache} object to hold the cache of network details
+	 * @param bitStreamList									{@link List} of {@link IBitStream} object
+	 * @return												Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
+	 * @throws QuadrigaStorageException
+	 */
+	public NewNetworkDetailsCache parseIntoRelationEventElement(RelationEventType relationEventType, NewNetworkDetailsCache newNetworkDetailCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
+
+		List <?> creatorOrRelationList = relationEventType.getRelationCreatorOrRelation();
+		Iterator <?> creatorOrRelationIterator=creatorOrRelationList.iterator();
+
+		while(creatorOrRelationIterator.hasNext()){
+			Object o = creatorOrRelationIterator.next();
+			if(o instanceof RelationType){
+				RelationType relationType = (RelationType) o;
+				List<JAXBElement<?>> elementsList =relationType.getIdOrCreatorOrCreationDate();
+				Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
+				while(elementsIterator.hasNext()){
+					JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
+
+					if(element.getValue().toString().contains("SubjectObjectType")){
+						//	Handles the subject part of the relation
+						if(element.getName().toString().contains("subject")){
+							SubjectObjectType  subject= (SubjectObjectType) element.getValue();
+							newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, subject, bitStreamList);
+
+						}else{
+							//	Handles the object part of the relation
+							if(element.getName().toString().contains("object")){
+
+								SubjectObjectType  object= (SubjectObjectType) element.getValue();
+								newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, object, bitStreamList);
+
+							}
+						}
+					}else{ 
+						//	Handles the predicate part of the relation
+						if(element.getValue().toString().contains("PredicateType")){
+
+							PredicateType  predicateType= (PredicateType) element.getValue();
+							AppellationEventType appellationEventType = predicateType.getAppellationEvent();
+							newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType, bitStreamList);
+						}
+					}
+				}
+			}
+		}
+
+		return newNetworkDetailCache;
+	}
+
+	/**
+	 * Parse {@link SubjectObjectType} and store the appropriate ID in the cache
+	 * @param newNetworkDetailCache						{@link NewNetworkDetailsCache} object to hold the cache of network details
+	 * @param subjectOrObject							{@link SubjectObjectType} object 
+	 * @param bitStreamList								{@link List} of {@link IBitStream} object	
+	 * @return											Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
+	 * @throws QuadrigaStorageException
+	 */
+	public NewNetworkDetailsCache parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,SubjectObjectType subjectOrObject,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
+
+
+		//	Check for relation event inside subject
+		RelationEventType relationEventType = subjectOrObject.getRelationEvent();
+		if(relationEventType == null){
+			// Check for Appellation event inside subject and add if any
+			AppellationEventType appellationEventType = subjectOrObject.getAppellationEvent();
+			newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType, bitStreamList);	
+		}else{
+			List<JAXBElement<?>> elementsList = relationEventType.getIdOrCreatorOrCreationDate();
+			Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
+			while(elementsIterator.hasNext()){
+				JAXBElement<?> elements = (JAXBElement<?>) elementsIterator.next();
+
+				if(elements.getName().toString().contains("id")){
+					String networkNodeInfo[] = { elements.getValue().toString(),INetworkManager.RELATIONEVENT, INetworkManager.NONTOPNODE};
+					newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+				}
+
+				if(elements.getName().toString().contains("source_reference")){
+					boolean dspaceFileExists = hasBitStream(elements.getValue().toString(), bitStreamList);
+					if(dspaceFileExists == false){
+						newNetworkDetailCache.setFileExists(false);
+					}
+				}
+			}
+			newNetworkDetailCache=parseIntoRelationEventElement(relationEventType,newNetworkDetailCache,bitStreamList);
+		}
+
+		return newNetworkDetailCache;
+	}
+
+
+
+	/**
+	 * Parse {@link AppellationEventType} usually which is found in Predicate and store the appropriate ID in the cache
+	 * @param newNetworkDetailCache					{@link NewNetworkDetailsCache} object to hold the cache of network details
+	 * @param appellationEventType					{@link AppellationEventType}objects
+	 * @param bitStreamList							{@link List} of {@link IBitStream} object
+	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
+	 */
+	public NewNetworkDetailsCache parseNewAppellationEventFoundInRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,AppellationEventType appellationEventType,List<IBitStream> bitStreamList){
+
+
+		//	Check for Appellation event inside predicate
+		if(appellationEventType == null){
+			logger.debug("AE1 is null");
+		}else{
+			logger.debug("AE1 found object");
+			List<JAXBElement<?>> elementsList = appellationEventType.getIdOrCreatorOrCreationDate();
+			Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
+			while(elementsIterator.hasNext()){
+				JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
+
+				if(element.getName().toString().contains("id")){
+					String networkNodeInfo[] = { element.getValue().toString(),INetworkManager.APPELLATIONEVENT, INetworkManager.NONTOPNODE};
+					newNetworkDetailCache.getNetworkDetailsCache().add(networkNodeInfo);
+				}
+
+				if(element.getName().toString().contains("source_reference")){
+					boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+					if(dspaceFileExists == false){
+						newNetworkDetailCache.setFileExists(false);
+					}
+				}
+			}
+		}
+
+		return newNetworkDetailCache;
+	}
+
+	/**
+	 * This inner class would be used to cache the network details of newly uploaded network.
+	 * We use hold the cache until all the data in the uploaded network seems legitimate as per our general rules of network. 
+	 * @author Lohith Dwaraka
+	 *
+	 */
+	class NewNetworkDetailsCache{
+
+		List <String[]> networkDetailsCache;
+		boolean fileExists;
+
+		NewNetworkDetailsCache(){
+			this.networkDetailsCache = new ArrayList<String[]>();
+			this.fileExists = true;
+		}
+
+		public List<String[]> getNetworkDetailsCache() {
+			return networkDetailsCache;
+		}
+		public void setNetworkDetailsCache(List<String[]> networkDetailsCache) {
+			this.networkDetailsCache = networkDetailsCache;
+		}
+		public boolean isFileExists() {
+			return fileExists;
+		}
+		public void setFileExists(boolean fileExists) {
+			this.fileExists = fileExists;
+		}
+
 	}
 
 }

@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.service.network;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -11,7 +10,6 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IProject;
@@ -34,6 +32,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 /**
+ * This interface would have all the methods required to work on storing, displaying or manipulating {@link INetwork} 
  * 
  * @author Lohith Dwaraka
  *
@@ -48,8 +47,17 @@ public interface INetworkManager {
 	public static String RELATIONEVENT = "RE";
 	public static String APPELLATIONEVENT = "AE";
 	
-	//Latest Version number for Network
+	// Latest Version number for Network
 	public static int VERSION_ZERO = 0;
+	
+	//  Top node in Network
+	public static String TOPNODE = "1";
+	
+	// Non Top node in Network
+	public static String NONTOPNODE = "0";
+	
+	// DSpace error
+	public static String DSPACEERROR = "DSPACEERROR";
 
 	/**
 	 * Getter for QStore network adding URL. 
@@ -75,25 +83,18 @@ public interface INetworkManager {
 	 */
 	public abstract String getQStoreGetPOSTURL();
 
-	
-	public abstract String receiveNetworkSubmitRequest(
-			JAXBElement<ElementEventsType> response, IUser user,
-			String networkName, String workspaceid,String updateStatus,String networkId);
 
 	/**
-	 * Stores XML from Vogon into Q-Store
-	 * @author Lohith Dwaraka
-	 * @param XML
-	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
+	 * This method should help in storing the XML in QStore and receive output from QStore with IDs.
+	 * We could check for errors from QStores if the XML sent to store may not be well formed.
+	 * @param XML									Network XML in form of {@link String}	
+	 * @return										Returns the XML with IDs filled by QStore
+	 * @throws ParserConfigurationException			Parsing exception 
+	 * @throws SAXException							SAX exception while parsing the MXL
+	 * @throws IOException							IO Exceptions while accessing QStore.
 	 */
 	public abstract String storeXMLQStore(String XML)
 			throws ParserConfigurationException, SAXException, IOException;
-
-	public abstract List<String[]> getRelationEventElements(RelationEventType re,
-			List<String[]> networkNodeCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException;
 
 	/**
 	 * Get {@link INetwork} object for a given networkId and {@link IUser}.
@@ -386,6 +387,22 @@ public interface INetworkManager {
 	 */
 	public abstract INetworkJSon getJsonForOldNetworks(String networkId, String jqueryType,
 			String versionNo) throws QuadrigaStorageException;
+
+	/**
+	 * This method should help to store the Network XML from clients into QStore
+	 * We should store all the nodes ID ( RelationEvent ID, Appellation ID ) in the network XML.
+	 * Also check if the text files mentioned in the XML is present in the workspace the networks is added to. 
+	 * @param xml										Network XML of type {@link String}
+	 * @param user										{@link IUser} object 
+	 * @param networkName								{@link INetwork} name of type {@link String}
+	 * @param workspaceId								{@link IWorkSpace} ID of type {@link String}
+	 * @param uploadStatus								Upload status of the network - NEW or UPDATE
+	 * @param networkId									{@link INetwork} ID of type {@link String}
+	 * @return											Returns the Network ID or Error message
+	 * @throws JAXBException							JAXB exception for any XML to object unmarshalling.
+	 */
+	public abstract String storeNetworkDetails(String xml, IUser user, String networkName,
+			String workspaceId, String uploadStatus, String networkId) throws JAXBException;
 	
 	
 	

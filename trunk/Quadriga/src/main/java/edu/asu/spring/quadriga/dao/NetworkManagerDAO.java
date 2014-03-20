@@ -284,8 +284,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			query.setParameter("networkid", networkId);
 			query.setParameter("versionId",versionId);
 			query.setParameter("isTop",isTop);
-			logger.info("version ID ======== " + versionId);
-			logger.info("Is Top ======== " + isTop);
+			
 			@SuppressWarnings("unchecked")
 			List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
 			if (listNetworkStatementsDTO != null) {
