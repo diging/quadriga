@@ -704,6 +704,13 @@
 			value="/WEB-INF/views/editing/editingnetworksnew.jsp" />
 	</definition>
 	
+	<definition name="auth/editing/history" extends="base.definition.editing">
+		<put-attribute name="title" value="Quadriga Networks Edit" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/editing/networkshistory.jsp" />
+	</definition>
+	
+	
 </tiles-definitions>
 
 	

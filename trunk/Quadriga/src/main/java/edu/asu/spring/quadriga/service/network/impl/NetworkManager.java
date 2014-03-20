@@ -44,6 +44,7 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -818,6 +819,19 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		//Fetch the list of networks in the project
 		List<INetwork> networksList = dbConnect.getNetworks(projectid);
+
+		if(networksList != null){
+			return networksList;
+		}
+		return null;
+	}
+	
+	@Override
+	@Transactional
+	public List<INetworkVersions> getNetworkVersions(String networkid) throws QuadrigaStorageException{
+
+		
+		List<INetworkVersions> networksList = dbConnect.getAllNetworkVersions(networkid);
 
 		if(networksList != null){
 			return networksList;

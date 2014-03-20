@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
@@ -235,13 +236,19 @@ public class EditingListController {
 		return "auth/editing/visualize";
 	}
 
-	@RequestMapping(value = "/auth/editing/oldversionvisualize/{networkId}/", method = RequestMethod.GET)
+	@RequestMapping(value = "/auth/editing/versionhistory/{networkId}/", method = RequestMethod.GET)
 	public String viewHistory(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		//INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
-		String nwId = "\""+networkId+"\"";
-		model.addAttribute("networkid",nwId);
+		//String nwId = "\""+networkId+"\"";
+		//model.addAttribute("networkid",nwId);
+		List<INetworkVersions> networkVersions = networkManager.getNetworkVersions(networkId);
 		
-		return "auth/editing/visualize";
+		if(networkVersions!=null && !networkVersions.isEmpty()){
+			model.addAttribute("Versions", networkVersions);
+			return "auth/editing/history";
+		}
+		
+		return null;
 	}
 	
 	/**

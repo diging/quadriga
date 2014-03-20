@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -418,5 +419,8 @@ public interface INetworkManager {
 	 * @throws QuadrigaStorageException					Database storage exception thrown
 	 */
 	public abstract String getNetworkDetails(String xml, String networkId)  throws QuadrigaStorageException;
+
+	List<INetworkVersions> getNetworkVersions(String networkid)
+			throws QuadrigaStorageException;
 	
 }

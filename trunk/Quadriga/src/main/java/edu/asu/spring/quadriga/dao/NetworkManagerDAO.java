@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.INetworkOldVersion;
+import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
@@ -458,6 +459,27 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<INetworkVersions> getAllNetworkVersions(String networkId) throws QuadrigaStorageException{
+		if(networkId == null || networkId.equals(""))
+			return null;
+		
+		List<INetworkVersions> networkList = new ArrayList<INetworkVersions>();
+		
+		
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworkAssignedDTO.findByNetworkid");
+		query.setParameter("networkid", networkId);
+		List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
+		
+		if(networkAssignedDTOList!=null){
+			networkList.addAll(networkMapper.getNetworkVersions(networkAssignedDTOList));
+		}
+		
+		return networkList;
+	}
+	
 
 	/**
 	 * Get the old versions of the network that were archived.
