@@ -13,7 +13,7 @@
 	
 	div.ex {
 	
-		width:200px;
+		width:250px;
 		float:left;
 	}
 	
@@ -27,7 +27,7 @@
 	
 	div.rolesError{
 	float:left;
-	
+	margin-top:-45px;
 	}
 	
 </style>
@@ -68,17 +68,18 @@ function onSubmit(){
 <div class="wrap">
 
 <div class="ex" >
-    <h5>select collaborator</h5>
+    <h4>select collaborator</h4>
 	<form:select path="userObj" id="userName">
 	    <form:option value="NONE" label="----- Select -----"/>
 	   	<form:options items="${notCollaboratingUsers}"  itemValue="userName" itemLabel="name" /> 
-	</form:select> 
+	</form:select>
+	<br> 
  	<div class="userError"><form:errors path="userObj" class="ui-state-error-text"></form:errors></div>
 </div> 	 
 <br/>
 
 <div class="ex1">
-    <h5>select access rights</h5>
+    <h4>select access rights</h4>
 	<ul><form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" element="li" /> </ul>	
 	<div class="rolesError"><form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors></div>
 </div>

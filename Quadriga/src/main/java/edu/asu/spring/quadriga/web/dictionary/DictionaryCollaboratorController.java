@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
@@ -144,6 +145,22 @@ public class DictionaryCollaboratorController {
 		modelAndView.getModelMap().put("collaborator", collaborator); 
 
 		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
+		//remove the restricted user
+				Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
+				while(userIterator.hasNext())
+				{
+					//fetch the quadriga roles and eliminate the restricted user
+					IUser user = userIterator.next();
+					List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+					for(IQuadrigaRole role : userQuadrigaRole)
+					{
+						if( (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) || (user.getUserName().equals(principal.getName())) )
+						{
+							userIterator.remove();
+							break;
+						}
+					}	
+				}
 		modelAndView.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
 		
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
@@ -167,7 +184,7 @@ public class DictionaryCollaboratorController {
 	}
 	
 	/**
-	 * this method is used to delete the collaborators from the dictionary
+	 * this method is used to adds the collaborators from the dictionary
 	 * 
 	 * @param dictionaryId
 	 * @param collaborator		object returned from the view

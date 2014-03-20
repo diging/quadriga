@@ -5,10 +5,31 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
     
 <style>
-div.ex {
-	color:#01A9DB;
-	font-style: italic
-}
+
+div.wrap {
+	  
+		 overflow: auto;
+		 margin-bottom:-30px; 
+	}
+	
+	div.ex {
+	
+		width:250px;
+		float:left;
+	}
+	
+	div.ex1{
+	
+		width:200px;
+		margin-top:-29px;
+		float:left;
+		overflow: auto;
+	}
+	
+	div.rolesError{
+	float:left;
+	margin-top:-45px;
+	}
 </style>
 
 <script>
@@ -43,16 +64,25 @@ function onSubmit(){
 <div>${dictionarydesc}</div>
 	<c:if test="${not empty nonCollaboratingUsers}">
 	<hr>
-	<div class="ex" style="float: left;">select collaborator</div>
+	<div class="wrap">
+	
+	<div class="ex">
+	<h4>select collaborator</h4>
 	<form:select path="userObj" id="selectbox" name="userName" onchange="enableDisable()" >
-	  	<form:option value="NONE" label="--- Select ---"/>
+	  	<form:option value="NONE" label="----- Select -----"/>
 		<form:options items="${nonCollaboratingUsers}"  itemValue="userName" itemLabel="userName" /> 
 	</form:select> 
-	<form:errors path="userObj" cssClass="ui-state-error-text"></form:errors>  
 	<br>
-	<div class="ex" style="float: left;">select access rights</div>	
-	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" />	
-	<form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors>
+	<form:errors path="userObj" cssClass="ui-state-error-text"></form:errors>  
+	</div>
+	<br>
+	<div class="ex1">
+	<h4>select access rights</h4>
+	<ul><form:checkboxes element="li" path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="displayName" /></ul>	
+	<div class="rolesError"><form:errors path="collaboratorRoles" cssClass="ui-state-error-text"></form:errors></div>
+	</div>
+	
+	</div>
 	<br>
 	<input type="submit" value="Add">
 <input type="button" value="Okay" onClick="onSubmit()">

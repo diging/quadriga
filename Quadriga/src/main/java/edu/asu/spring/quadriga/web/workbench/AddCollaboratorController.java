@@ -127,7 +127,7 @@ public class AddCollaboratorController {
 
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addcollaborators", method = RequestMethod.GET)
-	public ModelAndView displayAddCollaborator(@PathVariable("projectid") String projectid) 
+	public ModelAndView displayAddCollaborator(@PathVariable("projectid") String projectid, Principal principal) 
 			throws QuadrigaStorageException, QuadrigaAccessException 
 	{
 		
@@ -157,7 +157,7 @@ public class AddCollaboratorController {
 			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
 			for(IQuadrigaRole role : userQuadrigaRole)
 			{
-				if(role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED))
+				if( (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) || (user.getUserName().equals(principal.getName())) )
 				{
 					userIterator.remove();
 					break;
