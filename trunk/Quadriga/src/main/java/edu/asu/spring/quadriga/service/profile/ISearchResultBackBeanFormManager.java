@@ -5,9 +5,9 @@ import java.util.List;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 /**
- * the interface used for setting the searchresult to SearchResultBackBean class
- * retrieved from viaf service 
- *  
+ * the interface used for setting the searchresults  retrieved from viaf service 
+ * of SearchResult class type to SearchResultBackBean class
+ * 
  * @author rohit pendbhaje
  *
  */
