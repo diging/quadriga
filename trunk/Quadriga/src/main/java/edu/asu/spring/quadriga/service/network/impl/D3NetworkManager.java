@@ -20,6 +20,9 @@ import edu.asu.spring.quadriga.d3.domain.factory.ID3LinkFactory;
 import edu.asu.spring.quadriga.d3.domain.factory.ID3NodeFactory;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.ObjectTypeObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.PredicateObject;
+import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
@@ -51,8 +54,9 @@ public class D3NetworkManager implements ID3NetworkManager {
 			.getLogger(D3NetworkManager.class);
 
 
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#parseNetwork(java.util.List)
+	/**
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public INetworkJSon parseNetworkForD3Jquery(List<INetworkNodeInfo> networkTopNodesList){
@@ -98,6 +102,14 @@ public class D3NetworkManager implements ID3NetworkManager {
 	}
 
 
+	/**
+	 * This method would prepare {@link D3Map} which which has a {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * We maintain a cache of it until we parse the complete network.  
+	 * @param d3Map												{@link D3Map} object to cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @param nodeObjectWithStatementList						List of {@link INodeObjectWithStatement}
+	 * @param relationEventPredicateMapping						{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 */
 	private D3Map prepareD3Map(D3Map d3Map, List<INodeObjectWithStatement> nodeObjectWithStatementList, List<List<Object>> relationEventPredicateMapping) {
 
 		Iterator<INodeObjectWithStatement> nodeObjectWithStatementIterator =  nodeObjectWithStatementList.iterator();
@@ -109,6 +121,12 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3Map;
 	}
 
+	/**
+	 * This method would help in generating the D# JQuery JSon using the {@link D3Map} object.
+	 * We would form the JSon using the list of nodes and links of the networks. 
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @return													Returns JSon for D3 JQuery in form of {@link String}	
+	 */
 	public String getD3JSonString(D3Map d3Map){
 		StringBuffer d3JsonString= new StringBuffer("");
 
@@ -123,7 +141,12 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3JsonString.toString();
 	}
 
-	private Object addLinksToD3JSonString(D3Map d3Map) {
+	/**
+	 * This method would help in getting JSon having links of a network. 
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @return													Returns JSon related to links in form of {@link String}
+	 */
+	private String addLinksToD3JSonString(D3Map d3Map) {
 
 		List<ID3Node> d3NodeList = d3Map.getD3NodeList();
 		List<ID3Link> d3LinkList = d3Map.getD3LinkList();
@@ -149,7 +172,12 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3JsonString.toString();
 	}
 
-	private Object addNodesToD3JSonString(D3Map d3Map) {
+	/**
+	 * This method would help in getting JSon having Nodes of a network. 
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @return													Returns JSon related to nodes in form of {@link String}
+	 */
+	private String addNodesToD3JSonString(D3Map d3Map) {
 		List<ID3Node> d3NodeList = d3Map.getD3NodeList();
 		StringBuffer d3JsonString = new StringBuffer("");
 
@@ -203,8 +231,12 @@ public class D3NetworkManager implements ID3NetworkManager {
 	}
 
 	/**
+	 * This method would prepare {@link D3Map} object for each node.
 	 * Method to add nodes and links into List, which can be used to make a JSON object later.
-	 * @param nodeObject
+	 * @param nodeObjectWithStatement							{@link INodeObjectWithStatement} object which holds {@link NodeObject}
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @param relationEventPredicateMapping						{@link List} of {@link List} of {@link Object} to hold {@link PredicateObject} in it to avoid redundancy in the network.
+	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.				
 	 */
 	public D3Map prepareD3JSonPerNode(INodeObjectWithStatement nodeObjectWithStatement,D3Map d3Map, List<List<Object>> relationEventPredicateMapping){
 
@@ -239,6 +271,15 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3Map;
 	}
 
+	/**
+	 * This method would help in adding the links to D3Map for a particular relation.
+	 * We would have predicate, Subject and Object to forms the links. Link would contain Predicate --> Subject and Predicate --> Object
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @param predicateNameId									{@link PredicateObject} name or ID of type {@link String}
+	 * @param subjectNodeId										{@link SubjectObject} name or ID of type {@link String}
+	 * @param objectNodeId										{@link ObjectTypeObject} name or ID of type {@link String}
+	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.											
+	 */
 	private D3Map addD3Links(D3Map d3Map, String predicateNameId,
 			String subjectNodeId, String objectNodeId) {
 
@@ -262,7 +303,17 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3Map;
 	}
 
-	private D3Map addPredicateToNodeList(D3Map d3Map, String predicateNameId, String predicateName,
+	
+	/**
+	 * This method would help in adding the node details of predicate to the {@link D3Map}.
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @param predicateId										{@link PredicateObject} ID of type {@link String}		
+	 * @param predicateName										{@link PredicateObject} name of type {@link String}
+	 * @param nodeObject										{@link NodeObject} object which hold node details
+	 * @param statementId										Statement ID of the relation to which this node belongs to
+	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.								
+	 */
+	private D3Map addPredicateToNodeList(D3Map d3Map, String predicateId, String predicateName,
 			NodeObject nodeObject, String statementId) {
 
 		Map<String,Integer> d3NodeIdMap = d3Map.getD3NodeIdMap();
@@ -270,19 +321,19 @@ public class D3NetworkManager implements ID3NetworkManager {
 		int nodeIndex = d3Map.getIndex();
 
 		// Adding Predicate into node list
-		if(!d3NodeIdMap.containsKey(predicateNameId)){
+		if(!d3NodeIdMap.containsKey(predicateId)){
 			ID3Node d3NodePredicate = d3NodeFactory.createD3NodeObject();
 			List<String> stmtList = d3NodePredicate.getStatementIdList();
 			stmtList.add(statementId);
 			d3NodePredicate.setStatementIdList(stmtList);
 			d3NodePredicate.setNodeName(predicateName);
-			d3NodePredicate.setNodeId(predicateNameId);
+			d3NodePredicate.setNodeId(predicateId);
 			d3NodePredicate.setGroupId(ID3Constant.RELATION_EVENT_PREDICATE_TERM);
 			d3NodeList.add(d3NodePredicate);
-			d3NodeIdMap.put(predicateNameId,nodeIndex);
+			d3NodeIdMap.put(predicateId,nodeIndex);
 			nodeIndex++;
 		}else{
-			int index= d3NodeIdMap.get(predicateNameId);
+			int index= d3NodeIdMap.get(predicateId);
 			ID3Node d3NodePredicate = d3NodeList.get(index);
 			List<String> stmtList = d3NodePredicate.getStatementIdList();
 			boolean flag=false;
@@ -304,6 +355,14 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3Map;
 	}
 
+	/**
+	 * This method would help in adding the node details of object to the {@link D3Map}.
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @param objectNodeId										{@link ObjectTypeObject} ID of type {@link String}
+	 * @param nodeObject										{@link NodeObject} object which hold node details
+	 * @param statementID										Statement ID of the relation to which this node belongs to
+	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 */	
 	private D3Map addObjectToNodeList(D3Map d3Map, String objectNodeId,
 			NodeObject nodeObject, String statementID) {
 		Map<String,Integer> d3NodeIdMap = d3Map.getD3NodeIdMap();
@@ -332,6 +391,14 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3Map;
 	}
 
+	/**
+	 * This method would help in adding the node details of subject to the {@link D3Map}.
+	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 * @param subjectNodeId										{@link SubjectObject} ID of type {@link String}
+	 * @param nodeObject										{@link NodeObject} object which hold node details
+	 * @param statementID										Statement ID of the relation to which this node belongs to
+	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
+	 */
 	private D3Map addSubjectToNodeList(D3Map d3Map, String subjectNodeId,
 			NodeObject nodeObject, String statementID) {
 
@@ -360,10 +427,6 @@ public class D3NetworkManager implements ID3NetworkManager {
 
 		return d3Map;
 	}
-
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.impl.ID3NetworkManager#checkRelationEventRepeatation(java.lang.String, java.lang.String, java.util.List)
-	 */
 
 
 

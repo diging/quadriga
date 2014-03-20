@@ -731,10 +731,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	@Transactional
-	public INetwork getNetwork(String networkId, IUser user) throws QuadrigaStorageException{
+	public INetwork getNetwork(String networkId) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
-			network = dbConnect.getNetwork(networkId, user);
+			network = dbConnect.getNetwork(networkId);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -1171,7 +1171,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @param newNetworkDetailCache							{@link NewNetworkDetailsCache} object to hold the cache of network details
 	 * @param bitStreamList									{@link List} of {@link IBitStream} object
 	 * @return												Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
-	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaStorageException						Throws Database storage exception
 	 */
 	public NewNetworkDetailsCache parseIntoRelationEventElement(RelationEventType relationEventType, NewNetworkDetailsCache newNetworkDetailCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
 
@@ -1224,7 +1224,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @param subjectOrObject							{@link SubjectObjectType} object 
 	 * @param bitStreamList								{@link List} of {@link IBitStream} object	
 	 * @return											Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
-	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaStorageException					Throws Database storage exception
 	 */
 	public NewNetworkDetailsCache parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,SubjectObjectType subjectOrObject,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
 
@@ -1327,6 +1327,20 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			this.fileExists = fileExists;
 		}
 
+	}
+
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @throws QuadrigaStorageException 
+	 */
+	@Override
+	public String getNetworkDetails(String xml,String networkId) throws QuadrigaStorageException {
+		
+		INetwork network = getNetwork(networkId);
+		// TODO need to complete this.
+		// I would fix the annotation with creator and node id first
+		return null;
 	}
 
 }

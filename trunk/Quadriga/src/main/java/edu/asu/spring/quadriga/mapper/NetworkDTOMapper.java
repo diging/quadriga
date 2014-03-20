@@ -241,6 +241,29 @@ public class NetworkDTOMapper {
 	}
 	
 	/**
+	 * This method will create a {@link NetworkAssignedDTO} from the input parameters.
+	 * 
+	 * @param networkid				The id of the network
+	 * @param assignedUsername		The username to be assigned.
+	 * @param status				The status of the network
+	 * @param archived				The archived status
+	 * @return A {@link NetworkAssignedDTO} object will be created from the input parameters.
+	 */
+	public NetworkAssignedDTO getNetworkAssignedDTOWithNetworkName(String networkid, String assignedUsername, String status, int archived, String networkName)
+	{
+		NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
+		Date date = new Date();
+		networkAssignedDTO.setNetworkAssignedDTOPK(new NetworkAssignedDTOPK(networkid, assignedUsername,date));
+		networkAssignedDTO.setStatus(status);
+		networkAssignedDTO.setCreatedby(assignedUsername);
+		networkAssignedDTO.setUpdatedby(assignedUsername);
+		networkAssignedDTO.setUpdateddate(date);
+		networkAssignedDTO.setNetworkname(networkName);
+		logger.info("archived : "+archived);
+		networkAssignedDTO.setIsarchived(archived);
+		return networkAssignedDTO;
+	}
+	/**
 	 * This method will create {@link NetworksAnnotationsDTO} from the input parameters.
 	 * 
 	 * @param networkid			The id of the network

@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -33,6 +34,9 @@ public class EditorManager implements IEditorManager {
 
 	@Autowired
 	private INetworkFactory networkFactory;
+	
+	@Autowired
+	private INetworkManager networkManager;
 
 	@Autowired
 	private IDBConnectionEditorManager dbConnect;
@@ -72,8 +76,9 @@ public class EditorManager implements IEditorManager {
 	@Transactional
 	public String assignNetworkToUser(String networkId, IUser user) throws QuadrigaStorageException{
 		String msg = "";
+		INetwork network= networkManager.getNetwork(networkId);
 		try{
-			msg = dbConnect.assignNetworkToUser(networkId, user);
+			msg = dbConnect.assignNetworkToUser(networkId, user,network.getName());
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
