@@ -1,23 +1,15 @@
 package edu.asu.spring.quadriga.rest;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -41,7 +33,6 @@ import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
@@ -56,8 +47,8 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * Controller for networks related rest api's exposed to other clients
- * 
- * @author LohithDwaraka
+ * Client could add, manipulate or get details of {@link INetwork}
+ * @author Lohith Dwaraka
  * 
  */
 @Controller
@@ -117,7 +108,6 @@ public class NetworkRestController {
 		String networkId="";
 		String workspaceid = request.getParameter("workspaceid");
 
-
 		if(workspaceid == null||workspaceid.isEmpty()){
 			response.setStatus(404);
 			return "Please provide correct workspace id.";
@@ -145,28 +135,14 @@ public class NetworkRestController {
 				response.setStatus(406);
 				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 			}
-			JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-			InputStream is = new ByteArrayInputStream(res.getBytes());
-			JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-			networkId=networkManager.receiveNetworkSubmitRequest(response1,user,networkName,workspaceid,"NEW",networkId);
+			
+			networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, "NEW",networkId);
 
-			if(networkId.isEmpty()){
+			if(networkId.endsWith(INetworkManager.DSPACEERROR)){
 				response.setStatus(404);
 				return "Text files don't belong to this workspace.";
 			}
-
-			//			Below code would help in printing XML from qstore
-			Marshaller marshaller = context.createMarshaller();
-			ByteArrayOutputStream os=new ByteArrayOutputStream();
-			marshaller.marshal(response1, os);
-
-			//			String s = os.toString();
-			//			String r=networkManager.prettyFormat(s,2);
-			//			logger.info("checking this "+r);
-
-
+			
 			//TODO: Send email to all editors of a workspace
 			//TODO: Get the workspace editors from the workspaceid
 
@@ -464,12 +440,13 @@ public class NetworkRestController {
 				
 				networkManager.archiveNetwork(networkId);
 				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
-				JAXBContext context = JAXBContext.newInstance(ElementEventsType.class);
-				Unmarshaller unmarshaller = context.createUnmarshaller();
-				unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-				InputStream is = new ByteArrayInputStream(res.getBytes());
-				JAXBElement<ElementEventsType> response1 =  unmarshaller.unmarshal(new StreamSource(is), ElementEventsType.class);
-				networkId=networkManager.receiveNetworkSubmitRequest(response1,user,network.getName(),network.getWorkspaceid(),"UPDATE",networkId);
+				
+				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getWorkspaceid(), "UPDATE", networkId);
+
+				if(networkId.endsWith(INetworkManager.DSPACEERROR)){
+					response.setStatus(404);
+					return "Text files don't belong to this workspace.";
+				}
 
 				response.setStatus(200);
 				response.setContentType(accept);
