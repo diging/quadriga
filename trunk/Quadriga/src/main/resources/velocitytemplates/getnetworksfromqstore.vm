@@ -2,7 +2,7 @@
 <element_events xmlns="http://digitalhps.org/creationEvents-model"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://digitalhps.org/creationEvents-model QStore4S-GET-schema">
-#foreach ($statment in $statmentList)
-<id>$statment.id</id> 	
-#end
+	#foreach ($statment in $statmentList)
+	<id>$statment.id</id> 	
+	#end
 </element_events>

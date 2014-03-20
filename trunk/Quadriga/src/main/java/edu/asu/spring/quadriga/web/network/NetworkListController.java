@@ -33,7 +33,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
- * This class will handle list dictionaries controller for the dictionary
+ * This class will handle list {@link INetwork} of the {@link IUser} and fetch the {@link INetwork} details from DB and QStore.
  * 
  * @author : Lohith Dwaraka
  * 
