@@ -235,6 +235,15 @@ public class EditingListController {
 		return "auth/editing/visualize";
 	}
 
+	@RequestMapping(value = "/auth/editing/oldversionvisualize/{networkId}/", method = RequestMethod.GET)
+	public String viewHistory(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+		//INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
+		String nwId = "\""+networkId+"\"";
+		model.addAttribute("networkid",nwId);
+		
+		return "auth/editing/visualize";
+	}
+	
 	/**
 	 *  This controller method would get description of the lemma to javascript when called through a Ajax call
 	 * @author Lohith Dwaraka

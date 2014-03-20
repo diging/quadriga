@@ -42,9 +42,16 @@ function d3init(graph, networkId, path,type) {
 	.attr("width", width)
 	.attr("height", height);
 
-
-
+	var div1 = d3.select("#allannot_details");
 	
+	d3.select("#chart").on("click", function(){return div1.style("visibility", "visible");});
+
+	/*var expand = d3.select("#chart")
+				.on("click", function(){
+
+					$("chart").show();
+					$("allannot_details").hide();
+				});*/
 
 
 	// Prepare the arrow
@@ -631,7 +638,7 @@ function d3init(graph, networkId, path,type) {
 					// this allow variables to be assigned inside the ajax and 
 					// accessed outside
 						$.ajax({
-							url : path+"/rest/editing/getconcept/"+lemma,
+							url : path+"/auth/editing/getconcept/"+lemma,
 							//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
 							type : "GET",
 							success : function(data) {

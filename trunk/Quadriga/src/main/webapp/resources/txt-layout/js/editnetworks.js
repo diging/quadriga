@@ -213,7 +213,7 @@ function init(json, networkId, path) {
 							// accessed outside
 							$(document).ready(function() {	
 								$.ajax({
-									url : path+"/rest/editing/getconcept/"+lemma,
+									url : path+"/auth/editing/getconcept/"+lemma,
 									//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
 									type : "GET",
 									async: false,

@@ -134,7 +134,7 @@ function init1(json,path){
 				// Since our spring controller would ignore any data after dot (.)
 				lemma = lemma.replace(".","$");
 				
-				getConceptURL = path+"/rest/editing/getconcept/"+lemma;
+				getConceptURL = path+"/auth/editing/getconcept/"+lemma;
 				
 				// Ajax call for getting description of the node
 				// Note: this ajax call has async = false
