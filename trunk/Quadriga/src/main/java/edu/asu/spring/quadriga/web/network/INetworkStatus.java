@@ -9,6 +9,7 @@ public interface INetworkStatus {
 	public final static String ASSIGNED = "ASSIGNED";
 	public final static String APPROVED="APPROVED";
 	public final static String REJECTED = "REJECTED";
+	public final static String UNKNOWN = "UNKNOWN";
 	
 	public final static int NOT_ARCHIVED = 0;
 	public final static int ARCHIVE_LEVEL_ONE = 1;

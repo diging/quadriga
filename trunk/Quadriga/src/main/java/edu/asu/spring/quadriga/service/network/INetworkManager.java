@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.service.network;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -16,6 +17,7 @@ import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
@@ -422,5 +424,8 @@ public interface INetworkManager {
 
 	List<INetworkVersions> getNetworkVersions(String networkid)
 			throws QuadrigaStorageException;
+
+	String getNetworkXML(String networkId, HttpServletRequest req,
+			IRestVelocityFactory restVelocityFactory) throws Exception;
 	
 }

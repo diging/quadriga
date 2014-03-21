@@ -3,12 +3,14 @@ package edu.asu.spring.quadriga.service.network.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -16,6 +18,12 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -49,6 +57,7 @@ import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
+import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.CreationEvent;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
@@ -67,6 +76,7 @@ import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.SubjectObject;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.IJITNetworkManager;
@@ -706,7 +716,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getWholeNetworkXMLFromQStore(String XML) throws ParserConfigurationException, SAXException, IOException {
+	public String getWholeNetworkXMLFromQStore(String xml) {
 		String res="";
 		// Add message converters for JAxb
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -720,7 +730,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		headers.setAccept(mediaTypes);
-		HttpEntity<String> request = new HttpEntity<String>(XML,headers);
+		HttpEntity<String> request = new HttpEntity<String>(xml,headers);
 
 		try{
 			// Get complete network xml from QStore
@@ -731,6 +741,41 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			return res;
 		}
 		return res;
+	}
+	
+	@Override
+	@Transactional
+	public String getNetworkXML(String networkId, HttpServletRequest req, IRestVelocityFactory restVelocityFactory) throws Exception{
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		Template template = null;
+		StringWriter writer = null;
+		String networkXML=null;
+		try {
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/getnetworksfromqstore.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			List<INetworkNodeInfo> networkTopNodes = getNetworkTopNodes(networkId);
+			context.put("statmentList", networkTopNodes);
+			writer = new StringWriter();
+			template.merge(context, writer);
+			logger.debug("XML : "+ writer.toString());
+			networkXML = getWholeNetworkXMLFromQStore(writer.toString());
+		} catch (ResourceNotFoundException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		}
+		networkXML = networkXML.substring(networkXML.indexOf("element_events")-1,networkXML.length());
+		return networkXML;
 	}
 
 	/**
