@@ -52,7 +52,6 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
@@ -834,7 +833,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			while(iterator.hasNext())
 			{
 				INetworkNodeInfo networkNodeInfo = iterator.next();
-				if(networkNodeInfo.getIsArchived() != 0)
+				if(networkNodeInfo.getVersion() != 0)
 					iterator.remove();
 			}
 		}
@@ -935,7 +934,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			while(iterator.hasNext())
 			{
 				INetworkNodeInfo networkNodeInfo = iterator.next();
-				if(networkNodeInfo.getIsTop() != 1 || networkNodeInfo.getIsArchived() != INetworkStatus.ARCHIVE_LEVEL_ONE)
+				if(networkNodeInfo.getIsTop() != 1 || networkNodeInfo.getVersion() != INetworkStatus.ARCHIVE_LEVEL_ONE)
 					iterator.remove();
 			}
 		}

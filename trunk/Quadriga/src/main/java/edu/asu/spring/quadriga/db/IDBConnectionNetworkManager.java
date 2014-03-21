@@ -4,8 +4,6 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.INetworkOldVersion;
-import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -87,9 +85,9 @@ public interface IDBConnectionNetworkManager {
 
 	/**
 	 * This method should be called when network is reuploaded after admin has rejected the network.
-	 * Archive the network, would mark the network statements with isarchived =1 or isarchived=2.
-	 * isarchived = 1 is network is archived as is most recently archived
-	 * isarchived = 2 is network is archived and never used again. kept in DB for future references.
+	 * Archive the network, would mark the network statements with version =1 or version=2.
+	 * version = 1 is network is archived as is most recently archived
+	 * version = 2 is network is archived and never used again. kept in DB for future references.
 	 * @param networkId			ID of network
 	 * @return					returns success/error messages
 	 * @throws QuadrigaStorageException
@@ -120,13 +118,10 @@ public interface IDBConnectionNetworkManager {
 
 	/**
 	 * Get Networks of old versions.
-	 * Network with isarchive =1 and isarchive =2 are retrived.
 	 * @param networkId					ID of network
-	 * @param archiveLevel				Archive level would be from 0, 1, 2 - levels of old versions
-	 * @return							returns {@link List} of {@link INetworkOldVersion}
+	 * @return							returns {@link List} of {@link INetwork}
 	 * @throws QuadrigaStorageException
 	 */
-	//public abstract List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException;
 
 	List<INetwork> getAllNetworkVersions(String networkId) 
 			throws QuadrigaStorageException;

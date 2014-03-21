@@ -14,9 +14,9 @@ public interface INetworkNodeInfo {
 
 	public abstract void setStatementType(String statementType);
 
-	public abstract void setIsArchived(int isArchived);
+	public abstract void setVersion(int version);
 
-	public abstract int getIsArchived();
+	public abstract int getVersion();
 
 	public abstract void setIsTop(int isTop);
 
