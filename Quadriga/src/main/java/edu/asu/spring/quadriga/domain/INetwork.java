@@ -59,10 +59,6 @@ public interface INetwork
 
 	public abstract void setAssignedUser(String assignedUser);
 
-	public abstract void setNetworkOldVersion(INetworkOldVersion networkOldVersion);
-
-	public abstract INetworkOldVersion getNetworkOldVersion();
-
 	public abstract IProject getProject();
 
 	public abstract void setProject(IProject project);

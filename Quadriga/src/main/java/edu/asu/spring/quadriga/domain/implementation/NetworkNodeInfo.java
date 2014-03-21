@@ -27,11 +27,11 @@ public class NetworkNodeInfo implements INetworkNodeInfo
 		this.isTop = isTop;
 	}
 	@Override
-	public int getIsArchived() {
+	public int getVersion() {
 		return isArchived;
 	}
 	@Override
-	public void setIsArchived(int isArchived) {
+	public void setVersion(int isArchived) {
 		this.isArchived = isArchived;
 	}
 

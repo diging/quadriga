@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NetworkAssignedDTO.findByNetworkid", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid"),
     @NamedQuery(name = "NetworkAssignedDTO.findByAssigneduser", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.assigneduser = :assigneduser"),
     @NamedQuery(name = "NetworkAssignedDTO.findByStatus", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.status = :status"),
-    @NamedQuery(name = "NetworkAssignedDTO.findByIsarchived", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.isarchived = :isarchived")
+    @NamedQuery(name = "NetworkAssignedDTO.findByVersion", query = "SELECT n FROM NetworkAssignedDTO n WHERE n.version = :version")
     })
 public class NetworkAssignedDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -55,8 +55,8 @@ public class NetworkAssignedDTO implements Serializable {
     @Column(name = "createdby")
     private String createdby;
     @Basic(optional = false)
-    @Column(name = "isarchived")
-    private int isarchived;
+    @Column(name = "version")
+    private int version;
     @JoinColumn(name = "networkid", referencedColumnName = "networkid",insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private NetworksDTO networksDTO;
@@ -71,22 +71,22 @@ public class NetworkAssignedDTO implements Serializable {
         this.networkAssignedDTOPK = networkAssignedDTOPK;
     }
 
-    public NetworkAssignedDTO(NetworkAssignedDTOPK networkAssignedDTOPK, String status, String updatedby, Date updateddate, String createdby, int isarchived) {
+    public NetworkAssignedDTO(NetworkAssignedDTOPK networkAssignedDTOPK, String status, String updatedby, Date updateddate, String createdby, int version) {
         this.networkAssignedDTOPK = networkAssignedDTOPK;
         this.status = status;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
-        this.isarchived = isarchived;
+        this.version = version;
     }
 
-    public NetworkAssignedDTO(String networkid, String assigneduser,String status, String updatedby, Date updateddate, String createdby,Date createdDate, int isarchived) {
+    public NetworkAssignedDTO(String networkid, String assigneduser,String status, String updatedby, Date updateddate, String createdby,Date createdDate, int version) {
         this.networkAssignedDTOPK = new NetworkAssignedDTOPK(networkid, assigneduser,createdDate);
         this.status = status;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
         this.createdby = createdby;
-        this.isarchived = isarchived;
+        this.version = version;
         
     }
 
@@ -130,12 +130,12 @@ public class NetworkAssignedDTO implements Serializable {
         this.createdby = createdby;
     }
 
-	public int getIsarchived() {
-        return isarchived;
+	public int getVersion() {
+        return version;
     }
 
-    public void setIsarchived(int isarchived) {
-        this.isarchived = isarchived;
+    public void setVersion(int version) {
+        this.version = version;
     }
     
     public NetworksDTO getNetworksDTO() {

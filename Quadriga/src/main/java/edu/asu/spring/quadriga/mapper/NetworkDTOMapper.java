@@ -13,12 +13,9 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
-import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
-import edu.asu.spring.quadriga.domain.factories.INetworkVersionsFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.implementation.NetworkOldVersion;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
@@ -177,7 +174,7 @@ public class NetworkDTOMapper {
 				networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
 				networkNodeInfo.setId(networkStatementsDTO.getStatementid());
 				networkNodeInfo.setStatementType(networkStatementsDTO.getStatementtype());
-				networkNodeInfo.setIsArchived(networkStatementsDTO.getIsarchived());
+				networkNodeInfo.setVersion(networkStatementsDTO.getVersion());
 				networkNodeInfo.setIsTop(networkStatementsDTO.getIstop());
 				networkList.add(networkNodeInfo);
 			}
@@ -227,13 +224,8 @@ public class NetworkDTOMapper {
 				network.setName(networkAssignedDTO.getNetworkname());
 				network.setStatus(networkAssignedDTO.getStatus());
 				network.setAssignedUser(networkAssignedDTO.getUpdatedby());
-				network.setVersionNumber(networkAssignedDTO.getIsarchived());
+				network.setVersionNumber(networkAssignedDTO.getVersion());
 				
-				
-				/*version.setNetworkname(networkAssignedDTO.getNetworkname());
-				version.setAssigneduser(networkAssignedDTO.getUpdatedby());
-				version.setStatus(networkAssignedDTO.getStatus());
-				version.setVersionnumber(networkAssignedDTO.getIsarchived());*/
 				
 				networkVersions.add(network);
 			}
@@ -248,10 +240,10 @@ public class NetworkDTOMapper {
 	 * @param networkid				The id of the network
 	 * @param assignedUsername		The username to be assigned.
 	 * @param status				The status of the network
-	 * @param archived				The archived status
+	 * @param version				The version of network
 	 * @return A {@link NetworkAssignedDTO} object will be created from the input parameters.
 	 */
-	public NetworkAssignedDTO getNetworkAssignedDTO(String networkid, String assignedUsername, String status, int archived)
+	public NetworkAssignedDTO getNetworkAssignedDTO(String networkid, String assignedUsername, String status, int version)
 	{
 		NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
 		Date date = new Date();
@@ -260,8 +252,7 @@ public class NetworkDTOMapper {
 		networkAssignedDTO.setCreatedby(assignedUsername);
 		networkAssignedDTO.setUpdatedby(assignedUsername);
 		networkAssignedDTO.setUpdateddate(date);
-		logger.info("archived : "+archived);
-		networkAssignedDTO.setIsarchived(archived);
+		networkAssignedDTO.setVersion(version);
 		return networkAssignedDTO;
 	}
 	
@@ -271,10 +262,10 @@ public class NetworkDTOMapper {
 	 * @param networkid				The id of the network
 	 * @param assignedUsername		The username to be assigned.
 	 * @param status				The status of the network
-	 * @param archived				The archived status
+	 * @param version				The archived status
 	 * @return A {@link NetworkAssignedDTO} object will be created from the input parameters.
 	 */
-	public NetworkAssignedDTO getNetworkAssignedDTOWithNetworkName(String networkid, String assignedUsername, String status, int archived, String networkName)
+	public NetworkAssignedDTO getNetworkAssignedDTOWithNetworkName(String networkid, String assignedUsername, String status, int version, String networkName)
 	{
 		NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
 		Date date = new Date();
@@ -284,8 +275,7 @@ public class NetworkDTOMapper {
 		networkAssignedDTO.setUpdatedby(assignedUsername);
 		networkAssignedDTO.setUpdateddate(date);
 		networkAssignedDTO.setNetworkname(networkName);
-		logger.info("archived : "+archived);
-		networkAssignedDTO.setIsarchived(archived);
+		networkAssignedDTO.setVersion(version);
 		return networkAssignedDTO;
 	}
 	/**

@@ -21,8 +21,6 @@ import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.INetworkOldVersion;
-import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
@@ -280,7 +278,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		
 		try {
 			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkStatementsDTO n WHERE n.networkid = :networkid" +
-					" AND n.isarchived = :versionId AND n.istop= :isTop ");
+					" AND n.version = :versionId AND n.istop= :isTop ");
 			query.setParameter("networkid", networkId);
 			query.setParameter("versionId",versionId);
 			query.setParameter("isTop",isTop);
@@ -318,7 +316,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			StatelessSession session = sessionFactory.openStatelessSession();
 			transaction = session.beginTransaction();
 			
-			int archiveNumber = 0;
+			int versionNumber = 0;
 
 			// Select only the rows matching the network id and obtain a
 			// scrollable list
@@ -329,8 +327,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			while (scrollableDTO.next()) {
 				// Update the network statements
 				NetworkStatementsDTO networkStatementDTO = (NetworkStatementsDTO) scrollableDTO.get(0);
-				archiveNumber = networkStatementDTO.getIsarchived();
-				networkStatementDTO.setIsarchived(archiveNumber+1);
+				versionNumber = networkStatementDTO.getVersion();
+				networkStatementDTO.setVersion(versionNumber+1);
 				session.update(networkStatementDTO);
 			}
 
@@ -338,8 +336,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			while (scrollableDTO.next()) {
 				// update the network assigned rows
 				NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) scrollableDTO.get(0);
-				archiveNumber = networkAssignedDTO.getIsarchived();
-				networkAssignedDTO.setIsarchived(archiveNumber+1);
+				versionNumber = networkAssignedDTO.getVersion();
+				networkAssignedDTO.setVersion(versionNumber+1);
 				session.update(networkAssignedDTO);
 			}
 
@@ -481,41 +479,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 	
 
-	/**
-	 * Get the old versions of the network that were archived.
-	 * The method uses Hibernate Framework to perform the database operations.
-	 * 
-	 * @param networkId						ID of network.
-	 * @param archiveLevel					Archive level would be from 0 or 1 or 2 - levels of old versions.
-	 * @return								returns {@link List} of {@link INetworkOldVersion}. Null if there are no networks matching the input constraints.
-	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
-	 */
-	/*@Override
-	public List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException {
-		try {
-			List<INetworkOldVersion> networkOldVersionsList = null;
-			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived= :isarchived");
-			query.setParameter("networkid", networkId);
-			query.setParameter("isarchived", archiveLevel);
-
-			@SuppressWarnings("unchecked")
-			List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
-
-			if(networkAssignedDTOList != null)
-			{
-				networkOldVersionsList = new ArrayList<INetworkOldVersion>();
-				for(NetworkAssignedDTO networkAssignedDTO : networkAssignedDTOList)
-				{
-					networkOldVersionsList.add(networkMapper.getNetworkOldVersion(networkAssignedDTO));
-				}
-			}
-
-			return networkOldVersionsList;
-		} catch (Exception e) {
-			logger.error("Error in fetching	 old version details: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-	}*/
 
 	/******************************************************************************************************
 	 * 
@@ -534,7 +497,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		try {
 
 			String query1 = "Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-					"NetworkAssignedDTO na where na.isarchived=0) and";
+					"NetworkAssignedDTO na where na.version=0) and";
 			query1 += "((n.workspaceid in  " ;
 			query1 += "(select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
 					"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
@@ -643,9 +606,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							"FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.isarchived = :isarchived");
+							"FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.version = :version");
 			query.setParameter("networkid", networkId);
-			query.setParameter("isarchived", INetworkStatus.NOT_ARCHIVED);
+			query.setParameter("version", INetworkStatus.NOT_ARCHIVED);
 
 			NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query
 					.uniqueResult();

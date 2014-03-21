@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NetworkStatementsDTO.findById", query = "SELECT n FROM NetworkStatementsDTO n WHERE n.statementid = :statementid"),
     @NamedQuery(name = "NetworkStatementsDTO.findByStatementtype", query = "SELECT n FROM NetworkStatementsDTO n WHERE n.statementtype = :statementtype"),
     @NamedQuery(name = "NetworkStatementsDTO.findByIstop", query = "SELECT n FROM NetworkStatementsDTO n WHERE n.istop = :istop"),
-    @NamedQuery(name = "NetworkStatementsDTO.findByIsarchived", query = "SELECT n FROM NetworkStatementsDTO n WHERE n.isarchived = :isarchived"),
+    @NamedQuery(name = "NetworkStatementsDTO.findByVersion", query = "SELECT n FROM NetworkStatementsDTO n WHERE n.version = :version"),
     })
 public class NetworkStatementsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -54,8 +54,8 @@ public class NetworkStatementsDTO implements Serializable {
     @Column(name = "istop")
     private int istop;
     @Basic(optional = false)
-    @Column(name = "isarchived")
-    private int isarchived;
+    @Column(name = "version")
+    private int version;
 	@Basic(optional = false)
     @Column(name = "statementtype")
     private String statementtype;
@@ -80,12 +80,12 @@ public class NetworkStatementsDTO implements Serializable {
 	public NetworkStatementsDTO() {
     }
 	
-    public NetworkStatementsDTO(String rowid,String networkid,String statementid, int istop, int isarchived, String statementtype, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public NetworkStatementsDTO(String rowid,String networkid,String statementid, int istop, int version, String statementtype, String updatedby, Date updateddate, String createdby, Date createddate) {
     	this.rowid = rowid;
     	this.networkid = networkid;
     	this.statementid = statementid;
         this.istop = istop;
-        this.isarchived = isarchived;
+        this.version = version;
         this.statementtype = statementtype;
         this.updatedby = updatedby;
         this.updateddate = updateddate;
@@ -165,12 +165,12 @@ public class NetworkStatementsDTO implements Serializable {
         this.istop = istop;
     }
 
-    public int getIsarchived() {
-        return isarchived;
+    public int getVersion() {
+        return version;
     }
 
-    public void setIsarchived(int isarchived) {
-        this.isarchived = isarchived;
+    public void setVersion(int version) {
+        this.version = version;
     }
     
 }
