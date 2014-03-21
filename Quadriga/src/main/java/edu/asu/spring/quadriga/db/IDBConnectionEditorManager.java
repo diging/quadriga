@@ -19,7 +19,7 @@ import edu.asu.spring.quadriga.web.network.INetworkStatus;
 public interface IDBConnectionEditorManager {
 
 	/**
-	 * Get networks which editor can assign to him/her.
+	 * This method should help in getting list of networks which is available to editor for editing.
 	 * We need to consider the editor role of the {@link IUser} with respect any project or workspace. 
 	 * Based on the roles {@link IUser} has possessed, we need to get all the networks belonging to through resource ( {@link IProject} / {@link IWorkspace} 
 	 * @param user				{@link IUser} is usually the logged in user

@@ -65,7 +65,7 @@ public class NetworkRestController {
 
 	@Autowired
 	private IEditorManager editorManager;
-	
+
 	@Autowired
 	private IEditingNetworkAnnotationManager editingNetworkAnnoManager;
 
@@ -135,14 +135,14 @@ public class NetworkRestController {
 				response.setStatus(406);
 				return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 			}
-			
+
 			networkId=networkManager.storeNetworkDetails(res, user, networkName, workspaceid, INetworkManager.NEWNETWORK,networkId);
 
 			if(networkId.endsWith(INetworkManager.DSPACEERROR)){
 				response.setStatus(404);
 				return "Text files don't belong to this workspace.";
 			}
-			
+
 			//TODO: Send email to all editors of a workspace
 			//TODO: Get the workspace editors from the workspaceid
 
@@ -179,7 +179,7 @@ public class NetworkRestController {
 		status = network.getStatus();
 		try {
 			engine.init();
-			
+
 			template = engine
 					.getTemplate("velocitytemplates/networkstatus.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
@@ -187,6 +187,58 @@ public class NetworkRestController {
 				context.put("status", "UNKNOWN");
 			else
 				context.put("status", status);
+			context.put("networkid",networkId);
+			List<NetworkAnnotation>  networkAnnoList= editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
+			context.put("networkAnnoList",networkAnnoList);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			response.setStatus(200);
+			response.setContentType(accept);
+			response.setContentType("application/xml");
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		}
+
+	}
+
+
+	/**
+	 *  REST API for getting annotations of network 
+	 * http://<<URL>:<PORT>>/quadriga/rest/network/annotations/{NetworkId}
+	 * http://localhost:8080/quadriga/rest/network/annotations/dcb6b7bf-ba6b-40d7-a067-e1edf3460daa
+	 * @param networkId									{@link INetwork} ID of type {@link String}
+	 * @param response									{@link HttpServletResponse} object to set the status and response
+	 * @param accept									Type of MIME accepted
+	 * @param principal									{@link Principal} object to obtain the user details
+	 * @param req										{@link HttpServletRequest} object to access any user params
+	 * @return											XML with list of annotations belonging to a Network
+	 * @throws Exception								Throws the exception for any issue in the Velocity engine 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "rest/network/annotations/{NetworkId}", method = RequestMethod.GET, produces = "application/xml")
+	public String getAnnotationOfNetwork(@PathVariable("NetworkId") String networkId,
+			HttpServletResponse response,
+			String accept,Principal principal,HttpServletRequest req) throws Exception {
+		IUser user = userManager.getUserDetails(principal.getName());
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		Template template = null;
+		try {
+			engine.init();
+
+			template = engine
+					.getTemplate("velocitytemplates/networkannotations.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("networkid",networkId);
 			List<NetworkAnnotation>  networkAnnoList= editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
 			context.put("networkAnnoList",networkAnnoList);
@@ -439,12 +491,12 @@ public class NetworkRestController {
 
 		String networkName = request.getParameter("networkname");
 
-		
+
 		if(networkId == null||networkId.isEmpty()){
 			response.setStatus(404);
 			return "Please provide network id.";
 		}
-		
+
 		INetwork network = null;
 		try{
 			network = networkManager.getNetwork(networkId);
@@ -458,7 +510,7 @@ public class NetworkRestController {
 		}catch(QuadrigaStorageException e){
 			logger.error("DB Error :",e);
 		}
-//		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
+		//		logger.info("Old name : "+network.getName()+"  new name : "+networkName);
 		if(!(network.getStatus().equals(INetworkStatus.REJECTED))){
 			response.setStatus(500);
 			return "The Network doesn't have status : REJECTED";
@@ -484,10 +536,10 @@ public class NetworkRestController {
 						return "DB Issue, please try after sometime";
 					}
 				}
-				
+
 				networkManager.archiveNetwork(networkId);
 				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
-				
+
 				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getWorkspaceid(), INetworkManager.UPDATENETWORK, networkId);
 
 				if(networkId.endsWith(INetworkManager.DSPACEERROR)){
