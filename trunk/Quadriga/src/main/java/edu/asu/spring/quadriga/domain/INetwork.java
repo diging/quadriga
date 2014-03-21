@@ -70,6 +70,10 @@ public interface INetwork
 	public abstract IWorkSpace getWorkspace();
 
 	public abstract void setWorkspace(IWorkSpace workspace);
+	
+	public abstract int getVersionNumber();
+	
+	public abstract void setVersionNumber(int versionNumber);
 
 
 

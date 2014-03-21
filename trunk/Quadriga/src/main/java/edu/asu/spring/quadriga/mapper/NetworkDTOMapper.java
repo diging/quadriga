@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.INetworkOldVersion;
-import edu.asu.spring.quadriga.domain.INetworkVersions;
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkOldVersionFactory;
 import edu.asu.spring.quadriga.domain.factories.INetworkVersionsFactory;
@@ -41,12 +39,6 @@ public class NetworkDTOMapper {
 
 	@Autowired
 	private INetworkNodeInfoFactory networkNodeInfoFactory;
-	
-	@Autowired
-	private INetworkOldVersionFactory networkOldVersionFactory;
-	
-	@Autowired
-	private INetworkVersionsFactory networkVersionsFactory;
 	
 	private static final Logger logger = LoggerFactory.getLogger(NetworkDTOMapper.class);
 	
@@ -157,7 +149,7 @@ public class NetworkDTOMapper {
 				network.setName(networkDTO.getNetworkname());
 				network.setWorkspaceid(networkDTO.getWorkspaceid());
 				network.setStatus(networkDTO.getStatus());
-				network.setNetworkOldVersion(getNetworkOldVersion(getNetworkAssignedDTO(networkDTO.getNetworkid(), assignedUser, networkDTO.getStatus(), INetworkStatus.ARCHIVE_LEVEL_ONE )));
+				//network.setNetworkOldVersion(getNetworkOldVersion(getNetworkAssignedDTO(networkDTO.getNetworkid(), assignedUser, networkDTO.getStatus(), INetworkStatus.ARCHIVE_LEVEL_ONE )));
 				if(networkDTO.getNetworkowner() != null)
 					network.setCreator(userManager.getUserDetails(networkDTO.getNetworkowner()));
 				networkList.add(network);
@@ -200,7 +192,7 @@ public class NetworkDTOMapper {
 	 * @param networkAssignedDTO	The networkAssignedDTO to be converted
 	 * @return	A {@link INetworkOldVersion} object will be created from the input parameters. 
 	 */
-	public INetworkOldVersion getNetworkOldVersion(NetworkAssignedDTO networkAssignedDTO)
+	/*public INetworkOldVersion getNetworkOldVersion(NetworkAssignedDTO networkAssignedDTO)
 	{
 		INetworkOldVersion networkOldVersion =null;
 		if(networkAssignedDTO != null)
@@ -220,22 +212,30 @@ public class NetworkDTOMapper {
 		}
 		
 		return networkOldVersion;
-	}
+	}*/
 	
-	public List<INetworkVersions> getNetworkVersions(List<NetworkAssignedDTO> networkAssignedDTOList){
-		List<INetworkVersions> networkVersions = null;
+	public List<INetwork> getNetworkVersions(List<NetworkAssignedDTO> networkAssignedDTOList){
+		List<INetwork> networkVersions = null;
 		if(networkAssignedDTOList!=null){
-			networkVersions = new ArrayList<INetworkVersions>();
+			networkVersions = new ArrayList<INetwork>();
 			
-			INetworkVersions version = null;
+			INetwork network = null;
 			for(NetworkAssignedDTO networkAssignedDTO: networkAssignedDTOList)
 			{
-				version = networkVersionsFactory.createNetworkVersionsObject();
-				version.setNetworkname(networkAssignedDTO.getNetworkname());
+				//version = networkVersionsFactory.createNetworkVersionsObject();
+				network = networkFactory.createNetworkObject();
+				network.setName(networkAssignedDTO.getNetworkname());
+				network.setStatus(networkAssignedDTO.getStatus());
+				network.setAssignedUser(networkAssignedDTO.getUpdatedby());
+				network.setVersionNumber(networkAssignedDTO.getIsarchived());
+				
+				
+				/*version.setNetworkname(networkAssignedDTO.getNetworkname());
 				version.setAssigneduser(networkAssignedDTO.getUpdatedby());
 				version.setStatus(networkAssignedDTO.getStatus());
-				version.setVersionnumber(networkAssignedDTO.getIsarchived());
-				networkVersions.add(version);
+				version.setVersionnumber(networkAssignedDTO.getIsarchived());*/
+				
+				networkVersions.add(network);
 			}
 			
 		}

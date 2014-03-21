@@ -126,9 +126,9 @@ public interface IDBConnectionNetworkManager {
 	 * @return							returns {@link List} of {@link INetworkOldVersion}
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException;
+	//public abstract List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException;
 
-	List<INetworkVersions> getAllNetworkVersions(String networkId) 
+	List<INetwork> getAllNetworkVersions(String networkId) 
 			throws QuadrigaStorageException;
 	
 }

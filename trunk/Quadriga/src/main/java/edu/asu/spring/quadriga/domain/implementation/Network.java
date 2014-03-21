@@ -33,7 +33,14 @@ public class Network implements INetwork
 	private ENetworkAccessibility networksAccess;
 	private IProject project;
 	private IWorkSpace workspace;
+	private int versionNumber;
 	
+	public int getVersionNumber() {
+		return versionNumber;
+	}
+	public void setVersionNumber(int versionNumber) {
+		this.versionNumber = versionNumber;
+	}
 	@Override
 	public IProject getProject() {
 		return project;

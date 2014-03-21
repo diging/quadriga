@@ -236,12 +236,12 @@ public class EditingListController {
 		return "auth/editing/visualize";
 	}
 
-	@RequestMapping(value = "/auth/editing/versionhistory/{networkId}/", method = RequestMethod.GET)
-	public String viewHistory(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+	@RequestMapping(value = "auth/editing/versionhistory/{networkId}/", method = RequestMethod.GET)
+	public String viewHistory(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException {
 		//INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
 		//String nwId = "\""+networkId+"\"";
 		//model.addAttribute("networkid",nwId);
-		List<INetworkVersions> networkVersions = networkManager.getNetworkVersions(networkId);
+		List<INetwork> networkVersions = networkManager.getNetworkVersions(networkId);
 		
 		if(networkVersions!=null && !networkVersions.isEmpty()){
 			model.addAttribute("Versions", networkVersions);

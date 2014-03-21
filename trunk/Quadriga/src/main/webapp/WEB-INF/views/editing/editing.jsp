@@ -67,20 +67,6 @@
 						<ul>
 							<li>Project : <c:out value="${network.project.name}"></c:out></li>
 							<li>Workspace : <c:out value="${network.workspace.name}"></c:out></li>
-							<c:choose>
-								<c:when test="${not empty network.networkOldVersion}">
-									<li>Old Version : 
-								    <a href="${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${network.id}">Visualize</a> (
-								    Editor : 
-									<c:out value="${network.networkOldVersion.previousVersionAssignedUser}"></c:out>
-									( 
-									<c:out value="${network.networkOldVersion.previousVersionStatus}"></c:out>
-									) Update Date :
-									<c:out value="${network.networkOldVersion.updateDate}"></c:out>
-									)
-								    </li>
-								</c:when>
-							</c:choose>
 							<li>Submitted by : <c:out
 									value="${network.creator.userName}"></c:out>
 							</li>
