@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
+
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 
 
 
@@ -104,5 +107,17 @@ public class AppellationEventType
 			}
 		}    
 		return termTypeList;
+    }
+    
+    public String getAppellationEventID(){
+		List<JAXBElement<?>> elementsList = this.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
+		while(elementsIterator.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
+			if(element.getName().toString().contains("id")){
+				return element.getValue().toString();
+			}
+		}
+		return null;
     }
 }

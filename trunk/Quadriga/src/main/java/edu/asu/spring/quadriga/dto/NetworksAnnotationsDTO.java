@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "NetworksAnnotationsDTO.findAll", query = "SELECT n FROM NetworksAnnotationsDTO n"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByNetworkid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.networkid = :networkid"),
-    @NamedQuery(name = "NetworksAnnotationsDTO.findByid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.objectid = :objectid"),
+    @NamedQuery(name = "NetworksAnnotationsDTO.findByid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.nodeid = :nodeid"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByAnnotationText", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.annotationtext = :annotationtext"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByAnnotationId", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.annotationid = :annotationid"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByUsername", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.username = :username"),
@@ -44,8 +44,12 @@ public class NetworksAnnotationsDTO implements Serializable {
     private String networkid;
     
     @Basic(optional = false)
-    @Column(name = "objectid")
-    private String objectid;
+    @Column(name = "nodeid")
+    private String nodeid;
+    
+    @Basic(optional = false)
+    @Column(name = "nodename")
+    private String nodename;
     
     @Basic(optional = false)
     @Column(name = "annotationtext")
@@ -93,9 +97,10 @@ public class NetworksAnnotationsDTO implements Serializable {
 	public NetworksAnnotationsDTO() {
     }
 
-    public NetworksAnnotationsDTO(String networkid, String objectid, String annotationtext, String annotationid, String username, String objecttype, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public NetworksAnnotationsDTO(String networkid, String nodeid,String nodename, String annotationtext, String annotationid, String username, String objecttype, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.networkid = networkid;
-        this.objectid = objectid;
+        this.nodeid = nodeid;
+        this.nodename = nodename;
         this.annotationtext = annotationtext;
         this.annotationid = annotationid;
         this.username = username;
@@ -110,12 +115,21 @@ public class NetworksAnnotationsDTO implements Serializable {
 		return networkid;
 	}
 
-	public String getObjectid() {
-		return objectid;
+
+	public String getNodeid() {
+		return nodeid;
 	}
 
-	public void setObjectid(String objectid) {
-		this.objectid = objectid;
+	public void setNodeid(String nodeid) {
+		this.nodeid = nodeid;
+	}
+
+	public String getNodename() {
+		return nodename;
+	}
+
+	public void setNodename(String nodename) {
+		this.nodename = nodename;
 	}
 
 	public void setNetworkid(String networkid) {

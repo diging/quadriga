@@ -263,7 +263,7 @@ public class EditingListController {
 	 * @throws QuadrigaStorageException
 	 * @throws JAXBException
 	 */
-	@RequestMapping(value = "/rest/editing/getconcept/{lemma}", method = RequestMethod.GET)
+	@RequestMapping(value = "/auth/editing/getconcept/{lemma}", method = RequestMethod.GET)
 	@ResponseBody
 	public String getConceptCollectionObject(@PathVariable("lemma") String lemma,HttpServletRequest request, HttpServletResponse response, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		

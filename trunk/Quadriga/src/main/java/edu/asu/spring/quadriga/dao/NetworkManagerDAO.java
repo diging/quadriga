@@ -664,11 +664,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String addAnnotationToNetwork(String networkId, String id,
+	public String addAnnotationToNetwork(String networkId, String nodeID,String nodeName,
 			String annotationText, String userId, String objectType)
 					throws QuadrigaStorageException {
 		NetworksAnnotationsDTO networkAnnotationsDTO = networkMapper
-				.getNetworkAnnotationDTO(networkId, id, annotationText,
+				.getNetworkAnnotationDTO(networkId, nodeID,nodeName, annotationText,
 						"ANNOT_" + generateUniqueID(), userId, objectType);
 
 		try {
@@ -685,15 +685,15 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<NetworksAnnotationsDTO> getAnnotationByNodeType(String type, String id, String userId,
+	public List<NetworksAnnotationsDTO> getAnnotationByNodeType(String type, String nodeId, String userId,
 			String networkId) throws QuadrigaStorageException {
 		try {
 			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworksAnnotationsDTO>();
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							"from NetworksAnnotationsDTO n where n.objectid = :id and username = :username and networkid =:networkid and objecttype = :objecttype");
-			query.setParameter("id", id);
+							"from NetworksAnnotationsDTO n where n.nodeid = :nodeId and username = :username and networkid =:networkid and objecttype = :objecttype");
+			query.setParameter("nodeId", nodeId);
 			query.setParameter("username", userId);
 			query.setParameter("objecttype", type);
 			query.setParameter("networkid", networkId);

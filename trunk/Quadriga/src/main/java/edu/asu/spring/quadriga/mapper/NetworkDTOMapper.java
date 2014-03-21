@@ -292,18 +292,20 @@ public class NetworkDTOMapper {
 	 * This method will create {@link NetworksAnnotationsDTO} from the input parameters.
 	 * 
 	 * @param networkid			The id of the network
-	 * @param id				The id of this unique record
+	 * @param nodeId			The id of this unique record
+	 * @param nodeName			Node name
 	 * @param annotationtext	The annotation text
 	 * @param annotationid		The annotation id
 	 * @param username			The username of the user to be associated with annotation
 	 * @param objecttype		The type of object
 	 * @return A {@link NetworksAnnotationsDTO} object will be created from the input parameters; 
 	 */
-	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String networkid, String id, String annotationtext, String annotationid, String username, String objecttype)
+	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String networkid, String nodeId, String nodeName, String annotationtext, String annotationid, String username, String objecttype)
 	{
 		NetworksAnnotationsDTO networkAnnotationsDTO = new NetworksAnnotationsDTO();
 		networkAnnotationsDTO.setNetworkid(networkid);
-		networkAnnotationsDTO.setObjectid(id);
+		networkAnnotationsDTO.setNodeid(nodeId);
+		networkAnnotationsDTO.setNodename(nodeName);
 		networkAnnotationsDTO.setAnnotationtext(annotationtext);
 		networkAnnotationsDTO.setAnnotationid(annotationid);
 		networkAnnotationsDTO.setObjecttype(objecttype);

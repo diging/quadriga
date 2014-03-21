@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.domain.INetworkAnnotation;
 public class NetworkAnnotation implements INetworkAnnotation {
 
 	private String nodeName;
+	private String nodeId;
 	private String annotationId;
 	private String annotationText;
 	private String networkId;
@@ -45,6 +46,12 @@ public class NetworkAnnotation implements INetworkAnnotation {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getNodeId() {
+		return nodeId;
+	}
+	public void setNodeId(String nodeId) {
+		this.nodeId = nodeId;
 	}
 	
 	
