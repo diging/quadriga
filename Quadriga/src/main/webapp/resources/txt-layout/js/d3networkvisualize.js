@@ -453,8 +453,6 @@ function d3init(graph, networkId, path,type) {
 							+ d.id + " />";
 						html1 += "<input  type='hidden' name='nodename' id='nodename' value="
 							+ d.name + " />";
-						console.log("name "+d.name);
-						console.log("name "+d.id);
 						html1 += "<input type='button' id='annot_submit' value='submit'>";
 						html1 += "</div></form>";
 

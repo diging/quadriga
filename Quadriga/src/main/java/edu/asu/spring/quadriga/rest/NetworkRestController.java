@@ -409,9 +409,9 @@ public class NetworkRestController {
 		}
 	}
 	/**
-	 *  Rest interface for getting network list belonging to a workspace 
-	 * http://<<URL>:<PORT>>/quadriga/rest/networkdetails/{networkid}
-	 * http://localhost:8080/quadriga/rest/networkdetails/NET_1huxp4w7p71o0
+	 *  Rest interface for getting network XML for a particular Network ID.
+	 * http://<<URL>:<PORT>>/quadriga/rest/network/xml/{networkid}
+	 * http://localhost:8080/quadriga/rest/network/xml/NET_1huxp4w7p71o0
 	 * @param networkName
 	 * @param response
 	 * @param accept
@@ -420,7 +420,7 @@ public class NetworkRestController {
 	 * @throws Exception 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/networkdetails/{networkid}", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/network/xml/{networkid}", method = RequestMethod.GET, produces = "application/xml")
 	public String getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
@@ -457,10 +457,70 @@ public class NetworkRestController {
 		if(networkXML.isEmpty() || networkXML == null){
 			throw new RestException(404);
 		}
+		
 		response.setStatus(200);
 		response.setContentType(accept);
 		response.setContentType("application/xml");
 		return networkXML;
+	}
+	
+	/**
+	 *  Rest interface for getting network list belonging to a workspace 
+	 * http://<<URL>:<PORT>>/quadriga/rest/networkdetails/{networkid}
+	 * http://localhost:8080/quadriga/rest/networkdetails/NET_1huxp4w7p71o0
+	 * @param networkName
+	 * @param response
+	 * @param accept
+	 * @param principal
+	 * @return status
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "rest/networkdetails/{networkid}", method = RequestMethod.GET, produces = "application/xml")
+	public String getNetworkDetails(@PathVariable("networkid") String networkId,
+			HttpServletResponse response,
+			String accept,Principal principal,HttpServletRequest req) throws Exception {
+
+		IUser user = userManager.getUserDetails(principal.getName());
+		INetwork network = networkManager.getNetwork(networkId);
+		String networkXML = networkManager.getNetworkXML(networkId, req, restVelocityFactory);
+		String status = network.getStatus();
+		if(networkXML.isEmpty() || networkXML == null){
+			throw new RestException(404);
+		}
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		Template template = null;
+		try {
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/networkdetails.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			if(status == null)
+				context.put("status", INetworkStatus.UNKNOWN);
+			else
+				context.put("status", status);
+			context.put("networkxml", networkXML);
+			context.put("networkAnnoList",editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId));
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			response.setStatus(200);
+			response.setContentType(accept);
+			response.setContentType("application/xml");
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		}
+
 	}
 
 	/**
