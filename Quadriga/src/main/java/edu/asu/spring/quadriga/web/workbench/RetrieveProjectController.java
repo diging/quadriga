@@ -128,7 +128,7 @@ public class RetrieveProjectController
         model.getModelMap().put("allprojects", allProjectListJson);
         model.getModelMap().put("collaborator", projectListAsCollaboratorJson);
         model.getModelMap().put("wsowner", projectListAsWorkspaceOwnerJson);
-        model.getModelMap().put("wscolloborator", projectListAsWSCollaboratorJson);
+        model.getModelMap().put("wscollaborator", projectListAsWSCollaboratorJson);
 		
 		return model;
 	}

@@ -14,21 +14,42 @@
 	$(function() 
 	{
 		  $( "#tabs" ).tabs();
-		  
-		  allprojects();
-		  ownerprojects();
-		  collaboratorprojects();
-		  wsownerprojects();
-		  wscollaboratorprojects();
-		  
-		    $("#chkboxall").click(function() {
-		    	$("#chkboxall").trigger("change");
-		   
-				allprojects();
+		  $("#chkboxall").click(function() {
+				$("#chkboxwscollaborator").trigger("change");
+			  allprojects();
+				
 			});
+		 
+		  //allprojects();
+		   if($(".users").length == $(".users:checked").length) {
+			   if ($(".users:checked").length != 0){
+		          
+	            $("#chkboxall").prop("checked", true);
+	            allprojects();
+			   }
+			   
+	        } 
+		  if($(".users").length != $(".users:checked").length)  {
+			  $("#chkboxall").prop("checked", false);
+			 // allProjects();
+	        }   
+	     // allProjects();
+		  /* ownerprojects();
+		  collaboratorprojects();
+	      wsownerprojects();
+		  wscollaboratorprojects(); */
+		  $(".users").click(function(){
+			  if($(".users").length == $(".users:checked").length && $(".users:checked").length >0) {
+		            $("#chkboxall").prop("checked", true);
+		            allprojects();
+		        } 
+			  if($(".users").length != $(".users:checked").length )  {
+				  
+			  
+		            $("#chkboxall").prop("checked",false);
+		        }
 		   
 		   $("#chkboxowner").click(function() {
-		    	//alert("here");
 		    	$("#chkboxowner").trigger("change");
 		    	ownerprojects();
 		    	
@@ -52,81 +73,82 @@
 				wscollaboratorprojects();
 				
 			});
+			
+			
+		       
+		  });
+		    
+			
 	});
 	
 	function allprojects(){
+		var data = ${allprojects};
+    	$('#alljstree').jstree(data);
 		if ($('#chkboxall').prop('checked')){
-			  $("#chkboxall").trigger("change");
-			  var data = ${allprojects};
-		    	console.log(data);
-		    	//$('#alljstree').show();
-		    	$('#alljstree').jstree(data);
+			 $(".users").prop("checked", true);
+			if($(".users").length == $(".users:checked").length){
+			  
 		    	$('#alljstree').show();
+			}
+			else{
+				$('#alljstree').hide();
+			}
 		  } else {
+			  
 			  $('#alljstree').hide();
-			  $("#chkboxall").trigger("change");
+			  $(".users").prop("checked", false);
+			  
 		  
 		  }
 	}
 	function ownerprojects(){
+		var data = ${owner};
+    	$('#asownerjstree').jstree(data);
 		 if ($('#chkboxowner').prop('checked')){
-			  $("#chkboxowner").trigger("change");
-			  var data = ${allprojects};
-		    	console.log(data);
-		    	//$('#alljstree').show();
-		    	$('#asownerjstree').jstree(data);
 		    	$('#asownerjstree').show();
+		    	
 		  } else {
+			  
 			  $('#asownerjstree').hide();
 			  $("#chkboxowner").trigger("change");
 		  }
 	}
 	function collaboratorprojects(){
+		var data = ${collaborator};
+    	$('#ascollaboratorjstree').jstree(data);
 		if ($('#chkboxcollaborator').prop('checked')){
-			  $("#chkboxcollaborator").trigger("change");
-			  var data = ${collaborator};
-		    	console.log(data);
-		    	//$('#alljstree').show();
-		    	$('#ascollaboratorjstree').jstree(data);
+			  
 		    	$('#ascollaboratorjstree').show();
 		  } else {
 			  $('#ascollaboratorjstree').hide();
-			  $("#chkboxcollaborator").trigger("change");
 		  }
 	}
 	function wsownerprojects(){
+		var data = ${wsowner};
+    	console.log(data);
+    	$('#aswsownerjstree').jstree(data);
 		if ($('#chkboxwsowner').prop('checked')){
-			  $("#chkboxwsowner").trigger("change");
-			  var data = ${wsowner};
-		    	console.log(data);
-		    	//$('#alljstree').show();
-		    	$('#aswsownerjstree').jstree(data);
 		    	$('#aswsownerjstree').show();
 		  } else {
 			  $('#aswsownerjstree').hide();
-			  $("#chkboxwsowner").trigger("change");
 		  }
 	}
 	function wscollaboratorprojects(){
+		 var data = ${wscollaborator};
+	    	$('#aswscollaboratorjstree  ').jstree(data);
+	    	
 		if ($('#chkboxwscollaborator').prop('checked')){
-			  $("#chkboxwscollaborator").trigger("change");
-			  var data = ${wscolloborator};
-		    	console.log(data);
-		    	//$('#alljstree').show();
-		    	$('#aswscollaboratorjstree  ').jstree(data);
 		    	$('#aswscollaboratorjstree').show();
 		  } else {
 			  $('#aswscollaboratorjstree').hide();
-			  $("#chkboxwscollaborator").trigger("change");
 		  }
 	}
 	
-	/* $("#chkboxall").click(function() {
-		alert("here");
-		var opt = $(this).parent().find('input[type=checkbox]');
-        opt.prop('checked', $(this).is(':checked') ? true : false);
-	  
-	}); */
+	function clickproject(id,name){
+		window.location.href  = "${pageContext.servletContext.contextPath}/auth/workbench/"+id;
+	}
+	
+	
 	
 	
 </script>
@@ -141,19 +163,24 @@
 		<span class="byline">Manage projects and workspaces</span>
 	</header>
 	
-	<div id="users">
+	
 	<!-- <input type="checkbox"  id="chkboxall" checked > All  -->
 	<input type="checkbox"  id="chkboxall" checked > All
-	<input type="checkbox"  id="chkboxowner" > Owner 
-	<input type="checkbox"  id="chkboxcollaborator" > Collaborator
-	<input type="checkbox"  id="chkboxwsowner" > Workspace Owner 
-	<input type="checkbox" id="chkboxwscollaborator" > Workspace Collaborator 
+	<div id="users">
+	<input type="checkbox"  id="chkboxowner" class="users" checked> Owner 
+	<input type="checkbox"  id="chkboxcollaborator" class="users" checked> Collaborator
+	<input type="checkbox"  id="chkboxwsowner" class="users" checked> Workspace Owner 
+	<input type="checkbox" id="chkboxwscollaborator" class="users" checked> Workspace Collaborator 
 	</div>
 	
 	<div id="alljstree"></div>
+	
 	<div id="asownerjstree"></div>
+	
 	<div id="ascollaboratorjstree"></div>
+	
 	<div id="aswsownerjstree"></div>
+	
 	<div id="aswscollaboratorjstree"></div>
 	
 	<div id = "tabs" class="tabs">
