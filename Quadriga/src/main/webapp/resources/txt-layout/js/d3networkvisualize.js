@@ -449,8 +449,12 @@ function d3init(graph, networkId, path,type) {
 						+ "/auth/editing/saveAnnotation/";
 						html1 += networkId + " method='POST' >";
 						html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
-						html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+						html1 += "<input  type='hidden' name='nodeid' id='nodeid' value="
 							+ d.id + " />";
+						html1 += "<input  type='hidden' name='nodename' id='nodename' value="
+							+ d.name + " />";
+						console.log("name "+d.name);
+						console.log("name "+d.id);
 						html1 += "<input type='button' id='annot_submit' value='submit'>";
 						html1 += "</div></form>";
 
@@ -490,7 +494,7 @@ function d3init(graph, networkId, path,type) {
 							$.ajax({
 								url : $('#annot_form').attr("action"),
 								type : "POST",
-								data :"nodename="+d.id+"&annotText="+annottext+"&type=node",
+								data :"nodename="+d.name+"&nodeid="+d.id+"&annotText="+annottext+"&type=node",
 								success : function() {
 									$('#'+popupId+'').dialog('close');
 									displayAllAnnotations();

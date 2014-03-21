@@ -50,10 +50,10 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public String addAnnotationToNetwork(String networkId, String nodeName,
+	public String addAnnotationToNetwork(String networkId, String nodeId,String nodeName,
 			String annotationText, String userId,String objectType)
 			throws QuadrigaStorageException{
-		String msg = dbConnectionEditManager.addAnnotationToNetwork(networkId, nodeName,
+		String msg = dbConnectionEditManager.addAnnotationToNetwork(networkId, nodeId,nodeName,
 				annotationText, userId,objectType);
 		return msg;
 	}
@@ -91,7 +91,8 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 			NetworkAnnotation n = new NetworkAnnotation();
 			n.setAnnotationId(dto.getAnnotationid());
 			n.setAnnotationText(dto.getAnnotationtext());
-			n.setNodeName(dto.getObjectid());
+			n.setNodeId(dto.getNodeid());
+			n.setNodeName(dto.getNodename());
 			n.setUserId(dto.getCreatedby());
 			if(networkAnnoList==null){
 				networkAnnoList=new ArrayList<NetworkAnnotation>();

@@ -214,7 +214,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			// Check if event is Appellation event
 			if(creationEvent instanceof AppellationEventType)
 			{
-				// Do nothing, we no need to display appellation events on UI.
+				// Do nothing, we don't need to display appellation events on UI.
 			}
 			// Check if event is Relation event
 			if(creationEvent instanceof RelationEventType){
@@ -314,6 +314,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public PredicateObject parseThroughPredicate(RelationEventType relationEventType, PredicateType predicateType,List<List<Object>> relationEventPredicateMapping){
 		//	Predicate has only appellation event, so get appellation event inside the predicate
 		AppellationEventType appellationEvent = predicateType.getAppellationEvent();
+		String nodeId = appellationEvent.getAppellationEventID();
 		PredicateObject predicateObject = null;
 		List<TermType> termTypeList= appellationEvent.getTerms(appellationEvent);
 		Iterator <TermType> termTypeIterator = termTypeList.iterator();
@@ -321,7 +322,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			TermType tt = termTypeIterator.next();
 			AppellationEventObject appellationEventObject = new AppellationEventObject();
 			appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
-			appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+			if(nodeId!=null){
+				appellationEventObject.setTermId(nodeId+"_"+shortUUID());
+			}else{
+				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+			}
 			predicateObject = new PredicateObject();
 			predicateObject.setAppellationEventObject(appellationEventObject);
 
@@ -406,13 +411,18 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(appellationEventType == null){
 
 		}else{
+			String nodeId = appellationEventType.getAppellationEventID();
 			List<TermType> termTypeList= appellationEventType.getTerms(appellationEventType);
 			Iterator <TermType> termTypeIterator = termTypeList.iterator();
 			while(termTypeIterator.hasNext()){
 				TermType tt = termTypeIterator.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
 				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
-				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+				if(nodeId!=null){
+					appellationEventObject.setTermId(nodeId);
+				}else{
+					appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+				}
 				subjectObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
 			}
@@ -459,13 +469,18 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(appellationEventType == null){
 
 		}else{
+			String nodeId = appellationEventType.getAppellationEventID();
 			List<TermType> termTypeList= appellationEventType.getTerms(appellationEventType);
 			Iterator <TermType> termTypeIterator = termTypeList.iterator();
 			while(termTypeIterator.hasNext()){
 				TermType tt = termTypeIterator.next();
 				AppellationEventObject appellationEventObject = new AppellationEventObject();
 				appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt)));
-				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+				if(nodeId!=null){
+					appellationEventObject.setTermId(nodeId);
+				}else{
+					appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
+				}
 				objectTypeObject.setAppellationEventObject(appellationEventObject);
 				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
 			}
@@ -651,12 +666,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
 		return Long.toString(l, Character.MAX_RADIX);
 	}
-
-
-
-
-
-
 
 
 

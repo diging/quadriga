@@ -65,20 +65,19 @@ public class EditingNetworkAnnotationsController {
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
 			@RequestParam("annotText") String annotationText,
-			@RequestParam("nodename") String id, 
+			@RequestParam("nodeid") String nodeId, 
+			@RequestParam("nodename") String nodeName,
 			@RequestParam("type") String objectType, 
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		logger.info("network ID:" + networkId);
 		try {
-			logger.debug("Came to Save Annotation : object type :" + objectType + " id : " +id);
-			editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, id,
+			editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, nodeId,nodeName,
 					annotationText, user.getUserName(),objectType);
 			
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.debug("Annotation added to the node:" + id);
 
 		return "{ success: true; }";
 	}

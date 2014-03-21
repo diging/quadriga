@@ -244,14 +244,14 @@ public class D3NetworkManager implements ID3NetworkManager {
 		NodeObject nodeObject = nodeObjectWithStatement.getNodeObject();
 		String statementId = nodeObjectWithStatement.getStatementId();
 
-		String predicateNameId = nodeObject.getPredicate();
-		String subjectNodeId=nodeObject.getSubject();
-		String objectNodeId = nodeObject.getObject();
+		String predicateNameId = nodeObject.getPredicateId();
+		String subjectNodeId=nodeObject.getSubjectId();
+		String objectNodeId = nodeObject.getObjectId();
 
 
 		// Check for reference to relation
 		String temp=networkManager.getPredicateNameFromStackOfAE(nodeObject.getRelationEventId(),nodeObject.getPredicate(),relationEventPredicateMapping);
-		String predicateName = predicateNameId.substring(0,predicateNameId.lastIndexOf('_'));
+		String predicateName = nodeObject.getPredicate();
 		if(!(temp.equals(""))){
 			predicateNameId = temp;
 		}

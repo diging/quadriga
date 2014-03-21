@@ -75,7 +75,7 @@ public interface IDBConnectionEditorManager {
 	 * @return							Returns the success/failure status of the method
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addAnnotationToNetwork(String networkId, String nodeName,
+	public abstract String addAnnotationToNetwork(String networkId, String nodeId,String nodeName,
 			String annotationText, String userId,String objectType)
 			throws QuadrigaStorageException;
 	
