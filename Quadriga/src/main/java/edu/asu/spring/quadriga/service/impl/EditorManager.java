@@ -101,7 +101,7 @@ public class EditorManager implements IEditorManager {
 			networkList=dbConnect.getNetworksOfUser(user, INetworkStatus.ASSIGNED);
 
 			//Try to get the old network version(Archive level one) for each network in the list returned.
-			for(INetwork network: networkList)
+			/*for(INetwork network: networkList)
 			{
 				List<INetworkOldVersion> networkOldVersion = dbnetworkManager.getNetworkVersions(network.getId(), INetworkStatus.ARCHIVE_LEVEL_ONE);
 
@@ -109,7 +109,7 @@ public class EditorManager implements IEditorManager {
 					//Get the first index as according to business logic only one object will exist at Archive level one
 					network.setNetworkOldVersion(networkOldVersion.get(0));
 				}
-			}
+			}*/
 
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);

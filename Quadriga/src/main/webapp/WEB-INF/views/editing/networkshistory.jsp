@@ -59,15 +59,15 @@
 					<c:forEach var="version" items="${Versions}">
 						<tr>
 							<td width="25%" align="center"><c:out
-									value="${version.versionnumber}"></c:out></td>
+									value="${version.versionNumber}"></c:out></td>
 							<td width="25%" align="left"><img style="vertical-align: middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png" > <input name="items"
 								type="hidden" value="<c:out value="${version.networkname}"></c:out>" />
-								<c:out value="${version.networkname}"></c:out></td>
+								<c:out value="${version.name}"></c:out></td>
 							<td width="25%" align="center"><c:out
 									value="${version.status}"></c:out></td>
 							<td width="25%" align="center"><c:out
-									value="${version.assigneduser}"></c:out></td>
-							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${network.id}/${version.versionnumber}'" value='Visualize'></td>
+									value="${version.assignedUser}"></c:out></td>
+							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${network.id}/${version.versionNumber}'" value='Visualize'></td>
 						</tr>
 					</c:forEach>
 				</tbody>

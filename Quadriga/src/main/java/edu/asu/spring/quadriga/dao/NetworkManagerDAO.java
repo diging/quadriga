@@ -462,11 +462,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<INetworkVersions> getAllNetworkVersions(String networkId) throws QuadrigaStorageException{
+	public List<INetwork> getAllNetworkVersions(String networkId) throws QuadrigaStorageException{
 		if(networkId == null || networkId.equals(""))
 			return null;
 		
-		List<INetworkVersions> networkList = new ArrayList<INetworkVersions>();
+		List<INetwork> networkList = new ArrayList<INetwork>();
 		
 		
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworkAssignedDTO.findByNetworkid");
@@ -490,7 +490,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * @return								returns {@link List} of {@link INetworkOldVersion}. Null if there are no networks matching the input constraints.
 	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
-	@Override
+	/*@Override
 	public List<INetworkOldVersion> getNetworkVersions(String networkId, int archiveLevel) throws QuadrigaStorageException {
 		try {
 			List<INetworkOldVersion> networkOldVersionsList = null;
@@ -515,7 +515,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			logger.error("Error in fetching	 old version details: ", e);
 			throw new QuadrigaStorageException(e);
 		}
-	}
+	}*/
 
 	/******************************************************************************************************
 	 * 

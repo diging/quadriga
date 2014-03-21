@@ -422,7 +422,7 @@ public interface INetworkManager {
 	 */
 	public abstract String getNetworkDetails(String xml, String networkId)  throws QuadrigaStorageException;
 
-	List<INetworkVersions> getNetworkVersions(String networkid)
+	List<INetwork> getNetworkVersions(String networkid)
 			throws QuadrigaStorageException;
 
 	String getNetworkXML(String networkId, HttpServletRequest req,

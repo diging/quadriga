@@ -882,10 +882,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	
 	@Override
 	@Transactional
-	public List<INetworkVersions> getNetworkVersions(String networkid) throws QuadrigaStorageException{
+	public List<INetwork> getNetworkVersions(String networkid) throws QuadrigaStorageException{
 
 		
-		List<INetworkVersions> networksList = dbConnect.getAllNetworkVersions(networkid);
+		List<INetwork> networksList = dbConnect.getAllNetworkVersions(networkid);
 
 		if(networksList != null){
 			return networksList;
