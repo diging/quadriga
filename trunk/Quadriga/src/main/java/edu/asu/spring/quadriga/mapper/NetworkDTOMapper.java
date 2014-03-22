@@ -71,9 +71,9 @@ public class NetworkDTOMapper {
 	 * @param username			The username of the user associated with the network
 	 * @return					Return a {@link NetworkStatementsDTO} object created using the input parameters
 	 */
-	public NetworkStatementsDTO getNetworkStatementsDTO(String rowid,String networkId,String id,String type,String isTop, String username)
+	public NetworkStatementsDTO getNetworkStatementsDTO(String rowid,String networkId,String id,String type,String isTop, String username,int version)
 	{
-		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(rowid,networkId, id, Integer.parseInt(isTop), INetworkStatus.NOT_ARCHIVED, type, username, new Date(), username, new Date());
+		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(rowid,networkId, id, Integer.parseInt(isTop), version, type, username, new Date(), username, new Date());
 		return networkStatementsDTO;
 	}
 	

@@ -37,7 +37,7 @@ public interface IDBConnectionNetworkManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract String addNetworkStatement(String rowid,String networkId, String id, String type,
-			String isTop, IUser user) throws QuadrigaStorageException;
+			String isTop, IUser user, int version) throws QuadrigaStorageException;
 
 
 	/**
@@ -124,6 +124,9 @@ public interface IDBConnectionNetworkManager {
 	 */
 
 	List<INetwork> getAllNetworkVersions(String networkId) 
+			throws QuadrigaStorageException;
+
+	List<Integer> getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException;
 	
 }

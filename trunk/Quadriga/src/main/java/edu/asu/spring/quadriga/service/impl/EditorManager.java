@@ -77,7 +77,8 @@ public class EditorManager implements IEditorManager {
 		String msg = "";
 		INetwork network= networkManager.getNetwork(networkId);
 		try{
-			msg = dbConnect.assignNetworkToUser(networkId, user,network.getName());
+			int latestVersion = networkManager.getLatestVersionOfNetwork(networkId);
+			msg = dbConnect.assignNetworkToUser(networkId, user,network.getName(),latestVersion);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -225,7 +226,9 @@ public class EditorManager implements IEditorManager {
 	public String updateAssignedNetworkStatus(String networkId, String status) throws QuadrigaStorageException {
 		String msg = "";
 		try{
-			msg = dbConnect.updateAssignedNetworkStatus(networkId, status);
+			int latestVersion = networkManager.getLatestVersionOfNetwork(networkId);
+			logger.info("Latest version : " + latestVersion +"   status : "+status);
+			msg = dbConnect.updateAssignedNetworkStatus(networkId, status,latestVersion);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}

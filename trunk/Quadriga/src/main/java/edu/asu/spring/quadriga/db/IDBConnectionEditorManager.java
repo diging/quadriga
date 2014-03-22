@@ -38,7 +38,7 @@ public interface IDBConnectionEditorManager {
 	 * @return						Returns the success/failure status of the method
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String assignNetworkToUser(String networkId, IUser user,String networkName)
+	public abstract String assignNetworkToUser(String networkId, IUser user,String networkName,int version)
 			throws QuadrigaStorageException;
 	/**
 	 * This method is used to change the status of the network. 
@@ -62,7 +62,7 @@ public interface IDBConnectionEditorManager {
 	 * @return							Returns the success/failure status of the method
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String updateAssignedNetworkStatus(String networkId, String status)
+	public abstract String updateAssignedNetworkStatus(String networkId, String status,int latestVersion)
 			throws QuadrigaStorageException;
 
 	/**

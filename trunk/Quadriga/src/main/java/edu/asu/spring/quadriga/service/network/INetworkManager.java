@@ -407,7 +407,7 @@ public interface INetworkManager {
 	 * @throws JAXBException							JAXB exception for any XML to object unmarshalling.
 	 */
 	public abstract String storeNetworkDetails(String xml, IUser user, String networkName,
-			String workspaceId, String uploadStatus, String networkId) throws JAXBException;
+			String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException;
 	
 	
 	
@@ -426,5 +426,8 @@ public interface INetworkManager {
 
 	String getNetworkXML(String networkId, HttpServletRequest req,
 			IRestVelocityFactory restVelocityFactory) throws Exception;
+
+	public abstract int getLatestVersionOfNetwork(String networkID)
+			throws QuadrigaStorageException;
 	
 }
