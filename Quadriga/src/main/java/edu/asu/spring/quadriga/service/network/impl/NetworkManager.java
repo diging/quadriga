@@ -1078,7 +1078,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	@Transactional
-	public String storeNetworkDetails(String xml, IUser user, String networkName,String workspaceId, String uploadStatus, String networkId) throws JAXBException{
+	public String storeNetworkDetails(String xml, IUser user, String networkName,String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException{
 		ElementEventsType elementEventType = unMarshalXmlToElementEventsType(xml);
 		
 		// Get Workspace details.
@@ -1121,7 +1121,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		for(String node[] : networkDetailsCache){
 			try{
 				String rowid = generateUniqueID();
-				dbConnect.addNetworkStatement(rowid,networkId,node[0],node[1], node[2], user);
+				dbConnect.addNetworkStatement(rowid,networkId,node[0],node[1], node[2], user,version);
 			}catch(QuadrigaStorageException e1){
 				logger.error("DB error while adding network statment",e1);
 			}
@@ -1410,4 +1410,18 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return null;
 	}
 
+	@Override
+	@Transactional
+	public int getLatestVersionOfNetwork(String networkID)
+			throws QuadrigaStorageException{
+		List<Integer> latestVersion = dbConnect.getLatestVersionOfNetwork(networkID);
+		logger.info("Size : = "+latestVersion.size());
+		Iterator<Integer> latestVersionIterator = latestVersion.iterator();
+		while(latestVersionIterator.hasNext()){
+			Integer temp = latestVersionIterator.next();
+			logger.info("version : " +temp);
+		}
+		int version =latestVersion.get(0);
+		return version;
+	}
 }

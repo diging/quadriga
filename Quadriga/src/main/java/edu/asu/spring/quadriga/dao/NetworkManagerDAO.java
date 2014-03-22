@@ -114,11 +114,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@Override
 	public String addNetworkStatement(String rowid,String networkId, String id, String type,
-			String isTop, IUser user) throws QuadrigaStorageException {
+			String isTop, IUser user,int version) throws QuadrigaStorageException {
 
 		NetworkStatementsDTO networkStatementsDTO = networkMapper
 				.getNetworkStatementsDTO(rowid,networkId, id, type, isTop,
-						user.getUserName());
+						user.getUserName(),version);
 
 		try {
 			sessionFactory.getCurrentSession().save(networkStatementsDTO);
@@ -493,7 +493,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	public List<INetwork> getEditorNetworkList(IUser user)
 			throws QuadrigaStorageException {
 		List<INetwork> networkList = new ArrayList<INetwork>();
-
+		
 		try {
 
 			String query1 = "Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
@@ -557,11 +557,24 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String assignNetworkToUser(String networkId, IUser user, String networkName)
+	public List<Integer> getLatestVersionOfNetwork(String networkID)  throws QuadrigaStorageException{
+		String query1 = "select max(ns.version) from NetworkStatementsDTO ns where ns.networkid= :networkId";
+		Query query = sessionFactory
+				.getCurrentSession()
+				.createQuery(query1);
+		query.setParameter("networkId", networkID);
+		List<Integer> latestVersion = query.list();
+		return latestVersion;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String assignNetworkToUser(String networkId, IUser user, String networkName,int version)
 			throws QuadrigaStorageException {
 		NetworkAssignedDTO newtorkAssignedDTO = networkMapper
 				.getNetworkAssignedDTOWithNetworkName(networkId, user.getUserName(),
-						INetworkStatus.PENDING, INetworkStatus.NOT_ARCHIVED, networkName);
+						INetworkStatus.ASSIGNED, version, networkName);
 
 		try {
 			sessionFactory.getCurrentSession().save(newtorkAssignedDTO);
@@ -600,7 +613,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String updateAssignedNetworkStatus(String networkId, String status)
+	public String updateAssignedNetworkStatus(String networkId, String status, int latestVersion)
 			throws QuadrigaStorageException {
 		try {
 			Query query = sessionFactory
@@ -608,7 +621,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 					.createQuery(
 							"FROM NetworkAssignedDTO n WHERE n.networkAssignedDTOPK.networkid = :networkid and n.version = :version");
 			query.setParameter("networkid", networkId);
-			query.setParameter("version", INetworkStatus.NOT_ARCHIVED);
+			query.setParameter("version", latestVersion);
 
 			NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query
 					.uniqueResult();

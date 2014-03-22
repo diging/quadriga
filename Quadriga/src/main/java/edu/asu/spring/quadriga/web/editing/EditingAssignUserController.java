@@ -55,7 +55,7 @@ public class EditingAssignUserController {
 		try{
 			editorManager.assignNetworkToUser(networkId, user);
 			editorManager.updateNetworkStatus(networkId, INetworkStatus.ASSIGNED);
-			editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.ASSIGNED);
+			//editorManager.updateAssignedNetworkStatus(networkId, INetworkStatus.ASSIGNED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Some issue in the DB",e);
 		}
