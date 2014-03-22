@@ -11,7 +11,9 @@
 
 function d3init(graph, networkId, path,type) {
 	console.log("init");
-	
+	if(graph==null){
+		alert("no network");
+	}
 	// Layout size
 	var width = 1000,
 	height = 900;
@@ -125,17 +127,7 @@ function d3init(graph, networkId, path,type) {
 	var node = gnodes.append('circle')
 	.attr("class", "node")
 	.attr("r",10) 	
-//	.attr("d", d3.svg.symbol()
-//			.type(function(d) {
-//				var type = d.group;
-//				if (type == 0){
-//					type = 2;
-//				}
-//				else{
-//					type = 0;
-//				}
-//				return d3.svg.symbolTypes[type]; }))
-				.style("fill", function(d) { return color(d.group); })
+			.style("fill", function(d) { return color(d.group); })
 				.call(node_drag)
 				// works on right click
 				.on("contextmenu", function(data, index) {
@@ -462,27 +454,28 @@ function d3init(graph, networkId, path,type) {
 						 
 						// ajax Call to get annotation for a node.id
 						// Used to add the old annotation in to the popup view
-						$.ajax({
-							url : getAnnotationUrl,
-							type : "GET",
-							data: "nodeid="+d.id+"&type="+type1,
-							dataType: 'json',
-							success : function(data) {
-								var cnt = 0;
-								content += "<ol>";
-							$.each(data.text, function(key,value){
-				                    content += ++cnt +'.<li>'+value.name+'</li>';  
-			                });
-								content += "</ol>"
-								$('#annot_details').html(content);
-							},
-							error: function() {
-								alert("error");
-							}
-							
-						});
-						
-						$('#annot_details').html(content);
+//						$.ajax({
+//							url : getAnnotationUrl,
+//							type : "GET",
+//							data: "nodeid="+d.id+"&type="+type1,
+//							dataType: 'json',
+//							success : function(data) {
+//								var cnt = 0;
+//								content += "<ol>";
+//							$.each(data.text, function(key,value){
+//				                    content += ++cnt +'.<li>'+value.name+'</li>';  
+//			                });
+//								content += "</ol>"
+//								$('#annot_details').html(content);
+//							},
+//							error: function() {
+//								alert("error");
+//							}
+//							
+//						});
+//						
+//						$('#annot_details').html(content);
+						display_annotations(d);
 						event.preventDefault();
 						
 						
@@ -496,6 +489,7 @@ function d3init(graph, networkId, path,type) {
 								success : function() {
 									$('#'+popupId+'').dialog('close');
 									displayAllAnnotations();
+									display_annotations(d);
 								},
 								error: function() {
 									alert("error");
@@ -504,7 +498,10 @@ function d3init(graph, networkId, path,type) {
 							event.preventDefault();
 						
 						});
-
+						
+						
+						$('#annot_details').html(content);
+						event.preventDefault();
 
 						// Popup decoration effects
 						$( '#'+popupId+'' ).show( "slow" );					
@@ -593,7 +590,8 @@ function d3init(graph, networkId, path,type) {
 					$('#popup').dialog();
 					
 				}
-
+				
+				
 				function display_annotations(d){
 					var type1= "node";
 					var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
