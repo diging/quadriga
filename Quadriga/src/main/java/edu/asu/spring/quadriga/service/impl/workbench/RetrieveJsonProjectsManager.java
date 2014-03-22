@@ -14,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
+import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 @Service
 public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager {
@@ -25,6 +27,8 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 	
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
+	@Autowired
+	private	IListWSManager wsManager; 
 
 	
 	/**
@@ -60,6 +64,28 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
+				String wsParent = project.getInternalid();
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+						project.getInternalid(), sUserName);
+				for (IWorkSpace ws : wsList) {
+					// workspace json
+						JSONObject data1 = new JSONObject();
+						data1.put("id", ws.getId());
+						data1.put("parent", wsParent);
+						String wsLink = null;
+						
+						 wsLink = "<a href='#' id='"
+								+ ws.getId()
+								+ "' name='"
+								+ ws.getName()
+								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+								+ ws.getName() + "</a>";
+						
+						data1.put("text", wsLink);
+						dataArray.put(data1);
+				
+				}
+				
 		}
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
@@ -104,6 +130,27 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
+				String wsParent = project.getInternalid();
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+						project.getInternalid(), sUserName);
+				for (IWorkSpace ws : wsList) {
+					// workspace json
+						JSONObject data1 = new JSONObject();
+						data1.put("id", ws.getId());
+						data1.put("parent", wsParent);
+						String wsLink = null;
+						
+						 wsLink = "<a href='#' id='"
+								+ ws.getId()
+								+ "' name='"
+								+ ws.getName()
+								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+								+ ws.getName() + "</a>";
+						
+						data1.put("text", wsLink);
+						dataArray.put(data1);
+				
+				}
 		}
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
@@ -149,6 +196,27 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
+				String wsParent = project.getInternalid();
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+						project.getInternalid(), sUserName);
+				for (IWorkSpace ws : wsList) {
+					// workspace json
+						JSONObject data1 = new JSONObject();
+						data1.put("id", ws.getId());
+						data1.put("parent", wsParent);
+						String wsLink = null;
+						
+						 wsLink = "<a href='#' id='"
+								+ ws.getId()
+								+ "' name='"
+								+ ws.getName()
+								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+								+ ws.getName() + "</a>";
+						
+						data1.put("text", wsLink);
+						dataArray.put(data1);
+				
+				}
 		}
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
@@ -193,6 +261,27 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 						+ project.getName() + "</a>";
 				
 				data.put("text", projectLink);
+				String wsParent = project.getInternalid();
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+						project.getInternalid(), sUserName);
+				for (IWorkSpace ws : wsList) {
+					// workspace json
+						JSONObject data1 = new JSONObject();
+						data1.put("id", ws.getId());
+						data1.put("parent", wsParent);
+						String wsLink = null;
+						
+						 wsLink = "<a href='#' id='"
+								+ ws.getId()
+								+ "' name='"
+								+ ws.getName()
+								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+								+ ws.getName() + "</a>";
+						
+						data1.put("text", wsLink);
+						dataArray.put(data1);
+				
+				}
 				dataArray.put(data);
 		}
 		JSONObject dataList = new JSONObject();
@@ -263,6 +352,27 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
+				String wsParent = project.getInternalid();
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+						project.getInternalid(), sUserName);
+				for (IWorkSpace ws : wsList) {
+					// workspace json
+						JSONObject data1 = new JSONObject();
+						data1.put("id", ws.getId());
+						data1.put("parent", wsParent);
+						String wsLink = null;
+						
+						 wsLink = "<a href='#' id='"
+								+ ws.getId()
+								+ "' name='"
+								+ ws.getName()
+								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+								+ ws.getName() + "</a>";
+						
+						data1.put("text", wsLink);
+						dataArray.put(data1);
+				
+				}
 		}
 		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
