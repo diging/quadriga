@@ -18,6 +18,27 @@
 			   }
 		  }
 	});
+	function checkUsersSelect() {
+			  if($(".users").length == $(".users:checked").length ) {
+		            $("#chkboxall").prop("checked", true);
+		            allprojects();
+		            return true;
+		        } 
+			  
+		       return false;
+		}
+		function checkUsersDeSelect() {  
+			if($(".users").length != $(".users:checked").length)  {
+				  
+				  
+	            $("#chkboxall").prop("checked",false);
+	            $('#alljstree').hide();
+	            
+	         // allprojects();
+	            return false;
+	        }
+			return false;
+		}
 	$(function() 
 	{
 		  $( "#tabs" ).tabs();
@@ -27,27 +48,7 @@
 				
 			});
 		  
-		function checkUsersSelect() {
-		//  $(".users").click(function(){
-			  if($(".users").length == $(".users:checked").length ) {
-		            $("#chkboxall").prop("checked", true);
-		            allprojects();
-		            return true;
-		        } 
-			  
-		       return false;
-		//  });
-		}
-		function checkUsersDeSelect() {
-			if($(".users").length != $(".users:checked").length )  {
-				  
-				  
-	            $("#chkboxall").prop("checked",false);
-	            $('#alljstree').hide();
-	            return true;
-	        }
-			return false;
-		}
+		
 		  $("#chkboxowner").click(function() {
 			  
 		    	$("#chkboxowner").trigger("change");
@@ -99,37 +100,28 @@
 		    
 			
 	});
-	/* function checkOtherUsers(){
-		  ownerprojects();
-		  collaboratorprojects();
-	      wsownerprojects();
-		  wscollaboratorprojects();
-	} */
+	
 	function allprojects(){
 		var data = ${allprojects};
     	$('#alljstree').jstree(data);
 		if ($('#chkboxall').prop('checked')){
 			 $(".users").prop("checked", true);
-			//if($(".users").length == $(".users:checked").length){
-			  
 		    	$('#alljstree').show();
-			/* }
-			else{
-				$('#alljstree').hide();
-			} */
-		  } else {
+		}
+		if (!$('#chkboxall').prop('checked')){
 			  
 			  $('#alljstree').hide();
 			  $(".users").prop("checked", false);
-			   /* ownerprojects();
-			  collaboratorprojects();
-		      wsownerprojects();
-			  wscollaboratorprojects();  */
+			  wsownerprojects();
+				
+				ownerprojects();
+				  collaboratorprojects();
+				  wscollaboratorprojects(); 
 		  
 		  }
-		 /*   */
-		
 	}
+		
+	
 	function ownerprojects(){
 		var data = ${owner};
 		
@@ -139,11 +131,11 @@
 				  $('#asownerjstree').jstree(data);
 				  $('#asownerjstree').show();
 			 }
+			 
 		  } else {
 			  if(!checkUsersDeSelect()){
 			  $('#asownerjstree').hide();
 			  }
-			//  $("#chkboxowner").trigger("change");
 		  }
 	}
 	function collaboratorprojects(){
@@ -157,6 +149,7 @@
 		  } else {
 			  if(! checkUsersDeSelect())
 			  $('#ascollaboratorjstree').hide();
+			  
 		  }
 	}
 	function wsownerprojects(){
@@ -166,12 +159,15 @@
 			if(!checkUsersSelect()){
 			$('#aswsownerjstree').jstree(data);
 		    	$('#aswsownerjstree').show();
-			}
-		  } else {
+			
+		  } 
+		}else {
 			  if(!checkUsersDeSelect())
 			  $('#aswsownerjstree').hide();
 		  }
+		
 	}
+	
 	function wscollaboratorprojects(){
 		 var data = ${wscollaborator};
 	    	
@@ -181,9 +177,11 @@
 			$('#aswscollaboratorjstree  ').jstree(data);
 		    	$('#aswscollaboratorjstree').show();
 			 }
+				 
 		  } else {
 			  if(!checkUsersDeSelect())
 			  $('#aswscollaboratorjstree').hide();
+			  
 		  }
 	}
 	
@@ -191,51 +189,53 @@
 		window.location.href  = "${pageContext.servletContext.contextPath}/auth/workbench/"+id;
 	}
 	function clickWorkspace(id,name){
-		window.location.href  = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails"+id;
+		window.location.href  = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/"+id;
 	}
 	
 	
 	
 </script>
 <style>
-   .tabs
-   {
+.tabs {
 	font-size: 80%;
-   }
+}
 </style>
-	<header>
-		<h2>Quadriga Workbench</h2>
-		<span class="byline">Manage projects and workspaces</span>
-	</header>
-	
-	
-	<!-- <input type="checkbox"  id="chkboxall" checked > All  -->
-	<input type="checkbox"  id="chkboxall" checked > All
-	<div id="users">
-	<input type="checkbox"  id="chkboxowner" class="users" checked> Owner 
-	<input type="checkbox"  id="chkboxcollaborator" class="users" checked> Collaborator
-	<input type="checkbox"  id="chkboxwsowner" class="users" checked> Workspace Owner 
-	<input type="checkbox" id="chkboxwscollaborator" class="users" checked> Workspace Collaborator 
-	</div>
-	
-	<div id="alljstree"></div>
-	
-	<div id="asownerjstree"></div>
-	
-	<div id="ascollaboratorjstree"></div>
-	
-	<div id="aswsownerjstree"></div>
-	
-	<div id="aswscollaboratorjstree"></div>
-	
-	<div id = "tabs" class="tabs">
+<header>
+	<h2>Quadriga Workbench</h2>
+	<span class="byline">Manage projects and workspaces</span>
+</header>
+
+
+<!-- <input type="checkbox"  id="chkboxall" checked > All  -->
+<input type="checkbox" id="chkboxall" checked>
+All
+<div id="users">
+	<input type="checkbox" id="chkboxowner" class="users" checked>
+	Owner <input type="checkbox" id="chkboxcollaborator" class="users"
+		checked> Collaborator <input type="checkbox"
+		id="chkboxwsowner" class="users" checked> Workspace Owner <input
+		type="checkbox" id="chkboxwscollaborator" class="users" checked>
+	Workspace Collaborator
+</div>
+
+<div id="alljstree"></div>
+
+<div id="asownerjstree"></div>
+
+<div id="ascollaboratorjstree"></div>
+
+<div id="aswsownerjstree"></div>
+
+<div id="aswscollaboratorjstree"></div>
+
+<div id="tabs" class="tabs">
 	<ul>
-	  <li><a href="#asowner">Owner</a></li>
-	  <li><a href="#ascollaborator">Collaborator</a></li>
-	  <li><a href="#aswsowner">Workspace Owner</a></li>
-	  <li><a href="#aswscollaborator">Workspace Collaborator</a></li>
+		<li><a href="#asowner">Owner</a></li>
+		<li><a href="#ascollaborator">Collaborator</a></li>
+		<li><a href="#aswsowner">Workspace Owner</a></li>
+		<li><a href="#aswscollaborator">Workspace Collaborator</a></li>
 	</ul>
-	
+
 	<div id=asowner>
 		<c:if test="${not empty projectlistasowner}">
 	  You are the owner of the following projects:
@@ -253,61 +253,60 @@
 	   </c:if>
 	</div>
 	<div id=ascollaborator>
-	  <c:if test="${not empty projectlistascollaborator}">
-	  <ul class="style2 pagination1">
-   	 			<c:forEach var="project" items="${projectlistascollaborator}">
-					<li>
-						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out value="${project.name}"></c:out></a>
-						<br><c:out value="${project.description}"></c:out>
-					</li>
+		<c:if test="${not empty projectlistascollaborator}">
+			<ul class="style2 pagination1">
+				<c:forEach var="project" items="${projectlistascollaborator}">
+					<li><a
+						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out
+								value="${project.name}"></c:out></a> <br>
+					<c:out value="${project.description}"></c:out></li>
 				</c:forEach>
 			</ul>
-			</c:if>
-	<c:if test="${empty projectlistascollaborator}">
+		</c:if>
+		<c:if test="${empty projectlistascollaborator}">
 	   You are not collaborator to any of the projects.
 	</c:if>
 	</div>
 	<div id=aswsowner>
-	  <c:if test="${not empty projectlistaswsowner}">
+		<c:if test="${not empty projectlistaswsowner}">
 	  You are the workspace owner associated with the following projects:
 	  <ul class="style2 pagination1">
-   	 			<c:forEach var="project" items="${projectlistaswsowner}">
-					<li>
-						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out value="${project.name}"></c:out></a>
-						<br><c:out value="${project.description}"></c:out>
-					</li>
+				<c:forEach var="project" items="${projectlistaswsowner}">
+					<li><a
+						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out
+								value="${project.name}"></c:out></a> <br>
+					<c:out value="${project.description}"></c:out></li>
 				</c:forEach>
 			</ul>
-			</c:if>
-	 <c:if test="${empty projectlistaswsowner}">
+		</c:if>
+		<c:if test="${empty projectlistaswsowner}">
 	    You don't own any workspace associated with projects.
 	 </c:if>
 	</div>
-		
+
 	<div id=aswscollaborator>
-	<c:if test="${not empty projectlistaswscollaborator}">
+		<c:if test="${not empty projectlistaswscollaborator}">
 	  You are the workspace collaborator associated with the following projects:
 	  <ul class="style2 pagination1">
-   	 			<c:forEach var="project" items="${projectlistaswscollaborator}">
-					<li>
-						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out value="${project.name}"></c:out></a>
-						<br><c:out value="${project.description}"></c:out>
-					</li>
+				<c:forEach var="project" items="${projectlistaswscollaborator}">
+					<li><a
+						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out
+								value="${project.name}"></c:out></a> <br>
+					<c:out value="${project.description}"></c:out></li>
 				</c:forEach>
 			</ul>
-			</c:if>
+		</c:if>
 		<c:if test="${empty projectlistaswscollaborator}">
 		    You are not collaborator to any workspace associated with the projects.
 		</c:if>
 	</div>
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+
+
+
+
+
+
+
+
+
