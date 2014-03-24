@@ -1,7 +1,6 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -56,30 +55,29 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 			
 			dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
 			
+			WorkspaceDictionaryDTO workspaceDictionary = workspaceDTOMapper.getWorkspaceDictionary(workspace, dictionary, userId);
+			
+            sessionFactory.getCurrentSession().save(workspaceDictionary);
+            
+			//add the workspace dictionary mapping to workspace object
 			workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
-			
-			WorkspaceDictionaryDTOPK workspaceDictionaryKey = new WorkspaceDictionaryDTOPK(workspaceId,dictionaryId);
-			WorkspaceDictionaryDTO workspaceDictionary = new WorkspaceDictionaryDTO();
-			Date date = new Date();
-			workspaceDictionary.setWorkspaceDictionaryDTOPK(workspaceDictionaryKey);
-			workspaceDictionary.setCreatedby(userId);
-			workspaceDictionary.setCreateddate(date);
-			workspaceDictionary.setUpdatedby(userId);
-			workspaceDictionary.setUpdateddate(date);
-			workspaceDictionary.setDictionaryDTO(dictionary);
-			workspaceDictionary.setWorkspaceDTO(workspace);
-			
-			if(workspaceDictionaryList.contains(workspaceDictionary))
+			if(workspaceDictionaryList == null)
 			{
-				throw new QuadrigaStorageException();
+				workspaceDictionaryList = new ArrayList<WorkspaceDictionaryDTO>();
 			}
-			else
+			workspaceDictionaryList.add(workspaceDictionary);
+			workspace.setWorkspaceDictionaryDTOList(workspaceDictionaryList);
+			sessionFactory.getCurrentSession().update(workspace);
+			
+			//add the workspace dictionary mapping to dictionary object
+			workspaceDictionaryList = dictionary.getWsDictionaryDTOList();
+			if(workspaceDictionaryList == null)
 			{
-			   sessionFactory.getCurrentSession().save(workspaceDictionary);
-			   workspaceDictionaryList.add(workspaceDictionary);
-			   workspace.setWorkspaceDictionaryDTOList(workspaceDictionaryList);
-			   sessionFactory.getCurrentSession().update(workspace);
+				workspaceDictionaryList = new ArrayList<WorkspaceDictionaryDTO>();
 			}
+			workspaceDictionaryList.add(workspaceDictionary);
+			dictionary.setWsDictionaryDTOList(workspaceDictionaryList);
+			sessionFactory.getCurrentSession().update(dictionary);
 		}
 		catch(Exception ex)
 		{

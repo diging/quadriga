@@ -221,7 +221,7 @@
 	
 	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
 	
-	<bean id="networkOldVersionFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkOldVersionFactory" />
+<!--  	<bean id="networkOldVersionFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkOldVersionFactory" /> -->
 	
 	<bean id="ModifyWSCollabManager" class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager" />
 	
