@@ -1,154 +1,59 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 
-import javax.sql.DataSource;
-
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
-import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
+import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
 
 @ContextConfiguration(locations = {
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class WorkspaceDictionaryDAOTest {
-
+public class WorkspaceDictionaryDAOTest 
+{
 	@Autowired
-	private IWorkspaceDictionaryManager workspaceDictionaryManager;
-
-	@Autowired
-	private IDBConnectionWorkspaceDictionary dbConnectionWorkspaceDictionary;
+	private SessionFactory sessionFactory;
 	
 	@Autowired
-	IDBConnectionDictionaryManager dbConnection;
-
-	@Autowired
-	private IDictionaryManager dictionaryManager;
-
-	@Autowired
-	private DataSource dataSource;
-
-	@Autowired
-	private IModifyProjectManager modifyProjectManager;
-
-	String sDatabaseSetup[];
-
-	@Autowired
-	private IUserFactory userFactory;
-
-	@Autowired
-	private IQuadrigaRoleManager rolemanager;
-
-	@Autowired
-	private IQuadrigaRoleFactory quadrigaRoleFactory;
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(WorkspaceDictionaryDAOTest.class);
-	
-	
-	private Connection connection;
-
-	@Autowired
-	private IRetrieveProjectManager retrieveProjectManager;
+	private IDBConnectionWorkspaceDictionary dbConnect;
 	
 	@Autowired
-	private IListWSManager wsManager;
-
-	private IUser user;
-
-	@Autowired
-	private IDictionaryFactory dictionaryFactory;
-
-	@Autowired
-	private IDictionaryItemsFactory dictionaryItemsFactory;
-
-	protected int closeConnection() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-			return 0;
-		} catch (SQLException se) {
-			return -1;
-		}
-	}
-
-	/**
-	 * @Description : Establishes connection with the Quadriga DB
-	 * 
-	 * @return : connection handle for the created connection
-	 * 
-	 * @throws : SQLException
-	 */
-	protected void getConnection() {
-		try {
-			connection = dataSource.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public String getDictionaryID(String name) {
-		getConnection();
-		String id = null;
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.execute("select id from tbl_dictionary where dictionaryName='"
-					+ name + "'");
-			ResultSet rs = stmt.getResultSet();
-			if (rs != null) {
-				while (rs.next()) {
-					id = rs.getString(1);
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return id;
-	}
+	private WorkspaceDTOMapper workspaceMapper;
 	
+	@Autowired
+	private DictionaryDTOMapper dictionaryMapper;
+	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -158,418 +63,264 @@ public class WorkspaceDictionaryDAOTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
-		// Setup a user object to compare with the object produced from
-		// usermanager
-		try {
-			user = userFactory.createUserObject();
-			user.setUserName("jdoe");
-			user.setName("John Doe");
+	public void setUp() throws Exception 
+	{
+		//create a quadriga user
+		Date date = new Date();
+		QuadrigaUserDTO user = new QuadrigaUserDTO();
+		user.setUsername("projuser1");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser1");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser1");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
+		
+		user = new QuadrigaUserDTO();
+		user.setUsername("projuser2");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser2");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser2");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
+		
+		user = new QuadrigaUserDTO();
+		user.setUsername("projuser3");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser3");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser3");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
+		
+		//create a project
+		List<ProjectWorkspaceDTO> projectWorkspaceList = new ArrayList<ProjectWorkspaceDTO>();
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
+		ProjectDTO project = new ProjectDTO();
+		project.setProjectid("PROJ_1_Test");
+		project.setProjectname("testproject1");
+		project.setAccessibility("PUBLIC");
+		project.setCreatedby("projuser1");
+		project.setCreateddate(date);
+		project.setUpdatedby("projuser1");
+		project.setUpdateddate(date);
+		project.setUnixname("PROJ_1");
+		project.setProjectowner(user);
+		sessionFactory.getCurrentSession().save(project);
+		
+		//create a workspace
+		WorkspaceDTO workspace = new WorkspaceDTO();
+		workspace.setWorkspaceid("WS_1_Test");
+		workspace.setWorkspacename("WS_1");
+		workspace.setWorkspaceowner(user);
+		workspace.setCreatedby("projuser1");
+		workspace.setCreateddate(date);
+		workspace.setUpdatedby("projuser1");
+		workspace.setUpdateddate(date);
+		workspace.setIsarchived(false);
+		workspace.setIsdeactivated(false);
+        sessionFactory.getCurrentSession().save(workspace);
+        
+        //create project workspace mapping
+        ProjectWorkspaceDTO projectWorkspace = new ProjectWorkspaceDTO();
+        ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
+        projectWorkspace.setProjectWorkspaceDTOPK(projectWorkspaceKey);
+        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, "PROJ_1_Test");
+        projectWorkspace.setProjectDTO(project);
+        workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_1_Test");
+        projectWorkspace.setWorkspaceDTO(workspace);
+        projectWorkspace.setCreatedby("projuser1");
+        projectWorkspace.setCreateddate(date);
+        projectWorkspace.setUpdatedby("projuser1");
+        projectWorkspace.setUpdateddate(date);
+        sessionFactory.getCurrentSession().save(projectWorkspace);
+        projectWorkspaceList.add(projectWorkspace);
+        
+        project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+        project.setProjectWorkspaceDTOList(projectWorkspaceList);
+        sessionFactory.getCurrentSession().update(project);
+        
+		DictionaryDTO dictionary = new DictionaryDTO();
+		dictionary.setDictionaryname("dictionary1");
+		dictionary.setDictionaryid("DICT_1_Test");
+		dictionary.setDictionaryowner(user);
+		dictionary.setCreatedby("projuser1");
+		dictionary.setCreateddate(date);
+		sessionFactory.getCurrentSession().save(dictionary);
+		
+		dictionary = new DictionaryDTO();
+		dictionary.setDictionaryname("dictionary2");
+		dictionary.setDictionaryid("DICT_2_Test");
+		dictionary.setDictionaryowner(user);
+		dictionary.setCreatedby("projuser1");
+		dictionary.setCreateddate(date);
+		sessionFactory.getCurrentSession().save(dictionary);
 
-			List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-			IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
-			role.setDBid("role3");
-			roles.add(role);
-			role = quadrigaRoleFactory.createQuadrigaRoleObject();
-			role.setDBid("role4");
-			roles.add(role);
-
-			IQuadrigaRole quadrigaRole = null;
-			List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-			for (int i = 0; i < roles.size(); i++) {
-				quadrigaRole = rolemanager.getQuadrigaRole(roles.get(i)
-						.getDBid());
-
-				// If user account is deactivated remove other roles
-				if (quadrigaRole.getId().equals(
-						RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
-					rolesList.clear();
-				}
-				rolesList.add(quadrigaRole);
-			}
-			user.setQuadrigaRoles(rolesList);
-
-			// Setup the database with the proper data in the tables;
-			sDatabaseSetup = new String[] {
-					"delete from tbl_dictionary_items",
-					"delete from tbl_dictionary",
-					"delete from tbl_workspace_dictionary",
-					"delete from tbl_workspace",
-					"delete from tbl_quadriga_user_denied",
-					"delete from tbl_quadriga_user",
-					"delete from tbl_quadriga_user_requests",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-					"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())", };
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    List<WorkspaceDictionaryDTO> workspaceDictionaryList = new ArrayList<WorkspaceDictionaryDTO>();
+		WorkspaceDictionaryDTOPK workspaceDictionaryKey = new WorkspaceDictionaryDTOPK("WS_1_Test","DICT_1_Test");
+	    WorkspaceDictionaryDTO workspaceDictionary = new WorkspaceDictionaryDTO();
+	    workspaceDictionary.setWorkspaceDictionaryDTOPK(workspaceDictionaryKey);
+	    workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_1_Test");
+	    workspaceDictionary.setWorkspaceDTO(workspace);
+	    dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class,"DICT_1_Test");
+		workspaceDictionary.setDictionaryDTO(dictionary);
+		workspaceDictionary.setCreatedby("projuser1");
+		workspaceDictionary.setCreateddate(date);
+		workspaceDictionary.setUpdatedby("projuser1");
+		workspaceDictionary.setUpdateddate(date);
+		sessionFactory.getCurrentSession().save(workspaceDictionary);
+		
+		workspaceDictionaryList.add(workspaceDictionary);
+		workspace.setWorkspaceDictionaryDTOList(workspaceDictionaryList);
+		sessionFactory.getCurrentSession().update(workspaceDictionary);
+		
+		dictionary.setWsDictionaryDTOList(workspaceDictionaryList);
+		sessionFactory.getCurrentSession().update(dictionary);
 	}
 
 	@After
-	public void tearDown() throws Exception {
-	}
-
-	@Test
-	public void testSetupTestEnvironment() throws QuadrigaStorageException {
-		for (String singleQuery : sDatabaseSetup) {
-			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
+	public void tearDown() throws Exception 
+	{
+		WorkspaceDictionaryDTOPK workspaceDictionaryKey = new WorkspaceDictionaryDTOPK("WS_1_Test","DICT_1_Test");
+		WorkspaceDictionaryDTO workspaceDictionary = (WorkspaceDictionaryDTO) sessionFactory.getCurrentSession().get(WorkspaceDictionaryDTO.class, workspaceDictionaryKey);
+		if(workspaceDictionary !=null)
+		{
+			sessionFactory.getCurrentSession().delete(workspaceDictionary);
 		}
+		
+		DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class,"DICT_1_Test");
+		if(dictionary != null)
+		{
+			sessionFactory.getCurrentSession().delete(dictionary);
+		}
+		
+		dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class,"DICT_2_Test" );
+		if(dictionary !=null)
+		{
+			sessionFactory.getCurrentSession().delete(dictionary);
+		}
+		
+	    ProjectWorkspaceDTOPK projectWorkspaceKey = new ProjectWorkspaceDTOPK("PROJ_1_Test","WS_1_Test");
+	    ProjectWorkspaceDTO projectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class, projectWorkspaceKey);
+	    if(projectWorkspace !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(projectWorkspace);
+	    }
+	    
+	    WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+	    if(workspace !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(workspace);
+	    }
+	    
+	    ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+	    if(project !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(project);
+	    }
+	    
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+	    user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser2");
+	    if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+		
 	}
 
 	@Test
 	public void testAddWorkspaceDictionary() throws QuadrigaAccessException, QuadrigaStorageException {
-		testSetupTestEnvironment();
-		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
-			IProject project1 = null;
-			try {
-				project1 = retrieveProjectManager.getProjectDetails("1");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			assertEquals(project1.getDescription().equals("description"), true);
-			assertEquals(project1.getName().equals("projDict"), true);
-			assertEquals(project1.getUnixName().equals("unix"), true);
-		}
-		
-		
-		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,isarchived,isdeactivated,updatedby,updateddate,createdby,createddate) VALUES('workDict','description','1','jdoe','1','1','jdoe',NOW(),'jdoe',NOW());");
-			IWorkSpace workspace1 = null;
+			boolean isAdded = false;
+			dbConnect.addWorkspaceDictionary("WS_1_Test", "DICT_2_Test", "projuser1");
+			
+			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+			List<WorkspaceDictionaryDTO> workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
+			DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class,"DICT_2_Test");
+			
+			WorkspaceDictionaryDTO workspaceDictionary = workspaceMapper.getWorkspaceDictionary(workspace, dictionary, "projuser1");
+			
+			if(workspaceDictionaryList.contains(workspaceDictionary))
 			{
-				dbConnection
-				.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
+				isAdded = true;
 			}
-			try {
-				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			assertEquals(workspace1.getDescription().equals("description"), true);
-			assertEquals(workspace1.getName().equals("workDict"), true);
-		}
-		
-		{
-			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
-			dictionary.setDescription("description");
-			dictionary.setOwner(user);
-			String msg = "";
-			try {
-				dictionaryManager.addNewDictionary(dictionary);
-			} catch (QuadrigaStorageException e1) {
-				e1.printStackTrace();
-			}
-			logger.info(" message : " + msg);
-			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
-						+ user.getUserName());
-				List<IDictionary> dictionaryList = null;
-				try {
-					dictionaryList = dbConnection.getDictionaryOfUser(user
-							.getUserName());
-				} catch (QuadrigaStorageException e) {
-					e.printStackTrace();
-				}
-				Iterator<IDictionary> I = dictionaryList.iterator();
-				String name = null;
-				String desc = null;
-
-				while (I.hasNext()) {
-					IDictionary dictionaryTest = dictionaryFactory
-							.createDictionaryObject();
-					dictionaryTest = I.next();
-					assertEquals((dictionaryTest != null), true);
-					if (dictionaryTest != null) {
-						name = dictionaryTest.getName();
-						desc = dictionaryTest.getDescription();
-					}
-				}
-
-				assertEquals(name.equals("testDictionary"), true);
-				assertEquals(desc.equals("description"), true);
-			} else {
-				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"
-						+ msg);
-				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"
-						+ msg);
-			}
-		}
-
-		{
-			try {
-				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
-						getDictionaryID("testDictionary"), "jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-
-			List<IDictionary> dictList = null;
-			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			Iterator<IDictionary> I = dictList.iterator();
-			assertEquals(dictList.size() > 0, true);
-			while (I.hasNext()) {
-				IDictionary dict = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(dict.getName().equals("testDictionary"), true);
-			}
-		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace");
-		
-
+			
+			assertTrue(isAdded);
 	}
 
 	@Test
-	public void testListWorkspaceDictionary() throws QuadrigaAccessException, QuadrigaStorageException {
-		testSetupTestEnvironment();
+	public void testListWorkspaceDictionary() throws QuadrigaAccessException, QuadrigaStorageException 
+	{
+		
+		boolean isRetrieved = true;
+		IDictionary dictionary = null;
+		List<IDictionary> testDictionaryList = new ArrayList<IDictionary>();
+		List<IDictionary> dictionaryList = dbConnect.listWorkspaceDictionary("WS_1_Test", "projuser1");
+		
+		WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+		List<WorkspaceDictionaryDTO> workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
+		for(WorkspaceDictionaryDTO workspaceDictionary : workspaceDictionaryList)
 		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
-			IProject project1 = null;
-			try {
-				project1 = retrieveProjectManager.getProjectDetails("1");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			assertEquals(project1.getDescription().equals("description"), true);
-			assertEquals(project1.getName().equals("projDict"), true);
-			assertEquals(project1.getUnixName().equals("unix"), true);
+			WorkspaceDictionaryDTOPK workspacedictionaryKey = workspaceDictionary.getWorkspaceDictionaryDTOPK();
+			DictionaryDTO dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class,workspacedictionaryKey.getDictionaryid());
+		    dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
+		    testDictionaryList.add(dictionary);
 		}
 		
-		
+		if(dictionaryList.size() != testDictionaryList.size())
 		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,isarchived,isdeactivated,updatedby,updateddate,createdby,createddate) VALUES('workDict','description','1','jdoe','1','1','jdoe',NOW(),'jdoe',NOW());");
-			IWorkSpace workspace1 = null;
+			fail();
+		}
+		
+		for(IDictionary tempDictionary : dictionaryList)
+		{
+			if(!testDictionaryList.contains(tempDictionary))
 			{
-				dbConnection
-				.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
+				isRetrieved = false;
 			}
-			try {
-				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			assertEquals(workspace1.getDescription().equals("description"), true);
-			assertEquals(workspace1.getName().equals("workDict"), true);
 		}
 		
-		{
-			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
-			dictionary.setDescription("description");
-			dictionary.setOwner(user);
-			String msg = "";
-			try {
-				dictionaryManager.addNewDictionary(dictionary);
-			} catch (QuadrigaStorageException e1) {
-				e1.printStackTrace();
-			}
-			logger.info(" message : " + msg);
-			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
-						+ user.getUserName());
-				List<IDictionary> dictionaryList = null;
-				try {
-					dictionaryList = dbConnection.getDictionaryOfUser(user
-							.getUserName());
-				} catch (QuadrigaStorageException e) {
-					e.printStackTrace();
-				}
-				Iterator<IDictionary> I = dictionaryList.iterator();
-				String name = null;
-				String desc = null;
-
-				while (I.hasNext()) {
-					IDictionary dictionaryTest = dictionaryFactory
-							.createDictionaryObject();
-					dictionaryTest = I.next();
-					assertEquals((dictionaryTest != null), true);
-					if (dictionaryTest != null) {
-						name = dictionaryTest.getName();
-						desc = dictionaryTest.getDescription();
-					}
-				}
-
-				assertEquals(name.equals("testDictionary"), true);
-				assertEquals(desc.equals("description"), true);
-			} else {
-				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"
-						+ msg);
-				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"
-						+ msg);
-			}
-		}
-
-		{
-			try {
-				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
-						getDictionaryID("testDictionary"), "jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-
-			List<IDictionary> dictList = null;
-			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			Iterator<IDictionary> I = dictList.iterator();
-			assertEquals(dictList.size() > 0, true);
-			while (I.hasNext()) {
-				IDictionary dict = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(dict.getName().equals("testDictionary"), true);
-			}
-		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace");
-		
-
+		assertTrue(isRetrieved);
 	}
 
 	@Test
-	public void testDeleteWorkspaceDictionary() throws QuadrigaStorageException, QuadrigaAccessException {
-		testSetupTestEnvironment();
-		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
-			IProject project1 = null;
-			try {
-				project1 = retrieveProjectManager.getProjectDetails("1");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			assertEquals(project1.getDescription().equals("description"), true);
-			assertEquals(project1.getName().equals("projDict"), true);
-			assertEquals(project1.getUnixName().equals("unix"), true);
-		}
+	public void testDeleteWorkspaceDictionary() throws QuadrigaStorageException, QuadrigaAccessException 
+	{
+		  boolean isDeleted = true;
+		  dbConnect.deleteWorkspaceDictionary("WS_1_Test", "projuser1","DICT_1_Test");
+		  
+		  WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,"WS_1_Test");
+		  DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class,"DICT_1_Test");
 		
-		
-		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_workspace(workspacename,description,workspaceid,workspaceowner,isarchived,isdeactivated,updatedby,updateddate,createdby,createddate) VALUES('workDict','description','1','jdoe','1','1','jdoe',NOW(),'jdoe',NOW());");
-			IWorkSpace workspace1 = null;
-			{
-				dbConnection
-				.setupTestEnvironment("INSERT  INTO tbl_project_workspace(projectid,workspaceid,updatedby,updateddate,createdby,createddate) VALUES('1','1','jdoe',NOW(),'jdoe',NOW());");
-			}
-			try {
-				workspace1 = wsManager.getWorkspaceDetails("1", "jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			assertEquals(workspace1.getDescription().equals("description"), true);
-			assertEquals(workspace1.getName().equals("workDict"), true);
-		}
-		
-		{
-			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
-			dictionary.setDescription("description");
-			dictionary.setOwner(user);
-			String msg = "";
-			try {
-				dictionaryManager.addNewDictionary(dictionary);
-			} catch (QuadrigaStorageException e1) {
-				e1.printStackTrace();
-			}
-			logger.info(" message : " + msg);
-			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
-						+ user.getUserName());
-				List<IDictionary> dictionaryList = null;
-				try {
-					dictionaryList = dbConnection.getDictionaryOfUser(user
-							.getUserName());
-				} catch (QuadrigaStorageException e) {
-					e.printStackTrace();
-				}
-				Iterator<IDictionary> I = dictionaryList.iterator();
-				String name = null;
-				String desc = null;
-
-				while (I.hasNext()) {
-					IDictionary dictionaryTest = dictionaryFactory
-							.createDictionaryObject();
-					dictionaryTest = I.next();
-					assertEquals((dictionaryTest != null), true);
-					if (dictionaryTest != null) {
-						name = dictionaryTest.getName();
-						desc = dictionaryTest.getDescription();
-					}
-				}
-
-				assertEquals(name.equals("testDictionary"), true);
-				assertEquals(desc.equals("description"), true);
-			} else {
-				logger.info("addNewDictionaryTest: Create Dictionary Failed ; message :"
-						+ msg);
-				fail("addNewDictionaryTest: Create Dictionary Failed ; message :"
-						+ msg);
-			}
-		}
-
-		{
-			try {
-				dbConnectionWorkspaceDictionary.addWorkspaceDictionary("1",
-						getDictionaryID("testDictionary"), "jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-
-			List<IDictionary> dictList = null;
-			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			Iterator<IDictionary> I = dictList.iterator();
-			assertEquals(dictList.size() > 0, true);
-			while (I.hasNext()) {
-				IDictionary dict = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(dict.getName().equals("testDictionary"), true);
-			}
-			
-			dbConnectionWorkspaceDictionary.deleteWorkspaceDictionary("1", "jdoe", getDictionaryID("testDictionary"));
-			
-			dictList = null;
-			try {
-				dictList = workspaceDictionaryManager.listWorkspaceDictionary("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				e.printStackTrace();
-			}
-			I = dictList.iterator();
-			assertEquals(dictList.size() > 0, false);
-		}
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
-		dbConnection.setupTestEnvironment("delete from tbl_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace_dictionary");
-		dbConnection.setupTestEnvironment("delete from tbl_workspace");
-		
-
+		  List<WorkspaceDictionaryDTO> workspaceDictionaryList = dictionary.getWsDictionaryDTOList();
+		  if(workspaceDictionaryList != null)
+		  {
+			  for(WorkspaceDictionaryDTO tempWorkspaceDictionary : workspaceDictionaryList)
+			  {
+				  WorkspaceDTO testWorkspace = tempWorkspaceDictionary.getWorkspaceDTO();
+				  
+				  if((testWorkspace!=null)&&(workspace.equals(testWorkspace)))
+				  {
+					  isDeleted = false;
+				  }
+			  }
+		  }
+		  assertTrue(isDeleted);
 	}
 
 }

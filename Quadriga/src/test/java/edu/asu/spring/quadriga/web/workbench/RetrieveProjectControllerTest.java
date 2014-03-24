@@ -7,6 +7,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -137,7 +138,7 @@ public class RetrieveProjectControllerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGetProjectListByOwner() throws QuadrigaStorageException
+	public void testGetProjectListByOwner() throws QuadrigaStorageException, JSONException
 	{
 		//create the project objects and compare it with the retrieved objects
 		List<IProject> tempProjectList = new ArrayList<IProject>();
@@ -195,7 +196,7 @@ public class RetrieveProjectControllerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGetProjectListByCollaborator() throws QuadrigaStorageException
+	public void testGetProjectListByCollaborator() throws QuadrigaStorageException, JSONException
 	{
 		//create the project objects and compare it with the retrieved objects
 		List<IProject> tempProjectList = new ArrayList<IProject>();
@@ -253,7 +254,7 @@ public class RetrieveProjectControllerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGetProjectListByWorkspaceOwner() throws QuadrigaStorageException
+	public void testGetProjectListByWorkspaceOwner() throws QuadrigaStorageException, JSONException
 	{
 		//create the project objects and compare it with the retrieved objects
 				List<IProject> tempProjectList = new ArrayList<IProject>();
@@ -301,7 +302,7 @@ public class RetrieveProjectControllerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGetProjectListByWSCollaborator() throws QuadrigaStorageException
+	public void testGetProjectListByWSCollaborator() throws QuadrigaStorageException, JSONException
 	{
 		//create the project objects and compare it with the retrieved objects
 		List<IProject> tempProjectList = new ArrayList<IProject>();
