@@ -235,7 +235,7 @@ public class EditingListController {
 		return "auth/editing/visualize";
 	}
 
-	@RequestMapping(value = "auth/editing/versionhistory/{networkId}/", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/editing/versionhistory/{networkId}", method = RequestMethod.GET)
 	public String viewHistory(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException {
 		//INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
 		//String nwId = "\""+networkId+"\"";
