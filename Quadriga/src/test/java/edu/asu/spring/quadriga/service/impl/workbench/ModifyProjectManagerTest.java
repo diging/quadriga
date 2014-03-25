@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,12 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.workbench.ModifyProjectManagerDAO;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -31,7 +34,10 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration
 @Transactional
-public class ModifyProjectManagerTest {
+public class ModifyProjectManagerTest 
+{
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Autowired
 	IDBConnectionModifyProjectManager dbConnect;
@@ -59,17 +65,17 @@ public class ModifyProjectManagerTest {
 	@Before
 	public void setUp() throws Exception {
 		String[] databaseQuery = new String[7];
-		databaseQuery[0] = "INSERT INTO tbl_quadriga_user VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[1] = "INSERT INTO tbl_project VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[2] = "INSERT INTO tbl_project VALUES('testproject3','test case data','testproject3','PROJ_3','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[3] = "INSERT INTO tbl_project VALUES('testproject4','test case data','testproject4','PROJ_4','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[4] = "INSERT INTO tbl_quadriga_user VALUES('test project collab','projcollab',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
-		databaseQuery[5] = "INSERT INTO tbl_project VALUES('testproject5','test case data','testproject5','PROJ_5','projuser','ACCESSIBLE',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[0] = "INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,updatedby,updateddate,createdby,createddate) VALUES('test project user','projuser',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[1] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject2','test case data','testproject2','PROJ_2','projuser','PUBLIC',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[2] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject3','test case data','testproject3','PROJ_3','projuser','PUBLIC',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[3] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject4','test case data','testproject4','PROJ_4','projuser','PUBLIC',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[4] = "INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,updatedby,updateddate,createdby,createddate) VALUES('test project collab','projcollab',null,'tpu@test.com','role1,role4',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
+		databaseQuery[5] = "INSERT INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('testproject5','test case data','testproject5','PROJ_5','projuser','PUBLIC',SUBSTRING_INDEX(USER(),'@',1),NOW(),SUBSTRING_INDEX(USER(),'@',1),NOW())";
 		databaseQuery[6] = "INSERT INTO tbl_project_collaborator(projectid,collaboratoruser,collaboratorrole,updatedby,updateddate,createdby,createddate) VALUES ('PROJ_5','projcollab','collaborator_role3','projcollab',NOW(),'projcollab',NOW())";
 		
 		for(String query : databaseQuery)
 		{
-//			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
+			((ModifyProjectManagerDAO)dbConnect).setupTestEnvironment(query);
 		}
 	}
 
@@ -82,12 +88,13 @@ public class ModifyProjectManagerTest {
 		databaseQuery[3] = "DELETE FROM tbl_quadriga_user WHERE username IN ('projuser','projcollab')";
 		for(String query : databaseQuery)
 		{
-//			((DBConnectionModifyProjectManager)dbConnect).setupTestEnvironment(query);
-		}
+			((ModifyProjectManagerDAO)dbConnect).setupTestEnvironment(query);
+		}	
 	}
 
 	@Test
-	public void testAddProjectRequest() throws QuadrigaStorageException {
+	public void testAddProjectRequest() throws QuadrigaStorageException 
+	{
 		IProject project;
 		IUser owner;
 		
@@ -107,29 +114,28 @@ public class ModifyProjectManagerTest {
 	}
 
 	@Test
-	public void testUpdateProjectRequest() throws QuadrigaStorageException {
-		IProject project;
-		String owner;
-		
-		project = projectFactory.createProjectObject();
-		project.setName("testupdateproject");
-		project.setDescription("test case data");
-		project.setUnixName("testproject2");
-		project.setProjectAccess(EProjectAccessibility.PUBLIC);
-		project.setInternalid("PROJ_2");
-		
-		owner = "projuser";
-        projectManager.updateProjectRequest("PROJ_2","testupdateproject","test case data",EProjectAccessibility.PUBLIC.name(),"testproject2",owner);
-        assertTrue(true);
+	public void testUpdateProjectRequest() throws QuadrigaStorageException
+	{
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_2");
+		project.setProjectname("testupdateproject");
+        projectManager.updateProjectRequest("PROJ_2","testupdateproject","test case data",EProjectAccessibility.PUBLIC.name(),"testproject2","projuser");
+        ProjectDTO updatedProject = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_2");
+        assertEquals(project,updatedProject);
 	}
 
 	@Test
-	public void testDeleteProjectRequest() throws QuadrigaStorageException {
+	public void testDeleteProjectRequest() throws QuadrigaStorageException 
+	{
+		boolean isDeleted = false;
 		ArrayList<String> projectIdList = new ArrayList<String>();
-		projectIdList.add("PROJ_3");
 		projectIdList.add("PROJ_4");
 		projectManager.deleteProjectRequest(projectIdList);
-		assertTrue(true);
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_4");
+		if(project == null)
+		{
+		  isDeleted = true;
+		}
+		assertTrue(isDeleted);
 	}
 	
 	@Test
@@ -138,20 +144,11 @@ public class ModifyProjectManagerTest {
 		IProject project;
 		String owner;
 		
-		project = retrieveProjectManager.getProjectDetails("PROJ_5");
-		
-		projectManager.transferProjectOwnerRequest("PROJ_5", "projuser", "projcollab", "collaborator_role3");
-		
+		dbConnect.transferProjectOwnerRequest("PROJ_5", "projuser", "projcollab", "collaborator_role3");
 		//retrieve the project details
-	   project = retrieveProjectManager.getProjectDetails("PROJ_5");
-	   
-	   if(project == null)
-	   {
-		   fail();
-	   }
-	   
-	   owner = project.getOwner().getUserName();
-	   assertEquals("projcollab",owner);
+		project = retrieveProjectManager.getProjectDetails("PROJ_5");
+		owner = project.getOwner().getUserName();
+		assertEquals("projcollab",owner);
 	}
 	
 	
