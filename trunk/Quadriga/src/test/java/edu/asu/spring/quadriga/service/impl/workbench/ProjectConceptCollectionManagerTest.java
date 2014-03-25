@@ -3,49 +3,35 @@
  */
 package edu.asu.spring.quadriga.service.impl.workbench;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 
-import javax.sql.DataSource;
-
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
-import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTOPK;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
+import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
+import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
-import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
  * @author Lohith Dwaraka
@@ -55,56 +41,22 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 		"file:src/test/resources/spring-dbconnectionmanager.xml",
 		"file:src/test/resources/root-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ProjectConceptCollectionManagerTest {
+@Transactional
+public class ProjectConceptCollectionManagerTest 
+{
 
 	@Autowired
-	private IProjectConceptCollectionManager projectConceptCollectionManager;
-
-	@Autowired
-	IDBConnectionDictionaryManager dbConnection;
+	private SessionFactory sessionFactory;
 	
 	@Autowired
-	IDBConnectionCCManager dbConnect;
-
-	@Autowired
-	private IDictionaryManager dictionaryManager;
-
-	@Autowired
-	private DataSource dataSource;
-
-	@Autowired
-	private IConceptCollectionManager conceptCollectionManager;
+	private IProjectConceptCollectionManager dbConnect;
 	
 	@Autowired
-	private IModifyProjectManager modifyProjectManager;
+	private ProjectDTOMapper projectMapper;
 	
-	private Connection connection;
-
 	@Autowired
-	private IRetrieveProjectManager retrieveProjectManager;
+	private ConceptCollectionDTOMapper collectionMapper;
 
-	@Autowired
-	private IConceptCollectionFactory conceptCollectionFactory;
-	
-	private IUser user;
-	
-	String sDatabaseSetup[];
-
-	@Autowired
-	private IUserFactory userFactory;
-
-	@Autowired
-	private IQuadrigaRoleManager rolemanager;
-
-	@Autowired
-	private IQuadrigaRoleFactory quadrigaRoleFactory;
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(ProjectConceptCollectionManagerTest.class);
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -116,204 +68,166 @@ public class ProjectConceptCollectionManagerTest {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
-	public void setUp() throws Exception {
-		// Setup a user object to compare with the object produced from
-				// usermanager
-				try {
-					user = userFactory.createUserObject();
-					user.setUserName("jdoe");
-					user.setName("John Doe");
-
-					List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-					IQuadrigaRole role = quadrigaRoleFactory.createQuadrigaRoleObject();
-					role.setDBid("role3");
-					roles.add(role);
-					role = quadrigaRoleFactory.createQuadrigaRoleObject();
-					role.setDBid("role4");
-					roles.add(role);
-
-					IQuadrigaRole quadrigaRole = null;
-					List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-					for (int i = 0; i < roles.size(); i++) {
-						quadrigaRole = rolemanager.getQuadrigaRole(roles.get(i)
-								.getDBid());
-
-						// If user account is deactivated remove other roles
-						if (quadrigaRole.getId().equals(
-								RoleNames.ROLE_QUADRIGA_DEACTIVATED)) {
-							rolesList.clear();
-						}
-						rolesList.add(quadrigaRole);
-					}
-					user.setQuadrigaRoles(rolesList);
-
-					// Setup the database with the proper data in the tables;
-					sDatabaseSetup = new String[] {
-							"delete from tbl_conceptcollection_items",
-							"delete from tbl_conceptcollection",
-							"delete from tbl_quadriga_user_requests",
-							"delete from tbl_project_conceptcollection",
-							"delete from tbl_project",
-							"delete from tbl_quadriga_user_denied",
-							"delete from tbl_quadriga_user",
-							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-							"INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-							"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-							"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())",
-							"INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())", };
-
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+	public void setUp() throws Exception 
+	{
+		//create a quadriga user
+		Date date = new Date();
+		QuadrigaUserDTO user = new QuadrigaUserDTO();
+		user.setUsername("projuser1");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser1");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser1");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
+		
+		user = new QuadrigaUserDTO();
+		user.setUsername("projuser2");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser2");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser2");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
+		
+		user = new QuadrigaUserDTO();
+		user.setUsername("projuser3");
+		user.setFullname("test project user");
+		user.setCreatedby("projuser3");
+		user.setCreateddate(date);
+		user.setUpdatedby("projuser3");
+		user.setUpdateddate(date);
+		user.setEmail("tpu@test.com");
+		user.setQuadrigarole("role1,role4");
+		sessionFactory.getCurrentSession().save(user);
+		
+		//create a project
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
+		List<ProjectConceptCollectionDTO> projectConceptCollectionList = new ArrayList<ProjectConceptCollectionDTO>();
+		ProjectDTO project = new ProjectDTO();
+		project.setProjectid("PROJ_1_Test");
+		project.setProjectname("testproject1");
+		project.setAccessibility("PUBLIC");
+		project.setCreatedby("projuser1");
+		project.setCreateddate(date);
+		project.setUpdatedby("projuser1");
+		project.setUpdateddate(date);
+		project.setUnixname("PROJ_1");
+		project.setProjectowner(user);
+		sessionFactory.getCurrentSession().save(project);
+		
+		ConceptCollectionDTO conceptCollection = new ConceptCollectionDTO();
+		conceptCollection.setCollectionname("conceptCollection1");
+		conceptCollection.setCollectionowner(user);
+		conceptCollection.setConceptCollectionid("CC_1_Test");
+		conceptCollection.setCreatedby("projuser1");
+		conceptCollection.setCreateddate(date);
+		sessionFactory.getCurrentSession().save(conceptCollection);
+		
+		conceptCollection = new ConceptCollectionDTO();
+		conceptCollection.setCollectionname("conceptCollection2");
+		conceptCollection.setCollectionowner(user);
+		conceptCollection.setConceptCollectionid("CC_2_Test");
+		conceptCollection.setCreatedby("projuser1");
+		conceptCollection.setCreateddate(date);
+		sessionFactory.getCurrentSession().save(conceptCollection);
+		
+		conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_1_Test");
+		ProjectConceptCollectionDTOPK projectConceptCollectionKey = new ProjectConceptCollectionDTOPK("PROJ_1_Test","CC_1_Test");
+		ProjectConceptCollectionDTO projectConceptCollection = new ProjectConceptCollectionDTO();
+		projectConceptCollection.setProjectConceptcollectionDTOPK(projectConceptCollectionKey);
+		projectConceptCollection.setProjectDTO(project);
+		projectConceptCollection.setConceptCollection(conceptCollection);
+		projectConceptCollection.setCreatedby("projuser1");
+		projectConceptCollection.setCreateddate(date);
+		projectConceptCollection.setUpdatedby("projuser1");
+		projectConceptCollection.setUpdateddate(date);
+		sessionFactory.getCurrentSession().save(projectConceptCollection);
+		
+		projectConceptCollectionList.add(projectConceptCollection);
+		project.setProjectConceptCollectionDTOList(projectConceptCollectionList);
+		sessionFactory.getCurrentSession().update(project);
+		
+		conceptCollection.setProjConceptCollectionDTOList(projectConceptCollectionList);
+		sessionFactory.getCurrentSession().update(conceptCollection);
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws Exception 
+	{
+		ProjectConceptCollectionDTOPK projectConceptCollectionKey = new ProjectConceptCollectionDTOPK("PROJ_1_Test","CC_1_Test");
+		ProjectConceptCollectionDTO projectConceptCollection = (ProjectConceptCollectionDTO) sessionFactory.getCurrentSession().get(ProjectConceptCollectionDTO.class, projectConceptCollectionKey);
+		if(projectConceptCollection !=null)
+		{
+			sessionFactory.getCurrentSession().delete(projectConceptCollection);
+		}
+		
+		ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_1_Test");
+	    if(conceptCollection !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(conceptCollection);
+	    }
+	    conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_2_Test");
+	    if(conceptCollection !=null)
+	    {
+	    	sessionFactory.getCurrentSession().delete(conceptCollection);
+	    }
+	    
+	    ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		if(project!=null)
+		{
+	      sessionFactory.getCurrentSession().delete(project);
+		}
+		
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser1");
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+	    user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser2");
+	    if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
+		user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
+		if(user!=null)
+		{
+		  sessionFactory.getCurrentSession().delete(user);
+		}
 	}
 
-	@Test
-	public void testSetupTestEnvironment() throws QuadrigaStorageException {
-		for (String singleQuery : sDatabaseSetup) {
-			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
-		}
-	}
-	public void getConnection() {
-		try {
-			connection = dataSource.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public String getCCID(String name) {
-		getConnection();
-		String id = null;
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.execute("select conceptcollectionid from tbl_conceptcollection where collectionname='"
-					+ name + "'");
-			ResultSet rs = stmt.getResultSet();
-			if (rs != null) {
-				while (rs.next()) {
-					id = rs.getString(1);
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return id;
-	}
 	/**
 	 * Test method for {@link edu.asu.spring.quadriga.service.impl.workbench.ProjectConceptCollectionManager#addProjectConceptCollection(java.lang.String, java.lang.String, java.lang.String)}.
 	 * @throws QuadrigaStorageException 
 	 */
 	@Test
 	@Transactional
-	public void testAddProjectConceptCollection() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
-		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
-			IProject project1 = null;
-			try {
-				project1 = retrieveProjectManager.getProjectDetails("1");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			assertEquals(project1.getDescription().equals("description"), true);
-			assertEquals(project1.getName().equals("projDict"), true);
-			assertEquals(project1.getUnixName().equals("unix"), true);
-		}
-		{
-			IConceptCollection conceptCollection = conceptCollectionFactory.createConceptCollectionObject(); 
-			conceptCollection.setName("Test CC");
-			conceptCollection.setDescription("description");
-			conceptCollection.setOwner(user);
-			String msg = "";
-			try {
-				conceptCollectionManager.addConceptCollection(conceptCollection);
-			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			logger.info(" message : " + msg);
-			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
-						+ user.getUserName());
-				List<IConceptCollection> conceptCollectionList = null;
-				try {
-					conceptCollectionList = dbConnect.getConceptsOwnedbyUser(user
-							.getUserName());
-				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Iterator<IConceptCollection> I = conceptCollectionList.iterator();
-				String name = null;
-				String desc = null;
-				IUser userTest = null;
-
-				while (I.hasNext()) {
-					IConceptCollection conceptCollectionTest = conceptCollectionFactory
-							.createConceptCollectionObject();
-					conceptCollectionTest = I.next();
-					assertEquals((conceptCollectionTest != null), true);
-					if (conceptCollectionTest != null) {
-						name = conceptCollectionTest.getName();
-						desc = conceptCollectionTest.getDescription();
-						userTest = conceptCollectionTest.getOwner();
-					}
-				}
-
-				assertEquals(name.equals("Test CC"), true);
-				assertEquals(desc.equals("description"), true);
-			} else {
-				logger.info("testAddProjectConceptCollection: Create concept collection Failed ; message :"
-						+ msg);
-				fail("testAddProjectConceptCollection: Create concept collection Failed ; message :"
-						+ msg);
-			}
-		}
-
-		{
-			try {
-				projectConceptCollectionManager.addProjectConceptCollection("1",
-						getCCID("Test CC"), "jdoe");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			List<IConceptCollection> CCList = null;
-			try {
-				CCList = projectConceptCollectionManager.listProjectConceptCollection("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Iterator<IConceptCollection> I = CCList.iterator();
-			assertEquals(CCList.size() > 0, true);
-			while (I.hasNext()) {
-				IConceptCollection cc = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(cc.getName().equals("Test CC"), true);
-			}
-		}
-		dbConnection.setupTestEnvironment("delete from tbl_project_conceptcollection");
-		dbConnection.setupTestEnvironment("delete from tbl_project");
-		dbConnection.setupTestEnvironment("delete from tbl_conceptcollection");
+	public void testAddProjectConceptCollection() throws QuadrigaStorageException 
+	{
+		
+		boolean isAdded = false;
+		dbConnect.addProjectConceptCollection("PROJ_1_Test", "CC_2_Test", "projuser1");
+		
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		List<ProjectConceptCollectionDTO> projectConceptCollection = project.getProjectConceptCollectionDTOList();
+		
+		ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_2_Test");
+		
+		 //add the concept collection to the project
+		 ProjectConceptCollectionDTO testProjectConceptCollection = projectMapper.getProjectConceptCollection(project, conceptCollection, "projuser1");
+		
+		 if(projectConceptCollection.contains(testProjectConceptCollection))
+		 {
+			 isAdded = true;
+		 }
+		 
+		 assertTrue(isAdded);
 	}
 
 	/**
@@ -322,101 +236,39 @@ public class ProjectConceptCollectionManagerTest {
 	 */
 	@Test
 	@Transactional
-	public void testListProjectConceptCollection() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
+	public void testListProjectConceptCollection() throws QuadrigaStorageException 
+	{
+		boolean isRetrieved = true;
+		IConceptCollection collection = null;
+		List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
+		List<IConceptCollection> conceptCollection = dbConnect.listProjectConceptCollection("PROJ_1_Test", "projuser1");
+		
+		
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+		List<ProjectConceptCollectionDTO> projectConceptCollectionList = project.getProjectConceptCollectionDTOList();
+		
+		//retrieve the concept collection details for every concept collection id
+		for(ProjectConceptCollectionDTO tempProjectConceptCollection : projectConceptCollectionList)
 		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
-			IProject project1 = null;
-			try {
-				project1 = retrieveProjectManager.getProjectDetails("1");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			assertEquals(project1.getDescription().equals("description"), true);
-			assertEquals(project1.getName().equals("projDict"), true);
-			assertEquals(project1.getUnixName().equals("unix"), true);
+			ProjectConceptCollectionDTOPK projectConceptCollectionKey = tempProjectConceptCollection.getProjectConceptcollectionDTOPK();
+			ConceptCollectionDTO collectionDTO = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,projectConceptCollectionKey.getConceptcollectionid());
+			collection = collectionMapper.getConceptCollection(collectionDTO);
+			conceptCollectionList.add(collection);
 		}
+		
+		if(conceptCollectionList.size() != conceptCollection.size())
 		{
-			IConceptCollection conceptCollection = conceptCollectionFactory.createConceptCollectionObject(); 
-			conceptCollection.setName("Test CC");
-			conceptCollection.setDescription("description");
-			conceptCollection.setOwner(user);
-			String msg = "";
-			try {
-				conceptCollectionManager.addConceptCollection(conceptCollection);
-			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			logger.info(" message : " + msg);
-			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
-						+ user.getUserName());
-				List<IConceptCollection> conceptCollectionList = null;
-				try {
-					conceptCollectionList = dbConnect.getConceptsOwnedbyUser(user
-							.getUserName());
-				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Iterator<IConceptCollection> I = conceptCollectionList.iterator();
-				String name = null;
-				String desc = null;
-				IUser userTest = null;
-
-				while (I.hasNext()) {
-					IConceptCollection conceptCollectionTest = conceptCollectionFactory
-							.createConceptCollectionObject();
-					conceptCollectionTest = I.next();
-					assertEquals((conceptCollectionTest != null), true);
-					if (conceptCollectionTest != null) {
-						name = conceptCollectionTest.getName();
-						desc = conceptCollectionTest.getDescription();
-						userTest = conceptCollectionTest.getOwner();
-					}
-				}
-
-				assertEquals(name.equals("Test CC"), true);
-				assertEquals(desc.equals("description"), true);
-			} else {
-				logger.info("testAddProjectConceptCollection: Create concept collection Failed ; message :"
-						+ msg);
-				fail("testAddProjectConceptCollection: Create concept collection Failed ; message :"
-						+ msg);
+			fail();
+		}
+		
+		for(IConceptCollection tempCollection : conceptCollection)
+		{
+			if(!conceptCollectionList.contains(tempCollection))
+			{
+				isRetrieved = false;
 			}
 		}
-
-		{
-			try {
-				projectConceptCollectionManager.addProjectConceptCollection("1",
-						getCCID("Test CC"), "jdoe");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			List<IConceptCollection> CCList = null;
-			try {
-				CCList = projectConceptCollectionManager.listProjectConceptCollection("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Iterator<IConceptCollection> I = CCList.iterator();
-			assertEquals(CCList.size() > 0, true);
-			while (I.hasNext()) {
-				IConceptCollection cc = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(cc.getName().equals("Test CC"), true);
-			}
-		}
-		dbConnection.setupTestEnvironment("delete from tbl_project_conceptcollection");
-		dbConnection.setupTestEnvironment("delete from tbl_project");
-		dbConnection.setupTestEnvironment("delete from tbl_conceptcollection");
+		assertTrue(isRetrieved);
 	}
 
 	/**
@@ -425,118 +277,29 @@ public class ProjectConceptCollectionManagerTest {
 	 */
 	@Test
 	@Transactional
-	public void testDeleteProjectConceptCollection() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
-		{
-			dbConnection
-					.setupTestEnvironment("INSERT  INTO tbl_project(projectname,description,unixname,projectid,projectowner,accessibility,updatedby,updateddate,createdby,createddate) VALUES('projDict','description','unix','1','jdoe','PUBLIC','jdoe',NOW(),'jdoe',NOW());");
-			IProject project1 = null;
-			try {
-				project1 = retrieveProjectManager.getProjectDetails("1");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			assertEquals(project1.getDescription().equals("description"), true);
-			assertEquals(project1.getName().equals("projDict"), true);
-			assertEquals(project1.getUnixName().equals("unix"), true);
-		}
-		{
-			IConceptCollection conceptCollection = conceptCollectionFactory.createConceptCollectionObject(); 
-			conceptCollection.setName("Test CC");
-			conceptCollection.setDescription("description");
-			conceptCollection.setOwner(user);
-			String msg = "";
-			try {
-				conceptCollectionManager.addConceptCollection(conceptCollection);
-			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			logger.info(" message : " + msg);
-			if (msg.equals("")) {
-				logger.info("Getting dictionary for user :"
-						+ user.getUserName());
-				List<IConceptCollection> conceptCollectionList = null;
-				try {
-					conceptCollectionList = dbConnect.getConceptsOwnedbyUser(user
-							.getUserName());
-				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+	public void testDeleteProjectConceptCollection() throws QuadrigaStorageException 
+	{
+		 boolean isDeleted = true;
+			dbConnect.deleteProjectConceptCollection("PROJ_1_Test", "projuser1", "CC_1_Test");
+			
+			ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
+			
+			ConceptCollectionDTO conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,"CC_1_Test");
+			List<ProjectConceptCollectionDTO> testProjectConceptCollection =  conceptCollection.getProjConceptCollectionDTOList();
+			
+			for(ProjectConceptCollectionDTO tempProjectConceptCollection : testProjectConceptCollection )
+			{
+				ProjectDTO testProject = tempProjectConceptCollection.getProjectDTO();
+				if(testProject !=null)
+				{
+				if(project.equals(testProject))
+				{
+					isDeleted = false;
 				}
-				Iterator<IConceptCollection> I = conceptCollectionList.iterator();
-				String name = null;
-				String desc = null;
-				IUser userTest = null;
-
-				while (I.hasNext()) {
-					IConceptCollection conceptCollectionTest = conceptCollectionFactory
-							.createConceptCollectionObject();
-					conceptCollectionTest = I.next();
-					assertEquals((conceptCollectionTest != null), true);
-					if (conceptCollectionTest != null) {
-						name = conceptCollectionTest.getName();
-						desc = conceptCollectionTest.getDescription();
-						userTest = conceptCollectionTest.getOwner();
-					}
 				}
-
-				assertEquals(name.equals("Test CC"), true);
-				assertEquals(desc.equals("description"), true);
-			} else {
-				logger.info("testAddProjectConceptCollection: Create concept collection Failed ; message :"
-						+ msg);
-				fail("testAddProjectConceptCollection: Create concept collection Failed ; message :"
-						+ msg);
 			}
-		}
-
-		{
-			try {
-				projectConceptCollectionManager.addProjectConceptCollection("1",
-						getCCID("Test CC"), "jdoe");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			List<IConceptCollection> CCList = null;
-			try {
-				CCList = projectConceptCollectionManager.listProjectConceptCollection("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Iterator<IConceptCollection> I = CCList.iterator();
-			assertEquals(CCList.size() > 0, true);
-			while (I.hasNext()) {
-				IConceptCollection cc = I.next();
-				logger.info("Verifying the dictionary addition to project");
-				assertEquals(cc.getName().equals("Test CC"), true);
-			}
-			try {
-				projectConceptCollectionManager.deleteProjectConceptCollection("1", "jdoe", getCCID("Test CC"));
-			} catch (QuadrigaStorageException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			List<IConceptCollection> ccList1 = null;
-			try {
-				ccList1 = projectConceptCollectionManager.listProjectConceptCollection("1",
-						"jdoe");
-			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			I = ccList1.iterator();
-			assertEquals(ccList1.size() == 0, true);
-		}
-		
-		dbConnection.setupTestEnvironment("delete from tbl_project_conceptcollection");
-		dbConnection.setupTestEnvironment("delete from tbl_project");
-		dbConnection.setupTestEnvironment("delete from tbl_conceptcollection");
+			
+			assertTrue(isDeleted);
 	}
 
 }
