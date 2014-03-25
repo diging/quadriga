@@ -741,7 +741,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return res;
 	}
-	
+
 	@Override
 	@Transactional
 	public String getNetworkXML(String networkId, HttpServletRequest req, IRestVelocityFactory restVelocityFactory) throws Exception{
@@ -878,12 +878,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return null;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<INetwork> getNetworkVersions(String networkid) throws QuadrigaStorageException{
 
-		
+
 		List<INetwork> networksList = dbConnect.getAllNetworkVersions(networkid);
 
 		if(networksList != null){
@@ -902,7 +902,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	@Transactional
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,INetworkManager.VERSION_ZERO);
+		int versionNo = getLatestVersionOfNetwork(networkId);
+		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,versionNo);
 		if(networkNodeList != null)
 		{
 			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
@@ -1080,7 +1081,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Transactional
 	public String storeNetworkDetails(String xml, IUser user, String networkName,String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException{
 		ElementEventsType elementEventType = unMarshalXmlToElementEventsType(xml);
-		
+
 		// Get Workspace details.
 		IWorkSpace workspace = null;
 		try {
@@ -1403,7 +1404,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	public String getNetworkDetails(String xml,String networkId) throws QuadrigaStorageException {
-		
+
 		INetwork network = getNetwork(networkId);
 		// TODO need to complete this.
 		// I would fix the annotation with creator and node id first
@@ -1424,4 +1425,21 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		int version =latestVersion.get(0);
 		return version;
 	}
+
+	@Override
+	@Transactional
+	public List<INetwork> getNetworkOfOwner(IUser user)
+			throws QuadrigaStorageException {
+		List<INetwork> networkList = null;
+
+		try {
+
+			networkList = dbConnect.getNetworkOfOwner(user);
+		}catch(QuadrigaStorageException e){
+			logger.error("Error in fetching network of user: ", e);
+		}
+		
+		return networkList;
+	}
+
 }

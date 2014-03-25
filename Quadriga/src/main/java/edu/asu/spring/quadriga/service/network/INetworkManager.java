@@ -429,5 +429,8 @@ public interface INetworkManager {
 
 	public abstract int getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException;
+
+	List<INetwork> getNetworkOfOwner(IUser user)
+			throws QuadrigaStorageException;
 	
 }

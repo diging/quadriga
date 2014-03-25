@@ -129,4 +129,6 @@ public interface IDBConnectionNetworkManager {
 	List<Integer> getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException;
 	
+	List<INetwork> getNetworkOfOwner(IUser user) 
+			throws QuadrigaStorageException;
 }
