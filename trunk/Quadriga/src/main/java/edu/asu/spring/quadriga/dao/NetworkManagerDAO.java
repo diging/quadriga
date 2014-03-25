@@ -563,6 +563,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				.getCurrentSession()
 				.createQuery(query1);
 		query.setParameter("networkId", networkID);
+		@SuppressWarnings("unchecked")
 		List<Integer> latestVersion = query.list();
 		return latestVersion;
 	}
@@ -848,6 +849,45 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		catch(Exception e)
 		{
 			logger.error("update network method :",e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+	@Override
+	public List<INetwork> getNetworkOfOwner(IUser user)
+			throws QuadrigaStorageException {
+		List<INetwork> networkList = null;
+
+		try {
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkowner = :owner )");
+			query.setParameter("owner", user.getUserName());
+
+			@SuppressWarnings("unchecked")
+			List<NetworksDTO> listNetworksDTO = query.list();
+			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
+
+			// Update project name and workspace name of the network
+			for (INetwork network : networkList) {
+				// Get the project id associated with the workspace id
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
+				query.setParameter("workspaceid", network.getWorkspaceid());
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
+
+				if (projectWorkspaceDTO != null) {
+					// Get the project details
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
+				}
+			}
+
+			return networkList;
+		} catch (Exception e) {
+			logger.error("Error in fetching network of user: ", e);
 			throw new QuadrigaStorageException(e);
 		}
 	}

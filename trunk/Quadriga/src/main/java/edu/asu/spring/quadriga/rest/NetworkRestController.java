@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
-import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
@@ -408,6 +407,8 @@ public class NetworkRestController {
 			throw new RestException(404);
 		}
 	}
+	
+	
 	/**
 	 *  Rest interface for getting network XML for a particular Network ID.
 	 * http://<<URL>:<PORT>>/quadriga/rest/network/xml/{networkid}
@@ -420,25 +421,35 @@ public class NetworkRestController {
 	 * @throws Exception 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/network/xml/{networkid}", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/network/{networkid}", method = RequestMethod.GET, produces = "application/xml")
 	public String getNetworkXmlFromQstore(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
-		List<INetworkNodeInfo> networkTopNodes = networkManager.getNetworkTopNodes(networkId);
+		INetwork network = networkManager.getNetwork(networkId);
+		String networkXML = networkManager.getNetworkXML(networkId, req, restVelocityFactory);
+		String status = network.getStatus();
+		if(networkXML.isEmpty() || networkXML == null){
+			throw new RestException(404);
+		}
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
-		String networkXML="";
 		try {
 			engine.init();
 			template = engine
-					.getTemplate("velocitytemplates/getnetworksfromqstore.vm");
+					.getTemplate("velocitytemplates/networkinfo.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("statmentList", networkTopNodes);
+			if(status == null)
+				context.put("status", INetworkStatus.UNKNOWN);
+			else
+				context.put("status", status);
+			context.put("networkxml", networkXML);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
-			logger.debug("XML : "+ writer.toString());
-			networkXML = networkManager.getWholeNetworkXMLFromQStore(writer.toString());
+			response.setStatus(200);
+			response.setContentType(accept);
+			response.setContentType("application/xml");
+			return writer.toString();
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -452,17 +463,49 @@ public class NetworkRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "rest/mynetworks", method = RequestMethod.GET, produces = "application/xml")
+	public String getMyNetwork(
+			HttpServletResponse response,
+			String accept,Principal principal,HttpServletRequest req) throws Exception {
+		
+		IUser user = userManager.getUserDetails(principal.getName());
+		
+		List<INetwork> networkList = networkManager.getNetworkOfOwner(user);
+		
+		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+		Template template = null;
+		try {
+			engine.init();
+			template = engine
+					.getTemplate("velocitytemplates/mynetworks.vm");
+			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
+			context.put("networkList", networkList);
+			StringWriter writer = new StringWriter();
+			template.merge(context, writer);
+			response.setStatus(200);
+			response.setContentType(accept);
+			response.setContentType("application/xml");
+			return writer.toString();
+		} catch (ResourceNotFoundException e) {
 
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (ParseErrorException e) {
 
-		if(networkXML.isEmpty() || networkXML == null){
+			logger.error("Exception:", e);
+			throw new RestException(404);
+		} catch (MethodInvocationException e) {
+
+			logger.error("Exception:", e);
 			throw new RestException(404);
 		}
-		
-		response.setStatus(200);
-		response.setContentType(accept);
-		response.setContentType("application/xml");
-		return networkXML;
 	}
+	
+	
 	
 	/**
 	 *  Rest interface for getting network list belonging to a workspace 
