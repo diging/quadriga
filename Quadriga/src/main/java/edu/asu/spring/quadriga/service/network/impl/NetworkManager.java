@@ -1444,6 +1444,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	/**
 	 * 
 	 * {@inheritDoc}
+	 * 
 	 */
 	@Override
 	public int getNetworkStatusCode(String status){
