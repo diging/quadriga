@@ -33,8 +33,7 @@
 
 
 <header>
-	<h2>project ${project.name} </h2>
-	<span class="byline">View all the Networks of the project here.</span>
+	<span class="byline">View versions of the network here.</span>
 </header>
 
 
