@@ -10,6 +10,7 @@
 		<Quadriga:authorityFileEntry type="$authFileList">
 			<Quadriga:name>$authFileList.word</Quadriga:name>
 			<Quadriga:url>$authFileList.id</Quadriga:url>
+			<Quadriga:authorityType>$authFileList.id</Quadriga:authorityType>
 			<Quadriga:description>$authFileList.description</Quadriga:description>
 		</Quadriga:authorityFileEntry>
 		#end

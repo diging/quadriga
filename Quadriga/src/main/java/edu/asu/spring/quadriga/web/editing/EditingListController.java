@@ -240,7 +240,7 @@ public class EditingListController {
 		//INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
 		//String nwId = "\""+networkId+"\"";
 		//model.addAttribute("networkid",nwId);
-		List<INetwork> networkVersions = networkManager.getNetworkVersions(networkId);
+		List<INetwork> networkVersions = networkManager.getAllNetworkVersions(networkId);
 		
 		if(networkVersions!=null && !networkVersions.isEmpty()){
 			model.addAttribute("Versions", networkVersions);

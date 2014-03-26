@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.service.network;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -16,7 +15,6 @@ import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
-import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
 import edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType;
 import edu.asu.spring.quadriga.domain.impl.networks.PredicateType;
@@ -33,6 +31,7 @@ import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 /**
  * This interface would have all the methods required to work on storing, displaying or manipulating {@link INetwork} 
  * 
@@ -166,16 +165,14 @@ public interface INetworkManager {
 	public abstract void archiveNetwork(String networkId) throws QuadrigaStorageException;
 
 	/**
-	 * This method should help in getting complete Network XML from Qstore.
-	 * QStore allows us to get network XML for specific {@link RelationEventType} and also List of {@link RelationEventType} embedded in XML.
-	 * We have to get the list of top node and send all the {@link RelationEventType} ID and {@link AppellationEventType} IDs embedded in XML  
+	 * This method should help in getting Network XML from Qstore for a list of network statement.
 	 * @param XML									List of {@link RelationEventType} ID and {@link AppellationEventType} IDs embedded in XML 
 	 * @return										{@link String} XML containing {@link ElementEventsType} embedding {@link RelationEventType} and {@link AppellationEventType}
 	 * @throws ParserConfigurationException			Throws Parse config errors in case
 	 * @throws SAXException							Throws SAX Exception if the XML is not formed properly
 	 * @throws IOException							Throws IO exception in case the QStore is not available
 	 */
-	public abstract String getWholeNetworkXMLFromQStore(String XML) throws ParserConfigurationException,
+	public abstract String getNetworkXMLFromQStoreForAListOfCStatements(String XML) throws ParserConfigurationException,
 			SAXException, IOException;
 
 
@@ -409,18 +406,51 @@ public interface INetworkManager {
 	public abstract String storeNetworkDetails(String xml, IUser user, String networkName,
 			String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException;
 	
-	List<INetwork> getNetworkVersions(String networkid)
+	/**
+	 * This method should help in getting all the version of a {@link INetwork}
+	 * @author Sayalee
+	 * @param networkid									{@link INetwork} ID of type String
+	 * @return											Returns a {@link List} of {@link INetwork}
+	 * @throws QuadrigaStorageException					Throws a Storage exception if there is any issue accessing Database or table content.
+	 */
+	public abstract List<INetwork> getAllNetworkVersions(String networkid)
 			throws QuadrigaStorageException;
 
-	String getNetworkXML(String networkId, HttpServletRequest req,
-			IRestVelocityFactory restVelocityFactory) throws Exception;
+	/**
+	 * This method should help in getting Xml of the Network from Qstore or any source using the list of statements belonging to the Network.
+	 * @param networkId									{@link INetwork} ID of type String
+	 * @return											Returns XML of the Network
+	 * @throws Exception								Exception in parsing the xml or rendering the request to the source of network xml.
+	 */
+	public abstract String getNetworkXML(String networkId) throws Exception;
 
+	/**
+	 * This method should get the latest version number of the network 
+	 * @param networkID									{@link INetwork} ID of type String
+	 * @return											Returns the verison number of the {@link INetwork}
+	 * @throws QuadrigaStorageException					Throws a Storage exception if there is any issue accessing Database or table content.
+	 */
 	public abstract int getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException;
 
-	List<INetwork> getNetworkOfOwner(IUser user)
+	/**
+	 * This method should get {@link List} of {@link INetwork} object belonging to an owner {@link IUser}
+	 * @param user										{@link IUser} object 
+	 * @return											returns the {@link List} of {@link INetwork} of the {@link IUser}  
+	 * @throws QuadrigaStorageException					Throws a Storage exception if there is any issue accessing Database or table content.
+	 */
+	public abstract List<INetwork> getNetworksOfOwner(IUser user)
 			throws QuadrigaStorageException;
 
-	int getStatusCode(String status);
+	/**
+	 * This method should get the network status code for any status of the INetwork.
+	 * Network code for the different status of the {@link INetwork} would be found in {@link INetworkStatus}
+	 * PENDING = 0;    ASSIGNED = 1;     APPROVED= 2;    REJECTED = 3;    UNKNOWN = -1;
+	 * @param status									Status of the network, can take PENDING, ASSIGNED, APPROVED, REJECTED
+	 * @return											Returns the network status code.
+	 */
+	public abstract int getNetworkStatusCode(String status);
+
+	List<INetwork> editNetworkStatusCode(List<INetwork> networkList);
 	
 }

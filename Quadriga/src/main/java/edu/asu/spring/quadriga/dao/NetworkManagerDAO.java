@@ -53,7 +53,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
-
+	
 	@Autowired
 	private ProjectDTOMapper projectMapper;
 
@@ -148,7 +148,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
 			if (networksDTO != null) {
 				network = networkMapper.getNetwork(networksDTO);
-
+				
 				// Get the project id associated with the workspace id
 				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", networksDTO.getWorkspaceid());
