@@ -10,9 +10,11 @@ public interface IEditingNetworkAnnotationManager {
 
 	public abstract List<NetworksAnnotationsDTO> getAnnotation(String type, String id, String userid,String networkId)
 			throws QuadrigaStorageException;
+	public abstract List<NetworksAnnotationsDTO> getAnnotationOfEdge(String id, String userid,String networkId)
+			throws QuadrigaStorageException;
 
-	public abstract String addAnnotationToNetwork(String networkId,String nodeId,
-			String nodeName, String annotationText, String userId,
+	public abstract String addAnnotationToNetwork(String annotationtype,String networkId,String nodeId,
+			String edgeId,String nodeName, String annotationText, String userId,
 			String objectType) throws QuadrigaStorageException;
 
 	public abstract String updateAnnotationToNetwork(String annotationId,

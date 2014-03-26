@@ -280,8 +280,10 @@ public class NetworkDTOMapper {
 	/**
 	 * This method will create {@link NetworksAnnotationsDTO} from the input parameters.
 	 * 
+	 * @param annotationType    The type of annotation to edge/node.
 	 * @param networkid			The id of the network
-	 * @param nodeId			The id of this unique record
+	 * @param nodeId			The id of the node
+	 * @param edgeId			The id of the edge
 	 * @param nodeName			Node name
 	 * @param annotationtext	The annotation text
 	 * @param annotationid		The annotation id
@@ -289,11 +291,13 @@ public class NetworkDTOMapper {
 	 * @param objecttype		The type of object
 	 * @return A {@link NetworksAnnotationsDTO} object will be created from the input parameters; 
 	 */
-	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String networkid, String nodeId, String nodeName, String annotationtext, String annotationid, String username, String objecttype)
+	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String annotationType,String networkid, String nodeId,String edgeId, String nodeName, String annotationtext, String annotationid, String username, String objecttype)
 	{
 		NetworksAnnotationsDTO networkAnnotationsDTO = new NetworksAnnotationsDTO();
+		networkAnnotationsDTO.setAnnotationtype(annotationType);
 		networkAnnotationsDTO.setNetworkid(networkid);
 		networkAnnotationsDTO.setNodeid(nodeId);
+		networkAnnotationsDTO.setEdgeid(edgeId);
 		networkAnnotationsDTO.setNodename(nodeName);
 		networkAnnotationsDTO.setAnnotationtext(annotationtext);
 		networkAnnotationsDTO.setAnnotationid(annotationid);

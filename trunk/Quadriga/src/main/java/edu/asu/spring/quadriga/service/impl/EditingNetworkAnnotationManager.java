@@ -40,7 +40,10 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	
 	/**
 	 * This method adds annotation to the node of a network
+	 * @param annotationType - type of annotation ,added to edge/node
 	 * @param networkId - network id
+	 * @param nodeId - node id
+	 * @param edgeId - edge id
 	 * @param nodeName - node in the network for which annotation needs to be added
 	 * @param annotationText - annotation text value
 	 * @param userId - logged in user
@@ -48,12 +51,13 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 * @return String - message after adding the annotation to a node of network.
 	 * @throws QuadrigaStorageException
 	 */
+	
 	@Override
 	@Transactional
-	public String addAnnotationToNetwork(String networkId, String nodeId,String nodeName,
+	public String addAnnotationToNetwork(String annotationType,String networkId, String nodeId,String edgeId,String nodeName,
 			String annotationText, String userId,String objectType)
 			throws QuadrigaStorageException{
-		String msg = dbConnectionEditManager.addAnnotationToNetwork(networkId, nodeId,nodeName,
+		String msg = dbConnectionEditManager.addAnnotationToNetwork(annotationType,networkId, nodeId,edgeId,nodeName,
 				annotationText, userId,objectType);
 		return msg;
 	}
@@ -101,6 +105,23 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		}
 		
 		return networkAnnoList;
+	}
+
+	/**
+	 * This method retrieves the annotation entered by the user for the network edge
+	 * @param type : specifies it is a relation or an appellation
+	 * @param id : it is the id of the edge
+	 * @param userid : logged in user
+	 * @param networkId : network id
+	 * @return String[] - array of string containing the annotations entered by the user
+	 */
+	@SuppressWarnings("null")
+	@Override
+	@Transactional
+	public List<NetworksAnnotationsDTO> getAnnotationOfEdge(String id,
+			String userid, String networkId) throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

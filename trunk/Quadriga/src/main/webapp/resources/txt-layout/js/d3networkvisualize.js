@@ -80,8 +80,13 @@ function d3init(graph, networkId, path,type) {
 	.attr("class", "link")
 	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
 	.attr("marker-end", "url(#arrow)")
+	.on("click", function(d){
+			add_annotationstolink();
+			//d3.event.preventDefault();
+	})
+	.on("mouseout", fadeLinks(1));
 	//.on("mouseover", fadeLinks(.1)).on("mouseout", fadeLinks(1));;
-	.on("click", highlightStmt(.1)).on("mouseout", fadeLinks(1));;
+	//.on("click", highlightStmt(.1)).on("mouseout", fadeLinks(1));;
 	// Dragging the nodes
 	var node_drag = d3.behavior.drag()
 	.on("dragstart", dragstart)
@@ -404,6 +409,7 @@ function d3init(graph, networkId, path,type) {
 					var html = "";
 					// If the node type is Predicate
 					// We can annotate on whole relation or node
+					
 					if(d.group==1){
 						
 						html = "<div id='popup' title='Annotation' >" +
@@ -454,27 +460,6 @@ function d3init(graph, networkId, path,type) {
 						 
 						// ajax Call to get annotation for a node.id
 						// Used to add the old annotation in to the popup view
-//						$.ajax({
-//							url : getAnnotationUrl,
-//							type : "GET",
-//							data: "nodeid="+d.id+"&type="+type1,
-//							dataType: 'json',
-//							success : function(data) {
-//								var cnt = 0;
-//								content += "<ol>";
-//							$.each(data.text, function(key,value){
-//				                    content += ++cnt +'.<li>'+value.name+'</li>';  
-//			                });
-//								content += "</ol>"
-//								$('#annot_details').html(content);
-//							},
-//							error: function() {
-//								alert("error");
-//							}
-//							
-//						});
-//						
-//						$('#annot_details').html(content);
 						display_annotations(d);
 						event.preventDefault();
 						
@@ -482,10 +467,13 @@ function d3init(graph, networkId, path,type) {
 						// Saves the relation annotation to DB
 						$('#annot_submit').click(function(event) {
 							var annottext = $('#'+text1ID+'').val();  
+							var edgeid = "";
+							var type = "node";
+							var annotationtype = "node";
 							$.ajax({
 								url : $('#annot_form').attr("action"),
 								type : "POST",
-								data :"nodename="+d.name+"&nodeid="+d.id+"&annotText="+annottext+"&type=node",
+								data :"annotationtype="+annotationtype+"&nodename="+d.name+"&nodeid="+d.id+"&annotText="+annottext+"&type="+type+"&edgeid="+edgeid,
 								success : function() {
 									$('#'+popupId+'').dialog('close');
 									displayAllAnnotations();
@@ -535,13 +523,13 @@ function d3init(graph, networkId, path,type) {
 						// Sending the HTML code to D3 
 						$('#inner-details').html(html2);
 						var content = "<h3>Annotations</h3>";
-						
+						var edgeid = "";
 						// Ajax call to get annotation for node.id
 						// Used to add the old annotation in to the popup view
 						$.ajax({
 							url : path+"/auth/editing/getAnnotation/"+networkId,
 							type : "GET",
-							data: "nodeid="+d.id+"&type="+type1,
+							data: "nodeid="+d.id+"&type="+type1+"&edgeid="+edgeid,
 							dataType: 'json',
 							success : function(data) {
 								var cnt = 0;
@@ -561,10 +549,12 @@ function d3init(graph, networkId, path,type) {
 						// Saves the relation annotation to DB
 						$('#annot_submit1').click(function(event) {
 							var annottext = $('#'+text1ID+'').val();  
+							var type ="relation";
+							var edgeid = "";
 							$.ajax({
 								url : $('#annot_form').attr("action"),
 								type : "POST",
-								data :"nodename="+node.id+"&annotText="+annottext+"&type=relation",
+								data :"annotationtype="+annotationtype+"&nodename="+node.id+"&annotText="+annottext+"&type="+type+"&edgeid="+edgeid,
 								success : function() {
 									$('#'+popupId+'').dialog('close');
 									displayAllAnnotations();
@@ -650,5 +640,8 @@ function d3init(graph, networkId, path,type) {
 							}
 						});
 						
+				}
+				function add_annotationstolink(d){
+					alert("link");
 				}
 }
