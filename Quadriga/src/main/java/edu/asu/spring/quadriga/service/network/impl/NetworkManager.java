@@ -1397,19 +1397,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	}
 
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * @throws QuadrigaStorageException 
-	 */
-	@Override
-	public String getNetworkDetails(String xml,String networkId) throws QuadrigaStorageException {
-
-		INetwork network = getNetwork(networkId);
-		// TODO need to complete this.
-		// I would fix the annotation with creator and node id first
-		return null;
-	}
 
 	@Override
 	@Transactional
@@ -1442,4 +1429,19 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return networkList;
 	}
 
+	@Override
+	public int getStatusCode(String status){
+		if(status.equals(INetworkStatus.APPROVED))
+			return INetworkStatus.APPROVED_CODE;
+		if(status.equals(INetworkStatus.REJECTED))
+			return INetworkStatus.REJECTED_CODE;
+		if(status.equals(INetworkStatus.ASSIGNED))
+			return INetworkStatus.ASSIGNED_CODE;
+		if(status.equals(INetworkStatus.PENDING))
+			return INetworkStatus.PENDING_CODE;
+		
+		return INetworkStatus.UNKNOWN_CODE;
+		
+	}
+	
 }

@@ -409,18 +409,6 @@ public interface INetworkManager {
 	public abstract String storeNetworkDetails(String xml, IUser user, String networkName,
 			String workspaceId, String uploadStatus, String networkId, int version) throws JAXBException;
 	
-	
-	
-	/**
-	 * This method should help in getting the Network details.
-	 * The network details would include the name, network XML from QStore, annotations of Network. 
-	 * @param xml										XML of list of statement IDs belonging to a particular {@link INetwork}
-	 * @param networkId									{@link INetwork} ID in form of {@link String}
-	 * @return											Returns XML in form of {@link String} which contains Network XML QStore, Network Status and annotation.
-	 * @throws QuadrigaStorageException					Database storage exception thrown
-	 */
-	public abstract String getNetworkDetails(String xml, String networkId)  throws QuadrigaStorageException;
-
 	List<INetwork> getNetworkVersions(String networkid)
 			throws QuadrigaStorageException;
 
@@ -432,5 +420,7 @@ public interface INetworkManager {
 
 	List<INetwork> getNetworkOfOwner(IUser user)
 			throws QuadrigaStorageException;
+
+	int getStatusCode(String status);
 	
 }
