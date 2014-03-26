@@ -67,7 +67,10 @@ public interface IDBConnectionEditorManager {
 
 	/**
 	 * This method would help editors to add annotation to a network.
+	 * @param annotationType 			Type of annotation , added to edge/node.
 	 * @param networkId					ID of the {@link INetwork} editor requests for
+	 * @param nodeId					ID of the node.
+	 * @param edgeId					ID of the edge.
 	 * @param nodeName					Name of the selected node by the editor.
 	 * @param annotationText			Annotation text entered by the editor
 	 * @param userId					{@link IUser} id of the editor
@@ -75,7 +78,7 @@ public interface IDBConnectionEditorManager {
 	 * @return							Returns the success/failure status of the method
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addAnnotationToNetwork(String networkId, String nodeId,String nodeName,
+	public abstract String addAnnotationToNetwork(String annotatonType,String networkId, String nodeId,String edgeId,String nodeName,
 			String annotationText, String userId,String objectType)
 			throws QuadrigaStorageException;
 	
@@ -88,6 +91,15 @@ public interface IDBConnectionEditorManager {
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract List<NetworksAnnotationsDTO> getAnnotationByNodeType(String type, String id,String userid,String networkId) throws QuadrigaStorageException;
+	/**
+	 * This methods should helps in getting all annotations of the network based on the edge Id.
+	 * @param type						Type can be derived from Subject, Object or Predicate.
+	 * @param id						ID can be edge id in the network.
+	 * @param userid					{@link IUser} id of the editor
+	 * @return							Returns a {@link List} of {@link NetworksAnnotationsDTO} 
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract List<NetworksAnnotationsDTO> getAnnotationByEdgeId(String id,String userid,String networkId) throws QuadrigaStorageException;
 	
 	/**
 	 * This methods help in updating annotation of networks based on the annotation ID.

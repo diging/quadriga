@@ -63,16 +63,18 @@ public class EditingNetworkAnnotationsController {
 	@RequestMapping(value = "/auth/editing/saveAnnotation/{networkId}", method = RequestMethod.POST)
 	public @ResponseBody String saveAnnotationtoToNode(HttpServletRequest request,
 			HttpServletResponse response,
+			@RequestParam("annotationtype") String annotationType,
 			@PathVariable("networkId") String networkId,
 			@RequestParam("annotText") String annotationText,
-			@RequestParam("nodeid") String nodeId, 
+			@RequestParam("nodeid") String nodeId,
+			@RequestParam("edgeid") String edgeId, 
 			@RequestParam("nodename") String nodeName,
 			@RequestParam("type") String objectType, 
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		logger.info("network ID:" + networkId);
 		try {
-			editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, nodeId,nodeName,
+			editingNetworkAnnotationManager.addAnnotationToNetwork(annotationType,networkId, nodeId, edgeId,nodeName,
 					annotationText, user.getUserName(),objectType);
 			
 		} catch (QuadrigaStorageException e) {
@@ -129,7 +131,50 @@ public class EditingNetworkAnnotationsController {
 		logger.info("json::" +annotation);
 		return annotation;
 	}
+	/**
+	 * This method retrieves the annotations associated with the edge.
+	 * @param request
+	 * @param response
+	 * @param networkId
+	 * @param edgeId
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 * @throws JSONException 
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/auth/editing/getAnnotationOfEdge/{networkId}", method = RequestMethod.GET)
+	public @ResponseBody String getAnnotationForToEdge(HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable("networkId") String networkId,
+			@RequestParam("edgeid") String edgeId, 
+			Principal principal) throws QuadrigaStorageException, JSONException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		logger.info("network ID:" + networkId);
+		String annotation = "";
 		
+		try {
+			List<NetworksAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotationOfEdge(edgeId,user.getUserName(),networkId);
+			JSONArray ja = new JSONArray();
+			JSONObject j1 = new JSONObject();
+			if(resultList != null || resultList.size() > 0){
+				
+				for (int i = 0; i < resultList.size(); i++) {
+					JSONObject j = new JSONObject();
+					j.put("name", resultList.get(i).getAnnotationtext());
+					ja.put(j);
+				}
+				j1.put("text", ja);
+			annotation = j1.toString();
+			}
+			
+		
+		} catch (QuadrigaStorageException e) {
+			logger.error("Some issue in the DB", e);
+		}
+		logger.info("json::" +annotation);
+		return annotation;
+	}
 	
 	@RequestMapping(value = "/auth/editing/getAllAnnotations/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String getAllAnnotationsInNetwork(HttpServletRequest request,

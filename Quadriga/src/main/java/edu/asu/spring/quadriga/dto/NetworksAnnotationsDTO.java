@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "NetworksAnnotationsDTO.findAll", query = "SELECT n FROM NetworksAnnotationsDTO n"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByNetworkid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.networkid = :networkid"),
-    @NamedQuery(name = "NetworksAnnotationsDTO.findByid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.nodeid = :nodeid"),
+    @NamedQuery(name = "NetworksAnnotationsDTO.findByNodeid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.nodeid = :nodeid"),
+    @NamedQuery(name = "NetworksAnnotationsDTO.findByEdgeid", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.edgeid = :edgeid"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByAnnotationText", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.annotationtext = :annotationtext"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByAnnotationId", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.annotationid = :annotationid"),
     @NamedQuery(name = "NetworksAnnotationsDTO.findByUsername", query = "SELECT n FROM NetworksAnnotationsDTO n WHERE n.username = :username"),
@@ -40,12 +41,20 @@ public class NetworksAnnotationsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Basic(optional = false)
+    @Column(name = "annotationtype")
+    private String annotationtype;
+    
+    @Basic(optional = false)
     @Column(name = "networkid")
     private String networkid;
     
     @Basic(optional = false)
     @Column(name = "nodeid")
     private String nodeid;
+    
+    @Basic(optional = false)
+    @Column(name = "edgeid")
+    private String edgeid;
     
     @Basic(optional = false)
     @Column(name = "nodename")
@@ -97,9 +106,11 @@ public class NetworksAnnotationsDTO implements Serializable {
 	public NetworksAnnotationsDTO() {
     }
 
-    public NetworksAnnotationsDTO(String networkid, String nodeid,String nodename, String annotationtext, String annotationid, String username, String objecttype, String updatedby, Date updateddate, String createdby, Date createddate) {
-        this.networkid = networkid;
+    public NetworksAnnotationsDTO(String annotationtype,String networkid, String nodeid,String edgeid,String nodename, String annotationtext, String annotationid, String username, String objecttype, String updatedby, Date updateddate, String createdby, Date createddate) {
+        this.annotationtype = annotationtype;
+    	this.networkid = networkid;
         this.nodeid = nodeid;
+        this.edgeid = edgeid;
         this.nodename = nodename;
         this.annotationtext = annotationtext;
         this.annotationid = annotationid;
@@ -111,7 +122,15 @@ public class NetworksAnnotationsDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public String getNetworkid() {
+    public String getAnnotationtype() {
+		return annotationtype;
+	}
+
+	public void setAnnotationtype(String annotationtype) {
+		this.annotationtype = annotationtype;
+	}
+
+	public String getNetworkid() {
 		return networkid;
 	}
 
@@ -122,6 +141,14 @@ public class NetworksAnnotationsDTO implements Serializable {
 
 	public void setNodeid(String nodeid) {
 		this.nodeid = nodeid;
+	}
+
+	public String getEdgeid() {
+		return edgeid;
+	}
+
+	public void setEdgeid(String edgeid) {
+		this.edgeid = edgeid;
 	}
 
 	public String getNodename() {

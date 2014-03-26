@@ -641,11 +641,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String addAnnotationToNetwork(String networkId, String nodeID,String nodeName,
-			String annotationText, String userId, String objectType)
+	public String addAnnotationToNetwork(String annotationType,String networkId, String nodeID,String edgeId,
+			String nodeName,String annotationText, String userId, String objectType)
 					throws QuadrigaStorageException {
 		NetworksAnnotationsDTO networkAnnotationsDTO = networkMapper
-				.getNetworkAnnotationDTO(networkId, nodeID,nodeName, annotationText,
+				.getNetworkAnnotationDTO(annotationType,networkId, nodeID,edgeId,nodeName, annotationText,
 						"ANNOT_" + generateUniqueID(), userId, objectType);
 
 		try {
@@ -656,7 +656,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException(e);
 		}
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -673,6 +673,31 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			query.setParameter("nodeId", nodeId);
 			query.setParameter("username", userId);
 			query.setParameter("objecttype", type);
+			query.setParameter("networkid", networkId);
+
+			networkAnnotationsDTOList =  query.list();
+			return networkAnnotationsDTOList;
+
+		} catch (Exception e) {
+			logger.error("Error in fetching annotation: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<NetworksAnnotationsDTO> getAnnotationByEdgeId(String id,
+			String userId, String networkId) throws QuadrigaStorageException {
+		try {
+			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworksAnnotationsDTO>();
+			Query query = sessionFactory
+					.getCurrentSession()
+					.createQuery(
+							"from NetworksAnnotationsDTO n where n.edgeid = :edgeid and username = :username and networkid =:networkid");
+			query.setParameter("edgeid", id);
+			query.setParameter("username", userId);
 			query.setParameter("networkid", networkId);
 
 			networkAnnotationsDTOList =  query.list();
@@ -892,4 +917,5 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
+	
 }
