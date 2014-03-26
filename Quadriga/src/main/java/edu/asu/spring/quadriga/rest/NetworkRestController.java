@@ -225,7 +225,7 @@ public class NetworkRestController {
 	 * @throws Exception								Throws the exception for any issue in the Velocity engine 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/network/annotations/{NetworkId}", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/network/{NetworkId}/annotations", method = RequestMethod.GET, produces = "application/xml")
 	public String getAnnotationOfNetwork(@PathVariable("NetworkId") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
@@ -519,7 +519,7 @@ public class NetworkRestController {
 	 * @throws Exception 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "rest/networkdetails/{networkid}", method = RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value = "rest/network/{networkid}/all", method = RequestMethod.GET, produces = "application/xml")
 	public String getNetworkDetails(@PathVariable("networkid") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
