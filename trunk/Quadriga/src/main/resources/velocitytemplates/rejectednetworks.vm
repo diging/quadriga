@@ -5,8 +5,8 @@
 		<Quadriga:network>
 			<Quadriga:name>$network.name</Quadriga:name>
 			<Quadriga:id>$network.id</Quadriga:id>
-			<Quadriga:status>$network.status</Quadriga:status>
-			<Quadriga:uri>$url/rest/networkdetails/$network.id</Quadriga:uri>
+			<Quadriga:status code="$network.status"></Quadriga:status>
+			<Quadriga:uri>$url/rest/network/$network.id/all</Quadriga:uri>
 		</Quadriga:network> 	
 		#end
 	</Quadriga:networkList>
