@@ -83,7 +83,8 @@ public class ViafService implements IService {
 	/**
 	 * this method takes user entered term and calls viaf REST API to retrieve search results
 	 * @param item			term entered by user
-	 * 		  startindex	index in the REST API of viaf service
+	 * @param startindex	index in the REST API of viaf service
+	 * 
 	 * @return list of searchresults retrieved from viaf 
 	 * @author rohit pendbhaje
 	 * 	

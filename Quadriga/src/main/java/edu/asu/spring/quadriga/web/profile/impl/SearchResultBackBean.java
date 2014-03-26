@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.web.profile.impl;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * this class is used as a backing bean for the search results retrieved 
@@ -12,7 +11,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class SearchResultBackBean {
 	
-	@NotEmpty
 	private String word;
 	
 	private String id;
