@@ -171,19 +171,18 @@ public class NetworkRestController {
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 		IUser user = userManager.getUserDetails(principal.getName());
-		String status="UNKNOWN";
 		INetwork network =networkManager.getNetwork(networkId);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
-		status = network.getStatus();
+		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
 		try {
 			engine.init();
 
 			template = engine
 					.getTemplate("velocitytemplates/networkstatus.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			if(status == null)
-				context.put("status", "UNKNOWN");
+			if(network.getStatus() == null)
+				context.put("status", INetworkStatus.UNKNOWN_CODE+"");
 			else
 				context.put("status", status);
 			context.put("networkid",networkId);
@@ -282,6 +281,7 @@ public class NetworkRestController {
 
 
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
+		networkList = networkManager.editNetworkStatusCode(networkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -331,6 +331,7 @@ public class NetworkRestController {
 
 
 		List<INetwork> networkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
+		networkList = networkManager.editNetworkStatusCode(networkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -379,6 +380,7 @@ public class NetworkRestController {
 
 
 		List<INetwork> networkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
+		networkList = networkManager.editNetworkStatusCode(networkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -427,8 +429,8 @@ public class NetworkRestController {
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
 		INetwork network = networkManager.getNetwork(networkId);
-		String networkXML = networkManager.getNetworkXML(networkId, req, restVelocityFactory);
-		String status = network.getStatus();
+		String networkXML = networkManager.getNetworkXML(networkId);
+		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
 		if(networkXML.isEmpty() || networkXML == null){
 			throw new RestException(404);
 		}
@@ -439,10 +441,7 @@ public class NetworkRestController {
 			template = engine
 					.getTemplate("velocitytemplates/networkinfo.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			if(status == null)
-				context.put("status", INetworkStatus.UNKNOWN);
-			else
-				context.put("status", status);
+			context.put("status", status);
 			context.put("networkxml", networkXML);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
@@ -474,8 +473,8 @@ public class NetworkRestController {
 		
 		IUser user = userManager.getUserDetails(principal.getName());
 		
-		List<INetwork> networkList = networkManager.getNetworkOfOwner(user);
-		
+		List<INetwork> networkList = networkManager.getNetworksOfOwner(user);
+		networkList = networkManager.editNetworkStatusCode(networkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -526,8 +525,8 @@ public class NetworkRestController {
 
 		IUser user = userManager.getUserDetails(principal.getName());
 		INetwork network = networkManager.getNetwork(networkId);
-		String networkXML = networkManager.getNetworkXML(networkId, req, restVelocityFactory);
-		String status = network.getStatus();
+		String networkXML = networkManager.getNetworkXML(networkId);
+		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
 		if(networkXML.isEmpty() || networkXML == null){
 			throw new RestException(404);
 		}
@@ -538,10 +537,7 @@ public class NetworkRestController {
 			template = engine
 					.getTemplate("velocitytemplates/networkdetails.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			if(status == null)
-				context.put("status", INetworkStatus.UNKNOWN);
-			else
-				context.put("status", status);
+			context.put("status", status);
 			context.put("networkxml", networkXML);
 			context.put("networkAnnoList",editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId));
 			StringWriter writer = new StringWriter();

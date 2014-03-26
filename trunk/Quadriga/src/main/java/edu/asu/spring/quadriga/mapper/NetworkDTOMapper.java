@@ -23,7 +23,6 @@ import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * The purpose of this class is to map the DTO class objects to the domain objects

@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -107,6 +106,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Autowired
 	private INodeObjectWithStatementFactory nodeObjectWithStatementFactory;
 
+	@Autowired
+	IRestVelocityFactory restVelocityFactory;
+	
 	@Autowired
 	private IJITNetworkManager jitNetworkManager;
 
@@ -713,9 +715,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	/**
 	 * 
 	 * {@inheritDoc}
+	 * QStore allows us to get network XML for specific {@link RelationEventType} and also List of {@link RelationEventType} embedded in XML.
+	 * 
 	 */
 	@Override
-	public String getWholeNetworkXMLFromQStore(String xml) {
+	public String getNetworkXMLFromQStoreForAListOfCStatements(String xml) {
 		String res="";
 		// Add message converters for JAxb
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -744,8 +748,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Override
 	@Transactional
-	public String getNetworkXML(String networkId, HttpServletRequest req, IRestVelocityFactory restVelocityFactory) throws Exception{
-		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
+	public String getNetworkXML(String networkId) throws Exception{
+		VelocityEngine engine = restVelocityFactory.getVelocityRestEngine();
 		Template template = null;
 		StringWriter writer = null;
 		String networkXML=null;
@@ -759,7 +763,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			writer = new StringWriter();
 			template.merge(context, writer);
 			logger.debug("XML : "+ writer.toString());
-			networkXML = getWholeNetworkXMLFromQStore(writer.toString());
+			networkXML = getNetworkXMLFromQStoreForAListOfCStatements(writer.toString());
 		} catch (ResourceNotFoundException e) {
 
 			logger.error("Exception:", e);
@@ -881,7 +885,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Override
 	@Transactional
-	public List<INetwork> getNetworkVersions(String networkid) throws QuadrigaStorageException{
+	public List<INetwork> getAllNetworkVersions(String networkid) throws QuadrigaStorageException{
 
 
 		List<INetwork> networksList = dbConnect.getAllNetworkVersions(networkid);
@@ -1398,6 +1402,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	}
 
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	@Transactional
 	public int getLatestVersionOfNetwork(String networkID)
@@ -1413,9 +1421,13 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return version;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
 	@Transactional
-	public List<INetwork> getNetworkOfOwner(IUser user)
+	public List<INetwork> getNetworksOfOwner(IUser user)
 			throws QuadrigaStorageException {
 		List<INetwork> networkList = null;
 
@@ -1429,8 +1441,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		return networkList;
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
 	@Override
-	public int getStatusCode(String status){
+	public int getNetworkStatusCode(String status){
+		if(status==null)
+			return INetworkStatus.UNKNOWN_CODE;
 		if(status.equals(INetworkStatus.APPROVED))
 			return INetworkStatus.APPROVED_CODE;
 		if(status.equals(INetworkStatus.REJECTED))
@@ -1442,6 +1460,18 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		
 		return INetworkStatus.UNKNOWN_CODE;
 		
+	}
+	
+	@Override
+	public List<INetwork> editNetworkStatusCode(List<INetwork> networkList){
+		
+		Iterator<INetwork> networkListIterator = networkList.iterator();
+		while(networkListIterator.hasNext()){
+			INetwork network = networkListIterator.next();
+			network.setStatus(getNetworkStatusCode(network.getStatus())+"");
+		}
+		
+		return networkList;
 	}
 	
 }
