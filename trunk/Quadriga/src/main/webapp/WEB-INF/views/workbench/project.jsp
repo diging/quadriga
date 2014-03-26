@@ -119,6 +119,8 @@
 									<input type="button" name="Get Editor Role"
 									value="Get Editor Role" />
 								</a>
+								<input type="button" value="Show Inactive Workspace" 
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace'">	
 							</c:when>
 							<c:otherwise>
 								<a
@@ -126,6 +128,8 @@
 									<input type="button" name="Delete Editor Role"
 									value="Delete Editor Role" />
 								</a>
+								<input type="button" value="Show Inactive Workspace" 
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace'">	
 							</c:otherwise>
 						</c:choose>
 

@@ -26,13 +26,10 @@ $(document).ready(function(){
 	});
 	
 	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
+		
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/id';
 	}
 	
-	function cancel(){
-		
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench';
-	}
 	
 </script>
 
@@ -94,14 +91,14 @@ input {
 			<tr>
 			<td><input class="command" type="submit" value="Modify Project"> </td>
 			<td><input type="button" value="Cancel" 
-			onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench'"></td>
+			onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}'"></td>
 			</tr>
 		</table>
 			</c:when>
 				<c:when test="${success == '1'}">
 				<span class="byline">Project modified successfully.</span>
 				<ul>
-					<li><input type="button" onClick="submitClick(this.id);"
+					<li><input type="button" onClick="submitClick();"
 						value='Okay'></li>
 				</ul>
 			</c:when>

@@ -328,6 +328,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/workspace/activateworkspace.jsp" />
 	</definition>
+	<definition name="auth/workbench/workspace/showInactiveWorkspace" extends="base.definition.workbench">
+		<put-attribute name="title" value="List of Deactivated Workspaces" />
+		<put-attribute name="content" value="/WEB-INF/views/workspace/showInactiveWorkspace.jsp"/>
+	</definition>
+	
 	<!--  archive/activate workspace pages -END -->
 	<definition name="auth/workbench/workspace/addcollaborators"
 		extends="base.definition.workbench">

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -253,4 +254,14 @@ public class ActivateWSController
 		return model;
 		
 	}
+	
+	@RequestMapping(value = "auth/workbench/{projectid}/showInactiveWorkspace", method = RequestMethod.GET)
+	public String showInactiveWorkspaces(@PathVariable("projectId") String projectId, Principal principal, Model model) throws QuadrigaStorageException
+	{
+		List<ModifyWorkspace> deactivatedWSList = workspaceFormManager.getDeactivatedWorkspaceList(projectId, principal.getName());
+		model.addAttribute("deactivatedWSList", deactivatedWSList);
+		
+		return "auth/workbench/workspace/showInactiveWorkspace";
+	}
+	
 }

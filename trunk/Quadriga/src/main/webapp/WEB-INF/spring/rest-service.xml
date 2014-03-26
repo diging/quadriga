@@ -66,7 +66,7 @@
 	
 	<bean id="searchViafURLPath" class="java.lang.String">
 		<constructor-arg>
-			<value>?query=cql.any all 
+			<value>?query=local.names all 
 			</value>
 		</constructor-arg>
 	</bean>
