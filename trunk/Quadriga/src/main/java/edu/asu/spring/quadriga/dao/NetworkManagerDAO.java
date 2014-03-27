@@ -69,8 +69,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManagerDAO.class);
 
-
-
 	/**
 	 * Add a new network into a workspace. Creates a unique Network ID  and assigns the user as owner to the network object. 
 	 * It then adds the network into the Workspace. The method uses Hibernate Framework to perform the database operations.
@@ -213,7 +211,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 					// Get the workspace details
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
 						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
-
 				}
 			}
 
@@ -491,13 +488,14 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@Override
 	public List<INetwork> getEditorNetworkList(IUser user)
-			throws QuadrigaStorageException {
+			throws QuadrigaStorageException 
+	{
 		List<INetwork> networkList = new ArrayList<INetwork>();
 		
 		try {
-
-			String query1 = "Select n from NetworksDTO n where n.networkid not in (select na.networkAssignedDTOPK.networkid from " +
-					"NetworkAssignedDTO na where na.version=0) and";
+			Query query;
+			
+			String query1 = "Select n from NetworksDTO n where n.status = 'PENDING' and";
 			query1 += "((n.workspaceid in  " ;
 			query1 += "(select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
 					"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
@@ -515,7 +513,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 					"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
 					"where we.workspaceEditorDTOPK.editor = :username)))))"
 					+ "";
-			Query query = sessionFactory
+			System.out.println("Testing query :"+query1);
+			
+			query = sessionFactory
 					.getCurrentSession()
 					.createQuery(query1);
 
@@ -565,6 +565,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		query.setParameter("networkId", networkID);
 		@SuppressWarnings("unchecked")
 		List<Integer> latestVersion = query.list();
+		if(latestVersion == null)
+		{
+			throw new QuadrigaStorageException();
+		}
 		return latestVersion;
 	}
 	/**

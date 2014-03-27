@@ -905,7 +905,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	@Transactional
-	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException{
+	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException
+	{
 		int versionNo = getLatestVersionOfNetwork(networkId);
 		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,versionNo);
 		if(networkNodeList != null)

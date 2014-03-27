@@ -68,7 +68,7 @@ public interface IDBConnectionModifyWSManager
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteProjectWorkspace(String workspaceIdList)
+	public abstract void deleteProjectWorkspace(String workspaceIdList)
 			throws QuadrigaStorageException;
 	/**
 	 * Delete the project workspace for given workspace.
@@ -77,7 +77,7 @@ public interface IDBConnectionModifyWSManager
 	 * @throws QuadrigaStorageException
 	 */
 	
-	public abstract String deleteWorkspaceDictionary(String workspaceIdList)
+	public abstract void deleteWorkspaceDictionary(String workspaceIdList)
 			throws QuadrigaStorageException;
 	/**
 	 * Delete the workspace dictionary for given workspace.
@@ -85,7 +85,7 @@ public interface IDBConnectionModifyWSManager
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteWorkspaceConceptcollection(String workspaceIdList)
+	public abstract void deleteWorkspaceConceptcollection(String workspaceIdList)
 			throws QuadrigaStorageException;
 	/**
 	 * Delete the workspace COncept Collection for given workspace.
@@ -93,7 +93,7 @@ public interface IDBConnectionModifyWSManager
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteWorkspaceDspace(String workspaceIdList)
+	public abstract void deleteWorkspaceDspace(String workspaceIdList)
 			throws QuadrigaStorageException;
 	/**
 	 * Delete the workspace editor for given workspace.
@@ -101,7 +101,7 @@ public interface IDBConnectionModifyWSManager
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteWorkspaceEditor(String workspaceIdList)
+	public abstract void deleteWorkspaceEditor(String workspaceIdList)
 			throws QuadrigaStorageException;
 	
 	/**
@@ -110,7 +110,7 @@ public interface IDBConnectionModifyWSManager
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String deleteWorkspaceNetwork(String workspaceIdList)
+	public abstract void deleteWorkspaceNetwork(String workspaceIdList)
 			throws QuadrigaStorageException;
 	
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;

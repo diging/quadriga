@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "WorkspaceEditorDTO.findAll", query = "SELECT w FROM WorkspaceEditorDTO w"),
     @NamedQuery(name = "WorkspaceEditorDTO.findByWorkspaceid", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.workspaceEditorDTOPK.workspaceid = :workspaceid"),
-    @NamedQuery(name = "WorkspaceEditorDTO.findByOwner", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.workspaceEditorDTOPK.editor = :editor"),
+    @NamedQuery(name = "WorkspaceEditorDTO.findByEditor", query = "SELECT w FROM WorkspaceEditorDTO w WHERE w.workspaceEditorDTOPK.editor = :editor"),
     })
 public class WorkspaceEditorDTO implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -25,9 +25,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+//import org.hibernate.annotations.OnDelete;
+//import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *This class represents the column mappings for workspace table.
@@ -87,9 +86,11 @@ public class WorkspaceDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    private List<NetworksDTO> workspaceNetworksDTOList;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceEditorDTO> workspaceEditorDTOList;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "workspaceDTO")
-    @OnDelete(action=OnDeleteAction.NO_ACTION)
+//    @OnDelete(action=OnDeleteAction.NO_ACTION)
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
 
 
@@ -106,7 +107,7 @@ public class WorkspaceDTO implements Serializable {
         this.createdby = createdby;
         this.createddate = createddate;
     }
-
+    
     public String getWorkspacename() {
         return workspacename;
     }
@@ -190,6 +191,16 @@ public class WorkspaceDTO implements Serializable {
     @XmlTransient
     public List<WorkspaceDictionaryDTO> getWorkspaceDictionaryDTOList() {
 		return workspaceDictionaryDTOList;
+	}
+    
+    @XmlTransient
+    public List<NetworksDTO> getWorkspaceNetworksDTOList() {
+		return workspaceNetworksDTOList;
+	}
+
+	public void setWorkspaceNetworksDTOList(
+			List<NetworksDTO> workspaceNetworksDTOList) {
+		this.workspaceNetworksDTOList = workspaceNetworksDTOList;
 	}
 
 	public void setWorkspaceDictionaryDTOList(

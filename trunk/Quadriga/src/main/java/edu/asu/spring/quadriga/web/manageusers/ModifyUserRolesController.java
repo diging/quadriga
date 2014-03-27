@@ -1,18 +1,14 @@
 package edu.asu.spring.quadriga.web.manageusers;
 
-import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,23 +44,8 @@ public class ModifyUserRolesController
 	private ModifyQuadrigaUserFormManager quadrigaUserMananger;
 
 	@InitBinder
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder,WebDataBinder validateBinder) throws Exception {
+	protected void initBinder(WebDataBinder validateBinder) throws Exception {
         validateBinder.setValidator(validator);
-		
-		binder.registerCustomEditor(List.class, "users.quadrigaRoles", new PropertyEditorSupport() {
-
-			@Override
-			public void setAsText(String text) {
-				String[] roleIds = text.split(",");
-				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
-				for (String roleId : roleIds) {
-					IQuadrigaRole role = rolemanager.getQuadrigaRole(roleId.trim());
-					roles.add(role);
-				}
-				setValue(roles);
-			} 	
-		}); 
-		
 	}
 	
 	/**
