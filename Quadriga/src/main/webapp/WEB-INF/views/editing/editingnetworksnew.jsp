@@ -40,6 +40,11 @@ function changeLayout(json,networkid,path,type)
 
 <div id="container">
 
+<div id="top-container">
+<div id="dspace_metadata">
+</div>
+</div>
+
 <div id="center-container">
 <div id="chart"></div>
 </div>

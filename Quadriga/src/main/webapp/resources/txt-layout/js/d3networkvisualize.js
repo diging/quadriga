@@ -616,12 +616,12 @@ function d3init(graph, networkId, path,type) {
 				function conceptDescription(d){
 					lemma = d.name;
 					
+					var output = "<h5>Description of Node</h5>";
+					output+="<h5>"+lemma+"</h5>";
+					
 					// This is done to replace all dot (.) with dollar ($)
 					// Since our spring controller would ignore any data after dot (.)
 					lemma = lemma.replace(".","$");
-					
-					var output = "<h3>Description of Node</h3>";
-					output+="<h5>"+lemma+"</h5>";
 					
 					// Ajax call for getting description of the node
 					// Note: this ajax call has async = false
@@ -632,7 +632,7 @@ function d3init(graph, networkId, path,type) {
 							//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
 							type : "GET",
 							success : function(data) {
-								output+="<h8>" + data + "</h8>";
+								output+="<h8>"+ "<I>" + data + "</I>"+"</h8>";
 								$('#concept_desc').html(output);
 							},
 							error: function() {
