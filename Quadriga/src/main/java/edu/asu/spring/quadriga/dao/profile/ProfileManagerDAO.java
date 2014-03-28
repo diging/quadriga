@@ -93,6 +93,7 @@ implements IDBConnectionProfileManager
 		  {
 			    searchResultBackBean = new SearchResultBackBean();
 				searchResultBackBean.setId(userProfile.getQuadrigaUserprofileDTOPK().getProfileid());
+				searchResultBackBean.setServiceId(userProfile.getQuadrigaUserprofileDTOPK().getServiceid());
 				searchResultBackBean.setDescription(userProfile.getDescription());
 				searchResultBackBean.setWord(userProfile.getProfilename());
 				userProfileSearchList.add(searchResultBackBean);

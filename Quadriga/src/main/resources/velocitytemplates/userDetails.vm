@@ -12,7 +12,7 @@
 			<Quadriga:url>$authFileList.id</Quadriga:url>
 			<Quadriga:authorityType>$authFileList.id</Quadriga:authorityType>
 			<Quadriga:description>$authFileList.description</Quadriga:description>
-			<Quadriga:serviceId>$authFileList.serviceid</Quadriga:serviceId>
+			<Quadriga:serviceId>$authFileList.serviceId</Quadriga:serviceId>
 		</Quadriga:authorityFileEntry>
 		#end
 	</Quadriga:authorityFileEntryList>

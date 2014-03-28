@@ -12,11 +12,18 @@ package edu.asu.spring.quadriga.web.profile.impl;
 public class SearchResultBackBean {
 	
 	private String word;
-	
 	private String id;
 	private String description;
-	
+	private String serviceId;
 	private boolean isChecked = false;
+	
+	public String getServiceId() {
+		return serviceId;
+	}
+	
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
+	}
 	
 	public boolean getIsChecked() {
 		return isChecked;
