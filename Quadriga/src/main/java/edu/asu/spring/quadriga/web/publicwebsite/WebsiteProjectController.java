@@ -1,5 +1,12 @@
 package edu.asu.spring.quadriga.web.publicwebsite;
 
+/**
+ * This controller has all the mappings required to view the external website of a project, view all the networks in that project
+ * and visualize the networks 
+ * 
+ * @author Sayalee Mehendale
+ *
+ */
 
 
 import java.security.Principal;
@@ -79,10 +86,11 @@ public class WebsiteProjectController {
 	 * 
 	 * If the project has been set to 'accessible', then the public website page is displayed. If the project does not exist
 	 * then an error page is shown.
-	 * @param unixName unix name that is given to the project at the time of its creation
-	 * @param model
-	 * @return
-	 * @throws QuadrigaStorageException
+	 * 
+	 * @param unixName 								unix name that is given to the project at the time of its creation
+	 * @param model									Model object to map values to view
+	 * @return										returns a string to access the external website main page
+	 * @throws QuadrigaStorageException				Database storage exception thrown
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
 	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException {
@@ -106,10 +114,11 @@ public class WebsiteProjectController {
 	 * If the project contains networks, it displays all of the networks along with the names of the workspaces
 	 * that contain the networks. If no networks have been created for that
 	 * particular project, then an appropriate error page is displayed.
-	 * @param unixName unix name that is given to the project at the time of its creation
-	 * @param model
-	 * @return 
-	 * @throws QuadrigaStorageException
+	 * 
+	 * @param unixName 							unix name that is given to the project at the time of its creation
+	 * @param model								Model object to map values to view
+	 * @return 									returns a string to access the brwose networks page of the project external website
+	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}/browsenetworks", method=RequestMethod.GET)
 	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException{
@@ -141,12 +150,12 @@ public class WebsiteProjectController {
 	
 	/**
 	 * This method gives the visualization of the network with the given network id 
-	 * @param networkId network id of the network that has to be visualized
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws JAXBException
+	 * @param networkId 					network id of the network that has to be visualized
+	 * @param model							ModelMap object to map values to view
+	 * @param principal						current session user
+	 * @return								returns a string to access the visualize network page of the project external website
+	 * @throws QuadrigaStorageException		Database storage exception thrown
+	 * @throws JAXBException				JAXB exception while getting the JSON
 	 */
 	@RequestMapping(value = "sites/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
