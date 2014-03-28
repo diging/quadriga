@@ -120,8 +120,11 @@ public class EditingNetworkAnnotationsController {
 				}
 				j1.put("text", ja);
 			annotation = j1.toString();
+			}else{
+			annotation = j1.toString();
 			}
 			
+			logger.info("annotation "+annotation);
 		
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
@@ -193,8 +196,10 @@ public class EditingNetworkAnnotationsController {
 				}
 				j1.put("text", ja);
 			annotation = j1.toString();
+			}else{
+				annotation = j1.toString();
 			}
-			
+			logger.info("annoationa "+annotation);
 		
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
