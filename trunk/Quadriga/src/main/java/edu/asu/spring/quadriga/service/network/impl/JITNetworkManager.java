@@ -44,8 +44,6 @@ public class JITNetworkManager implements IJITNetworkManager {
 		List<INodeObjectWithStatement> nodeObjectWithStatementList = new ArrayList<INodeObjectWithStatement>();
 		while(topNodeIterator.hasNext()){
 			INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
-			logger.debug("Node id "+networkNodeInfo.getId());
-			logger.debug("Node statement type "+networkNodeInfo.getStatementType());
 			if(networkNodeInfo.getStatementType().equals(INetworkManager.RELATIONEVENT)){
 				try{
 					String statementId = networkNodeInfo.getId();

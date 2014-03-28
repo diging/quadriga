@@ -15,7 +15,7 @@ public class NetworkNodeInfo implements INetworkNodeInfo
 	private String id;
 	private String statementType ;
 	private int isTop;
-	private int isArchived;
+	private int version;
 
 	
 	@Override
@@ -28,11 +28,11 @@ public class NetworkNodeInfo implements INetworkNodeInfo
 	}
 	@Override
 	public int getVersion() {
-		return isArchived;
+		return version;
 	}
 	@Override
-	public void setVersion(int isArchived) {
-		this.isArchived = isArchived;
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 	@Override

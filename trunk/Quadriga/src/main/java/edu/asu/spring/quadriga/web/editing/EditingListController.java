@@ -270,7 +270,6 @@ public class EditingListController {
 		// is not read as expected so we could replace it by $ in the javascript
 		// and revert back in our controller
 		lemma = lemma.replace('$', '.');
-		logger.info("lemma : "+lemma);
 		ConceptpowerReply conceptPowerReply = conceptCollectionManager.search(lemma, "NOUN");
 		List <ConceptEntry> conceptList = conceptPowerReply.getConceptEntry();
 		Iterator <ConceptEntry> conceptListIterator = conceptList.iterator();
