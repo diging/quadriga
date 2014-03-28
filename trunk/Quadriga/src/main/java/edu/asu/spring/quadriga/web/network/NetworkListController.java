@@ -139,6 +139,7 @@ public class NetworkListController {
 		return "auth/networks";
 	}
 
+
 	/**
 	 * Get the network displayed on to JSP by passing JSON string
 	 * @author Lohith Dwaraka
@@ -152,7 +153,7 @@ public class NetworkListController {
 	@RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		
-		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
+		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
@@ -177,8 +178,8 @@ public class NetworkListController {
 	@RequestMapping(value = "auth/editing/editnetworks/{networkId}", method = RequestMethod.GET)
 	public String visualizeAndEditNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 
-		INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
-
+		//INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
+		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;

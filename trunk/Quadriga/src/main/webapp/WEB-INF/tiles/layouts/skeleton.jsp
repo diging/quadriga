@@ -32,6 +32,7 @@
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery-alert.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jquery.dataTables.js"></script>
 <script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networkvisualize.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/d3networks.js"></script>
 <!--  script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script-->
 <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script> 
 <script
