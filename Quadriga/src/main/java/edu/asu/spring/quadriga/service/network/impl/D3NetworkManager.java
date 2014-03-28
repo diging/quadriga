@@ -68,8 +68,6 @@ public class D3NetworkManager implements ID3NetworkManager {
 				List<INodeObjectWithStatement> nodeObjectWithStatementList = new ArrayList<INodeObjectWithStatement>();
 				while(topNodeIterator.hasNext()){
 					INetworkNodeInfo networkNodeInfo = topNodeIterator.next();
-					logger.debug("Node id "+networkNodeInfo.getId());
-					logger.debug("Node statement type "+networkNodeInfo.getStatementType());
 					if(networkNodeInfo.getStatementType().equals(INetworkManager.RELATIONEVENT)){
 						try{
 							String statementId = networkNodeInfo.getId();
@@ -81,7 +79,6 @@ public class D3NetworkManager implements ID3NetworkManager {
 						}
 					}
 				}
-
 
 				d3Map =new D3Map();
 				d3Map = prepareD3Map(d3Map, nodeObjectWithStatementList, relationEventPredicateMapping);
@@ -248,12 +245,24 @@ public class D3NetworkManager implements ID3NetworkManager {
 		String subjectNodeId=nodeObject.getSubjectId();
 		String objectNodeId = nodeObject.getObjectId();
 
+		String predicateName = nodeObject.getPredicate();
+		String subjectName = nodeObject.getSubject();
+		String objectName = nodeObject.getObject();
 
 		// Check for reference to relation
 		String temp=networkManager.getPredicateNameFromStackOfAE(nodeObject.getRelationEventId(),nodeObject.getPredicate(),relationEventPredicateMapping);
-		String predicateName = nodeObject.getPredicate();
+
 		if(!(temp.equals(""))){
 			predicateNameId = temp;
+		}
+		predicateName = predicateName.substring(0, predicateName.lastIndexOf("_"));
+		if(subjectName.lastIndexOf("_")!=-1){
+			subjectName = subjectName.substring(0, subjectName.lastIndexOf("_"));   
+			nodeObject.setSubject(subjectName);
+		}
+		if(objectName.lastIndexOf("_")!=-1){
+			objectName = subjectName.substring(0, objectName.lastIndexOf("_"));    
+			nodeObject.setObject(objectName);
 		}
 
 		// Adding Subject into node list
@@ -303,7 +312,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 		return d3Map;
 	}
 
-	
+
 	/**
 	 * This method would help in adding the node details of predicate to the {@link D3Map}.
 	 * @param d3Map												{@link D3Map} object which has cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
@@ -487,3 +496,4 @@ public class D3NetworkManager implements ID3NetworkManager {
 	}
 
 }
+

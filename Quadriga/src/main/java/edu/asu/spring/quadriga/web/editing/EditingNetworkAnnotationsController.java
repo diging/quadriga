@@ -72,7 +72,6 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("type") String objectType, 
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		logger.info("network ID:" + networkId);
 		try {
 			editingNetworkAnnotationManager.addAnnotationToNetwork(annotationType,networkId, nodeId, edgeId,nodeName,
 					annotationText, user.getUserName(),objectType);
@@ -106,7 +105,6 @@ public class EditingNetworkAnnotationsController {
 			//@RequestParam("objecttype") String objectType, 
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		logger.info("network ID:" + networkId);
 		String annotation = "";
 		
 		try {
@@ -128,7 +126,6 @@ public class EditingNetworkAnnotationsController {
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.info("json::" +annotation);
 		return annotation;
 	}
 	/**
@@ -150,7 +147,6 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("edgeid") String edgeId, 
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		logger.info("network ID:" + networkId);
 		String annotation = "";
 		
 		try {
@@ -172,7 +168,6 @@ public class EditingNetworkAnnotationsController {
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.info("json::" +annotation);
 		return annotation;
 	}
 	
@@ -182,7 +177,6 @@ public class EditingNetworkAnnotationsController {
 			@PathVariable("networkId") String networkId,
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
-		logger.info("network ID:" + networkId);
 		String annotation = "";
 		List<NetworkAnnotation> resultList = new ArrayList<NetworkAnnotation>();
 		try {
@@ -205,7 +199,6 @@ public class EditingNetworkAnnotationsController {
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
-		logger.info("json::" +annotation);
 		return annotation;
 	}
 	

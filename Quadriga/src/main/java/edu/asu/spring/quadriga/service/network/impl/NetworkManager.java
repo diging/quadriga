@@ -335,16 +335,54 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			appellationEventObject.setNode(conceptCollectionManager.getConceptLemmaFromConceptId(tt.getTermInterpertation(tt))+"_"+shortUUID());
 			if(nodeId!=null){
 				appellationEventObject.setTermId(nodeId+"_"+shortUUID());
+				//appellationEventObject.setTermId(nodeId);
 			}else{
 				appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 			}
 			predicateObject = new PredicateObject();
 			predicateObject.setAppellationEventObject(appellationEventObject);
-
+			relationEventPredicateMapping = stackPredicateAppellationObject(relationEventType.getRelationEventId(relationEventType),predicateObject.getAppellationEventObject().getTermId(),appellationEventObject,relationEventPredicateMapping);
 			predicateObject.setRelationEventID(relationEventType.getRelationEventId(relationEventType));
 			return predicateObject;
 		}
 		return predicateObject;
+	}
+	
+	/**
+	 * Making a cache of relation predicate objects for checking references
+	 * @param relationEventId
+	 * @param predicateName
+	 * @param appellationEventObject
+	 * @return
+	 */
+	public List<List<Object>> stackPredicateAppellationObject(String relationEventId,String predicateName,AppellationEventObject appellationEventObject,List<List<Object>> relationEventPredicateMapping){
+		Iterator<List<Object>> I = relationEventPredicateMapping.iterator();
+
+		while(I.hasNext()){
+			List<Object> objectList = I.next();
+			Iterator<Object> I1 = objectList.iterator();
+			while(I1.hasNext()){
+				Object object = I1.next();
+				if(object instanceof String[]){
+					String pairs[] = (String [])object;
+					if(pairs[0].equals(relationEventId)){
+						String predicateNameLocal = pairs[1];
+						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
+						return relationEventPredicateMapping;
+					}
+				}
+			}
+		}
+		String[] pairs = new String [2];
+		pairs[0]=(relationEventId);
+		pairs[1]=(predicateName);
+		List<Object> objectList = new ArrayList<Object>();
+		objectList.add(pairs);
+		objectList.add(appellationEventObject);
+		relationEventPredicateMapping.add(objectList);
+
+		return relationEventPredicateMapping;
+
 	}
 
 
@@ -376,10 +414,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				if(object instanceof AppellationEventObject){
 					appellationEventObject=(AppellationEventObject)object;
 				}
+				
 			}
 			if(flag==1){
 				return appellationEventObject;
 			}
+			
 		}
 
 		return null;
@@ -406,13 +446,13 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			 * when we find a existing relation event been referred here
 			 * I will give appellation event with predicate of referred relation event
 			 */
-			if(!(temp == null)){
+			if(temp != null){
 				subjectObject.setIsRelationEventObject(false);
 				subjectObject.setAppellationEventObject(temp);
 			}else{
 				subjectObject.setIsRelationEventObject(true);
 				RelationEventObject relationEventObject   = new RelationEventObject();
-				isRelationEventPresentInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
+				//isRelationEventPresentInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
 				relationEventObject=parseThroughRelationEvent(subjectRelationEventType,relationEventObject,relationEventPredicateMapping);
 				subjectObject.setRelationEventObject(relationEventObject);
 			}
@@ -435,7 +475,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 					appellationEventObject.setTermId(tt.getTermID(tt)+"_"+shortUUID());
 				}
 				subjectObject.setAppellationEventObject(appellationEventObject);
-				logger.debug("subjectType Term : "+tt.getTermInterpertation(tt));
 			}
 		}
 		return subjectObject;
@@ -464,13 +503,13 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			 * when we find a existing relation event been referred here
 			 * I will give appellation event with predicate of referred relation event
 			 */
-			if(!(temp == null)){
+			if(temp != null){
 				objectTypeObject.setIsRelationEventObject(false);
 				objectTypeObject.setAppellationEventObject(temp);
 			}else{
 				objectTypeObject.setIsRelationEventObject(true);
 				RelationEventObject relationEventObject   = new RelationEventObject();
-				isRelationEventPresentInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
+				//isRelationEventPresentInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
 				relationEventObject=parseThroughRelationEvent(objectRelationEventType,relationEventObject,relationEventPredicateMapping);
 				objectTypeObject.setRelationEventObject(relationEventObject);
 			}
@@ -574,7 +613,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		nodeObject.setPredicate(appellationEventObject.getNode());
 		nodeObject.setPredicateId(appellationEventObject.getTermId());
-		logger.debug("Predicate : "+appellationEventObject.getNode() );
 
 		return nodeObject;
 	}
@@ -596,7 +634,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 					String pairs[] = (String [])object;
 					if(pairs[0].equals(relationEventId)){
 						String predicateNameLocal = pairs[1];
-						logger.debug(" relationEventId  :" +relationEventId +" id : "+pairs[0]+"predicate Name"+predicateNameLocal );
 						return predicateNameLocal;
 					}
 				}
@@ -1412,12 +1449,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public int getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException{
 		List<Integer> latestVersion = dbConnect.getLatestVersionOfNetwork(networkID);
-		logger.info("Size : = "+latestVersion.size());
-		Iterator<Integer> latestVersionIterator = latestVersion.iterator();
-		while(latestVersionIterator.hasNext()){
-			Integer temp = latestVersionIterator.next();
-			logger.info("version : " +temp);
-		}
 		int version =latestVersion.get(0);
 		return version;
 	}
