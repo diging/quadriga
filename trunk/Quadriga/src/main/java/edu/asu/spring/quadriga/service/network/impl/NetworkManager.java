@@ -449,6 +449,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			if(temp != null){
 				subjectObject.setIsRelationEventObject(false);
 				subjectObject.setAppellationEventObject(temp);
+				subjectObject.setRemoteLink(true);
 			}else{
 				subjectObject.setIsRelationEventObject(true);
 				RelationEventObject relationEventObject   = new RelationEventObject();
@@ -506,6 +507,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			if(temp != null){
 				objectTypeObject.setIsRelationEventObject(false);
 				objectTypeObject.setAppellationEventObject(temp);
+				objectTypeObject.setRemoteLink(true);
 			}else{
 				objectTypeObject.setIsRelationEventObject(true);
 				RelationEventObject relationEventObject   = new RelationEventObject();
@@ -558,12 +560,18 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(subjectObject.getIsRelationEventObject()){
 			nodeObject.setSubject(subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 			nodeObject.setSubjectId(subjectObject.getSubjectRelationPredictionAppellationTermId(subjectObject));
+			if(subjectObject.isRemoteLink()){
+				nodeObject.setSubjectRemoteLink(true);
+			}
 			logger.debug("Subject Predicate node : "+subjectObject.getSubjectRelationPredictionAppellation(subjectObject));
 
 			// Get Object into temp structure 
 			if(objectTypeObject.getIsRelationEventObject()){
 				nodeObject.setObject(objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 				nodeObject.setObjectId(objectTypeObject.getObjectRelationPredictionAppellationTermId(objectTypeObject));
+				if(objectTypeObject.isRemoteLink()){
+					nodeObject.setObjectRemoteLink(true);
+				}
 				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
 				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 			}else{
@@ -571,7 +579,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
 				nodeObject.setObject(appellationEventObject1.getNode());
 				nodeObject.setObjectId(appellationEventObject1.getTermId());
+				if(objectTypeObject.isRemoteLink()){
+					nodeObject.setObjectRemoteLink(true);
+				}
 				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
+				
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
 
@@ -582,6 +594,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			AppellationEventObject appellationEventObject1 = subjectObject.getAppellationEventObject();
 			nodeObject.setSubject(appellationEventObject1.getNode());
 			nodeObject.setSubjectId(appellationEventObject1.getTermId());
+			if(subjectObject.isRemoteLink()){
+				nodeObject.setSubjectRemoteLink(true);
+			}
 			logger.debug("Subject Predicate : "+appellationEventObject1.getNode() );
 		}
 
@@ -592,6 +607,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			AppellationEventObject appellationEventObject1 = objectTypeObject.getAppellationEventObject();
 			nodeObject.setObject(appellationEventObject1.getNode());
 			nodeObject.setObjectId(appellationEventObject1.getTermId());
+			if(objectTypeObject.isRemoteLink()){
+				nodeObject.setObjectRemoteLink(true);
+			}
 			nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
 			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 		}
@@ -1060,8 +1078,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 						JSONObject data2 = new JSONObject();
 						data2.put("id",network.getId());
 						data2.put("parent",networkParent);
+						String networkLink = "<a href='#' id='"
+								+ network.getId()
+								+ "' name='"
+								+ network.getName()
+								+ "' onclick='javascript:clicknetwork(this.id,this.name);' > "
+								+ network.getName() + "</a>";
 						String s = "<input type=button	onClick=\"location.href='networks/visualize/"+network.getId()+"'\" value='"+network.getName()+"'>";
-						data2.put("text", s);
+						data2.put("text", networkLink);
 						data2.put("href", "networks/visualize/"+network.getId());
 						JSONObject data2href = new JSONObject();
 						data2href.put("href", "networks/visualize/"+network.getId());
