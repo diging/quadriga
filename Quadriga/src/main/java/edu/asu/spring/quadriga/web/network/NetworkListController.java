@@ -216,6 +216,9 @@ public class NetworkListController {
 			json = networkJSon.getJson();
 			nodeList =networkJSon.getNodeList();
 		}
+		logger.info("----------------------------");
+		logger.info(json);
+		logger.info("----------------------------");
 		model.addAttribute("jsonstring",json);
 		model.addAttribute("nodeList",nodeList);
 		return "auth/editing/editnetworksnew";

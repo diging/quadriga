@@ -45,6 +45,10 @@
 		var data = ${core};
 		$('#html3').jstree(data);
 	});
+	
+	function clicknetwork(id,name){
+		window.location.href  = "${pageContext.servletContext.contextPath}/auth/networks/visualize/"+id;
+	}
 </script>
 
 

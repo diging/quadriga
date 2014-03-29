@@ -40,10 +40,10 @@ public class EditingNetworkAnnotationsController {
 
 	@Autowired
 	INetworkManager networkManager;
-	
+
 	@Autowired
 	IEditingNetworkAnnotationManager editingNetworkAnnotationManager;
-	
+
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(EditingNetworkAnnotationsController.class);
@@ -75,14 +75,14 @@ public class EditingNetworkAnnotationsController {
 		try {
 			editingNetworkAnnotationManager.addAnnotationToNetwork(annotationType,networkId, nodeId, edgeId,nodeName,
 					annotationText, user.getUserName(),objectType);
-			
+
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
 
 		return "{ success: true; }";
 	}
-	
+
 	/**
 	 * This method retrieves the annotations associated with the node
 	 * @param request
@@ -106,26 +106,25 @@ public class EditingNetworkAnnotationsController {
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String annotation = "";
-		
+
 		try {
 			List<NetworksAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotation(type,nodeId,user.getUserName(),networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){
-				
+
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
 					j.put("name", resultList.get(i).getAnnotationtext());
 					ja.put(j);
 				}
 				j1.put("text", ja);
-			annotation = j1.toString();
+				annotation = j1.toString();
 			}else{
-			annotation = j1.toString();
+				annotation = j1.toString();
 			}
-			
-			logger.info("annotation "+annotation);
-		
+
+
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
@@ -151,29 +150,31 @@ public class EditingNetworkAnnotationsController {
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String annotation = "";
-		
+
 		try {
 			List<NetworksAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotationOfEdge(edgeId,user.getUserName(),networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){
-				
+
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
 					j.put("name", resultList.get(i).getAnnotationtext());
 					ja.put(j);
 				}
 				j1.put("text", ja);
-			annotation = j1.toString();
+				annotation = j1.toString();
+			}else{
+				annotation = j1.toString();
 			}
-			
-		
+
+
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
 		return annotation;
 	}
-	
+
 	@RequestMapping(value = "/auth/editing/getAllAnnotations/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String getAllAnnotationsInNetwork(HttpServletRequest request,
 			HttpServletResponse response,
@@ -187,7 +188,7 @@ public class EditingNetworkAnnotationsController {
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null){
-				
+
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
 					j.put("name", resultList.get(i).getNodeName());
@@ -195,19 +196,18 @@ public class EditingNetworkAnnotationsController {
 					ja.put(j);
 				}
 				j1.put("text", ja);
-			annotation = j1.toString();
+				annotation = j1.toString();
 			}else{
 				annotation = j1.toString();
 			}
-			logger.info("annoationa "+annotation);
-		
+
 		} catch (QuadrigaStorageException e) {
 			logger.error("Some issue in the DB", e);
 		}
 		return annotation;
 	}
-	
-	
+
+
 
 }
 
