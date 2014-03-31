@@ -98,17 +98,25 @@ public class HomeController {
 
 	/**
 	 * Simply selects the home view to render by returning its name.
+	 * @throws QuadrigaStorageException 
 	 */
 	@RequestMapping(value = "auth/home", method = RequestMethod.GET)
-	public String home(Locale locale, Model model, Principal principal) {
+	public String home(Locale locale, Model model, Principal principal) throws QuadrigaStorageException {
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 
 		String formattedDate = dateFormat.format(date);
 
-		System.out.println("Testing principal object :"+principal.toString());
 		// Get the LDAP-authenticated userid
 		String sUserId = principal.getName();		
+		
+		//inserting a record for admin in the database
+		if(sUserId.trim().equalsIgnoreCase("admin"))
+		{
+			//call the database layer to insert a record
+			userManager.insertQuadrigaAdminUser(sUserId);
+		}
+		
 		model.addAttribute("username", sUserId);
 		model.addAttribute("serverTime", formattedDate );
 		model.addAttribute("wbmsg",messages.getProperty("workbench_desc"));
