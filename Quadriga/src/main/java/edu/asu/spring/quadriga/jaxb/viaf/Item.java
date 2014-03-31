@@ -5,7 +5,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-//@XmlRootElement(name="item")
+/**
+ * jaxb class for parsing xml retrieved from viaf service
+ * 
+ * @author rohit
+ *
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="item")
 public class Item {
