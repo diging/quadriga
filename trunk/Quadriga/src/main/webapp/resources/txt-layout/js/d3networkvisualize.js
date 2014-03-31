@@ -81,6 +81,7 @@ function d3init(graph, networkId, path,type) {
 	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
 	.attr("marker-end", "url(#arrow)")
 	.on("click", function(d){
+		display_annotations_of_edge(d);
 			add_annotationstolink();
 			//d3.event.preventDefault();
 	})
@@ -642,6 +643,102 @@ function d3init(graph, networkId, path,type) {
 						
 				}
 				function add_annotationstolink(d){
-					alert("link");
+					//Type = node
+					var type1 ="edge";
+
+					// Making it unique, as getting the handle on $(#something).val() 
+					// is not working for more than one edge.
+					var text1ID = "annotText_"+guid();
+					var popupId = "popup1_"+guid();
+
+					// Get annotation URL
+					var getAnnotationUrl = path+"/auth/editing/getAnnotationOfEdge/"+networkId;
+
+
+					// Creating popup html content to facilitate adding annotation
+					var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
+					"<form id='annot_form' action=" + path
+					+ "/auth/editing/saveAnnotation/";
+					html1 += networkId + " method='POST' >";
+					html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
+					html1 += "<input type='button' id='annot_submit' value='submit'>";
+					html1 += "</div></form>";
+
+					// Appending to D3 view
+					$('#inner-details').html(html1);
+					var content = "<h3>Annotations</h3>";
+					 
+					// ajax Call to get annotation for a node.id
+					// Used to add the old annotation in to the popup view
+					display_annotations(d);
+					event.preventDefault();
+					
+					
+					// Saves the relation annotation to DB
+					$('#annot_submit').click(function(event) {
+						var annottext = $('#'+text1ID+'').val();  
+						var edgeid = d.source+d.target;
+						var type = "";
+						var annotationtype = "edge";
+						$.ajax({
+							url : $('#annot_form').attr("action"),
+							type : "POST",
+							data :"annotationtype="+annotationtype+"&nodename=''&nodeid=''&annotText="+annottext+"&type="+type+"&edgeid="+edgeid,
+							success : function() {
+								$('#'+popupId+'').dialog('close');
+								displayAllAnnotations();
+								display_annotations(d);
+							},
+							error: function() {
+								alert("error");
+							}
+						});
+						event.preventDefault();
+					
+					});
+					
+					
+					$('#annot_details').html(content);
+					event.preventDefault();
+
+					// Popup decoration effects
+					$( '#'+popupId+'' ).show( "slow" );					
+					$('#'+popupId+'').dialog({
+						open: function(event, ui) {
+							$('.ui-dialog-titlebar-close').css({'text-decoration':'block', 'right':'45px', 'height':'21px', 'width': '20px'}); 
+						}
+					});
 				}
+				
+				function display_annotations_of_edge(d){
+					var type1= "node";
+					var getAnnotationUrl = path+"/auth/editing/getAnnotationOfEdge/"+networkId;
+					var content = "<h3>Annotations</h3>";
+					// ajax Call to get annotation for a node.id
+					// Used to add the old annotation in to the popup view
+					$.ajax({
+						url : getAnnotationUrl,
+						type : "GET",
+						data: "nodeid="+d.id+"&type="+type1,
+						dataType: 'json',
+						success : function(data) {
+							var cnt = 0;
+							content += "<ol>";
+						$.each(data.text, function(key,value){
+			                    content += ++cnt +'.<li>'+value.name+'</li>';  
+		                });
+							content += "</ol>"
+							$('#annot_details').html(content);
+						},
+						error: function() {
+							alert("error");
+						}
+						
+					});
+					
+					$('#annot_details').html(content);
+					
+					
+				}
+				
 }
