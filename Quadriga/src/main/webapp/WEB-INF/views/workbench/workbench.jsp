@@ -30,11 +30,9 @@
 		function checkUsersDeSelect() {  
 			if($(".users").length != $(".users:checked").length)  {
 				  
-				  
 	            $("#chkboxall").prop("checked",false);
 	            $('#alljstree').hide();
 	            
-	         // allprojects();
 	            return false;
 	        }
 			return false;
@@ -52,49 +50,54 @@
 		  $("#chkboxowner").click(function() {
 			  
 		    	$("#chkboxowner").trigger("change");
-		    	ownerprojects();
-		    	//checkOtherUsers();
-		    	//checkUsersCLick();
-		    	collaboratorprojects();
+		    	
+		    	 
+		    //	hideUsersifunchecked(); 
+		    	ownerprojects(); 
+		    	 /* collaboratorprojects();
 			      wsownerprojects();
-				  wscollaboratorprojects();
+				  wscollaboratorprojects();  */
+				  showUsersifchecked();
 			});
 		   
 		   
 		   $("#chkboxcollaborator").click(function() {
 			      
 				$("#chkboxcollaborator").trigger("change");
-				collaboratorprojects();
-				//checkOtherUsers();
-				//checkUsersCLick();
-				ownerprojects();
+				
+				
+		    //	hideUsersifunchecked(); 
+		    	collaboratorprojects(); 
+				 /* ownerprojects();
 			      wsownerprojects();
-				  wscollaboratorprojects(); 
-		    	
+				  wscollaboratorprojects();  */ 
+				  showUsersifchecked();
 			});
 		   $("#chkboxwsowner").click(function() {
 			      
 				$("#chkboxwsowner").trigger("change");
-				wsownerprojects();
-				//checkOtherUsers();
-				//checkUsersCLick();
-				ownerprojects();
+				
+				/* 
+		    	 hideUsersifunchecked(); */
+		    	wsownerprojects(); 
+				/* ownerprojects();
 				  collaboratorprojects();
-				  wscollaboratorprojects(); 
-				 
+				  wscollaboratorprojects();  */ 
+				  showUsersifchecked();
 			});
 			
 			
 			$("#chkboxwscollaborator").click(function() {
 				
 				$("#chkboxwscollaborator").trigger("change");
-				wscollaboratorprojects();
-				//checkOtherUsers();
-				//checkUsersCLick();
-				ownerprojects();
-				  collaboratorprojects();
-			      wsownerprojects(); 
 				
+				/* 
+		    	hideUsersifunchecked(); */
+		    	wscollaboratorprojects();
+				/* ownerprojects();
+				  collaboratorprojects();
+			      wsownerprojects();  */ 
+			      showUsersifchecked();
 				
 			});
 		    
@@ -102,21 +105,20 @@
 	});
 	
 	function allprojects(){
-		var data = ${allprojects};
-    	$('#alljstree').jstree(data);
+		
 		if ($('#chkboxall').prop('checked')){
-			 $(".users").prop("checked", true);
+			// alert("here");
+			 var data = ${allprojects};
+		    	$('#alljstree').jstree(data);
 		    	$('#alljstree').show();
+		    	$(".users").prop("checked", true); 
+		    	showUsersifchecked();
 		}
 		if (!$('#chkboxall').prop('checked')){
 			  
 			  $('#alljstree').hide();
 			  $(".users").prop("checked", false);
-			  wsownerprojects();
-				
-				ownerprojects();
-				  collaboratorprojects();
-				  wscollaboratorprojects(); 
+			  hideUsersifunchecked();
 		  
 		  }
 	}
@@ -130,11 +132,13 @@
 			 if(!checkUsersSelect()) {
 				  $('#asownerjstree').jstree(data);
 				  $('#asownerjstree').show();
+				  showUsersifchecked();
 			 }
 			 
 		  } else {
 			  if(!checkUsersDeSelect()){
 			  $('#asownerjstree').hide();
+			  showUsersifchecked();
 			  }
 		  }
 	}
@@ -145,10 +149,12 @@
 			if(!checkUsersSelect()){
 			$('#ascollaboratorjstree').jstree(data);
 		    	$('#ascollaboratorjstree').show();
+		    	showUsersifchecked();
 		   }
 		  } else {
 			  if(! checkUsersDeSelect())
 			  $('#ascollaboratorjstree').hide();
+			  showUsersifchecked();
 			  
 		  }
 	}
@@ -159,11 +165,13 @@
 			if(!checkUsersSelect()){
 			$('#aswsownerjstree').jstree(data);
 		    	$('#aswsownerjstree').show();
+		    	showUsersifchecked();
 			
 		  } 
 		}else {
 			  if(!checkUsersDeSelect())
 			  $('#aswsownerjstree').hide();
+			  showUsersifchecked();
 		  }
 		
 	}
@@ -176,15 +184,54 @@
 			 if(!checkUsersSelect()){
 			$('#aswscollaboratorjstree  ').jstree(data);
 		    	$('#aswscollaboratorjstree').show();
+		    	showUsersifchecked();
 			 }
 				 
 		  } else {
 			  if(!checkUsersDeSelect())
 			  $('#aswscollaboratorjstree').hide();
 			  
+			  
 		  }
+		showUsersifchecked();
 	}
-	
+	function showUsersifchecked(){
+		 if ($('#chkboxowner').prop('checked')){
+			 var odata = ${owner};
+			 $('#asownerjstree').jstree(odata);
+			  $('#asownerjstree').show();
+		 }
+		 if ($('#chkboxcollaborator').prop('checked')){
+			 var cdata = ${collaborator};
+			 $('#ascollaboratorjstree').jstree(cdata);
+			  $('#ascollaboratorjstree').show();
+		 }
+		 if ($('#chkboxwsowner').prop('checked')){
+			 var wodata = ${wsowner};
+			 $('#aswsownerjstree').jstree(wodata);
+			  $('#aswsownerjstree').show();
+		 }
+		 if ($('#chkboxwscollaborator').prop('checked')){
+			 var wscdata = ${wscollaborator};
+			 $('#aswscollaboratorjstree').jstree(wscdata);
+			  $('#aswscollaboratorjstree').show();
+		 }
+	}
+	function hideUsersifunchecked(){
+		 if (!$('#chkboxowner').prop('checked')){
+			
+			  $('#asownerjstree').hide();
+		 }
+		 if (!$('#chkboxcollaborator').prop('checked')){
+			  $('#ascollaboratorjstree').hide();
+		 }
+		 if (!$('#chkboxwsowner').prop('checked')){
+			  $('#aswsownerjstree').hide();
+		 }
+		 if (!$('#chkboxwscollaborator').prop('checked')){
+			  $('#aswscollaboratorjstree').hide();
+		 }
+	}
 	function clickproject(id,name){
 		window.location.href  = "${pageContext.servletContext.contextPath}/auth/workbench/"+id;
 	}
