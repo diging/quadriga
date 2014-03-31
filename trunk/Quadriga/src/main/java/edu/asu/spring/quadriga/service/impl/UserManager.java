@@ -405,5 +405,40 @@ public class UserManager implements IUserManager {
 			throw new QuadrigaStorageException();
 		}
 	}
+	
+	/**
+	 * This method calls the DAO layer method to insert 
+	 * Quadriga Admin user record into the daabase.
+	 * @param userName - Quadriga admin user name.
+	 * @param sRoles - quadriga Roles possed by the admin.
+	 * @throws QuadrigaStorageException - represents any database exception.
+	 * @author kiran batna
+	 */
+	@Override
+	@Transactional
+	public void insertQuadrigaAdminUser(String userName) throws QuadrigaStorageException
+	{
+		try
+		{
+			//retreive the db names of the quadriga admin roles
+			StringBuilder quadrigaRoles = new StringBuilder();
+			String role = null;
+			
+			role = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
+			quadrigaRoles.append(role);
+			role = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_USER_STANDARD);
+			quadrigaRoles.append(",");
+			quadrigaRoles.append(role);
+			role = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_USER_COLLABORATOR);
+			quadrigaRoles.append(",");
+			quadrigaRoles.append(role);
+			
+			usermanagerDAO.insertQuadrigaAdminUser(userName, quadrigaRoles.toString());
+		}
+		catch(Exception ex)
+		{
+			throw new QuadrigaStorageException(ex.getMessage());
+		}
+	}
 
 }

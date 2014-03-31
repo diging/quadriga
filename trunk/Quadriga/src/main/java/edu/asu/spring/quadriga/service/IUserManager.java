@@ -108,4 +108,15 @@ public interface IUserManager {
 	public abstract void updateUserQuadrigaRoles(String userName, String quadrigaRoles,
 			String loggedInUser) throws QuadrigaStorageException;
 
+	/**
+	 * This method calls the DAO layer method to insert 
+	 * Quadriga Admin user record into the daabase.
+	 * @param userName - Quadriga admin user name.
+	 * @param sRoles - quadriga Roles possed by the admin.
+	 * @throws QuadrigaStorageException - represents any database exception.
+	 * @author kiran batna
+	 */
+	public abstract void insertQuadrigaAdminUser(String userName)
+			throws QuadrigaStorageException;
+
 }

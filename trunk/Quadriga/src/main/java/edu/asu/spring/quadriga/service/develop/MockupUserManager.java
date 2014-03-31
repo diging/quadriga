@@ -293,4 +293,8 @@ public class MockupUserManager implements IUserManager {
 			throws QuadrigaStorageException {
 	}
 
+	public void insertQuadrigaAdminUser(String userName)
+			throws QuadrigaStorageException {
+	}
+
 }

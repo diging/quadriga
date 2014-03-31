@@ -154,5 +154,15 @@ public interface IDBConnectionManager
 	public abstract QuadrigaUserDTO getUserDTO(String userName)
 			throws QuadrigaStorageException;
 
+	/**
+	 * This method inserts the quadiriga Admin user record into the daabase
+	 * @param userName - Quadriga admin user name
+	 * @param sRoles - quadriga Roles possed by the admin
+	 * @throws QuadrigaStorageException - represents any database exception
+	 * @author kiran batna
+	 */
+	public abstract void insertQuadrigaAdminUser(String userName, String sRoles)
+			throws QuadrigaStorageException;
+
 
 }

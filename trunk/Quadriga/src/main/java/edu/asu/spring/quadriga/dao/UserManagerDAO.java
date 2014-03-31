@@ -378,4 +378,42 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
         	throw new QuadrigaStorageException();
 		}
 	}
+	
+	
+	/**
+	 * This method inserts the quadiriga Admin user record into the daabase
+	 * @param userName - Quadriga admin user name
+	 * @param sRoles - quadriga Roles possed by the admin
+	 * @throws QuadrigaStorageException - represents any database exception
+	 * @author kiran batna
+	 */
+	@Override
+	public void insertQuadrigaAdminUser(String userName, String sRoles) throws QuadrigaStorageException
+	{
+		try
+		{
+			QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
+			if(user == null)
+			{
+				//insert the record into the quadriga user table
+				Date date = new Date();
+				QuadrigaUserDTO quadrigaAdmin = new QuadrigaUserDTO();
+				quadrigaAdmin.setFullname(userName);
+				quadrigaAdmin.setUsername(userName);
+				quadrigaAdmin.setPasswd(null);
+				quadrigaAdmin.setQuadrigarole(sRoles);
+				quadrigaAdmin.setCreatedby(userName);
+				quadrigaAdmin.setCreateddate(date);
+				quadrigaAdmin.setUpdatedby(userName);
+				quadrigaAdmin.setUpdateddate(date);
+				sessionFactory.getCurrentSession().save(quadrigaAdmin);
+				
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			throw new QuadrigaStorageException();
+		}
+	}
 }
