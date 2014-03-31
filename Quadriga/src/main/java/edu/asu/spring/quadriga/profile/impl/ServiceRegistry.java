@@ -14,8 +14,8 @@ import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
 
 /***
- * @description this class registers all the services and creates one time objects 
- * 				for each service which implements IService interface
+ * this class registers all the services and creates one time objects 
+ * for each service which implements IService interface
  * 
  * @author rohit pendbhaje
  *

@@ -15,7 +15,8 @@ import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
 /**
- * this class connects quadriga service to conceptpower 
+ * this class contains methods which connects quadriga to conceptpower and searches
+ * the required term in conceptpower
  * 
  * @author rohit
  *
@@ -61,10 +62,10 @@ public class ConceptPowerService implements IService {
 	}
 
 /**
- * searches results in the conceptpower service and gives back results to quadriga
- * @param term  search term user wants to search in service
- * @return list of search results
- * @author rohit pendbhaje
+ * searches results in the conceptpower authority service and gives back results to quadriga
+ * @param term  	search term user wants to search in service
+ * @return 			list of search results
+ * @author 			rohit pendbhaje
  * 
  */
 	@Override

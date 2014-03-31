@@ -12,7 +12,7 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.service.profile.ISearchResultBackBeanFormManager;
 
 /**
- * this class takes items returned by viaf service and copies it in the searchresultbackbean 
+ * this class retrieves items returned by authority service and copies it into the searchresultbackbean 
  * 
  * @author rohit pendbhaje
  *
@@ -29,8 +29,8 @@ public class SearchResultBackBeanFormManager implements ISearchResultBackBeanFor
 	private SearchResultBackBeanForm backBeanForm;
 
 /**
- * this method takes results from viafservice method and copy it in the SearchResultBackBean 
- * 
+ * this method takes results from authority service (e.g. conceptpower) method and copy 
+ * it in the SearchResultBackBean 
  * 	
  * @param serviceId		id of the service selected by the user
  * @param term			term entered by the user

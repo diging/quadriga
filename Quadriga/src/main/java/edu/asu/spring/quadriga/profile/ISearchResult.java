@@ -1,10 +1,8 @@
 package edu.asu.spring.quadriga.profile;
 
 /**
- * this interface is implemented by the domain searchresult class 
- * 
- * methods:
- * contains getters and setters for description, id and name attributes of searchresult class 
+ * this interface has methods which are getters and setters for all the 
+ * attributes of SearchResult class.
  * 
  * @author rohit pendbhaje
  *

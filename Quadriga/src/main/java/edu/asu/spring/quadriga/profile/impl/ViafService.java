@@ -17,7 +17,8 @@ import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
 
 /**
- * this class sends request to viaf service and gets back object in response
+ * this class contains methods which connects quadriga to viaf authority service and searches
+ * the required term in it.
  * 
  * @author rohit pendbhaje
  */
@@ -81,11 +82,11 @@ public class ViafService implements IService {
 	}
 	
 	/**
-	 * this method takes user entered term and calls viaf REST API to retrieve search results
+     * searches results in the viaf authority service and gives back results to quadriga
 	 * @param item			term entered by user
-	 * @param startindex	index in the REST API of viaf service
+	 * @param startindex	index of the start of the search result viaf service
 	 * 
-	 * @return list of searchresults retrieved from viaf 
+	 * @return list of searchresults retrieved from viaf service
 	 * @author rohit pendbhaje
 	 * 	
 	 */

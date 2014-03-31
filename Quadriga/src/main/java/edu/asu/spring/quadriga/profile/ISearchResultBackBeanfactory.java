@@ -3,16 +3,18 @@ package edu.asu.spring.quadriga.profile;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 /**
- * this interface is used for creating SearchResultBackBean new object
+ * this interface has method which is used for creating new object of SearchResultBackBean class.
  * 
- * methods:
- * createSearchResultBackBeanObject() : creates object of SearchResultBackBean
- * 
- * @author rohit pendbhaje
+ *  @author rohit pendbhaje
  *
  */
 public interface ISearchResultBackBeanfactory {
-	
+
+/**
+ * this method creates object of SearchresultBackBean class
+ * 
+ * @return	object of SearchResultBackBean class
+ */
 	public SearchResultBackBean createSearchResultBackBeanObject();
 
 }
