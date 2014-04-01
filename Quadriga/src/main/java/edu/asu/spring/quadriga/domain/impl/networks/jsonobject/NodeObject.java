@@ -12,9 +12,23 @@ public class NodeObject {
 	String predicateId;
 	String subject;
 	String subjectId;
+	boolean isSubjectRemoteLink=false;
 	String object;
 	String objectId;
+	boolean isObjectRemoteLink=false;
 	
+	public boolean isSubjectRemoteLink() {
+		return isSubjectRemoteLink;
+	}
+	public void setSubjectRemoteLink(boolean isSubjectRemoteLink) {
+		this.isSubjectRemoteLink = isSubjectRemoteLink;
+	}
+	public boolean isObjectRemoteLink() {
+		return isObjectRemoteLink;
+	}
+	public void setObjectRemoteLink(boolean isObjectRemoteLink) {
+		this.isObjectRemoteLink = isObjectRemoteLink;
+	}
 	public String getPredicateId() {
 		return predicateId;
 	}
