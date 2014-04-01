@@ -225,13 +225,14 @@ public class EditingListController {
 	 */
 	@RequestMapping(value = "/auth/editing/oldversionvisualize/{networkId}/{versionNo}", method = RequestMethod.GET)
 	public String visualizeNetworksOldVersion(@PathVariable("networkId") String networkId, @PathVariable("versionNo") String versionNo, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
+		INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.D3JQUERY,versionNo);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;
 		if(networkJSon!=null){
 			json = networkJSon.getJson();
 		}
+		logger.info(json);
 		model.addAttribute("jsonstring",json);
 		return "auth/editing/visualize";
 	}

@@ -66,7 +66,7 @@
 									value="${version.status}"></c:out></td>
 							<td width="25%" align="center"><c:out
 									value="${version.assignedUser}"></c:out></td>
-							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${network.id}/${version.versionNumber}'" value='Visualize'></td>
+							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${version.id}/${version.versionNumber}'" value='Visualize'></td>
 						</tr>
 					</c:forEach>
 				</tbody>
