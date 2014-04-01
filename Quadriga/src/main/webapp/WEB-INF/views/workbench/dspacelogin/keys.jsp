@@ -9,13 +9,17 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 	
+	$("input[type=button]").button().click(function(event) {
+		event.preventDefault();
+	});
+	
 	$("#keysSubmit").click(function()
 			{
 				$('#formKeys').submit();
 			});
 });
 </script>
-	<h3>Manage Dspace Access Keys</h3>
+	<h2>Manage Dspace Access Keys</h2>
 	A more secure way to access Dspace repository. Generate new keys <a href="https://import.hps.ubio.org/api_keys" target="_blank">here.</a>
 	<form:form method="POST" id="formKeys" action="${pageContext.servletContext.contextPath}/auth/workbench/updatekeys">
 		<table>
@@ -76,9 +80,11 @@ $(document).ready(function() {
 		</div>
 		<input type="submit" id="keysSubmit" value="Update the keys" />
 		<input type="submit" onclick="deleteCheck()" value="Remove the keys" />
+		<input type="button" value="Cancel" onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench'">
 		</c:when>
 						<c:otherwise>
 		<input type="submit" id="keysSubmit" value="Store new keys" />
+		<input type="button" value="Cancel" onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench'">
 						</c:otherwise>
 					</c:choose></td>
 			</tr>
