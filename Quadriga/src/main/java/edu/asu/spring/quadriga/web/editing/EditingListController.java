@@ -232,7 +232,6 @@ public class EditingListController {
 		if(networkJSon!=null){
 			json = networkJSon.getJson();
 		}
-		logger.info(json);
 		model.addAttribute("jsonstring",json);
 		return "auth/editing/visualize";
 	}

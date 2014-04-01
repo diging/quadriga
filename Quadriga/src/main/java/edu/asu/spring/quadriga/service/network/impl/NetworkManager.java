@@ -995,7 +995,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			while(iterator.hasNext())
 			{
 				INetworkNodeInfo networkNodeInfo = iterator.next();
-				if(networkNodeInfo.getIsTop() != 1 || networkNodeInfo.getVersion() != INetworkStatus.ARCHIVE_LEVEL_ONE)
+				if(networkNodeInfo.getIsTop() != 1 || networkNodeInfo.getVersion() != versionNo)
 					iterator.remove();
 			}
 		}
@@ -1126,6 +1126,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		if(jqueryType.equals(INetworkManager.D3JQUERY)){
 			networkJSon = d3NetworkManager.parseNetworkForD3Jquery(oldNetworkTopNodesList);
+			
 		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
 			String jitJSon = jitNetworkManager.parseNetworkForJITJquery(oldNetworkTopNodesList);
 			if(networkJSon ==null){
