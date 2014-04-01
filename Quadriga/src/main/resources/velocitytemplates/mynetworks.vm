@@ -5,7 +5,7 @@
 		<Quadriga:network>
 			<Quadriga:name>$network.name</Quadriga:name>
 			<Quadriga:id>$network.id</Quadriga:id>
-			<Quadriga:status>$network.status</Quadriga:status>
+			<Quadriga:status code="$network.status"></Quadriga:status>
 			<Quadriga:projectID>$network.project.internalid</Quadriga:projectID>
 			<Quadriga:workspaceID>$network.workspaceid</Quadriga:workspaceID>
 			<Quadriga:uri>$url/rest/network/$network.id</Quadriga:uri>

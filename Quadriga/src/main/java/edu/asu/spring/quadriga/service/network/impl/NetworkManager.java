@@ -1474,6 +1474,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public int getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException{
 		List<Integer> latestVersion = dbConnect.getLatestVersionOfNetwork(networkID);
+		
 		int version =latestVersion.get(0);
 		return version;
 	}

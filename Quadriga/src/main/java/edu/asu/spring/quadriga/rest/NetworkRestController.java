@@ -31,6 +31,7 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
@@ -39,6 +40,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.exceptions.RestException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IEditorManager;
+import edu.asu.spring.quadriga.service.IRestMessage;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -58,6 +60,9 @@ public class NetworkRestController {
 
 	@Autowired
 	private INetworkManager networkManager;
+
+	@Autowired
+	private IRestMessage errorMessageRest;
 
 	@Autowired
 	private	IListWSManager wsManager;
@@ -102,6 +107,8 @@ public class NetworkRestController {
 	public String getNetworkFromClients(HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
+
+
 		IUser user = userManager.getUserDetails(principal.getName());
 		String networkName = request.getParameter("networkname");
 		String networkId="";
@@ -170,8 +177,13 @@ public class NetworkRestController {
 	public String getNetworkStatus(@PathVariable("NetworkId") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
+			return errorMsg;
+		}
 		IUser user = userManager.getUserDetails(principal.getName());
-		INetwork network =networkManager.getNetwork(networkId);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
@@ -228,6 +240,12 @@ public class NetworkRestController {
 	public String getAnnotationOfNetwork(@PathVariable("NetworkId") String networkId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
+			return errorMsg;
+		}
 		IUser user = userManager.getUserDetails(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
@@ -278,7 +296,12 @@ public class NetworkRestController {
 	public String getWorkspaceNetworkList(@PathVariable("workspaceid") String workspaceId,
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
-
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
+		if(workspace==null){
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
+			return errorMsg;
+		}
 
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
 		networkList = networkManager.editNetworkStatusCode(networkList);
@@ -329,6 +352,12 @@ public class NetworkRestController {
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
+		if(workspace==null){
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
+			return errorMsg;
+		}
 
 		List<INetwork> networkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
 		networkList = networkManager.editNetworkStatusCode(networkList);
@@ -378,6 +407,12 @@ public class NetworkRestController {
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
+		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId, principal.getName());
+		if(workspace==null){
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Workspace ID : "+workspaceId+" doesn't exist");
+			return errorMsg;
+		}
 
 		List<INetwork> networkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
 		networkList = networkManager.editNetworkStatusCode(networkList);
@@ -409,8 +444,8 @@ public class NetworkRestController {
 			throw new RestException(404);
 		}
 	}
-	
-	
+
+
 	/**
 	 *  Rest interface for getting network XML for a particular Network ID.
 	 * http://<<URL>:<PORT>>/quadriga/rest/network/xml/{networkid}
@@ -429,6 +464,12 @@ public class NetworkRestController {
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
 		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
+			return errorMsg;
+		}
+		
 		String networkXML = networkManager.getNetworkXML(networkId);
 		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
 		if(networkXML.isEmpty() || networkXML == null){
@@ -463,16 +504,16 @@ public class NetworkRestController {
 			throw new RestException(404);
 		}
 	}
-	
-	
+
+
 	@ResponseBody
 	@RequestMapping(value = "rest/mynetworks", method = RequestMethod.GET, produces = "application/xml")
 	public String getMyNetwork(
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
-		
+
 		IUser user = userManager.getUserDetails(principal.getName());
-		
+
 		List<INetwork> networkList = networkManager.getNetworksOfOwner(user);
 		networkList = networkManager.editNetworkStatusCode(networkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
@@ -503,9 +544,9 @@ public class NetworkRestController {
 			throw new RestException(404);
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 *  Rest interface for getting network list belonging to a workspace 
 	 * http://<<URL>:<PORT>>/quadriga/rest/networkdetails/{networkid}
@@ -523,8 +564,14 @@ public class NetworkRestController {
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
-		IUser user = userManager.getUserDetails(principal.getName());
 		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			response.setStatus(404);
+			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
+			return errorMsg;
+		}
+		
+		IUser user = userManager.getUserDetails(principal.getName());
 		String networkXML = networkManager.getNetworkXML(networkId);
 		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
 		if(networkXML.isEmpty() || networkXML == null){
@@ -586,6 +633,7 @@ public class NetworkRestController {
 			@RequestBody String xml,
 			@RequestHeader("Accept") String accept,
 			Principal principal) throws JAXBException, QuadrigaStorageException, RestException, ParserConfigurationException, SAXException, IOException {
+
 		IUser user = userManager.getUserDetails(principal.getName());
 
 		String networkName = request.getParameter("networkname");

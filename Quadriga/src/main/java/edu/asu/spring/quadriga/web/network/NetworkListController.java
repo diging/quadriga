@@ -152,7 +152,10 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
 		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
@@ -177,7 +180,10 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/editing/editnetworks/{networkId}", method = RequestMethod.GET)
 	public String visualizeAndEditNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
 		//INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
@@ -205,7 +211,10 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/editing/editnetworks/{networkId}/D3", method = RequestMethod.GET)
 	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
-		
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
 		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 
 		String nwId = "\""+networkId+"\"";
