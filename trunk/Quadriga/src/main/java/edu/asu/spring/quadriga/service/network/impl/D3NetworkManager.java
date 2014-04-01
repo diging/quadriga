@@ -62,6 +62,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 	public INetworkJSon parseNetworkForD3Jquery(List<INetworkNodeInfo> networkTopNodesList){
 		D3Map d3Map = null;
 		if(networkTopNodesList!=null){
+			
 			if( networkTopNodesList.size()>0 ){
 				Iterator <INetworkNodeInfo> topNodeIterator = networkTopNodesList.iterator();
 				List<List<Object>> relationEventPredicateMapping = new ArrayList<List<Object>>();
