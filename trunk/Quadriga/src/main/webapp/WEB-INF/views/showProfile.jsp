@@ -56,7 +56,7 @@ $("input[name='deselectAll']").button().click(function(){
 
 <form:form method="GET" action="${pageContext.servletContext.contextPath}/auth/profile/addnew" >
  
-<input type="submit" value="Add new Authority File entry" style="float:left;">
+<input type="submit" value="Add new Authority File Entry" style="float:left;">
 
 </form:form>
 <br>
