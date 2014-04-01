@@ -261,7 +261,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 			nodeObject.setSubject(subjectName);
 		}
 		if(objectName.lastIndexOf("_")!=-1){
-			objectName = subjectName.substring(0, objectName.lastIndexOf("_"));    
+			objectName = objectName.substring(0, objectName.lastIndexOf("_"));    
 			nodeObject.setObject(objectName);
 		}
 

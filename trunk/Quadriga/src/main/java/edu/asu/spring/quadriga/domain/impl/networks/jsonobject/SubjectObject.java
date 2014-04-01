@@ -5,7 +5,14 @@ public class SubjectObject {
 	Boolean isRelationEventObject;
 	RelationEventObject relationEventObject;
 	AppellationEventObject appellationEventObject;
+	boolean isRemoteLink = false;
 	
+	public boolean isRemoteLink() {
+		return isRemoteLink;
+	}
+	public void setRemoteLink(boolean isRemoteLink) {
+		this.isRemoteLink = isRemoteLink;
+	}
 	public void setRelationEventObject(RelationEventObject relationEventObject){
 		this.relationEventObject = relationEventObject;
 	}
