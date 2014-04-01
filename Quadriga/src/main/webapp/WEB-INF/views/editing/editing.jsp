@@ -77,12 +77,12 @@
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.id}'"
 								name='Approve' value='Approve'> <input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}'"
-								value='Visualize'> <input type=button
+								value='Visualize'> <%-- <input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
-								value='Edit Network'>
+								value='Edit Network'> --%>
 								<input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}/D3'"
-								value='Edit Network new'>
+								value='Edit Network'>
 								<input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/versionhistory/${network.id}'"
 								value='View History'>
