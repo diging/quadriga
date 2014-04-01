@@ -17,7 +17,7 @@
 <ul id="menu">
 	<li>
 		<h2 class="major">
-			<span>Tools</span>
+			<span>Toolbox</span>
 		</h2>
 	</li>
 	<li><a href="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">
