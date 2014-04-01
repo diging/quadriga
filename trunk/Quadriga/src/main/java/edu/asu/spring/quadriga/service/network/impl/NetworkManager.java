@@ -1522,6 +1522,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	public List<INetwork> editNetworkStatusCode(List<INetwork> networkList){
 		
+		if(networkList==null){
+			return networkList;
+		}
+		
 		Iterator<INetwork> networkListIterator = networkList.iterator();
 		while(networkListIterator.hasNext()){
 			INetwork network = networkListIterator.next();
