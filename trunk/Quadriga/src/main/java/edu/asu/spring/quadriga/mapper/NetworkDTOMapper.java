@@ -224,7 +224,7 @@ public class NetworkDTOMapper {
 				network.setStatus(networkAssignedDTO.getStatus());
 				network.setAssignedUser(networkAssignedDTO.getUpdatedby());
 				network.setVersionNumber(networkAssignedDTO.getVersion());
-				
+				network.setId(networkAssignedDTO.getNetworkAssignedDTOPK().getNetworkid());
 				
 				networkVersions.add(network);
 			}
