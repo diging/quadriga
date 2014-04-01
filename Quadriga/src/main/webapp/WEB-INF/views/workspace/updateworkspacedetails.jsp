@@ -38,6 +38,9 @@ function submitClick(id){
 						</tr>
 						<tr>
 							<td><input type="submit" value="Update Workspace"></td>
+							<td><input type="button" value="Cancel" 
+			                onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}'">
+			                </td>
 						</tr>
 					</table>
 				</header>

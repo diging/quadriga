@@ -18,6 +18,12 @@
 			{
 				    $( "#tabs" ).tabs();
 			});
+	
+	/* inactiveWS()
+	{
+		location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace';
+	} */
+	
 </script>
 
 <style>
@@ -128,8 +134,14 @@
 									<input type="button" name="Delete Editor Role"
 									value="Delete Editor Role" />
 								</a>
+								
+								<%-- <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace">
+								<input type="button" value="Show Inactive Workspace" name="Show Inactive Workspace"/>
+								</a> --%>
+								
 								<input type="button" value="Show Inactive Workspace" 
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace'">	
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace'"> 	
+							
 							</c:otherwise>
 						</c:choose>
 
