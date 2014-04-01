@@ -50,7 +50,7 @@ public class EditorAccessManager implements IEditorAccessManager
 		
 		isEditor = false;
 		
-		dbConnect.chkIsNetworkEditor(networkId, userName);
+		isEditor = dbConnect.chkIsNetworkEditor(networkId, userName);
 		
 		return isEditor;
 	}

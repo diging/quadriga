@@ -198,7 +198,10 @@ public class EditingListController {
 	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=1,userRole={})})
 	@RequestMapping(value = "auth/editing/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		//INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
 		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
@@ -225,6 +228,10 @@ public class EditingListController {
 	 */
 	@RequestMapping(value = "/auth/editing/oldversionvisualize/{networkId}/{versionNo}", method = RequestMethod.GET)
 	public String visualizeNetworksOldVersion(@PathVariable("networkId") String networkId, @PathVariable("versionNo") String versionNo, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
 		INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.D3JQUERY,versionNo);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
@@ -238,9 +245,10 @@ public class EditingListController {
 
 	@RequestMapping(value = "auth/editing/versionhistory/{networkId}", method = RequestMethod.GET)
 	public String viewHistory(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException {
-		//INetworkJSon networkJSon = networkManager.getJsonForOldNetworks(networkId, INetworkManager.JITJQUERY,versionNo);
-		//String nwId = "\""+networkId+"\"";
-		//model.addAttribute("networkid",nwId);
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
 		List<INetwork> networkVersions = networkManager.getAllNetworkVersions(networkId);
 		
 		if(networkVersions!=null && !networkVersions.isEmpty()){

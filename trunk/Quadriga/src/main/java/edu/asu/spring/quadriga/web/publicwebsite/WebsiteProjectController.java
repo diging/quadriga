@@ -159,6 +159,10 @@ public class WebsiteProjectController {
 	 */
 	@RequestMapping(value = "sites/networks/visualize/{networkId}", method = RequestMethod.GET)
 	public String visualizeNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
+		INetwork network = networkmanager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
 		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
