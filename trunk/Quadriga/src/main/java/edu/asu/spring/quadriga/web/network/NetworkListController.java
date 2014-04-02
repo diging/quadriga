@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -208,15 +209,17 @@ public class NetworkListController {
 	 * @throws QuadrigaStorageException
 	 * @throws JAXBException
 	 * @throws JSONException 
+	 * @throws QStoreStorageException 
 	 */
 	@RequestMapping(value = "auth/editing/editnetworks/{networkId}/D3", method = RequestMethod.GET)
-	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException {
+	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException, QStoreStorageException {
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
 			return "auth/accessissue";
 		}
 		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 
+		logger.info("Source reference ID " + networkManager.getSourceReferenceURL(networkId, networkManager.getLatestVersionOfNetwork(networkId)));
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;

@@ -184,7 +184,7 @@ public interface INetworkManager {
 	 * @return									Returns the {@link List} of {@link INetworkNodeInfo}
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
-	public abstract List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId, int versionNo)
+	public abstract List<INetworkNodeInfo> getNetworkTopNodesByVersion(String networkId, int versionNo)
 			throws QuadrigaStorageException;
 
 	/**
@@ -228,7 +228,7 @@ public interface INetworkManager {
 	 * @return									Returns the {@link ElementEventsType} Object in form of XML.
 	 * @throws JAXBException					JAXB exception are thrown during unmarshalling the object into XML.
 	 */
-	public abstract  String getRelationEventXmlStringFromQstore(String relationEventTypeID)throws JAXBException;
+	public abstract  String getCreationEventXmlStringFromQstore(String relationEventTypeID)throws JAXBException;
 
 	/**
 	 * This method should help in returning the UUID in the form of {@link String}.
@@ -282,7 +282,7 @@ public interface INetworkManager {
 	 * @throws JAXBException					Throws JAXB exception in case we have issues while unmarshalling.
 	 * @throws QStoreStorageException			Database storage exception thrown
 	 */
-	public abstract ElementEventsType getElementEventTypeFromRelationEventTypeID(
+	public abstract ElementEventsType getElementEventTypeFromCreationEventTypeID(
 			String relationEventId) throws JAXBException,
 			QStoreStorageException;
 
@@ -452,5 +452,12 @@ public interface INetworkManager {
 	public abstract int getNetworkStatusCode(String status);
 
 	List<INetwork> editNetworkStatusCode(List<INetwork> networkList);
+
+	String getSourceReferenceURL(String networkId, int versionNo)
+			throws QuadrigaStorageException, JAXBException,
+			QStoreStorageException;
+
+	String getSourceReferenceFromElementEventsType(
+			ElementEventsType elementEventsType);
 	
 }

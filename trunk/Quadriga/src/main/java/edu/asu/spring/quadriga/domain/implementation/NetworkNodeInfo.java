@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 public class NetworkNodeInfo implements INetworkNodeInfo 
 {
 	private String id;
-	private String statementType ;
+	private String statementType ; // RE or AE
 	private int isTop;
 	private int version;
 

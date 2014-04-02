@@ -120,4 +120,16 @@ public class AppellationEventType
 		}
 		return null;
     }
+    
+    public String getAppellationSourceReference(){
+		List<JAXBElement<?>> elementsList = this.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
+		while(elementsIterator.hasNext()){
+			JAXBElement<?> element = (JAXBElement<?>) elementsIterator.next();
+			if(element.getName().toString().contains("source_reference")){
+				return element.getValue().toString();
+			}
+		}
+		return null;
+    }
 }
