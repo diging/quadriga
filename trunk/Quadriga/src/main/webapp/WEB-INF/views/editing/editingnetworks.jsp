@@ -46,12 +46,6 @@ function changeLayout(json,networkid,path,type)
 <div id="chart"></div>
 
 
-
-
-
-
-
-
 <div id="allannot_details"></div>
 
 

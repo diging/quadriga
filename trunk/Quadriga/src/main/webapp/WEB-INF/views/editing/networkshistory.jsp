@@ -33,7 +33,8 @@
 
 
 <header>
-	<span class="byline">View versions of the network here.</span>
+	<h2>Network History</h2>
+	<span class="byline">View versions of the network here</span>
 </header>
 
 

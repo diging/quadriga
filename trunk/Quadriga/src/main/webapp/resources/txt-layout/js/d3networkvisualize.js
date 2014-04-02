@@ -593,7 +593,7 @@ function d3init(graph, networkId, path,type) {
 	function display_annotations(d){
 		var type1= "node";
 		var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
-		var annotationDesc = "<h3>Annotations</h3>";
+		var annotationDesc = "<h5>Annotations</h5>";
 		var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
 		// ajax Call to get annotation for a node.id
 		// Used to add the old annotation in to the popup view
