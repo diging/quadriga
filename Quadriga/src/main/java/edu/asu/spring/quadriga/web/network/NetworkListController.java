@@ -164,7 +164,7 @@ public class NetworkListController {
 			json = networkJSon.getJson();
 		}
 		model.addAttribute("jsonstring",json);
-
+		
 		return "auth/networks/visualize";
 	}
 

@@ -151,7 +151,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 		StringBuffer d3JsonString = new StringBuffer("");
 
 		if(d3NodeList.size() > 0) {
-			for(int i =0;i<d3LinkList.size()-2;i++){
+			for(int i =0;i<d3LinkList.size()-1;i++){
 				ID3Link d3Link =d3LinkList.get(i);
 				d3JsonString.append("{\"source\":");
 				d3JsonString.append(d3Link.getSource());
@@ -497,4 +497,5 @@ public class D3NetworkManager implements ID3NetworkManager {
 	}
 
 }
+
 

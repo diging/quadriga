@@ -1084,7 +1084,6 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 								+ network.getName()
 								+ "' onclick='javascript:clicknetwork(this.id,this.name);' > "
 								+ network.getName() + "</a>";
-						String s = "<input type=button	onClick=\"location.href='networks/visualize/"+network.getId()+"'\" value='"+network.getName()+"'>";
 						data2.put("text", networkLink);
 						data2.put("href", "networks/visualize/"+network.getId());
 						JSONObject data2href = new JSONObject();
@@ -1474,6 +1473,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public int getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException{
 		List<Integer> latestVersion = dbConnect.getLatestVersionOfNetwork(networkID);
+		if(latestVersion==null || latestVersion.size()==0||latestVersion.get(0)==null){
+			return -1;
+		}
 		
 		int version =latestVersion.get(0);
 		return version;
