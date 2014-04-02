@@ -75,9 +75,7 @@
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/rejectnetwork/${network.id}'"
 								name='Reject' value='Reject'> <input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.id}'"
-								name='Approve' value='Approve'> <input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}'"
-								value='Visualize'> <%-- <input type=button
+								name='Approve' value='Approve'>  <%-- <input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
 								value='Edit Network'> --%>
 								<input type=button
@@ -129,7 +127,7 @@
 								value="${network.status}"></c:out></td>
 						<td width="15%" align="center"><input type=button
 							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}'"
-							value='Visualize'></td>
+							value='View Networks'></td>
 						<td width="15%" align="center"><input type=button
 							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignuser/${network.id}'"
 							value='Assign'></td>

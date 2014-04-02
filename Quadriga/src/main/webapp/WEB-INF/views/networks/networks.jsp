@@ -102,7 +102,7 @@
 											value="${network.status}"></c:out></td>
 									<td width="25%" align="center"><input type=button
 										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
-										value='Visualize'></td>
+										value='View Networks'></td>
 								</tr>
 							</c:forEach>
 						</tbody>
