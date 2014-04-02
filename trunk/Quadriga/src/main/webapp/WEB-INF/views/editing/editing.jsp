@@ -79,7 +79,7 @@
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
 								value='Edit Network'> --%>
 								<input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}/D3'"
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
 								value='Edit Network'>
 								<input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/versionhistory/${network.id}'"

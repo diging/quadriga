@@ -28,6 +28,15 @@
 		<put-attribute name="currentPage" value="home" />
 	</definition>
 	
+	<definition name="base.definition.rightnav" template="/WEB-INF/tiles/layouts/skeleton_right.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="navigation"
+			value="/WEB-INF/views/top-navs/loggedin-nav.jsp" />
+		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="right-navigation" value="" />
+		<put-attribute name="currentPage" value="home" />
+	</definition>
+	
 	<definition name="base.definition" template="/WEB-INF/tiles/layouts/skeleton.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="navigation"
@@ -702,16 +711,21 @@
 	<definition name="auth/home/profile/adduri" extends="base.definition">
 		<put-attribute name="content" value="/WEB-INF/views/adduri.jsp" />
 	</definition>
-	<definition name="auth/editing/editnetworks" extends="base.definition.editing">
-		<put-attribute name="title" value="Quadriga Networks Edit" />
-		<put-attribute name="content"
-			value="/WEB-INF/views/editing/editnetworks.jsp" />
-	</definition>
+
 	<definition name="auth/editing/editnetworksnew" extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Networks Edit" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/editingnetworksnew.jsp" />
 	</definition>
+	
+	<definition name="auth/editing/editnetworks" extends="base.definition.rightnav">
+		<put-attribute name="title" value="Quadriga Networks Edit" />
+		<put-attribute name="right-navigation" 
+		value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
+		<put-attribute name="content"
+			value="/WEB-INF/views/editing/editingnetworks.jsp" />
+	</definition>
+	
 	
 	<definition name="auth/editing/history" extends="base.definition">
 		<put-attribute name="title" value="Quadriga Networks Edit" />

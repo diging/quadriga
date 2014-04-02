@@ -15,8 +15,8 @@ function d3init(graph, networkId, path,type) {
 		alert("no network");
 	}
 	// Layout size
-	var width = 1000,
-	height = 900;
+	var width = 500,
+	height = 500;
 	var layout;
 	var color = d3.scale.category20();
 	// Preparing the force directed graph
@@ -407,6 +407,7 @@ function d3init(graph, networkId, path,type) {
 				}
 
 				function rightClick(d){
+					alert("rightclick");
 					var html = "";
 					// If the node type is Predicate
 					// We can annotate on whole relation or node
@@ -586,7 +587,8 @@ function d3init(graph, networkId, path,type) {
 				function display_annotations(d){
 					var type1= "node";
 					var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
-					var content = "<h3>Annotations</h3>";
+					var annotationDesc = "<h3>Annotations</h3>";
+					var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
 					// ajax Call to get annotation for a node.id
 					// Used to add the old annotation in to the popup view
 					$.ajax({
@@ -596,12 +598,14 @@ function d3init(graph, networkId, path,type) {
 						dataType: 'json',
 						success : function(data) {
 							var cnt = 0;
-							content += "<ol>";
+							
 						$.each(data.text, function(key,value){
-			                    content += ++cnt +'.<li>'+value.name+'</li>';  
+							annotationContent += ++cnt +'. '+value.name;
+							annotationContent += "\n";
 		                });
-							content += "</ol>"
-							$('#annot_details').html(content);
+						annotationContent += "</textarea>";
+							$('#annot_desc').html(annotationDesc);
+							$('#annot_details').html(annotationContent);
 						},
 						error: function() {
 							alert("error");
@@ -609,7 +613,7 @@ function d3init(graph, networkId, path,type) {
 						
 					});
 					
-					$('#annot_details').html(content);
+					
 					
 					
 				}
@@ -617,8 +621,10 @@ function d3init(graph, networkId, path,type) {
 				function conceptDescription(d){
 					lemma = d.name;
 					
-					var output = "<h5>Description of Node</h5>";
-					output+="<h5>"+lemma+"</h5>";
+					var descHeading = "<h5>Description of Node</h5>";
+					
+					var lemmaName="<h5> Node name : "+lemma+"</h5>";
+					var conceptDesc = "<textarea id="+'"conceptdescTextArea"'+" cols=40 rows=5 readonly>";
 					
 					// This is done to replace all dot (.) with dollar ($)
 					// Since our spring controller would ignore any data after dot (.)
@@ -633,8 +639,10 @@ function d3init(graph, networkId, path,type) {
 							//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
 							type : "GET",
 							success : function(data) {
-								output+="<h8>"+ "<I>" + data + "</I>"+"</h8>";
-								$('#concept_desc').html(output);
+								conceptDesc+=data + "</textarea>";
+								$('#lemma_name').html(lemmaName);
+								$('#desc_heading').html(descHeading);
+								$('#concept_desc').html(conceptDesc);
 							},
 							error: function() {
 								alert("error");

@@ -169,34 +169,7 @@ public class NetworkListController {
 		return "auth/networks/visualize";
 	}
 
-	/**
-	 * Get the network displayed  on to JSP by passing JSON string and allow to add annotations 
-	 * @author Sowjanya Ambati
-	 * @param networkId
-	 * @param model
-	 * @param principal
-	 * @return
-	 * @throws QuadrigaStorageException
-	 * @throws JAXBException
-	 */
-	@RequestMapping(value = "auth/editing/editnetworks/{networkId}", method = RequestMethod.GET)
-	public String visualizeAndEditNetworks(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
-		INetwork network = networkManager.getNetwork(networkId);
-		if(network==null){
-			return "auth/accessissue";
-		}
-		//INetworkJSon networkJSon = networkManager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
-		INetworkJSon networkJSon= networkManager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
-		String nwId = "\""+networkId+"\"";
-		model.addAttribute("networkid",nwId);
-		String json = null;
-		if(networkJSon!=null){
-			json = networkJSon.getJson();
-		}
-		model.addAttribute("jsonstring",json);
-
-		return "auth/editing/editnetworks";
-	}
+	
 
 
 	/**
@@ -211,7 +184,7 @@ public class NetworkListController {
 	 * @throws JSONException 
 	 * @throws QStoreStorageException 
 	 */
-	@RequestMapping(value = "auth/editing/editnetworks/{networkId}/D3", method = RequestMethod.GET)
+	@RequestMapping(value = "auth/editing/editnetworks/{networkId}", method = RequestMethod.GET)
 	public String visualizeAndEditNetworksByD3(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, JSONException, QStoreStorageException {
 		INetwork network = networkManager.getNetwork(networkId);
 		if(network==null){
@@ -230,7 +203,7 @@ public class NetworkListController {
 		}
 		model.addAttribute("jsonstring",json);
 		model.addAttribute("nodeList",nodeList);
-		return "auth/editing/editnetworksnew";
+		return "auth/editing/editnetworks";
 	}
 
 	/**
