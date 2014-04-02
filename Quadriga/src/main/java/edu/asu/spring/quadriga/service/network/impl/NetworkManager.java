@@ -108,7 +108,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Autowired
 	IRestVelocityFactory restVelocityFactory;
-	
+
 	@Autowired
 	private IJITNetworkManager jitNetworkManager;
 
@@ -216,7 +216,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	public List<INodeObjectWithStatement> parseEachStatement(String relationEventId,String statementType, String statementId, List<List<Object>> relationEventPredicateMapping, List<INodeObjectWithStatement> nodeObjectWithStatementList) throws JAXBException, QStoreStorageException{
-		ElementEventsType elementEventType =getElementEventTypeFromRelationEventTypeID(relationEventId);
+		ElementEventsType elementEventType =getElementEventTypeFromCreationEventTypeID(relationEventId);
 		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
 		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
 
@@ -255,8 +255,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ElementEventsType getElementEventTypeFromRelationEventTypeID(String relationEventId) throws JAXBException, QStoreStorageException{
-		String xml = getRelationEventXmlStringFromQstore(relationEventId);
+	public ElementEventsType getElementEventTypeFromCreationEventTypeID(String relationEventId) throws JAXBException, QStoreStorageException{
+		String xml = getCreationEventXmlStringFromQstore(relationEventId);
 		ElementEventsType elementEventType = null;
 		if(xml ==null){
 			throw new QStoreStorageException("Some issue retriving data from Qstore, Please check the logs related to Qstore");
@@ -347,7 +347,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		return predicateObject;
 	}
-	
+
 	/**
 	 * Making a cache of relation predicate objects for checking references
 	 * @param relationEventId
@@ -414,12 +414,12 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				if(object instanceof AppellationEventObject){
 					appellationEventObject=(AppellationEventObject)object;
 				}
-				
+
 			}
 			if(flag==1){
 				return appellationEventObject;
 			}
-			
+
 		}
 
 		return null;
@@ -583,7 +583,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 					nodeObject.setObjectRemoteLink(true);
 				}
 				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
-				
+
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
 
@@ -691,7 +691,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getRelationEventXmlStringFromQstore(String id)throws JAXBException{
+	public String getCreationEventXmlStringFromQstore(String id)throws JAXBException{
 		// Message converters for JAXb to understand the xml
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
@@ -987,7 +987,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 */
 	@Override
 	@Transactional
-	public List<INetworkNodeInfo> getNetworkOldVersionTopNodes(String networkId, int versionNo)throws QuadrigaStorageException{
+	public List<INetworkNodeInfo> getNetworkTopNodesByVersion(String networkId, int versionNo)throws QuadrigaStorageException{
 		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,versionNo);
 		if(networkNodeList != null)
 		{
@@ -1118,14 +1118,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		List<INetworkNodeInfo> oldNetworkTopNodesList = null;
 
 		try{
-			oldNetworkTopNodesList = getNetworkOldVersionTopNodes(networkId, Integer.parseInt(versionID));
+			oldNetworkTopNodesList = getNetworkTopNodesByVersion(networkId, Integer.parseInt(versionID));
 		}catch(QuadrigaStorageException e){
 			logger.error("DB Error while getting network top nodes",e);
 		}
 
 		if(jqueryType.equals(INetworkManager.D3JQUERY)){
 			networkJSon = d3NetworkManager.parseNetworkForD3Jquery(oldNetworkTopNodesList);
-			
+
 		}else if(jqueryType.equals(INetworkManager.JITJQUERY)){
 			String jitJSon = jitNetworkManager.parseNetworkForJITJquery(oldNetworkTopNodesList);
 			if(networkJSon ==null){
@@ -1476,7 +1476,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(latestVersion==null || latestVersion.size()==0||latestVersion.get(0)==null){
 			return -1;
 		}
-		
+
 		int version =latestVersion.get(0);
 		return version;
 	}
@@ -1497,7 +1497,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}catch(QuadrigaStorageException e){
 			logger.error("Error in fetching network of user: ", e);
 		}
-		
+
 		return networkList;
 	}
 
@@ -1518,25 +1518,66 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			return INetworkStatus.ASSIGNED_CODE;
 		if(status.equals(INetworkStatus.PENDING))
 			return INetworkStatus.PENDING_CODE;
-		
+
 		return INetworkStatus.UNKNOWN_CODE;
-		
+
 	}
-	
+
 	@Override
 	public List<INetwork> editNetworkStatusCode(List<INetwork> networkList){
-		
+
 		if(networkList==null){
 			return networkList;
 		}
-		
+
 		Iterator<INetwork> networkListIterator = networkList.iterator();
 		while(networkListIterator.hasNext()){
 			INetwork network = networkListIterator.next();
 			network.setStatus(getNetworkStatusCode(network.getStatus())+"");
 		}
-		
+
 		return networkList;
 	}
-	
+
+	@Override
+	@Transactional
+	public String getSourceReferenceURL(String networkId,int versionNo) throws QuadrigaStorageException, JAXBException, QStoreStorageException{
+		String sourceReferenceUrl = null;
+		List<INetworkNodeInfo> networkNodeInfoList = getNetworkTopNodesByVersion(networkId, versionNo);
+		if(networkNodeInfoList != null){
+			INetworkNodeInfo someNetworkNodeInfo = networkNodeInfoList.get(0);
+			String statementID = someNetworkNodeInfo.getId();
+			ElementEventsType elementEventsType = getElementEventTypeFromCreationEventTypeID(statementID);
+			return getSourceReferenceFromElementEventsType(elementEventsType);
+		}
+		return sourceReferenceUrl;
+	}
+
+
+	@Override
+	public String getSourceReferenceFromElementEventsType(ElementEventsType elementEventsType){
+		String sourceReferenceUrl = null;
+
+		List<CreationEvent> creationEventList =elementEventsType.getRelationEventOrAppellationEvent();
+		Iterator <CreationEvent> creationEventIterator= creationEventList.iterator();
+
+		while(creationEventIterator.hasNext()){
+			CreationEvent creationEvent = creationEventIterator.next();
+			// Check if event is Appellation event
+			if(creationEvent instanceof AppellationEventType)
+			{
+				AppellationEventType appellationEventType = (AppellationEventType) creationEvent;
+				return appellationEventType.getAppellationSourceReference();
+			}
+			// Check if event is Relation event
+			if(creationEvent instanceof RelationEventType){
+				RelationEventType relationEventType = (RelationEventType) creationEvent;
+
+				return relationEventType.getRelationEventSourceReference();
+			}
+		}
+
+		return sourceReferenceUrl;
+	}
+
 }

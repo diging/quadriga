@@ -53,6 +53,8 @@ extends CreationEvent
 	})
 	protected List<Object> relationCreatorOrRelation;
 
+
+
 	/**
 	 * Gets the value of the relationCreatorOrRelation property.
 	 * 
@@ -118,6 +120,18 @@ extends CreationEvent
 		return "";
 	}
 
+	
+	public String getRelationEventSourceReference(){
+		List<JAXBElement<?>> relationEventElementList = this.getIdOrCreatorOrCreationDate();
+		Iterator <JAXBElement<?>> relationEventElementIterator = relationEventElementList.iterator();
+		while(relationEventElementIterator.hasNext()){
+			JAXBElement<?> relationEventElement = (JAXBElement<?>) relationEventElementIterator.next();
+			if(relationEventElement.getName().toString().contains("source_reference")){
+				return relationEventElement.getValue().toString();
+			}
+		}
+		return null;
+	}
 	
 }
 
