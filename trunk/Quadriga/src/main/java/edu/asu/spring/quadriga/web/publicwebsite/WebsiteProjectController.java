@@ -117,7 +117,7 @@ public class WebsiteProjectController {
 	 * 
 	 * @param unixName 							unix name that is given to the project at the time of its creation
 	 * @param model								Model object to map values to view
-	 * @return 									returns a string to access the brwose networks page of the project external website
+	 * @return 									returns a string to access the browse networks page of the project external website
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}/browsenetworks", method=RequestMethod.GET)

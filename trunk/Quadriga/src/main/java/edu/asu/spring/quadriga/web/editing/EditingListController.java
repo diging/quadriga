@@ -243,6 +243,17 @@ public class EditingListController {
 		return "auth/editing/visualize";
 	}
 
+	
+	/**
+	 * List all the versions of a particular network 
+	 * Displays a jsp that contains a table with all the information about the different versions of the network
+	 * @author Sayalee Mehendale
+	 * @param networkId 						id of the particular network
+	 * @param model								Model object to map values to view
+	 * @param principal							current session user
+	 * @return									returns a string to access the page that displays the network history
+	 * @throws QuadrigaStorageException			Database storage exception thrown
+	 */
 	@RequestMapping(value = "auth/editing/versionhistory/{networkId}", method = RequestMethod.GET)
 	public String viewHistory(@PathVariable("networkId") String networkId, ModelMap model, Principal principal) throws QuadrigaStorageException {
 		INetwork network = networkManager.getNetwork(networkId);
