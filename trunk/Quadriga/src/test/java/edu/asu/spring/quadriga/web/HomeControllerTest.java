@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+
 
 public class HomeControllerTest {
 
@@ -37,7 +39,7 @@ public class HomeControllerTest {
 	}
 	
 	@Test
-	public void homeTest() {
+	public void homeTest() throws QuadrigaStorageException {
 		
 		assertEquals("auth/home", homeController.home(new Locale("us"), model, principal));
 		assertEquals(principal.getName(), ((ModelMap)model).get("username"));

@@ -2,31 +2,32 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script>
-	$(function() {
-		$("#menu").menu();
-	});
-</script>
+<link rel="stylesheet"
+	href="${pageContext.servletContext.contextPath}/resources/txt-layout/css/style.min.css" />
+<script
+	src="${pageContext.servletContext.contextPath}/resources/txt-layout/js/jstree.min.js"></script>
 
-<style>
-.ui-menu {
-	width: 150px;
-	font-size:13px;
-	position:relative;
-    z-index:9999;
-}
-</style>
+<script type="text/javascript">
+  $(function () {
+    $('#workbenchmenu').jstree();
+  });
+  </script>
 
-<section>
-
-<ul id="menu">
-	<li>
-		<h2 class="major">
-			<span>Toolbox</span>
-		</h2>
-	</li>
-	<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add Project</a></li>
-	<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteproject">Delete Project</a></li>
-	<li><a href="${pageContext.servletContext.contextPath}/auth/workbench/keys">Manage DSpace Login</a></li>
+<h2 class="major">
+			<span>Menu</span>
+</h2>
+<div id="workbenchmenu">
+<ul>
+    <li> Project
+    <ul>
+    <li data-jstree='{"icon":"http://jstree.com/tree.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">New</a></li>
+    <li><a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteproject">Delete</a></li>
+    </ul>
+    </li>
+    <li>DSpace
+    <ul>
+    <li><a href="${pageContext.servletContext.contextPath}/auth/workbench/keys">Manage</a></li>
+    </ul>
+    </li>
 </ul>
-</section>
+</div>

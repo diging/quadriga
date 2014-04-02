@@ -67,6 +67,15 @@ public class ModifyUserRolesController
 		//Get all Active Users
 		List<IUser> activeUserList = userManager.getAllActiveUsers();
 		
+		//remove the admin user from the active user list
+		for(IUser user : activeUserList)
+		{
+			if(user.getUserName().equals("admin"))
+			{
+				activeUserList.remove(user);
+			}
+		}
+		
 		userForm = quadrigaUserMananger.modifyUserQuadrigaRolesManager(activeUserList);
 		
 		//Get all Quadriga roles
