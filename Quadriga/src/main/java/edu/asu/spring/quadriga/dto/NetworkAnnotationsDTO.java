@@ -23,18 +23,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "tbl_network_annotations_new")
 @XmlRootElement
-//@NamedQueries({
-//    @NamedQuery(name = "NetworkAnnotationsDTO.findAll", query = "SELECT n FROM NetworkAnnotationsDTO n"),
-////    @NamedQuery(name = "NetworkAnnotationsDTO.findByNetworkid", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.networkid = :networkid"),
-////    @NamedQuery(name = "NetworkAnnotationsDTO.findByNodeid", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.nodeid = :nodeid"),
-////    @NamedQuery(name = "NetworkAnnotationsDTO.findByEdgeid", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.edgeid = :edgeid"),
-//    @NamedQuery(name = "NetworkAnnotationsDTO.findByAnnotationText", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.annotationText = :annotationtext"),
-//    @NamedQuery(name = "NetworkAnnotationsDTO.findByAnnotationId", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.annotationId = :annotationid"),
-//    @NamedQuery(name = "NetworkAnnotationsDTO.findByUsername", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.userName = :username"),
-//    @NamedQuery(name = "NetworkAnnotationsDTO.findByObjectType", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.objectType = :objecttype"),
-//    })
+@NamedQueries({
+    @NamedQuery(name = "NetworkAnnotationsDTO.findAll", query = "SELECT n FROM NetworkAnnotationsDTO n"),
+    @NamedQuery(name = "NetworkAnnotationsDTO.findByNetworkid", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.networkId = :networkid"),
+    @NamedQuery(name = "NetworkAnnotationsDTO.findByAnnotationText", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.annotationText = :annotationtext"),
+    @NamedQuery(name = "NetworkAnnotationsDTO.findByAnnotationId", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.annotationId = :annotationid"),
+    @NamedQuery(name = "NetworkAnnotationsDTO.findByUsername", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.userName = :username"),
+    @NamedQuery(name = "NetworkAnnotationsDTO.findByObjectType", query = "SELECT n FROM NetworkAnnotationsDTO n WHERE n.objectType = :objecttype"),
+    })
 public class NetworkAnnotationsDTO implements Serializable {
-
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -48,21 +45,16 @@ public class NetworkAnnotationsDTO implements Serializable {
     private String annotationText;
    
 	@Basic(optional = false)
+    @Column(name = "networkid")
+    private String networkId;
+	
+	@Basic(optional = false)
     @Column(name = "username")
     private String userName;
     
     @Basic(optional = false)
     @Column(name = "objecttype")
     private String objectType;
-    
-    @Basic(optional = false)    
-    @Column(name = "updatedby")
-    private String updatedBy;
-    
-    @Basic(optional = false)
-    @Column(name = "updateddate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateDdate;
     
     @Basic(optional = false)
     @Column(name = "createdby")
@@ -73,6 +65,15 @@ public class NetworkAnnotationsDTO implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
     
+    @Basic(optional = false)    
+    @Column(name = "updatedby")
+    private String updatedBy;
+    
+    @Basic(optional = false)
+    @Column(name = "updateddate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateDdate;
+    
     @JoinColumn(name = "networkid",referencedColumnName = "networkid",insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private NetworksDTO networksDTO;
@@ -81,37 +82,45 @@ public class NetworkAnnotationsDTO implements Serializable {
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nodes")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annotationNodes")
     private List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "edges")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annotationEdges")
     private List<NetworkEdgeAnnotationsDTO> networkEdgeAnnotationList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "relation")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annotationRelation")
     private List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList;
 
-	public String getAnnotationid() {
+	public String getAnnotationId() {
 		return annotationId;
 	}
 
-	public void setAnnotationid(String annotationid) {
-		this.annotationId = annotationid;
+	public void setAnnotationId(String annotationId) {
+		this.annotationId = annotationId;
 	}
 
-	public String getAnnotationtext() {
+	public String getAnnotationText() {
 		return annotationText;
 	}
 
-	public void setAnnotationtext(String annotationtext) {
-		this.annotationText = annotationtext;
+	public void setAnnotationText(String annotationText) {
+		this.annotationText = annotationText;
 	}
 
-	public String getUsername() {
+	public String getNetworkId() {
+		return networkId;
+	}
+
+	public void setNetworkId(String networkId) {
+		this.networkId = networkId;
+	}
+
+	public String getUserName() {
 		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.userName = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getObjectType() {
@@ -120,22 +129,6 @@ public class NetworkAnnotationsDTO implements Serializable {
 
 	public void setObjectType(String objectType) {
 		this.objectType = objectType;
-	}
-
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Date getUpdateDdate() {
-		return updateDdate;
-	}
-
-	public void setUpdateDdate(Date updateDdate) {
-		this.updateDdate = updateDdate;
 	}
 
 	public String getCreatedBy() {
@@ -152,6 +145,22 @@ public class NetworkAnnotationsDTO implements Serializable {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Date getUpdateDdate() {
+		return updateDdate;
+	}
+
+	public void setUpdateDdate(Date updateDdate) {
+		this.updateDdate = updateDdate;
 	}
 
 	public NetworksDTO getNetworksDTO() {
@@ -225,6 +234,5 @@ public class NetworkAnnotationsDTO implements Serializable {
 			return false;
 		return true;
 	}
-   
 
 }
