@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
   $(function () {
-    $('#workbenchmenu').jstree();
+   // $('#workbenchmenu').jstree();
   });
   </script>
 
@@ -18,16 +18,16 @@
 </h2>
 <div id="workbenchmenu">
 <ul>
-    <li> Project
-    <ul>
+  <!--    <li> Project
+    <ul> -->
     <li data-jstree='{"icon":"http://jstree.com/tree.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">New</a></li>
     <li><a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteproject">Delete</a></li>
-    </ul>
+ <!--     </ul>
     </li>
     <li>DSpace
-    <ul>
+    <ul> -->
     <li><a href="${pageContext.servletContext.contextPath}/auth/workbench/keys">Manage</a></li>
-    </ul>
-    </li>
+<!-- </ul>
+    </li>  -->    
 </ul>
 </div>
