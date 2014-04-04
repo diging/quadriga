@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.workbench;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +156,39 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Transactional
 	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
 		return dbConnect.getProjectDetailsByUnixName(unixName);
+		
+	}
+	
+	@Override
+	@Transactional
+	public boolean getPublicProjectWebsiteAccessibility(String unixName) throws QuadrigaStorageException{
+		IProject project = dbConnect.getProjectDetailsByUnixName(unixName);
+		String access = project.getProjectAccess().toString();
+		if(access.equals("PUBLIC")){
+			return true;
+		}
+		return false;
 	}
 
-
+	@Override
+	@Transactional
+	public boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) throws QuadrigaStorageException{
+		IProject project = dbConnect.getProjectDetailsByUnixName(unixName);
+		
+		List<ICollaborator> collaborators = project.getCollaborators();
+		List<String> collaboratorNames = new ArrayList<String>();
+		Iterator<ICollaborator> collabIterator = collaborators.iterator();
+		while(collabIterator.hasNext()){
+			String collab = collabIterator.next().getUserObj().getName();
+			collaboratorNames.add(collab);
+		}
+		String access = project.getProjectAccess().toString();
+		
+		if(access.equals("PRIVATE")){
+			if(project.getOwner().getName().equals(user) || collaboratorNames.contains(user)){
+				return true;
+			}
+		}
+		return false;
+	}
 }
