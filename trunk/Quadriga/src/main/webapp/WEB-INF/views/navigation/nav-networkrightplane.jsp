@@ -16,6 +16,7 @@ $(document).ready(function(){
 		background: #CEE7F5;
 		color: #000000;
 		overflow: auto;
+		left: 0;
 	}
 	
 	div.div_main {
@@ -31,7 +32,7 @@ $(document).ready(function(){
 	
 	caption,th,td {
 		font-family: 'Open Sans Condensed', sans-serif;
-		padding: .2em .8em;
+		padding: 0em 0em;
 		border: 0px solid #B0BCB0;
 	}
 	
@@ -43,57 +44,56 @@ $(document).ready(function(){
 	#textfilestyle
 	{
 		display: inline-block;
-		background: #CEE7F5;
-		padding: 0.75em 2em 0.75em 2em;
-		border-radius: 8px;
+		background: #DDEFF8;
+		padding: 0.75em 0.75em 0.75em 0em;
+		border-radius: 3px;
 		font-size: 0.85em;
 		color: #000000;
+		margin-left: -1.3em;
+		left: 0;
 	}
-	
-		#textfilestyle a
-		{
-			color: inherit;
-		}
+
 </style>
 
-<div id="textfilestyle">
+<section>
+	<h2 class="major"><span>Network details</span></h2>
+	<ul class="style3">
+		<li>
+			<article class="is-post-summary">
+				<h3><div id="dummy" align="left">TEXT FILE DETAILS</div></h3>
+				<div id="textfilestyle">
+					<table style="width: 300px">
 
+							<tr>
+								<td align="left">Name</td>
+								<td align="left">123</td>
+							</tr>
+							<tr>
+								<td align="left">Created date</td>
 
-	<table style="width: 300px">
-		<caption>Text File Details</caption>
+								<td align="left">123</td>
+							</tr>
+							<tr>
+								<td align="left">Created by</td>
 
-		<tbody>
-			<tr>
-				<td align="left">Name</td>
-				<td align="left">123</td>
-			</tr>
-			<tr>
-				<td align="left">Created date</td>
-
-				<td align="left">123</td>
-			</tr>
-			<tr>
-				<td align="left">Name</td>
-
-				<td align="left">123</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-
-<br />
-
-<div class="div_main">
-	<div align="left" id="desc_heading"></div>
-
-	<div align="left" id="lemma_name"></div>
-	<div id="concept_desc"></div>
-</div>
-
-
-<div class="div_main">
-	<div align="left" id="annot_desc"></div>
-	<div id="annot_details"></div>
-</div>
-
-<div id="inner-details"></div>
+								<td align="left">User123</td>
+							</tr>
+					</table>
+				</div>
+			</article>
+		</li>
+		<li>
+			<article class="is-post-summary">
+				<h3><div align="left" id="desc_heading"></div></h3>
+				<div align="left" id="lemma_name"></div>
+				<div id="concept_desc"></div>
+			</article>
+		</li>
+		<li>
+			<article class="is-post-summary">
+				<h3><div align="left" id="annot_desc"></div></h3>
+				<div id="annot_details"></div>
+			</article>
+		</li>
+	</ul>
+</section>

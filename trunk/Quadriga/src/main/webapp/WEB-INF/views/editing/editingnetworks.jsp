@@ -24,6 +24,12 @@ function changeLayout(json,networkid,path,type)
 {
 	d3init(json,networkid,path,type);
 }
+
+</script>
+<script>
+$("input[type=button]").button().click(function(event) {
+	event.preventDefault();
+});
 </script>
 
 
