@@ -75,7 +75,7 @@ public class WebsiteProjectController {
 		this.projectManager = projectManager;
 	}
 	
-	public IProject getProjectDetails(String name) throws QuadrigaStorageException{
+	private IProject getProjectDetails(String name) throws QuadrigaStorageException{
 		IProject project = projectManager.getProjectDetailsByUnixName(name);
 		return project;
 	}
@@ -93,18 +93,27 @@ public class WebsiteProjectController {
 	 * @throws QuadrigaStorageException				Database storage exception thrown
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
-	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException {
+	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException {
 		
-		
+		String user = principal.getName();
 		IProject project = getProjectDetails(unixName);
 		//IProject project = projectManager.getProjectDetailsByUnixName(unixName);
 		//String projectid = project.getInternalid();
+		
 		if(project!=null){
-			model.addAttribute("project", project);
-			return "sites/website";
-		} 
-		else
-			return "forbidden";
+			if(user == null && projectManager.getPublicProjectWebsiteAccessibility(unixName)){
+				model.addAttribute("project", project);
+				return "sites/website";
+			}
+			if(user!=null && (projectManager.getPrivateProjectWebsiteAccessibility(unixName, user) 
+								|| projectManager.getPublicProjectWebsiteAccessibility(unixName))){
+				model.addAttribute("project", project);
+				return "sites/website";
+			}
+		}
+
+		return "forbidden";
+		
 		
 	}
 	
@@ -121,7 +130,7 @@ public class WebsiteProjectController {
 	 * @throws QuadrigaStorageException			Database storage exception thrown
 	 */
 	@RequestMapping(value="sites/{ProjectUnixName}/browsenetworks", method=RequestMethod.GET)
-	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException{
+	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException{
 		System.out.println("browse");
 		IProject project = getProjectDetails(unixName);
 		String projectid = project.getInternalid();

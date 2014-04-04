@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
@@ -250,10 +252,12 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		query.setParameter("unixname", unixName);
 		ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
 		IProject project = null;
+		
 		if(projectDTO!=null){
 			project = projectDTOMapper.getProject(projectDTO);
 			project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
 		}
+		
 		return project;
 	}
 
