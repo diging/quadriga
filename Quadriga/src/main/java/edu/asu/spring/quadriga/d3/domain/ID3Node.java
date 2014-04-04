@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.d3.domain;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.service.network.domain.IStatementObject;
+
 /**
  * Interface to represent the node in a network.
  * This class is very specific to the D3 Jquery.
@@ -53,12 +55,12 @@ public interface ID3Node {
 	 * Getter of statement lists the {@link ID3Node} belongs to
 	 * @return				returns a {@link List} of Statement IDs
 	 */
-	public List<String> getStatementIdList();
+	public List<IStatementObject> getStatementIdList();
 
 	/**
 	 * Setter of statement lists the {@link ID3Node} belongs to
 	 * @param statementIdList			{@link List} of Statement IDs
 	 */
-	public void setStatementIdList(List<String> statementIdList);
+	public void setStatementIdList(List<IStatementObject> statementIdList);
 
 }

@@ -1,7 +1,10 @@
 package edu.asu.spring.quadriga.service.network.domain.impl;
 
+import java.util.List;
+
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
+import edu.asu.spring.quadriga.service.network.domain.IStatementObject;
 
 /**
  * Inner class to store {@link NodeObject} with statement ID it belongs to.
@@ -11,42 +14,51 @@ import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 public class NodeObjectWithStatement implements INodeObjectWithStatement {
 
 	private NodeObject nodeObject;
-	private String statementId;
+	private List<IStatementObject> statementObjectList;
 	
-	public NodeObjectWithStatement(NodeObject nodeObject,String statementId) {
+	public NodeObjectWithStatement(NodeObject nodeObject,List<IStatementObject> statementObjectList) {
 		this.nodeObject = nodeObject;
-		this.statementId = statementId;
+		this.statementObjectList = statementObjectList;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	*/
 	@Override
-	public INodeObjectWithStatement getNodeObjectWithStatementFactory(NodeObject nodeObject,String statementId) {
-		INodeObjectWithStatement nodeObjectWithStatement = new NodeObjectWithStatement(nodeObject,statementId);
+	public INodeObjectWithStatement getNodeObjectWithStatementFactory(NodeObject nodeObject,List<IStatementObject> statementObjectList) {
+		INodeObjectWithStatement nodeObjectWithStatement = new NodeObjectWithStatement(nodeObject,statementObjectList);
 		return nodeObjectWithStatement;
 	}
 
+	/**
+	 * {@inheritDoc}
+	*/
 	@Override
 	public NodeObject getNodeObject() {
 		return nodeObject;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.domain.impl.INodeObjectWithStatement#setNodeObject(edu.asu.spring.quadriga.domain.impl.networks.jsonobject.NodeObject)
-	 */
+
+	/**
+	 * {@inheritDoc}
+	*/
 	@Override
 	public void setNodeObject(NodeObject nodeObject) {
 		this.nodeObject = nodeObject;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.domain.impl.INodeObjectWithStatement#getStatementId()
-	 */
+
+	/**
+	 * {@inheritDoc}
+	*/
 	@Override
-	public String getStatementId() {
-		return statementId;
+	public List<IStatementObject> getStatementObjectList() {
+		return this.statementObjectList;
 	}
-	/* (non-Javadoc)
-	 * @see edu.asu.spring.quadriga.service.network.domain.impl.INodeObjectWithStatement#setStatementId(java.lang.String)
-	 */
+
+	/**
+	 * {@inheritDoc}
+	*/
 	@Override
-	public void setStatementId(String statementId) {
-		this.statementId = statementId;
+	public void setStatementId(List<IStatementObject> statementObjectList) {
+		this.statementObjectList = statementObjectList;
 	}	
 }

@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.d3.domain.impl;
 import java.util.List;
 
 import edu.asu.spring.quadriga.d3.domain.ID3Node;
+import edu.asu.spring.quadriga.service.network.domain.IStatementObject;
 /**
  * Implemenation of {@link ID3Node} domain interface.
  * Used specifically for D3 Jquery JSON building.
@@ -13,14 +14,14 @@ public class D3Node implements ID3Node {
 
 	private String nodeName;
 	private String nodeId;
-	private List<String> statementIdList;
+	private List<IStatementObject> statementIdList;
 	private int groupId;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<String> getStatementIdList() {
+	public List<IStatementObject> getStatementIdList() {
 		return statementIdList;
 	}
 
@@ -28,7 +29,7 @@ public class D3Node implements ID3Node {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setStatementIdList(List<String> statementIdList) {
+	public void setStatementIdList(List<IStatementObject> statementIdList) {
 		this.statementIdList = statementIdList;
 	}
 	

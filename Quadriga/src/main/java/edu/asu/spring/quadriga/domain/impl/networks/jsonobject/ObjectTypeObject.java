@@ -4,7 +4,17 @@ public class ObjectTypeObject {
 	Boolean isRelationEventObject;
 	RelationEventObject relationEventObject;
 	AppellationEventObject appellationEventObject;
+	String remoteStatementId;
 	boolean isRemoteLink = false;
+	
+	
+	public String getRemoteStatementId() {
+		return remoteStatementId;
+	}
+	public void setRemoteStatementId(String remoteStatementId) {
+		this.remoteStatementId = remoteStatementId;
+	}
+	
 	
 	public boolean isRemoteLink() {
 		return isRemoteLink;

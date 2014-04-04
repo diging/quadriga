@@ -440,7 +440,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(subjectRelationEventType == null){
 			subjectObject.setIsRelationEventObject(false);
 		}else{
-			AppellationEventObject temp = isRelationEventPresentInStack(subjectRelationEventType.getRelationEventId(subjectRelationEventType),relationEventPredicateMapping);
+			String tempRelationEventId = subjectRelationEventType.getRelationEventId(subjectRelationEventType);
+			AppellationEventObject temp = isRelationEventPresentInStack(tempRelationEventId, relationEventPredicateMapping);
 			/*
 			 * I am trying to fool subject as Appellation event
 			 * when we find a existing relation event been referred here
@@ -449,6 +450,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			if(temp != null){
 				subjectObject.setIsRelationEventObject(false);
 				subjectObject.setAppellationEventObject(temp);
+				subjectObject.setRemoteStatementId(tempRelationEventId);
 				subjectObject.setRemoteLink(true);
 			}else{
 				subjectObject.setIsRelationEventObject(true);
@@ -498,7 +500,8 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(objectRelationEventType == null){
 			objectTypeObject.setIsRelationEventObject(false);
 		}else{
-			AppellationEventObject temp = isRelationEventPresentInStack(objectRelationEventType.getRelationEventId(objectRelationEventType),relationEventPredicateMapping);
+			String tempRelationEventId = objectRelationEventType.getRelationEventId(objectRelationEventType);
+			AppellationEventObject temp = isRelationEventPresentInStack(tempRelationEventId,relationEventPredicateMapping);
 			/*
 			 * I am trying to fool subject as Appellation event
 			 * when we find a existing relation event been referred here
@@ -507,6 +510,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			if(temp != null){
 				objectTypeObject.setIsRelationEventObject(false);
 				objectTypeObject.setAppellationEventObject(temp);
+				objectTypeObject.setRemoteStatementId(tempRelationEventId);
 				objectTypeObject.setRemoteLink(true);
 			}else{
 				objectTypeObject.setIsRelationEventObject(true);
@@ -572,7 +576,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				if(objectTypeObject.isRemoteLink()){
 					nodeObject.setObjectRemoteLink(true);
 				}
-				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
+				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId,false));
 				logger.debug("Object Predicate node : "+objectTypeObject.getObjectRelationPredictionAppellation(objectTypeObject));
 			}else{
 
@@ -582,7 +586,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				if(objectTypeObject.isRemoteLink()){
 					nodeObject.setObjectRemoteLink(true);
 				}
-				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
+				nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId,false));
 
 				logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 			}
@@ -610,7 +614,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			if(objectTypeObject.isRemoteLink()){
 				nodeObject.setObjectRemoteLink(true);
 			}
-			nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId));
+			nodeObjectWithStatementList.add(nodeObjectWithStatementFactory.getNodeObjectWithStatementFactory(nodeObject,statementId,false));
 			logger.debug("Object Predicate : "+appellationEventObject1.getNode() );
 		}
 

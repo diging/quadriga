@@ -29,6 +29,7 @@ import edu.asu.spring.quadriga.service.network.ID3NetworkManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
+import edu.asu.spring.quadriga.service.network.domain.IStatementObject;
 import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
 import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
 
@@ -62,7 +63,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 	public INetworkJSon parseNetworkForD3Jquery(List<INetworkNodeInfo> networkTopNodesList){
 		D3Map d3Map = null;
 		if(networkTopNodesList!=null){
-			
+
 			if( networkTopNodesList.size()>0 ){
 				Iterator <INetworkNodeInfo> topNodeIterator = networkTopNodesList.iterator();
 				List<List<Object>> relationEventPredicateMapping = new ArrayList<List<Object>>();
@@ -195,9 +196,9 @@ public class D3NetworkManager implements ID3NetworkManager {
 				d3JsonString.append("\"statementid\":[\"");
 				for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
 					if(j == d3Node.getStatementIdList().size()-1){
-						d3JsonString.append(d3Node.getStatementIdList().get(j));
+						d3JsonString.append(d3Node.getStatementIdList().get(j).getStatementId());
 					}else{
-						d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+						d3JsonString.append(d3Node.getStatementIdList().get(j).getStatementId()+",");
 					}
 				}
 				d3JsonString.append("\"]");
@@ -217,9 +218,9 @@ public class D3NetworkManager implements ID3NetworkManager {
 			d3JsonString.append("\"statementid\":[\"");
 			for (int j = 0; j < d3Node.getStatementIdList().size(); j++) {
 				if(j == d3Node.getStatementIdList().size()-1){
-					d3JsonString.append(d3Node.getStatementIdList().get(j));
+					d3JsonString.append(d3Node.getStatementIdList().get(j).getStatementId());
 				}else{
-					d3JsonString.append(d3Node.getStatementIdList().get(j)+",");
+					d3JsonString.append(d3Node.getStatementIdList().get(j).getStatementId()+",");
 				}
 
 			}
@@ -240,7 +241,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 
 
 		NodeObject nodeObject = nodeObjectWithStatement.getNodeObject();
-		String statementId = nodeObjectWithStatement.getStatementId();
+		List<IStatementObject> statementIdList = nodeObjectWithStatement.getStatementObjectList();
 
 		String predicateNameId = nodeObject.getPredicateId();
 		String subjectNodeId=nodeObject.getSubjectId();
@@ -267,13 +268,13 @@ public class D3NetworkManager implements ID3NetworkManager {
 		}
 
 		// Adding Subject into node list
-		d3Map = addSubjectToNodeList(d3Map, subjectNodeId, nodeObject,statementId);
+		d3Map = addSubjectToNodeList(d3Map, subjectNodeId, nodeObject,statementIdList);
 
 		// Adding Object into node list
-		d3Map = addObjectToNodeList(d3Map, objectNodeId, nodeObject,statementId);
+		d3Map = addObjectToNodeList(d3Map, objectNodeId, nodeObject,statementIdList);
 
 		// Adding Object into node list
-		d3Map = addPredicateToNodeList(d3Map, predicateNameId,predicateName, nodeObject,statementId);
+		d3Map = addPredicateToNodeList(d3Map, predicateNameId,predicateName, nodeObject,statementIdList);
 
 		// Add Links for D3 JSon
 		d3Map = addD3Links(d3Map, predicateNameId, subjectNodeId, objectNodeId);
@@ -324,7 +325,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.								
 	 */
 	private D3Map addPredicateToNodeList(D3Map d3Map, String predicateId, String predicateName,
-			NodeObject nodeObject, String statementId) {
+			NodeObject nodeObject, List<IStatementObject> statementIDList) {
 
 		Map<String,Integer> d3NodeIdMap = d3Map.getD3NodeIdMap();
 		List<ID3Node> d3NodeList = d3Map.getD3NodeList();
@@ -333,9 +334,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 		// Adding Predicate into node list
 		if(!d3NodeIdMap.containsKey(predicateId)){
 			ID3Node d3NodePredicate = d3NodeFactory.createD3NodeObject();
-			List<String> stmtList = d3NodePredicate.getStatementIdList();
-			stmtList.add(statementId);
-			d3NodePredicate.setStatementIdList(stmtList);
+			d3NodePredicate.setStatementIdList(statementIDList);
 			d3NodePredicate.setNodeName(predicateName);
 			d3NodePredicate.setNodeId(predicateId);
 			d3NodePredicate.setGroupId(ID3Constant.RELATION_EVENT_PREDICATE_TERM);
@@ -345,16 +344,41 @@ public class D3NetworkManager implements ID3NetworkManager {
 		}else{
 			int index= d3NodeIdMap.get(predicateId);
 			ID3Node d3NodePredicate = d3NodeList.get(index);
-			List<String> stmtList = d3NodePredicate.getStatementIdList();
-			boolean flag=false;
-			for(String stmt: stmtList){
-				if(stmt.equals(statementId)){
-					flag=true;
+			d3NodePredicate.setGroupId(ID3Constant.RELATION_EVENT_PREDICATE_TERM);
+			List<IStatementObject> predicateStatmentList = d3NodePredicate.getStatementIdList();
+			for(int i=0;i<statementIDList.size();i++){
+				IStatementObject statementObject = statementIDList.get(i);
+				if(!statementObject.isReference()){
+					statementIDList.remove(i);
 				}
 			}
-			if(!flag){
-				stmtList.add(statementId);
+			if(statementIDList.size()>0){
+
+				for(int i=0;i<predicateStatmentList.size();i++){
+					IStatementObject statementObject = predicateStatmentList.get(i);
+					if(!statementObject.isReference()){
+						statementIDList.remove(i);
+					}
+				}
+				if(predicateStatmentList.size()==0){
+					predicateStatmentList = statementIDList;
+				}else{
+					for(int i=0;i<statementIDList.size();i++){
+						
+						boolean flag=false;
+						for(int j=0;j<predicateStatmentList.size();j++){
+							String tempStatementId = predicateStatmentList.get(j).getStatementId();
+							if(tempStatementId.equals(statementIDList.get(i).getStatementId())){
+								flag=true;
+							}
+						}
+						if(!flag){
+							predicateStatmentList.add(statementIDList.get(i));
+						}
+					}
+				}
 			}
+			d3NodePredicate.setStatementIdList(predicateStatmentList);
 		}
 
 		d3Map.setD3NodeIdMap(d3NodeIdMap);
@@ -374,7 +398,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
 	 */	
 	private D3Map addObjectToNodeList(D3Map d3Map, String objectNodeId,
-			NodeObject nodeObject, String statementID) {
+			NodeObject nodeObject, List<IStatementObject> statementIDList) {
 		Map<String,Integer> d3NodeIdMap = d3Map.getD3NodeIdMap();
 		List<ID3Node> d3NodeList = d3Map.getD3NodeList();
 		int nodeIndex = d3Map.getIndex();
@@ -410,7 +434,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 	 * @return													Returns the {@link D3Map} object which cache {@link List} of {@link ID3Node} and {@link List} of {@link ID3Link}.
 	 */
 	private D3Map addSubjectToNodeList(D3Map d3Map, String subjectNodeId,
-			NodeObject nodeObject, String statementID) {
+			NodeObject nodeObject, List<IStatementObject> statementIDList) {
 
 		Map<String,Integer> d3NodeIdMap = d3Map.getD3NodeIdMap();
 		List<ID3Node> d3NodeList = d3Map.getD3NodeList();

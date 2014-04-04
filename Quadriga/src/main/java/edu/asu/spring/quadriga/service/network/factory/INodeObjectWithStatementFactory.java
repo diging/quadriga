@@ -6,6 +6,6 @@ import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 public interface INodeObjectWithStatementFactory {
 
 	public abstract INodeObjectWithStatement getNodeObjectWithStatementFactory(
-			NodeObject nodeObject, String statementId);
+			NodeObject nodeObject,String statementId,boolean isReference);
 
 }
