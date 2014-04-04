@@ -92,7 +92,7 @@
 								<!-- /Content -->
 							</div>
 						</div>
-						<div class="3u">
+						<div class="4u">
 							<div class="sidebar">
 								<!-- Sidebar -->
 								<!-- Recent Posts -->

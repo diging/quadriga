@@ -272,6 +272,7 @@
 		padding-left: 1.5em;
 	}
 
+
 	ul.style2
 	{
 	}
@@ -329,6 +330,71 @@
 			background: url('images/project.png');
 		}
 
+	ul.style3
+	{
+	}
+		ul.style3 textarea
+		{
+			position: relative;
+			display: block;
+			padding-left: 0px;
+			margin-left: 0em;
+			margin-top: 0.8em;
+		}
+		
+		
+		
+		ul.style3 > li
+		{
+			border-top: solid 2px #e7eae8;
+			padding-top: 2.35em;
+			margin-top: 2.35em;
+		}
+		
+		ul.style3 > li:first-child
+		{
+			border-top: 0;
+			padding-top: 0;
+			margin-top: 0;
+		}
+		
+		ul.style3 li
+		{
+			position: relative;
+			display: block;
+			padding-left: 0px;
+			margin-left: 0em;
+			margin-top: 0.8em;
+		}
+
+			ul.style3 li a
+			{
+				color: inherit;
+				outline: 0;
+			}
+			
+			ul.style3 li a:hover
+			{
+				color: inherit;
+				text-decoration:underline;
+			}
+
+		ul.style3 li:first-child
+		{
+			
+		}
+		
+		ul.style3 li:before
+		{
+			content: '';
+			display: block;
+			position: absolute;
+			width: 36px;
+			height: 27px;
+			left: 0;
+			top: 30px;
+			margin-top: -15px;
+		}
 	ul.noStyle {}
 
 	ul.contact
