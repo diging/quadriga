@@ -45,11 +45,11 @@ $(document).ready(function(){
 	{
 		display: inline-block;
 		background: #DDEFF8;
-		padding: 0.75em 0.75em 0.75em 0em;
-		border-radius: 3px;
+		padding: 0.75em 0.75em 0.75em 0.75em;
+		border-radius: 8px;
 		font-size: 0.85em;
 		color: #000000;
-		margin-left: -1.3em;
+		margin-left: -4.3em;
 		left: 0;
 	}
 

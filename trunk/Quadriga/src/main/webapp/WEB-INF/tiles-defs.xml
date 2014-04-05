@@ -719,6 +719,7 @@
 	</definition>
 	
 	<definition name="auth/editing/editnetworks" extends="base.definition.rightnav">
+		<put-attribute name="currentPage" value="networks" />
 		<put-attribute name="title" value="Quadriga Networks Edit" />
 		<put-attribute name="right-navigation" 
 		value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
