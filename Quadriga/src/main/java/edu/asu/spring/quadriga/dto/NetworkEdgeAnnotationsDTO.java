@@ -67,7 +67,7 @@ public class NetworkEdgeAnnotationsDTO implements Serializable {
     @Basic(optional = false)
     @Column(name = "updateddate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updateDdate;
+    private Date updatedDate;
 	
 	@JoinColumn(name = "edgeannotationid", referencedColumnName = "annotationid",insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -146,12 +146,12 @@ public class NetworkEdgeAnnotationsDTO implements Serializable {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getUpdateDdate() {
-		return updateDdate;
+	public Date getUpdatedDate() {
+		return updatedDate;
 	}
 
-	public void setUpdateDdate(Date updateDdate) {
-		this.updateDdate = updateDdate;
+	public void setUpdatedDate(Date updateDdate) {
+		this.updatedDate = updateDdate;
 	}
 
 	public NetworkAnnotationsDTO getAnnotationEdges() {

@@ -22,7 +22,9 @@ import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
+import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
@@ -692,15 +694,16 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<NetworksAnnotationsDTO> getAnnotationByEdgeId(String id,
+	public List<NetworksAnnotationsDTO> getAnnotationByEdgeId(String sourceId,String targetId,
 			String userId, String networkId) throws QuadrigaStorageException {
 		try {
 			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworksAnnotationsDTO>();
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							"from NetworksAnnotationsDTO n where n.edgeid = :edgeid and username = :username and networkid =:networkid");
-			query.setParameter("edgeid", id);
+							"from NetworkAnnotationsDTO n where n.networkEdgeAnnotationList.sourceid = :sourceid and n.networkEdgeAnnotationList.targetid = :targetid and username = :username and networkid =:networkid");
+			query.setParameter("sourceid", sourceId);
+			query.setParameter("targetid", targetId);
 			query.setParameter("username", userId);
 			query.setParameter("networkid", networkId);
 
@@ -919,6 +922,25 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			logger.error("Error in fetching network of user: ", e);
 			throw new QuadrigaStorageException(e);
 		}
+	}
+
+	@Override
+	public String addAnnotationToEdge( String networkId,
+			String sourceId, String targetId, String sourceName,
+			String targetName, String annotationText, String userId,
+			String objectType, String targetType) throws QuadrigaStorageException {
+		NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO = networkMapper
+				.getNetworkEdgeAnnotationDTO(networkId, sourceId,targetId,sourceName,targetName, annotationText,
+						"ANNOT_" + generateUniqueID(), userId, objectType,targetType);
+
+		try {
+			sessionFactory.getCurrentSession().save(networkEdgeAnnotationsDTO);
+			return "";
+		} catch (Exception e) {
+			logger.error("Error in assigning network to user: ", e);
+			throw new QuadrigaStorageException(e);
+		}
+		
 	}
 
 	

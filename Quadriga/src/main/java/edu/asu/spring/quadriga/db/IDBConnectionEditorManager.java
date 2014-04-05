@@ -93,7 +93,7 @@ public interface IDBConnectionEditorManager {
 	 * @return							Returns a {@link List} of {@link NetworksAnnotationsDTO} 
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<NetworksAnnotationsDTO> getAnnotationByEdgeId(String id,String userid,String networkId) throws QuadrigaStorageException;
+	public abstract List<NetworksAnnotationsDTO> getAnnotationByEdgeId(String sourceId,String targetId,String userid,String networkId) throws QuadrigaStorageException;
 	
 	/**
 	 * This method should help in updating annotation of node based on the annotation ID.
@@ -115,7 +115,7 @@ public interface IDBConnectionEditorManager {
 	 */
 	public abstract List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException;
 
-	/**
+	/** 
 	 * This method should get all the {@link INetwork} which is being assigned  of the other users based on {@link List} of status of the network.
 	 * 
 	 * @param user											{@link IUser} object
@@ -132,8 +132,11 @@ public interface IDBConnectionEditorManager {
 	 * @return												Returns {@link List} of {@link NetworksAnnotationsDTO}
 	 * @throws QuadrigaStorageException						Throws Storage exception when there is a issue while getting any data from database
 	 */
-	List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
+	public abstract List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
 			String networkId) throws QuadrigaStorageException;
+             
+	public abstract String addAnnotationToEdge(String networkId, String sourceId, String targetId,
+			String sourceName, String targetName, String annotationText,String userId, String objectType, String targetType) throws QuadrigaStorageException;
 
 
 }

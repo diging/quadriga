@@ -146,13 +146,14 @@ public class EditingNetworkAnnotationsController {
 	public @ResponseBody String getAnnotationForToEdge(HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
-			@RequestParam("edgeid") String edgeId, 
+			@RequestParam("sourceid") String sourceId, 
+			@RequestParam("targetid") String targetId,
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String annotation = "";
 
 		try {
-			List<NetworksAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotationOfEdge(edgeId,user.getUserName(),networkId);
+			List<NetworksAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotationOfEdge(sourceId,targetId,user.getUserName(),networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){
@@ -207,7 +208,42 @@ public class EditingNetworkAnnotationsController {
 		return annotation;
 	}
 
+	/**
+	 * This method saves the annotation entered to the node
+	 * @param request
+	 * @param response
+	 * @param networkId
+	 * @param annotationText
+	 * @param id
+	 * @param objectType
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@RequestMapping(value = "/auth/editing/saveAnnotationToEdge/{networkId}", method = RequestMethod.POST)
+	public @ResponseBody String saveAnnotationtoToEdge(HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam("annotationtype") String annotationType,
+			@PathVariable("networkId") String networkId,
+			@RequestParam("annotText") String annotationText,
+			@RequestParam("sourceid") String sourceId,
+			@RequestParam("targetid") String targetId, 
+			@RequestParam("sourcename") String sourceName,
+			@RequestParam("targetename") String targetName,
+			@RequestParam("objecttype") String objectType, 
+			@RequestParam("targettype") String targetType,
+			Principal principal) throws QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		try {
+			editingNetworkAnnotationManager.addAnnotationToEdge(annotationType,networkId, sourceId, targetId,sourceName,
+					targetName,annotationText, user.getUserName(),objectType,targetType);
 
+		} catch (QuadrigaStorageException e) {
+			logger.error("Some issue in the DB", e);
+		}
+
+		return "{ success: true; }";
+	}
 
 }
 
