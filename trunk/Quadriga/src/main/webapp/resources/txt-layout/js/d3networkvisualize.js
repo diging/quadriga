@@ -87,8 +87,8 @@ function d3init(graph, networkId, path,type) {
 	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
 	.attr("marker-end", "url(#arrow)")
 	.on("click", function(d){
-		display_annotations_of_edge(d);
-		add_annotationstolink();
+		//display_annotations_of_edge(d.source,d.target);
+		add_annotationstolink(d);
 		//d3.event.preventDefault();
 	})
 	.on("mouseout", fadeLinks(1));
@@ -672,7 +672,7 @@ function d3init(graph, networkId, path,type) {
 		// Creating popup html content to facilitate adding annotation
 		var html1 = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
 		"<form id='annot_form' action=" + path
-		+ "/auth/editing/saveAnnotation/";
+		+ "/auth/editing/saveAnnotationToEdge/";
 		html1 += networkId + " method='POST' >";
 		html1 += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
 		html1 += "<input type='button' id='annot_submit' value='submit'>";
@@ -684,20 +684,24 @@ function d3init(graph, networkId, path,type) {
 
 		// ajax Call to get annotation for a node.id
 		// Used to add the old annotation in to the popup view
-		display_annotations(d);
-		event.preventDefault();
+		//display_annotations(d);
+		//event.preventDefault();
 
 
 		// Saves the relation annotation to DB
 		$('#annot_submit').click(function(event) {
 			var annottext = $('#'+text1ID+'').val();  
-			var edgeid = d.source+d.target;
-			var type = "";
-			var annotationtype = "edge";
+			var sourceid = d.source.id;
+			var sourcename = d.source.name;
+			var targetid = d.target.id;
+			var targetname = d.target.name;
+			var targettype = d.target.group;
+			var objecttype = "edge";
+			
 			$.ajax({
 				url : $('#annot_form').attr("action"),
 				type : "POST",
-				data :"annotationtype="+annotationtype+"&nodename=''&nodeid=''&annotText="+annottext+"&type="+type+"&edgeid="+edgeid,
+				data :"sourceid="+sourceid+"&sourcename="+sourcename+"&targetid="+targetid+"&targetname="+targetname+"&targettype="+targettype+"&objecttype="+objecttype,
 				success : function() {
 					$('#'+popupId+'').dialog('close');
 					displayAllAnnotations();
@@ -724,8 +728,8 @@ function d3init(graph, networkId, path,type) {
 		});
 	}
 
-	function display_annotations_of_edge(d){
-		var type1= "node";
+	function display_annotations_of_edge(source,target){
+		var objecttypetype= "edge";
 		var getAnnotationUrl = path+"/auth/editing/getAnnotationOfEdge/"+networkId;
 		var content = "<h3>Annotations</h3>";
 		// ajax Call to get annotation for a node.id
@@ -733,7 +737,7 @@ function d3init(graph, networkId, path,type) {
 		$.ajax({
 			url : getAnnotationUrl,
 			type : "GET",
-			data: "nodeid="+d.id+"&type="+type1,
+			data: "sourceid="+source.id+"targetid="+target.id+"&type="+objecttypetype,
 			dataType: 'json',
 			success : function(data) {
 				var cnt = 0;

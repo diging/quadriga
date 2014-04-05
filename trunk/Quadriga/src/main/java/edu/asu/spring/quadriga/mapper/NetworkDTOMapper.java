@@ -16,8 +16,10 @@ import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Network;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
+import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
+import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
@@ -310,7 +312,7 @@ public class NetworkDTOMapper {
 		
 		return networkAnnotationsDTO;
 	}
-	
+
 	/**
 	 * This method will create list of networks from the input parameters.
 	 * 
@@ -330,5 +332,36 @@ public class NetworkDTOMapper {
 			}
 		}
 		return networkList;
+	}
+	
+	/**
+	 * This method will create {@link NetworksAnnotationsDTO} from the input parameters.
+	 * 
+	 * @param annotationType    The type of annotation to edge/node.
+	 * @param networkid			The id of the network
+	 * @param nodeId			The id of the node
+	 * @param edgeId			The id of the edge
+	 * @param nodeName			Node name
+	 * @param annotationtext	The annotation text
+	 * @param annotationid		The annotation id
+	 * @param username			The username of the user to be associated with annotation
+	 * @param objecttype		The type of object
+	 * @return A {@link NetworksAnnotationsDTO} object will be created from the input parameters; 
+	 */
+	public NetworkEdgeAnnotationsDTO getNetworkEdgeAnnotationDTO(String networkId,String sourceId,String targetId, String sourceName,String targetName, String annotationText, String annotationId, String userName,String objectType,String targetNodeType)
+	{
+		NetworkAnnotationsDTO networkAnnotationsDTO = new NetworkAnnotationsDTO(annotationId, annotationText, networkId, userName, objectType, userName, new Date(), userName, new Date());
+		NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO = new NetworkEdgeAnnotationsDTO();
+		networkEdgeAnnotationsDTO.setSourceId(sourceId);
+		networkEdgeAnnotationsDTO.setTargetId(targetId); 
+		networkEdgeAnnotationsDTO.setSourceName(sourceName);
+		networkEdgeAnnotationsDTO.setTargetName(targetName);
+		networkEdgeAnnotationsDTO.setTargetNodeType(targetNodeType);
+		networkEdgeAnnotationsDTO.setCreatedBy(userName);
+		networkEdgeAnnotationsDTO.setCreatedDate(new Date());
+		networkEdgeAnnotationsDTO.setUpdatedBy(userName);
+		networkEdgeAnnotationsDTO.setUpdatedDate(new Date());
+		networkEdgeAnnotationsDTO.setAnnotationEdges(networkAnnotationsDTO);
+		return networkEdgeAnnotationsDTO;
 	}
 }

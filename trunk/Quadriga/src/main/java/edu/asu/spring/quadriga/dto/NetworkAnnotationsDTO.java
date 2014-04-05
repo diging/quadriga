@@ -72,7 +72,7 @@ public class NetworkAnnotationsDTO implements Serializable {
     @Basic(optional = false)
     @Column(name = "updateddate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updateDdate;
+    private Date updatedDate;
     
     @JoinColumn(name = "networkid",referencedColumnName = "networkid",insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -155,12 +155,12 @@ public class NetworkAnnotationsDTO implements Serializable {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getUpdateDdate() {
-		return updateDdate;
+	public Date getUpdatedDate() {
+		return updatedDate;
 	}
 
-	public void setUpdateDdate(Date updateDdate) {
-		this.updateDdate = updateDdate;
+	public void setUpdatedDate(Date updateDdate) {
+		this.updatedDate = updateDdate;
 	}
 
 	public NetworksDTO getNetworksDTO() {
@@ -207,6 +207,22 @@ public class NetworkAnnotationsDTO implements Serializable {
 	public void setNetworkRelationAnnotationList(
 			List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList) {
 		this.networkRelationAnnotationList = networkRelationAnnotationList;
+	}
+
+	public NetworkAnnotationsDTO(String annotationId, String annotationText,
+			String networkId, String userName, String objectType,
+			String createdBy, Date createdDate, String updatedBy,
+			Date updatedDate) {
+		
+		this.annotationId = annotationId;
+		this.annotationText = annotationText;
+		this.networkId = networkId;
+		this.userName = userName;
+		this.objectType = objectType;
+		this.createdBy = createdBy;
+		this.createdDate = createdDate;
+		this.updatedBy = updatedBy;
+		this.updatedDate = updatedDate;
 	}
 
 	@Override
