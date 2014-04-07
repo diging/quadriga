@@ -5,8 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +19,11 @@ import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
+import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 
@@ -38,7 +39,8 @@ public class NetworkDTOMapper {
 	@Autowired
 	private INetworkNodeInfoFactory networkNodeInfoFactory;
 	
-	private static final Logger logger = LoggerFactory.getLogger(NetworkDTOMapper.class);
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Autowired
 	private NetworkFactory networkFactory;
@@ -363,5 +365,81 @@ public class NetworkDTOMapper {
 		networkEdgeAnnotationsDTO.setUpdatedDate(new Date());
 		networkEdgeAnnotationsDTO.setAnnotationEdges(networkAnnotationsDTO);
 		return networkEdgeAnnotationsDTO;
+	}
+	
+	/**
+	 * This method will create {@link NetworkRelationAnnotationsDTO} from the input parameters
+	 * @param networkId          The id of the network
+	 * @param annotationId       The unique annotation id
+	 * @param annotationText     The annotated text
+	 * @param objectType         The type of annotation
+	 * @param userName           The user name to which the annotation is associated
+	 * @param predicateId        The id of predicate
+	 * @param predicateName      The name of predicate
+	 * @param subjectId          The id of subject
+	 * @param subjectName        The name of subject
+	 * @param objectId           The id of object
+	 * @param objectName         The name of object
+	 * @return {@link NetworkRelationAnnotationsDTO} object will create from the input parameters.
+	 * @throws QuadrigaStorageException 
+	 * @author kiran batna
+	 */
+	public NetworkRelationAnnotationsDTO getNetworkRelationAnnationDTO(NetworkAnnotationsDTO networkAnnotationsDTO,String userName,
+			String predicateId,String predicateName,String subjectId,String subjectName,
+			String objectId, String objectName ) throws QuadrigaStorageException
+	{
+		Date date = new Date();
+		NetworkRelationAnnotationsDTO networkRelationAnnotationsDTO = new NetworkRelationAnnotationsDTO();
+		networkRelationAnnotationsDTO.setObjectId(objectId);
+		networkRelationAnnotationsDTO.setObjectName(objectName);
+		networkRelationAnnotationsDTO.setPredicateId(predicateId);
+		networkRelationAnnotationsDTO.setPredicateName(predicateName);
+		networkRelationAnnotationsDTO.setSubjectId(subjectId);
+		networkRelationAnnotationsDTO.setSubjectName(subjectName);
+		networkRelationAnnotationsDTO.setRealtionAnnotationId(networkAnnotationsDTO.getAnnotationId());
+		networkRelationAnnotationsDTO.setAnnotationRelation(networkAnnotationsDTO);
+		networkRelationAnnotationsDTO.setCreatedBy(userName);
+		networkRelationAnnotationsDTO.setCreatedDate(date);
+		networkRelationAnnotationsDTO.setUpdatedBy(userName);
+		networkRelationAnnotationsDTO.setUpdateDdate(date);
+		return networkRelationAnnotationsDTO;
+	}
+	
+	/**
+	 * This method will create {@link NetworkAnnotationsDTO} from the given input parameters
+	 * @param networkId       The id of network
+	 * @param annotationId    The annotation id
+	 * @param annotationText  Annotated text given by editor 
+	 * @param objectType      The type of annotated object
+	 * @param userName        Name of user who annotated the object.
+	 * @return                {@link NetworkAnnotationsDTO} object create from the input parameters
+	 * @throws QuadrigaStorageException
+	 * @author kiran batna
+	 */
+	public NetworkAnnotationsDTO getNetworkAnnotationDTO(String networkId,String annotationId,String annotationText,String objectType,String userName) 
+			throws QuadrigaStorageException
+	{
+		NetworksDTO network = (NetworksDTO) sessionFactory.getCurrentSession().get(NetworksDTO.class, networkId);
+		if(network == null)
+		{
+			throw new QuadrigaStorageException();
+		}
+		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
+		if(user == null)
+		{
+			throw new QuadrigaStorageException();
+		}
+		Date date = new Date();
+		NetworkAnnotationsDTO networkAnnotationsDTO = new NetworkAnnotationsDTO();
+		networkAnnotationsDTO.setAnnotationId(annotationId);
+		networkAnnotationsDTO.setAnnotationText(annotationText);
+		networkAnnotationsDTO.setNetworkId(networkId);
+		networkAnnotationsDTO.setNetworksDTO(network);
+		networkAnnotationsDTO.setQuadrigaUserDTO(user);
+		networkAnnotationsDTO.setCreatedBy(userName);
+		networkAnnotationsDTO.setCreatedDate(date);
+		networkAnnotationsDTO.setUpdatedBy(userName);
+		networkAnnotationsDTO.setUpdatedDate(date);
+		return networkAnnotationsDTO;
 	}
 }

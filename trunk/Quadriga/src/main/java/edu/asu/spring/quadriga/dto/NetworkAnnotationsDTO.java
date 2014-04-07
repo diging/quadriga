@@ -91,6 +91,11 @@ public class NetworkAnnotationsDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "annotationRelation")
     private List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList;
 
+    public NetworkAnnotationsDTO()
+    {
+    	
+    }
+    
 	public String getAnnotationId() {
 		return annotationId;
 	}

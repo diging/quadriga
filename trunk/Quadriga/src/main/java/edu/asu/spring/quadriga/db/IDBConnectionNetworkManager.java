@@ -131,4 +131,5 @@ public interface IDBConnectionNetworkManager {
 	
 	List<INetwork> getNetworkOfOwner(IUser user) 
 			throws QuadrigaStorageException;
+
 }
