@@ -990,4 +990,36 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 	
+	/**
+	 * This method retrieves the annotations associated with the relation.
+	 * @param subjectId     Id of the subject in the annotated relation
+	 * @param objectId      Id of the object in the annotated relation.
+	 * @param predicateId   Id of the predicate in the annotated relation.
+	 * @param userName      name of the editor.
+	 * @return List<NetworkRelationAnnotationsDTO> List of {@link NetworkRelationAnnotations} objects containing the annotations for the given relation 
+	 * @throws QuadrigaStorageException Any database exception is redirected to the custom defined database error exception message.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String subjectId,String objectId, String predicateId,String userName) throws QuadrigaStorageException
+	{
+		List<NetworkRelationAnnotationsDTO> networkRelationAnnotations = null;
+		try
+		{
+		String queryString = "from NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid AND n.objectId = :objectid AND n.predicateId = :predicateid";
+		Query query = sessionFactory.getCurrentSession().createQuery(queryString);
+		query.setParameter("subjectid", subjectId);
+		query.setParameter("objectid", objectId);
+		query.setParameter("predicateId", predicateId);
+		networkRelationAnnotations = query.list();
+		}
+		catch(Exception ex)
+		{
+			throw new QuadrigaStorageException();
+		}
+		
+		return networkRelationAnnotations;
+		
+	}
+	
 }

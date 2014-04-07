@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findAll", query = "SELECT n FROM NetworkRelationAnnotationsDTO n"),
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findBySubjectId", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid"),
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findBySubjectName", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.subjectName = :subjectname"),
-    @NamedQuery(name = "NetworkRelationAnnotationsDTO.findByObjectId", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.objectId = :objectname"),
+    @NamedQuery(name = "NetworkRelationAnnotationsDTO.findByObjectId", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.objectId = :objectid"),
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findByObjectName", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.objectName = :objectname"),
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findByPredicateId", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.predicateId = :predicateid"),
     @NamedQuery(name = "NetworkRelationAnnotationsDTO.findByPredicateName", query = "SELECT n FROM NetworkRelationAnnotationsDTO n WHERE n.predicateName = :predicatename"),
