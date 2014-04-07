@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
+import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
+import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -32,10 +35,15 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public List<NetworksAnnotationsDTO> getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException{
-		List<NetworksAnnotationsDTO> list = null;
-		list = dbConnectionEditManager.getAnnotationByNodeType(type,id , userid,networkId);
-		return list;
+	public List<NetworkAnnotationsDTO> getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException{
+		List<NetworkNodeAnnotationsDTO> networkNodeAnnotationsDTOList = null;
+		networkNodeAnnotationsDTOList = dbConnectionEditManager.getAnnotationByNodeType(type, id, userid, networkId);
+		List<NetworkAnnotationsDTO> networkAnnotationsDTOs = new ArrayList<NetworkAnnotationsDTO>();
+		for(NetworkNodeAnnotationsDTO networkEdgeAnnotationsDTO : networkNodeAnnotationsDTOList){
+			NetworkAnnotationsDTO annotationsDTO = networkEdgeAnnotationsDTO.getAnnotationNodes();
+			networkAnnotationsDTOs.add(annotationsDTO);
+		}
+		return networkAnnotationsDTOs;
 	}
 	
 	/**
@@ -54,10 +62,10 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	
 	@Override
 	@Transactional
-	public String addAnnotationToNetwork(String annotationType,String networkId, String nodeId,String edgeId,String nodeName,
+	public String addAnnotationToNetwork(String networkId, String nodeId,String nodeName,
 			String annotationText, String userId,String objectType)
 			throws QuadrigaStorageException{
-		String msg = dbConnectionEditManager.addAnnotationToNetwork(annotationType,networkId, nodeId,edgeId,nodeName,
+		String msg = dbConnectionEditManager.addAnnotationToNetwork(networkId, nodeId,nodeName,
 				annotationText, userId,objectType);
 		return msg;
 	}
@@ -117,11 +125,16 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public List<NetworksAnnotationsDTO> getAnnotationOfEdge(String sourceId,String targetId,
+	public List<NetworkAnnotationsDTO> getAnnotationOfEdge(String sourceId,String targetId,
 			String userId, String networkId) throws QuadrigaStorageException {
-		List<NetworksAnnotationsDTO> list = null;
-		list = dbConnectionEditManager.getAnnotationByEdgeId(sourceId ,targetId, userId,networkId);
-		return list;
+		List<NetworkEdgeAnnotationsDTO> networkEdgeAnnotationsDTOList = null;
+		networkEdgeAnnotationsDTOList = dbConnectionEditManager.getAnnotationByEdgeId(sourceId ,targetId, userId,networkId);
+		List<NetworkAnnotationsDTO> networkAnnotationsDTOs = new ArrayList<NetworkAnnotationsDTO>();
+		for(NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO : networkEdgeAnnotationsDTOList){
+			NetworkAnnotationsDTO annotationsDTO = networkEdgeAnnotationsDTO.getAnnotationEdges();
+			networkAnnotationsDTOs.add(annotationsDTO);
+		}
+		return networkAnnotationsDTOs;
 	}
 	/**
 	 * This method adds annotation to the node of a network
@@ -139,7 +152,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	
 	@Override
 	@Transactional
-	public String addAnnotationToEdge(String annotationType,String networkId, String sourceId,String targetId,String sourceName,
+	public String addAnnotationToEdge(String networkId, String sourceId,String targetId,String sourceName,
 			String targetName,String annotationText, String userId,String objectType,String targetType)
 			throws QuadrigaStorageException{
 		String msg = dbConnectionEditManager.addAnnotationToEdge(networkId, sourceId,targetId,sourceName,
@@ -169,6 +182,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 * @throws QuadrigaStorageException  Any database exception.
 	 */
 	@Override
+	@Transactional
 	public void addAnnotationToRelation(String annotationText,String networkId,String predicateId,String predicateName,String subjectId,String subjectName,
 			String objectId, String objectName,String userName,String annotedObjectType) throws QuadrigaStorageException
 	{
@@ -188,6 +202,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 * @throws QuadrigaStorageException Any database exception is redirected to the custom defined database error exception message.
 	 */
 	@Override
+	@Transactional
 	public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String subjectId,String objectId, String predicateId,String userName) throws QuadrigaStorageException
 	{
 		List<NetworkRelationAnnotationsDTO> networkRelationAnnotations = null;
