@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
+import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
@@ -433,7 +434,9 @@ public class NetworkDTOMapper {
 		NetworkAnnotationsDTO networkAnnotationsDTO = new NetworkAnnotationsDTO();
 		networkAnnotationsDTO.setAnnotationId(annotationId);
 		networkAnnotationsDTO.setAnnotationText(annotationText);
+		networkAnnotationsDTO.setObjectType(objectType);
 		networkAnnotationsDTO.setNetworkId(networkId);
+		networkAnnotationsDTO.setUserName(userName);
 		networkAnnotationsDTO.setNetworksDTO(network);
 		networkAnnotationsDTO.setQuadrigaUserDTO(user);
 		networkAnnotationsDTO.setCreatedBy(userName);
@@ -441,5 +444,21 @@ public class NetworkDTOMapper {
 		networkAnnotationsDTO.setUpdatedBy(userName);
 		networkAnnotationsDTO.setUpdatedDate(date);
 		return networkAnnotationsDTO;
+	}
+	
+	public NetworkNodeAnnotationsDTO getNetworkNodeAnnationDTO(NetworkAnnotationsDTO networkAnnotationsDTO,String userName,
+			String nodeId,String nodeName) throws QuadrigaStorageException
+	{
+		Date date = new Date();
+		NetworkNodeAnnotationsDTO networkNodeAnnotationsDTO = new NetworkNodeAnnotationsDTO();
+		networkNodeAnnotationsDTO.setNodeId(nodeId);
+		networkNodeAnnotationsDTO.setNodeName(nodeName);
+		networkNodeAnnotationsDTO.setNodeAnnotationId(networkAnnotationsDTO.getAnnotationId());
+		networkNodeAnnotationsDTO.setAnnotationNodes(networkAnnotationsDTO);
+		networkNodeAnnotationsDTO.setCreatedBy(userName);
+		networkNodeAnnotationsDTO.setCreatedDate(date);
+		networkNodeAnnotationsDTO.setUpdatedBy(userName);
+		networkNodeAnnotationsDTO.setUpdateDdate(date);
+		return networkNodeAnnotationsDTO;
 	}
 }

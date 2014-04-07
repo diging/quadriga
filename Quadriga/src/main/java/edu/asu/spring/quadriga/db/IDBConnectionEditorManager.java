@@ -4,6 +4,9 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
+import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
+import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -72,8 +75,8 @@ public interface IDBConnectionEditorManager {
 	 * @return							Returns the success/failure status of the method
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract String addAnnotationToNetwork(String annotatonType,String networkId, String nodeId,String edgeId,String nodeName,
-			String annotationText, String userId,String objectType)
+	public abstract String addAnnotationToNetwork(String networkId,String nodeId,String nodeName,
+			String annotationText, String objectType,String userId)
 			throws QuadrigaStorageException;
 	
 	/**
@@ -84,7 +87,7 @@ public interface IDBConnectionEditorManager {
 	 * @return												Returns a {@link List} of {@link NetworksAnnotationsDTO} 
 	 * @throws QuadrigaStorageException						Throws Storage exception when there is a issue while getting any data from database
 	 */
-	public abstract List<NetworksAnnotationsDTO> getAnnotationByNodeType(String type, String id,String userid,String networkId) throws QuadrigaStorageException;
+	public abstract List<NetworkNodeAnnotationsDTO> getAnnotationByNodeType(String type, String id,String userid,String networkId) throws QuadrigaStorageException;
 	
 	/**
 	 * This methods should helps in getting all annotations of the network based on the edge Id.
@@ -94,7 +97,7 @@ public interface IDBConnectionEditorManager {
 	 * @return							Returns a {@link List} of {@link NetworksAnnotationsDTO} 
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<NetworksAnnotationsDTO> getAnnotationByEdgeId(String sourceId,String targetId,String userid,String networkId) throws QuadrigaStorageException;
+	public abstract List<NetworkEdgeAnnotationsDTO> getAnnotationByEdgeId(String sourceId,String targetId,String userid,String networkId) throws QuadrigaStorageException;
 	
 	/**
 	 * This method should help in updating annotation of node based on the annotation ID.

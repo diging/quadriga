@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -63,17 +64,15 @@ public class EditingNetworkAnnotationsController {
 	@RequestMapping(value = "/auth/editing/saveAnnotation/{networkId}", method = RequestMethod.POST)
 	public @ResponseBody String saveAnnotationtoToNode(HttpServletRequest request,
 			HttpServletResponse response,
-			@RequestParam("annotationtype") String annotationType,
 			@PathVariable("networkId") String networkId,
 			@RequestParam("annotText") String annotationText,
 			@RequestParam("nodeid") String nodeId,
-			@RequestParam("edgeid") String edgeId, 
 			@RequestParam("nodename") String nodeName,
-			@RequestParam("type") String objectType, 
+			@RequestParam("objecttype") String objectType, 
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		try {
-			editingNetworkAnnotationManager.addAnnotationToNetwork(annotationType,networkId, nodeId, edgeId,nodeName,
+			editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, nodeId, nodeName,
 					annotationText, user.getUserName(),objectType);
 
 		} catch (QuadrigaStorageException e) {
@@ -101,21 +100,20 @@ public class EditingNetworkAnnotationsController {
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
 			@RequestParam("nodeid") String nodeId,
-			@RequestParam("type") String type, 
-			//@RequestParam("objecttype") String objectType, 
+			@RequestParam("objecttype") String objectType, 
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String annotation = "";
 
 		try {
-			List<NetworksAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotation(type,nodeId,user.getUserName(),networkId);
+			List<NetworkAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotation(objectType,nodeId,user.getUserName(),networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){
 
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
-					j.put("name", resultList.get(i).getAnnotationtext());
+					j.put("name", resultList.get(i).getAnnotationText());
 					ja.put(j);
 				}
 				j1.put("text", ja);
@@ -153,14 +151,14 @@ public class EditingNetworkAnnotationsController {
 		String annotation = "";
 
 		try {
-			List<NetworksAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotationOfEdge(sourceId,targetId,user.getUserName(),networkId);
+			List<NetworkAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotationOfEdge(sourceId,targetId,user.getUserName(),networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){
 
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
-					j.put("name", resultList.get(i).getAnnotationtext());
+					j.put("name", resultList.get(i).getAnnotationText());
 					ja.put(j);
 				}
 				j1.put("text", ja);
@@ -223,7 +221,6 @@ public class EditingNetworkAnnotationsController {
 	@RequestMapping(value = "/auth/editing/saveAnnotationToEdge/{networkId}", method = RequestMethod.POST)
 	public @ResponseBody String saveAnnotationtoToEdge(HttpServletRequest request,
 			HttpServletResponse response,
-			@RequestParam("annotationtype") String annotationType,
 			@PathVariable("networkId") String networkId,
 			@RequestParam("annotText") String annotationText,
 			@RequestParam("sourceid") String sourceId,
@@ -235,7 +232,7 @@ public class EditingNetworkAnnotationsController {
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		try {
-			editingNetworkAnnotationManager.addAnnotationToEdge(annotationType,networkId, sourceId, targetId,sourceName,
+			editingNetworkAnnotationManager.addAnnotationToEdge(networkId, sourceId, targetId,sourceName,
 					targetName,annotationText, user.getUserName(),objectType,targetType);
 
 		} catch (QuadrigaStorageException e) {
