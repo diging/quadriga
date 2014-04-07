@@ -138,5 +138,25 @@ public interface IDBConnectionEditorManager {
 	public abstract String addAnnotationToEdge(String networkId, String sourceId, String targetId,
 			String sourceName, String targetName, String annotationText,String userId, String objectType, String targetType) throws QuadrigaStorageException;
 
+	/**
+	 * This method adds an annotation to a relation in network.
+	 * @param annotationText     The annotated text
+	 * @param networkId          Id of the network for which the relations are annotated.
+	 * @param predicateId        Id of predicate of a relation
+	 * @param predicateName      Name of predicate of a relation
+	 * @param subjectId          Id of subject of a relation
+	 * @param subjectName        Name of subject of a relation
+	 * @param objectId           Id of object of a relation
+	 * @param objectName         Name of object of a relation
+	 * @param userName           Name of user who annotated the relation
+	 * @param annotedObjectType  The type of object that is annotated by editor.
+	 * @throws QuadrigaStorageException  Any database exception
+	 * @author kiran batna
+	 */
+	public abstract void addAnnotationToRelation(String annotationText, String networkId,
+			String predicateId, String predicateName, String subjectId, String subjectName, String objectId,
+			String objectName, String userName, String annotedObjectType)
+			throws QuadrigaStorageException;
+
 
 }

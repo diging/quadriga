@@ -31,5 +31,24 @@ public interface IEditingNetworkAnnotationManager {
 	public abstract List<NetworksAnnotationsDTO> getAnnotationOfEdge(String sourceId,
 			String targetId, String userId, String networkId)
 			throws QuadrigaStorageException;
+	
+	/**
+	 * This method calls {@link NetworkManagerDAO} to add an annotation to a relation in network.
+	 * @param annotationText       Annotated text submitted by editor.
+	 * @param networkId            Id of the network for which the relation contains.
+	 * @param predicateId          Id of the predicate in the annotated relation.
+	 * @param predicateName        Name of the predicate in the annotated relation
+	 * @param subjectId            Id of subject in the annotated relation
+	 * @param subjectName          Name of the subject in the annotated relation.
+	 * @param objectId             Id of object in the annotated relation.
+	 * @param objectName           Name of the object in the annotated relation.
+	 * @param userName             Name of the editor who annotated the relation.
+	 * @param annotedObjectType    Type of annotated object. Here it is relation type.
+	 * @throws QuadrigaStorageException  Any database exception.
+	 */
+	public abstract void addAnnotationToRelation(String annotationText, String networkId,
+			String predicateId, String predicateName, String subjectId, String subjectName, String objectId,
+			String objectName, String userName, String annotedObjectType)
+			throws QuadrigaStorageException;
 
 }

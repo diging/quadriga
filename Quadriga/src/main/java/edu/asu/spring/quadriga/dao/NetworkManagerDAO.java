@@ -25,6 +25,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
+import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
@@ -939,6 +940,51 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		} catch (Exception e) {
 			logger.error("Error in assigning network to user: ", e);
 			throw new QuadrigaStorageException(e);
+		}
+		
+	}
+	
+	/**
+	 * This method adds an annotation to a relation in network.
+	 * @param annotationText     The annotated text
+	 * @param networkId          Id of the network for which the relations are annotated.
+	 * @param predicateId        Id of predicate of a relation
+	 * @param predicateName      Name of predicate of a relation
+	 * @param subjectId          Id of subject of a relation
+	 * @param subjectName        Name of subject of a relation
+	 * @param objectId           Id of object of a relation
+	 * @param objectName         Name of object of a relation
+	 * @param userName           Name of user who annotated the relation
+	 * @param annotedObjectType  The type of object that is annotated by editor.
+	 * @throws QuadrigaStorageException  Any database exception
+	 * @author kiran batna
+	 */
+	@Override
+	public void addAnnotationToRelation(String annotationText,String networkId,String predicateId,String predicateName,String subjectId,String subjectName,
+			String objectId, String objectName,String userName,String annotedObjectType) throws QuadrigaStorageException
+	{
+		try
+		{
+			List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList = null;
+			String annotationId = "ANNOT_" + generateUniqueID();
+			NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId, annotationText, annotedObjectType, userName);
+			NetworkRelationAnnotationsDTO networkRelationAnnotation = networkMapper.getNetworkRelationAnnationDTO(networkAnnotation, userName, predicateId, predicateName, subjectId, subjectName, objectId, objectName);
+			networkRelationAnnotationList = networkAnnotation.getNetworkRelationAnnotationList();
+			if(networkRelationAnnotationList == null)
+			{
+				networkRelationAnnotationList = new ArrayList<NetworkRelationAnnotationsDTO>();
+			}
+			networkRelationAnnotationList.add(networkRelationAnnotation);
+			networkAnnotation.setNetworkRelationAnnotationList(networkRelationAnnotationList);
+			
+			sessionFactory.getCurrentSession().save(networkAnnotation);
+			sessionFactory.getCurrentSession().save(networkRelationAnnotation);
+			
+		}
+		catch(Exception e)
+		{
+			logger.error("Error in annotating relation :",e);
+			throw new QuadrigaStorageException();
 		}
 		
 	}
