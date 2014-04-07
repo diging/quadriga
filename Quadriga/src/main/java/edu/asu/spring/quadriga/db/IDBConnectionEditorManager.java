@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
@@ -157,6 +158,18 @@ public interface IDBConnectionEditorManager {
 			String predicateId, String predicateName, String subjectId, String subjectName, String objectId,
 			String objectName, String userName, String annotedObjectType)
 			throws QuadrigaStorageException;
+
+	/**
+	 * This method retrieves the annotations associated with the relation.
+	 * @param subjectId     Id of the subject in the annotated relation
+	 * @param objectId      Id of the object in the annotated relation.
+	 * @param predicateId   Id of the predicate in the annotated relation.
+	 * @param userName      name of the editor.
+	 * @return List<NetworkRelationAnnotationsDTO> List of {@link NetworkRelationAnnotations} objects containing the annotations for the given relation 
+	 * @throws QuadrigaStorageException Any database exception is redirected to the custom defined database error exception message.
+	 */
+	public abstract List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String subjectId, String objectId,
+			String predicateId, String userName) throws QuadrigaStorageException;
 
 
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -173,6 +174,25 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	{
 		dbConnectionEditManager.addAnnotationToRelation(annotationText, networkId, predicateId, predicateName, subjectId, subjectName, objectId, objectName, userName, annotedObjectType);
 		
+	}
+	
+	
+	/**
+	 * This method calls the {@link NetworkManagerDAO} layer method  to retrieve
+	 * the annotations associated with the relation.
+	 * @param subjectId     Id of the subject in the annotated relation
+	 * @param objectId      Id of the object in the annotated relation.
+	 * @param predicateId   Id of the predicate in the annotated relation.
+	 * @param userName      name of the editor.
+	 * @return List<NetworkRelationAnnotationsDTO> List of {@link NetworkRelationAnnotations} objects containing the annotations for the given relation 
+	 * @throws QuadrigaStorageException Any database exception is redirected to the custom defined database error exception message.
+	 */
+	@Override
+	public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String subjectId,String objectId, String predicateId,String userName) throws QuadrigaStorageException
+	{
+		List<NetworkRelationAnnotationsDTO> networkRelationAnnotations = null;
+		networkRelationAnnotations = dbConnectionEditManager.getAnnotationToRelation(subjectId, objectId, predicateId, userName);
+		return networkRelationAnnotations;
 	}
 	
 	
