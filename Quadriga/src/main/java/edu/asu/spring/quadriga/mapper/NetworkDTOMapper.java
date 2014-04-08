@@ -446,6 +446,15 @@ public class NetworkDTOMapper {
 		return networkAnnotationsDTO;
 	}
 	
+	/**
+	 * This method will create {@link NetworkNodeAnnotationsDTO} from the input parameters
+	 * @param  networkAnnotationsDTO    {@link NetworkAnnotationsDTO} object containing the annotated text for the node in the network.
+	 * @param  userName                 logged in user name
+	 * @param  nodeId                   Id of the node for which the annotation is created.
+	 * @param  nodeName                 Name of the node for which the annotation is created.
+	 * @return {@link NetworkNodeAnnotationsDTO} object will create from the input parameters.
+	 * @throws Sowjanya Ambati
+	 */
 	public NetworkNodeAnnotationsDTO getNetworkNodeAnnationDTO(NetworkAnnotationsDTO networkAnnotationsDTO,String userName,
 			String nodeId,String nodeName) throws QuadrigaStorageException
 	{
@@ -460,5 +469,23 @@ public class NetworkDTOMapper {
 		networkNodeAnnotationsDTO.setUpdatedBy(userName);
 		networkNodeAnnotationsDTO.setUpdateDdate(date);
 		return networkNodeAnnotationsDTO;
+	}
+	
+	/**
+	 * This method returns the {@link NetworkAnnotationsDTO} objects containing the annotations for the given network relations.
+	 * @param networkRelationAnnotations {@link NetworkRelationAnnotationsDTO} objects containing the relations which are annotated in the network.
+	 * @return List<NetworkAnnotationsDTO> {@link NetworkAnnotationsDTO} objects for the annotated relations.
+	 * @author kiran batna
+	 */
+	public List<NetworkAnnotationsDTO> getMappedRelationAnnotations(List<NetworkRelationAnnotationsDTO> networkRelationAnnotations)
+	{
+		List<NetworkAnnotationsDTO> networkAnnotations = new ArrayList<NetworkAnnotationsDTO>();
+		for(NetworkRelationAnnotationsDTO relationAnnotation : networkRelationAnnotations)
+		{
+			NetworkAnnotationsDTO annotation = relationAnnotation.getAnnotationRelation();
+			networkAnnotations.add(annotation);
+		}
+		
+		return networkAnnotations;
 	}
 }

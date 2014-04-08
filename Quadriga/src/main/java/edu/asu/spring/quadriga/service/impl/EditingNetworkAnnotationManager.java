@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 
 @Service
@@ -23,6 +24,9 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 
 	@Autowired
 	IDBConnectionEditorManager dbConnectionEditManager;
+	
+	@Autowired
+	private NetworkDTOMapper networkMapper;
 	
 
 	/**
@@ -203,11 +207,13 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String subjectId,String objectId, String predicateId,String userName) throws QuadrigaStorageException
+	public List<NetworkAnnotationsDTO> getAnnotationToRelation(String networkId,String subjectId,String objectId, String predicateId,String userName) throws QuadrigaStorageException
 	{
+		List<NetworkAnnotationsDTO> networkAnnotations = null;
 		List<NetworkRelationAnnotationsDTO> networkRelationAnnotations = null;
-		networkRelationAnnotations = dbConnectionEditManager.getAnnotationToRelation(subjectId, objectId, predicateId, userName);
-		return networkRelationAnnotations;
+		networkRelationAnnotations = dbConnectionEditManager.getAnnotationToRelation(networkId,subjectId, objectId, predicateId, userName);
+		networkAnnotations = networkMapper.getMappedRelationAnnotations(networkRelationAnnotations);
+		return networkAnnotations;
 	}
 	
 	
