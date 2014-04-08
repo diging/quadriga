@@ -109,7 +109,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 			n.setAnnotationText(dto.getAnnotationtext());
 			n.setNodeId(dto.getNodeid());
 			n.setNodeName(dto.getNodename());
-			n.setUserId(dto.getCreatedby());
+			n.setUserName(dto.getCreatedby());
 			if(networkAnnoList==null){
 				networkAnnoList=new ArrayList<NetworkAnnotation>();
 			}

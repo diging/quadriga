@@ -8,10 +8,6 @@ package edu.asu.spring.quadriga.domain;
  */
 public interface INetworkAnnotation {
 
-	public abstract String getNodeName();
-	
-	public abstract void setNodeName(String nodeName);
-	
 	public abstract String getAnnotationId();
 	
 	public abstract void setAnnotationId(String annotationId);
@@ -24,7 +20,7 @@ public interface INetworkAnnotation {
 	
 	public abstract void setNetworkId(String networkId);
 	
-	public abstract String getUserId();
+	public abstract String getUserName();
 	
-	public abstract void setUserId(String userId);
+	public abstract void setUserName(String userName);
 }
