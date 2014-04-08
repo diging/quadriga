@@ -2,9 +2,9 @@ package edu.asu.spring.quadriga.service;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
-import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -63,7 +63,7 @@ public interface IEditingNetworkAnnotationManager {
 	 * @return List<NetworkRelationAnnotationsDTO> List of {@link NetworkRelationAnnotations} objects containing the annotations for the given relation 
 	 * @throws QuadrigaStorageException Any database exception is redirected to the custom defined database error exception message.
 	 */
-	public abstract List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String subjectId, String objectId,
+	public abstract List<NetworkAnnotationsDTO> getAnnotationToRelation(String networkId,String subjectId, String objectId,
 			String predicateId, String userName) throws QuadrigaStorageException;
 
 }

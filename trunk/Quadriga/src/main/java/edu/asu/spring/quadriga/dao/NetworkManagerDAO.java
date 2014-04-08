@@ -717,6 +717,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<NetworkEdgeAnnotationsDTO> getAnnotationByEdgeId(String sourceId,String targetId,
 			String userId, String networkId) throws QuadrigaStorageException {
@@ -1011,6 +1012,18 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		
 	}
 
+	/**
+	 * This method adds annotation to the given node in a network.
+	 * @param annotationText     Annotation text for the given node in the network.
+	 * @param networkId          Id of the network.
+	 * @param nodeId             Id of the node which is annotated.
+	 * @param nodeName           Name of the node which is annotated.
+	 * @param userName           Logged in user name.
+	 * @param annotedObjectType  Type of the object(node/relation)
+	 * @throws QuadrigaStorageException Any database exception is redirected to custom defined exception.
+	 * @author Sowjanya Amabati
+	 */
+	@Override
 	public void addAnnotationToNode(String annotationText,String networkId,String nodeId,String nodeName,String userName,String annotedObjectType) throws QuadrigaStorageException
 	{
 		try
@@ -1040,6 +1053,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 	/**
 	 * This method retrieves the annotations associated with the relation.
+	 * @param networkId     Id of the network for which the relation belongs.
 	 * @param subjectId     Id of the subject in the annotated relation
 	 * @param objectId      Id of the object in the annotated relation.
 	 * @param predicateId   Id of the predicate in the annotated relation.
@@ -1049,16 +1063,17 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String subjectId,String objectId, String predicateId,String userName) throws QuadrigaStorageException
+	public List<NetworkRelationAnnotationsDTO> getAnnotationToRelation(String networkId,String subjectId,String objectId, String predicateId,String userName) throws QuadrigaStorageException
 	{
 		List<NetworkRelationAnnotationsDTO> networkRelationAnnotations = null;
 		try
 		{
-		String queryString = "from NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid AND n.objectId = :objectid AND n.predicateId = :predicateid";
+		String queryString = "from NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid AND n.objectId = :objectid AND n.predicateId = :predicateid AND n.annotationRelation.networkId =:networkid";
 		Query query = sessionFactory.getCurrentSession().createQuery(queryString);
 		query.setParameter("subjectid", subjectId);
 		query.setParameter("objectid", objectId);
-		query.setParameter("predicateId", predicateId);
+		query.setParameter("predicateid", predicateId);
+		query.setParameter("networkid",networkId);
 		networkRelationAnnotations = query.list();
 		}
 		catch(Exception ex)
