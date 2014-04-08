@@ -95,20 +95,32 @@ public class WebsiteProjectController {
 	@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
 	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException {
 		
-		String user = principal.getName();
+		String user = null;
+		if(principal!=null){
+			user = principal.getName();
+		}
+		
 		IProject project = getProjectDetails(unixName);
 		//IProject project = projectManager.getProjectDetailsByUnixName(unixName);
 		//String projectid = project.getInternalid();
 		
 		if(project!=null){
-			if(user == null && projectManager.getPublicProjectWebsiteAccessibility(unixName)){
-				model.addAttribute("project", project);
-				return "sites/website";
+			if(user == null){
+				if(projectManager.getPublicProjectWebsiteAccessibility(unixName)){
+					model.addAttribute("project", project);
+					return "sites/website";
+				}
+				else
+					return "forbidden";
 			}
-			if(user!=null && (projectManager.getPrivateProjectWebsiteAccessibility(unixName, user) 
-								|| projectManager.getPublicProjectWebsiteAccessibility(unixName))){
-				model.addAttribute("project", project);
-				return "sites/website";
+			if(user!=null){
+				if(projectManager.getPrivateProjectWebsiteAccessibility(unixName, user)
+						|| projectManager.getPublicProjectWebsiteAccessibility(unixName)){
+					model.addAttribute("project", project);
+					return "sites/website";
+				}
+				else
+					return "forbidden";
 			}
 		}
 
