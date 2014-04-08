@@ -52,16 +52,15 @@ $("input[type=button]").button().click(function(event) {
 <!-- <div id="dspace_metadata"></div>  -->
 
 <div class="ui-widget">
-	<label for="tags"></label> <input id="tags">
-	<button>Search</button>
-</div>
-
+  <label for="tags">Tags: </label>
+  <input id="tags">  <button>Search</button>
+</div> 
 <br/>
 
 
 <div id="chart"></div>
 
-
+<div id="inner-details"></div>
 <div id="allannot_details"></div>
 
 
