@@ -16,7 +16,7 @@ public class NetworkAnnotation implements INetworkAnnotation {
 	private String annotationId;
 	private String annotationText;
 	private String networkId;
-	private String userId;
+	private String userName;
 	public String getNodeName() {
 		return nodeName;
 	}
@@ -41,11 +41,11 @@ public class NetworkAnnotation implements INetworkAnnotation {
 	public void setNetworkId(String networkId) {
 		this.networkId = networkId;
 	}
-	public String getUserId() {
-		return userId;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserName(String userId) {
+		this.userName = userId;
 	}
 	public String getNodeId() {
 		return nodeId;
@@ -53,7 +53,4 @@ public class NetworkAnnotation implements INetworkAnnotation {
 	public void setNodeId(String nodeId) {
 		this.nodeId = nodeId;
 	}
-	
-	
-	
 }
