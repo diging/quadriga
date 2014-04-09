@@ -9,20 +9,24 @@ package edu.asu.spring.quadriga.domain;
 public interface IQuadrigaRole 
 {
 
-	public String getDBid();
+	public abstract String getDBid();
 	
-	public void setDBid(String dBid);
+	public abstract void setDBid(String dBid);
+	
+	public abstract void setId(String id);
+
+	public abstract String getId();
+	
+	public abstract void setName(String name);
+
+	public abstract String getName();
+	
+	public abstract String getDisplayName();
+	
+	public abstract void setDisplayName(String displayName);
 	
 	public abstract void setDescription(String description);
 
 	public abstract String getDescription();
-
-	public abstract void setName(String name);
-
-	public abstract String getName();
-
-	public abstract void setId(String id);
-
-	public abstract String getId();
 
 }

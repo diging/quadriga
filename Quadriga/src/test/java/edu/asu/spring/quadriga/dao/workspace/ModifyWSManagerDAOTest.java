@@ -335,7 +335,7 @@ public class ModifyWSManagerDAOTest {
 		user = userManager.getUserDetails("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws2");
+		workspace.setWorkspaceName("testprojws2");
 		workspace.setDescription("test workspace");
 		workspace.setOwner(user);
 		
@@ -346,7 +346,7 @@ public class ModifyWSManagerDAOTest {
 		for(ProjectWorkspaceDTO tempProjectWorkspace : projectWorkspace)
 		{
 			testWorkspace = workspaceDTOMapper.getWorkSpace(tempProjectWorkspace.getWorkspaceDTO());
-			if(testWorkspace.getName().equals(workspace.getName()) && testWorkspace.getOwner().equals(user))
+			if(testWorkspace.getWorkspaceName().equals(workspace.getWorkspaceName()) && testWorkspace.getOwner().equals(user))
 			{
 				isExists = true;
 			}
@@ -371,7 +371,7 @@ public class ModifyWSManagerDAOTest {
 		String errmsg;
 		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, "WS_2_Test");
 		IWorkSpace workspace = workspaceDTOMapper.getWorkSpace(workspaceDTO);
-		workspace.setName("Test Updating workspace");
+		workspace.setWorkspaceName("Test Updating workspace");
 		errmsg = dbConnect.updateWorkspaceRequest(workspace);
 	    assertEquals("",errmsg);
 	}

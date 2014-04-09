@@ -333,7 +333,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 				// Each data
 				//if (!ccProjectsList.contains(project)) {
 					JSONObject data = new JSONObject();
-					data.put("id", project.getInternalid());
+					data.put("id", project.getProjectId());
 					data.put("parent", "#");
 					String projectLink = null;
 					if(ccProjectsList.contains(project)){
@@ -341,7 +341,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 					}
 					else {
 					projectLink = "<a href='#' id='"
-							+ project.getInternalid()
+							+ project.getProjectId()
 							+ "' name='"
 							+ project.getName()
 							+ "' onclick='javascript:addCCtoProjects(this.id,this.name);' > "
@@ -349,27 +349,27 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 					}
 					data.put("text", projectLink);
 					dataArray.put(data);
-					String wsParent = project.getInternalid();
+					String wsParent = project.getProjectId();
 
 					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-							project.getInternalid(), userName);
+							project.getProjectId(), userName);
 					for (IWorkSpace ws : wsList) {
 						// workspace json
 					//	if(!ccWorkspaceList.contains(ws)) {
 							JSONObject data1 = new JSONObject();
-							data1.put("id", ws.getId());
+							data1.put("id", ws.getWorkspaceId());
 							data1.put("parent", wsParent);
 							String wsLink = null;
 							if(ccWorkspaceList.contains(ws)){
-								wsLink = ws.getName();
+								wsLink = ws.getWorkspaceName();
 							}
 							else {
 							 wsLink = "<a href='#' id='"
-									+ ws.getId()
+									+ ws.getWorkspaceId()
 									+ "' name='"
-									+ ws.getName()
+									+ ws.getWorkspaceName()
 									+ "' onclick='javascript:addCCtoWorkspace(this.id,this.name);' >"
-									+ ws.getName() + "</a>";
+									+ ws.getWorkspaceName() + "</a>";
 							}
 							data1.put("text", wsLink);
 							dataArray.put(data1);

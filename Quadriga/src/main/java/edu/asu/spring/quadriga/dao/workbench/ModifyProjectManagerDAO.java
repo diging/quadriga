@@ -56,7 +56,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 	public void addProjectRequest(IProject project, String userName) throws QuadrigaStorageException
 	{
 		String projectId = messages.getProperty("project_internalid.name") + generateUniqueID();
-		project.setInternalid(projectId);
+		project.setProjectId(projectId);
 		ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project,userName);
 		
         try

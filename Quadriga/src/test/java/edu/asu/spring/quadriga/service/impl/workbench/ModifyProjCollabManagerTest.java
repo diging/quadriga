@@ -161,7 +161,7 @@ public class ModifyProjCollabManagerTest
 		collaboratorRoles.add(role);
 		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
 		ICollaborator collaborator = collaboratorFactory.createCollaborator();
-		collaborator.setCollaboratorName("projuser3");
+//		collaborator.setCollaboratorName("projuser3");
 		collaborator.setUserObj(userMapper.getUser(user));
 		collaborator.setCollaboratorRoles(collaboratorRoles);
 		
@@ -187,7 +187,7 @@ public class ModifyProjCollabManagerTest
 		collaboratorRoles.add(role);
 		QuadrigaUserDTO user = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, "projuser3");
 		ICollaborator collaborator = collaboratorFactory.createCollaborator();
-		collaborator.setCollaboratorName("projuser3");
+//		collaborator.setCollaboratorName("projuser3");
 		collaborator.setUserObj(userMapper.getUser(user));
 		collaborator.setDescription("collaborator");
 		collaborator.setCollaboratorRoles(collaboratorRoles);

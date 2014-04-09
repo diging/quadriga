@@ -94,8 +94,8 @@ public class ProjectTest {
 		//project.setInternalid(null);
 		//assertEquals(project.getInternalid(), null);
 		
-		project.setInternalid("44");
-		assertEquals(project.getInternalid(), "44");
+		project.setProjectId("44");
+		assertEquals(project.getProjectId(), "44");
 	}
 
 	

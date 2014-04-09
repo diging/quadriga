@@ -39,7 +39,7 @@ public class ProjectValidator implements Validator {
 		Project project = (Project)obj;
 		
 		String projUnixName = project.getUnixName();
-		String projectId = project.getInternalid();
+		String projectId = project.getProjectId();
 		EProjectAccessibility projectAccess = project.getProjectAccess();
 		
 		if(err.getFieldError("projectAccess")==null)

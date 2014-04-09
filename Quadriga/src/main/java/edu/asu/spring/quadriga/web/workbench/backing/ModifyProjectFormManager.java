@@ -39,7 +39,7 @@ public class ModifyProjectFormManager
 			for(IProject iProject : projectList)
 			{
 				project = new ModifyProject();
-				project.setInternalid(iProject.getInternalid());
+				project.setInternalid(iProject.getProjectId());
 				project.setName(iProject.getName());
 				project.setDescription(iProject.getDescription());
 				project.setProjectOwner(iProject.getOwner().getUserName());
@@ -79,7 +79,7 @@ public class ModifyProjectFormManager
 			for(IProject iProject : projectList)
 			{
 				project = new ModifyProject();
-				project.setInternalid(iProject.getInternalid());
+				project.setInternalid(iProject.getProjectId());
 				project.setName(iProject.getName());
 				project.setDescription(iProject.getDescription());
 				project.setProjectOwner(iProject.getOwner().getUserName());
@@ -89,7 +89,7 @@ public class ModifyProjectFormManager
 			for(IProject iCollabProject : collaboratorProjectList)
 			{
 				project = new ModifyProject();
-				project.setInternalid(iCollabProject.getInternalid());
+				project.setInternalid(iCollabProject.getProjectId());
 				project.setName(iCollabProject.getName());
 				project.setDescription(iCollabProject.getDescription());
 				project.setProjectOwner(iCollabProject.getOwner().getUserName());

@@ -81,14 +81,14 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 			message.append(project.getName()+".");
 			message.append(emailMessages.getProperty("email.new_workspace_msg_part2"));
 			message.append(emailMessages.getProperty("email.new_workspace_msg_part3"));
-			message.append(workspace.getName());
+			message.append(workspace.getWorkspaceName());
 			message.append(emailMessages.getProperty("email.new_workspace_msg_part4"));
 			message.append(workspace.getDescription());
 			message.append(emailMessages.getProperty("email.new_workspace_msg_part5"));
 			message.append(workspace.getOwner().getUserName());
 
 			emailSender.sendNotificationEmail(projectOwner.getEmail(), emailMessages.getProperty("email.new_workspace_subject"), message.toString());
-			logger.info("The system sent an email notification to <<"+projectOwner.getEmail()+">> for the workspace <"+workspace.getName()+"> added by <"+workspace.getOwner().getUserName()+">");
+			logger.info("The system sent an email notification to <<"+projectOwner.getEmail()+">> for the workspace <"+workspace.getWorkspaceName()+"> added by <"+workspace.getOwner().getUserName()+">");
 		}
 	}
 

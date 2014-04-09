@@ -57,11 +57,11 @@ public class WorkSpaceTest {
 	@Test
 	public void testGetName() {
 		
-		workspace.setName(null);
-		assertEquals(workspace.getName(), null);
+		workspace.setWorkspaceName(null);
+		assertEquals(workspace.getWorkspaceName(), null);
 		
-		workspace.setName("jade");
-		assertEquals(workspace.getName(),"jade");
+		workspace.setWorkspaceName("jade");
+		assertEquals(workspace.getWorkspaceName(),"jade");
 				
 		
 	}
@@ -82,11 +82,11 @@ public class WorkSpaceTest {
 	@Test
 	public void testGetId() {
 		
-		workspace.setId(null);
-		assertEquals(workspace.getId(), null);
+		workspace.setWorkspaceId(null);
+		assertEquals(workspace.getWorkspaceId(), null);
 		
-		workspace.setId("593");
-		assertEquals(workspace.getId(), "593");
+		workspace.setWorkspaceId("593");
+		assertEquals(workspace.getWorkspaceId(), "593");
 		
 		
 	}

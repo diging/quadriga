@@ -11,30 +11,44 @@ import java.util.List;
 public interface IWorkSpace 
 {
 
-	public abstract void setCollaborators(List<ICollaborator> collaborators);
+	public abstract void setWorkspaceId(String workspaceId);
 
-	public abstract List<ICollaborator> getCollaborators();
+	public abstract String getWorkspaceId();
+	
+	public abstract void setWorkspaceName(String workspaceName);
 
-	public abstract void setOwner(IUser owner);
-
-	public abstract IUser getOwner();
-
+	public abstract String getWorkspaceName();
+	
 	public abstract void setDescription(String description);
 
 	public abstract String getDescription();
+	
+	public abstract void setOwner(IUser owner);
 
-	public abstract void setName(String name);
+	public abstract IUser getOwner();
+	
+	public abstract void setCollaborators(List<ICollaborator> collaborators);
 
-	public abstract String getName();
-
-	public abstract void setId(String id);
-
-	public abstract String getId();
-
-	public abstract void addBitstream(IBitStream bitstream);
+	public abstract List<ICollaborator> getCollaborators();
+	
+	public abstract IProject getProject();
+	
+	public abstract void setProject(IProject project);
 
 	public abstract void setBitstreams(List<IBitStream> bitstreams);
 
 	public abstract List<IBitStream> getBitstreams();
+	
+	public abstract List<IConceptCollection> getConceptCollections();
+	
+	public abstract void setConceptCollections(List<IConceptCollection> conceptCollections);
+	
+	public abstract List<IDictionary> getDictionaries();
+	
+	public abstract void setDictionaries(List<IDictionary> dictionaries);
+	
+	public abstract List<INetwork> getNetworks();
+	
+	public abstract void setNetworks(List<INetwork> networks);
 
 }

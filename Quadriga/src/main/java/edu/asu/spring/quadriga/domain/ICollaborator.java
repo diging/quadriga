@@ -11,6 +11,10 @@ import java.util.List;
 public interface ICollaborator 
 {
 
+	public abstract void setUserObj(IUser userObj);
+
+	public abstract IUser getUserObj();
+	
 	public abstract void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles);
 
 	public abstract List<ICollaboratorRole> getCollaboratorRoles();
@@ -18,11 +22,4 @@ public interface ICollaborator
 	public abstract void setDescription(String description);
 
 	public abstract String getDescription();
-
-	public abstract void setUserObj(IUser userObj);
-
-	public abstract IUser getUserObj();
-	
-	public abstract void setCollaboratorName(String collaborator);
-
 }

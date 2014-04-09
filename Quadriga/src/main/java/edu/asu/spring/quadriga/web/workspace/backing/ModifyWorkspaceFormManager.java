@@ -37,8 +37,8 @@ public class ModifyWorkspaceFormManager
 		for(IWorkSpace workspace : workspaceList)
 		{
 			modifyWorkspace = new ModifyWorkspace();
-			modifyWorkspace.setId(workspace.getId());
-			modifyWorkspace.setName(workspace.getName());
+			modifyWorkspace.setId(workspace.getWorkspaceId());
+			modifyWorkspace.setName(workspace.getWorkspaceName());
 			modifyWorkspace.setDescription(workspace.getDescription());
 			modifyWorkspaceList.add(modifyWorkspace);
 		}
@@ -69,8 +69,8 @@ public class ModifyWorkspaceFormManager
 			for(IWorkSpace workspace : workspaceList)
 			{
 				modifyWorkspace = new ModifyWorkspace();
-				modifyWorkspace.setId(workspace.getId());
-				modifyWorkspace.setName(workspace.getName());
+				modifyWorkspace.setId(workspace.getWorkspaceId());
+				modifyWorkspace.setName(workspace.getWorkspaceName());
 				modifyWorkspace.setDescription(workspace.getDescription());
 				modifyWorkspaceList.add(modifyWorkspace);
 			}			
@@ -99,8 +99,8 @@ public class ModifyWorkspaceFormManager
 		for(IWorkSpace workspace : workspaceList)
 		{
 			modifyWorkspace = new ModifyWorkspace();
-			modifyWorkspace.setId(workspace.getId());
-			modifyWorkspace.setName(workspace.getName());
+			modifyWorkspace.setId(workspace.getWorkspaceId());
+			modifyWorkspace.setName(workspace.getWorkspaceName());
 			modifyWorkspace.setDescription(workspace.getDescription());
 			modifyWorkspaceList.add(modifyWorkspace);
 		}

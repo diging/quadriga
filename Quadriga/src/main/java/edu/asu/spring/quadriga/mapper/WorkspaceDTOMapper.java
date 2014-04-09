@@ -35,7 +35,7 @@ public class WorkspaceDTOMapper extends DAOConnectionManager{
 	public WorkspaceDTO getWorkspaceDTO(IWorkSpace iWorkSpace) throws QuadrigaStorageException
 	{
 		WorkspaceDTO workspaceDTO = new WorkspaceDTO();
-		workspaceDTO.setWorkspacename(iWorkSpace.getName());
+		workspaceDTO.setWorkspacename(iWorkSpace.getWorkspaceName());
 		workspaceDTO.setDescription(iWorkSpace.getDescription());
 		workspaceDTO.setWorkspaceowner((getUserDTO(iWorkSpace.getOwner().getUserName())));
 		workspaceDTO.setIsarchived(false);
@@ -50,9 +50,9 @@ public class WorkspaceDTOMapper extends DAOConnectionManager{
 	public IWorkSpace getWorkSpace(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException
 	{
 		IWorkSpace workSpace = workspaceFactory.createWorkspaceObject();
-		workSpace.setName(workspaceDTO.getWorkspacename());
+		workSpace.setWorkspaceName(workspaceDTO.getWorkspacename());
 		workSpace.setDescription(workspaceDTO.getDescription());
-		workSpace.setId(workspaceDTO.getWorkspaceid());
+		workSpace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 		workSpace.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 		return workSpace;
 	}

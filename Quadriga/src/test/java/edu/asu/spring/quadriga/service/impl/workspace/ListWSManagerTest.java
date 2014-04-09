@@ -100,30 +100,30 @@ public class ListWSManagerTest {
 		user = userManager.getUserDetails("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws1");
+		workspace.setWorkspaceName("testprojws1");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_1");
+		workspace.setWorkspaceId("WS_1");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws2");
+		workspace.setWorkspaceName("testprojws2");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_2");
+		workspace.setWorkspaceId("WS_2");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws3");
+		workspace.setWorkspaceName("testprojws3");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_3");
+		workspace.setWorkspaceId("WS_3");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws4");
+		workspace.setWorkspaceName("testprojws4");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_4");
+		workspace.setWorkspaceId("WS_4");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
@@ -150,16 +150,16 @@ public class ListWSManagerTest {
 		user = userManager.getUserDetails("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws1");
+		workspace.setWorkspaceName("testprojws1");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_1");
+		workspace.setWorkspaceId("WS_1");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws2");
+		workspace.setWorkspaceName("testprojws2");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_2");
+		workspace.setWorkspaceId("WS_2");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
@@ -186,9 +186,9 @@ public class ListWSManagerTest {
 		user = userManager.getUserDetails("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws3");
+		workspace.setWorkspaceName("testprojws3");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_3");
+		workspace.setWorkspaceId("WS_3");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
@@ -215,9 +215,9 @@ public class ListWSManagerTest {
 		user = userManager.getUserDetails("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws4");
+		workspace.setWorkspaceName("testprojws4");
 		workspace.setDescription("test workspace");
-		workspace.setId("WS_4");
+		workspace.setWorkspaceId("WS_4");
 		workspace.setOwner(user);
 		testWorkspaceList.add(workspace);
 		
@@ -243,9 +243,9 @@ public class ListWSManagerTest {
 		user = userManager.getUserDetails("projuser");
 		
 		testWorkspace = workspaceFactory.createWorkspaceObject();
-		testWorkspace.setName("testprojws1");
+		testWorkspace.setWorkspaceName("testprojws1");
 		testWorkspace.setDescription("test workspace");
-		testWorkspace.setId("WS_1");
+		testWorkspace.setWorkspaceId("WS_1");
 		testWorkspace.setOwner(user);
 		
 		if(workspace == null)

@@ -123,7 +123,7 @@ public class RetrieveProjectManagerDAOTest {
 		project.setName("testproject1");
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
-		project.setInternalid("PROJ_1");
+		project.setProjectId("PROJ_1");
 		project.setProjectAccess(EProjectAccessibility.valueOf("PUBLIC"));
 		user = userManager.getUserDetails("projuser");
 		project.setOwner(user);

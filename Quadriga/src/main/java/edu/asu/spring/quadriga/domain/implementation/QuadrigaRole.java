@@ -14,6 +14,7 @@ public class QuadrigaRole implements IQuadrigaRole
 	private String DBid;
 	private String id;
 	private String name;
+	private String displayName;
 	private String description;
 
 	@Override
@@ -42,6 +43,19 @@ public class QuadrigaRole implements IQuadrigaRole
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Override
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	@Override
+	public void setDisplayName(String displayName) 
+	{
+		this.displayName = displayName;
+		
+	}
+	
 	@Override
 	public String getDescription() {
 		return description;
@@ -58,6 +72,8 @@ public class QuadrigaRole implements IQuadrigaRole
 		result = prime * result + ((DBid == null) ? 0 : DBid.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result
+				+ ((displayName == null) ? 0 : displayName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -65,73 +81,40 @@ public class QuadrigaRole implements IQuadrigaRole
 
 	@Override
 	public boolean equals(Object obj) {
-		
-		if(obj == null)
-			return false;
-		
-		if(this == obj)
+		if (this == obj)
 			return true;
-		
-		if(this.getClass() != obj.getClass())
+		if (obj == null)
 			return false;
-		
-		
-		IQuadrigaRole role = (QuadrigaRole) obj;
-		//Check values of DBid
-		if(this.DBid == null)
-		{
-			if(role.getDBid() != null)
-			{
+		if (getClass() != obj.getClass())
+			return false;
+		QuadrigaRole other = (QuadrigaRole) obj;
+		if (DBid == null) {
+			if (other.DBid != null)
 				return false;
-			}				
-		}
-		else if(!this.DBid.equals(role.getDBid()))
-		{
-			//One of the value is null and the other is not null (or) the values do not match
+		} else if (!DBid.equals(other.DBid))
 			return false;
-		}
-
-		//Check values of id
-		if(this.id == null)
-		{
-			if(role.getId() != null)
-			{
+		if (description == null) {
+			if (other.description != null)
 				return false;
-			}
-		}
-		else if(!this.getId().equals(role.getId()))
-		{
-			//One of the value is null and the other is not null (or) the values do not match
+		} else if (!description.equals(other.description))
 			return false;
-		}
-
-		//Check if name is not null
-		if(this.name == null)
-		{
-			if(role.getName() != null)
-			{
+		if (displayName == null) {
+			if (other.displayName != null)
 				return false;
-			}
-		}
-		else if(!this.name.equals(role.getName()))
-		{
-			//One of the value is null and the other is not null (or) the values do not match
+		} else if (!displayName.equals(other.displayName))
 			return false;
-		}
-
-		//Check if description is not null
-		if(this.description == null)
-		{
-			if(role.getDescription() != null)
-			{
+		if (id == null) {
+			if (other.id != null)
 				return false;
-			}
-		}
-		else if(!this.description.equals(role.getDescription()))
-		{
-			//One of the value is null and the other is not null (or) the values do not match
+		} else if (!id.equals(other.id))
 			return false;
-		}
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		return true;
 	}
+
+
 }

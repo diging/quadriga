@@ -562,7 +562,7 @@ public class DictionaryManager implements IDictionaryManager {
         {
         	JSONObject data = new JSONObject();
         	String projectlink = null;
-        	data.put("id", project.getInternalid());
+        	data.put("id", project.getProjectId());
         	data.put("parent", "#");
         	
         	if(dictProjectList.contains(project))
@@ -572,7 +572,7 @@ public class DictionaryManager implements IDictionaryManager {
         	else
         	{
         		projectlink = "<a href='#' id='"
-        				     +project.getInternalid()
+        				     +project.getProjectId()
         				     +"'name= '"
         				     +project.getName()
         				     +"'onclick='javascript:addDictToProjects(this.id,this.name);'>"
@@ -583,27 +583,27 @@ public class DictionaryManager implements IDictionaryManager {
         	data.put("text", projectlink);
         	dataArray.put(data);
         	
-        	String wsParent = project.getInternalid();
+        	String wsParent = project.getProjectId();
         	List<IWorkSpace> wsList = wsManager.listActiveWorkspace(wsParent, userName);
         	
         	for(IWorkSpace workSpace: wsList)
         	{
         		JSONObject data1 = new JSONObject();
-				data1.put("id", workSpace.getId());
+				data1.put("id", workSpace.getWorkspaceId());
 				data1.put("parent", wsParent);
 				String wsLink = null;
 				if(dictWorkspaceList.contains(workSpace))
 				{
-					wsLink = workSpace.getName();
+					wsLink = workSpace.getWorkspaceName();
 				}
 				else{
 					
 					wsLink = "<a href ='#' id='"
-					         + workSpace.getId()
+					         + workSpace.getWorkspaceId()
 					         + "' name='"
-					         + workSpace.getName()
+					         + workSpace.getWorkspaceName()
 					         + "' onclick='javascript:addDictToWorkspace(this.id,this.name);' >"
-					         + workSpace.getName() + "</a>";
+					         + workSpace.getWorkspaceName() + "</a>";
 				   }
 				
 				data1.put("text", wsLink);

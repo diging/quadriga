@@ -155,7 +155,7 @@ public class RetrieveProjectControllerTest {
 		};
 		
 		project = projectFactory.createProjectObject();
-		project.setInternalid("PROJ_1");
+		project.setProjectId("PROJ_1");
 		project.setName("proj1");
 		project.setDescription("test project");
 		project.setUnixName("proj1");
@@ -165,7 +165,7 @@ public class RetrieveProjectControllerTest {
 		tempProjectList.add(project);
 		
 		project = projectFactory.createProjectObject();
-		project.setInternalid("PROJ_2");
+		project.setProjectId("PROJ_2");
 		project.setName("proj2");
 		project.setDescription("test project");
 		project.setUnixName("proj2");
@@ -213,7 +213,7 @@ public class RetrieveProjectControllerTest {
 		};
 		
 		project = projectFactory.createProjectObject();
-		project.setInternalid("PROJ_3");
+		project.setProjectId("PROJ_3");
 		project.setName("proj3");
 		project.setDescription("test project");
 		project.setUnixName("proj3");
@@ -223,7 +223,7 @@ public class RetrieveProjectControllerTest {
 		tempProjectList.add(project);
 		
 		project = projectFactory.createProjectObject();
-		project.setInternalid("PROJ_4");
+		project.setProjectId("PROJ_4");
 		project.setName("proj4");
 		project.setDescription("test project");
 		project.setUnixName("proj4");
@@ -271,7 +271,7 @@ public class RetrieveProjectControllerTest {
 				};
 				
 				project = projectFactory.createProjectObject();
-				project.setInternalid("PROJ_5");
+				project.setProjectId("PROJ_5");
 				project.setName("proj5");
 				project.setDescription("test project");
 				project.setUnixName("proj5");
@@ -319,7 +319,7 @@ public class RetrieveProjectControllerTest {
 		};
 		
 		project = projectFactory.createProjectObject();
-		project.setInternalid("PROJ_6");
+		project.setProjectId("PROJ_6");
 		project.setName("proj6");
 		project.setDescription("test project");
 		project.setUnixName("proj6");
@@ -366,7 +366,7 @@ public class RetrieveProjectControllerTest {
 			};
 			
 			project = projectFactory.createProjectObject();
-			project.setInternalid("PROJ_5");
+			project.setProjectId("PROJ_5");
 			project.setName("proj5");
 			project.setDescription("test project");
 			project.setUnixName("proj5");

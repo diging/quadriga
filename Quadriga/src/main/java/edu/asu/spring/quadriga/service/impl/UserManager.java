@@ -310,7 +310,9 @@ public class UserManager implements IUserManager {
 
 			//Convert the user roles to one string with DBROLEIDs
 			//Update the role in the Quadriga Database.
-			iResult = usermanagerDAO.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(), sAdminId);
+			//TODO: Change the method to update the user roles.
+//			iResult = usermanagerDAO.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(), sAdminId);
+			
 			if(iResult == SUCCESS)
 			{
 				logger.info("The admin "+sAdminId+" activated the account of "+sUserId);
