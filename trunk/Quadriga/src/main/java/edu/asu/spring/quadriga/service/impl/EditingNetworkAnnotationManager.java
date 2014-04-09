@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
@@ -97,26 +98,38 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public List<NetworkAnnotation> getAllAnnotationOfNetwork(String username, String networkId) throws QuadrigaStorageException {
+	public List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String username, String networkId) throws QuadrigaStorageException {
 		
-		List<NetworksAnnotationsDTO> networkAnnoDTOList = dbConnectionEditManager.getAllAnnotationOfNetwork(username,networkId);
+		List<NetworkAnnotationsDTO> networkAnnoDTOList = dbConnectionEditManager.getAllAnnotationOfNetwork(username,networkId);
 		
-		List<NetworkAnnotation> networkAnnoList = null;
 		
-		for(NetworksAnnotationsDTO dto :networkAnnoDTOList){
-			NetworkAnnotation n = new NetworkAnnotation();
-			n.setAnnotationId(dto.getAnnotationid());
-			n.setAnnotationText(dto.getAnnotationtext());
-			n.setNodeId(dto.getNodeid());
-			n.setNodeName(dto.getNodename());
-			n.setUserName(dto.getCreatedby());
-			if(networkAnnoList==null){
-				networkAnnoList=new ArrayList<NetworkAnnotation>();
+//		List<NetworkAnnotation> networkAnnoList = null;
+//		
+//		for(NetworkAnnotationsDTO dto :networkAnnoDTOList){
+//			NetworkAnnotation n = new NetworkAnnotation();
+//			n.setAnnotationId(dto.getAnnotationId());
+//			n.setAnnotationText(dto.getAnnotationText());
+//			n.setNodeId(dto.getNodeid());
+//			n.setNodeName(dto.getNodename());
+//			n.setUserId(dto.getCreatedby());
+//			if(networkAnnoList==null){
+//				networkAnnoList=new ArrayList<NetworkAnnotation>();
+//			}
+//			networkAnnoList.add(n);
+//		}
+		List<INetworkAnnotation> networkAnnotationsList = new ArrayList<INetworkAnnotation>();
+		for(NetworkAnnotationsDTO networkAnnotation : networkAnnoDTOList){
+			if(networkAnnotation.getObjectType().equals("node")){
+				//INetworkAnnotation nodeAnnotation = 
 			}
-			networkAnnoList.add(n);
+			if(networkAnnotation.getObjectType().equals("edge")){
+			}
+			if(networkAnnotation.getObjectType().equals("relation")){
+			}
 		}
+
 		
-		return networkAnnoList;
+		return networkAnnoDTOList;
 	}
 
 	/**

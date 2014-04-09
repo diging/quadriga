@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
@@ -135,7 +136,7 @@ public interface IDBConnectionEditorManager {
 	 * @return												Returns {@link List} of {@link NetworksAnnotationsDTO}
 	 * @throws QuadrigaStorageException						Throws Storage exception when there is a issue while getting any data from database
 	 */
-	public abstract List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
+	public abstract List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
 			String networkId) throws QuadrigaStorageException;
              
 	public abstract String addAnnotationToEdge(String networkId, String sourceId, String targetId,

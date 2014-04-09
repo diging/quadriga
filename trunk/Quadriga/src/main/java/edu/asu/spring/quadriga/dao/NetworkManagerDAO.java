@@ -669,13 +669,14 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			String annotationId = "ANNOT_" + generateUniqueID();
 			NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId, annotationText, objectType, userName);
 			NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper.getNetworkNodeAnnationDTO(networkAnnotation, userName, nodeId,nodeName);
-			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
-			if(networkNodeAnnotationList == null)
-			{
-				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
-			}
-			networkNodeAnnotationList.add(networkNodeAnnotation);
-			networkAnnotation.setNetworkNodeAnnotationList(networkNodeAnnotationList);
+			networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation);
+//			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
+//			if(networkNodeAnnotationList == null)
+//			{
+//				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
+//			}
+//			networkNodeAnnotationList.add(networkNodeAnnotation);
+			//networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation.getAnnotationNodes());
 			
 			sessionFactory.getCurrentSession().save(networkAnnotation);
 			sessionFactory.getCurrentSession().save(networkNodeAnnotation);
@@ -745,14 +746,14 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<NetworksAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
+	public List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
 			String networkId) throws QuadrigaStorageException {
 		try {
-			List<NetworksAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworksAnnotationsDTO>();
+			List<NetworkAnnotationsDTO> networkAnnotationsDTOList = new ArrayList<NetworkAnnotationsDTO>();
 			Query query = sessionFactory
 					.getCurrentSession()
 					.createQuery(
-							"from NetworksAnnotationsDTO n where username = :username and networkid =:networkid");
+							"from NetworkAnnotationsDTO n where username = :username and networkid =:networkid");
 			query.setParameter("username", userId);
 			query.setParameter("networkid", networkId);
 
@@ -992,13 +993,15 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			String annotationId = "ANNOT_" + generateUniqueID();
 			NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId, annotationText, annotedObjectType, userName);
 			NetworkRelationAnnotationsDTO networkRelationAnnotation = networkMapper.getNetworkRelationAnnationDTO(networkAnnotation, userName, predicateId, predicateName, subjectId, subjectName, objectId, objectName);
-			networkRelationAnnotationList = networkAnnotation.getNetworkRelationAnnotationList();
-			if(networkRelationAnnotationList == null)
-			{
-				networkRelationAnnotationList = new ArrayList<NetworkRelationAnnotationsDTO>();
-			}
-			networkRelationAnnotationList.add(networkRelationAnnotation);
-			networkAnnotation.setNetworkRelationAnnotationList(networkRelationAnnotationList);
+			networkAnnotation.setNetworkRelationAnnotation(networkRelationAnnotation);
+			
+			//	networkRelationAnnotationList = networkAnnotation.getNetworkRelationAnnotationList();
+//			if(networkRelationAnnotationList == null)
+//			{
+//				networkRelationAnnotationList = new ArrayList<NetworkRelationAnnotationsDTO>();
+//			}
+//			networkRelationAnnotationList.add(networkRelationAnnotation);
+			//networkAnnotation.setNetworkRelationAnnotationList(networkRelationAnnotationList);
 			
 			sessionFactory.getCurrentSession().save(networkAnnotation);
 			sessionFactory.getCurrentSession().save(networkRelationAnnotation);
@@ -1032,13 +1035,15 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			String annotationId = "ANNOT_" + generateUniqueID();
 			NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId, annotationText, annotedObjectType, userName);
 			NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper.getNetworkNodeAnnationDTO(networkAnnotation, userName, nodeId,nodeName);
-			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
-			if(networkNodeAnnotationList == null)
-			{
-				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
-			}
-			networkNodeAnnotationList.add(networkNodeAnnotation);
-			networkAnnotation.setNetworkNodeAnnotationList(networkNodeAnnotationList);
+			networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation);
+			
+//			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
+//			if(networkNodeAnnotationList == null)
+//			{
+//				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
+//			}
+//			networkNodeAnnotationList.add(networkNodeAnnotation);
+//			networkAnnotation.setNetworkNodeAnnotationList(networkNodeAnnotationList);
 			
 			sessionFactory.getCurrentSession().save(networkAnnotation);
 			sessionFactory.getCurrentSession().save(networkNodeAnnotation);

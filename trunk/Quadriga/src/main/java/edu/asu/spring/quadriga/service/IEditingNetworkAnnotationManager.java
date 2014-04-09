@@ -23,7 +23,7 @@ public interface IEditingNetworkAnnotationManager {
 			String annotationText) throws QuadrigaStorageException;
 	
 
-	public abstract List<NetworkAnnotation> getAllAnnotationOfNetwork(String userId,
+	public abstract List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
 			String networkId) throws QuadrigaStorageException;
 	public abstract String addAnnotationToEdge( String networkId,
 			String sourceId, String targetId, String sourceName,
