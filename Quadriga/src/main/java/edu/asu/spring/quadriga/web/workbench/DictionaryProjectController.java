@@ -105,7 +105,7 @@ public class DictionaryProjectController {
 			for (int i = 0; i < values.length; i++) {
 				logger.info("values " + values[i]);
 				try {
-					projectDictionaryManager.addProjectDictionary(projectid,values[i], userId);
+					projectDictionaryManager.addDictionaryToProject(projectid,values[i], userId);
 					if(!msg.equals("")){
 						flag=1;
 					}

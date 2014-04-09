@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 
@@ -26,11 +25,8 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	private IDBConnectionProjectDictionary dbConnect;
 	
 	/**
-	 * This class helps in adding dictionary to the project 
-	 * @param projectId								{@link IProject} ID of type {@link String} 
-	 * @param dictionaryId						  	{@link IDictionary} ID of type {@link String}
-	 * @param userId								{@link IUser} ID of type {@link String}
-	 * @throws QuadrigaStorageException				Throws Storage exception when there is a issue with access to DB
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	@Transactional
@@ -40,11 +36,8 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	}
 
 	/**
-	 * This class helps in getting {@link List} the {@link IDictionary} from {@link IProject} and {@link IUser} Id
-	 * @param projectId								{@link IProject} ID of type {@link String} 
-	 * @param userId								{@link IUser} ID of type {@link String}							
-	 * @return										Returns the of {@link List} of {@link IDictionary} 
-	 * @throws QuadrigaStorageException				Throws Storage exception when there is a issue with access to DB
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	@Transactional
@@ -55,11 +48,8 @@ public class ProjectDictionaryManager implements IProjectDictionaryManager {
 	}
 
 	/**
-	 * This class helps in deleting the {@link IDictionary} of a {@link IProject} using {@link IProject} ID, {@link IDictionary} ID and {@link IUser} Id
-	 * @param projectId								{@link IProject} ID of type {@link String} 
-	 * @param userId								{@link IUser} ID of type {@link String}		
-	 * @param dictioanaryId						  	{@link IDictionary} ID of type {@link String}
-	 * @throws QuadrigaStorageException				Throws Storage exception when there is a issue with access to DB
+	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	@Transactional
