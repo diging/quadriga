@@ -2,7 +2,10 @@ package edu.asu.spring.quadriga.service;
 
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+
 import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
+import edu.asu.spring.quadriga.domain.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
@@ -23,7 +26,7 @@ public interface IEditingNetworkAnnotationManager {
 			String annotationText) throws QuadrigaStorageException;
 	
 
-	public abstract List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String userId,
+	public abstract List<INetworkAnnotation> getAllAnnotationOfNetwork(String userId,
 			String networkId) throws QuadrigaStorageException;
 	public abstract String addAnnotationToEdge( String networkId,
 			String sourceId, String targetId, String sourceName,
@@ -65,5 +68,8 @@ public interface IEditingNetworkAnnotationManager {
 	 */
 	public abstract List<NetworkAnnotationsDTO> getAnnotationToRelation(String networkId,String subjectId, String objectId,
 			String predicateId, String userName) throws QuadrigaStorageException;
+	
+	public abstract String getAllAnnotationOfNetworkAsJson(String username, String networkId)
+			throws QuadrigaStorageException, JSONException;
 
 }

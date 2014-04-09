@@ -14,7 +14,8 @@ public class NetworkRelationAnnotation implements INetworkRelationAnnotation
 	String subjectName;
 	String objectId;
 	String objectName;
-
+	String objectType;
+	
 	@Override
 	public String getAnnotationId() 
 	{
@@ -123,6 +124,14 @@ public class NetworkRelationAnnotation implements INetworkRelationAnnotation
 	public void setObjectName(String objectName) 
 	{
         this.objectName = objectName;
+	}
+
+	public String getObjectType() {
+		return objectType;
+	}
+
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
 	}
 
 }
