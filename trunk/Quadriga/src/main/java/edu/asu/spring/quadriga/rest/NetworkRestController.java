@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
@@ -198,7 +199,7 @@ public class NetworkRestController {
 			else
 				context.put("status", status);
 			context.put("networkid",networkId);
-			List<NetworkAnnotation>  networkAnnoList= editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
+			List<INetworkAnnotation>  networkAnnoList= editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
 			context.put("networkAnnoList",networkAnnoList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
@@ -256,7 +257,7 @@ public class NetworkRestController {
 					.getTemplate("velocitytemplates/networkannotations.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
 			context.put("networkid",networkId);
-			List<NetworkAnnotation>  networkAnnoList= editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
+			List<INetworkAnnotation>  networkAnnoList= editingNetworkAnnoManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
 			context.put("networkAnnoList",networkAnnoList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);

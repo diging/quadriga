@@ -10,7 +10,8 @@ public class NetworkNodeAnnotation implements INetworkNodeAnnotation
 	String userName;
 	String nodeId;
 	String nodeName;
-
+	String objectType;
+	
 	@Override
 	public String getAnnotationId() 
 	{
@@ -80,5 +81,14 @@ public class NetworkNodeAnnotation implements INetworkNodeAnnotation
 	{
         this.nodeName = nodeName;
 	}
+
+	public String getObjectType() {
+		return objectType;
+	}
+
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
+	}
+	
 
 }

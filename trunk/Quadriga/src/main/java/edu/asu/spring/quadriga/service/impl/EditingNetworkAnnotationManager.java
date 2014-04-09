@@ -3,6 +3,9 @@ package edu.asu.spring.quadriga.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.INetworkAnnotation;
+import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.domain.implementation.NetworkEdgeAnnotation;
+import edu.asu.spring.quadriga.domain.implementation.NetworkNodeAnnotation;
+import edu.asu.spring.quadriga.domain.implementation.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
@@ -19,6 +26,10 @@ import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
+import edu.asu.spring.quadriga.service.network.factory.INetworkEdgeAnnotationFactory;
+import edu.asu.spring.quadriga.service.network.factory.INetworkNodeAnnotationFactory;
+import edu.asu.spring.quadriga.service.network.factory.INetworkRelationAnnotationFactory;
+import edu.asu.spring.quadriga.service.network.factory.impl.NetworkNodeAnnotationFactory;
 
 @Service
 public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotationManager {
@@ -29,6 +40,42 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	@Autowired
 	private NetworkDTOMapper networkMapper;
 	
+	@Autowired
+	private INetworkEdgeAnnotationFactory networkEdgeAnnotationFactory;
+	
+	@Autowired
+	private INetworkNodeAnnotationFactory networkNodeAnnotationFactory;
+	
+	@Autowired
+	private INetworkRelationAnnotationFactory networkRelationAnnotationFactory;
+	
+
+	public INetworkEdgeAnnotationFactory getNetworkEdgeAnnotationFactory() {
+		return networkEdgeAnnotationFactory;
+	}
+
+	public void setNetworkEdgeAnnotationFactory(
+			INetworkEdgeAnnotationFactory networkEdgeAnnotationFactory) {
+		this.networkEdgeAnnotationFactory = networkEdgeAnnotationFactory;
+	}
+
+	public INetworkNodeAnnotationFactory getNetworkNodeAnnotationFactory() {
+		return networkNodeAnnotationFactory;
+	}
+
+	public void setNetworkNodeAnnotationFactory(
+			INetworkNodeAnnotationFactory networkNodeAnnotationFactory) {
+		this.networkNodeAnnotationFactory = networkNodeAnnotationFactory;
+	}
+
+	public INetworkRelationAnnotationFactory getNetworkRelationAnnotationFactory() {
+		return networkRelationAnnotationFactory;
+	}
+
+	public void setNetworkRelationAnnotationFactory(
+			INetworkRelationAnnotationFactory networkRelationAnnotationFactory) {
+		this.networkRelationAnnotationFactory = networkRelationAnnotationFactory;
+	}
 
 	/**
 	 * This method retrieves the annotation entered by the user for the network node.
@@ -98,38 +145,59 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public List<NetworkAnnotationsDTO> getAllAnnotationOfNetwork(String username, String networkId) throws QuadrigaStorageException {
+	public List<INetworkAnnotation> getAllAnnotationOfNetwork(String username, String networkId) throws QuadrigaStorageException {
 		
 		List<NetworkAnnotationsDTO> networkAnnoDTOList = dbConnectionEditManager.getAllAnnotationOfNetwork(username,networkId);
-		
-		
-//		List<NetworkAnnotation> networkAnnoList = null;
-//		
-//		for(NetworkAnnotationsDTO dto :networkAnnoDTOList){
-//			NetworkAnnotation n = new NetworkAnnotation();
-//			n.setAnnotationId(dto.getAnnotationId());
-//			n.setAnnotationText(dto.getAnnotationText());
-//			n.setNodeId(dto.getNodeid());
-//			n.setNodeName(dto.getNodename());
-//			n.setUserId(dto.getCreatedby());
-//			if(networkAnnoList==null){
-//				networkAnnoList=new ArrayList<NetworkAnnotation>();
-//			}
-//			networkAnnoList.add(n);
-//		}
 		List<INetworkAnnotation> networkAnnotationsList = new ArrayList<INetworkAnnotation>();
 		for(NetworkAnnotationsDTO networkAnnotation : networkAnnoDTOList){
 			if(networkAnnotation.getObjectType().equals("node")){
-				//INetworkAnnotation nodeAnnotation = 
+				NetworkNodeAnnotation networkNodeAnnotation =  (NetworkNodeAnnotation) networkNodeAnnotationFactory.createUserObject();
+				
+				networkNodeAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
+				networkNodeAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
+				networkNodeAnnotation.setNetworkId(networkAnnotation.getNetworkId());
+				networkNodeAnnotation.setNodeId(networkAnnotation.getNetworkNodeAnnotation().getNodeId());
+				networkNodeAnnotation.setNodeName(networkAnnotation.getNetworkNodeAnnotation().getNodeName());
+				networkNodeAnnotation.setUserName(networkAnnotation.getUserName());
+				networkNodeAnnotation.setObjectType(networkAnnotation.getObjectType());
+				
+			    networkAnnotationsList.add(networkNodeAnnotation);
 			}
 			if(networkAnnotation.getObjectType().equals("edge")){
+				NetworkEdgeAnnotation networkEdgeAnnotation = (NetworkEdgeAnnotation) networkEdgeAnnotationFactory.createUserObject();
+				networkEdgeAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
+				networkEdgeAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
+				networkEdgeAnnotation.setNetworkId(networkAnnotation.getNetworkId());
+				networkEdgeAnnotation.setUserName(networkAnnotation.getUserName());
+				networkEdgeAnnotation.setSourceId(networkAnnotation.getNetworkEdgeAnnotation().getSourceId());
+				networkEdgeAnnotation.setSourceName(networkAnnotation.getNetworkEdgeAnnotation().getSourceName());
+				networkEdgeAnnotation.setTargetId(networkAnnotation.getNetworkEdgeAnnotation().getTargetId());
+				networkEdgeAnnotation.setTargetName(networkAnnotation.getNetworkEdgeAnnotation().getTargetName());
+				networkEdgeAnnotation.setTargetNodeType(networkAnnotation.getNetworkEdgeAnnotation().getTargetNodeType());
+				networkEdgeAnnotation.setObjectType(networkAnnotation.getObjectType());
+				
+				networkAnnotationsList.add(networkEdgeAnnotation);
 			}
 			if(networkAnnotation.getObjectType().equals("relation")){
+				NetworkRelationAnnotation networkRelationAnnotation = (NetworkRelationAnnotation) networkRelationAnnotationFactory.createUserObject();
+				networkRelationAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
+				networkRelationAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
+				networkRelationAnnotation.setNetworkId(networkAnnotation.getNetworkId());
+				networkRelationAnnotation.setUserName(networkAnnotation.getUserName());
+				networkRelationAnnotation.setPredicateId(networkAnnotation.getNetworkRelationAnnotation().getPredicateId());
+				networkRelationAnnotation.setPredicateName(networkAnnotation.getNetworkRelationAnnotation().getPredicateName());
+				networkRelationAnnotation.setSubjectId(networkAnnotation.getNetworkRelationAnnotation().getSubjectId());
+				networkRelationAnnotation.setSubjectName(networkAnnotation.getNetworkRelationAnnotation().getSubjectName());
+				networkRelationAnnotation.setObjectId(networkAnnotation.getNetworkRelationAnnotation().getObjectId());
+				networkRelationAnnotation.setObjectName(networkAnnotation.getNetworkRelationAnnotation().getObjectName());
+				networkRelationAnnotation.setObjectType(networkAnnotation.getObjectType());
+				
+				networkAnnotationsList.add(networkRelationAnnotation);
 			}
 		}
 
 		
-		return networkAnnoDTOList;
+		return networkAnnotationsList;
 	}
 
 	/**
@@ -229,7 +297,43 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		return networkAnnotations;
 	}
 	
-	
+	@Override
+	@Transactional
+	public String getAllAnnotationOfNetworkAsJson(String username, String networkId) throws QuadrigaStorageException, JSONException {
+		List<INetworkAnnotation> networkAnnotationsList = getAllAnnotationOfNetwork(username, networkId);
+		String jsonAnnotations = "";
+		JSONArray ja = new JSONArray();
+		JSONObject j1 = new JSONObject();
+		for(INetworkAnnotation networkAnnotation : networkAnnotationsList){
+			JSONObject j = new JSONObject();
+			if(networkAnnotation instanceof NetworkNodeAnnotation) {
+				j.put("name", ((NetworkNodeAnnotation) networkAnnotation).getNodeName());
+				j.put("text", ((NetworkNodeAnnotation) networkAnnotation).getAnnotationText());
+				j.put("objecttype", ((NetworkNodeAnnotation) networkAnnotation).getObjectType());
+				ja.put(j);
+			} 
+			if(networkAnnotation instanceof NetworkEdgeAnnotation) {
+				String name = ((NetworkEdgeAnnotation) networkAnnotation).getSourceName() + "-" + ((NetworkEdgeAnnotation) networkAnnotation).getTargetName();
+				j.put("name", name);
+				j.put("text", ((NetworkEdgeAnnotation) networkAnnotation).getAnnotationText());
+				j.put("objecttype", ((NetworkEdgeAnnotation) networkAnnotation).getObjectType());
+				ja.put(j);
+			}
+			if(networkAnnotation instanceof NetworkRelationAnnotation) {
+				String name = ((NetworkRelationAnnotation) networkAnnotation).getSubjectName() + "-" + ((NetworkRelationAnnotation) networkAnnotation).getPredicateName() + "_" + ((NetworkRelationAnnotation) networkAnnotation).getObjectName();
+				j.put("name", name);
+				j.put("text", ((NetworkRelationAnnotation) networkAnnotation).getAnnotationText());
+				j.put("objecttype", ((NetworkRelationAnnotation) networkAnnotation).getObjectType());
+				ja.put(j);
+			} 
+			
+			
+		}
+		j1.put("text", ja);
+		jsonAnnotations = j1.toString();
+		return jsonAnnotations;
+		
+	}
 
 	
 	

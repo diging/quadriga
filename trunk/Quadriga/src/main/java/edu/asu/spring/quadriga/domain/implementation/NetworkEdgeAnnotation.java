@@ -13,7 +13,8 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 	String targetName;
 	String targetNodeType;
 	String userName;
-
+	String objectType;
+	
 	@Override
 	public String getAnnotationId() 
 	{
@@ -87,6 +88,14 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 		this.targetId = targetId;
 	}
 
+	public String getTargetName() {
+		return targetName;
+	}
+
+	public void setTargetName(String targetName) {
+		this.targetName = targetName;
+	}
+
 	@Override
 	public String getTargetNodeType() 
 	{
@@ -111,4 +120,13 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 		this.userName = userName;
 		
 	}
+
+	public String getObjectType() {
+		return objectType;
+	}
+
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
+	}
+	
 }
