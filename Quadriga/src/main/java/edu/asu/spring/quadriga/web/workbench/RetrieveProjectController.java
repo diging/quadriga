@@ -116,7 +116,6 @@ public class RetrieveProjectController
 		
 		projectListAsWSCollaboratorJson = jsonProjectManager.getProjectListAsWorkspaceCollaborator(userName);
 		
-		logger.info(projectListAsOwnerJson);
 		
 		model = new ModelAndView("auth/workbench");
 		model.getModelMap().put("projectlistasowner", projectListAsOwner);

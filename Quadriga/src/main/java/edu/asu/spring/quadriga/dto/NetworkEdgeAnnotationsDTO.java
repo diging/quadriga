@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -70,7 +71,7 @@ public class NetworkEdgeAnnotationsDTO implements Serializable {
     private Date updatedDate;
 	
 	@JoinColumn(name = "edgeannotationid", referencedColumnName = "annotationid",insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     private NetworkAnnotationsDTO annotationEdges;
 
 

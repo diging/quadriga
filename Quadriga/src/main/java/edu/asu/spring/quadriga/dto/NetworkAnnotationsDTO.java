@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -82,14 +83,14 @@ public class NetworkAnnotationsDTO implements Serializable {
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annotationNodes")
-    private List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "annotationNodes")
+    private NetworkNodeAnnotationsDTO networkNodeAnnotation;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annotationEdges")
-    private List<NetworkEdgeAnnotationsDTO> networkEdgeAnnotationList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "annotationEdges")
+    private NetworkEdgeAnnotationsDTO networkEdgeAnnotation;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "annotationRelation")
-    private List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "annotationRelation")
+    private NetworkRelationAnnotationsDTO networkRelationAnnotation;
 
     public NetworkAnnotationsDTO()
     {
@@ -184,34 +185,36 @@ public class NetworkAnnotationsDTO implements Serializable {
 		this.quadrigaUserDTO = quadrigaUserDTO;
 	}
 
-	@XmlTransient
-	public List<NetworkNodeAnnotationsDTO> getNetworkNodeAnnotationList() {
-		return networkNodeAnnotationList;
+	
+	public NetworkNodeAnnotationsDTO getNetworkNodeAnnotation() {
+		return networkNodeAnnotation;
 	}
 
-	public void setNetworkNodeAnnotationList(
-			List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList) {
-		this.networkNodeAnnotationList = networkNodeAnnotationList;
+	public void setNetworkNodeAnnotation(
+			NetworkNodeAnnotationsDTO networkNodeAnnotation) {
+		this.networkNodeAnnotation = networkNodeAnnotation;
 	}
 
-	@XmlTransient
-	public List<NetworkEdgeAnnotationsDTO> getNetworkEdgeAnnotationList() {
-		return networkEdgeAnnotationList;
+	public NetworkEdgeAnnotationsDTO getNetworkEdgeAnnotation() {
+		return networkEdgeAnnotation;
 	}
 
-	public void setNetworkEdgeAnnotationList(
-			List<NetworkEdgeAnnotationsDTO> networkEdgeAnnotationList) {
-		this.networkEdgeAnnotationList = networkEdgeAnnotationList;
+	public void setNetworkEdgeAnnotation(
+			NetworkEdgeAnnotationsDTO networkEdgeAnnotation) {
+		this.networkEdgeAnnotation = networkEdgeAnnotation;
 	}
 
-	@XmlTransient
-	public List<NetworkRelationAnnotationsDTO> getNetworkRelationAnnotationList() {
-		return networkRelationAnnotationList;
+	public NetworkRelationAnnotationsDTO getNetworkRelationAnnotation() {
+		return networkRelationAnnotation;
 	}
 
-	public void setNetworkRelationAnnotationList(
-			List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList) {
-		this.networkRelationAnnotationList = networkRelationAnnotationList;
+	public void setNetworkRelationAnnotation(
+			NetworkRelationAnnotationsDTO networkRelationAnnotation) {
+		this.networkRelationAnnotation = networkRelationAnnotation;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public NetworkAnnotationsDTO(String annotationId, String annotationText,

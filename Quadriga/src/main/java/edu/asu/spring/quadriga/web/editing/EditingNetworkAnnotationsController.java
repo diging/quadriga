@@ -181,7 +181,7 @@ public class EditingNetworkAnnotationsController {
 			Principal principal) throws QuadrigaStorageException, JSONException {
 		IUser user = userManager.getUserDetails(principal.getName());
 		String annotation = "";
-		List<NetworkAnnotation> resultList = new ArrayList<NetworkAnnotation>();
+		List<NetworkAnnotationsDTO> resultList = new ArrayList<NetworkAnnotationsDTO>();
 		try {
 			resultList = editingNetworkAnnotationManager.getAllAnnotationOfNetwork(user.getUserName(), networkId);
 			JSONArray ja = new JSONArray();
@@ -190,7 +190,7 @@ public class EditingNetworkAnnotationsController {
 
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
-					j.put("name", resultList.get(i).getNodeName());
+				//	j.put("name", resultList.get(i).getNetworkNodeAnnotationList().get(index));
 					j.put("text", resultList.get(i).getAnnotationText());
 					ja.put(j);
 				}
@@ -241,6 +241,81 @@ public class EditingNetworkAnnotationsController {
 
 		return "{ success: true; }";
 	}
+	
+	/**
+	 * This method gets the annotations entered to the edge
+	 * @param request
+	 * @param response
+	 * @param networkId
+	 * @param annotationText
+	 * @param id
+	 * @param objectType
+	 * @param principal
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/auth/editing/getAnnotationOfEdge/{networkId}", method = RequestMethod.GET)
+	public @ResponseBody String getAnnotationForToRelation(HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable("networkId") String networkId,
+			@RequestParam("predicateid") String predicateId, 
+			@RequestParam("subjectid") String subjectId, 
+			@RequestParam("objectid") String objectId, 
+			Principal principal) throws QuadrigaStorageException, JSONException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		String annotation = "";
 
+		try {
+			List<NetworkAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotationToRelation(networkId,subjectId,objectId,predicateId,user.getUserName());
+			JSONArray ja = new JSONArray();
+			JSONObject j1 = new JSONObject();
+			if(resultList != null || resultList.size() > 0){
+
+				for (int i = 0; i < resultList.size(); i++) {
+					JSONObject j = new JSONObject();
+					j.put("name", resultList.get(i).getAnnotationText());
+					ja.put(j);
+				}
+				j1.put("text", ja);
+				annotation = j1.toString();
+			}else{
+				annotation = j1.toString();
+			}
+
+
+		} catch (QuadrigaStorageException e) {
+			logger.error("Some issue in the DB", e);
+		}
+		return annotation;
+	}
+	
+	@RequestMapping(value = "/auth/editing/saveAnnotationToEdge/{networkId}", method = RequestMethod.POST)
+	public @ResponseBody String saveAnnotationtoToRelation(HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable("networkId") String networkId,
+			@RequestParam("annotText") String annotationText,
+			@RequestParam("subjectid") String subjectId,
+			@RequestParam("subjectname") String subjectName, 
+			@RequestParam("predicateid") String predicateId,
+			@RequestParam("predicatename") String predicateName,
+			@RequestParam("objectid") String objectId,
+			@RequestParam("objectname") String objectName,
+			@RequestParam("objecttype") String objectType, 
+			@RequestParam("targettype") String targetType,
+			Principal principal) throws QuadrigaStorageException {
+		IUser user = userManager.getUserDetails(principal.getName());
+		try {
+			editingNetworkAnnotationManager.addAnnotationToRelation(annotationText,networkId, predicateId, predicateName,subjectId,
+					subjectName,objectId,objectName, user.getUserName(),objectType);
+
+		} catch (QuadrigaStorageException e) {
+			logger.error("Some issue in the DB", e);
+		}
+
+		return "{ success: true; }";
+	}
+
+	
 }
 
