@@ -197,7 +197,7 @@ public class ProjectDictionaryManagerTest {
 	public void testAddProjectDictionary() throws QuadrigaStorageException 
 	{
 		boolean isAdded = false;
-		dbConnect.addProjectDictionary("PROJ_1_Test", "DICT_2_Test", "projuser1");
+		dbConnect.addDictionaryToProject("PROJ_1_Test", "DICT_2_Test", "projuser1");
 		
 		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,"PROJ_1_Test");
 		List<ProjectDictionaryDTO> projectDictionaryList = project.getProjectDictionaryDTOList();
