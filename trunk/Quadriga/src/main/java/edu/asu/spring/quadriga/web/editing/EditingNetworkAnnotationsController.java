@@ -256,7 +256,7 @@ public class EditingNetworkAnnotationsController {
 	 * @throws QuadrigaStorageException
 	 */
 	@SuppressWarnings("null")
-	@RequestMapping(value = "/auth/editing/getAnnotationOfEdge/{networkId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/auth/editing/getAnnotationOfRelation/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String getAnnotationForToRelation(HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
@@ -291,7 +291,7 @@ public class EditingNetworkAnnotationsController {
 		return annotation;
 	}
 	
-	@RequestMapping(value = "/auth/editing/saveAnnotationToEdge/{networkId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/auth/editing/saveAnnotationToRelation/{networkId}", method = RequestMethod.POST)
 	public @ResponseBody String saveAnnotationtoToRelation(HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
