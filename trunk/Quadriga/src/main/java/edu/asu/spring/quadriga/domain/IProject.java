@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.domain;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 
 /**
@@ -11,7 +10,11 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
  * @author        : Kiran Kumar Batna
  *
  */
-public interface IProject {
+public interface IProject 
+{
+	public abstract void setProjectId(String projectId);
+
+	public abstract String getProjectId();
 
 	public abstract String getName();
 
@@ -23,7 +26,11 @@ public interface IProject {
 
 	public abstract String getUnixName();
 
-	public abstract void setUnixName(String id);
+	public abstract void setUnixName(String unixName);
+	
+	public abstract EProjectAccessibility getProjectAccess();
+
+	public abstract void setProjectAccess(EProjectAccessibility projectAccess);
 
 	public abstract IUser getOwner();
 
@@ -33,17 +40,15 @@ public interface IProject {
 
 	public abstract void setCollaborators(List<ICollaborator> collaborators);
 	
-	public abstract EProjectAccessibility getProjectAccess();
-
-	public abstract void setProjectAccess(EProjectAccessibility projectAccess);
-
-	public abstract ENetworkAccessibility getNetworksDefaultAccess();
-
-	public abstract void setNetworksDefaultAccess(
-			ENetworkAccessibility networksDefaultAccess);
-
-	public abstract void setInternalid(String internalid);
-
-	public abstract String getInternalid();
+	public abstract List<IWorkSpace> getWorkspaces();
 	
+	public abstract void setWorkspaces(List<IWorkSpace> workspaces);
+	
+	public abstract List<IConceptCollection> getConceptCollections();
+	
+	public abstract void setConceptCollections(List<IConceptCollection> conceptCollections);
+	
+	public abstract List<IDictionary> getDictionaries();
+	
+	public abstract void setDictionaries(List<IDictionary> dictionaries);
 }

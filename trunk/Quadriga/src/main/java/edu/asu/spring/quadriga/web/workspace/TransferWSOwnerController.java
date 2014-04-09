@@ -100,9 +100,9 @@ public class TransferWSOwnerController
 
 			//adding the collaborator model
 			model.getModelMap().put("user", userFactory.createUserObject());
-			model.getModelMap().put("wsname", workspace.getName());
+			model.getModelMap().put("wsname", workspace.getWorkspaceName());
 			model.getModelMap().put("wsowner", workspace.getOwner().getUserName());
-			model.getModelMap().put("workspaceid", workspace.getId());
+			model.getModelMap().put("workspaceid", workspace.getWorkspaceId());
 			
 			//fetch the collaborators
 			for(ICollaborator collabuser : collaboratingUser)
@@ -150,13 +150,13 @@ public class TransferWSOwnerController
 		//retrieve the collaborators associated with the workspace
 		collaboratingUser = wsCollabManager.getWorkspaceCollaborators(workspaceid);
 
-		model.getModelMap().put("workspaceid", workspace.getId());
+		model.getModelMap().put("workspaceid", workspace.getWorkspaceId());
 		
 			if(result.hasErrors())
 			{
 				model.getModelMap().put("user", collaboratorUser);
 				
-				model.getModelMap().put("wsname", workspace.getName());
+				model.getModelMap().put("wsname", workspace.getWorkspaceName());
 				model.getModelMap().put("wsowner", workspace.getOwner().getUserName());
 				
 				for(ICollaborator collabuser : collaboratingUser)

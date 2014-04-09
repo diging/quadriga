@@ -143,7 +143,7 @@ public class AddWSCollabController
 		
 		//adding the workspace id
 		model.getModelMap().put("workspaceid", workspaceid);
-		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacename",workspace.getWorkspaceName());
 		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		
 		
@@ -212,7 +212,7 @@ public class AddWSCollabController
 		userName = principal.getName();
 		
 		IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
-		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacename",workspace.getWorkspaceName());
 		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		
 		if(result.hasErrors())

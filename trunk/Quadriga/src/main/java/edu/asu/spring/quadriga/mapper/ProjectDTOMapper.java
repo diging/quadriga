@@ -37,7 +37,7 @@ public class ProjectDTOMapper extends DAOConnectionManager{
 		project.setName(projectDTO.getProjectname());
 		project.setDescription(projectDTO.getDescription());
 		project.setUnixName(projectDTO.getUnixname());
-		project.setInternalid(projectDTO.getProjectid());
+		project.setProjectId(projectDTO.getProjectid());
 		project.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
 		project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 		return project;
@@ -50,7 +50,7 @@ public class ProjectDTOMapper extends DAOConnectionManager{
 		projectDTO.setProjectname(project.getName());
 		projectDTO.setDescription(project.getDescription());
 		projectDTO.setUnixname(project.getUnixName());
-		projectDTO.setProjectid(project.getInternalid());
+		projectDTO.setProjectid(project.getProjectId());
 		projectDTO.setProjectowner(quadrigaUser);
 		projectDTO.setCreatedby(project.getOwner().getUserName());
 		projectDTO.setCreateddate(new Date());

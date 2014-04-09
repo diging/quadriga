@@ -65,7 +65,7 @@ public class DeleteWSCollabController
 		
 		//set the workspace id
 		model.getModelMap().put("workspaceid", workspaceid);
-		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacename",workspace.getWorkspaceName());
 		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		
 		return model;
@@ -116,7 +116,7 @@ public class DeleteWSCollabController
 		
 		//set the workspace id
 		model.getModelMap().put("workspaceid", workspaceid);
-		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacename",workspace.getWorkspaceName());
 		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		
 		//success message

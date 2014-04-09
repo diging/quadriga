@@ -98,13 +98,13 @@ public class ProjectProxy implements IProject {
 	}
 
 	@Override
-	public void setInternalid(String internalid) {
+	public void setProjectId(String internalid) {
 		this.internalid = internalid;
 
 	}
 
 	@Override
-	public String getInternalid() {
+	public String getProjectId() {
 		return this.internalid;
 	}
 

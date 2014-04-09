@@ -4,6 +4,10 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.IWorkSpace;
 
@@ -16,20 +20,33 @@ import edu.asu.spring.quadriga.domain.IWorkSpace;
  */
 public class WorkSpace implements IWorkSpace 
 {
-	private String name;
+	private String workspaceId;
+	private String workspaceName;
 	private String description;
-	private String id;
 	private IUser owner;
 	private List<ICollaborator> collaborators;
-	private List<IBitStream> bitstreams;
+	private IProject project;
+	private List<IBitStream> bitStreams;
+	private List<IConceptCollection> conceptCollections;
+	private List<IDictionary> dictionaries;
+	private List<INetwork> networks;
 	
 	@Override
-	public String getName() {
-		return name;
+	public String getWorkspaceId() {
+		return workspaceId;
 	}
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setWorkspaceId(String id) {
+		this.workspaceId = id;
+	}
+	
+	@Override
+	public String getWorkspaceName() {
+		return workspaceName;
+	}
+	@Override
+	public void setWorkspaceName(String name) {
+		this.workspaceName = name;
 	}
 	@Override
 	public String getDescription() {
@@ -39,14 +56,7 @@ public class WorkSpace implements IWorkSpace
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@Override
-	public String getId() {
-		return id;
-	}
-	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
+
 	@Override
 	public IUser getOwner() {
 		return owner;
@@ -63,63 +73,49 @@ public class WorkSpace implements IWorkSpace
 	public void setCollaborators(List<ICollaborator> collaborators) {
 		this.collaborators = collaborators;
 	}
+	
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((collaborators == null) ? 0 : collaborators.hashCode());
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public IProject getProject() {
+		return project;
 	}
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		WorkSpace other = (WorkSpace) obj;
-		if (collaborators == null) {
-			if (other.collaborators != null)
-				return false;
-		} else if (!collaborators.equals(other.collaborators))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public void setProject(IProject project) {
+		this.project = project;
 	}
 	
 	@Override
 	public List<IBitStream> getBitstreams() {
-		return bitstreams;
+		return bitStreams;
 	}
 	@Override
 	public void setBitstreams(List<IBitStream> bitstreams) {
-		this.bitstreams = bitstreams;
-	}
-	
-	@Override
-	public void addBitstream(IBitStream bitstream)
-	{
-		this.bitstreams.add(bitstream);
+		this.bitStreams = bitstreams;
 	}
 
+	@Override
+	public List<IConceptCollection> getConceptCollections() {
+		return conceptCollections;
+	}
+	@Override
+	public void setConceptCollections(
+			List<IConceptCollection> conceptCollections) {
+		this.conceptCollections = conceptCollections;
+	}
+	@Override
+	public List<IDictionary> getDictionaries() {
+		return dictionaries;
+	}
+	@Override
+	public void setDictionaries(List<IDictionary> dictionaries) {
+		this.dictionaries = dictionaries;
+	}
+	@Override
+	public List<INetwork> getNetworks() {
+		return networks;
+	}
+	@Override
+	public void setNetworks(List<INetwork> networks) {
+		this.networks = networks;
+	}
+	
 }

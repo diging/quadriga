@@ -52,11 +52,11 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
-				data.put("id", project.getInternalid());
+				data.put("id", project.getProjectId());
 				data.put("parent", "#");
 				String projectLink = null;
 				projectLink = "<a href='#' id='"
-						+ project.getInternalid()
+						+ project.getProjectId()
 						+ "' name='"
 						+ project.getName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
@@ -64,22 +64,22 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
-				String wsParent = project.getInternalid();
+				String wsParent = project.getProjectId();
 				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getInternalid(), sUserName);
+						project.getProjectId(), sUserName);
 				for (IWorkSpace ws : wsList) {
 					// workspace json
 						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getId());
+						data1.put("id", ws.getWorkspaceId());
 						data1.put("parent", wsParent);
 						String wsLink = null;
 						
 						 wsLink = "<a href='#' id='"
-								+ ws.getId()
+								+ ws.getWorkspaceId()
 								+ "' name='"
-								+ ws.getName()
+								+ ws.getWorkspaceName()
 								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getName() + "</a>";
+								+ ws.getWorkspaceName() + "</a>";
 						
 						data1.put("text", wsLink);
 						dataArray.put(data1);
@@ -118,11 +118,11 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
-				data.put("id", project.getInternalid());
+				data.put("id", project.getProjectId());
 				data.put("parent", "#");
 				String projectLink = null;
 				projectLink = "<a href='#' id='"
-						+ project.getInternalid()
+						+ project.getProjectId()
 						+ "' name='"
 						+ project.getName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
@@ -130,22 +130,22 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
-				String wsParent = project.getInternalid();
+				String wsParent = project.getProjectId();
 				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getInternalid(), sUserName);
+						project.getProjectId(), sUserName);
 				for (IWorkSpace ws : wsList) {
 					// workspace json
 						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getId());
+						data1.put("id", ws.getWorkspaceId());
 						data1.put("parent", wsParent);
 						String wsLink = null;
 						
 						 wsLink = "<a href='#' id='"
-								+ ws.getId()
+								+ ws.getWorkspaceId()
 								+ "' name='"
-								+ ws.getName()
+								+ ws.getWorkspaceName()
 								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getName() + "</a>";
+								+ ws.getWorkspaceName() + "</a>";
 						
 						data1.put("text", wsLink);
 						dataArray.put(data1);
@@ -184,11 +184,11 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
-				data.put("id", project.getInternalid());
+				data.put("id", project.getProjectId());
 				data.put("parent", "#");
 				String projectLink = null;
 				projectLink = "<a href='#' id='"
-						+ project.getInternalid()
+						+ project.getProjectId()
 						+ "' name='"
 						+ project.getName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
@@ -196,22 +196,22 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
-				String wsParent = project.getInternalid();
+				String wsParent = project.getProjectId();
 				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getInternalid(), sUserName);
+						project.getProjectId(), sUserName);
 				for (IWorkSpace ws : wsList) {
 					// workspace json
 						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getId());
+						data1.put("id", ws.getWorkspaceId());
 						data1.put("parent", wsParent);
 						String wsLink = null;
 						
 						 wsLink = "<a href='#' id='"
-								+ ws.getId()
+								+ ws.getWorkspaceId()
 								+ "' name='"
-								+ ws.getName()
+								+ ws.getWorkspaceName()
 								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getName() + "</a>";
+								+ ws.getWorkspaceName() + "</a>";
 						
 						data1.put("text", wsLink);
 						dataArray.put(data1);
@@ -250,33 +250,33 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
-				data.put("id", project.getInternalid());
+				data.put("id", project.getProjectId());
 				data.put("parent", "#");
 				String projectLink = null;
 				projectLink = "<a href='#' id='"
-						+ project.getInternalid()
+						+ project.getProjectId()
 						+ "' name='"
 						+ project.getName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
 						+ project.getName() + "</a>";
 				
 				data.put("text", projectLink);
-				String wsParent = project.getInternalid();
+				String wsParent = project.getProjectId();
 				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getInternalid(), sUserName);
+						project.getProjectId(), sUserName);
 				for (IWorkSpace ws : wsList) {
 					// workspace json
 						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getId());
+						data1.put("id", ws.getWorkspaceId());
 						data1.put("parent", wsParent);
 						String wsLink = null;
 						
 						 wsLink = "<a href='#' id='"
-								+ ws.getId()
+								+ ws.getWorkspaceId()
 								+ "' name='"
-								+ ws.getName()
+								+ ws.getWorkspaceName()
 								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getName() + "</a>";
+								+ ws.getWorkspaceName() + "</a>";
 						
 						data1.put("text", wsLink);
 						dataArray.put(data1);
@@ -340,11 +340,11 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		for (IProject project : allProjectsList) {
 			
 				JSONObject data = new JSONObject();
-				data.put("id", project.getInternalid());
+				data.put("id", project.getProjectId());
 				data.put("parent", "#");
 				String projectLink = null;
 				projectLink = "<a href='#' id='"
-						+ project.getInternalid()
+						+ project.getProjectId()
 						+ "' name='"
 						+ project.getName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
@@ -352,22 +352,22 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
-				String wsParent = project.getInternalid();
+				String wsParent = project.getProjectId();
 				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getInternalid(), sUserName);
+						project.getProjectId(), sUserName);
 				for (IWorkSpace ws : wsList) {
 					// workspace json
 						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getId());
+						data1.put("id", ws.getWorkspaceId());
 						data1.put("parent", wsParent);
 						String wsLink = null;
 						
 						 wsLink = "<a href='#' id='"
-								+ ws.getId()
+								+ ws.getWorkspaceId()
 								+ "' name='"
-								+ ws.getName()
+								+ ws.getWorkspaceName()
 								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getName() + "</a>";
+								+ ws.getWorkspaceName() + "</a>";
 						
 						data1.put("text", wsLink);
 						dataArray.put(data1);

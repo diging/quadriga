@@ -918,7 +918,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		//Get the project object associated with the workspace
 		IProject project = projectManager.getProject(workspaceid);
 		if(project != null)
-			return project.getInternalid();
+			return project.getProjectId();
 		else 
 			return null;
 	}
@@ -1061,23 +1061,23 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			for(IProject project : projectList){
 				// Each data
 				JSONObject data = new JSONObject();
-				data.put("id",project.getInternalid());
+				data.put("id",project.getProjectId());
 				data.put("parent","#");
 				data.put("text",project.getName());
 				dataArray.put(data);
-				String wsParent = project.getInternalid();
+				String wsParent = project.getProjectId();
 
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getInternalid(), userName);
+				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getProjectId(), userName);
 				for(IWorkSpace ws : wsList){
 					//workspace json
 					JSONObject data1 = new JSONObject();
-					data1.put("id",ws.getId());
+					data1.put("id",ws.getWorkspaceId());
 					data1.put("parent",wsParent);
-					data1.put("text",ws.getName());
+					data1.put("text",ws.getWorkspaceName());
 					dataArray.put(data1);
-					String networkParent = ws.getId();
+					String networkParent = ws.getWorkspaceId();
 
-					List<INetwork> networkList1 = wsManager.getWorkspaceNetworkList(ws.getId());
+					List<INetwork> networkList1 = wsManager.getWorkspaceNetworkList(ws.getWorkspaceId());
 					for(INetwork network : networkList1){
 						JSONObject data2 = new JSONObject();
 						data2.put("id",network.getId());

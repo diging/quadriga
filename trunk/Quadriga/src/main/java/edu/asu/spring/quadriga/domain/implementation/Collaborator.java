@@ -41,16 +41,6 @@ public class Collaborator implements ICollaborator
 	public void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles) {
 		this.collaboratorRoles = collaboratorRoles;
 	}
-	/*@Override
-	public void setProjectCollaborator(String collaborator) {
-		
-		this.collaborator = collaborator;
-		
-	} */
-	@Override
-	public void setCollaboratorName(String collaborator) {
-		
-	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -61,6 +51,7 @@ public class Collaborator implements ICollaborator
 						.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((userObj == null) ? 0 : userObj.hashCode());
 		return result;
 	}
 	@Override
@@ -82,9 +73,11 @@ public class Collaborator implements ICollaborator
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
+		if (userObj == null) {
+			if (other.userObj != null)
+				return false;
+		} else if (!userObj.equals(other.userObj))
+			return false;
 		return true;
 	}
-	
-	
-	
 }

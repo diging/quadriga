@@ -37,9 +37,9 @@ public class WorkspaceFactory implements IWorkspaceFactory
 	public IWorkSpace cloneWorkspaceObject(IWorkSpace workspace)
 	{
 		IWorkSpace clone = createWorkspaceObject();
-		clone.setName(workspace.getName());
+		clone.setWorkspaceName(workspace.getWorkspaceName());
 		clone.setDescription(workspace.getDescription());
-		clone.setId(workspace.getId());
+		clone.setWorkspaceId(workspace.getWorkspaceId());
 		
 		IUser owner = workspace.getOwner();
 		

@@ -66,6 +66,8 @@ public class CollaboratorRole implements ICollaboratorRole
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((displayName == null) ? 0 : displayName.hashCode());
+		result = prime * result
 				+ ((roleDBid == null) ? 0 : roleDBid.hashCode());
 		result = prime * result
 				+ ((roledescription == null) ? 0 : roledescription.hashCode());
@@ -84,6 +86,11 @@ public class CollaboratorRole implements ICollaboratorRole
 		if (getClass() != obj.getClass())
 			return false;
 		CollaboratorRole other = (CollaboratorRole) obj;
+		if (displayName == null) {
+			if (other.displayName != null)
+				return false;
+		} else if (!displayName.equals(other.displayName))
+			return false;
 		if (roleDBid == null) {
 			if (other.roleDBid != null)
 				return false;
@@ -106,8 +113,4 @@ public class CollaboratorRole implements ICollaboratorRole
 			return false;
 		return true;
 	}
-	
-	
-	
-
 }

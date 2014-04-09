@@ -228,11 +228,11 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("WorkspaceDTO.findByWorkspaceid");
-			query.setParameter("workspaceid", workspace.getId());
+			query.setParameter("workspaceid", workspace.getWorkspaceId());
 			WorkspaceDTO workspaceDTO = (WorkspaceDTO) query.uniqueResult();
 			if(workspaceDTO != null)
 			{
-				workspaceDTO.setWorkspacename(workspace.getName());
+				workspaceDTO.setWorkspacename(workspace.getWorkspaceName());
 				workspaceDTO.setDescription(workspace.getDescription());
 				workspaceDTO.setUpdateddate(new Date());
 				workspaceDTO.setUpdatedby(workspace.getOwner().getName());

@@ -157,7 +157,7 @@ public class ModifyWSController {
 			workspace.setOwner(wsOwner);
 
 			// set the workspace id
-			workspace.setId(workspaceid);
+			workspace.setWorkspaceId(workspaceid);
 
 			if (result.hasErrors()) {
 				model.getModelMap().put("workspace", workspace);

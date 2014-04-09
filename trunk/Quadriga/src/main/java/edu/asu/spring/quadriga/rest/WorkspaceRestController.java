@@ -250,7 +250,7 @@ public class WorkspaceRestController {
 			logger.info("Name : " +workspace.getName().trim());
 			logger.info("ID : "+workspace.getId().trim());
 			workspaceNew.setDescription(workspace.getDescription().trim());
-			workspaceNew.setName(workspace.getName().trim());
+			workspaceNew.setWorkspaceName(workspace.getName().trim());
 			workspaceNew.setOwner(user);
 			modifyWSManager.addWorkSpaceRequest(workspaceNew, projectId);
 		}

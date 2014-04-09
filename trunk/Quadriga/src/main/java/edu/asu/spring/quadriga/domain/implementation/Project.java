@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
+import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 
 /**
@@ -18,29 +20,48 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
  */
 @Service
 public class Project implements IProject {
-	private String name;
+	private String projectId;
+	private String projectName;
 	private String description;
 	private String unixName;
-	private String internalid;
-	private List<ICollaborator> collaborators;
 	private EProjectAccessibility projectAccess;
-	private ENetworkAccessibility networksDefaultAccess;
 	private IUser owner;
+	private List<ICollaborator> collaborators;
+	private List<IWorkSpace> workspaces;
+	private List<IConceptCollection> conceptCollections;
+	private List<IDictionary> dictionaries;
+	
+	/**
+	 * retrieves the internal id of the project
+	 */
+	@Override
+	public String getProjectId() {
+		return projectId;
+	}
 
+	/**
+	 * assigns the internal id of the project
+	 */
+	@Override
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+	
+	
 	/**
 	 * retrieves the name of the project
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return projectName;
 	}
 
 	/**
 	 * assigns the name of the project to the supplied variable.
 	 */
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	/**
@@ -71,24 +92,24 @@ public class Project implements IProject {
 	 * assigns the Unix ID of the project
 	 */
 	@Override
-	public void setUnixName(String unixname) {
-		this.unixName = unixname;
+	public void setUnixName(String unixName) {
+		this.unixName = unixName;
 	}
 
 	/**
-	 * retrieves the internal id of the project
+	 * retrieves the accessibility of the project
 	 */
 	@Override
-	public String getInternalid() {
-		return internalid;
+	public EProjectAccessibility getProjectAccess() {
+		return projectAccess;
 	}
 
 	/**
-	 * assigns the internal id of the project
+	 * assigns the accessibility of the project
 	 */
 	@Override
-	public void setInternalid(String internalid) {
-		this.internalid = internalid;
+	public void setProjectAccess(EProjectAccessibility projectAccess) {
+		this.projectAccess = projectAccess;
 	}
 
 	/**
@@ -122,38 +143,36 @@ public class Project implements IProject {
 	public void setCollaborators(List<ICollaborator> collaborators) {
 		this.collaborators = collaborators;
 	}
-
-	/**
-	 * retrieves the accessibility of the project
-	 */
+	
 	@Override
-	public EProjectAccessibility getProjectAccess() {
-		return projectAccess;
+	public List<IWorkSpace> getWorkspaces() {
+		return workspaces;
 	}
 
-	/**
-	 * assigns the accessibility of the project
-	 */
 	@Override
-	public void setProjectAccess(EProjectAccessibility projectAccess) {
-		this.projectAccess = projectAccess;
+	public void setWorkspaces(List<IWorkSpace> workspaces) {
+		this.workspaces = workspaces;
 	}
 
-	/**
-	 * retrieves the networks access of the project
-	 */
 	@Override
-	public ENetworkAccessibility getNetworksDefaultAccess() {
-		return networksDefaultAccess;
+	public List<IConceptCollection> getConceptCollections() {
+		return conceptCollections;
 	}
 
-	/**
-	 * assigns the network access of the project
-	 */
 	@Override
-	public void setNetworksDefaultAccess(
-			ENetworkAccessibility networksDefaultAccess) {
-		this.networksDefaultAccess = networksDefaultAccess;
+	public void setConceptCollections(
+			List<IConceptCollection> conceptCollections) {
+		this.conceptCollections = conceptCollections;
+	}
+
+	@Override
+	public List<IDictionary> getDictionaries() {
+		return dictionaries;
+	}
+
+	@Override
+	public void setDictionaries(List<IDictionary> dictionaries) {
+		 this.dictionaries = dictionaries;
 	}
 
 	@Override
@@ -162,19 +181,25 @@ public class Project implements IProject {
 		int result = 1;
 		result = prime * result
 				+ ((collaborators == null) ? 0 : collaborators.hashCode());
+		result = prime
+				* result
+				+ ((conceptCollections == null) ? 0 : conceptCollections
+						.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result
-				+ ((internalid == null) ? 0 : internalid.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime
-				* result
-				+ ((networksDefaultAccess == null) ? 0 : networksDefaultAccess
-						.hashCode());
+				+ ((dictionaries == null) ? 0 : dictionaries.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
 		result = prime * result
 				+ ((projectAccess == null) ? 0 : projectAccess.hashCode());
 		result = prime * result
+				+ ((projectId == null) ? 0 : projectId.hashCode());
+		result = prime * result
+				+ ((projectName == null) ? 0 : projectName.hashCode());
+		result = prime * result
 				+ ((unixName == null) ? 0 : unixName.hashCode());
+		result = prime * result
+				+ ((workspaces == null) ? 0 : workspaces.hashCode());
 		return result;
 	}
 
@@ -188,35 +213,52 @@ public class Project implements IProject {
 			return false;
 		Project other = (Project) obj;
 		if (collaborators == null) {
-			if (other.collaborators != null && other.collaborators.size()>0)
+			if (other.collaborators != null)
 				return false;
 		} else if (!collaborators.equals(other.collaborators))
+			return false;
+		if (conceptCollections == null) {
+			if (other.conceptCollections != null)
+				return false;
+		} else if (!conceptCollections.equals(other.conceptCollections))
 			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (internalid == null) {
-			if (other.internalid != null)
+		if (dictionaries == null) {
+			if (other.dictionaries != null)
 				return false;
-		} else if (!internalid.equals(other.internalid))
+		} else if (!dictionaries.equals(other.dictionaries))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (owner == null) {
+			if (other.owner != null)
 				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (networksDefaultAccess != other.networksDefaultAccess)
+		} else if (!owner.equals(other.owner))
 			return false;
 		if (projectAccess != other.projectAccess)
+			return false;
+		if (projectId == null) {
+			if (other.projectId != null)
+				return false;
+		} else if (!projectId.equals(other.projectId))
+			return false;
+		if (projectName == null) {
+			if (other.projectName != null)
+				return false;
+		} else if (!projectName.equals(other.projectName))
 			return false;
 		if (unixName == null) {
 			if (other.unixName != null)
 				return false;
 		} else if (!unixName.equals(other.unixName))
 			return false;
+		if (workspaces == null) {
+			if (other.workspaces != null)
+				return false;
+		} else if (!workspaces.equals(other.workspaces))
+			return false;
 		return true;
 	}
-
 }

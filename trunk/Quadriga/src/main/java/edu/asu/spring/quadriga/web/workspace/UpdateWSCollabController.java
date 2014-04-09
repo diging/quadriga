@@ -126,7 +126,7 @@ public class UpdateWSCollabController
 		model.getModelMap().put("wscollabroles", collaboratorRoles);
 		model.getModelMap().put("collaboratorform", collaboratorForm);
 		model.getModelMap().put("workspaceid", workspaceid);
-		model.getModelMap().put("workspacename",workspace.getName());
+		model.getModelMap().put("workspacename",workspace.getWorkspaceName());
 		model.getModelMap().put("workspacedesc", workspace.getDescription());
 		model.getModelMap().put("success", 0);
 		
@@ -168,7 +168,7 @@ public class UpdateWSCollabController
 
 			//add the workspace details
 			IWorkSpace workspace = retrieveWSManager.getWorkspaceDetails(workspaceid, userName);
-			model.getModelMap().put("workspacename",workspace.getName());
+			model.getModelMap().put("workspacename",workspace.getWorkspaceName());
 			model.getModelMap().put("workspacedesc", workspace.getDescription());
 			
 			//add the model map

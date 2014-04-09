@@ -87,7 +87,7 @@ public class ModifyWSManagerTest {
 		user = userManager.getUserDetails("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
-		workspace.setName("testprojws2");
+		workspace.setWorkspaceName("testprojws2");
 		workspace.setDescription("test workspace");
 		workspace.setOwner(user);
 		

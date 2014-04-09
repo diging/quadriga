@@ -145,7 +145,7 @@ public class WebsiteProjectController {
 	public String browseNetworks(@PathVariable("ProjectUnixName") String unixName,Model model, Principal principal) throws QuadrigaStorageException{
 		System.out.println("browse");
 		IProject project = getProjectDetails(unixName);
-		String projectid = project.getInternalid();
+		String projectid = project.getProjectId();
 		List<INetwork> Networks = networkmanager.getNetworksInProject(projectid);
 		
 		//List<String> networkNames = null;
@@ -154,7 +154,7 @@ public class WebsiteProjectController {
 		{
 			//networkNames = new ArrayList<String>();
 			for(INetwork network : Networks){
-				System.out.println(network.getWorkspace().getName());
+				System.out.println(network.getWorkspace().getWorkspaceName());
 			}
 				//networkNames.add(network.getName());
 				 
