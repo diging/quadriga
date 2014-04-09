@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.network.factory;
 
 import org.apache.commons.lang.NotImplementedException;
 
+import edu.asu.spring.quadriga.domain.INetworkEdgeAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeAnnotation;
 
 public interface INetworkEdgeAnnotationFactory {
@@ -9,7 +10,7 @@ public interface INetworkEdgeAnnotationFactory {
 	 * Factory method for creating {@link NetworkNodeAnnotation} objects.
 	 * @return
 	 */
-	public abstract INetworkEdgeAnnotationFactory createUserObject();
+	public abstract INetworkEdgeAnnotation createUserObject();
 
 	/**
 	 * Method for cloning a {@link INetworkEdgeAnnotationFactory} object. Note that this will produce a shallow clone, meaning that the NetworkEdgeAnnotation
@@ -18,6 +19,6 @@ public interface INetworkEdgeAnnotationFactory {
 	 * @return a clone of the given networkEdgeAnnotation object that contains the exact same information as the original object.
 	 * @throws NotImplementedException
 	 */
-	public abstract  INetworkEdgeAnnotationFactory cloneUserObject(INetworkEdgeAnnotationFactory networkEdgeAnnotation);
+	public abstract  INetworkEdgeAnnotation cloneUserObject(INetworkEdgeAnnotation networkEdgeAnnotation);
 
 }

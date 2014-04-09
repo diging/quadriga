@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.network.factory;
 
 import org.apache.commons.lang.NotImplementedException;
 
+import edu.asu.spring.quadriga.domain.INetworkRelationAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkRelationAnnotation;
 
 public interface INetworkRelationAnnotationFactory {
@@ -9,7 +10,7 @@ public interface INetworkRelationAnnotationFactory {
 	 * Factory method for creating {@link NetworkRelationAnnotation} objects.
 	 * @return
 	 */
-	public abstract INetworkRelationAnnotationFactory createUserObject();
+	public abstract INetworkRelationAnnotation createUserObject();
 
 	/**
 	 * Method for cloning a {@link INetworkNodeAnnotationFactory} object. Note that this will produce a shallow clone, meaning that the NetworkRelationAnnotation
@@ -18,6 +19,6 @@ public interface INetworkRelationAnnotationFactory {
 	 * @return a clone of the given networkRelationAnnotation object that contains the exact same information as the original object.
 	 * @throws NotImplementedException
 	 */
-	public abstract  INetworkRelationAnnotationFactory cloneUserObject(INetworkRelationAnnotationFactory networkRelationAnnotation);
+	public abstract  INetworkRelationAnnotation cloneUserObject(INetworkRelationAnnotation networkRelationAnnotation);
 
 }
