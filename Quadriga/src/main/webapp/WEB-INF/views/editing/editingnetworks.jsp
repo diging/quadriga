@@ -61,7 +61,9 @@ $("input[type=button]").button().click(function(event) {
 <div id="chart"></div>
 
 <div id="inner-details"></div>
-<div id="allannot_details"></div>
+<div id="allannot_details">
+<table id = annotationsTable></table>
+</div>
 
 
 <div id="log"></div>
