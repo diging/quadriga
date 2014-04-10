@@ -413,6 +413,51 @@ function d3init(graph, networkId, path,type) {
 		});
 	}
 
+	function displayAllAnnotationsNew(){
+		$.ajax({
+			url : path+"/auth/editing/getAllAnnotations/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				if (data.length > 0) {
+					$('#annotationsTable')
+							.dataTable()
+							.fnClearTable();
+					$('#annotationsTable')
+							.dataTable().fnAddData(
+									response);
+				} else {
+					$('#annotationsTable')
+							.dataTable()
+							.fnClearTable();
+				}
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+	}
+	
+	function defineAnnotationsTable(){
+		$('#annotationsTable')
+		.dataTable(
+				{
+					"bJQueryUI" : true,
+					"sPaginationType" : "full_numbers",
+					"bAutoWidth" : false,
+					"aoColumns" : [ {
+						"sTitle" : "Name",
+						"mDataProp" : "name",
+					}, {
+						"sTitle" : "Text",
+						"mDataProp" : "text",
+					}, {
+						"sTitle" : "Object Type",
+						"mDataProp" : "objecttype",
+					}],
+				});
+	}
+	
 	function rightClick(d){
 		var html = "";
 		// If the node type is Predicate
