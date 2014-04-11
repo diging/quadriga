@@ -20,10 +20,10 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -82,7 +82,7 @@ public class TransferProjectOwnerController
 			
 			//create a model
 		    model.getModelMap().put("user", userFactory.createUserObject());
-			model.getModelMap().put("projectname", project.getName());
+			model.getModelMap().put("projectname", project.getProjectName());
 			model.getModelMap().put("projectowner", project.getOwner().getUserName());
 			model.getModelMap().put("projectid", projectid);
 			
@@ -138,7 +138,7 @@ public class TransferProjectOwnerController
 				model.getModelMap().put("user", collaboratorUser);
 				
 				//create a model
-				model.getModelMap().put("projectname", project.getName());
+				model.getModelMap().put("projectname", project.getProjectName());
 				model.getModelMap().put("projectowner", project.getOwner().getUserName());
 				
 				//fetch the collaborators

@@ -23,12 +23,12 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
@@ -156,7 +156,7 @@ public class RetrieveProjectControllerTest {
 		
 		project = projectFactory.createProjectObject();
 		project.setProjectId("PROJ_1");
-		project.setName("proj1");
+		project.setProjectName("proj1");
 		project.setDescription("test project");
 		project.setUnixName("proj1");
 		project.setProjectAccess(EProjectAccessibility.PUBLIC);
@@ -166,7 +166,7 @@ public class RetrieveProjectControllerTest {
 		
 		project = projectFactory.createProjectObject();
 		project.setProjectId("PROJ_2");
-		project.setName("proj2");
+		project.setProjectName("proj2");
 		project.setDescription("test project");
 		project.setUnixName("proj2");
 		project.setProjectAccess(EProjectAccessibility.PUBLIC);
@@ -214,7 +214,7 @@ public class RetrieveProjectControllerTest {
 		
 		project = projectFactory.createProjectObject();
 		project.setProjectId("PROJ_3");
-		project.setName("proj3");
+		project.setProjectName("proj3");
 		project.setDescription("test project");
 		project.setUnixName("proj3");
 		project.setProjectAccess(EProjectAccessibility.PUBLIC);
@@ -224,7 +224,7 @@ public class RetrieveProjectControllerTest {
 		
 		project = projectFactory.createProjectObject();
 		project.setProjectId("PROJ_4");
-		project.setName("proj4");
+		project.setProjectName("proj4");
 		project.setDescription("test project");
 		project.setUnixName("proj4");
 		project.setProjectAccess(EProjectAccessibility.PUBLIC);
@@ -272,7 +272,7 @@ public class RetrieveProjectControllerTest {
 				
 				project = projectFactory.createProjectObject();
 				project.setProjectId("PROJ_5");
-				project.setName("proj5");
+				project.setProjectName("proj5");
 				project.setDescription("test project");
 				project.setUnixName("proj5");
 				project.setProjectAccess(EProjectAccessibility.PUBLIC);
@@ -320,7 +320,7 @@ public class RetrieveProjectControllerTest {
 		
 		project = projectFactory.createProjectObject();
 		project.setProjectId("PROJ_6");
-		project.setName("proj6");
+		project.setProjectName("proj6");
 		project.setDescription("test project");
 		project.setUnixName("proj6");
 		project.setProjectAccess(EProjectAccessibility.PUBLIC);
@@ -367,7 +367,7 @@ public class RetrieveProjectControllerTest {
 			
 			project = projectFactory.createProjectObject();
 			project.setProjectId("PROJ_5");
-			project.setName("proj5");
+			project.setProjectName("proj5");
 			project.setDescription("test project");
 			project.setUnixName("proj5");
 			project.setProjectAccess(EProjectAccessibility.PUBLIC);

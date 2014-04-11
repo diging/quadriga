@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionWorkspaceDictionary {

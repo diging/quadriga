@@ -219,7 +219,7 @@ public class DictionaryItemControllerTest {
 		{
 			
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -240,7 +240,7 @@ public class DictionaryItemControllerTest {
 		{
 			
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -271,7 +271,7 @@ public class DictionaryItemControllerTest {
 		{
 			
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);

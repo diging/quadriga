@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 
 /**
  * @description   : interface to implement Network class.

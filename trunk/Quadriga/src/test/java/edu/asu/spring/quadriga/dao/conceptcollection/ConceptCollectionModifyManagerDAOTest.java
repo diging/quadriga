@@ -85,10 +85,10 @@ public class ConceptCollectionModifyManagerDAOTest {
 				
 		conceptCollection = ccManagerDAO.getConceptsOwnedbyUser("projuser").get(0);
 		conceptCollection.setDescription("UPDATED_DESC");
-		conceptCollection.setName("UPDATED_NAME");
+		conceptCollection.setConceptCollectionName("UPDATED_NAME");
 		dbConnect.updateCollectionDetails(conceptCollection, "projuser");
 		
 		conceptCollection = ccManagerDAO.getConceptsOwnedbyUser("projuser").get(0);
-		assertEquals("UPDATED_NAME",conceptCollection.getName());
+		assertEquals("UPDATED_NAME",conceptCollection.getConceptCollectionName());
 	}
 }

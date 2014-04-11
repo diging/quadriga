@@ -25,8 +25,8 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -114,7 +114,7 @@ public class ModifyProjectCollaboratorController
 		model.getModelMap().put("projcollabroles", collaboratorRoles);
 		model.getModelMap().put("collaboratorform", collaboratorForm);
 		model.getModelMap().put("projectid", projectid);
-		model.getModel().put("projectname", project.getName());
+		model.getModel().put("projectname", project.getProjectName());
 		model.getModelMap().put("projectdesc",project.getDescription());
 		model.getModelMap().put("success", 0);
 		
@@ -152,7 +152,7 @@ public class ModifyProjectCollaboratorController
 				projCollaborators = collaboratorManager.modifyProjectCollaboratorManager(projectid);
 				collaboratorForm.setCollaborators(projCollaborators);
 				model.getModelMap().put("collaboratorform", collaboratorForm);
-				model.getModel().put("projectname", project.getName());
+				model.getModel().put("projectname", project.getProjectName());
 				model.getModelMap().put("projectdesc",project.getDescription());
 				model.getModelMap().put("projectid", projectid);
 				

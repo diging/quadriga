@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
-import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSManager;

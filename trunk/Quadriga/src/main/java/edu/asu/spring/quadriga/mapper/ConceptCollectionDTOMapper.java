@@ -150,12 +150,12 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 			}
 			
 		}
-		concept.setId(collection.getConceptCollectionid());
-		concept.setName(collection.getCollectionname());
+		concept.setConceptCollectionId(collection.getConceptCollectionid());
+		concept.setConceptCollectionName(collection.getCollectionname());
 		concept.setDescription(collection.getDescription());
         concept.setOwner(userDTOMapper.getUser(collection.getCollectionowner()));
         concept.setCollaborators(collaboratorList);   
-        concept.setItems(conceptList);
+        concept.setConcepts(conceptList);
 		
 		return concept;
 	}
@@ -174,7 +174,7 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 	{
 		IConcept concept = null;
 		concept = conceptCollectionFactory.createConcept();
-		concept.setId(conceptDTO.getItem());
+		concept.setConceptId(conceptDTO.getItem());
 		concept.setDescription(conceptDTO.getDescription());
 		concept.setLemma(conceptDTO.getLemma());
 		concept.setPos(conceptDTO.getPos());
@@ -261,9 +261,9 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		conceptcollectionsDTO.setUpdateddate(new Date());
 		conceptcollectionsDTO.setCreatedby(conceptCollection.getOwner().getUserName());
 		conceptcollectionsDTO.setCreateddate(new Date());
-		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
+		conceptcollectionsDTO.setCollectionname(conceptCollection.getConceptCollectionName());
 		conceptcollectionsDTO.setDescription(conceptCollection.getDescription());
-		conceptcollectionsDTO.setCollectionname(conceptCollection.getName());
+		conceptcollectionsDTO.setCollectionname(conceptCollection.getConceptCollectionName());
 		conceptcollectionsDTO.setCollectionowner(getUserDTO(conceptCollection.getOwner().getUserName()));
 		conceptcollectionsDTO.setAccessibility(Boolean.FALSE);
 		return conceptcollectionsDTO;

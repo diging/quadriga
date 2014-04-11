@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.service.workbench;
 
 import java.util.ArrayList;
 
-import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyProjectManager {

@@ -234,7 +234,7 @@ public class DictionaryItemCollabControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -272,7 +272,7 @@ public class DictionaryItemCollabControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -317,7 +317,7 @@ public class DictionaryItemCollabControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -354,7 +354,7 @@ public class DictionaryItemCollabControllerTest {
 			assertEquals(roleAccess,1);
 			assertEquals(dictName,"testDictionary");
 			assertEquals(dictionaryid,getDictionaryID("testDictionary"));
-			dbConnection.deleteDictionaryItems(getDictionaryID("testDictionary"), dictionaryItems.getId(), "jdoe");
+			dbConnection.deleteDictionaryItems(getDictionaryID("testDictionary"), dictionaryItems.getDictionaryItemId(), "jdoe");
 			//dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
 			
@@ -366,7 +366,7 @@ public class DictionaryItemCollabControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -405,7 +405,7 @@ public class DictionaryItemCollabControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -427,7 +427,7 @@ public class DictionaryItemCollabControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -446,8 +446,8 @@ public class DictionaryItemCollabControllerTest {
 				logger.error("",e);
 			}
 			DictionaryItem dictionaryItems = new DictionaryItem();
-			dictionaryItems.setId(values);
-			dictionaryItems.setItems("dog");
+			dictionaryItems.setDictionaryItemId(values);
+			dictionaryItems.setTerm("dog");
 			dictionaryItems.setPos("noun");
 			dictionaryItems.setDescription("something");
 			principal = new Principal() {			
@@ -465,7 +465,7 @@ public class DictionaryItemCollabControllerTest {
 			Iterator <IDictionaryItem> I =dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),true);
 			IDictionaryItem di = I.next();
-			assertEquals(di.getItems(),"dog");
+			assertEquals(di.getTerm(),"dog");
 			assertEquals(di.getPos(),"noun");
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
 		}

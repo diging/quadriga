@@ -177,7 +177,7 @@ public class ConceptcollectionControllerTest {
 	@Test
 	public void testConceptCollectionHandler() throws QuadrigaStorageException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
-		c.setName("test");
+		c.setConceptCollectionName("test");
 		c.setDescription("Description ");
 		c.setOwner(user);
 		conceptCollectionManager.addConceptCollection(c);
@@ -195,7 +195,7 @@ public class ConceptcollectionControllerTest {
 	@Test
 	public void testConceptDetailsHandler() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
-		c.setName("test");
+		c.setConceptCollectionName("test");
 		c.setDescription("Description ");
 		c.setOwner(user);
 		conceptCollectionManager.addConceptCollection(c);
@@ -212,7 +212,7 @@ public class ConceptcollectionControllerTest {
 			concept = (IConceptCollection) model.get("concept");
 		}
 		
-		assertEquals(concept.getName(), "test");
+		assertEquals(concept.getConceptCollectionName(), "test");
 		
 		List<ICollaborator> collaboratingUsers = null;
 		
@@ -225,7 +225,7 @@ public class ConceptcollectionControllerTest {
 	@Test
 	public void testConceptSearchHandler() throws QuadrigaStorageException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
-		c.setName("test");
+		c.setConceptCollectionName("test");
 		c.setDescription("Description ");
 		c.setOwner(user);
 		conceptCollectionManager.addConceptCollection(c);
@@ -251,7 +251,7 @@ public class ConceptcollectionControllerTest {
 	@Test
 	public void testSaveItemsHandler() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
-		c.setName("test");
+		c.setConceptCollectionName("test");
 		c.setDescription("Description ");
 		c.setOwner(user);
 		conceptCollectionManager.addConceptCollection(c);
@@ -280,7 +280,7 @@ public class ConceptcollectionControllerTest {
 	public void testAddConceptCollection() throws QuadrigaStorageException {
 		IConceptCollection temp = conceptCollectionFactory.createConceptCollectionObject();
 		ConceptCollection c = (ConceptCollection) temp;
-		c.setName("test");
+		c.setConceptCollectionName("test");
 		c.setDescription("Description ");
 		c.setOwner(user);
 		BindingResult result = mock(BindingResult.class);
@@ -291,7 +291,7 @@ public class ConceptcollectionControllerTest {
 	@Test
 	public void testDeleteItems() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
-		c.setName("test");
+		c.setConceptCollectionName("test");
 		c.setDescription("Description ");
 		c.setOwner(user);
 		conceptCollectionManager.addConceptCollection(c);
@@ -311,10 +311,10 @@ public class ConceptcollectionControllerTest {
 		IConcept concept = conceptFactory.createConceptObject();
 		ConceptpowerReply.ConceptEntry conceptEntry = c1.getConceptEntry().get(1);
 		concept.setDescription(conceptEntry.getDescription());
-		concept.setId(conceptEntry.getId());
+		concept.setConceptId(conceptEntry.getId());
 		concept.setLemma(conceptEntry.getLemma());
 		concept.setPos(conceptEntry.getPos());
-		cTest.getItems().add(concept);
+		cTest.getConcepts().add(concept);
 		ccController.setCollection(cTest);
 		assertEquals(ccController.deleteItems(mock, model, principal), "redirect:/auth/conceptcollections/"+ccId);
 	}
@@ -322,7 +322,7 @@ public class ConceptcollectionControllerTest {
 	@Test
 	public void testConceptUpdateHandler() throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		IConceptCollection c = conceptCollectionFactory.createConceptCollectionObject();
-		c.setName("test");
+		c.setConceptCollectionName("test");
 		c.setDescription("Description ");
 		c.setOwner(user);
 		conceptCollectionManager.addConceptCollection(c);
@@ -340,10 +340,10 @@ public class ConceptcollectionControllerTest {
 		IConcept concept = conceptFactory.createConceptObject();
 		ConceptpowerReply.ConceptEntry conceptEntry = c1.getConceptEntry().get(1);
 		concept.setDescription(conceptEntry.getDescription());
-		concept.setId(conceptEntry.getId());
+		concept.setConceptId(conceptEntry.getId());
 		concept.setLemma(conceptEntry.getLemma());
 		concept.setPos(conceptEntry.getPos());
-		cTest.getItems().add(concept);
+		cTest.getConcepts().add(concept);
 		ccController.setCollection(cTest);
 		assertEquals(ccController.conceptUpdateHandler(mock, model, principal), "redirect:/auth/conceptcollections/"+ccId);
 	}

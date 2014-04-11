@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.service.workspace;
 
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IModifyWSManager {

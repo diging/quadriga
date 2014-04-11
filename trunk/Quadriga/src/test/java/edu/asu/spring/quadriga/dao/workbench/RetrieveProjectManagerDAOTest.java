@@ -17,10 +17,10 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -120,7 +120,7 @@ public class RetrieveProjectManagerDAOTest {
 		
 		//create project object with the test data
 		project = projectFactory.createProjectObject();
-		project.setName("testproject1");
+		project.setProjectName("testproject1");
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
 		project.setProjectId("PROJ_1");

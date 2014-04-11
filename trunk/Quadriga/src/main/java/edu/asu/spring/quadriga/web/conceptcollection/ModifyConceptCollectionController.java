@@ -69,7 +69,7 @@ public class ModifyConceptCollectionController
 		model = new ModelAndView("auth/conceptcollections/updatecollectiondetails");
 		//retrieve the collection details
 		collection = collectionFactory.createConceptCollectionObject();
-		collection.setId(collectionid);
+		collection.setConceptCollectionId(collectionid);
 		conceptControllerManager.getCollectionDetails(collection,userName);
 		
 		model.getModelMap().put("collection", collection);

@@ -30,7 +30,7 @@ public class CollectionsValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		IConceptCollection c = (IConceptCollection) obj;
-		String id = c.getName();
+		String id = c.getConceptCollectionName();
 		
 			try {
 				validateId(id, errors);

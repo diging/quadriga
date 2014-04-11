@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
-import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTO;

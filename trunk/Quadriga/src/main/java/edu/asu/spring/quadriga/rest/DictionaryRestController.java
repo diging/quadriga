@@ -348,7 +348,7 @@ public class DictionaryRestController {
 		
 		dictionary.setDescription(desc);
 		dictionary.setOwner(user);
-		dictionary.setName(dictName);
+		dictionary.setDictionaryName(dictName);
 		
 		dictionaryManager.addNewDictionary(dictionary);
 		String dictId = dictionaryManager.getDictionaryId(dictName);

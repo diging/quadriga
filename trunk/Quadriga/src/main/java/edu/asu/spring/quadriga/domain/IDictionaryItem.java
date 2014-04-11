@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain;
 
+import java.util.List;
+
 /**
  * Interface to implement DictionaryItems class.
  * 
@@ -8,17 +10,13 @@ package edu.asu.spring.quadriga.domain;
  */
 public interface IDictionaryItem {
 	
-	public abstract String getItems();
+	public abstract String getTerm();
 	
-	public abstract void setItems(String items);
-
-	public abstract String getDictionaryId();
+	public abstract void setTerm(String term);
 	
-	public abstract void setDictionaryId(String dictionaryId);
+	public abstract String getDictionaryItemId();
 	
-	public abstract String getId();
-	
-	public abstract void setId(String id);
+	public abstract void setDictionaryItemId(String dictionaryItemId);
 	
 	public abstract String getPos();
 	
@@ -31,5 +29,9 @@ public interface IDictionaryItem {
 	public abstract String getDescription();
 	
 	public abstract void setDescription(String description);
+	
+	public abstract List<IDictionary> getDictionaries();
+	
+	public abstract void setDictionaries(List<IDictionary> dictionaries);
 	
 }

@@ -123,7 +123,7 @@ public class DictionaryItemController {
 
 		
 	    IDictionary dictionaryObj = dictionaryFactory.createDictionaryObject();
-	    dictionaryObj.setId(dictionaryid);
+	    dictionaryObj.setDictionaryId(dictionaryid);
 	    dictionaryObj = retrieveDictionaryManager.getDictionaryDetails(dictionaryid);
 	   
 	    String jsonTreeData = dictonaryManager.getProjectsTree(userName, dictionaryid);

@@ -111,7 +111,7 @@ public class RetrieveDictionaryManagerDAOTest {
 	public void getDictionaryDetails() throws QuadrigaStorageException 
 	{
 		IDictionary dictionary = dbConnect.getDictionaryDetails("TEST_DICT_ID");
-		assertEquals("TEST_DICT_ID", dictionary.getId());
+		assertEquals("TEST_DICT_ID", dictionary.getDictionaryId());
 	}
 	
 }

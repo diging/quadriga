@@ -137,7 +137,7 @@ public class DictionaryCollaboratorController {
 		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
 		
 		modelAndView.getModelMap().put("dictionaryid", dictionaryId);
-		modelAndView.getModelMap().put("dictionaryname", dictionary.getName());
+		modelAndView.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 		modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
 		
 		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
@@ -204,7 +204,7 @@ public class DictionaryCollaboratorController {
 		
 		//fetch dictionary details
 		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
-		model.getModelMap().put("dictionaryname", dictionary.getName());
+		model.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 		model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 
 		String collaboratorUser = collaborator.getUserObj().getUserName();

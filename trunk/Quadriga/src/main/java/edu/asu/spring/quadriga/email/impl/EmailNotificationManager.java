@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 
 /**
@@ -78,7 +78,7 @@ public class EmailNotificationManager implements IEmailNotificationManager{
 		{
 			//Build the message to be sent to the user
 			StringBuilder message = new StringBuilder(emailMessages.getProperty("email.new_workspace_msg_part1"));
-			message.append(project.getName()+".");
+			message.append(project.getProjectName()+".");
 			message.append(emailMessages.getProperty("email.new_workspace_msg_part2"));
 			message.append(emailMessages.getProperty("email.new_workspace_msg_part3"));
 			message.append(workspace.getWorkspaceName());

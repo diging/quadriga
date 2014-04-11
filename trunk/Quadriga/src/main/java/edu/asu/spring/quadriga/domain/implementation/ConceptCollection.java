@@ -1,12 +1,13 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 
 /**
  * @description : ConceptCollection class describing the properties 
@@ -17,29 +18,31 @@ import edu.asu.spring.quadriga.domain.IUser;
  */
 public class ConceptCollection implements IConceptCollection 
 {
-	private String name;
+	private String conceptCollectionId;
+	private String conceptCollectionName;
 	private String description;
-	private String id;
 	private IUser owner;
 	private List<ICollaborator> collaborators;
-	private List<IConcept> items = new ArrayList<IConcept>();
+	private List<IConcept> concepts;
+	private List<IProject> projects;
+	private List<IWorkSpace> workspaces;
 	
 	@Override
-	public String getId() {
-		return id; 
+	public String getConceptCollectionId() {
+		return conceptCollectionId; 
 	}
 	@Override
-	public void setId(String id) {
-		this.id = id;
+	public void setConceptCollectionId(String id) {
+		this.conceptCollectionId = id;
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public String getConceptCollectionName() {
+		return conceptCollectionName;
 	}
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setConceptCollectionName(String conceptCollectionName) {
+		this.conceptCollectionName = conceptCollectionName;
 	}
 	@Override
 	public String getDescription() {
@@ -67,27 +70,56 @@ public class ConceptCollection implements IConceptCollection
 		this.collaborators = collaborators;
 	}
 	@Override
-	public List<IConcept> getItems() {
-		return items;
+	public List<IConcept> getConcepts() {
+		return concepts;
 	}
 	
 	@Override
-	public void setItems(List<IConcept> concepts)
+	public void setConcepts(List<IConcept> concepts)
 	{
-		this.items = concepts;
+		this.concepts = concepts;
 	}
 	
 	@Override
-	public void addItem(IConcept concept) {
-		if(items.indexOf(concept)<0){
-		items.add(concept);
-		}
+	public List<IProject> getProjects() 
+	{
+		return projects;
+	}
+	@Override
+	public void setProjects(List<IProject> projects) {
+		this.projects = projects;
+	}
+	@Override
+	public List<IWorkSpace> getWorkspaces() {
+		return workspaces;
+	}
+	@Override
+	public void setWorkspaces(List<IWorkSpace> workspaces) {
+		this.workspaces = workspaces;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((collaborators == null) ? 0 : collaborators.hashCode());
+		result = prime
+				* result
+				+ ((conceptCollectionId == null) ? 0 : conceptCollectionId
+						.hashCode());
+		result = prime
+				* result
+				+ ((conceptCollectionName == null) ? 0 : conceptCollectionName
+						.hashCode());
+		result = prime * result
+				+ ((concepts == null) ? 0 : concepts.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result
+				+ ((projects == null) ? 0 : projects.hashCode());
+		result = prime * result
+				+ ((workspaces == null) ? 0 : workspaces.hashCode());
 		return result;
 	}
 	@Override
@@ -99,13 +131,46 @@ public class ConceptCollection implements IConceptCollection
 		if (getClass() != obj.getClass())
 			return false;
 		ConceptCollection other = (ConceptCollection) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (collaborators == null) {
+			if (other.collaborators != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!collaborators.equals(other.collaborators))
+			return false;
+		if (conceptCollectionId == null) {
+			if (other.conceptCollectionId != null)
+				return false;
+		} else if (!conceptCollectionId.equals(other.conceptCollectionId))
+			return false;
+		if (conceptCollectionName == null) {
+			if (other.conceptCollectionName != null)
+				return false;
+		} else if (!conceptCollectionName.equals(other.conceptCollectionName))
+			return false;
+		if (concepts == null) {
+			if (other.concepts != null)
+				return false;
+		} else if (!concepts.equals(other.concepts))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		if (projects == null) {
+			if (other.projects != null)
+				return false;
+		} else if (!projects.equals(other.projects))
+			return false;
+		if (workspaces == null) {
+			if (other.workspaces != null)
+				return false;
+		} else if (!workspaces.equals(other.workspaces))
 			return false;
 		return true;
 	} 
-	
-
 }

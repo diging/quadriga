@@ -94,8 +94,8 @@ public class ConceptCollectionModifyManagerDAO extends DAOConnectionManager impl
 		try
 		{
 			Date date = new Date();
-			conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, collection.getId());
-		    conceptCollection.setCollectionname(collection.getName());
+			conceptCollection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, collection.getConceptCollectionId());
+		    conceptCollection.setCollectionname(collection.getConceptCollectionName());
 		    conceptCollection.setDescription(collection.getDescription());
 		    conceptCollection.setAccessibility(Boolean.FALSE);
 		    conceptCollection.setUpdatedby(userName);

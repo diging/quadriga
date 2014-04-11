@@ -122,11 +122,11 @@ public class CCManagerDAOTest {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
-		collection.setName("Collection Test");
+		collection.setConceptCollectionName("Collection Test");
 		collection.setOwner(user);
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
-		assertEquals(collection.getName(),list.get(0).getName());
+		assertEquals(collection.getConceptCollectionName(),list.get(0).getConceptCollectionName());
 		testSetupTestEnvironment();
 	}
 	
@@ -143,17 +143,17 @@ public class CCManagerDAOTest {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
-		collection.setName("Collection Test");
+		collection.setConceptCollectionName("Collection Test");
 		collection.setOwner(user);
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
-		assertEquals(collection.getName(),list.get(0).getName());
-		collection.setId(list.get(0).getId());
-		dbConnection.saveItem("lemma", "testid", "red", "hello", collection.getId(),user.getUserName());
+		assertEquals(collection.getConceptCollectionName(),list.get(0).getConceptCollectionName());
+		collection.setConceptCollectionId(list.get(0).getConceptCollectionId());
+		dbConnection.saveItem("lemma", "testid", "red", "hello", collection.getConceptCollectionId(),user.getUserName());
 		dbConnection.getCollectionDetails(collection, user.getUserName());
 		IConcept concept = conceptFactory.createConceptObject();
-		concept.setId("testid");
-		assertEquals(concept,collection.getItems().get(0));
+		concept.setConceptId("testid");
+		assertEquals(concept,collection.getConcepts().get(0));
 		testSetupTestEnvironment();
 	}
 	
@@ -170,7 +170,7 @@ public class CCManagerDAOTest {
 		throws Exception {
 		
 		IConceptCollection con = new ConceptCollection();
-		con.setName("name2");
+		con.setConceptCollectionName("name2");
 		con.setOwner(user);
 		con.setDescription("sdads");
 		//TO DO CHANGE THE IMPLEMENTATION FOR HIBERNATE
@@ -196,23 +196,23 @@ public class CCManagerDAOTest {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
-		collection.setName("Collection Test");
+		collection.setConceptCollectionName("Collection Test");
 		collection.setOwner(user);
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
-		assertEquals(collection.getName(),list.get(0).getName());
-		collection.setId(list.get(0).getId());
+		assertEquals(collection.getConceptCollectionName(),list.get(0).getConceptCollectionName());
+		collection.setConceptCollectionId(list.get(0).getConceptCollectionId());
 		ConceptpowerReply rep = collectionManager.search("dog", "noun");
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
-		concept.setId(rep.getConceptEntry().get(0).getId());
+		concept.setConceptId(rep.getConceptEntry().get(0).getId());
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		
-		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId(),user.getUserName());
+		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getConceptCollectionId(),user.getUserName());
 		
 		dbConnection.getCollectionDetails(collection,user.getUserName());
-		assertEquals(concept.getId(),collection.getItems().get(0).getId());
+		assertEquals(concept.getConceptId(),collection.getConcepts().get(0).getConceptId());
 		testSetupTestEnvironment();
 	}
 	
@@ -222,32 +222,32 @@ public class CCManagerDAOTest {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
-		collection.setName("Collection Test");
+		collection.setConceptCollectionName("Collection Test");
 		collection.setOwner(user);
 		
 		dbConnection.addCollection(collection);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
-		assertEquals(collection.getName(),list.get(0).getName());
-		collection.setId(list.get(0).getId());
+		assertEquals(collection.getConceptCollectionName(),list.get(0).getConceptCollectionName());
+		collection.setConceptCollectionId(list.get(0).getConceptCollectionId());
 		ConceptpowerReply rep = collectionManager.search("dog", "noun");
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
-		concept.setId(rep.getConceptEntry().get(0).getId());
+		concept.setConceptId(rep.getConceptEntry().get(0).getId());
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
 		
-		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getId(),user.getUserName());
+		dbConnection.saveItem(rep.getConceptEntry().get(0).getLemma(), rep.getConceptEntry().get(0).getId(), rep.getConceptEntry().get(0).getPos(), rep.getConceptEntry().get(0).getDescription(), collection.getConceptCollectionId(),user.getUserName());
 		dbConnection.getCollectionDetails(collection, user.getUserName());
 		
-		assertEquals(concept.getId(),collection.getItems().get(0).getId());
-		dbConnection.deleteItems(concept.getId(), collection.getId(), user.getUserName());
+		assertEquals(concept.getConceptId(),collection.getConcepts().get(0).getConceptId());
+		dbConnection.deleteItems(concept.getConceptId(), collection.getConceptCollectionId(), user.getUserName());
 		List<IConceptCollection> clist = dbConnection.getConceptsOwnedbyUser(user.getUserName());
 		
-		assertEquals(collection.getName(),clist.get(0).getName());
-		collection.setId(clist.get(0).getId());
+		assertEquals(collection.getConceptCollectionName(),clist.get(0).getConceptCollectionName());
+		collection.setConceptCollectionId(clist.get(0).getConceptCollectionId());
 		collection = clist.get(0);
 		dbConnection.getCollectionDetails(collection, user.getUserName());
-		assertEquals(0,collection.getItems().size());
+		assertEquals(0,collection.getConcepts().size());
 		testSetupTestEnvironment();
 	}
 	
@@ -257,26 +257,26 @@ public class CCManagerDAOTest {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
-		collection.setName("Collection Test");
+		collection.setConceptCollectionName("Collection Test");
 		collection.setOwner(user);
 		dbConnection.addCollection(collection);
 		ConceptpowerReply rep = collectionManager.search("dog", "noun");
 		IConcept concept = conceptFactory.createConceptObject();
 		concept.setDescription(rep.getConceptEntry().get(0).getDescription());
-		concept.setId(rep.getConceptEntry().get(0).getId());
+		concept.setConceptId(rep.getConceptEntry().get(0).getId());
 		concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 		concept.setPos(rep.getConceptEntry().get(0).getPos());
-		collection.getItems().add(concept);
+		collection.getConcepts().add(concept);
 		List<IConceptCollection> list = dbConnection.getConceptsOwnedbyUser(user.getUserName());
-		assertEquals(collection.getName(),list.get(0).getName());
-		collection.setId(list.get(0).getId());
-		dbConnection.saveItem("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getId(),user.getUserName());
+		assertEquals(collection.getConceptCollectionName(),list.get(0).getConceptCollectionName());
+		collection.setConceptCollectionId(list.get(0).getConceptCollectionId());
+		dbConnection.saveItem("lemma", rep.getConceptEntry().get(0).getId(), "red", "hello", collection.getConceptCollectionId(),user.getUserName());
 		
 		concept.setLemma("updatedlemma");
-		dbConnection.updateItem(concept, collection.getId(),user.getUserName());
+		dbConnection.updateItem(concept, collection.getConceptCollectionId(),user.getUserName());
 		
 		collectionManager.getCollectionDetails(collection, user.getUserName());
-		assertEquals("updatedlemma",collection.getItems().get(0).getLemma());
+		assertEquals("updatedlemma",collection.getConcepts().get(0).getLemma());
 		testSetupTestEnvironment();
 	}
 	
@@ -286,7 +286,7 @@ public class CCManagerDAOTest {
 		dbConnection.setupTestEnvironment(sDatabaseSetup.split("&"));
 		IConceptCollection collection = conceptcollectionFactory.createConceptCollectionObject();
 		collection.setDescription("Hello This is a test");
-		collection.setName("Collection Test");
+		collection.setConceptCollectionName("Collection Test");
 		collection.setOwner(user);
 		String ret = dbConnection.validateId("Collection Test");
 		assertNull(ret);

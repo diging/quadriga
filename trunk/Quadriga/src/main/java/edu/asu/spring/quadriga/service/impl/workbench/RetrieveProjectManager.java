@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;

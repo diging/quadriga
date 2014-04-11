@@ -223,7 +223,7 @@ public class DictionaryItemSearchAddControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -239,7 +239,7 @@ public class DictionaryItemSearchAddControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -250,8 +250,8 @@ public class DictionaryItemSearchAddControllerTest {
 				logger.error("",e);
 			}
 			DictionaryItem dictionaryItems = new DictionaryItem();
-			dictionaryItems.setId(values);
-			dictionaryItems.setItems("dog");
+			dictionaryItems.setDictionaryItemId(values);
+			dictionaryItems.setTerm("dog");
 			dictionaryItems.setPos("noun");
 			dictionaryItems.setDescription("something");
 			assertEquals(dictionaryItemSearchAddController.addDictionaryItem(mock, getDictionaryID("testDictionary"), dictionaryItems, model, principal), "auth/dictionary/dictionary");
@@ -263,7 +263,7 @@ public class DictionaryItemSearchAddControllerTest {
 			Iterator <IDictionaryItem> I =dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),true);
 			IDictionaryItem di = I.next();
-			assertEquals(di.getItems(),"dog");
+			assertEquals(di.getTerm(),"dog");
 			assertEquals(di.getPos(),"noun");
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
 		}
@@ -274,7 +274,7 @@ public class DictionaryItemSearchAddControllerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);

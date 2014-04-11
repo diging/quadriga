@@ -58,11 +58,11 @@ public class ConceptCollectionTest {
 	@Test
 	public void testGetName() {
 		
-		conceptcollection.setName(null);
-		assertEquals(conceptcollection.getName(), null);
+		conceptcollection.setConceptCollectionName(null);
+		assertEquals(conceptcollection.getConceptCollectionName(), null);
 		
-		conceptcollection.setName("jane");
-		assertEquals(conceptcollection.getName(),"jane");
+		conceptcollection.setConceptCollectionName("jane");
+		assertEquals(conceptcollection.getConceptCollectionName(),"jane");
 				
 	}
 
@@ -80,11 +80,11 @@ public class ConceptCollectionTest {
 	@Test
 	public void testGetId() {
 		
-		conceptcollection.setName(null);
-		assertEquals(conceptcollection.getName(), null);
+		conceptcollection.setConceptCollectionName(null);
+		assertEquals(conceptcollection.getConceptCollectionName(), null);
 		
-		conceptcollection.setName("3333");
-		assertEquals(conceptcollection.getName(), "3333");
+		conceptcollection.setConceptCollectionName("3333");
+		assertEquals(conceptcollection.getConceptCollectionName(), "3333");
 		
 	}
 
@@ -114,11 +114,11 @@ public class ConceptCollectionTest {
 	public void testGetItems() {
 		
 		IConcept concept=(new ConceptFactory().createConceptObject());
-		conceptcollection.addItem(concept);
-		concept.setId("hellotest");
-		assertEquals(conceptcollection.getItems().get(0).equals(concept),true );
-		conceptcollection.getItems().remove(0);
-		assertEquals(conceptcollection.getItems().size(),0 );
+//		conceptcollection.addItem(concept);
+		concept.setConceptId("hellotest");
+		assertEquals(conceptcollection.getConcepts().get(0).equals(concept),true );
+		conceptcollection.getConcepts().remove(0);
+		assertEquals(conceptcollection.getConcepts().size(),0 );
 				
 	}
 

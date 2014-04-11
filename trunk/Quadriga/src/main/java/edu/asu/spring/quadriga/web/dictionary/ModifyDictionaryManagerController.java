@@ -92,7 +92,7 @@ public class ModifyDictionaryManagerController
 		}
 		else
 		{
-			 dictionary.setId(dictionaryid);
+			 dictionary.setDictionaryId(dictionaryid);
 			 dictionaryManager.updateDictionaryDetailsRequest(dictionary, userName);
 	    	 model.getModelMap().put("success", 1);
 		}

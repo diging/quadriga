@@ -93,7 +93,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		try
 		{
 			String dictionaryId = messages.getProperty("dictionary_internalid.name") + generateUniqueID();
-			dictionary.setId(dictionaryId);
+			dictionary.setDictionaryId(dictionaryId);
 			DictionaryDTO dictionaryDTO = dictionaryDTOMapper.getDictionaryDTO(dictionary);
 			sessionFactory.getCurrentSession().save(dictionaryDTO);
 		}

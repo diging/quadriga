@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -63,7 +63,7 @@ public class ConceptCollectionProjectController {
 		Iterator<IConceptCollection> I = conceptCollectionList.iterator(); 
 		while(I.hasNext()){
 			IConceptCollection con = I.next();
-			logger.info(" "+con.getName());
+			logger.info(" "+con.getConceptCollectionName());
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
 		IProject project = projectManager.getProjectDetails(projectid);
@@ -96,7 +96,7 @@ public class ConceptCollectionProjectController {
 			Iterator<IConceptCollection> I = conceptCollectionList.iterator(); 
 			while(I.hasNext()){
 				IConceptCollection con = I.next();
-				logger.info(" "+con.getName());
+				logger.info(" "+con.getConceptCollectionName());
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
 			IProject project = projectManager.getProjectDetails(projectid);

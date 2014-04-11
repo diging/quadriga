@@ -30,11 +30,11 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IConcept;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.INetwork;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -182,12 +182,12 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			System.out.println("name:: "+i);
 			
 			concept = conceptFactory.createConceptObject();
-			concept.setId(i);
-			concept = collection.getItems().get((collection.getItems().indexOf(concept)));
+			concept.setConceptId(i);
+			concept = collection.getConcepts().get((collection.getConcepts().indexOf(concept)));
 			concept.setDescription(rep.getConceptEntry().get(0).getDescription());
 			concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 			concept.setPos(rep.getConceptEntry().get(0).getPos());
-			dbConnect.updateItem(concept,collection.getId(),username);
+			dbConnect.updateItem(concept,collection.getConceptCollectionId(),username);
 		}
 		}
 	}
@@ -337,15 +337,15 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 					data.put("parent", "#");
 					String projectLink = null;
 					if(ccProjectsList.contains(project)){
-						projectLink = project.getName();
+						projectLink = project.getProjectName();
 					}
 					else {
 					projectLink = "<a href='#' id='"
 							+ project.getProjectId()
 							+ "' name='"
-							+ project.getName()
+							+ project.getProjectName()
 							+ "' onclick='javascript:addCCtoProjects(this.id,this.name);' > "
-							+ project.getName() + "</a>";
+							+ project.getProjectName() + "</a>";
 					}
 					data.put("text", projectLink);
 					dataArray.put(data);

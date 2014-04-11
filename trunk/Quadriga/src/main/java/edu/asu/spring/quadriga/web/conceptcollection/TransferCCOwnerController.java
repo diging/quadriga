@@ -84,12 +84,12 @@ public class TransferCCOwnerController
 		
 		//retrieve the concept collection details
 		conceptCollection = collectionFactory.createConceptCollectionObject();
-		conceptCollection.setId(collectionId);
+		conceptCollection.setConceptCollectionId(collectionId);
 		conceptCollectionManager.getCollectionDetails(conceptCollection, userName);
 		
 		//create a model
 		model.getModelMap().put("user", userFactory.createUserObject());
-		model.getModelMap().put("collectionname", conceptCollection.getName());
+		model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 		model.getModelMap().put("collectionowner", conceptCollection.getOwner().getName());
 		model.getModelMap().put("collectionid", collectionId);
 		
@@ -138,7 +138,7 @@ public class TransferCCOwnerController
 		
 		//retrieve the concept collection details
 		conceptCollection = collectionFactory.createConceptCollectionObject();
-		conceptCollection.setId(collectionId);
+		conceptCollection.setConceptCollectionId(collectionId);
 		conceptCollectionManager.getCollectionDetails(conceptCollection,userName);
 		
 		model.getModelMap().put("collectionid", collectionId);
@@ -148,7 +148,7 @@ public class TransferCCOwnerController
 			model.getModelMap().put("user", collaboratorUser);
 			
 			//create a model
-			model.getModelMap().put("collectionname", conceptCollection.getName());
+			model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 			model.getModelMap().put("collectionowner", conceptCollection.getOwner().getName());
 			
 			//fetch the collaborators

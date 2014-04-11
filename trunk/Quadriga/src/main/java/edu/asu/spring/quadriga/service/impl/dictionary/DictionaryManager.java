@@ -21,13 +21,13 @@ import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
 import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -418,7 +418,7 @@ public class DictionaryManager implements IDictionaryManager {
 			DictionaryItem di = getDictionaryItemIndex(
 					values[i], dictionartItems);
 			addNewDictionariesItems(dictionaryId,
-					di.getItems(), di.getId(), di.getPos(), getDictionaryOwner(dictionaryId));
+					di.getTerm(), di.getDictionaryItemId(), di.getPos(), getDictionaryOwner(dictionaryId));
 		}
 	}
 	
@@ -432,8 +432,8 @@ public class DictionaryManager implements IDictionaryManager {
 	public DictionaryItem getDictionaryItemIndex(String termId,
 			DictionaryItem dictionaryItems) {
 
-		String terms[] = dictionaryItems.getItems().split(",");
-		String ids[] = dictionaryItems.getId().split(",");
+		String terms[] = dictionaryItems.getTerm().split(",");
+		String ids[] = dictionaryItems.getDictionaryItemId().split(",");
 		String pos[] = dictionaryItems.getPos().split(",");
 		int index = -1;
 		if (ids.length > 0) {
@@ -446,8 +446,8 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 		DictionaryItem di = dictionaryItemsFactory
 				.createDictionaryItemsObject();
-		di.setId(ids[index]);
-		di.setItems(terms[index]);
+		di.setDictionaryItemId(ids[index]);
+		di.setTerm(terms[index]);
 		di.setPos(pos[index]);
 
 		return di;
@@ -567,16 +567,16 @@ public class DictionaryManager implements IDictionaryManager {
         	
         	if(dictProjectList.contains(project))
         	{
-        		projectlink = project.getName();
+        		projectlink = project.getProjectName();
         	}
         	else
         	{
         		projectlink = "<a href='#' id='"
         				     +project.getProjectId()
         				     +"'name= '"
-        				     +project.getName()
+        				     +project.getProjectName()
         				     +"'onclick='javascript:addDictToProjects(this.id,this.name);'>"
-        				     +project.getName()
+        				     +project.getProjectName()
         				     +"</a>";
         	}
         	
