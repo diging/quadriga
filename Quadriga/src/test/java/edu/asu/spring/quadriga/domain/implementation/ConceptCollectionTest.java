@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.impl.ConceptFactory;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 
 /*
 * @Description 	: tests getters and setters for concept description, concept id , concept owner and

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.domain.conceptcollection;
 
 import java.util.List;
 
@@ -12,7 +12,6 @@ import java.util.List;
  */
 public interface IConcept 
 {
-	
 	public abstract String getConceptId();
 	
 	public abstract void setConceptId(String conceptId);
@@ -29,7 +28,7 @@ public interface IConcept
 
 	public abstract void setLemma(String lemma);
 	
-	public abstract List<IConceptCollection> getConceptCollections();
+	public abstract List<IConceptCollectionConcepts> getConceptCollectionConcepts();
 	
-	public abstract void setConceptCollections(List<IConceptCollection> conceptCollections);
+	public abstract void setConceptCollectionConcepts(List<IConceptCollectionConcepts> conceptCollectionConcepts);
 }

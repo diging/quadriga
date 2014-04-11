@@ -1,18 +1,16 @@
-package edu.asu.spring.quadriga.domain.workbench;
+package edu.asu.spring.quadriga.domain.conceptcollection;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-
-public interface IProjectConceptCollection 
+public interface IConceptCollectionConcepts 
 {
-	public abstract IProject getProject();
-	
-	public abstract void setProject(IProject project);
-	
 	public abstract IConceptCollection getConceptCollection();
 	
 	public abstract void setConceptCollection(IConceptCollection conceptCollection);
+	
+	public abstract IConcept getConcept();
+	
+	public abstract void setConcept(IConcept concept);
 	
 	public abstract String getCreatedBy();
 	
@@ -25,8 +23,9 @@ public interface IProjectConceptCollection
 	public abstract String getUpdatedBy();
 	
 	public abstract void setUpdatedBy(String updatedBy);
-
+	
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
+
 }

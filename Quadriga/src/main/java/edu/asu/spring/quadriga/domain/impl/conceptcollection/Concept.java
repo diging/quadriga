@@ -1,11 +1,11 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.conceptcollection;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IConcept;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 
 /**
  * uses to create a concept and also fill in a object upon downloading from the concept power

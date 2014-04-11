@@ -280,7 +280,7 @@ public class ConceptCollectionManagerTest {
 	}
 
 	/**
-	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#getCollectionDetails(edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection)}.
+	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#getCollectionDetails(edu.edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection)}.
 	 * @throws QuadrigaStorageException 
 	 * @throws QuadrigaAccessException 
 	 */
@@ -314,7 +314,7 @@ public class ConceptCollectionManagerTest {
 	}
 
 	/**
-	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#update(java.lang.String[], edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection)}.
+	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#update(java.lang.String[], edu.edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection)}.
 	 * @throws QuadrigaStorageException 
 	 * @throws QuadrigaAccessException 
 	 */

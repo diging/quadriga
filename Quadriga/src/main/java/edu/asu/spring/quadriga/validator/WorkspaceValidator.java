@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.implementation.WorkSpace;
+import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 
 /**
  * This method validates if the workspace name and description

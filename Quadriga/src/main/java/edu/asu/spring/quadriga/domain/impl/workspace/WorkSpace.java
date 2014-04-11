@@ -1,6 +1,7 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import java.util.Date;
+import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -24,12 +25,12 @@ public class WorkSpace implements IWorkSpace
 	private String workspaceName;
 	private String description;
 	private IUser owner;
-	private IWorkspaceCollaborator workspaceCollaborator;
+	private List<IWorkspaceCollaborator> workspaceCollaborators;
 	private IProject project;
-	private IWorkspaceBitStream workspaceBitStream;
-	private IWorkspaceConceptCollection workspaceConceptCollection;
-	private IWorkspaceDictionary workspaceDictionary;
-	private IWorkspaceNetwork workspaceNetwork;
+	private List<IWorkspaceBitStream> workspaceBitStreams;
+	private List<IWorkspaceConceptCollection> workspaceConceptCollections;
+	private List<IWorkspaceDictionary> workspaceDictionaries;
+	private List<IWorkspaceNetwork> workspaceNetworks;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -71,13 +72,13 @@ public class WorkSpace implements IWorkSpace
 	}
 	
 	@Override
-	public IWorkspaceCollaborator getWorkspaceCollaborators() {
-		return workspaceCollaborator;
+	public List<IWorkspaceCollaborator> getWorkspaceCollaborators() {
+		return workspaceCollaborators;
 	}
 	@Override
 	public void setWorkspaceCollaborators(
-			IWorkspaceCollaborator workspaceCollaborator) {
-       this.workspaceCollaborator = workspaceCollaborator;		
+			List<IWorkspaceCollaborator> workspaceCollaborators) {
+        this.workspaceCollaborators = workspaceCollaborators;		
 	}
 	
 	@Override
@@ -90,42 +91,39 @@ public class WorkSpace implements IWorkSpace
 	}
 	
 	@Override
-	public IWorkspaceBitStream getWorkspaceBitStreams() {
-		return workspaceBitStream;
+	public List<IWorkspaceBitStream> getWorkspaceBitStreams() {
+		return workspaceBitStreams;
 	}
 	@Override
-	public void setWorkspaceBitStreams(IWorkspaceBitStream workspaceBitStream) {
-        this.workspaceBitStream = workspaceBitStream;		
+	public void setWorkspaceBitStreams(
+			List<IWorkspaceBitStream> workspaceBitStreams) {
+        this.workspaceBitStreams = workspaceBitStreams;		
 	}
-	
 	@Override
-	public IWorkspaceConceptCollection getWorkspaceConceptCollections() {
-		return workspaceConceptCollection;
+	public List<IWorkspaceConceptCollection> getWorkspaceConceptCollections() {
+		return workspaceConceptCollections;
 	}
-	
 	@Override
 	public void setWorkspaceConceptCollections(
-			IWorkspaceConceptCollection workspaceConceptCollection) {
-        this.workspaceConceptCollection = workspaceConceptCollection;		
+			List<IWorkspaceConceptCollection> workspaceConceptCollections) {
+        this.workspaceConceptCollections = workspaceConceptCollections;		
 	}
-	
 	@Override
-	public IWorkspaceDictionary getWorkspaceDictinaries() {
-		return workspaceDictionary;
+	public List<IWorkspaceDictionary> getWorkspaceDictinaries() {
+		return workspaceDictionaries;
 	}
 	@Override
 	public void setWorkspaceDictionaries(
-			IWorkspaceDictionary workspaceDictionary) {
-       this.workspaceDictionary = workspaceDictionary;		
-	}
-	
-	@Override
-	public IWorkspaceNetwork getWorkspaceNetworks() {
-		return workspaceNetwork;
+			List<IWorkspaceDictionary> workspaceDictionaries) {
+        this.workspaceDictionaries = workspaceDictionaries;		
 	}
 	@Override
-	public void setWorkspaceNetworks(IWorkspaceNetwork workspaceNetwork) {
-        this.workspaceNetwork = workspaceNetwork;		
+	public List<IWorkspaceNetwork> getWorkspaceNetworks() {
+		return workspaceNetworks;
+	}
+	@Override
+	public void setWorkspaceNetworks(List<IWorkspaceNetwork> workspaceNetworks) {
+        this.workspaceNetworks = workspaceNetworks;		
 	}
 	
 	@Override
@@ -178,19 +176,19 @@ public class WorkSpace implements IWorkSpace
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		result = prime
 				* result
-				+ ((workspaceBitStream == null) ? 0 : workspaceBitStream
+				+ ((workspaceBitStreams == null) ? 0 : workspaceBitStreams
 						.hashCode());
 		result = prime
 				* result
-				+ ((workspaceCollaborator == null) ? 0 : workspaceCollaborator
-						.hashCode());
+				+ ((workspaceCollaborators == null) ? 0
+						: workspaceCollaborators.hashCode());
 		result = prime
 				* result
-				+ ((workspaceConceptCollection == null) ? 0
-						: workspaceConceptCollection.hashCode());
+				+ ((workspaceConceptCollections == null) ? 0
+						: workspaceConceptCollections.hashCode());
 		result = prime
 				* result
-				+ ((workspaceDictionary == null) ? 0 : workspaceDictionary
+				+ ((workspaceDictionaries == null) ? 0 : workspaceDictionaries
 						.hashCode());
 		result = prime * result
 				+ ((workspaceId == null) ? 0 : workspaceId.hashCode());
@@ -198,7 +196,8 @@ public class WorkSpace implements IWorkSpace
 				+ ((workspaceName == null) ? 0 : workspaceName.hashCode());
 		result = prime
 				* result
-				+ ((workspaceNetwork == null) ? 0 : workspaceNetwork.hashCode());
+				+ ((workspaceNetworks == null) ? 0 : workspaceNetworks
+						.hashCode());
 		return result;
 	}
 	@Override
@@ -245,26 +244,26 @@ public class WorkSpace implements IWorkSpace
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
-		if (workspaceBitStream == null) {
-			if (other.workspaceBitStream != null)
+		if (workspaceBitStreams == null) {
+			if (other.workspaceBitStreams != null)
 				return false;
-		} else if (!workspaceBitStream.equals(other.workspaceBitStream))
+		} else if (!workspaceBitStreams.equals(other.workspaceBitStreams))
 			return false;
-		if (workspaceCollaborator == null) {
-			if (other.workspaceCollaborator != null)
+		if (workspaceCollaborators == null) {
+			if (other.workspaceCollaborators != null)
 				return false;
-		} else if (!workspaceCollaborator.equals(other.workspaceCollaborator))
+		} else if (!workspaceCollaborators.equals(other.workspaceCollaborators))
 			return false;
-		if (workspaceConceptCollection == null) {
-			if (other.workspaceConceptCollection != null)
+		if (workspaceConceptCollections == null) {
+			if (other.workspaceConceptCollections != null)
 				return false;
-		} else if (!workspaceConceptCollection
-				.equals(other.workspaceConceptCollection))
+		} else if (!workspaceConceptCollections
+				.equals(other.workspaceConceptCollections))
 			return false;
-		if (workspaceDictionary == null) {
-			if (other.workspaceDictionary != null)
+		if (workspaceDictionaries == null) {
+			if (other.workspaceDictionaries != null)
 				return false;
-		} else if (!workspaceDictionary.equals(other.workspaceDictionary))
+		} else if (!workspaceDictionaries.equals(other.workspaceDictionaries))
 			return false;
 		if (workspaceId == null) {
 			if (other.workspaceId != null)
@@ -276,14 +275,11 @@ public class WorkSpace implements IWorkSpace
 				return false;
 		} else if (!workspaceName.equals(other.workspaceName))
 			return false;
-		if (workspaceNetwork == null) {
-			if (other.workspaceNetwork != null)
+		if (workspaceNetworks == null) {
+			if (other.workspaceNetworks != null)
 				return false;
-		} else if (!workspaceNetwork.equals(other.workspaceNetwork))
+		} else if (!workspaceNetworks.equals(other.workspaceNetworks))
 			return false;
 		return true;
 	}
-	
-	
-	
 }

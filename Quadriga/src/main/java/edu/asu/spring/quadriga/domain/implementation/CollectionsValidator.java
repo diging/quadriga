@@ -8,7 +8,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**

@@ -1,41 +1,43 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workbench;
 
 import java.util.Date;
-import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import org.springframework.stereotype.Service;
 
-public class WorkspaceConceptCollection implements IWorkspaceConceptCollection 
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+
+@Service
+public class ProjectCollaborator implements IProjectCollaborator 
 {
-	private String workspaceId;
-	private List<IConceptCollection> conceptCollections;
+	private IProject project;
+	private ICollaborator collaborator;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
 	@Override
-	public String getWorkspaceId() {
-		return workspaceId;
+	public IProject getProject() {
+		return project;
 	}
 
 	@Override
-	public void setWorkspaceId(String workspaceId) {
-         this.workspaceId = workspaceId;
+	public void setProject(IProject project) {
+        this.project = project;		
 	}
 
 	@Override
-	public List<IConceptCollection> getConceptCollections() {
-		return conceptCollections;
+	public ICollaborator getCollaborator() {
+		return collaborator;
 	}
 
 	@Override
-	public void setConceptCollections(
-			List<IConceptCollection> conceptCollections) {
-         this.conceptCollections = conceptCollections;
+	public void setCollaborator(ICollaborator collaborator) {
+        this.collaborator = collaborator;		
 	}
-
+	
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -48,12 +50,12 @@ public class WorkspaceConceptCollection implements IWorkspaceConceptCollection
 
 	@Override
 	public Date getCreatedDate() {
- 		return createdDate;
+		return createdDate;
 	}
 
 	@Override
 	public void setCreatedDate(Date createdDate) {
-         this.createdDate = createdDate;
+       this.createdDate = createdDate;
 	}
 
 	@Override
@@ -63,16 +65,16 @@ public class WorkspaceConceptCollection implements IWorkspaceConceptCollection
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+         this.updatedBy = updatedBy;
 	}
 
 	@Override
 	public Date getUpdatedDate() {
- 		return updatedDate;
+		return updatedDate;
 	}
 
 	@Override
-	public void setUpdatedDate(Date updatedDate) {
+	public void setUpdateDate(Date updatedDate) {
         this.updatedDate = updatedDate;
 	}
 
@@ -80,20 +82,17 @@ public class WorkspaceConceptCollection implements IWorkspaceConceptCollection
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime
-				* result
-				+ ((conceptCollections == null) ? 0 : conceptCollections
-						.hashCode());
+		result = prime * result
+				+ ((collaborator == null) ? 0 : collaborator.hashCode());
 		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
-		result = prime * result
-				+ ((workspaceId == null) ? 0 : workspaceId.hashCode());
 		return result;
 	}
 
@@ -105,11 +104,11 @@ public class WorkspaceConceptCollection implements IWorkspaceConceptCollection
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkspaceConceptCollection other = (WorkspaceConceptCollection) obj;
-		if (conceptCollections == null) {
-			if (other.conceptCollections != null)
+		ProjectCollaborator other = (ProjectCollaborator) obj;
+		if (collaborator == null) {
+			if (other.collaborator != null)
 				return false;
-		} else if (!conceptCollections.equals(other.conceptCollections))
+		} else if (!collaborator.equals(other.collaborator))
 			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)
@@ -121,6 +120,11 @@ public class WorkspaceConceptCollection implements IWorkspaceConceptCollection
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
 			return false;
+		if (project == null) {
+			if (other.project != null)
+				return false;
+		} else if (!project.equals(other.project))
+			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
 				return false;
@@ -131,14 +135,6 @@ public class WorkspaceConceptCollection implements IWorkspaceConceptCollection
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
-		if (workspaceId == null) {
-			if (other.workspaceId != null)
-				return false;
-		} else if (!workspaceId.equals(other.workspaceId))
-			return false;
 		return true;
 	}
-	
-	
-
 }

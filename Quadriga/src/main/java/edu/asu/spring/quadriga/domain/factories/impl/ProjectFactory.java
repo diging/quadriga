@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain.factories.impl;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
-import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 
 /**

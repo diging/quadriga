@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.db.conceptcollection;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionModifyCCManager {

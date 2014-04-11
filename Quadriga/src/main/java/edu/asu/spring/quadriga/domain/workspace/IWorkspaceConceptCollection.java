@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 
 public interface IWorkspaceConceptCollection 
 {
