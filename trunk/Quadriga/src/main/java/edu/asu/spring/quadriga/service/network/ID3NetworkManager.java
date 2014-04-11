@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.d3.domain.ID3Link;
 import edu.asu.spring.quadriga.d3.domain.ID3Node;
-import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 
 /**

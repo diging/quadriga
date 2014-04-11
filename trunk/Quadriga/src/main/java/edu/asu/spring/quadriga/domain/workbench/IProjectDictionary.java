@@ -1,20 +1,19 @@
 package edu.asu.spring.quadriga.domain.workbench;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
 
 public interface IProjectDictionary 
 {
-	public abstract String getProjectId();
+	public abstract IProject getProject();
 	
-	public abstract void setProjectId(String projectId);
+	public abstract void setProejct(IProject project);
 	
-	public abstract List<IDictionary> getDictionaries();
+	public abstract IDictionary getDictionary();
 	
-	public abstract void setDictionaries(List<IDictionary> dictionaries);
-	
+	public abstract void setDictionary(IDictionary dictionary);
+
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);

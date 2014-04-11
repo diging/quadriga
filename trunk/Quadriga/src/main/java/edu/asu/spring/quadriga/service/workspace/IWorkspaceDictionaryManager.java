@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.service.workspace;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWorkspaceDictionaryManager {

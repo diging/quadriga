@@ -1,20 +1,19 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 
 public interface IWorkspaceConceptCollection 
 {
-    public abstract String getWorkspaceId();
+	public abstract IWorkSpace getWorkspace();
 	
-	public abstract void setWorkspaceId(String workspaceId);
+	public abstract void setWorkspace(IWorkSpace workspace);
+
+	public abstract IConceptCollection getConceptCollection();
 	
-	public abstract List<IConceptCollection> getConceptCollections();
-	
-	public abstract void setConceptCollections(List<IConceptCollection> conceptCollections);
-	
+	public abstract void setConceptCollection(IConceptCollection conceptCollection);
+
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);

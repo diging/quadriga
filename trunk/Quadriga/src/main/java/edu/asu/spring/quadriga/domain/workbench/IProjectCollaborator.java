@@ -1,19 +1,18 @@
 package edu.asu.spring.quadriga.domain.workbench;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 
 public interface IProjectCollaborator 
 {
-	public abstract String getProjectId();
+	public abstract IProject getProject();
 	
-	public abstract void setProjectId(String projectId);
-	
-	public abstract List<ICollaborator> getCollaborators();
+	public abstract void setProject(IProject project);
 
-	public abstract void setCollaborators(List<ICollaborator> collaborators);
+	public abstract ICollaborator getCollaborator();
+	
+	public abstract void setCollaborator(ICollaborator collaborator);
 	
 	public abstract String getCreatedBy();
 	

@@ -5,8 +5,8 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
-import edu.asu.spring.quadriga.domain.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

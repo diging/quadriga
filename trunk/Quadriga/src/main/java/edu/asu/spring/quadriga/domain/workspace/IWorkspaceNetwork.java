@@ -1,19 +1,18 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
-import java.util.List;
 
-import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.network.INetwork;
 
 public interface IWorkspaceNetwork 
 {
-	public abstract String getWorkspaceId();
+	public abstract IWorkSpace getWorkspace();
 	
-	public abstract void setWorkspaceId(String workspaceId);
+	public abstract void setWorkspace(IWorkSpace workspace);
 	
-	public abstract List<INetwork> getNetworks();
+	public abstract INetwork getNetwork();
 	
-	public abstract void setNetworks(List<INetwork> networks);
+	public abstract void setNetwork(INetwork network);
 	
 	public abstract String getCreatedBy();
 	

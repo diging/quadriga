@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain.implementation;
 import java.util.Date;
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.INetwork;
+import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 
 public class WorkspaceNetwork implements IWorkspaceNetwork 

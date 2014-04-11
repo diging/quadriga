@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
+import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -30,29 +31,29 @@ public interface IWorkSpace
 
 	public abstract IUser getOwner();
 	
-	public abstract IWorkspaceCollaborator getWorkspaceCollaborators();
+	public abstract List<IWorkspaceCollaborator> getWorkspaceCollaborators();
 	
-	public abstract void setWorkspaceCollaborators(IWorkspaceCollaborator workspaceCollaborator);
+	public abstract void setWorkspaceCollaborators(List<IWorkspaceCollaborator> workspaceCollaborators);
 	
 	public abstract IProject getProject();
 	
 	public abstract void setProject(IProject project);
 	
-	public abstract IWorkspaceBitStream getWorkspaceBitStreams();
+	public abstract List<IWorkspaceBitStream> getWorkspaceBitStreams();
 	
-	public abstract void setWorkspaceBitStreams(IWorkspaceBitStream workspaceBitStream);
+	public abstract void setWorkspaceBitStreams(List<IWorkspaceBitStream> workspaceBitStreams);
 	
-    public abstract IWorkspaceConceptCollection getWorkspaceConceptCollections();
+    public abstract List<IWorkspaceConceptCollection> getWorkspaceConceptCollections();
     
-    public abstract void setWorkspaceConceptCollections(IWorkspaceConceptCollection workspaceConceptCollection);
+    public abstract void setWorkspaceConceptCollections(List<IWorkspaceConceptCollection> workspaceConceptCollections);
 	
-    public abstract  IWorkspaceDictionary getWorkspaceDictinaries();
+    public abstract  List<IWorkspaceDictionary> getWorkspaceDictinaries();
     
-    public abstract void setWorkspaceDictionaries(IWorkspaceDictionary workspaceDictionary);
+    public abstract void setWorkspaceDictionaries(List<IWorkspaceDictionary> workspaceDictionaries);
     
-    public abstract IWorkspaceNetwork getWorkspaceNetworks();
+    public abstract List<IWorkspaceNetwork> getWorkspaceNetworks();
     
-    public abstract void setWorkspaceNetworks(IWorkspaceNetwork workspaceNetwork);
+    public abstract void setWorkspaceNetworks(List<IWorkspaceNetwork> workspaceNetworks);
     
 	public abstract String getCreatedBy();
 	

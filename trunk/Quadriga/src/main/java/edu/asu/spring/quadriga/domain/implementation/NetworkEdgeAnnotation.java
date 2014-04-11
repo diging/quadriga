@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import edu.asu.spring.quadriga.domain.INetworkEdgeAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkEdgeAnnotation;
 
 public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 {

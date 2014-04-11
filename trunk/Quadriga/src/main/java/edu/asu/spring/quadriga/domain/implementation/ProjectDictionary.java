@@ -1,43 +1,42 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 
 @Service
 public class ProjectDictionary implements IProjectDictionary 
 {
-	private String projectId;
-	private List<IDictionary> dictionaries;
+	private IProject project;
+	private IDictionary dictionary;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
 	@Override
-	public String getProjectId() {
-		return projectId;
+	public IProject getProject() {
+		return project;
 	}
 
 	@Override
-	public void setProjectId(String projectId) {
-        this.projectId = projectId;
+	public void setProejct(IProject project) {
+        this.project = project;		
 	}
 
 	@Override
-	public List<IDictionary> getDictionaries() {
-		return dictionaries;
+	public IDictionary getDictionary() {
+		return dictionary;
 	}
 
 	@Override
-	public void setDictionaries(List<IDictionary> dictionaries) {
-       this.dictionaries = dictionaries;
+	public void setDictionary(IDictionary dictionary) {
+         this.dictionary = dictionary;		
 	}
-
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -87,9 +86,8 @@ public class ProjectDictionary implements IProjectDictionary
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
 		result = prime * result
-				+ ((dictionaries == null) ? 0 : dictionaries.hashCode());
-		result = prime * result
-				+ ((projectId == null) ? 0 : projectId.hashCode());
+				+ ((dictionary == null) ? 0 : dictionary.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
@@ -116,15 +114,15 @@ public class ProjectDictionary implements IProjectDictionary
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		if (dictionaries == null) {
-			if (other.dictionaries != null)
+		if (dictionary == null) {
+			if (other.dictionary != null)
 				return false;
-		} else if (!dictionaries.equals(other.dictionaries))
+		} else if (!dictionary.equals(other.dictionary))
 			return false;
-		if (projectId == null) {
-			if (other.projectId != null)
+		if (project == null) {
+			if (other.project != null)
 				return false;
-		} else if (!projectId.equals(other.projectId))
+		} else if (!project.equals(other.project))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
@@ -138,7 +136,4 @@ public class ProjectDictionary implements IProjectDictionary
 			return false;
 		return true;
 	}
-	
-	
-
 }

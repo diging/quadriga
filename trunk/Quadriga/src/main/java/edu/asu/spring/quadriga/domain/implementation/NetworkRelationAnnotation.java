@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import edu.asu.spring.quadriga.domain.INetworkRelationAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkRelationAnnotation;
 
 public class NetworkRelationAnnotation implements INetworkRelationAnnotation 
 {

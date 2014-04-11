@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.domain.workbench;
 
 import java.util.Date;
+import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
@@ -37,21 +38,21 @@ public interface IProject
 
 	public abstract void setOwner(IUser owner);
 	
-	public abstract IProjectCollaborator getProjectCollaborators();
+	public abstract List<IProjectCollaborator> getProjectCollaborators();
 	
-	public abstract void setProjectCollaborators(IProjectCollaborator projectCollaborator);
+	public abstract void setProjectCollaborators(List<IProjectCollaborator> projectCollaborators);
 	
-	public abstract IProjectWorkspace getProjectWorkspaces();
+	public abstract List<IProjectWorkspace> getProjectWorkspaces();
 	
-	public abstract void setProjectWorkspaces(IProjectWorkspace projectWorkspace);
+	public abstract void setProjectWorkspaces(List<IProjectWorkspace> projectWorkspaces);
 	
-	public abstract IProjectDictionary getProjectDictionaries();
+	public abstract List<IProjectDictionary> getProjectDictionaries();
 	
-	public abstract void setProjectDictionaries(IProjectDictionary projectDictionary);
+	public abstract void setProjectDictionaries(List<IProjectDictionary> projectDictionaries);
 	
-	public abstract IProjectConceptCollection getProjectConceptCollections();
+	public abstract List<IProjectConceptCollection> getProjectConceptCollections();
 	
-	public abstract void setProjectConceptCollections(IProjectConceptCollection projectConceptCollection);
+	public abstract void setProjectConceptCollections(List<IProjectConceptCollection> projectConceptCollections);
 	
 	public abstract String getCreatedBy();
 	

@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,10 @@ public class Project implements IProject {
 	private String unixName;
 	private EProjectAccessibility projectAccess;
 	private IUser owner;
-	private IProjectCollaborator projectCollaborator;
-	private IProjectWorkspace projectWorkspace;
-	private IProjectConceptCollection projectConceptCollection;
-	private IProjectDictionary projectDictionary;
+	private List<IProjectCollaborator> projectCollaborators;
+	private List<IProjectWorkspace> projectWorkspaces;
+	private List<IProjectConceptCollection> projectConceptCollections;
+	private List<IProjectDictionary> projectDictionaries;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -133,44 +134,46 @@ public class Project implements IProject {
 	}
 
 	@Override
-	public IProjectCollaborator getProjectCollaborators() {
-		return projectCollaborator;
+	public void setProjectCollaborators(
+			List<IProjectCollaborator> projectCollaborators) {
+         this.projectCollaborators = projectCollaborators;		
+	}
+	
+	@Override
+	public List<IProjectCollaborator> getProjectCollaborators() {
+		return projectCollaborators;
 	}
 
 	@Override
-	public void setProjectCollaborators(IProjectCollaborator projectCollaborator) {
-         this.projectCollaborator = projectCollaborator;		
+	public void setProjectWorkspaces(List<IProjectWorkspace> projectWorkspaces) {
+         this.projectWorkspaces = projectWorkspaces;		
+	}
+	
+	@Override
+	public List<IProjectWorkspace> getProjectWorkspaces() {
+		return projectWorkspaces;
 	}
 
 	@Override
-	public IProjectWorkspace getProjectWorkspaces() {
-		return projectWorkspace;
+	public void setProjectDictionaries(
+			List<IProjectDictionary> projectDictionaries) {
+         this.projectDictionaries = projectDictionaries;		
+	}
+	
+	@Override
+	public List<IProjectDictionary> getProjectDictionaries() {
+		return projectDictionaries;
 	}
 
 	@Override
-	public void setProjectWorkspaces(IProjectWorkspace projectWorkspace) {
-         this.projectWorkspace = projectWorkspace;		
-	}
-
-	@Override
-	public IProjectDictionary getProjectDictionaries() {
-		return projectDictionary;
-	}
-
-	@Override
-	public void setProjectDictionaries(IProjectDictionary projectDictionary) {
-          this.projectDictionary = projectDictionary;		
-	}
-
-	@Override
-	public IProjectConceptCollection getProjectConceptCollections() {
-		return projectConceptCollection;
+	public List<IProjectConceptCollection> getProjectConceptCollections() {
+		return projectConceptCollections;
 	}
 
 	@Override
 	public void setProjectConceptCollections(
-			IProjectConceptCollection projectConceptCollection) {
-        this.projectConceptCollection = projectConceptCollection;		
+			List<IProjectConceptCollection> projectConceptCollections) {
+        this.projectConceptCollections = projectConceptCollections;		
 	}
 
 	@Override
@@ -228,15 +231,15 @@ public class Project implements IProject {
 				+ ((projectAccess == null) ? 0 : projectAccess.hashCode());
 		result = prime
 				* result
-				+ ((projectCollaborator == null) ? 0 : projectCollaborator
+				+ ((projectCollaborators == null) ? 0 : projectCollaborators
 						.hashCode());
 		result = prime
 				* result
-				+ ((projectConceptCollection == null) ? 0
-						: projectConceptCollection.hashCode());
+				+ ((projectConceptCollections == null) ? 0
+						: projectConceptCollections.hashCode());
 		result = prime
 				* result
-				+ ((projectDictionary == null) ? 0 : projectDictionary
+				+ ((projectDictionaries == null) ? 0 : projectDictionaries
 						.hashCode());
 		result = prime * result
 				+ ((projectId == null) ? 0 : projectId.hashCode());
@@ -244,7 +247,8 @@ public class Project implements IProject {
 				+ ((projectName == null) ? 0 : projectName.hashCode());
 		result = prime
 				* result
-				+ ((projectWorkspace == null) ? 0 : projectWorkspace.hashCode());
+				+ ((projectWorkspaces == null) ? 0 : projectWorkspaces
+						.hashCode());
 		result = prime * result
 				+ ((unixName == null) ? 0 : unixName.hashCode());
 		result = prime * result
@@ -285,21 +289,21 @@ public class Project implements IProject {
 			return false;
 		if (projectAccess != other.projectAccess)
 			return false;
-		if (projectCollaborator == null) {
-			if (other.projectCollaborator != null)
+		if (projectCollaborators == null) {
+			if (other.projectCollaborators != null)
 				return false;
-		} else if (!projectCollaborator.equals(other.projectCollaborator))
+		} else if (!projectCollaborators.equals(other.projectCollaborators))
 			return false;
-		if (projectConceptCollection == null) {
-			if (other.projectConceptCollection != null)
+		if (projectConceptCollections == null) {
+			if (other.projectConceptCollections != null)
 				return false;
-		} else if (!projectConceptCollection
-				.equals(other.projectConceptCollection))
+		} else if (!projectConceptCollections
+				.equals(other.projectConceptCollections))
 			return false;
-		if (projectDictionary == null) {
-			if (other.projectDictionary != null)
+		if (projectDictionaries == null) {
+			if (other.projectDictionaries != null)
 				return false;
-		} else if (!projectDictionary.equals(other.projectDictionary))
+		} else if (!projectDictionaries.equals(other.projectDictionaries))
 			return false;
 		if (projectId == null) {
 			if (other.projectId != null)
@@ -311,10 +315,10 @@ public class Project implements IProject {
 				return false;
 		} else if (!projectName.equals(other.projectName))
 			return false;
-		if (projectWorkspace == null) {
-			if (other.projectWorkspace != null)
+		if (projectWorkspaces == null) {
+			if (other.projectWorkspaces != null)
 				return false;
-		} else if (!projectWorkspace.equals(other.projectWorkspace))
+		} else if (!projectWorkspaces.equals(other.projectWorkspaces))
 			return false;
 		if (unixName == null) {
 			if (other.unixName != null)
@@ -333,6 +337,5 @@ public class Project implements IProject {
 			return false;
 		return true;
 	}
-	
-	
+
 }

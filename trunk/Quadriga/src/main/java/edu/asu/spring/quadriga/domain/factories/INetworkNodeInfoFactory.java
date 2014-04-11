@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 
 /**
  * Factory interface to create NetworkNodeInfo object
