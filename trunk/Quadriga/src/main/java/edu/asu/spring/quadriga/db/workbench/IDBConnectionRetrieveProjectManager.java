@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.db.workbench;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionRetrieveProjectManager 
@@ -98,5 +99,9 @@ public interface IDBConnectionRetrieveProjectManager
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
+	
+	
+	public List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException;
+	
 
 }

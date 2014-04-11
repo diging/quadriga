@@ -100,6 +100,27 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		return projectList;
 	}	
 
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException
+	{
+		List<ProjectDTO> projectDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.projectowner.username =:username");
+			query.setParameter("username", sUserName);
+			projectDTOList = query.list();
+		}
+		catch(Exception e)
+		{
+			logger.info("getProjectList details method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectDTOList;
+	}
+	
+	
 	/**
 	 * This method fetches the list of projects where current logged in user is the collaborator.
 	 * @returns  List of projects
