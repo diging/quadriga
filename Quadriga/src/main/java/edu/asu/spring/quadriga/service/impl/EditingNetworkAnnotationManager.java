@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
-import edu.asu.spring.quadriga.domain.INetwork;
-import edu.asu.spring.quadriga.domain.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkEdgeAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkNodeAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkRelationAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;

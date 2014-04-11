@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import edu.asu.spring.quadriga.domain.INetworkAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 
 /**
  * This class is a Annotation bean class for network nodes.

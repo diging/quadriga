@@ -1,19 +1,18 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IDictionary;
 
 public interface IWorkspaceDictionary 
 {
-	public abstract String getWorkspaceId();
+	public abstract IWorkSpace getWorkspace();
 	
-	public abstract void setWorkspaceId(String workspaceId);
+	public abstract void setWorkspace(IWorkSpace workspace);
 	
-	public abstract List<IDictionary> getDictionaries();
+	public abstract IDictionary getDictionary();
 	
-	public abstract void setDictionaries(List<IDictionary> dictionaries);
+	public abstract void setDictionary(IDictionary dictionary);
 	
 	public abstract String getCreatedBy();
 	

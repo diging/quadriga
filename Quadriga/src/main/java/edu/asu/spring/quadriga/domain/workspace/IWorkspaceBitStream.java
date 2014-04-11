@@ -1,19 +1,18 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IBitStream;
 
 public interface IWorkspaceBitStream 
 {
-	public abstract String getWorkspaceId();
+	public abstract IWorkSpace getWorkspace();
 	
-	public abstract void setWorkspaceId(String workspaceId);
+	public abstract void setWorkspace(IWorkSpace workspace);
 	
-	public abstract void setBitStreams(List<IBitStream> bitStreams);
-
-	public abstract List<IBitStream> getBitStreams();
+	public abstract IBitStream getBitStream();
+	
+	public abstract void setBitStream(IBitStream bitStream);
 	
 	public abstract String getCreatedBy();
 	

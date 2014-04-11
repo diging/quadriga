@@ -29,10 +29,10 @@ import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
-import edu.asu.spring.quadriga.domain.IBitStream;
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICommunity;
-import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.ICollection;
+import edu.asu.spring.quadriga.domain.dspace.ICommunity;
+import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;

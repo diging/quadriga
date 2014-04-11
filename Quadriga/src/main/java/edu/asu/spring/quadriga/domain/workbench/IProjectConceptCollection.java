@@ -1,19 +1,18 @@
 package edu.asu.spring.quadriga.domain.workbench;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 
 public interface IProjectConceptCollection 
 {
-	public abstract String getProjectId();
+	public abstract IProject getProject();
 	
-	public abstract void setProjectId(String projectId);
+	public abstract void setProject(IProject project);
 	
-	public abstract List<IConceptCollection> getConceptCollections();
-
-	public abstract void setConceptCollections(List<IConceptCollection> conceptCollections);
+	public abstract IConceptCollection getConceptCollection();
+	
+	public abstract void setConceptCollection(IConceptCollection conceptCollection);
 	
 	public abstract String getCreatedBy();
 	

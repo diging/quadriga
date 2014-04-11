@@ -35,10 +35,10 @@ import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IConcept;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
@@ -280,7 +280,7 @@ public class ConceptCollectionManagerTest {
 	}
 
 	/**
-	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#getCollectionDetails(edu.asu.spring.quadriga.domain.IConceptCollection)}.
+	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#getCollectionDetails(edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection)}.
 	 * @throws QuadrigaStorageException 
 	 * @throws QuadrigaAccessException 
 	 */
@@ -314,7 +314,7 @@ public class ConceptCollectionManagerTest {
 	}
 
 	/**
-	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#update(java.lang.String[], edu.asu.spring.quadriga.domain.IConceptCollection)}.
+	 * Test method for {@link edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager#update(java.lang.String[], edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection)}.
 	 * @throws QuadrigaStorageException 
 	 * @throws QuadrigaAccessException 
 	 */

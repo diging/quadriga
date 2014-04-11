@@ -1,43 +1,43 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 
 @Service
 public class ProjectWorkspace implements IProjectWorkspace 
 {
-	private String projectId;
-	private List<IWorkSpace> workspaces;
+	private IProject project;
+	private IWorkSpace workspace;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
 	@Override
-	public String getProjectId() {
-		return projectId;
+	public IProject getProject() {
+		return project;
 	}
 
 	@Override
-	public void setProjectId(String projectId) {
-        this.projectId = projectId;
+	public void setProejct(IProject project) {
+         this.project = project;		
 	}
 
 	@Override
-	public List<IWorkSpace> getWorkspaces() {
-		return workspaces;
+	public IWorkSpace getWorkspace() {
+		return workspace;
 	}
 
 	@Override
-	public void setWorkspaces(List<IWorkSpace> workspaces) {
-         this.workspaces = workspaces;
+	public void setWorkspace(IWorkSpace workspace) {
+         this.workspace = workspace;		
 	}
-
+	
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -86,14 +86,13 @@ public class ProjectWorkspace implements IProjectWorkspace
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result
-				+ ((projectId == null) ? 0 : projectId.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		result = prime * result
-				+ ((workspaces == null) ? 0 : workspaces.hashCode());
+				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -116,10 +115,10 @@ public class ProjectWorkspace implements IProjectWorkspace
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		if (projectId == null) {
-			if (other.projectId != null)
+		if (project == null) {
+			if (other.project != null)
 				return false;
-		} else if (!projectId.equals(other.projectId))
+		} else if (!project.equals(other.project))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
@@ -131,14 +130,11 @@ public class ProjectWorkspace implements IProjectWorkspace
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
-		if (workspaces == null) {
-			if (other.workspaces != null)
+		if (workspace == null) {
+			if (other.workspace != null)
 				return false;
-		} else if (!workspaces.equals(other.workspaces))
+		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}
-	
-	
-
 }

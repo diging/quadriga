@@ -1,19 +1,18 @@
 package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 
 public interface IWorkspaceCollaborator 
 {
-	public abstract String getWorkspaceId();
+	public abstract IWorkSpace getWorkspace();
 	
-	public abstract void setWorkspaceId(String workspaceId);
+	public abstract void setWorkspace(IWorkSpace workspace);
 	
-	public abstract void setCollaborators(List<ICollaborator> collaborators);
-
-	public abstract List<ICollaborator> getCollaborators();
+	public abstract ICollaborator getCollaborator();
+	
+	public abstract void setCollaborator(ICollaborator collaborator);
 	
 	public abstract String getCreatedBy();
 	

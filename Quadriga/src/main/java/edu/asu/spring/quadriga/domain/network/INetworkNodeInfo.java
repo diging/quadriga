@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.domain.network;
 
 /**
  * Interface to extract the node info from a network

@@ -2,10 +2,10 @@ package edu.asu.spring.quadriga.domain.factories.impl;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.INetwork;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.domain.implementation.Dictionary;
 import edu.asu.spring.quadriga.domain.implementation.Network;
+import edu.asu.spring.quadriga.domain.network.INetwork;
 
 /**
  * Factory class for creating {@link Dictionary}.

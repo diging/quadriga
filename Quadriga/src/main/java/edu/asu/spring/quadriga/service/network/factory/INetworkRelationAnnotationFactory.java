@@ -2,8 +2,8 @@ package edu.asu.spring.quadriga.service.network.factory;
 
 import org.apache.commons.lang.NotImplementedException;
 
-import edu.asu.spring.quadriga.domain.INetworkRelationAnnotation;
 import edu.asu.spring.quadriga.domain.implementation.NetworkRelationAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkRelationAnnotation;
 
 public interface INetworkRelationAnnotationFactory {
 	/**

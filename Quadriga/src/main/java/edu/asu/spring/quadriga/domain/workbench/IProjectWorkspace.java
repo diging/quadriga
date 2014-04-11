@@ -1,19 +1,18 @@
 package edu.asu.spring.quadriga.domain.workbench;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 
 public interface IProjectWorkspace 
 {
-	public abstract String getProjectId();
+	public abstract IProject getProject();
 	
-	public abstract void setProjectId(String projectId);
+	public abstract void setProejct(IProject project);
 	
-	public abstract List<IWorkSpace> getWorkspaces();
+	public abstract IWorkSpace getWorkspace();
 	
-	public abstract void setWorkspaces(List<IWorkSpace> workspaces);
+	public abstract void setWorkspace(IWorkSpace workspace);
 	
 	public abstract String getCreatedBy();
 	
