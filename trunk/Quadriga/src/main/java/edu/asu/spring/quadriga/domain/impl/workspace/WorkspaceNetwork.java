@@ -1,43 +1,40 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import java.util.Date;
 
-import org.springframework.stereotype.Service;
+import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
-
-@Service
-public class ProjectConceptCollection implements IProjectConceptCollection 
+public class WorkspaceNetwork implements IWorkspaceNetwork 
 {
-	private IProject project;
-	private IConceptCollection conceptCollection;
+	private IWorkSpace workspace;
+	private INetwork network;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
 	@Override
-	public IProject getProject() {
-		return project;
+	public IWorkSpace getWorkspace() {
+		return workspace;
 	}
 
 	@Override
-	public void setProject(IProject project) {
-        this.project = project;		
+	public void setWorkspace(IWorkSpace workspace) {
+         this.workspace = workspace;		
 	}
 
 	@Override
-	public IConceptCollection getConceptCollection() {
-		return conceptCollection;
+	public INetwork getNetwork() {
+		return network;
 	}
 
 	@Override
-	public void setConceptCollection(IConceptCollection conceptCollection) {
-        this.conceptCollection = conceptCollection;		
+	public void setNetwork(INetwork network) {
+         this.network = network;		
 	}
-
+	
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -65,7 +62,7 @@ public class ProjectConceptCollection implements IProjectConceptCollection
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-         this.updatedBy = updatedBy;
+        this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -82,19 +79,17 @@ public class ProjectConceptCollection implements IProjectConceptCollection
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime
-				* result
-				+ ((conceptCollection == null) ? 0 : conceptCollection
-						.hashCode());
 		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result + ((project == null) ? 0 : project.hashCode());
+		result = prime * result + ((network == null) ? 0 : network.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
+		result = prime * result
+				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -106,12 +101,7 @@ public class ProjectConceptCollection implements IProjectConceptCollection
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProjectConceptCollection other = (ProjectConceptCollection) obj;
-		if (conceptCollection == null) {
-			if (other.conceptCollection != null)
-				return false;
-		} else if (!conceptCollection.equals(other.conceptCollection))
-			return false;
+		WorkspaceNetwork other = (WorkspaceNetwork) obj;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
@@ -122,10 +112,10 @@ public class ProjectConceptCollection implements IProjectConceptCollection
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		if (project == null) {
-			if (other.project != null)
+		if (network == null) {
+			if (other.network != null)
 				return false;
-		} else if (!project.equals(other.project))
+		} else if (!network.equals(other.network))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
@@ -136,6 +126,11 @@ public class ProjectConceptCollection implements IProjectConceptCollection
 			if (other.updatedDate != null)
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
+			return false;
+		if (workspace == null) {
+			if (other.workspace != null)
+				return false;
+		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}

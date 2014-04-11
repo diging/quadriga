@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;

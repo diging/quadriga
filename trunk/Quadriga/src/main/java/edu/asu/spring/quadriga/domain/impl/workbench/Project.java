@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workbench;
 
 import java.util.Date;
 import java.util.List;

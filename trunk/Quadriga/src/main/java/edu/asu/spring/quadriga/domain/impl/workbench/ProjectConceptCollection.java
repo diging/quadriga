@@ -1,18 +1,18 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workbench;
 
 import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 
 @Service
-public class ProjectCollaborator implements IProjectCollaborator 
+public class ProjectConceptCollection implements IProjectConceptCollection 
 {
 	private IProject project;
-	private ICollaborator collaborator;
+	private IConceptCollection conceptCollection;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -29,15 +29,15 @@ public class ProjectCollaborator implements IProjectCollaborator
 	}
 
 	@Override
-	public ICollaborator getCollaborator() {
-		return collaborator;
+	public IConceptCollection getConceptCollection() {
+		return conceptCollection;
 	}
 
 	@Override
-	public void setCollaborator(ICollaborator collaborator) {
-        this.collaborator = collaborator;		
+	public void setConceptCollection(IConceptCollection conceptCollection) {
+        this.conceptCollection = conceptCollection;		
 	}
-	
+
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -55,7 +55,7 @@ public class ProjectCollaborator implements IProjectCollaborator
 
 	@Override
 	public void setCreatedDate(Date createdDate) {
-       this.createdDate = createdDate;
+        this.createdDate = createdDate;
 	}
 
 	@Override
@@ -74,16 +74,18 @@ public class ProjectCollaborator implements IProjectCollaborator
 	}
 
 	@Override
-	public void setUpdateDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+	public void setUpdatedDate(Date updatedDate) {
+         this.updatedDate = updatedDate;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((collaborator == null) ? 0 : collaborator.hashCode());
+		result = prime
+				* result
+				+ ((conceptCollection == null) ? 0 : conceptCollection
+						.hashCode());
 		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
@@ -104,11 +106,11 @@ public class ProjectCollaborator implements IProjectCollaborator
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProjectCollaborator other = (ProjectCollaborator) obj;
-		if (collaborator == null) {
-			if (other.collaborator != null)
+		ProjectConceptCollection other = (ProjectConceptCollection) obj;
+		if (conceptCollection == null) {
+			if (other.conceptCollection != null)
 				return false;
-		} else if (!collaborator.equals(other.collaborator))
+		} else if (!conceptCollection.equals(other.conceptCollection))
 			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)

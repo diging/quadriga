@@ -1,41 +1,40 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import java.util.Date;
-import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 
-public class WorkspaceCollaborator implements IWorkspaceCollaborator 
+public class WorkspaceConceptCollection implements IWorkspaceConceptCollection 
 {
-	private String workspaceId;
-	private List<ICollaborator> collaborators;
+	private IWorkSpace workspace;
+	private IConceptCollection conceptCollection;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
 	@Override
-	public String getWorkspaceId() {
-		return workspaceId;
+	public IWorkSpace getWorkspace() {
+		return workspace;
 	}
 
 	@Override
-	public void setWorkspaceId(String workspaceId) {
-       this.workspaceId = workspaceId;
+	public void setWorkspace(IWorkSpace workspace) {
+        this.workspace = workspace;		
 	}
 
 	@Override
-	public void setCollaborators(List<ICollaborator> collaborators) 
-	{
-       this.collaborators = collaborators;    
+	public IConceptCollection getConceptCollection() {
+		return conceptCollection;
 	}
 
 	@Override
-	public List<ICollaborator> getCollaborators() {
-		return collaborators;
+	public void setConceptCollection(IConceptCollection conceptCollection) {
+        this.conceptCollection = conceptCollection;		
 	}
-
+	
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -48,7 +47,7 @@ public class WorkspaceCollaborator implements IWorkspaceCollaborator
 
 	@Override
 	public Date getCreatedDate() {
-		return createdDate;
+ 		return createdDate;
 	}
 
 	@Override
@@ -68,7 +67,7 @@ public class WorkspaceCollaborator implements IWorkspaceCollaborator
 
 	@Override
 	public Date getUpdatedDate() {
-		return updatedDate;
+ 		return updatedDate;
 	}
 
 	@Override
@@ -80,8 +79,10 @@ public class WorkspaceCollaborator implements IWorkspaceCollaborator
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((collaborators == null) ? 0 : collaborators.hashCode());
+		result = prime
+				* result
+				+ ((conceptCollection == null) ? 0 : conceptCollection
+						.hashCode());
 		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
@@ -91,7 +92,7 @@ public class WorkspaceCollaborator implements IWorkspaceCollaborator
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		result = prime * result
-				+ ((workspaceId == null) ? 0 : workspaceId.hashCode());
+				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -103,11 +104,11 @@ public class WorkspaceCollaborator implements IWorkspaceCollaborator
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkspaceCollaborator other = (WorkspaceCollaborator) obj;
-		if (collaborators == null) {
-			if (other.collaborators != null)
+		WorkspaceConceptCollection other = (WorkspaceConceptCollection) obj;
+		if (conceptCollection == null) {
+			if (other.conceptCollection != null)
 				return false;
-		} else if (!collaborators.equals(other.collaborators))
+		} else if (!conceptCollection.equals(other.conceptCollection))
 			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)
@@ -129,10 +130,10 @@ public class WorkspaceCollaborator implements IWorkspaceCollaborator
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
-		if (workspaceId == null) {
-			if (other.workspaceId != null)
+		if (workspace == null) {
+			if (other.workspace != null)
 				return false;
-		} else if (!workspaceId.equals(other.workspaceId))
+		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}

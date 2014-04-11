@@ -1,40 +1,40 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import java.util.Date;
-import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 
-public class WorkspaceDictionary implements IWorkspaceDictionary 
+public class WorkspaceBitStream implements IWorkspaceBitStream 
 {
-	private String workspaceId;
-	private List<IDictionary> dictionaries;
+	private IWorkSpace workspace;
+	private IBitStream bitStream;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
 	@Override
-	public String getWorkspaceId() {
-		return workspaceId;
+	public IWorkSpace getWorkspace() {
+		return workspace;
 	}
 
 	@Override
-	public void setWorkspaceId(String workspaceId) {
-        this.workspaceId = workspaceId;
+	public void setWorkspace(IWorkSpace workspace) {
+         this.workspace = workspace;		
 	}
 
 	@Override
-	public List<IDictionary> getDictionaries() {
-		return dictionaries;
+	public IBitStream getBitStream() {
+		return bitStream;
 	}
 
 	@Override
-	public void setDictionaries(List<IDictionary> dictionaries) {
-       this.dictionaries = dictionaries;
+	public void setBitStream(IBitStream bitStream) {
+        this.bitStream = bitStream;		
 	}
-
+	
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -42,7 +42,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+         this.createdBy = createdBy;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-          this.updatedBy = updatedBy;
+        this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setUpdatedDate(Date updatedDate) {
-         this.updatedDate = updatedDate;
+        this.updatedDate = updatedDate;
 	}
 
 	@Override
@@ -80,17 +80,17 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((bitStream == null) ? 0 : bitStream.hashCode());
+		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result
-				+ ((dictionaries == null) ? 0 : dictionaries.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		result = prime * result
-				+ ((workspaceId == null) ? 0 : workspaceId.hashCode());
+				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -102,7 +102,12 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkspaceDictionary other = (WorkspaceDictionary) obj;
+		WorkspaceBitStream other = (WorkspaceBitStream) obj;
+		if (bitStream == null) {
+			if (other.bitStream != null)
+				return false;
+		} else if (!bitStream.equals(other.bitStream))
+			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
@@ -112,11 +117,6 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 			if (other.createdDate != null)
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
-			return false;
-		if (dictionaries == null) {
-			if (other.dictionaries != null)
-				return false;
-		} else if (!dictionaries.equals(other.dictionaries))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
@@ -128,12 +128,11 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
-		if (workspaceId == null) {
-			if (other.workspaceId != null)
+		if (workspace == null) {
+			if (other.workspace != null)
 				return false;
-		} else if (!workspaceId.equals(other.workspaceId))
+		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}
-
 }

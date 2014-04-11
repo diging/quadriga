@@ -2,11 +2,11 @@ package edu.asu.spring.quadriga.domain.factories.impl;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IConcept;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.implementation.Concept;
-import edu.asu.spring.quadriga.domain.implementation.ConceptCollection;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 
 
 /**

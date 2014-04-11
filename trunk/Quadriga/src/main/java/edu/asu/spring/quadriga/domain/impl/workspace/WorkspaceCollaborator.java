@@ -1,32 +1,19 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import java.util.Date;
 
-import org.springframework.stereotype.Service;
-
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 
-@Service
-public class ProjectWorkspace implements IProjectWorkspace 
+public class WorkspaceCollaborator implements IWorkspaceCollaborator 
 {
-	private IProject project;
 	private IWorkSpace workspace;
+	private ICollaborator collaborator;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
-
-	@Override
-	public IProject getProject() {
-		return project;
-	}
-
-	@Override
-	public void setProejct(IProject project) {
-         this.project = project;		
-	}
 
 	@Override
 	public IWorkSpace getWorkspace() {
@@ -36,6 +23,16 @@ public class ProjectWorkspace implements IProjectWorkspace
 	@Override
 	public void setWorkspace(IWorkSpace workspace) {
          this.workspace = workspace;		
+	}
+
+	@Override
+	public ICollaborator getCollaborator() {
+		return collaborator;
+	}
+
+	@Override
+	public void setCollaborator(ICollaborator collaborator) {
+         this.collaborator = collaborator;		
 	}
 	
 	@Override
@@ -55,7 +52,7 @@ public class ProjectWorkspace implements IProjectWorkspace
 
 	@Override
 	public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+         this.createdDate = createdDate;
 	}
 
 	@Override
@@ -65,7 +62,7 @@ public class ProjectWorkspace implements IProjectWorkspace
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-       this.updatedBy = updatedBy;
+        this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -75,7 +72,7 @@ public class ProjectWorkspace implements IProjectWorkspace
 
 	@Override
 	public void setUpdatedDate(Date updatedDate) {
-       this.updatedDate = updatedDate;
+        this.updatedDate = updatedDate;
 	}
 
 	@Override
@@ -83,10 +80,11 @@ public class ProjectWorkspace implements IProjectWorkspace
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((collaborator == null) ? 0 : collaborator.hashCode());
+		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
@@ -104,7 +102,12 @@ public class ProjectWorkspace implements IProjectWorkspace
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProjectWorkspace other = (ProjectWorkspace) obj;
+		WorkspaceCollaborator other = (WorkspaceCollaborator) obj;
+		if (collaborator == null) {
+			if (other.collaborator != null)
+				return false;
+		} else if (!collaborator.equals(other.collaborator))
+			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
@@ -114,11 +117,6 @@ public class ProjectWorkspace implements IProjectWorkspace
 			if (other.createdDate != null)
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
-			return false;
-		if (project == null) {
-			if (other.project != null)
-				return false;
-		} else if (!project.equals(other.project))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)

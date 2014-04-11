@@ -1,38 +1,39 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import java.util.Date;
-import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
+import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 
-public class WorkspaceBitStream implements IWorkspaceBitStream 
+public class WorkspaceDictionary implements IWorkspaceDictionary 
 {
-	private String workspaceId;
-	private List<IBitStream> bitStreams;
+	private IWorkSpace workspace;
+	private IDictionary dictionary;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
+	
 	@Override
-	public String getWorkspaceId() {
-		return workspaceId;
+	public IWorkSpace getWorkspace() {
+		return workspace;
 	}
 
 	@Override
-	public void setWorkspaceId(String workspaceId) {
-       this.workspaceId = workspaceId;
+	public void setWorkspace(IWorkSpace workspace) {
+         this.workspace = workspace;		
 	}
 
 	@Override
-	public void setBitStreams(List<IBitStream> bitStreams) {
-         this.bitStreams = bitStreams;
+	public IDictionary getDictionary() {
+		return dictionary;
 	}
 
 	@Override
-	public List<IBitStream> getBitStreams() {
-		return bitStreams;
+	public void setDictionary(IDictionary dictionary) {
+        this.dictionary = dictionary;		
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 
 	@Override
 	public void setCreatedBy(String createdBy) {
-         this.createdBy = createdBy;
+        this.createdBy = createdBy;
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+          this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 
 	@Override
 	public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+         this.updatedDate = updatedDate;
 	}
 
 	@Override
@@ -80,17 +81,17 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((bitStreams == null) ? 0 : bitStreams.hashCode());
-		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
+		result = prime * result
+				+ ((dictionary == null) ? 0 : dictionary.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		result = prime * result
-				+ ((workspaceId == null) ? 0 : workspaceId.hashCode());
+				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -102,12 +103,7 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkspaceBitStream other = (WorkspaceBitStream) obj;
-		if (bitStreams == null) {
-			if (other.bitStreams != null)
-				return false;
-		} else if (!bitStreams.equals(other.bitStreams))
-			return false;
+		WorkspaceDictionary other = (WorkspaceDictionary) obj;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
@@ -117,6 +113,11 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 			if (other.createdDate != null)
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
+			return false;
+		if (dictionary == null) {
+			if (other.dictionary != null)
+				return false;
+		} else if (!dictionary.equals(other.dictionary))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
@@ -128,10 +129,10 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
-		if (workspaceId == null) {
-			if (other.workspaceId != null)
+		if (workspace == null) {
+			if (other.workspace != null)
 				return false;
-		} else if (!workspaceId.equals(other.workspaceId))
+		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}

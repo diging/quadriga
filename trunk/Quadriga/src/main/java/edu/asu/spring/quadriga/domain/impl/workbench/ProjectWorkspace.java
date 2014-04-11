@@ -1,40 +1,43 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.workbench;
 
 import java.util.Date;
-import java.util.List;
 
-import edu.asu.spring.quadriga.domain.network.INetwork;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import org.springframework.stereotype.Service;
 
-public class WorkspaceNetwork implements IWorkspaceNetwork 
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+
+@Service
+public class ProjectWorkspace implements IProjectWorkspace 
 {
-	private String workspaceId;
-	private List<INetwork> networks;
+	private IProject project;
+	private IWorkSpace workspace;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
 	@Override
-	public String getWorkspaceId() {
-		return workspaceId;
+	public IProject getProject() {
+		return project;
 	}
 
 	@Override
-	public void setWorkspaceId(String workspaceId) {
-        this.workspaceId = workspaceId;
+	public void setProejct(IProject project) {
+         this.project = project;		
 	}
 
 	@Override
-	public List<INetwork> getNetworks() {
-		return networks;
+	public IWorkSpace getWorkspace() {
+		return workspace;
 	}
 
 	@Override
-	public void setNetworks(List<INetwork> networks) {
-        this.networks = networks;
+	public void setWorkspace(IWorkSpace workspace) {
+         this.workspace = workspace;		
 	}
-
+	
 	@Override
 	public String getCreatedBy() {
 		return createdBy;
@@ -62,7 +65,7 @@ public class WorkspaceNetwork implements IWorkspaceNetwork
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+       this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class WorkspaceNetwork implements IWorkspaceNetwork
 
 	@Override
 	public void setUpdatedDate(Date updatedDate) {
-         this.updatedDate = updatedDate;
+       this.updatedDate = updatedDate;
 	}
 
 	@Override
@@ -83,14 +86,13 @@ public class WorkspaceNetwork implements IWorkspaceNetwork
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result
-				+ ((networks == null) ? 0 : networks.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		result = prime * result
-				+ ((workspaceId == null) ? 0 : workspaceId.hashCode());
+				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -102,7 +104,7 @@ public class WorkspaceNetwork implements IWorkspaceNetwork
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkspaceNetwork other = (WorkspaceNetwork) obj;
+		ProjectWorkspace other = (ProjectWorkspace) obj;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
@@ -113,10 +115,10 @@ public class WorkspaceNetwork implements IWorkspaceNetwork
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		if (networks == null) {
-			if (other.networks != null)
+		if (project == null) {
+			if (other.project != null)
 				return false;
-		} else if (!networks.equals(other.networks))
+		} else if (!project.equals(other.project))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
@@ -128,13 +130,11 @@ public class WorkspaceNetwork implements IWorkspaceNetwork
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
-		if (workspaceId == null) {
-			if (other.workspaceId != null)
+		if (workspace == null) {
+			if (other.workspace != null)
 				return false;
-		} else if (!workspaceId.equals(other.workspaceId))
+		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}
-
-	
 }

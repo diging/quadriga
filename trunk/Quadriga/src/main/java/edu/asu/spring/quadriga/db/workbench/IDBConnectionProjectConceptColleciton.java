@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.db.workbench;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionProjectConceptColleciton {

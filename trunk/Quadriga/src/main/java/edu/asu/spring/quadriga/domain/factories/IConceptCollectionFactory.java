@@ -3,8 +3,8 @@
  */
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.IConcept;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 
 /**
  * @Description : Creates {@link ConceptCollectiont} objects.

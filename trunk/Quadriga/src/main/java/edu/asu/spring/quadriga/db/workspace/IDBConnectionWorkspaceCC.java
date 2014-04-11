@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.db.workspace;
 import java.sql.SQLException;
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionWorkspaceCC {
