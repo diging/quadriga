@@ -29,6 +29,7 @@ public class WorkspaceDspaceDTOMapper {
 		{
 			bitstream = bitstreamFactory.createBitStreamObject();					
 			bitstream.setId(workspaceDspaceDTO.getWorkspaceDspaceDTOPK().getBitstreamid());
+			bitstream.setItemHandle(workspaceDspaceDTO.getWorkspaceDspaceDTOPK().getItemHandle());
 		}
 		return bitstream;
 	}

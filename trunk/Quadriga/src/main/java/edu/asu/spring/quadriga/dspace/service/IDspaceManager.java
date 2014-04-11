@@ -285,7 +285,7 @@ public interface IDspaceManager{
 	 * @throws QuadrigaStorageException
 	 * @throws QuadrigaAccessException
 	 */
-	public abstract void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String bitstreamId, String username)
+	public abstract void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String bitstreamId, String itemHandle, String username)
 			throws QuadrigaStorageException, QuadrigaAccessException;
 	
 	/**

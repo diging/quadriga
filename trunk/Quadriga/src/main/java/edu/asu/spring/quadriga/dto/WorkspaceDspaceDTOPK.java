@@ -21,16 +21,20 @@ public class WorkspaceDspaceDTOPK implements Serializable
     @Basic(optional = false)
     @Column(name = "workspaceid")
     private String workspaceid;
+    
     @Basic(optional = false)
     @Column(name = "bitstreamid")
     private String bitstreamid;
+    
+    private String itemHandle;
 
     public WorkspaceDspaceDTOPK() {
     }
 
-    public WorkspaceDspaceDTOPK(String workspaceid, String bitstreamid) {
+    public WorkspaceDspaceDTOPK(String workspaceid, String bitstreamid, String itemHandle) {
         this.workspaceid = workspaceid;
         this.bitstreamid = bitstreamid;
+        this.itemHandle = itemHandle;
     }
 
     public String getWorkspaceid() {
@@ -71,4 +75,12 @@ public class WorkspaceDspaceDTOPK implements Serializable
         }
         return true;
     }
+
+	public String getItemHandle() {
+		return itemHandle;
+	}
+
+	public void setItemHandle(String itemHandle) {
+		this.itemHandle = itemHandle;
+	}
 }

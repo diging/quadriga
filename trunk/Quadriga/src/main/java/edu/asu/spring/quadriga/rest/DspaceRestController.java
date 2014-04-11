@@ -9,6 +9,7 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -47,6 +48,8 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceMetadataBitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -112,6 +115,17 @@ public class DspaceRestController {
 
 			// Retrieve the list of bitstreams for this workspace
 			List<IBitStream> bitstreams = dspaceManager.getBitstreamsInWorkspace(workspaceid, principal.getName());
+			
+			Iterator<IBitStream> bitStreamIterator = bitstreams.iterator();
+			while(bitStreamIterator.hasNext()){
+				IBitStream bit = bitStreamIterator.next();
+				logger.info(bit.getId());
+				logger.info(bit.getName());
+				logger.info(bit.getItemName());
+				logger.info(bit.getMimeType());
+				logger.info(bit.getSize());
+				logger.info(""+ bit.getLoadStatus());
+			}
 
 			template = engine.getTemplate("velocitytemplates/dspacefiles.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
@@ -344,8 +358,21 @@ public class DspaceRestController {
 				String restURLPath = getBitstreamMetadataPath(fileid, email, password, publicKey, privateKey, quadrigaUsername);
 				IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
 
+				String itemHandle = null;
+				// get item handle for bitstream
+				if (metadataBitstream.getBundles() != null && metadataBitstream.getBundles().getBundleEntity() != null) {
+					IDspaceMetadataBundleEntity entry = metadataBitstream.getBundles().getBundleEntity();
+					if (entry != null && entry.getItems() != null && entry.getItems().getItementities() != null) {
+						if (entry.getItems().getItementities().size() > 0) {
+							// we only get the first item, this might be wrong and needs to be checked.
+							IDspaceMetadataItemEntity itemEntry = entry.getItems().getItementities().get(0);
+							itemHandle = itemEntry.getHandle();
+						}
+					}
+				}
+				
 				//Add the file to the workspace
-				dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, fileid, quadrigaUsername);
+				dspaceManager.addBitStreamsToWorkspaceThroughRestInterface(workspaceid, fileid, itemHandle, quadrigaUsername);
 				response.setStatus(201);
 				return restMessage.getSuccessMsg(dspaceProperties.getProperty("dspace.file_add_success"),request);
 			} 

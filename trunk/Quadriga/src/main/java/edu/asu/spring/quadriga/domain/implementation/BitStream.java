@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public class BitStream implements IBitStream{
 
 	private String id;
+	private String itemHandle;
 	private String name;
 	private String size;
 	private String mimeType;
@@ -148,6 +149,14 @@ public class BitStream implements IBitStream{
 	@Override
 	public void setSize(String size) {
 		this.size = size;
+	}
+	
+	public String getItemHandle() {
+		return itemHandle;
+	}
+
+	public void setItemHandle(String itemHandle) {
+		this.itemHandle = itemHandle;
 	}
 
 

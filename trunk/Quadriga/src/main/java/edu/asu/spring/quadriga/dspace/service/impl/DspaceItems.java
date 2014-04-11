@@ -16,6 +16,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItems;
 public class DspaceItems implements IDspaceItems {
 
 	private IDspaceBitStream bitstreams;
+	private String handle;
 
 	/* (non-Javadoc)
 	 * @see edu.asu.spring.quadriga.dspace.service.impl.IDspaceItems#getBitstreams()
@@ -32,5 +33,13 @@ public class DspaceItems implements IDspaceItems {
 	@Override
 	public void setBitstreams(IDspaceBitStream bitstreams) {
 		this.bitstreams = bitstreams;
+	}
+
+	public String getHandle() {
+		return handle;
+	}
+
+	public void setHandle(String handle) {
+		this.handle = handle;
 	}
 }

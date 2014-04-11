@@ -32,17 +32,22 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WorkspaceDspaceDTO.findByBitstreamid", query = "SELECT w FROM WorkspaceDspaceDTO w WHERE w.workspaceDspaceDTOPK.bitstreamid = :bitstreamid"),
     })
 public class WorkspaceDspaceDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
+    
+	private static final long serialVersionUID = 1L;
+
+	@EmbeddedId
     protected WorkspaceDspaceDTOPK workspaceDspaceDTOPK;
-    @Basic(optional = false)
+    
+	@Basic(optional = false)
     @Column(name = "createdby")
     private String createdby;
-    @Basic(optional = false)
+    
+	@Basic(optional = false)
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
+    
+	@JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private WorkspaceDTO workspaceDTO;
 
@@ -55,8 +60,8 @@ public class WorkspaceDspaceDTO implements Serializable {
         this.createddate = createddate;
     }
 
-    public WorkspaceDspaceDTO(String workspaceid, String bitstreamid, String createdby, Date createddate) {
-        this.workspaceDspaceDTOPK = new WorkspaceDspaceDTOPK(workspaceid, bitstreamid);
+    public WorkspaceDspaceDTO(String workspaceid, String bitstreamid, String itemHandle, String createdby, Date createddate) {
+        this.workspaceDspaceDTOPK = new WorkspaceDspaceDTOPK(workspaceid, bitstreamid, itemHandle);
         this.createdby = createdby;
         this.createddate = createddate;
     }
