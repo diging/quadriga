@@ -1,5 +1,8 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
+import java.util.List;
+
+import edu.asu.spring.quadriga.domain.IDictionary;
 import edu.asu.spring.quadriga.domain.IDictionaryItem;
 
 /**
@@ -9,15 +12,14 @@ import edu.asu.spring.quadriga.domain.IDictionaryItem;
  *
  */
 
-public class DictionaryItem implements IDictionaryItem {
-
-	
-	private String items;
-	private String dictionaryid;
-	private String id;
+public class DictionaryItem implements IDictionaryItem 
+{
+	private String term;
+	private String dictionaryItemId;
 	private String pos;
 	private String vocabulary;
 	private String description;
+	private List<IDictionary> dictionaries;
 	
 	/**
 	 * getter for variable items 
@@ -25,8 +27,8 @@ public class DictionaryItem implements IDictionaryItem {
 	 * @return 	Return items
 	 */
 	@Override
-	public String getItems() {
-		return items;
+	public String getTerm() {
+		return term;
 	}
 	/**
 	 * setter for variable items 
@@ -34,31 +36,10 @@ public class DictionaryItem implements IDictionaryItem {
 	 * 
 	 */
 	@Override
-	public void setItems(String items) {
-		this.items=items;
-		
+	public void setTerm(String term) {
+		this.term=term;
 	}
 
-	/**
-	 * getter for variable dictionaryId 
-	 * 
-	 * @return 	Return dictionaryId
-	 */
-	@Override
-	public String getDictionaryId() {
-		return dictionaryid;
-	}
-
-	/**
-	 * setter for variable dictionaryId 
-	 * @param dictionaryId1
-	 * 
-	 */
-	@Override
-	public void setDictionaryId(String dictionaryId1) {
-		this.dictionaryid = dictionaryId1;
-	}
-	
 	/**
 	 * getter for variable id 
 	 * 
@@ -66,8 +47,8 @@ public class DictionaryItem implements IDictionaryItem {
 	 */
 	
 	@Override
-	public String getId() {
-		return id;
+	public String getDictionaryItemId() {
+		return dictionaryItemId;
 	}
 
 	/**
@@ -76,9 +57,8 @@ public class DictionaryItem implements IDictionaryItem {
 	 * 
 	 */
 	@Override
-	public void setId(String id) {
-		this.id=id;
-		
+	public void setDictionaryItemId(String id) {
+		this.dictionaryItemId=id;
 	}
 	
 	/**
@@ -144,6 +124,16 @@ public class DictionaryItem implements IDictionaryItem {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Override
+	public List<IDictionary> getDictionaries() {
+		return dictionaries;
+	}
+	
+	@Override
+	public void setDictionaries(List<IDictionary> dictionaries) {
+		this.dictionaries = dictionaries;
 	}
 
 }

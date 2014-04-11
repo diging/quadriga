@@ -56,7 +56,7 @@ public class ConceptCollectionAuthorization implements IAuthorization
 		
 		//fetch the details of the concept collection
 		collection = collectionFactory.createConceptCollectionObject();
-		collection.setId(conceptCollectionId);
+		collection.setConceptCollectionId(conceptCollectionId);
 		conceptCollectionManager.getCollectionDetails(collection, userName);
 		
 		//check if the user is a concept collection owner

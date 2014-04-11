@@ -83,8 +83,8 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 			}
 		}
 		
-		tempDictionary.setId(dictionary.getDictionaryid());
-		tempDictionary.setName(dictionary.getDictionaryname());
+		tempDictionary.setDictionaryId(dictionary.getDictionaryid());
+		tempDictionary.setDictionaryName(dictionary.getDictionaryname());
 		tempDictionary.setDescription(dictionary.getDescription());
 		tempDictionary.setOwner(user);
 		tempDictionary.setCollaborators(collaboratorList);
@@ -129,8 +129,8 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 	public DictionaryDTO getDictionaryDTO(IDictionary dictionary) throws QuadrigaStorageException
 	{
 		DictionaryDTO dictionaryDTO = new DictionaryDTO();
-		dictionaryDTO.setDictionaryid(dictionary.getId());
-		dictionaryDTO.setDictionaryname(dictionary.getName());
+		dictionaryDTO.setDictionaryid(dictionary.getDictionaryId());
+		dictionaryDTO.setDictionaryname(dictionary.getDictionaryName());
 		dictionaryDTO.setDescription(dictionary.getDescription());
 		dictionaryDTO.setAccessibility(Boolean.FALSE);
 		dictionaryDTO.setDictionaryowner((getUserDTO(dictionary.getOwner().getUserName())));
@@ -144,8 +144,8 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 	public IDictionaryItem getDictionaryItem(DictionaryItemsDTO dictionaryItemsDTO)
 	{
 		IDictionaryItem dictionaryItem = dictionaryItemsFactory.createDictionaryItemsObject();
-		dictionaryItem.setId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
-		dictionaryItem.setItems(dictionaryItemsDTO.getTerm());					
+		dictionaryItem.setDictionaryItemId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
+		dictionaryItem.setTerm(dictionaryItemsDTO.getTerm());					
 		dictionaryItem.setPos(dictionaryItemsDTO.getPos());
 		return dictionaryItem;
 	}

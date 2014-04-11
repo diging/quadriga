@@ -163,17 +163,18 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	public void getCollectionDetails(IConceptCollection collection,String username) throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser owner = null;
 		collection.setCollaborators(new ArrayList<ICollaborator>());
+		List<IConcept> concepts = new ArrayList<IConcept>();
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid");
-			query.setParameter("conceptCollectionid", collection.getId());
+			query.setParameter("conceptCollectionid", collection.getConceptCollectionId());
 			
 			ConceptCollectionDTO conceptcollectionsDTO = (ConceptCollectionDTO) query.uniqueResult();
 			
 			if(conceptcollectionsDTO != null)
 			{
 				collection.setDescription(conceptcollectionsDTO.getDescription());
-				collection.setName(conceptcollectionsDTO.getCollectionname());
+				collection.setConceptCollectionName(conceptcollectionsDTO.getCollectionname());
 				owner = userManager.getUserDetails(conceptcollectionsDTO.getCollectionowner().getUsername());
 				collection.setOwner(owner);
 				if(conceptcollectionsDTO.getConceptCollectionItemsDTOList() != null && conceptcollectionsDTO.getConceptCollectionItemsDTOList().size() > 0)
@@ -183,9 +184,10 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 					while(ccItemsIterator.hasNext())
 					{
 						ConceptsDTO concept = ccItemsIterator.next().getConceptDTO();
-						collection.addItem(conceptCollectionDTOMapper.getConceptCollectionItems(concept));
+						concepts.add(conceptCollectionDTOMapper.getConceptCollectionItems(concept));
 					}	
 				}
+				collection.setConcepts(concepts);
 			}
 		}
 		catch(Exception e)
@@ -565,7 +567,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptsDTO c where c.item =:id");
-			query.setParameter("id", concept.getId());
+			query.setParameter("id", concept.getConceptId());
 			List<ConceptsDTO> conceptsDTOList = query.list();
 			
 			if(conceptsDTOList != null && conceptsDTOList.size() > 0)
@@ -634,7 +636,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid");
-			query.setParameter("conceptCollectionid", collection.getId());
+			query.setParameter("conceptCollectionid", collection.getConceptCollectionId());
 			List<ConceptCollectionCollaboratorDTO> ccCollabList = query.list();
 			
 			if(ccCollabList != null && ccCollabList.size() > 0)

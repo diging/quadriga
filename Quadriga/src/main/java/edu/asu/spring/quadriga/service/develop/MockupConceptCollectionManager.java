@@ -35,8 +35,8 @@ public class MockupConceptCollectionManager implements
 		
 		
 		
-		cc1.setName("quadriga 1");
-		cc2.setName("quadriga 2");
+		cc1.setConceptCollectionName("quadriga 1");
+		cc2.setConceptCollectionName("quadriga 2");
 		
 		cc1.setDescription("some list goes here");
 		cc2.setDescription("some list goes here");

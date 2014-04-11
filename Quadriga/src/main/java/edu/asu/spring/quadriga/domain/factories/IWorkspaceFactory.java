@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 
 public interface IWorkspaceFactory {
 

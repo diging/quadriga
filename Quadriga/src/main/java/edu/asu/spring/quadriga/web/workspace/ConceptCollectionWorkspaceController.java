@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -71,7 +71,7 @@ public class ConceptCollectionWorkspaceController {
 		Iterator<IConceptCollection> I = conceptCollectionList.iterator(); 
 		while(I.hasNext()){
 			IConceptCollection con = I.next();
-			logger.info(" "+con.getName());
+			logger.info(" "+con.getConceptCollectionName());
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
 		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
@@ -112,7 +112,7 @@ public class ConceptCollectionWorkspaceController {
 			Iterator<IConceptCollection> I = conceptCollectionList.iterator(); 
 			while(I.hasNext()){
 				IConceptCollection con = I.next();
-				logger.info(" "+con.getName());
+				logger.info(" "+con.getConceptCollectionName());
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
 			IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);

@@ -67,11 +67,11 @@ public class DictionaryTest {
 	@Test
 	public void testGetName() {
 		
-		dictionary.setName(null);
-		assertEquals(dictionary.getName(), null);
+		dictionary.setDictionaryName(null);
+		assertEquals(dictionary.getDictionaryName(), null);
 		
-		dictionary.setName("jane");
-		assertEquals(dictionary.getName(),"jane");
+		dictionary.setDictionaryName("jane");
+		assertEquals(dictionary.getDictionaryName(),"jane");
 		
 	}
 
@@ -91,11 +91,11 @@ public class DictionaryTest {
 	@Test
 	public void testGetId() {
 		
-		dictionary.setId(null);
-		assertEquals(dictionary.getId(), null);
+		dictionary.setDictionaryId(null);
+		assertEquals(dictionary.getDictionaryId(), null);
 		
-		dictionary.setId("2058");
-		assertEquals(dictionary.getId(), "2058");
+		dictionary.setDictionaryId("2058");
+		assertEquals(dictionary.getDictionaryId(), "2058");
 		
 	}
 

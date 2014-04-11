@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.implementation.WorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 
 /**
  * @description  : Factory class for creating {@link WorkSpace}.

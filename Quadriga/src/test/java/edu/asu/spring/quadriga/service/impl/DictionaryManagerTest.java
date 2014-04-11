@@ -185,7 +185,7 @@ public class DictionaryManagerTest {
 		{
 			String msg = "";
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dictionaryManager.addNewDictionary(dictionary);
@@ -209,7 +209,7 @@ public class DictionaryManagerTest {
 					dictionaryTest=I.next();
 					assertEquals((dictionaryTest!=null), true);
 					if(dictionaryTest!=null){
-						name =dictionaryTest.getName();
+						name =dictionaryTest.getDictionaryName();
 						desc =dictionaryTest.getDescription();
 						userTest =dictionaryTest.getOwner();
 					}
@@ -243,7 +243,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";
@@ -262,9 +262,9 @@ public class DictionaryManagerTest {
 				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItem dictionaryItems = I.next();
-				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getTerm(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
-				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = '"+getDictionaryID("testDictionary")+"'");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
@@ -283,7 +283,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";
@@ -308,7 +308,7 @@ public class DictionaryManagerTest {
 					dictionaryTest=I.next();
 					assertEquals((dictionaryTest!=null), true);
 					if(dictionaryTest!=null){
-						name =dictionaryTest.getName();
+						name =dictionaryTest.getDictionaryName();
 						desc =dictionaryTest.getDescription();
 						userTest =dictionaryTest.getOwner();
 					}
@@ -332,7 +332,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";
@@ -350,9 +350,9 @@ public class DictionaryManagerTest {
 				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItem dictionaryItems = I.next();
-				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getTerm(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
-				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = '"+getDictionaryID("testDictionary")+"'");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
 			}else{
@@ -369,7 +369,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";
@@ -392,8 +392,8 @@ public class DictionaryManagerTest {
 					dictionaryTest=I.next();
 					assertEquals((dictionaryTest!=null), true);
 					if(dictionaryTest!=null){
-						id =getDictionaryID(dictionaryTest.getName());
-						assertEquals(dictionaryManager.getDictionaryName(id), dictionaryTest.getName());
+						id =getDictionaryID(dictionaryTest.getDictionaryName());
+						assertEquals(dictionaryManager.getDictionaryName(id), dictionaryTest.getDictionaryName());
 					}
 				}
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
@@ -412,7 +412,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";
@@ -437,7 +437,7 @@ public class DictionaryManagerTest {
 					dictionaryTest=I.next();
 					assertEquals((dictionaryTest!=null), true);
 					if(dictionaryTest!=null){
-						name =dictionaryTest.getName();
+						name =dictionaryTest.getDictionaryName();
 						desc =dictionaryTest.getDescription();
 						userTest =dictionaryTest.getOwner();
 					}
@@ -472,7 +472,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";
@@ -491,9 +491,9 @@ public class DictionaryManagerTest {
 				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItem dictionaryItems = I.next();
-				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getTerm(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
-				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				dictionaryManager.deleteDictionariesItems(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n","jdoe");
 				dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
 				I = dictionaryItemsList.iterator();
@@ -514,7 +514,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg ="";
@@ -532,9 +532,9 @@ public class DictionaryManagerTest {
 				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItem dictionaryItems = I.next();
-				assertEquals(dictionaryItems.getItems(), "cat");
+				assertEquals(dictionaryItems.getTerm(), "cat");
 				assertEquals(dictionaryItems.getPos(), "noun");
-				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				List <WordpowerReply.DictionaryEntry> dictionaryEntryList=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				Iterator <WordpowerReply.DictionaryEntry> I1 =dictionaryEntryList.iterator(); 
 				WordpowerReply.DictionaryEntry dictionaryEntry=I1.next();
@@ -547,9 +547,9 @@ public class DictionaryManagerTest {
 				I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				dictionaryItems = I.next();
-				assertEquals(dictionaryItems.getItems(), "dog");
+				assertEquals(dictionaryItems.getTerm(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
-				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary_items where id = '"+getDictionaryID("testDictionary")+"'");
 				dbConnection.setupTestEnvironment("delete from tbl_dictionary");
@@ -567,7 +567,7 @@ public class DictionaryManagerTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg ="";
@@ -585,9 +585,9 @@ public class DictionaryManagerTest {
 				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
 				IDictionaryItem dictionaryItems = I.next();
-				assertEquals(dictionaryItems.getItems(), "cat");
+				assertEquals(dictionaryItems.getTerm(), "cat");
 				assertEquals(dictionaryItems.getPos(), "noun");
-				assertEquals(dictionaryItems.getId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
+				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				List<WordpowerReply.DictionaryEntry> dictionaryEntryList=dictionaryManager.getUpdateFromWordPower(getDictionaryID("testDictionary"), "http://www.digitalhps.org/dictionary/XID-dog-n");
 				Iterator <WordpowerReply.DictionaryEntry> I1 =dictionaryEntryList.iterator(); 
 				WordpowerReply.DictionaryEntry dictionaryEntry=I1.next();

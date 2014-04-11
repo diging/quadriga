@@ -117,11 +117,11 @@ public class ModifyDictionaryManagerDAOTest {
 		IDictionary dictionary = null;
 		dictionary = dictionaryManagerDAO.getDictionaryOfUser("projuser").get(0);
 		dictionary.setDescription("UPDATED_DESC");
-		dictionary.setName("UPDATED_NAME");
+		dictionary.setDictionaryName("UPDATED_NAME");
 		
 		dbConnect.updateDictionaryRequest(dictionary, "projuser");
 		dictionary = dictionaryManagerDAO.getDictionaryOfUser("projuser").get(0);
-		assertEquals("UPDATED_NAME", dictionary.getName());
+		assertEquals("UPDATED_NAME", dictionary.getDictionaryName());
 
 	}
 	

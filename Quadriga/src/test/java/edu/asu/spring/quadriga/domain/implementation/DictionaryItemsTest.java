@@ -56,56 +56,56 @@ public class DictionaryItemsTest {
 
 	@Test
 	public void testGetItems() {
-		dictionaryItems.setItems(null);
-		assertEquals(dictionaryItems.getItems(), null);
+		dictionaryItems.setTerm(null);
+		assertEquals(dictionaryItems.getTerm(), null);
 		
-		dictionaryItems.setItems("horse");
-		assertEquals(dictionaryItems.getItems(),"horse");		
+		dictionaryItems.setTerm("horse");
+		assertEquals(dictionaryItems.getTerm(),"horse");		
 	}
 
 	@Test
 	public void testSetItems() {
-		dictionaryItems.setItems(null);
-		assertEquals(dictionaryItems.getItems(), null);
+		dictionaryItems.setTerm(null);
+		assertEquals(dictionaryItems.getTerm(), null);
 		
-		dictionaryItems.setItems("horse");
-		assertEquals(dictionaryItems.getItems(),"horse");	
+		dictionaryItems.setTerm("horse");
+		assertEquals(dictionaryItems.getTerm(),"horse");	
 	}
 
 	@Test
 	public void testGetDictionaryId() {
-		dictionaryItems.setDictionaryId(null);
-		assertEquals(dictionaryItems.getDictionaryId(), null);
+//		dictionaryItems.setDictionaryId(null);
+//		assertEquals(dictionaryItems.getDictionaryId(), null);
 		
-		dictionaryItems.setDictionaryId("id1");
-		assertEquals(dictionaryItems.getDictionaryId(),"id1");	
+//		dictionaryItems.setDictionaryId("id1");
+//		assertEquals(dictionaryItems.getDictionaryId(),"id1");	
 	}
 
 	@Test
 	public void testSetDictionaryId() {
-		dictionaryItems.setDictionaryId(null);
-		assertEquals(dictionaryItems.getDictionaryId(), null);
-		
-		dictionaryItems.setDictionaryId("id1");
-		assertEquals(dictionaryItems.getDictionaryId(),"id1");	
+//		dictionaryItems.setDictionaryId(null);
+//		assertEquals(dictionaryItems.getDictionaryId(), null);
+//		
+//		dictionaryItems.setDictionaryId("id1");
+//		assertEquals(dictionaryItems.getDictionaryId(),"id1");	
 	}
 
 	@Test
 	public void testGetId() {
-		dictionaryItems.setId(null);
-		assertEquals(dictionaryItems.getId(), null);
+		dictionaryItems.setDictionaryItemId(null);
+		assertEquals(dictionaryItems.getDictionaryItemId(), null);
 		
-		dictionaryItems.setId("id1");
-		assertEquals(dictionaryItems.getId(),"id1");	
+		dictionaryItems.setDictionaryItemId("id1");
+		assertEquals(dictionaryItems.getDictionaryItemId(),"id1");	
 	}
 
 	@Test
 	public void testSetId() {
-		dictionaryItems.setId(null);
-		assertEquals(dictionaryItems.getId(), null);
+		dictionaryItems.setDictionaryItemId(null);
+		assertEquals(dictionaryItems.getDictionaryItemId(), null);
 		
-		dictionaryItems.setId("id1");
-		assertEquals(dictionaryItems.getId(),"id1");	
+		dictionaryItems.setDictionaryItemId("id1");
+		assertEquals(dictionaryItems.getDictionaryItemId(),"id1");	
 	}
 
 	@Test

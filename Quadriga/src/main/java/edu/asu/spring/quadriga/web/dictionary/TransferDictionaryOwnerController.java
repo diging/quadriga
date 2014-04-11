@@ -80,7 +80,7 @@ public class TransferDictionaryOwnerController
 		
 		//create a model
 	    model.getModelMap().put("user", userFactory.createUserObject());
-		model.getModelMap().put("dictionaryname", dictionary.getName());
+		model.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 		model.getModelMap().put("dictionaryowner", dictionary.getOwner().getUserName());
 		model.getModelMap().put("dictionaryid", dictionaryid);
 		
@@ -133,7 +133,7 @@ public class TransferDictionaryOwnerController
 			model.getModelMap().put("user", collaboratorUser);
 			
 			//create a model
-			model.getModelMap().put("dictionaryname", dictionary.getName());
+			model.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 			model.getModelMap().put("dictionaryowner", dictionary.getOwner().getUserName());
 			
 			//fetch the collaborators

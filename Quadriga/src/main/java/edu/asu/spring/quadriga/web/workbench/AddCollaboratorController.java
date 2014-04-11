@@ -29,12 +29,12 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -140,7 +140,7 @@ public class AddCollaboratorController {
 		
 		model = new ModelAndView("auth/workbench/addcollaborators");
 		model.getModel().put("collaborator", collaborator);
-		model.getModel().put("projectname", project.getName());
+		model.getModel().put("projectname", project.getProjectName());
 		model.getModelMap().put("projectdesc",project.getDescription());
 		model.getModelMap().put("projectid", projectid);
 		
@@ -200,7 +200,7 @@ public class AddCollaboratorController {
 		{
 			//retrieve the project details
 			IProject project = retrieveprojectManager.getProjectDetails(projectid);
-			model.getModelMap().put("projectname", project.getName());
+			model.getModelMap().put("projectname", project.getProjectName());
 			model.getModelMap().put("projectdesc", project.getDescription());
 			model.getModelMap().put("projectid", projectid);
 			

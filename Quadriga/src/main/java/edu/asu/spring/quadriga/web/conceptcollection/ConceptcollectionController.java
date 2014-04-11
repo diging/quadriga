@@ -198,7 +198,7 @@ public class ConceptcollectionController {
 			throws QuadrigaStorageException, QuadrigaAccessException, JSONException {
 		
 		collection = collectionFactory.createConceptCollectionObject();
-		collection.setId(collection_id);
+		collection.setConceptCollectionId(collection_id);
 		conceptControllerManager.getCollectionDetails(collection,principal.getName());
 		model.addAttribute("concept", collection);
 		conceptControllerManager.getCollaborators(collection);
@@ -306,7 +306,7 @@ public class ConceptcollectionController {
 			BindingResult result, Model model, Principal principal)
 			throws QuadrigaStorageException {
 		if (result.hasErrors()) {
-			model.addAttribute("Error", "Error: " + collection.getName()
+			model.addAttribute("Error", "Error: " + collection.getConceptCollectionName()
 					+ "already exists.");
 			return new ModelAndView(
 					"auth/conceptcollections/addCollectionsForm", "command",
@@ -343,17 +343,17 @@ public class ConceptcollectionController {
 		if (values != null) {
 			for (String id : values) {
 
-				conceptControllerManager.deleteItem(id, collection.getId(),principal.getName());
+				conceptControllerManager.deleteItem(id, collection.getConceptCollectionId(),principal.getName());
 				concept = conceptFactory.createConceptObject();
-				concept.setId(id);
-				collection.getItems().remove(collection.getItems().indexOf(concept));
+				concept.setConceptId(id);
+				collection.getConcepts().remove(collection.getConcepts().indexOf(concept));
 
 			}
 		}
 
 		conceptControllerManager.getCollectionDetails(collection,principal.getName());
 
-		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
+		return "redirect:/auth/conceptcollections/" + collection.getConceptCollectionId() + "";
 
 	}
 	/**
@@ -373,7 +373,7 @@ public class ConceptcollectionController {
 		if (values != null)
 			conceptControllerManager.update(values, collection,principal.getName() );
 
-		return "redirect:/auth/conceptcollections/" + collection.getId() + "";
+		return "redirect:/auth/conceptcollections/" + collection.getConceptCollectionId() + "";
 	}
 
 }

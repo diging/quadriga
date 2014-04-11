@@ -72,7 +72,7 @@ public class DeleteCCCollaboratorController {
 		
 		//fetch the concept collection details
 		IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
-		conceptCollection.setId(collectionid);
+		conceptCollection.setConceptCollectionId(collectionid);
 		conceptControllerManager.getCollectionDetails(conceptCollection, userName);
 		
 		collaboratorForm = collaboratorFormFactory.createCollaboratorFormObject();
@@ -82,7 +82,7 @@ public class DeleteCCCollaboratorController {
 		collaboratorForm.setCollaborators(modifyCollaborator);
 		
 		model.getModelMap().put("collectionid", collectionid);
-		model.getModelMap().put("collectionname", conceptCollection.getName());
+		model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 		model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 		model.getModelMap().put("collaboratorForm", collaboratorForm);
 		model.getModelMap().put("success", 0);
@@ -120,10 +120,10 @@ public class DeleteCCCollaboratorController {
 			//fetch the concept collection details
 			//fetch the concept collection details
 			IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
-			conceptCollection.setId(collectionid);
+			conceptCollection.setConceptCollectionId(collectionid);
 			conceptControllerManager.getCollectionDetails(conceptCollection, userName);
 
-			model.getModelMap().put("collectionname", conceptCollection.getName());
+			model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 			model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 			
 			collaborators = collaboratorFormManager.modifyCCCollaboratorManager(collectionid);

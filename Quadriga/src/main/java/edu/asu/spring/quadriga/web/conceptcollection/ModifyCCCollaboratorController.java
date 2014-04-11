@@ -107,7 +107,7 @@ public class ModifyCCCollaboratorController
 
 		 //fetch the concept collection details
 		 IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
-		 conceptCollection.setId(collectionid);
+		 conceptCollection.setConceptCollectionId(collectionid);
 		 conceptControllerManager.getCollectionDetails(conceptCollection, userName);
 		 
 		 
@@ -125,7 +125,7 @@ public class ModifyCCCollaboratorController
 			model.getModelMap().put("cccollabroles", collaboratorRoles);
 			model.getModelMap().put("collaboratorform", collaboratorForm);
 			model.getModelMap().put("collectionid", collectionid);
-			model.getModelMap().put("collectionname", conceptCollection.getName());
+			model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 			model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 			model.getModelMap().put("success", 0);
 		 return model;
@@ -164,7 +164,7 @@ public class ModifyCCCollaboratorController
 			{
 				//fetch the concept collection details
 				IConceptCollection conceptCollection = collectionFactory.createConceptCollectionObject();
-				conceptCollection.setId(collectionid);
+				conceptCollection.setConceptCollectionId(collectionid);
 				conceptControllerManager.getCollectionDetails(conceptCollection, userName);
 
 				//add a variable to display the entire page
@@ -175,7 +175,7 @@ public class ModifyCCCollaboratorController
 				//add the model map
 				model.getModelMap().put("collaboratorform", collaboratorForm);
 				model.getModelMap().put("collectionid", collectionid);
-				model.getModelMap().put("collectionname", conceptCollection.getName());
+				model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 				model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 				
 				//retrieve the collaborator roles and assign it to a map

@@ -25,13 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyProjectFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -197,7 +197,7 @@ public class ModifyProjectController
 		}
 		else
 		{
-			projectManager.updateProjectRequest(project.getProjectId(),project.getName(),project.getDescription(),project.getProjectAccess().name(),project.getUnixName(),userName);
+			projectManager.updateProjectRequest(project.getProjectId(),project.getProjectName(),project.getDescription(),project.getProjectAccess().name(),project.getUnixName(),userName);
 			model.getModelMap().put("success", 1);
 		}
 		return model;

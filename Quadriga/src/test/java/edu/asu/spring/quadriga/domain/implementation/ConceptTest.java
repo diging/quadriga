@@ -35,7 +35,7 @@ public class ConceptTest {
 	public void setUp()
 	{
 		concept = factory.createConceptObject(); 
-		concept.setId("test1");
+		concept.setConceptId("test1");
 		concept.setLemma("hellotest");
 		concept.setPos("noun");
 		concept.setDescription("desc");
@@ -51,7 +51,7 @@ public class ConceptTest {
 		
 		
 		IConcept concept2 = factory.createConceptObject(); 
-		concept2.setId("test1");
+		concept2.setConceptId("test1");
 		assertEquals(true, concept.equals(concept2));
 		
 	}
@@ -69,7 +69,7 @@ public class ConceptTest {
 
 	@Test
 	public void testGetId() {
-		assertEquals("test1", concept.getId()); 
+		assertEquals("test1", concept.getConceptId()); 
 	}
 
 	@Test
@@ -84,8 +84,8 @@ public class ConceptTest {
 
 	@Test
 	public void testSetId() {
-		concept.setId("test2");
-		assertEquals("test2", concept.getId()); 
+		concept.setConceptId("test2");
+		assertEquals("test2", concept.getConceptId()); 
 	}
 
 	@Test

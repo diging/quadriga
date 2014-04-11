@@ -41,8 +41,8 @@ public class ModifyDictionaryManagerDAO extends DAOConnectionManager implements 
 	{
 		try
 		{
-			DictionaryDTO dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionary.getId());
-			dictionaryDTO.setDictionaryname(dictionary.getName());
+			DictionaryDTO dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionary.getDictionaryId());
+			dictionaryDTO.setDictionaryname(dictionary.getDictionaryName());
 			dictionaryDTO.setDescription(dictionary.getDescription());
 			dictionaryDTO.setAccessibility(Boolean.FALSE);
 			dictionaryDTO.setUpdatedby(userName);

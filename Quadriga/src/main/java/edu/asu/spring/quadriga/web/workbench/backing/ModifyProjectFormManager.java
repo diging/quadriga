@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -40,7 +40,7 @@ public class ModifyProjectFormManager
 			{
 				project = new ModifyProject();
 				project.setInternalid(iProject.getProjectId());
-				project.setName(iProject.getName());
+				project.setName(iProject.getProjectName());
 				project.setDescription(iProject.getDescription());
 				project.setProjectOwner(iProject.getOwner().getUserName());
 				modifyProjectList.add(project);
@@ -80,7 +80,7 @@ public class ModifyProjectFormManager
 			{
 				project = new ModifyProject();
 				project.setInternalid(iProject.getProjectId());
-				project.setName(iProject.getName());
+				project.setName(iProject.getProjectName());
 				project.setDescription(iProject.getDescription());
 				project.setProjectOwner(iProject.getOwner().getUserName());
 				modifyProjectList.add(project);
@@ -90,7 +90,7 @@ public class ModifyProjectFormManager
 			{
 				project = new ModifyProject();
 				project.setInternalid(iCollabProject.getProjectId());
-				project.setName(iCollabProject.getName());
+				project.setName(iCollabProject.getProjectName());
 				project.setDescription(iCollabProject.getDescription());
 				project.setProjectOwner(iCollabProject.getOwner().getUserName());
 				if(!modifyProjectList.contains(project))

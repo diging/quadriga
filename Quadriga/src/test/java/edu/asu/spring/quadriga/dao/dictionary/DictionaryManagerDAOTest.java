@@ -189,7 +189,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 
 		IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-		dictionary.setName("testDictionary");
+		dictionary.setDictionaryName("testDictionary");
 		dictionary.setDescription("description");
 		dictionary.setOwner(user);
 		String msg ="";
@@ -213,7 +213,7 @@ public class DictionaryManagerDAOTest {
 				dictionaryTest=I.next();
 				assertEquals((dictionaryTest!=null), true);
 				if(dictionaryTest!=null){
-					name =dictionaryTest.getName();
+					name =dictionaryTest.getDictionaryName();
 					desc =dictionaryTest.getDescription();
 				}
 			}
@@ -243,7 +243,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg ="";
@@ -274,7 +274,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg ="";
@@ -303,7 +303,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";
@@ -332,7 +332,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg ="";
@@ -357,7 +357,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg ="";
@@ -381,13 +381,13 @@ public class DictionaryManagerDAOTest {
 			logger.info("Checking if Iterator has objects  : "+I.hasNext());
 			IDictionaryItem dictionaryItems=dictionaryItemsFactory.createDictionaryItemsObject();
 			dictionaryItems=I.next();
-			logger.info("Dictionary id :"+dictionaryItems.getId());
+			logger.info("Dictionary id :"+dictionaryItems.getDictionaryItemId());
 			logger.info("Dictionary Pos :"+dictionaryItems.getPos());
-			logger.info("Dictionary Items :"+dictionaryItems.getItems());
+			logger.info("Dictionary Items :"+dictionaryItems.getTerm());
 			
-			assertEquals(dictionaryItems.getId().equals("Dog id"),true);
+			assertEquals(dictionaryItems.getDictionaryItemId().equals("Dog id"),true);
 			assertEquals(dictionaryItems.getPos().equals("noun"),true);
-			assertEquals(dictionaryItems.getItems().equals("dog"),true);
+			assertEquals(dictionaryItems.getTerm().equals("dog"),true);
 			
 		}
 		dbConnection.setupTestEnvironment("delete from tbl_dictionary_items");
@@ -400,7 +400,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg ="";
@@ -422,7 +422,7 @@ public class DictionaryManagerDAOTest {
 		testSetupTestEnvironment();
 		{
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			String msg = "";

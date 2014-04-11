@@ -22,10 +22,10 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManag
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -105,7 +105,7 @@ public class RetrieveProjectManagerTest {
 		
 		//create project object with the test data
 		project = projectFactory.createProjectObject();
-		project.setName("testproject1");
+		project.setProjectName("testproject1");
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
 		project.setProjectId("PROJ_1");
@@ -113,7 +113,7 @@ public class RetrieveProjectManagerTest {
 		testProjectList.add(project);
 		
 		project = projectFactory.createProjectObject();
-		project.setName("testproject2");
+		project.setProjectName("testproject2");
 		project.setDescription("test case data");
 		project.setUnixName("testproject2");
 		project.setProjectId("PROJ_2");
@@ -140,7 +140,7 @@ public class RetrieveProjectManagerTest {
 				
 		//create project object with the test data
 		project = projectFactory.createProjectObject();
-		project.setName("testproject1");
+		project.setProjectName("testproject1");
 		project.setDescription("test case data");
 		project.setUnixName("testproject1");
 		project.setProjectId("PROJ_1");

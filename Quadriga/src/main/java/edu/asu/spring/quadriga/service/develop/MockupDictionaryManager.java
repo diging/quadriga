@@ -36,20 +36,20 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 		IDictionary diction2= new Dictionary();
 		IDictionary diction3= new Dictionary();
 		
-		diction1.setName("Horse");
-		diction1.setId("jdoe");
+		diction1.setDictionaryName("Horse");
+		diction1.setDictionaryId("jdoe");
 		diction1.setDescription("solid-hoofed herbivorous quadruped domesticated"+
 								"since prehistoric times a padded gymnastic apparatus"+
 								"on legs troops trained to fight on horseback");
 		
-		diction2.setName("Dog");
-		diction2.setId("jdoe");
+		diction2.setDictionaryName("Dog");
+		diction2.setDictionaryId("jdoe");
 		diction2.setDescription("a member of the genus Canis (probably descended from"+ 
 								"the common wolf) that has been domesticated by man since"+ 
 								"prehistoric times");
 		
-		diction3.setName("Cat");
-		diction3.setId("jdoe");
+		diction3.setDictionaryName("Cat");
+		diction3.setDictionaryId("jdoe");
 		diction3.setDescription("feline mammal usually having thick soft fur and no ability"+ 
 								"to roar: domestic cats; wildcats an informal term for a youth or man");
 		

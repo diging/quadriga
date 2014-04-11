@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
@@ -34,7 +34,7 @@ public class ProjectDTOMapper extends DAOConnectionManager{
 	public IProject getProject(ProjectDTO projectDTO)  throws QuadrigaStorageException
 	{
 		IProject project = new Project();
-		project.setName(projectDTO.getProjectname());
+		project.setProjectName(projectDTO.getProjectname());
 		project.setDescription(projectDTO.getDescription());
 		project.setUnixName(projectDTO.getUnixname());
 		project.setProjectId(projectDTO.getProjectid());
@@ -47,7 +47,7 @@ public class ProjectDTOMapper extends DAOConnectionManager{
 	{
 		QuadrigaUserDTO quadrigaUser = getUserDTO(userName);
 		ProjectDTO projectDTO = new ProjectDTO();
-		projectDTO.setProjectname(project.getName());
+		projectDTO.setProjectname(project.getProjectName());
 		projectDTO.setDescription(project.getDescription());
 		projectDTO.setUnixname(project.getUnixName());
 		projectDTO.setProjectid(project.getProjectId());

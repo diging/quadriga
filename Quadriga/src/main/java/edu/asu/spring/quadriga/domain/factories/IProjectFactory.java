@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 
 /**
  * Factory interface to create project object

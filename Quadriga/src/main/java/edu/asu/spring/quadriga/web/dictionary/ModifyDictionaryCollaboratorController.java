@@ -115,7 +115,7 @@ public class ModifyDictionaryCollaboratorController
 			model.getModelMap().put("dictcollabroles", collaboratorRoles);
 			model.getModelMap().put("collaboratorform", collaboratorForm);
 			model.getModelMap().put("dictionaryid", dictionaryid);
-			model.getModelMap().put("dictionaryname", dictionary.getName());
+			model.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 			model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 			model.getModelMap().put("success", 0);
 		 return model;
@@ -161,7 +161,7 @@ public class ModifyDictionaryCollaboratorController
 				//add the model map
 				model.getModelMap().put("collaboratorform", collaboratorForm);
 				model.getModelMap().put("dictionaryid", dictionaryid);
-				model.getModelMap().put("dictionaryname", dictionary.getName());
+				model.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 				model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 				
 				//retrieve the collaborator roles and assign it to a map

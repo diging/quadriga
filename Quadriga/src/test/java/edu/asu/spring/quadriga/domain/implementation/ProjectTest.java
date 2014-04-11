@@ -12,8 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 
 /*
 * @Description 	: tests getters and setters for project name, decription, id, internalid, collaborators
@@ -57,11 +57,11 @@ public class ProjectTest {
 	@Test
 	public void testGetName() {
 		
-		project.setName(null);
-		assertEquals(project.getName(), null);
+		project.setProjectName(null);
+		assertEquals(project.getProjectName(), null);
 		
-		project.setName("jerry");
-		assertEquals(project.getName(), "jerry");
+		project.setProjectName("jerry");
+		assertEquals(project.getProjectName(), "jerry");
 	}
 
 	

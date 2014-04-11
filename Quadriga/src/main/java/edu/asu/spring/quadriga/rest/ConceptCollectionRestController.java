@@ -398,7 +398,7 @@ public class ConceptCollectionRestController {
 
 		collection.setDescription(desc);
 		collection.setOwner(user);
-		collection.setName(ccName);
+		collection.setConceptCollectionName(ccName);
 
 		conceptControllerManager.addConceptCollection(collection);
 		String ccId = conceptControllerManager.getConceptCollectionId(ccName);
@@ -455,7 +455,7 @@ public class ConceptCollectionRestController {
 		Template template = null;
 		StringWriter sw = new StringWriter();
 		collection = collectionFactory.createConceptCollectionObject();
-		collection.setId(collectionID);
+		collection.setConceptCollectionId(collectionID);
 		try {
 			engine = restVelocityFactory.getVelocityEngine(req);
 			engine.init();
@@ -465,7 +465,7 @@ public class ConceptCollectionRestController {
 					.getTemplate("velocitytemplates/conceptdetails.vm");
 			VelocityContext context = new VelocityContext(
 					restVelocityFactory.getVelocityContext());
-			context.put("list", collection.getItems());
+			context.put("list", collection.getConcepts());
 			context.put("conceptPowerURL", conceptPowerURL);
 			context.put("path", updateConceptPowerURLPath);
 			template.merge(context, sw);

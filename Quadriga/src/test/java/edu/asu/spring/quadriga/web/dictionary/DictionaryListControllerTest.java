@@ -235,7 +235,7 @@ public class DictionaryListControllerTest {
 		{
 			
 			IDictionary dictionary = dictionaryFactory.createDictionaryObject();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			dbConnection.addDictionary(dictionary);
@@ -265,7 +265,7 @@ public class DictionaryListControllerTest {
 		testSetupTestEnvironment();
 		{
 			Dictionary dictionary = new Dictionary();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			assertEquals(dictionaryListController.addDictionaryHandle(dictionary, model, principal),"auth/dictionaries");
@@ -283,7 +283,7 @@ public class DictionaryListControllerTest {
 		testSetupTestEnvironment();
 		{
 			Dictionary dictionary = new Dictionary();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			assertEquals(dictionaryListController.addDictionaryHandle(dictionary, model, principal),"auth/dictionaries");
@@ -308,7 +308,7 @@ public class DictionaryListControllerTest {
 		testSetupTestEnvironment();
 		{
 			Dictionary dictionary = new Dictionary();
-			dictionary.setName("testDictionary");
+			dictionary.setDictionaryName("testDictionary");
 			dictionary.setDescription("description");
 			dictionary.setOwner(user);
 			assertEquals(dictionaryListController.addDictionaryHandle(dictionary, model, principal),"auth/dictionaries");

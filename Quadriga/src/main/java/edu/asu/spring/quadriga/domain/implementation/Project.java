@@ -1,16 +1,16 @@
 package edu.asu.spring.quadriga.domain.implementation;
 
-import java.util.List;
+import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IConceptCollection;
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
+import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 
 /**
  * @description : Project class describing the properties of a Project object
@@ -26,10 +26,14 @@ public class Project implements IProject {
 	private String unixName;
 	private EProjectAccessibility projectAccess;
 	private IUser owner;
-	private List<ICollaborator> collaborators;
-	private List<IWorkSpace> workspaces;
-	private List<IConceptCollection> conceptCollections;
-	private List<IDictionary> dictionaries;
+	private IProjectCollaborator projectCollaborator;
+	private IProjectWorkspace projectWorkspace;
+	private IProjectConceptCollection projectConceptCollection;
+	private IProjectDictionary projectDictionary;
+	private String createdBy;
+	private Date createdDate;
+	private String updatedBy;
+	private Date updatedDate;
 	
 	/**
 	 * retrieves the internal id of the project
@@ -52,7 +56,7 @@ public class Project implements IProject {
 	 * retrieves the name of the project
 	 */
 	@Override
-	public String getName() {
+	public String getProjectName() {
 		return projectName;
 	}
 
@@ -60,7 +64,7 @@ public class Project implements IProject {
 	 * assigns the name of the project to the supplied variable.
 	 */
 	@Override
-	public void setName(String projectName) {
+	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
 
@@ -128,51 +132,85 @@ public class Project implements IProject {
 		this.owner = owner;
 	}
 
-	/**
-	 * retrieves the collaborators of the project
-	 */
 	@Override
-	public List<ICollaborator> getCollaborators() {
-		return collaborators;
-	}
-
-	/**
-	 * assigns the collaborators of the project
-	 */
-	@Override
-	public void setCollaborators(List<ICollaborator> collaborators) {
-		this.collaborators = collaborators;
-	}
-	
-	@Override
-	public List<IWorkSpace> getWorkspaces() {
-		return workspaces;
+	public IProjectCollaborator getProjectCollaborators() {
+		return projectCollaborator;
 	}
 
 	@Override
-	public void setWorkspaces(List<IWorkSpace> workspaces) {
-		this.workspaces = workspaces;
+	public void setProjectCollaborators(IProjectCollaborator projectCollaborator) {
+         this.projectCollaborator = projectCollaborator;		
 	}
 
 	@Override
-	public List<IConceptCollection> getConceptCollections() {
-		return conceptCollections;
+	public IProjectWorkspace getProjectWorkspaces() {
+		return projectWorkspace;
 	}
 
 	@Override
-	public void setConceptCollections(
-			List<IConceptCollection> conceptCollections) {
-		this.conceptCollections = conceptCollections;
+	public void setProjectWorkspaces(IProjectWorkspace projectWorkspace) {
+         this.projectWorkspace = projectWorkspace;		
 	}
 
 	@Override
-	public List<IDictionary> getDictionaries() {
-		return dictionaries;
+	public IProjectDictionary getProjectDictionaries() {
+		return projectDictionary;
 	}
 
 	@Override
-	public void setDictionaries(List<IDictionary> dictionaries) {
-		 this.dictionaries = dictionaries;
+	public void setProjectDictionaries(IProjectDictionary projectDictionary) {
+          this.projectDictionary = projectDictionary;		
+	}
+
+	@Override
+	public IProjectConceptCollection getProjectConceptCollections() {
+		return projectConceptCollection;
+	}
+
+	@Override
+	public void setProjectConceptCollections(
+			IProjectConceptCollection projectConceptCollection) {
+        this.projectConceptCollection = projectConceptCollection;		
+	}
+
+	@Override
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	@Override
+	public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;		
+	}
+
+	@Override
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	@Override
+	public void setCreatedDate(Date createdDate) {
+       this.createdDate = createdDate;		
+	}
+
+	@Override
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	@Override
+	public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;		
+	}
+
+	@Override
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	@Override
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;		
 	}
 
 	@Override
@@ -180,26 +218,39 @@ public class Project implements IProject {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((collaborators == null) ? 0 : collaborators.hashCode());
-		result = prime
-				* result
-				+ ((conceptCollections == null) ? 0 : conceptCollections
-						.hashCode());
+				+ ((createdBy == null) ? 0 : createdBy.hashCode());
+		result = prime * result
+				+ ((createdDate == null) ? 0 : createdDate.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result
-				+ ((dictionaries == null) ? 0 : dictionaries.hashCode());
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
 		result = prime * result
 				+ ((projectAccess == null) ? 0 : projectAccess.hashCode());
+		result = prime
+				* result
+				+ ((projectCollaborator == null) ? 0 : projectCollaborator
+						.hashCode());
+		result = prime
+				* result
+				+ ((projectConceptCollection == null) ? 0
+						: projectConceptCollection.hashCode());
+		result = prime
+				* result
+				+ ((projectDictionary == null) ? 0 : projectDictionary
+						.hashCode());
 		result = prime * result
 				+ ((projectId == null) ? 0 : projectId.hashCode());
 		result = prime * result
 				+ ((projectName == null) ? 0 : projectName.hashCode());
+		result = prime
+				* result
+				+ ((projectWorkspace == null) ? 0 : projectWorkspace.hashCode());
 		result = prime * result
 				+ ((unixName == null) ? 0 : unixName.hashCode());
 		result = prime * result
-				+ ((workspaces == null) ? 0 : workspaces.hashCode());
+				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
+		result = prime * result
+				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		return result;
 	}
 
@@ -212,25 +263,20 @@ public class Project implements IProject {
 		if (getClass() != obj.getClass())
 			return false;
 		Project other = (Project) obj;
-		if (collaborators == null) {
-			if (other.collaborators != null)
+		if (createdBy == null) {
+			if (other.createdBy != null)
 				return false;
-		} else if (!collaborators.equals(other.collaborators))
+		} else if (!createdBy.equals(other.createdBy))
 			return false;
-		if (conceptCollections == null) {
-			if (other.conceptCollections != null)
+		if (createdDate == null) {
+			if (other.createdDate != null)
 				return false;
-		} else if (!conceptCollections.equals(other.conceptCollections))
+		} else if (!createdDate.equals(other.createdDate))
 			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
-			return false;
-		if (dictionaries == null) {
-			if (other.dictionaries != null)
-				return false;
-		} else if (!dictionaries.equals(other.dictionaries))
 			return false;
 		if (owner == null) {
 			if (other.owner != null)
@@ -238,6 +284,22 @@ public class Project implements IProject {
 		} else if (!owner.equals(other.owner))
 			return false;
 		if (projectAccess != other.projectAccess)
+			return false;
+		if (projectCollaborator == null) {
+			if (other.projectCollaborator != null)
+				return false;
+		} else if (!projectCollaborator.equals(other.projectCollaborator))
+			return false;
+		if (projectConceptCollection == null) {
+			if (other.projectConceptCollection != null)
+				return false;
+		} else if (!projectConceptCollection
+				.equals(other.projectConceptCollection))
+			return false;
+		if (projectDictionary == null) {
+			if (other.projectDictionary != null)
+				return false;
+		} else if (!projectDictionary.equals(other.projectDictionary))
 			return false;
 		if (projectId == null) {
 			if (other.projectId != null)
@@ -249,16 +311,28 @@ public class Project implements IProject {
 				return false;
 		} else if (!projectName.equals(other.projectName))
 			return false;
+		if (projectWorkspace == null) {
+			if (other.projectWorkspace != null)
+				return false;
+		} else if (!projectWorkspace.equals(other.projectWorkspace))
+			return false;
 		if (unixName == null) {
 			if (other.unixName != null)
 				return false;
 		} else if (!unixName.equals(other.unixName))
 			return false;
-		if (workspaces == null) {
-			if (other.workspaces != null)
+		if (updatedBy == null) {
+			if (other.updatedBy != null)
 				return false;
-		} else if (!workspaces.equals(other.workspaces))
+		} else if (!updatedBy.equals(other.updatedBy))
+			return false;
+		if (updatedDate == null) {
+			if (other.updatedDate != null)
+				return false;
+		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
 		return true;
 	}
+	
+	
 }

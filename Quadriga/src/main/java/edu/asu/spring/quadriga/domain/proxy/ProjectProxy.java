@@ -5,12 +5,12 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IConceptCollection;
 import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IProject;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.implementation.Project;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 /**
@@ -19,22 +19,23 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
  * @author Lohith Dwaraka
  *
  */
-public class ProjectProxy implements IProject {
-
+public class ProjectProxy implements IProject 
+{
 	private String name;
 	private String description;
 	private String unixName;
 	private String internalid;
 	private EProjectAccessibility projectAccess;
 	private IRetrieveProjectManager projectManager;
+	private Project project;
 	
 	@Override
-	public String getName() {
+	public String getProjectName() {
 		return this.name;
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setProjectName(String name) {
 		this.name = name;
 
 	}

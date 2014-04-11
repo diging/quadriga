@@ -102,7 +102,7 @@ public class DictionaryDeleteCollabController {
 			modelAndView.getModelMap().put("success", 0);
 			modelAndView.getModelMap().put("error", 1);
 			modelAndView.getModelMap().put("dictionaryid", dictionaryId);
-			modelAndView.getModelMap().put("dictionaryname", dictionary.getName());
+			modelAndView.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 			modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
 		}
 		
@@ -155,7 +155,7 @@ public class DictionaryDeleteCollabController {
 		
 		modelAndView.getModelMap().put("collaboratorForm", collaboratorForm);
 		modelAndView.getModelMap().put("dictionaryid", dictionaryId);
-		modelAndView.getModelMap().put("dictionaryname", dictionary.getName());
+		modelAndView.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 		modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
 		
 		modelAndView.getModelMap().put("success", 0);

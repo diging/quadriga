@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
-import edu.asu.spring.quadriga.domain.IProject;
-import edu.asu.spring.quadriga.domain.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -58,9 +58,9 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				projectLink = "<a href='#' id='"
 						+ project.getProjectId()
 						+ "' name='"
-						+ project.getName()
+						+ project.getProjectName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getName() + "</a>";
+						+ project.getProjectName() + "</a>";
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
@@ -124,9 +124,9 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				projectLink = "<a href='#' id='"
 						+ project.getProjectId()
 						+ "' name='"
-						+ project.getName()
+						+ project.getProjectName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getName() + "</a>";
+						+ project.getProjectName() + "</a>";
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
@@ -190,9 +190,9 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				projectLink = "<a href='#' id='"
 						+ project.getProjectId()
 						+ "' name='"
-						+ project.getName()
+						+ project.getProjectName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getName() + "</a>";
+						+ project.getProjectName() + "</a>";
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
@@ -256,9 +256,9 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				projectLink = "<a href='#' id='"
 						+ project.getProjectId()
 						+ "' name='"
-						+ project.getName()
+						+ project.getProjectName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getName() + "</a>";
+						+ project.getProjectName() + "</a>";
 				
 				data.put("text", projectLink);
 				String wsParent = project.getProjectId();
@@ -346,9 +346,9 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 				projectLink = "<a href='#' id='"
 						+ project.getProjectId()
 						+ "' name='"
-						+ project.getName()
+						+ project.getProjectName()
 						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getName() + "</a>";
+						+ project.getProjectName() + "</a>";
 				
 				data.put("text", projectLink);
 				dataArray.put(data);
