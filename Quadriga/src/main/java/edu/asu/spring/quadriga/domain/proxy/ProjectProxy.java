@@ -54,7 +54,7 @@ public class ProjectProxy implements IProject
 	 * Constructor to create {@link ProjectProxy} with {@link IRetrieveProjectManager} manager object.
 	 * @param projectManager
 	 */
-	ProjectProxy(IRetrieveProjectManager projectManager){
+	public ProjectProxy(IRetrieveProjectManager projectManager){
 		this.projectManager = projectManager;
 	}
 	
