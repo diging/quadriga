@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "NetworkWorkspaceDTO.findAll", query = "SELECT n FROM NetworkWorkspaceDTO n"),
     @NamedQuery(name = "NetworkWorkspaceDTO.findByNetworkid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.NetworkWorkspaceDTOPK.networkid = :networkid"),
-    @NamedQuery(name = "NetworkWorkspaceDTO.findByWorkspaceid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.NetworkWorkspaceDTOPK.workspaceid = :workspaceid"),
+   @NamedQuery(name = "NetworkWorkspaceDTO.findByWorkspaceid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.NetworkWorkspaceDTOPK.workspaceid = :workspaceid"),
     })
 public class NetworkWorkspaceDTO implements Serializable{
 

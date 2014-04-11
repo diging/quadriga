@@ -47,48 +47,64 @@ public class WorkspaceDTO implements Serializable {
     @Basic(optional = false)
     @Column(name = "workspacename")
     private String workspacename;
+   
     @Lob
     @Column(name = "description")
     private String description;
+   
     @Id
     @Basic(optional = false)
     @Column(name = "workspaceid")
     private String workspaceid;
+   
     @Basic(optional = false)
     @Column(name = "isarchived")
     private Boolean isarchived;
+    
     @Basic(optional = false)
     @Column(name = "isdeactivated")
     private Boolean isdeactivated;
+    
     @Basic(optional = false)
     @Column(name = "updatedby")
     private String updatedby;
+    
     @Basic(optional = false)
     @Column(name = "updateddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateddate;
+    
     @Basic(optional = false)
     @Column(name = "createdby")
     private String createdby;
+   
     @Basic(optional = false)
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-	@JoinColumn(name = "workspaceowner", referencedColumnName = "username")
+	
+    @JoinColumn(name = "workspaceowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO workspaceowner;
+   
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO", orphanRemoval=true)
     private List<WorkspaceCollaboratorDTO> workspaceCollaboratorDTOList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList;
+   
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<NetworksDTO> workspaceNetworksDTOList;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+	
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceEditorDTO> workspaceEditorDTOList;
+   
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "workspaceDTO")
 //    @OnDelete(action=OnDeleteAction.NO_ACTION)
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;

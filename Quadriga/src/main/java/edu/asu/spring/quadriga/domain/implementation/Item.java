@@ -273,6 +273,7 @@ public class Item implements IItem{
 									bitstream.setSize(dspaceBitStream.getSize());
 									bitstream.setMimeType(dspaceBitStream.getMimeType());
 									bitstream.setLoadStatus(true);
+									bitstream.setItemHandle(handle);
 									break;
 								}
 							}

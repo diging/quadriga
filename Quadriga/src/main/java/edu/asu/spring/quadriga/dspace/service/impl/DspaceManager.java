@@ -308,7 +308,7 @@ public class DspaceManager implements IDspaceManager{
 				}
 
 				//Add bitstream to workspace. For security, the id's are gotten from Dspace Objects.
-				dbconnectionManager.addBitstreamToWorkspace(workspaceId,  bitstream.getId(), username);
+				dbconnectionManager.addBitstreamToWorkspace(workspaceId,  bitstream.getId(), item.getHandle(), username);
 			}
 		}
 		catch(QuadrigaAccessException e)
@@ -339,9 +339,9 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	@Transactional
-	public void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String bitstreamId, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	public void addBitStreamsToWorkspaceThroughRestInterface(String workspaceId, String bitstreamId, String itemHandle, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, username);
+		dbconnectionManager.addBitstreamToWorkspace(workspaceId, bitstreamId, itemHandle, username);
 	}
 
 

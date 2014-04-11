@@ -9,6 +9,9 @@ import java.util.List;
  */
 public interface IBitStream extends Runnable{
 
+	public String getItemHandle();
+	public void setItemHandle(String handle);
+	
 	public abstract String getName();
 
 	public abstract void setName(String name);

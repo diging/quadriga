@@ -24,8 +24,10 @@ import edu.asu.spring.quadriga.dspace.service.impl.DspaceCollection;
 import edu.asu.spring.quadriga.rest.DspaceRestController;
 
 /**
- * The class representation of the Collection got from Dspace repostiory. It also loads the dependent items within this collection.
- * This class will be used by Quadriga and its representation is independent of the Dspace Rest service output.
+ * The class representation of the Collection got from Dspace repostiory. It also 
+ * loads the dependent items within this collection.
+ * This class will be used by Quadriga and its representation is 
+ * independent of the Dspace Rest service output.
  * 
  * 
  * @author Ram Kumar Kumaresan
