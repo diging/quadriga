@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.domain.networks.impl.NetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -223,7 +223,7 @@ public class EditingNetworkAnnotationsController {
 	public @ResponseBody String saveAnnotationtoToEdge(HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
-			@RequestParam("annotText") String annotationText,
+			@RequestParam("annottext") String annotationText,
 			@RequestParam("sourceid") String sourceId,
 			@RequestParam("targetid") String targetId, 
 			@RequestParam("sourcename") String sourceName,
@@ -232,6 +232,8 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("targettype") String targetType,
 			Principal principal) throws QuadrigaStorageException {
 		IUser user = userManager.getUserDetails(principal.getName());
+		
+		
 		try {
 			editingNetworkAnnotationManager.addAnnotationToEdge(networkId, sourceId, targetId,sourceName,
 					targetName,annotationText, user.getUserName(),objectType,targetType);

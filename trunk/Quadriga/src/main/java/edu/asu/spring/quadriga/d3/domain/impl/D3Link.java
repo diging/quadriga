@@ -12,6 +12,7 @@ public class D3Link implements ID3Link {
 
 	private int source;
 	private int target;
+	private String labelText;
 	
 	/**
 	 * {@inheritDoc}
@@ -42,6 +43,17 @@ public class D3Link implements ID3Link {
 	public void setTarget(int target) {
 		this.target = target;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getLabelText() {
+		return labelText;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setLabelText(String labelText) {
+		this.labelText = labelText;
+	}
 	
 }

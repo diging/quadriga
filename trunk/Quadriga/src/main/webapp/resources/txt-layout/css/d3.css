@@ -22,6 +22,7 @@ div.node {
   stroke: #fff;
   stroke-width: 1.5px;
   size : 10 px;
+  r:10
 }
 
 .link {
@@ -45,6 +46,11 @@ circle {
 }
 
 text {
+  fill: #000 !important;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+linktext {
   fill: #000 !important;
   font: 10px sans-serif;
   pointer-events: none;
