@@ -102,6 +102,8 @@ public interface IDBConnectionRetrieveProjectManager
 	
 	
 	public List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException;
+
+	ProjectDTO getProjectDTO(String projectId) throws QuadrigaStorageException;
 	
 
 }
