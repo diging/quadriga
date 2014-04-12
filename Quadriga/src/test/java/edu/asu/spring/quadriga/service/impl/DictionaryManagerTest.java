@@ -29,7 +29,7 @@ import edu.asu.spring.quadriga.db.sql.DBConnectionDictionaryManagerTest;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItem;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
@@ -258,10 +258,10 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
-				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
+				List<IItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
+				Iterator <IItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
-				IDictionaryItem dictionaryItems = I.next();
+				IItem dictionaryItems = I.next();
 				assertEquals(dictionaryItems.getTerm(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
@@ -346,10 +346,10 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
-				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
+				List<IItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
+				Iterator <IItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
-				IDictionaryItem dictionaryItems = I.next();
+				IItem dictionaryItems = I.next();
 				assertEquals(dictionaryItems.getTerm(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
@@ -487,10 +487,10 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
-				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
+				List<IItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
+				Iterator <IItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
-				IDictionaryItem dictionaryItems = I.next();
+				IItem dictionaryItems = I.next();
 				assertEquals(dictionaryItems.getTerm(), "dog");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
@@ -528,10 +528,10 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
-				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
+				List<IItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
+				Iterator <IItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
-				IDictionaryItem dictionaryItems = I.next();
+				IItem dictionaryItems = I.next();
 				assertEquals(dictionaryItems.getTerm(), "cat");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");
@@ -581,10 +581,10 @@ public class DictionaryManagerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				List<IDictionaryItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
-				Iterator <IDictionaryItem> I = dictionaryItemsList.iterator();
+				List<IItem> dictionaryItemsList=dictionaryManager.getDictionariesItems(getDictionaryID("testDictionary"),"jdoe");
+				Iterator <IItem> I = dictionaryItemsList.iterator();
 				assertEquals(I.hasNext(),true);
-				IDictionaryItem dictionaryItems = I.next();
+				IItem dictionaryItems = I.next();
 				assertEquals(dictionaryItems.getTerm(), "cat");
 				assertEquals(dictionaryItems.getPos(), "noun");
 				assertEquals(dictionaryItems.getDictionaryItemId(), "http://www.digitalhps.org/dictionary/XID-dog-n");

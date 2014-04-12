@@ -5,10 +5,10 @@ import java.util.List;
 import org.codehaus.jettison.json.JSONException;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
+import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -61,7 +61,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionaryItem> getDictionariesItems(
+	public abstract List<IItem> getDictionariesItems(
 			String dictionaryid,String ownerName) throws QuadrigaStorageException;
 
 	/**
@@ -121,8 +121,8 @@ public interface IDictionaryManager {
 	 * @param dictionaryItems
 	 * @return
 	 */
-	public abstract DictionaryItem getDictionaryItemIndex(String termId,
-			DictionaryItem dictionaryItems);
+	public abstract Item getDictionaryItemIndex(String termId,
+			Item dictionaryItems);
 
 		
 	/**
@@ -192,7 +192,7 @@ public interface IDictionaryManager {
 	public abstract List<String> getDictionaryCollabPerm(String userId, String dicitonaryId)
 			throws QuadrigaStorageException;
 
-	public abstract List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid)
+	public abstract List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
 	public abstract void deleteDictionaryItemsCollab(String dictionaryId, String itemid)
@@ -201,7 +201,7 @@ public interface IDictionaryManager {
 	public abstract String getDictionaryOwner(String dictionaryid)
 			throws QuadrigaStorageException;
 
-	public abstract void addDictionaryItems(DictionaryItem dictionartItems, String[] values,
+	public abstract void addDictionaryItems(Item dictionartItems, String[] values,
 			String dictionaryId) throws QuadrigaStorageException;
 
 	public abstract String getDictionaryId(String dictName) throws QuadrigaStorageException;

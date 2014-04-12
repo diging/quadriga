@@ -1,19 +1,19 @@
-package edu.asu.spring.quadriga.domain.workbench;
+package edu.asu.spring.quadriga.domain.dictionary;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 
-public interface IProjectDictionary 
+public interface IDictionaryCollaborator 
 {
-	public abstract IProject getProject();
-	
-	public abstract void setProejct(IProject project);
-	
 	public abstract IDictionary getDictionary();
 	
 	public abstract void setDictionary(IDictionary dictionary);
-
+	
+	public abstract ICollaborator getCollaborator();
+	
+	public abstract void setCollaborator(ICollaborator collaborator);
+	
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);
@@ -29,5 +29,4 @@ public interface IProjectDictionary
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
-
 }

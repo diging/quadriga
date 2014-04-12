@@ -1,39 +1,39 @@
-package edu.asu.spring.quadriga.domain.impl.workspace;
+package edu.asu.spring.quadriga.domain.impl.conceptcollection;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 
-public class WorkspaceDictionary implements IWorkspaceDictionary 
-{
-	private IWorkSpace workspace;
-	private IDictionary dictionary;
+public class ConceptCollectionCollaborator implements
+		IConceptCollectionCollaborator {
+	
+	private IConceptCollection conceptCollection;
+	private ICollaborator collaborator;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
 
-	
 	@Override
-	public IWorkSpace getWorkspace() {
-		return workspace;
+	public IConceptCollection getConceptCollection() {
+		return conceptCollection;
 	}
 
 	@Override
-	public void setWorkspace(IWorkSpace workspace) {
-         this.workspace = workspace;		
+	public void setConceptCollection(IConceptCollection conceptCollection) {
+      this.conceptCollection = conceptCollection;
 	}
 
 	@Override
-	public IDictionary getDictionary() {
-		return dictionary;
+	public ICollaborator getCollaborator() {
+		return collaborator;
 	}
 
 	@Override
-	public void setDictionary(IDictionary dictionary) {
-        this.dictionary = dictionary;		
+	public void setCollaborator(ICollaborator collaborator) {
+         this.collaborator = collaborator;
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-          this.updatedBy = updatedBy;
+        this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setUpdatedDate(Date updatedDate) {
-         this.updatedDate = updatedDate;
+       this.updatedDate = updatedDate;
 	}
 
 	@Override
@@ -81,17 +81,19 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((collaborator == null) ? 0 : collaborator.hashCode());
+		result = prime
+				* result
+				+ ((conceptCollection == null) ? 0 : conceptCollection
+						.hashCode());
+		result = prime * result
 				+ ((createdBy == null) ? 0 : createdBy.hashCode());
 		result = prime * result
 				+ ((createdDate == null) ? 0 : createdDate.hashCode());
 		result = prime * result
-				+ ((dictionary == null) ? 0 : dictionary.hashCode());
-		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
-		result = prime * result
-				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -103,7 +105,17 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkspaceDictionary other = (WorkspaceDictionary) obj;
+		ConceptCollectionCollaborator other = (ConceptCollectionCollaborator) obj;
+		if (collaborator == null) {
+			if (other.collaborator != null)
+				return false;
+		} else if (!collaborator.equals(other.collaborator))
+			return false;
+		if (conceptCollection == null) {
+			if (other.conceptCollection != null)
+				return false;
+		} else if (!conceptCollection.equals(other.conceptCollection))
+			return false;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
@@ -114,11 +126,6 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 				return false;
 		} else if (!createdDate.equals(other.createdDate))
 			return false;
-		if (dictionary == null) {
-			if (other.dictionary != null)
-				return false;
-		} else if (!dictionary.equals(other.dictionary))
-			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
 				return false;
@@ -128,11 +135,6 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 			if (other.updatedDate != null)
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
-			return false;
-		if (workspace == null) {
-			if (other.workspace != null)
-				return false;
-		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}

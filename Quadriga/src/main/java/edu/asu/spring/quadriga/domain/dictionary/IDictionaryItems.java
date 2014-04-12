@@ -1,19 +1,17 @@
-package edu.asu.spring.quadriga.domain.workbench;
+package edu.asu.spring.quadriga.domain.dictionary;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-
-public interface IProjectDictionary 
+public interface IDictionaryItems 
 {
-	public abstract IProject getProject();
-	
-	public abstract void setProejct(IProject project);
-	
 	public abstract IDictionary getDictionary();
 	
 	public abstract void setDictionary(IDictionary dictionary);
-
+	
+	public abstract IItem getDictionaryItem();
+	
+	public abstract void setDictionaryItem(IItem dictionaryItem);
+	
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);

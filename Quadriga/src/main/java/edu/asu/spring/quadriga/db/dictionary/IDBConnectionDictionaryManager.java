@@ -3,9 +3,9 @@ package edu.asu.spring.quadriga.db.dictionary;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -43,7 +43,7 @@ public interface IDBConnectionDictionaryManager {
 	 *         a dictionary
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionaryItem> getDictionaryItemsDetails(
+	public abstract List<IItem> getDictionaryItemsDetails(
 			String dictionaryid,String ownerName) throws QuadrigaStorageException;
 
 	/**
@@ -176,7 +176,7 @@ public interface IDBConnectionDictionaryManager {
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
 	 */
-	public abstract List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid)
+	public abstract List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
 	/**

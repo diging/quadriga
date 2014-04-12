@@ -18,9 +18,9 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
@@ -113,9 +113,9 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IDictionaryItem> getDictionaryItemsDetails(String dictionaryid,String ownerName) throws QuadrigaStorageException 
+	public List<IItem> getDictionaryItemsDetails(String dictionaryid,String ownerName) throws QuadrigaStorageException 
 	{
-		List<IDictionaryItem> dictItemList = null;
+		List<IItem> dictItemList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.dictionaryid =:dictionaryid ORDER BY dictItems.term");
@@ -476,8 +476,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
-		List<IDictionaryItem> dictionaryItemList = null;
+	public List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
+		List<IItem> dictionaryItemList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from DictionaryItemsDTO dictItems where dictItems.dictionaryItemsDTOPK.dictionaryid =:dictionaryid ORDER BY dictItems.term");

@@ -1,30 +1,19 @@
-package edu.asu.spring.quadriga.domain.impl.workspace;
+package edu.asu.spring.quadriga.domain.impl.dictionary;
 
 import java.util.Date;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 
-public class WorkspaceDictionary implements IWorkspaceDictionary 
+public class DictionaryItems implements IDictionaryItems 
 {
-	private IWorkSpace workspace;
 	private IDictionary dictionary;
+	private IItem dictionaryItem;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
 	private Date updatedDate;
-
-	
-	@Override
-	public IWorkSpace getWorkspace() {
-		return workspace;
-	}
-
-	@Override
-	public void setWorkspace(IWorkSpace workspace) {
-         this.workspace = workspace;		
-	}
 
 	@Override
 	public IDictionary getDictionary() {
@@ -33,7 +22,17 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setDictionary(IDictionary dictionary) {
-        this.dictionary = dictionary;		
+       this.dictionary = dictionary;
+	}
+
+	@Override
+	public IItem getDictionaryItem() {
+		return dictionaryItem;
+	}
+
+	@Override
+	public void setDictionaryItem(IItem dictionaryItem) {
+       this.dictionaryItem = dictionaryItem;
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+       this.createdBy = createdBy;
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+       this.createdDate = createdDate;
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-          this.updatedBy = updatedBy;
+       this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -73,7 +72,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 
 	@Override
 	public void setUpdatedDate(Date updatedDate) {
-         this.updatedDate = updatedDate;
+       this.updatedDate = updatedDate;
 	}
 
 	@Override
@@ -87,11 +86,11 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 		result = prime * result
 				+ ((dictionary == null) ? 0 : dictionary.hashCode());
 		result = prime * result
+				+ ((dictionaryItem == null) ? 0 : dictionaryItem.hashCode());
+		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
-		result = prime * result
-				+ ((workspace == null) ? 0 : workspace.hashCode());
 		return result;
 	}
 
@@ -103,7 +102,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkspaceDictionary other = (WorkspaceDictionary) obj;
+		DictionaryItems other = (DictionaryItems) obj;
 		if (createdBy == null) {
 			if (other.createdBy != null)
 				return false;
@@ -119,6 +118,11 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 				return false;
 		} else if (!dictionary.equals(other.dictionary))
 			return false;
+		if (dictionaryItem == null) {
+			if (other.dictionaryItem != null)
+				return false;
+		} else if (!dictionaryItem.equals(other.dictionaryItem))
+			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
 				return false;
@@ -128,11 +132,6 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 			if (other.updatedDate != null)
 				return false;
 		} else if (!updatedDate.equals(other.updatedDate))
-			return false;
-		if (workspace == null) {
-			if (other.workspace != null)
-				return false;
-		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
 	}

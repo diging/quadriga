@@ -35,11 +35,11 @@ import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItem;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
+import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -249,7 +249,7 @@ public class DictionaryItemSearchAddControllerTest {
 			}catch(Exception e){
 				logger.error("",e);
 			}
-			DictionaryItem dictionaryItems = new DictionaryItem();
+			Item dictionaryItems = new Item();
 			dictionaryItems.setDictionaryItemId(values);
 			dictionaryItems.setTerm("dog");
 			dictionaryItems.setPos("noun");
@@ -259,10 +259,10 @@ public class DictionaryItemSearchAddControllerTest {
 			String dictionaryName=(String) model.get("dictName");
 			assertEquals(dictionaryId, getDictionaryID("testDictionary"));
 			assertEquals(dictionaryName, "testDictionary");
-			List<IDictionaryItem> dictionaryItemList = (List<IDictionaryItem> )model.get("dictionaryItemList");
-			Iterator <IDictionaryItem> I =dictionaryItemList.iterator();
+			List<IItem> dictionaryItemList = (List<IItem> )model.get("dictionaryItemList");
+			Iterator <IItem> I =dictionaryItemList.iterator();
 			assertEquals(I.hasNext(),true);
-			IDictionaryItem di = I.next();
+			IItem di = I.next();
 			assertEquals(di.getTerm(),"dog");
 			assertEquals(di.getPos(),"noun");
 			dbConnection.deleteDictionary("jdoe", getDictionaryID("testDictionary"));
