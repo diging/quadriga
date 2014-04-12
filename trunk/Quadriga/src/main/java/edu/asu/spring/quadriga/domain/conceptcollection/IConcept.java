@@ -3,6 +3,7 @@
  */
 package edu.asu.spring.quadriga.domain.conceptcollection;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,5 +31,21 @@ public interface IConcept
 	
 	public abstract List<IConceptCollectionConcepts> getConceptCollectionConcepts();
 	
-	public abstract void setConceptCollectionConcepts(List<IConceptCollectionConcepts> conceptCollectionConcepts);
+	public abstract void setConceptCollectionConcepts(List<IConceptCollectionConcepts> conceptCollections);
+	
+	public abstract String getCreatedBy();
+	
+	public abstract void setCreatedBy(String createdBy);
+	
+	public abstract Date getCreatedDate();
+	
+	public abstract void setCreatedDate(Date createdDate);
+	
+	public abstract String getUpdatedBy();
+	
+	public abstract void setUpdatedBy(String updatedBy);
+	
+	public abstract Date getUpdatedDate();
+	
+	public abstract void setUpdatedDate(Date updatedDate);
 }

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItem;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
+import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -85,7 +85,7 @@ public class DictionaryItemSearchAddController {
 	@RequestMapping(value = "auth/dictionaries/addDictionaryItems/{dictionaryid}", method = RequestMethod.POST)
 	public String addDictionaryItem(HttpServletRequest req,
 			@PathVariable("dictionaryid") String dictionaryId,
-			@ModelAttribute("SpringWeb") DictionaryItem dictionaryItems,
+			@ModelAttribute("SpringWeb") Item dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser user = usermanager.getUserDetails(principal.getName());
@@ -98,7 +98,7 @@ public class DictionaryItemSearchAddController {
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
-			List<IDictionaryItem> dictionaryItemList = dictonaryManager
+			List<IItem> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -122,7 +122,7 @@ public class DictionaryItemSearchAddController {
 				model.addAttribute("errormsg", msg);
 			}
 		}
-		List<IDictionaryItem> dictionaryItemList = dictonaryManager
+		List<IItem> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);

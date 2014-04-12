@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
@@ -141,18 +141,18 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 		return dictionaryDTO;
 	}
 	
-	public IDictionaryItem getDictionaryItem(DictionaryItemsDTO dictionaryItemsDTO)
+	public IItem getDictionaryItem(DictionaryItemsDTO dictionaryItemsDTO)
 	{
-		IDictionaryItem dictionaryItem = dictionaryItemsFactory.createDictionaryItemsObject();
+		IItem dictionaryItem = dictionaryItemsFactory.createDictionaryItemsObject();
 		dictionaryItem.setDictionaryItemId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
 		dictionaryItem.setTerm(dictionaryItemsDTO.getTerm());					
 		dictionaryItem.setPos(dictionaryItemsDTO.getPos());
 		return dictionaryItem;
 	}
 	
-	public List<IDictionaryItem> getDictionaryItemList(List<DictionaryItemsDTO> dictItemsDTOList)
+	public List<IItem> getDictionaryItemList(List<DictionaryItemsDTO> dictItemsDTOList)
 	{
-		List<IDictionaryItem> dictItemList = new ArrayList<IDictionaryItem>();
+		List<IItem> dictItemList = new ArrayList<IItem>();
 		if(dictItemsDTOList != null && dictItemsDTOList.size() > 0)
 		{
 			Iterator<DictionaryItemsDTO> dictItemsIterator = dictItemsDTOList.iterator();

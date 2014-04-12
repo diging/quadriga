@@ -19,12 +19,12 @@ import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.IDictionary;
-import edu.asu.spring.quadriga.domain.IDictionaryItem;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
-import edu.asu.spring.quadriga.domain.implementation.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -257,10 +257,10 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public List<IDictionaryItem> getDictionariesItems(String dictionaryid,
+	public List<IItem> getDictionariesItems(String dictionaryid,
 			String ownerName) throws QuadrigaStorageException {
 
-		List<IDictionaryItem> dictionaryItemList = null;
+		List<IItem> dictionaryItemList = null;
 		try {
 			dictionaryItemList = dbConnect.getDictionaryItemsDetails(
 					dictionaryid, ownerName);
@@ -273,9 +273,9 @@ public class DictionaryManager implements IDictionaryManager {
 	
 	@Override
 	@Transactional
-	public List<IDictionaryItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
+	public List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
 
-		List<IDictionaryItem> dictionaryItemList = null;
+		List<IItem> dictionaryItemList = null;
 		try {
 			dictionaryItemList = dbConnect.getDictionaryItemsDetailsCollab(
 					dictionaryid);
@@ -412,10 +412,10 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public void addDictionaryItems(DictionaryItem dictionartItems, String [] values,String dictionaryId) throws QuadrigaStorageException{
+	public void addDictionaryItems(Item dictionartItems, String [] values,String dictionaryId) throws QuadrigaStorageException{
 		for (int i = 0; i < values.length; i++) {
 
-			DictionaryItem di = getDictionaryItemIndex(
+			Item di = getDictionaryItemIndex(
 					values[i], dictionartItems);
 			addNewDictionariesItems(dictionaryId,
 					di.getTerm(), di.getDictionaryItemId(), di.getPos(), getDictionaryOwner(dictionaryId));
@@ -429,8 +429,8 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 * @return Return the dictionaryEntry bean to controller
 	 */
-	public DictionaryItem getDictionaryItemIndex(String termId,
-			DictionaryItem dictionaryItems) {
+	public Item getDictionaryItemIndex(String termId,
+			Item dictionaryItems) {
 
 		String terms[] = dictionaryItems.getTerm().split(",");
 		String ids[] = dictionaryItems.getDictionaryItemId().split(",");
@@ -444,7 +444,7 @@ public class DictionaryManager implements IDictionaryManager {
 				}
 			}
 		}
-		DictionaryItem di = dictionaryItemsFactory
+		Item di = dictionaryItemsFactory
 				.createDictionaryItemsObject();
 		di.setDictionaryItemId(ids[index]);
 		di.setTerm(terms[index]);

@@ -31,7 +31,7 @@ import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItem;
+import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
@@ -374,12 +374,12 @@ public class DictionaryManagerDAOTest {
 				e.printStackTrace();
 			}
 			assertEquals((msg.equals("")), true);
-			List <IDictionaryItem> dictionaryItemsList = null;
+			List <IItem> dictionaryItemsList = null;
 			dictionaryItemsList=dbConnection.getDictionaryItemsDetails(id,"jdoe");
-			Iterator<IDictionaryItem> I = dictionaryItemsList.iterator();
+			Iterator<IItem> I = dictionaryItemsList.iterator();
 			assertEquals(I.hasNext(),true);
 			logger.info("Checking if Iterator has objects  : "+I.hasNext());
-			IDictionaryItem dictionaryItems=dictionaryItemsFactory.createDictionaryItemsObject();
+			IItem dictionaryItems=dictionaryItemsFactory.createDictionaryItemsObject();
 			dictionaryItems=I.next();
 			logger.info("Dictionary id :"+dictionaryItems.getDictionaryItemId());
 			logger.info("Dictionary Pos :"+dictionaryItems.getPos());

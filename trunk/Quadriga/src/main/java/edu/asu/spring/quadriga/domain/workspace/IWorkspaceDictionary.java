@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain.workspace;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 
 public interface IWorkspaceDictionary 
 {
