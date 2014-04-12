@@ -213,4 +213,11 @@ public class ListWSManager implements IListWSManager
 		}
 		return networkList;
 	}
+
+	@Override
+	public IWorkSpace getWorkspaceDetails(String workspaceId)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

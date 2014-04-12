@@ -20,6 +20,9 @@ public interface IListWSManager {
 
 	public abstract IWorkSpace getWorkspaceDetails(String workspaceId, String username)
 			throws QuadrigaStorageException, QuadrigaAccessException;
+	
+	public abstract IWorkSpace getWorkspaceDetails(String workspaceId)
+			throws QuadrigaStorageException;
 
 	public abstract List<IWorkSpace> listWorkspace(String projectid,String user)
 			throws QuadrigaStorageException;
