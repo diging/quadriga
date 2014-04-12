@@ -37,5 +37,17 @@ public interface ID3Link {
 	 * @param target		{@link Integer} value of D3Node number from {@link HashMap} of {@link D3Node}.
 	 */
 	public abstract void setTarget(int target);
+	
+	/**
+	 * Getter for the label text of the link 
+	 * @return 		returns the label text from  {@link HashMap} of {@link D3Node}
+	 */
+	public abstract String getLabelText();
+
+	/**
+	 * Setter for the source where the link would start. We would set the {@link D3Node} number from the {@link HashMap} of {@link D3Node}
+	 * @param labelText		{@link String} value of D3Node number from {@link HashMap} of {@link D3Node}.
+	 */
+	public abstract void setLabelText(String labelText);
 
 }

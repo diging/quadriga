@@ -84,6 +84,7 @@ function d3init(graph, networkId, path,type) {
 	.data(graph.links)
 	.enter().append("line")
 	.attr("class", "link")
+	.text(function(d) { return d.label; })
 	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
 	.attr("marker-end", "url(#arrow)")
 	.on("click", function(d){
@@ -94,6 +95,26 @@ function d3init(graph, networkId, path,type) {
 	.on("mouseout", fadeLinks(1));
 	//.on("mouseover", fadeLinks(.1)).on("mouseout", fadeLinks(1));;
 	//.on("click", highlightStmt(.1)).on("mouseout", fadeLinks(1));;
+	
+	
+	var linktext = link.append("text")
+	.text(function(d) {return d.label; })
+	.attr("class", "linktext");
+	
+	linktext.attr("transform", function(d) 
+			{
+				var dx = (d.target.x - d.source.x),
+				dy = (d.target.y - d.source.y);
+				var dr = Math.sqrt(dx * dx + dy * dy);
+				var sinus = dy/dr;
+				var cosinus = dx/dr;
+				var l = d.label.length*6;
+				var offset = (1 - (l / dr )) / 2;
+				var x=(d.source.x + dx*offset);
+				var y=(d.source.y + dy*offset);
+				return "translate(" + x + "," + y + ") matrix("+cosinus+", "+sinus+", "+-sinus+", "+cosinus+", 0 , 0)";
+			});
+	
 	// Dragging the nodes
 	var node_drag = d3.behavior.drag()
 	.on("dragstart", dragstart)
@@ -181,6 +202,8 @@ function d3init(graph, networkId, path,type) {
 		text.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; });
 //		.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
 //		.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+		
+		//linktext.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; });
 	};
 
 	function  redraw() {
@@ -555,6 +578,15 @@ function d3init(graph, networkId, path,type) {
 		$('#annot_relation').click(function() {
 			var objecttype = "relation";
 
+			
+//			var associated_links = vis.selectAll("line").filter(function(d) {
+//				return  d.source.index == i;
+//				// return d.source.index == i || d.target.index == i;
+//			}).each(function(d) {
+//				if(d.label == "subject")
+//				
+//				
+//				});
 			// Making it unique, as getting the handle on $(#something).val() 
 			// is not working for more than one node.
 			var text1ID = "annotText_"+guid();
@@ -594,7 +626,7 @@ function d3init(graph, networkId, path,type) {
 					alert("error");
 				}
 			});
-
+			
 
 			// Saves the relation annotation to DB
 			$('#annot_submit1').click(function(event) {
@@ -604,7 +636,7 @@ function d3init(graph, networkId, path,type) {
 				$.ajax({
 					url : $('#annot_form').attr("action"),
 					type : "POST",
-					data :"annotationtype="+annotationtype+"&nodename="+node.id+"&annotText="+annottext+"&type="+type+"&edgeid="+edgeid,
+					data :"objecttype="+objecttype+"&nodename="+node.id+"&annotText="+annottext+"&type="+type+"&edgeid="+edgeid,
 					success : function() {
 						$('#'+popupId+'').dialog('close');
 						displayAllAnnotations();
@@ -701,7 +733,6 @@ function d3init(graph, networkId, path,type) {
 	function add_annotationstolink(d){
 		//Type = node
 		var type1 ="edge";
-		alert("here");
 		// Making it unique, as getting the handle on $(#something).val() 
 		// is not working for more than one edge.
 		var text1ID = "annotText_"+guid();
@@ -715,14 +746,15 @@ function d3init(graph, networkId, path,type) {
 		var html = "<div id='"+popupId+"' title='Annotation' style='display: none'>" +
 		"<form id='annot_edge_form' action=" + path
 		+ "/auth/editing/saveAnnotationToEdge/";
-		html += networkId + " method='POST' >";
+		html += networkId + " method='GET' >";
 		html += "<textarea name='annotText' id='"+text1ID+"' cols='15' rows='15'></textarea>";
 		html+= "<input type='button' id='annot_submit_edge' value='submit'>";
 		html += "</div></form>";
 
 		// Appending to D3 view
 		$('#inner-details').html(html);
-		var content = "<h3>Annotations</h3>";
+		var content = "";
+	//	var content = "<h3>Annotations</h3>";
 
 		// ajax Call to get annotation for a node.id
 		// Used to add the old annotation in to the popup view
@@ -740,11 +772,16 @@ function d3init(graph, networkId, path,type) {
 			var targetname = d.target.name;
 			var targettype = d.target.group;
 			var objecttype = "edge";
-			
+			var annottext = $('#'+text1ID).val();
+			var url = path+"/auth/editing/saveAnnotationToEdge/"+networkId;
+			console.log("url:"+url);
+			var input = "annottext="+annottext+"&sourceid="+sourceid+"&sourcename="+sourcename+"&targetid="+targetid+"&targetname="+targetname+"&targettype="+targettype+"&objecttype="+objecttype;
+			console.log("input:"+input);
 			$.ajax({
 				url : path+"/auth/editing/saveAnnotationToEdge/"+networkId,
 				type : "POST",
-				data :"sourceid="+sourceid+"&sourcename="+sourcename+"&targetid="+targetid+"&targetname="+targetname+"&targettype="+targettype+"&objecttype="+objecttype,
+				data : input,
+				contentType: 'application/json; charset=utf-8',
 				success : function() {
 					$('#'+popupId+'').dialog('close');
 				//	displayAllAnnotations();

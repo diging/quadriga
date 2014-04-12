@@ -159,6 +159,9 @@ public class D3NetworkManager implements ID3NetworkManager {
 				d3JsonString.append(",");
 				d3JsonString.append("\"target\":");
 				d3JsonString.append(d3Link.getTarget());
+				d3JsonString.append(",");
+				d3JsonString.append("\"label\":");
+				d3JsonString.append(d3Link.getLabelText());
 				d3JsonString.append("},\n");
 			}
 			ID3Link d3Link =d3LinkList.get(d3LinkList.size()-1);
@@ -167,6 +170,9 @@ public class D3NetworkManager implements ID3NetworkManager {
 			d3JsonString.append(",");
 			d3JsonString.append("\"target\":");
 			d3JsonString.append(d3Link.getTarget());
+			d3JsonString.append(",");
+			d3JsonString.append("\"label\":");
+			d3JsonString.append(d3Link.getLabelText());
 		}
 		return d3JsonString.toString();
 	}
@@ -301,11 +307,13 @@ public class D3NetworkManager implements ID3NetworkManager {
 		ID3Link d3LinkSubject = d3LinkFactory.createD3LinkObject();
 		d3LinkSubject.setSource(d3NodeIdMap.get(predicateNameId));
 		d3LinkSubject.setTarget(d3NodeIdMap.get(subjectNodeId));
+		d3LinkSubject.setLabelText("\"subject\"");
 		d3LinkList.add(d3LinkSubject);
 
 		ID3Link d3LinkObject = d3LinkFactory.createD3LinkObject();
 		d3LinkObject.setSource(d3NodeIdMap.get(predicateNameId));
 		d3LinkObject.setTarget(d3NodeIdMap.get(objectNodeId));
+		d3LinkObject.setLabelText("\"object\"");
 		d3LinkList.add(d3LinkObject);
 
 		d3Map.setD3NodeIdMap(d3NodeIdMap);

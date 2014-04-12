@@ -10,14 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
-import edu.asu.spring.quadriga.domain.implementation.NetworkEdgeAnnotation;
-import edu.asu.spring.quadriga.domain.implementation.NetworkNodeAnnotation;
-import edu.asu.spring.quadriga.domain.implementation.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkEdgeAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkNodeAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkRelationAnnotation;
+import edu.asu.spring.quadriga.domain.networks.impl.NetworkEdgeAnnotation;
+import edu.asu.spring.quadriga.domain.networks.impl.NetworkNodeAnnotation;
+import edu.asu.spring.quadriga.domain.networks.impl.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
@@ -29,7 +31,6 @@ import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
 import edu.asu.spring.quadriga.service.network.factory.INetworkEdgeAnnotationFactory;
 import edu.asu.spring.quadriga.service.network.factory.INetworkNodeAnnotationFactory;
 import edu.asu.spring.quadriga.service.network.factory.INetworkRelationAnnotationFactory;
-import edu.asu.spring.quadriga.service.network.factory.impl.NetworkNodeAnnotationFactory;
 
 @Service
 public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotationManager {
@@ -151,7 +152,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		List<INetworkAnnotation> networkAnnotationsList = new ArrayList<INetworkAnnotation>();
 		for(NetworkAnnotationsDTO networkAnnotation : networkAnnoDTOList){
 			if(networkAnnotation.getObjectType().equals("node")){
-				NetworkNodeAnnotation networkNodeAnnotation =  (NetworkNodeAnnotation) networkNodeAnnotationFactory.createUserObject();
+				INetworkNodeAnnotation networkNodeAnnotation =  (NetworkNodeAnnotation) networkNodeAnnotationFactory.createNetworkNodeAnnotationObject();
 				
 				networkNodeAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
 				networkNodeAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
@@ -164,7 +165,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 			    networkAnnotationsList.add(networkNodeAnnotation);
 			}
 			if(networkAnnotation.getObjectType().equals("edge")){
-				NetworkEdgeAnnotation networkEdgeAnnotation = (NetworkEdgeAnnotation) networkEdgeAnnotationFactory.createUserObject();
+				INetworkEdgeAnnotation networkEdgeAnnotation = (NetworkEdgeAnnotation) networkEdgeAnnotationFactory.createNetworkEdgeAnnotationObject();
 				networkEdgeAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
 				networkEdgeAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
 				networkEdgeAnnotation.setNetworkId(networkAnnotation.getNetworkId());
@@ -179,7 +180,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 				networkAnnotationsList.add(networkEdgeAnnotation);
 			}
 			if(networkAnnotation.getObjectType().equals("relation")){
-				NetworkRelationAnnotation networkRelationAnnotation = (NetworkRelationAnnotation) networkRelationAnnotationFactory.createUserObject();
+				INetworkRelationAnnotation networkRelationAnnotation = (NetworkRelationAnnotation) networkRelationAnnotationFactory.createNetworkRelationAnnotationObject();
 				networkRelationAnnotation.setAnnotationId(networkAnnotation.getAnnotationId());
 				networkRelationAnnotation.setAnnotationText(networkAnnotation.getAnnotationText());
 				networkRelationAnnotation.setNetworkId(networkAnnotation.getNetworkId());

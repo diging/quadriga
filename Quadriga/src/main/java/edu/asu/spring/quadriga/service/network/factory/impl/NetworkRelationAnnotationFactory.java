@@ -2,8 +2,8 @@ package edu.asu.spring.quadriga.service.network.factory.impl;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.implementation.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetworkRelationAnnotation;
+import edu.asu.spring.quadriga.domain.networks.impl.NetworkRelationAnnotation;
 import edu.asu.spring.quadriga.service.network.factory.INetworkRelationAnnotationFactory;
 
 @Service
@@ -14,17 +14,10 @@ public class NetworkRelationAnnotationFactory implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public INetworkRelationAnnotation createUserObject() {
+	public INetworkRelationAnnotation createNetworkRelationAnnotationObject() {
 		return new NetworkRelationAnnotation();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public INetworkRelationAnnotation cloneUserObject(
-			INetworkRelationAnnotation networkRelationAnnotation) {
-		return null;
-	}
+	
 
 }
