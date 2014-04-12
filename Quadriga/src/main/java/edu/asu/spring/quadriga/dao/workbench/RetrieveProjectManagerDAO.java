@@ -13,8 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
@@ -54,6 +52,22 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 			project = projectDTOMapper.getProject(projectDTO);
 			project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
 			return project;
+		}
+		catch(Exception e)
+		{
+			logger.info("Retrieve project details method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+	}
+	
+	@Override
+	public ProjectDTO getProjectDTO(String projectId) throws QuadrigaStorageException 
+	{
+		ProjectDTO projectDTO = null;
+		try
+		{
+			projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+			return projectDTO;
 		}
 		catch(Exception e)
 		{
