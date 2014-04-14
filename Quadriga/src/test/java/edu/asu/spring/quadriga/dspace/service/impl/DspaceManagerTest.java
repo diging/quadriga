@@ -32,7 +32,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionManager;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
-import edu.asu.spring.quadriga.domain.implementation.BitStream;
+import edu.asu.spring.quadriga.domain.impl.dspace.BitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
@@ -202,7 +202,7 @@ public class DspaceManagerTest {
 
 		ICollection collection = dspaceManager.getCollection("10" , "12");
 		assertNotNull(collection);
-		assertEquals("10", collection.getId());
+		assertEquals("10", collection.getNetworkId());
 
 		//Invalid collection id
 		assertNull(dspaceManager.getCollection("11111111111111111111" , "12"));
@@ -406,7 +406,7 @@ public class DspaceManagerTest {
 
 		//Setup bitstreams
 		IBitStream bitstream = new BitStream();
-		bitstream.setId("3991");
+		bitstream.setNetworkId("3991");
 		List<IBitStream> bitstreams = new ArrayList<IBitStream>();
 		bitstreams.add(bitstream);
 
@@ -458,7 +458,7 @@ public class DspaceManagerTest {
 		//Check in the database if the file was added
 		IWorkSpace workspace = wsManager.getWorkspaceDetails("WS_1", "test");
 		IBitStream bitstream = workspace.getBitstreams().get(0);
-		assertEquals("3991", bitstream.getId());
+		assertEquals("3991", bitstream.getNetworkId());
 	}
 
 	@Test
@@ -491,8 +491,8 @@ public class DspaceManagerTest {
 		}
 		
 		IBitStream bitstream = new BitStream();
-		bitstream.setId("3991");
-		bitstream.setName("valid bitstream");
+		bitstream.setNetworkId("3991");
+		bitstream.setNetworkName("valid bitstream");
 		
 		List<IBitStream> workspacebitstreams = new ArrayList<IBitStream>();
 		workspacebitstreams.add(bitstream);

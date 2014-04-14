@@ -1,8 +1,8 @@
 package edu.asu.spring.quadriga.domain.factories.impl;
 
-import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IItemFactory;
-import edu.asu.spring.quadriga.domain.implementation.Item;
+import edu.asu.spring.quadriga.domain.impl.dspace.Item;
 
 /**
  * Factory class for creating {@link @Item}

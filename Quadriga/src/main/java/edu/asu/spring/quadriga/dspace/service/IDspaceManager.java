@@ -7,10 +7,10 @@ import java.util.Properties;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
-import edu.asu.spring.quadriga.domain.IBitStream;
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICommunity;
-import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.ICollection;
+import edu.asu.spring.quadriga.domain.dspace.ICommunity;
+import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;

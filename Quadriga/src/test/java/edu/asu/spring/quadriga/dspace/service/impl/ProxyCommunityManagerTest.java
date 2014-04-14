@@ -140,7 +140,7 @@ public class ProxyCommunityManagerTest {
 
 		//Test case to load collection from cache
 		ICollection collection = proxyCommunityManager.getCollection("10", true, null, null, null, null, null, "12");
-		assertNotNull(collection.getName());
+		assertNotNull(collection.getNetworkName());
 		
 		//Invalid collection id
 		assertNull(proxyCommunityManager.getCollection("111111111111", true, null, null, null, null, null, "12"));
@@ -155,7 +155,7 @@ public class ProxyCommunityManagerTest {
 		//Test case to handle reload of collection
 		collection = proxyCommunityManager.getCollection("10",false,restTemplate,dspaceProperties,dspaceKeys,null,null,"12");
 		//A new REST Call would be made and hence thread takes time to load the collection name.
-		assertNull(collection.getName());
+		assertNull(collection.getNetworkName());
 	}
 
 	@Test

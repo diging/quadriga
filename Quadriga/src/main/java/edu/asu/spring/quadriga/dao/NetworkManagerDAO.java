@@ -854,7 +854,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			for (INetwork network : networkList) {
 				// Get the assigned user name for the network
 				query = sessionFactory.getCurrentSession().createQuery("from NetworkAssignedDTO na where na.networkAssignedDTOPK.networkid = :networkid and status = :status");
-				query.setParameter("networkid", network.getId());
+				query.setParameter("networkid", network.getNetworkId());
 				query.setParameter("status", INetworkStatus.ASSIGNED);
 				NetworkAssignedDTO networkAssignedDTO = (NetworkAssignedDTO) query.uniqueResult();
 				if(networkAssignedDTO != null)
@@ -899,7 +899,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 		try
 		{
-			NetworksDTO networksDTO = networkMapper.getNetworksDTO(network.getId(), network.getName(), username, network.getStatus(), network.getWorkspaceid());
+			NetworksDTO networksDTO = networkMapper.getNetworksDTO(network.getNetworkId(), network.getNetworkName(), username, network.getStatus(), network.getWorkspaceid());
 			sessionFactory.getCurrentSession().saveOrUpdate(networksDTO);
 			return SUCCESS;
 		}

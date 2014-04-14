@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.domain.network;
 
+import java.util.Date;
+
 /**
  * Interface to implement NetworkAnnotations class.
  * 
@@ -23,4 +25,20 @@ public interface INetworkAnnotation {
 	public abstract String getUserName();
 	
 	public abstract void setUserName(String userName);
+	
+	public abstract String getCreatedBy();
+	
+	public abstract void setCreatedBy(String createdBy);
+	
+	public abstract Date getCreatedDate();
+	
+	public abstract void setCreatedDate(Date createdDate);
+	
+	public abstract String getUpdatedBy();
+	
+	public abstract void setUpdatedBy(String updatedBy);
+	
+	public abstract Date getUpdatedDate();
+	
+	public abstract void setUpdatedDate(Date updatedDate);
 }

@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.dspace;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,8 +13,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.dspace.ICollection;
+import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IItemFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.ItemFactory;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollection;

@@ -7,10 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DspaceKeysFactory;
-import edu.asu.spring.quadriga.domain.implementation.BitStream;
+import edu.asu.spring.quadriga.domain.impl.dspace.BitStream;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
 
 @Service

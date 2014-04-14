@@ -1,11 +1,11 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.dspace;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICommunity;
+import edu.asu.spring.quadriga.domain.dspace.ICollection;
+import edu.asu.spring.quadriga.domain.dspace.ICommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCollectionEntityId;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 /**

@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.networks.Network;
 
 /*
 * @Description 	: tests getters and setters for appelationId, relationId, creator, creationTime and
