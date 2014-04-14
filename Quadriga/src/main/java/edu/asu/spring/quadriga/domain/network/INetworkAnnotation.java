@@ -41,4 +41,8 @@ public interface INetworkAnnotation {
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
+	
+	public abstract String getObjectType();
+	 
+	public abstract String setObjectType(String objectType);
 }
