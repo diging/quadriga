@@ -2,19 +2,14 @@ package edu.asu.spring.quadriga.domain.impl.networks;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.network.INetworkEdgeAnnotation;
+import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 
-public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation 
+public class NetworkAnnotation implements INetworkAnnotation 
 {
 	private String annotationId;
 	private String annotationText;
 	private String networkId;
 	private String userName;
-	private String sourceId;
-	private String sourceName;
-	private String targetId;
-	private String targetName;
-	private String targetNodeType;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -48,7 +43,7 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 
 	@Override
 	public void setNetworkId(String networkId) {
-        this.networkId = networkId;
+         this.networkId = networkId;
 	}
 
 	@Override
@@ -58,57 +53,7 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 
 	@Override
 	public void setUserName(String userName) {
-         this.userName = userName;
-	}
-
-	@Override
-	public String getSourceId() {
-		return sourceId;
-	}
-
-	@Override
-	public void setSourceId(String sourceId) {
-         this.sourceId = sourceId;
-	}
-
-	@Override
-	public String getSourceName() {
-		return sourceName;
-	}
-
-	@Override
-	public void setSourceName(String sourceName) {
-          this.sourceName = sourceName;
-	}
-
-	@Override
-	public String getTargetId() {
-		return targetId;
-	}
-
-	@Override
-	public void setTargetId(String targetId) {
-        this.targetId = targetId;
-	}
-	
-	@Override
-	public String getTargetName() {
-		return targetName;
-	}
-
-	@Override
-	public void setTargetName(String targetName) {
-        this.targetName = targetName;		
-	}
-
-	@Override
-	public String getTargetNodeType() {
-		return targetNodeType;
-	}
-
-	@Override
-	public void setTargetNodeType(String targetNodeType) {
-          this.targetNodeType = targetNodeType;
+       this.userName = userName;
 	}
 
 	@Override
@@ -118,7 +63,7 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 
 	@Override
 	public void setCreatedBy(String createdBy) {
-         this.createdBy = createdBy;		
+        this.createdBy = createdBy;
 	}
 
 	@Override
@@ -128,7 +73,7 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 
 	@Override
 	public void setCreatedDate(Date createdDate) {
-          this.createdDate = createdDate;		
+        this.createdDate = createdDate;
 	}
 
 	@Override
@@ -138,7 +83,7 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 
 	@Override
 	public void setUpdatedBy(String updatedBy) {
-         this.updatedBy = updatedBy;		
+         this.updatedBy = updatedBy;
 	}
 
 	@Override
@@ -148,9 +93,7 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 
 	@Override
 	public void setUpdatedDate(Date updatedDate) {
-          this.updatedDate = updatedDate;		
+         this.updatedDate = updatedDate;
 	}
-
-
 
 }
