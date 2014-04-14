@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
-import edu.asu.spring.quadriga.domain.implementation.Network;
+import edu.asu.spring.quadriga.domain.impl.networks.Network;
+import edu.asu.spring.quadriga.domain.impl.networks.NetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
-import edu.asu.spring.quadriga.domain.networks.impl.NetworkNodeInfo;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
@@ -95,8 +95,8 @@ public class NetworkDTOMapper {
 		if(networksDTO != null)
 		{
 			network = networkFactory.createNetworkObject();
-			network.setId(networksDTO.getNetworkid());
-			network.setName(networksDTO.getNetworkname());
+			network.setNetworkId(networksDTO.getNetworkid());
+			network.setNetworkName(networksDTO.getNetworkname());
 			network.setWorkspaceid(networksDTO.getWorkspaceid());
 			network.setStatus(networksDTO.getStatus());
 			if(networksDTO.getNetworkowner() != null)
@@ -123,8 +123,8 @@ public class NetworkDTOMapper {
 			for(NetworksDTO networkDTO: networksDTO)
 			{
 				network = networkFactory.createNetworkObject();
-				network.setId(networkDTO.getNetworkid());
-				network.setName(networkDTO.getNetworkname());
+				network.setNetworkId(networkDTO.getNetworkid());
+				network.setNetworkName(networkDTO.getNetworkname());
 				network.setWorkspaceid(networkDTO.getWorkspaceid());
 				network.setStatus(networkDTO.getStatus());
 				if(networkDTO.getNetworkowner() != null)
@@ -146,8 +146,8 @@ public class NetworkDTOMapper {
 			for(NetworksDTO networkDTO: networksDTO)
 			{
 				network = networkFactory.createNetworkObject();
-				network.setId(networkDTO.getNetworkid());
-				network.setName(networkDTO.getNetworkname());
+				network.setNetworkId(networkDTO.getNetworkid());
+				network.setNetworkName(networkDTO.getNetworkname());
 				network.setWorkspaceid(networkDTO.getWorkspaceid());
 				network.setStatus(networkDTO.getStatus());
 				//network.setNetworkOldVersion(getNetworkOldVersion(getNetworkAssignedDTO(networkDTO.getNetworkid(), assignedUser, networkDTO.getStatus(), INetworkStatus.ARCHIVE_LEVEL_ONE )));
@@ -225,11 +225,11 @@ public class NetworkDTOMapper {
 			{
 				//version = networkVersionsFactory.createNetworkVersionsObject();
 				network = networkFactory.createNetworkObject();
-				network.setName(networkAssignedDTO.getNetworkname());
+				network.setNetworkName(networkAssignedDTO.getNetworkname());
 				network.setStatus(networkAssignedDTO.getStatus());
 				network.setAssignedUser(networkAssignedDTO.getUpdatedby());
 				network.setVersionNumber(networkAssignedDTO.getVersion());
-				network.setId(networkAssignedDTO.getNetworkAssignedDTOPK().getNetworkid());
+				network.setNetworkId(networkAssignedDTO.getNetworkAssignedDTOPK().getNetworkid());
 				
 				networkVersions.add(network);
 			}

@@ -15,6 +15,10 @@ public interface INetworkEdgeAnnotation extends INetworkAnnotation
 	
 	public abstract void setTargetId(String targetId);
 	
+	public abstract String getTargetName();
+	
+	public abstract void setTargetName(String targetName);
+	
 	public abstract String getTargetNodeType();
 	
 	public abstract void setTargetNodeType(String targetNodeType);
