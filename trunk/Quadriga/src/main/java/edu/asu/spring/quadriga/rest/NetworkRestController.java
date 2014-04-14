@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.implementation.NetworkAnnotation;
+import edu.asu.spring.quadriga.domain.impl.networks.NetworkAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -653,7 +653,7 @@ public class NetworkRestController {
 				response.setStatus(404);
 				return "Please provide correct network id.";
 			}else{
-				logger.info(network.getName());
+				logger.info(network.getNetworkName());
 			}
 		}catch(QuadrigaStorageException e){
 			logger.error("DB Error :",e);
@@ -677,7 +677,7 @@ public class NetworkRestController {
 					return "Please provide correct XML in body of the post request. Qstore system is not accepting ur XML";
 				}
 				String networkNameUpdateStatus="";
-				if(!(networkName == null ||networkName.equals(network.getName()) || networkName.equals(""))){
+				if(!(networkName == null ||networkName.equals(network.getNetworkName()) || networkName.equals(""))){
 					networkNameUpdateStatus = networkManager.updateNetworkName(networkId,networkName);
 					if(!(networkNameUpdateStatus.equals("success"))){
 						response.setStatus(500);

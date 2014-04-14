@@ -23,10 +23,10 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.db.IDBConnectionDspaceManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
-import edu.asu.spring.quadriga.domain.IBitStream;
-import edu.asu.spring.quadriga.domain.ICollection;
-import edu.asu.spring.quadriga.domain.ICommunity;
-import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.ICollection;
+import edu.asu.spring.quadriga.domain.dspace.ICommunity;
+import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;

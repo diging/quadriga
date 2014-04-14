@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.db.workspace;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;

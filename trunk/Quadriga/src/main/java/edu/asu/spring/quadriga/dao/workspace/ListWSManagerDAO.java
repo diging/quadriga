@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
-import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;

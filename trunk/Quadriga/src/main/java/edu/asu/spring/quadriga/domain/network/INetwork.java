@@ -5,8 +5,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.enums.ENetworkAccessibility;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 
 /**
  * @description   : interface to implement Network class.
@@ -16,6 +15,14 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
  */
 public interface INetwork 
 {
+	
+	public abstract String getNetworkId();
+
+	public abstract void setNetworkId(String networkId);
+	
+	public abstract String getNetworkName();
+
+	public abstract void setNetworkName(String networkName);
 
 	public abstract void setTextUrl(String textUrl);
 
@@ -33,48 +40,23 @@ public interface INetwork
 
 	public abstract ENetworkAccessibility getNetworksAccess();
 
-	public abstract void setRelationIds(List<String> relationIds);
-
-	public abstract List<String> getRelationIds();
-
-	public abstract void setAppellationIds(List<String> appellationIds);
-
-	public abstract List<String> getAppellationIds();
-
-	public abstract String getName();
-
-	public abstract void setName(String name);
-
 	public abstract String getStatus();
 
 	public abstract void setStatus(String status);
-
-	public abstract String getId();
-
-	public abstract void setId(String id);
-
-	public abstract String getWorkspaceid();
-
-	public abstract void setWorkspaceid(String workspaceid);
-
+	
+	public abstract int getVersionNumber();
+	
+	public abstract void setVersionNumber(int versionNumber);
+	
+	public abstract List<INetworkNodeInfo> getNetworkNodes();
+	
+	public abstract void setNetworkNodes(List<INetworkNodeInfo> networkNodes);
 
 	public abstract String getAssignedUser();
 
 	public abstract void setAssignedUser(String assignedUser);
 
-	public abstract IProject getProject();
-
-	public abstract void setProject(IProject project);
-
-	public abstract IWorkSpace getWorkspace();
-
-	public abstract void setWorkspace(IWorkSpace workspace);
-	
-	public abstract int getVersionNumber();
-	
-	public abstract void setVersionNumber(int versionNumber);
-
-
-
-
+    public abstract List<IWorkspaceNetwork> getNetworkWorkspaces();
+    
+    public abstract void setNetworkWorkspaces(List<IWorkspaceNetwork> networkWorkspaces);
 }

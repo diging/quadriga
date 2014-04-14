@@ -48,8 +48,8 @@ import org.xml.sax.SAXException;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
-import edu.asu.spring.quadriga.domain.IBitStream;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.INetworkFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.AppellationEventType;
@@ -680,7 +680,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 		String fileId =uri=uri.substring(uri.lastIndexOf("/")+1,uri.length());
 		for(IBitStream bitStream : bitStreamList){
-			if(fileId.equals(bitStream.getId())){
+			if(fileId.equals(bitStream.getNetworkId())){
 				logger.debug("true");
 				return true;
 			}
@@ -1080,18 +1080,18 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 					List<INetwork> networkList1 = wsManager.getWorkspaceNetworkList(ws.getWorkspaceId());
 					for(INetwork network : networkList1){
 						JSONObject data2 = new JSONObject();
-						data2.put("id",network.getId());
+						data2.put("id",network.getNetworkId());
 						data2.put("parent",networkParent);
 						String networkLink = "<a href='#' id='"
-								+ network.getId()
+								+ network.getNetworkId()
 								+ "' name='"
-								+ network.getName()
+								+ network.getNetworkName()
 								+ "' onclick='javascript:clicknetwork(this.id,this.name);' > "
-								+ network.getName() + "</a>";
+								+ network.getNetworkName() + "</a>";
 						data2.put("text", networkLink);
-						data2.put("href", "networks/visualize/"+network.getId());
+						data2.put("href", "networks/visualize/"+network.getNetworkId());
 						JSONObject data2href = new JSONObject();
-						data2href.put("href", "networks/visualize/"+network.getId());
+						data2href.put("href", "networks/visualize/"+network.getNetworkId());
 						dataArray.put(data2);
 					}
 				}

@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.domain.ICollection;
+import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 
 /**

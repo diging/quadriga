@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 
 /**
  * Factory interface for Bitstream factories.

@@ -470,7 +470,7 @@ public class ListWSControllerTest {
 		//Check in the database if the file was added
 		IWorkSpace workspace = wsManager.getWorkspaceDetails("WS_1", "test");
 		IBitStream bitstream = workspace.getBitstreams().get(0);
-		assertEquals("3991", bitstream.getId());
+		assertEquals("3991", bitstream.getNetworkId());
 	}
 
 

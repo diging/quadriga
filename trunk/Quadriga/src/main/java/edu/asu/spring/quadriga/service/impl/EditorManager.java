@@ -78,7 +78,7 @@ public class EditorManager implements IEditorManager {
 		INetwork network= networkManager.getNetwork(networkId);
 		try{
 			int latestVersion = networkManager.getLatestVersionOfNetwork(networkId);
-			msg = dbConnect.assignNetworkToUser(networkId, user,network.getName(),latestVersion);
+			msg = dbConnect.assignNetworkToUser(networkId, user,network.getNetworkName(),latestVersion);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}

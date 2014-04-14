@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain.impl.workspace;
 
 import java.util.Date;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 

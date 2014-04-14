@@ -545,8 +545,8 @@ public class ListWSController
 		{
 			if(collection.getLoadStatus() == true)
 			{
-				if(collection.getName() != null)
-					return collection.getName();
+				if(collection.getNetworkName() != null)
+					return collection.getNetworkName();
 				else
 					return getDspaceMessages().getProperty("dspace.restricted_collection");
 			}
@@ -564,7 +564,7 @@ public class ListWSController
 		}
 		if(bitstream != null)
 		{
-			if(bitstream.getName() != null)
+			if(bitstream.getNetworkName() != null)
 			{
 				return bitstream.getItemName();
 			}
@@ -583,8 +583,8 @@ public class ListWSController
 		}
 		if(bitstream != null)
 		{
-			if(bitstream.getName() != null)
-				return bitstream.getName();
+			if(bitstream.getNetworkName() != null)
+				return bitstream.getNetworkName();
 		}
 		return getDspaceMessages().getProperty("dspace.loading");
 	}
@@ -608,8 +608,8 @@ public class ListWSController
 		IBitStream bitstream = dspaceManager.getBitStream(collectionId, itemId, bitstreamId);
 		if(bitstream != null)
 		{
-			if(bitstream.getName() != null)
-				return bitstream.getName();
+			if(bitstream.getNetworkName() != null)
+				return bitstream.getNetworkName();
 		}
 		return getDspaceMessages().getProperty("dspace.loading");		
 	}

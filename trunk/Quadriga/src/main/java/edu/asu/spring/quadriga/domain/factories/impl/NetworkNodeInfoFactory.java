@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
-import edu.asu.spring.quadriga.domain.implementation.NetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.impl.networks.NetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 
 /**

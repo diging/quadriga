@@ -1,6 +1,6 @@
 package edu.asu.spring.quadriga.domain.factories;
 
-import edu.asu.spring.quadriga.domain.IItem;
+import edu.asu.spring.quadriga.domain.dspace.IItem;
 
 /**
  * Factory interface for Item factories.

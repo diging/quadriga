@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl.dspace;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.domain.IBitStream;
+import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollectionEntity;
