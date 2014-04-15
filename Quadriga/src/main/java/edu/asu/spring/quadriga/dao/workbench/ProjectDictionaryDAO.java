@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
@@ -176,7 +179,16 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 	        	if(projectDTO != null)
 	        	{
 	        		IProject project = projectMapper.getProject(projectDTO);
-	        		project.setCollaborators(collaboratorDTOMapper.getProjectCollaboratorList(projectDTO));
+	        		List<IProjectCollaborator> projectCollaboratorList = new ArrayList<IProjectCollaborator>();
+	        		
+	        		for(ICollaborator collaborator : collaboratorDTOMapper.getProjectCollaboratorList(projectDTO))
+	        		{
+	        			IProjectCollaborator projectCollaborator = new ProjectCollaborator();
+	        			projectCollaborator.setCollaborator(collaborator);
+	        			projectCollaborator.setProject(project);
+	        			projectCollaboratorList.add(projectCollaborator);
+	        		}
+	        		project.setProjectCollaborators(projectCollaboratorList);
 	        		projects.add(project);
 	        	}
 	        	

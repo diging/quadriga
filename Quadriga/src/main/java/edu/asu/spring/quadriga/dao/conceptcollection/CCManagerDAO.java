@@ -22,10 +22,14 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionConcepts;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptsDTO;
@@ -162,8 +166,8 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	@Override
 	public void getCollectionDetails(IConceptCollection collection,String username) throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser owner = null;
-		collection.setCollaborators(new ArrayList<ICollaborator>());
-		List<IConcept> concepts = new ArrayList<IConcept>();
+		collection.setConceptCollectionCollaborators(new ArrayList<IConceptCollectionCollaborator>());
+		List<IConceptCollectionConcepts> concepts = new ArrayList<IConceptCollectionConcepts>();
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid");
@@ -183,11 +187,13 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 					
 					while(ccItemsIterator.hasNext())
 					{
+						IConceptCollectionConcepts tempConcept = new ConceptCollectionConcepts();
 						ConceptsDTO concept = ccItemsIterator.next().getConceptDTO();
-						concepts.add(conceptCollectionDTOMapper.getConceptCollectionItems(concept));
+						tempConcept.setConcept(conceptCollectionDTOMapper.getConceptCollectionItems(concept));
+                        tempConcept.setConceptCollection(collection);
 					}	
 				}
-				collection.setConcepts(concepts);
+				collection.setConceptCollectionConcepts(concepts);
 			}
 		}
 		catch(Exception e)
@@ -568,6 +574,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptsDTO c where c.item =:id");
 			query.setParameter("id", concept.getConceptId());
+			@SuppressWarnings("unchecked")
 			List<ConceptsDTO> conceptsDTOList = query.list();
 			
 			if(conceptsDTOList != null && conceptsDTOList.size() > 0)
@@ -633,6 +640,8 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	@Override
 	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		List<IConceptCollectionCollaborator> conceptCollectionCollaboratorList = new ArrayList<IConceptCollectionCollaborator>();
+		
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid");
@@ -668,8 +677,13 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 					String userRoleList = (String) pairs.getValue();
 					collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));
 					collaborator.setCollaboratorRoles(collaboratorRoles);
-					collection.getCollaborators().add(collaborator);
+					IConceptCollectionCollaborator conceptCollectionCollaborator = new ConceptCollectionCollaborator();
+					conceptCollectionCollaborator.setConceptCollection(collection);
+					conceptCollectionCollaborator.setCollaborator(collaborator);
+					conceptCollectionCollaboratorList.add(conceptCollectionCollaborator);
 				}
+				
+				collection.setConceptCollectionCollaborators(conceptCollectionCollaboratorList);
 			}	
 		}
 		catch(Exception e)

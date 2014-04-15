@@ -26,6 +26,8 @@ public class WorkspaceDspaceDTOPK implements Serializable
     @Column(name = "bitstreamid")
     private String bitstreamid;
     
+    @Basic(optional = false)
+    @Column(name = "itemHandle")
     private String itemHandle;
 
     public WorkspaceDspaceDTOPK() {

@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "NetworksDTO.findAll", query = "SELECT n FROM NetworksDTO n"),
     @NamedQuery(name = "NetworksDTO.findByNetworkid", query = "SELECT n FROM NetworksDTO n WHERE n.networkid = :networkid"),
-    @NamedQuery(name = "NetworksDTO.findByWorkspaceid", query = "SELECT n FROM NetworksDTO n WHERE n.workspaceid = :workspaceid"),
     @NamedQuery(name = "NetworksDTO.findByNetworkname", query = "SELECT n FROM NetworksDTO n WHERE n.networkname = :networkname"),
     @NamedQuery(name = "NetworksDTO.findByNetworkowner", query = "SELECT n FROM NetworksDTO n WHERE n.networkowner = :networkowner"),
     @NamedQuery(name = "NetworksDTO.findByStatus", query = "SELECT n FROM NetworksDTO n WHERE n.status = :status"),
@@ -45,9 +44,6 @@ public class NetworksDTO implements Serializable {
     @Basic(optional = false)
     @Column(name = "networkid")
     private String networkid;
-    @Basic(optional = false)
-    @Column(name = "workspaceid")
-    private String workspaceid;
     @Basic(optional = false)
     @Column(name = "networkname")
     private String networkname;
@@ -74,12 +70,11 @@ public class NetworksDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
     private List<NetworkAssignedDTO> networksAssignedDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
-    private List<NetworksAnnotationsDTO> networksAnnotationsDTOList;
+    private List<NetworkAnnotationsDTO> networksAnnotationsDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networkDTO")
     private List<NetworkStatementsDTO> networkStamentesDTOList;
-    @JoinColumn(name = "workspaceid",referencedColumnName = "workspaceid",insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private WorkspaceDTO workspaceDTO;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
+    private List<NetworkWorkspaceDTO> networkWorkspaceDTOList;
     @JoinColumn(name = "networkowner",referencedColumnName = "username",insertable = false , updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
@@ -87,9 +82,8 @@ public class NetworksDTO implements Serializable {
 	public NetworksDTO() {
     }
 
-    public NetworksDTO(String networkid, String workspaceid, String networkname, String networkowner, String status, String updatedby, Date updateddate, String createdby, Date createddate) {
+    public NetworksDTO(String networkid,String networkname, String networkowner, String status, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.networkid = networkid;
-        this.workspaceid = workspaceid;
         this.networkname = networkname;
         this.networkowner = networkowner;
         this.status = status;
@@ -110,12 +104,12 @@ public class NetworksDTO implements Serializable {
 	}
 
 	@XmlTransient
-	public List<NetworksAnnotationsDTO> getNetworksAnnotationsDTOList() {
+	public List<NetworkAnnotationsDTO> getNetworksAnnotationsDTOList() {
 		return networksAnnotationsDTOList;
 	}
 
 	public void setNetworksAnnotationsDTOList(
-			List<NetworksAnnotationsDTO> networksAnnotationsDTOList) {
+			List<NetworkAnnotationsDTO> networksAnnotationsDTOList) {
 		this.networksAnnotationsDTOList = networksAnnotationsDTOList;
 	}
 
@@ -128,13 +122,15 @@ public class NetworksDTO implements Serializable {
 			List<NetworkStatementsDTO> networkStamentesDTOList) {
 		this.networkStamentesDTOList = networkStamentesDTOList;
 	}
-
-	public WorkspaceDTO getWorkspaceDTO() {
-		return workspaceDTO;
+	
+	@XmlTransient
+	public List<NetworkWorkspaceDTO> getNetworkWorkspaceDTOList() {
+		return networkWorkspaceDTOList;
 	}
 
-	public void setWorkspaceDTO(WorkspaceDTO workspaceDTO) {
-		this.workspaceDTO = workspaceDTO;
+	public void setNetworkWorkspaceDTOList(
+			List<NetworkWorkspaceDTO> networkWorkspaceDTOList) {
+		this.networkWorkspaceDTOList = networkWorkspaceDTOList;
 	}
 
 	public QuadrigaUserDTO getQuadrigaUserDTO() {
@@ -151,14 +147,6 @@ public class NetworksDTO implements Serializable {
 
     public void setNetworkid(String networkid) {
         this.networkid = networkid;
-    }
-
-    public String getWorkspaceid() {
-        return workspaceid;
-    }
-
-    public void setWorkspaceid(String workspaceid) {
-        this.workspaceid = workspaceid;
     }
 
     public String getNetworkname() {
