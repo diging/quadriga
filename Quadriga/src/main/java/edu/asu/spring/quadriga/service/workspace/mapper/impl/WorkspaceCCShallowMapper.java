@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workbench.mapper.impl;
+package edu.asu.spring.quadriga.service.workspace.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IWorkspaceCCShallowMapper;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
 
 @Service
 public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
