@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain;
+package edu.asu.spring.quadriga.domain.dictionary;
 
 /**
  * Interface to implement WordPower class.

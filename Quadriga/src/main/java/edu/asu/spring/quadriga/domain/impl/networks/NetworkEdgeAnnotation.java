@@ -15,6 +15,7 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 	private String targetId;
 	private String targetName;
 	private String targetNodeType;
+	private String objectType;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -110,6 +111,17 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
 	public void setTargetNodeType(String targetNodeType) {
           this.targetNodeType = targetNodeType;
 	}
+	
+	@Override
+	public String getObjectType() {
+		return objectType;
+	}
+
+	@Override
+	public void setObjectType(String objectType)
+	{
+		this.objectType = objectType;
+	}
 
 	@Override
 	public String getCreatedBy() {
@@ -151,6 +163,120 @@ public class NetworkEdgeAnnotation implements INetworkEdgeAnnotation
           this.updatedDate = updatedDate;		
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((annotationId == null) ? 0 : annotationId.hashCode());
+		result = prime * result
+				+ ((annotationText == null) ? 0 : annotationText.hashCode());
+		result = prime * result
+				+ ((createdBy == null) ? 0 : createdBy.hashCode());
+		result = prime * result
+				+ ((createdDate == null) ? 0 : createdDate.hashCode());
+		result = prime * result
+				+ ((networkId == null) ? 0 : networkId.hashCode());
+		result = prime * result
+				+ ((objectType == null) ? 0 : objectType.hashCode());
+		result = prime * result
+				+ ((sourceId == null) ? 0 : sourceId.hashCode());
+		result = prime * result
+				+ ((sourceName == null) ? 0 : sourceName.hashCode());
+		result = prime * result
+				+ ((targetId == null) ? 0 : targetId.hashCode());
+		result = prime * result
+				+ ((targetName == null) ? 0 : targetName.hashCode());
+		result = prime * result
+				+ ((targetNodeType == null) ? 0 : targetNodeType.hashCode());
+		result = prime * result
+				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
+		result = prime * result
+				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
+		result = prime * result
+				+ ((userName == null) ? 0 : userName.hashCode());
+		return result;
+	}
 
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NetworkEdgeAnnotation other = (NetworkEdgeAnnotation) obj;
+		if (annotationId == null) {
+			if (other.annotationId != null)
+				return false;
+		} else if (!annotationId.equals(other.annotationId))
+			return false;
+		if (annotationText == null) {
+			if (other.annotationText != null)
+				return false;
+		} else if (!annotationText.equals(other.annotationText))
+			return false;
+		if (createdBy == null) {
+			if (other.createdBy != null)
+				return false;
+		} else if (!createdBy.equals(other.createdBy))
+			return false;
+		if (createdDate == null) {
+			if (other.createdDate != null)
+				return false;
+		} else if (!createdDate.equals(other.createdDate))
+			return false;
+		if (networkId == null) {
+			if (other.networkId != null)
+				return false;
+		} else if (!networkId.equals(other.networkId))
+			return false;
+		if (objectType == null) {
+			if (other.objectType != null)
+				return false;
+		} else if (!objectType.equals(other.objectType))
+			return false;
+		if (sourceId == null) {
+			if (other.sourceId != null)
+				return false;
+		} else if (!sourceId.equals(other.sourceId))
+			return false;
+		if (sourceName == null) {
+			if (other.sourceName != null)
+				return false;
+		} else if (!sourceName.equals(other.sourceName))
+			return false;
+		if (targetId == null) {
+			if (other.targetId != null)
+				return false;
+		} else if (!targetId.equals(other.targetId))
+			return false;
+		if (targetName == null) {
+			if (other.targetName != null)
+				return false;
+		} else if (!targetName.equals(other.targetName))
+			return false;
+		if (targetNodeType == null) {
+			if (other.targetNodeType != null)
+				return false;
+		} else if (!targetNodeType.equals(other.targetNodeType))
+			return false;
+		if (updatedBy == null) {
+			if (other.updatedBy != null)
+				return false;
+		} else if (!updatedBy.equals(other.updatedBy))
+			return false;
+		if (updatedDate == null) {
+			if (other.updatedDate != null)
+				return false;
+		} else if (!updatedDate.equals(other.updatedDate))
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		return true;
+	}
 }

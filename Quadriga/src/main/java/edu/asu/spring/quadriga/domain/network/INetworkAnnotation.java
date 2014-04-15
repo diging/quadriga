@@ -26,6 +26,10 @@ public interface INetworkAnnotation {
 	
 	public abstract void setUserName(String userName);
 	
+	public abstract String getObjectType();
+	 
+	public abstract void setObjectType(String objectType);
+	
 	public abstract String getCreatedBy();
 	
 	public abstract void setCreatedBy(String createdBy);
@@ -41,8 +45,4 @@ public interface INetworkAnnotation {
 	public abstract Date getUpdatedDate();
 	
 	public abstract void setUpdatedDate(Date updatedDate);
-	
-	public abstract String getObjectType();
-	 
-	public abstract String setObjectType(String objectType);
 }

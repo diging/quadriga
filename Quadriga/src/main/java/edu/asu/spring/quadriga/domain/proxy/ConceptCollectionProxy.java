@@ -11,14 +11,9 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
-import edu.asu.spring.quadriga.domain.impl.workbench.Project;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 
 public class ConceptCollectionProxy implements IConceptCollection {
 

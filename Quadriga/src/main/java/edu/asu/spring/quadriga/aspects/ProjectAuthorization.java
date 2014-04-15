@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
@@ -67,9 +68,11 @@ public class ProjectAuthorization implements IAuthorization
 			if(userRoles.length>0)
 			{
 				roles = getAccessRoleList(userRoles);
-				List<ICollaborator> collaboratorList = project.getCollaborators();
-				for(ICollaborator collaborator : collaboratorList)
+				List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
+				
+				for(IProjectCollaborator projectCollaborator : projectCollaborators)
 				{
+					ICollaborator collaborator = projectCollaborator.getCollaborator();
 					//check if he is a collaborator to the project
 					collaboratorName = collaborator.getUserObj().getUserName();
 				
