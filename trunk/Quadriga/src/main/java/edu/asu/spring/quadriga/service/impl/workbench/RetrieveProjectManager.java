@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 @Service
 public class RetrieveProjectManager implements IRetrieveProjectManager 
@@ -26,6 +27,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	
 	@Autowired
 	private IDBConnectionRetrieveProjCollabManager databaseConnect;
+	
+	@Autowired
+	private IProjectShallowMapper projectShallowMapper;	
 	
 	@Autowired
 	private ICollaboratorRoleManager roleMapper;
