@@ -13,6 +13,8 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcep
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 
 public class ConceptCollectionProxy implements IConceptCollection {
@@ -215,11 +217,16 @@ public class ConceptCollectionProxy implements IConceptCollection {
 	 * Also sets the values of variables in {@link DictionaryProxy} to local {@link DictionaryP} object.
 	 */
 	private void setConceptCollectionDetails(){
-//		try{
-//			this.conceptCollection =  this.conceptCollectionManager.getCollectionDetails(this.conceptCollectionId,this.owner.getName());
-//		}catch(QuadrigaStorageException e){
-//			logger.error("Issue accessing database from Concept Collection proxy",e);
-//		}
+		try{
+			
+			 try {
+				this.conceptCollectionManager.getCollectionDetails(this.conceptCollection,this.owner.getName());
+			} catch (QuadrigaAccessException e) {
+				logger.error("Issue accessing database from Concept Collection proxy",e);
+			}
+		}catch(QuadrigaStorageException e){
+			logger.error("Issue accessing database from Concept Collection proxy",e);
+		}
 		
 		
 		this.conceptCollection.setConceptCollectionId(this.conceptCollectionId);
