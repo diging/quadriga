@@ -59,4 +59,20 @@ public interface INetwork
     public abstract List<IWorkspaceNetwork> getNetworkWorkspaces();
     
     public abstract void setNetworkWorkspaces(List<IWorkspaceNetwork> networkWorkspaces);
+    
+    public abstract String getCreatedBy();
+    
+    public abstract void setCreatedBy(String createdBy);
+    
+    public abstract Date getCreatedDate();
+    
+    public abstract void setCreatedDate(Date createdDate);
+    
+    public abstract String getUpdatedBy();
+    
+    public abstract void setUpdatedBy(String updatedBy);
+    
+    public abstract Date getUpdatedDate();
+    
+    public abstract void setUpdatedDate(Date updatedDate);
 }

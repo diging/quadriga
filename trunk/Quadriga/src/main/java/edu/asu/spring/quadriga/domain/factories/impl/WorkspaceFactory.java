@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 
 /**
  * @description  : Factory class for creating {@link WorkSpace}.
@@ -45,14 +45,14 @@ public class WorkspaceFactory implements IWorkspaceFactory
 		
 		clone.setOwner(owner);
 		
-		List<ICollaborator> collaborator = new ArrayList<ICollaborator>();
+		List<IWorkspaceCollaborator> collaborator = new ArrayList<IWorkspaceCollaborator>();
 		
-		for(ICollaborator collaboratorUser : workspace.getCollaborators())
+		for(IWorkspaceCollaborator workspaceCollaborator : workspace.getWorkspaceCollaborators())
 		{
-			collaborator.add(collaboratorUser);
+			collaborator.add(workspaceCollaborator);
 		}
 		
-		clone.setCollaborators(collaborator);
+		clone.setWorkspaceCollaborators(collaborator);
 		
 		return clone;
 	}
