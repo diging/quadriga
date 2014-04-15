@@ -303,6 +303,25 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
+	public WorkspaceDTO getWorkspaceDTO(String workspaceId) throws QuadrigaStorageException
+	{
+		WorkspaceDTO workspaceDTO = null;
+		try
+		{
+			workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+		}
+		catch(HibernateException e)
+		{
+			logger.error("Retrieve workspace details method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTO;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IBitStream> getBitStreams(String workspaceId, String username) throws QuadrigaAccessException, QuadrigaStorageException

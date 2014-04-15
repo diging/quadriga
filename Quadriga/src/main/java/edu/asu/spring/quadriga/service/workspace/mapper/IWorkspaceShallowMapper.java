@@ -26,4 +26,13 @@ public interface IWorkspaceShallowMapper {
 	public abstract List<IWorkSpace> getWorkSpaceList(String projectId)
 			throws QuadrigaStorageException;
 
+	/**
+	 * This class should get a {@link IWorkSpace} of domain class type {@link WorkSpaceProxy} for a {@link IWorkSpace} ID.
+	 * @param workspaceId									{@link IWorkSpace} ID of type {@link String}
+	 * @return												Returns {@link IWorkSpace} object of domain class typ {@link WorkSpaceProxy}
+	 * @throws QuadrigaStorageException						Throws the storage exception when the method has issues to access the database
+	 */
+	public abstract  IWorkSpace getWorkSpaceDetails(String workspaceId)
+			throws QuadrigaStorageException;
+
 }

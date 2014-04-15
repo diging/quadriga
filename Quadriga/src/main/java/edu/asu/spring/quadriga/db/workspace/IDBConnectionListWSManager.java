@@ -148,4 +148,7 @@ public interface IDBConnectionListWSManager {
 			throws QuadrigaStorageException;
 
 	public List<WorkspaceDTO> listWorkspaceDTO(String projectid) throws QuadrigaStorageException;
+
+	WorkspaceDTO getWorkspaceDTO(String workspaceId)
+			throws QuadrigaStorageException;
 }
