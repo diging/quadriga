@@ -9,17 +9,14 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceDictionaryFactory;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
-import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 
 @Service
@@ -33,7 +30,7 @@ public class ProjectDictionaryShallowMapper implements
 	private IUserManager userManager;
 	
 	@Autowired
-	private IRetrieveDictionaryManager dictionaryManager;
+	private IDictionaryManager dictionaryManager;
 	
 	@Autowired
 	private IProjectDictionaryFactory projectDictionaryFactory;

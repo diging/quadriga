@@ -16,7 +16,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDictionaryShallowMapper;
 
 @Service
@@ -29,7 +29,7 @@ public class WorkspaceDictionaryShallowMapper implements
 	private IUserManager userManager;
 	
 	@Autowired
-	private IRetrieveDictionaryManager dictionaryManager;
+	private IDictionaryManager dictionaryManager;
 	
 	@Autowired
 	private IWorkspaceDictionaryFactory wsDictionaryFactory;
