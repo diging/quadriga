@@ -33,6 +33,7 @@ public class WorkspaceDictionaryShallowMapper implements
 	
 	@Autowired
 	private IWorkspaceDictionaryFactory wsDictionaryFactory;
+	
 	@Override
 	public List<IWorkspaceDictionary> getWorkspaceDictionaryList(
 			IWorkSpace workspace, WorkspaceDTO workspaceDTO)
