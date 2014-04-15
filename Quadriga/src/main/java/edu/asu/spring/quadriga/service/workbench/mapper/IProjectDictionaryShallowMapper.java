@@ -1,0 +1,13 @@
+package edu.asu.spring.quadriga.service.workbench.mapper;
+
+import java.util.List;
+
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+
+public interface IProjectDictionaryShallowMapper {
+	public List<IProjectDictionary> getProjectDictionaryList(IProject project,ProjectDTO projectDTO) throws QuadrigaStorageException;
+
+}
