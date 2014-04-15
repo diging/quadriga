@@ -144,7 +144,7 @@
 								</a> --%>
 								
 								<input type="button" value="Show Inactive Workspace" 
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace'"> 	
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showinactiveworkspace'"> 	
 							
 							</c:otherwise>
 						</c:choose>

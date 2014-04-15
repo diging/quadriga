@@ -44,6 +44,16 @@ $("input[name='deselectAll']").button().click(function(){
 
 });
  
+$(function(){
+	
+	$("#dialog").dialog({
+	  buttons:{
+		  OK:function(){
+			 $(this).dialog("close");
+		  }  
+	   }	
+	});
+});
 
 </script> 
 
@@ -64,7 +74,11 @@ $("input[name='deselectAll']").button().click(function(){
 <%-- if no record is selected --%>
 
 <c:if test="${success == '0'}">
-<font color="red">${errmsg}</font>
+
+<div id="dialog" title="Oops!">
+ <p>${errmsg}</p>
+</div>
+
 <br>
 <input type="button" value="Select All" name="selectAll"> <input type="button" value="Deselect All" name="deselectAll">
 <form:form method="POST" modelAttribute="SearchResultBackBeanForm" 

@@ -256,10 +256,11 @@ public class ActivateWSController
 	}
 	
 	@RequestMapping(value="auth/workbench/{projectid}/showinactiveworkspace", method = RequestMethod.GET)
-	public String showInactiveWorkspaces(@PathVariable("projectId") String projectId, Principal principal, Model model) throws QuadrigaStorageException
+	public String showInactiveWorkspaces(@PathVariable("projectid") String projectId, Principal principal, Model model) throws QuadrigaStorageException
 	{
 		List<ModifyWorkspace> deactivatedWSList = workspaceFormManager.getDeactivatedWorkspaceList(projectId, principal.getName());
 		model.addAttribute("deactivatedWSList", deactivatedWSList);
+		model.addAttribute("projectid", projectId);
 		
 		return "auth/workbench/workspace/showInactiveWorkspace";
 	}
