@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -73,8 +74,8 @@ public class NetworksDTO implements Serializable {
     private List<NetworkAnnotationsDTO> networksAnnotationsDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networkDTO")
     private List<NetworkStatementsDTO> networkStamentesDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "networksDTO")
-    private List<NetworkWorkspaceDTO> networkWorkspaceDTOList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "networksDTO")
+    private NetworkWorkspaceDTO networkWorkspaceDTO;
     @JoinColumn(name = "networkowner",referencedColumnName = "username",insertable = false , updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
@@ -124,13 +125,13 @@ public class NetworksDTO implements Serializable {
 	}
 	
 	@XmlTransient
-	public List<NetworkWorkspaceDTO> getNetworkWorkspaceDTOList() {
-		return networkWorkspaceDTOList;
+	public NetworkWorkspaceDTO getNetworkWorkspaceDTO() {
+		return networkWorkspaceDTO;
 	}
 
-	public void setNetworkWorkspaceDTOList(
-			List<NetworkWorkspaceDTO> networkWorkspaceDTOList) {
-		this.networkWorkspaceDTOList = networkWorkspaceDTOList;
+	public void setNetworkWorkspaceDTO(
+			NetworkWorkspaceDTO networkWorkspaceDTO) {
+		this.networkWorkspaceDTO = networkWorkspaceDTO;
 	}
 
 	public QuadrigaUserDTO getQuadrigaUserDTO() {

@@ -56,9 +56,9 @@ public interface INetwork
 
 	public abstract void setAssignedUser(String assignedUser);
 
-    public abstract List<IWorkspaceNetwork> getNetworkWorkspaces();
+    public abstract IWorkspaceNetwork getNetworkWorkspace();
     
-    public abstract void setNetworkWorkspaces(List<IWorkspaceNetwork> networkWorkspaces);
+    public abstract void setNetworkWorkspace(IWorkspaceNetwork networkWorkspace);
     
     public abstract String getCreatedBy();
     
