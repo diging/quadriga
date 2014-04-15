@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.workbench.domain.factory;
+package edu.asu.spring.quadriga.domain.factory.workbench;
 
 import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 

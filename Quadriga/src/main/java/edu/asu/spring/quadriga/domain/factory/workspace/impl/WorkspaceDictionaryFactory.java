@@ -1,9 +1,12 @@
-package edu.asu.spring.quadriga.workspace.domain.factory.impl;
+package edu.asu.spring.quadriga.domain.factory.workspace.impl;
 
+import org.springframework.stereotype.Service;
+
+import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceDictionaryFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
-import edu.asu.spring.quadriga.workspace.domain.factory.IWorkspaceDictionaryFactory;
 
+@Service
 public class WorkspaceDictionaryFactory implements IWorkspaceDictionaryFactory {
 
 	@Override
