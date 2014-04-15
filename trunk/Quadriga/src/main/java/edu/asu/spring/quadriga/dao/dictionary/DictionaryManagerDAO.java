@@ -580,6 +580,40 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	}
 	
 	/**
+	 * 
+	 * 
+	 * 
+	 */
+	@Override
+	public IDictionary getDictionaryDetails(String userName)
+			throws QuadrigaStorageException {
+
+		DictionaryDTO dictDTO = null;
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("DictionaryDTO.findAll");
+		dictDTO = (DictionaryDTO) query.uniqueResult();
+		IDictionary dictionary = dictionaryDTOMapper.getDictionary(dictDTO);
+		return dictionary;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DictionaryDTO> getDictionaryDTOList(String userName)
+			throws QuadrigaStorageException {
+
+		List<DictionaryDTO> dictionaryDTOList = null;
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("from DictionaryDTO dictionary where dictionary.username =: userName");
+		query.setParameter("userName",userName);
+		dictionaryDTOList = query.list();
+		return dictionaryDTOList;
+	}
+
+	/**
 	 * This method retrieves the collaborators associated with given dictionary
 	 * @param : dictionaryid - dictionary id
 	 * @throws : QuadrigaStorageException
@@ -602,4 +636,6 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		}
 		return collaborators;
 	}
+
+	
 }

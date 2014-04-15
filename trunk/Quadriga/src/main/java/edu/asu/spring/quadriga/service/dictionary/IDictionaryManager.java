@@ -30,6 +30,16 @@ public interface IDictionaryManager {
 	 */
 	public abstract List<IDictionary> getDictionariesList(String sUserId)
 			throws QuadrigaStorageException;
+	
+	
+	/**
+	 * @throws QuadrigaStorageException 
+	 * 
+	 * 
+	 * 
+	 */
+	public abstract IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException;
+	
 
 	/**
 	 * Adding a new item to a dictionary 
