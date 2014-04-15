@@ -14,6 +14,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
 /**
  * Class implements {@link IListWSManager} to
@@ -30,6 +31,9 @@ public class ListWSManager implements IListWSManager
 	@Autowired
 	private IDBConnectionListWSManager dbConnect;
 	
+	@Autowired
+	private IWorkspaceShallowMapper workspaceShallowMapper;
+	
 	/**
 	 * This will list all the workspaces associated
 	 * with the project.
@@ -45,6 +49,17 @@ public class ListWSManager implements IListWSManager
 	{
 		List<IWorkSpace> workspaceList;
 		workspaceList = dbConnect.listWorkspace(projectid,user);
+		return workspaceList;
+	}
+	
+	
+	
+	@Override
+	@Transactional
+	public List<IWorkSpace> listWorkspace(String projectid) throws QuadrigaStorageException
+	{
+		List<IWorkSpace> workspaceList;
+		workspaceList = workspaceShallowMapper.getWorkSpaceList(projectid);
 		return workspaceList;
 	}
 	

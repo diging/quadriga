@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
@@ -33,6 +34,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 	 * {@inheritDoc}
 	*/
 	@Override
+	@Transactional
 	public List<IProject> getProjectList(String userName) throws QuadrigaStorageException{
 		List<ProjectDTO> projectDTOList = dbConnect.getProjectDTOList(userName);
 		List<IProject> projectList = null;

@@ -78,6 +78,29 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<WorkspaceDTO> listWorkspaceDTO(String projectid) throws QuadrigaStorageException
+	{
+		List<WorkspaceDTO> workspaceDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork where projWork.projectDTO.projectid =:projectid"); 
+			query.setParameter("projectid", projectid);
+			workspaceDTOList = query.list();
+
+		}
+		catch(HibernateException e)
+		{
+			logger.error("List workspace method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTOList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String username) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList = null;

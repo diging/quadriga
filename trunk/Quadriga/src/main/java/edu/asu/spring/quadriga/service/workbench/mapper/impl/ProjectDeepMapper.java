@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.workbench.mapper.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
@@ -30,6 +31,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 	 * {@inheritDoc}
 	*/
 	@Override
+	@Transactional
 	public IProject getProjectDetails(String projectId) throws QuadrigaStorageException{
 		ProjectDTO projectDTO = dbConnect.getProjectDTO(projectId);
 		IProject project = null;
