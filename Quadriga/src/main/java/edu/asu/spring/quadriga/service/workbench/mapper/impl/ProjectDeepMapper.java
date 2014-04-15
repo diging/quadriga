@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.workbench.mapper.impl;
+package edu.asu.spring.quadriga.service.workbench.mapper.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,8 +9,8 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.impl.workbench.mapper.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 
 public class ProjectDeepMapper implements IProjectDeepMapper {
 
