@@ -60,6 +60,12 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		}
 	}
 	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * Uses Hibernate to get {@link ProjectDTO} of a {@link IProject} ID. 
+	 */
 	@Override
 	public ProjectDTO getProjectDTO(String projectId) throws QuadrigaStorageException 
 	{
