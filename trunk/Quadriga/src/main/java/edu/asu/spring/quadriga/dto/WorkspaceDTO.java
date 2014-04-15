@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -104,6 +105,10 @@ public class WorkspaceDTO implements Serializable {
    
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "workspaceDTO")
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    private NetworkWorkspaceDTO workspaceNetworkDTO; 
+    
 
 
     public WorkspaceDTO() {
@@ -266,8 +271,16 @@ public class WorkspaceDTO implements Serializable {
     public void setProjectWorkspaceDTOList(List<ProjectWorkspaceDTO> projectWorkspaceDTOList) {
         this.projectWorkspaceDTOList = projectWorkspaceDTOList;
     }
+    
+    public NetworkWorkspaceDTO getWorkspaceNetworkDTO() {
+		return workspaceNetworkDTO;
+	}
 
-    @Override
+	public void setWorkspaceNetworkDTO(NetworkWorkspaceDTO workspaceNetworkDTO) {
+		this.workspaceNetworkDTO = workspaceNetworkDTO;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (workspaceid != null ? workspaceid.hashCode() : 0);

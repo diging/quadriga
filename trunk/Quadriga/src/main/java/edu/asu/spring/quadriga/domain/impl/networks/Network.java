@@ -21,7 +21,7 @@ public class Network implements INetwork
 	private int versionNumber;
 	private List<INetworkNodeInfo> networkNodes;
 	private String assignedUser;
-	private List<IWorkspaceNetwork> networkWorkspaces;
+	private IWorkspaceNetwork networkWorkspace;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -126,16 +126,17 @@ public class Network implements INetwork
 	public void setAssignedUser(String assignedUser) {
         this.assignedUser = assignedUser;
 	}
-
+	
 	@Override
-	public List<IWorkspaceNetwork> getNetworkWorkspaces() {
-		return networkWorkspaces;
+	public IWorkspaceNetwork getNetworkWorkspace() {
+		return networkWorkspace;
 	}
 
 	@Override
-	public void setNetworkWorkspaces(List<IWorkspaceNetwork> networkWorkspaces) {
-       this.networkWorkspaces = networkWorkspaces;
+	public void setNetworkWorkspace(IWorkspaceNetwork networkWorkspace) {
+           this.networkWorkspace = networkWorkspace;		
 	}
+
 
 	@Override
 	public String getCreatedBy() {
@@ -198,8 +199,7 @@ public class Network implements INetwork
 				+ ((networkNodes == null) ? 0 : networkNodes.hashCode());
 		result = prime
 				* result
-				+ ((networkWorkspaces == null) ? 0 : networkWorkspaces
-						.hashCode());
+				+ ((networkWorkspace == null) ? 0 : networkWorkspace.hashCode());
 		result = prime * result
 				+ ((networksAccess == null) ? 0 : networksAccess.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -261,10 +261,10 @@ public class Network implements INetwork
 				return false;
 		} else if (!networkNodes.equals(other.networkNodes))
 			return false;
-		if (networkWorkspaces == null) {
-			if (other.networkWorkspaces != null)
+		if (networkWorkspace == null) {
+			if (other.networkWorkspace != null)
 				return false;
-		} else if (!networkWorkspaces.equals(other.networkWorkspaces))
+		} else if (!networkWorkspace.equals(other.networkWorkspace))
 			return false;
 		if (networksAccess != other.networksAccess)
 			return false;
@@ -292,6 +292,9 @@ public class Network implements INetwork
 			return false;
 		return true;
 	}
+
+
+
 
 	
 }
