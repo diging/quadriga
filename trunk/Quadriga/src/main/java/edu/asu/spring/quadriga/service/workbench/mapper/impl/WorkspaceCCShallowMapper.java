@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.proxy.ConceptCollectionProxy;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
@@ -17,7 +18,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IWorkspaceCCShallowMapper;
-import edu.asu.spring.quadriga.workspace.domain.factory.IWorkspaceConceptCollectionFactory;
 
 @Service
 public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {

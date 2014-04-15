@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceDictionaryFactory;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
@@ -17,7 +18,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IWorkspaceDictionaryShallowMapper;
-import edu.asu.spring.quadriga.workspace.domain.factory.IWorkspaceDictionaryFactory;
 
 @Service
 public class WorkspaceDictionaryShallowMapper implements
