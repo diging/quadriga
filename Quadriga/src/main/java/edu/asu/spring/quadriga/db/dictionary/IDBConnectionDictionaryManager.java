@@ -6,6 +6,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -198,6 +199,10 @@ public interface IDBConnectionDictionaryManager {
 	 */
 	public abstract String getDictionaryOwner(String dictionaryId)
 			throws QuadrigaStorageException;
+	
+	public abstract IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException;
+	
+	public abstract List<DictionaryDTO> getDictionaryDTOList(String userName) throws QuadrigaStorageException;
 	
 	public abstract int setupTestEnvironment(String sQuery) throws QuadrigaStorageException;
 

@@ -128,6 +128,23 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryList;
 	}
+	
+	/**
+	 * @throws QuadrigaStorageException 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	@Override
+	public IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException {
+		
+		IDictionary dictionary = dbConnect.getDictionaryDetails(userName);
+		return dictionary;
+	}
+
+	
+	
 
 	/**
 	 * Checks for user permission on dictionary
@@ -620,4 +637,5 @@ public class DictionaryManager implements IDictionaryManager {
 		return core.toString(1);
 	}
 
+	
 }
