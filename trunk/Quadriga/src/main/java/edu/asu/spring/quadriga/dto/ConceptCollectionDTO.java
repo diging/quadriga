@@ -73,7 +73,7 @@ public class ConceptCollectionDTO implements Serializable {
     private List<ProjectConceptCollectionDTO> projConceptCollectionDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conceptCollectionDTO")
     private List<WorkspaceConceptcollectionDTO> wsConceptCollectionDTOList;
-	@JoinColumn(name = "collectionowner", referencedColumnName = "username")
+	@JoinColumn(name = "collectionowner", referencedColumnName = "username",insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO collectionowner;
 

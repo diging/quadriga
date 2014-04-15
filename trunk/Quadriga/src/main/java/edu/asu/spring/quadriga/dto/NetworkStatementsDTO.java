@@ -172,5 +172,93 @@ public class NetworkStatementsDTO implements Serializable {
     public void setVersion(int version) {
         this.version = version;
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((createdby == null) ? 0 : createdby.hashCode());
+		result = prime * result
+				+ ((createddate == null) ? 0 : createddate.hashCode());
+		result = prime * result + istop;
+		result = prime * result
+				+ ((networkDTO == null) ? 0 : networkDTO.hashCode());
+		result = prime * result
+				+ ((networkid == null) ? 0 : networkid.hashCode());
+		result = prime * result + ((rowid == null) ? 0 : rowid.hashCode());
+		result = prime * result
+				+ ((statementid == null) ? 0 : statementid.hashCode());
+		result = prime * result
+				+ ((statementtype == null) ? 0 : statementtype.hashCode());
+		result = prime * result
+				+ ((updatedby == null) ? 0 : updatedby.hashCode());
+		result = prime * result
+				+ ((updateddate == null) ? 0 : updateddate.hashCode());
+		result = prime * result + version;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NetworkStatementsDTO other = (NetworkStatementsDTO) obj;
+		if (createdby == null) {
+			if (other.createdby != null)
+				return false;
+		} else if (!createdby.equals(other.createdby))
+			return false;
+		if (createddate == null) {
+			if (other.createddate != null)
+				return false;
+		} else if (!createddate.equals(other.createddate))
+			return false;
+		if (istop != other.istop)
+			return false;
+		if (networkDTO == null) {
+			if (other.networkDTO != null)
+				return false;
+		} else if (!networkDTO.equals(other.networkDTO))
+			return false;
+		if (networkid == null) {
+			if (other.networkid != null)
+				return false;
+		} else if (!networkid.equals(other.networkid))
+			return false;
+		if (rowid == null) {
+			if (other.rowid != null)
+				return false;
+		} else if (!rowid.equals(other.rowid))
+			return false;
+		if (statementid == null) {
+			if (other.statementid != null)
+				return false;
+		} else if (!statementid.equals(other.statementid))
+			return false;
+		if (statementtype == null) {
+			if (other.statementtype != null)
+				return false;
+		} else if (!statementtype.equals(other.statementtype))
+			return false;
+		if (updatedby == null) {
+			if (other.updatedby != null)
+				return false;
+		} else if (!updatedby.equals(other.updatedby))
+			return false;
+		if (updateddate == null) {
+			if (other.updateddate != null)
+				return false;
+		} else if (!updateddate.equals(other.updateddate))
+			return false;
+		if (version != other.version)
+			return false;
+		return true;
+	}
+    
     
 }

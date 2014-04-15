@@ -25,9 +25,6 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-//import org.hibernate.annotations.OnDelete;
-//import org.hibernate.annotations.OnDeleteAction;
-
 /**
  *This class represents the column mappings for workspace table.
  * @author Karthik
@@ -83,7 +80,7 @@ public class WorkspaceDTO implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
 	
-    @JoinColumn(name = "workspaceowner", referencedColumnName = "username")
+    @JoinColumn(name = "workspaceowner", referencedColumnName = "username",insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO workspaceowner;
    
@@ -106,7 +103,6 @@ public class WorkspaceDTO implements Serializable {
     private List<WorkspaceEditorDTO> workspaceEditorDTOList;
    
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "workspaceDTO")
-//    @OnDelete(action=OnDeleteAction.NO_ACTION)
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
 
 
