@@ -332,8 +332,9 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 			
 			
 		}
-		j1.put("text", ja);
-		jsonAnnotations = j1.toString();
+		//j1.put("text", ja);
+		//jsonAnnotations = j1.toString();
+		jsonAnnotations = ja.toString();
 		return jsonAnnotations;
 		
 	}
