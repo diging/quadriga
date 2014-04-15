@@ -44,4 +44,6 @@ public interface IListWSManager {
 	List<IWorkSpace> listWorkspaceOfCollaborator(String projectid, String user)
 			throws QuadrigaStorageException;
 
+	public List<IWorkSpace> listWorkspace(String projectid) throws QuadrigaStorageException;
+	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -146,4 +147,5 @@ public interface IDBConnectionListWSManager {
 	public abstract List<IWorkSpace> getWorkspaceByConceptCollection(String ccId)
 			throws QuadrigaStorageException;
 
+	public List<WorkspaceDTO> listWorkspaceDTO(String projectid) throws QuadrigaStorageException;
 }
