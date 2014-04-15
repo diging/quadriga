@@ -296,7 +296,8 @@ public class HomeController {
 		
 		boolean atLeastOneTrue = false;
 		int count = 0;
-						
+		
+		try{
 		List<SearchResultBackBean> backBeanSearchResults = searchResultBackBeanForm.getSearchResultList();
 				
 			for(SearchResultBackBean resultBackBean: backBeanSearchResults)
@@ -305,23 +306,21 @@ public class HomeController {
 				{
 					userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);					
 					atLeastOneTrue = true;
-					//count++;
 				}
-				//else
-					//atLeastOneTrue = false;
 				
-				/*if(atLeastOneTrue)
-				{
-					userProfileManager.addUserProfile(principal.getName(), serviceid, resultBackBean);					
-				}*/
 			}
+		}
+		catch(QuadrigaStorageException ex){
+			
+			System.out.println(ex);
+		}
 			
 			if(!atLeastOneTrue)
 			{
 				model.addAttribute("ServiceBackBean", serviceBackBean);
 				model.addAttribute("serviceNameIdMap", serviceRegistry.getServiceNameIdMap());
 				model.addAttribute("success",2);
-				model.addAttribute("errmsg", "please select some record");
+				model.addAttribute("errmsg", "please select at least one entry from table");
 				return "auth/home/profile";
 			}
 		

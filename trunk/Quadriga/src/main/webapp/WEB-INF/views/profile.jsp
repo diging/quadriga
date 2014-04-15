@@ -44,6 +44,16 @@ $("input[name='deselectAll']").button().click(function(){
 
 });
 
+$(function() {
+    $( "#dialog" ).dialog({
+    buttons: {
+    	OK: function(){
+    		$(this).dialog("close");	
+    	}
+      }		
+   }); 
+ });
+
 </script> 
 
 <head>
@@ -130,7 +140,7 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 
 <c:otherwise>
 	<c:if test="${success == '2'}">
-	<font color="red">${errmsg}</font>
+	
 	<%--<c:if test="${not empty searchResultList}">   why after putting this condition error message gets displayed twice--%>   
 		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
@@ -168,11 +178,19 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 			</table>
 		 </form:form>
 	 </c:if>
+	   
+	<%--  <div id="dialog" title="Oops!"> 
+		<p>${errmsg}</p>
+	 </div> --%>
+	
 </c:otherwise>
 </c:choose>
 
 <c:if test="${success == '2'}">
 	<font color="red">${errmsg}</font>
+	<div id="dialog" title="Oops!">
+		<p>${errmsg}</p>
+	</div>
 </c:if>
 
 			
