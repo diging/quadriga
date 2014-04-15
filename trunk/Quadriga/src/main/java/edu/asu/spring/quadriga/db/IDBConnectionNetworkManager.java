@@ -5,6 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionNetworkManager {
@@ -130,6 +131,9 @@ public interface IDBConnectionNetworkManager {
 			throws QuadrigaStorageException;
 	
 	List<INetwork> getNetworkOfOwner(IUser user) 
+			throws QuadrigaStorageException;
+
+	NetworksDTO getNetworksDTO(String networkId)
 			throws QuadrigaStorageException;
 
 }

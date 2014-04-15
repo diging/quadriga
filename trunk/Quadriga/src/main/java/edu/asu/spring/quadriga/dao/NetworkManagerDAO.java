@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
@@ -30,6 +31,7 @@ import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
@@ -73,6 +75,31 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManagerDAO.class);
 
+	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * Uses Hibernate to get {@link NetworkDTO} of a {@link INetwork} ID. 
+	 */
+	@Override
+	public NetworksDTO getNetworksDTO(String networkId) throws QuadrigaStorageException 
+	{
+		NetworksDTO networksDTO = null;
+		try
+		{
+			networksDTO = (NetworksDTO) sessionFactory.getCurrentSession().get(NetworksDTO.class, networkId);
+			return networksDTO;
+		}
+		catch(Exception e)
+		{
+			logger.info("getNetworksDTO error :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+	}
+	
+	
+	
 	/**
 	 * Add a new network into a workspace. Creates a unique Network ID  and assigns the user as owner to the network object. 
 	 * It then adds the network into the Workspace. The method uses Hibernate Framework to perform the database operations.
