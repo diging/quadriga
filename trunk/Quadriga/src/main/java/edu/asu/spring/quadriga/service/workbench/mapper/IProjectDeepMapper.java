@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.impl.workbench.mapper.impl;
+package edu.asu.spring.quadriga.service.workbench.mapper;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
