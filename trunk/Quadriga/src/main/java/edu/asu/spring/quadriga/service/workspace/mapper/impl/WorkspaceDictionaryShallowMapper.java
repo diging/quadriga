@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workbench.mapper.impl;
+package edu.asu.spring.quadriga.service.workspace.mapper.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.mapper.IWorkspaceDictionaryShallowMapper;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDictionaryShallowMapper;
 
 @Service
 public class WorkspaceDictionaryShallowMapper implements
