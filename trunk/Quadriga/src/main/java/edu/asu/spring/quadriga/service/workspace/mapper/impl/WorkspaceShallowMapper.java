@@ -82,7 +82,8 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 			workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 			workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 			workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-			// TODO 
+			// TODO : there is a bug in WorkspaceDTO, it returns a List of ProjectWorkspaceDTO. W
+			// We need only one ProjectWorkspaceDTO object
 			//workspaceProxy.setProject();
 		}
 		
