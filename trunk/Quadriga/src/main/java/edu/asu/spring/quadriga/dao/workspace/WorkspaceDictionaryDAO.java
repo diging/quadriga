@@ -88,36 +88,59 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 		}
 	}
 
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public List<IDictionary> listWorkspaceDictionary(String workspaceId,
+//			String userId) throws QuadrigaStorageException 
+//	{
+//		WorkspaceDTO workspace = null;
+//		List<WorkspaceDictionaryDTO> workspaceDictionaryList = null;
+//		IDictionary dictionary = null;
+//		DictionaryDTO dictionaryDTO = null;
+//		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+//		
+//		try
+//		{
+//			workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+//			workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
+//			for(WorkspaceDictionaryDTO workspaceDictionary : workspaceDictionaryList)
+//			{
+//				dictionaryDTO = workspaceDictionary.getDictionaryDTO();
+//				dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
+//				dictionaryList.add(dictionary);
+//			}
+//		}
+//		catch(Exception ex)
+//		{
+//			throw new QuadrigaStorageException();
+//		}
+//		
+//		return dictionaryList;
+//	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<IDictionary> listWorkspaceDictionary(String workspaceId,
+	public WorkspaceDTO listWorkspaceDictionary(String workspaceId,
 			String userId) throws QuadrigaStorageException 
 	{
-		WorkspaceDTO workspace = null;
-		List<WorkspaceDictionaryDTO> workspaceDictionaryList = null;
-		IDictionary dictionary = null;
-		DictionaryDTO dictionaryDTO = null;
-		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+		WorkspaceDTO workspaceDTO = null;
+		
 		
 		try
 		{
-			workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
-			for(WorkspaceDictionaryDTO workspaceDictionary : workspaceDictionaryList)
-			{
-				dictionaryDTO = workspaceDictionary.getDictionaryDTO();
-				dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
-				dictionaryList.add(dictionary);
-			}
+			workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+			
 		}
 		catch(Exception ex)
 		{
 			throw new QuadrigaStorageException();
 		}
 		
-		return dictionaryList;
+		return workspaceDTO;
 	}
 	
 	/**

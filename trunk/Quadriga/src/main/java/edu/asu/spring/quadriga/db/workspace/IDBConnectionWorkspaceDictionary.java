@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionWorkspaceDictionary {
@@ -25,7 +26,7 @@ public interface IDBConnectionWorkspaceDictionary {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionary> listWorkspaceDictionary(String workspaceId, String userId)
+	public abstract WorkspaceDTO listWorkspaceDictionary(String workspaceId, String userId)
 			throws QuadrigaStorageException;
 
 	/**

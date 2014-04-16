@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.service.workspace;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWorkspaceCCManager {
@@ -19,12 +21,13 @@ public interface IWorkspaceCCManager {
 	
 	/**
 	 * List the concept collection in a project for a user - userId
-	 * @param workspaceId
+	 * @param workspace
 	 * @param userId
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IConceptCollection> listWorkspaceCC(String workspaceId,String userId)throws QuadrigaStorageException;
+	public abstract List<IWorkspaceConceptCollection> listWorkspaceCC(IWorkSpace workspace,
+			String userId) throws QuadrigaStorageException;
 
 	/**
 	 * Delete the concept collection in a project for a user - userId

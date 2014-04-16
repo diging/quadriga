@@ -8,14 +8,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceCC;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.impl.WorkspaceCCShallowMapper;
 
 @Service
 public class WorkspaceCCManager implements IWorkspaceCCManager {
 
 	@Autowired
 	private IDBConnectionWorkspaceCC dbConnect;
+	
+	@Autowired
+	private WorkspaceCCShallowMapper wsCCShallowMapper;
 	
 	@Override
 	@Transactional
@@ -27,10 +34,11 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 
 	@Override
 	@Transactional
-	public List<IConceptCollection> listWorkspaceCC(String workspaceId,
+	public List<IWorkspaceConceptCollection> listWorkspaceCC(IWorkSpace workspace,
 			String userId) throws QuadrigaStorageException {
-		List<IConceptCollection> conceptConnectionList = dbConnect.listWorkspaceCC(workspaceId, userId);
-		return conceptConnectionList;
+		WorkspaceDTO workspaceDTO  = dbConnect.listWorkspaceCC(workspace.getWorkspaceId(), userId);
+		List<IWorkspaceConceptCollection> wsCCList = wsCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO);
+		return wsCCList;
 	}
 	
 	@Override

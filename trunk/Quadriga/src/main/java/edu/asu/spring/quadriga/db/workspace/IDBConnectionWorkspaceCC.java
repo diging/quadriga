@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionWorkspaceCC {
@@ -24,7 +25,7 @@ public interface IDBConnectionWorkspaceCC {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IConceptCollection> listWorkspaceCC(String workspaceId, String userId)
+	public abstract WorkspaceDTO listWorkspaceCC(String workspaceId, String userId)
 			throws QuadrigaStorageException;
 
 	/**
