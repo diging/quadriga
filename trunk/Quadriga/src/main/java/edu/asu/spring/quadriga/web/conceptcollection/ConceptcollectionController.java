@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -40,8 +38,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.network.INetworkManager;
-import edu.asu.spring.quadriga.service.network.impl.NetworkManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -346,7 +342,7 @@ public class ConceptcollectionController {
 				conceptControllerManager.deleteItem(id, collection.getConceptCollectionId(),principal.getName());
 				concept = conceptFactory.createConceptObject();
 				concept.setConceptId(id);
-				collection.getConcepts().remove(collection.getConcepts().indexOf(concept));
+				collection.getConceptCollectionConcepts().remove(collection.getConceptCollectionConcepts().indexOf(concept));
 
 			}
 		}

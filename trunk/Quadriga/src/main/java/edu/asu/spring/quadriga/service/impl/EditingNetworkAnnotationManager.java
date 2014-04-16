@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.impl.networks.NetworkAnnotation;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkEdgeAnnotation;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkNodeAnnotation;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkRelationAnnotation;
@@ -26,7 +24,6 @@ import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
-import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -249,7 +246,7 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	}
 
 	@Override
-	public List<NetworksAnnotationsDTO> getAnnotationOfEdge(String id,
+	public List<NetworkAnnotationsDTO> getAnnotationOfEdge(String id,
 			String userid, String networkId) throws QuadrigaStorageException {
 		return null;
 	}

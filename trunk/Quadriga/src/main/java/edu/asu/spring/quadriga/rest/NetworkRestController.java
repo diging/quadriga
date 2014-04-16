@@ -31,7 +31,6 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.impl.networks.NetworkAnnotation;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
@@ -688,7 +687,7 @@ public class NetworkRestController {
 				//networkManager.archiveNetwork(networkId);
 				editorManager.updateNetworkStatus(networkId, INetworkStatus.PENDING);
 				int latestVersion = networkManager.getLatestVersionOfNetwork(networkId) +1;
-				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getWorkspaceid(), INetworkManager.UPDATENETWORK, networkId,latestVersion);
+				networkId=networkManager.storeNetworkDetails(res, user, networkName, network.getNetworkWorkspace().getWorkspace().getWorkspaceId(), INetworkManager.UPDATENETWORK, networkId,latestVersion);
 
 				if(networkId.endsWith(INetworkManager.DSPACEERROR)){
 					response.setStatus(404);

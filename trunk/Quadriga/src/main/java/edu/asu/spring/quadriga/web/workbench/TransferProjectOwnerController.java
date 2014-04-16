@@ -19,11 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -70,7 +70,7 @@ public class TransferProjectOwnerController
 	{
 		ModelAndView model;
 		IProject project;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IProjectCollaborator> projectcollaborators = new ArrayList<IProjectCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		//create a view
@@ -87,11 +87,11 @@ public class TransferProjectOwnerController
 			model.getModelMap().put("projectid", projectid);
 			
 			//fetch the collaborators
-			collaboratingUser = project.getCollaborators();
+			projectcollaborators = project.getProjectCollaborators();
 			
-			for(ICollaborator collabuser : collaboratingUser)
+			for(IProjectCollaborator projectCollaborator : projectcollaborators)
 			{
-				userList.add(collabuser.getUserObj());
+				userList.add(projectCollaborator.getCollaborator().getUserObj());
 			}
 			
 			model.getModelMap().put("collaboratinguser", userList);
@@ -121,7 +121,7 @@ public class TransferProjectOwnerController
 		String newOwner;
 		String collaboratorRole;
 		IProject project;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IProjectCollaborator> projectCollaborators = new ArrayList<IProjectCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		//create a view
@@ -142,11 +142,11 @@ public class TransferProjectOwnerController
 				model.getModelMap().put("projectowner", project.getOwner().getUserName());
 				
 				//fetch the collaborators
-				collaboratingUser = project.getCollaborators();
+				projectCollaborators = project.getProjectCollaborators();
 				
-				for(ICollaborator collabuser : collaboratingUser)
+				for(IProjectCollaborator projectCollaborator : projectCollaborators)
 				{
-					userList.add(collabuser.getUserObj());
+					userList.add(projectCollaborator.getCollaborator().getUserObj());
 				}
 				
 				model.getModelMap().put("collaboratinguser", userList);

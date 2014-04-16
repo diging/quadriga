@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManag
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
@@ -179,11 +180,11 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) throws QuadrigaStorageException{
 		IProject project = dbConnect.getProjectDetailsByUnixName(unixName);
 		
-		List<ICollaborator> collaborators = project.getCollaborators();
+		List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
 		List<String> collaboratorNames = new ArrayList<String>();
-		Iterator<ICollaborator> collabIterator = collaborators.iterator();
-		while(collabIterator.hasNext()){
-			String collab = collabIterator.next().getUserObj().getName();
+		Iterator<IProjectCollaborator> projectCollabIterator = projectCollaborators.iterator();
+		while(projectCollabIterator.hasNext()){
+			String collab = projectCollabIterator.next().getCollaborator().getUserObj().getName();
 			collaboratorNames.add(collab);
 		}
 		String access = project.getProjectAccess().toString();

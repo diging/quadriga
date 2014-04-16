@@ -465,7 +465,7 @@ public class ConceptCollectionRestController {
 					.getTemplate("velocitytemplates/conceptdetails.vm");
 			VelocityContext context = new VelocityContext(
 					restVelocityFactory.getVelocityContext());
-			context.put("list", collection.getConcepts());
+			context.put("list", collection.getConceptCollectionConcepts());
 			context.put("conceptPowerURL", conceptPowerURL);
 			context.put("path", updateConceptPowerURLPath);
 			template.merge(context, sw);
