@@ -34,7 +34,7 @@ public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
 	private IWorkspaceConceptCollectionFactory wsCCFactory;
 
 	@Override
-	public List<IWorkspaceConceptCollection> getProjectWorkspaceList(
+	public List<IWorkspaceConceptCollection> getWorkspaceCCList(
 			IWorkSpace workspace,WorkspaceDTO workspaceDTO) throws QuadrigaStorageException {
 		List<IWorkspaceConceptCollection> workspaceCCList = null;
 		if(workspace != null){

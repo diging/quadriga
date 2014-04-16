@@ -8,6 +8,6 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWorkspaceCCShallowMapper {
-	public abstract List<IWorkspaceConceptCollection> getProjectWorkspaceList(IWorkSpace workspace,WorkspaceDTO workspaceDTO) throws QuadrigaStorageException;
+	public abstract List<IWorkspaceConceptCollection> getWorkspaceCCList(IWorkSpace workspace,WorkspaceDTO workspaceDTO) throws QuadrigaStorageException;
 
 }
