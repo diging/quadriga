@@ -8,7 +8,6 @@ import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
-import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -29,9 +30,16 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDictionaryShallowMapper;
 
-public class WorkspaceDeepMapper  {
+/**
+ * This class would help in mapping {@link IWorkSpace} object with all the variables in it using {@link WorkspaceDTO}.
+ * @author Lohith Dwaraka
+ *
+ */
+@Service
+public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 
 	@Autowired
 	private IDBConnectionListWSManager dbConnect;
@@ -74,6 +82,10 @@ public class WorkspaceDeepMapper  {
 	private IUserManager userManager;
 	
 	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
 	public IWorkSpace getWorkSpaceDetails(String workspaceId) throws QuadrigaStorageException{
 
 		WorkspaceDTO workspaceDTO = dbConnect.getWorkspaceDTO(workspaceId);

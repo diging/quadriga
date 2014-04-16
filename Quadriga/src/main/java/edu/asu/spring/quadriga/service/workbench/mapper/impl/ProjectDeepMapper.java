@@ -24,7 +24,10 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallowMapper;
 
 public class ProjectDeepMapper implements IProjectDeepMapper {
 
@@ -45,6 +48,15 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 	
 	@Autowired
 	private ICollaboratorRoleManager roleMapper;
+	
+	@Autowired
+	private IProjectConceptCollectionShallowMapper projectConceptCollectionShallowMapper;
+	
+	@Autowired
+	private IProjectDictionaryShallowMapper projectDictionaryShallowMapper;
+	
+	@Autowired
+	private IProjectWorkspaceShallowMapper projectWorkspaceShallowMapper;
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
@@ -77,8 +89,16 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
 			project.setUpdatedDate(projectDTO.getUpdateddate());
-			// Adding List of IProjectCollaborators to the project
+			// Set List of IProjectCollaborators to the project
 			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));
+			// Set Project Concept Collections 
+			project.setProjectConceptCollections(projectConceptCollectionShallowMapper.getProjectConceptCollectionList(project, projectDTO));
+			// Set Project Dictionaries
+			project.setProjectDictionaries(projectDictionaryShallowMapper.getProjectDictionaryList(project, projectDTO));
+			// Set Project Workspaces
+			project.setProjectWorkspaces(projectWorkspaceShallowMapper.getProjectWorkspaceList(project, projectDTO)) ;
+			
+			
 		}
 
 		return project;
@@ -171,4 +191,6 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 		}
 		return userProjectCollaboratorMap;
 	}
+	
+
 }
