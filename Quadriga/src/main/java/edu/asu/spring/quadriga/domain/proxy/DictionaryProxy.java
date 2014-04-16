@@ -45,7 +45,6 @@ public class DictionaryProxy implements IDictionary {
 			this.dictionaryManager = dictionaryManager;
 		}
 		
-		
 		public IDictionaryManager getDictionaryManager() {
 			return dictionaryManager;
 		}
