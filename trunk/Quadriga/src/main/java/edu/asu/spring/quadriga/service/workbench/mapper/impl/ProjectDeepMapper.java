@@ -14,7 +14,10 @@ import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IProjectFactory;
+import edu.asu.spring.quadriga.domain.factory.workbench.IProjectCollaboratorFactory;
+import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -36,6 +39,9 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 
 	@Autowired
 	private IUserManager userManager;
+	
+	@Autowired
+	private IProjectCollaboratorFactory projectCollaboratorFactory;
 	
 	@Autowired
 	private ICollaboratorRoleManager roleMapper;
@@ -71,57 +77,98 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
 			project.setUpdatedDate(projectDTO.getUpdateddate());
+			// Adding List of IProjectCollaborators to the project
+			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));
 		}
 
 		return project;
 	}
 	
-	
-	public List<ICollaborator> getProjectCollaboratorList(ProjectDTO projectDTO) throws QuadrigaStorageException
+
+	/**
+	 * This class would help in getting {@link List} of {@link IProjectCollaborator} object mapping for a particular {@link IProject} and {@link ProjectDTO} 
+	 * @param projectDTO											{@link ProjectDTO} object used for mapping collaborators 
+	 * @param project												{@link IProject} object of domain class type {@link Project}
+	 * @return														Returns {@link List} of {@link IProjectCollaborator} object
+	 * @throws QuadrigaStorageException								Throws a storage issue when this method is having issues to access database.
+	 */
+	public List<IProjectCollaborator> getProjectCollaboratorList(ProjectDTO projectDTO,IProject project) throws QuadrigaStorageException
 	{
-		List<ICollaborator> projectCollaboratorList = new ArrayList<ICollaborator>();
+		List<IProjectCollaborator> projectCollaboratorList = null;
 		if(projectDTO.getProjectCollaboratorDTOList() != null && projectDTO.getProjectCollaboratorDTOList().size() > 0)
 		{
-			HashMap<String,List<String>> collabMap = mapUserRoles(projectDTO);
-			for(String userID:collabMap.keySet())
+			HashMap<String,IProjectCollaborator> userProjectCollaboratorMap = mapUserProjectCollaborator(projectDTO,project);
+			for(String userID:userProjectCollaboratorMap.keySet())
 			{
-				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
-				ICollaborator collaborator = collaboratorFactory.createCollaborator();
-				collaborator.setUserObj(userManager.getUserDetails(userID));
-				for(String roleName: collabMap.get(userID))
-				{
-					ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-					collaboratorRole.setRoleDBid(roleName);
-					collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
-					roleMapper.fillProjectCollaboratorRole(collaboratorRole);
-					collaboratorRoleList.add(collaboratorRole);
+				if(projectCollaboratorList == null){
+					projectCollaboratorList = new ArrayList<IProjectCollaborator>();
 				}
-				collaborator.setCollaboratorRoles(collaboratorRoleList);
-				projectCollaboratorList.add(collaborator);
+				projectCollaboratorList.add(userProjectCollaboratorMap.get(userID));
 			}
 		}
 		return projectCollaboratorList;
 	}
 	
-	public HashMap<String,List<String>> mapUserRoles(ProjectDTO projectDTO)
-	{
-		HashMap<String,List<String>> collabMap = new HashMap<String, List<String>>();
-		List<String> roleList = null;
+	public HashMap<String,IProjectCollaborator> mapUserProjectCollaborator(ProjectDTO projectDTO,IProject project)
+	{		
+		
+		HashMap<String, IProjectCollaborator> userProjectCollaboratorMap = new HashMap<String, IProjectCollaborator>();
 		
 		for(ProjectCollaboratorDTO projectCollaboratorDTO : projectDTO.getProjectCollaboratorDTOList())
 		{
 			String userName = projectCollaboratorDTO.getQuadrigaUserDTO().getUsername();
-			if(collabMap.containsKey(userName))
+			
+			if(userProjectCollaboratorMap.containsKey(userName))
 			{
-				collabMap.get(userName).add(projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole());
+				String roleName = projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole();
+				
+				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+				collaboratorRole.setRoleDBid(roleName);
+				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
+				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				
+				IProjectCollaborator projectCollaborator =userProjectCollaboratorMap.get(userName);
+				
+				ICollaborator collaborator = projectCollaborator.getCollaborator();
+				collaborator.getCollaboratorRoles().add(collaboratorRole);
+				
+				// Checking if there is a update latest then previous update date 
+				if(projectCollaboratorDTO.getUpdateddate().compareTo(projectCollaborator.getUpdatedDate()) > 0 ){
+					projectCollaborator.setUpdatedBy(projectCollaboratorDTO.getUpdatedby());
+					projectCollaborator.setUpdateDate(projectCollaboratorDTO.getUpdateddate());
+				}
+				
 			}
 			else
 			{
-				roleList = new ArrayList<String>();
-				roleList.add(projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole());
-				collabMap.put(userName,roleList);
+				String roleName = projectCollaboratorDTO.getProjectCollaboratorDTOPK().getCollaboratorrole();
+				// Prepare collaborator roles
+				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+				collaboratorRole.setRoleDBid(roleName);
+				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
+				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				// Create a Collaborator Role list
+				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+				// Add collaborator role to the list
+				collaboratorRoleList.add(collaboratorRole);
+				// Create a Collaborator
+				ICollaborator collaborator = collaboratorFactory.createCollaborator();
+				// Set Collaborator Role List to the Collaborator
+				collaborator.setCollaboratorRoles(collaboratorRoleList);
+				
+				// Create ProjectCollaborator object
+				IProjectCollaborator projectCollaborator = projectCollaboratorFactory.createProjectCollaboratorObject();
+				projectCollaborator.setCollaborator(collaborator);
+				projectCollaborator.setCreatedBy(projectCollaboratorDTO.getCreatedby());
+				projectCollaborator.setCreatedDate(projectCollaboratorDTO.getCreateddate());
+				projectCollaborator.setUpdatedBy(projectCollaboratorDTO.getUpdatedby());
+				projectCollaborator.setUpdateDate(projectCollaboratorDTO.getUpdateddate());
+				projectCollaborator.setProject(project);
+				
+				userProjectCollaboratorMap.put(userName, projectCollaborator);
+
 			}
 		}
-		return collabMap;
+		return userProjectCollaboratorMap;
 	}
 }
