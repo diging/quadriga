@@ -100,39 +100,75 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 		return errMsg;
 	}
 
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public List<IConceptCollection> listWorkspaceCC(String workspaceId, String userId) throws QuadrigaStorageException {
+//		List<IConceptCollection> conceptCollList = new ArrayList<IConceptCollection>();
+//		try
+//		{
+//			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+//			if(workspace == null)
+//			{
+//				return null;
+//			}
+//			List<WorkspaceConceptcollectionDTO> workspaceConceptCollection = workspace.getWorkspaceConceptCollectionDTOList();
+//			
+//			if(workspaceConceptCollection == null)
+//			{
+//				return null;
+//			}
+//			
+//			for(WorkspaceConceptcollectionDTO tempWSConceptCollection : workspaceConceptCollection)
+//			{
+//				ConceptCollectionDTO conceptCollectionDTO = tempWSConceptCollection.getConceptCollectionDTO();
+//				IConceptCollection conceptCollection = collectionMapper.getConceptCollection(conceptCollectionDTO);
+//				conceptCollList.add(conceptCollection);
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logger.error("listWorkspaceCC method :",e);
+//        	throw new QuadrigaStorageException();
+//		}
+//		return conceptCollList;
+//	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<IConceptCollection> listWorkspaceCC(String workspaceId, String userId) throws QuadrigaStorageException {
+	public WorkspaceDTO listWorkspaceCC(String workspaceId, String userId) throws QuadrigaStorageException {
 		List<IConceptCollection> conceptCollList = new ArrayList<IConceptCollection>();
+		WorkspaceDTO workspace = null;
 		try
 		{
-			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			if(workspace == null)
-			{
-				return null;
-			}
-			List<WorkspaceConceptcollectionDTO> workspaceConceptCollection = workspace.getWorkspaceConceptCollectionDTOList();
-			
-			if(workspaceConceptCollection == null)
-			{
-				return null;
-			}
-			
-			for(WorkspaceConceptcollectionDTO tempWSConceptCollection : workspaceConceptCollection)
-			{
-				ConceptCollectionDTO conceptCollectionDTO = tempWSConceptCollection.getConceptCollectionDTO();
-				IConceptCollection conceptCollection = collectionMapper.getConceptCollection(conceptCollectionDTO);
-				conceptCollList.add(conceptCollection);
-			}
+			 workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+//			if(workspace == null)
+//			{
+//				return null;
+//			}
+//			List<WorkspaceConceptcollectionDTO> workspaceConceptCollection = workspace.getWorkspaceConceptCollectionDTOList();
+//			
+//			if(workspaceConceptCollection == null)
+//			{
+//				return null;
+//			}
+//			
+//			for(WorkspaceConceptcollectionDTO tempWSConceptCollection : workspaceConceptCollection)
+//			{
+//				ConceptCollectionDTO conceptCollectionDTO = tempWSConceptCollection.getConceptCollectionDTO();
+//				IConceptCollection conceptCollection = collectionMapper.getConceptCollection(conceptCollectionDTO);
+//				conceptCollList.add(conceptCollection);
+//			}
 		}
 		catch(Exception e)
 		{
 			logger.error("listWorkspaceCC method :",e);
         	throw new QuadrigaStorageException();
 		}
-		return conceptCollList;
+		return workspace;
 	}
 	
 	/**

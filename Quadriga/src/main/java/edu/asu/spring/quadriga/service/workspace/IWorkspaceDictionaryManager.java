@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.service.workspace;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IWorkspaceDictionaryManager {
@@ -24,7 +26,7 @@ public interface IWorkspaceDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionary> listWorkspaceDictionary(String workspaceId,String userId)throws QuadrigaStorageException;
+	public abstract List<IWorkspaceDictionary> listWorkspaceDictionary(IWorkSpace workspace,String userId)throws QuadrigaStorageException;
 
 	/**
 	 * Delete the dictionary in a project for a user - userId
