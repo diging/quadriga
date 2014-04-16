@@ -14,6 +14,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
 /**
@@ -33,6 +34,9 @@ public class ListWSManager implements IListWSManager
 	
 	@Autowired
 	private IWorkspaceShallowMapper workspaceShallowMapper;
+	
+	@Autowired
+	private IWorkspaceDeepMapper workspaceDeepMapper;
 	
 	/**
 	 * This will list all the workspaces associated
@@ -156,11 +160,7 @@ public class ListWSManager implements IListWSManager
 	@Transactional
 	public IWorkSpace getWorkspaceDetails(String workspaceId, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		IWorkSpace workspace;
-		workspace = dbConnect.getWorkspaceDetails(workspaceId,username);
-		if(workspace!=null){
-			workspace.setBitstreams(dbConnect.getBitStreams(workspaceId, username));
-		}
+		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
 		return workspace;
 	}
 	
