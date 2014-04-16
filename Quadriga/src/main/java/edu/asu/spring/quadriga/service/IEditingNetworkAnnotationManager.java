@@ -7,14 +7,13 @@ import org.codehaus.jettison.json.JSONException;
 import edu.asu.spring.quadriga.dao.NetworkManagerDAO;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
-import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IEditingNetworkAnnotationManager {
 
 	public abstract List<NetworkAnnotationsDTO> getAnnotation(String type, String id, String userid,String networkId)
 			throws QuadrigaStorageException;
-	public abstract List<NetworksAnnotationsDTO> getAnnotationOfEdge(String id, String userid,String networkId)
+	public abstract List<NetworkAnnotationsDTO> getAnnotationOfEdge(String id, String userid,String networkId)
 			throws QuadrigaStorageException;
 
 	public abstract String addAnnotationToNetwork(String networkId,String nodeId,
