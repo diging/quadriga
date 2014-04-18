@@ -29,7 +29,9 @@ function d3init(graph, networkId, path,type) {
 		.nodes(graph.nodes)
 		.links(graph.links)
 		.start();
-		displayAllAnnotations();
+		//displayAllAnnotations();
+		defineAnnotationsTable();
+		displayAllAnnotationsNew();
 	} //  tree layout if need we can change the layout
 	else if(type=="tree"){
 		layout = d3.layout.tree();
@@ -436,19 +438,22 @@ function d3init(graph, networkId, path,type) {
 		});
 	}
 
+
 	function displayAllAnnotationsNew(){
+		console.log("came here");
 		$.ajax({
 			url : path+"/auth/editing/getAllAnnotations/"+networkId,
 			type : "GET",
 			dataType: 'json',
 			success : function(data) {
+				console.log(data);
 				if (data.length > 0) {
+					alert(data.length);
 					$('#annotationsTable')
 							.dataTable()
 							.fnClearTable();
 					$('#annotationsTable')
-							.dataTable().fnAddData(
-									response);
+							.dataTable().fnAddData(data);
 				} else {
 					$('#annotationsTable')
 							.dataTable()
@@ -470,17 +475,20 @@ function d3init(graph, networkId, path,type) {
 					"bAutoWidth" : false,
 					"aoColumns" : [ {
 						"sTitle" : "Name",
-						"mDataProp" : "name",
-					}, {
+						"mDataProp" :"name",
+					},{
 						"sTitle" : "Text",
-						"mDataProp" : "text",
+						"mDataProp" :"text",
 					}, {
 						"sTitle" : "Object Type",
-						"mDataProp" : "objecttype",
+						"mDataProp" :"objecttype",
 					}],
 				});
+		//displayAllAnnotationsNew();
 	}
+
 	
+
 	function rightClick(d){
 		var html = "";
 		// If the node type is Predicate
@@ -550,7 +558,7 @@ function d3init(graph, networkId, path,type) {
 					data :"nodename="+d.name+"&nodeid="+d.id+"&annotText="+annottext+"&objecttype="+objecttype,
 					success : function() {
 						$('#'+popupId+'').dialog('close');
-						displayAllAnnotations();
+						displayAllAnnotationsNew();
 						display_annotations(d);
 					},
 					error: function() {
@@ -639,7 +647,7 @@ function d3init(graph, networkId, path,type) {
 					data :"objecttype="+objecttype+"&nodename="+node.id+"&annotText="+annottext+"&type="+type+"&edgeid="+edgeid,
 					success : function() {
 						$('#'+popupId+'').dialog('close');
-						displayAllAnnotations();
+						displayAllAnnotationsNew();
 					},
 					error: function() {
 						alert("error");
