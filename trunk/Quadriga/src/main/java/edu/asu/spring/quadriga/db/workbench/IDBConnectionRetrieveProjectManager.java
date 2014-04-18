@@ -104,6 +104,21 @@ public interface IDBConnectionRetrieveProjectManager
 	public List<ProjectDTO> getProjectDTOList(String sUserName) throws QuadrigaStorageException;
 
 	ProjectDTO getProjectDTO(String projectId) throws QuadrigaStorageException;
+
+	List<ProjectDTO> getCollaboratorProjectDTOListOfUser(String sUserName)
+			throws QuadrigaStorageException;
+
+	List<ProjectDTO> getProjectDTOListAsWorkspaceOwner(String sUserName)
+			throws QuadrigaStorageException;
+
+	List<ProjectDTO> getProjectDTOListAsWorkspaceCollaborator(String sUserName)
+			throws QuadrigaStorageException;
+
+	List<ProjectDTO> getProjectDTOListByCollaboratorRole(String sUserName,
+			String collaboratorRole) throws QuadrigaStorageException;
+
+	ProjectDTO getProjectDTOByUnixName(String unixName)
+			throws QuadrigaStorageException;
 	
 
 }

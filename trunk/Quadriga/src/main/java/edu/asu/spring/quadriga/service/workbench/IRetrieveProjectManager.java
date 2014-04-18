@@ -2,8 +2,8 @@ package edu.asu.spring.quadriga.service.workbench;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IRetrieveProjectManager {
@@ -15,7 +15,7 @@ public interface IRetrieveProjectManager {
 	public abstract List<IProject> getProjectList(String sUserName)
 			throws QuadrigaStorageException;
 	
-	public abstract List<ICollaborator> getCollaboratingUsers(String projectId) throws QuadrigaStorageException;
+	public abstract List<IProjectCollaborator> getCollaboratingUsers(String projectId) throws QuadrigaStorageException;
 
 	public abstract List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
 			throws QuadrigaStorageException;

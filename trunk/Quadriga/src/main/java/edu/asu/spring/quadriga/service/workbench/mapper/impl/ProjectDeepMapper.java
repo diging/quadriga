@@ -104,6 +104,74 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 		return project;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException{
+		ProjectDTO projectDTO = dbConnect.getProjectDTOByUnixName(unixName);
+		IProject project = null;
+		if(projectDTO != null){
+			if(project == null){
+				project = projectFactory.createProjectObject();
+			}
+			project.setProjectId(projectDTO.getProjectid());
+			project.setProjectName(projectDTO.getProjectname());
+			project.setDescription(projectDTO.getDescription());
+			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+			project.setUnixName(projectDTO.getUnixname());
+			project.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setCreatedBy(projectDTO.getCreatedby());
+			project.setCreatedDate(projectDTO.getCreateddate());
+			project.setUpdatedBy(projectDTO.getUpdatedby());
+			project.setUpdatedDate(projectDTO.getUpdateddate());
+			// Set List of IProjectCollaborators to the project
+			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));
+			// Set Project Concept Collections 
+			project.setProjectConceptCollections(projectConceptCollectionShallowMapper.getProjectConceptCollectionList(project, projectDTO));
+			// Set Project Dictionaries
+			project.setProjectDictionaries(projectDictionaryShallowMapper.getProjectDictionaryList(project, projectDTO));
+			// Set Project Workspaces
+			project.setProjectWorkspaces(projectWorkspaceShallowMapper.getProjectWorkspaceList(project, projectDTO)) ;
+			
+			
+		}
+
+		return project;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IProjectCollaborator> getCollaboratorsOfProject(String projectId) throws QuadrigaStorageException{
+		ProjectDTO projectDTO = dbConnect.getProjectDTO(projectId);
+		IProject project = null;
+		if(projectDTO != null){
+			if(project == null){
+				project = projectFactory.createProjectObject();
+			}
+			project.setProjectId(projectDTO.getProjectid());
+			project.setProjectName(projectDTO.getProjectname());
+			project.setDescription(projectDTO.getDescription());
+			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+			project.setUnixName(projectDTO.getUnixname());
+			project.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setCreatedBy(projectDTO.getCreatedby());
+			project.setCreatedDate(projectDTO.getCreateddate());
+			project.setUpdatedBy(projectDTO.getUpdatedby());
+			project.setUpdatedDate(projectDTO.getUpdateddate());
+			// Set List of IProjectCollaborators to the project
+			project.setProjectCollaborators(getProjectCollaboratorList(projectDTO, project));		
+			
+		}
+
+		return project.getProjectCollaborators();
+	}
+	
 
 	/**
 	 * This class would help in getting {@link List} of {@link IProjectCollaborator} object mapping for a particular {@link IProject} and {@link ProjectDTO} 

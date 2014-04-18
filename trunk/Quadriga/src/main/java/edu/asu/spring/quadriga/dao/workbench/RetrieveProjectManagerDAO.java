@@ -177,6 +177,29 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		}
 		return projectList;
 	}
+	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProjectDTO> getCollaboratorProjectDTOListOfUser(String sUserName) throws QuadrigaStorageException
+	{
+		List<ProjectDTO> projectDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select distinct projectCollab.projectDTO from ProjectCollaboratorDTO projectCollab where projectCollab.quadrigaUserDTO.username =:username");
+			query.setParameter("username", sUserName);
+			projectDTOList = query.list();
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectDTOList;
+	}
 
 	/**
 	 * This method fetches the list of projects where current logged in user is the collaborator.
@@ -215,6 +238,26 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		return projectList;
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProjectDTO> getProjectDTOListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
+	{
+		List<ProjectDTO> projectDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO.workspaceowner.username = :username group by projWork.projectDTO.projectid");
+			query.setParameter("username", sUserName);
+			projectDTOList = query.list();
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectDTOList;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -249,6 +292,27 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		return projectList;
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProjectDTO> getProjectDTOListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
+	{
+		List<ProjectDTO> projectDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.workspaceCollaboratorDTOPK.collaboratoruser = :collaboratoruser)");
+			query.setParameter("collaboratoruser", sUserName);
+			projectDTOList = query.list();
+
+		}
+		catch(Exception e)
+		{
+			logger.info("getProjectListAsWorkspaceCollaborator method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectDTOList;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -283,6 +347,30 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		return projectList;
 	}
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProjectDTO> getProjectDTOListByCollaboratorRole(String sUserName,String collaboratorRole) throws QuadrigaStorageException
+	{
+		List<ProjectDTO> projectDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.projectDTO from ProjectWorkspaceDTO projWork where projWork.workspaceDTO in (Select wcDTO.workspaceDTO from WorkspaceCollaboratorDTO wcDTO where wcDTO.quadrigaUserDTO.username = :username )");
+			query.setParameter("username", sUserName);
+			projectDTOList = query.list();
+
+		}
+		catch(Exception e)
+		{
+			logger.info("getCollaboratorProjectList method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+		return projectDTOList;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -300,6 +388,19 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 		}
 		
 		return project;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ProjectDTO getProjectDTOByUnixName(String unixName) throws QuadrigaStorageException {
+
+		Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.unixname = :unixname");
+		query.setParameter("unixname", unixName);
+		ProjectDTO projectDTO = (ProjectDTO) query.uniqueResult();
+		
+		return projectDTO;
 	}
 
 	/**
