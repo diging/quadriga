@@ -9,6 +9,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -24,7 +25,7 @@ public interface IDBConnectionCCManager {
 		 * @return List containing user objects of all collections of the user
 		 * @throws QuadrigaStorageException 
 		 */
-		public abstract List<IConceptCollection> getConceptsOwnedbyUser(String userName) throws QuadrigaStorageException;
+		public abstract List<ConceptCollectionDTO> getConceptsOwnedbyUser(String userName) throws QuadrigaStorageException;
 		/**
 		 * Queries the database and builds a list of concept collection objects collaborated by particular user
 		 * 

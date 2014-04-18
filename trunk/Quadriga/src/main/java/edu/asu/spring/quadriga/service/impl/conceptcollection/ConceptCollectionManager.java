@@ -35,6 +35,7 @@ import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -89,17 +90,32 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	private IDBConnectionListWSManager wsListManger;
 
+//	/**
+//	 * This method retrieves the concept collection owner by the submitted user
+//	 * @param userId - logged in user
+//	 * @throws QuadrigaStorageException
+//	 * @return List<IConceptCollection> list of concept collection associated with the user as owner
+//	 */
+//	@Override
+//	@Transactional
+//	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
+//	{
+//		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
+//		conceptList = dbConnect.getConceptsOwnedbyUser(sUserId);
+//		return conceptList;
+//	}
+
 	/**
 	 * This method retrieves the concept collection owner by the submitted user
 	 * @param userId - logged in user
 	 * @throws QuadrigaStorageException
-	 * @return List<IConceptCollection> list of concept collection associated with the user as owner
+	 * @return List<ConceptCollectionDTO> list of concept collection associated with the user as owner
 	 */
 	@Override
 	@Transactional
-	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
+	public List<ConceptCollectionDTO> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
 	{
-		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
+		List<ConceptCollectionDTO> conceptList = new ArrayList<ConceptCollectionDTO>();  
 		conceptList = dbConnect.getConceptsOwnedbyUser(sUserId);
 		return conceptList;
 	}
@@ -382,7 +398,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			dataList.put("data", dataArray);
 
 			core.put("core", dataList);
-			logger.info(core.toString(1));
+			//logger.info(core.toString(1));
 
 		} catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",

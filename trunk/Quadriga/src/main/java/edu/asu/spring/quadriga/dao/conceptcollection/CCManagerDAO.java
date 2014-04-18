@@ -71,6 +71,36 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	
 	private static final Logger logger = LoggerFactory.getLogger(CCManagerDAO.class);
 	
+//	/**
+//	 * Queries the database and builds a list of concept collection objects owned by particular user
+//	 * @param Username
+//	 * @return List containing user objects of all collections of the user
+//	 * @throws QuadrigaStorageException 
+//	 * @author Karthik Jayaraman
+//	 */
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public List<IConceptCollection> getConceptsOwnedbyUser(String userName) throws QuadrigaStorageException 
+//	{
+//		List<IConceptCollection> conceptCollectionList = null;
+//		try
+//		{
+//			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionDTO concept where concept.collectionowner.username =:userName");
+//			query.setParameter("userName", userName);
+//			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
+//			
+//			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
+//			{
+//				conceptCollectionList = conceptCollectionDTOMapper.getConceptCollectionList(conceptcollectionsDTOList);
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logger.info("getConceptsOwnedbyUser method :"+e.getMessage());	
+//			throw new QuadrigaStorageException(e);
+//		}
+//		return conceptCollectionList;
+//	}
 	/**
 	 * Queries the database and builds a list of concept collection objects owned by particular user
 	 * @param Username
@@ -80,26 +110,22 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IConceptCollection> getConceptsOwnedbyUser(String userName) throws QuadrigaStorageException 
+	public List<ConceptCollectionDTO> getConceptsOwnedbyUser(String userName) throws QuadrigaStorageException 
 	{
-		List<IConceptCollection> conceptCollectionList = null;
+		List<ConceptCollectionDTO> conceptcollectionsDTOList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("from ConceptCollectionDTO concept where concept.collectionowner.username =:userName");
 			query.setParameter("userName", userName);
-			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
+			 conceptcollectionsDTOList = query.list();
 			
-			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
-			{
-				conceptCollectionList = conceptCollectionDTOMapper.getConceptCollectionList(conceptcollectionsDTOList);
-			}
 		}
 		catch(Exception e)
 		{
 			logger.info("getConceptsOwnedbyUser method :"+e.getMessage());	
 			throw new QuadrigaStorageException(e);
 		}
-		return conceptCollectionList;
+		return conceptcollectionsDTOList;
 	}
 	
 	
