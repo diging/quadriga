@@ -63,6 +63,37 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 		return workspaceList;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IWorkSpace> getWorkSpaceList(String projectId, String userName) throws QuadrigaStorageException{
+		List<WorkspaceDTO> workspaceDTOList = dbConnect.listWorkspaceDTO(projectId,userName);
+		List<IWorkSpace> workspaceList = null;
+		if(workspaceDTOList != null){
+			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
+				if(workspaceList == null){
+					workspaceList = new ArrayList<IWorkSpace>();
+				}
+				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
+				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
+				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
+				workspaceProxy.setDescription(workspaceDTO.getDescription());
+				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
+				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
+				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
+				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
+				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectId));
+				workspaceList.add(workspaceProxy);
+			}
+		}
+		
+		return workspaceList;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	*/
@@ -88,5 +119,159 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 		}
 		
 		return workspaceProxy;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String username) throws QuadrigaStorageException{
+		List<WorkspaceDTO> workspaceDTOList = dbConnect.listWorkspaceDTOofCollaborator(projectid, username);
+		List<IWorkSpace> workspaceList = null;
+		if(workspaceDTOList != null){
+			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
+				if(workspaceList == null){
+					workspaceList = new ArrayList<IWorkSpace>();
+				}
+				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
+				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
+				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
+				workspaceProxy.setDescription(workspaceDTO.getDescription());
+				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
+				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
+				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
+				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
+				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceList.add(workspaceProxy);
+			}
+		}
+		
+		return workspaceList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IWorkSpace> listActiveWorkspaceOfOwner(String projectid,
+			String username) throws QuadrigaStorageException{
+		List<WorkspaceDTO> workspaceDTOList = dbConnect.listActiveWorkspaceDTOofOwner(projectid, username);
+		List<IWorkSpace> workspaceList = null;
+		if(workspaceDTOList != null){
+			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
+				if(workspaceList == null){
+					workspaceList = new ArrayList<IWorkSpace>();
+				}
+				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
+				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
+				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
+				workspaceProxy.setDescription(workspaceDTO.getDescription());
+				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
+				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
+				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
+				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
+				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceList.add(workspaceProxy);
+			}
+		}
+		
+		return workspaceList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IWorkSpace> listActiveWorkspaceOfCollaborator(String projectid,
+			String username) throws QuadrigaStorageException{
+		List<WorkspaceDTO> workspaceDTOList = dbConnect.listActiveWorkspaceDTOofCollaborator(projectid, username);
+		List<IWorkSpace> workspaceList = null;
+		if(workspaceDTOList != null){
+			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
+				if(workspaceList == null){
+					workspaceList = new ArrayList<IWorkSpace>();
+				}
+				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
+				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
+				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
+				workspaceProxy.setDescription(workspaceDTO.getDescription());
+				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
+				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
+				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
+				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
+				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceList.add(workspaceProxy);
+			}
+		}
+		
+		return workspaceList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IWorkSpace> listArchivedWorkspace(String projectid,
+			String username) throws QuadrigaStorageException{
+		List<WorkspaceDTO> workspaceDTOList = dbConnect.listArchivedWorkspaceDTO(projectid, username);
+		List<IWorkSpace> workspaceList = null;
+		if(workspaceDTOList != null){
+			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
+				if(workspaceList == null){
+					workspaceList = new ArrayList<IWorkSpace>();
+				}
+				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
+				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
+				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
+				workspaceProxy.setDescription(workspaceDTO.getDescription());
+				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
+				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
+				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
+				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
+				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceList.add(workspaceProxy);
+			}
+		}
+		
+		return workspaceList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IWorkSpace> listDeactivatedWorkspace(String projectid,
+			String username) throws QuadrigaStorageException{
+		List<WorkspaceDTO> workspaceDTOList = dbConnect.listDeactivatedWorkspaceDTO(projectid, username);
+		List<IWorkSpace> workspaceList = null;
+		if(workspaceDTOList != null){
+			for(WorkspaceDTO workspaceDTO : workspaceDTOList){
+				if(workspaceList == null){
+					workspaceList = new ArrayList<IWorkSpace>();
+				}
+				IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
+				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
+				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
+				workspaceProxy.setDescription(workspaceDTO.getDescription());
+				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
+				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
+				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
+				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
+				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceList.add(workspaceProxy);
+			}
+		}
+		
+		return workspaceList;
 	}
 }

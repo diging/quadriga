@@ -52,18 +52,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = dbConnect.listWorkspace(projectid,user);
-		return workspaceList;
-	}
-	
-	
-	
-	@Override
-	@Transactional
-	public List<IWorkSpace> listWorkspace(String projectid) throws QuadrigaStorageException
-	{
-		List<IWorkSpace> workspaceList;
-		workspaceList = workspaceShallowMapper.getWorkSpaceList(projectid);
+		workspaceList = workspaceShallowMapper.getWorkSpaceList(projectid, user);
 		return workspaceList;
 	}
 	
@@ -81,7 +70,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = dbConnect.listWorkspaceOfCollaborator(projectid, user);
+		workspaceList = workspaceShallowMapper.listWorkspaceOfCollaborator(projectid, user);
 		return workspaceList;
 	}
 	
@@ -99,7 +88,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listActiveWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> ownerWorkspaceList;
-		ownerWorkspaceList = dbConnect.listActiveWorkspaceOfOwner(projectid, user);
+		ownerWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfOwner(projectid, user);
 		return ownerWorkspaceList;
 	}
 	
@@ -108,7 +97,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> collaboratorWorkspaceList;
-		collaboratorWorkspaceList = dbConnect.listActiveWorkspaceOfCollaborator(projectid, user);
+		collaboratorWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfCollaborator(projectid, user);
 		return collaboratorWorkspaceList;
 	}
 	
@@ -126,7 +115,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listArchivedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = dbConnect.listArchivedWorkspace(projectid,user);
+		workspaceList = workspaceShallowMapper.listArchivedWorkspace(projectid,user);
 		return workspaceList;
 	}
 	
@@ -144,7 +133,7 @@ public class ListWSManager implements IListWSManager
 	public List<IWorkSpace> listDeactivatedWorkspace(String projectid,String user) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList;
-		workspaceList = dbConnect.listDeactivatedWorkspace(projectid, user);
+		workspaceList = workspaceShallowMapper.listDeactivatedWorkspace(projectid, user);
 		return workspaceList;
 	}
 	
@@ -178,7 +167,7 @@ public class ListWSManager implements IListWSManager
 	public String getWorkspaceName(String workspaceId) throws QuadrigaStorageException
 	{
 		String workspacename;
-		workspacename = dbConnect.getWorkspaceName(workspaceId);
+		workspacename = workspaceDeepMapper.getWorkSpaceDetails(workspaceId).getWorkspaceName();
 		return workspacename;
 	}
 	
@@ -229,10 +218,4 @@ public class ListWSManager implements IListWSManager
 		return networkList;
 	}
 
-	@Override
-	public IWorkSpace getWorkspaceDetails(String workspaceId)
-			throws QuadrigaStorageException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

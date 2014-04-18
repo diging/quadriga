@@ -101,6 +101,30 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<WorkspaceDTO> listWorkspaceDTO(String projectid,String userName) throws QuadrigaStorageException
+	{
+		List<WorkspaceDTO> workspaceDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork where projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.workspaceowner.username =:username");
+			query.setParameter("username", userName);
+			query.setParameter("projectid", projectid);
+			workspaceDTOList = query.list();
+
+		}
+		catch(HibernateException e)
+		{
+			logger.error("List workspace method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTOList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<IWorkSpace> listWorkspaceOfCollaborator(String projectid,String username) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList = null;
@@ -121,6 +145,31 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<WorkspaceDTO> listWorkspaceDTOofCollaborator(String projectid,String username) throws QuadrigaStorageException
+	{
+		List<WorkspaceDTO> workspaceDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where workcollab.quadrigaUserDTO.username =:username and projWork.projectDTO.projectid =:projectid"); 
+			query.setParameter("username", username);
+			query.setParameter("projectid", projectid);
+			workspaceDTOList = query.list();
+
+		}
+		catch(HibernateException e)
+		{
+			logger.error("List workspace associated with collaborator  :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTOList;
 	}
 	
 	
@@ -159,6 +208,32 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<WorkspaceDTO> listActiveWorkspaceDTOofOwner(String projectid,String username) throws QuadrigaStorageException
+	{
+		List<WorkspaceDTO> workspaceDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork where projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.workspaceowner.username =:username and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated"); 
+			query.setParameter("username", username);
+			query.setParameter("projectid", projectid);
+			query.setParameter("isdeactivated", false);
+			query.setParameter("isarchived", false);
+			
+			workspaceDTOList = query.list();
+		}
+		catch(HibernateException e)
+		{
+			logger.error("Retrieve active workspace method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTOList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<IWorkSpace> listActiveWorkspaceOfCollaborator(String projectid,String username) throws QuadrigaStorageException
 	{
 		List<IWorkSpace> workspaceList = null;
@@ -182,6 +257,33 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<WorkspaceDTO> listActiveWorkspaceDTOofCollaborator(String projectid,String username) throws QuadrigaStorageException
+	{
+		List<WorkspaceDTO> workspaceDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery("Select projWork.workspaceDTO from ProjectWorkspaceDTO projWork INNER JOIN projWork.workspaceDTO.workspaceCollaboratorDTOList workcollab where workcollab.quadrigaUserDTO.username =:username and projWork.projectDTO.projectid =:projectid and projWork.workspaceDTO.isarchived =:isarchived and projWork.workspaceDTO.isdeactivated =:isdeactivated"); 
+			query.setParameter("username", username);
+			query.setParameter("projectid", projectid);
+			query.setParameter("isdeactivated", false);
+			query.setParameter("isarchived", false);
+			
+			workspaceDTOList = query.list();
+		}
+		catch(HibernateException e)
+		{
+			logger.error("retrieve active workspace of collaborator :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTOList;
 	}
 	
 	
@@ -218,6 +320,37 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		return workspaceList;
 	}
 	
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<WorkspaceDTO> listArchivedWorkspaceDTO(String projectid,String username) throws QuadrigaStorageException
+	{
+		List<WorkspaceDTO> workspaceDTOList = null;
+		try
+		{
+			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
+		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated  AND projWork.workspaceDTO.isarchived = :isarchived" +
+					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
+					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+			Query query = sessionFactory.getCurrentSession().createQuery(value);
+			query.setParameter("username", username);
+			query.setParameter("projectid", projectid);
+			query.setParameter("isdeactivated", false);
+			query.setParameter("isarchived", true);
+			workspaceDTOList = query.list();
+		}
+		catch(HibernateException e)
+		{
+			logger.error("Retrieve archived workspace method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTOList;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -248,6 +381,35 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
         	throw new QuadrigaStorageException();
 		}
 		return workspaceList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<WorkspaceDTO> listDeactivatedWorkspaceDTO(String projectid,String username) throws QuadrigaStorageException
+	{
+		List<WorkspaceDTO> workspaceDTOList = null;
+		try
+		{
+			String value = "SELECT projWork.workspaceDTO from ProjectWorkspaceDTO projWork WHERE projWork.projectWorkspaceDTOPK.projectid =:projectid" +
+		            " AND projWork.workspaceDTO.isdeactivated =:isdeactivated " +
+					" AND ((projWork.workspaceDTO.workspaceowner.username = :username) OR (projWork.workspaceDTO.workspaceid IN (" +
+					" SELECT wsc.workspaceCollaboratorDTOPK.workspaceid FROM WorkspaceCollaboratorDTO wsc WHERE wsc.workspaceCollaboratorDTOPK.collaboratoruser =:username)))";
+			Query query = sessionFactory.getCurrentSession().createQuery(value);
+			query.setParameter("username", username);
+			query.setParameter("projectid", projectid);
+			query.setParameter("isdeactivated", true);
+			workspaceDTOList = query.list();
+
+		}
+		catch(HibernateException e)
+		{
+			logger.error("retrieve deactive workspace method :",e);
+        	throw new QuadrigaStorageException();
+		}
+		return workspaceDTOList;
 	}
 	
 	/**
