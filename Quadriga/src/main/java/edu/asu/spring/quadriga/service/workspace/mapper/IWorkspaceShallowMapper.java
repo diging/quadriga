@@ -96,4 +96,13 @@ public interface IWorkspaceShallowMapper {
 	public abstract List<IWorkSpace> listDeactivatedWorkspace(String projectid, String username)
 			throws QuadrigaStorageException;
 
+	/**
+	 * This class should get a {@link IWorkSpace} of domain class type {@link WorkSpaceProxy} for a {@link IWorkSpace} ID.
+	 * @param workspaceDTO									{@link WorkspaceDTO} object 
+	 * @return												Returns {@link IWorkSpace} object of domain class typ {@link WorkSpaceProxy}
+	 * @throws QuadrigaStorageException						Throws the storage exception when the method has issues to access the database
+	 */
+	IWorkSpace getWorkSpaceDetails(WorkspaceDTO workspaceDTO)
+			throws QuadrigaStorageException;
+
 }

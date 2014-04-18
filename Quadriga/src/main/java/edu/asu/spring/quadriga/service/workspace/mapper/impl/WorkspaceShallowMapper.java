@@ -121,6 +121,34 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 		return workspaceProxy;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public IWorkSpace getWorkSpaceDetails(WorkspaceDTO workspaceDTO) throws QuadrigaStorageException{
+		IWorkSpace workspaceProxy = null;
+		
+		if(workspaceDTO != null){
+			workspaceProxy = new WorkSpaceProxy(wsManager);
+			workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
+			workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
+			workspaceProxy.setDescription(workspaceDTO.getDescription());
+			workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
+			workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
+			workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
+			workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
+			// TODO : there is a bug in WorkspaceDTO, it returns a List of ProjectWorkspaceDTO. W
+			// We need only one ProjectWorkspaceDTO object
+			//workspaceProxy.setProject();
+		}
+		
+		return workspaceProxy;
+	}
+	
+	
 	/**
 	 * {@inheritDoc}
 	*/
