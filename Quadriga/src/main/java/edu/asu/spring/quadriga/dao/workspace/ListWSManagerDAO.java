@@ -73,6 +73,7 @@ public class ListWSManagerDAO extends DAOConnectionManager implements IDBConnect
 		return workspaceList;
 	}
 	
+	
 	/**
 	 * {@inheritDoc}
 	 */
