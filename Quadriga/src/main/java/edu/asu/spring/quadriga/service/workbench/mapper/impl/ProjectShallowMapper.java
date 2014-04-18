@@ -87,4 +87,132 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 		return projectProxy;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IProject> getCollaboratorProjectListOfUser(String userName) throws QuadrigaStorageException{
+		List<ProjectDTO> projectDTOList = dbConnect.getCollaboratorProjectDTOListOfUser(userName);
+		List<IProject> projectList = null;
+		if(projectDTOList!=null){
+			for(ProjectDTO projectDTO : projectDTOList){
+				if(projectList == null){
+					projectList = new ArrayList<IProject>();
+				}
+				IProject projectProxy = new ProjectProxy(projectManager);
+				projectProxy.setProjectId(projectDTO.getProjectid());
+				projectProxy.setProjectName(projectDTO.getProjectname());
+				projectProxy.setDescription(projectDTO.getDescription());
+				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+				projectProxy.setUnixName(projectDTO.getUnixname());
+				projectProxy.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setCreatedBy(projectDTO.getCreatedby());
+				projectProxy.setCreatedDate(projectDTO.getCreateddate());
+				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
+				projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
+				projectList.add(projectProxy);
+			}
+		}
+		
+		return projectList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IProject> getProjectListAsWorkspaceOwner(String userName)
+			throws QuadrigaStorageException{
+		List<ProjectDTO> projectDTOList = dbConnect.getProjectDTOListAsWorkspaceOwner(userName);
+		List<IProject> projectList = null;
+		if(projectDTOList!=null){
+			for(ProjectDTO projectDTO : projectDTOList){
+				if(projectList == null){
+					projectList = new ArrayList<IProject>();
+				}
+				IProject projectProxy = new ProjectProxy(projectManager);
+				projectProxy.setProjectId(projectDTO.getProjectid());
+				projectProxy.setProjectName(projectDTO.getProjectname());
+				projectProxy.setDescription(projectDTO.getDescription());
+				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+				projectProxy.setUnixName(projectDTO.getUnixname());
+				projectProxy.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setCreatedBy(projectDTO.getCreatedby());
+				projectProxy.setCreatedDate(projectDTO.getCreateddate());
+				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
+				projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
+				projectList.add(projectProxy);
+			}
+		}
+		
+		return projectList;
+	}
+	
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IProject> getProjectListAsWorkspaceCollaborator(String userName)
+			throws QuadrigaStorageException{
+		List<ProjectDTO> projectDTOList = dbConnect.getProjectDTOListAsWorkspaceCollaborator(userName);
+		List<IProject> projectList = null;
+		if(projectDTOList!=null){
+			for(ProjectDTO projectDTO : projectDTOList){
+				if(projectList == null){
+					projectList = new ArrayList<IProject>();
+				}
+				IProject projectProxy = new ProjectProxy(projectManager);
+				projectProxy.setProjectId(projectDTO.getProjectid());
+				projectProxy.setProjectName(projectDTO.getProjectname());
+				projectProxy.setDescription(projectDTO.getDescription());
+				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+				projectProxy.setUnixName(projectDTO.getUnixname());
+				projectProxy.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setCreatedBy(projectDTO.getCreatedby());
+				projectProxy.setCreatedDate(projectDTO.getCreateddate());
+				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
+				projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
+				projectList.add(projectProxy);
+			}
+		}
+		
+		return projectList;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
+	public List<IProject> getProjectListByCollaboratorRole(String userName,
+			String collaboratorRole) throws QuadrigaStorageException{
+		List<ProjectDTO> projectDTOList = dbConnect.getProjectDTOListByCollaboratorRole(userName,collaboratorRole);
+		List<IProject> projectList = null;
+		if(projectDTOList!=null){
+			for(ProjectDTO projectDTO : projectDTOList){
+				if(projectList == null){
+					projectList = new ArrayList<IProject>();
+				}
+				IProject projectProxy = new ProjectProxy(projectManager);
+				projectProxy.setProjectId(projectDTO.getProjectid());
+				projectProxy.setProjectName(projectDTO.getProjectname());
+				projectProxy.setDescription(projectDTO.getDescription());
+				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+				projectProxy.setUnixName(projectDTO.getUnixname());
+				projectProxy.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setCreatedBy(projectDTO.getCreatedby());
+				projectProxy.setCreatedDate(projectDTO.getCreateddate());
+				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
+				projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
+				projectList.add(projectProxy);
+			}
+		}
+		
+		return projectList;
+	}
+	
 }

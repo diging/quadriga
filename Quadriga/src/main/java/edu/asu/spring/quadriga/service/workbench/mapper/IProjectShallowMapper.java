@@ -36,4 +36,42 @@ public interface IProjectShallowMapper {
 	public abstract IProject getProjectDetails(String projectId)
 			throws QuadrigaStorageException;
 
+	/**
+	 * This class should get a {@link List} of {@link IProject} of domain class type {@link ProjectProxy} to which the user is collaborator based on username.
+	 * @param userName									{@link IUser} name of type {@link String}
+	 * @return											{@link List} of {@link IProject}
+	 * @throws QuadrigaStorageException					Throws the storage exception when the method has issues to access the database
+	 */
+	public abstract List<IProject> getCollaboratorProjectListOfUser(String userName)
+			throws QuadrigaStorageException;
+
+	/**
+	 * This class should get a {@link List} of {@link IProject} of domain class type {@link ProjectProxy} of a workspace owner based on username
+	 * @param userName									{@link IUser} name of type {@link String}
+	 * @return											{@link List} of {@link IProject}
+	 * @throws QuadrigaStorageException					Throws the storage exception when the method has issues to access the database
+	 */
+	public abstract List<IProject> getProjectListAsWorkspaceOwner(String userName)
+			throws QuadrigaStorageException;
+
+	/**
+	 * This class should get a {@link List} of {@link IProject} of domain class type {@link ProjectProxy} of a workspace collaborator based on username
+	 * @param userName									{@link IUser} name of type {@link String}
+	 * @return											{@link List} of {@link IProject}
+	 * @throws QuadrigaStorageException					Throws the storage exception when the method has issues to access the database
+	 */
+	public abstract List<IProject> getProjectListAsWorkspaceCollaborator(String userName)
+			throws QuadrigaStorageException;
+
+	/**
+	 * This class should get a {@link List} of {@link IProject} of domain class type {@link ProjectProxy} by username and collaborator role.
+	 * @param userName									{@link IUser} name of type {@link String}
+	 * @param collaboratorRole							Collaborator role of type {@link String}
+	 * @return											{@link List} of {@link IProject}
+	 * @throws QuadrigaStorageException					Throws the storage exception when the method has issues to access the database
+	 */
+	public abstract List<IProject> getProjectListByCollaboratorRole(String userName,
+			String collaboratorRole) throws QuadrigaStorageException;
+
+	
 }
