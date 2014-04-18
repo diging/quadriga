@@ -149,10 +149,26 @@ public class ListWSManager implements IListWSManager
 	@Transactional
 	public IWorkSpace getWorkspaceDetails(String workspaceId, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
+		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId,username);
 		return workspace;
 	}
 	
+	
+	/**
+	 *This method display the workspace details for the workspace submitted.
+	 * @param   workspaceId
+	 * @return  IWorkSpace - workspace object
+	 * @throws  QuadrigaStorageException
+	 * @author  Kiran Kumar Batna
+	 * @throws QuadrigaAccessException 
+	 */
+	@Override
+	@Transactional
+	public IWorkSpace getWorkspaceDetails(String workspaceId) throws QuadrigaStorageException, QuadrigaAccessException
+	{
+		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
+		return workspace;
+	}
 	
 	/**
 	 * This method get the workspace name for the workspace id.

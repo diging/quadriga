@@ -8,4 +8,7 @@ public interface IWorkspaceDeepMapper {
 	public abstract IWorkSpace getWorkSpaceDetails(String workspaceId)
 			throws QuadrigaStorageException;
 
+	IWorkSpace getWorkSpaceDetails(String workspaceId, String userName)
+			throws QuadrigaStorageException;
+
 }
