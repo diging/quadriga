@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 @Service
@@ -32,6 +33,10 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Autowired
 	private IProjectShallowMapper projectShallowMapper;	
 	
+	
+	@Autowired
+	private IProjectDeepMapper projectDeepMapper;	
+	
 	@Autowired
 	private ICollaboratorRoleManager roleMapper;
 	
@@ -43,7 +48,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	
 	/**
 	 * This method returns the list of projects associated with
-	 * the logged in user.
+	 * the logged in user. It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
 	 * @param sUserName
 	 * @return List - list of projects.
 	 * @throws QuadrigaStorageException
@@ -54,12 +59,13 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		projectList = dbConnect.getProjectList(sUserName);
+		projectList =  projectShallowMapper.getProjectList(sUserName);
 		return projectList;
 	}
 	
 	/**
-	 * This method retrieves the list of projects associated with the logged in user as a collaborator.
+	 * This method retrieves the list of projects associated with the logged in user as a collaborator. 
+	 * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
 	 * @param sUserName - logged in user name.
 	 * @return List<IProject> - list of projects associated with the logged in user as collaborator.
 	 * @throws QuadrigaStorageException
@@ -69,13 +75,14 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getCollaboratorProjectList(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		projectList = dbConnect.getCollaboratorProjectList(sUserName);
+		projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);
 		return projectList;
 	}
 	
 	/**
 	 * This method retrieves the list of projects associated with the logged in user as a owner
 	 * of associated workspaces.
+	 * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
 	 * @param sUserName - logged in user name.
 	 * @return List<IProject> list of projects associated with the logged in user as one of its workspaces.
 	 * @throws QuadrigaStorageException
@@ -86,7 +93,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectListAsWorkspaceOwner(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		projectList = dbConnect.getProjectListAsWorkspaceOwner(sUserName);
+		projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
 		return projectList;
 	}
 	
@@ -103,7 +110,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		projectList = dbConnect.getProjectListAsWorkspaceCollaborator(sUserName);
+		projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
 		return projectList;
 	}
 	
@@ -120,7 +127,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	public List<IProject> getProjectListByCollaboratorRole(String sUserName,String role) throws QuadrigaStorageException
 	{
 		List<IProject> projectList;
-		projectList = dbConnect.getProjectListByCollaboratorRole(sUserName,role);
+		projectList = projectShallowMapper.getProjectListByCollaboratorRole(sUserName,role);
 		return projectList;
 	}
 	
@@ -135,20 +142,20 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Transactional
 	public IProject getProjectDetails(String projectId) throws QuadrigaStorageException
 	{
-		return dbConnect.getProjectDetails(projectId);
+		return projectDeepMapper.getProjectDetails(projectId);
 	}
 
 	/**
 	 * This method retrieves the collaborators associated with the project
 	 * @param projectId - project id.
-	 * @return List<ICollaborator> list of collaborators associated with the project.
+	 * @return List<IProjectCollaborator> list of project collaborators associated with the project.
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
 	@Transactional
-	public List<ICollaborator> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
-		List<ICollaborator> collaboratingUsersList = databaseConnect.getProjectCollaborators(projectId);
-		return collaboratingUsersList;
+	public List<IProjectCollaborator> getCollaboratingUsers(String projectId)throws QuadrigaStorageException {
+		List<IProjectCollaborator> projectCollaboratingUsersList = projectDeepMapper.getCollaboratorsOfProject(projectId);
+		return projectCollaboratingUsersList;
 	}
 
 	/**
@@ -160,14 +167,14 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Override
 	@Transactional
 	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
-		return dbConnect.getProjectDetailsByUnixName(unixName);
+		return projectDeepMapper.getProjectDetailsByUnixName(unixName);
 		
 	}
 	
 	@Override
 	@Transactional
 	public boolean getPublicProjectWebsiteAccessibility(String unixName) throws QuadrigaStorageException{
-		IProject project = dbConnect.getProjectDetailsByUnixName(unixName);
+		IProject project = projectDeepMapper.getProjectDetailsByUnixName(unixName);
 		String access = project.getProjectAccess().toString();
 		if(access.equals("PUBLIC")){
 			return true;
@@ -178,7 +185,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Override
 	@Transactional
 	public boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) throws QuadrigaStorageException{
-		IProject project = dbConnect.getProjectDetailsByUnixName(unixName);
+		IProject project = projectDeepMapper.getProjectDetailsByUnixName(unixName);
 		
 		List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
 		List<String> collaboratorNames = new ArrayList<String>();
