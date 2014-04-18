@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
+import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -404,7 +405,9 @@ public class WorkSpaceProxy implements IWorkSpace {
 		try{
 			this.workspace =  this.wsManager.getWorkspaceDetails(this.workspaceId);
 		}catch(QuadrigaStorageException e){
-			logger.error("Issue accessing database from project proxt",e);
+			logger.error("Issue accessing database from project proxy",e);
+		} catch (QuadrigaAccessException e) {
+			logger.error("Issue user accessing project",e);
 		}
 		this.workspace.setWorkspaceName(this.workspaceName);
 		this.workspace.setWorkspaceId(this.workspaceId);

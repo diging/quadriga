@@ -119,6 +119,44 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 		
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	public IWorkSpace getWorkSpaceDetails(String workspaceId,String userName) throws QuadrigaStorageException{
+
+		WorkspaceDTO workspaceDTO = dbConnect.getWorkspaceDTO(workspaceId);
+		IWorkSpace workspace = null;
+		
+		if(workspaceDTO != null){
+			workspace = new WorkSpaceProxy(wsManager);
+			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
+			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
+			workspace.setDescription(workspaceDTO.getDescription());
+			workspace.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspace.setCreatedBy(workspaceDTO.getCreatedby());
+			workspace.setCreatedDate(workspaceDTO.getCreateddate());
+			workspace.setUpdatedBy(workspaceDTO.getUpdatedby());
+			workspace.setUpdatedDate(workspaceDTO.getUpdateddate());
+			// Set Workspace Collaborators
+			workspace.setWorkspaceCollaborators(getWorkspaceCollaboratorList(workspaceDTO, workspace));
+			// Set Workspace Concept Collations
+			workspace.setWorkspaceConceptCollections(workspaceCCShallowMapper.getWorkspaceCCList(workspace, workspaceDTO));
+			// Set Workspace Dictionaries
+			workspace.setWorkspaceDictionaries(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO));
+			
+			// TODO : there is a bug in WorkspaceDTO, it returns a List of ProjectWorkspaceDTO. W
+			// We need only one ProjectWorkspaceDTO object
+			//workspaceProxy.setProject();
+			
+			workspace.setWorkspaceBitStreams(getWorkspaceBitstream(workspaceDTO, workspace));
+		}
+				
+		return workspace;
+		
+	}
+	
 	/**
 	 * This class should returns a {@link List} of {@link IWorkspaceCollaborator} object by mapping workspaceDTO details and {@link List} of {@link WorkspaceCollaboratorDTO}
 	 * @param workspaceDTO										{@link WorkspaceDTO} object of a workspace
