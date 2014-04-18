@@ -151,4 +151,22 @@ public interface IDBConnectionListWSManager {
 
 	WorkspaceDTO getWorkspaceDTO(String workspaceId)
 			throws QuadrigaStorageException;
+
+	List<WorkspaceDTO> listWorkspaceDTO(String projectid, String userName)
+			throws QuadrigaStorageException;
+
+	List<WorkspaceDTO> listWorkspaceDTOofCollaborator(String projectid,
+			String username) throws QuadrigaStorageException;
+
+	List<WorkspaceDTO> listActiveWorkspaceDTOofOwner(String projectid,
+			String username) throws QuadrigaStorageException;
+
+	List<WorkspaceDTO> listActiveWorkspaceDTOofCollaborator(String projectid,
+			String username) throws QuadrigaStorageException;
+
+	List<WorkspaceDTO> listArchivedWorkspaceDTO(String projectid,
+			String username) throws QuadrigaStorageException;
+
+	List<WorkspaceDTO> listDeactivatedWorkspaceDTO(String projectid,
+			String username) throws QuadrigaStorageException;
 }
