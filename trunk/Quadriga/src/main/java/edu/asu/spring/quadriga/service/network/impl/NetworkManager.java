@@ -71,6 +71,7 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -673,14 +674,15 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @return								Returns boolean values true or false
 	 * @author Lohith Dwaraka
 	 */
-	public boolean hasBitStream(String uri,List<IBitStream> bitStreamList){
+	public boolean hasBitStream(String uri,List<IWorkspaceBitStream> workspaceBitStreamList){
 		if(uri.isEmpty()){
 			logger.debug("true");
 			return true;
 		}
 		String fileId =uri=uri.substring(uri.lastIndexOf("/")+1,uri.length());
-		for(IBitStream bitStream : bitStreamList){
-			if(fileId.equals(bitStream.getNetworkId())){
+		for(IWorkspaceBitStream workspaceBitStream : workspaceBitStreamList){
+			
+			if(fileId.equals(workspaceBitStream.getBitStream().getId())){
 				logger.debug("true");
 				return true;
 			}
@@ -1163,13 +1165,13 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		}
 
 		// Get DSpace of the workspace
-		List<IBitStream> bitStreamList = workspace.getBitstreams();
+		List<IWorkspaceBitStream> workspaceBitStreamList = workspace.getWorkspaceBitStreams();
 
 		NewNetworkDetailsCache newNetworkDetailCache = new NewNetworkDetailsCache();
 
 		// Below code reads the top level Appelation events 
 
-		newNetworkDetailCache = parseNewNetworkStatement(elementEventType,bitStreamList,newNetworkDetailCache);
+		newNetworkDetailCache = parseNewNetworkStatement(elementEventType,workspaceBitStreamList,newNetworkDetailCache);
 
 		// Check if it DSpace is present in the XML
 		if(!newNetworkDetailCache.isFileExists()){
@@ -1208,7 +1210,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
 	 */
 	private NewNetworkDetailsCache parseNewNetworkStatement(
-			ElementEventsType elementEventType, List<IBitStream> bitStreamList,
+			ElementEventsType elementEventType, List<IWorkspaceBitStream> workspaceBitStreamList,
 			NewNetworkDetailsCache newNetworkDetailCache) {	
 
 		List<CreationEvent> creationEventList =elementEventType.getRelationEventOrAppellationEvent();
@@ -1217,11 +1219,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			CreationEvent creationEvent = creationEventIterator.next();
 			// Cache Appellation Events
 			if(creationEvent instanceof AppellationEventType){
-				newNetworkDetailCache =  parseNewAppellationEvent(newNetworkDetailCache, creationEvent, bitStreamList);
+				newNetworkDetailCache =  parseNewAppellationEvent(newNetworkDetailCache, creationEvent, workspaceBitStreamList);
 			}
 			// Cache Relation Events
 			if(creationEvent instanceof RelationEventType){
-				newNetworkDetailCache =  parseNewRelationEvent(newNetworkDetailCache, creationEvent, bitStreamList);
+				newNetworkDetailCache =  parseNewRelationEvent(newNetworkDetailCache, creationEvent, workspaceBitStreamList);
 
 			}
 		}
@@ -1235,7 +1237,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @param bitStreamList							{@link List} of {@link IBitStream} object
 	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
 	 */
-	public NewNetworkDetailsCache parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,CreationEvent creationEvent,List<IBitStream> bitStreamList){
+	public NewNetworkDetailsCache parseNewAppellationEvent(NewNetworkDetailsCache newNetworkDetailCache,CreationEvent creationEvent,List<IWorkspaceBitStream> workspaceBitStreamList){
 
 
 		List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
@@ -1249,7 +1251,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			// Check if dspace file exists. 
 			if(element.getName().toString().contains("source_reference")){
 				logger.debug("Dspace file : "+element.getValue().toString());
-				boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+				boolean dspaceFileExists = hasBitStream(element.getValue().toString(), workspaceBitStreamList);
 				if(dspaceFileExists == false){
 					newNetworkDetailCache.setFileExists(false);
 				}
@@ -1267,7 +1269,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @param bitStreamList							{@link List} of {@link IBitStream} object
 	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
 	 */
-	public NewNetworkDetailsCache parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,CreationEvent creationEvent,List<IBitStream> bitStreamList){
+	public NewNetworkDetailsCache parseNewRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,CreationEvent creationEvent,List<IWorkspaceBitStream> workspaceBitStreamList){
 
 
 		List<JAXBElement<?>> elementsList = creationEvent.getIdOrCreatorOrCreationDate();
@@ -1283,7 +1285,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 			// get dspace quadriga URL
 			if(element.getName().toString().contains("source_reference")){
-				boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+				boolean dspaceFileExists = hasBitStream(element.getValue().toString(), workspaceBitStreamList);
 				if(dspaceFileExists == false){
 					newNetworkDetailCache.setFileExists(false);
 				}
@@ -1293,7 +1295,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		RelationEventType relationEventType = (RelationEventType) (creationEvent);
 		try{
 			// Go Recursively and check for Relation event within a relation events
-			newNetworkDetailCache = parseIntoRelationEventElement(relationEventType,newNetworkDetailCache,bitStreamList);
+			newNetworkDetailCache = parseIntoRelationEventElement(relationEventType,newNetworkDetailCache,workspaceBitStreamList);
 		}catch(QuadrigaStorageException se){
 			logger.error("DB Storage issue",se);
 		}
@@ -1311,7 +1313,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @return												Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
 	 * @throws QuadrigaStorageException						Throws Database storage exception
 	 */
-	public NewNetworkDetailsCache parseIntoRelationEventElement(RelationEventType relationEventType, NewNetworkDetailsCache newNetworkDetailCache,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
+	public NewNetworkDetailsCache parseIntoRelationEventElement(RelationEventType relationEventType, NewNetworkDetailsCache newNetworkDetailCache,List<IWorkspaceBitStream> workspaceBitStreamList) throws QuadrigaStorageException{
 
 		List <?> creatorOrRelationList = relationEventType.getRelationCreatorOrRelation();
 		Iterator <?> creatorOrRelationIterator=creatorOrRelationList.iterator();
@@ -1329,14 +1331,14 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 						//	Handles the subject part of the relation
 						if(element.getName().toString().contains("subject")){
 							SubjectObjectType  subject= (SubjectObjectType) element.getValue();
-							newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, subject, bitStreamList);
+							newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, subject, workspaceBitStreamList);
 
 						}else{
 							//	Handles the object part of the relation
 							if(element.getName().toString().contains("object")){
 
 								SubjectObjectType  object= (SubjectObjectType) element.getValue();
-								newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, object, bitStreamList);
+								newNetworkDetailCache = parseNewSubjectObjectType(newNetworkDetailCache, object, workspaceBitStreamList);
 
 							}
 						}
@@ -1346,7 +1348,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 							PredicateType  predicateType= (PredicateType) element.getValue();
 							AppellationEventType appellationEventType = predicateType.getAppellationEvent();
-							newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType, bitStreamList);
+							newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType, workspaceBitStreamList);
 						}
 					}
 				}
@@ -1364,7 +1366,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @return											Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
 	 * @throws QuadrigaStorageException					Throws Database storage exception
 	 */
-	public NewNetworkDetailsCache parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,SubjectObjectType subjectOrObject,List<IBitStream> bitStreamList) throws QuadrigaStorageException{
+	public NewNetworkDetailsCache parseNewSubjectObjectType(NewNetworkDetailsCache newNetworkDetailCache,SubjectObjectType subjectOrObject,List<IWorkspaceBitStream> workspaceBitStreamList) throws QuadrigaStorageException{
 
 
 		//	Check for relation event inside subject
@@ -1372,7 +1374,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(relationEventType == null){
 			// Check for Appellation event inside subject and add if any
 			AppellationEventType appellationEventType = subjectOrObject.getAppellationEvent();
-			newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType, bitStreamList);	
+			newNetworkDetailCache = parseNewAppellationEventFoundInRelationEvent(newNetworkDetailCache, appellationEventType, workspaceBitStreamList);	
 		}else{
 			List<JAXBElement<?>> elementsList = relationEventType.getIdOrCreatorOrCreationDate();
 			Iterator <JAXBElement<?>> elementsIterator = elementsList.iterator();
@@ -1385,13 +1387,13 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				}
 
 				if(elements.getName().toString().contains("source_reference")){
-					boolean dspaceFileExists = hasBitStream(elements.getValue().toString(), bitStreamList);
+					boolean dspaceFileExists = hasBitStream(elements.getValue().toString(), workspaceBitStreamList);
 					if(dspaceFileExists == false){
 						newNetworkDetailCache.setFileExists(false);
 					}
 				}
 			}
-			newNetworkDetailCache=parseIntoRelationEventElement(relationEventType,newNetworkDetailCache,bitStreamList);
+			newNetworkDetailCache=parseIntoRelationEventElement(relationEventType,newNetworkDetailCache,workspaceBitStreamList);
 		}
 
 		return newNetworkDetailCache;
@@ -1406,7 +1408,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	 * @param bitStreamList							{@link List} of {@link IBitStream} object
 	 * @return										Returns updated {@link NewNetworkDetailsCache} object which holds the cache of network details
 	 */
-	public NewNetworkDetailsCache parseNewAppellationEventFoundInRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,AppellationEventType appellationEventType,List<IBitStream> bitStreamList){
+	public NewNetworkDetailsCache parseNewAppellationEventFoundInRelationEvent(NewNetworkDetailsCache newNetworkDetailCache,AppellationEventType appellationEventType,List<IWorkspaceBitStream> workspaceBitStreamList){
 
 
 		//	Check for Appellation event inside predicate
@@ -1425,7 +1427,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				}
 
 				if(element.getName().toString().contains("source_reference")){
-					boolean dspaceFileExists = hasBitStream(element.getValue().toString(), bitStreamList);
+					boolean dspaceFileExists = hasBitStream(element.getValue().toString(), workspaceBitStreamList);
 					if(dspaceFileExists == false){
 						newNetworkDetailCache.setFileExists(false);
 					}
