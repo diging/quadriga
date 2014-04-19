@@ -22,19 +22,16 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
-import edu.asu.spring.quadriga.domain.impl.networks.jsonobject.JsonObject;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
-import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
-import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
 
 /**
  * This class acts as a Dictionary manager which adds list of Dictionary words
@@ -75,7 +72,7 @@ public class DictionaryManager implements IDictionaryManager {
 	private IDBConnectionDictionaryManager dbConnect;
 
 	@Autowired
-	private DictionaryItemsFactory dictionaryItemsFactory;
+	private DictionaryItemFactory dictionaryItemsFactory;
 	
 	@Autowired
 	private IDBConnectionProjectDictionary connectProjectDictionary;
@@ -462,7 +459,7 @@ public class DictionaryManager implements IDictionaryManager {
 			}
 		}
 		Item di = dictionaryItemsFactory
-				.createDictionaryItemsObject();
+				.createDictionaryItemObject();
 		di.setDictionaryItemId(ids[index]);
 		di.setTerm(terms[index]);
 		di.setPos(pos[index]);

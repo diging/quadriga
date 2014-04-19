@@ -51,4 +51,21 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 	}
 	
 
+	@Override
+	public DictionaryDTO getDictionaryDTO(String dictionaryId) throws QuadrigaStorageException 
+	{
+		DictionaryDTO dictionaryDTO = null;
+		try
+		{
+			dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
+		} 
+		catch (HibernateException e) 
+		{
+			logger.error("getDictionaryDetails method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return dictionaryDTO;
+	}
+	
+	
 }

@@ -12,29 +12,34 @@ import edu.asu.spring.quadriga.domain.factory.workbench.IProjectDictionaryFactor
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 @Service
 public class ProjectDictionaryShallowMapper implements
-		IProjectDictionaryShallowMapper {
+IProjectDictionaryShallowMapper {
 
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
-	
+
 	@Autowired
 	private IUserManager userManager;
-	
+
+	@Autowired
+	private IProjectShallowMapper projectShallowMapper;	
+
 	@Autowired
 	private IDictionaryManager dictionaryManager;
-	
+
 	@Autowired
 	private IProjectDictionaryFactory projectDictionaryFactory;
-	
+
 	@Override
 	public List<IProjectDictionary> getProjectDictionaryList(IProject project,
 			ProjectDTO projectDTO) throws QuadrigaStorageException {
@@ -64,7 +69,36 @@ public class ProjectDictionaryShallowMapper implements
 			}
 		}
 		return projectDictionaryList;
-	
+
+	}
+
+
+	@Override
+	public List<IProjectDictionary> getProjectDictionaryList(DictionaryDTO dictionaryDTO, IDictionary dictionary) throws QuadrigaStorageException{
+		List<IProjectDictionary> projectDictionaryList = null;
+
+		List<ProjectDictionaryDTO> projectDictionaryDTOList = dictionaryDTO.getProjectDictionaryDTOList();
+		if(projectDictionaryDTOList != null){
+			for(ProjectDictionaryDTO projectDictionaryDTO : projectDictionaryDTOList){
+				if(projectDictionaryList == null){
+					projectDictionaryList = new ArrayList<IProjectDictionary>();
+				}
+				ProjectDTO projectDTO = projectDictionaryDTO.getProject();
+				IProject project = projectShallowMapper.getProjectDetails(projectDTO);
+				IProjectDictionary projectDictionary = projectDictionaryFactory.createProjectDictionaryObject();
+				projectDictionary.setProejct(project);
+				projectDictionary.setDictionary(dictionary);
+				projectDictionary.setCreatedBy(projectDictionaryDTO.getCreatedby());
+				projectDictionary.setCreatedDate(projectDictionaryDTO.getCreateddate());
+				projectDictionary.setUpdatedBy(projectDictionaryDTO.getUpdatedby());
+				projectDictionary.setUpdatedDate(projectDictionaryDTO.getUpdateddate());
+				projectDictionaryList.add(projectDictionary);
+				
+			}
+		}
+
+
+		return projectDictionaryList;
 	}
 
 }

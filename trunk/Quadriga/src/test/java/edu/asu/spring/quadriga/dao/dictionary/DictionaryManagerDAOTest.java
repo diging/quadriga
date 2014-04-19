@@ -33,7 +33,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.factories.IDictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -74,7 +74,7 @@ public class DictionaryManagerDAOTest {
 	private IDictionaryFactory dictionaryFactory;
 
 	@Autowired
-	private IDictionaryItemsFactory dictionaryItemsFactory;
+	private IDictionaryItemFactory dictionaryItemsFactory;
 
 	private IUser user;
 	@BeforeClass
@@ -379,7 +379,7 @@ public class DictionaryManagerDAOTest {
 			Iterator<IItem> I = dictionaryItemsList.iterator();
 			assertEquals(I.hasNext(),true);
 			logger.info("Checking if Iterator has objects  : "+I.hasNext());
-			IItem dictionaryItems=dictionaryItemsFactory.createDictionaryItemsObject();
+			IItem dictionaryItems=dictionaryItemsFactory.createDictionaryItemObject();
 			dictionaryItems=I.next();
 			logger.info("Dictionary id :"+dictionaryItems.getDictionaryItemId());
 			logger.info("Dictionary Pos :"+dictionaryItems.getPos());

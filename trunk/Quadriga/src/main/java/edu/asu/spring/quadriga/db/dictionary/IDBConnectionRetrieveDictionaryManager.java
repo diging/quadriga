@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.db.dictionary;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionRetrieveDictionaryManager
@@ -13,6 +14,9 @@ public interface IDBConnectionRetrieveDictionaryManager
 	 * @throws QuadrigaStorageException
 	 */
 	public abstract IDictionary getDictionaryDetails(String dictionaryId)
+			throws QuadrigaStorageException;
+
+	DictionaryDTO getDictionaryDTO(String dictionaryId)
 			throws QuadrigaStorageException;
 
 }

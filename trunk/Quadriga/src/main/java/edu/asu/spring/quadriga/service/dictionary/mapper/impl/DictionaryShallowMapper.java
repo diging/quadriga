@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
+import edu.asu.spring.quadriga.db.dictionary.IDBConnectionRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.enums.EProjectAccessibility;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
-import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
-import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -23,6 +20,9 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 
 	@Autowired
 	private IDBConnectionDictionaryManager dbConnect;
+	
+	@Autowired
+	private IDBConnectionRetrieveDictionaryManager dbconnect1;
 	
 	@Autowired
 	private IDictionaryManager dictionaryManager;
@@ -78,4 +78,23 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 		return dictionaryProxy;
 	}
 
+
+	@Override
+	@Transactional
+	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException{
+		DictionaryDTO dictionaryDTO = dbconnect1.getDictionaryDTO(dictionaryId);
+		IDictionary dictionaryProxy = null;
+		if(dictionaryDTO != null){
+			dictionaryProxy = new DictionaryProxy(dictionaryManager);
+			dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
+			dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
+			dictionaryProxy.setDescription(dictionaryDTO.getDescription());
+			dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
+			dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
+			dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
+			dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
+			dictionaryProxy.setOwner(userManager.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+		}
+		return dictionaryProxy;
+	}
 }

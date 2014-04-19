@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.domain.factories.impl;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.factories.IDictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 
 /**
@@ -13,9 +13,9 @@ import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
  */
 
 @Service
-public class DictionaryItemsFactory implements IDictionaryItemsFactory {
+public class DictionaryItemFactory implements IDictionaryItemFactory {
 	@Override
-	public Item createDictionaryItemsObject() {
+	public Item createDictionaryItemObject() {
 		
 		return new Item();
 	}

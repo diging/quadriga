@@ -10,4 +10,9 @@ public interface IDictionaryShallowMapper {
 	
 	public abstract List<IDictionary> getDictionaryList(String userName) throws QuadrigaStorageException;
 	public abstract IDictionary getDictionaryDetails(DictionaryDTO dictionaryDTO) throws QuadrigaStorageException;
+
+
+	IDictionary getDictionaryDetails(String dictionaryId)
+			throws QuadrigaStorageException;
+
 }
