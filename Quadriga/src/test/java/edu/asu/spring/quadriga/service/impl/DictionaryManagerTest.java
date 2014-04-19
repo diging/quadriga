@@ -31,7 +31,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.factories.IDictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
@@ -74,7 +74,7 @@ public class DictionaryManagerTest {
 	private IDictionaryFactory dictionaryFactory;
 
 	@Autowired
-	private IDictionaryItemsFactory dictionaryItemsFactory;
+	private IDictionaryItemFactory dictionaryItemsFactory;
 
 	private IUser user;
 

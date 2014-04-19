@@ -92,6 +92,31 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 	*/
 	@Override
 	@Transactional
+	public IProject getProjectDetails(ProjectDTO projectDTO) throws QuadrigaStorageException{
+		IProject projectProxy = null;
+		
+		if(projectDTO != null){
+			projectProxy = new ProjectProxy(projectManager);
+			projectProxy.setProjectId(projectDTO.getProjectid());
+			projectProxy.setProjectName(projectDTO.getProjectname());
+			projectProxy.setDescription(projectDTO.getDescription());
+			projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
+			projectProxy.setUnixName(projectDTO.getUnixname());
+			projectProxy.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			projectProxy.setCreatedBy(projectDTO.getCreatedby());
+			projectProxy.setCreatedDate(projectDTO.getCreateddate());
+			projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
+			projectProxy.setUpdatedDate(projectDTO.getUpdateddate());
+		}
+		
+		return projectProxy;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	*/
+	@Override
+	@Transactional
 	public List<IProject> getCollaboratorProjectListOfUser(String userName) throws QuadrigaStorageException{
 		List<ProjectDTO> projectDTOList = dbConnect.getCollaboratorProjectDTOListOfUser(userName);
 		List<IProject> projectList = null;

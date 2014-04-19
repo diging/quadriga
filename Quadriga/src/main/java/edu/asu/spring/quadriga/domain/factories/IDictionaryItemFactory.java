@@ -6,11 +6,11 @@ import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
  * Factory interface for DictionaryItems factories.
  * 
  */
-public interface IDictionaryItemsFactory {
+public interface IDictionaryItemFactory {
 	/**
 	 * 
 	 * @return DictionaryItems
 	 */
-	public abstract Item createDictionaryItemsObject();
+	public abstract Item createDictionaryItemObject();
 
 }

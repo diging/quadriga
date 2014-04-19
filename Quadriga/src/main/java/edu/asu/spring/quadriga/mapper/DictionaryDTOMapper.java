@@ -16,7 +16,7 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemFactory;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
@@ -32,7 +32,7 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 	private DictionaryFactory dictionaryFactory;
 	
 	@Autowired
-	private DictionaryItemsFactory dictionaryItemsFactory;
+	private DictionaryItemFactory dictionaryItemsFactory;
 	
 	@Autowired
 	private UserDTOMapper userMapper;
@@ -143,7 +143,7 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 	
 	public IItem getDictionaryItem(DictionaryItemsDTO dictionaryItemsDTO)
 	{
-		IItem dictionaryItem = dictionaryItemsFactory.createDictionaryItemsObject();
+		IItem dictionaryItem = dictionaryItemsFactory.createDictionaryItemObject();
 		dictionaryItem.setDictionaryItemId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
 		dictionaryItem.setTerm(dictionaryItemsDTO.getTerm());					
 		dictionaryItem.setPos(dictionaryItemsDTO.getPos());

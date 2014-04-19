@@ -14,10 +14,10 @@ import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceBitstreamFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.impl.dspace.BitStream;
-import edu.asu.spring.quadriga.domain.proxy.WorkSpaceProxy;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -56,6 +56,8 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	@Autowired
 	private IBitStreamFactory bitStreamFactory;
 	
+	@Autowired
+	private IWorkspaceFactory workspaceFactory;
 	
 	@Autowired
 	private IWorkspaceCollaboratorFactory workspaceCollaboratorFactory;
@@ -92,7 +94,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 		IWorkSpace workspace = null;
 		
 		if(workspaceDTO != null){
-			workspace = new WorkSpaceProxy(wsManager);
+			workspace = workspaceFactory.createWorkspaceObject();
 			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspace.setDescription(workspaceDTO.getDescription());
@@ -130,7 +132,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 		IWorkSpace workspace = null;
 		
 		if(workspaceDTO != null){
-			workspace = new WorkSpaceProxy(wsManager);
+			workspace = workspaceFactory.createWorkspaceObject();
 			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspace.setDescription(workspaceDTO.getDescription());

@@ -47,7 +47,7 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemsFactory;
+import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItem;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItemList;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.QuadrigaDictDetailsReply;
@@ -98,7 +98,7 @@ public class DictionaryRestController {
 	private IDictionaryFactory dictionaryFactory;
 
 	@Autowired
-	private DictionaryItemsFactory dictionaryItemsFactory;
+	private DictionaryItemFactory dictionaryItemsFactory;
 
 	@Autowired
 	private IRestVelocityFactory restVelocityFactory;
