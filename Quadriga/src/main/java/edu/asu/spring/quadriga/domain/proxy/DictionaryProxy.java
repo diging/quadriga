@@ -4,9 +4,6 @@ package edu.asu.spring.quadriga.domain.proxy;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
@@ -34,7 +31,6 @@ public class DictionaryProxy implements IDictionary {
 		private String createdBy;
 		private Date createdDate;
 		private Date updatedDate; 
-		private List<ICollaborator> collaborators;
 		
 		private IDictionary dictionary;
 		

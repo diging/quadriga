@@ -1,11 +1,11 @@
 package edu.asu.spring.quadriga.domain.impl.dictionary;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IWorkspaceDictionary;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 
 public class WorkspaceDictionary implements IWorkspaceDictionary {
 
@@ -63,19 +63,18 @@ public class WorkspaceDictionary implements IWorkspaceDictionary {
 	}
 
 	@Override
-	public String getupdatedBy() {
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
 	@Override
-	public void setUpdatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-		
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
 	@Override
 	public Date getUpdatedDate() {
-		return createdDate;
+		return updatedDate;
 	}
 
 }

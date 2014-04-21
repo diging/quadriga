@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 
 /**
  * @description   : interface to implement WorkSpace class.
@@ -35,9 +35,9 @@ public interface IWorkSpace
 	
 	public abstract void setWorkspaceCollaborators(List<IWorkspaceCollaborator> workspaceCollaborators);
 	
-	public abstract IProject getProject();
+	public abstract IProjectWorkspace getProjectWorkspace();
 	
-	public abstract void setProject(IProject project);
+	public abstract void setProjectWorkspace(IProjectWorkspace projectWorkspace);
 	
 	public abstract List<IWorkspaceBitStream> getWorkspaceBitStreams();
 	

@@ -23,8 +23,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.asu.spring.quadriga.service.network.impl.NetworkManager;
-
 
 
 /**
@@ -79,8 +77,6 @@ public class TermType {
     })
     protected List<JAXBElement<?>> idOrCreatorOrCreationDate;
 
-    private static final Logger logger = LoggerFactory
-			.getLogger(TermType.class);
     /**
      * Returns the interperation object 
      * @author Lohith Dwaraka 

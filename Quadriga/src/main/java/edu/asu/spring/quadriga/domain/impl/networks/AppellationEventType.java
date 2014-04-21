@@ -19,8 +19,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 
-import edu.asu.spring.quadriga.service.network.INetworkManager;
-
 
 
 /**

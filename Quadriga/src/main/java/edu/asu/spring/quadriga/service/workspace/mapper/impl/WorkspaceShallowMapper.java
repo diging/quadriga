@@ -55,7 +55,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectId));
+				workspaceProxy.setProjectWorkspace(projectShallowMapper.getProjectDetails(projectId));
 				workspaceList.add(workspaceProxy);
 			}
 		}
@@ -86,7 +86,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectId));
+				workspaceProxy.setProjectWorkspace(projectShallowMapper.getProjectDetails(projectId));
 				workspaceList.add(workspaceProxy);
 			}
 		}
@@ -171,7 +171,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceProxy.setProjectWorkspace(projectShallowMapper.getProjectDetails(projectid));
 				workspaceList.add(workspaceProxy);
 			}
 		}
@@ -202,7 +202,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceProxy.setProjectWorkspace(projectShallowMapper.getProjectDetails(projectid));
 				workspaceList.add(workspaceProxy);
 			}
 		}
@@ -233,7 +233,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceProxy.setProjectWorkspace(projectShallowMapper.getProjectDetails(projectid));
 				workspaceList.add(workspaceProxy);
 			}
 		}
@@ -264,7 +264,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceProxy.setProjectWorkspace(projectShallowMapper.getProjectDetails(projectid));
 				workspaceList.add(workspaceProxy);
 			}
 		}
@@ -295,7 +295,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
 				workspaceProxy.setUpdatedDate(workspaceDTO.getUpdateddate());
-				workspaceProxy.setProject(projectShallowMapper.getProjectDetails(projectid));
+				workspaceProxy.setProjectWorkspace(projectShallowMapper.getProjectDetails(projectid));
 				workspaceList.add(workspaceProxy);
 			}
 		}

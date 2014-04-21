@@ -58,7 +58,7 @@ IProjectDictionaryShallowMapper {
 					dictionaryProxy.setUpdatedBy(projectDictionaryDTO.getDictionary().getUpdatedby());
 					dictionaryProxy.setUpdatedDate(projectDictionaryDTO.getDictionary().getUpdateddate());
 					IProjectDictionary projectDictioanry = projectDictionaryFactory.createProjectDictionaryObject();
-					projectDictioanry.setProejct(project);
+					projectDictioanry.setProject(project);
 					projectDictioanry.setDictionary(dictionaryProxy);
 					projectDictioanry.setCreatedBy(projectDictionaryDTO.getCreatedby());
 					projectDictioanry.setCreatedDate(projectDictionaryDTO.getCreateddate());
@@ -86,7 +86,7 @@ IProjectDictionaryShallowMapper {
 				ProjectDTO projectDTO = projectDictionaryDTO.getProject();
 				IProject project = projectShallowMapper.getProjectDetails(projectDTO);
 				IProjectDictionary projectDictionary = projectDictionaryFactory.createProjectDictionaryObject();
-				projectDictionary.setProejct(project);
+				projectDictionary.setProject(project);
 				projectDictionary.setDictionary(dictionary);
 				projectDictionary.setCreatedBy(projectDictionaryDTO.getCreatedby());
 				projectDictionary.setCreatedDate(projectDictionaryDTO.getCreateddate());

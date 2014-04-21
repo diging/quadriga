@@ -24,7 +24,7 @@ public class ProjectDictionary implements IProjectDictionary
 	}
 
 	@Override
-	public void setProejct(IProject project) {
+	public void setProject(IProject project) {
         this.project = project;		
 	}
 
