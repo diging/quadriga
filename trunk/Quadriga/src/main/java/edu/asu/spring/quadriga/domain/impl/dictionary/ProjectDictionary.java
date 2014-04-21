@@ -1,10 +1,10 @@
 package edu.asu.spring.quadriga.domain.impl.dictionary;
 
-import java.sql.Date;
+import java.util.Date;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IProjectDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 
 public class ProjectDictionary implements IProjectDictionary {
 
@@ -62,7 +62,7 @@ public class ProjectDictionary implements IProjectDictionary {
 	}
 
 	@Override
-	public String getupdatedBy() {
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
@@ -75,5 +75,4 @@ public class ProjectDictionary implements IProjectDictionary {
 	public Date getUpdatedDate() {
 		return updatedDate;
 	}
-
 }

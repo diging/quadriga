@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -25,8 +25,8 @@ public class WorkSpace implements IWorkSpace
 	private String workspaceName;
 	private String description;
 	private IUser owner;
+	private IProjectWorkspace workspaceProject;
 	private List<IWorkspaceCollaborator> workspaceCollaborators;
-	private IProject project;
 	private List<IWorkspaceBitStream> workspaceBitStreams;
 	private List<IWorkspaceConceptCollection> workspaceConceptCollections;
 	private List<IWorkspaceDictionary> workspaceDictionaries;
@@ -82,12 +82,13 @@ public class WorkSpace implements IWorkSpace
 	}
 	
 	@Override
-	public IProject getProject() {
-		return project;
+	public IProjectWorkspace getProjectWorkspace() {
+		return workspaceProject;
 	}
+	
 	@Override
-	public void setProject(IProject project) {
-		this.project = project;
+	public void setProjectWorkspace(IProjectWorkspace projectWorkspace) {
+		workspaceProject = projectWorkspace;
 	}
 	
 	@Override
@@ -169,7 +170,6 @@ public class WorkSpace implements IWorkSpace
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
-		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result
 				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
 		result = prime * result
@@ -198,6 +198,9 @@ public class WorkSpace implements IWorkSpace
 				* result
 				+ ((workspaceNetworks == null) ? 0 : workspaceNetworks
 						.hashCode());
+		result = prime
+				* result
+				+ ((workspaceProject == null) ? 0 : workspaceProject.hashCode());
 		return result;
 	}
 	@Override
@@ -228,11 +231,6 @@ public class WorkSpace implements IWorkSpace
 			if (other.owner != null)
 				return false;
 		} else if (!owner.equals(other.owner))
-			return false;
-		if (project == null) {
-			if (other.project != null)
-				return false;
-		} else if (!project.equals(other.project))
 			return false;
 		if (updatedBy == null) {
 			if (other.updatedBy != null)
@@ -280,6 +278,14 @@ public class WorkSpace implements IWorkSpace
 				return false;
 		} else if (!workspaceNetworks.equals(other.workspaceNetworks))
 			return false;
+		if (workspaceProject == null) {
+			if (other.workspaceProject != null)
+				return false;
+		} else if (!workspaceProject.equals(other.workspaceProject))
+			return false;
 		return true;
 	}
+	
+	
+
 }

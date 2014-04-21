@@ -177,7 +177,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 * 
 	 */
 	@Override
-	public IProject getProject() {
+	public IProject getProjectWorkspace() {
 		return this.project;
 	}
 	
@@ -186,10 +186,10 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 * Also updates the local {@link IWorkSpace} object if it is not null
 	 */
 	@Override
-	public void setProject(IProject project) {
+	public void setProjectWorkspace(IProject project) {
 		this.project = project;
 		if(this.workspace != null){
-			this.workspace.setProject(project);
+			this.workspace.setProjectWorkspace(project);
 		}
 	}
 	
@@ -415,7 +415,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 		this.workspace.setUpdatedBy(this.updatedBy);
 		this.workspace.setUpdatedDate(this.updatedDate);
 		this.workspace.setOwner(this.owner);
-		this.workspace.setProject(this.project);
+		this.workspace.setProjectWorkspace(this.project);
 		
 	}
 	

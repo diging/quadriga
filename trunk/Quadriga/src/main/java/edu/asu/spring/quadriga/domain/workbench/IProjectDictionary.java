@@ -8,7 +8,7 @@ public interface IProjectDictionary
 {
 	public abstract IProject getProject();
 	
-	public abstract void setProejct(IProject project);
+	public abstract void setProject(IProject project);
 	
 	public abstract IDictionary getDictionary();
 	

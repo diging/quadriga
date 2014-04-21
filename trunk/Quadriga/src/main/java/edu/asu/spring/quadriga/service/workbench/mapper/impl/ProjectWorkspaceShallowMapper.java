@@ -45,7 +45,7 @@ IProjectWorkspaceShallowMapper {
 				for(ProjectWorkspaceDTO projectWorkspaceDTO :  projectWorkspaceDTOList){
 
 					IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
-					workspaceProxy.setProject(project);
+					workspaceProxy.setProjectWorkspace(project);
 					workspaceProxy.setWorkspaceId(projectWorkspaceDTO.getWorkspaceDTO().getWorkspaceid());
 					workspaceProxy.setWorkspaceName(projectWorkspaceDTO.getWorkspaceDTO().getWorkspacename());
 					workspaceProxy.setDescription(projectWorkspaceDTO.getWorkspaceDTO().getDescription());

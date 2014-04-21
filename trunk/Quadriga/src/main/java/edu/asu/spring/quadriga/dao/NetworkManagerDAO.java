@@ -186,7 +186,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
 					if(projectWorkspaceDTO.getProjectDTO() != null)
-						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
 					// Get the workspace details
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
@@ -237,7 +237,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
 					if(projectWorkspaceDTO.getProjectDTO() != null)
-						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
 					// Get the workspace details
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
@@ -471,7 +471,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			if (projectWorkspaceDTO != null) {
 				// Get the project details
 				if(projectWorkspaceDTO.getProjectDTO() != null)
-					network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+					network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
 				// Get the workspace details
 				if(projectWorkspaceDTO.getWorkspaceDTO() != null)
@@ -568,7 +568,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
 					if(projectWorkspaceDTO.getProjectDTO() != null)
-						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
 					// Get the workspace details
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
@@ -842,7 +842,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
 					if(projectWorkspaceDTO.getProjectDTO() != null)
-						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
 					// Get the workspace details
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
@@ -896,7 +896,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
 					if(projectWorkspaceDTO.getProjectDTO() != null)
-						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
 					// Get the workspace details
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
@@ -960,7 +960,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				if (projectWorkspaceDTO != null) {
 					// Get the project details
 					if(projectWorkspaceDTO.getProjectDTO() != null)
-						network.setProject(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
 
 					// Get the workspace details
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
