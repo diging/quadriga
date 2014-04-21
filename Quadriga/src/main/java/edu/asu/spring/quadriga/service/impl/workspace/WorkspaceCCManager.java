@@ -13,7 +13,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceCCManager;
-import edu.asu.spring.quadriga.service.workspace.mapper.impl.WorkspaceCCShallowMapper;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
 
 @Service
 public class WorkspaceCCManager implements IWorkspaceCCManager {
@@ -22,7 +22,7 @@ public class WorkspaceCCManager implements IWorkspaceCCManager {
 	private IDBConnectionWorkspaceCC dbConnect;
 	
 	@Autowired
-	private WorkspaceCCShallowMapper wsCCShallowMapper;
+	private IWorkspaceCCShallowMapper wsCCShallowMapper;
 	
 	@Override
 	@Transactional
