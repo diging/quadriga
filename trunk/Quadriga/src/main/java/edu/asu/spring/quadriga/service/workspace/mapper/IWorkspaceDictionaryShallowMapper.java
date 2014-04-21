@@ -2,9 +2,12 @@ package edu.asu.spring.quadriga.service.workspace.mapper;
 
 import java.util.List;
 
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -15,5 +18,6 @@ public interface IWorkspaceDictionaryShallowMapper {
 	List<IWorkspaceDictionary> getWorkspaceDictionaryList(
 			IDictionary dictionary, DictionaryDTO dictionaryDTO)
 			throws QuadrigaStorageException;
+
 
 }

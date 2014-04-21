@@ -8,16 +8,24 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factory.workbench.IProjectDictionaryFactory;
 import edu.asu.spring.quadriga.domain.proxy.ConceptCollectionProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
+import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 
 @Service
 public class ProjectConceptCollectionShallowMapper implements
@@ -33,6 +41,11 @@ IProjectConceptCollectionShallowMapper {
 
 	@Autowired
 	private IProjectConceptCollectionFactory projectCCFactory;
+	
+	@Autowired
+	private IProjectShallowMapper projectShallowMapper;	
+
+	
 
 	@Override
 	public List<IProjectConceptCollection> getProjectConceptCollectionList(
@@ -64,6 +77,35 @@ IProjectConceptCollectionShallowMapper {
 			}
 		}
 		return projectCCList;
+	}
+	
+	
+	@Override
+	public List<IProjectConceptCollection> getProjectConceptCollectionList(ConceptCollectionDTO ccDTO, IConceptCollection conceptCollection) throws QuadrigaStorageException{
+		List<IProjectConceptCollection> projectDictionaryList = null;
+
+		List<ProjectConceptCollectionDTO> projectConceptCollectionDTOList = ccDTO.getProjConceptCollectionDTOList();
+		if(projectConceptCollectionDTOList != null){
+			for(ProjectConceptCollectionDTO projectCCDTO : projectConceptCollectionDTOList){
+				if(projectDictionaryList == null){
+					projectDictionaryList = new ArrayList<IProjectConceptCollection>();
+				}
+				ProjectDTO projectDTO = projectCCDTO.getProjectDTO();
+				IProject project = projectShallowMapper.getProjectDetails(projectDTO);
+				IProjectConceptCollection projectDictionary = projectCCFactory.createProjectConceptCollectionObject();
+				projectDictionary.setProject(project);
+				projectDictionary.setConceptCollection(conceptCollection);
+				projectDictionary.setCreatedBy(projectCCDTO.getCreatedby());
+				projectDictionary.setCreatedDate(projectCCDTO.getCreateddate());
+				projectDictionary.setUpdatedBy(projectCCDTO.getUpdatedby());
+				projectDictionary.setUpdatedDate(projectCCDTO.getUpdateddate());
+				projectDictionaryList.add(projectDictionary);
+				
+			}
+		}
+
+
+		return projectDictionaryList;
 	}
 
 

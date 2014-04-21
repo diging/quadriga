@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptsDTO;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -717,6 +719,22 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
 			throw new QuadrigaStorageException(e);
 		}
+	}
+	
+	@Override
+	public ConceptCollectionDTO getCCDTO(String ccId) throws QuadrigaStorageException 
+	{
+		ConceptCollectionDTO ccDTO = null;
+		try
+		{
+			ccDTO = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, ccId);
+		} 
+		catch (HibernateException e) 
+		{
+			logger.error("getConceptCollectionDetails method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return ccDTO;
 	}
 
 }

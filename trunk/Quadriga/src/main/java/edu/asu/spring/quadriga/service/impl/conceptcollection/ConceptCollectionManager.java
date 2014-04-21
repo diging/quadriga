@@ -32,7 +32,6 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
@@ -40,7 +39,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-import edu.asu.spring.quadriga.service.network.impl.NetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
@@ -407,5 +405,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		// return core.toString(SUCCESS);
 		return core.toString(1);
 	}
+	
 	
 }

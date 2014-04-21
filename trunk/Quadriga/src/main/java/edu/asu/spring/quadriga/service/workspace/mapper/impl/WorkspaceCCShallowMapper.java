@@ -8,16 +8,23 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceDictionaryFactory;
 import edu.asu.spring.quadriga.domain.proxy.ConceptCollectionProxy;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
+import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
 @Service
 public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
@@ -32,6 +39,10 @@ public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
 	
 	@Autowired
 	private IWorkspaceConceptCollectionFactory wsCCFactory;
+	
+	@Autowired
+	private IWorkspaceShallowMapper workspaceShallowMapper;
+
 
 	@Override
 	public List<IWorkspaceConceptCollection> getWorkspaceCCList(
@@ -63,5 +74,35 @@ public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
 		}
 		return workspaceCCList;
 	}
+	
+	
+	@Override
+	public List<IWorkspaceConceptCollection> getWorkspaceConceptCollectionList(
+			IConceptCollection conceptCollection, ConceptCollectionDTO  ccDTO)
+					throws QuadrigaStorageException {
+		List<IWorkspaceConceptCollection> workspaceConceptCollectionList = null;
+		List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList = ccDTO.getWsConceptCollectionDTOList();
+		if(workspaceConceptCollectionDTOList != null){
+			for( WorkspaceConceptcollectionDTO workspaceConceptCollectionDTO : workspaceConceptCollectionDTOList){
+				if(workspaceConceptCollectionList == null){
+					workspaceConceptCollectionList = new ArrayList<IWorkspaceConceptCollection>();
+				}
+
+				IWorkSpace workspace = workspaceShallowMapper.getWorkSpaceDetails(workspaceConceptCollectionDTO.getWorkspaceDTO());
+				IWorkspaceConceptCollection wsCocneptCollection = wsCCFactory.createWorkspaceConceptCollectionObject();
+				wsCocneptCollection.setWorkspace(workspace);
+				wsCocneptCollection.setConceptCollection(conceptCollection);
+				wsCocneptCollection.setCreatedBy(workspaceConceptCollectionDTO.getCreatedby());
+				wsCocneptCollection.setCreatedDate(workspaceConceptCollectionDTO.getCreateddate());
+				wsCocneptCollection.setUpdatedBy(workspaceConceptCollectionDTO.getUpdatedby());
+				wsCocneptCollection.setUpdatedDate(workspaceConceptCollectionDTO.getUpdateddate());
+				workspaceConceptCollectionList.add(wsCocneptCollection);
+
+			}
+		}
+
+		return workspaceConceptCollectionList;
+	}
+
 
 }
