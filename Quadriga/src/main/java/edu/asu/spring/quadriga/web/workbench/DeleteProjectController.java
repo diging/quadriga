@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.factories.IModifyProjectFormFactory;
+import edu.asu.spring.quadriga.domain.factory.workbench.IModifyProjectFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.ICheckProjectSecurity;
@@ -82,7 +82,7 @@ public class DeleteProjectController
 		userName = principal.getName();
 		
 		//create a project form
-		projectForm = projectFormFactory.createModifyProjectForm();
+		projectForm = projectFormFactory.createModifyProjectFormObject();
 		
 		deleteProjectList = projectFormManager.getProjectList(userName,RoleNames.ROLE_COLLABORATOR_ADMIN);
 		

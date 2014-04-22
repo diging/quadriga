@@ -14,7 +14,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;

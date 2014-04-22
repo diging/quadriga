@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
-import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
+import edu.asu.spring.quadriga.domain.factory.impl.networks.NetworkFactory;
+import edu.asu.spring.quadriga.domain.factory.networks.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;

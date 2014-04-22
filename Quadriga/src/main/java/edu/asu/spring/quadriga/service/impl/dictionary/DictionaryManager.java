@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
-import edu.asu.spring.quadriga.domain.factories.impl.DictionaryItemFactory;
+import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
