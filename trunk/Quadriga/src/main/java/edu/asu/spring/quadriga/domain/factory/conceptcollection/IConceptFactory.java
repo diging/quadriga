@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.factories;
+package edu.asu.spring.quadriga.domain.factory.conceptcollection;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;

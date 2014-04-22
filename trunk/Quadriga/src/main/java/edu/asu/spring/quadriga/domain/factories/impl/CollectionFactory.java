@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
-import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.ICollectionFactory;
 import edu.asu.spring.quadriga.domain.impl.dspace.Collection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 
