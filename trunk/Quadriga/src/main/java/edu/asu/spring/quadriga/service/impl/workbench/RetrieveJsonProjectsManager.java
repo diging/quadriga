@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 @Service
@@ -27,6 +28,10 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 	
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
+	
+	@Autowired
+	private IProjectShallowMapper projectShallowMapper;
+	
 	@Autowired
 	private	IListWSManager wsManager; 
 
@@ -48,7 +53,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = dbConnect.getProjectList(sUserName);
+		projectList = projectShallowMapper.getProjectList(sUserName);
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
@@ -114,7 +119,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = dbConnect.getProjectListAsWorkspaceCollaborator(sUserName);
+		projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
@@ -180,7 +185,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = dbConnect.getProjectListAsWorkspaceOwner(sUserName);
+		projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
@@ -246,7 +251,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = dbConnect.getCollaboratorProjectList(sUserName);
+		projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);
 		for (IProject project : projectList) {
 			
 				JSONObject data = new JSONObject();
@@ -312,26 +317,26 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONObject core = new JSONObject();
 		try {
 		List<IProject> allProjectsList = new ArrayList<IProject>() ;
-		List<IProject> projectList = dbConnect.getProjectList(sUserName);
+		List<IProject> projectList = projectShallowMapper.getProjectList(sUserName);
 		for(IProject project : projectList){
 			allProjectsList.add(project);
 		}
 		projectList = null;
-		projectList = dbConnect.getProjectListAsWorkspaceCollaborator(sUserName);
-		for(IProject project : projectList){
-			if(!allProjectsList.contains(project)) {
-			allProjectsList.add(project);
-			}
-		}
-		projectList = null;
-		projectList = dbConnect.getCollaboratorProjectList(sUserName); 
+		projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
 		for(IProject project : projectList){
 			if(!allProjectsList.contains(project)) {
 			allProjectsList.add(project);
 			}
 		}
 		projectList = null;
-		projectList = dbConnect.getProjectListAsWorkspaceOwner(sUserName);
+		projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName); 
+		for(IProject project : projectList){
+			if(!allProjectsList.contains(project)) {
+			allProjectsList.add(project);
+			}
+		}
+		projectList = null;
+		projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
 		for(IProject project : projectList){
 			if(!allProjectsList.contains(project)) {
 			allProjectsList.add(project);

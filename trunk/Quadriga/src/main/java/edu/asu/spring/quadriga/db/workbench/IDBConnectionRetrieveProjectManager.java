@@ -15,8 +15,8 @@ public interface IDBConnectionRetrieveProjectManager
 	 * @return IProject - Project object containing all its details.
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract IProject getProjectDetails(String projectId)
-			throws QuadrigaStorageException;
+//	public abstract IProject getProjectDetails(String projectId)
+//			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieve the list of projects associated with the given user as project owner.
@@ -24,8 +24,8 @@ public interface IDBConnectionRetrieveProjectManager
 	 * @return List<IProject> - list of project objects associated with the user as project oner.
 	 * @throws QuadrigaStorageException
 	 */
-	List<IProject> getProjectList(String sUserName)
-			throws QuadrigaStorageException;
+//	List<IProject> getProjectList(String sUserName)
+//			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieve the list of projects association with the given user as associated
@@ -34,8 +34,8 @@ public interface IDBConnectionRetrieveProjectManager
 	 * @returnList<IProject> - list of projects associated with user as owner for the projects.
 	 * @throws QuadrigaStorageException
 	 */
-	List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
-			throws QuadrigaStorageException;
+//	List<IProject> getProjectListAsWorkspaceOwner(String sUserName)
+//			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieves the list of projects associated with given user as a collaborators to 
@@ -45,8 +45,8 @@ public interface IDBConnectionRetrieveProjectManager
 	 * to associated workspaces.
 	 * @throws QuadrigaStorageException
 	 */
-	List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
-			throws QuadrigaStorageException;
+//	List<IProject> getProjectListAsWorkspaceCollaborator(String sUserName)
+//			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieves the project details associated it unix name.
@@ -54,8 +54,8 @@ public interface IDBConnectionRetrieveProjectManager
 	 * @return IProject - project object containing details associated with given unix name.
 	 * @throws QuadrigaStorageException
 	 */
-	IProject getProjectDetailsByUnixName(String unixName)
-			throws QuadrigaStorageException;
+//	IProject getProjectDetailsByUnixName(String unixName)
+//			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieves list of projects associated with the given user as collaborators to projects.
@@ -64,8 +64,8 @@ public interface IDBConnectionRetrieveProjectManager
 	 * as projects.
 	 * @throws QuadrigaStorageException
 	 */
-	List<IProject> getCollaboratorProjectList(String sUserName)
-			throws QuadrigaStorageException;
+//	List<IProject> getCollaboratorProjectList(String sUserName)
+//			throws QuadrigaStorageException;
 
 	/**
 	 * Retrieve list of projects associated with the given user as collaborator to projects.
@@ -75,8 +75,8 @@ public interface IDBConnectionRetrieveProjectManager
 	 * specified role to projects.
 	 * @throws QuadrigaStorageException
 	 */
-	List<IProject> getProjectListByCollaboratorRole(String sUserName,
-			String collaboratorRole) throws QuadrigaStorageException;
+//	List<IProject> getProjectListByCollaboratorRole(String sUserName,
+//			String collaboratorRole) throws QuadrigaStorageException;
 	
 	/**
 	 * Retrieve the project to which the workspace is associated. A workspace will be associated
@@ -88,9 +88,9 @@ public interface IDBConnectionRetrieveProjectManager
 	 * @author Ram Kumar Kumaresan
 	 */
 	public abstract IProject getProject(String workspaceid) throws QuadrigaStorageException;
-
-	public abstract List<IProject> getProjectsByConceptCollection(String ccId)
-			throws QuadrigaStorageException;
+//
+//	public abstract List<IProject> getProjectsByConceptCollection(String ccId)
+//			throws QuadrigaStorageException;
 	
 	/**
 	 * This method executes the query utilized in setting up test environment
