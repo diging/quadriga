@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 
 @Service
 public class ProjectWorkspaceShallowMapper implements
@@ -25,6 +26,9 @@ IProjectWorkspaceShallowMapper {
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
 
+	@Autowired
+	private IWorkspaceDeepMapper workspaceDeepMapper;
+	
 	@Autowired
 	private IListWSManager wsManager;
 
@@ -45,7 +49,7 @@ IProjectWorkspaceShallowMapper {
 				for(ProjectWorkspaceDTO projectWorkspaceDTO :  projectWorkspaceDTOList){
 
 					IWorkSpace workspaceProxy = new WorkSpaceProxy(wsManager);
-					workspaceProxy.setProjectWorkspace(project);
+					workspaceProxy.setProjectWorkspace(workspaceDeepMapper.getProjectWorkspaceOfWorkspace(workspaceProxy ,projectWorkspaceDTO.getWorkspaceDTO()));
 					workspaceProxy.setWorkspaceId(projectWorkspaceDTO.getWorkspaceDTO().getWorkspaceid());
 					workspaceProxy.setWorkspaceName(projectWorkspaceDTO.getWorkspaceDTO().getWorkspacename());
 					workspaceProxy.setDescription(projectWorkspaceDTO.getWorkspaceDTO().getDescription());
