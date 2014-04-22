@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.dao.workspace;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -39,18 +38,18 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 
 	@Autowired
 	WorkspaceDTOMapper workspaceDTOMapper;
-	
+
 	@Autowired
 	ProjectDTOMapper projectMapper;
-	
+
 	@Autowired
 	SessionFactory sessionFactory;
-	
+
 	@Autowired
 	WorkspaceCollaboratorDTOMapper collaboratorMapper;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ModifyWSManagerDAO.class);
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -62,28 +61,21 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 			ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,projectId);
 			WorkspaceDTO workspaceDTO = workspaceDTOMapper.getWorkspaceDTO(workSpace);
 			workspaceDTO.setWorkspaceid(generateUniqueID());
-			
-			List<ProjectWorkspaceDTO> projectWorkspaceList = workspaceDTO.getProjectWorkspaceDTOList();
-			
+
+
 			ProjectWorkspaceDTO projectWorkspaceDTO = projectMapper.getProjectWorkspace(project, workspaceDTO);
-			
-			if(projectWorkspaceList == null)
-			{
-				projectWorkspaceList = new ArrayList<ProjectWorkspaceDTO>();
-			}
-			projectWorkspaceList.add(projectWorkspaceDTO);
-			workspaceDTO.setProjectWorkspaceDTOList(projectWorkspaceList);
+
+			workspaceDTO.setProjectWorkspaceDTO(projectWorkspaceDTO);
 			sessionFactory.getCurrentSession().save(workspaceDTO);
-			project.setProjectWorkspaceDTOList(projectWorkspaceList);
 			sessionFactory.getCurrentSession().update(project);
 		}
 		catch(HibernateException e)
 		{
 			logger.error("addWorkSpaceRequest method :",e);
-        	throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException();
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -93,38 +85,38 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		WorkspaceCollaboratorDTO collaborator = null;
 		try
 		{
-		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,workspaceId);
-		//set the new workspace owner
-		workspaceDTO.setWorkspaceowner(getUserDTO(newOwner));
-		workspaceDTO.setUpdatedby(oldOwner);
-		workspaceDTO.setUpdateddate(new Date());
-		
-		
-		//fetch the workspace collaborators
-		Iterator<WorkspaceCollaboratorDTO> workspaceCollaborator = workspaceDTO.getWorkspaceCollaboratorDTOList().iterator();
-		while(workspaceCollaborator.hasNext())
-		{
-			collaborator = workspaceCollaborator.next();
-			if(collaborator.getQuadrigaUserDTO().getUsername().equals(newOwner))
+			WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,workspaceId);
+			//set the new workspace owner
+			workspaceDTO.setWorkspaceowner(getUserDTO(newOwner));
+			workspaceDTO.setUpdatedby(oldOwner);
+			workspaceDTO.setUpdateddate(new Date());
+
+
+			//fetch the workspace collaborators
+			Iterator<WorkspaceCollaboratorDTO> workspaceCollaborator = workspaceDTO.getWorkspaceCollaboratorDTOList().iterator();
+			while(workspaceCollaborator.hasNext())
 			{
-				workspaceCollaborator.remove();
-				break;
+				collaborator = workspaceCollaborator.next();
+				if(collaborator.getQuadrigaUserDTO().getUsername().equals(newOwner))
+				{
+					workspaceCollaborator.remove();
+					break;
+				}
 			}
-		}
-		
-		//add the current owner as a collaborator
-		collaborator = collaboratorMapper.getWorkspaceCollaboratorDTO(workspaceDTO, oldOwner, collabRole);
-		workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
-		
-		sessionFactory.getCurrentSession().update(workspaceDTO);
+
+			//add the current owner as a collaborator
+			collaborator = collaboratorMapper.getWorkspaceCollaboratorDTO(workspaceDTO, oldOwner, collabRole);
+			workspaceDTO.getWorkspaceCollaboratorDTOList().add(collaborator);
+
+			sessionFactory.getCurrentSession().update(workspaceDTO);
 		}
 		catch(Exception e)
 		{
 			logger.error("transferWorkspaceOwnerRequest method :",e);
-        	throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException();
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,10 +132,10 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		catch(Exception e)
 		{
 			logger.error("assignWorkspaceOwnerEditor method :",e);
-        	throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException();
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -166,11 +158,11 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		catch(Exception e)
 		{
 			logger.error("deleteWorkspaceOwnerEditor method :",e);
-        	throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException();
 		}
 		return result;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -186,7 +178,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		catch(Exception e)
 		{
 			logger.error("getUserDTO :",e);
-        	throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException();
 		}
 	}
 
@@ -205,7 +197,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 			deleteWorkspaceDspace(workspaceIdList);
 			deleteWorkspaceEditor(workspaceIdList);
 			deleteWorkspaceNetwork(workspaceIdList);
-			
+
 			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceDTO workspace where workspace.workspaceid IN (:workspaceIdList)");
 			query.setParameter("workspaceIdList", workspaceIdList);
 			query.executeUpdate();
@@ -214,7 +206,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		{
 			logger.error("deleteWorkspaceRequest :",e);
 			errMsg = "Exception in Database";
-        	throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException();
 		}
 		return errMsg;
 	}
@@ -236,7 +228,7 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 				workspaceDTO.setDescription(workspace.getDescription());
 				workspaceDTO.setUpdateddate(new Date());
 				workspaceDTO.setUpdatedby(workspace.getOwner().getName());
-				
+
 				sessionFactory.getCurrentSession().update(workspaceDTO);
 			}
 			else
@@ -248,11 +240,11 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 		{
 			logger.error("deleteWorkspaceRequest :",e);
 			errMsg = "Exception in Database";
-        	throw new QuadrigaStorageException();
+			throw new QuadrigaStorageException();
 		}
 		return errMsg;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -261,31 +253,29 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	{
 		try
 		{
-		String[] workspaceIds = workspaceIdList.split(",");
-		for(String workspaceId : workspaceIds)
-		{
-			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			if(workspace == null)
+			String[] workspaceIds = workspaceIdList.split(",");
+			for(String workspaceId : workspaceIds)
 			{
-				throw new QuadrigaStorageException(); 
-			}
-			List<ProjectWorkspaceDTO> projectWorkspaceList = workspace.getProjectWorkspaceDTOList();
-			for(ProjectWorkspaceDTO projectWorkspace : projectWorkspaceList)
-			{
-				ProjectDTO project = projectWorkspace.getProjectDTO();
-				List<ProjectWorkspaceDTO> tempProjectWorkspaceList = project.getProjectWorkspaceDTOList();
-				if(tempProjectWorkspaceList != null && tempProjectWorkspaceList.contains(projectWorkspace))
+				WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+				if(workspace == null)
 				{
-					tempProjectWorkspaceList.remove(projectWorkspace);
+					throw new QuadrigaStorageException(); 
+				}
+				ProjectWorkspaceDTO projectWorkspaceDTO = workspace.getProjectWorkspaceDTO();
+
+				ProjectDTO project = projectWorkspaceDTO.getProjectDTO();
+				List<ProjectWorkspaceDTO> tempProjectWorkspaceList = project.getProjectWorkspaceDTOList();
+				if(tempProjectWorkspaceList != null && tempProjectWorkspaceList.contains(projectWorkspaceDTO))
+				{
+					tempProjectWorkspaceList.remove(projectWorkspaceDTO);
 					project.setProjectWorkspaceDTOList(tempProjectWorkspaceList);
 					sessionFactory.getCurrentSession().update(project);
 				}
-			    sessionFactory.getCurrentSession().delete(projectWorkspace);
+				sessionFactory.getCurrentSession().delete(projectWorkspaceDTO);
+				//assigning the workspace project mapping to null for workspace object
+				workspace.setProjectWorkspaceDTO(null);
+				sessionFactory.getCurrentSession().update(workspace);
 			}
-			//assigning the workspace project mapping to null for workspace object
-			workspace.setProjectWorkspaceDTOList(null);
-			sessionFactory.getCurrentSession().update(workspace);
-		}
 		}
 		catch(Exception ex)
 		{
@@ -301,32 +291,32 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	{
 		try
 		{
-		String[] workspaceIds = workspaceIdList.split(",");
-		for(String workspaceId : workspaceIds)
-		{
-			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			if(workspace == null)
+			String[] workspaceIds = workspaceIdList.split(",");
+			for(String workspaceId : workspaceIds)
 			{
-				throw new QuadrigaStorageException(); 
-			}
-			List<WorkspaceDictionaryDTO> workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
-			for(WorkspaceDictionaryDTO workspaceDictionary : workspaceDictionaryList)
-			{
-				DictionaryDTO dictionary = workspaceDictionary.getDictionaryDTO();
-				List<WorkspaceDictionaryDTO> tempWorkspaceDictionary = dictionary.getWsDictionaryDTOList();
-				if(tempWorkspaceDictionary != null && tempWorkspaceDictionary.contains(workspaceDictionary))
+				WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+				if(workspace == null)
 				{
-					tempWorkspaceDictionary.remove(workspaceDictionary);
-					dictionary.setWsDictionaryDTOList(tempWorkspaceDictionary);
-					sessionFactory.getCurrentSession().update(tempWorkspaceDictionary);
+					throw new QuadrigaStorageException(); 
 				}
-				sessionFactory.getCurrentSession().delete(workspaceDictionary);
+				List<WorkspaceDictionaryDTO> workspaceDictionaryList = workspace.getWorkspaceDictionaryDTOList();
+				for(WorkspaceDictionaryDTO workspaceDictionary : workspaceDictionaryList)
+				{
+					DictionaryDTO dictionary = workspaceDictionary.getDictionaryDTO();
+					List<WorkspaceDictionaryDTO> tempWorkspaceDictionary = dictionary.getWsDictionaryDTOList();
+					if(tempWorkspaceDictionary != null && tempWorkspaceDictionary.contains(workspaceDictionary))
+					{
+						tempWorkspaceDictionary.remove(workspaceDictionary);
+						dictionary.setWsDictionaryDTOList(tempWorkspaceDictionary);
+						sessionFactory.getCurrentSession().update(tempWorkspaceDictionary);
+					}
+					sessionFactory.getCurrentSession().delete(workspaceDictionary);
+				}
+
+				//assigning the dictionary workspace mapping for workspace object to null
+				workspace.setWorkspaceDictionaryDTOList(null);
+				sessionFactory.getCurrentSession().update(workspace);
 			}
-			
-			//assigning the dictionary workspace mapping for workspace object to null
-			workspace.setWorkspaceDictionaryDTOList(null);
-			sessionFactory.getCurrentSession().update(workspace);
-		}
 		}
 		catch(Exception ex)
 		{
@@ -340,41 +330,41 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	@Override
 	public void deleteWorkspaceConceptcollection(String workspaceIdList)
 			throws QuadrigaStorageException 
-	{
+			{
 		try
 		{
-		String[] workspaceIds = workspaceIdList.split(",");
-		for(String workspaceId : workspaceIds)
-		{
-			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			if(workspace == null)
+			String[] workspaceIds = workspaceIdList.split(",");
+			for(String workspaceId : workspaceIds)
 			{
-				throw new QuadrigaStorageException(); 
+				WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+				if(workspace == null)
+				{
+					throw new QuadrigaStorageException(); 
+				}
+				List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionList = workspace.getWorkspaceConceptCollectionDTOList();
+				for(WorkspaceConceptcollectionDTO workspaceConceptCollection : workspaceConceptCollectionList)
+				{
+					ConceptCollectionDTO conceptCollection = workspaceConceptCollection.getConceptCollectionDTO();
+					List<WorkspaceConceptcollectionDTO> tempWorkspaceConceptCollectionList = conceptCollection.getWsConceptCollectionDTOList();
+					if(tempWorkspaceConceptCollectionList !=null && tempWorkspaceConceptCollectionList.contains(conceptCollection))
+					{
+						tempWorkspaceConceptCollectionList.remove(workspaceConceptCollection);
+						conceptCollection.setWsConceptCollectionDTOList(tempWorkspaceConceptCollectionList);
+						sessionFactory.getCurrentSession().update(conceptCollection);
+					}
+					sessionFactory.getCurrentSession().delete(workspaceConceptCollection);
+				}
+
+				//set the workspace concept collection mapping to null for workspace object
+				workspace.setWorkspaceConceptCollectionDTOList(null);
+				sessionFactory.getCurrentSession().update(workspace);
 			}
-			List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionList = workspace.getWorkspaceConceptCollectionDTOList();
-            for(WorkspaceConceptcollectionDTO workspaceConceptCollection : workspaceConceptCollectionList)
-            {
-            	ConceptCollectionDTO conceptCollection = workspaceConceptCollection.getConceptCollectionDTO();
-            	List<WorkspaceConceptcollectionDTO> tempWorkspaceConceptCollectionList = conceptCollection.getWsConceptCollectionDTOList();
-            	if(tempWorkspaceConceptCollectionList !=null && tempWorkspaceConceptCollectionList.contains(conceptCollection))
-            	{
-            		tempWorkspaceConceptCollectionList.remove(workspaceConceptCollection);
-            		conceptCollection.setWsConceptCollectionDTOList(tempWorkspaceConceptCollectionList);
-            		sessionFactory.getCurrentSession().update(conceptCollection);
-            	}
-            	sessionFactory.getCurrentSession().delete(workspaceConceptCollection);
-            }
-            
-            //set the workspace concept collection mapping to null for workspace object
-            workspace.setWorkspaceConceptCollectionDTOList(null);
-            sessionFactory.getCurrentSession().update(workspace);
-		}
 		}
 		catch(Exception ex)
 		{
 			throw new QuadrigaStorageException();
 		}
-	}
+			}
 
 	/**
 	 * {@inheritDoc}
@@ -382,32 +372,32 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	@Override
 	public void deleteWorkspaceDspace(String workspaceIdList)
 			throws QuadrigaStorageException
-	{
+			{
 		try
 		{
-		String[] workspaceIds = workspaceIdList.split(",");
-		for(String workspaceId : workspaceIds)
-		{
-			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			if(workspace == null)
+			String[] workspaceIds = workspaceIdList.split(",");
+			for(String workspaceId : workspaceIds)
 			{
-				throw new QuadrigaStorageException(); 
+				WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+				if(workspace == null)
+				{
+					throw new QuadrigaStorageException(); 
+				}
+				List<WorkspaceDspaceDTO> workspaceDspaceList = workspace.getWorkspaceDspaceDTOList();
+				for(WorkspaceDspaceDTO workspaceDspace : workspaceDspaceList)
+				{
+					sessionFactory.getCurrentSession().delete(workspaceDspace);
+				}
+				//set the workspace dspace mapping null in workspace object
+				workspace.setWorkspaceDspaceDTOList(null);
+				sessionFactory.getCurrentSession().update(workspace);
 			}
-			List<WorkspaceDspaceDTO> workspaceDspaceList = workspace.getWorkspaceDspaceDTOList();
-			for(WorkspaceDspaceDTO workspaceDspace : workspaceDspaceList)
-			{
-				sessionFactory.getCurrentSession().delete(workspaceDspace);
-			}
-			//set the workspace dspace mapping null in workspace object
-			workspace.setWorkspaceDspaceDTOList(null);
-			sessionFactory.getCurrentSession().update(workspace);
-		}
 		}
 		catch(Exception ex)
 		{
 			throw new QuadrigaStorageException();
 		}
-	}
+			}
 
 	/**
 	 * {@inheritDoc}
@@ -415,27 +405,27 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	@Override
 	public void deleteWorkspaceEditor(String workspaceIdList)
 			throws QuadrigaStorageException {
-		
+
 		try
 		{
-		String[] workspaceIds = workspaceIdList.split(",");
-		for(String workspaceId : workspaceIds)
-		{
-			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			if(workspace == null)
+			String[] workspaceIds = workspaceIdList.split(",");
+			for(String workspaceId : workspaceIds)
 			{
-				throw new QuadrigaStorageException(); 
+				WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+				if(workspace == null)
+				{
+					throw new QuadrigaStorageException(); 
+				}
+				List<WorkspaceEditorDTO> workspaceEditorList = workspace.getWorkspaceEditorDTOList();
+				for(WorkspaceEditorDTO workspaceEditor : workspaceEditorList)
+				{
+					sessionFactory.getCurrentSession().delete(workspaceEditor);
+				}
+
+				//set the editor workspace mapping to null in workspace object
+				workspace.setWorkspaceEditorDTOList(null);
+				sessionFactory.getCurrentSession().update(workspace);
 			}
-			List<WorkspaceEditorDTO> workspaceEditorList = workspace.getWorkspaceEditorDTOList();
-			for(WorkspaceEditorDTO workspaceEditor : workspaceEditorList)
-			{
-				sessionFactory.getCurrentSession().delete(workspaceEditor);
-			}
-			
-			//set the editor workspace mapping to null in workspace object
-			workspace.setWorkspaceEditorDTOList(null);
-			sessionFactory.getCurrentSession().update(workspace);
-		}
 		}
 		catch(Exception ex)
 		{
@@ -449,33 +439,33 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 	@Override
 	public void deleteWorkspaceNetwork(String workspaceIdList)
 			throws QuadrigaStorageException 
-	{
+			{
 		try
 		{
-		String[] workspaceIds = workspaceIdList.split(",");
-		for(String workspaceId : workspaceIds)
-		{
-			WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
-			if(workspace == null)
+			String[] workspaceIds = workspaceIdList.split(",");
+			for(String workspaceId : workspaceIds)
 			{
-				throw new QuadrigaStorageException(); 
+				WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+				if(workspace == null)
+				{
+					throw new QuadrigaStorageException(); 
+				}
+				List<NetworksDTO> workspaceNetworksList = workspace.getWorkspaceNetworksDTOList();
+				for(NetworksDTO workspaceNetwork : workspaceNetworksList)
+				{
+
+					sessionFactory.getCurrentSession().delete(workspaceNetwork);
+				}
+				//set the workspace network mapping to null in workspace object
+				workspace.setWorkspaceNetworksDTOList(null);
+				sessionFactory.getCurrentSession().update(workspace);
+
 			}
-			List<NetworksDTO> workspaceNetworksList = workspace.getWorkspaceNetworksDTOList();
-			for(NetworksDTO workspaceNetwork : workspaceNetworksList)
-			{
-				
-				sessionFactory.getCurrentSession().delete(workspaceNetwork);
-			}
-			//set the workspace network mapping to null in workspace object
-			workspace.setWorkspaceNetworksDTOList(null);
-			sessionFactory.getCurrentSession().update(workspace);
-			
-		}
 		}
 		catch(Exception ex)
 		{
 			throw new QuadrigaStorageException();
 		}
-	}
+			}
 
 }

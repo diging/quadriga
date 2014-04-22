@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -47,7 +46,7 @@ public class ModifyWSManager implements IModifyWSManager
 		dbConnect.addWorkSpaceRequest(workspace, projectId);
 		
 		//Get project owner
-		IProject project = dbProjectManager.getProjectDetails(projectId);
+//		IProject project = dbProjectManager.getProjectDetails(projectId);
 		
 		//TODO: Remove email setup
 		/*project.getOwner().setEmail("ramkumar007@gmail.com");

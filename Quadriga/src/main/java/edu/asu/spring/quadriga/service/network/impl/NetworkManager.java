@@ -47,7 +47,6 @@ import org.xml.sax.SAXException;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
@@ -84,7 +83,9 @@ import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
 import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -147,7 +148,10 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	private INetworkFactory networkFactory;
 
 	@Autowired
-	private IDBConnectionRetrieveProjectManager projectManager;
+	private IWorkspaceShallowMapper workspaceShallowMapper;
+	
+	@Autowired
+	private IProjectShallowMapper projectShallowMapper;
 
 	@Autowired
 	private IDBConnectionNetworkManager dbConnect;
@@ -918,7 +922,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		if(workspaceid == null || workspaceid.equals(""))
 			return null;
 		//Get the project object associated with the workspace
-		IProject project = projectManager.getProject(workspaceid);
+		IProject project = workspaceShallowMapper.getWorkSpaceDetails(workspaceid).getProjectWorkspace().getProject();
 		if(project != null)
 			return project.getProjectId();
 		else 
@@ -1057,7 +1061,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		List<IProject> projectList = null;
 		JSONObject core = new JSONObject();
 		try{
-			projectList = projectManager.getProjectList(userName);
+			projectList = projectShallowMapper.getProjectList(userName);
 			JSONArray dataArray = new JSONArray();
 
 			for(IProject project : projectList){
