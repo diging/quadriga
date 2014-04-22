@@ -9,5 +9,9 @@ public interface IWorkspaceBitstreamFactory {
 	 * @return							Returns {@link IWorkspaceBitStream} object
 	 */
 	public abstract IWorkspaceBitStream createWorkspaceBitstreamObject();
+	
+	
+	public abstract IWorkspaceBitStream cloneWorkspaceBitStreamObject(
+			IWorkspaceBitStream workspaceBitStream);
 
 }
