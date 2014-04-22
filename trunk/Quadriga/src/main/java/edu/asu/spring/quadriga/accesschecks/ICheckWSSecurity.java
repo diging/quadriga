@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service.workspace;
+package edu.asu.spring.quadriga.accesschecks;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
