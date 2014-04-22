@@ -30,6 +30,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -39,6 +40,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
@@ -75,6 +77,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Autowired
 	@Qualifier("updateConceptPowerURLPath")
 	private String updateURL;
+	
+	@Autowired
+	private IConceptCollectionDeepMapper conceptCollectionDeepMapper;
 	
 	@Autowired
 	private ICollaboratorRoleManager roleMapper ;
@@ -197,7 +202,6 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			
 			concept = conceptFactory.createConceptObject();
 			concept.setConceptId(i);
-			concept = collection.getConcepts().get((collection.getConcepts().indexOf(concept)));
 			concept.setDescription(rep.getConceptEntry().get(0).getDescription());
 			concept.setLemma(rep.getConceptEntry().get(0).getLemma());
 			concept.setPos(rep.getConceptEntry().get(0).getPos());
@@ -304,13 +308,14 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Transactional
 	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
 		
-		dbConnect.getCollaborators(collection);
-		List<ICollaborator> collaborators = collection.getCollaborators();
-		if(collaborators != null && collaborators.size() > 0)
+		IConceptCollection conceptCollection = conceptCollectionDeepMapper.getConceptCollectionDetails(collection.getConceptCollectionId());
+		
+		List<IConceptCollectionCollaborator> conceptCollectionCollaborators = conceptCollection.getConceptCollectionCollaborators();
+		if(conceptCollectionCollaborators != null && conceptCollectionCollaborators.size() > 0)
 		{
-			for(ICollaborator collaborator:collaborators)
+			for(IConceptCollectionCollaborator conceptCollectionCollaborator:conceptCollectionCollaborators)
 			{
-				for(ICollaboratorRole collaboratorRole: collaborator.getCollaboratorRoles())
+				for(ICollaboratorRole collaboratorRole: conceptCollectionCollaborator.getCollaborator().getCollaboratorRoles())
 				{
 					roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
 				}

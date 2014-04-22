@@ -263,11 +263,11 @@ public class WorkspaceDTO implements Serializable {
         this.workspaceCollaboratorDTOList = workspaceCollaboratorDTOList;
     }
 
-    public ProjectWorkspaceDTO getProjectWorkspaceDTOList() {
+    public ProjectWorkspaceDTO getProjectWorkspaceDTO() {
         return projectWorkspaceDTO;
     }
 
-    public void setProjectWorkspaceDTOList(ProjectWorkspaceDTO projectWorkspaceDTO) {
+    public void setProjectWorkspaceDTO(ProjectWorkspaceDTO projectWorkspaceDTO) {
         this.projectWorkspaceDTO = projectWorkspaceDTO;
     }
     

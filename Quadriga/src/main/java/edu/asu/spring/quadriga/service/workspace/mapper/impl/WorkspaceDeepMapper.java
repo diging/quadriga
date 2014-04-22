@@ -14,13 +14,18 @@ import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factory.workbench.IProjectWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceBitstreamFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.workspace.IWorkspaceFactory;
 import edu.asu.spring.quadriga.domain.impl.dspace.BitStream;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
@@ -49,6 +54,9 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	
 	@Autowired
 	private IWorkspaceDictionaryShallowMapper workspaceDictionaryShallowMapper;
+	
+	@Autowired
+	private IProjectWorkspaceFactory projectWorkspaceFactory;
 	
 	@Autowired
 	private IWorkspaceBitstreamFactory workspaceBitstreamFactory;
@@ -110,9 +118,8 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			// Set Workspace Dictionaries
 			workspace.setWorkspaceDictionaries(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO));
 			
-			// TODO : there is a bug in WorkspaceDTO, it returns a List of ProjectWorkspaceDTO. W
-			// We need only one ProjectWorkspaceDTO object
-			//workspaceProxy.setProject();
+			// Set Project Workspace 
+			workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
 			
 			workspace.setWorkspaceBitStreams(getWorkspaceBitstream(workspaceDTO, workspace));
 		}
@@ -148,9 +155,8 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			// Set Workspace Dictionaries
 			workspace.setWorkspaceDictionaries(workspaceDictionaryShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO));
 			
-			// TODO : there is a bug in WorkspaceDTO, it returns a List of ProjectWorkspaceDTO. W
-			// We need only one ProjectWorkspaceDTO object
-			//workspaceProxy.setProject();
+			// Set Project Workspace 
+			workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
 			
 			workspace.setWorkspaceBitStreams(getWorkspaceBitstream(workspaceDTO, workspace));
 		}
@@ -264,9 +270,6 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			workspaceBitStream.setWorkspace(workspace);
 			workspaceBitStream.setCreatedBy(workspaceDspaceDTO.getCreatedby());
 			workspaceBitStream.setCreatedDate(workspaceDspaceDTO.getCreateddate());
-			// TODO : we don;t have updateby and update date in DTO, will do once it is done.
-			//workspaceBitStream.setUpdatedBy(workspaceDspaceDTO.)
-			//workspaceBitStream.setUpdatedDate(workspaceDspaceDTO.se)
 		}
 		
 		return workspaceBitstreamList;
@@ -285,6 +288,27 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 		return bitstream;
 	}
 	
+	@Override
+	public IProjectWorkspace getProjectWorkspaceOfWorkspace(IWorkSpace workspace, WorkspaceDTO workspaceDTO) throws QuadrigaStorageException{
+		IProjectWorkspace projectWorkspace = null;
+		
+		ProjectWorkspaceDTO projectWorkspaceDTO = workspaceDTO.getProjectWorkspaceDTO();
+		
+		projectWorkspace = projectWorkspaceFactory.createProjectWorkspaceObject();
+		projectWorkspace.setWorkspace(workspace);
+		
+		ProjectDTO projectDTO = projectWorkspaceDTO.getProjectDTO();
+		IProject project = projectShallowMapper.getProjectDetails(projectDTO);
+		projectWorkspace.setProject(project);
+		
+		projectWorkspace.setCreatedBy(projectWorkspaceDTO.getCreatedby());
+		projectWorkspace.setCreatedDate(projectWorkspaceDTO.getCreateddate());
+		projectWorkspace.setUpdatedBy(projectWorkspaceDTO.getUpdatedby());
+		projectWorkspace.setUpdatedDate(projectWorkspaceDTO.getUpdateddate());
+		
+		return projectWorkspace;
+		
+	}
 
 
 	
