@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.factories;
+package edu.asu.spring.quadriga.domain.factory.workbench;
 
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 
@@ -10,5 +10,8 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 public interface IProjectFactory {
 	
 	public abstract IProject  createProjectObject();
+	
+	
+	public abstract IProject cloneProjectObject(IProject project);
 
 }

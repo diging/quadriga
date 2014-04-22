@@ -10,5 +10,8 @@ public interface IProjectCollaboratorFactory {
 	 * @return							Returns the {@link IProjectCollaborator} object
 	 */
 	public abstract IProjectCollaborator createProjectCollaboratorObject();
+	
+	public abstract IProjectCollaborator cloneProjectCollaboratorObject(
+			IProjectCollaborator projectCollaborator);
 
 }

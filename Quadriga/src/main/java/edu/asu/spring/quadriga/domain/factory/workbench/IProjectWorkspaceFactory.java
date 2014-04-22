@@ -9,5 +9,8 @@ import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
  */
 public interface IProjectWorkspaceFactory {
 	public abstract IProjectWorkspace  createProjectWorkspaceObject();
+	
+	public abstract IProjectWorkspace cloneProjectWorkspaceObject(
+			IProjectWorkspace projectWorkspace) 
 
 }
