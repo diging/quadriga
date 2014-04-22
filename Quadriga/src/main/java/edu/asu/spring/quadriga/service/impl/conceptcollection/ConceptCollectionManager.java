@@ -40,12 +40,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
-
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
-
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
-
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 
 /**
  * 
@@ -99,6 +98,12 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 	@Autowired
 	private IConceptCollectionShallowMapper ccShallowMapper;
+	
+	@Autowired
+	private IProjectShallowMapper projectShallowMapper;
+	
+	@Autowired
+	private IWorkspaceShallowMapper wsShallowMapper;
 
 //	/**
 //	 * This method retrieves the concept collection owner by the submitted user
@@ -366,12 +371,11 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		List<IProject> projectList = null;
 		JSONObject core = new JSONObject();
 		try {
-			projectList = projectManager.getProjectList(userName);
+			//projectList = projectManager.getProjectList(userName);
+			projectList = projectShallowMapper.getProjectList(userName);
 			JSONArray dataArray = new JSONArray();
-			List<IProject> ccProjectsList = projectManager
-					.getProjectsByConceptCollection(ccId);
-			List<IWorkSpace> ccWorkspaceList = wsListManger
-					.getWorkspaceByConceptCollection(ccId);
+			List<IProject> ccProjectsList = projectShallowMapper.getCollaboratorProjectListOfUser(ccId);
+			List<IWorkSpace> ccWorkspaceList = wsListManger.getWorkspaceByConceptCollection(ccId);
 			for (IProject project : projectList) {
 				// Each data
 				//if (!ccProjectsList.contains(project)) {
@@ -389,7 +393,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 							+ project.getProjectName()
 							+ "' onclick='javascript:addCCtoProjects(this.id,this.name);' > "
 							+ project.getProjectName() + "</a>";
-					}
+					} 
 					data.put("text", projectLink);
 					dataArray.put(data);
 					String wsParent = project.getProjectId();
