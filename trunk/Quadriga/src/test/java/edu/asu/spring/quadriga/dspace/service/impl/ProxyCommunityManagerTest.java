@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
-import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.ICollectionFactory;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 
