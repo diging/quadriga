@@ -9,8 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.factories.INetworkNodeInfoFactory;
-import edu.asu.spring.quadriga.domain.factories.impl.NetworkFactory;
+import edu.asu.spring.quadriga.domain.factory.impl.networks.NetworkFactory;
+import edu.asu.spring.quadriga.domain.factory.networks.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.impl.networks.Network;
 import edu.asu.spring.quadriga.domain.impl.networks.NetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.network.INetwork;

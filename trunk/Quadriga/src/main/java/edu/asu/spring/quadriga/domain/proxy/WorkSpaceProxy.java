@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
-import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -32,7 +32,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	private String workspaceName;
 	private String description;
 	private IUser owner;
-	private IProject project;
+	private IProjectWorkspace workspaceProject;
 	private String createdBy;
 	private Date createdDate;
 	private String updatedBy;
@@ -177,8 +177,8 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 * 
 	 */
 	@Override
-	public IProject getProjectWorkspace() {
-		return this.project;
+	public IProjectWorkspace getProjectWorkspace() {
+		return this.workspaceProject;
 	}
 	
 	/**
@@ -186,10 +186,10 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 * Also updates the local {@link IWorkSpace} object if it is not null
 	 */
 	@Override
-	public void setProjectWorkspace(IProject project) {
-		this.project = project;
+	public void setProjectWorkspace(IProjectWorkspace workspaceProject) {
+		this.workspaceProject = workspaceProject;
 		if(this.workspace != null){
-			this.workspace.setProjectWorkspace(project);
+			this.workspace.setProjectWorkspace(workspaceProject);
 		}
 	}
 	
@@ -415,7 +415,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 		this.workspace.setUpdatedBy(this.updatedBy);
 		this.workspace.setUpdatedDate(this.updatedDate);
 		this.workspace.setOwner(this.owner);
-		this.workspace.setProjectWorkspace(this.project);
+		this.workspace.setProjectWorkspace(this.workspaceProject);
 		
 	}
 	

@@ -8,7 +8,7 @@ public interface IProjectWorkspace
 {
 	public abstract IProject getProject();
 	
-	public abstract void setProejct(IProject project);
+	public abstract void setProject(IProject project);
 	
 	public abstract IWorkSpace getWorkspace();
 	

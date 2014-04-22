@@ -54,7 +54,7 @@ IProjectWorkspaceShallowMapper {
 					workspaceProxy.setUpdatedBy(projectWorkspaceDTO.getWorkspaceDTO().getUpdatedby());
 					workspaceProxy.setUpdatedDate(projectWorkspaceDTO.getWorkspaceDTO().getUpdateddate());
 					IProjectWorkspace projectWorkspace = projectWorkspaceFactory.createProjectWorkspaceObject();
-					projectWorkspace.setProejct(project);	
+					projectWorkspace.setProject(project);	
 					projectWorkspace.setWorkspace(workspaceProxy);
 					projectWorkspace.setCreatedBy(projectWorkspaceDTO.getCreatedby());
 					projectWorkspace.setCreatedDate(projectWorkspaceDTO.getCreateddate());
