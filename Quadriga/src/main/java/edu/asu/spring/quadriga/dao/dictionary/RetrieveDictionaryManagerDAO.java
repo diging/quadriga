@@ -13,6 +13,7 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
+import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 
 @Repository
 public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implements IDBConnectionRetrieveDictionaryManager
@@ -24,6 +25,9 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 	@Autowired
 	private DictionaryDTOMapper dictionaryDTOMapper;
 	
+	@Autowired
+	private IDictionaryDeepMapper dictionaryDeepMapper;
+	
 	private static final Logger logger = LoggerFactory.getLogger(RetrieveDictionaryManagerDAO.class);
 
 	/**
@@ -33,21 +37,21 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException 
+	public DictionaryDTO getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException 
 	{
 		IDictionary dictionary = null;
 		DictionaryDTO dictionaryDTO = null;
 		try
 		{
 			dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryId);
-			dictionary = dictionaryDTOMapper.getDictionary(dictionaryDTO);
+			//dictionary = dictionaryDTOMapper.getDictionary(dictionaryDTO);
 		} 
 		catch (HibernateException e) 
 		{
 			logger.error("getDictionaryDetails method :",e);
 			throw new QuadrigaStorageException();
 		}
-		return dictionary;
+		return dictionaryDTO;
 	}
 	
 
