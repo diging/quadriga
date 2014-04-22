@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 
 @Service
 public class RetrieveDictionaryManager implements IRetrieveDictionaryManager
@@ -15,6 +17,8 @@ public class RetrieveDictionaryManager implements IRetrieveDictionaryManager
 	@Autowired
 	private IDBConnectionRetrieveDictionaryManager dbConnect;
 	
+	@Autowired
+	private IDictionaryDeepMapper dictionaryDeepMapper;
 	
 	/**
 	 * This method retrieves the dictionary details.
@@ -26,8 +30,10 @@ public class RetrieveDictionaryManager implements IRetrieveDictionaryManager
 	@Transactional
 	public IDictionary getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException
 	{
-		IDictionary dictionary;
-		dictionary = dbConnect.getDictionaryDetails(dictionaryId);
+		DictionaryDTO dictionaryDTO;
+		IDictionary dictionary =  null;
+		//dictionaryDTO = dbConnect.getDictionaryDetails(dictionaryId);
+		dictionary = dictionaryDeepMapper.getDictionaryDetails(dictionaryId);
 		return dictionary;
 	}
 
