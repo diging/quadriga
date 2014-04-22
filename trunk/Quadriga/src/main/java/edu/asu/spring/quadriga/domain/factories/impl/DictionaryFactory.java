@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain.factories.impl;
 import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.factories.IDictionaryFactory;
+import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
 
 /**

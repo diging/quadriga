@@ -39,5 +39,4 @@ public class ModifyProjectFormFactory implements IModifyProjectFormFactory {
 		
 		return clone;
 	}
-
 }

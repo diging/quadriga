@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.factories;
+package edu.asu.spring.quadriga.domain.factory.dictionary;
 
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 
