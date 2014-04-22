@@ -130,36 +130,63 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		return conceptcollectionsDTOList;
 	}
 	
-	
+//	
+//	/**
+//	 * Queries the database and builds a list of concept collection objects with the user as collaborator
+//	 * 
+//	 * @return List containing user objects of all collections of the user
+//	 * @throws QuadrigaStorageException 
+//	 * @author Karthik Jayaraman
+//	 */
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public List<IConceptCollection> getCollaboratedConceptsofUser(String userName) throws QuadrigaStorageException 
+//	{
+//		List<IConceptCollection> conceptCollectionList = null;
+//		try
+//		{
+//			Query query = sessionFactory.getCurrentSession().createQuery("Select conceptCollab.conceptCollectionDTO from ConceptCollectionCollaboratorDTO conceptCollab where conceptCollab.quadrigaUserDTO.username =:userName");
+//			query.setParameter("userName", userName);
+//			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
+//			
+//			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
+//			{
+//				conceptCollectionList = conceptCollectionDTOMapper.getConceptCollectionList(conceptcollectionsDTOList);
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
+//			throw new QuadrigaStorageException(e);
+//		}
+//		return conceptCollectionList;
+//	}
 	/**
 	 * Queries the database and builds a list of concept collection objects with the user as collaborator
 	 * 
 	 * @return List containing user objects of all collections of the user
 	 * @throws QuadrigaStorageException 
-	 * @author Karthik Jayaraman
+	 * @author Sowjanya Ambati
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IConceptCollection> getCollaboratedConceptsofUser(String userName) throws QuadrigaStorageException 
+	public List<ConceptCollectionDTO> getCollaboratedConceptsofUser(String userName) throws QuadrigaStorageException 
 	{
-		List<IConceptCollection> conceptCollectionList = null;
+		List<ConceptCollectionDTO> conceptcollectionsDTOList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("Select conceptCollab.conceptCollectionDTO from ConceptCollectionCollaboratorDTO conceptCollab where conceptCollab.quadrigaUserDTO.username =:userName");
 			query.setParameter("userName", userName);
-			List<ConceptCollectionDTO> conceptcollectionsDTOList = query.list();
+			conceptcollectionsDTOList = query.list();
 			
-			if(conceptcollectionsDTOList != null && conceptcollectionsDTOList.size() > 0)
-			{
-				conceptCollectionList = conceptCollectionDTOMapper.getConceptCollectionList(conceptcollectionsDTOList);
-			}
+			
 		}
 		catch(Exception e)
 		{
 			logger.info("getCollaboratedConceptsofUser method :"+e.getMessage());	
 			throw new QuadrigaStorageException(e);
 		}
-		return conceptCollectionList;
+		return conceptcollectionsDTOList;
 	}
 	
 	/**
