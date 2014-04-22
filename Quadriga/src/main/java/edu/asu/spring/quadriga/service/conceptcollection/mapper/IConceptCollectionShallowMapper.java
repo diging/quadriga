@@ -9,5 +9,6 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 public interface IConceptCollectionShallowMapper {
 	public abstract List<IConceptCollection> getConceptCollectionList(String userName) throws QuadrigaStorageException;
 	public abstract IConceptCollection getConceptCollectionDetails(ConceptCollectionDTO ccDTO) throws QuadrigaStorageException;
+	public abstract List<IConceptCollection> getConceptCollectionListOfCollaborator(String userName) throws QuadrigaStorageException;
 
 }

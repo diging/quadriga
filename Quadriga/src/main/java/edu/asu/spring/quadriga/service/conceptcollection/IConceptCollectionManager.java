@@ -37,7 +37,7 @@ public interface IConceptCollectionManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<ConceptCollectionDTO> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException;
+	public abstract List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException;
 	
 	
 	/**

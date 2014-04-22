@@ -40,7 +40,11 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+
+import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
+
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
+
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 /**
@@ -92,6 +96,9 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 	@Autowired
 	private IDBConnectionListWSManager wsListManger;
+	
+	@Autowired
+	private IConceptCollectionShallowMapper ccShallowMapper;
 
 //	/**
 //	 * This method retrieves the concept collection owner by the submitted user
@@ -116,14 +123,30 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 */
 	@Override
 	@Transactional
-	public List<ConceptCollectionDTO> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
+	public List<IConceptCollection> getCollectionsOwnedbyUser(String sUserId) throws QuadrigaStorageException
 	{
-		List<ConceptCollectionDTO> conceptList = new ArrayList<ConceptCollectionDTO>();  
-		conceptList = dbConnect.getConceptsOwnedbyUser(sUserId);
+		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
+		conceptList = ccShallowMapper.getConceptCollectionList(sUserId);
 		return conceptList;
 	}
 
 
+//	/**
+//	 * This methods retrieves the concept collection associated with the user
+//	 * as a collaborator
+//	 * @param sUserID - logged in user id
+//	 * @param List<IConceptCollection> - list of concept collection associated 
+//	 * with user as a collaborator
+//	 * @throws QuadrigatorageException
+//	 */
+//	@Override
+//	@Transactional
+//	public List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException {
+//		
+//		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
+//		conceptList = dbConnect.getCollaboratedConceptsofUser(sUserId);
+//		return conceptList;
+//	}
 	/**
 	 * This methods retrieves the concept collection associated with the user
 	 * as a collaborator
@@ -137,9 +160,10 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	public List<IConceptCollection> getUserCollaborations(String sUserId) throws QuadrigaStorageException {
 		
 		List<IConceptCollection> conceptList = new ArrayList<IConceptCollection>();  
-		conceptList = dbConnect.getCollaboratedConceptsofUser(sUserId);
+		conceptList = ccShallowMapper.getConceptCollectionListOfCollaborator(sUserId);
 		return conceptList;
 	}
+
 
 	/**
 	 * This method retrieves the concept collection details

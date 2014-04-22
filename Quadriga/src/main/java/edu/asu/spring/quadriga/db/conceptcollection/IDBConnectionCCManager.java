@@ -35,7 +35,7 @@ public interface IDBConnectionCCManager {
 		 * @return List containing user objects of all collections of the user
 		 * @throws QuadrigaStorageException 
 		 */
-		public abstract List<IConceptCollection> getCollaboratedConceptsofUser(String userName) throws QuadrigaStorageException;
+		public abstract List<ConceptCollectionDTO> getCollaboratedConceptsofUser(String userName) throws QuadrigaStorageException;
 		/**
 		 * Queries the database with concept collection objects
 		 * @param username 
