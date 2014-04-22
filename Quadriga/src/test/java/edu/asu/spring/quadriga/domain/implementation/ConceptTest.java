@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
-import edu.asu.spring.quadriga.domain.factories.IConceptFactory;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 @ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
 "file:src/test/resources/root-context.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
