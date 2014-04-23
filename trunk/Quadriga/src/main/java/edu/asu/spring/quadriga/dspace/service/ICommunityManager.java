@@ -172,16 +172,38 @@ public interface ICommunityManager {
 	 */
 	public abstract void clearCompleteCache();
 
-	
-	public abstract boolean validateDspaceCredentials(RestTemplate restTemplate,
-			Properties dspaceProperties, IDspaceKeys dspaceKeys,
+	/**
+	 * Check if a given dspace credential is valid or not.
+	 * 
+	 * @param restTemplate					The RestTemplate object containing the details about the parser.
+	 * @param dspaceProperties				The property strings related to dspace REST service connection.
+	 * @param dspaceKeys					The Dspace Access keys used by the user.
+	 * @param sUserName						The username of the authorized user.
+	 * @param sPassword						The password of the authorized user.
+	 * @return								TRUE - If quadriga was successfully able to access the dspace using the supplied credentials. FALSE - If access to dspace was denied.
+	 */
+	public abstract boolean validateDspaceCredentials(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys,
 			String sUserName, String sPassword) throws NoSuchAlgorithmException;
 
+	/**
+	 * Get the collection factory object used by the class.
+	 * 
+	 * @return			The collection factory object used by the class.
+	 */
 	public abstract ICollectionFactory getCollectionFactory();
 
+	/**
+	 * Used to set the collection factory class variable. Generally it is autowired through spring framework.
+	 * @param collectionFactory 		The collection factory object to be set.
+	 */
 	public abstract void setCollectionFactory(ICollectionFactory collectionFactory);
 
 	public abstract IBitStream getBitStream(String itemid, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException;
 
+	/**
+	 * Add a bitstream to the user session cache for faster loading.
+	 * 
+	 * @param bitstream						The bitstream object which needs to be loaded faster next time around.
+	 */
 	public abstract void addBitStreamToCache(IBitStream bitstream);
 }
