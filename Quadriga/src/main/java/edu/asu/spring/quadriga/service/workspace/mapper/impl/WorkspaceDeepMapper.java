@@ -122,6 +122,8 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
 			
 			workspace.setWorkspaceBitStreams(getWorkspaceBitstream(workspaceDTO, workspace));
+			
+			//TODO : network workspace
 		}
 				
 		return workspace;

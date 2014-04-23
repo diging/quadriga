@@ -249,40 +249,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
-	/**
-	 * Check if the network name is already used.
-	 * The method uses Hibernate Framework to perform the database operations.
-	 * 
-	 * @param networkName					Name for the network.
-	 * @param user							{@link IUser} object for searching network name.
-	 * @return								TRUE - If the network name is already in use. FALSE - If the network name is not already taken.
-	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
-	 */
-	@Override
-	public boolean hasNetworkName(String networkName, IUser user)
-			throws QuadrigaStorageException {
 
-		try {
-			Query query = sessionFactory
-					.getCurrentSession()
-					.createQuery(
-							" from NetworksDTO network where network.networkowner = :networkowner and network.networkname = :networkname");
-			query.setParameter("networkowner", user.getUserName());
-			query.setParameter("networkname", networkName);
-			@SuppressWarnings("unchecked")
-			List<NetworksDTO> networksDTO = query.list();
-
-			if (networksDTO != null) {
-				if (networksDTO.size() > 0)
-					return true;
-			}
-			return false;
-		} catch (Exception e) {
-			logger.error("Error in network name check: ", e);
-			throw new QuadrigaStorageException(e);
-		}
-
-	}
 
 	/**
 	 * Get all the network statements {@link INetworkNodeInfo} for a network.
