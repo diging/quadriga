@@ -51,6 +51,7 @@ import edu.asu.spring.quadriga.domain.impl.conceptlist.Concept;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList;
 import edu.asu.spring.quadriga.domain.impl.conceptlist.QuadrigaConceptReply;
 import edu.asu.spring.quadriga.domain.impl.workspacexml.Workspace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -272,7 +273,7 @@ public class ConceptCollectionRestController {
 	public String listWorkspaceConceptCollections(
 			@PathVariable("workspaceId") String workspaceId, ModelMap model,
 			Principal principal, HttpServletRequest req) throws RestException {
-		List<IConceptCollection> collectionsList = null;
+		List<IWorkspaceConceptCollection> collectionsList = null;
 		VelocityEngine engine = null;
 		Template template = null;
 
