@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
  *
  */
 public class WorkSpaceProxy implements IWorkSpace {
-	
+
 	private String workspaceId;
 	private String workspaceName;
 	private String description;
@@ -47,8 +47,8 @@ public class WorkSpaceProxy implements IWorkSpace {
 	private IListWSManager wsManager;
 	private static final Logger logger = LoggerFactory
 			.getLogger(WorkSpaceProxy.class);
-	
-	
+
+
 	/**
 	 * Constructor to create {@link WorkSpaceProxy} with {@link IListWSManager} manager object.
 	 * @param wsManager							{@link IListWSManager} object
@@ -56,8 +56,8 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public WorkSpaceProxy(IListWSManager wsManager) {
 		this.wsManager = wsManager;
 	}
-	
-	
+
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -69,7 +69,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 			this.workspace.setWorkspaceId(workspaceId);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -78,7 +78,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public String getWorkspaceId() {
 		return this.workspaceId;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -89,9 +89,9 @@ public class WorkSpaceProxy implements IWorkSpace {
 		if(this.workspace!=null){
 			this.workspace.setWorkspaceName(workspaceName);
 		}
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -100,7 +100,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public String getWorkspaceName() {
 		return this.workspaceName;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -112,7 +112,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 			this.workspace.setDescription(description);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -121,7 +121,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public String getDescription() {
 		return this.description;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -133,7 +133,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 			this.workspace.setOwner(owner);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -142,7 +142,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public IUser getOwner() {
 		return this.owner;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method checks if local {@link IWorkSpace} object is null. 
@@ -156,7 +156,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 		}
 		return this.workspace.getWorkspaceCollaborators();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method also checks if local {@link IWorkSpace} object is null. 
@@ -171,7 +171,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 		}
 		this.workspace.setWorkspaceCollaborators(workspaceCollaborators);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -180,7 +180,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public IProjectWorkspace getProjectWorkspace() {
 		return this.workspaceProject;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -192,7 +192,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 			this.workspace.setProjectWorkspace(workspaceProject);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method checks if local {@link IWorkSpace} object is null. 
@@ -201,12 +201,19 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 */
 	@Override
 	public List<IWorkspaceBitStream> getWorkspaceBitStreams() {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			return this.workspace.getWorkspaceBitStreams();
+		}else{
 			setWorkSpaceDetails();
+			//We need to do this in case of Quadriga storage exception in setWorkSpaceDetails(); , this.workspace would be null
+			if(this.workspace != null){
+			return this.workspace.getWorkspaceBitStreams();
+			}else{
+				return null;
+			}
 		}
-		return this.workspace.getWorkspaceBitStreams();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method also checks if local {@link IWorkSpace} object is null. 
@@ -216,13 +223,19 @@ public class WorkSpaceProxy implements IWorkSpace {
 	@Override
 	public void setWorkspaceBitStreams(
 			List<IWorkspaceBitStream> workspaceBitStreams) {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			this.workspace.setWorkspaceBitStreams(workspaceBitStreams);
+		}else{
 			setWorkSpaceDetails();
+			if(this.workspace!=null){
+				this.workspace.setWorkspaceBitStreams(workspaceBitStreams);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setWorkSpaceDetails()
+			}
 		}
-		this.workspace.setWorkspaceBitStreams(workspaceBitStreams);
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method checks if local {@link IWorkSpace} object is null. 
@@ -231,12 +244,20 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 */
 	@Override
 	public List<IWorkspaceConceptCollection> getWorkspaceConceptCollections() {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			return this.workspace.getWorkspaceConceptCollections();
+		}else{
 			setWorkSpaceDetails();
+			//We need to do this in case of Quadriga storage exception in setWorkSpaceDetails(); , this.workspace would be null
+			if(this.workspace != null){
+			return this.workspace.getWorkspaceConceptCollections();
+			}else{
+				return null;
+			}
 		}
-		return this.workspace.getWorkspaceConceptCollections();
+		
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method also checks if local {@link IWorkSpace} object is null. 
@@ -246,13 +267,19 @@ public class WorkSpaceProxy implements IWorkSpace {
 	@Override
 	public void setWorkspaceConceptCollections(
 			List<IWorkspaceConceptCollection> workspaceConceptCollections) {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			this.workspace.setWorkspaceConceptCollections(workspaceConceptCollections);
+		}else{
 			setWorkSpaceDetails();
+			if(this.workspace!=null){
+				this.workspace.setWorkspaceConceptCollections(workspaceConceptCollections);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setWorkSpaceDetails()
+			}
 		}
-		this.workspace.setWorkspaceConceptCollections(workspaceConceptCollections);
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method checks if local {@link IWorkSpace} object is null. 
@@ -261,12 +288,19 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 */
 	@Override
 	public List<IWorkspaceDictionary> getWorkspaceDictinaries() {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			return this.workspace.getWorkspaceDictinaries();
+		}else{
 			setWorkSpaceDetails();
+			//We need to do this in case of Quadriga storage exception in setWorkSpaceDetails(); , this.workspace would be null
+			if(this.workspace != null){
+			return this.workspace.getWorkspaceDictinaries();
+			}else{
+				return null;
+			}
 		}
-		return this.workspace.getWorkspaceDictinaries();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method also checks if local {@link IWorkSpace} object is null. 
@@ -276,13 +310,19 @@ public class WorkSpaceProxy implements IWorkSpace {
 	@Override
 	public void setWorkspaceDictionaries(
 			List<IWorkspaceDictionary> workspaceDictionaries) {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			this.workspace.setWorkspaceDictionaries(workspaceDictionaries);
+		}else{
 			setWorkSpaceDetails();
+			if(this.workspace!=null){
+				this.workspace.setWorkspaceDictionaries(workspaceDictionaries);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setWorkSpaceDetails()
+			}
 		}
-		this.workspace.setWorkspaceDictionaries(workspaceDictionaries);
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method checks if local {@link IWorkSpace} object is null. 
@@ -291,12 +331,20 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 */
 	@Override
 	public List<IWorkspaceNetwork> getWorkspaceNetworks() {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			return this.workspace.getWorkspaceNetworks();
+		}else{
 			setWorkSpaceDetails();
+			//We need to do this in case of Quadriga storage exception in setWorkSpaceDetails(); , this.workspace would be null
+			if(this.workspace != null){
+			return this.workspace.getWorkspaceNetworks();
+			}else{
+				return null;
+			}
 		}
-		return this.workspace.getWorkspaceNetworks();
+		
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This method also checks if local {@link IWorkSpace} object is null. 
@@ -305,13 +353,19 @@ public class WorkSpaceProxy implements IWorkSpace {
 	 */
 	@Override
 	public void setWorkspaceNetworks(List<IWorkspaceNetwork> workspaceNetworks) {
-		if(this.workspace == null){
+		if(this.workspace != null){
+			this.workspace.setWorkspaceNetworks(workspaceNetworks);
+		}else{
 			setWorkSpaceDetails();
+			if(this.workspace!=null){
+				this.workspace.setWorkspaceNetworks(workspaceNetworks);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setWorkSpaceDetails()
+			}
 		}
-		this.workspace.setWorkspaceNetworks(workspaceNetworks);
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -320,7 +374,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public String getCreatedBy() {
 		return this.createdBy;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -332,7 +386,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 			this.workspace.setCreatedBy(createdBy);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -341,7 +395,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public Date getCreatedDate() {
 		return this.createdDate;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -352,9 +406,9 @@ public class WorkSpaceProxy implements IWorkSpace {
 		if(this.workspace != null){
 			this.workspace.setCreatedDate(createdDate);
 		}
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -363,7 +417,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public String getUpdatedBy() {
 		return this.updatedBy;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -375,7 +429,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 			this.workspace.setUpdatedBy(updatedBy);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -384,7 +438,7 @@ public class WorkSpaceProxy implements IWorkSpace {
 	public Date getUpdatedDate() {
 		return this.updatedDate;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * Also updates the local {@link IWorkSpace} object if it is not null
@@ -409,14 +463,16 @@ public class WorkSpaceProxy implements IWorkSpace {
 		} catch (QuadrigaAccessException e) {
 			logger.error("Issue user accessing project",e);
 		}
-		this.workspace.setWorkspaceName(this.workspaceName);
-		this.workspace.setWorkspaceId(this.workspaceId);
-		this.workspace.setDescription(this.description);
-		this.workspace.setUpdatedBy(this.updatedBy);
-		this.workspace.setUpdatedDate(this.updatedDate);
-		this.workspace.setOwner(this.owner);
-		this.workspace.setProjectWorkspace(this.workspaceProject);
-		
+		if(this.workspace != null){
+			this.workspace.setWorkspaceName(this.workspaceName);
+			this.workspace.setWorkspaceId(this.workspaceId);
+			this.workspace.setDescription(this.description);
+			this.workspace.setUpdatedBy(this.updatedBy);
+			this.workspace.setUpdatedDate(this.updatedDate);
+			this.workspace.setOwner(this.owner);
+			this.workspace.setProjectWorkspace(this.workspaceProject);
+		}
+
 	}
-	
+
 }

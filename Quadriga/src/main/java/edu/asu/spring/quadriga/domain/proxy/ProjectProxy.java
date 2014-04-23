@@ -287,7 +287,7 @@ public class ProjectProxy implements IProject
 	/**
 	 * This class helps in fetching the full project object using project manager object.
 	 * Also sets the values of variables in {@link ProjectProxy} to local {@link Project} object.
-	 * TODO : The method should throw exception. NULL means error or else return the object.
+
 	 */
 	private void setProjectDetails(){
 		try{
@@ -295,14 +295,24 @@ public class ProjectProxy implements IProject
 		}catch(QuadrigaStorageException e){
 			logger.error("Issue accessing database from project proxt",e);
 		}
-		this.project.setProjectName(this.projectName);
-		this.project.setProjectId(this.projectId);
-		this.project.setDescription(this.description);
-		this.project.setProjectAccess(this.projectAccess);
-		this.project.setUpdatedBy(this.updatedBy);
-		this.project.setUpdatedDate(this.updatedDate);
-		this.project.setOwner(this.owner);
-		this.project.setUnixName(this.unixName);
+		if(this.project != null){
+			this.project.setProjectName(this.projectName);
+			this.project.setProjectId(this.projectId);
+			this.project.setDescription(this.description);
+			this.project.setProjectAccess(this.projectAccess);
+			this.project.setUpdatedBy(this.updatedBy);
+			this.project.setUpdatedDate(this.updatedDate);
+			this.project.setOwner(this.owner);
+			this.project.setUnixName(this.unixName);
+		}
+
+
+
+
+
+
+
+
 		
 	}
 
@@ -313,12 +323,21 @@ public class ProjectProxy implements IProject
 	 * else if local {@link IProject} is not null, just returns {@link List} of {@link IProjectCollaborator} from local {@link IProject}
 	 */
 	@Override
-	public List<IProjectCollaborator> getProjectCollaborators(){
-		if(this.project == null){
-			
+	public List<IProjectCollaborator> getProjectCollaborators() {
+		if(this.project != null){
+			return this.project.getProjectCollaborators();
+		}else{
+
 			setProjectDetails();
+			//We need to do this in case of Quadriga storage exception in setProjectDetails() , this.project would be null
+			if(this.project != null){
+			return this.project.getProjectCollaborators();
+			}else{
+				return null;
+			}
 		}
-		return this.project.getProjectCollaborators();
+		
+
 	}
 
 	/**
@@ -330,10 +349,18 @@ public class ProjectProxy implements IProject
 	@Override
 	public void setProjectCollaborators(
 			List<IProjectCollaborator> projectCollaborators) {
-		if(this.project == null){
+		if(this.project != null){
+			this.project.setProjectCollaborators(projectCollaborators);
+		}else{
 			setProjectDetails();
+			if(this.project!=null){
+				this.project.setProjectCollaborators(projectCollaborators);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setProjectDetails()
+			}
 		}
-		this.project.setProjectCollaborators(projectCollaborators);
+		
+
 	}
 
 	/**
@@ -344,10 +371,19 @@ public class ProjectProxy implements IProject
 	 */
 	@Override
 	public List<IProjectWorkspace> getProjectWorkspaces() {
-		if(this.project == null){
+		if(this.project != null){
+			return this.project.getProjectWorkspaces();
+		}else{
 			setProjectDetails();
+			//We need to do this in case of Quadriga storage exception in setProjectDetails() , this.project would be null
+			if(this.project != null){
+			return this.project.getProjectWorkspaces();
+			}else{
+				return null;
+			}
 		}
-		return this.project.getProjectWorkspaces();
+
+
 	}
 
 	/**
@@ -358,10 +394,17 @@ public class ProjectProxy implements IProject
 	 */
 	@Override
 	public void setProjectWorkspaces(List<IProjectWorkspace> projectWorkspaces) {
-		if(this.project == null){
+		if(this.project != null){
+			this.project.setProjectWorkspaces(projectWorkspaces);
+		}else{
 			setProjectDetails();
+			if(this.project!=null){
+				this.project.setProjectWorkspaces(projectWorkspaces);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setProjectDetails()
+			}
 		}
-		this.project.setProjectWorkspaces(projectWorkspaces);
+
 	}
 
 	/**
@@ -372,10 +415,18 @@ public class ProjectProxy implements IProject
 	 */
 	@Override
 	public List<IProjectDictionary> getProjectDictionaries() {
-		if(this.project == null){
+		if(this.project != null){
+			return this.project.getProjectDictionaries();
+		}else{
 			setProjectDetails();
+			//We need to do this in case of Quadriga storage exception in setProjectDetails() , this.project would be null
+			if(this.project != null){
+			return this.project.getProjectDictionaries();
+			}else{
+				return null;
+			}
 		}
-		return this.project.getProjectDictionaries();
+
 	}
 
 	/**
@@ -387,10 +438,17 @@ public class ProjectProxy implements IProject
 	@Override
 	public void setProjectDictionaries(
 			List<IProjectDictionary> projectDictionaries) {
-		if(this.project == null){
+		if(this.project != null){
+			this.project.setProjectDictionaries(projectDictionaries);
+		}else{
 			setProjectDetails();
+			if(this.project!=null){
+				this.project.setProjectDictionaries(projectDictionaries);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setProjectDetails()
+			}
 		}
-		this.project.setProjectDictionaries(projectDictionaries);
+
 	}
 
 	/**
@@ -401,10 +459,19 @@ public class ProjectProxy implements IProject
 	 */
 	@Override
 	public List<IProjectConceptCollection> getProjectConceptCollections() {
-		if(this.project == null){
+		if(this.project != null){
+			return this.project.getProjectConceptCollections();
+		}else{
 			setProjectDetails();
+			//We need to do this in case of Quadriga storage exception in setProjectDetails() , this.project would be null
+			if(this.project != null){
+			return this.project.getProjectConceptCollections();
+			}else{
+				return null;
+			}
 		}
-		return this.project.getProjectConceptCollections();
+
+
 	}
 
 	/**
@@ -417,10 +484,17 @@ public class ProjectProxy implements IProject
 	@Override
 	public void setProjectConceptCollections(
 			List<IProjectConceptCollection> projectConceptCollectionsList) {
-		if(this.project == null){
+		if(this.project != null){
+			this.project.setProjectConceptCollections(projectConceptCollectionsList);
+		}else{
 			setProjectDetails();
+			if(this.project!=null){
+				this.project.setProjectConceptCollections(projectConceptCollectionsList);
+			}else{
+				//Doing nothing this would be in case of Quadriga storage exception in setProjectDetails()
+			}
 		}
-		this.project.setProjectConceptCollections(projectConceptCollectionsList);
+
 	}
 
 }
