@@ -77,6 +77,38 @@ public class RetrieveProjectManagerDAO extends DAOConnectionManager implements I
 			throw new QuadrigaStorageException(e);
 		}
 	}
+	
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * Uses Hibernate to get {@link ProjectDTO} of a {@link IProject} ID. 
+	 */
+	@Override
+	public ProjectDTO getProjectDTO(String projectId,String userId) throws QuadrigaStorageException 
+	{
+		ProjectDTO projectDTO = null;
+		List<ProjectDTO> projectDTOList = null;
+		try
+		{
+			Query query = sessionFactory.getCurrentSession().createQuery(" from ProjectDTO project where project.projectowner.username =:username and projectid=:projectid");
+			//projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+			query.setParameter("username", userId);
+			query.setParameter("projectid", projectId);
+			
+			projectDTOList =  query.list();
+			if(projectDTOList != null){
+			projectDTO = projectDTOList.get(0);
+			}
+			return projectDTO;
+		}
+		catch(Exception e)
+		{
+			logger.info("Retrieve project details method :"+e.getMessage());	
+			throw new QuadrigaStorageException(e);
+		}
+	}
+
 
 //	/**
 //	 * This method fetches the list of projects where current logged in user is the owner.

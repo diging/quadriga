@@ -104,7 +104,7 @@ IDBConnectionProjectConceptColleciton
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<IConceptCollection> listProjectConceptCollection(String projectId,
+	public List<ProjectConceptCollectionDTO> listProjectConceptCollection(String projectId,
 			String userId) throws QuadrigaStorageException
 	{
 		List<IConceptCollection> conceptCollectionList = null;
@@ -123,15 +123,15 @@ IDBConnectionProjectConceptColleciton
 		List<ProjectConceptCollectionDTO> projectConceptCollection = project.getProjectConceptCollectionDTOList();
 		
 		//retrieve the concept collection details for every concept collection id
-		for(ProjectConceptCollectionDTO tempProjectConceptCollection : projectConceptCollection)
-		{
-			ProjectConceptCollectionDTOPK projectConceptCollectionKey = tempProjectConceptCollection.getProjectConceptcollectionDTOPK();
-			ConceptCollectionDTO collection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,projectConceptCollectionKey.getConceptcollectionid());
-			conceptCollection = collectionMapper.getConceptCollection(collection);
-			conceptCollectionList.add(conceptCollection);
-		}
+//		for(ProjectConceptCollectionDTO tempProjectConceptCollection : projectConceptCollection)
+//		{
+//			ProjectConceptCollectionDTOPK projectConceptCollectionKey = tempProjectConceptCollection.getProjectConceptcollectionDTOPK();
+//			ConceptCollectionDTO collection = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class,projectConceptCollectionKey.getConceptcollectionid());
+//			conceptCollection = collectionMapper.getConceptCollection(collection);
+//			conceptCollectionList.add(conceptCollection);
+//		}
 		
-		return conceptCollectionList;
+		return projectConceptCollection;
 	}
 	
 	/**

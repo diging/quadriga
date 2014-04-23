@@ -22,10 +22,10 @@ public interface IDBConnectionDictionaryManager {
 	/**
 	 * Queries the database to get a list of dictionary objects list
 	 * 
-	 * @return List containing IDictionary objects of dictionary of the users
+	 * @return List containing DictionaryDTO objects of dictionary of the users
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionary> getDictionaryOfUser(String userName)
+	public abstract List<DictionaryDTO> getDictionaryOfUser(String userName)
 			throws QuadrigaStorageException;
 
 	/**
@@ -153,11 +153,11 @@ public interface IDBConnectionDictionaryManager {
 	/**
 	 * Get user dictionary of the user with the collaborator role
 	 * @param user id
-	 * @return List of Dictionary objects
+	 * @return List of DictionaryDTO objects
 	 * @throws QuadrigaStorageException
 	 * @author Karthik Jayaraman
 	 */
-	public abstract List<IDictionary> getDictionaryCollabOfUser(String userId)
+	public abstract List<DictionaryDTO> getDictionaryCollabOfUser(String userId)
 			throws QuadrigaStorageException;
 
 	/**
@@ -200,7 +200,7 @@ public interface IDBConnectionDictionaryManager {
 	public abstract String getDictionaryOwner(String dictionaryId)
 			throws QuadrigaStorageException;
 	
-	public abstract IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException;
+	public abstract DictionaryDTO getDictionaryDetails(String userName) throws QuadrigaStorageException;
 	
 	public abstract List<DictionaryDTO> getDictionaryDTOList(String userName) throws QuadrigaStorageException;
 	

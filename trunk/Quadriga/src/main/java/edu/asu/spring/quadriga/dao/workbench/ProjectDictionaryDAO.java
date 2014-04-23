@@ -97,7 +97,7 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<IDictionary> listProjectDictionary(String projectId,String userId) throws QuadrigaStorageException
+	public List<ProjectDictionaryDTO> listProjectDictionary(String projectId,String userId) throws QuadrigaStorageException
 	{
 		List<IDictionary> dictionaryList = null;
 		DictionaryDTO dictionaryDTO = null;
@@ -115,15 +115,15 @@ public class ProjectDictionaryDAO implements IDBConnectionProjectDictionary
 		
 		List<ProjectDictionaryDTO> projectDictionaryDTOList = project.getProjectDictionaryDTOList();
 		
-	    for(ProjectDictionaryDTO projectDictionary: projectDictionaryDTOList)	
-	    {
-	    	ProjectDictionaryDTOPK projectDictionaryKey = projectDictionary.getProjectDictionaryDTOPK();
-	    	dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, projectDictionaryKey.getDictionaryid());
-	    	dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
-	    	dictionaryList.add(dictionary);
-	    }
+//	    for(ProjectDictionaryDTO projectDictionary: projectDictionaryDTOList)	
+//	    {
+//	    	ProjectDictionaryDTOPK projectDictionaryKey = projectDictionary.getProjectDictionaryDTOPK();
+//	    	dictionaryDTO = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, projectDictionaryKey.getDictionaryid());
+//	    	dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
+//	    	dictionaryList.add(dictionary);
+//	    }
 		
-		return dictionaryList;
+		return projectDictionaryDTOList;
 	}
 	
 	/**
