@@ -62,8 +62,7 @@ public class ConceptCollectionWorkspaceController {
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Issue while accessing DB",e);
 		}
 		if(conceptCollectionList == null){
 			logger.info("Concept collection list is empty buddy");
@@ -103,8 +102,7 @@ public class ConceptCollectionWorkspaceController {
 			try {
 				conceptCollectionList = workspaceCCManager.getNonAssociatedWorkspaceConcepts(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Issue while accessing DB",e);
 			}
 			if (conceptCollectionList == null) {
 				logger.info("conceptCollectionList list is empty");
@@ -151,8 +149,7 @@ public class ConceptCollectionWorkspaceController {
 			try {
 				conceptCollectionList = workspaceCCManager.getNonAssociatedWorkspaceConcepts(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Issue while accessing DB",e);
 			}
 			if(conceptCollectionList == null){
 				logger.info("Concept Collection list is empty buddy");
@@ -171,8 +168,7 @@ public class ConceptCollectionWorkspaceController {
 						flag=1;
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					logger.error(" ",e);
+					logger.error("Issue while accessing DB",e);
 				}
 			}
 		}
@@ -185,8 +181,7 @@ public class ConceptCollectionWorkspaceController {
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Issue while accessing DB",e);
 		}
 		if(conceptCollectionList == null){
 			logger.info("conceptCollectionList list is empty buddy");
@@ -219,8 +214,7 @@ public class ConceptCollectionWorkspaceController {
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Issue while accessing DB",e);
 		}
 		if(conceptCollectionList == null){
 			logger.info("conceptCollectionList list is empty buddy");
@@ -258,8 +252,7 @@ public class ConceptCollectionWorkspaceController {
 			try {
 				conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Issue while accessing DB",e);
 			}
 			if(conceptCollectionList == null){
 				logger.info("Concept Collection list is empty buddy");
@@ -274,8 +267,7 @@ public class ConceptCollectionWorkspaceController {
 				try {
 			       workspaceCCManager.deleteWorkspaceCC(workspaceId, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("Issue while accessing DB",e);
 				}
 				if(!msg.equals("")){
 					flag=1;
@@ -291,8 +283,7 @@ public class ConceptCollectionWorkspaceController {
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Issue while accessing DB",e);
 		}
 		if(conceptCollectionList == null){
 			logger.info("Dictionary list is empty buddy");
