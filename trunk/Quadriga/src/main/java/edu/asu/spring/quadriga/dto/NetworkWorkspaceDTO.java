@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NetworkWorkspaceDTO.findAll", query = "SELECT n FROM NetworkWorkspaceDTO n"),
-    @NamedQuery(name = "NetworkWorkspaceDTO.findByNetworkid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.NetworkWorkspaceDTOPK.networkid = :networkid"),
-   @NamedQuery(name = "NetworkWorkspaceDTO.findByWorkspaceid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.NetworkWorkspaceDTOPK.workspaceid = :workspaceid"),
+    @NamedQuery(name = "NetworkWorkspaceDTO.findByNetworkid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.networkWorkspaceDTOPK.networkid = :networkid"),
+   @NamedQuery(name = "NetworkWorkspaceDTO.findByWorkspaceid", query = "SELECT n FROM NetworkWorkspaceDTO n WHERE n.networkWorkspaceDTOPK.workspaceid = :workspaceid"),
     })
 public class NetworkWorkspaceDTO implements Serializable{
 
@@ -44,7 +44,6 @@ public class NetworkWorkspaceDTO implements Serializable{
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-	
 	@JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private WorkspaceDTO workspaceDTO;

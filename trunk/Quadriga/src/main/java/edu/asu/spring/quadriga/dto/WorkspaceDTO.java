@@ -98,9 +98,6 @@ public class WorkspaceDTO implements Serializable {
     private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
-    private List<NetworksDTO> workspaceNetworksDTOList;
-	
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
     private List<WorkspaceEditorDTO> workspaceEditorDTOList;
    
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "workspaceDTO")
@@ -210,16 +207,6 @@ public class WorkspaceDTO implements Serializable {
 		return workspaceDictionaryDTOList;
 	}
     
-    @XmlTransient
-    public List<NetworksDTO> getWorkspaceNetworksDTOList() {
-		return workspaceNetworksDTOList;
-	}
-
-	public void setWorkspaceNetworksDTOList(
-			List<NetworksDTO> workspaceNetworksDTOList) {
-		this.workspaceNetworksDTOList = workspaceNetworksDTOList;
-	}
-
 	public void setWorkspaceDictionaryDTOList(
 			List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList) {
 		this.workspaceDictionaryDTOList = workspaceDictionaryDTOList;

@@ -22,7 +22,6 @@ import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
-import edu.asu.spring.quadriga.dto.NetworksAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -58,9 +57,9 @@ public class NetworkDTOMapper {
 	 * @param workspaceid		The id of the workspace that the network belongs to
 	 * @return					Return a {@link NetworksDTO} object created using the input parameters
 	 */
-	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String status, String workspaceid)
+	public NetworksDTO getNetworksDTO(String networkid, String networkName, String username, String status)
 	{
-		NetworksDTO networkDTO = new NetworksDTO(networkid, workspaceid, networkName, username, status, username, new Date(), username, new Date());
+		NetworksDTO networkDTO = new NetworksDTO(networkid, networkName, username, status, username, new Date(), username, new Date());
 		return networkDTO;
 	}
 	
@@ -97,7 +96,6 @@ public class NetworkDTOMapper {
 			network = networkFactory.createNetworkObject();
 			network.setNetworkId(networksDTO.getNetworkid());
 			network.setNetworkName(networksDTO.getNetworkname());
-			network.setWorkspaceid(networksDTO.getWorkspaceid());
 			network.setStatus(networksDTO.getStatus());
 			if(networksDTO.getNetworkowner() != null)
 				network.setCreator(userManager.getUserDetails(networksDTO.getNetworkowner()));
@@ -125,7 +123,6 @@ public class NetworkDTOMapper {
 				network = networkFactory.createNetworkObject();
 				network.setNetworkId(networkDTO.getNetworkid());
 				network.setNetworkName(networkDTO.getNetworkname());
-				network.setWorkspaceid(networkDTO.getWorkspaceid());
 				network.setStatus(networkDTO.getStatus());
 				if(networkDTO.getNetworkowner() != null)
 					network.setCreator(userManager.getUserDetails(networkDTO.getNetworkowner()));
@@ -148,7 +145,6 @@ public class NetworkDTOMapper {
 				network = networkFactory.createNetworkObject();
 				network.setNetworkId(networkDTO.getNetworkid());
 				network.setNetworkName(networkDTO.getNetworkname());
-				network.setWorkspaceid(networkDTO.getWorkspaceid());
 				network.setStatus(networkDTO.getStatus());
 				//network.setNetworkOldVersion(getNetworkOldVersion(getNetworkAssignedDTO(networkDTO.getNetworkid(), assignedUser, networkDTO.getStatus(), INetworkStatus.ARCHIVE_LEVEL_ONE )));
 				if(networkDTO.getNetworkowner() != null)
@@ -296,22 +292,22 @@ public class NetworkDTOMapper {
 	 * @param objecttype		The type of object
 	 * @return A {@link NetworksAnnotationsDTO} object will be created from the input parameters; 
 	 */
-	public NetworksAnnotationsDTO getNetworkAnnotationDTO(String annotationType,String networkid, String nodeId,String edgeId, String nodeName, String annotationtext, String annotationid, String username, String objecttype)
+	public NetworkAnnotationsDTO getNetworkAnnotationDTO(String annotationType,String networkid, String nodeId,String edgeId, String nodeName, String annotationtext, String annotationid, String username, String objecttype)
 	{
-		NetworksAnnotationsDTO networkAnnotationsDTO = new NetworksAnnotationsDTO();
-		networkAnnotationsDTO.setAnnotationtype(annotationType);
-		networkAnnotationsDTO.setNetworkid(networkid);
-		networkAnnotationsDTO.setNodeid(nodeId);
-		networkAnnotationsDTO.setEdgeid(edgeId);
-		networkAnnotationsDTO.setNodename(nodeName);
-		networkAnnotationsDTO.setAnnotationtext(annotationtext);
-		networkAnnotationsDTO.setAnnotationid(annotationid);
-		networkAnnotationsDTO.setObjecttype(objecttype);
-		networkAnnotationsDTO.setUsername(username);
-		networkAnnotationsDTO.setCreatedby(username);
-		networkAnnotationsDTO.setCreateddate(new Date());
-		networkAnnotationsDTO.setUpdatedby(username);
-		networkAnnotationsDTO.setUpdateddate(new Date());
+		NetworkAnnotationsDTO networkAnnotationsDTO = new NetworkAnnotationsDTO();
+//		networkAnnotationsDTO.setAnnotationtype(annotationType);
+//		networkAnnotationsDTO.setNetworkid(networkid);
+//		networkAnnotationsDTO.setNodeid(nodeId);
+//		networkAnnotationsDTO.setEdgeid(edgeId);
+//		networkAnnotationsDTO.setNodename(nodeName);
+//		networkAnnotationsDTO.setAnnotationtext(annotationtext);
+//		networkAnnotationsDTO.setAnnotationid(annotationid);
+//		networkAnnotationsDTO.setObjecttype(objecttype);
+//		networkAnnotationsDTO.setUsername(username);
+//		networkAnnotationsDTO.setCreatedby(username);
+//		networkAnnotationsDTO.setCreateddate(new Date());
+//		networkAnnotationsDTO.setUpdatedby(username);
+//		networkAnnotationsDTO.setUpdateddate(new Date());
 		
 		return networkAnnotationsDTO;
 	}
