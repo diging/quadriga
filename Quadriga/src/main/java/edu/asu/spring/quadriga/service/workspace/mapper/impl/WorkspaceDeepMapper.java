@@ -31,7 +31,8 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
@@ -71,6 +72,9 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	private IWorkspaceCollaboratorFactory workspaceCollaboratorFactory;
 	
 	@Autowired
+	private IWorkspaceNetworkMapper workspaceNetworkMapper;
+	
+	@Autowired
 	private ICollaboratorRoleManager roleMapper;
 	
 	@Autowired
@@ -89,7 +93,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	private ICollaboratorRoleManager collaboratorRoleManager;
 	
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepMapper;
 	
 	
 	/**
@@ -106,7 +110,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspace.setDescription(workspaceDTO.getDescription());
-			workspace.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspace.setOwner(userDeepMapper.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 			workspace.setCreatedBy(workspaceDTO.getCreatedby());
 			workspace.setCreatedDate(workspaceDTO.getCreateddate());
 			workspace.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -122,8 +126,10 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			workspace.setProjectWorkspace(getProjectWorkspaceOfWorkspace(workspace, workspaceDTO));
 			
 			workspace.setWorkspaceBitStreams(getWorkspaceBitstream(workspaceDTO, workspace));
+
+			//Set network workspace
+			//workspace.setWorkspaceNetworks(workspaceNetworkMapper.getNetworkWorkspaceByWorkSpaceDTO(workspaceDTO, workspace));
 			
-			//TODO : network workspace
 		}
 				
 		return workspace;
@@ -145,7 +151,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspace.setDescription(workspaceDTO.getDescription());
-			workspace.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspace.setOwner(userDeepMapper.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 			workspace.setCreatedBy(workspaceDTO.getCreatedby());
 			workspace.setCreatedDate(workspaceDTO.getCreateddate());
 			workspace.setUpdatedBy(workspaceDTO.getUpdatedby());

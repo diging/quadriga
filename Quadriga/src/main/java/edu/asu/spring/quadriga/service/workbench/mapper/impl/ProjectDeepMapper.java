@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
@@ -42,7 +42,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 	private IProjectFactory projectFactory;
 
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepMapper;
 	
 	@Autowired
 	private IProjectCollaboratorFactory projectCollaboratorFactory;
@@ -85,7 +85,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setDescription(projectDTO.getDescription());
 			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
 			project.setCreatedBy(projectDTO.getCreatedby());
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
@@ -123,7 +123,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setDescription(projectDTO.getDescription());
 			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
 			project.setCreatedBy(projectDTO.getCreatedby());
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
@@ -160,7 +160,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setDescription(projectDTO.getDescription());
 			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userManager.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
 			project.setCreatedBy(projectDTO.getCreatedby());
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());

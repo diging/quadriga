@@ -44,48 +44,24 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 
 	private static final Logger logger = LoggerFactory.getLogger(UserManagerDAO.class);
 
-	/**
-	 * {@inheritDoc} 
-	 */
-	@Override
-	public IUser getUserDetails(String userid) throws QuadrigaStorageException
-	{
-		if(userid == null || userid.equals(""))
-			return null;
 
-		try
-		{
-			QuadrigaUserDTO userDTO = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class,userid);
-			if(userDTO == null)
-				return null;
-			else
-				return userMapper.getUser(userDTO);
-		}		
-		catch(Exception e)
-		{
-			logger.error("Error in fetching a user detail: ",e);
-			throw new QuadrigaStorageException(e);
-		}
-	}
+
 
 	/**
 	 * {@inheritDoc} 
 	 */
 	@Override
-	public List<IUser> getUsers(String userRoleId) throws QuadrigaStorageException
+	public List<QuadrigaUserDTO> getUserDTOList(String userRoleId) throws QuadrigaStorageException
 	{
-		List<IUser> listUsers = null;
+		List<QuadrigaUserDTO> usersDTOList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from QuadrigaUserDTO user where user.quadrigarole like :quadrigarole");
 			query.setParameter("quadrigarole", "%"+userRoleId+"%");
 
-			List<QuadrigaUserDTO> usersDTO = query.list();
+			usersDTOList = query.list();
 
-			if(usersDTO != null)
-				listUsers = userMapper.getUsers(usersDTO);
-
-			return listUsers;
+			return usersDTOList;
 		}
 		catch(Exception e)
 		{
@@ -93,7 +69,7 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 			throw new QuadrigaStorageException(e);
 		}
 	}
-
+	
 	/**
 	 * {@inheritDoc} 
 	 */
@@ -115,23 +91,21 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 			throw new QuadrigaStorageException(e);
 		}		
 	}
-
+	
+	
 	/**
 	 * {@inheritDoc} 
 	 */
 	@Override
-	public List<IUser> getUserRequests() throws QuadrigaStorageException
+	public List<QuadrigaUserRequestsDTO> getUserRequestDTOList() throws QuadrigaStorageException
 	{
-		List<IUser> listUsers = null;
+		List<QuadrigaUserRequestsDTO> userRequestDTOList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserRequestsDTO.findAll");
-			List<QuadrigaUserRequestsDTO> userRequestsDTO = query.list();
+			userRequestDTOList = query.list();
 
-			if(userRequestsDTO != null)
-				listUsers = userMapper.getUserReqests(userRequestsDTO);
-
-			return listUsers;
+			return userRequestDTOList;
 		}
 		catch(Exception e)
 		{
@@ -140,24 +114,24 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 		}
 	}
 
+	
+	
+	
 	/**
 	 * {@inheritDoc} 
 	 */
 	@Override
-	public List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException
+	public List<QuadrigaUserDTO> getUserDTOListNotInRole(String userRoleId) throws QuadrigaStorageException
 	{
 
-		List<IUser> listUsers = null;
+		List<QuadrigaUserDTO> usersDTOList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from QuadrigaUserDTO user where user.quadrigarole not like :quadrigarole");
 			query.setParameter("quadrigarole", "%"+userRoleId+"%");
-			List<QuadrigaUserDTO> usersDTO = query.list();
+			usersDTOList = query.list();
 
-			if(usersDTO!=null)
-				listUsers = userMapper.getUsers(usersDTO);
-
-			return listUsers;
+			return usersDTOList;
 		}
 		catch(Exception e)
 		{
@@ -165,6 +139,7 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 			throw new QuadrigaStorageException(e);
 		}
 	}
+	
 
 	/**
 	 * {@inheritDoc} 

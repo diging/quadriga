@@ -12,9 +12,9 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.proxy.DictionaryProxy;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryShallowMapper;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
 public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 
@@ -28,7 +28,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 	private IDictionaryManager dictionaryManager;
 	
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepMapper;
 	
 	@Override
 	@Transactional
@@ -49,7 +49,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 				dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
 				dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
 				dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-				dictionaryProxy.setOwner(userManager.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+				dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
 				dictionaryList.add(dictionaryProxy);
 			}
 		}
@@ -68,7 +68,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 			dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
 			dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
 			dictionaryProxy.setDescription(dictionaryDTO.getDescription());
-			dictionaryProxy.setOwner(userManager.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+			dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
 			dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
 			dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
 			dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
@@ -93,7 +93,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 			dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
 			dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
 			dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-			dictionaryProxy.setOwner(userManager.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+			dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
 		}
 		return dictionaryProxy;
 	}

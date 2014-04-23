@@ -11,9 +11,9 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.proxy.ConceptCollectionProxy;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
 @Service
 public class ConceptCollectionShallowMapper implements
@@ -26,7 +26,7 @@ public class ConceptCollectionShallowMapper implements
 	private IConceptCollectionManager ccManager;
 	
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepMapper;
 	
 	@Override
 	public List<IConceptCollection> getConceptCollectionList(String userName)
@@ -85,7 +85,7 @@ public class ConceptCollectionShallowMapper implements
 			ccProxy.setConceptCollectionId(ccDTO.getConceptCollectionid());
 			ccProxy.setConceptCollectionName(ccDTO.getCollectionname());
 			ccProxy.setDescription(ccDTO.getDescription());
-			ccProxy.setOwner(userManager.getUserDetails(ccDTO.getCollectionowner().getUsername()));
+			ccProxy.setOwner(userDeepMapper.getUserDetails(ccDTO.getCollectionowner().getUsername()));
 			ccProxy.setCreatedBy(ccDTO.getCreatedby());
 			ccProxy.setCreatedDate(ccDTO.getCreateddate());
 			ccProxy.setUpdatedBy(ccDTO.getUpdatedby());

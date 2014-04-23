@@ -19,6 +19,7 @@ import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -41,6 +42,9 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private IModifyUserRoles modifyUserRoleManager;
 
+	@Autowired
+	private IUserDeepMapper userDeepMapper;
+	
 	@Autowired
 	private IUserFactory userFactory;
 
@@ -84,40 +88,7 @@ public class UserManager implements IUserManager {
 	@Transactional
 	public IUser getUserDetails(String sUserId) throws QuadrigaStorageException
 	{
-		int i = 0;
-		IUser user = null;
-		List<IQuadrigaRole> userRole = null;
-		IQuadrigaRole quadrigaRole = null;
-		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-
-		user = usermanagerDAO.getUserDetails(sUserId);
-
-		if(user!=null)
-		{
-			userRole = user.getQuadrigaRoles();
-
-			for(i=0;i<userRole.size();i++)
-			{
-				quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
-
-				//If user account is deactivated remove other roles 
-				if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
-				{
-					rolesList.clear();
-					rolesList.add(quadrigaRole);
-					break;
-				}
-				rolesList.add(quadrigaRole);
-			}
-			user.setQuadrigaRoles(rolesList);
-		}
-		else
-		{
-			user = userFactory.createUserObject();
-			quadrigaRole = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
-			rolesList.add(quadrigaRole);
-			user.setQuadrigaRoles(rolesList);
-		}
+		IUser user = userDeepMapper.getUserDetails(sUserId);
 
 		return user;	
 	}
@@ -133,12 +104,7 @@ public class UserManager implements IUserManager {
 	@Transactional
 	public List<IUser> getAllActiveUsers() throws QuadrigaStorageException
 	{
-		List<IUser> listUsers = null;
-
-		//Find the ROLEDBID for Deactivated account
-		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
-
-		listUsers = usermanagerDAO.getUsersNotInRole(sDeactiveRoleDBId);
+		List<IUser> listUsers = userDeepMapper.getAllActiveUsers();
 
 		return listUsers;		
 	}
@@ -154,12 +120,7 @@ public class UserManager implements IUserManager {
 	@Transactional
 	public List<IUser> getAllInActiveUsers() throws QuadrigaStorageException
 	{
-		List<IUser> listUsers = null;
-
-		//Find the ROLEDBID for Deactivated account
-		String sDeactiveRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
-
-		listUsers = usermanagerDAO.getUsers(sDeactiveRoleDBId);
+		List<IUser> listUsers = userDeepMapper.getAllInActiveUsers();
 		return listUsers;		
 	}
 
@@ -174,9 +135,7 @@ public class UserManager implements IUserManager {
 	@Transactional
 	public List<IUser> getUserRequests() throws QuadrigaStorageException
 	{
-		List<IUser> listUsers = null;
-
-		listUsers = usermanagerDAO.getUserRequests();
+		List<IUser> listUsers = userDeepMapper.getUserRequests();
 
 		return listUsers;		
 	}
@@ -290,7 +249,7 @@ public class UserManager implements IUserManager {
 		//Find all the roles of the user
 		IUser user = null;
 
-		user = usermanagerDAO.getUserDetails(sUserId);
+		user = userDeepMapper.getUserDetails(sUserId);
 
 		//Remove the deactivated role from user roles
 		if(user!=null)
@@ -342,7 +301,7 @@ public class UserManager implements IUserManager {
 		int iUserStatus;
 
 		//Get all open user requests
-		List<IUser> listUsers = usermanagerDAO.getUserRequests();
+		List<IUser> listUsers = userDeepMapper.getUserRequests();
 
 		//Check if an open request is already placed for the userid
 		for(IUser user:listUsers)
@@ -360,7 +319,7 @@ public class UserManager implements IUserManager {
 		if(iUserStatus == SUCCESS)
 		{
 			String sAdminRoleDBId = rolemanager.getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_ADMIN);
-			List<IUser> listAdminUsers = usermanagerDAO.getUsers(sAdminRoleDBId);
+			List<IUser> listAdminUsers = userDeepMapper.getUsersByRoleId(sAdminRoleDBId);
 
 			//Ignore the user if the account is deactivated
 			adminlabel:

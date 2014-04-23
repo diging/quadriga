@@ -25,8 +25,8 @@ import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDictionaryShallowMapper;
@@ -73,7 +73,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 	private IDictionaryItemFactory dictionaryItemFactory;
 	
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepMapper;
 	
 	/**
 	 * {@inheritDoc}
@@ -92,7 +92,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			dictionary.setCreatedDate(dictionaryDTO.getCreateddate());
 			dictionary.setUpdatedBy(dictionaryDTO.getUpdatedby());
 			dictionary.setUpdatedDate(dictionaryDTO.getUpdateddate());
-			dictionary.setOwner(userManager.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+			dictionary.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
 			
 			// Setting dictionary collaborator
 			dictionary.setDictionaryCollaborators(getDictionaryCollaboratorList(dictionaryDTO, dictionary));

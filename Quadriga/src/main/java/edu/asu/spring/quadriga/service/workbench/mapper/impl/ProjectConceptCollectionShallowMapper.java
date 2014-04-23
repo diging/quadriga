@@ -16,7 +16,6 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
@@ -26,9 +25,6 @@ public class ProjectConceptCollectionShallowMapper implements
 IProjectConceptCollectionShallowMapper {
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
-
-	@Autowired
-	private IUserManager userManager;
 
 	@Autowired
 	private IConceptCollectionManager ccManager;

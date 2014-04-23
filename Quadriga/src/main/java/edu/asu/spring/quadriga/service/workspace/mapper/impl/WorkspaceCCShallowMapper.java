@@ -16,7 +16,6 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
@@ -25,9 +24,6 @@ import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 public class WorkspaceCCShallowMapper implements IWorkspaceCCShallowMapper {
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
-	
-	@Autowired
-	private IUserManager userManager;
 	
 	@Autowired
 	private IConceptCollectionManager ccManager;
