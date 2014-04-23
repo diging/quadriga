@@ -21,4 +21,16 @@ public class WorkspaceCollaboratorFactory implements IWorkspaceCollaboratorFacto
 	public IWorkspaceCollaborator createWorkspaceCollaboratorObject() {
 		return new WorkspaceCollaborator();
 	}
+
+	@Override
+	public IWorkspaceCollaborator cloneWorkspaceCollaboratorObject(IWorkspaceCollaborator workspaceCollaborator) {
+		IWorkspaceCollaborator clone = new WorkspaceCollaborator();
+		clone.setWorkspace(workspaceCollaborator.getWorkspace());
+		clone.setCollaborator(workspaceCollaborator.getCollaborator());
+		clone.setCreatedBy(workspaceCollaborator.getCreatedBy());
+		clone.setCreatedDate(workspaceCollaborator.getCreatedDate());
+		clone.setUpdatedBy(workspaceCollaborator.getUpdatedBy());
+		clone.setUpdatedDate(workspaceCollaborator.getUpdatedDate());
+		return clone;
+	}
 }

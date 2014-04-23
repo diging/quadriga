@@ -11,5 +11,7 @@ public interface IWorkspaceDictionaryFactory {
 	 */
 	public abstract IWorkspaceDictionary  createWorkspaceDictionaryObject();
 	
+	public abstract IWorkspaceDictionary cloneWorkspaceDictionary(IWorkspaceDictionary workspaceDictionary);
+	
 
 }

@@ -10,5 +10,7 @@ public interface IWorkspaceCollaboratorFactory {
 	 * @return							Returns {@link IWorkspaceCollaborator} object of domain type {@link WorkspaceCollaborator}
 	 */
 	public abstract IWorkspaceCollaborator createWorkspaceCollaboratorObject();
+	
+	public abstract IWorkspaceCollaborator cloneWorkspaceCollaboratorObject(IWorkspaceCollaborator workspaceCollaborator);
 
 }

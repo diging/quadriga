@@ -10,5 +10,7 @@ import edu.asu.spring.quadriga.web.workspace.backing.ModifyWorkspaceForm;
 public interface IWorkspaceFormFactory {
 
 	public abstract ModifyWorkspaceForm createModifyWorkspaceForm();
+	
+	public abstract ModifyWorkspaceForm cloneModifyWorkspaceFormObject(ModifyWorkspaceForm workspaceForm);
 
 }

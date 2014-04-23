@@ -305,15 +305,6 @@ public class ProjectProxy implements IProject
 			this.project.setOwner(this.owner);
 			this.project.setUnixName(this.unixName);
 		}
-
-
-
-
-
-
-
-
-		
 	}
 
 	/**

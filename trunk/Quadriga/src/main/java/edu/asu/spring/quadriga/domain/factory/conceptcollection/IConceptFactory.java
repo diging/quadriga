@@ -10,4 +10,6 @@ import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
 public interface IConceptFactory {
 
 	public abstract IConcept createConceptObject();
+	
+	public abstract IConcept cloneConceptObject(IConcept concept);
 }

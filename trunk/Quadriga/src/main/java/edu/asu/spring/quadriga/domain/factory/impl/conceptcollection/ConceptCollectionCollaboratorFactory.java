@@ -15,4 +15,18 @@ public class ConceptCollectionCollaboratorFactory implements
 		return new ConceptCollectionCollaborator();
 	}
 
+	@Override
+	public IConceptCollectionCollaborator cloneConceptCollectionCollaboratorObject(
+			IConceptCollectionCollaborator conceptCollectionCollaborator) 
+	{
+		IConceptCollectionCollaborator clone = new ConceptCollectionCollaborator();
+		clone.setCollaborator(conceptCollectionCollaborator.getCollaborator());
+		clone.setConceptCollection(conceptCollectionCollaborator.getConceptCollection());
+		clone.setCreatedBy(conceptCollectionCollaborator.getCreatedBy());
+		clone.setCreatedDate(conceptCollectionCollaborator.getCreatedDate());
+		clone.setUpdatedBy(conceptCollectionCollaborator.getUpdatedBy());
+		clone.setUpdatedDate(conceptCollectionCollaborator.getUpdatedDate());
+		return clone;
+	}
+
 }

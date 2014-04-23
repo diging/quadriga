@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
 import edu.asu.spring.quadriga.domain.dspace.IItem;
-import edu.asu.spring.quadriga.domain.factory.conceptcollection.ICollectionFactory;
+import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
 import edu.asu.spring.quadriga.domain.impl.dspace.BitStream;
 import edu.asu.spring.quadriga.domain.impl.dspace.Community;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
