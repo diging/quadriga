@@ -15,4 +15,17 @@ public class ConceptCollectionConceptFactory implements
 		return new ConceptCollectionConcepts();
 	}
 
+	@Override
+	public IConceptCollectionConcepts cloneConceptCollectionConceptsObject(IConceptCollectionConcepts conceptCollectionConcepts)
+	{
+		IConceptCollectionConcepts clone = new ConceptCollectionConcepts();
+		clone.setConcept(conceptCollectionConcepts.getConcept());
+		clone.setConceptCollection(conceptCollectionConcepts.getConceptCollection());
+		clone.setCreatedBy(conceptCollectionConcepts.getCreatedBy());
+		clone.setCreatedDate(conceptCollectionConcepts.getCreatedDate());
+		clone.setUpdatedBy(conceptCollectionConcepts.getUpdatedBy());
+		clone.setUpdatedDate(conceptCollectionConcepts.getUpdatedDate());
+		return clone;
+	}
+
 }

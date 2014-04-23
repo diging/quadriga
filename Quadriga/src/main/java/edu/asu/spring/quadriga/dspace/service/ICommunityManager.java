@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
 import edu.asu.spring.quadriga.domain.dspace.IItem;
-import edu.asu.spring.quadriga.domain.factory.conceptcollection.ICollectionFactory;
+import edu.asu.spring.quadriga.domain.factories.ICollectionFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 

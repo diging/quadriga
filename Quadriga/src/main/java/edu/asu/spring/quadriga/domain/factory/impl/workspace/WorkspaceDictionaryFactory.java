@@ -14,4 +14,17 @@ public class WorkspaceDictionaryFactory implements IWorkspaceDictionaryFactory {
 		return new WorkspaceDictionary();
 	}
 
+	@Override
+	public IWorkspaceDictionary cloneWorkspaceDictionary(
+			IWorkspaceDictionary workspaceDictionary) {
+        IWorkspaceDictionary clone = new WorkspaceDictionary();
+        clone.setDictionary(workspaceDictionary.getDictionary());
+        clone.setWorkspace(workspaceDictionary.getWorkspace());
+        clone.setCreatedBy(workspaceDictionary.getCreatedBy());
+        clone.setCreatedDate(workspaceDictionary.getCreatedDate());
+        clone.setUpdatedBy(workspaceDictionary.getUpdatedBy());
+        clone.setUpdatedDate(workspaceDictionary.getUpdatedDate());
+		return clone;
+	}
+
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.asu.spring.quadriga.domain.conceptcollection;
 
 import java.util.Date;

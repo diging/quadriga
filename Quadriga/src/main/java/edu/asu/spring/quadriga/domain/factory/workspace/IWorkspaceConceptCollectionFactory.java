@@ -9,5 +9,8 @@ public interface IWorkspaceConceptCollectionFactory {
 	 * @return
 	 */
 	public abstract IWorkspaceConceptCollection  createWorkspaceConceptCollectionObject();
+	
+	
+	public abstract IWorkspaceConceptCollection cloneWorkspaceConceptCollectionObject(IWorkspaceConceptCollection workspaceConceptCollection);
 
 }

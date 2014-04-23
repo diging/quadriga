@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.domain.factory.conceptcollection;
+package edu.asu.spring.quadriga.domain.factories;
 
 import java.util.Properties;
 

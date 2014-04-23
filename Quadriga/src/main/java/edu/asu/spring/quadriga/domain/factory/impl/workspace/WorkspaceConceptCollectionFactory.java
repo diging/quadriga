@@ -17,4 +17,17 @@ public class WorkspaceConceptCollectionFactory implements
 		return new WorkspaceConceptCollection();
 	}
 
+	@Override
+	public IWorkspaceConceptCollection cloneWorkspaceConceptCollectionObject(IWorkspaceConceptCollection workspaceConceptCollection) 
+	{
+		IWorkspaceConceptCollection clone = new WorkspaceConceptCollection();
+		clone.setConceptCollection(workspaceConceptCollection.getConceptCollection());
+		clone.setWorkspace(workspaceConceptCollection.getWorkspace());
+		clone.setCreatedBy(workspaceConceptCollection.getCreatedBy());
+		clone.setCreatedDate(workspaceConceptCollection.getCreatedDate());
+		clone.setUpdatedBy(workspaceConceptCollection.getUpdatedBy());
+		clone.setUpdatedDate(workspaceConceptCollection.getUpdatedDate());
+		return clone;
+	}
+
 }
