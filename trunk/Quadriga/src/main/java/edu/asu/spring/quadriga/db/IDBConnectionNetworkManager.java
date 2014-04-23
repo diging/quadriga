@@ -61,14 +61,6 @@ public interface IDBConnectionNetworkManager {
 	 */
 	public abstract List<INetwork> getNetworkList(IUser user) throws QuadrigaStorageException;
 
-	/**
-	 * Check if the network name is already used
-	 * @param networkName		Name for the network
-	 * @param user				{@link IUser} object for searching network name
-	 * @return					returns {@link Boolean} value of whether name exist or not
-	 * @throws QuadrigaStorageException
-	 */
-	public abstract boolean hasNetworkName(String networkName,IUser user) throws QuadrigaStorageException;
 
 	/**
 	 * Get all the network statements {@link INetworkNodeInfo} for a network.
