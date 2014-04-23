@@ -25,8 +25,8 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
 
@@ -40,7 +40,7 @@ public class ConceptCollectionDeepMapper implements
 	private IConceptCollectionFactory ccFactory;
 	
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepMapper;
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
@@ -83,7 +83,7 @@ public class ConceptCollectionDeepMapper implements
 			conceptCollection.setCreatedDate(ccDTO.getCreateddate());
 			conceptCollection.setUpdatedBy(ccDTO.getUpdatedby());
 			conceptCollection.setUpdatedDate(ccDTO.getUpdateddate());
-			conceptCollection.setOwner(userManager.getUserDetails(ccDTO.getCollectionowner().getUsername()));
+			conceptCollection.setOwner(userDeepMapper.getUserDetails(ccDTO.getCollectionowner().getUsername()));
 			
 			// Setting dictionary collaborator
 			conceptCollection.setConceptCollectionCollaborators(getConceptCollectionCollaboratorList(ccDTO, conceptCollection));

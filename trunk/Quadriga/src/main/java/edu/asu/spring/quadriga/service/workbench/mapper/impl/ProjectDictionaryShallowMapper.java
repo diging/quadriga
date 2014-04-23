@@ -16,7 +16,6 @@ import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
@@ -28,8 +27,6 @@ IProjectDictionaryShallowMapper {
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
 
-	@Autowired
-	private IUserManager userManager;
 
 	@Autowired
 	private IProjectShallowMapper projectShallowMapper;	

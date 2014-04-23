@@ -14,9 +14,9 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
 public class NetworkMapper implements INetworkMapper{
 	
@@ -27,7 +27,7 @@ public class NetworkMapper implements INetworkMapper{
 	private NetworkFactory networkFactory;
 	
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepMapper;
 	
 	@Autowired
 	private IWorkspaceNetworkMapper networkworkspacemapper;
@@ -51,7 +51,7 @@ public class NetworkMapper implements INetworkMapper{
 
 			network.setStatus(networksDTO.getStatus());
 			if(networksDTO.getNetworkowner() != null)
-				network.setCreator(userManager.getUserDetails(networksDTO.getNetworkowner()));
+				network.setCreator(userDeepMapper.getUserDetails(networksDTO.getNetworkowner()));
 			network.setCreatedBy(networksDTO.getCreatedby());
 			network.setCreatedDate(networksDTO.getCreateddate());
 			network.setUpdatedBy(networksDTO.getUpdatedby());
@@ -97,7 +97,7 @@ public class NetworkMapper implements INetworkMapper{
 
 			network.setStatus(networksDTO.getStatus());
 			if(networksDTO.getNetworkowner() != null)
-				network.setCreator(userManager.getUserDetails(networksDTO.getNetworkowner()));
+				network.setCreator(userDeepMapper.getUserDetails(networksDTO.getNetworkowner()));
 			network.setCreatedBy(networksDTO.getCreatedby());
 			network.setCreatedDate(networksDTO.getCreateddate());
 			network.setUpdatedBy(networksDTO.getUpdatedby());

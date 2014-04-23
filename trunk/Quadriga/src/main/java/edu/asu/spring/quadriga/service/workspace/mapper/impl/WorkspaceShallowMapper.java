@@ -13,6 +13,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
@@ -34,7 +35,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 	private IProjectShallowMapper projectShallowMapper;
 	
 	@Autowired
-	private IUserManager userManager;
+	private IUserDeepMapper userDeepManager;
 	
 	
 	/**
@@ -54,7 +55,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 				workspaceProxy.setDescription(workspaceDTO.getDescription());
-				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -85,7 +86,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 				workspaceProxy.setDescription(workspaceDTO.getDescription());
-				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -112,7 +113,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 			workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspaceProxy.setDescription(workspaceDTO.getDescription());
-			workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 			workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 			workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 			workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -137,7 +138,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 			workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspaceProxy.setDescription(workspaceDTO.getDescription());
-			workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 			workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 			workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 			workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -166,7 +167,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 				workspaceProxy.setDescription(workspaceDTO.getDescription());
-				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -197,7 +198,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 				workspaceProxy.setDescription(workspaceDTO.getDescription());
-				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -228,7 +229,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 				workspaceProxy.setDescription(workspaceDTO.getDescription());
-				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -259,7 +260,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 				workspaceProxy.setDescription(workspaceDTO.getDescription());
-				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -290,7 +291,7 @@ public class WorkspaceShallowMapper implements IWorkspaceShallowMapper {
 				workspaceProxy.setWorkspaceId(workspaceDTO.getWorkspaceid());
 				workspaceProxy.setWorkspaceName(workspaceDTO.getWorkspacename());
 				workspaceProxy.setDescription(workspaceDTO.getDescription());
-				workspaceProxy.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+				workspaceProxy.setOwner(userDeepManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
 				workspaceProxy.setCreatedBy(workspaceDTO.getCreatedby());
 				workspaceProxy.setCreatedDate(workspaceDTO.getCreateddate());
 				workspaceProxy.setUpdatedBy(workspaceDTO.getUpdatedby());

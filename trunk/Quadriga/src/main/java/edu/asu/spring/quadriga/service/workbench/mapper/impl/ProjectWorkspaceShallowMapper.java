@@ -15,7 +15,6 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
@@ -31,9 +30,6 @@ IProjectWorkspaceShallowMapper {
 	
 	@Autowired
 	private IListWSManager wsManager;
-
-	@Autowired
-	private IUserManager userManager;
 
 	@Autowired
 	private IProjectWorkspaceFactory projectWorkspaceFactory;

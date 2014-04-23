@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 /**
@@ -27,49 +28,7 @@ public interface IDBConnectionManager
 	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	public abstract int addAccountRequest(String sUserId) throws QuadrigaStorageException;
-
-	/**
-	 * Returns all open user requests in quadriga.
-	 * 
-	 * @return Returns the list of user objects whose request are to be approved/denied.
-	 * 
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles. 
-	 */	
-	public abstract List<IUser> getUserRequests() throws QuadrigaStorageException;
-
-	/**
-	 *  Retrieves the user details for the given userid
-	 *  
-	 *  @param       : userid (the userid for which details are to be retrieved).
-	 *  
-	 *  @return      : null - if the user is not present in the quadriga DB
-	 *                 IUser - User object containing the user details.
-	 * @throws QuadrigaStorageException 
-	 *                 
-	 *  @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
-	 */
-	public abstract IUser getUserDetails(String userid) throws QuadrigaStorageException;
-
-	/**
-	 * Retrieve a list of user objects who have a certain role
-	 * 
-	 * @param userRoleId	The roleid of the Quadriga Role for which the list of users are to be fetched.
-	 * @return				The list of users who are assigned the roleid.
-	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
-	 * @author Ram Kumar Kumaresan
-	 */
-	public abstract List<IUser> getUsers(String userRoleId) throws QuadrigaStorageException;
-
-	/**
-	 * Retrieve a list of user objects who don't have a certain role
-	 * 
-	 * @param userRoleId					The roleid of the Quadriga Role based on which the user list is to be filtered.
-	 * @return								The list of users who don't have the given role
-	 * @throws QuadrigaStorageException Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
-	 * @author Ram Kumar Kumaresan
-	 */
-	public abstract List<IUser> getUsersNotInRole(String userRoleId) throws QuadrigaStorageException;
+	
 
 	/**
 	 * Delete a user from the quadriga database. The user must not own a project/workspace and must not be a collaborator on a project/workspace.
@@ -162,6 +121,36 @@ public interface IDBConnectionManager
 	 * @author kiran batna
 	 */
 	public abstract void insertQuadrigaAdminUser(String userName, String sRoles)
+			throws QuadrigaStorageException;
+
+
+	/**
+	 * Retrieve a list of {@link QuadrigaUserDTO} objects who don't have a certain role
+	 * @param userRoleId							The roleid of the Quadriga Role for which the list of users are to be fetched.
+	 * @return										{@link List} of {@link QuadrigaUserDTO} object who don't have the given roleid
+	 * @throws QuadrigaStorageException				Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	public abstract List<QuadrigaUserDTO> getUserDTOListNotInRole(String userRoleId)
+			throws QuadrigaStorageException;
+
+
+	/**
+	 * Retrieve a list of {@link QuadrigaUserDTO} objects who have a certain role
+	 * @param userRoleId							The roleid of the Quadriga Role for which the list of users are to be fetched.
+	 * @return										{@link List} of {@link QuadrigaUserDTO} object who are assigned the roleid
+	 * @throws QuadrigaStorageException				Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	public abstract List<QuadrigaUserDTO> getUserDTOList(String userRoleId)
+			throws QuadrigaStorageException;
+
+	
+	
+	/**
+	 * Returns all open user requests in quadriga.
+	 * @return										Returns the list of {@link QuadrigaUserDTO} objects whose request are to be approved/denied.
+	 * @throws QuadrigaStorageException				Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	public abstract List<QuadrigaUserRequestsDTO> getUserRequestDTOList()
 			throws QuadrigaStorageException;
 
 
