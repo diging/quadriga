@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.dspace.service;
 
+import java.util.Date;
+
 public interface IDspaceMetadataItemEntity {
 
 	public abstract void setName(String name);
@@ -21,5 +23,13 @@ public interface IDspaceMetadataItemEntity {
 	public abstract IDspaceMetadataCommunity getCommunities();
 
 	public abstract void setCommunities(IDspaceMetadataCommunity communities);
+
+	public abstract void setSubmitter(IDspaceItemSubmitter submitter);
+
+	public abstract IDspaceItemSubmitter getSubmitter();
+
+	public abstract void setLastModifiedDate(Date lastModifiedDate);
+
+	public abstract Date getLastModifiedDate();
 
 }
