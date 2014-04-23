@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IWorkspaceDictionaryManager;
+import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.impl.WorkspaceDictionaryShallowMapper;
 
 @Service
@@ -25,6 +26,9 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 	
 	@Autowired
 	private WorkspaceDictionaryShallowMapper wsDictShallowMapper;
+	
+	@Autowired
+	private IWorkspaceDeepMapper wsDeepMapper;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -67,6 +71,26 @@ public class WorkspaceDictionaryManager implements IWorkspaceDictionaryManager {
 		
 		List<IWorkspaceDictionary> wsDictionaryList = null;
 		WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspace.getWorkspaceId(), userId);
+		wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
+		return wsDictionaryList;
+	}
+	
+	/**
+	 * List the dictionary in a project for a user - userId
+	 * @param workspaceId
+	 * @param userId
+	 * @return
+	 * @throws QuadrigaStorageException
+	 */
+	@Override
+	@Transactional
+	public List<IWorkspaceDictionary> listWorkspaceDictionary(String workspaceId,
+			String userId) throws QuadrigaStorageException {
+		
+		List<IWorkspaceDictionary> wsDictionaryList = null;
+		IWorkSpace workspace = wsDeepMapper.getWorkSpaceDetails(workspaceId);
+		WorkspaceDTO workspaceDTO = dbConnect.listWorkspaceDictionary(workspaceId, userId);
+		
 		wsDictionaryList = wsDictShallowMapper.getWorkspaceDictionaryList(workspace, workspaceDTO);
 		return wsDictionaryList;
 	}

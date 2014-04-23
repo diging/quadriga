@@ -42,4 +42,7 @@ public interface IWorkspaceCCManager {
 
 	public abstract List<IConceptCollection> getNonAssociatedWorkspaceConcepts(String workspaceId,
 			String userId) throws QuadrigaStorageException;
+
+	public abstract List<IWorkspaceConceptCollection> listWorkspaceCC(String workspaceId,
+			String userId) throws QuadrigaStorageException;
 }

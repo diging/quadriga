@@ -52,6 +52,7 @@ import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFact
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItem;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItemList;
 import edu.asu.spring.quadriga.domain.impl.dictionarylist.QuadrigaDictDetailsReply;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -181,7 +182,7 @@ public class DictionaryRestController {
 			throws Exception {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		List<IDictionary> dictionaryList = null;
+		List<IWorkspaceDictionary> dictionaryList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
 		Template template = null;
