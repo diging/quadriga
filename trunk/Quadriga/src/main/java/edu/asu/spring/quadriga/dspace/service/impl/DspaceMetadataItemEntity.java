@@ -1,10 +1,13 @@
 package edu.asu.spring.quadriga.dspace.service.impl;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import edu.asu.spring.quadriga.dspace.service.IDspaceItemSubmitter;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCollection;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
@@ -26,6 +29,25 @@ public class DspaceMetadataItemEntity implements IDspaceMetadataItemEntity {
 	private IDspaceMetadataCollection collections;
 	private IDspaceMetadataCommunity communities;
 	
+	private Date lastModifiedDate;
+	private IDspaceItemSubmitter submitter;
+	
+	@Override
+	public IDspaceItemSubmitter getSubmitter() {
+		return submitter;
+	}
+	@Override
+	public void setSubmitter(IDspaceItemSubmitter submitter) {
+		this.submitter = submitter;
+	}
+	@Override
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+	@Override
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 	@Override
 	public String getId() {
 		return id;

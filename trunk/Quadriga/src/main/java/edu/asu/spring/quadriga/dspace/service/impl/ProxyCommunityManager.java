@@ -25,6 +25,8 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceCommunities;
 import edu.asu.spring.quadriga.dspace.service.IDspaceCommunity;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBitStream;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataBundleEntity;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -570,6 +572,28 @@ public class ProxyCommunityManager implements ICommunityManager {
 
 		//No authentication provided
 		return dspaceProperties.getProperty("dspace.dspace_url")+dspaceProperties.getProperty("dspace.bitstream_url")+fileid+dspaceProperties.getProperty("dspace.xml");
+	}
+	
+	@Override
+	public IDspaceMetadataItemEntity getItemMetadata(RestTemplate restTemplate, Properties dspaceProperties, String fileid, String email, String password, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException
+	{
+		String restURLPath = getBitstreamMetadataPath(dspaceProperties, fileid, email, password, dspaceKeys);
+		IDspaceMetadataBitStream metadataBitstream = (IDspaceMetadataBitStream)restTemplate.getForObject(restURLPath, DspaceMetadataBitStream.class);
+		IDspaceMetadataItemEntity itemEntry = null;
+
+		
+		// get item handle for bitstream
+		if (metadataBitstream.getBundles() != null && metadataBitstream.getBundles().getBundleEntity() != null) {
+			IDspaceMetadataBundleEntity entry = metadataBitstream.getBundles().getBundleEntity();
+			if (entry != null && entry.getItems() != null && entry.getItems().getItementities() != null) {
+				if (entry.getItems().getItementities().size() > 0) {
+					// we only get the first item, this might be wrong and needs to be checked.
+					itemEntry = entry.getItems().getItementities().get(0);
+				}
+			}
+		}
+		
+		return itemEntry;
 	}
 
 }

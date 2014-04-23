@@ -35,7 +35,7 @@ public interface IDspaceManager{
 	public abstract void setDspaceMessages(Properties dspaceMessages);
 	
 	/**
-	 * Get all the communities available for the given user
+	 * Get all the communities available for the given user. Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 * 
 	 * @param dspaceKeys	The Dspace Access keys used by the user.
 	 * @param sUserName		The dspace username of the user.
@@ -47,7 +47,7 @@ public interface IDspaceManager{
 	public abstract List<ICommunity> getAllCommunities(IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException, QuadrigaAccessException;
 
 	/**
-	 * Get all the collections available for the given user
+	 * Get all the collections available for the given user. Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 * 
 	 * @param dspaceKeys		The Dspace Access keys used by the user.
 	 * @param sUserName			The dspace username of the user.
@@ -66,7 +66,7 @@ public interface IDspaceManager{
 	public abstract List<IItem> getAllItems(String sCollectionId);
 
 	/**
-	 * Get all bitstreams within an item
+	 * Get all bitstreams within an item. Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 * 
 	 * @param dspaceKeys		The Dspace Access keys used by the user.
 	 * @param sUserName			The dspace username of the user.
@@ -134,7 +134,7 @@ public interface IDspaceManager{
 
 	/**
 	 * Add a list of bitstreams to a workspace. The user must have access to the workspace.
-	 * All the fields are not required. 
+	 * All the fields are not required.  
 	 * 
 	 * @param workspaceId					The id of the workspace to which the bitstream(s) are to be added.
 	 * @param communityId					The id of the community to which the bitstream(s) belong to.
@@ -223,7 +223,7 @@ public interface IDspaceManager{
 	/**
 	 * Check whether the user has access to the list of bitstreams in Dspace. Checks in the Dspace cache for finding out the access rights.
 	 * Sets the corresponding community, collection, item and bitstream name. Will always return then same number of bitstreams as provided in
-	 * input.
+	 * input.  Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 *  
 	 * @param bitstreams		The list of bitstreams which are to be tested against the user rights.
 	 * @param dspaceKeys		The Dspace Access keys used by the user.
@@ -250,7 +250,7 @@ public interface IDspaceManager{
 	/**
 	 * The purpose of this method is ONLY to validate the supplied dspace credentials and will return false if it
 	 * was not able to connect to dspace using them. It does not handle other expcetions and will return true for all 
-	 * other cases.The dspacekeys take precedence over the login username and password. 
+	 * other cases.The dspacekeys take precedence over the login username and password. Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 * 
 	 * @param username		The dspace username.
 	 * @param password		The dspace password.
@@ -261,7 +261,7 @@ public interface IDspaceManager{
 	public abstract boolean validateDspaceCredentials(String username, String password,	IDspaceKeys dspacekeys);
 	
 	/**
-	 * This method will return the community object.
+	 * This method will return the community object. Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 * 
 	 * @param dspaceKeys				The public and private keys for dspace.
 	 * @param username					The dspace username.
@@ -301,6 +301,7 @@ public interface IDspaceManager{
 	
 	/**
 	 * Load the bitstream data from dspace. Makes an asynchrounous call to dspace and hence the returned object will take few seconds to be loaded with data.
+	 * Either the dspace username+password (or) dspace keys are required to access dspace data.
 	 * 
 	 * @param fileid						The id of the bitstream.
 	 * @param dspaceKeys					The dspace authentication keys of the user.

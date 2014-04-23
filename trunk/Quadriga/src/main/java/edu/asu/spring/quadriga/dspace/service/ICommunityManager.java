@@ -24,7 +24,7 @@ public interface ICommunityManager {
 
 	/**
 	 * Get all the communities available for the given user. For the first call, this method makes a request to Dspace.
-	 * After the first call, it loads the values from the cache.
+	 * After the first call, it loads the values from the cache. Either the dspace username+password (or) dspace keys are required to access restricted dspace data.
 	 * 
 	 * @param restTemplate			The RestTemplate variable containing the information on parsers.
 	 * @param dspaceProperties		The property strings related to dspace REST service connection.
@@ -39,7 +39,8 @@ public interface ICommunityManager {
 	/**
 	 * Get all the collections available for the given user. For the first call, this method makes a request to Dspace.
 	 * The method {@link #getAllCommunities(RestTemplate, Properties, String, String)} should have loaded all 
-	 * the community data before this method can be called for the first time. After the first call, it loads the values from the cache. 
+	 * the community data before this method can be called for the first time. After the first call, it loads the values from the cache.
+	 * Either the dspace username+password (or) dspace keys are required to access restricted dspace data. 
 	 * 
 	 * @param restTemplate				The RestTemplate variable containing the information on parsers.
 	 * @param dspaceProperties			The property strings related to dspace REST service connection.
@@ -63,7 +64,7 @@ public interface ICommunityManager {
 
 	/**
 	 * Get the collection object for a given collection id. Information can be loaded from cache or again loaded directly from 
-	 * the dspace server. This method can also be used to refresh the existing dspace data.
+	 * the dspace server. This method can also be used to refresh the existing dspace data. Either the dspace username+password (or) dspace keys are required to access restricted dspace data.
 	 * 
 	 * @param sCollectionId				The collection id whose collection object is to be fetched.
 	 * @param fromCache					FALSE - If the collection object is to be loaded from dspace. TRUE - If the collection object 
@@ -82,7 +83,7 @@ public interface ICommunityManager {
 
 	/**
 	 * Get all items within a collection. The methods {@link #getAllCommunities(RestTemplate, Properties, String, String)} and {@link #getAllCollections(RestTemplate, Properties, String, String, String)} 
-	 * should have loaded all the community and collection data before this method can be called.
+	 * should have loaded all the community and collection data before this method can be called. Either the dspace username+password (or) dspace keys are required to access restricted dspace data.
 	 * 
 	 * @param sCollectionId	The collection id whose items are to be fetched
 	 * @return				All the items within the requested collection.
@@ -142,7 +143,7 @@ public interface ICommunityManager {
 
 	/**
 	 * Get the community object for a given collection id. Information can be loaded from cache or again loaded directly from 
-	 * the dspace server. This method can also be used to refresh the existing dspace data.
+	 * the dspace server. This method can also be used to refresh the existing dspace data. Either the dspace username+password (or) dspace keys are required to access restricted dspace data.
 	 * 
 	 * @param communityId				The id of the community whose data is requested.
 	 * @param fromCache					FALSE - If the community object is to be loaded from dspace. TRUE - If the community object 
@@ -173,20 +174,20 @@ public interface ICommunityManager {
 	public abstract void clearCompleteCache();
 
 	/**
-	 * Check if a given dspace credential is valid or not.
+	 * Check if a given dspace credential is valid or not. Either the dspace username+password (or) dspace keys are required to access restricted dspace data.
 	 * 
 	 * @param restTemplate					The RestTemplate object containing the details about the parser.
 	 * @param dspaceProperties				The property strings related to dspace REST service connection.
 	 * @param dspaceKeys					The Dspace Access keys used by the user.
-	 * @param sUserName						The username of the authorized user.
-	 * @param sPassword						The password of the authorized user.
+	 * @param sUserName						The dspace username of the authorized user.
+	 * @param sPassword						The dspace password of the authorized user.
 	 * @return								TRUE - If quadriga was successfully able to access the dspace using the supplied credentials. FALSE - If access to dspace was denied.
 	 */
 	public abstract boolean validateDspaceCredentials(RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys,
 			String sUserName, String sPassword) throws NoSuchAlgorithmException;
 
 	/**
-	 * Get the collection factory object used by the class.
+	 * Get the collection factory object used by the class. 
 	 * 
 	 * @return			The collection factory object used by the class.
 	 */
@@ -206,4 +207,21 @@ public interface ICommunityManager {
 	 * @param bitstream						The bitstream object which needs to be loaded faster next time around.
 	 */
 	public abstract void addBitStreamToCache(IBitStream bitstream);
+
+	/**
+	 * Get the item metadata of a given bitstream. Either the dspace username+password (or) dspace keys are required to access restricted dspace data.
+	 * 
+	 * @param restTemplate					The RestTemplate object containing the details about the parser.
+	 * @param dspaceProperties				The property strings related to dspace REST service connection.
+	 * @param fileid						The dspace bitstream id whose item metadata need to be fetched.
+	 * @param email							The dspace username of the user.
+	 * @param password						The dspace password of the user.
+	 * @param dspaceKeys					The Dspace Access keys used by the user.
+	 * @return								The item metadata containing id, name, creator, last modified date information.
+	 * @throws NoSuchAlgorithmException
+	 * @throws QuadrigaStorageException
+	 */
+	public abstract IDspaceMetadataItemEntity getItemMetadata(RestTemplate restTemplate, Properties dspaceProperties, String fileid, String email,
+			String password, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException;
+
 }
