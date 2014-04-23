@@ -287,6 +287,7 @@ public class ProjectProxy implements IProject
 	/**
 	 * This class helps in fetching the full project object using project manager object.
 	 * Also sets the values of variables in {@link ProjectProxy} to local {@link Project} object.
+	 * TODO : The method should throw exception. NULL means error or else return the object.
 	 */
 	private void setProjectDetails(){
 		try{
@@ -312,8 +313,9 @@ public class ProjectProxy implements IProject
 	 * else if local {@link IProject} is not null, just returns {@link List} of {@link IProjectCollaborator} from local {@link IProject}
 	 */
 	@Override
-	public List<IProjectCollaborator> getProjectCollaborators() {
+	public List<IProjectCollaborator> getProjectCollaborators(){
 		if(this.project == null){
+			
 			setProjectDetails();
 		}
 		return this.project.getProjectCollaborators();
