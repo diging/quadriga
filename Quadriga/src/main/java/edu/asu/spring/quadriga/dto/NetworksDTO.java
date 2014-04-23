@@ -75,7 +75,8 @@ public class NetworksDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networkDTO")
     private List<NetworkStatementsDTO> networkStamentesDTOList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "networksDTO")
-    private NetworkWorkspaceDTO networkWorkspaceDTO;
+    private NetworkWorkspaceDTO networkWorkspace;
+    
     @JoinColumn(name = "networkowner",referencedColumnName = "username",insertable = false , updatable = false)
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
@@ -124,14 +125,12 @@ public class NetworksDTO implements Serializable {
 		this.networkStamentesDTOList = networkStamentesDTOList;
 	}
 	
-	@XmlTransient
-	public NetworkWorkspaceDTO getNetworkWorkspaceDTO() {
-		return networkWorkspaceDTO;
+	public NetworkWorkspaceDTO getNetworkWorkspace() {
+		return networkWorkspace;
 	}
 
-	public void setNetworkWorkspaceDTO(
-			NetworkWorkspaceDTO networkWorkspaceDTO) {
-		this.networkWorkspaceDTO = networkWorkspaceDTO;
+	public void setNetworkWorkspace(NetworkWorkspaceDTO networkWorkspace) {
+		this.networkWorkspace = networkWorkspace;
 	}
 
 	public QuadrigaUserDTO getQuadrigaUserDTO() {

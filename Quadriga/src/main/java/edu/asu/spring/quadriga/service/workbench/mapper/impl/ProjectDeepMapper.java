@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
@@ -28,7 +29,7 @@ import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectio
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectWorkspaceShallowMapper;
-
+@Service
 public class ProjectDeepMapper implements IProjectDeepMapper {
 
 	@Autowired

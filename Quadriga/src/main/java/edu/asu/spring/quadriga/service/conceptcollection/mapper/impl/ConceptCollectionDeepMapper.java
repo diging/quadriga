@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -29,6 +30,7 @@ import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollecti
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceCCShallowMapper;
 
+@Service
 public class ConceptCollectionDeepMapper implements
 		IConceptCollectionDeepMapper {
 	@Autowired

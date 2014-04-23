@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
@@ -14,6 +15,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
 
+@Service
 public class ConceptCollectionShallowMapper implements
 		IConceptCollectionShallowMapper {
 
