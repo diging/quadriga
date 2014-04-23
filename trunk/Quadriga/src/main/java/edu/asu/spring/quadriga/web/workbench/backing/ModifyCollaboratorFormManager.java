@@ -8,7 +8,11 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -52,16 +56,18 @@ public class ModifyCollaboratorFormManager {
 	{
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
-		List<ICollaborator> collaborators =  projCollabManager.getProjectCollaborators(projectId);
+		
+		//TODO: getProjectCollaborators() needs to be modified to call mapper
+		List<IProjectCollaborator> collaborators =  projCollabManager.getProjectCollaborators(projectId);
 		IUser user;
 		
-		for(ICollaborator collaborator:collaborators)
+		for(IProjectCollaborator projectCollaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			user = collaborator.getUserObj();
+			user = projectCollaborator.getCollaborator().getUserObj();
 			modifyCollab.setUserName(user.getUserName());
 			modifyCollab.setName(user.getName());
-			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
+			modifyCollab.setCollaboratorRoles(projectCollaborator.getCollaborator().getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
 		
@@ -80,15 +86,17 @@ public class ModifyCollaboratorFormManager {
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
-		List<ICollaborator> collaborators =  dictManager.showCollaboratingUsers(dictionaryId);
 		
-		for(ICollaborator collaborator:collaborators)
+		//TODO: showCollaboratingUsers() needs to be modified to call mapper
+		List<IDictionaryCollaborator> collaborators =  dictManager.showCollaboratingUsers(dictionaryId);
+		
+		for(IDictionaryCollaborator dictCollaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			user = collaborator.getUserObj();
+			user = dictCollaborator.getCollaborator().getUserObj();
 			modifyCollab.setUserName(user.getUserName());
 			modifyCollab.setName(user.getName());
-			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
+			modifyCollab.setCollaboratorRoles(dictCollaborator.getCollaborator().getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
 		
@@ -108,15 +116,17 @@ public class ModifyCollaboratorFormManager {
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
-		List<ICollaborator> collaborators =  collectionManager.showCollaboratingUsers(collectionId);
 		
-		for(ICollaborator collaborator:collaborators)
+		//TODO: showCollaboratingUsers() needs to be modified to call mapper
+		List<IConceptCollectionCollaborator> collaborators =  collectionManager.showCollaboratingUsers(collectionId);
+		
+		for(IConceptCollectionCollaborator ccCollaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			user = collaborator.getUserObj();
+			user = ccCollaborator.getCollaborator().getUserObj();
 			modifyCollab.setUserName(user.getUserName());
 			modifyCollab.setName(user.getName());
-			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
+			modifyCollab.setCollaboratorRoles(ccCollaborator.getCollaborator().getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
 		
@@ -127,15 +137,17 @@ public class ModifyCollaboratorFormManager {
 	{
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
-		List<ICollaborator> collaborators =  workspaceManager.getWorkspaceCollaborators(workspaceId);
 		
-		for(ICollaborator collaborator:collaborators)
+		//TODO: getWorkspaceCollaborators() needs to be modified to call mapper
+		List<IWorkspaceCollaborator> collaborators =  workspaceManager.getWorkspaceCollaborators(workspaceId);
+		
+		for(IWorkspaceCollaborator wsCollaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			user = collaborator.getUserObj();
+			user = wsCollaborator.getCollaborator().getUserObj();
 			modifyCollab.setUserName(user.getUserName());
 			modifyCollab.setName(user.getName());
-			modifyCollab.setCollaboratorRoles(collaborator.getCollaboratorRoles());
+			modifyCollab.setCollaboratorRoles(wsCollaborator.getCollaborator().getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
 		

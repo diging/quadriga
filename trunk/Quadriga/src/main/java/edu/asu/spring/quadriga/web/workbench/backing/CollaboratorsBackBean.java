@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 
 /**
  * This class holds the list of collaborators to display 
@@ -13,18 +14,18 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
  */
 public class CollaboratorsBackBean {
 	
-	private List<ICollaborator> collaboratorList;
+	private List<IProjectCollaborator> collaboratorList;
 	
 	
 	public CollaboratorsBackBean() {
-		collaboratorList = new ArrayList<ICollaborator>();
+		collaboratorList = new ArrayList<IProjectCollaborator>();
 	}
 
-	public List<ICollaborator> getCollaboratorList() {
+	public List<IProjectCollaborator> getCollaboratorList() {
 		return collaboratorList;
 	}
 
-	public void setCollaboratorList(List<ICollaborator> collaboratorList) {
+	public void setCollaboratorList(List<IProjectCollaborator> collaboratorList) {
 		this.collaboratorList = collaboratorList;
 	}
 	
