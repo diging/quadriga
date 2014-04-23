@@ -57,7 +57,7 @@ function onSubmit(){
 
 </script>
 
-<form:form method="POST" name="myForm" commandName="collaborator" 
+<form:form method="POST" name="myForm" commandName="projectCollaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
   <h2>Project Collaborators:</h2>
 <h3>Project: ${projectname}</h3>
@@ -95,7 +95,7 @@ function onSubmit(){
  <input type="button" value="Done" onClick="onSubmit()">
 </c:if>
 <br>
-<c:if test="${not empty collaboratingUsers}">
+<c:if test="${not empty projectCollaborators}">
 <hr>
 <span class="byline">List of Project Collaborators :</span>
 <table style="width:100%" class="display dataTable">					
@@ -107,7 +107,7 @@ function onSubmit(){
 	</thead>
 	
 	<tbody>
-	<c:forEach var="collab" items="${collaboratingUsers}">
+	<c:forEach var="collab" items="${projectCollaborators}">
 		<tr>
 		 <td><c:out value="${collab.userObj.name}"></c:out></td>
 		 <td>

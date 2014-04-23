@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.workbench.IProjectDictionaryManager;
@@ -51,8 +52,9 @@ public class DictionaryProjectController {
 			String userId = user.getUsername();
 			logger.info("USer : " + user.getUsername()
 					+ " trying to add dictionary into workspace");
-			List<IDictionary> dictionaryList = null;
+			List<IProjectDictionary> dictionaryList = null;
 			try {
+				// TODO: getDictionariesList() is to be changed according to mapper
 				dictionaryList = dictonaryManager.getDictionariesList(user
 						.getUsername());
 			} catch (QuadrigaStorageException e) {
@@ -86,8 +88,9 @@ public class DictionaryProjectController {
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
 			model.addAttribute("deletesuccess", 0);
-			List<IDictionary> dicitonaryList = null;
+			List<IProjectDictionary> dicitonaryList = null;
 			try {
+				// TODO: listProjectDictionary() is to be changed according to mapper
 				dicitonaryList = projectDictionaryManager.listProjectDictionary(
 						projectid, userId);
 			} catch (QuadrigaStorageException e) {
@@ -119,8 +122,9 @@ public class DictionaryProjectController {
 		}else{
 			model.addAttribute("success", 0);
 		}
-		List<IDictionary> dicitonaryList = null;
+		List<IProjectDictionary> dicitonaryList = null;
 		try {
+			// TODO: listProjectDictionary() is to be changed according to mapper
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {
@@ -141,8 +145,9 @@ public class DictionaryProjectController {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
-		List<IDictionary> dicitonaryList = null;
+		List<IProjectDictionary> dicitonaryList = null;
 		try {
+			// TODO: listProjectDictionary() is to be changed according to mapper
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {
@@ -165,8 +170,9 @@ public class DictionaryProjectController {
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		
-		List<IDictionary> dicitonaryList = null;
+		List<IProjectDictionary> dicitonaryList = null;
 		try {
+			
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {
@@ -194,8 +200,9 @@ public class DictionaryProjectController {
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
 			model.addAttribute("deletesuccess", 0);
-			List<IDictionary> dicitonaryList = null;
+			List<IProjectDictionary> dicitonaryList = null;
 			try {
+				// TODO: listProjectDictionary() is to be changed according to mapper
 				dicitonaryList = projectDictionaryManager.listProjectDictionary(
 						projectid, userId);
 			} catch (QuadrigaStorageException e) {
@@ -226,8 +233,9 @@ public class DictionaryProjectController {
 		}else{
 			model.addAttribute("deletesuccess", 0);
 		}
-		List<IDictionary> dicitonaryList = null;
+		List<IProjectDictionary> dicitonaryList = null;
 		try {
+			// TODO: listProjectDictionary() is to be changed according to mapper
 			dicitonaryList = projectDictionaryManager.listProjectDictionary(
 					projectid, userId);
 		} catch (QuadrigaStorageException e) {

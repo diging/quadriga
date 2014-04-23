@@ -33,8 +33,10 @@ import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.factory.workbench.IProjectCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -78,6 +80,9 @@ public class AddCollaboratorController {
 	
 	@Autowired
 	private CollaboratorValidator collaboratorValidator;
+	
+	@Autowired 
+	private IProjectCollaboratorFactory projectCollaboratorFactory;
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger(AddCollaboratorController.class);
@@ -135,17 +140,21 @@ public class AddCollaboratorController {
 		
 		//retrieve the project details
 		IProject project = retrieveprojectManager.getProjectDetails(projectid);
-		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
-		collaborator.setUserObj(userFactory.createUserObject());
+		
+		//ICollaborator collaborator =  collaboratorFactory.createCollaborator();
+		//collaborator.setUserObj(userFactory.createUserObject());
+		
+		IProjectCollaborator projectCollaborator = projectCollaboratorFactory.createProjectCollaboratorObject();
 		
 		model = new ModelAndView("auth/workbench/addcollaborators");
-		model.getModel().put("collaborator", collaborator);
+		model.getModel().put("projectCollaborator", projectCollaborator);
 		model.getModel().put("projectname", project.getProjectName());
 		model.getModelMap().put("projectdesc",project.getDescription());
 		model.getModelMap().put("projectid", projectid);
 		
 		
 		// retrieve the collaborators who are not associated with project
+		// TODO: getProjectNonCollaborators() method has not been changed for mapper 
 		List<IUser> nonCollaboratingUsers = projectCollabManager.getProjectNonCollaborators(projectid);
 
 		//remove the restricted user
@@ -166,8 +175,8 @@ public class AddCollaboratorController {
 		}
 		model.getModelMap().put("notCollaboratingUsers", nonCollaboratingUsers);
 
-		List<ICollaborator> collaboratingUsers = retrieveprojectManager.getCollaboratingUsers(projectid);
-		model.getModelMap().put("collaboratingUsers", collaboratingUsers);
+		List<IProjectCollaborator> projectCollaborators = retrieveprojectManager.getCollaboratingUsers(projectid);
+		model.getModelMap().put("projectCollaborators", projectCollaborators);
 		
 		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
 		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
@@ -248,15 +257,15 @@ public class AddCollaboratorController {
 			}
 			model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
 			
-			List<ICollaborator> collaborators = retrieveProjCollabManager.getProjectCollaborators(projectid);
-			model.getModelMap().put("collaboratingUsers", collaborators);
+			//List<ICollaborator> collaborators = retrieveProjCollabManager.getProjectCollaborators(projectid);
+			List<IProjectCollaborator> projectCollaborators = retrieveprojectManager.getCollaboratingUsers(projectid);
+			model.getModelMap().put("projectCollaborators", projectCollaborators);
 		}
 		catch(HibernateSystemException ex)
 		{
 			throw new QuadrigaStorageException();
 		}
 
-		
 		return model;
 	}
 }
