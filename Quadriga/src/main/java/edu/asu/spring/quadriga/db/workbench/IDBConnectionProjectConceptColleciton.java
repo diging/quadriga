@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.db.workbench;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionProjectConceptColleciton {
@@ -25,7 +26,7 @@ public interface IDBConnectionProjectConceptColleciton {
 	 *         specified project.
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IConceptCollection> listProjectConceptCollection(String projectId, String userId)
+	public abstract List<ProjectConceptCollectionDTO> listProjectConceptCollection(String projectId, String userId)
 			throws QuadrigaStorageException;
 
 	/**

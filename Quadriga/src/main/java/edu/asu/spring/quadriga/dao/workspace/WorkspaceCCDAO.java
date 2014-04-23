@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceConceptcollectionDTOPK;
 import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
+import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionShallowMapper;
 
 @Repository
 public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectionWorkspaceCC {
@@ -29,6 +30,9 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 	
 	@Autowired
 	private ConceptCollectionDTOMapper collectionMapper;
+	
+	@Autowired
+	private IConceptCollectionShallowMapper ccShallowMapper;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WorkspaceCCDAO.class);
 
@@ -198,7 +202,7 @@ public class WorkspaceCCDAO extends DAOConnectionManager implements IDBConnectio
 			
 			for(ConceptCollectionDTO conceptCollectionDTO : conceptCollectionDTOList)
 			{
-				conceptCollection = collectionMapper.getConceptCollection(conceptCollectionDTO);
+				conceptCollection = ccShallowMapper.getConceptCollectionDetails(conceptCollectionDTO);
 				conceptCollectionList.add(conceptCollection);
 			}
 			

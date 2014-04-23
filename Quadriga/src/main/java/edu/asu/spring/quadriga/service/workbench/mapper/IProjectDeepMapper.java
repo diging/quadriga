@@ -43,5 +43,8 @@ public interface IProjectDeepMapper {
 	public abstract IProject getProjectDetailsByUnixName(String unixName)
 			throws QuadrigaStorageException;
 
+	public abstract IProject getProjectDetails(String projectId, String userId)
+			throws QuadrigaStorageException;
+
 
 }

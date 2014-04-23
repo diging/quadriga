@@ -43,54 +43,54 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 	@Autowired
 	private CollaboratorRoleManager collaboratorRoleManager;
 	
-	public IDictionary getDictionary(DictionaryDTO dictionary)
-	{
-		List<ICollaborator> collaboratorList = null;
-		ICollaborator collaborator= null;
-		IDictionary tempDictionary = null;
-		List<DictionaryCollaboratorDTO> dictionaryCollaboratorList;
-		
-		collaboratorList = new ArrayList<ICollaborator>();
-		
-		tempDictionary = dictionaryFactory.createDictionaryObject();
-		
-		IUser user = userMapper.getUser(dictionary.getDictionaryowner());
-		
-		//fetch the collaborators
-		dictionaryCollaboratorList = dictionary.getDictionaryCollaboratorDTOList();
-		
-		if(dictionaryCollaboratorList != null)
-		{
-			for(DictionaryCollaboratorDTO dictionaryCollaborator : dictionaryCollaboratorList)
-			{
-				collaborator = getDictionaryCollaborators(dictionaryCollaborator);
-				
-				if(collaboratorList.contains(collaborator))
-				{
-					int index = collaboratorList.indexOf(collaborator);
-					ICollaborator tempCollaborator = collaboratorList.get(index);
-					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
-					tempRoles.addAll(collaborator.getCollaboratorRoles());
-					tempCollaborator.setCollaboratorRoles(tempRoles);
-					
-					//set the collaborator with the roles
-					collaboratorList.set(index, tempCollaborator);
-				}
-				else
-				{
-					collaboratorList.add(collaborator);
-				}
-			}
-		}
-		
-		tempDictionary.setDictionaryId(dictionary.getDictionaryid());
-		tempDictionary.setDictionaryName(dictionary.getDictionaryname());
-		tempDictionary.setDescription(dictionary.getDescription());
-		tempDictionary.setOwner(user);
-		tempDictionary.setCollaborators(collaboratorList);
-		
-		return tempDictionary;
-	}
+//	public IDictionary getDictionary(DictionaryDTO dictionary)
+//	{
+//		List<ICollaborator> collaboratorList = null;
+//		ICollaborator collaborator= null;
+//		IDictionary tempDictionary = null;
+//		List<DictionaryCollaboratorDTO> dictionaryCollaboratorList;
+//		
+//		collaboratorList = new ArrayList<ICollaborator>();
+//		
+//		tempDictionary = dictionaryFactory.createDictionaryObject();
+//		
+//		IUser user = userMapper.getUser(dictionary.getDictionaryowner());
+//		
+//		//fetch the collaborators
+//		dictionaryCollaboratorList = dictionary.getDictionaryCollaboratorDTOList();
+//		
+//		if(dictionaryCollaboratorList != null)
+//		{
+//			for(DictionaryCollaboratorDTO dictionaryCollaborator : dictionaryCollaboratorList)
+//			{
+//				collaborator = getDictionaryCollaborators(dictionaryCollaborator);
+//				
+//				if(collaboratorList.contains(collaborator))
+//				{
+//					int index = collaboratorList.indexOf(collaborator);
+//					ICollaborator tempCollaborator = collaboratorList.get(index);
+//					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
+//					tempRoles.addAll(collaborator.getCollaboratorRoles());
+//					tempCollaborator.setCollaboratorRoles(tempRoles);
+//					
+//					//set the collaborator with the roles
+//					collaboratorList.set(index, tempCollaborator);
+//				}
+//				else
+//				{
+//					collaboratorList.add(collaborator);
+//				}
+//			}
+//		}
+//		
+//		tempDictionary.setDictionaryId(dictionary.getDictionaryid());
+//		tempDictionary.setDictionaryName(dictionary.getDictionaryname());
+//		tempDictionary.setDescription(dictionary.getDescription());
+//		tempDictionary.setOwner(user);
+//		tempDictionary.setCollaborators(collaboratorList);
+//		
+//		return tempDictionary;
+//	}
 	
 	
 	public ICollaborator getDictionaryCollaborators(DictionaryCollaboratorDTO dictionaryCollaborator)
@@ -112,19 +112,7 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 		return collaborator;
 	}
 	
-	public List<IDictionary> getDictionaryList(List<DictionaryDTO> dictionaryDTOList)
-	{
-		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
-		if(dictionaryDTOList != null && dictionaryDTOList.size() > 0)
-		{
-			Iterator<DictionaryDTO> dictionaryDTOIterator = dictionaryDTOList.iterator();
-			while(dictionaryDTOIterator.hasNext())
-			{
-				dictionaryList.add(getDictionary(dictionaryDTOIterator.next()));
-			}
-		}
-		return dictionaryList;
-	}
+
 
 	public DictionaryDTO getDictionaryDTO(IDictionary dictionary) throws QuadrigaStorageException
 	{

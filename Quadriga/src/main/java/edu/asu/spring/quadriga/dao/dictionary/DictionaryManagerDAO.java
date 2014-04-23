@@ -60,24 +60,24 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IDictionary> getDictionaryOfUser(String userId) throws QuadrigaStorageException 
+	public List<DictionaryDTO> getDictionaryOfUser(String userId) throws QuadrigaStorageException 
 	{
-		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+		List<DictionaryDTO> dictionaryDTOList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryDTO dictionary where dictionary.dictionaryowner.username =:username");
 			query.setParameter("username", userId);
-			List<DictionaryDTO> dictionaryDTOList = query.list();
-			if(dictionaryDTOList != null && dictionaryDTOList.size() > 0)
-			{
-				dictionaryList = dictionaryDTOMapper.getDictionaryList(dictionaryDTOList);
-			}
+			dictionaryDTOList = query.list();
+//			if(dictionaryDTOList != null && dictionaryDTOList.size() > 0)
+//			{
+//				dictionaryList = dictionaryDTOMapper.getDictionaryList(dictionaryDTOList);
+//			}
 		} 
 		catch (HibernateException e) 
 		{
 			logger.error("getDictionaryOfUser method :",e);
 		}
-		return dictionaryList;
+		return dictionaryDTOList;
 	}
 
 	/**
@@ -414,26 +414,27 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 */
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
-		List<IDictionary> dictList = null;
+	public List<DictionaryDTO> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException {
+		//List<IDictionary> dictList = null;
+		List<DictionaryDTO> dictDTOList = null;
 		try
 		{
 			Query query = sessionFactory.getCurrentSession().createQuery("Select dictCollab.dictionaryDTO from DictionaryCollaboratorDTO dictCollab where dictCollab.quadrigaUserDTO.username =:username");
 			query.setParameter("username", userId);
-			List<DictionaryDTO> dictDTOList = query.list();
-			dictList = new ArrayList<IDictionary>();
-			for(DictionaryDTO dictionaryDTO : dictDTOList)
-			{
-				IDictionary dictionary = dictionaryDTOMapper.getDictionary(dictionaryDTO);
-				dictList.add(dictionary);
-			}
+			 dictDTOList = query.list();
+//			dictList = new ArrayList<IDictionary>();
+//			for(DictionaryDTO dictionaryDTO : dictDTOList)
+//			{
+//				IDictionary dictionary = dictionaryDTOMapper.getDictionary(dictionaryDTO);
+//				dictList.add(dictionary);
+//			}
 		}
 		catch(Exception e)
 		{
 			logger.error("getDictionaryCollabOfUser method :",e);
 			throw new QuadrigaStorageException();
 		}
-		return dictList;
+		return dictDTOList;
 	}
 
 	/**
@@ -585,14 +586,14 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	 * 
 	 */
 	@Override
-	public IDictionary getDictionaryDetails(String userName)
+	public DictionaryDTO getDictionaryDetails(String userName)
 			throws QuadrigaStorageException {
 
 		DictionaryDTO dictDTO = null;
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("DictionaryDTO.findAll");
 		dictDTO = (DictionaryDTO) query.uniqueResult();
-		IDictionary dictionary = dictionaryDTOMapper.getDictionary(dictDTO);
-		return dictionary;
+		//IDictionary dictionary = dictionaryDTOMapper.getDictionary(dictDTO);
+		return dictDTO;
 	}
 	
 	/**

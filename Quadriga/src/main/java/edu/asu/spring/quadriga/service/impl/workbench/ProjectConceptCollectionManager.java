@@ -7,16 +7,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectConceptColleciton;
+import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
+import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workbench.IProjectConceptCollectionManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectConceptCollectionShallowMapper;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
 
 @Service
 public class ProjectConceptCollectionManager implements IProjectConceptCollectionManager {
 
 	@Autowired
 	private IDBConnectionProjectConceptColleciton dbConnect;
+	@Autowired
+	private IProjectConceptCollectionShallowMapper projCCShallowMapper;
 	
+	@Autowired
+	private IProjectDeepMapper projDeepMapper;
+	
+	@Autowired
+	private IDBConnectionRetrieveProjectManager projManager;
 
 	/**
 	 * This method associates the concept collection with the project.
@@ -43,9 +57,11 @@ public class ProjectConceptCollectionManager implements IProjectConceptCollectio
      */
 	@Override
 	@Transactional
-	public List<IConceptCollection> listProjectConceptCollection(String projectId,
+	public List<IProjectConceptCollection> listProjectConceptCollection(String projectId,
 			String userId) throws QuadrigaStorageException {
-		List<IConceptCollection> conceptCollectionList  = dbConnect.listProjectConceptCollection(projectId, userId);
+		IProject project = projDeepMapper.getProjectDetails(projectId);
+		ProjectDTO projectDTO = projManager.getProjectDTO(projectId, userId);
+		List<IProjectConceptCollection> conceptCollectionList  = projCCShallowMapper.getProjectConceptCollectionList(project, projectDTO);
 		return conceptCollectionList;
 	}
 	

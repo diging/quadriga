@@ -27,9 +27,12 @@ import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
+import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
@@ -85,6 +88,13 @@ public class DictionaryManager implements IDictionaryManager {
 	
 	@Autowired
 	private IListWSManager wsManager;
+	
+	@Autowired
+	private IDictionaryDeepMapper dictDeepMapper;
+	
+	@Autowired
+	private IDictionaryShallowMapper dictShallowMapper;
+	
 
 	/**
 	 * Gets the searchWordPowerURL
@@ -118,7 +128,8 @@ public class DictionaryManager implements IDictionaryManager {
 		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
 
 		try {
-			dictionaryList = dbConnect.getDictionaryOfUser(userId);
+			//dictionaryList = dbConnect.getDictionaryOfUser(userId);
+			dictionaryList = dictShallowMapper.getDictionaryList(userId);
 		} catch (Exception e) {
 			logger.error("getDictionariesList",e);
 		}
@@ -126,21 +137,22 @@ public class DictionaryManager implements IDictionaryManager {
 		return dictionaryList;
 	}
 	
-	/**
-	 * @throws QuadrigaStorageException 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	@Override
-	public IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException {
-		
-		IDictionary dictionary = dbConnect.getDictionaryDetails(userName);
-		return dictionary;
-	}
-
-	
+//	/**
+//	 * @throws QuadrigaStorageException 
+//	 * 
+//	 * 
+//	 * 
+//	 * 
+//	 */
+//	@Override
+//	public IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException {
+//		
+//		IDictionary dictionary = dbConnect.getDictionaryDetails(userName);
+//		
+//		return dictionary;
+//	}
+//
+//	
 	
 
 	/**
@@ -161,6 +173,21 @@ public class DictionaryManager implements IDictionaryManager {
 		return result;
 	}
 	
+//	/**
+//	 * Checks for user permission on dictionary
+//	 * @param userId
+//	 * @param dicitonaryId
+//	 * @return
+//	 * @throws QuadrigaStorageException
+//	 * @throws QuadrigaAccessException 
+//	 */
+//	@Override
+//	@Transactional
+//	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException, QuadrigaAccessException{
+//		List<IDictionary> dictionaryList= dbConnect.getDictionaryCollabOfUser(userId);
+//		return dictionaryList;
+//	}
+	
 	/**
 	 * Checks for user permission on dictionary
 	 * @param userId
@@ -172,7 +199,7 @@ public class DictionaryManager implements IDictionaryManager {
 	@Override
 	@Transactional
 	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException, QuadrigaAccessException{
-		List<IDictionary> dictionaryList=dbConnect.getDictionaryCollabOfUser(userId);
+		List<IDictionary> dictionaryList = dictShallowMapper.getDictionaryListOfCollaborator(userId);
 		return dictionaryList;
 	}
 	
@@ -633,6 +660,14 @@ public class DictionaryManager implements IDictionaryManager {
       
 		return core.toString(1);
 	}
+
+	@Override
+	public IDictionary getDictionaryDetails(String userName)
+			throws QuadrigaStorageException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	
 }

@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceDTOMapper;
+import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 
 @Repository
 public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBConnectionWorkspaceDictionary 
@@ -27,6 +28,9 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 	
 	@Autowired
 	DictionaryDTOMapper dictionaryMapper;
+	
+	@Autowired
+	IDictionaryDeepMapper dictionaryDeepMapper;
 	
 	@Autowired
 	WorkspaceDTOMapper workspaceDTOMapper;
@@ -170,7 +174,7 @@ public class WorkspaceDictionaryDAO extends DAOConnectionManager implements IDBC
 			
 			for(DictionaryDTO dictionaryDTO : dictionaryDTOList)
 			{
-				dictionary = dictionaryMapper.getDictionary(dictionaryDTO);
+				dictionary = dictionaryDeepMapper.getDictionaryDetails(dictionaryDTO.getDictionaryid());
 				dictionaryList.add(dictionary);
 			}
 			

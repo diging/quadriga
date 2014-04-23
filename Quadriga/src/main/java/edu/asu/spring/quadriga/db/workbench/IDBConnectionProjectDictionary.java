@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IDBConnectionProjectDictionary {
@@ -25,7 +26,7 @@ public interface IDBConnectionProjectDictionary {
 	 * @return List<IDictionary> - list of dictionaries associated with the specified project.
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IDictionary> listProjectDictionary(String projectId, String userId)
+	public abstract List<ProjectDictionaryDTO> listProjectDictionary(String projectId, String userId)
 			throws QuadrigaStorageException;
 
 	/**

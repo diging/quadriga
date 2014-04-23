@@ -56,6 +56,33 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 		
 		return dictionaryList;
 	}
+	
+	@Override
+	@Transactional
+	public List<IDictionary> getDictionaryListOfCollaborator(String userName) throws QuadrigaStorageException {
+		
+		List<DictionaryDTO> dictionaryDTOList = dbConnect.getDictionaryCollabOfUser(userName);
+		
+		List<IDictionary> dictionaryList = new ArrayList<IDictionary>();
+		if(dictionaryDTOList != null)
+		{
+			for(DictionaryDTO dictionaryDTO: dictionaryDTOList)
+			{
+				IDictionary dictionaryProxy = new DictionaryProxy(dictionaryManager);
+				dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
+				dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
+				dictionaryProxy.setDescription(dictionaryDTO.getDescription());
+				dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
+				dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
+				dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
+				dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
+				dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+				dictionaryList.add(dictionaryProxy);
+			}
+		}
+		
+		return dictionaryList;
+	}
 
 	@Override
 	public IDictionary getDictionaryDetails(DictionaryDTO  dictionaryDTO)
