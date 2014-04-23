@@ -15,10 +15,10 @@ import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.network.mapper.INetworMapper;
+import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
 
-public class NetworkMapper implements INetworMapper{
+public class NetworkMapper implements INetworkMapper{
 	
 	@Autowired
 	private IDBConnectionNetworkManager dbconnect;
@@ -46,7 +46,7 @@ public class NetworkMapper implements INetworMapper{
 			network.setNetworkId(networksDTO.getNetworkid());
 			network.setNetworkName(networksDTO.getNetworkname());
 
-			IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspace(networksDTO, network);
+			IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspaceByNetworkDTO(networksDTO, network);
 			network.setNetworkWorkspace(networkworkspace);
 
 			network.setStatus(networksDTO.getStatus());
@@ -81,6 +81,27 @@ public class NetworkMapper implements INetworMapper{
 			//network.setNetworksAccess(networksDTO.getn)
 			//network.setTextUrl(textUrl)
 			//network.setVersionNumber(networksDTO.get)
+		}
+		return network;
+	}
+	
+	@Override
+	public INetwork getNetworkShallowDetails(NetworksDTO networksDTO) throws QuadrigaStorageException{
+		
+		INetwork network = null;
+		if(networksDTO != null)
+		{
+			network = networkFactory.createNetworkObject();
+			network.setNetworkId(networksDTO.getNetworkid());
+			network.setNetworkName(networksDTO.getNetworkname());
+
+			network.setStatus(networksDTO.getStatus());
+			if(networksDTO.getNetworkowner() != null)
+				network.setCreator(userManager.getUserDetails(networksDTO.getNetworkowner()));
+			network.setCreatedBy(networksDTO.getCreatedby());
+			network.setCreatedDate(networksDTO.getCreateddate());
+			network.setUpdatedBy(networksDTO.getUpdatedby());
+			network.setUpdatedDate(networksDTO.getUpdateddate());
 		}
 		return network;
 	}
