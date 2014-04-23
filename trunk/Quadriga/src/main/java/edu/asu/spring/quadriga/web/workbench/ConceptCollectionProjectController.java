@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -51,8 +52,9 @@ public class ConceptCollectionProjectController {
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		logger.info("Concept collection list is empty buddy");
-		List<IConceptCollection> conceptCollectionList = null;
+		List<IProjectConceptCollection> conceptCollectionList = null;
 		try {
+			//TODO: listProjectConceptCollection() needs to be modified 
 			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException();
@@ -60,7 +62,9 @@ public class ConceptCollectionProjectController {
 		if(conceptCollectionList == null){
 			logger.info("Concept collection list is empty buddy");
 		}
-		Iterator<IConceptCollection> I = conceptCollectionList.iterator(); 
+		
+		//TODO: iterator has to be changed according to the new domain class
+		Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator(); 
 		while(I.hasNext()){
 			IConceptCollection con = I.next();
 			logger.info(" "+con.getConceptCollectionName());
@@ -84,7 +88,8 @@ public class ConceptCollectionProjectController {
 					.getAuthentication().getPrincipal();
 			String userId = user.getUsername();
 
-			List<IConceptCollection> conceptCollectionList = null;
+			List<IProjectConceptCollection> conceptCollectionList = null;
+			//TODO: getCollectionsOwnedbyUser() needs to be changed according to mapper
 			try {
 				conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
 			} catch (QuadrigaStorageException e) {
@@ -93,7 +98,8 @@ public class ConceptCollectionProjectController {
 			if (conceptCollectionList == null) {
 				logger.info("conceptCollectionList list is empty");
 			}
-			Iterator<IConceptCollection> I = conceptCollectionList.iterator(); 
+			//TODO: iterator needs to be changed
+			Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator(); 
 			while(I.hasNext()){
 				IConceptCollection con = I.next();
 				logger.info(" "+con.getConceptCollectionName());
@@ -123,8 +129,9 @@ public class ConceptCollectionProjectController {
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
 			model.addAttribute("deletesuccess", 0);
-			List<IConceptCollection> conceptCollectionList = null;
+			List<IProjectConceptCollection> conceptCollectionList = null;
 			try {
+				//TODO: listProjectConceptCollection() is to be changed according to mapper
 				conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 			} catch (QuadrigaStorageException e) {
 				throw new QuadrigaStorageException();
@@ -156,8 +163,9 @@ public class ConceptCollectionProjectController {
 		}else{
 			model.addAttribute("success", 0);
 		}
-		List<IConceptCollection> conceptCollectionList = null;
+		List<IProjectConceptCollection> conceptCollectionList = null;
 		try {
+			// TODO: getCollectionsOwnedbyUser() is to be changed according to mapper
 			conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
 		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException();
@@ -180,8 +188,9 @@ public class ConceptCollectionProjectController {
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		
-		List<IConceptCollection> conceptCollectionList = null;
+		List<IProjectConceptCollection> conceptCollectionList = null;
 		try {
+			// TODO: listProjectConceptCollection() is to be changed according to mapper
 			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException();
@@ -209,8 +218,9 @@ public class ConceptCollectionProjectController {
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
 			model.addAttribute("deletesuccess", 0);
-			List<IConceptCollection> conceptCollectionList = null;
+			List<IProjectConceptCollection> conceptCollectionList = null;
 			try {
+				// TODO: listProjectConceptCollection() is to be changed according to mapper
 				conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 			} catch (QuadrigaStorageException e) {
 				throw new QuadrigaStorageException();
@@ -240,8 +250,9 @@ public class ConceptCollectionProjectController {
 		}else{
 			model.addAttribute("deletesuccess", 0);
 		}
-		List<IConceptCollection> conceptCollectionList = null;
+		List<IProjectConceptCollection> conceptCollectionList = null;
 		try {
+			// TODO: listProjectConceptCollection() is to be changed according to mapper
 			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException();
