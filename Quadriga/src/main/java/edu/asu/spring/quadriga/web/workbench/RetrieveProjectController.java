@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.impl.workbench.RetrieveJsonProjectsManager;
@@ -138,8 +139,8 @@ public class RetrieveProjectController
 		ModelAndView model;
 		String userName;
 		IProject project;
-		List<IWorkSpace> workspaceList;
-		List<IWorkSpace> collaboratorWorkspaceList;
+		List<IProjectWorkspace> workspaceList;
+		List<IProjectWorkspace> collaboratorWorkspaceList;
 		
 		model = new ModelAndView("auth/workbench/project");
 		
@@ -147,7 +148,13 @@ public class RetrieveProjectController
 		project = projectManager.getProjectDetails(projectid);
 		
 		//retrieve all the workspaces associated with the project
+		
+		//TODO: please check shallowmapper used in listActiveWorkspace() method. should return list of 
+		//      IProjectWorkspace
 		workspaceList = wsManager.listActiveWorkspace(projectid,userName);
+		
+		//TODO: please check shallowmapper used in listActiveWorkspaceByCollaborator() method. 
+		//      should return list of IProjectWorkspace
 		collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 		
 		model.getModelMap().put("project", project);
