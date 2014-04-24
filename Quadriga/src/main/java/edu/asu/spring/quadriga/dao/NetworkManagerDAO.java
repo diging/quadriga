@@ -210,9 +210,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 * @throws QuadrigaStorageException		Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
 	@Override
-	public List<INetwork> getNetworkList(IUser user)
+	public List<NetworksDTO> getNetworkList(IUser user)
 			throws QuadrigaStorageException {
-		List<INetwork> networkList = new ArrayList<INetwork>();
 		try {
 			Query query = sessionFactory.getCurrentSession().getNamedQuery(
 					"NetworksDTO.findByNetworkowner");
@@ -220,10 +219,10 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
-			networkList = networkMapper.getListOfNetworks(listNetworksDTO);
+			//networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
 			// Update project and workspace name for the network
-			for (INetwork network : networkList) {
+			/*for (INetwork network : networkList) {
 				// Get the project id associated with the workspace id
 				query = sessionFactory.getCurrentSession().getNamedQuery(
 						"ProjectWorkspaceDTO.findByWorkspaceid");
@@ -240,9 +239,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
 						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
 				}
-			}
+			}*/
 
-			return networkList;
+			return listNetworksDTO;
 		} catch (Exception e) {
 			logger.error("Error in fetching a network status: ", e);
 			throw new QuadrigaStorageException(e);
@@ -379,16 +378,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 
-	/**
-	 * Get the list of networks associated with a project id. If the project id is null or the project does not contain any
-	 * workspaces or networks then the return will be null.
-	 * The method uses Hibernate Framework to perform the database operations.
-	 * 
-	 * @param projectid						The id of the project in which you need to find the list of networks.
-	 * @return								List of networks belonging to the given project id. The list will be empty (not null) if there are no networks matching the input constraints.
-	 * @throws QuadrigaStorageException		Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
-	 */
-	@Override
+	
+	/*@Override
 	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
 		if(projectid == null || projectid.equals(""))
 			return null;
@@ -448,6 +439,50 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		return networkList;
 
 
+	}*/
+	
+	
+	/**
+	 * Get the list of networks associated with a project id. If the project id is null or the project does not contain any
+	 * workspaces or networks then the return will be null.
+	 * The method uses Hibernate Framework to perform the database operations.
+	 * 
+	 * @param projectid						The id of the project in which you need to find the list of networks.
+	 * @return								List of networks belonging to the given project id. The list will be empty (not null) if there are no networks matching the input constraints.
+	 * @throws QuadrigaStorageException		Exception will be thrown when the input paramets do not satisfy the system/database constraints or due to database connection troubles.
+	 */
+	@Override
+	public List<NetworksDTO> getNetworkDTOList(String projectid) throws QuadrigaStorageException {
+		if(projectid == null || projectid.equals(""))
+			return null;
+
+		//Create a query to get all projects
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByProjectid");
+		query.setParameter("projectid", projectid);
+
+		@SuppressWarnings("unchecked")
+		List<ProjectWorkspaceDTO> projectWorkspaceDTOList = query.list();
+
+
+		List<NetworksDTO> networksDTOList = new ArrayList<NetworksDTO>();
+
+		//If there are a list of projects, get all the networks using the workspace ids
+
+		for(ProjectWorkspaceDTO projectWorkspaceDTO : projectWorkspaceDTOList){
+			if (projectWorkspaceDTO != null) {
+
+				String workspaceid1 = projectWorkspaceDTO.getProjectWorkspaceDTOPK().getWorkspaceid();
+				Query queryNetworks = sessionFactory.getCurrentSession().getNamedQuery("NetworkWorkspaceDTO.findByWorkspaceid");
+				queryNetworks.setParameter("workspaceid", workspaceid1);
+
+				@SuppressWarnings("unchecked")
+				List<NetworksDTO> networksDTO =queryNetworks.list();
+				for(NetworksDTO networkDTO : networksDTO){
+					networksDTOList.add(networkDTO);
+				}
+			}
+		}
+		return networksDTOList;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -783,7 +818,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
+	/*@Override
 	public List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException {
 		List<INetwork> networkList = null;
 
@@ -820,8 +855,56 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			logger.error("Error in fetching network of user: ", e);
 			throw new QuadrigaStorageException(e);
 		}
+	}*/
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException {
+		List<INetwork> networkList = null;
+
+		try {
+			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser ) and status = :status");
+			query.setParameter("assigneduser", user.getUserName());
+			query.setParameter("status", networkStatus);
+
+			@SuppressWarnings("unchecked")
+			List<NetworksDTO> listNetworksDTO = query.list();
+			//networkList = networkMapper.getListOfNetworks(listNetworksDTO);
+			
+			for(NetworksDTO networksDTO : listNetworksDTO){
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
+				query.setParameter("workspaceid", networksDTO.getNetworkWorkspace().getNetworkWorkspaceDTOPK().getWorkspaceid());
+			}
+
+			// Update project name and workspace name of the network
+			for (INetwork network : networkList) {
+				// Get the project id associated with the workspace id
+				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
+				query.setParameter("workspaceid", network.getWorkspaceid());
+				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
+
+				if (projectWorkspaceDTO != null) {
+					// Get the project details
+					if(projectWorkspaceDTO.getProjectDTO() != null)
+						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
+
+					// Get the workspace details
+					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
+						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+
+				}
+			}
+
+			return networkList;
+		} catch (Exception e) {
+			logger.error("Error in fetching network of user: ", e);
+			throw new QuadrigaStorageException(e);
+		}
 	}
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -901,7 +984,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
-	@Override
+	/*@Override
 	public List<INetwork> getNetworkOfOwner(IUser user)
 			throws QuadrigaStorageException {
 		List<INetwork> networkList = null;
@@ -938,7 +1021,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			logger.error("Error in fetching network of user: ", e);
 			throw new QuadrigaStorageException(e);
 		}
-	}
+	}*/
 
 	@Override
 	public String addAnnotationToEdge( String networkId,

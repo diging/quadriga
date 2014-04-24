@@ -83,6 +83,7 @@ import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
 import edu.asu.spring.quadriga.service.network.domain.INodeObjectWithStatement;
 import edu.asu.spring.quadriga.service.network.domain.impl.NetworkJSon;
 import edu.asu.spring.quadriga.service.network.factory.INodeObjectWithStatementFactory;
+import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectShallowMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
@@ -122,6 +123,9 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	@Autowired
 	private	IListWSManager wsManager;
+	
+	@Autowired
+	private INetworkMapper networkmapper;
 
 	@Autowired
 	@Qualifier("qStoreURL_Add")
@@ -877,7 +881,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try{
-			networkList=dbConnect.getNetworkList(user);
+			networkList=networkmapper.getListOfNetworks(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -940,7 +944,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public List<INetwork> getNetworksInProject(String projectid) throws QuadrigaStorageException{
 
 		//Fetch the list of networks in the project
-		List<INetwork> networksList = dbConnect.getNetworks(projectid);
+		List<INetwork> networksList = networkmapper.getNetworkList(projectid);
 
 		if(networksList != null){
 			return networksList;

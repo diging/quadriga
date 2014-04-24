@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
+import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.impl.networks.NetworkFactory;
 import edu.asu.spring.quadriga.domain.factory.networks.INetworkNodeInfoFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -104,6 +105,51 @@ public class NetworkMapper implements INetworkMapper{
 			network.setUpdatedDate(networksDTO.getUpdateddate());
 		}
 		return network;
+	}
+	
+	@Override
+	public List<INetwork> getListOfNetworks(IUser user) throws QuadrigaStorageException
+	{
+		List<NetworksDTO> networksDTO = dbconnect.getNetworkList(user);
+		List<INetwork> networkList = null;
+		if(networksDTO != null)
+		{
+			networkList = new ArrayList<INetwork>();
+			INetwork network = null;
+			for(NetworksDTO networkDTO: networksDTO)
+			{
+				network = networkFactory.createNetworkObject();
+				network.setNetworkId(networkDTO.getNetworkid());
+				network.setNetworkName(networkDTO.getNetworkname());
+				network.setStatus(networkDTO.getStatus());
+				if(networkDTO.getNetworkowner() != null)
+					network.setCreator(userDeepMapper.getUserDetails(networkDTO.getNetworkowner()));
+				networkList.add(network);
+			}
+		}		
+		return networkList;
+	}
+	
+	@Override
+	public List<INetwork> getNetworkList(String projectid) throws QuadrigaStorageException{
+		List<NetworksDTO> networksDTO = dbconnect.getNetworkDTOList(projectid);
+		List<INetwork> networkList = null;
+		if(networksDTO != null)
+		{
+			networkList = new ArrayList<INetwork>();
+			INetwork network = null;
+			for(NetworksDTO networkDTO: networksDTO)
+			{
+				network = networkFactory.createNetworkObject();
+				network.setNetworkId(networkDTO.getNetworkid());
+				network.setNetworkName(networkDTO.getNetworkname());
+				network.setStatus(networkDTO.getStatus());
+				if(networkDTO.getNetworkowner() != null)
+					network.setCreator(userDeepMapper.getUserDetails(networkDTO.getNetworkowner()));
+				networkList.add(network);
+			}
+		}		
+		return networkList;
 	}
 	
 }
