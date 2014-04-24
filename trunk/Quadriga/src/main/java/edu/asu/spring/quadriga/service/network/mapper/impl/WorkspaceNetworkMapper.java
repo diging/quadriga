@@ -1,5 +1,8 @@
 package edu.asu.spring.quadriga.service.network.mapper.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceNetwork;
@@ -46,23 +49,31 @@ public class WorkspaceNetworkMapper implements IWorkspaceNetworkMapper{
 	}
 	
 	@Override
-	public IWorkspaceNetwork getNetworkWorkspaceByWorkSpaceDTO(WorkspaceDTO workspaceDTO,
+	public List<IWorkspaceNetwork> getNetworkWorkspaceByWorkSpaceDTO(WorkspaceDTO workspaceDTO,
 			IWorkSpace workspace) throws QuadrigaStorageException {
 		
-		IWorkspaceNetwork networkworkspace = new WorkspaceNetwork();
+		List<IWorkspaceNetwork> networkworkspaceList = null;
 		
-		NetworkWorkspaceDTO networkworkspaceDTO =workspaceDTO.getWorkspaceNetworkDTO();
-		if(networkworkspaceDTO!=null){
-			INetwork network = networkmapper.getNetworkShallowDetails(networkworkspaceDTO.getNetworksDTO());
-			networkworkspace.setNetwork(network);
-			networkworkspace.setWorkspace(workspace);
-			networkworkspace.setCreatedBy(networkworkspaceDTO.getCreatedby());
-			networkworkspace.setCreatedDate(networkworkspaceDTO.getCreateddate());
-			networkworkspace.setUpdatedBy(networkworkspaceDTO.getUpdatedby());
-			networkworkspace.setUpdatedDate(networkworkspaceDTO.getUpdateddate());
+		List<NetworkWorkspaceDTO> networkworkspaceDTOList =workspaceDTO.getWorkspaceNetworkDTOList();
+		
+		if(networkworkspaceDTOList!=null){
+			networkworkspaceList = new ArrayList<IWorkspaceNetwork>();
+			IWorkspaceNetwork networkworkspace = null;
+			
+			for(NetworkWorkspaceDTO networkworkspaceDTO : networkworkspaceDTOList){
+				networkworkspace = new WorkspaceNetwork();
+				INetwork network = networkmapper.getNetworkShallowDetails(networkworkspaceDTO.getNetworksDTO());
+				networkworkspace.setNetwork(network);
+				networkworkspace.setWorkspace(workspace);
+				networkworkspace.setCreatedBy(networkworkspaceDTO.getCreatedby());
+				networkworkspace.setCreatedDate(networkworkspaceDTO.getCreateddate());
+				networkworkspace.setUpdatedBy(networkworkspaceDTO.getUpdatedby());
+				networkworkspace.setUpdatedDate(networkworkspaceDTO.getUpdateddate());
+				networkworkspaceList.add(networkworkspace);
+			}
 		}
 		
-		return networkworkspace;
+		return networkworkspaceList;
 	}
 
 }

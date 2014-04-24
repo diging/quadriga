@@ -26,7 +26,7 @@ public interface IDBConnectionEditorManager {
 	 * @return										returns {@link List} of {@link INetwork}
 	 * @throws QuadrigaStorageException				Throws Storage exception when there is a issue while getting any data from database
 	 */
-	public abstract List<INetwork> getEditorNetworkList(IUser user)
+	public abstract List<NetworksDTO> getEditorNetworkList(IUser user)
 			throws QuadrigaStorageException;
 
 	/**
@@ -117,7 +117,7 @@ public interface IDBConnectionEditorManager {
 	 * @return												Returns the {@link List} of {@link INetwork}
 	 * @throws QuadrigaStorageException						Throws Storage exception when there is a issue while getting any data from database
 	 */
-	public abstract List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException;
+	//public abstract List<INetwork> getNetworksOfUser(IUser user, String networkStatus) throws QuadrigaStorageException;
 
 	/** 
 	 * This method should get all the {@link INetwork} which is being assigned  of the other users based on {@link List} of status of the network.
@@ -177,6 +177,9 @@ public interface IDBConnectionEditorManager {
 
 	public abstract void addAnnotationToNode(String annotationText, String networkId,
 			String nodeId, String nodeName, String userName, String annotedObjectType)
+			throws QuadrigaStorageException;
+
+	List<NetworksDTO> getNetworksOfUserWithStatus(IUser user, String networkStatus)
 			throws QuadrigaStorageException;
 
 

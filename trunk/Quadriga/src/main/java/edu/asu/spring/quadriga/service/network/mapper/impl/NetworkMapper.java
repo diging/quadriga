@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factory.impl.networks.NetworkFactory;
@@ -23,6 +24,9 @@ public class NetworkMapper implements INetworkMapper{
 	
 	@Autowired
 	private IDBConnectionNetworkManager dbconnect;
+	
+	@Autowired
+	private IDBConnectionEditorManager editormanager;
 	
 	@Autowired
 	private NetworkFactory networkFactory;
@@ -108,47 +112,93 @@ public class NetworkMapper implements INetworkMapper{
 	}
 	
 	@Override
-	public List<INetwork> getListOfNetworks(IUser user) throws QuadrigaStorageException
+	public List<INetwork> getListOfNetworksForUser(IUser user) throws QuadrigaStorageException
 	{
-		List<NetworksDTO> networksDTO = dbconnect.getNetworkList(user);
 		List<INetwork> networkList = null;
-		if(networksDTO != null)
-		{
-			networkList = new ArrayList<INetwork>();
-			INetwork network = null;
-			for(NetworksDTO networkDTO: networksDTO)
-			{
-				network = networkFactory.createNetworkObject();
-				network.setNetworkId(networkDTO.getNetworkid());
-				network.setNetworkName(networkDTO.getNetworkname());
-				network.setStatus(networkDTO.getStatus());
-				if(networkDTO.getNetworkowner() != null)
-					network.setCreator(userDeepMapper.getUserDetails(networkDTO.getNetworkowner()));
-				networkList.add(network);
-			}
-		}		
+		List<NetworksDTO> networksDTO = dbconnect.getNetworkList(user);
+		if(networksDTO!=null){
+			networkList = getNetworkListFromDTOList(networksDTO);
+		}
 		return networkList;
 	}
 	
 	@Override
-	public List<INetwork> getNetworkList(String projectid) throws QuadrigaStorageException{
-		List<NetworksDTO> networksDTO = dbconnect.getNetworkDTOList(projectid);
+	public List<INetwork> getNetworkListForProject(String projectid) throws QuadrigaStorageException{
 		List<INetwork> networkList = null;
-		if(networksDTO != null)
+		List<NetworksDTO> networksDTO = dbconnect.getNetworkDTOList(projectid);
+		if(networksDTO!=null){
+			networkList = getNetworkListFromDTOList(networksDTO);
+		}
+		return networkList;
+	}
+	
+	@Override
+	public List<INetwork> getNetworksOfUserWithStatus(IUser user, String networkStatus) throws QuadrigaStorageException{
+		List<INetwork> networkList = null;
+		List<NetworksDTO> networksDTO = editormanager.getNetworksOfUserWithStatus(user,networkStatus);
+		if(networksDTO!=null){
+			networkList = getNetworkListFromDTOList(networksDTO);
+		}
+		return networkList;
+	}
+	
+	@Override
+	public List<INetworkNodeInfo> getNetworkNodes(String networkId,int versionId)
+			throws QuadrigaStorageException{
+		
+		List<INetworkNodeInfo> networkNodeList = null;
+		List<NetworkStatementsDTO> networkStatementsDTOList = dbconnect.getNetworkNodes(networkId, versionId);
+		if(networkStatementsDTOList != null)
+		{
+			networkNodeList = new ArrayList<INetworkNodeInfo>();
+			INetworkNodeInfo networkNodeInfo = null;
+			for(NetworkStatementsDTO networkStatementsDTO:networkStatementsDTOList)
+			{
+				networkNodeInfo = networkNodeInfoFactory.createNetworkNodeInfoObject();
+				networkNodeInfo.setId(networkStatementsDTO.getStatementid());
+				networkNodeInfo.setStatementType(networkStatementsDTO.getStatementtype());
+				networkNodeInfo.setVersion(networkStatementsDTO.getVersion());
+				networkNodeInfo.setIsTop(networkStatementsDTO.getIstop());
+				networkNodeList.add(networkNodeInfo);
+			}
+		}
+		
+		
+		return networkNodeList;
+	}
+	
+	@Override
+	public List<INetwork> getEditorNetworkList(IUser user)
+			throws QuadrigaStorageException{
+		List<INetwork> networkList = null;
+		List<NetworksDTO> networksDTO = editormanager.getEditorNetworkList(user);
+		if(networksDTO!=null){
+			networkList = getNetworkListFromDTOList(networksDTO);
+		}
+		return networkList;
+		
+	}
+	
+	public List<INetwork> getNetworkListFromDTOList(List<NetworksDTO> networksDTOList) throws QuadrigaStorageException{
+		
+		List<INetwork> networkList = null;
+		if(networksDTOList != null)
 		{
 			networkList = new ArrayList<INetwork>();
 			INetwork network = null;
-			for(NetworksDTO networkDTO: networksDTO)
+			for(NetworksDTO networkDTO: networksDTOList)
 			{
 				network = networkFactory.createNetworkObject();
 				network.setNetworkId(networkDTO.getNetworkid());
 				network.setNetworkName(networkDTO.getNetworkname());
 				network.setStatus(networkDTO.getStatus());
+				IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspaceByNetworkDTO(networkDTO, network);
+				network.setNetworkWorkspace(networkworkspace);
 				if(networkDTO.getNetworkowner() != null)
 					network.setCreator(userDeepMapper.getUserDetails(networkDTO.getNetworkowner()));
-				networkList.add(network);
+				networkList.add(network);	
 			}
-		}		
+		}
 		return networkList;
 	}
 	

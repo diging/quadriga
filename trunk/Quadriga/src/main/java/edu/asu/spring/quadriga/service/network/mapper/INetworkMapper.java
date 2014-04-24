@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
+import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -21,10 +22,18 @@ public interface INetworkMapper {
 	public INetwork getNetworkShallowDetails(NetworksDTO networksDTO)
 			throws QuadrigaStorageException;
 
-	List<INetwork> getListOfNetworks(IUser user)
+	public List<INetwork> getListOfNetworksForUser(IUser user)
 			throws QuadrigaStorageException;
 
-	List<INetwork> getNetworkList(String projectid)
+	public List<INetwork> getNetworkListForProject(String projectid)
+			throws QuadrigaStorageException;
+
+	public List<INetwork> getNetworksOfUserWithStatus(IUser user, String networkStatus) throws QuadrigaStorageException;
+
+	public List<INetworkNodeInfo> getNetworkNodes(String networkId, int versionId)
+			throws QuadrigaStorageException;
+
+	public List<INetwork> getEditorNetworkList(IUser user)
 			throws QuadrigaStorageException;	
 	
 }
