@@ -2,10 +2,8 @@ package edu.asu.spring.quadriga.domain.factory.impl.conceptcollection;
 
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.Concept;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 
 
@@ -23,17 +21,26 @@ public class ConceptCollectionFactory implements IConceptCollectionFactory {
 	 */
 	@Override
 	public IConceptCollection createConceptCollectionObject() {
-		// TODO Auto-generated method stub
 		return new ConceptCollection();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
-	public IConcept createConcept()
-	{
-		return new Concept();
+	public IConceptCollection cloneConceptCollectionObject(IConceptCollection conceptCollection) {
+		IConceptCollection clone = createConceptCollectionObject();
+		clone.setConceptCollectionId(conceptCollection.getConceptCollectionId());
+		clone.setConceptCollectionName(conceptCollection.getConceptCollectionName());
+		clone.setDescription(conceptCollection.getDescription());
+		clone.setOwner(conceptCollection.getOwner());
+		clone.setConceptCollectionCollaborators(conceptCollection.getConceptCollectionCollaborators());
+		clone.setConceptCollectionConcepts(conceptCollection.getConceptCollectionConcepts());
+		clone.setConceptCollectionProjects(conceptCollection.getConceptCollectionProjects());
+		clone.setConceptCollectionWorkspaces(conceptCollection.getConceptCollectionWorkspaces());
+		clone.setCreatedBy(conceptCollection.getCreatedBy());
+		clone.setCreatedDate(conceptCollection.getCreatedDate());
+		clone.setUpdatedBy(conceptCollection.getUpdatedBy());
+		clone.setUpdatedDate(conceptCollection.getUpdatedDate());
+		return clone;
 	}
+	
 
 }

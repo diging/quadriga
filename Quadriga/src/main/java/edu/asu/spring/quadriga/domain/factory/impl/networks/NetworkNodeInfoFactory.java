@@ -25,4 +25,15 @@ public class NetworkNodeInfoFactory implements INetworkNodeInfoFactory  {
 		return new NetworkNodeInfo();
 	}
 
+	@Override
+	public INetworkNodeInfo cloneNetworkNodeInfoObject(INetworkNodeInfo networkNode) 
+	{
+		INetworkNodeInfo clone = createNetworkNodeInfoObject();
+		clone.setId(networkNode.getId());
+		clone.setIsTop(networkNode.getIsTop());
+		clone.setStatementType(networkNode.getStatementType());
+		clone.setVersion(networkNode.getVersion());
+		return clone;
+	}
+
 }

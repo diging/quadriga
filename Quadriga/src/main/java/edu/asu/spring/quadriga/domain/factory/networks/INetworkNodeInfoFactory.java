@@ -10,5 +10,7 @@ import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 public interface INetworkNodeInfoFactory {
 
 	public abstract INetworkNodeInfo createNetworkNodeInfoObject();
+	
+	public abstract INetworkNodeInfo cloneNetworkNodeInfoObject(INetworkNodeInfo networkNode);
 
 }

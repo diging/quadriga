@@ -14,5 +14,7 @@ public interface INetworkFactory {
 	 * @return INetwork
 	 */
 	public abstract INetwork createNetworkObject();
+	
+	public abstract INetwork cloneNetworkObject(INetwork network);
 
 }

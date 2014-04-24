@@ -20,4 +20,21 @@ public class DictionaryItemFactory implements IDictionaryItemFactory {
 		return new Item();
 	}
 
+	@Override
+	public Item cloneDictionaryItemObject(Item dictionaryItem) 
+	{
+		Item clone = createDictionaryItemObject();
+		clone.setDictionaryItemId(dictionaryItem.getDictionaryItemId());
+		clone.setPos(dictionaryItem.getPos());
+		clone.setTerm(dictionaryItem.getTerm());
+		clone.setVocabulary(dictionaryItem.getVocabulary());
+		clone.setItemDictionaries(dictionaryItem.getItemDictionaries());
+		clone.setDescription(dictionaryItem.getDescription());
+		clone.setCreatedBy(dictionaryItem.getCreatedBy());
+		clone.setCreatedDate(dictionaryItem.getCreatedDate());
+		clone.setUpdatedBy(dictionaryItem.getUpdatedBy());
+		clone.setUpdatedDate(dictionaryItem.getUpdatedDate());
+		return clone;
+	}
+
 }

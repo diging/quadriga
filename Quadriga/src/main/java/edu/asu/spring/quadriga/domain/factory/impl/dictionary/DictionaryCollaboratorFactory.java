@@ -17,5 +17,17 @@ public class DictionaryCollaboratorFactory implements IDictionaryCollaboratorFac
 		
 		return new DictionaryCollaborator();
 	}
+
+	@Override
+	public IDictionaryCollaborator cloneDictionaryCollaboratorObject(IDictionaryCollaborator dictionaryCollaborator) {
+        IDictionaryCollaborator clone = createDictionaryCollaboratorObject();
+        clone.setCollaborator(dictionaryCollaborator.getCollaborator());
+        clone.setDictionary(dictionaryCollaborator.getDictionary());
+        clone.setCreatedBy(dictionaryCollaborator.getCreatedBy());
+        clone.setCreatedDate(dictionaryCollaborator.getCreatedDate());
+        clone.setUpdatedBy(dictionaryCollaborator.getUpdatedBy());
+        clone.setUpdatedDate(dictionaryCollaborator.getUpdatedDate());
+		return clone;
+	}
 	
 }
