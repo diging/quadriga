@@ -12,5 +12,7 @@ public interface IDictionaryItemFactory {
 	 * @return DictionaryItems
 	 */
 	public abstract Item createDictionaryItemObject();
+	
+	public abstract Item cloneDictionaryItemObject(Item dictionaryItem);
 
 }

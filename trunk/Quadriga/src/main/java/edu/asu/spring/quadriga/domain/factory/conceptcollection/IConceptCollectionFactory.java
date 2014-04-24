@@ -3,7 +3,6 @@
  */
 package edu.asu.spring.quadriga.domain.factory.conceptcollection;
 
-import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 
 /**
@@ -18,10 +17,8 @@ public interface IConceptCollectionFactory {
 	 * @return			returns {@link IConceptCollection} 
 	 */
 	public abstract IConceptCollection createConceptCollectionObject();
+	
+	
+	public abstract IConceptCollection cloneConceptCollectionObject(IConceptCollection conceptCollection);
 
-	/**
-	 * Creates {@link IConcept} for any developer who wants to create concepts
-	 * @return			returns {@link IConceptCollection} 
-	 */
-	public abstract IConcept createConcept();
 }

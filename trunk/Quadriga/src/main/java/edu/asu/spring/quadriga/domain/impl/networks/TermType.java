@@ -20,9 +20,6 @@ import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 
 /**

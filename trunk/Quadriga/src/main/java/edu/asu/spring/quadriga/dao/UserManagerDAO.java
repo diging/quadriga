@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.db.IDBConnectionManager;
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDeniedDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
@@ -50,6 +49,7 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	/**
 	 * {@inheritDoc} 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<QuadrigaUserDTO> getUserDTOList(String userRoleId) throws QuadrigaStorageException
 	{
@@ -96,6 +96,7 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	/**
 	 * {@inheritDoc} 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<QuadrigaUserRequestsDTO> getUserRequestDTOList() throws QuadrigaStorageException
 	{
@@ -120,6 +121,7 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	/**
 	 * {@inheritDoc} 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<QuadrigaUserDTO> getUserDTOListNotInRole(String userRoleId) throws QuadrigaStorageException
 	{

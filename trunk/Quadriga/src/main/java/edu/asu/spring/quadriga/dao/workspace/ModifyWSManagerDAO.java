@@ -17,7 +17,7 @@ import edu.asu.spring.quadriga.db.workspace.IDBConnectionModifyWSManager;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
-import edu.asu.spring.quadriga.dto.NetworksDTO;
+import edu.asu.spring.quadriga.dto.NetworkWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -450,14 +450,13 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 				{
 					throw new QuadrigaStorageException(); 
 				}
-				List<NetworksDTO> workspaceNetworksList = workspace.getWorkspaceNetworksDTOList();
-				for(NetworksDTO workspaceNetwork : workspaceNetworksList)
+				List<NetworkWorkspaceDTO> workspaceNetworksList = workspace.getWorkspaceNetworkDTOList();
+				for(NetworkWorkspaceDTO workspaceNetwork : workspaceNetworksList)
 				{
-
 					sessionFactory.getCurrentSession().delete(workspaceNetwork);
 				}
 				//set the workspace network mapping to null in workspace object
-				workspace.setWorkspaceNetworksDTOList(null);
+				workspace.setWorkspaceNetworkDTOList(null);
 				sessionFactory.getCurrentSession().update(workspace);
 
 			}
