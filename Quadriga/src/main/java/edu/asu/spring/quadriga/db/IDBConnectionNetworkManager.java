@@ -5,6 +5,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -50,7 +51,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return					return {@link INetwork} object associated to the networkid, user
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract INetwork getNetwork(String networkid) throws QuadrigaStorageException;
+	//public abstract INetwork getNetwork(String networkid) throws QuadrigaStorageException;
 
 	/**
 	 * This would give the list of {@link INetwork} belonging the {@link IUser}.
@@ -73,7 +74,7 @@ public interface IDBConnectionNetworkManager {
 	 * @return					returns {@link List} of {@link INetworkNodeInfo}	
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<INetworkNodeInfo> getNetworkNodes(String networkId,int versionId)
+	public abstract List<NetworkStatementsDTO> getNetworkNodes(String networkId,int versionId)
 			throws QuadrigaStorageException;
 
 	/**
@@ -111,8 +112,8 @@ public interface IDBConnectionNetworkManager {
 	List<Integer> getLatestVersionOfNetwork(String networkID)
 			throws QuadrigaStorageException;
 	
-	List<INetwork> getNetworkOfOwner(IUser user) 
-			throws QuadrigaStorageException;
+	/*List<INetwork> getNetworkOfOwner(IUser user) 
+			throws QuadrigaStorageException;*/
 
 	NetworksDTO getNetworksDTO(String networkId)
 			throws QuadrigaStorageException;

@@ -17,6 +17,7 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
 import edu.asu.spring.quadriga.service.network.INetworkManager;
+import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
@@ -39,6 +40,9 @@ public class EditorManager implements IEditorManager {
 
 	@Autowired
 	private IDBConnectionEditorManager dbConnect;
+	
+	@Autowired
+	private INetworkMapper networkmapper;
 
 	@Autowired
 	private IDBConnectionNetworkManager dbnetworkManager;
@@ -57,7 +61,7 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try{
-			networkList=dbConnect.getEditorNetworkList(user);
+			networkList=networkmapper.getEditorNetworkList(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -98,7 +102,7 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = null;
 
 		try{
-			networkList=dbConnect.getNetworksOfUser(user, INetworkStatus.ASSIGNED);
+			networkList=networkmapper.getNetworksOfUserWithStatus(user, INetworkStatus.ASSIGNED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -167,7 +171,7 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = null;
 
 		try{
-			networkList=dbConnect.getNetworksOfUser(user, INetworkStatus.REJECTED);
+			networkList=networkmapper.getNetworksOfUserWithStatus(user, INetworkStatus.REJECTED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -187,7 +191,7 @@ public class EditorManager implements IEditorManager {
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try{
-			networkList=dbConnect.getNetworksOfUser(user, INetworkStatus.APPROVED);
+			networkList=networkmapper.getNetworksOfUserWithStatus(user, INetworkStatus.APPROVED);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}

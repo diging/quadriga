@@ -861,7 +861,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public INetwork getNetwork(String networkId) throws QuadrigaStorageException{
 		INetwork network = null;
 		try{
-			network = dbConnect.getNetwork(networkId);
+			network = networkmapper.getNetwork(networkId);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -881,7 +881,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		List<INetwork> networkList = new ArrayList<INetwork>();
 
 		try{
-			networkList=networkmapper.getListOfNetworks(user);
+			networkList=networkmapper.getListOfNetworksForUser(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Something went wrong in DB",e);
 		}
@@ -898,7 +898,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Transactional
 	public List<INetworkNodeInfo> getAllNetworkNodes(String networkId)
 			throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,INetworkManager.VERSION_ZERO);
+		List<INetworkNodeInfo> networkNodeList = networkmapper.getNetworkNodes(networkId,INetworkManager.VERSION_ZERO);
 
 		if(networkNodeList != null)
 		{
@@ -944,7 +944,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public List<INetwork> getNetworksInProject(String projectid) throws QuadrigaStorageException{
 
 		//Fetch the list of networks in the project
-		List<INetwork> networksList = networkmapper.getNetworkList(projectid);
+		List<INetwork> networksList = networkmapper.getNetworkListForProject(projectid);
 
 		if(networksList != null){
 			return networksList;
@@ -977,7 +977,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	public List<INetworkNodeInfo> getNetworkTopNodes(String networkId)throws QuadrigaStorageException
 	{
 		int versionNo = getLatestVersionOfNetwork(networkId);
-		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,versionNo);
+		List<INetworkNodeInfo> networkNodeList = networkmapper.getNetworkNodes(networkId,versionNo);
 		if(networkNodeList != null)
 		{
 			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
@@ -1002,7 +1002,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 	@Override
 	@Transactional
 	public List<INetworkNodeInfo> getNetworkTopNodesByVersion(String networkId, int versionNo)throws QuadrigaStorageException{
-		List<INetworkNodeInfo> networkNodeList = dbConnect.getNetworkNodes(networkId,versionNo);
+		List<INetworkNodeInfo> networkNodeList = networkmapper.getNetworkNodes(networkId,versionNo);
 		if(networkNodeList != null)
 		{
 			Iterator<INetworkNodeInfo> iterator = networkNodeList.iterator();
@@ -1507,7 +1507,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 		try {
 
-			networkList = dbConnect.getNetworkOfOwner(user);
+			networkList = networkmapper.getListOfNetworksForUser(user);
 		}catch(QuadrigaStorageException e){
 			logger.error("Error in fetching network of user: ", e);
 		}
