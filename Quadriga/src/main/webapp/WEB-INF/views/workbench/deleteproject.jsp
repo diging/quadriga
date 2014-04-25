@@ -97,7 +97,7 @@
 							</td>
 							<td><font size="3">
 							<form:label path="projectList[${status.index}].name">
-							<c:out value="${project.name}"></c:out>
+							<c:out value="${project.projectName}"></c:out>
 							</form:label> 
 							</font></td>
 							<td><font size="3">
