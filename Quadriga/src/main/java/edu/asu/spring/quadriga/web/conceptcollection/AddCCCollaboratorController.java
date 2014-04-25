@@ -32,10 +32,12 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -55,6 +57,9 @@ public class AddCCCollaboratorController {
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	private IConceptCollectionCollaboratorFactory ccCollaboratorFactory;
 	
 	@Autowired
 	private IUserFactory userFactory;
@@ -126,11 +131,11 @@ public class AddCCCollaboratorController {
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/addcollaborators", method=RequestMethod.GET)
 	 public ModelAndView addCollaborator(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
-			ICollaborator collaborator;
+		    IConceptCollectionCollaborator ccCollaborator;
 			ModelAndView model;
 			List<IUser> nonCollaboratorList;
 			List<ICollaboratorRole> collaboratorRoleList;
-			List<ICollaborator>collaboratingUsers;
+			List<IConceptCollectionCollaborator>ccCollaboratingUsers;
 
 			String userName = principal.getName();
 			model = new ModelAndView( "auth/conceptcollection/addcollaborators");
@@ -166,9 +171,9 @@ public class AddCCCollaboratorController {
 			model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 			model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 			
-			collaborator =  collaboratorFactory.createCollaborator();
-			collaborator.setUserObj(userFactory.createUserObject());
-			model.getModelMap().put("collaborator", collaborator);
+			ccCollaborator =  ccCollaboratorFactory.createConceptCollectionCollaboratorObject();
+			ccCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
+			model.getModelMap().put("ccCollaborator", ccCollaborator);
 			
 			collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
 			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoleList.iterator();
@@ -181,8 +186,10 @@ public class AddCCCollaboratorController {
 				}
 			}
 			model.getModelMap().put("collaboratorRoles",collaboratorRoleList);
-		    collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collectionid);
-		    model.getModelMap().put("collaboratingUsers", collaboratingUsers);
+			
+			//TODO: showCollaboratingUsers() should be changed with mapper
+		    ccCollaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collectionid);
+		    model.getModelMap().put("ccCollaboratingUsers", ccCollaboratingUsers);
 			return model;
 		}
 		
@@ -190,7 +197,7 @@ public class AddCCCollaboratorController {
 		 * @description this method will add collaborators for current conceptcollection
 		 * @param collectionid   id of the collection
 		 * @param model
-		 * @param collaborator  object returned by jsp to controller
+		 * @param ccCollaborator  object returned by jsp to controller
 		 * @param principal
 		 * @return String having path for showcollaborators jsp page.
 		 * @throws QuadrigaStorageException
@@ -199,7 +206,7 @@ public class AddCCCollaboratorController {
 	   @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	   @RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
 		public ModelAndView addCollaborators(@PathVariable("collection_id") String collectionid, Principal principal,
-		@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result)throws QuadrigaStorageException, QuadrigaAccessException
+		@Validated @ModelAttribute("ccCollaborator") ConceptCollectionCollaborator ccCollaborator, BindingResult result)throws QuadrigaStorageException, QuadrigaAccessException
 		{
 		   List<IUser> nonCollaboratorList;
 		   List<ICollaboratorRole> collaboratorRoleList;
@@ -219,12 +226,12 @@ public class AddCCCollaboratorController {
 		   model.getModelMap().put("collectionid", collectionid);
 		   if(result.hasErrors())
 		   {
-			   model.getModelMap().put("collaborator", collaborator);
+			   model.getModelMap().put("collaborator", ccCollaborator);
 		   }
 		   else
 		   {
-			  
-			  CollaboratorManager.addCollaborators(collaborator, collectionid, username);
+			  //TODO: definition of addCollaborators() needs to be changed. 
+			  CollaboratorManager.addCollaborators(ccCollaborator, collectionid, username);
 			  model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());  
 		   }
 		   
@@ -259,8 +266,9 @@ public class AddCCCollaboratorController {
 			}
 		   model.getModelMap().put("collaboratorRoles",collaboratorRoleList);
 			
-			List<ICollaborator>collaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
-			model.getModelMap().put("collaboratingUsers", collaborators);
+		   //TODO: showCollaboratingUsers() should be changed with mapper
+		   List<IConceptCollectionCollaborator>ccCollaborators =  conceptControllerManager.showCollaboratingUsers(collectionid);
+			model.getModelMap().put("ccCollaboratingUsers", ccCollaborators);
 			
 		    return model;
 	}

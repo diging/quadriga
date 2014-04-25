@@ -54,7 +54,7 @@ function onSubmit(){
 	location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}';
 }
 </script>
-<form:form  method="POST" name="myForm" commandName="collaborator"
+<form:form  method="POST" name="myForm" commandName="ccCollaborator"
 action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${collectionid}/addcollaborators"> 
 <h2>Associate collaborators to collection:</h2>
 <h3>Concept Collection: ${collectionname}</h3>
@@ -87,7 +87,7 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
  <span class="byline">All collaborators are associated to concept collection</span>
  <input type="button" value="Okay" onClick="onSubmit()">
 </c:if>
-<c:if test="${not empty collaboratingUsers}">
+<c:if test="${not empty ccCollaboratingUsers}">
 <hr>
 <span class="byline">Associated concept collection collaborators :</span>
 <table style="width:100%" class="display dataTable">					
@@ -99,7 +99,7 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 	</thead>
 	
 	<tbody>
-	<c:forEach var="collab" items="${collaboratingUsers}">
+	<c:forEach var="collab" items="${ccCollaboratingUsers}">
 		<tr>
 		 <td><c:out value="${collab.userObj.name}"></c:out></td>
 		 <td>

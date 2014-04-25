@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionModifyCCManager
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
@@ -76,7 +77,7 @@ public class TransferCCOwnerController
 		String userName;
 		ModelAndView model;
 		IConceptCollection conceptCollection;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IConceptCollectionCollaborator> collaboratingUser = new ArrayList<IConceptCollectionCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		model = new ModelAndView("auth/conceptcollections/transferconceptcollectionowner");
@@ -94,11 +95,12 @@ public class TransferCCOwnerController
 		model.getModelMap().put("collectionid", collectionId);
 		
 		//fetch the collaborators
+		//TODO: showCollaboratingUsers() needs to be changed to mapper.
 		collaboratingUser = conceptCollectionManager.showCollaboratingUsers(collectionId);
 		
-		for(ICollaborator collabuser : collaboratingUser)
+		for(IConceptCollectionCollaborator collabuser : collaboratingUser)
 		{
-			userList.add(collabuser.getUserObj());
+			userList.add(collabuser.getCollaborator().getUserObj());
 		}
 		
 		model.getModelMap().put("collaboratinguser", userList);
