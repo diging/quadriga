@@ -32,7 +32,6 @@ import edu.asu.spring.quadriga.domain.factory.workbench.IModifyProjectFormFactor
 import edu.asu.spring.quadriga.domain.factory.workbench.IProjectFactory;
 import edu.asu.spring.quadriga.domain.impl.workbench.Project;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -124,6 +123,7 @@ public class ModifyProjectController
 	public ModelAndView addProjectRequest(@Validated @ModelAttribute("project")Project project, 
 			BindingResult result,Principal principal) throws QuadrigaStorageException
 	{
+		
 		ModelAndView model;
 		model = new ModelAndView("auth/workbench/addproject");
         logger.info("Adding project details.");
@@ -138,6 +138,9 @@ public class ModifyProjectController
 		{
 			IUser user = userManager.getUserDetails(principal.getName());
             project.setOwner(user);
+            if(user != null){
+            	logger.info("user not null"+user.getName() + " "+ user.getUserName());
+            }
 			projectManager.addProjectRequest(project,principal.getName());
 			model.getModelMap().put("success", 1);
 		}
@@ -221,11 +224,9 @@ public class ModifyProjectController
 		String userName =user.getUserName();
 		projectManager.assignEditorToOwner(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);
-		
-		//TODO: please check shallowmapper used in listActiveWorkspace() method. should return list of 
-		//      IProjectWorkspace
+
 		//retrieve all the workspaces associated with the project
-		List <IProjectWorkspace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
+		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId, userName);
 		if(projectSecurity.checkProjectOwner(userName,projectId)){
 			model.addAttribute("owner", 1);
 		}else{
@@ -255,11 +256,9 @@ public class ModifyProjectController
 		String userName =user.getUserName();
 		projectManager.deleteEditorToOwner(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);
-		
-		//TODO: please check shallowmapper used in listActiveWorkspace() method. should return list of 
-		//      IProjectWorkspace
+
 		//retrieve all the workspaces associated with the project
-		List <IProjectWorkspace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
+		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
 		if(projectSecurity.checkProjectOwner(userName,projectId)){
 			model.addAttribute("owner", 1);
 		}else{

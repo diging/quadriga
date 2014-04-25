@@ -31,7 +31,7 @@ public class ProjectValidator implements Validator {
 	public void validate(Object obj, Errors err) 
 	{
 		//validate all the input parameters
-		ValidationUtils.rejectIfEmptyOrWhitespace(err, "name", "project_name.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectName", "project_name.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "project_description.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "projectAccess", "project_projectAccess.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "unixName", "project_unixname.required");

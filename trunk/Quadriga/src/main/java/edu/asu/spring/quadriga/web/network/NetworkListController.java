@@ -203,6 +203,7 @@ public class NetworkListController {
 		}
 		model.addAttribute("jsonstring",json);
 		model.addAttribute("nodeList",nodeList);
+		logger.info("json : "+json);
 		return "auth/editing/editnetworks";
 	}
 
