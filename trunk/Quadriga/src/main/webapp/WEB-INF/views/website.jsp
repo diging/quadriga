@@ -67,7 +67,7 @@ h1{
 		<td>
 			<h3>Project Name</h3>
 		</td>
-		<td><h3>${project.name}</h3></td>
+		<td><h3>${project.projectName}</h3></td>
 	</tr>	
 	<tr>
 		<td>
@@ -87,11 +87,11 @@ h1{
 		</td>
 		<td>
 			<section>
-				<c:if test="${not empty project.collaborators}">
+				<c:if test="${not empty project.projectCollaborators}">
 					<ul class="collaborators">
 						<c:forEach var="projectcollaborator"
-							items="${project.collaborators}">
-							<li><c:out value="${projectcollaborator.userObj.name}"></c:out>
+							items="${project.projectCollaborators}">
+							<li><c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
 							</li>
 						</c:forEach>
 					</ul>

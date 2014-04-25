@@ -92,16 +92,16 @@
 										style="vertical-align: middle;"
 										src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png">
 										<input name="items" type="hidden"
-										value="<c:out value="${network.name}"></c:out>" /> <c:out
-											value="${network.name}"></c:out></td>
+										value="<c:out value="${network.networkName}"></c:out>" /> <c:out
+											value="${network.networkName}"></c:out></td>
 									<td width="25%" align="center"><c:out
-											value="${network.project.name}"></c:out></td>
+											value="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out></td>
 									<td width="25%" align="center"><c:out
-											value="${network.workspace.name}"></c:out></td>
+											value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
 									<td width="25%" align="center"><c:out
 											value="${network.status}"></c:out></td>
 									<td width="25%" align="center"><input type=button
-										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
+										onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.networkId}'"
 										value='View Networks'></td>
 								</tr>
 							</c:forEach>

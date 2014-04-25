@@ -30,7 +30,6 @@
 				<div id="chart"></div>
 			</div>
 
-
 			<div id="right-container">
 				<div id="annot_details"></div>
 				<div id="inner-details"></div>

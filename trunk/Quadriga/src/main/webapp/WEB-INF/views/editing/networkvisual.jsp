@@ -57,7 +57,8 @@
 				<div id="allannot_details"></div>
 
 			</div>
-
+			
+		
 		</div>
 	</c:when>
 	<c:otherwise>
