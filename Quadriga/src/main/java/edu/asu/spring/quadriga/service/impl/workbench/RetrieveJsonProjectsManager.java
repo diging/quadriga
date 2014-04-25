@@ -22,20 +22,20 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 
 @Service
 public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager {
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(RetrieveJsonProjectsManager.class);
-	
+
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
-	
+
 	@Autowired
 	private IProjectShallowMapper projectShallowMapper;
-	
+
 	@Autowired
 	private	IListWSManager wsManager; 
 
-	
+
 	/**
 	 * This method returns the JSON string with list of projects associated with
 	 * the logged in user as owner of projects 
@@ -44,7 +44,7 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 	 * @throws QuadrigaStorageException,JSONException
 	 * @author Sowjanya Ambati
 	 */
-	
+
 	@Override
 	@Transactional
 	public String getProjectList(String sUserName)
@@ -53,54 +53,58 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = projectShallowMapper.getProjectList(sUserName);
-		for (IProject project : projectList) {
-			
-				JSONObject data = new JSONObject();
-				data.put("id", project.getProjectId());
-				data.put("parent", "#");
-				String projectLink = null;
-				projectLink = "<a href='#' id='"
-						+ project.getProjectId()
-						+ "' name='"
-						+ project.getProjectName()
-						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getProjectName() + "</a>";
-				
-				data.put("text", projectLink);
-				dataArray.put(data);
-				String wsParent = project.getProjectId();
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getProjectId(), sUserName);
-				for (IWorkSpace ws : wsList) {
-					// workspace json
-						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getWorkspaceId());
-						data1.put("parent", wsParent);
-						String wsLink = null;
-						
-						 wsLink = "<a href='#' id='"
-								+ ws.getWorkspaceId()
-								+ "' name='"
-								+ ws.getWorkspaceName()
-								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getWorkspaceName() + "</a>";
-						
-						data1.put("text", wsLink);
-						dataArray.put(data1);
-				
-				}
-				
-		}
-		JSONObject dataList = new JSONObject();
-		dataList.put("data", dataArray);
+			projectList = projectShallowMapper.getProjectList(sUserName);
+			if(projectList != null){
+				for (IProject project : projectList) {
 
-		core.put("core", dataList);
+					JSONObject data = new JSONObject();
+					data.put("id", project.getProjectId());
+					data.put("parent", "#");
+					String projectLink = null;
+					projectLink = "<a href='#' id='"
+							+ project.getProjectId()
+							+ "' name='"
+							+ project.getProjectName()
+							+ "' onclick='javascript:clickproject(this.id,this.name);' > "
+							+ project.getProjectName() + "</a>";
+
+					data.put("text", projectLink);
+					dataArray.put(data);
+					String wsParent = project.getProjectId();
+					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+							project.getProjectId(), sUserName);
+					if(wsList != null){
+						for (IWorkSpace ws : wsList) {
+							// workspace json
+							JSONObject data1 = new JSONObject();
+							data1.put("id", ws.getWorkspaceId());
+							data1.put("parent", wsParent);
+							String wsLink = null;
+
+							wsLink = "<a href='#' id='"
+									+ ws.getWorkspaceId()
+									+ "' name='"
+									+ ws.getWorkspaceName()
+									+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+									+ ws.getWorkspaceName() + "</a>";
+
+							data1.put("text", wsLink);
+							dataArray.put(data1);
+
+						}
+					}
+
+				}
+			}
+			JSONObject dataList = new JSONObject();
+			dataList.put("data", dataArray);
+
+			core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
 		}
-		
+
 		return core.toString(1);
 	}
 	/**
@@ -119,56 +123,60 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
-		for (IProject project : projectList) {
-			
-				JSONObject data = new JSONObject();
-				data.put("id", project.getProjectId());
-				data.put("parent", "#");
-				String projectLink = null;
-				projectLink = "<a href='#' id='"
-						+ project.getProjectId()
-						+ "' name='"
-						+ project.getProjectName()
-						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getProjectName() + "</a>";
-				
-				data.put("text", projectLink);
-				dataArray.put(data);
-				String wsParent = project.getProjectId();
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getProjectId(), sUserName);
-				for (IWorkSpace ws : wsList) {
-					// workspace json
-						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getWorkspaceId());
-						data1.put("parent", wsParent);
-						String wsLink = null;
-						
-						 wsLink = "<a href='#' id='"
-								+ ws.getWorkspaceId()
-								+ "' name='"
-								+ ws.getWorkspaceName()
-								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getWorkspaceName() + "</a>";
-						
-						data1.put("text", wsLink);
-						dataArray.put(data1);
-				
-				}
-		}
-		JSONObject dataList = new JSONObject();
-		dataList.put("data", dataArray);
+			projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
+			if(projectList != null){
+				for (IProject project : projectList) {
 
-		core.put("core", dataList);
+					JSONObject data = new JSONObject();
+					data.put("id", project.getProjectId());
+					data.put("parent", "#");
+					String projectLink = null;
+					projectLink = "<a href='#' id='"
+							+ project.getProjectId()
+							+ "' name='"
+							+ project.getProjectName()
+							+ "' onclick='javascript:clickproject(this.id,this.name);' > "
+							+ project.getProjectName() + "</a>";
+
+					data.put("text", projectLink);
+					dataArray.put(data);
+					String wsParent = project.getProjectId();
+					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+							project.getProjectId(), sUserName);
+					if(wsList != null){
+						for (IWorkSpace ws : wsList) {
+							// workspace json
+							JSONObject data1 = new JSONObject();
+							data1.put("id", ws.getWorkspaceId());
+							data1.put("parent", wsParent);
+							String wsLink = null;
+
+							wsLink = "<a href='#' id='"
+									+ ws.getWorkspaceId()
+									+ "' name='"
+									+ ws.getWorkspaceName()
+									+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+									+ ws.getWorkspaceName() + "</a>";
+
+							data1.put("text", wsLink);
+							dataArray.put(data1);
+
+						}
+					}
+				}
+			}
+			JSONObject dataList = new JSONObject();
+			dataList.put("data", dataArray);
+
+			core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
 		}
-		
+
 		return core.toString(1);
 	}
-	
+
 	/**
 	 * This method returns JSON string with list of projects associated with
 	 * the logged in user as workspace owner
@@ -185,56 +193,60 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
-		for (IProject project : projectList) {
-			
-				JSONObject data = new JSONObject();
-				data.put("id", project.getProjectId());
-				data.put("parent", "#");
-				String projectLink = null;
-				projectLink = "<a href='#' id='"
-						+ project.getProjectId()
-						+ "' name='"
-						+ project.getProjectName()
-						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getProjectName() + "</a>";
-				
-				data.put("text", projectLink);
-				dataArray.put(data);
-				String wsParent = project.getProjectId();
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getProjectId(), sUserName);
-				for (IWorkSpace ws : wsList) {
-					// workspace json
-						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getWorkspaceId());
-						data1.put("parent", wsParent);
-						String wsLink = null;
-						
-						 wsLink = "<a href='#' id='"
-								+ ws.getWorkspaceId()
-								+ "' name='"
-								+ ws.getWorkspaceName()
-								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getWorkspaceName() + "</a>";
-						
-						data1.put("text", wsLink);
-						dataArray.put(data1);
-				
-				}
-		}
-		JSONObject dataList = new JSONObject();
-		dataList.put("data", dataArray);
+			projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
+			if(projectList != null){
+				for (IProject project : projectList) {
 
-		core.put("core", dataList);
+					JSONObject data = new JSONObject();
+					data.put("id", project.getProjectId());
+					data.put("parent", "#");
+					String projectLink = null;
+					projectLink = "<a href='#' id='"
+							+ project.getProjectId()
+							+ "' name='"
+							+ project.getProjectName()
+							+ "' onclick='javascript:clickproject(this.id,this.name);' > "
+							+ project.getProjectName() + "</a>";
+
+					data.put("text", projectLink);
+					dataArray.put(data);
+					String wsParent = project.getProjectId();
+					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+							project.getProjectId(), sUserName);
+					if(wsList != null){
+						for (IWorkSpace ws : wsList) {
+							// workspace json
+							JSONObject data1 = new JSONObject();
+							data1.put("id", ws.getWorkspaceId());
+							data1.put("parent", wsParent);
+							String wsLink = null;
+
+							wsLink = "<a href='#' id='"
+									+ ws.getWorkspaceId()
+									+ "' name='"
+									+ ws.getWorkspaceName()
+									+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+									+ ws.getWorkspaceName() + "</a>";
+
+							data1.put("text", wsLink);
+							dataArray.put(data1);
+
+						}
+					}
+				}
+			}
+			JSONObject dataList = new JSONObject();
+			dataList.put("data", dataArray);
+
+			core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
 		}
-		
+
 		return core.toString(1);
 	}
-	
+
 	/**
 	 * This method returns JSON string with list of projects associated with
 	 * the logged in user as a collaborator.
@@ -251,53 +263,57 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);
-		for (IProject project : projectList) {
-			
-				JSONObject data = new JSONObject();
-				data.put("id", project.getProjectId());
-				data.put("parent", "#");
-				String projectLink = null;
-				projectLink = "<a href='#' id='"
-						+ project.getProjectId()
-						+ "' name='"
-						+ project.getProjectName()
-						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getProjectName() + "</a>";
-				
-				data.put("text", projectLink);
-				String wsParent = project.getProjectId();
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getProjectId(), sUserName);
-				for (IWorkSpace ws : wsList) {
-					// workspace json
-						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getWorkspaceId());
-						data1.put("parent", wsParent);
-						String wsLink = null;
-						
-						 wsLink = "<a href='#' id='"
-								+ ws.getWorkspaceId()
-								+ "' name='"
-								+ ws.getWorkspaceName()
-								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getWorkspaceName() + "</a>";
-						
-						data1.put("text", wsLink);
-						dataArray.put(data1);
-				
-				}
-				dataArray.put(data);
-		}
-		JSONObject dataList = new JSONObject();
-		dataList.put("data", dataArray);
+			projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);
+			if(projectList != null){
+				for (IProject project : projectList) {
 
-		core.put("core", dataList);
+					JSONObject data = new JSONObject();
+					data.put("id", project.getProjectId());
+					data.put("parent", "#");
+					String projectLink = null;
+					projectLink = "<a href='#' id='"
+							+ project.getProjectId()
+							+ "' name='"
+							+ project.getProjectName()
+							+ "' onclick='javascript:clickproject(this.id,this.name);' > "
+							+ project.getProjectName() + "</a>";
+
+					data.put("text", projectLink);
+					String wsParent = project.getProjectId();
+					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+							project.getProjectId(), sUserName);
+					if(wsList != null){
+						for (IWorkSpace ws : wsList) {
+							// workspace json
+							JSONObject data1 = new JSONObject();
+							data1.put("id", ws.getWorkspaceId());
+							data1.put("parent", wsParent);
+							String wsLink = null;
+
+							wsLink = "<a href='#' id='"
+									+ ws.getWorkspaceId()
+									+ "' name='"
+									+ ws.getWorkspaceName()
+									+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+									+ ws.getWorkspaceName() + "</a>";
+
+							data1.put("text", wsLink);
+							dataArray.put(data1);
+
+						}
+						dataArray.put(data);
+					}
+				}
+			}
+			JSONObject dataList = new JSONObject();
+			dataList.put("data", dataArray);
+
+			core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
 		}
-		
+
 		return core.toString(1);
 	}
 
@@ -316,78 +332,91 @@ public class RetrieveJsonProjectsManager implements IRetrieveJsonProjectManager 
 		JSONArray dataArray = new JSONArray();
 		JSONObject core = new JSONObject();
 		try {
-		List<IProject> allProjectsList = new ArrayList<IProject>() ;
-		List<IProject> projectList = projectShallowMapper.getProjectList(sUserName);
-		for(IProject project : projectList){
-			allProjectsList.add(project);
-		}
-		projectList = null;
-		projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
-		for(IProject project : projectList){
-			if(!allProjectsList.contains(project)) {
-			allProjectsList.add(project);
-			}
-		}
-		projectList = null;
-		projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName); 
-		for(IProject project : projectList){
-			if(!allProjectsList.contains(project)) {
-			allProjectsList.add(project);
-			}
-		}
-		projectList = null;
-		projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
-		for(IProject project : projectList){
-			if(!allProjectsList.contains(project)) {
-			allProjectsList.add(project);
-			}
-		}
-		for (IProject project : allProjectsList) {
-			
-				JSONObject data = new JSONObject();
-				data.put("id", project.getProjectId());
-				data.put("parent", "#");
-				String projectLink = null;
-				projectLink = "<a href='#' id='"
-						+ project.getProjectId()
-						+ "' name='"
-						+ project.getProjectName()
-						+ "' onclick='javascript:clickproject(this.id,this.name);' > "
-						+ project.getProjectName() + "</a>";
-				
-				data.put("text", projectLink);
-				dataArray.put(data);
-				String wsParent = project.getProjectId();
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
-						project.getProjectId(), sUserName);
-				for (IWorkSpace ws : wsList) {
-					// workspace json
-						JSONObject data1 = new JSONObject();
-						data1.put("id", ws.getWorkspaceId());
-						data1.put("parent", wsParent);
-						String wsLink = null;
-						
-						 wsLink = "<a href='#' id='"
-								+ ws.getWorkspaceId()
-								+ "' name='"
-								+ ws.getWorkspaceName()
-								+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
-								+ ws.getWorkspaceName() + "</a>";
-						
-						data1.put("text", wsLink);
-						dataArray.put(data1);
-				
+			List<IProject> allProjectsList = new ArrayList<IProject>() ;
+			List<IProject> projectList = projectShallowMapper.getProjectList(sUserName);
+			if(projectList != null){
+				for(IProject project : projectList){
+					allProjectsList.add(project);
 				}
-		}
-		JSONObject dataList = new JSONObject();
-		dataList.put("data", dataArray);
+			}
+			projectList = null;
 
-		core.put("core", dataList);
+			projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
+			if(projectList != null){
+				for(IProject project : projectList){
+					if(!allProjectsList.contains(project)) {
+						allProjectsList.add(project);
+					}
+				}
+			}
+			projectList = null;
+			projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);
+			if(projectList != null){
+				for(IProject project : projectList){
+					if(!allProjectsList.contains(project)) {
+						allProjectsList.add(project);
+					}
+				}
+			}
+			projectList = null;
+			projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
+			if(projectList != null){
+				for(IProject project : projectList){
+					if(!allProjectsList.contains(project)) {
+						allProjectsList.add(project);
+					}
+				}
+			}
+			if(allProjectsList != null){
+				for (IProject project : allProjectsList) {
+
+					JSONObject data = new JSONObject();
+					data.put("id", project.getProjectId());
+					data.put("parent", "#");
+					String projectLink = null;
+					projectLink = "<a href='#' id='"
+							+ project.getProjectId()
+							+ "' name='"
+							+ project.getProjectName()
+							+ "' onclick='javascript:clickproject(this.id,this.name);' > "
+							+ project.getProjectName() + "</a>";
+
+					data.put("text", projectLink);
+					dataArray.put(data);
+					String wsParent = project.getProjectId();
+					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(
+							project.getProjectId(), sUserName);
+					if(wsList != null){
+						for (IWorkSpace ws : wsList) {
+							// workspace json
+							JSONObject data1 = new JSONObject();
+							data1.put("id", ws.getWorkspaceId());
+							data1.put("parent", wsParent);
+							String wsLink = null;
+
+							wsLink = "<a href='#' id='"
+									+ ws.getWorkspaceId()
+									+ "' name='"
+									+ ws.getWorkspaceName()
+									+ "' onclick='javascript:clickWorkspace(this.id,this.name);' >"
+									+ ws.getWorkspaceName() + "</a>";
+
+							data1.put("text", wsLink);
+							dataArray.put(data1);
+
+						}
+					}
+				}
+			}
+			JSONObject dataList = new JSONObject();
+			dataList.put("data", dataArray);
+
+			core.put("core", dataList);
 		}catch (QuadrigaStorageException e) {
 			logger.error("DB Error while fetching project, Workspace  details",
 					e);
 		}
-		
+
 		return core.toString(1);
 	}
 
