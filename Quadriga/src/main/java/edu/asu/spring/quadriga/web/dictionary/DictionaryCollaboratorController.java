@@ -31,6 +31,7 @@ import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -181,7 +182,7 @@ public class DictionaryCollaboratorController {
 		
 		modelAndView.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
 		
-		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
+		List<IDictionaryCollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
 		modelAndView.getModelMap().put("collaboratingUsers", collaborators);
 		
 		return modelAndView;	
@@ -232,7 +233,7 @@ public class DictionaryCollaboratorController {
 		model.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
 		
 		//mapping existing collaborators present in the dictionary
-		List<ICollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
+		List<IDictionaryCollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
 		model.getModelMap().put("collaboratingUsers", collaborators);
 		
 		//mapping collaborator roles

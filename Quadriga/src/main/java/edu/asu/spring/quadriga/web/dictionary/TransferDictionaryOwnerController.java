@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -71,7 +72,7 @@ public class TransferDictionaryOwnerController
 	{
 		ModelAndView model;
 		IDictionary dictionary;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IDictionaryCollaborator> collaboratingUser = new ArrayList<IDictionaryCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		model = new ModelAndView("auth/dictionaries/changedictionaryowner");
@@ -87,9 +88,11 @@ public class TransferDictionaryOwnerController
 		//fetch the collaborators
 		collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
 		
-		for(ICollaborator collabuser : collaboratingUser)
+		for(IDictionaryCollaborator collabuser : collaboratingUser)
 		{
-			userList.add(collabuser.getUserObj());
+			//userList.add(collabuser);
+			
+			userList.add(collabuser.getCollaborator().getUserObj());
 		}
 		
 		model.getModelMap().put("collaboratinguser", userList);
@@ -120,7 +123,7 @@ public class TransferDictionaryOwnerController
 		String collaboratorRole;
 		ModelAndView model;
 		IDictionary dictionary; 
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IDictionaryCollaborator> collaboratingUser = new ArrayList<IDictionaryCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		userName = principal.getName();
@@ -139,9 +142,9 @@ public class TransferDictionaryOwnerController
 			//fetch the collaborators
 			collaboratingUser = dictionaryCollabManager.showCollaboratingUsers(dictionaryid);
 			
-			for(ICollaborator collabuser : collaboratingUser)
+			for(IDictionaryCollaborator collabuser : collaboratingUser)
 			{
-				userList.add(collabuser.getUserObj());
+				userList.add(collabuser.getCollaborator().getUserObj());
 			}
 			
 			model.getModelMap().put("collaboratinguser", userList);

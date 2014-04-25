@@ -22,6 +22,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
@@ -118,7 +119,7 @@ public class DictionaryItemController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictionary", dictionary);
 
-		List<ICollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
+		List<IDictionaryCollaborator> existingCollaborators = dictonaryManager.showCollaboratingUsers(dictionaryid);
 		model.addAttribute("collaboratingUsers", existingCollaborators);
 
 		

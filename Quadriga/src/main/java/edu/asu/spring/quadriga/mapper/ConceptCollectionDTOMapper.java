@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
@@ -30,6 +31,9 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 	
 	@Autowired
 	private IConceptCollectionFactory conceptCollectionFactory;
+	
+	@Autowired
+	private IConceptFactory conceptFactory;
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
@@ -173,7 +177,7 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 	public IConcept getConceptCollectionItems(ConceptsDTO conceptDTO)
 	{
 		IConcept concept = null;
-		concept = conceptCollectionFactory.createConcept();
+		concept = conceptFactory.createConceptObject();
 		concept.setConceptId(conceptDTO.getItem());
 		concept.setDescription(conceptDTO.getDescription());
 		concept.setLemma(conceptDTO.getLemma());
