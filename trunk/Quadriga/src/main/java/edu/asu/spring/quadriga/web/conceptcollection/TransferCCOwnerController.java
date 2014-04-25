@@ -131,7 +131,7 @@ public class TransferCCOwnerController
 		String newOwner;
 		String collaboratorRole;
 		IConceptCollection conceptCollection;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IConceptCollectionCollaborator> collaboratingUser = new ArrayList<IConceptCollectionCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		//create a view
@@ -156,9 +156,9 @@ public class TransferCCOwnerController
 			//fetch the collaborators
 			collaboratingUser = conceptCollectionManager.showCollaboratingUsers(collectionId);
 			
-			for(ICollaborator collabuser : collaboratingUser)
+			for(IConceptCollectionCollaborator collabuser : collaboratingUser)
 			{
-				userList.add(collabuser.getUserObj());
+				userList.add(collabuser.getCollaborator().getUserObj());
 			}
 			
 			model.getModelMap().put("collaboratinguser", userList);
