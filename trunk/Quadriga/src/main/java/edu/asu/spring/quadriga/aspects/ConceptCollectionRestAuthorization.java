@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -73,28 +74,35 @@ public class ConceptCollectionRestAuthorization implements IAuthorization
 			{
 				roles = getAccessRoleList(userRoles);
 				//fetch the collaborators of the concept collection
-				List<ICollaborator> collaboratorList = conceptCollectionManager.showCollaboratingUsers(conceptCollectionId);
-				
-				for(ICollaborator collaborator : collaboratorList)
-				{
-					//check if he is the collaborator to the concept collection
-					collaboratorName = collaborator.getUserObj().getUserName();
-					
-					if(userName.equals(collaboratorName))
-					{
-						collaboratorRoles = collaborator.getCollaboratorRoles();
-						
-							for(ICollaboratorRole collabRole : collaboratorRoles)
-							{
-								collaboratorRoleId = collabRole.getRoleid();
-								if(roles.contains(collaboratorRoleId))
-								{
-									haveAccess = true;
-									return haveAccess;
+				List<IConceptCollectionCollaborator> ccCollaboratorList = conceptCollectionManager.showCollaboratingUsers(conceptCollectionId);
+				if (ccCollaboratorList != null) {
+					for (IConceptCollectionCollaborator ccCollaborator : ccCollaboratorList) {
+						// check if he is the collaborator to the concept
+						// collection
+						collaboratorName = ccCollaborator.getCollaborator()
+								.getUserObj().getUserName();
+						if (userName != null) {
+							if (userName.equals(collaboratorName)) {
+								collaboratorRoles = ccCollaborator
+										.getCollaborator()
+										.getCollaboratorRoles();
+								if (collaboratorRoles != null) {
+									for (ICollaboratorRole collabRole : collaboratorRoles) {
+										collaboratorRoleId = collabRole
+												.getRoleid();
+										if (roles != null) {
+											if (roles.contains(collaboratorRoleId)) {
+												haveAccess = true;
+												return haveAccess;
+											}
+										}
+									}
 								}
 							}
+						}
 					}
 				}
+
 			}
 		}
 		return haveAccess;
