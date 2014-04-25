@@ -18,6 +18,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -51,7 +52,7 @@ public class DeleteWSCollabController
 	public ModelAndView deleteWorkspaceCollaboratorForm(@PathVariable("workspaceid") String workspaceid,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		ModelAndView model;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
 		
 		model = new ModelAndView("auth/workbench/workspace/deletecollaborators");
 		
@@ -87,7 +88,7 @@ public class DeleteWSCollabController
 		String[] values;
 		String userName = "";
 		ModelAndView model;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
 		
 		//create a model view
 		model = new ModelAndView("auth/workbench/workspace/deletecollaborators");

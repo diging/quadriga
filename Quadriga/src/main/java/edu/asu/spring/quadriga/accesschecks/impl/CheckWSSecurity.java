@@ -11,6 +11,7 @@ import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
@@ -108,6 +109,52 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		return chkAccess;
 	}
 	
+//	/**
+//	 * This checks if the user has the specified collaborator role
+//	 * @param userName
+//	 * @param workspaceId
+//	 * @param collaboratorRole
+//	 * @return boolean - TRUE if the user role is same as supplied else FALSE
+//	 * @throws QuadrigaStorageException
+//	 * @author kiranbatna
+//	 */
+//	@Override
+//	@Transactional
+//	public boolean chkCollabWorkspaceAccess(String userName,String workspaceId,String collaboratorRole) throws QuadrigaStorageException
+//	{
+//		List<ICollaborator> collaboratorList;
+//		List<ICollaboratorRole> collaboratorRoles;
+//		boolean chkAccess;
+//		
+//		//initialize the local variable
+//		chkAccess = false;
+//		
+//		//fetch the collaborators associated with the workspace
+//		collaboratorList = workspaceManager.getWorkspaceCollaborators(workspaceId);
+//		
+//		for(ICollaborator collaborator : collaboratorList)
+//		{
+//			//check if the user is one of the collaborators
+//			if(collaborator.getUserObj().getUserName() == userName)
+//			{
+//				collaboratorRoles = collaborator.getCollaboratorRoles();
+//				
+//				//check if the collaborator is the supplied collaborator role
+//				for(ICollaboratorRole role : collaboratorRoles)
+//				{
+//					if(role.getRoleid() == collaboratorRole)
+//					{
+//						chkAccess = true;
+//						break;
+//					}
+//				}
+//				// break through the outer loop
+//				break;
+//			}
+//		}
+//		return chkAccess;
+//	}
+	
 	/**
 	 * This checks if the user has the specified collaborator role
 	 * @param userName
@@ -121,7 +168,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	@Transactional
 	public boolean chkCollabWorkspaceAccess(String userName,String workspaceId,String collaboratorRole) throws QuadrigaStorageException
 	{
-		List<ICollaborator> collaboratorList;
+		List<IWorkspaceCollaborator> collaboratorList;
 		List<ICollaboratorRole> collaboratorRoles;
 		boolean chkAccess;
 		
@@ -131,12 +178,12 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		//fetch the collaborators associated with the workspace
 		collaboratorList = workspaceManager.getWorkspaceCollaborators(workspaceId);
 		
-		for(ICollaborator collaborator : collaboratorList)
+		for(IWorkspaceCollaborator collaborator : collaboratorList)
 		{
 			//check if the user is one of the collaborators
-			if(collaborator.getUserObj().getUserName() == userName)
+			if(collaborator.getCollaborator().getUserObj().getUserName() == userName)
 			{
-				collaboratorRoles = collaborator.getCollaboratorRoles();
+				collaboratorRoles = collaborator.getCollaborator().getCollaboratorRoles();
 				
 				//check if the collaborator is the supplied collaborator role
 				for(ICollaboratorRole role : collaboratorRoles)
@@ -153,7 +200,6 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		}
 		return chkAccess;
 	}
-	
 	/**
 	 * This method is used to check if the user has access to modify workspace
 	 * @param userName

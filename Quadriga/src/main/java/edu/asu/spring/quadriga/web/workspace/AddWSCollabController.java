@@ -34,6 +34,7 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -130,7 +131,7 @@ public class AddWSCollabController
 		ModelAndView model;
 		List<IUser> nonCollaboratingUser;
 		ICollaborator collaborator;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
 		
 		model = new ModelAndView("auth/workbench/workspace/addcollaborators");
 		String userName = principal.getName();
@@ -204,7 +205,7 @@ public class AddWSCollabController
 		String collabUser;
 		StringBuilder roleIdList;
 		List<IUser> nonCollaboratingUser;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
 		
 		//create the model view
 		model = new ModelAndView("auth/workbench/workspace/addcollaborators");

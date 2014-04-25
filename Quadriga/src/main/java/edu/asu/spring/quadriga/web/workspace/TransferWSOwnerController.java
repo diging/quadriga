@@ -24,6 +24,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.implementation.User;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -84,7 +85,7 @@ public class TransferWSOwnerController
 		ModelAndView model;
 		IWorkSpace workspace;
 		String owner;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		//create a view
@@ -105,9 +106,9 @@ public class TransferWSOwnerController
 			model.getModelMap().put("workspaceid", workspace.getWorkspaceId());
 			
 			//fetch the collaborators
-			for(ICollaborator collabuser : collaboratingUser)
+			for(IWorkspaceCollaborator collabuser : collaboratingUser)
 			{
-				userList.add(collabuser.getUserObj());
+				userList.add(collabuser.getCollaborator().getUserObj());
 			}
 			
 			model.getModelMap().put("collaboratinguser", userList);
@@ -137,7 +138,7 @@ public class TransferWSOwnerController
 		String newOwner;
 		String collaboratorRole;
 		IWorkSpace workspace;
-		List<ICollaborator> collaboratingUser = new ArrayList<ICollaborator>();
+		List<IWorkspaceCollaborator> collaboratingUser = new ArrayList<IWorkspaceCollaborator>();
 		List<IUser> userList = new ArrayList<IUser>();
 		
 		//create a view
@@ -159,9 +160,9 @@ public class TransferWSOwnerController
 				model.getModelMap().put("wsname", workspace.getWorkspaceName());
 				model.getModelMap().put("wsowner", workspace.getOwner().getUserName());
 				
-				for(ICollaborator collabuser : collaboratingUser)
+				for(IWorkspaceCollaborator collabuser : collaboratingUser)
 				{
-					userList.add(collabuser.getUserObj());
+					userList.add(collabuser.getCollaborator().getUserObj());
 				}
 				
 				model.getModelMap().put("collaboratinguser", userList);

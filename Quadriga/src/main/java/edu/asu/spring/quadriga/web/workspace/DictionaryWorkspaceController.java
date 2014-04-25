@@ -20,6 +20,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceDictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -178,7 +179,7 @@ public class DictionaryWorkspaceController {
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		
-		List<IDictionary> dicitonaryList = null;
+		List<IWorkspaceDictionary> dicitonaryList = null;
 		try {
 			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
@@ -210,7 +211,7 @@ public class DictionaryWorkspaceController {
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		
-		List<IDictionary> dicitonaryList = null;
+		List<IWorkspaceDictionary> dicitonaryList = null;
 		try {
 			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
@@ -248,7 +249,7 @@ public class DictionaryWorkspaceController {
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
 			model.addAttribute("deletesuccess", 0);
-			List<IDictionary> dicitonaryList = null;
+			List<IWorkspaceDictionary> dicitonaryList = null;
 			try {
 				dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
 						workspaceId, userId);
@@ -282,7 +283,7 @@ public class DictionaryWorkspaceController {
 		}else{
 			model.addAttribute("deletesuccess", 0);
 		}
-		List<IDictionary> dicitonaryList = null;
+		List<IWorkspaceDictionary> dicitonaryList = null;
 		try {
 			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
 					workspaceId, userId);
