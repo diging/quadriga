@@ -36,8 +36,8 @@ $(document).ready(function(){
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Name:</td>
-				<td><form:input path="name" size="60" id="name" /></td>
-				<td><form:errors path="name" cssClass="error"></form:errors></td>
+				<td><form:input path="conceptCollectionName" size="60" id="conceptCollectionName" /></td>
+				<td><form:errors path="conceptCollectionName" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description:</td>

@@ -10,9 +10,9 @@
 <script>
 	$(function() {
 		$("input[type=submit]").button().click(function(event) {
-			if (!$.trim($("#name").val())) {
+			if (!$.trim($("#conceptCollectionName").val())) {
 					$.alert("Please enter a conceptcollection name","Oops!");
-					$("#name").val("");		            
+					$("#conceptCollectionName").val("");		            
 					event.preventDefault();
 					return;
 			}
@@ -38,7 +38,7 @@
 		<table>
 			<tr>
 				<td>Name:</td>
-				<td><form:input path="name" size="30" id="name"/></td>
+				<td><form:input path="conceptCollectionName" size="30" id="conceptCollectionName"/></td>
 			</tr>
 			<tr>
 				<td>Description:</td>

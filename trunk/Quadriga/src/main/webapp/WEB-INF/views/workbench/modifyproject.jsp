@@ -62,8 +62,8 @@ input {
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 170px">Name:</td>
-				<td style="width: 400px"><form:input path="name" size="60" id="name" /></td>
-				<td><form:errors path="name" class="ui-state-error-text"></form:errors></td>
+				<td style="width: 400px"><form:input path="projectName" size="60" id="projectName" /></td>
+				<td><form:errors path="projectName" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
 				<td style="vertical-align: top">Description:</td>
