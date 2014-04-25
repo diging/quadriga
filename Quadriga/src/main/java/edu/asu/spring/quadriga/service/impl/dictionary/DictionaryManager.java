@@ -20,7 +20,10 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
@@ -494,6 +497,29 @@ public class DictionaryManager implements IDictionaryManager {
 		return di;
 	}
 	
+//	/**
+//	 * this method used to return collaborators which are present in the current dictionary
+//	 * 
+//	 * @param		dictionaryid
+//	 * @return		List of collaborators
+//	 * @exception 	QuadrigaStorageException	
+//	 */
+//	@Override
+//	@Transactional
+//	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
+//		
+//		List<ICollaborator> collaborators = null;
+//		try {
+//			
+//		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
+//		
+//		} catch (QuadrigaStorageException e) {
+//			e.printStackTrace();
+//		}
+//	
+//		return collaborators;
+//	}
+//	
 	/**
 	 * this method used to return collaborators which are present in the current dictionary
 	 * 
@@ -503,18 +529,14 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
+	public List<IDictionaryCollaborator> showCollaboratingUsers(String dictionaryId) throws QuadrigaStorageException {
 		
-		List<ICollaborator> collaborators = null;
-		try {
-			
-		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
-		
-		} catch (QuadrigaStorageException e) {
-			e.printStackTrace();
+		List<IDictionaryCollaborator>  workspaceCollaboratorList =  null;
+		IDictionary dictionary =  dictDeepMapper.getDictionaryDetails(dictionaryId);
+		if(dictionary != null){
+			workspaceCollaboratorList = dictionary.getDictionaryCollaborators(); 
 		}
-	
-		return collaborators;
+		return workspaceCollaboratorList;
 	}
 	
 	/**

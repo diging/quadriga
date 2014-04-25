@@ -321,9 +321,14 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	 */
 	@Override
 	@Transactional
-	public List<ICollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
-		List<ICollaborator> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
-		return collaboratorList;
+	public List<IConceptCollectionCollaborator> showCollaboratingUsers(String collectionid) throws QuadrigaStorageException {
+		//List<ICollaborator> collaboratorList = dbConnect.showCollaboratorRequest(collectionid);
+		List<IConceptCollectionCollaborator>  ccCollaboratorList =  null;
+		IConceptCollection conceptCollection =  conceptCollectionDeepMapper.getConceptCollectionDetails(collectionid);
+		if(conceptCollection != null){
+			ccCollaboratorList = conceptCollection.getConceptCollectionCollaborators(); 
+		}
+		return ccCollaboratorList;
 	}
 
 	/**
