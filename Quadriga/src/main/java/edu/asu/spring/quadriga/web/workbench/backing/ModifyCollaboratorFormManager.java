@@ -57,7 +57,6 @@ public class ModifyCollaboratorFormManager {
 	
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		
-		//TODO: getProjectCollaborators() needs to be modified to call mapper
 		List<IProjectCollaborator> collaborators =  projCollabManager.getProjectCollaborators(projectId);
 		IUser user;
 		
@@ -138,7 +137,6 @@ public class ModifyCollaboratorFormManager {
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
 		
-		//TODO: getWorkspaceCollaborators() needs to be modified to call mapper
 		List<IWorkspaceCollaborator> collaborators =  workspaceManager.getWorkspaceCollaborators(workspaceId);
 		
 		for(IWorkspaceCollaborator wsCollaborator:collaborators)
