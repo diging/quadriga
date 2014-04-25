@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -80,6 +82,9 @@ public class DictionaryCollaboratorController {
 	@Autowired
 	IModifyCollaboratorFormFactory collaboratorFormFactory;
 	
+	private static final Logger logger = LoggerFactory
+			.getLogger(DictionaryCollaboratorController.class);
+	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) throws Exception {
 	    
@@ -94,8 +99,7 @@ public class DictionaryCollaboratorController {
 				user = userManager.getUserDetails(text);
 				setValue(user);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Issue connecting to DB",e);
 			}
 	        
 	    }
@@ -208,7 +212,7 @@ public class DictionaryCollaboratorController {
 		model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 
 		String collaboratorUser = collaborator.getUserObj().getUserName();
-		List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
+		//List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
 		
 		if(result.hasErrors())
 		{

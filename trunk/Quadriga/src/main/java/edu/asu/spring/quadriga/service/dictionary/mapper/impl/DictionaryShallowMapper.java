@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
@@ -16,6 +17,7 @@ import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryShallowMapper;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
+@Service
 public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 
 	@Autowired
