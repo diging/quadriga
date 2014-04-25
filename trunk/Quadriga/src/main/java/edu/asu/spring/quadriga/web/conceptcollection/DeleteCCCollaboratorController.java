@@ -138,7 +138,6 @@ public class DeleteCCCollaboratorController {
 			
 			for(ModifyCollaborator collaborator:collaborators)
 			{
-				System.out.println("---------collaborator name "+collaborator.getUserName());
 				user = collaborator.getUserName();
 				if(user!=null)
 				{

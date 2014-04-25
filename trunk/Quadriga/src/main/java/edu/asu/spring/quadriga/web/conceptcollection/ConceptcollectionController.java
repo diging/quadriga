@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factory.impl.conceptcollection.ConceptCollectionFactory;
@@ -51,7 +52,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class ConceptcollectionController {
 
 	@Autowired
-	IConceptCollectionManager conceptControllerManager;
+	private IConceptCollectionManager conceptControllerManager;
 	
 	private List<IConceptCollection> list;
 
@@ -205,7 +206,8 @@ public class ConceptcollectionController {
 		String jsTreeData = conceptControllerManager.getProjectsTree(userName,collection_id);
 		model.addAttribute("core", jsTreeData);
 		
-		List<ICollaborator>collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
+		//TODO: showCollaboratingUsers() should be changed with mapper
+		List<IConceptCollectionCollaborator> collaboratingUsers =  conceptControllerManager.showCollaboratingUsers(collection_id);
 		model.addAttribute("collaboratingUsers", collaboratingUsers);
 		return "auth/conceptcollections/details";
 	}
