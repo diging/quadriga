@@ -52,7 +52,7 @@ public class DictionaryProjectController {
 			String userId = user.getUsername();
 			logger.info("USer : " + user.getUsername()
 					+ " trying to add dictionary into workspace");
-			List<IProjectDictionary> dictionaryList = null;
+			List<IDictionary> dictionaryList = null;
 			try {
 				// TODO: getDictionariesList() is to be changed according to mapper
 				dictionaryList = dictonaryManager.getDictionariesList(user

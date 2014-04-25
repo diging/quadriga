@@ -64,10 +64,11 @@ public class ConceptCollectionProjectController {
 		}
 		
 		//TODO: iterator has to be changed according to the new domain class
-		Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator(); 
-		while(I.hasNext()){
-			IConceptCollection con = I.next();
-			logger.info(" "+con.getConceptCollectionName());
+		Iterator<IProjectConceptCollection> itr = conceptCollectionList.iterator(); 
+		while(itr.hasNext()){
+			//IConceptCollection con = itr.next();
+			IProjectConceptCollection con = itr.next();
+			logger.info(" "+con.getConceptCollection().getConceptCollectionName());
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
 		IProject project = projectManager.getProjectDetails(projectid);
@@ -76,6 +77,44 @@ public class ConceptCollectionProjectController {
 		return "auth/workbench/project/conceptcollections";
 	}
 	
+//	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
+//	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
+//	public String addProjectConceptCollection(
+//			@PathVariable("projectid") String projectid, Model model)
+//					throws QuadrigaAccessException
+//	
+//	{
+//		try {
+//			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+//					.getAuthentication().getPrincipal();
+//			String userId = user.getUsername();
+//
+//			List<IProjectConceptCollection> conceptCollectionList = null;
+//			//TODO: getCollectionsOwnedbyUser() needs to be changed according to mapper
+//			try {
+//				conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
+//			} catch (QuadrigaStorageException e) {
+//				throw new QuadrigaStorageException();
+//			}
+//			if (conceptCollectionList == null) {
+//				logger.info("conceptCollectionList list is empty");
+//			}
+//			//TODO: iterator needs to be changed
+//			Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator(); 
+//			while(I.hasNext()){
+//				IConceptCollection con = I.next();
+//				logger.info(" "+con.getConceptCollectionName());
+//			}
+//			model.addAttribute("conceptCollectionList", conceptCollectionList);
+//			IProject project = projectManager.getProjectDetails(projectid);
+//			model.addAttribute("project", project);
+//			model.addAttribute("projectid", projectid);
+//			model.addAttribute("userId", userId);
+//		} catch (Exception e) {
+//			logger.error(" ----",e);
+//		}
+//		return "auth/workbench/project/addconceptcollections";
+//	}
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
 	public String addProjectConceptCollection(
@@ -88,7 +127,7 @@ public class ConceptCollectionProjectController {
 					.getAuthentication().getPrincipal();
 			String userId = user.getUsername();
 
-			List<IProjectConceptCollection> conceptCollectionList = null;
+			List<IConceptCollection> conceptCollectionList = null;
 			//TODO: getCollectionsOwnedbyUser() needs to be changed according to mapper
 			try {
 				conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
@@ -99,9 +138,9 @@ public class ConceptCollectionProjectController {
 				logger.info("conceptCollectionList list is empty");
 			}
 			//TODO: iterator needs to be changed
-			Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator(); 
-			while(I.hasNext()){
-				IConceptCollection con = I.next();
+			Iterator<IConceptCollection> itr = conceptCollectionList.iterator(); 
+			while(itr.hasNext()){
+				IConceptCollection con = itr.next();
 				logger.info(" "+con.getConceptCollectionName());
 			}
 			model.addAttribute("conceptCollectionList", conceptCollectionList);
@@ -163,7 +202,7 @@ public class ConceptCollectionProjectController {
 		}else{
 			model.addAttribute("success", 0);
 		}
-		List<IProjectConceptCollection> conceptCollectionList = null;
+		List<IConceptCollection> conceptCollectionList = null;
 		try {
 			// TODO: getCollectionsOwnedbyUser() is to be changed according to mapper
 			conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);

@@ -21,6 +21,7 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -58,7 +59,9 @@ public class ConceptCollectionWorkspaceController {
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		logger.info("Concept collection list is empty buddy");
-		List<IConceptCollection> conceptCollectionList = null;
+		//List<IConceptCollection> conceptCollectionList = null;
+		List<IWorkspaceConceptCollection> conceptCollectionList = null;
+		
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
@@ -67,9 +70,9 @@ public class ConceptCollectionWorkspaceController {
 		if(conceptCollectionList == null){
 			logger.info("Concept collection list is empty buddy");
 		}
-		Iterator<IConceptCollection> I = conceptCollectionList.iterator(); 
-		while(I.hasNext()){
-			IConceptCollection con = I.next();
+		Iterator<IConceptCollection> itr = conceptCollectionList.iterator(); 
+		while(itr.hasNext()){
+			IConceptCollection con = itr.next();
 			logger.info(" "+con.getConceptCollectionName());
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);

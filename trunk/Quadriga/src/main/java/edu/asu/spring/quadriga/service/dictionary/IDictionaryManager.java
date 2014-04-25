@@ -7,6 +7,7 @@ import org.codehaus.jettison.json.JSONException;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
@@ -140,9 +141,10 @@ public interface IDictionaryManager {
 	 * present in the current dictionary
 	 * 
 	 * @param dictionaryId
-	 * @return List<ICollaborator>
+	 * @return List<IDictionaryCollaborator>
+	 * @throws QuadrigaStorageException 
 	 */
-	public abstract List<ICollaborator> showCollaboratingUsers(String dictionaryId);
+	public abstract List<IDictionaryCollaborator> showCollaboratingUsers(String dictionaryId) throws QuadrigaStorageException;
 	
 	/**
 	 * this method used to call the db manager method and return collaborators which are 
