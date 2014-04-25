@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,10 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
-import edu.asu.spring.quadriga.domain.workbench.IProjectWorkspace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.workbench.RetrieveJsonProjectsManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveJsonProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -139,8 +136,8 @@ public class RetrieveProjectController
 		ModelAndView model;
 		String userName;
 		IProject project;
-		List<IProjectWorkspace> workspaceList;
-		List<IProjectWorkspace> collaboratorWorkspaceList;
+		List<IWorkSpace> workspaceList;
+		List<IWorkSpace> collaboratorWorkspaceList;
 		
 		model = new ModelAndView("auth/workbench/project");
 		
@@ -148,13 +145,8 @@ public class RetrieveProjectController
 		project = projectManager.getProjectDetails(projectid);
 		
 		//retrieve all the workspaces associated with the project
-		
-		//TODO: please check shallowmapper used in listActiveWorkspace() method. should return list of 
-		//      IProjectWorkspace
 		workspaceList = wsManager.listActiveWorkspace(projectid,userName);
 		
-		//TODO: please check shallowmapper used in listActiveWorkspaceByCollaborator() method. 
-		//      should return list of IProjectWorkspace
 		collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
 		
 		model.getModelMap().put("project", project);
