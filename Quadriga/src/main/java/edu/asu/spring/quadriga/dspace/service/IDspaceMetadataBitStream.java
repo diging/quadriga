@@ -19,8 +19,8 @@ public interface IDspaceMetadataBitStream {
 
 	public abstract void setCheckSum(String checkSum);
 
-	public abstract IDspaceMetadataBundles getBundles();
-
-	public abstract void setBundles(IDspaceMetadataBundles bundles);
+//	public abstract IDspaceMetadataBundles getBundles();
+//
+//	public abstract void setBundles(IDspaceMetadataBundles bundles);
 
 }

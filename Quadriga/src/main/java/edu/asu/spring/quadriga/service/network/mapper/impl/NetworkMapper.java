@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
@@ -20,6 +21,7 @@ import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 
+@Service
 public class NetworkMapper implements INetworkMapper{
 	
 	@Autowired
