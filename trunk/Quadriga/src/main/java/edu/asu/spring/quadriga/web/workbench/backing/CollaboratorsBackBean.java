@@ -3,7 +3,6 @@ package edu.asu.spring.quadriga.web.workbench.backing;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 
 /**

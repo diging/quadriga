@@ -58,6 +58,7 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 		String projectId = messages.getProperty("project_internalid.name") + generateUniqueID();
 		project.setProjectId(projectId);
 		ProjectDTO projectDTO = projectDTOMapper.getProjectDTO(project,userName);
+		logger.info(" " + projectDTO.getProjectowner().getUsername());
         try
         {
         	sessionFactory.getCurrentSession().save(projectDTO);			

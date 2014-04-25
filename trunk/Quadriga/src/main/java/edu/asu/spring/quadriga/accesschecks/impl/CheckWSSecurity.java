@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
 import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -22,13 +21,13 @@ public class CheckWSSecurity implements ICheckWSSecurity
 {
 	@Autowired
 	private ICheckProjectSecurity projectSecurity;
-	
+
 	@Autowired
 	private IRetrieveWSCollabManager workspaceManager;
-	
+
 	@Autowired
 	private IDBConnectionWSAccessManager dbConnect;
-	
+
 	/**
 	 * This method checks if the user has access to create a worksapce.
 	 * @param userName
@@ -42,31 +41,31 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	public boolean chkCreateWSAccess(String userName,String projectId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
-		
+
 		//check if the user is a project owner
 		chkAccess = projectSecurity.checkProjectOwner(userName,projectId);
-		
+
 		//check if the user is a project collaborator and has a ADMIN role
 		if(!chkAccess)
 		{
 			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_COLLABORATOR_ADMIN);
 		}
-		
+
 		//check if the user is a project collaborator and has PROJECT_ADMIN role
 		if(!chkAccess)
 		{
 			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
 		}
-		
+
 		//check if the user is a project collaborator and has CONTRIBUTOR role
 		if(!chkAccess)
 		{
 			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR);
 		}
-		
+
 		return chkAccess;
 	}
-	
+
 	/**
 	 * This method checks if the user has access to Archive/Deactivate/Delete workspace
 	 * @param userName
@@ -80,35 +79,35 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	@Transactional
 	public boolean chkWorkspaceAccess(String userName,String projectId,String workspaceId) throws QuadrigaStorageException
 	{
-	    boolean chkAccess;
-	    
-	    //initialize the variable
-	    chkAccess = false;
-	    
-	    //check if the user is a project owner
-	    chkAccess = projectSecurity.checkProjectOwner(userName,projectId);
-	    
-	    //check if the user is workspace owner
-	    if(!chkAccess)
-	    {
-	    	chkAccess = dbConnect.chkWorkspaceOwner(userName, workspaceId);
-	    }
-	    
-	    //check if the user is a project collaborator having ADMIN role
-	    if(!chkAccess)
-	    {
-	    	chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
-	    }
-	    
-	    //check if user is project collaborator having PROJECT_ADMIN role
-	    if(!chkAccess)
-	    {
-	    	chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
-	    }
-	    
+		boolean chkAccess;
+
+		//initialize the variable
+		chkAccess = false;
+
+		//check if the user is a project owner
+		chkAccess = projectSecurity.checkProjectOwner(userName,projectId);
+
+		//check if the user is workspace owner
+		if(!chkAccess)
+		{
+			chkAccess = dbConnect.chkWorkspaceOwner(userName, workspaceId);
+		}
+
+		//check if the user is a project collaborator having ADMIN role
+		if(!chkAccess)
+		{
+			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
+		}
+
+		//check if user is project collaborator having PROJECT_ADMIN role
+		if(!chkAccess)
+		{
+			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
+		}
+
 		return chkAccess;
 	}
-	
+
 //	/**
 //	 * This checks if the user has the specified collaborator role
 //	 * @param userName
@@ -168,38 +167,45 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	@Transactional
 	public boolean chkCollabWorkspaceAccess(String userName,String workspaceId,String collaboratorRole) throws QuadrigaStorageException
 	{
-		List<IWorkspaceCollaborator> collaboratorList;
-		List<ICollaboratorRole> collaboratorRoles;
+		List<IWorkspaceCollaborator> workspaceCollaboratorList = null;
+		List<ICollaboratorRole> collaboratorRoles = null;
 		boolean chkAccess;
-		
+
 		//initialize the local variable
 		chkAccess = false;
-		
+
 		//fetch the collaborators associated with the workspace
-		collaboratorList = workspaceManager.getWorkspaceCollaborators(workspaceId);
-		
-		for(IWorkspaceCollaborator collaborator : collaboratorList)
-		{
-			//check if the user is one of the collaborators
-			if(collaborator.getCollaborator().getUserObj().getUserName() == userName)
+		workspaceCollaboratorList = workspaceManager.getWorkspaceCollaborators(workspaceId);
+
+		if(workspaceCollaboratorList != null){
+			for(IWorkspaceCollaborator workspaceCollaborator : workspaceCollaboratorList)
 			{
-				collaboratorRoles = collaborator.getCollaborator().getCollaboratorRoles();
-				
-				//check if the collaborator is the supplied collaborator role
-				for(ICollaboratorRole role : collaboratorRoles)
-				{
-					if(role.getRoleid() == collaboratorRole)
+				//check if the user is one of the collaborators
+				if(workspaceCollaborator.getCollaborator() != null){
+					if(workspaceCollaborator.getCollaborator().getUserObj().getUserName() == userName)
 					{
-						chkAccess = true;
+						collaboratorRoles = workspaceCollaborator.getCollaborator().getCollaboratorRoles();
+
+						if(collaboratorRoles != null){
+							//check if the collaborator is the supplied collaborator role
+							for(ICollaboratorRole role : collaboratorRoles)
+							{
+								if(role.getRoleid() == collaboratorRole)
+								{
+									chkAccess = true;
+									break;
+								}
+							}
+						}
+						// break through the outer loop
 						break;
 					}
 				}
-				// break through the outer loop
-				break;
 			}
 		}
 		return chkAccess;
 	}
+
 	/**
 	 * This method is used to check if the user has access to modify workspace
 	 * @param userName
@@ -213,60 +219,60 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	public boolean chkModifyWorkspaceAccess(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
-		
+
 		//initialize the variable
 		chkAccess = false;
-		
+
 		//check if the user is Workspace owner
 		chkAccess = dbConnect.chkWorkspaceOwner(userName, workspaceId);
-		
+
 		if(!chkAccess)
 		{
 			//check if the user has collaborator role SINGLE WORKSPACE ADMIN
 			chkAccess = this.chkCollabWorkspaceAccess(userName, workspaceId, RoleNames.ROLE_WORKSPACE_COLLABORATOR_ADMIN);
 		}
-		
+
 		return chkAccess;
 	}
-	
+
 	@Override
 	@Transactional
 	public boolean checkWorkspaceOwner(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
-		
+
 		//initialize check Access variable
 		chkAccess = false;
-		
+
 		//check if the user is project owner
 		chkAccess = dbConnect.chkWorkspaceOwner(userName,workspaceId);
-		
+
 		return chkAccess;
-		
+
 	}
-	
+
 	@Override
 	@Transactional
 	public boolean checkIsWorkspaceAssociated(String userName) throws QuadrigaStorageException
 	{
 		boolean isAssociated;
 		isAssociated = false;
-		
+
 		isAssociated = dbConnect.chkIsWorkspaceAssocaited(userName);
 		return isAssociated;
 	}
-	
+
 	@Override
 	@Transactional
 	public boolean chkIsCollaboratorWorkspaceAssociated(String userName,String role) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		boolean isAssociated;
 		isAssociated = false;
-		
+
 		isAssociated = dbConnect.chkIsCollaboratorWorkspaceAssociated(userName, role);
 		return isAssociated;
 	}
-	
+
 	/**
 	 * This method checks if the user is workspace owner and has editor role to this workspace
 	 * @param userName
@@ -279,15 +285,15 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	public boolean checkWorkspaceOwnerEditorAccess(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
-		
+
 		//initialize chkAccess variable
 		chkAccess = false;
-		
+
 		//check if the user is project owner
 		chkAccess = dbConnect.chkWorkspaceOwnerEditorRole(userName, workspaceId);
 		return chkAccess;
 	}
-	
+
 	/**
 	 * This method checks if the user is project owner and has editor roles. If this editor is inherit to workspace access
 	 * @param userName
@@ -300,24 +306,24 @@ public class CheckWSSecurity implements ICheckWSSecurity
 	public boolean checkWorkspaceProjectInheritOwnerEditorAccess(String userName,String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
-		
+
 		//initialize chkAccess variable
 		chkAccess = false;
-		
+
 		//check if the user is project owner
 		chkAccess = dbConnect.chkWorkspaceProjectInheritOwnerEditorRole(userName, workspaceId);
 		return chkAccess;
 	}
-	
+
 	@Override
 	@Transactional
 	public boolean checkIsWorkspaceExists(String workspaceId) throws QuadrigaStorageException
 	{
 		boolean chkAccess;
-		
+
 		//initialize the chkAccess variable
 		chkAccess = false;
-		
+
 		//check if the workspace exists
 		chkAccess = dbConnect.chkWorkspaceExists(workspaceId);
 		return chkAccess;
