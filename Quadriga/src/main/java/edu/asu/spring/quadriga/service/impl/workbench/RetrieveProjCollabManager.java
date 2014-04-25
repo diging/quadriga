@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workbench.IProject;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
+import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
 
 //show collaborators for a project
 //show non collaborators for a project
@@ -22,10 +24,13 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 
 	@Autowired
 	private ICollaboratorRoleManager roleMapper;
-	
+
+	@Autowired
+	private IProjectDeepMapper projectDeepMapper;
+
 	@Autowired
 	private IDBConnectionRetrieveProjCollabManager dbConnect;
-	
+
 	/**
 	 * This method retrieves the users who are not collaborators to the project.
 	 * @param projectid - project id
@@ -37,12 +42,12 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	public List<IUser> getProjectNonCollaborators(String projectid) throws QuadrigaStorageException
 	{
 		List<IUser> nonCollaborators;
-		
+
 		nonCollaborators = dbConnect.getProjectNonCollaborators(projectid);
-		
+
 		return nonCollaborators;
 	}
-	
+
 	/**
 	 * This method retrieves the collaborators associated with the project
 	 * @param projectId - project id
@@ -50,20 +55,27 @@ public class RetrieveProjCollabManager implements IRetrieveProjCollabManager
 	 * @throws QuadrigaStorageException
 	 */
 	@Override
-	@Transactional
-	public List<ICollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
+	public List<IProjectCollaborator> getProjectCollaborators(String projectId) throws QuadrigaStorageException
 	{
-		List<ICollaborator> collaboratorList;
+		List<IProjectCollaborator> projectCollaboratorList = null;
 		//retrieve the collaborators associated with project
-		collaboratorList = dbConnect.getProjectCollaborators(projectId);
+
+		IProject project =  projectDeepMapper.getProjectDetails(projectId);
+		if(project != null){
+			projectCollaboratorList = project.getProjectCollaborators();
+		}
 
 		//map the collaborators to UI XML values
-		for (ICollaborator collaborator : collaboratorList) 
-		{
-			for (ICollaboratorRole collaboratorRole : collaborator.getCollaboratorRoles()) {
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+		if(projectCollaboratorList!=null){
+			for (IProjectCollaborator projectCollaborator : projectCollaboratorList) 
+			{
+				if(projectCollaborator.getCollaborator() != null && projectCollaborator.getCollaborator().getCollaboratorRoles() != null){
+					for (ICollaboratorRole collaboratorRole : projectCollaborator.getCollaborator().getCollaboratorRoles()) {
+						roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+					}
+				}
 			}
 		}
-		return collaboratorList;
+		return projectCollaboratorList;
 	}
 }
