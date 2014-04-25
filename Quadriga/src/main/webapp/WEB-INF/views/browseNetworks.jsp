@@ -33,7 +33,7 @@
 
 
 <header>
-	<h2>project ${project.name} </h2>
+	<h2>project ${project.projectName} </h2>
 	<span class="byline">View all the Networks of the project here.</span>
 </header>
 
@@ -57,11 +57,11 @@
 					<c:forEach var="network" items="${networks}">
 						<tr>
 							<td width="25%" align="left"><img style="vertical-align: middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png" > <input name="items"
-								type="hidden" value="<c:out value="${network.name}"></c:out>" />
-								<c:out value="${network.name}"></c:out></td>
+								type="hidden" value="<c:out value="${network.networkName}"></c:out>" />
+								<c:out value="${network.networkName}"></c:out></td>
 							<td width="25%" align="center"><c:out
-									value="${network.workspace.name}"></c:out></td>
-							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/sites/networks/visualize/${network.id}'" value='Visualize'></td>
+									value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
+							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/sites/networks/visualize/${network.networkId}'" value='Visualize'></td>
 						</tr>
 					</c:forEach>
 				</tbody>

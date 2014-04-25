@@ -61,13 +61,13 @@
 							<td width="25%" align="center"><c:out
 									value="${version.versionNumber}"></c:out></td>
 							<td width="25%" align="left"><img style="vertical-align: middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/network.png" > <input name="items"
-								type="hidden" value="<c:out value="${version.name}"></c:out>" />
-								<c:out value="${version.name}"></c:out></td>
+								type="hidden" value="<c:out value="${version.networkName}"></c:out>" />
+								<c:out value="${version.networkName}"></c:out></td>
 							<td width="25%" align="center"><c:out
 									value="${version.status}"></c:out></td>
 							<td width="25%" align="center"><c:out
 									value="${version.assignedUser}"></c:out></td>
-							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${version.id}/${version.versionNumber}'" value='Visualize'></td>
+							<td width="25%" align="center"><input type=button onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/oldversionvisualize/${version.networkId}/${version.versionNumber}'" value='Visualize'></td>
 						</tr>
 					</c:forEach>
 				</tbody>

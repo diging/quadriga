@@ -60,29 +60,29 @@
 				<li><details>
 						<summary>
 							<a
-								href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}">
-								<c:out value="${network.name}"></c:out>
+								href="${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.networkId}">
+								<c:out value="${network.networkName}"></c:out>
 							</a>
 						</summary>
 						<ul>
-							<li>Project : <c:out value="${network.project.name}"></c:out></li>
-							<li>Workspace : <c:out value="${network.workspace.name}"></c:out></li>
+							<li>Project : <c:out value="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out></li>
+							<li>Workspace : <c:out value="${network.networkWorkspace.workspace.workspaceName}"></c:out></li>
 							<li>Submitted by : <c:out
 									value="${network.creator.userName}"></c:out>
 							</li>
 							<li>Status : <c:out value="${network.status}"></c:out></li>
 							<li><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/rejectnetwork/${network.id}'"
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/rejectnetwork/${network.networkId}'"
 								name='Reject' value='Reject'> <input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.id}'"
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/approvenetwork/${network.networkId}'"
 								name='Approve' value='Approve'>  <%-- <input type=button
 								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
 								value='Edit Network'> --%>
 								<input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.id}'"
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/editnetworks/${network.networkId}'"
 								value='Edit Network'>
 								<input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/versionhistory/${network.id}'"
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/versionhistory/${network.networkId}'"
 								value='View History'>
 								</li>
 						</ul>
@@ -117,19 +117,19 @@
 				<c:forEach var="network" items="${networkList}">
 					<tr>
 						<td width="15%" align="center"><input name="items"
-							type="hidden" value="<c:out value="${network.name}"></c:out>" />
-							<c:out value="${network.name}"></c:out></td>
+							type="hidden" value="<c:out value="${network.networkName}"></c:out>" />
+							<c:out value="${network.networkName}"></c:out></td>
 						<td width="15%" align="center"><c:out
-								value="${network.project.name}"></c:out></td>
+								value="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out></td>
 						<td width="15%" align="center"><c:out
-								value="${network.workspace.name}"></c:out></td>
+								value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
 						<td width="15%" align="center"><c:out
 								value="${network.status}"></c:out></td>
 						<td width="15%" align="center"><input type=button
-							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.id}'"
+							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/visualize/${network.networkId}'"
 							value='View Networks'></td>
 						<td width="15%" align="center"><input type=button
-							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignuser/${network.id}'"
+							onClick="location.href='${pageContext.servletContext.contextPath}/auth/editing/assignuser/${network.networkId}'"
 							value='Assign'></td>
 					</tr>
 				</c:forEach>

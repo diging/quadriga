@@ -64,19 +64,19 @@
 				<c:forEach var="network" items="${networkList}">
 					<tr>
 						<td width="15%" align="center"><input name="items"
-							type="hidden" value="<c:out value="${network.name}"></c:out>" />
-							<c:out value="${network.name}"></c:out></td>
+							type="hidden" value="<c:out value="${network.networkName}"></c:out>" />
+							<c:out value="${network.networkName}"></c:out></td>
 						<td width="15%" align="center"><c:out
 								value="${network.assignedUser}"></c:out></td>
 
 						<td width="15%" align="center"><c:out
-								value="${network.project.name}"></c:out></td>
+								value="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out></td>
 						<td width="15%" align="center"><c:out
-								value="${network.workspace.name}"></c:out></td>
+								value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
 						<td width="15%" align="center"><c:out
 								value="${network.status}"></c:out></td>
 						<td width="15%" align="center"><input type=button
-							onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'"
+							onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.networkId}'"
 							value='Visualize'></td>
 
 					</tr>
