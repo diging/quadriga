@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
@@ -140,6 +141,52 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		
 	}
 	
+//	/**
+//	 * This method checks if the project collaborator has access to perform operations.
+//	 * @param userName
+//	 * @param projectId
+//	 * @param collaboratorRole
+//	 * @return boolean - TRUE if he has access else FALSE
+//	 * @throws QuadrigaStorageException
+//	 * @author kiranbatna
+//	 */
+//	@Override
+//	@Transactional
+//	public boolean checkCollabProjectAccess(String userName,String projectId,String collaboratorRole) throws QuadrigaStorageException
+//	{
+//		List<ICollaborator> collaboratorList;
+//		List<ICollaboratorRole> collaboratorRoles;
+//		boolean chkAccess;
+//		
+//		//initialize the local variable
+//		chkAccess = false;
+//		
+//		//fetch the collaborators associated with the project
+//		collaboratorList = projectManager.getProjectCollaborators(projectId);
+//		
+//		//loop through each collaborator
+//		for(ICollaborator collaborator : collaboratorList)
+//		{
+//			//check if the user is one of the collaborators
+//			if(collaborator.getUserObj().getUserName() == userName)
+//			{
+//				collaboratorRoles = collaborator.getCollaboratorRoles();
+//				
+//				//check if the collaborator is Project Admin or Contributor
+//				for(ICollaboratorRole role : collaboratorRoles)
+//				{
+//					if(role.getRoleid() == collaboratorRole)
+//					{
+//						chkAccess = true;
+//						break;
+//					}
+//				}
+//				// break through the outer loop
+//				break;
+//			}
+//		}
+//		return chkAccess;
+//	}
 	/**
 	 * This method checks if the project collaborator has access to perform operations.
 	 * @param userName
@@ -153,7 +200,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	@Transactional
 	public boolean checkCollabProjectAccess(String userName,String projectId,String collaboratorRole) throws QuadrigaStorageException
 	{
-		List<ICollaborator> collaboratorList;
+		List<IProjectCollaborator> collaboratorList;
 		List<ICollaboratorRole> collaboratorRoles;
 		boolean chkAccess;
 		
@@ -164,12 +211,12 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		collaboratorList = projectManager.getProjectCollaborators(projectId);
 		
 		//loop through each collaborator
-		for(ICollaborator collaborator : collaboratorList)
+		for(IProjectCollaborator collaborator : collaboratorList)
 		{
 			//check if the user is one of the collaborators
-			if(collaborator.getUserObj().getUserName() == userName)
+			if(collaborator.getCollaborator().getUserObj().getUserName() == userName)
 			{
-				collaboratorRoles = collaborator.getCollaboratorRoles();
+				collaboratorRoles = collaborator.getCollaborator().getCollaboratorRoles();
 				
 				//check if the collaborator is Project Admin or Contributor
 				for(ICollaboratorRole role : collaboratorRoles)

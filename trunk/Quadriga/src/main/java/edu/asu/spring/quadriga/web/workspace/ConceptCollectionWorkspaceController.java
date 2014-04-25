@@ -70,10 +70,10 @@ public class ConceptCollectionWorkspaceController {
 		if(conceptCollectionList == null){
 			logger.info("Concept collection list is empty buddy");
 		}
-		Iterator<IConceptCollection> itr = conceptCollectionList.iterator(); 
+		Iterator<IWorkspaceConceptCollection> itr = conceptCollectionList.iterator(); 
 		while(itr.hasNext()){
-			IConceptCollection con = itr.next();
-			logger.info(" "+con.getConceptCollectionName());
+			IWorkspaceConceptCollection con = itr.next();
+			logger.info(" "+con.getConceptCollection().getConceptCollectionName());
 		}
 		model.addAttribute("conceptCollectionList", conceptCollectionList);
 		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
@@ -180,7 +180,7 @@ public class ConceptCollectionWorkspaceController {
 		}else{
 			model.addAttribute("success", 0);
 		}
-		List<IConceptCollection> conceptCollectionList = null;
+		List<IWorkspaceConceptCollection> conceptCollectionList = null;
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
@@ -213,7 +213,7 @@ public class ConceptCollectionWorkspaceController {
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
 		
-		List<IConceptCollection> conceptCollectionList = null;
+		List<IWorkspaceConceptCollection> conceptCollectionList = null;
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
@@ -251,7 +251,7 @@ public class ConceptCollectionWorkspaceController {
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
 			model.addAttribute("deletesuccess", 0);
-			List<IConceptCollection> conceptCollectionList = null;
+			List<IWorkspaceConceptCollection> conceptCollectionList = null;
 			try {
 				conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
@@ -282,7 +282,7 @@ public class ConceptCollectionWorkspaceController {
 		}else{
 			model.addAttribute("deletesuccess", 0);
 		}
-		List<IConceptCollection> conceptCollectionList = null;
+		List<IWorkspaceConceptCollection> conceptCollectionList = null;
 		try {
 			conceptCollectionList = workspaceCCManager.listWorkspaceCC(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
