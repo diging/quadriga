@@ -33,6 +33,7 @@ public class DspaceMetadataItemEntity implements IDspaceMetadataItemEntity {
 	private Date lastModifiedDate;
 	private IDspaceItemSubmitter submitter;
 	
+	@XmlElementRefs({@XmlElementRef(type=DspaceItemSubmitter.class)})
 	@Override
 	public IDspaceItemSubmitter getSubmitter() {
 		return submitter;
