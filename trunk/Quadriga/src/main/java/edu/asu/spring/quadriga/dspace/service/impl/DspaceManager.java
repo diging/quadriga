@@ -31,6 +31,7 @@ import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -276,7 +277,7 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	@Transactional
-	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException, QuadrigaException, QuadrigaAccessException
+	public void addBitStreamsToWorkspace(String workspaceId, String communityId, String collectionId, String itemId, String[] bitstreamIds, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		try
 		{
@@ -509,7 +510,7 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	@Transactional
-	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaException, QuadrigaAccessException, QuadrigaStorageException
+	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
 	{
 		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
 
@@ -582,6 +583,12 @@ public class DspaceManager implements IDspaceManager{
 		//Get the bitstream and load it into the cache before returning it.
 		IBitStream bitstream = proxyCommunityManager.getBitStream(fileid, restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
 		return bitstream;
+	}
+	
+	@Override
+	public IDspaceMetadataItemEntity getItemMetadata(String fileid, String sUserName, String sPassword, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException
+	{
+		return proxyCommunityManager.getItemMetadata(restTemplate, dspaceProperties, fileid, sUserName, sPassword, dspaceKeys);		
 	}
 
 }

@@ -21,7 +21,7 @@ public class DspaceMetadataBitStream implements IDspaceMetadataBitStream{
 	private String name;
 	private String size;	
 	private String checkSum;
-//	private IDspaceMetadataBundles bundles;
+	private IDspaceMetadataBundles bundles;
 
 	
 	/* (non-Javadoc)
@@ -88,16 +88,16 @@ public class DspaceMetadataBitStream implements IDspaceMetadataBitStream{
 		this.checkSum = checkSum;
 	}
 
-//	@XmlElementRefs({@XmlElementRef(type=DspaceMetadataBundles.class)})
-//	@Override
-//	public IDspaceMetadataBundles getBundles() {
-//		return bundles;
-//	}
-//
-//	@Override
-//	public void setBundles(IDspaceMetadataBundles bundles) {
-//		this.bundles = bundles;
-//	}
+	@XmlElementRefs({@XmlElementRef(type=DspaceMetadataBundles.class)})
+	@Override
+	public IDspaceMetadataBundles getBundles() {
+		return bundles;
+	}
+
+	@Override
+	public void setBundles(IDspaceMetadataBundles bundles) {
+		this.bundles = bundles;
+	}
 	
 	
 	public static class Adapter extends XmlAdapter<DspaceMetadataBitStream, IDspaceMetadataBitStream>

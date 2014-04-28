@@ -10,7 +10,7 @@ import edu.asu.spring.quadriga.dspace.service.IDspaceItemSubmitter;
  * 
  * @author Ram Kumar Kumaresan
  */
-@XmlRootElement(name="itementity")
+@XmlRootElement(name="submitter")
 public class DspaceItemSubmitter implements IDspaceItemSubmitter{
 
 	private String id;

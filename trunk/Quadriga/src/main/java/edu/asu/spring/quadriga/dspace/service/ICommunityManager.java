@@ -76,8 +76,7 @@ public interface ICommunityManager {
 	 * @param sPassword					The password of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @param communityid				The id of the community to which the collection belongs to.
 	 * @return							The collection object for the given collection id.  Will be NULL if there no matching collection id was found.
-	 * @throws NoSuchAlgorithmException 
-	 * @throws QuadrigaAccessException 
+	 * @throws QuadrigaAccessException  Thrown when the user tries to modify a resource to which he/she does not have access to.
 	 */
 	public abstract ICollection getCollection(String sCollectionId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword,String communityid) throws NoSuchAlgorithmException, QuadrigaAccessException;
 
@@ -154,8 +153,7 @@ public interface ICommunityManager {
 	 * @param sUserName					The username of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @param sPassword					The password of the authorized user. Only needed if fromCache is set to FALSE.
 	 * @return							The community object for the corresponding community id. Will be NULL if there is no matching community id was found.
-	 * @throws NoSuchAlgorithmException 
-	 * @throws QuadrigaAccessException 
+	 * @throws QuadrigaStorageException Thrown when database encountered any problem during the operation. 
 	 */
 	public abstract ICommunity getCommunity(String communityId, boolean fromCache, RestTemplate restTemplate, Properties dspaceProperties, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws NoSuchAlgorithmException, QuadrigaAccessException;
 
@@ -218,8 +216,7 @@ public interface ICommunityManager {
 	 * @param password						The dspace password of the user.
 	 * @param dspaceKeys					The Dspace Access keys used by the user.
 	 * @return								The item metadata containing id, name, creator, last modified date information.
-	 * @throws NoSuchAlgorithmException
-	 * @throws QuadrigaStorageException
+	 * @throws QuadrigaStorageException 	Thrown when database encountered any problem during the operation.
 	 */
 	public abstract IDspaceMetadataItemEntity getItemMetadata(RestTemplate restTemplate, Properties dspaceProperties, String fileid, String email,
 			String password, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException;
