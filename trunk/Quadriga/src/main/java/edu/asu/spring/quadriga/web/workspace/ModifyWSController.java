@@ -29,6 +29,7 @@ import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -188,7 +189,7 @@ public class ModifyWSController {
 		String msg="";
 		modifyWSManager.assignEditorRoleToOwner(workspaceId, userName);
 		IWorkSpace workspace;
-		List<ICollaborator> collaboratorList;
+		List<IWorkspaceCollaborator> collaboratorList;
 
 		userName = principal.getName();
 		workspace = wsManager.getWorkspaceDetails(workspaceId,userName);
@@ -203,7 +204,7 @@ public class ModifyWSController {
 		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
 
 
-		workspace.setCollaborators(collaboratorList);
+		workspace.setWorkspaceCollaborators(collaboratorList);
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
@@ -262,7 +263,7 @@ public class ModifyWSController {
 		String userName =user.getUserName();
 		String msg=modifyWSManager.deleteEditorRoleToOwner(workspaceId, userName);
 		IWorkSpace workspace;
-		List<ICollaborator> collaboratorList;
+		List<IWorkspaceCollaborator> collaboratorList;
 
 		userName = principal.getName();
 		workspace = wsManager.getWorkspaceDetails(workspaceId,userName);
@@ -277,7 +278,7 @@ public class ModifyWSController {
 		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
 
 
-		workspace.setCollaborators(collaboratorList);
+		workspace.setWorkspaceCollaborators(collaboratorList);
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
