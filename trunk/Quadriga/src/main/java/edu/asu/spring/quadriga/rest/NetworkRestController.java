@@ -34,6 +34,7 @@ import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkAnnotation;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -303,8 +304,8 @@ public class NetworkRestController {
 			return errorMsg;
 		}
 
-		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
-		networkList = networkManager.editNetworkStatusCode(networkList);
+		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceId);
+		workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -312,7 +313,7 @@ public class NetworkRestController {
 			template = engine
 					.getTemplate("velocitytemplates/networks.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("networkList", networkList);
+			context.put("workspaceNetworkList", workspaceNetworkList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			response.setStatus(200);
@@ -359,8 +360,8 @@ public class NetworkRestController {
 			return errorMsg;
 		}
 
-		List<INetwork> networkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
-		networkList = networkManager.editNetworkStatusCode(networkList);
+		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceRejectedNetworkList(workspaceId);
+		workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -368,7 +369,7 @@ public class NetworkRestController {
 			template = engine
 					.getTemplate("velocitytemplates/rejectednetworks.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("networkList", networkList);
+			context.put("workspaceNetworkList", workspaceNetworkList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			response.setStatus(200);
@@ -414,8 +415,8 @@ public class NetworkRestController {
 			return errorMsg;
 		}
 
-		List<INetwork> networkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
-		networkList = networkManager.editNetworkStatusCode(networkList);
+		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceApprovedNetworkList(workspaceId);
+		workspaceNetworkList = networkManager.editWorkspaceNetworkStatusCode(workspaceNetworkList);
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -423,7 +424,7 @@ public class NetworkRestController {
 			template = engine
 					.getTemplate("velocitytemplates/approvednetworks.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());
-			context.put("networkList", networkList);
+			context.put("workspaceNetworkList", workspaceNetworkList);
 			StringWriter writer = new StringWriter();
 			template.merge(context, writer);
 			response.setStatus(200);

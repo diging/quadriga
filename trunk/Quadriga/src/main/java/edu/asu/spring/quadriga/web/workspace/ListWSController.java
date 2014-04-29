@@ -40,9 +40,9 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
-import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -308,8 +308,8 @@ public class ListWSController
 
 
 		workspace.setWorkspaceCollaborators(workspaceCollaboratorList);
-		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceid);
-		model.addAttribute("networkList", networkList);
+		List<IWorkspaceNetwork> workspaceNetworkList = wsManager.getWorkspaceNetworkList(workspaceid);
+		model.addAttribute("networkList", workspaceNetworkList);
 		model.addAttribute("workspacedetails", workspace);
 
 		if(workspaceSecurity.checkWorkspaceOwner(userName, workspaceid)){

@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.network.domain.INetworkJSon;
@@ -451,7 +452,9 @@ public interface INetworkManager {
 	 */
 	public abstract int getNetworkStatusCode(String status);
 
-	List<INetwork> editNetworkStatusCode(List<INetwork> networkList);
+	public List<IWorkspaceNetwork> editWorkspaceNetworkStatusCode(List<IWorkspaceNetwork> workspaceNetworkList);
+
+	public List<INetwork> editNetworkStatusCode(List<INetwork> networkList);
 
 	String getSourceReferenceURL(String networkId, int versionNo)
 			throws QuadrigaStorageException, JAXBException,
