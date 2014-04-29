@@ -45,7 +45,7 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.aspects.annotations.RestAccessPolicies;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
-import edu.asu.spring.quadriga.domain.dictionary.IItem;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
@@ -233,7 +233,7 @@ public class DictionaryRestController {
 
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		List<IItem> dictionaryItemsList = null;
+		List<IDictionaryItems> dictionaryItemsList = null;
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 
 		Template template = null;
@@ -262,12 +262,10 @@ public class DictionaryRestController {
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (ParseErrorException e) {
-			// TODO Auto-generated catch block
 
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		} catch (MethodInvocationException e) {
-			// TODO Auto-generated catch block
 			logger.error("Exception:", e);
 			throw new RestException(404);
 		}
