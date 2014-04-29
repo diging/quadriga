@@ -12,6 +12,7 @@ import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
 import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -159,7 +160,7 @@ public interface IDspaceManager{
 	 * @throws QuadrigaStorageException		Thrown when any unexpected error occurs in the database.
 	 * @throws QuadrigaAccessException		Thrown when a user tries to modify a workspace to which he/she does not have access. Also thrown when a user tries to access this method with made-up request paramaters.
 	 */
-	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, List<IBitStream> workspaceBitStreams,
+	public abstract void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, List<IWorkspaceBitStream> workspaceBitStreams,
 			String username) throws QuadrigaStorageException,
 			QuadrigaAccessException;
 
@@ -232,7 +233,7 @@ public interface IDspaceManager{
 	 * 							If the cache is yet to be populated then the bitstream names will be 'Checking BitStream Access...'
 	 * @throws QuadrigaStorageException 	Thrown when database encountered any problem during the operation.
 	 */
-	public abstract List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String username, String password) throws QuadrigaStorageException;
+	public abstract List<IWorkspaceBitStream> checkDspaceBitstreamAccess(List<IWorkspaceBitStream> bitstreams, IDspaceKeys dspaceKeys, String username, String password) throws QuadrigaStorageException;
 
 	/**
 	 * Delete the dspace keys stored in dspace for this user.

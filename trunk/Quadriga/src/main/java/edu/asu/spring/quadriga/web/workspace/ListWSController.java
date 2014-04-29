@@ -27,7 +27,6 @@ import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
@@ -35,6 +34,8 @@ import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
@@ -264,7 +265,7 @@ public class ListWSController
 	{
 		String userName;
 		IWorkSpace workspace;
-		List<ICollaborator> collaboratorList;
+		List<IWorkspaceCollaborator> workspaceCollaboratorList;
 
 		userName = principal.getName();
 		workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
@@ -277,25 +278,25 @@ public class ListWSController
 		}
 
 		//Check if the dspace authentication is correct.
-		List<IBitStream> workspaceBitStreams = null;
+		List<IWorkspaceBitStream> workspaceBitStreams = null;
 		if(dspaceManager.validateDspaceCredentials(this.dspaceUsername, this.dspacePassword, this.dspaceKeys))
 		{
-			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
+			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
 		}
 		else
 		{	
 			//Set a flag to indicate the error in dspace login credentials.
 			model.addAttribute("wrongDspaceLogin", "true");
-			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), null, null, null);
+			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), null, null, null);
 		}
-		workspace.setBitstreams(workspaceBitStreams);
+		workspace.setWorkspaceBitStreams(workspaceBitStreams);
 		
 
 		//retrieve the collaborators associated with the workspace
-		collaboratorList = getWsCollabManager().getWorkspaceCollaborators(workspaceid);
+		workspaceCollaboratorList = workspace.getWorkspaceCollaborators();
 
 
-		workspace.setCollaborators(collaboratorList);
+		workspace.setWorkspaceCollaborators(workspaceCollaboratorList);
 		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceid);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
@@ -545,8 +546,8 @@ public class ListWSController
 		{
 			if(collection.getLoadStatus() == true)
 			{
-				if(collection.getNetworkName() != null)
-					return collection.getNetworkName();
+				if(collection.getId() != null)
+					return collection.getId();
 				else
 					return getDspaceMessages().getProperty("dspace.restricted_collection");
 			}
@@ -564,7 +565,7 @@ public class ListWSController
 		}
 		if(bitstream != null)
 		{
-			if(bitstream.getNetworkName() != null)
+			if(bitstream.getItemName() != null)
 			{
 				return bitstream.getItemName();
 			}
@@ -583,8 +584,8 @@ public class ListWSController
 		}
 		if(bitstream != null)
 		{
-			if(bitstream.getNetworkName() != null)
-				return bitstream.getNetworkName();
+			if(bitstream.getItemName() != null)
+				return bitstream.getItemName();
 		}
 		return getDspaceMessages().getProperty("dspace.loading");
 	}
@@ -608,8 +609,8 @@ public class ListWSController
 		IBitStream bitstream = dspaceManager.getBitStream(collectionId, itemId, bitstreamId);
 		if(bitstream != null)
 		{
-			if(bitstream.getNetworkName() != null)
-				return bitstream.getNetworkName();
+			if(bitstream.getItemName() != null)
+				return bitstream.getItemName();
 		}
 		return getDspaceMessages().getProperty("dspace.loading");		
 	}
@@ -657,7 +658,7 @@ public class ListWSController
 		IWorkSpace workspace = getWsManager().getWorkspaceDetails(workspaceId,principal.getName());
 		//Check bitstream access in dspace. 
 		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
-		List<IBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
+		List<IWorkspaceBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.getDspaceKeys(), this.getDspaceUsername(), this.getDspacePassword());
 
 		dspaceManager.deleteBitstreamFromWorkspace(workspaceId, bitstreamids, workspaceBitStreams, principal.getName());
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;

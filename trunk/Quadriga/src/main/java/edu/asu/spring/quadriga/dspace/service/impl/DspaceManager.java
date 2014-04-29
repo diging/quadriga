@@ -28,6 +28,7 @@ import edu.asu.spring.quadriga.domain.dspace.ICollection;
 import edu.asu.spring.quadriga.domain.dspace.ICommunity;
 import edu.asu.spring.quadriga.domain.dspace.IItem;
 import edu.asu.spring.quadriga.domain.factories.IBitStreamFactory;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.dspace.service.ICommunityManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
@@ -351,7 +352,7 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	@Transactional
-	public void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, List<IBitStream> workspaceBitStreams, String username) throws QuadrigaStorageException, QuadrigaAccessException
+	public void deleteBitstreamFromWorkspace(String workspaceid, String[] bitstreamids, List<IWorkspaceBitStream> workspaceBitStreams, String username) throws QuadrigaStorageException, QuadrigaAccessException
 	{
 		try
 		{	
@@ -364,12 +365,12 @@ public class DspaceManager implements IDspaceManager{
 
 			for(String bitstreamid: bitstreamids)
 			{
-				for(IBitStream workspaceBitStream: workspaceBitStreams)
+				for(IWorkspaceBitStream workspaceBitStream: workspaceBitStreams)
 				{
-					if(workspaceBitStream.getId()!=null)
-						if(workspaceBitStream.getId().equals(bitstreamid))
+					if(workspaceBitStream.getBitStream().getId()!=null)
+						if(workspaceBitStream.getBitStream().getId().equals(bitstreamid))
 						{
-							if(!(workspaceBitStream.getName().equals(getDspaceMessages().getProperty("dspace.restricted_bitstream")) && workspaceBitStream.getName().equals(getDspaceMessages().getProperty("dspace.access_check_bitstream"))))
+							if(!(workspaceBitStream.getBitStream().getName().equals(getDspaceMessages().getProperty("dspace.restricted_bitstream")) && workspaceBitStream.getBitStream().getName().equals(getDspaceMessages().getProperty("dspace.access_check_bitstream"))))
 							{
 								authorizedBitStreamsForDelete.add(bitstreamid);
 								break;
@@ -510,14 +511,14 @@ public class DspaceManager implements IDspaceManager{
 	 */
 	@Override
 	@Transactional
-	public List<IBitStream> checkDspaceBitstreamAccess(List<IBitStream> bitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
+	public List<IWorkspaceBitStream> checkDspaceBitstreamAccess(List<IWorkspaceBitStream> workspaceBitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
 	{
-		List<IBitStream> checkedBitStreams = new ArrayList<IBitStream>();
+		List<IWorkspaceBitStream> checkedBitStreams = new ArrayList<IWorkspaceBitStream>();
 
-				for(IBitStream bitstream: bitstreams)
+				for(IWorkspaceBitStream workspaceBitstream: workspaceBitstreams)
 				{
 					//Check if the bitstream was already loaded.
-					IBitStream bitstreamFromDspace = proxyCommunityManager.getBitStream(bitstream.getId(), restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
+					IBitStream bitstreamFromDspace = proxyCommunityManager.getBitStream(workspaceBitstream.getBitStream().getId(), restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
 					if(bitstreamFromDspace != null)
 					{
 						if(bitstreamFromDspace.getName() == null)
@@ -534,11 +535,11 @@ public class DspaceManager implements IDspaceManager{
 								bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.restricted_bitstream"));
 								bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.restricted_item"));
 							}
-							checkedBitStreams.add(bitstreamFromDspace);
+							checkedBitStreams.add(workspaceBitstream);
 						}
 						else
 						{
-							checkedBitStreams.add(bitstreamFromDspace);
+							checkedBitStreams.add(workspaceBitstream);
 						}						
 					}
 				} //End of for each loop for bitstream

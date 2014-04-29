@@ -248,7 +248,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 
 		NodeObject nodeObject = nodeObjectWithStatement.getNodeObject();
 		List<IStatementObject> statementIdList = nodeObjectWithStatement.getStatementObjectList();
-
+		
 		String predicateNameId = nodeObject.getPredicateId();
 		String subjectNodeId=nodeObject.getSubjectId();
 		String objectNodeId = nodeObject.getObjectId();
@@ -414,6 +414,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 		// Adding Object into node list
 		if(!d3NodeIdMap.containsKey(objectNodeId)){
 			ID3Node d3NodeObject = d3NodeFactory.createD3NodeObject();
+			d3NodeObject.setStatementIdList(statementIDList);
 			//List<String> stmtList = d3NodeObject.getStatementIdList();
 			//stmtList.add(stmtId);
 			//d3NodeObject.setStatementIdList(stmtList);
@@ -451,6 +452,7 @@ public class D3NetworkManager implements ID3NetworkManager {
 		// Adding Subject into node list
 		if(!d3NodeIdMap.containsKey(subjectNodeId)){
 			ID3Node d3NodeSubject = d3NodeFactory.createD3NodeObject();
+			d3NodeSubject.setStatementIdList(statementIDList);
 			//List<String> stmtList = d3NodeSubject.getStatementIdList();
 			//stmtList.add(stmtId);
 			//d3NodeSubject.setStatementIdList(stmtList);
