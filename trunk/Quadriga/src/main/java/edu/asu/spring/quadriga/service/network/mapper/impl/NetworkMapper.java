@@ -64,6 +64,11 @@ public class NetworkMapper implements INetworkMapper{
 			network.setUpdatedBy(networksDTO.getUpdatedby());
 			network.setUpdatedDate(networksDTO.getUpdateddate());
 			
+			List<Integer> version = dbconnect.getLatestVersionOfNetwork(networkId);
+			if(version!=null && !version.isEmpty()){
+				network.setVersionNumber(version.get(0));
+			}
+			
 			List<NetworkStatementsDTO> networkStatementsDTOList = networksDTO.getNetworkStamentesDTOList();
 			List<INetworkNodeInfo> networkList = null;
 			if(networkStatementsDTOList != null)

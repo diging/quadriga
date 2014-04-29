@@ -1,7 +1,11 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
+import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -37,6 +44,9 @@ public class ListWSManager implements IListWSManager
 	
 	@Autowired
 	private IWorkspaceDeepMapper workspaceDeepMapper;
+	
+	@Autowired
+	private IDspaceManager dspaceManager;
 	
 	/**
 	 * This will list all the workspaces associated
@@ -232,6 +242,27 @@ public class ListWSManager implements IListWSManager
 			logger.error("",e);
 		}
 		return networkList;
+	}
+	
+	@Override
+	public String getItemMetadataAsJson(String fileid, String dspaceUsername, String dspacePassword, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException, JSONException{
+		
+		IDspaceMetadataItemEntity metaData = dspaceManager.getItemMetadata(fileid, dspaceUsername, dspacePassword, dspaceKeys);
+		
+		String itemData = "";
+		JSONArray ja = new JSONArray();
+		JSONObject j = new JSONObject();
+		
+		j.put("filename", metaData.getName());
+		j.put("modifieddate", metaData.getLastModifiedDate());
+		j.put("submitter", metaData.getSubmitter().getFullname());
+		
+		ja.put(metaData);
+		
+		itemData = ja.toString();
+		
+		return itemData;
+		
 	}
 
 }

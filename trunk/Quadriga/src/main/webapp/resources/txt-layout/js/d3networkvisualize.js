@@ -487,6 +487,52 @@ function d3init(graph, networkId, path,type) {
 		//displayAllAnnotationsNew();
 	}
 
+	function displayItemData(){
+		console.log("came here");
+		$.ajax({
+			url : path+"auth/editing/getitemmetadata/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				console.log(data);
+				if (data.length > 0) {
+					alert(data.length);
+					$('#metadataTable')
+							.dataTable()
+							.fnClearTable();
+					$('#metadataTable')
+							.dataTable().fnAddData(data);
+				} else {
+					$('#metadataTable')
+							.dataTable()
+							.fnClearTable();
+				}
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+	}
+	
+	function defineMetadataTable(){
+		$('#metadataTable')
+		.dataTable(
+				{
+					"bJQueryUI" : true,
+					"sPaginationType" : "full_numbers",
+					"bAutoWidth" : false,
+					"aoColumns" : [ {
+						"sTitle" : "FileName",
+						"mDataProp" :"filename",
+					},{
+						"sTitle" : "Author",
+						"mDataProp" :"submitter",
+					}, {
+						"sTitle" : "Last Modified Date",
+						"mDataProp" :"modifieddate",
+					}],
+				});
+	}
 	
 
 	function rightClick(d){
