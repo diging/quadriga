@@ -15,6 +15,7 @@ import edu.asu.spring.quadriga.db.dictionary.IDBConnectionRetrieveDictionaryMana
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
@@ -75,19 +76,32 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 		return dictionaryDTO;
 	}
 	
-	@Override
-	public List<DictionaryItemsDTO> getDictionaryItemsDetailsDTOs(String dictionaryid,String ownerName)
-	{
-		Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.dictionaryid =:dictionaryid ORDER BY dictItems.term");
-		query.setParameter("ownerName", ownerName);
-		query.setParameter("dictionaryid", dictionaryid);
-		
-		List<DictionaryItemsDTO> dictItemsDTOList = query.list();
-		
-		return dictItemsDTOList;
-	}
 	
+	@Override
+	public DictionaryDTO getDictionaryDTO(String dictionaryId, String userName) throws QuadrigaStorageException 
+	{
+		DictionaryDTO dictionaryDTO = null;
+		try
+		{
+			
+			Query query = sessionFactory.getCurrentSession().createQuery("SELECT d FROM DictionaryDTO d WHERE d.dictionaryid = :dictionaryid and d.dictionaryowner.username =:username "); 
+			query.setParameter("username", userName);
+			query.setParameter("dictionaryid", dictionaryId);
+			List<DictionaryDTO> dictionaryDTOList = query.list();
+			
+			if(dictionaryDTOList != null && dictionaryDTOList.size() > 0){
+				dictionaryDTO = dictionaryDTOList.get(0);
+			}
+		} 
+		catch (HibernateException e) 
+		{
+			logger.error("getDictionaryDetails method :",e);
+			throw new QuadrigaStorageException();
+		}
+		return dictionaryDTO;
+	}
 
+	
 	
 	
 }

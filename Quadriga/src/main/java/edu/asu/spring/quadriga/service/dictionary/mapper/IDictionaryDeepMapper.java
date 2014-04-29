@@ -8,4 +8,7 @@ public interface IDictionaryDeepMapper {
 	public abstract IDictionary getDictionaryDetails(String dictionaryId)
 			throws QuadrigaStorageException;
 
+	IDictionary getDictionaryDetails(String dictionaryId, String userName)
+			throws QuadrigaStorageException;
+
 }

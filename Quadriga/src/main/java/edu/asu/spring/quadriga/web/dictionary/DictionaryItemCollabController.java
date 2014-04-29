@@ -22,7 +22,6 @@ import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -91,7 +90,6 @@ public class DictionaryItemCollabController {
 			throws QuadrigaStorageException, QuadrigaAccessException{
 		IUser user = usermanager.getUserDetails(principal.getName());
 		
-		//TODO: getDictionaryItemsDetailsCollab() to return list of IDictionaryItems
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItemsDetailsCollab(dictionaryid);
 		if (dictionaryItemList == null) {
 			logger.info("Dictionary ITem list is null");
@@ -139,7 +137,6 @@ public class DictionaryItemCollabController {
 			model.addAttribute("delsuccess", 0);
 			//			model.addAttribute("delerrormsg", "Items were not selected");
 			
-			//TODO: getDictionaryItemsDetailsCollab() should return IDictionaryItems 
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
@@ -187,7 +184,6 @@ public class DictionaryItemCollabController {
 		}
 		logger.info("Item Returned ");
 		
-		//TODO: getDictionaryItemsDetailsCollab() should return IDictionaryItems 
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager
 				.getDictionaryItemsDetailsCollab(dictionaryId);
 		String dictionaryName = dictonaryManager
@@ -228,7 +224,6 @@ public class DictionaryItemCollabController {
 		if(values == null){
 			model.addAttribute("updatesuccess", 0);
 			
-			//TODO: getDictionaryItemsDetailsCollab() should return IDictionaryItems 
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionaryItemsDetailsCollab(dictionaryId);
 			String dictionaryName = dictonaryManager
@@ -434,7 +429,6 @@ public class DictionaryItemCollabController {
 			model.addAttribute("status", 1);
 			model.addAttribute("dictionaryEntryList", dictionaryEntryList);
 
-			//TODO: change getDictionariesItems() to return IDictionaryItems
 			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryid,user.getUserName());
 			String dictionaryName = dictonaryManager
