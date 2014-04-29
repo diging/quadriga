@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
@@ -98,7 +99,8 @@ public class DictionaryItemSearchAddController {
 		}else{
 			model.addAttribute("additemsuccess", 2);
 			
-			List<IItem> dictionaryItemList = dictonaryManager
+			//TODO: getDictionaryItems() should return IDictionaryItems
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -122,7 +124,7 @@ public class DictionaryItemSearchAddController {
 				model.addAttribute("errormsg", msg);
 			}
 		}
-		List<IItem> dictionaryItemList = dictonaryManager
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);

@@ -35,6 +35,7 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -64,6 +65,9 @@ public class DictionaryCollaboratorController {
 	
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
+	IDictionaryCollaboratorFactory dictCollaboratorFactory;
 	
 	@Autowired
 	IUserFactory userFactory;
@@ -145,9 +149,9 @@ public class DictionaryCollaboratorController {
 		modelAndView.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 		modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
 		
-		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
-		collaborator.setUserObj(userFactory.createUserObject());
-		modelAndView.getModelMap().put("collaborator", collaborator); 
+		IDictionaryCollaborator dictCollaborator =  dictCollaboratorFactory.createDictionaryCollaboratorObject();
+		dictCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
+		modelAndView.getModelMap().put("dictCollaborator", dictCollaborator); 
 
 		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
 		//remove the restricted user

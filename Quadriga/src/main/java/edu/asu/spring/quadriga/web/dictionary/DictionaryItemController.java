@@ -23,6 +23,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
@@ -113,7 +114,8 @@ public class DictionaryItemController {
 		
 		String userName = principal.getName();
 
-		List<IItem> dictionaryItemList = dictonaryManager
+		//TODO: getDictionariesItems() should return IDictionaryItems
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryid,userName);
 
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
@@ -158,7 +160,8 @@ public class DictionaryItemController {
 		if(values == null){
 			model.addAttribute("delsuccess", 0);
 			//			model.addAttribute("delerrormsg", "Items were not selected");
-			List<IItem> dictionaryItemList = dictonaryManager
+			
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -194,7 +197,7 @@ public class DictionaryItemController {
 			}
 		}
 		logger.info("Item Returned ");
-		List<IItem> dictionaryItemList = dictonaryManager
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);
@@ -225,7 +228,7 @@ public class DictionaryItemController {
 		if(values == null){
 			model.addAttribute("updatesuccess", 0);
 			//			model.addAttribute("updateerrormsg", "Items were not selected");
-			List<IItem> dictionaryItemList = dictonaryManager
+			List<IDictionaryItems> dictionaryItemList = dictonaryManager
 					.getDictionariesItems(dictionaryId,user.getUserName());
 			String dictionaryName = dictonaryManager
 					.getDictionaryName(dictionaryId);
@@ -275,7 +278,7 @@ public class DictionaryItemController {
 			}
 		}
 		logger.debug("Item Returned ");
-		List<IItem> dictionaryItemList = dictonaryManager
+		List<IDictionaryItems> dictionaryItemList = dictonaryManager
 				.getDictionariesItems(dictionaryId,user.getUserName());
 		String dictionaryName = dictonaryManager
 				.getDictionaryName(dictionaryId);

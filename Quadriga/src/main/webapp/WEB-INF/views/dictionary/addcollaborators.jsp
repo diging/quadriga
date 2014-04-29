@@ -57,7 +57,7 @@ function onSubmit(){
 }
 </script>
 
-<form:form method="POST" name="myForm" commandName="collaborator"
+<form:form method="POST" name="myForm" commandName="dictCollaborator"
  action="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionaryid}/addCollaborators">
 <h2>Associate collaborators to dictionary:</h2>
 <h3>Dictionary: ${dictionaryname}</h3>
