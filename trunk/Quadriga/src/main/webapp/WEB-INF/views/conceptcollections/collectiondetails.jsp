@@ -143,7 +143,7 @@ function addCCtoWorkspace(id,name){
 <tr>
 <td style="width:90%">
 <div>
-    <h2>Concept Collection: ${concept.name}</h2>
+    <h2>Concept Collection: ${concept.conceptCollectionName}</h2>
     <div>${concept.description}</div>
     <br>
     <div class="user">Owned by: ${concept.owner.name}</div>
@@ -153,17 +153,17 @@ function addCCtoWorkspace(id,name){
     <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections'"
 		value='Done'>
-	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.id}'"
+	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${concept.conceptCollectionId}'"
 	   value = "Edit">
-	   <input type="hidden" id="hidden" value="${concept.id}" />
+	   <input type="hidden" id="hidden" value="${concept.conceptCollectionId}" />
 	</div>
 	<hr>
 	<c:choose >
-	<c:when test="${not empty concept.items}">
+	<c:when test="${not empty concept.conceptCollectionConcepts}">
 		<span class="byline">These are all the concepts in this collection.</span>
 <form method="post">
 	<input type="button"
-		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.id}/searchitems'"
+		onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
 		value='Add Items'>
 	<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/deleteitems'" value='Delete Items'>
 	<input type="submit" onClick="this.form.action='${pageContext.servletContext.contextPath}/auth/conceptcollections/updateitems'" value="Update Items">
@@ -179,17 +179,17 @@ function addCCtoWorkspace(id,name){
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="conceptItem" items="${concept.items}">
+			<c:forEach var="conceptItem" items="${concept.conceptCollectionConcepts}">
 				<tr>
-					<td><input type="checkbox" class="selected" name="selected" value="${conceptItem.id}"/></td>
+					<td><input type="checkbox" class="selected" name="selected" value="${conceptItem.concept.uri}"/></td>
 					<td align="justify"><font size="2"><c:out
-								value="${conceptItem.lemma}"></c:out></font></td>
+								value="${conceptItem.concept.name}"></c:out></font></td>
 					<td width="25%" align="justify"><font size="2"><c:out
-								value="${conceptItem.id}"></c:out></font></td>
+								value="${conceptItem.concept.uri}"></c:out></font></td>
 					<td class="center" align="justify"><font size="2"><c:out
-								value="${conceptItem.pos}"></c:out></font></td>
+								value="${conceptItem.concept.pos}"></c:out></font></td>
 					<td width="30%" align="justify"><font size="2"><c:out
-								value="${conceptItem.description}"></c:out></font></td>
+								value="${conceptItem.concept.description}"></c:out></font></td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -200,7 +200,7 @@ function addCCtoWorkspace(id,name){
 			You don't have any items. Click on button to add items.
 			<br />
 			<input type=button
-				onClick="location.href='${pageContext.servletContext.contextPath}//auth/conceptcollections/${concept.id}/searchitems'"
+				onClick="location.href='${pageContext.servletContext.contextPath}//auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
 				value='Add Items' />
 	</c:otherwise>
 	</c:choose>
