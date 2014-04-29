@@ -8,7 +8,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
-import edu.asu.spring.quadriga.domain.dictionary.IItem;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -72,7 +72,7 @@ public interface IDictionaryManager {
 	 * @return
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract List<IItem> getDictionariesItems(
+	public abstract List<IDictionaryItems> getDictionariesItems(
 			String dictionaryid,String ownerName) throws QuadrigaStorageException;
 
 	/**
@@ -204,7 +204,7 @@ public interface IDictionaryManager {
 	public abstract List<String> getDictionaryCollabPerm(String userId, String dicitonaryId)
 			throws QuadrigaStorageException;
 
-	public abstract List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid)
+	public abstract List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid)
 			throws QuadrigaStorageException;
 
 	public abstract void deleteDictionaryItemsCollab(String dictionaryId, String itemid)

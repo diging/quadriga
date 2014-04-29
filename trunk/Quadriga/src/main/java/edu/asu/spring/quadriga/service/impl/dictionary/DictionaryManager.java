@@ -20,17 +20,14 @@ import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectDictionary;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWorkspaceDictionary;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
-import edu.asu.spring.quadriga.domain.dictionary.IItem;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
-import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
@@ -301,13 +298,14 @@ public class DictionaryManager implements IDictionaryManager {
 	 */
 	@Override
 	@Transactional
-	public List<IItem> getDictionariesItems(String dictionaryid,
+	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
 			String ownerName) throws QuadrigaStorageException {
 
-		List<IItem> dictionaryItemList = null;
+		IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryid, ownerName);
+		
+		List<IDictionaryItems> dictionaryItemList = null;
 		try {
-			dictionaryItemList = dbConnect.getDictionaryItemsDetails(
-					dictionaryid, ownerName);
+			dictionaryItemList = dictionary.getDictionaryItems();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -317,12 +315,14 @@ public class DictionaryManager implements IDictionaryManager {
 	
 	@Override
 	@Transactional
-	public List<IItem> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
+	public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
 
-		List<IItem> dictionaryItemList = null;
+		
+		IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryid);
+		
+		List<IDictionaryItems> dictionaryItemList = null;
 		try {
-			dictionaryItemList = dbConnect.getDictionaryItemsDetailsCollab(
-					dictionaryid);
+			dictionaryItemList = dictionary.getDictionaryItems();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
