@@ -25,10 +25,10 @@ import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
-import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -207,7 +207,7 @@ public class ModifyWSController {
 
 
 		workspace.setWorkspaceCollaborators(collaboratorList);
-		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
+		List<IWorkspaceNetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
 
@@ -281,7 +281,7 @@ public class ModifyWSController {
 
 
 		workspace.setWorkspaceCollaborators(collaboratorList);
-		List<INetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
+		List<IWorkspaceNetwork> networkList = wsManager.getWorkspaceNetworkList(workspaceId);
 		model.addAttribute("networkList", networkList);
 		model.addAttribute("workspacedetails", workspace);
 

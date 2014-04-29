@@ -71,6 +71,7 @@ import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -1067,42 +1068,47 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 		try{
 			projectList = projectShallowMapper.getProjectList(userName);
 			JSONArray dataArray = new JSONArray();
+			if(projectList != null){
+				for(IProject project : projectList){
+					// Each data
+					JSONObject data = new JSONObject();
+					data.put("id",project.getProjectId());
+					data.put("parent","#");
+					data.put("text",project.getProjectName());
+					dataArray.put(data);
+					String wsParent = project.getProjectId();
 
-			for(IProject project : projectList){
-				// Each data
-				JSONObject data = new JSONObject();
-				data.put("id",project.getProjectId());
-				data.put("parent","#");
-				data.put("text",project.getProjectName());
-				dataArray.put(data);
-				String wsParent = project.getProjectId();
+					List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getProjectId(), userName);
+					if(wsList != null){
+						for(IWorkSpace ws : wsList){
+							//workspace json
+							JSONObject data1 = new JSONObject();
+							data1.put("id",ws.getWorkspaceId());
+							data1.put("parent",wsParent);
+							data1.put("text",ws.getWorkspaceName());
+							dataArray.put(data1);
+							String networkParent = ws.getWorkspaceId();
 
-				List<IWorkSpace> wsList = wsManager.listActiveWorkspace(project.getProjectId(), userName);
-				for(IWorkSpace ws : wsList){
-					//workspace json
-					JSONObject data1 = new JSONObject();
-					data1.put("id",ws.getWorkspaceId());
-					data1.put("parent",wsParent);
-					data1.put("text",ws.getWorkspaceName());
-					dataArray.put(data1);
-					String networkParent = ws.getWorkspaceId();
-
-					List<INetwork> networkList1 = wsManager.getWorkspaceNetworkList(ws.getWorkspaceId());
-					for(INetwork network : networkList1){
-						JSONObject data2 = new JSONObject();
-						data2.put("id",network.getNetworkId());
-						data2.put("parent",networkParent);
-						String networkLink = "<a href='#' id='"
-								+ network.getNetworkId()
-								+ "' name='"
-								+ network.getNetworkName()
-								+ "' onclick='javascript:clicknetwork(this.id,this.name);' > "
-								+ network.getNetworkName() + "</a>";
-						data2.put("text", networkLink);
-						data2.put("href", "networks/visualize/"+network.getNetworkId());
-						JSONObject data2href = new JSONObject();
-						data2href.put("href", "networks/visualize/"+network.getNetworkId());
-						dataArray.put(data2);
+							List<IWorkspaceNetwork> workspaceNnetworkList = wsManager.getWorkspaceNetworkList(ws.getWorkspaceId());
+							if(workspaceNnetworkList != null){
+								for(IWorkspaceNetwork workspaceNetwork : workspaceNnetworkList){
+									JSONObject data2 = new JSONObject();
+									data2.put("id",workspaceNetwork.getNetwork().getNetworkId());
+									data2.put("parent",networkParent);
+									String networkLink = "<a href='#' id='"
+											+ workspaceNetwork.getNetwork().getNetworkId()
+											+ "' name='"
+											+ workspaceNetwork.getNetwork().getNetworkName()
+											+ "' onclick='javascript:clicknetwork(this.id,this.name);' > "
+											+ workspaceNetwork.getNetwork().getNetworkName() + "</a>";
+									data2.put("text", networkLink);
+									data2.put("href", "networks/visualize/"+workspaceNetwork.getNetwork().getNetworkId());
+									JSONObject data2href = new JSONObject();
+									data2href.put("href", "networks/visualize/"+workspaceNetwork.getNetwork().getNetworkId());
+									dataArray.put(data2);
+								}
+							}
+						}
 					}
 				}
 			}
@@ -1537,6 +1543,24 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 
 	}
 
+	@Override
+	public List<IWorkspaceNetwork> editWorkspaceNetworkStatusCode(List<IWorkspaceNetwork> workspaceNetworkList){
+
+		if(workspaceNetworkList==null){
+			return workspaceNetworkList;
+		}
+
+		Iterator<IWorkspaceNetwork> workspaceNetworkListIterator = workspaceNetworkList.iterator();
+		while(workspaceNetworkListIterator.hasNext()){
+			IWorkspaceNetwork workspaceNetwork = workspaceNetworkListIterator.next();
+			workspaceNetwork.getNetwork().setStatus(getNetworkStatusCode(workspaceNetwork.getNetwork().getStatus())+"");
+		}
+
+		return workspaceNetworkList;
+	}
+
+	
+	
 	@Override
 	public List<INetwork> editNetworkStatusCode(List<INetwork> networkList){
 
