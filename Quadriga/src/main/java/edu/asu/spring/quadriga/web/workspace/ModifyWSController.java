@@ -22,9 +22,7 @@ import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.dspace.IBitStream;
 import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.network.INetwork;
@@ -199,10 +197,10 @@ public class ModifyWSController {
 		//TODO: Implement check for dspace keys and Username/password 
 		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
 		
-		List<IWorkspaceBitStream> workspaceBitStreams = workspace.getWorkspaceBitStreams();
 		
-		List<IBitStream> bitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
-		workspace.setBitstreams(bitstreams);
+		
+		List<IWorkspaceBitStream> workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
+		workspace.setWorkspaceBitStreams(workspaceBitStreams);
 
 		//retrieve the collaborators associated with the workspace
 		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
@@ -275,8 +273,8 @@ public class ModifyWSController {
 		//Check bitstream access in dspace.
 		//TODO: Implement check for dspace keys and Username/password 
 		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
-		List<IBitStream> bitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
-		workspace.setBitstreams(bitstreams);
+		List<IWorkspaceBitStream> workspaceBitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
+		workspace.setWorkspaceBitStreams(workspaceBitstreams);
 
 		//retrieve the collaborators associated with the workspace
 		collaboratorList = wsCollabManager.getWorkspaceCollaborators(workspaceId);
