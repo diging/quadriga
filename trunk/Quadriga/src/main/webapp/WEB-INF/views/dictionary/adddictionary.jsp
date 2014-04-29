@@ -49,7 +49,7 @@
 		<table>
 			<tr>
 				<td>Name:</td>
-				<td><form:input path="name" size="30" id="name" /></td>
+				<td><form:input path="dictionaryName" size="30" id="name" /></td>
 			</tr>
 			<tr>
 				<td>Description:</td>
