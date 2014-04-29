@@ -1,12 +1,16 @@
 package edu.asu.spring.quadriga.web.workspace;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -38,10 +42,13 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
+import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
 import edu.asu.spring.quadriga.dspace.service.impl.DspaceKeys;
+import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.network.INetworkManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
@@ -92,6 +99,9 @@ public class ListWSController
 
 	@Autowired
 	private	DspaceKeysValidator keysValidator;
+	
+	@Autowired
+	private INetworkManager networkManager;
 
 	/**
 	 * Attach the custom validator to the Spring context
@@ -189,6 +199,7 @@ public class ListWSController
 		this.wsManager = wsManager;
 	}
 
+	
 	/**
 	 * Handle the request to view masked dspace keys and also allow an user to update the keys.
 	 * 
@@ -662,5 +673,25 @@ public class ListWSController
 
 		dspaceManager.deleteBitstreamFromWorkspace(workspaceId, bitstreamids, workspaceBitStreams, principal.getName());
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
+	}
+	
+	@RequestMapping(value = "auth/editing/getitemmetadata/{networkId}", method = RequestMethod.GET)
+	public @ResponseBody String viewDspaceMetaData(HttpServletRequest request,
+			HttpServletResponse response,@PathVariable("networkId") String networkId, 
+			ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, QStoreStorageException, NoSuchAlgorithmException, JSONException {
+		
+		INetwork network = networkManager.getNetwork(networkId);
+		if(network==null){
+			return "auth/accessissue";
+		}
+		String fileid = networkManager.getSourceReferenceURL(networkId,network.getVersionNumber());
+		
+		String metaData = wsManager.getItemMetadataAsJson(fileid, dspaceUsername, dspacePassword, dspaceKeys);
+		
+		if(metaData!=null){
+			return metaData;
+		}
+		
+		return null;
 	}
 }

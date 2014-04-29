@@ -55,43 +55,27 @@ $(document).ready(function(){
 
 </style>
 
+
 <section>
 	<h2 class="major"><span>Network details</span></h2>
 	<ul class="style3">
 		<li>
 			<article class="is-post-summary">
-				<h3><div id="dummy" align="left">TEXT FILE DETAILS</div></h3>
-				<div id="textfilestyle">
-					<table style="width: 300px">
-
-							<tr>
-								<td align="left">Name</td>
-								<td align="left">123</td>
-							</tr>
-							<tr>
-								<td align="left">Created date</td>
-
-								<td align="left">123</td>
-							</tr>
-							<tr>
-								<td align="left">Created by</td>
-
-								<td align="left">User123</td>
-							</tr>
-					</table>
+				<div align="left" id="item_metadata">
+				<table id = metadataTable></table>
 				</div>
+				
 			</article>
 		</li>
 		<li>
 			<article class="is-post-summary">
-				<h3><div align="left" id="desc_heading"></div></h3>
 				<div align="left" id="lemma_name"></div>
 				<div id="concept_desc"></div>
 			</article>
 		</li>
 		<li>
 			<article class="is-post-summary">
-				<h3><div align="left" id="annot_desc"></div></h3>
+				<div align="left" id="annot_desc"></div>
 				<div id="annot_details"></div>
 			</article>
 		</li>
