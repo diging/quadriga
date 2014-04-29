@@ -341,19 +341,24 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	@Transactional
 	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
 		
-		IConceptCollection conceptCollection = conceptCollectionDeepMapper.getConceptCollectionDetails(collection.getConceptCollectionId());
-		
-		List<IConceptCollectionCollaborator> conceptCollectionCollaborators = conceptCollection.getConceptCollectionCollaborators();
-		if(conceptCollectionCollaborators != null && conceptCollectionCollaborators.size() > 0)
-		{
-			for(IConceptCollectionCollaborator conceptCollectionCollaborator:conceptCollectionCollaborators)
-			{
-				for(ICollaboratorRole collaboratorRole: conceptCollectionCollaborator.getCollaborator().getCollaboratorRoles())
-				{
-					roleMapper.fillCollectionCollaboratorRole(collaboratorRole);
+		IConceptCollection conceptCollection = conceptCollectionDeepMapper
+				.getConceptCollectionDetails(collection
+						.getConceptCollectionId());
+		if (conceptCollection != null) {
+
+			List<IConceptCollectionCollaborator> conceptCollectionCollaborators = conceptCollection
+					.getConceptCollectionCollaborators();
+			if (conceptCollectionCollaborators != null
+					&& conceptCollectionCollaborators.size() > 0) {
+				for (IConceptCollectionCollaborator conceptCollectionCollaborator : conceptCollectionCollaborators) {
+					for (ICollaboratorRole collaboratorRole : conceptCollectionCollaborator
+							.getCollaborator().getCollaboratorRoles()) {
+						roleMapper
+								.fillCollectionCollaboratorRole(collaboratorRole);
+					}
 				}
 			}
-		}	
+		}
 	}
 	
 	/**
@@ -380,6 +385,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			JSONArray dataArray = new JSONArray();
 			List<IProject> ccProjectsList = projectShallowMapper.getCollaboratorProjectListOfUser(ccId);
 			List<IWorkSpace> ccWorkspaceList = wsListManger.getWorkspaceByConceptCollection(ccId);
+			if(ccProjectsList != null) {
 			for (IProject project : projectList) {
 				// Each data
 				//if (!ccProjectsList.contains(project)) {
@@ -429,6 +435,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 
 				//}
 			}
+		}
 			JSONObject dataList = new JSONObject();
 			dataList.put("data", dataArray);
 
