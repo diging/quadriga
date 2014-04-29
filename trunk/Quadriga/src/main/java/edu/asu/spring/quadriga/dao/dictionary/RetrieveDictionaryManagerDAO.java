@@ -1,6 +1,9 @@
 package edu.asu.spring.quadriga.dao.dictionary;
 
+import java.util.List;
+
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,7 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
+import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
@@ -70,6 +74,20 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 		}
 		return dictionaryDTO;
 	}
+	
+	@Override
+	public List<DictionaryItemsDTO> getDictionaryItemsDetailsDTOs(String dictionaryid,String ownerName)
+	{
+		Query query = sessionFactory.getCurrentSession().createQuery(" from DictionaryItemsDTO dictItems where dictItems.dictionaryDTO.dictionaryowner.username =:ownerName and dictItems.dictionaryDTO.dictionaryid =:dictionaryid ORDER BY dictItems.term");
+		query.setParameter("ownerName", ownerName);
+		query.setParameter("dictionaryid", dictionaryid);
+		
+		List<DictionaryItemsDTO> dictItemsDTOList = query.list();
+		
+		return dictItemsDTOList;
+	}
+	
+
 	
 	
 }
