@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.workspace;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
 import edu.asu.spring.quadriga.dspace.service.IDspaceMetadataItemEntity;
@@ -23,6 +25,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
+import edu.asu.spring.quadriga.web.network.INetworkStatus;
 
 /**
  * Class implements {@link IListWSManager} to
@@ -199,49 +202,103 @@ public class ListWSManager implements IListWSManager
 	
 	@Override
 	@Transactional
-	public List<INetwork> getWorkspaceNetworkList(String workspaceid)
+	public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid)
 			throws QuadrigaStorageException{
 		
-		List<INetwork> networkList=null;
-		try{
-			networkList=dbConnect.getWorkspaceNetworkList(workspaceid);
-		}catch(QuadrigaStorageException e){
-			logger.error("",e);
+		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+		List<IWorkspaceNetwork> workspaceNetworkList = null;
+		if(workspace != null){
+			 workspaceNetworkList =  workspace.getWorkspaceNetworks();
 		}
-		return networkList;
+
+		return workspaceNetworkList;
 	}
 	
 	@Override
 	@Transactional
-	public List<INetwork> getWorkspaceRejectedNetworkList(String workspaceid)
+	public List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceid)
 			throws QuadrigaStorageException{
 		
-		List<INetwork> networkList=null;
-		try{
-			networkList=dbConnect.getWorkspaceRejectedNetworkList(workspaceid);
-		}catch(QuadrigaStorageException e){
-			logger.error("",e);
+		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+		List<IWorkspaceNetwork> workspaceNetworkList=null;
+		if(workspace != null){
+			workspaceNetworkList = workspace.getWorkspaceNetworks();
 		}
-		return networkList;
+		List<Integer> removeList = null;
+		if(workspaceNetworkList != null){
+			for(int i=0;i<workspaceNetworkList.size();i++){
+				IWorkspaceNetwork workspaceNetwork = workspaceNetworkList.get(i);
+				INetwork network = workspaceNetwork.getNetwork();
+				if(network!=null){
+					if(network.getStatus().equals(INetworkStatus.REJECTED)){
+						// do nothing
+					}else{
+						if(removeList == null){
+							removeList = new ArrayList<Integer>();
+						}
+						removeList.add(i);
+					}
+				}else{
+					if(removeList == null){
+						removeList = new ArrayList<Integer>();
+					}
+					removeList.add(i);
+				}
+			}
+			
+			
+			for(Integer i : removeList){
+				workspaceNetworkList.remove(i);
+			}
+		}
+			
+		
+		return workspaceNetworkList;
 	}
-
+	
 	/**
 	 * 
 	 * {@inheritDoc}
 	 * 
-	 * We are using Hibernate DAO to fetch data from DB.
 	 */
 	@Override
 	@Transactional
-	public List<INetwork> getWorkspaceApprovedNetworkList(String workspaceid)
+	public List<IWorkspaceNetwork> getWorkspaceApprovedNetworkList(String workspaceid)
 			throws QuadrigaStorageException {
-		List<INetwork> networkList=null;
-		try{
-			networkList=dbConnect.getWorkspaceApprovedNetworkList(workspaceid);
-		}catch(QuadrigaStorageException e){
-			logger.error("",e);
+		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
+		List<IWorkspaceNetwork> workspaceNetworkList=null;
+		if(workspace != null){
+			workspaceNetworkList = workspace.getWorkspaceNetworks();
 		}
-		return networkList;
+
+		List<Integer> removeList = null;
+		if(workspaceNetworkList != null){
+			for(int i=0;i<workspaceNetworkList.size();i++){
+				IWorkspaceNetwork workspaceNetwork = workspaceNetworkList.get(i);
+				INetwork network = workspaceNetwork.getNetwork();
+				if(network!=null){
+					if(network.getStatus().equals(INetworkStatus.APPROVED)){
+						// do nothing
+					}else{
+						if(removeList == null){
+							removeList = new ArrayList<Integer>();
+						}
+						removeList.add(i);
+					}
+				}else{
+					if(removeList == null){
+						removeList = new ArrayList<Integer>();
+					}
+					removeList.add(i);
+				}
+			}
+			
+			
+			for(Integer i : removeList){
+				workspaceNetworkList.remove(i);
+			}
+		}
+		return workspaceNetworkList;
 	}
 	
 	@Override
