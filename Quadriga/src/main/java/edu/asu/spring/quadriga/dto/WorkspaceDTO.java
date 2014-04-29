@@ -81,7 +81,7 @@ public class WorkspaceDTO implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
 	
-    @JoinColumn(name = "workspaceowner", referencedColumnName = "username",insertable = false, updatable = false)
+    @JoinColumn(name = "workspaceowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO workspaceowner;
    

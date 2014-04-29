@@ -77,7 +77,7 @@ public class NetworksDTO implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "networksDTO")
     private NetworkWorkspaceDTO networkWorkspace;
     
-    @JoinColumn(name = "networkowner",referencedColumnName = "username",insertable = false , updatable = false)
+    @JoinColumn(name = "networkowner",referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO quadrigaUserDTO;
    
