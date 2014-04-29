@@ -6,7 +6,7 @@
 
 
 <c:choose>
-	<c:when test="${not empty workspacedetails.bitstreams}">
+	<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 	<script>
 	function submitClick()
 	{
@@ -300,7 +300,7 @@
 $(document).ready(function() {
 
 $('a.login-window').click(function() {
-    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/communities";        
+    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";        
 });
 
 });
@@ -311,7 +311,7 @@ $('a.login-window').click(function() {
 $(document).ready(function() {
 
 $('a.login-window').click(function() {
-    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/communities";        
+    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";        
 });
 
 });
@@ -374,7 +374,7 @@ $(document).ready(function(){
 	
 	
 	$('a.change-login').click(function() {
-		$('#dspaceLogin').attr('action','${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/changedspacelogin');
+		$('#dspaceLogin').attr('action','${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/changedspacelogin');
 	    $( "#login-box" ).dialog( "open" );
 	});
 })
@@ -385,7 +385,7 @@ $(document).ready(function(){
 <c:choose><c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when></c:choose>
 <c:choose>
 	<c:when test="${not empty workspacedetails.bitstreams}">
-	<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.id}/deletebitstreams">
+	<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
 	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
 	<c:choose><c:when test="${empty dspaceKeys}"></c:when></c:choose></font> 
 		<br>

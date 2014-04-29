@@ -27,8 +27,8 @@ function submitClick(id){
 				<table style="width: 100%">
 					<tr>
 						<td style="width: 170px">Name:</td>
-						<td><form:input path="name" size="60" id="name" /></td>
-						<td><form:errors path="name" class="ui-state-error-text"></form:errors></td>
+						<td><form:input path="workspaceName" size="60" id="workspaceName" /></td>
+						<td><form:errors path="workspaceName" class="ui-state-error-text"></form:errors></td>
 					</tr>
 					<tr>
 						<td style="vertical-align: top">Description:</td>

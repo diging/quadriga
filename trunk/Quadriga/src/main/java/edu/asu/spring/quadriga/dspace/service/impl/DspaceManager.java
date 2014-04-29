@@ -513,8 +513,9 @@ public class DspaceManager implements IDspaceManager{
 	@Transactional
 	public List<IWorkspaceBitStream> checkDspaceBitstreamAccess(List<IWorkspaceBitStream> workspaceBitstreams, IDspaceKeys dspaceKeys, String sUserName, String sPassword) throws QuadrigaStorageException
 	{
-		List<IWorkspaceBitStream> checkedBitStreams = new ArrayList<IWorkspaceBitStream>();
+		List<IWorkspaceBitStream> checkedBitStreams = null;
 
+			if(workspaceBitstreams!=null){
 				for(IWorkspaceBitStream workspaceBitstream: workspaceBitstreams)
 				{
 					//Check if the bitstream was already loaded.
@@ -535,14 +536,21 @@ public class DspaceManager implements IDspaceManager{
 								bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.restricted_bitstream"));
 								bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.restricted_item"));
 							}
+							if(checkedBitStreams == null){
+								checkedBitStreams = new ArrayList<IWorkspaceBitStream>();
+							}
 							checkedBitStreams.add(workspaceBitstream);
 						}
 						else
 						{
+							if(checkedBitStreams == null){
+								checkedBitStreams = new ArrayList<IWorkspaceBitStream>();
+							}
 							checkedBitStreams.add(workspaceBitstream);
 						}						
 					}
 				} //End of for each loop for bitstream
+			}
 
 		return checkedBitStreams;		
 	}
