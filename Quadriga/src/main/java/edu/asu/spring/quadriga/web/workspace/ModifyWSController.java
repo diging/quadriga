@@ -29,6 +29,7 @@ import edu.asu.spring.quadriga.domain.factories.IDspaceKeysFactory;
 import edu.asu.spring.quadriga.domain.impl.workspace.WorkSpace;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceBitStream;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.dspace.service.IDspaceKeys;
 import edu.asu.spring.quadriga.dspace.service.IDspaceManager;
@@ -197,6 +198,9 @@ public class ModifyWSController {
 		//Check bitstream access in dspace.
 		//TODO: Implement check for dspace keys and Username/password 
 		this.dspaceKeys = dspaceManager.getDspaceKeys(principal.getName());
+		
+		List<IWorkspaceBitStream> workspaceBitStreams = workspace.getWorkspaceBitStreams();
+		
 		List<IBitStream> bitstreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getBitstreams(), this.dspaceKeys, this.dspaceUsername, this.dspacePassword);
 		workspace.setBitstreams(bitstreams);
 

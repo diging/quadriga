@@ -21,7 +21,7 @@
 	
 	/* inactiveWS()
 	{
-		location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace';
+		location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace';
 	} */
 	
 </script>
@@ -37,7 +37,7 @@
 	<tr>
 		<!-- Display project details -->
 		<td style="width: 90%">
-			<h2>Project: ${project.name}</h2>
+			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
 			<hr>
 			<div class="user">Owned by: ${project.owner.name}</div>
@@ -53,8 +53,8 @@
     		<ul class="style2 pagination1">
 								<c:forEach var="workspace" items="${workspaceList}">
 									<li><a
-										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
-												value="${workspace.name}"></c:out></a> <br> <c:out
+										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
+												value="${workspace.workspaceName}"></c:out></a> <br> <c:out
 											value="${workspace.description}"></c:out></li>
 								</c:forEach>
 							</ul>
@@ -113,7 +113,7 @@
 			</c:choose>
 			<div align="left">
 				<hr>
-				<a href="modifyproject/${project.internalid}"> <input
+				<a href="modifyproject/${project.projectId}"> <input
 					type="button" name="Edit" value="Edit" />
 				</a>
 				<c:choose>
@@ -121,30 +121,30 @@
 						<c:choose>
 							<c:when test="${editoraccess=='0' }">
 								<a
-									href="${pageContext.servletContext.contextPath}/auth/workbench/assignownereditor/${project.internalid}">
+									href="${pageContext.servletContext.contextPath}/auth/workbench/assignownereditor/${project.projectId}">
 									<input type="button" name="Get Editor Role"
 									value="Get Editor Role" />
 								</a>
 								
-								 <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showinactiveworkspace">
+								 <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
 								<input type="button" value="Show Inactive Workspace" name="Show Inactive Workspace"/>
 								</a> 
 								
 								<%-- <input type="button" value="Show Inactive Workspace" 
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace'">	--%>							</c:when>
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace'">	--%>							</c:when>
 							<c:otherwise>
 								<a
-									href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.internalid}">
+									href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.projectId}">
 									<input type="button" name="Delete Editor Role"
 									value="Delete Editor Role" />
 								</a>
 								
-								<%-- <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showInactiveWorkspace">
+								<%-- <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace">
 								<input type="button" value="Show Inactive Workspace" name="Show Inactive Workspace"/>
 								</a> --%>
 								
 								<input type="button" value="Show Inactive Workspace" 
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}/showinactiveworkspace'"> 	
+								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace'"> 	
 							
 							</c:otherwise>
 						</c:choose>

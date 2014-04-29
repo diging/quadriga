@@ -21,8 +21,10 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.db.IDBConnectionEditorManager;
 import edu.asu.spring.quadriga.db.IDBConnectionNetworkManager;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.workspace.WorkspaceNetwork;
 import edu.asu.spring.quadriga.domain.network.INetwork;
 import edu.asu.spring.quadriga.domain.network.INetworkNodeInfo;
+import edu.asu.spring.quadriga.domain.workspace.IWorkspaceNetwork;
 import edu.asu.spring.quadriga.dto.NetworkAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTO;
 import edu.asu.spring.quadriga.dto.NetworkAssignedDTOPK;
@@ -925,18 +927,19 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 				// Get the project id associated with the workspace id
 				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
-				query.setParameter("workspaceid", network.getWorkspaceid());
+				query.setParameter("workspaceid", network.getNetworkWorkspace().getWorkspace().getWorkspaceId());
 				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
-
-				if (projectWorkspaceDTO != null) {
-					// Get the project details
-					if(projectWorkspaceDTO.getProjectDTO() != null)
-						network.setProjectWorkspace(projectMapper.getProject(projectWorkspaceDTO.getProjectDTO()));
-
-					// Get the workspace details
+				
+				if (projectWorkspaceDTO != null)
+				{
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
-						network.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
-
+					{
+						IWorkspaceNetwork workspaceNetwork = new WorkspaceNetwork();
+						workspaceNetwork.setWorkspace(workspaceMapper.getWorkSpace(projectWorkspaceDTO.getWorkspaceDTO()));
+						workspaceNetwork.setNetwork(network);
+						network.setNetworkWorkspace(workspaceNetwork);
+					}
+					
 				}
 			}
 

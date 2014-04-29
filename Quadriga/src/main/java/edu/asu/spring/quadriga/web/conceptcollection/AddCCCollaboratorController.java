@@ -27,7 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -226,12 +225,12 @@ public class AddCCCollaboratorController {
 		   model.getModelMap().put("collectionid", collectionid);
 		   if(result.hasErrors())
 		   {
-			   model.getModelMap().put("collaborator", ccCollaborator);
+			   model.getModelMap().put("collaborator", ccCollaborator.getCollaborator());
 		   }
 		   else
 		   {
 			  //TODO: definition of addCollaborators() needs to be changed. 
-			  CollaboratorManager.addCollaborators(ccCollaborator, collectionid, username);
+			  CollaboratorManager.addCollaborators(ccCollaborator.getCollaborator(), collectionid, username);
 			  model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());  
 		   }
 		   
