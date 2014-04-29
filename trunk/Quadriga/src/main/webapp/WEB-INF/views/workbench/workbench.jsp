@@ -289,8 +289,8 @@ All
 	  <ul class="style2 pagination1">
 				<c:forEach var="project" items="${projectlistasowner}">
 					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out
-								value="${project.name}"></c:out></a> <br> <c:out
+						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
+								value="${project.projectName}"></c:out></a> <br> <c:out
 							value="${project.description}"></c:out></li>
 				</c:forEach>
 			</ul>
@@ -304,8 +304,8 @@ All
 			<ul class="style2 pagination1">
 				<c:forEach var="project" items="${projectlistascollaborator}">
 					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out
-								value="${project.name}"></c:out></a> <br>
+						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
+								value="${project.projectName}"></c:out></a> <br>
 					<c:out value="${project.description}"></c:out></li>
 				</c:forEach>
 			</ul>
@@ -320,8 +320,8 @@ All
 	  <ul class="style2 pagination1">
 				<c:forEach var="project" items="${projectlistaswsowner}">
 					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out
-								value="${project.name}"></c:out></a> <br>
+						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
+								value="${project.projectName}"></c:out></a> <br>
 					<c:out value="${project.description}"></c:out></li>
 				</c:forEach>
 			</ul>
@@ -337,8 +337,8 @@ All
 	  <ul class="style2 pagination1">
 				<c:forEach var="project" items="${projectlistaswscollaborator}">
 					<li><a
-						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}"><c:out
-								value="${project.name}"></c:out></a> <br>
+						href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}"><c:out
+								value="${project.projectName}"></c:out></a> <br>
 					<c:out value="${project.description}"></c:out></li>
 				</c:forEach>
 			</ul>
