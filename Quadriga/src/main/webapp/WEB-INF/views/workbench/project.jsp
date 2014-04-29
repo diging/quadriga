@@ -156,14 +156,14 @@
 		<!-- Display collaborators -->
 		<td style="width: 10%">
 			<section>
-				<c:if test="${not empty project.collaborators}">
+				<c:if test="${not empty project.projectCollaborators}">
 					<h3 class="major">
 						<span>Collaborators</span>
 					</h3>
 					<ul class="collaborators">
 						<c:forEach var="projectcollaborator"
-							items="${project.collaborators}">
-							<li><c:out value="${projectcollaborator.userObj.name}"></c:out>
+							items="${project.projectCollaborators}">
+							<li><c:out value="${projectcollaborator.collaborator.userObj.name}"></c:out>
 							</li>
 						</c:forEach>
 					</ul>

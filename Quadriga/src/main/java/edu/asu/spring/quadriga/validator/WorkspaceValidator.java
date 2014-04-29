@@ -23,7 +23,7 @@ public class WorkspaceValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors err) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(err, "name", "workspace_name.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(err, "workspaceName", "workspace_name.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "workspace_description.required");
 	}
 
