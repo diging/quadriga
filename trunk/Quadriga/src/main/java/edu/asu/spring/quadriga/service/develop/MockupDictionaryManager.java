@@ -6,6 +6,7 @@ import java.util.List;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
@@ -131,7 +132,7 @@ public abstract class MockupDictionaryManager implements IDictionaryManager {
 	}
 
 	@Override
-	public List<IItem> getDictionariesItems(String dictionaryid,
+	public List<IDictionaryItems> getDictionariesItems(String dictionaryid,
 			String ownerName) throws QuadrigaStorageException {
 		// TODO Auto-generated method stub
 		return null;

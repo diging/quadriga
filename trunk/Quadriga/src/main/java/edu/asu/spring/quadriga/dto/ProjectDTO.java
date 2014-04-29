@@ -70,7 +70,7 @@ public class ProjectDTO implements Serializable
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @JoinColumn(name = "projectowner", referencedColumnName = "username",insertable = false, updatable = false)
+    @JoinColumn(name = "projectowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO projectowner;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
