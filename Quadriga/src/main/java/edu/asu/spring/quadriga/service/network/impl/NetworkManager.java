@@ -689,13 +689,16 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			return true;
 		}
 		String fileId =uri=uri.substring(uri.lastIndexOf("/")+1,uri.length());
-		for(IWorkspaceBitStream workspaceBitStream : workspaceBitStreamList){
-			
-			if(fileId.equals(workspaceBitStream.getBitStream().getId())){
-				logger.debug("true");
-				return true;
+		if(workspaceBitStreamList!=null){
+			for(IWorkspaceBitStream workspaceBitStream : workspaceBitStreamList){
+				
+				if(fileId.equals(workspaceBitStream.getBitStream().getId())){
+					logger.debug("true");
+					return true;
+				}
 			}
 		}
+		
 		logger.debug("false");
 		return false;
 	}
