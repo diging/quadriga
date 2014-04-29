@@ -35,8 +35,8 @@ $(document).ready(function() {
 			<c:forEach var="concept" items="${conceptlist}">
 			
 			<li>
-			   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.id}">
-			          <c:out value="${concept.name}"></c:out>
+			   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}">
+			          <c:out value="${concept.conceptCollectionName}"></c:out>
 			   </a> <br> 
 			     <c:out value="${concept.description}"></c:out>
 			</li>
@@ -53,8 +53,8 @@ $(document).ready(function() {
 	<ul class="style2 pagination1">
 	<c:forEach var="concept" items="${collaborationlist}">
 	<li>
-			   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.id}">
-			          <c:out value="${concept.name}"></c:out>
+			   <a href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}">
+			          <c:out value="${concept.conceptCollectionName}"></c:out>
 			   </a> <br> 
 			     <c:out value="${concept.description}"></c:out>
 			     </li>
