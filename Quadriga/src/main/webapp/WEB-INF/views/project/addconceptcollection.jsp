@@ -78,7 +78,7 @@
 		});
 	});
 </script>
-<h2>Project: ${project.name}</h2>
+<h2>Project: ${project.projectName}</h2>
 <hr />
 
 
@@ -110,11 +110,11 @@
 						<tr>
 							<td width="10%"><input type="checkbox" class="selected"
 								name="selected"
-								value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
+								value='<c:out value="${conceptCollection.conceptCollectionId}"></c:out>' /></td>
 							<td width="30%" align="center"><input name="items"
 								type="hidden"
-								value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
-									value="${conceptCollection.name}"></c:out></td>
+								value="<c:out value="${conceptCollection.conceptCollectionName}"></c:out>" /> <c:out
+									value="${conceptCollection.conceptCollectionName}"></c:out></td>
 							<td width="60%" align="justify"><c:out
 									value="${conceptCollection.description}"></c:out></td>
 						</tr>

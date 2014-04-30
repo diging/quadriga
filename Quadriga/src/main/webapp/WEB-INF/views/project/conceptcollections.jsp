@@ -20,7 +20,7 @@
 		});
 	});
 </script>
-<h2>Project: ${project.name}</h2>
+<h2>Project: ${project.projectName}</h2>
 <hr />
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
@@ -53,8 +53,8 @@
 				<ul class="style2 pagination1">
 					<c:forEach var="conceptCollection" items="${conceptCollectionList}">
 						<li><a
-							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptCollection.id}"><c:out
-									value="${conceptCollection.name}"></c:out></a> <br> <c:out
+							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptCollection.conceptCollectionId}"><c:out
+									value="${conceptCollection.conceptCollectionName}"></c:out></a> <br> <c:out
 								value="${conceptCollection.description}"></c:out></li>
 					</c:forEach>
 				</ul>
