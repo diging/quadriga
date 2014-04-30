@@ -35,7 +35,6 @@ public class HomeControllerTest {
 				return "jdoe";
 			}
 		};		
-
 	}
 	
 	@Test

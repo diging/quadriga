@@ -228,7 +228,7 @@
   <tr>
 	<td style="width:90%">
 	<div>
-    <h2>Dictionary: ${dictionary.name}</h2>
+    <h2>Dictionary: ${dictionary.dictionaryName}</h2>
     <div>${dictionary.description}</div>
     <br />
     <div class="user">Owned by: ${dictionary.owner.name}</div>
@@ -237,10 +237,10 @@
     <input type="button"
 		onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries'"
 		value='Okay'>
-	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.id}'"
+	<input type="button"  onClick="location.href='${pageContext.servletContext.contextPath}/auth/dictionaries/updatedictionary/${dictionary.dictionaryId}'"
 	   value = "Edit">
 	   
-	   <input type="hidden" id="hidden" value="${dictionary.id}" />
+	   <input type="hidden" id="hidden" value="${dictionary.dictionaryId}" />
 	</div>
 	<hr>
 <c:choose>

@@ -174,7 +174,7 @@ public class DictionaryProxy implements IDictionary {
 		}
 		@Override
 		public void setCreatedBy(String createdBy) {
-			this.setCreatedBy(createdBy);
+			this.createdBy = createdBy;
 			if(dictionary != null)
 				this.dictionary.setCreatedBy(createdBy);
 		}
@@ -184,7 +184,7 @@ public class DictionaryProxy implements IDictionary {
 		}
 		@Override
 		public void setCreatedDate(Date createdDate) {
-			this.setCreatedDate(createdDate);
+			this.createdDate = createdDate;
 			if(dictionary != null)
 				this.dictionary.setCreatedDate(createdDate);	
 		}
@@ -194,7 +194,7 @@ public class DictionaryProxy implements IDictionary {
 		}
 		@Override
 		public void setUpdatedBy(String updatedBy) {
-			this.setUpdatedBy(updatedBy);
+			this.updatedBy = updatedBy;
 			if(dictionary != null)
 				this.dictionary.setUpdatedBy(updatedBy);
 			
@@ -206,7 +206,7 @@ public class DictionaryProxy implements IDictionary {
 		}
 		@Override
 		public void setUpdatedDate(Date updatedDate) {
-			this.setUpdatedDate(updatedDate);
+			this.updatedDate = updatedDate;
 			if(dictionary != null)
 				this.dictionary.setUpdatedDate(updatedDate);
 		}

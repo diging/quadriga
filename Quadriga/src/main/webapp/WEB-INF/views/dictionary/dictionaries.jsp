@@ -60,8 +60,8 @@ $(document).ready(function() {
 			<ul class="style2 pagination1">
 				<c:forEach var="dictionary" items="${dictinarylist}">
 					<li>
-					<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.id}">
-			          <c:out value="${dictionary.name}"></c:out>
+					<a href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.dictionaryId}">
+			          <c:out value="${dictionary.dictionaryName}"></c:out>
 			   </a> <br> 
 			     <c:out value="${dictionary.description}"></c:out>
 						</li>
@@ -77,8 +77,8 @@ $(document).ready(function() {
 	<ul class="style2 pagination1">
 	<c:forEach var="dictionary" items="${dictionaryCollabList}">
 	<li>
-			   <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.id}">
-			          <c:out value="${dictionary.name}"></c:out>
+			   <a href="${pageContext.servletContext.contextPath}/auth/dictionaries/collab/${dictionary.dictionaryId}">
+			          <c:out value="${dictionary.dictionaryName}"></c:out>
 			   </a> <br> 
 			     <c:out value="${dictionary.description}"></c:out>
 			     </li>
