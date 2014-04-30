@@ -384,7 +384,7 @@ $(document).ready(function(){
 <br><br>
 <c:choose><c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when></c:choose>
 <c:choose>
-	<c:when test="${not empty workspacedetails.bitstreams}">
+	<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 	<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
 	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
 	<c:choose><c:when test="${empty dspaceKeys}"></c:when></c:choose></font> 
@@ -398,23 +398,23 @@ $(document).ready(function(){
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="bitstream" items="${workspacedetails.bitstreams}">
+				<c:forEach var="workspaceBitstream" items="${workspacedetails.workspaceBitStreams}">
 					<tr bgcolor="#E0F0FF">
 						<td>
-    						<div id='checkbox_<c:out value="${bitstream.id}"/>' class='checkbox_<c:out value="${bitstream.id}"/>'>
+    						<div id='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>' class='checkbox_<c:out value="${workspaceBitstream.bitStream.id}"/>'>
         						<c:choose>
-            					<c:when test="${not((bitstream.name == 'No Access to File') or (bitstream.name == 'Wrong Dspace Authentication') or (bitstream.name == 'Dspace is Down...')) }">
+            					<c:when test="${not((workspaceBitstream.bitStream.name == 'No Access to File') or (workspaceBitstream.bitStream.name == 'Wrong Dspace Authentication') or (workspaceBitstream.bitStream.name == 'Dspace is Down...')) }">
                 					<c:choose>
-	                    				<c:when test="${not(bitstream.name == 'Checking BitStream Access...')}">
-                        					<input type="checkbox" class="checkbox" name="bitstreamids" value="${bitstream.id}" />
+	                    				<c:when test="${not(workspaceBitstream.bitStream.name == 'Checking BitStream Access...')}">
+                        					<input type="checkbox" class="checkbox" name="bitstreamids" value="${workspaceBitstream.bitStream.id}" />
                     					</c:when>
                 					</c:choose>
             					</c:when>
         						</c:choose>
     						</div>
 						</td>
-						<td><div class='item_<c:out value="${bitstream.id}"/>' id='item_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.itemName}"></c:out></font></div></td>
-						<td><div class='bitstream_<c:out value="${bitstream.id}"/>' id='bitstream_<c:out value="${bitstream.id}"/>'><font size="1"><c:out value="${bitstream.name}"></c:out></font></div></td>
+						<td><div class='item_<c:out value="${workspaceBitstream.bitStream.id}"/>' id='item_<c:out value="${workspaceBitstream.bitStream.id}"/>'><font size="1"><c:out value="${workspaceBitstream.bitStream.itemName}"></c:out></font></div></td>
+						<td><div class='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>' id='bitstream_<c:out value="${workspaceBitstream.bitStream.id}"/>'><font size="1"><c:out value="${workspaceBitstream.bitStream.name}"></c:out></font></div></td>
 					</tr>
 				</c:forEach>
 				</tbody>
