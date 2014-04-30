@@ -126,7 +126,7 @@ function d3init(graph, networkId, path,type) {
 	// Starts the drag
 	// Means starts with force.stop
 	function dragstart(d, i) {
-		//force.stop() // stops the force auto positioning before you start dragging
+		layout.stop(); // stops the force auto positioning before you start dragging
 	}
 
 	// Moves the node based on the user interaction
@@ -141,9 +141,9 @@ function d3init(graph, networkId, path,type) {
 
 	// End drag
 	function dragend(d, i) {
-		//d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
-		//tick();
-		//force.resume();
+		d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+		tick();
+		layout.resume();
 	}
 
 	// Properties for the nodes

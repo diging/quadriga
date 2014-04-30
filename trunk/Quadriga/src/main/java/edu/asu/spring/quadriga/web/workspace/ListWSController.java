@@ -281,6 +281,7 @@ public class ListWSController
 		userName = principal.getName();
 		workspace = getWsManager().getWorkspaceDetails(workspaceid,userName);
 
+		
 		//Check bitstream access in dspace. 
 		this.setDspaceKeys(dspaceManager.getDspaceKeys(principal.getName()));
 		if(this.getDspaceKeys() != null)
@@ -300,6 +301,7 @@ public class ListWSController
 			model.addAttribute("wrongDspaceLogin", "true");
 			workspaceBitStreams = dspaceManager.checkDspaceBitstreamAccess(workspace.getWorkspaceBitStreams(), null, null, null);
 		}
+		
 		workspace.setWorkspaceBitStreams(workspaceBitStreams);
 		
 
@@ -557,8 +559,8 @@ public class ListWSController
 		{
 			if(collection.getLoadStatus() == true)
 			{
-				if(collection.getId() != null)
-					return collection.getId();
+				if(collection.getName() != null)
+					return collection.getName();
 				else
 					return getDspaceMessages().getProperty("dspace.restricted_collection");
 			}

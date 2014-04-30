@@ -227,7 +227,7 @@
   <tr>
     <!-- Display workspace details -->
     <td style="width:90%">
-    <h2>Workspace: ${workspacedetails.name}</h2>
+    <h2>Workspace: ${workspacedetails.workspaceName}</h2>
 <div>${workspacedetails.description}</div>
 <hr>
 <div class="user">Owned by: ${workspacedetails.owner.name}</div>
@@ -435,10 +435,10 @@ $(document).ready(function(){
 
     <!-- Display collaborators -->
     <td style="width:10%"> 
-    <c:if test="${not empty workspacedetails.collaborators}">
+    <c:if test="${not empty workspacedetails.workspaceCollaborators}">
    <h3 class="major"><span>Collaborators</span></h3>
     <ul class="collaborators">
-			<c:forEach var="wscollaborator" items="${workspacedetails.collaborators}">
+			<c:forEach var="wscollaborator" items="${workspacedetails.workspaceCollaborators}">
 				<li>
 					<c:out value="${wscollaborator.userObj.name}"></c:out>
 				</li>
