@@ -32,6 +32,7 @@ import edu.asu.spring.quadriga.dto.NetworkEdgeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
+import edu.asu.spring.quadriga.dto.NetworkWorkspaceDTO;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -60,7 +61,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 	@Resource(name = "database_error_msgs")
 	private Properties messages;
-	
+
 	@Autowired
 	private ProjectDTOMapper projectMapper;
 
@@ -76,7 +77,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	private static final Logger logger = LoggerFactory
 			.getLogger(NetworkManagerDAO.class);
 
-	
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -98,9 +99,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException(e);
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Add a new network into a workspace. Creates a unique Network ID  and assigns the user as owner to the network object. 
 	 * It then adds the network into the Workspace. The method uses Hibernate Framework to perform the database operations.
@@ -120,9 +121,11 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		String networkid = generateUniqueID();
 		NetworksDTO networksDTO = new NetworksDTO(networkid, networkName, user.getUserName(), INetworkStatus.PENDING, user.getUserName(), new Date(), user.getUserName(), new Date());
 		//NetworksDTO networksDTO = networkMapper.getNetworksDTO(networkid, networkName, user.getUserName(), INetworkStatus.PENDING, workspaceid);
-																
+		NetworkWorkspaceDTO networkWorkspaceDTO =  new NetworkWorkspaceDTO(networkid, workspaceid, user.getUserName(), new Date(), user.getUserName(), new Date());
+		
 		try {
 			sessionFactory.getCurrentSession().save(networksDTO);
+			sessionFactory.getCurrentSession().save(networkWorkspaceDTO);
 			return networkid;
 		} catch (Exception e) {
 			logger.error("Error in adding a network request: ", e);
@@ -148,7 +151,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			String isTop, IUser user,int version) throws QuadrigaStorageException {
 
 		NetworkStatementsDTO networkStatementsDTO = new NetworkStatementsDTO(rowid,networkId, id, Integer.parseInt(isTop), version, type, user.getUserName(), new Date(), user.getUserName(), new Date());
-				//networkMapper.getNetworkStatementsDTO(rowid,networkId, id, type, isTop,user.getUserName(),version);
+		//networkMapper.getNetworkStatementsDTO(rowid,networkId, id, type, isTop,user.getUserName(),version);
 
 		try {
 			sessionFactory.getCurrentSession().save(networkStatementsDTO);
@@ -178,7 +181,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			NetworksDTO networksDTO = (NetworksDTO) query.uniqueResult();
 			if (networksDTO != null) {
 				network = networkMapper.getNetwork(networksDTO);
-				
+
 				// Get the project id associated with the workspace id
 				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", networksDTO.getWorkspaceid());
@@ -223,6 +226,23 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
+
+			for(NetworksDTO networksDTO : listNetworksDTO){
+
+				if(networksDTO.getNetworkWorkspace() == null){
+//					Query query1 = sessionFactory.getCurrentSession().getNamedQuery(
+//							"NetworkWorkspaceDTO.findByNetworkid");
+//					query1.setParameter("networkid", networksDTO.getNetworkid());
+//					NetworkWorkspaceDTO networkWorkspaceDTO= (NetworkWorkspaceDTO) query1.uniqueResult(); 
+//					networksDTO.setNetworkWorkspace(networkWorkspaceDTO);
+//					if(networkWorkspaceDTO != null){
+//
+//					}else{
+						logger.info("netowkr workspace DTO is null -----------------");
+//					}
+				}
+
+			}
 			//networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
 			// Update project and workspace name for the network
@@ -267,14 +287,14 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	public List<NetworkStatementsDTO> getNetworkNodes(String networkId,int versionId)
 			throws QuadrigaStorageException {		
 		int isTop = 1;
-		
+
 		try {
 			Query query = sessionFactory.getCurrentSession().createQuery(" from NetworkStatementsDTO n WHERE n.networkid = :networkid" +
 					" AND n.version = :versionId AND n.istop= :isTop ");
 			query.setParameter("networkid", networkId);
 			query.setParameter("versionId",versionId);
 			query.setParameter("isTop",isTop);
-			
+
 			@SuppressWarnings("unchecked")
 			List<NetworkStatementsDTO> listNetworkStatementsDTO = query.list();
 			/*if (listNetworkStatementsDTO != null) {
@@ -307,7 +327,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			// Obtain a stateless session to overcome OutOfMemory Exception
 			StatelessSession session = sessionFactory.openStatelessSession();
 			transaction = session.beginTransaction();
-			
+
 			int versionNumber = 0;
 
 			// Select only the rows matching the network id and obtain a
@@ -346,8 +366,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 
 	}
-	
-	
+
+
 	/**
 	 * Update the network name for an existing network
 	 * This method could be called if User's network has been rejected and user prefers to store the network with an alternative name (Like version name).
@@ -379,7 +399,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	}
 
 
-	
+
 	/*@Override
 	public List<INetwork> getNetworks(String projectid)	throws QuadrigaStorageException {
 		if(projectid == null || projectid.equals(""))
@@ -441,8 +461,8 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 
 	}*/
-	
-	
+
+
 	/**
 	 * Get the list of networks associated with a project id. If the project id is null or the project does not contain any
 	 * workspaces or networks then the return will be null.
@@ -485,27 +505,27 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 		return networksDTOList;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<INetwork> getAllNetworkVersions(String networkId) throws QuadrigaStorageException{
 		if(networkId == null || networkId.equals(""))
 			return null;
-		
+
 		List<INetwork> networkList = new ArrayList<INetwork>();
-		
-		
+
+
 		Query query = sessionFactory.getCurrentSession().getNamedQuery("NetworkAssignedDTO.findByNetworkid");
 		query.setParameter("networkid", networkId);
 		List<NetworkAssignedDTO> networkAssignedDTOList = query.list();
-		
+
 		if(networkAssignedDTOList!=null){
 			networkList.addAll(networkMapper.getNetworkVersions(networkAssignedDTOList));
 		}
-		
+
 		return networkList;
 	}
-	
+
 
 
 	/******************************************************************************************************
@@ -520,12 +540,12 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	@Override
 	public List<NetworksDTO> getEditorNetworkList(IUser user)
 			throws QuadrigaStorageException 
-	{
+			{
 		//List<INetwork> networkList = new ArrayList<INetwork>();
-		
+
 		try {
 			Query query;
-			
+
 			String query1 = "Select n from NetworksDTO n where n.status = 'PENDING' and";
 			query1 += "((n.workspaceid in  " ;
 			query1 += "(select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
@@ -545,7 +565,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 					"where we.workspaceEditorDTOPK.editor = :username)))))"
 					+ "";
 			System.out.println("Testing query :"+query1);
-			
+
 			query = sessionFactory
 					.getCurrentSession()
 					.createQuery(query1);
@@ -554,7 +574,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
-			
+
 			/*networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
 			// Update project name and workspace name of the network
@@ -583,7 +603,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			logger.error("Error in fetching network list of editors: ", e);
 			throw new QuadrigaStorageException(e);
 		}
-	}
+			}
 
 	/**
 	 * {@inheritDoc}
@@ -609,7 +629,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	@Override
 	public String assignNetworkToUser(String networkId, IUser user, String networkName,int version)
 			throws QuadrigaStorageException {
-		
+
 		NetworkAssignedDTO networkAssignedDTO = new NetworkAssignedDTO();
 		Date date = new Date();
 		String assignedUsername = user.getUserName();
@@ -620,7 +640,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		networkAssignedDTO.setUpdateddate(date);
 		networkAssignedDTO.setNetworkname(networkName);
 		networkAssignedDTO.setVersion(version);
-		
+
 		/*NetworkAssignedDTO newtorkAssignedDTO = networkMapper
 				.getNetworkAssignedDTOWithNetworkName(networkId, user.getUserName(),
 						INetworkStatus.ASSIGNED, version, networkName);*/
@@ -692,17 +712,17 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	public String addAnnotationToNetwork(String networkId, String nodeId,
 			String nodeName,String annotationText, String userName, String objectType)
 					throws QuadrigaStorageException {
-//		NetworkAnnotationsDTO networkAnnotationsDTO = networkMapper
-//				.getNetworkAnnotationDTO(networkId, 
-//						"ANNOT_" + generateUniqueID(),annotationText, objectType,userId);
-//		
-//		try {
-//			sessionFactory.getCurrentSession().save(networkAnnotationsDTO);
-//			return "";
-//		} catch (Exception e) {
-//			logger.error("Error in assigning network to user: ", e);
-//			throw new QuadrigaStorageException(e);
-//		}
+		//		NetworkAnnotationsDTO networkAnnotationsDTO = networkMapper
+		//				.getNetworkAnnotationDTO(networkId, 
+		//						"ANNOT_" + generateUniqueID(),annotationText, objectType,userId);
+		//		
+		//		try {
+		//			sessionFactory.getCurrentSession().save(networkAnnotationsDTO);
+		//			return "";
+		//		} catch (Exception e) {
+		//			logger.error("Error in assigning network to user: ", e);
+		//			throw new QuadrigaStorageException(e);
+		//		}
 		try
 		{
 			List<NetworkNodeAnnotationsDTO> networkNodeAnnotationList = null;
@@ -710,17 +730,17 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId, annotationText, objectType, userName);
 			NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper.getNetworkNodeAnnationDTO(networkAnnotation, userName, nodeId,nodeName);
 			networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation);
-//			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
-//			if(networkNodeAnnotationList == null)
-//			{
-//				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
-//			}
-//			networkNodeAnnotationList.add(networkNodeAnnotation);
+			//			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
+			//			if(networkNodeAnnotationList == null)
+			//			{
+			//				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
+			//			}
+			//			networkNodeAnnotationList.add(networkNodeAnnotation);
 			//networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation.getAnnotationNodes());
-			
+
 			sessionFactory.getCurrentSession().save(networkAnnotation);
 			sessionFactory.getCurrentSession().save(networkNodeAnnotation);
-			
+
 		}
 		catch(Exception e)
 		{
@@ -729,7 +749,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 		return "";
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -805,7 +825,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException(e);
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -827,7 +847,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
-	
+
 
 	/**
 	 * {@inheritDoc}
@@ -877,7 +897,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@Override
 	public List<NetworksDTO> getNetworksOfUserWithStatus(IUser user, String networkStatus) throws QuadrigaStorageException{
-		
+
 
 		try {
 			Query query = sessionFactory.getCurrentSession().createQuery("from NetworksDTO n where n.networkid in (Select na.networkAssignedDTOPK.networkid from NetworkAssignedDTO na where na.networkAssignedDTOPK.assigneduser = :assigneduser ) and status = :status");
@@ -886,7 +906,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 
 			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
-			
+
 			return listNetworksDTO;
 		} catch (Exception e) {
 			logger.error("Error in fetching network of user: ", e);
@@ -894,7 +914,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 	}
 
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -929,7 +949,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				query = sessionFactory.getCurrentSession().getNamedQuery("ProjectWorkspaceDTO.findByWorkspaceid");
 				query.setParameter("workspaceid", network.getNetworkWorkspace().getWorkspace().getWorkspaceId());
 				ProjectWorkspaceDTO projectWorkspaceDTO = (ProjectWorkspaceDTO) query.uniqueResult();
-				
+
 				if (projectWorkspaceDTO != null)
 				{
 					if(projectWorkspaceDTO.getWorkspaceDTO() != null)
@@ -939,7 +959,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 						workspaceNetwork.setNetwork(network);
 						network.setNetworkWorkspace(workspaceNetwork);
 					}
-					
+
 				}
 			}
 
@@ -965,7 +985,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		try
 		{
 			NetworksDTO networksDTO = new NetworksDTO(network.getNetworkId(), network.getNetworkName(), username, network.getStatus(), username, new Date(), username, new Date());
-		//networkMapper.getNetworksDTO(network.getNetworkId(), network.getNetworkName(), username, network.getStatus(), network.getWorkspaceid());
+			//networkMapper.getNetworksDTO(network.getNetworkId(), network.getNetworkName(), username, network.getStatus(), network.getWorkspaceid());
 			sessionFactory.getCurrentSession().saveOrUpdate(networksDTO);
 			return SUCCESS;
 		}
@@ -1020,7 +1040,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			String sourceId, String targetId, String sourceName,
 			String targetName, String annotationText, String userId,
 			String objectType, String targetType) throws QuadrigaStorageException {
-			NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO = getNetworkEdgeAnnotationDTO(networkId, sourceId,
+		NetworkEdgeAnnotationsDTO networkEdgeAnnotationsDTO = getNetworkEdgeAnnotationDTO(networkId, sourceId,
 				targetId,sourceName,targetName, annotationText,"ANNOT_" + generateUniqueID(), userId, objectType,targetType);
 
 		try {
@@ -1030,9 +1050,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			logger.error("Error in assigning network to user: ", e);
 			throw new QuadrigaStorageException(e);
 		}
-		
+
 	}
-	
+
 	/**
 	 * This method adds an annotation to a relation in network.
 	 * @param annotationText     The annotated text
@@ -1051,7 +1071,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	@Override
 	public void addAnnotationToRelation(String annotationText,String networkId,String predicateId,String predicateName,String subjectId,String subjectName,
 			String objectId, String objectName,String userName,String annotedObjectType) throws QuadrigaStorageException
-	{
+			{
 		try
 		{
 			List<NetworkRelationAnnotationsDTO> networkRelationAnnotationList = null;
@@ -1059,26 +1079,26 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId, annotationText, annotedObjectType, userName);
 			NetworkRelationAnnotationsDTO networkRelationAnnotation = networkMapper.getNetworkRelationAnnationDTO(networkAnnotation, userName, predicateId, predicateName, subjectId, subjectName, objectId, objectName);
 			networkAnnotation.setNetworkRelationAnnotation(networkRelationAnnotation);
-			
+
 			//	networkRelationAnnotationList = networkAnnotation.getNetworkRelationAnnotationList();
-//			if(networkRelationAnnotationList == null)
-//			{
-//				networkRelationAnnotationList = new ArrayList<NetworkRelationAnnotationsDTO>();
-//			}
-//			networkRelationAnnotationList.add(networkRelationAnnotation);
+			//			if(networkRelationAnnotationList == null)
+			//			{
+			//				networkRelationAnnotationList = new ArrayList<NetworkRelationAnnotationsDTO>();
+			//			}
+			//			networkRelationAnnotationList.add(networkRelationAnnotation);
 			//networkAnnotation.setNetworkRelationAnnotationList(networkRelationAnnotationList);
-			
+
 			sessionFactory.getCurrentSession().save(networkAnnotation);
 			sessionFactory.getCurrentSession().save(networkRelationAnnotation);
-			
+
 		}
 		catch(Exception e)
 		{
 			logger.error("Error in annotating relation :",e);
 			throw new QuadrigaStorageException();
 		}
-		
-	}
+
+			}
 
 	/**
 	 * This method adds annotation to the given node in a network.
@@ -1101,25 +1121,25 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			NetworkAnnotationsDTO networkAnnotation = networkMapper.getNetworkAnnotationDTO(networkId, annotationId, annotationText, annotedObjectType, userName);
 			NetworkNodeAnnotationsDTO networkNodeAnnotation = networkMapper.getNetworkNodeAnnationDTO(networkAnnotation, userName, nodeId,nodeName);
 			networkAnnotation.setNetworkNodeAnnotation(networkNodeAnnotation);
-			
-//			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
-//			if(networkNodeAnnotationList == null)
-//			{
-//				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
-//			}
-//			networkNodeAnnotationList.add(networkNodeAnnotation);
-//			networkAnnotation.setNetworkNodeAnnotationList(networkNodeAnnotationList);
-			
+
+			//			networkNodeAnnotationList = networkAnnotation.getNetworkNodeAnnotationList();
+			//			if(networkNodeAnnotationList == null)
+			//			{
+			//				networkNodeAnnotationList = new ArrayList<NetworkNodeAnnotationsDTO>();
+			//			}
+			//			networkNodeAnnotationList.add(networkNodeAnnotation);
+			//			networkAnnotation.setNetworkNodeAnnotationList(networkNodeAnnotationList);
+
 			sessionFactory.getCurrentSession().save(networkAnnotation);
 			sessionFactory.getCurrentSession().save(networkNodeAnnotation);
-			
+
 		}
 		catch(Exception e)
 		{
 			logger.error("Error in annotating relation :",e);
 			throw new QuadrigaStorageException();
 		}
-		
+
 	}
 	/**
 	 * This method retrieves the annotations associated with the relation.
@@ -1138,23 +1158,23 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		List<NetworkRelationAnnotationsDTO> networkRelationAnnotations = null;
 		try
 		{
-		String queryString = "from NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid AND n.objectId = :objectid AND n.predicateId = :predicateid AND n.annotationRelation.networkId =:networkid";
-		Query query = sessionFactory.getCurrentSession().createQuery(queryString);
-		query.setParameter("subjectid", subjectId);
-		query.setParameter("objectid", objectId);
-		query.setParameter("predicateid", predicateId);
-		query.setParameter("networkid",networkId);
-		networkRelationAnnotations = query.list();
+			String queryString = "from NetworkRelationAnnotationsDTO n WHERE n.subjectId = :subjectid AND n.objectId = :objectid AND n.predicateId = :predicateid AND n.annotationRelation.networkId =:networkid";
+			Query query = sessionFactory.getCurrentSession().createQuery(queryString);
+			query.setParameter("subjectid", subjectId);
+			query.setParameter("objectid", objectId);
+			query.setParameter("predicateid", predicateId);
+			query.setParameter("networkid",networkId);
+			networkRelationAnnotations = query.list();
 		}
 		catch(Exception ex)
 		{
 			throw new QuadrigaStorageException();
 		}
-		
+
 		return networkRelationAnnotations;
-		
+
 	}
-	
+
 	public NetworkEdgeAnnotationsDTO getNetworkEdgeAnnotationDTO(String networkId,String sourceId,String targetId, String sourceName,String targetName, String annotationText, String annotationId, String userName,String objectType,String targetNodeType)
 	{
 		NetworkAnnotationsDTO networkAnnotationsDTO = new NetworkAnnotationsDTO(annotationId, annotationText, networkId, userName, objectType, userName, new Date(), userName, new Date());
@@ -1171,5 +1191,5 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		networkEdgeAnnotationsDTO.setAnnotationEdges(networkAnnotationsDTO);
 		return networkEdgeAnnotationsDTO;
 	}
-	
+
 }

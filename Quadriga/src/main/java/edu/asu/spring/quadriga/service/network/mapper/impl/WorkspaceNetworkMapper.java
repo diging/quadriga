@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.service.network.mapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import edu.asu.spring.quadriga.service.network.mapper.INetworkMapper;
 import edu.asu.spring.quadriga.service.network.mapper.IWorkspaceNetworkMapper;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
+import edu.asu.spring.quadriga.web.network.NetworkListController;
 
 @Service
 public class WorkspaceNetworkMapper implements IWorkspaceNetworkMapper{
@@ -27,6 +30,9 @@ public class WorkspaceNetworkMapper implements IWorkspaceNetworkMapper{
 	
 	@Autowired
 	IWorkspaceShallowMapper workspaceshallowmapper;
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(WorkspaceNetworkMapper.class);
 	
 	@Autowired
 	INetworkMapper networkmapper;
@@ -39,8 +45,12 @@ public class WorkspaceNetworkMapper implements IWorkspaceNetworkMapper{
 		
 		NetworkWorkspaceDTO networkworkspaceDTO = networksDTO.getNetworkWorkspace();
 		if(networkworkspaceDTO!=null){
+			logger.info("networkworkspaceDTO is not null");
 			IWorkSpace workspace = workspaceshallowmapper.getWorkSpaceDetails(networkworkspaceDTO.getWorkspaceDTO());
 			networkworkspace.setWorkspace(workspace);
+			if(workspace == null){
+				logger.info("--workspace is not null");
+			}
 			networkworkspace.setNetwork(network);
 			networkworkspace.setCreatedBy(networkworkspaceDTO.getCreatedby());
 			networkworkspace.setCreatedDate(networkworkspaceDTO.getCreateddate());
