@@ -522,6 +522,7 @@ public class DspaceManager implements IDspaceManager{
 					IBitStream bitstreamFromDspace = proxyCommunityManager.getBitStream(workspaceBitstream.getBitStream().getId(), restTemplate, dspaceProperties, dspaceKeys, sUserName, sPassword);
 					if(bitstreamFromDspace != null)
 					{
+						//Name is yet to be loaded
 						if(bitstreamFromDspace.getName() == null)
 						{
 							if(bitstreamFromDspace.getLoadStatus() == false)
@@ -536,18 +537,12 @@ public class DspaceManager implements IDspaceManager{
 								bitstreamFromDspace.setName(getDspaceMessages().getProperty("dspace.restricted_bitstream"));
 								bitstreamFromDspace.setItemName(getDspaceMessages().getProperty("dspace.restricted_item"));
 							}
-							if(checkedBitStreams == null){
-								checkedBitStreams = new ArrayList<IWorkspaceBitStream>();
-							}
-							checkedBitStreams.add(workspaceBitstream);
+						}	
+						if(checkedBitStreams == null){
+							checkedBitStreams = new ArrayList<IWorkspaceBitStream>();
 						}
-						else
-						{
-							if(checkedBitStreams == null){
-								checkedBitStreams = new ArrayList<IWorkspaceBitStream>();
-							}
-							checkedBitStreams.add(workspaceBitstream);
-						}						
+						workspaceBitstream.setBitStream(bitstreamFromDspace);
+						checkedBitStreams.add(workspaceBitstream);
 					}
 				} //End of for each loop for bitstream
 			}
