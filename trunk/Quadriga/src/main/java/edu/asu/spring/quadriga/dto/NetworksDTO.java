@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -74,7 +75,7 @@ public class NetworksDTO implements Serializable {
     private List<NetworkAnnotationsDTO> networksAnnotationsDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "networkDTO")
     private List<NetworkStatementsDTO> networkStamentesDTOList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "networksDTO")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "networksDTO")
     private NetworkWorkspaceDTO networkWorkspace;
     
     @JoinColumn(name = "networkowner",referencedColumnName = "username",insertable=false ,updatable=false)
