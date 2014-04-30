@@ -58,7 +58,7 @@ public class DictionaryManager implements IDictionaryManager {
 	@Autowired
 	@Qualifier("wordPowerURL")
 	private String wordPowerURL;
-	
+
 	@Autowired
 	@Qualifier("searchWordPowerURLPath")
 	private String searchWordPowerURLPath;
@@ -66,8 +66,8 @@ public class DictionaryManager implements IDictionaryManager {
 	@Autowired
 	@Qualifier("updateFromWordPowerURLPath")
 	private String updateFromWordPowerURLPath;
-	
-	
+
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryManager.class);
 
@@ -76,25 +76,25 @@ public class DictionaryManager implements IDictionaryManager {
 
 	@Autowired
 	private DictionaryItemFactory dictionaryItemsFactory;
-	
+
 	@Autowired
 	private IDBConnectionProjectDictionary connectProjectDictionary;
-	
+
 	@Autowired
 	private IRetrieveProjectManager retrieveProjectManager;
-	
+
 	@Autowired
 	private IDBConnectionWorkspaceDictionary connectWorkspaceDictionary;
-	
+
 	@Autowired
 	private IListWSManager wsManager;
-	
+
 	@Autowired
 	private IDictionaryDeepMapper dictDeepMapper;
-	
+
 	@Autowired
 	private IDictionaryShallowMapper dictShallowMapper;
-	
+
 
 	/**
 	 * Gets the searchWordPowerURL
@@ -136,24 +136,24 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryList;
 	}
-	
-//	/**
-//	 * @throws QuadrigaStorageException 
-//	 * 
-//	 * 
-//	 * 
-//	 * 
-//	 */
-//	@Override
-//	public IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException {
-//		
-//		IDictionary dictionary = dbConnect.getDictionaryDetails(userName);
-//		
-//		return dictionary;
-//	}
-//
-//	
-	
+
+	//	/**
+	//	 * @throws QuadrigaStorageException 
+	//	 * 
+	//	 * 
+	//	 * 
+	//	 * 
+	//	 */
+	//	@Override
+	//	public IDictionary getDictionaryDetails(String userName) throws QuadrigaStorageException {
+	//		
+	//		IDictionary dictionary = dbConnect.getDictionaryDetails(userName);
+	//		
+	//		return dictionary;
+	//	}
+	//
+	//	
+
 
 	/**
 	 * Checks for user permission on dictionary
@@ -172,22 +172,22 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 		return result;
 	}
-	
-//	/**
-//	 * Checks for user permission on dictionary
-//	 * @param userId
-//	 * @param dicitonaryId
-//	 * @return
-//	 * @throws QuadrigaStorageException
-//	 * @throws QuadrigaAccessException 
-//	 */
-//	@Override
-//	@Transactional
-//	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException, QuadrigaAccessException{
-//		List<IDictionary> dictionaryList= dbConnect.getDictionaryCollabOfUser(userId);
-//		return dictionaryList;
-//	}
-	
+
+	//	/**
+	//	 * Checks for user permission on dictionary
+	//	 * @param userId
+	//	 * @param dicitonaryId
+	//	 * @return
+	//	 * @throws QuadrigaStorageException
+	//	 * @throws QuadrigaAccessException 
+	//	 */
+	//	@Override
+	//	@Transactional
+	//	public List<IDictionary> getDictionaryCollabOfUser(String userId) throws QuadrigaStorageException, QuadrigaAccessException{
+	//		List<IDictionary> dictionaryList= dbConnect.getDictionaryCollabOfUser(userId);
+	//		return dictionaryList;
+	//	}
+
 	/**
 	 * Checks for user permission on dictionary
 	 * @param userId
@@ -202,7 +202,7 @@ public class DictionaryManager implements IDictionaryManager {
 		List<IDictionary> dictionaryList = dictShallowMapper.getDictionaryListOfCollaborator(userId);
 		return dictionaryList;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<String> getDictionaryCollabPerm(String userId,String dicitonaryId) throws QuadrigaStorageException {
@@ -237,7 +237,7 @@ public class DictionaryManager implements IDictionaryManager {
 	@Transactional
 	public void addNewDictionariesItems(String dictionaryId, String item,
 			String id, String pos, String owner)
-			throws QuadrigaStorageException {
+					throws QuadrigaStorageException {
 		try {
 			dbConnect.addDictionaryItems(dictionaryId, item, id, pos,
 					owner);
@@ -262,7 +262,7 @@ public class DictionaryManager implements IDictionaryManager {
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteDictionaryItemsCollab(String dictionaryId, String itemid) throws QuadrigaStorageException {
@@ -273,7 +273,7 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 
 	}
-	
+
 	/**
 	 * Update the dictionary item of the dictionary from the word power
 	 * 
@@ -302,7 +302,7 @@ public class DictionaryManager implements IDictionaryManager {
 			String ownerName) throws QuadrigaStorageException {
 
 		IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryid, ownerName);
-		
+
 		List<IDictionaryItems> dictionaryItemList = null;
 		try {
 			dictionaryItemList = dictionary.getDictionaryItems();
@@ -312,14 +312,14 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryItemList;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<IDictionaryItems> getDictionaryItemsDetailsCollab(String dictionaryid) throws QuadrigaStorageException {
 
-		
+
 		IDictionary dictionary = dictDeepMapper.getDictionaryDetails(dictionaryid);
-		
+
 		List<IDictionaryItems> dictionaryItemList = null;
 		try {
 			dictionaryItemList = dictionary.getDictionaryItems();
@@ -329,7 +329,7 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryItemList;
 	}
-	
+
 	/**
 	 * Gets dictionary name of the dictionary from dictionary ID
 	 * 
@@ -350,7 +350,7 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryName;
 	}
-	
+
 	/**
 	 * This method retrieves the dictionary owner for the given dictionary id
 	 * @param dictionaryid - dictionary id
@@ -372,7 +372,7 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return dictionaryOwner;
 	}
-	
+
 	/**
 	 * Call the word power for a term and fetch the xml from word power rest
 	 * 
@@ -421,7 +421,7 @@ public class DictionaryManager implements IDictionaryManager {
 	 * 
 	 * @return Return the dictionaryEntry bean to controller
 	 */
-	
+
 	public List<WordpowerReply.DictionaryEntry> getUpdateFromWordPower(
 			String dictionaryId, String itemid) {
 
@@ -465,8 +465,8 @@ public class DictionaryManager implements IDictionaryManager {
 					di.getTerm(), di.getDictionaryItemId(), di.getPos(), getDictionaryOwner(dictionaryId));
 		}
 	}
-	
-	
+
+
 	/**
 	 * Get index of term from a list for update and deleting term from
 	 * dictionary
@@ -496,30 +496,30 @@ public class DictionaryManager implements IDictionaryManager {
 
 		return di;
 	}
-	
-//	/**
-//	 * this method used to return collaborators which are present in the current dictionary
-//	 * 
-//	 * @param		dictionaryid
-//	 * @return		List of collaborators
-//	 * @exception 	QuadrigaStorageException	
-//	 */
-//	@Override
-//	@Transactional
-//	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
-//		
-//		List<ICollaborator> collaborators = null;
-//		try {
-//			
-//		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
-//		
-//		} catch (QuadrigaStorageException e) {
-//			e.printStackTrace();
-//		}
-//	
-//		return collaborators;
-//	}
-//	
+
+	//	/**
+	//	 * this method used to return collaborators which are present in the current dictionary
+	//	 * 
+	//	 * @param		dictionaryid
+	//	 * @return		List of collaborators
+	//	 * @exception 	QuadrigaStorageException	
+	//	 */
+	//	@Override
+	//	@Transactional
+	//	public List<ICollaborator> showCollaboratingUsers(String dictionaryid) {
+	//		
+	//		List<ICollaborator> collaborators = null;
+	//		try {
+	//			
+	//		collaborators = dbConnect.showCollaboratingUsersRequest(dictionaryid);
+	//		
+	//		} catch (QuadrigaStorageException e) {
+	//			e.printStackTrace();
+	//		}
+	//	
+	//		return collaborators;
+	//	}
+	//	
 	/**
 	 * this method used to return collaborators which are present in the current dictionary
 	 * 
@@ -530,7 +530,7 @@ public class DictionaryManager implements IDictionaryManager {
 	@Override
 	@Transactional
 	public List<IDictionaryCollaborator> showCollaboratingUsers(String dictionaryId) throws QuadrigaStorageException {
-		
+
 		List<IDictionaryCollaborator>  workspaceCollaboratorList =  null;
 		IDictionary dictionary =  dictDeepMapper.getDictionaryDetails(dictionaryId);
 		if(dictionary != null){
@@ -538,7 +538,7 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 		return workspaceCollaboratorList;
 	}
-	
+
 	/**
 	 * this method used to return collaborators which are not present in the current dictionary
 	 * 
@@ -570,14 +570,14 @@ public class DictionaryManager implements IDictionaryManager {
 	@Transactional
 	public void addCollaborators(ICollaborator collaborator, String dictionaryid, String userName, String sessionUser) {
 		try {
-		 dbConnect.addCollaborators(collaborator, dictionaryid, userName, sessionUser);
-			
+			dbConnect.addCollaborators(collaborator, dictionaryid, userName, sessionUser);
+
 		} catch (QuadrigaStorageException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	/**
 	 * this method used to delete collaborators in the current dictionary
 	 * 
@@ -589,11 +589,11 @@ public class DictionaryManager implements IDictionaryManager {
 	@Override
 	@Transactional
 	public void deleteCollaborator(String dictionaryid, String userName) throws QuadrigaStorageException {
-		
+
 		dbConnect.deleteCollaborators(dictionaryid, userName);
-		
+
 	}
-	
+
 	/**
 	 * This method retrieves the dictionary id for the given dictionary name
 	 * @param dictName - dictionary name
@@ -607,79 +607,80 @@ public class DictionaryManager implements IDictionaryManager {
 		String dictId = dbConnect.getDictionaryId(dictName);
 		return dictId;
 	}
-	
-	
+
+
 	@Override
 	@Transactional
 	public String getProjectsTree(String userName, String dictionaryId) throws QuadrigaStorageException, JSONException {
-		
+
 		JSONObject core = new JSONObject();
-		
+
 		List<IProject> projectList = retrieveProjectManager.getProjectList(userName);
 		JSONArray dataArray = new JSONArray();
-        
-        List<IProject> dictProjectList = connectProjectDictionary.getprojectsByDictId(dictionaryId);
-        List<IWorkSpace> dictWorkspaceList = connectWorkspaceDictionary.getWorkspaceByDictId(dictionaryId);
 
-        for(IProject project : projectList)
-        {
-        	JSONObject data = new JSONObject();
-        	String projectlink = null;
-        	data.put("id", project.getProjectId());
-        	data.put("parent", "#");
-        	
-        	if(dictProjectList.contains(project))
-        	{
-        		projectlink = project.getProjectName();
-        	}
-        	else
-        	{
-        		projectlink = "<a href='#' id='"
-        				     +project.getProjectId()
-        				     +"'name= '"
-        				     +project.getProjectName()
-        				     +"'onclick='javascript:addDictToProjects(this.id,this.name);'>"
-        				     +project.getProjectName()
-        				     +"</a>";
-        	}
-        	
-        	data.put("text", projectlink);
-        	dataArray.put(data);
-        	
-        	String wsParent = project.getProjectId();
-        	List<IWorkSpace> wsList = wsManager.listActiveWorkspace(wsParent, userName);
-        	
-        	for(IWorkSpace workSpace: wsList)
-        	{
-        		JSONObject data1 = new JSONObject();
-				data1.put("id", workSpace.getWorkspaceId());
-				data1.put("parent", wsParent);
-				String wsLink = null;
-				if(dictWorkspaceList.contains(workSpace))
+		List<IProject> dictProjectList = connectProjectDictionary.getprojectsByDictId(dictionaryId);
+		List<IWorkSpace> dictWorkspaceList = connectWorkspaceDictionary.getWorkspaceByDictId(dictionaryId);
+
+		for(IProject project : projectList)
+		{
+			JSONObject data = new JSONObject();
+			String projectlink = null;
+			data.put("id", project.getProjectId());
+			data.put("parent", "#");
+
+			if(dictProjectList.contains(project))
+			{
+				projectlink = project.getProjectName();
+			}
+			else
+			{
+				projectlink = "<a href='#' id='"
+						+project.getProjectId()
+						+"'name= '"
+						+project.getProjectName()
+						+"'onclick='javascript:addDictToProjects(this.id,this.name);'>"
+						+project.getProjectName()
+						+"</a>";
+			}
+
+			data.put("text", projectlink);
+			dataArray.put(data);
+
+			String wsParent = project.getProjectId();
+			List<IWorkSpace> wsList = wsManager.listActiveWorkspace(wsParent, userName);
+			if(wsList != null){
+				for(IWorkSpace workSpace: wsList)
 				{
-					wsLink = workSpace.getWorkspaceName();
+
+					JSONObject data1 = new JSONObject();
+					data1.put("id", workSpace.getWorkspaceId());
+					data1.put("parent", wsParent);
+					String wsLink = null;
+					if(dictWorkspaceList.contains(workSpace))
+					{
+						wsLink = workSpace.getWorkspaceName();
+					}
+					else{
+
+						wsLink = "<a href ='#' id='"
+								+ workSpace.getWorkspaceId()
+								+ "' name='"
+								+ workSpace.getWorkspaceName()
+								+ "' onclick='javascript:addDictToWorkspace(this.id,this.name);' >"
+								+ workSpace.getWorkspaceName() + "</a>";
+					}
+
+					data1.put("text", wsLink);
+					dataArray.put(data1);
 				}
-				else{
-					
-					wsLink = "<a href ='#' id='"
-					         + workSpace.getWorkspaceId()
-					         + "' name='"
-					         + workSpace.getWorkspaceName()
-					         + "' onclick='javascript:addDictToWorkspace(this.id,this.name);' >"
-					         + workSpace.getWorkspaceName() + "</a>";
-				   }
-				
-				data1.put("text", wsLink);
-				dataArray.put(data1);
-        	}
-        	
-        }
-        
-        JSONObject dataList = new JSONObject();
+			}
+		}
+
+		JSONObject dataList = new JSONObject();
 		dataList.put("data", dataArray);
-		
+
 		core.put("core", dataList);
-      
+
 		return core.toString(1);
 	}
 
@@ -691,5 +692,5 @@ public class DictionaryManager implements IDictionaryManager {
 	}
 
 
-	
+
 }
