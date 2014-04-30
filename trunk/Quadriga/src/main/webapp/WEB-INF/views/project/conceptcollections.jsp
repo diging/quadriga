@@ -48,14 +48,14 @@
 
 <div class="container">
 	<c:choose>
-		<c:when test="${not empty conceptCollectionList}">
+		<c:when test="${not empty projectConceptCollectionList}">
 				
 				<ul class="style2 pagination1">
-					<c:forEach var="conceptCollection" items="${conceptCollectionList}">
+					<c:forEach var="projectConceptCollection" items="${projectConceptCollectionList}">
 						<li><a
-							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptCollection.conceptCollectionId}"><c:out
-									value="${conceptCollection.conceptCollectionName}"></c:out></a> <br> <c:out
-								value="${conceptCollection.description}"></c:out></li>
+							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${projectConceptCollection.conceptCollection.conceptCollectionId}"><c:out
+									value="${projectConceptCollection.conceptCollection.conceptCollectionName}"></c:out></a> <br> <c:out
+								value="${projectConceptCollection.conceptCollection.description}"></c:out></li>
 					</c:forEach>
 				</ul>
 		</c:when>
