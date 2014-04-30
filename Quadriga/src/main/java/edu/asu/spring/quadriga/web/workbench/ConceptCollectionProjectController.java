@@ -37,91 +37,80 @@ public class ConceptCollectionProjectController {
 
 	@Autowired 
 	IRetrieveProjectManager projectManager;
-	
+
 	@Autowired
 	private IProjectConceptCollectionManager projectConceptCollectionManager;
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ConceptCollectionProjectController.class);
 
-	
+
 
 	@RequestMapping(value = "auth/workbench/{projectid}/conceptcollections", method = RequestMethod.GET)
 	public String listProjectConceptCollection(@PathVariable("projectid") String projectid, Model model) throws QuadrigaStorageException {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
-		logger.info("Concept collection list is empty buddy");
-		List<IProjectConceptCollection> conceptCollectionList = null;
+		List<IProjectConceptCollection> projectConceptCollectionList = null;
 		try {
 			//TODO: listProjectConceptCollection() needs to be modified 
-			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+			projectConceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException();
 		}
-		if(conceptCollectionList == null){
-			logger.info("Concept collection list is empty buddy");
-		}
-		
-		//TODO: iterator has to be changed according to the new domain class
-		Iterator<IProjectConceptCollection> itr = conceptCollectionList.iterator(); 
-		while(itr.hasNext()){
-			//IConceptCollection con = itr.next();
-			IProjectConceptCollection con = itr.next();
-			logger.info(" "+con.getConceptCollection().getConceptCollectionName());
-		}
-		model.addAttribute("conceptCollectionList", conceptCollectionList);
+
+		model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/conceptcollections";
 	}
-	
-//	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
-//	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
-//	public String addProjectConceptCollection(
-//			@PathVariable("projectid") String projectid, Model model)
-//					throws QuadrigaAccessException
-//	
-//	{
-//		try {
-//			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-//					.getAuthentication().getPrincipal();
-//			String userId = user.getUsername();
-//
-//			List<IProjectConceptCollection> conceptCollectionList = null;
-//			//TODO: getCollectionsOwnedbyUser() needs to be changed according to mapper
-//			try {
-//				conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
-//			} catch (QuadrigaStorageException e) {
-//				throw new QuadrigaStorageException();
-//			}
-//			if (conceptCollectionList == null) {
-//				logger.info("conceptCollectionList list is empty");
-//			}
-//			//TODO: iterator needs to be changed
-//			Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator(); 
-//			while(I.hasNext()){
-//				IConceptCollection con = I.next();
-//				logger.info(" "+con.getConceptCollectionName());
-//			}
-//			model.addAttribute("conceptCollectionList", conceptCollectionList);
-//			IProject project = projectManager.getProjectDetails(projectid);
-//			model.addAttribute("project", project);
-//			model.addAttribute("projectid", projectid);
-//			model.addAttribute("userId", userId);
-//		} catch (Exception e) {
-//			logger.error(" ----",e);
-//		}
-//		return "auth/workbench/project/addconceptcollections";
-//	}
+
+	//	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
+	//	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
+	//	public String addProjectConceptCollection(
+	//			@PathVariable("projectid") String projectid, Model model)
+	//					throws QuadrigaAccessException
+	//	
+	//	{
+	//		try {
+	//			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+	//					.getAuthentication().getPrincipal();
+	//			String userId = user.getUsername();
+	//
+	//			List<IProjectConceptCollection> conceptCollectionList = null;
+	//			//TODO: getCollectionsOwnedbyUser() needs to be changed according to mapper
+	//			try {
+	//				conceptCollectionList = conceptCollectionManager.getCollectionsOwnedbyUser(userId);
+	//			} catch (QuadrigaStorageException e) {
+	//				throw new QuadrigaStorageException();
+	//			}
+	//			if (conceptCollectionList == null) {
+	//				logger.info("conceptCollectionList list is empty");
+	//			}
+	//			//TODO: iterator needs to be changed
+	//			Iterator<IProjectConceptCollection> I = conceptCollectionList.iterator(); 
+	//			while(I.hasNext()){
+	//				IConceptCollection con = I.next();
+	//				logger.info(" "+con.getConceptCollectionName());
+	//			}
+	//			model.addAttribute("conceptCollectionList", conceptCollectionList);
+	//			IProject project = projectManager.getProjectDetails(projectid);
+	//			model.addAttribute("project", project);
+	//			model.addAttribute("projectid", projectid);
+	//			model.addAttribute("userId", userId);
+	//		} catch (Exception e) {
+	//			logger.error(" ----",e);
+	//		}
+	//		return "auth/workbench/project/addconceptcollections";
+	//	}
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 1, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.GET)
 	public String addProjectConceptCollection(
 			@PathVariable("projectid") String projectid, Model model)
 					throws QuadrigaAccessException
-	
-	{
+
+					{
 		try {
 			UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
@@ -152,8 +141,8 @@ public class ConceptCollectionProjectController {
 			logger.error(" ----",e);
 		}
 		return "auth/workbench/project/addconceptcollections";
-	}
-	
+					}
+
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/addconceptcollection", method = RequestMethod.POST)
 	public String addProjectConceptCollection(HttpServletRequest req,
@@ -226,24 +215,26 @@ public class ConceptCollectionProjectController {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		String userId = user.getUsername();
-		
-		List<IProjectConceptCollection> conceptCollectionList = null;
+
+		List<IProjectConceptCollection> projectConceptCollectionList = null;
 		try {
-			// TODO: listProjectConceptCollection() is to be changed according to mapper
-			conceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
+			projectConceptCollectionList = projectConceptCollectionManager.listProjectConceptCollection(projectid, userId);
 		} catch (QuadrigaStorageException e) {
 			throw new QuadrigaStorageException();
 		}
-		if(conceptCollectionList == null){
-			logger.info("conceptCollectionList list is empty buddy");
+
+		if(projectConceptCollectionList != null){
+			logger.info(" "+ projectConceptCollectionList.size());
+		}else{
+			logger.info("projectConceptCollectionList   ---- null" );
 		}
-		model.addAttribute("conceptCollectionList", conceptCollectionList);
+		model.addAttribute("projectConceptCollectionList", projectConceptCollectionList);
 		IProject project = projectManager.getProjectDetails(projectid);
 		model.addAttribute("project", project);
 		model.addAttribute("projectid", projectid);
 		return "auth/workbench/project/deleteconceptcollections";
 	}
-	
+
 	@AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.PROJECT,paramIndex = 2, userRole = {RoleNames.ROLE_COLLABORATOR_ADMIN,RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN} )})
 	@RequestMapping(value = "auth/workbench/{projectid}/deleteconceptcollections", method = RequestMethod.POST)
 	public String deleteProjectConceptCollection(HttpServletRequest req,@PathVariable("projectid") String projectid, Model model) 
@@ -253,7 +244,7 @@ public class ConceptCollectionProjectController {
 		String userId = user.getUsername();
 		String msg = "";
 		int flag=0;
-		
+
 		String[] values = req.getParameterValues("selected");
 		if (values == null) {
 			model.addAttribute("deletesuccess", 0);

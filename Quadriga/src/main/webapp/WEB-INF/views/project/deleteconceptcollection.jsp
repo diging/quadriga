@@ -78,7 +78,7 @@
 		});
 	});
 </script>
-<h2>Project: ${project.name}</h2>
+<h2>Project: ${project.projectName}</h2>
 <hr />
 
 
@@ -100,7 +100,7 @@
 </c:choose>
 
 <c:choose>
-	<c:when test="${not empty conceptCollectionList}">
+	<c:when test="${not empty projectConceptCollectionList}">
 		<form method="POST">
 
 			<input type=button
@@ -123,17 +123,17 @@
 				</thead>
 
 				<tbody>
-					<c:forEach var="conceptCollection" items="${conceptCollectionList}">
+					<c:forEach var="projectConceptCollection" items="${projectConceptCollectionList}">
 						<tr>
 							<td width="10%"><input type="checkbox" class="selected"
 								name="selected"
-								value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
+								value='<c:out value="${projectConceptCollection.conceptCollection.conceptCollectionId}"></c:out>' /></td>
 							<td width="30%" align="center"><input name="items"
 								type="hidden"
-								value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
-									value="${conceptCollection.name}"></c:out></td>
+								value="<c:out value="${projectConceptCollection.conceptCollection.conceptCollectionName}"></c:out>" /> <c:out
+									value="${projectConceptCollection.conceptCollection.conceptCollectionName}"></c:out></td>
 							<td width="60%" align="justify"><c:out
-									value="${conceptCollection.description}"></c:out></td>
+									value="${projectConceptCollection.conceptCollection.description}"></c:out></td>
 						</tr>
 					</c:forEach>
 				</tbody>
