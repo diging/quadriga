@@ -40,7 +40,7 @@
 			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
 			<hr>
-			<div class="user">Owned by: ${project.owner.name}</div>
+			<div class="user">Owned by: ${project.owner.name} (<a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">Change</a>)</div>
 			<hr> <!--  Display associated workspace -->
 			<div id = "tabs" class="tabs">
 			<ul>
