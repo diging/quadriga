@@ -10,6 +10,10 @@
 <script type="text/javascript">
   $(function () {
    $('#projectmenu').jstree().on("select_node.jstree", function (e, data) {
+	   var i, j = [];
+	   for(i = 0, j = data.selected.length; i < j; i++) {
+		   $('#projectmenu').jstree().toggle_node(data.instance.get_node(data.selected[i]));
+		}
        document.location = data.instance.get_node(data.node, true).children('a').attr('href');
    });
   });
@@ -20,58 +24,58 @@
 </h2>
 <div id="projectmenu">
 	<ul>
-		<li>Workspace
+		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Workspace
 			<ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/new.png"}'><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/delete.png"}'><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteworkspace">Delete</a></li>
 
-				<li><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/archiveworkspace">Archive</a></li>
-				<li><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/unarchiveworkspace">Unarchive</a></li>
 
-				<li><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deactivateworkspace">Deactivate
 		</a></li>
-				<li><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/activateworkspace">Activate</a></li>
 			</ul>
 		</li>
-		<li>Dictionary
+		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Dictionary
 			<ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/new.png"}'><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary">Add</a></li>
-				<li><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/dictionaries">List</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/delete.png"}'><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary">Delete</a></li>
 			</ul>
 		</li>
-		<li>Collections
+		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collections
 			<ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/new.png"}'><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection">Add</a></li>
-				<li><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/conceptcollections">List</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/delete.png"}'><a
+				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections">Delete</a></li>
 			</ul>
 		</li>
-		<li>Collaborators
+		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
 		<ul>
-			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/new.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">
+			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">
 			Add</a></li>
 			
-			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/delete.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators">
+			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators">
 			Delete</a></li>
-			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/edit.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators">
+			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/pen.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators">
 			Update</a></li>
 		</ul>
 		</li>
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/edit.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">
-			Change Owner</a></li>
+		<!-- <li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/edit.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">
+			Change Owner</a></li>  -->
 
 	</ul>
 </div>
