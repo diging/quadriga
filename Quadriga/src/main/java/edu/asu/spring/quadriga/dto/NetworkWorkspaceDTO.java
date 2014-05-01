@@ -51,6 +51,11 @@ public class NetworkWorkspaceDTO implements Serializable{
     @OneToOne(optional = false)
     private NetworksDTO networksDTO;
     
+    public NetworkWorkspaceDTO()
+    {
+    	
+    }
+    
     public NetworkWorkspaceDTO(NetworkWorkspaceDTOPK networkWorkspaceDTOPK,String createdBy,Date createdDate,String updatedBy,Date updatedDate) {
 		this.networkWorkspaceDTOPK = networkWorkspaceDTOPK;
 		this.createdby = createdBy;

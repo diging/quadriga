@@ -94,8 +94,10 @@
 										<input name="items" type="hidden"
 										value="<c:out value="${network.networkName}"></c:out>" /> <c:out
 											value="${network.networkName}"></c:out></td>
-									<td width="25%" align="center"><c:out
-											value="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out></td>
+									<td width="25%" align="center">
+									<c:out
+											value ="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out>
+											</td>
 									<td width="25%" align="center"><c:out
 											value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
 									<td width="25%" align="center"><c:out

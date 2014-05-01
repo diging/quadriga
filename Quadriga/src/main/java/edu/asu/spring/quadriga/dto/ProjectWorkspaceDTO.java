@@ -50,10 +50,10 @@ public class ProjectWorkspaceDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
-    @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
+    @JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid",insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private WorkspaceDTO workspaceDTO;
-    @JoinColumn(name = "projectid", referencedColumnName = "projectid", insertable = false, updatable = false)
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid",insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private ProjectDTO projectDTO;
 
