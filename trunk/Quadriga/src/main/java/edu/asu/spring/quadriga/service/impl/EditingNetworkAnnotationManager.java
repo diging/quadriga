@@ -303,7 +303,6 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 		List<INetworkAnnotation> networkAnnotationsList = getAllAnnotationOfNetwork(username, networkId);
 		String jsonAnnotations = "";
 		JSONArray ja = new JSONArray();
-		JSONObject j1 = new JSONObject();
 		for(INetworkAnnotation networkAnnotation : networkAnnotationsList){
 			JSONObject j = new JSONObject();
 			if(networkAnnotation instanceof NetworkNodeAnnotation) {

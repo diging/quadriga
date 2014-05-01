@@ -83,7 +83,7 @@ public class NetworksDTO implements Serializable {
    
 	public NetworksDTO() {
     }
-
+						
     public NetworksDTO(String networkid,String networkname, String networkowner, String status, String updatedby, Date updateddate, String createdby, Date createddate) {
         this.networkid = networkid;
         this.networkname = networkname;
