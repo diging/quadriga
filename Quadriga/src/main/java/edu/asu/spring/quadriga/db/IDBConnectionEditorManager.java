@@ -87,7 +87,7 @@ public interface IDBConnectionEditorManager {
 	 * @return												Returns a {@link List} of {@link NetworksAnnotationsDTO} 
 	 * @throws QuadrigaStorageException						Throws Storage exception when there is a issue while getting any data from database
 	 */
-	public abstract List<NetworkNodeAnnotationsDTO> getAnnotationByNodeType(String type, String id,String userid,String networkId) throws QuadrigaStorageException;
+	public abstract List<NetworkNodeAnnotationsDTO> getAnnotationByNodeType(String type, String id,String networkId) throws QuadrigaStorageException;
 	
 	/**
 	 * This methods should helps in getting all annotations of the network based on the edge Id.

@@ -99,13 +99,11 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("nodeid") String nodeId,
 			@RequestParam("objecttype") String objectType, 
 			Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
 		String annotation = "";
 
 		try {
 			
-			logger.info("objectType  "+objectType +"nodeId "+ nodeId+"user.getUserName()  "+user.getUserName()+"networkId   "+networkId);
-			List<NetworkAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotation(objectType,nodeId,user.getUserName(),networkId);
+			List<NetworkAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotation(objectType,nodeId,networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){

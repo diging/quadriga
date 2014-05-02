@@ -11,7 +11,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IEditingNetworkAnnotationManager {
 
-	public abstract List<NetworkAnnotationsDTO> getAnnotation(String type, String id, String userid,String networkId)
+	public abstract List<NetworkAnnotationsDTO> getAnnotation(String type, String id,String networkId)
 			throws QuadrigaStorageException;
 	public abstract List<NetworkAnnotationsDTO> getAnnotationOfEdge(String id, String userid,String networkId)
 			throws QuadrigaStorageException;

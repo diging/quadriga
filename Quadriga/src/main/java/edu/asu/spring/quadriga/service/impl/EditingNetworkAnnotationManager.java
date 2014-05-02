@@ -87,9 +87,9 @@ public class EditingNetworkAnnotationManager implements IEditingNetworkAnnotatio
 	 */
 	@Override
 	@Transactional
-	public List<NetworkAnnotationsDTO> getAnnotation(String type, String id,String userid,String networkId) throws QuadrigaStorageException{
+	public List<NetworkAnnotationsDTO> getAnnotation(String type, String id,String networkId) throws QuadrigaStorageException{
 		List<NetworkNodeAnnotationsDTO> networkNodeAnnotationsDTOList = null;
-		networkNodeAnnotationsDTOList = dbConnectionEditManager.getAnnotationByNodeType(type, id, userid, networkId);
+		networkNodeAnnotationsDTOList = dbConnectionEditManager.getAnnotationByNodeType(type, id, networkId);
 		List<NetworkAnnotationsDTO> networkAnnotationsDTOs = new ArrayList<NetworkAnnotationsDTO>();
 		for(NetworkNodeAnnotationsDTO networkEdgeAnnotationsDTO : networkNodeAnnotationsDTOList){
 			NetworkAnnotationsDTO annotationsDTO = networkEdgeAnnotationsDTO.getAnnotationNodes();

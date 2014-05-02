@@ -31,8 +31,6 @@ function d3init(graph, networkId, path,type) {
 		//displayAllAnnotations();
 		defineAnnotationsTable();
 		displayAllAnnotationsNew();
-		defineMetadataTable();
-		displayItemData();
 	} //  tree layout if need we can change the layout
 	else if(type=="tree"){
 		layout = d3.layout.tree();
@@ -445,7 +443,6 @@ function d3init(graph, networkId, path,type) {
 			type : "GET",
 			dataType: 'json',
 			success : function(data) {
-				console.log(data);
 				if (data.length > 0) {
 					$('#annotationsTable')
 							.dataTable()
@@ -486,13 +483,11 @@ function d3init(graph, networkId, path,type) {
 	}
 
 	function displayItemData(){
-		console.log("came here");
 		$.ajax({
 			url : path+"auth/editing/getitemmetadata/"+networkId,
 			type : "GET",
 			dataType: 'json',
 			success : function(data) {
-				console.log(data);
 				if (data.length > 0) {
 					$('#metadataTable')
 							.dataTable()
@@ -766,7 +761,7 @@ function d3init(graph, networkId, path,type) {
 		// this allow variables to be assigned inside the ajax and 
 		// accessed outside
 		$.ajax({
-			url : path+"/auth/editing/getconcept/"+lemma,
+			url : path+"/sites/network/getconcept/"+lemma,
 			//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
 			type : "GET",
 			success : function(data) {
@@ -825,9 +820,7 @@ function d3init(graph, networkId, path,type) {
 			var objecttype = "edge";
 			var annottext = $('#'+text1ID).val();
 			var url = path+"/auth/editing/saveAnnotationToEdge/"+networkId;
-			console.log("url:"+url);
 			var input = "annottext="+annottext+"&sourceid="+sourceid+"&sourcename="+sourcename+"&targetid="+targetid+"&targetname="+targetname+"&targettype="+targettype+"&objecttype="+objecttype;
-			console.log("input:"+input);
 			$.ajax({
 				url : path+"/auth/editing/saveAnnotationToEdge/"+networkId,
 				type : "POST",

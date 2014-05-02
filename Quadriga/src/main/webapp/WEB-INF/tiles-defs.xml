@@ -751,7 +751,7 @@
 		<put-attribute name="right-navigation" 
 		value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
 		<put-attribute name="content"
-			value="/WEB-INF/views/editing/networkvisual.jsp" />
+			value="/WEB-INF/views/publicnetworkvisual.jsp" />
 	</definition>
 	
 
