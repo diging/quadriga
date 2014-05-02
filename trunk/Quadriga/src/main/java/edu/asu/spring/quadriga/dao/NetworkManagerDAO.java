@@ -757,7 +757,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<NetworkNodeAnnotationsDTO> getAnnotationByNodeType(String type, String nodeId, String userId,
+	public List<NetworkNodeAnnotationsDTO> getAnnotationByNodeType(String type, String nodeId,
 			String networkId) throws QuadrigaStorageException {
 		try {
 			List<NetworkNodeAnnotationsDTO> networkNodeAnnotationsDTOList = new ArrayList<NetworkNodeAnnotationsDTO>();

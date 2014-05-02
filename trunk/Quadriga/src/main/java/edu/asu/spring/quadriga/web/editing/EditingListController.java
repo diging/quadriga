@@ -29,7 +29,6 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.network.INetwork;
-import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditorManager;
@@ -284,7 +283,7 @@ public class EditingListController {
 	 * @throws QuadrigaStorageException
 	 * @throws JAXBException
 	 */
-	@RequestMapping(value = "/auth/editing/getconcept/{lemma}", method = RequestMethod.GET)
+	@RequestMapping(value = "/sites/network/getconcept/{lemma}", method = RequestMethod.GET)
 	@ResponseBody
 	public String getConceptCollectionObject(@PathVariable("lemma") String lemma,HttpServletRequest request, HttpServletResponse response, ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException {
 		

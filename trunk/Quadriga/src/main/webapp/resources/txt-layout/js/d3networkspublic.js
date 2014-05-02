@@ -19,7 +19,7 @@
  */
 
 
-function d3visualize(graph, networkId, path,type) {
+function d3visualizepublic(graph, networkId, path,type) {
 	if(graph==null){
 		alert("no network");
 	}
@@ -38,9 +38,6 @@ function d3visualize(graph, networkId, path,type) {
 		.nodes(graph.nodes)
 		.links(graph.links)
 		.start();
-		//displayAllAnnotations();
-		defineAnnotationsTable();
-		displayAllAnnotationsNew();
 	} //  tree layout if need we can change the layout
 	else if(type=="tree"){
 		layout = d3.layout.tree();
@@ -100,7 +97,6 @@ function d3visualize(graph, networkId, path,type) {
 	.attr("marker-end", "url(#arrow)")
 	.on("click", function(d){
 		//display_annotations_of_edge(d.source,d.target);
-		add_annotationstolink(d);
 		//d3.event.preventDefault();
 	})
 	.on("mouseout", fadeLinks(1));
@@ -171,7 +167,6 @@ function d3visualize(graph, networkId, path,type) {
 	// Works on left click
 	.on("click", function(d){
 
-		display_annotations(d);
 		conceptDescription(d);
 	})
 	
@@ -402,69 +397,7 @@ function d3visualize(graph, networkId, path,type) {
 		}
 	}
 
-	function displayAllAnnotations(){
-		var output = "<h3>All Annotations of Network</h3>";
-		output+="<h5>Node/Relation Name --> Annotation Text</h5>";
-		output+="</br>";
-		$.ajax({
-			url : path+"/auth/editing/getAllAnnotations/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				/*var tr;
-
-					$.each(data.text, function(key,value){
-
-					            tr = $('<tr/>');
-
-					            tr.append("<td>" + json[i].User_Name + "</td>");
-
-					            tr.append("<td>" + json[i].score + "</td>");
-
-					            tr.append("<td>" + json[i].team + "</td>");
-
-					            $('annot_table').append(tr);
-
-					        });*/
-				var cnt = 0;
-				output += "<ol>";
-				$.each(data.text, function(key,value){
-					//content += ++cnt +'.<li>'+value.name+'</li>'+value.text+'</li>'; 
-					output+="<li>" + ++cnt + ")"+ " " + value.name + " "+ "-->" +" "+ value.text+"</li>"; 
-				});
-				output += "</ol>";
-					$('#allannot_details').html(output);
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}
-
-
-	function displayAllAnnotationsNew(){
-		$.ajax({
-			url : path+"/auth/editing/getAllAnnotations/"+networkId,
-			type : "GET",
-			dataType: 'json',
-			success : function(data) {
-				if (data.length > 0) {
-					$('#annotationsTable')
-							.dataTable()
-							.fnClearTable();
-					$('#annotationsTable')
-							.dataTable().fnAddData(data);
-				} else {
-					$('#annotationsTable')
-							.dataTable()
-							.fnClearTable();
-				}
-			},
-			error: function() {
-				alert("error");
-			}
-		});
-	}
+	
 	
 	function defineAnnotationsTable(){
 		$('#annotationsTable')
@@ -535,39 +468,6 @@ function d3visualize(graph, networkId, path,type) {
 	
 
 
-	function display_annotations(d){
-		console.log("came her");
-		var objecttype = "node";
-		var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
-		var annotationDesc = "<h5>Annotations</h5>";
-		var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
-		// ajax Call to get annotation for a node.id
-		// Used to add the old annotation in to the popup view
-		$.ajax({
-			url : getAnnotationUrl,
-			type : "GET",
-			data: "nodeid="+d.id+"&objecttype="+objecttype,
-			dataType: 'json',
-			success : function(data) {
-				var cnt = 0;
-				$.each(data.text, function(key,value){
-					annotationContent += ++cnt +'. '+value.name;
-					annotationContent += "\n";
-				});
-				annotationContent += "</textarea>";
-				$('#annot_desc').html(annotationDesc);
-				$('#annot_details').html(annotationContent);
-			},
-			error: function() {
-				alert("error in display_annotations");
-			}
-
-		});
-
-
-
-
-	}
 
 	function conceptDescription(d){
 		lemma = d.name;
@@ -603,35 +503,5 @@ function d3visualize(graph, networkId, path,type) {
 	}
 	
 
-	function display_annotations_of_edge(source,target){
-		var objecttypetype= "edge";
-		var getAnnotationUrl = path+"/auth/editing/getAnnotationOfEdge/"+networkId;
-		var content = "<h3>Annotations</h3>";
-		// ajax Call to get annotation for a node.id
-		// Used to add the old annotation in to the popup view
-		$.ajax({
-			url : getAnnotationUrl,
-			type : "GET",
-			data: "sourceid="+source.id+"targetid="+target.id+"&type="+objecttypetype,
-			dataType: 'json',
-			success : function(data) {
-				var cnt = 0;
-				content += "<ol>";
-				$.each(data.text, function(key,value){
-					content += ++cnt +'.<li>'+value.name+'</li>';  
-				});
-				content += "</ol>";
-					$('#annot_details').html(content);
-			},
-			error: function() {
-				alert("error");
-			}
-
-		});
-
-		$('#annot_details').html(content);
-
-
-	}
 
 }
