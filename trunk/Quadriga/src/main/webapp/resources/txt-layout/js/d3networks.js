@@ -9,11 +9,23 @@
  */
 
 
+/**
+ * @Author : Sowjanya Ambati
+ * @Author : Dwaraka Lohith
+ * 
+ * Data visualization in D3 JQuery.
+ * This javascript should work on displaying different layouts.
+ * 
+ */
+
+
 function d3visualize(graph, networkId, path,type) {
-	
+	if(graph==null){
+		alert("no network");
+	}
 	// Layout size
-	var width = 1000,
-	height = 900;
+	var width = 500,
+	height = 500;
 	var layout;
 	var color = d3.scale.category20();
 	// Preparing the force directed graph
@@ -26,7 +38,9 @@ function d3visualize(graph, networkId, path,type) {
 		.nodes(graph.nodes)
 		.links(graph.links)
 		.start();
-		displayAllAnnotations();
+		//displayAllAnnotations();
+		defineAnnotationsTable();
+		displayAllAnnotationsNew();
 	} //  tree layout if need we can change the layout
 	else if(type=="tree"){
 		layout = d3.layout.tree();
@@ -35,19 +49,32 @@ function d3visualize(graph, networkId, path,type) {
 		.links(graph.links)
 		.start();
 	}
+
+
+	var vis = d3.select("#chart").append("svg:svg")
+			.attr("width", width)
+			.attr("height", height)
+			.append('svg:g')
+			// Zoom in and out
+			.call(d3.behavior.zoom().on("zoom", redraw))
+			.append('svg:g');
 	
 
-	var svg = d3.select("#chart").append("svg")
-	.attr("width", width)
-	.attr("height", height);
 
 	var div1 = d3.select("#allannot_details");
-	
+
 	d3.select("#chart").on("click", function(){return div1.style("visibility", "visible");});
+
+	/*var expand = d3.select("#chart")
+				.on("click", function(){
+
+					$("chart").show();
+					$("allannot_details").hide();
+				});*/
 
 
 	// Prepare the arrow
-	svg.append("defs").selectAll("marker")
+	vis.append("defs").selectAll("marker")
 	.data(["arrow"])
 	.enter()
 	.append("marker")
@@ -61,6 +88,45 @@ function d3visualize(graph, networkId, path,type) {
 	.append("path")
 	.attr("d", "M0,-5L10,0L0,5");
 
+
+
+	// Draw links between the nodes
+	var link = vis.selectAll(".link")
+	.data(graph.links)
+	.enter().append("line")
+	.attr("class", "link")
+	.text(function(d) { return d.label; })
+	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
+	.attr("marker-end", "url(#arrow)")
+	.on("click", function(d){
+		//display_annotations_of_edge(d.source,d.target);
+		add_annotationstolink(d);
+		//d3.event.preventDefault();
+	})
+	.on("mouseout", fadeLinks(1));
+	//.on("mouseover", fadeLinks(.1)).on("mouseout", fadeLinks(1));;
+	//.on("click", highlightStmt(.1)).on("mouseout", fadeLinks(1));;
+	
+	
+	var linktext = link.append("text")
+	.text(function(d) {return d.label; })
+	.attr("class", "linktext");
+	
+	linktext.attr("transform", function(d) 
+			{
+				var dx = (d.target.x - d.source.x),
+				dy = (d.target.y - d.source.y);
+				var dr = Math.sqrt(dx * dx + dy * dy);
+				var sinus = dy/dr;
+				var cosinus = dx/dr;
+				var l = d.label.length*6;
+				var offset = (1 - (l / dr )) / 2;
+				var x=(d.source.x + dx*offset);
+				var y=(d.source.y + dy*offset);
+				return "translate(" + x + "," + y + ") matrix("+cosinus+", "+sinus+", "+-sinus+", "+cosinus+", 0 , 0)";
+			});
+	
+	// Dragging the nodes
 	var node_drag = d3.behavior.drag()
 	.on("dragstart", dragstart)
 	.on("drag", dragmove)
@@ -69,7 +135,7 @@ function d3visualize(graph, networkId, path,type) {
 	// Starts the drag
 	// Means starts with force.stop
 	function dragstart(d, i) {
-		//force.stop() // stops the force auto positioning before you start dragging
+		layout.stop(); // stops the force auto positioning before you start dragging
 	}
 
 	// Moves the node based on the user interaction
@@ -84,169 +150,489 @@ function d3visualize(graph, networkId, path,type) {
 
 	// End drag
 	function dragend(d, i) {
-		//d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
-		//tick();
-		//force.resume();
+		d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+		tick();
+		layout.resume();
 	}
 
-	// Draw links between the nodes
-	var link = svg.selectAll(".link")
-	.data(graph.links)
-	.enter().append("line")
-	.attr("class", "link")
-	.style("stroke-width", function(d) { return Math.sqrt(d.value); })
-	.attr("marker-end", "url(#arrow)")
-	
-
 	// Properties for the nodes
-
-	var gnodes = svg.selectAll('g.gnode')
+	var gnodes = vis.selectAll('g.gnode')
 	.data(graph.nodes)
 	.enter();
 
 	var node = gnodes.append('circle')
 	.attr("class", "node")
 	.attr("r",10) 	
-			.style("fill", function(d) { return color(d.group); })
-				.call(node_drag)
-				.on("click", function(d){
-					display_annotations(d);
-					conceptDescription(d);
+	.style("fill", function(d) { return color(d.group); })
+	.call(node_drag)
+	
+
+	
+	// Works on left click
+	.on("click", function(d){
+
+		display_annotations(d);
+		conceptDescription(d);
+	})
+	
+	.call(node_drag)
+	.on("mouseover", fade(.1)).on("mouseout", fade(1));;
+//	.call(force.drag);
+
+	node.append("svg:circle")
+	.attr("r", 10);
+
+
+//	Appending labels to the nodes
+	var text = gnodes.append("text")
+	.call(node_drag)
+	.text(function(d) { return d.name; });
+
+//	Appending title to the nodes 
+//	Mouse hover on the node shows the name of the node.
+	node.append("title")
+	.text(function(d) { return d.name; });
+
+//	Properties for the position of the node
+	function tick() {
+		link.attr("x1", function(d) { return d.source.x; })
+		.attr("y1", function(d) { return d.source.y; })
+		.attr("x2", function(d) { return d.target.x; })
+		.attr("y2", function(d) { return d.target.y; })
+		.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+		.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+
+		node.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; });
+		//.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+		//.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+		text.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; });
+//		.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
+//		.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+		
+		//linktext.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; });
+	};
+
+	function  redraw() {
+		console.log("here", d3.event.translate, d3.event.scale);
+		vis.attr("transform",
+				"translate(" + d3.event.translate + ")"
+				+ " scale(" + d3.event.scale + ")");
+	};
+//	Works on loading the network and placing the nodes randomly for view
+
+	layout.on("tick", tick);
+
+	function neighboring(a, b) {
+
+		//	return linkedByIndex[a.index + "," + b.index];
+		return link.some(function(d) {
+			return (d.source === a && d.target === b);
+
+		});
+	}
+
+
+	function fade(opacity) {
+		return function(d, i) {
+			//fade all elements
+//			d3.select(d.source).style("opacity", opacity);
+//			d3.select(d.target).style("opacity", opacity);
+			//fade all elements
+			vis.selectAll("circle, line").style("opacity", opacity);
+
+			var associated_links = vis.selectAll("line").filter(function(d) {
+				return  d.source.index == i;
+				// return d.source.index == i || d.target.index == i;
+			}).each(function(d) {
+				//unfade links and nodes connected to the current node
+				d3.select(this).style("opacity", 1);
+				//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
+				//  d3.select(d.source).style("opacity", 1);
+				//  d3.select(d.target).style("opacity", 1);
+				node.style("opacity", function(o) {
+					d3.select(o.source).style("opacity", 1);
+				});
+			});
+
+		};
+
+	}
+
+
+	function highlightStmt(opacity) {
+		return function(d, i) {
+			//fade all elements
+			// d3.select(d.source).style("opacity", opacity);
+			// d3.select(d.target).style("opacity", opacity);
+			//fade all elements
+
+			var snodes = vis.selectAll(".node, line").style("opacity", opacity);
+			var source = d.source;
+			var nodearray = [];
+			var found = [];
+			var statementId = [];
+
+			//alert(source);
+			statementId = source.statementid;
+			/*var snodes = vis.selectAll(".node").each(function(d){
+
+						for(var i in statementId){
+							for(var j in d.statementid){
+								if(statementId[i] == d.statementid[j]){
+									nodearray.push(d);
+									//alert(nodearray.length);
+								}
+							}
+						}
+
+						/*found = $.intersection(statementId, d.statementid);
+						if(found.size()>0){
+							nodearray.push(d);
+						}*/
+
+			/*var found = $.inArray(statementId, d.statementid);
+						if(found > -1){
+							nodearray.push(d);
+							alert(nodearray.size());
+							}*/
+
+			/*if((d.statementid.indexOf(statementId))>0)
+							{array.push(d);
+							console.log(d.name);
+							}
+					});*/
+
+
+			//var filtered = snodes.filter(function(d) { return d.statementid[0]==statementId;});
+			//alert(filtered.size());
+
+			var filtered = snodes.filter(function(d) { return d.statementid[0]==statementId;}).each(function(d) {
+				//d3.select(this).style("opacity", 1);
+				node.style("stroke-opacity", function(o) {
+					return neighboring(d, o) ? 1 : opacity;
 				});
 
-				node.append("svg:circle")
-			      .attr("r", 10)
-			      
-				
-//				Appending labels to the nodes
-				var text = gnodes.append("text")
-				.call(node_drag)
-				.text(function(d) { return d.name; });
+				//link.style("stroke-opacity", opacity).style("stroke-opacity", function(o) {
+				link.style("stroke-opacity", function(o) {
+					return o.source === d || o.target === d ? 1 : opacity;
+				});
 
-//				Appending title to the nodes 
-//				Mouse hover on the node shows the name of the node.
-				node.append("title")
-				.text(function(d) { return d.name; });
+			});
 
-//				Properties for the position of the node
-				function tick() {
-					link.attr("x1", function(d) { return d.source.x; })
-					.attr("y1", function(d) { return d.source.y; })
-					.attr("x2", function(d) { return d.target.x; })
-					.attr("y2", function(d) { return d.target.y; })
-					.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
-					.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
+		};
 
-					node.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; })
-					//.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
-					//.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
-					text.attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; })
-//					.attr("cx", function(d) { return d.x = Math.max(6, Math.min(width - 6, d.x)); })
-//					.attr("cy", function(d) { return d.y = Math.max(6, Math.min(height - 6, d.y)); });
-				};
+	}
 
-//				Works on loading the network and placing the nodes randomly for view
-				
-				layout.on("tick", tick);
 
-				
+	/*function highlightStmt(opacity) {
+					return function(d, i) {
+						fade all elements
+						d3.select(d.source).style("opacity", opacity);
+						d3.select(d.target).style("opacity", opacity);
+						//fade all elements
+						vis.selectAll("circle, line").style("opacity", opacity);
 
-				
-				
-				
-				
-				function s4() {
-					return Math.floor((1 + Math.random()) * 0x10000)
-					.toString(16)
-					.substring(1);
-				};
-
-				
-				function displayAllAnnotations(){
-					var output = "<h3>All Annotations of Network</h3>";
-					output+="<h5>Node/Relation Name --> Annotation Text</h5>";
-					output+="</br>";
-					$.ajax({
-					url : path+"/auth/editing/getAllAnnotations/"+networkId,
-					type : "GET",
-					dataType: 'json',
-					success : function(data) {
-					
-					var cnt = 0;
-					output += "<ol>";
-					$.each(data.text, function(key,value){
-					    output+="<li>" + ++cnt + ")"+ " " + value.name + " "+ "-->" +" "+ value.text+"</li>"; 
-					                });
-					output += "</ol>"
-					$('#allannot_details').html(output);
-					},
-					error: function() {
-					alert("error");
-					}
-					});
-				}
-
-				
-				function display_annotations(d){
-					var type1= "node";
-					var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
-					var content = "<h3>Annotations</h3>";
-					// ajax Call to get annotation for a node.id
-					// Used to add the old annotation in to the popup view
-					$.ajax({
-						url : getAnnotationUrl,
-						type : "GET",
-						data: "nodeid="+d.id+"&type="+type1,
-						dataType: 'json',
-						success : function(data) {
-							var cnt = 0;
-							content += "<ol>";
-						$.each(data.text, function(key,value){
-			                    content += ++cnt +'.<li>'+value.name+'</li>';  
-		                });
-							content += "</ol>"
-							$('#annot_details').html(content);
-						},
-						error: function() {
-							alert("error");
-						}
-						
-					});
-					
-					$('#annot_details').html(content);
-					
-					
-				}
-				
-				function conceptDescription(d){
-					lemma = d.name;
-					
-					// This is done to replace all dot (.) with dollar ($)
-					// Since our spring controller would ignore any data after dot (.)
-					lemma = lemma.replace(".","$");
-					
-					var output = "<h3>Description of Node</h3>";
-					output+="<h5>"+lemma+"</h5>";
-					
-					// Ajax call for getting description of the node
-					// Note: this ajax call has async = false
-					// this allow variables to be assigned inside the ajax and 
-					// accessed outside
-						$.ajax({
-							url : path+"/auth/editing/getconcept/"+lemma,
-							//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
-							type : "GET",
-							success : function(data) {
-								output+="<h8>" + data + "</h8>";
-								$('#concept_desc').html(output);
-							},
-							error: function() {
-								alert("error");
-							}
+						var associated_links = vis.selectAll("line").filter(function(d) {
+							return  d.source.index == i;
+							// return d.source.index == i || d.target.index == i;
+						}).each(function(d) {
+							//unfade links and nodes connected to the current node
+							d3.select(this).style("opacity", 1);
+							//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
+							//  d3.select(d.source).style("opacity", 1);
+							//  d3.select(d.target).style("opacity", 1);
+							node.style("opacity", function(o) {
+								d3.select(o.source).style("opacity", 1);
+							});
 						});
-						
+
+					};
+
+				}*/
+
+	function fadeLinks(opacity) {
+		return function(d, i) {
+			//fade all elements
+			//fade all elements
+			vis.selectAll("circle, link").style("opacity", opacity);
+//			alert(d.source);
+//			alert(d.target);
+//			alert(i);
+			//alert("source:"+d.source.index);
+			//alert("target:"+d.target.index);
+			//	alert(i);
+			var associated_links = vis.selectAll("link").filter(function(d) {
+				//   return  d.source.index == i;
+				return d.source.index == i || d.target.index == i;
+			}).each(function(d) {
+				alert("here");
+				var stmtid = d.statementid;
+				alert(stmtid);
+
+				//unfade links and nodes connected to the current node
+				// d3.select(this).style("opacity", 1);
+				//THE FOLLOWING CAUSES: Uncaught TypeError: Cannot call method 'setProperty' of undefined
+				//  d3.select(d.source).style("opacity", 1);
+				//  d3.select(d.target).style("opacity", 1);
+//				node.style("opacity", function(o) {
+//				d3.select(o.source).style("opacity", 1);
+//				});
+
+			});
+
+		};
+	};
+
+//	});
+	function s4() {
+		return Math.floor((1 + Math.random()) * 0x10000)
+		.toString(16)
+		.substring(1);
+	};
+
+	function guid() {
+		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+		s4() + '-' + s4() + s4() + s4();
+	}
+	function getShape(d){
+		if(d.group == 0) {
+			return 'rect';
+		}else {
+			return 'circle';
+		}
+	}
+
+	function displayAllAnnotations(){
+		var output = "<h3>All Annotations of Network</h3>";
+		output+="<h5>Node/Relation Name --> Annotation Text</h5>";
+		output+="</br>";
+		$.ajax({
+			url : path+"/auth/editing/getAllAnnotations/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				/*var tr;
+
+					$.each(data.text, function(key,value){
+
+					            tr = $('<tr/>');
+
+					            tr.append("<td>" + json[i].User_Name + "</td>");
+
+					            tr.append("<td>" + json[i].score + "</td>");
+
+					            tr.append("<td>" + json[i].team + "</td>");
+
+					            $('annot_table').append(tr);
+
+					        });*/
+				var cnt = 0;
+				output += "<ol>";
+				$.each(data.text, function(key,value){
+					//content += ++cnt +'.<li>'+value.name+'</li>'+value.text+'</li>'; 
+					output+="<li>" + ++cnt + ")"+ " " + value.name + " "+ "-->" +" "+ value.text+"</li>"; 
+				});
+				output += "</ol>";
+					$('#allannot_details').html(output);
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+	}
+
+
+	function displayAllAnnotationsNew(){
+		$.ajax({
+			url : path+"/auth/editing/getAllAnnotations/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				if (data.length > 0) {
+					$('#annotationsTable')
+							.dataTable()
+							.fnClearTable();
+					$('#annotationsTable')
+							.dataTable().fnAddData(data);
+				} else {
+					$('#annotationsTable')
+							.dataTable()
+							.fnClearTable();
 				}
-				function add_annotationstolink(d){
-					alert("link");
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+	}
+	
+	function defineAnnotationsTable(){
+		$('#annotationsTable')
+		.dataTable(
+				{
+					"bJQueryUI" : true,
+					"sPaginationType" : "full_numbers",
+					"bAutoWidth" : false,
+					"aoColumns" : [ {
+						"sTitle" : "Name",
+						"mDataProp" :"name",
+					},{
+						"sTitle" : "Text",
+						"mDataProp" :"text",
+					}, {
+						"sTitle" : "Object Type",
+						"mDataProp" :"objecttype",
+					}],
+				});
+		//displayAllAnnotationsNew();
+	}
+
+	function displayItemData(){
+		$.ajax({
+			url : path+"auth/editing/getitemmetadata/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				if (data.length > 0) {
+					$('#metadataTable')
+							.dataTable()
+							.fnClearTable();
+					$('#metadataTable')
+							.dataTable().fnAddData(data);
+				} else {
+					$('#metadataTable')
+							.dataTable()
+							.fnClearTable();
 				}
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+	}
+	
+	function defineMetadataTable(){
+		$('#metadataTable')
+		.dataTable(
+				{
+					"bJQueryUI" : true,
+					"sPaginationType" : "full_numbers",
+					"bAutoWidth" : false,
+					"aoColumns" : [ {
+						"sTitle" : "FileName",
+						"mDataProp" :"filename",
+					},{
+						"sTitle" : "Author",
+						"mDataProp" :"submitter",
+					}, {
+						"sTitle" : "Last Modified Date",
+						"mDataProp" :"modifieddate",
+					}],
+				});
+	}
+	
+
+	
+
+
+	function display_annotations(d){
+		var objecttype = "node";
+		var getAnnotationUrl = path+"/auth/editing/getAnnotation/"+networkId;
+		var annotationDesc = "<h5>Annotations</h5>";
+		var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
+		// ajax Call to get annotation for a node.id
+		// Used to add the old annotation in to the popup view
+		$.ajax({
+			url : getAnnotationUrl,
+			type : "GET",
+			data: "nodeid="+d.id+"&objecttype="+objecttype,
+			dataType: 'json',
+			success : function(data) {
+				var cnt = 0;
+
+				$.each(data.text, function(key,value){
+					
+					annotationContent += ++cnt +'. '+value.name;
+					annotationContent += "\n";
+				});
+				annotationContent += "</textarea>";
+				$('#annot_desc').html(annotationDesc);
+				$('#annot_details').html(annotationContent);
+			},
+			error: function() {
+				alert("error");
+			}
+
+		});
+
+
+
+
+	}
+
+	function conceptDescription(d){
+		lemma = d.name;
+
+		var descHeading = "<h5>Description of Node</h5>";
+
+		var lemmaName="<h5> Node name : "+lemma+"</h5>";
+		var conceptDesc = "<textarea id="+'"conceptdescTextArea"'+" cols=40 rows=5 readonly>";
+
+		// This is done to replace all dot (.) with dollar ($)
+		// Since our spring controller would ignore any data after dot (.)
+		lemma = lemma.replace(".","$");
+
+		// Ajax call for getting description of the node
+		// Note: this ajax call has async = false
+		// this allow variables to be assigned inside the ajax and 
+		// accessed outside
+		$.ajax({
+			url : path+"/auth/editing/getconcept/"+lemma,
+			//url : path+"/rest/editing/getconcept/PHIL D. PUTWAIN",
+			type : "GET",
+			success : function(data) {
+				conceptDesc+=data + "</textarea>";
+				$('#lemma_name').html(lemmaName);
+				$('#desc_heading').html(descHeading);
+				$('#concept_desc').html(conceptDesc);
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+
+	}
+	
+
+	function display_annotations_of_edge(source,target){
+		var objecttypetype= "edge";
+		var getAnnotationUrl = path+"/auth/editing/getAnnotationOfEdge/"+networkId;
+		var content = "<h3>Annotations</h3>";
+		// ajax Call to get annotation for a node.id
+		// Used to add the old annotation in to the popup view
+		$.ajax({
+			url : getAnnotationUrl,
+			type : "GET",
+			data: "sourceid="+source.id+"targetid="+target.id+"&type="+objecttypetype,
+			dataType: 'json',
+			success : function(data) {
+				var cnt = 0;
+				content += "<ol>";
+				$.each(data.text, function(key,value){
+					content += ++cnt +'.<li>'+value.name+'</li>';  
+				});
+				content += "</ol>";
+					$('#annot_details').html(content);
+			},
+			error: function() {
+				alert("error");
+			}
+
+		});
+
+		$('#annot_details').html(content);
+
+
+	}
+
 }

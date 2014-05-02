@@ -33,8 +33,10 @@ import edu.asu.spring.quadriga.dto.NetworkNodeAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkRelationAnnotationsDTO;
 import edu.asu.spring.quadriga.dto.NetworkStatementsDTO;
 import edu.asu.spring.quadriga.dto.NetworkWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.NetworkWorkspaceDTOPK;
 import edu.asu.spring.quadriga.dto.NetworksDTO;
 import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.NetworkDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
@@ -119,18 +121,34 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			throw new QuadrigaStorageException("Error in adding a network");
 
 		String networkid = generateUniqueID();
+		logger.info("network id " + networkid);
 		NetworksDTO networksDTO = new NetworksDTO(networkid, networkName, user.getUserName(), INetworkStatus.PENDING, user.getUserName(), new Date(), user.getUserName(), new Date());
-		//NetworksDTO networksDTO = networkMapper.getNetworksDTO(networkid, networkName, user.getUserName(), INetworkStatus.PENDING, workspaceid);
-		NetworkWorkspaceDTO networkWorkspaceDTO =  new NetworkWorkspaceDTO(networkid, workspaceid, user.getUserName(), new Date(), user.getUserName(), new Date());
-		
+		NetworkWorkspaceDTO networkWorkspaceDTO =  null;
+		NetworkWorkspaceDTOPK  networkWorkspaceDTOPK = null;
+		String userName =  user.getUserName();
+		Date date = new Date();
+		networkWorkspaceDTOPK = new NetworkWorkspaceDTOPK(networkid, workspaceid);
+		networkWorkspaceDTO = new NetworkWorkspaceDTO();
+		networkWorkspaceDTO.setNetworkWorkspaceDTOPK(networkWorkspaceDTOPK);
+		networkWorkspaceDTO.setNetworksDTO(networksDTO);
+		networkWorkspaceDTO.setCreateddate(date);
+		networkWorkspaceDTO.setUpdateddate(date);
+		networkWorkspaceDTO.setCreatedby(userName);
+		networkWorkspaceDTO.setUpdatedby(userName);
+		WorkspaceDTO workspaceDTO = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class,workspaceid);
+		networkWorkspaceDTO.setWorkspaceDTO(workspaceDTO);
+		networksDTO.setNetworkWorkspace(networkWorkspaceDTO);
 		try {
+			logger.info("saving network");
 			sessionFactory.getCurrentSession().save(networksDTO);
-			sessionFactory.getCurrentSession().save(networkWorkspaceDTO);
+			logger.info("done");
 			return networkid;
 		} catch (Exception e) {
 			logger.error("Error in adding a network request: ", e);
 			throw new QuadrigaStorageException(e);
 		}
+		
+		
 	}
 
 	/**
