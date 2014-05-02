@@ -42,7 +42,35 @@
 			<hr>
 			<div class="user">Owned by: ${project.owner.name} (<a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">Change</a>)</div>
 			<hr> <!--  Display associated workspace -->
-			<div id = "tabs" class="tabs">
+			
+			<strong>Workspaces in this project:</strong>
+			<ul>
+			<c:forEach var="workspace" items="${workspaceList}">
+				<li class="ws">
+					<a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.workspaceId}"><c:out
+							value="${workspace.workspaceName}"></c:out></a> (Owner) <br> 
+						
+					<c:out
+					value="${workspace.description}"></c:out>
+				</li>
+			</c:forEach>
+			
+			<c:forEach var="workspace" items="${collabworkspacelist}">
+			<li  class="ws"><a
+					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspace.id}"><c:out
+					value="${workspace.name}"></c:out></a> (Collaborator)<br> <c:out
+					value="${workspace.description}"></c:out></li>
+			</c:forEach>
+			</ul>
+			<c:if test="${empty workspaceList}">
+			There are no workspaces yet. You should create one!
+			</c:if>
+			<c:if test="${empty collabworkspacelist}">
+				You are not collaborating on any workspace.
+			</c:if>
+			
+			<!-- <div id = "tabs" class="tabs">
 			<ul>
 			  	  <li><a href="#asowner">Owner</a></li>
 	              <li><a href="#ascollaborator">Collaborator</a></li>
@@ -78,7 +106,7 @@
 						<c:if test="${empty collabworkspacelist}">
 			You are not collaborator to any workspace.
 		</c:if>
-					</div>
+					</div> -->
 			</div>
 			<c:choose>
 				<c:when test="${AssignEditorSuccess=='1'}">
