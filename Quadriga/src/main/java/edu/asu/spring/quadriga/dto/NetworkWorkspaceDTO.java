@@ -8,9 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,10 +45,10 @@ public class NetworkWorkspaceDTO implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
 	@JoinColumn(name = "workspaceid", referencedColumnName = "workspaceid", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private WorkspaceDTO workspaceDTO;
     @JoinColumn(name = "networkid", referencedColumnName = "networkid", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private NetworksDTO networksDTO;
     
     public NetworkWorkspaceDTO()

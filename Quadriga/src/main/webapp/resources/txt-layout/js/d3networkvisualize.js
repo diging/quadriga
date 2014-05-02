@@ -10,7 +10,6 @@
 
 
 function d3init(graph, networkId, path,type) {
-	console.log("init");
 	if(graph==null){
 		alert("no network");
 	}
@@ -439,7 +438,6 @@ function d3init(graph, networkId, path,type) {
 
 
 	function displayAllAnnotationsNew(){
-		console.log("came here");
 		$.ajax({
 			url : path+"/auth/editing/getAllAnnotations/"+networkId,
 			type : "GET",

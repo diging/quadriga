@@ -27,7 +27,7 @@ $(document).ready(function(){
 	
 	function submitClick(id) {
 		
-		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/id';
+		location.href = '${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}';
 	}
 	
 	
@@ -52,7 +52,7 @@ input {
 <article class="is-page-content">
 <div id="projectDiv">
 	<form:form commandName="project" method="POST"
-		action="/auth/workbench/modifyproject/${project.internalid}">
+		action="/auth/workbench/modifyproject/${project.projectId}">
 				<c:choose>
 			<c:when test="${success == '0'}">
 			<header>
@@ -85,13 +85,13 @@ input {
 				<td><form:errors path="unixName" class="ui-state-error-text"></form:errors></td>
 			</tr>
 			<tr>
-				<td><form:input path="internalid" type="hidden" /> </td>
+				<td><form:input path="projectId" type="hidden" /> </td>
 				<td><div id="UnixURL"></div></td>
 			</tr>
 			<tr>
 			<td><input class="command" type="submit" value="Modify Project"> </td>
 			<td><input type="button" value="Cancel" 
-			onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.internalid}'"></td>
+			onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}'"></td>
 			</tr>
 		</table>
 			</c:when>
