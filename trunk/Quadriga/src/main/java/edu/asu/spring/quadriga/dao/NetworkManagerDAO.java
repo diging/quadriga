@@ -95,7 +95,7 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 		}
 		catch(Exception e)
 		{
-			logger.info("getNetworksDTO error :"+e.getMessage());	
+			logger.error("getNetworksDTO error :",e);	
 			throw new QuadrigaStorageException(e);
 		}
 	}
@@ -227,22 +227,6 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			@SuppressWarnings("unchecked")
 			List<NetworksDTO> listNetworksDTO = query.list();
 
-			for(NetworksDTO networksDTO : listNetworksDTO){
-
-				if(networksDTO.getNetworkWorkspace() == null){
-//					Query query1 = sessionFactory.getCurrentSession().getNamedQuery(
-//							"NetworkWorkspaceDTO.findByNetworkid");
-//					query1.setParameter("networkid", networksDTO.getNetworkid());
-//					NetworkWorkspaceDTO networkWorkspaceDTO= (NetworkWorkspaceDTO) query1.uniqueResult(); 
-//					networksDTO.setNetworkWorkspace(networkWorkspaceDTO);
-//					if(networkWorkspaceDTO != null){
-//
-//					}else{
-						logger.info("netowkr workspace DTO is null -----------------");
-//					}
-				}
-
-			}
 			//networkList = networkMapper.getListOfNetworks(listNetworksDTO);
 
 			// Update project and workspace name for the network
@@ -547,21 +531,21 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 			Query query;
 
 			String query1 = "Select n from NetworksDTO n where n.status = 'PENDING' and";
-			query1 += "((n.workspaceid in  " ;
+			query1 += "((n.networkWorkspace.workspaceDTO.workspaceid in  " ;
 			query1 += "(select distinct wc.workspaceCollaboratorDTOPK.workspaceid from WorkspaceCollaboratorDTO wc " +
 					"where wc.workspaceCollaboratorDTOPK.collaboratoruser = :username and " +
 					"wc.workspaceCollaboratorDTOPK.collaboratorrole in ('wscollab_role2','wscollab_role1'))) OR ";
-			query1 += "(n.workspaceid in  " ;
+			query1 += "(n.networkWorkspace.workspaceDTO.workspaceid in  " ;
 			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
 					"where pw.projectWorkspaceDTOPK.projectid in " +
 					"(select distinct pc.projectCollaboratorDTOPK.projectid from ProjectCollaboratorDTO pc " +
 					"where pc.projectCollaboratorDTOPK.collaboratoruser = :username and pc.projectCollaboratorDTOPK.collaboratorrole in " +
 					"('collaborator_role4')))) OR ";
-			query1 += "(n.workspaceid in  " ;
+			query1 += "(n.networkWorkspace.workspaceDTO.workspaceid in  " ;
 			query1 += "(select pw.projectWorkspaceDTOPK.workspaceid from ProjectWorkspaceDTO pw " +
 					"where pw.projectWorkspaceDTOPK.projectid in " +
 					"(select pe.projectEditorDTOPK.projectid from ProjectEditorDTO pe where pe.projectEditorDTOPK.editor = :username))) " +
-					"or n.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
+					"or n.networkWorkspace.workspaceDTO.workspaceid in (select distinct we.workspaceEditorDTOPK.workspaceid from WorkspaceEditorDTO we " +
 					"where we.workspaceEditorDTOPK.editor = :username)))))"
 					+ "";
 			System.out.println("Testing query :"+query1);

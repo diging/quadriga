@@ -1590,8 +1590,11 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 			String statementID = someNetworkNodeInfo.getId();
 			ElementEventsType elementEventsType = getElementEventTypeFromCreationEventTypeID(statementID);
 			String url = getSourceReferenceFromElementEventsType(elementEventsType);
-			String[] urlTokens = url.split("\\");
-			String fileid = urlTokens[3];
+			int indexSlash = url.lastIndexOf("/");
+			if(indexSlash == -1){
+				indexSlash = url.lastIndexOf("\\");
+			}
+			String fileid = url.substring(indexSlash+1,url.length());
 			return fileid;
 		}
 		return sourceReferenceUrl;

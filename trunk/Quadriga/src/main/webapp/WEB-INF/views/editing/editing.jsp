@@ -65,7 +65,7 @@
 							</a>
 						</summary>
 						<ul>
-							<li>Project : <c:out value="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out></li>
+							<li>Project : <c:out value="${network.networkWorkspace.workspace.projectWorkspace.project.projectName}"></c:out></li>
 							<li>Workspace : <c:out value="${network.networkWorkspace.workspace.workspaceName}"></c:out></li>
 							<li>Submitted by : <c:out
 									value="${network.creator.userName}"></c:out>
@@ -120,7 +120,7 @@
 							type="hidden" value="<c:out value="${network.networkName}"></c:out>" />
 							<c:out value="${network.networkName}"></c:out></td>
 						<td width="15%" align="center"><c:out
-								value="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out></td>
+								value="${network.networkWorkspace.workspace.projectWorkspace.project.projectName}"></c:out></td>
 						<td width="15%" align="center"><c:out
 								value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
 						<td width="15%" align="center"><c:out

@@ -96,7 +96,7 @@
 											value="${network.networkName}"></c:out></td>
 									<td width="25%" align="center">
 									<c:out
-											value ="${network.networkWorkspace.workspace.workspaceProject.project.projectName}"></c:out>
+											value ="${network.networkWorkspace.workspace.projectWorkspace.project.projectName}"></c:out>
 											</td>
 									<td width="25%" align="center"><c:out
 											value="${network.networkWorkspace.workspace.workspaceName}"></c:out></td>
