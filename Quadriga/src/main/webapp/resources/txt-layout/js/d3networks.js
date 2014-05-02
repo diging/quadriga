@@ -542,6 +542,8 @@ function d3visualize(graph, networkId, path,type) {
 		var annotationContent = "<textarea id="+'"annotationtextarea"'+" cols=40 rows=5 readonly>";
 		// ajax Call to get annotation for a node.id
 		// Used to add the old annotation in to the popup view
+		console.log(d.id);
+		console.log(objecttype);
 		$.ajax({
 			url : getAnnotationUrl,
 			type : "GET",
@@ -549,9 +551,9 @@ function d3visualize(graph, networkId, path,type) {
 			dataType: 'json',
 			success : function(data) {
 				var cnt = 0;
-
+				console.log("data "+data);
 				$.each(data.text, function(key,value){
-					
+					console.log("value.name "+value.name);
 					annotationContent += ++cnt +'. '+value.name;
 					annotationContent += "\n";
 				});

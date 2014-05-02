@@ -499,9 +499,9 @@ public class NetworkManagerDAO extends DAOConnectionManager implements IDBConnec
 				queryNetworks.setParameter("workspaceid", workspaceid1);
 
 				@SuppressWarnings("unchecked")
-				List<NetworksDTO> networksDTO =queryNetworks.list();
-				for(NetworksDTO networkDTO : networksDTO){
-					networksDTOList.add(networkDTO);
+				List<NetworkWorkspaceDTO> networkWorkspaceDTOList =queryNetworks.list();
+				for(NetworkWorkspaceDTO networkWorkspaceDTO : networkWorkspaceDTOList){
+					networksDTOList.add(networkWorkspaceDTO.getNetworksDTO());
 				}
 			}
 		}

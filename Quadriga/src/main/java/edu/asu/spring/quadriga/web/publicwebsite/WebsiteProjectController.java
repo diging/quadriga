@@ -173,7 +173,7 @@ public class WebsiteProjectController {
 		if(network==null){
 			return "auth/accessissue";
 		}
-		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.JITJQUERY);
+		INetworkJSon networkJSon = networkmanager.getJsonForNetworks(networkId, INetworkManager.D3JQUERY);
 		String nwId = "\""+networkId+"\"";
 		model.addAttribute("networkid",nwId);
 		String json = null;

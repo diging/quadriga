@@ -663,11 +663,11 @@
 		<put-attribute name="content" value="/WEB-INF/views/browseNetworks.jsp"/>
 	</definition>
 	
-	<definition name="sites/networks/visualize" extends="base.definition.networks">
+	<!-- <definition name="sites/networks/visualize" extends="base.definition.networks">
 		<put-attribute name="title" value="Quadriga Networks visualize" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/networks.jsp" />
-	</definition>
+	</definition> -->
 
 
 	<!-- editing -->
@@ -688,11 +688,11 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/approvedrejectednetworks.jsp" />
 	</definition>
-	<definition name="auth/editing/visualize" extends="base.definition.editing">
+	<!-- <definition name="auth/editing/visualize" extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Networks visualize" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/editing/networkvisual.jsp" />
-	</definition>
+	</definition> -->
 	
 	<definition name="auth/editing/networksAssginedToOtherUsers" extends="base.definition.editing">
 		<put-attribute name="title" value="Quadriga Assigned User" />
@@ -735,6 +735,26 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/networks/networkvisual.jsp" />
 	</definition>
+	
+	<definition name="auth/editing/visualize" extends="base.definition.rightnav">
+		<put-attribute name="currentPage" value="networks" />
+		<put-attribute name="title" value="Quadriga Networks Visualize" />
+		<put-attribute name="right-navigation" 
+		value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
+		<put-attribute name="content"
+			value="/WEB-INF/views/editing/networkvisual.jsp" />
+	</definition>
+	
+	<definition name="sites/networks/visualize" extends="base.definition.rightnav">
+		<put-attribute name="currentPage" value="networks" />
+		<put-attribute name="title" value="Quadriga Networks Visualize" />
+		<put-attribute name="right-navigation" 
+		value="/WEB-INF/views/navigation/nav-networkrightplane.jsp"/>
+		<put-attribute name="content"
+			value="/WEB-INF/views/editing/networkvisual.jsp" />
+	</definition>
+	
+
 	
 	
 	<definition name="auth/editing/history" extends="base.definition">
