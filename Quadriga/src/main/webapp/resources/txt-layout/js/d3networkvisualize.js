@@ -31,6 +31,8 @@ function d3init(graph, networkId, path,type) {
 		//displayAllAnnotations();
 		defineAnnotationsTable();
 		displayAllAnnotationsNew();
+		defineMetadataTable();
+		displayItemData();
 	} //  tree layout if need we can change the layout
 	else if(type=="tree"){
 		layout = d3.layout.tree();
