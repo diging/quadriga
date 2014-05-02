@@ -3,8 +3,6 @@ package edu.asu.spring.quadriga.service.network.mapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,9 +42,6 @@ public class NetworkMapper implements INetworkMapper{
 	@Autowired
 	private INetworkNodeInfoFactory networkNodeInfoFactory;
 	
-	
-	private static final Logger logger = LoggerFactory
-			.getLogger(NetworkMapper.class);
 	
 	@Override
 	public INetwork getNetwork(String networkId) throws QuadrigaStorageException
@@ -205,16 +200,6 @@ public class NetworkMapper implements INetworkMapper{
 				network.setNetworkId(networkDTO.getNetworkid());
 				network.setNetworkName(networkDTO.getNetworkname());
 				network.setStatus(networkDTO.getStatus());
-				if(networkDTO.getNetworkWorkspace() == null){
-					logger.info("getNetworkWorkspaceDTO is null");
-				}else{
-					logger.info("getNetworkWorkspaceDTO is not null");
-					if( networkDTO.getNetworkWorkspace().getWorkspaceDTO() == null){
-						logger.info("getWorkspaceDTO is null");
-					}else{
-						logger.info("getWorkspaceDTO is not null");
-					}
-				}
 				IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspaceByNetworkDTO(networkDTO, network);
 				network.setNetworkWorkspace(networkworkspace);
 				if(networkDTO.getNetworkowner() != null)

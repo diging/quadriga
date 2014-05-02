@@ -24,7 +24,6 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.d3.domain.ID3Node;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.network.INetwork;
-import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QStoreStorageException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IEditingNetworkAnnotationManager;
@@ -130,21 +129,6 @@ public class NetworkListController {
 
 			networkList=networkManager.getNetworkList(user);
 
-			if(networkList!= null){
-				for(INetwork network : networkList){
-
-					if(network.getNetworkWorkspace() != null){
-						logger.info("network workspace is not null");
-						IWorkSpace workspace=  network.getNetworkWorkspace().getWorkspace();
-						if(workspace != null){
-							logger.info("workspace is not null");
-							logger.info(workspace.getWorkspaceName());
-						}
-					}
-
-				}
-			}
-
 		}catch(QuadrigaStorageException e){
 			logger.error("Something wrong on DB Side",e);
 		}
@@ -219,7 +203,6 @@ public class NetworkListController {
 		}
 		model.addAttribute("jsonstring",json);
 		model.addAttribute("nodeList",nodeList);
-		logger.info("json : "+json);
 		return "auth/editing/editnetworks";
 	}
 

@@ -391,7 +391,6 @@ function d3init(graph, networkId, path,type) {
 		s4() + '-' + s4() + s4() + s4();
 	}
 	function getShape(d){
-		alert(d.group);
 		if(d.group == 0) {
 			return 'rect';
 		}else {
@@ -448,7 +447,6 @@ function d3init(graph, networkId, path,type) {
 			success : function(data) {
 				console.log(data);
 				if (data.length > 0) {
-					alert(data.length);
 					$('#annotationsTable')
 							.dataTable()
 							.fnClearTable();
@@ -496,7 +494,6 @@ function d3init(graph, networkId, path,type) {
 			success : function(data) {
 				console.log(data);
 				if (data.length > 0) {
-					alert(data.length);
 					$('#metadataTable')
 							.dataTable()
 							.fnClearTable();
