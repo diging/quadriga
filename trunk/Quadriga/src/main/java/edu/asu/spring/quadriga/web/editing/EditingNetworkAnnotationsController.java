@@ -103,13 +103,16 @@ public class EditingNetworkAnnotationsController {
 		String annotation = "";
 
 		try {
+			
+			logger.info("objectType  "+objectType +"nodeId "+ nodeId+"user.getUserName()  "+user.getUserName()+"networkId   "+networkId);
 			List<NetworkAnnotationsDTO> resultList = editingNetworkAnnotationManager.getAnnotation(objectType,nodeId,user.getUserName(),networkId);
 			JSONArray ja = new JSONArray();
 			JSONObject j1 = new JSONObject();
 			if(resultList != null || resultList.size() > 0){
-
+				logger.info("resultList is not null or size 0");
 				for (int i = 0; i < resultList.size(); i++) {
 					JSONObject j = new JSONObject();
+					logger.info("resultList.get(i).getAnnotationText() :"+resultList.get(i).getAnnotationText());
 					j.put("name", resultList.get(i).getAnnotationText());
 					ja.put(j);
 				}

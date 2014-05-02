@@ -26,26 +26,26 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 {
 	@Autowired
 	private IDBConnectionRetrieveProjectManager dbConnect;
-	
+
 	@Autowired
 	private IDBConnectionRetrieveProjCollabManager databaseConnect;
-	
+
 	@Autowired
 	private IProjectShallowMapper projectShallowMapper;	
-	
-	
+
+
 	@Autowired
 	private IProjectDeepMapper projectDeepMapper;	
-	
+
 	@Autowired
 	private ICollaboratorRoleManager roleMapper;
-	
+
 	@Autowired
 	private ICheckProjectSecurity projectSecurity;
-	
+
 	@Autowired
 	private IRetrieveProjCollabManager projectManager;
-	
+
 	/**
 	 * This method returns the list of projects associated with
 	 * the logged in user. It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
@@ -62,7 +62,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		projectList =  projectShallowMapper.getProjectList(sUserName);
 		return projectList;
 	}
-	
+
 	/**
 	 * This method retrieves the list of projects associated with the logged in user as a collaborator. 
 	 * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
@@ -78,7 +78,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		projectList = projectShallowMapper.getCollaboratorProjectListOfUser(sUserName);
 		return projectList;
 	}
-	
+
 	/**
 	 * This method retrieves the list of projects associated with the logged in user as a owner
 	 * of associated workspaces.
@@ -96,7 +96,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		projectList = projectShallowMapper.getProjectListAsWorkspaceOwner(sUserName);
 		return projectList;
 	}
-	
+
 	/**
 	 * This method retrieves the list of projects associated with the logged in user as a collaborator
 	 * of associated workspaces.
@@ -113,7 +113,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		projectList = projectShallowMapper.getProjectListAsWorkspaceCollaborator(sUserName);
 		return projectList;
 	}
-	
+
 	/**
 	 * This method retrieves the list of projects associated with the logged in user as a collaborator
 	 * of associated workspaces.
@@ -130,7 +130,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		projectList = projectShallowMapper.getProjectListByCollaboratorRole(sUserName,role);
 		return projectList;
 	}
-	
+
 	/**
 	 * This method returns the project details for the supplied project.
 	 * @param projectId
@@ -168,9 +168,9 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Transactional
 	public IProject getProjectDetailsByUnixName(String unixName) throws QuadrigaStorageException {
 		return projectDeepMapper.getProjectDetailsByUnixName(unixName);
-		
+
 	}
-	
+
 	@Override
 	@Transactional
 	public boolean getPublicProjectWebsiteAccessibility(String unixName) throws QuadrigaStorageException{
@@ -186,16 +186,18 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	@Transactional
 	public boolean getPrivateProjectWebsiteAccessibility(String unixName, String user) throws QuadrigaStorageException{
 		IProject project = projectDeepMapper.getProjectDetailsByUnixName(unixName);
-		
+
 		List<IProjectCollaborator> projectCollaborators = project.getProjectCollaborators();
 		List<String> collaboratorNames = new ArrayList<String>();
-		Iterator<IProjectCollaborator> projectCollabIterator = projectCollaborators.iterator();
-		while(projectCollabIterator.hasNext()){
-			String collab = projectCollabIterator.next().getCollaborator().getUserObj().getName();
-			collaboratorNames.add(collab);
+		if(projectCollaborators != null){
+			Iterator<IProjectCollaborator> projectCollabIterator = projectCollaborators.iterator();
+			while(projectCollabIterator.hasNext()){
+				String collab = projectCollabIterator.next().getCollaborator().getUserObj().getName();
+				collaboratorNames.add(collab);
+			}
 		}
 		String access = project.getProjectAccess().toString();
-		
+
 		if(access.equals("PRIVATE")){
 			if(project.getOwner().getName().equals(user) || collaboratorNames.contains(user)){
 				return true;
