@@ -57,7 +57,7 @@ function onSubmit(){
 
 </script>
 
-<form:form method="POST" name="myForm" commandName="projectCollaborator" 
+<form:form method="POST" name="myForm" commandName="collaborator" 
   action="${pageContext.servletContext.contextPath}/auth/workbench/${projectid}/addcollaborators">
   <h2>Project Collaborators:</h2>
 <h3>Project: ${projectname}</h3>
@@ -109,10 +109,10 @@ function onSubmit(){
 	<tbody>
 	<c:forEach var="collab" items="${projectCollaborators}">
 		<tr>
-		 <td><c:out value="${collab.userObj.name}"></c:out></td>
+		 <td><c:out value="${collab.collaborator.userObj}"></c:out></td>
 		 <td>
-			<c:forEach var="roles" items="${collab.collaboratorRoles}">
-		 	<c:out value="${roles.displayName}"></c:out> ||
+			<c:forEach var="roles" items="${collab.collaborator.collaboratorRoles}">
+		 	<c:out value="${roles.displayName}"></c:out>||
 		 	</c:forEach>		 
 		 </td>
 		</tr>

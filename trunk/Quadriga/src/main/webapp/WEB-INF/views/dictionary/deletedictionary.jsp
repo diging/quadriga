@@ -183,11 +183,11 @@
 						<c:forEach var="dictionary" items="${dictinarylist}">
 							<tr>
 								<td width="10%"><input type="checkbox" class="selected" name="selected"
-									value='<c:out value="${dictionary.id}"></c:out>' /></td>
+									value='<c:out value="${dictionary.dictionaryId}"></c:out>' /></td>
 								<td align="center"><input name="items"
 									type="hidden"
-									value="<c:out value="${dictionary.name}"></c:out>" /> <c:out
-										value="${dictionary.name}"></c:out></td>
+									value="<c:out value="${dictionary.dictionaryName}"></c:out>" /> <c:out
+										value="${dictionary.dictionaryName}"></c:out></td>
 								<td  align="justify"><c:out
 										value="${dictionary.description}"></c:out></td>
 							</tr>
