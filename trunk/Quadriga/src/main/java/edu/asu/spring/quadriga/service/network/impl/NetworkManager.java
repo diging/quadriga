@@ -1595,6 +1595,7 @@ public class NetworkManager extends DAOConnectionManager implements INetworkMana
 				indexSlash = url.lastIndexOf("\\");
 			}
 			String fileid = url.substring(indexSlash+1,url.length());
+			//System.out.println(fileid);
 			return fileid;
 		}
 		return sourceReferenceUrl;

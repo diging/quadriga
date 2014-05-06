@@ -31,6 +31,10 @@ function d3init(graph, networkId, path,type) {
 		//displayAllAnnotations();
 		defineAnnotationsTable();
 		displayAllAnnotationsNew();
+
+		//defineMetadataTable();
+		displayItemData();
+
 	} //  tree layout if need we can change the layout
 	else if(type=="tree"){
 		layout = d3.layout.tree();
@@ -484,6 +488,29 @@ function d3init(graph, networkId, path,type) {
 
 	function displayItemData(){
 		$.ajax({
+			url : path+"/auth/editing/getitemmetadata/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				console.log(data);
+				if (data.length > 0) {
+					$.each(data.text, function(key,value) {
+					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
+					console.log(value.filename);
+					$("#metadataTable").append(row);
+                        });
+            
+				} 
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+	}
+	
+	/*function displayItemData(){
+		console.log("came here");
+		$.ajax({
 			url : path+"auth/editing/getitemmetadata/"+networkId,
 			type : "GET",
 			dataType: 'json',
@@ -504,9 +531,9 @@ function d3init(graph, networkId, path,type) {
 				alert("error");
 			}
 		});
-	}
+	}*/
 	
-	function defineMetadataTable(){
+	/*function defineMetadataTable(){
 		$('#metadataTable')
 		.dataTable(
 				{
@@ -524,7 +551,7 @@ function d3init(graph, networkId, path,type) {
 						"mDataProp" :"modifieddate",
 					}],
 				});
-	}
+	}*/
 	
 
 	function rightClick(d){

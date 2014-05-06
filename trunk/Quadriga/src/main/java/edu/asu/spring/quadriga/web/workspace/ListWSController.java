@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
 import org.codehaus.jettison.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -53,6 +55,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.network.NetworkListController;
 
 /**
  * Controller to handle all the workspace requests for Quadriga.
@@ -102,6 +105,9 @@ public class ListWSController
 	
 	@Autowired
 	private INetworkManager networkManager;
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(ListWSController.class);
 
 	/**
 	 * Attach the custom validator to the Spring context
@@ -677,7 +683,7 @@ public class ListWSController
 		return "redirect:/auth/workbench/workspace/workspacedetails/"+workspaceId;
 	}
 	
-	@RequestMapping(value = "auth/editing/getitemmetadata/{networkId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/auth/editing/getitemmetadata/{networkId}", method = RequestMethod.GET)
 	public @ResponseBody String viewDspaceMetaData(HttpServletRequest request,
 			HttpServletResponse response,@PathVariable("networkId") String networkId, 
 			ModelMap model, Principal principal) throws QuadrigaStorageException, JAXBException, QStoreStorageException, NoSuchAlgorithmException, JSONException {
@@ -686,7 +692,8 @@ public class ListWSController
 		if(network==null){
 			return "auth/accessissue";
 		}
-		String fileid = networkManager.getSourceReferenceURL(networkId,network.getVersionNumber());
+		String fileid = networkManager.getSourceReferenceURL(networkId,networkManager.getLatestVersionOfNetwork(networkId));
+		logger.info("Source reference ID " + fileid);
 		
 		String metaData = wsManager.getItemMetadataAsJson(fileid, dspaceUsername, dspacePassword, dspaceKeys);
 		
