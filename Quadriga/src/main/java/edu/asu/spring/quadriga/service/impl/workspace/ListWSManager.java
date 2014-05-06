@@ -26,6 +26,7 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
+import edu.asu.spring.quadriga.web.workspace.ListWSController;
 
 /**
  * Class implements {@link IListWSManager} to
@@ -50,6 +51,8 @@ public class ListWSManager implements IListWSManager
 	
 	@Autowired
 	private IDspaceManager dspaceManager;
+	
+	
 	
 	/**
 	 * This will list all the workspaces associated
@@ -306,17 +309,23 @@ public class ListWSManager implements IListWSManager
 		
 		IDspaceMetadataItemEntity metaData = dspaceManager.getItemMetadata(fileid, dspaceUsername, dspacePassword, dspaceKeys);
 		
+		logger.info(metaData.getName()+metaData.getLastModifiedDate()+metaData.getSubmitter().getFullname());
+		
 		String itemData = "";
 		JSONArray ja = new JSONArray();
+		JSONObject ja1 = new JSONObject();
 		JSONObject j = new JSONObject();
 		
 		j.put("filename", metaData.getName());
-		j.put("modifieddate", metaData.getLastModifiedDate());
 		j.put("submitter", metaData.getSubmitter().getFullname());
+		j.put("modifieddate", metaData.getLastModifiedDate());
+		
 		
 		ja.put(metaData);
 		
-		itemData = ja.toString();
+		ja1.put("text", ja);
+		
+		itemData = ja1.toString();
 		
 		return itemData;
 		

@@ -62,7 +62,13 @@ $(document).ready(function(){
 		<li>
 			<article class="is-post-summary">
 				<div align="left" id="item_metadata">
-				<table id = metadataTable></table>
+				<table id = metadataTable>
+					<tr>
+        				<th>Filename</th>
+        				<th>Author</th>
+        				<th>Last Modified Date</th>
+   				 	</tr>
+				</table>
 				</div>
 				
 			</article>
