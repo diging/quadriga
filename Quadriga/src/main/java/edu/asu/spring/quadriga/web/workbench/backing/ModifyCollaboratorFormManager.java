@@ -10,6 +10,7 @@ import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.impl.ModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
@@ -43,6 +44,9 @@ public class ModifyCollaboratorFormManager {
 	ModifyCollaboratorFormFactory collaboratorFormFactory;
 	
 	@Autowired
+	ICollaboratorFactory collaboratorFactory;
+	
+	@Autowired
 	IRetrieveWSCollabManager workspaceManager;
 	
 	/**
@@ -71,7 +75,7 @@ public class ModifyCollaboratorFormManager {
 		}
 		
 		return modifyCollaborators;
-	}
+	}	
 	
 	/**
 	 * takes dictionary id to return collaborators of ModifyCollaborator domain

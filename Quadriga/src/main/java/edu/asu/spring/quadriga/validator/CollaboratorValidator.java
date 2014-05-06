@@ -7,7 +7,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 /**
  * This class checks if the collaborator user name and roles are empty
@@ -19,7 +22,10 @@ public class CollaboratorValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
-		return arg0.isAssignableFrom(Collaborator.class);
+		
+		boolean check = arg0.isAssignableFrom(Collaborator.class); 
+		
+		return check ;
 	}
 
 	@Override

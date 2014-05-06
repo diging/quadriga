@@ -70,8 +70,8 @@ public class AddCollaboratorController {
 	private IUserFactory userFactory;
 
 	@Autowired
-	ICollaboratorFactory collaboratorFactory;
-
+	private ICollaboratorFactory collaboratorFactory;
+	
 	@Autowired
 	private ICollaboratorRoleManager collaboratorRoleManager;
 
@@ -88,7 +88,7 @@ public class AddCollaboratorController {
 			.getLogger(AddCollaboratorController.class);
 	
 
-	@InitBinder
+	@InitBinder()
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) throws Exception {
 		
 		validateBinder.setValidator(collaboratorValidator);
@@ -125,7 +125,9 @@ public class AddCollaboratorController {
 
 	@ModelAttribute
 	public ICollaborator getCollaborator() {
+		//IProjectCollaborator projectCollaborator = projectCollaboratorFactory.createProjectCollaboratorObject();
 		ICollaborator collaborator = collaboratorFactory.createCollaborator();
+		//projectCollaborator.setCollaborator(collaborator); //.setUserObj(userFactory.createUserObject());
 		collaborator.setUserObj(userFactory.createUserObject());
 		return collaborator;
 	} 
@@ -141,13 +143,13 @@ public class AddCollaboratorController {
 		//retrieve the project details
 		IProject project = retrieveprojectManager.getProjectDetails(projectid);
 		
-		//ICollaborator collaborator =  collaboratorFactory.createCollaborator();
+		ICollaborator collaborator =  collaboratorFactory.createCollaborator();
 		//collaborator.setUserObj(userFactory.createUserObject());
 		
-		IProjectCollaborator projectCollaborator = projectCollaboratorFactory.createProjectCollaboratorObject();
+		//IProjectCollaborator projectCollaborator = projectCollaboratorFactory.createProjectCollaboratorObject();
 		
 		model = new ModelAndView("auth/workbench/addcollaborators");
-		model.getModel().put("projectCollaborator", projectCollaborator);
+		model.getModel().put("collaborator", collaborator);
 		model.getModel().put("projectname", project.getProjectName());
 		model.getModelMap().put("projectdesc",project.getDescription());
 		model.getModelMap().put("projectid", projectid);
