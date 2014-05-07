@@ -227,12 +227,29 @@
   <tr>
     <!-- Display workspace details -->
     <td style="width:90%">
-    <h2>Workspace: ${workspacedetails.workspaceName}</h2>
-<div>${workspacedetails.description}</div>
-<hr>
-<div class="user">Owned by: ${workspacedetails.owner.name}</div>
-<hr>
+       <h2>Workspace: ${workspacedetails.workspaceName}</h2>
+       <div>${workspacedetails.description}</div>
+       <div style="text-align:right">
+          <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
+		     <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Workspace
+		  </a>
+	   </div>
+       <hr>
+       <div class="user">Owned by: ${workspacedetails.owner.name} <c:if test="${owner=='1'}">(<a href="${pageContext.servletContext.contextPath}/auth/workspace/transferworkspaceowner/${workspaceid}">Change</a>)</c:if></div>
+					
+					<c:if test="${owner=='1' and editoraccess=='0' }">
+					<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses-no.png"> You are not an Editor on this Workspace 
+						(<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/assignEditorRoleToOwner/${workspaceid}">Become an Editor</a>)
+						
+					</c:if>
+					
+					<c:if test="${owner=='1' and editoraccess=='1' and projectinherit == '0' }">
+					<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Workspace
+					(<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/deleteEditorRoleToOwner/${workspaceid}">Remove me as Editor</a>)
+					</c:if>
+       <hr>
 
+    <!--  messages for assigning editor access -->
 	<c:choose>
 		<c:when test="${AssignEditorSuccess=='1'}">
 			<font color="blue"> <spring:message
@@ -248,6 +265,7 @@
 					code="workspace.assign.owner.editor.assigned" /></font>
 		</c:when>
 	</c:choose>
+	<!-- messages for deleting editor access -->
 	<c:choose>
 		<c:when test="${DeleteEditorSuccess=='1'}">
 			<font color="blue"> <spring:message
@@ -264,62 +282,42 @@
 		</c:when>
 	</c:choose>
 	<br/>
-	
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/updateworkspacedetails/${workspaceid}">
-<input type="button" name="Edit" value="Edit"/>
-</a> 
+
 <c:choose>
-	<c:when test="${owner=='1'}">
-		<c:choose>
-			<c:when test="${editoraccess=='0' }">
-				<a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/assignEditorRoleToOwner/${workspaceid}">
-						<input type="button" name="Get Editor Role" value="Get Editor Role" />
-				</a> 
-			</c:when>
-			<c:otherwise>
-				<c:choose>
-								<c:when test="${projectinherit == '0' }">
-									<a
-										href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/deleteEditorRoleToOwner/${workspaceid}">
-										<input type="button" name="Delete Editor Role"
-										value="Delete Editor Role" />
-									</a>
-								</c:when>
-							</c:choose>
-			</c:otherwise>
-		</c:choose>
+				<c:when test="${empty dspaceKeys}">
+					<!-- Dspace Login popup -->
+					<script>
+						$(document)
+								.ready(
+										function() {
 
-	</c:when>
-</c:choose>
+											$('a.login-window')
+													.click(
+															function() {
+																location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";
+															});
 
+										});
+					</script>
+				</c:when>
+				<c:otherwise>
+					<script>
+						$(document)
+								.ready(
+										function() {
 
+											$('a.login-window')
+													.click(
+															function() {
+																location.href = "${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";
+															});
 
-<c:choose><c:when test="${empty dspaceKeys}">
-<!-- Dspace Login popup -->
-<script>
-$(document).ready(function() {
+										});
+					</script>
+				</c:otherwise>
+			</c:choose> <a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
 
-$('a.login-window').click(function() {
-    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";        
-});
-
-});
-</script>
-</c:when>
-<c:otherwise>
-<script>
-$(document).ready(function() {
-
-$('a.login-window').click(function() {
-    location.href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/communities";        
-});
-
-});
-</script>
-</c:otherwise>
-</c:choose>
-
-<a href="#login-box" class="login-window"><input type="submit" value="Add text from Dspace"></a>
+<!-- DSpace Login credentials -->
 <c:choose><c:when test="${empty dspaceKeys}">
 <!-- Allow the user to change the dspace login credentials -->
 <a href="#change-login" class="change-login">Change Dspace Login<c:choose><c:when test="${not empty wrongDspaceLogin}">*</c:when></c:choose></a>
@@ -383,13 +381,14 @@ $(document).ready(function(){
 
 <br><br>
 <c:choose><c:when test="${not empty wrongDspaceLogin}">*Invalid dspace login credentails. Please provide the correct details to view all files.</c:when></c:choose>
+<!-- Display bit streams -->
 <c:choose>
 	<c:when test="${not empty workspacedetails.workspaceBitStreams}">
 	<form id="bitstream" method="POST" action="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deletebitstreams">
 	<font size="2"><input type="submit" onclick="submitClick();" value="Delete Dspace Files" />
 	<c:choose><c:when test="${empty dspaceKeys}"></c:when></c:choose></font> 
 		<br>
-		<table class="display dataTable" width="100%">
+		<table class="display dataTable" style="width:100%">
 			<thead>
 				<tr>
 					<th ></th>
@@ -432,27 +431,8 @@ $(document).ready(function(){
 					<br>Workspace does not contain any files from dspace !
 				</c:otherwise>
 </c:choose>
-
-    <!-- Display collaborators -->
-    <td style="width:10%"> 
-    <c:if test="${not empty workspacedetails.workspaceCollaborators}">
-   <h3 class="major"><span>Collaborators</span></h3>
-    <ul class="collaborators">
-			<c:forEach var="wscollaborator" items="${workspacedetails.workspaceCollaborators}">
-				<li>
-					<c:out value="${wscollaborator.userObj.name}"></c:out>
-				</li>
-			</c:forEach>
-		</ul>
-    </c:if>
-    </td>
-  </tr>
-</table>
-
-
-
-
-
+<hr>
+<!-- Display Networks -->
 <c:choose>
 	<c:when test="${not empty networkList}">
 		<span class="byline">Networks belonging to this workspace</span>
@@ -478,7 +458,7 @@ $(document).ready(function(){
 						<td width="25%" align="center"><c:out
 								value="${network.status}"></c:out></td>
 						<td width="25%" align="center"><input type=button
-								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'" value='View Networks'></td>
+								onClick="location.href='${pageContext.servletContext.contextPath}/auth/networks/visualize/${network.id}'" value='View'></td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -488,4 +468,27 @@ $(document).ready(function(){
 		<spring:message code="empty.networks" />
 	</c:otherwise>
 </c:choose>
+</td>
+
+    <!-- Display collaborators -->
+    <td style="width:10%"> 
+    <c:if test="${not empty workspacedetails.workspaceCollaborators}">
+   <h3 class="major"><span>Collaborators</span></h3>
+    <ul class="collaborators">
+			<c:forEach var="wscollaborator" items="${workspacedetails.workspaceCollaborators}">
+				<li>
+					<c:out value="${wscollaborator.userObj.name}"></c:out>
+				</li>
+			</c:forEach>
+		</ul>
+    </c:if>
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+
 

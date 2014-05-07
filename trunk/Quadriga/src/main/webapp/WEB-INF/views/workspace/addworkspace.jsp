@@ -50,7 +50,7 @@ function submitClick(id){
 		<ul>
 					<li><input type="button" onClick="submitClick(this.id);"
 						value='Okay'></li>
-				</ul>>
+				</ul>
 		  </c:when>
 		</c:choose>
 	</form:form>
