@@ -75,7 +75,7 @@ public class DictionaryItems implements IDictionaryItems
        this.updatedDate = updatedDate;
 	}
 
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -134,5 +134,5 @@ public class DictionaryItems implements IDictionaryItems
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
 		return true;
-	}
+	}*/
 }
