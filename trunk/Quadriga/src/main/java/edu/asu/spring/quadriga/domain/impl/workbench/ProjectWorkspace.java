@@ -78,63 +78,63 @@ public class ProjectWorkspace implements IProjectWorkspace
        this.updatedDate = updatedDate;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((createdBy == null) ? 0 : createdBy.hashCode());
-		result = prime * result
-				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result + ((project == null) ? 0 : project.hashCode());
-		result = prime * result
-				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
-		result = prime * result
-				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
-		result = prime * result
-				+ ((workspace == null) ? 0 : workspace.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProjectWorkspace other = (ProjectWorkspace) obj;
-		if (createdBy == null) {
-			if (other.createdBy != null)
-				return false;
-		} else if (!createdBy.equals(other.createdBy))
-			return false;
-		if (createdDate == null) {
-			if (other.createdDate != null)
-				return false;
-		} else if (!createdDate.equals(other.createdDate))
-			return false;
-		if (project == null) {
-			if (other.project != null)
-				return false;
-		} else if (!project.equals(other.project))
-			return false;
-		if (updatedBy == null) {
-			if (other.updatedBy != null)
-				return false;
-		} else if (!updatedBy.equals(other.updatedBy))
-			return false;
-		if (updatedDate == null) {
-			if (other.updatedDate != null)
-				return false;
-		} else if (!updatedDate.equals(other.updatedDate))
-			return false;
-		if (workspace == null) {
-			if (other.workspace != null)
-				return false;
-		} else if (!workspace.equals(other.workspace))
-			return false;
-		return true;
-	}
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result
+//				+ ((createdBy == null) ? 0 : createdBy.hashCode());
+//		result = prime * result
+//				+ ((createdDate == null) ? 0 : createdDate.hashCode());
+//		result = prime * result + ((project == null) ? 0 : project.hashCode());
+//		result = prime * result
+//				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
+//		result = prime * result
+//				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
+//		result = prime * result
+//				+ ((workspace == null) ? 0 : workspace.hashCode());
+//		return result;
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		ProjectWorkspace other = (ProjectWorkspace) obj;
+//		if (createdBy == null) {
+//			if (other.createdBy != null)
+//				return false;
+//		} else if (!createdBy.equals(other.createdBy))
+//			return false;
+//		if (createdDate == null) {
+//			if (other.createdDate != null)
+//				return false;
+//		} else if (!createdDate.equals(other.createdDate))
+//			return false;
+//		if (project == null) {
+//			if (other.project != null)
+//				return false;
+//		} else if (!project.equals(other.project))
+//			return false;
+//		if (updatedBy == null) {
+//			if (other.updatedBy != null)
+//				return false;
+//		} else if (!updatedBy.equals(other.updatedBy))
+//			return false;
+//		if (updatedDate == null) {
+//			if (other.updatedDate != null)
+//				return false;
+//		} else if (!updatedDate.equals(other.updatedDate))
+//			return false;
+//		if (workspace == null) {
+//			if (other.workspace != null)
+//				return false;
+//		} else if (!workspace.equals(other.workspace))
+//			return false;
+//		return true;
+//	}
 }

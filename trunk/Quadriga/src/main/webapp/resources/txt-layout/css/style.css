@@ -822,6 +822,11 @@
 			margin-top: 0.8em;
 			border: 1px solid #dddddd;
 		}
+		
+	.projectList {
+		border: 1px solid #c1cac5;
+		padding: 5px;
+	}
 
 /*********************************************************************************/
 /* Footer                                                                        */
