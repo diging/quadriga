@@ -17,10 +17,10 @@
        document.location = data.instance.get_node(data.node, true).children('a').attr('href');
    });
   });
-  </script>
+</script>
 
 <h2 class="major">
-			<span>Menu</span>
+	<span>Menu</span>
 </h2>
 <div id="projectmenu">
 	<ul>
@@ -74,8 +74,5 @@
 			Update</a></li>
 		</ul>
 		</li>
-		<!-- <li data-jstree='{"icon":"/quadriga/resources/txt-layout/images/edit.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">
-			Change Owner</a></li>  -->
-
 	</ul>
 </div>
