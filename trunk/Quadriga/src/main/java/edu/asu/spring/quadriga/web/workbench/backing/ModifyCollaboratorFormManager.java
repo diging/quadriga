@@ -33,22 +33,22 @@ public class ModifyCollaboratorFormManager {
 
 	@Autowired
 	IRetrieveProjCollabManager projCollabManager;
-	
+
 	@Autowired
 	IDictionaryManager dictManager;
-	
+
 	@Autowired
 	IConceptCollectionManager collectionManager;
-	
+
 	@Autowired
 	ModifyCollaboratorFormFactory collaboratorFormFactory;
-	
+
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
-	
+
 	@Autowired
 	IRetrieveWSCollabManager workspaceManager;
-	
+
 	/**
 	 * takes project id to return collaborators of ModifyCollaborator domain
 	 * 
@@ -58,25 +58,26 @@ public class ModifyCollaboratorFormManager {
 	 */
 	public List<ModifyCollaborator> modifyProjectCollaboratorManager(String projectId) throws QuadrigaStorageException
 	{
-	
+
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
-		
+
 		List<IProjectCollaborator> collaborators =  projCollabManager.getProjectCollaborators(projectId);
 		IUser user;
-		
-		for(IProjectCollaborator projectCollaborator:collaborators)
-		{
-			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			user = projectCollaborator.getCollaborator().getUserObj();
-			modifyCollab.setUserName(user.getUserName());
-			modifyCollab.setName(user.getName());
-			modifyCollab.setCollaboratorRoles(projectCollaborator.getCollaborator().getCollaboratorRoles());
-			modifyCollaborators.add(modifyCollab);
-		}
-		
+
+		if(collaborators != null)
+			for(IProjectCollaborator projectCollaborator:collaborators)
+			{
+				ModifyCollaborator modifyCollab = new ModifyCollaborator();
+				user = projectCollaborator.getCollaborator().getUserObj();
+				modifyCollab.setUserName(user.getUserName());
+				modifyCollab.setName(user.getName());
+				modifyCollab.setCollaboratorRoles(projectCollaborator.getCollaborator().getCollaboratorRoles());
+				modifyCollaborators.add(modifyCollab);
+			}
+
 		return modifyCollaborators;
 	}	
-	
+
 	/**
 	 * takes dictionary id to return collaborators of ModifyCollaborator domain
 	 * 
@@ -86,13 +87,13 @@ public class ModifyCollaboratorFormManager {
 	 */
 	public List<ModifyCollaborator> modifyDictCollaboratorManager(String dictionaryId) throws QuadrigaStorageException
 	{
-	
+
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
-		
+
 		//TODO: showCollaboratingUsers() needs to be modified to call mapper
 		List<IDictionaryCollaborator> collaborators =  dictManager.showCollaboratingUsers(dictionaryId);
-		
+
 		for(IDictionaryCollaborator dictCollaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
@@ -102,11 +103,11 @@ public class ModifyCollaboratorFormManager {
 			modifyCollab.setCollaboratorRoles(dictCollaborator.getCollaborator().getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
-		
+
 		return modifyCollaborators;
 	}
-	
-	
+
+
 	/**
 	 * takes collection id to return collaborators of ModifyCollaborator domain
 	 * 
@@ -116,13 +117,13 @@ public class ModifyCollaboratorFormManager {
 	 */
 	public List<ModifyCollaborator> modifyCCCollaboratorManager(String collectionId) throws QuadrigaStorageException
 	{
-	
+
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
-		
+
 		//TODO: showCollaboratingUsers() needs to be modified to call mapper
 		List<IConceptCollectionCollaborator> collaborators =  collectionManager.showCollaboratingUsers(collectionId);
-		
+
 		for(IConceptCollectionCollaborator ccCollaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
@@ -132,17 +133,17 @@ public class ModifyCollaboratorFormManager {
 			modifyCollab.setCollaboratorRoles(ccCollaborator.getCollaborator().getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
-		
+
 		return modifyCollaborators;
 	}
-	
+
 	public List<ModifyCollaborator> modifyWorkspaceCollaboratorManager(String workspaceId) throws QuadrigaStorageException
 	{
 		List<ModifyCollaborator> modifyCollaborators = new ArrayList<ModifyCollaborator>();
 		IUser user;
-		
+
 		List<IWorkspaceCollaborator> collaborators =  workspaceManager.getWorkspaceCollaborators(workspaceId);
-		
+
 		for(IWorkspaceCollaborator wsCollaborator:collaborators)
 		{
 			ModifyCollaborator modifyCollab = new ModifyCollaborator();
@@ -152,10 +153,10 @@ public class ModifyCollaboratorFormManager {
 			modifyCollab.setCollaboratorRoles(wsCollaborator.getCollaborator().getCollaboratorRoles());
 			modifyCollaborators.add(modifyCollab);
 		}
-		
+
 		return modifyCollaborators;
-		
+
 	}
-	
-	
+
+
 }
