@@ -39,8 +39,25 @@
 		<td style="width: 90%">
 			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
+			<div style="text-align:right">
+			<a href="modifyproject/${project.projectId}"> <img style="vertical-align:text-top;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/edit.png"> Edit Project
+			</a>
+			</div>
 			<hr>
 			<div class="user">Owned by: ${project.owner.name} (<a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">Change</a>)</div>
+					
+					<c:if test="${owner=='1' and editoraccess=='0' }">
+					<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses-no.png"> You are not an Editor on this Project 
+						(<a href="${pageContext.servletContext.contextPath}/auth/workbench/assignownereditor/${project.projectId}">Become an Editor</a>)
+						
+						
+					</c:if>
+					
+					<c:if test="${owner=='1' and editoraccess=='1' }">
+					<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses.png"> You are an Editor on this Project
+					(<a href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.projectId}">Remove me as Editor</a>)
+					</c:if>
+			
 			<hr> <!--  Display associated workspace -->
 			
 			<strong>Workspaces in this project:</strong>
@@ -141,53 +158,26 @@
 			</c:choose>
 			<div align="left">
 				<hr>
-				<a href="modifyproject/${project.projectId}"> <input
-					type="button" name="Edit" value="Edit" />
-				</a>
+				To go to the public site, click this link <a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">http://quadriga.asu.edu/sites/${project.unixName}</a>
+				<hr>
 				<c:choose>
 					<c:when test="${owner=='1'}">
-						<c:choose>
-							<c:when test="${editoraccess=='0' }">
-								<a
-									href="${pageContext.servletContext.contextPath}/auth/workbench/assignownereditor/${project.projectId}">
-									<input type="button" name="Get Editor Role"
-									value="Get Editor Role" />
-								</a>
-								
-								 <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
-								<input type="button" value="Show Inactive Workspace" name="Show Inactive Workspace"/>
-								</a> 
-								
-								<%-- <input type="button" value="Show Inactive Workspace" 
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace'">	--%>							</c:when>
-							<c:otherwise>
-								<a
-									href="${pageContext.servletContext.contextPath}/auth/workbench/deleteownereditor/${project.projectId}">
-									<input type="button" name="Delete Editor Role"
-									value="Delete Editor Role" />
-								</a>
-								
-								<%-- <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showInactiveWorkspace">
-								<input type="button" value="Show Inactive Workspace" name="Show Inactive Workspace"/>
-								</a> --%>
-								
-								<input type="button" value="Show Inactive Workspace" 
-								onclick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace'"> 	
-							
-							</c:otherwise>
-						</c:choose>
-
+						<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/showinactiveworkspace">
+						<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/archive.png"> Show Inactive Workspace
+						</a> 
+													
 					</c:when>
+				
 				</c:choose>
 			</div>
 		</td>
 		<!-- Display collaborators -->
 		<td style="width: 10%">
 			<section>
+				<h3 class="major">
+					<span>Collaborators</span>
+				</h3>
 				<c:if test="${not empty project.projectCollaborators}">
-					<h3 class="major">
-						<span>Collaborators</span>
-					</h3>
 					<ul class="collaborators">
 						<c:forEach var="projectcollaborator"
 							items="${project.projectCollaborators}">
@@ -200,6 +190,6 @@
 		</td>
 	</tr>
 	<tr>
-	<td>To go to the public site, click this link <a href="${pageContext.servletContext.contextPath}/sites/${project.unixName}">http://quadriga.asu.edu/sites/${project.unixName}</a></td>
+	<td></td>
 	</tr>
 </table>

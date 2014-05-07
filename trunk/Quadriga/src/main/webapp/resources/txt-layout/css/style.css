@@ -69,12 +69,12 @@
 	{
 		color: rgb(182, 174, 127); /*#006376;*/
 		text-decoration: none;
-		font-weight: bold;
+		font-weight: normal;
 	}
 
 		a:hover
 		{
-			text-decoration: none;
+			text-decoration: underline;
 		}
 		
 	a.inText {
@@ -804,20 +804,20 @@
 			content: '';
 			display: block;
 			position: absolute;
-			width: 45px;
+			width: 50px;
 			height: 34px;
 			left: 5px;
 			top: 30px;
 			margin-right: 15px;
 			margin-top: -15px;
-			background: no-repeat url('images/folder.png');
+			background: no-repeat url('images/ws.png');
 		}
 		
 	li.ws
 		{
 			position: relative;
 			display: block;
-			padding-left: 50px;
+			padding-left: 60px;
 			margin-left: 1em;
 			margin-top: 0.8em;
 			border: 1px solid #dddddd;
