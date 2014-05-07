@@ -132,8 +132,8 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 	public IItem getDictionaryItem(DictionaryItemsDTO dictionaryItemsDTO)
 	{
 		IItem dictionaryItem = dictionaryItemsFactory.createDictionaryItemObject();
-		dictionaryItem.setDictionaryItemId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
-		dictionaryItem.setTerm(dictionaryItemsDTO.getTerm());					
+		dictionaryItem.setId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
+		dictionaryItem.setLemma(dictionaryItemsDTO.getTerm());					
 		dictionaryItem.setPos(dictionaryItemsDTO.getPos());
 		return dictionaryItem;
 	}
