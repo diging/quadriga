@@ -149,8 +149,8 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 				}
 				IItem item = dictionaryItemFactory.createDictionaryItemObject();
 				//TODO : we need to fill this
-				item.setTerm(dictionaryItemsDTO.getTerm());
-				item.setDictionaryItemId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
+				item.setLemma(dictionaryItemsDTO.getTerm());
+				item.setId(dictionaryItemsDTO.getDictionaryItemsDTOPK().getTermid());
 				item.setPos(dictionaryItemsDTO.getPos());
 				
 				IDictionaryItems dictionaryItems= dictionaryItemsFactory.createDictionaryItemsObject(); 

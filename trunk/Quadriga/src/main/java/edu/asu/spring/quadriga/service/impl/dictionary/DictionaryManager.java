@@ -462,7 +462,7 @@ public class DictionaryManager implements IDictionaryManager {
 			Item di = getDictionaryItemIndex(
 					values[i], dictionartItems);
 			addNewDictionariesItems(dictionaryId,
-					di.getTerm(), di.getDictionaryItemId(), di.getPos(), getDictionaryOwner(dictionaryId));
+					di.getLemma(), di.getId(), di.getPos(), getDictionaryOwner(dictionaryId));
 		}
 	}
 
@@ -476,8 +476,8 @@ public class DictionaryManager implements IDictionaryManager {
 	public Item getDictionaryItemIndex(String termId,
 			Item dictionaryItems) {
 
-		String terms[] = dictionaryItems.getTerm().split(",");
-		String ids[] = dictionaryItems.getDictionaryItemId().split(",");
+		String terms[] = dictionaryItems.getLemma().split(",");
+		String ids[] = dictionaryItems.getId().split(",");
 		String pos[] = dictionaryItems.getPos().split(",");
 		int index = -1;
 		if (ids.length > 0) {
@@ -490,8 +490,8 @@ public class DictionaryManager implements IDictionaryManager {
 		}
 		Item di = dictionaryItemsFactory
 				.createDictionaryItemObject();
-		di.setDictionaryItemId(ids[index]);
-		di.setTerm(terms[index]);
+		di.setId(ids[index]);
+		di.setLemma(terms[index]);
 		di.setPos(pos[index]);
 
 		return di;
