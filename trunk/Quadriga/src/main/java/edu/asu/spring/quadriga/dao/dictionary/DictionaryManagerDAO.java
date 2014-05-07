@@ -608,8 +608,8 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 			throws QuadrigaStorageException {
 
 		List<DictionaryDTO> dictionaryDTOList = null;
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("from DictionaryDTO dictionary where dictionary.username =: userName");
-		query.setParameter("userName",userName);
+		Query query = sessionFactory.getCurrentSession().getNamedQuery("DictionaryDTO.findByUsername");
+		query.setParameter("username",userName);
 		dictionaryDTOList = query.list();
 		return dictionaryDTOList;
 	}
