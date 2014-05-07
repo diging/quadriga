@@ -20,7 +20,7 @@
 		});
 	});
 </script>
-<h2>Workspace: ${workspacedetails.name}</h2>
+<h2>Workspace: ${workspacedetails.workspaceName}</h2>
 <hr />
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${workspaceid}'"
@@ -51,11 +51,11 @@
 		<c:when test="${not empty conceptCollectionList}">
 				
 				<ul class="style2 pagination1">
-					<c:forEach var="conceptCollection" items="${conceptCollectionList}">
+					<c:forEach var="workspaceConceptCollection" items="${conceptCollectionList}">
 						<li><a
-							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${conceptCollection.id}"><c:out
-									value="${conceptCollection.name}"></c:out></a> <br> <c:out
-								value="${conceptCollection.description}"></c:out></li>
+							href="${pageContext.servletContext.contextPath}/auth/conceptcollections/${workspaceConceptCollection.conceptCollection.conceptCollectionId}"><c:out
+									value="${workspaceConceptCollection.conceptCollection.conceptCollectionName}"></c:out></a> <br> <c:out
+								value="${workspaceConceptCollection.conceptCollection.description}"></c:out></li>
 					</c:forEach>
 				</ul>
 		</c:when>
