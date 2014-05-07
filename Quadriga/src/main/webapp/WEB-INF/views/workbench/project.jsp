@@ -44,7 +44,7 @@
 			</a>
 			</div>
 			<hr>
-			<div class="user">Owned by: ${project.owner.name} (<a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">Change</a>)</div>
+			<div class="user">Owned by: ${project.owner.name} <c:if test="${owner=='1'}">(<a href="${pageContext.servletContext.contextPath}/auth/workbench/transferprojectowner/${project.projectId}">Change</a>)</c:if></div>
 					
 					<c:if test="${owner=='1' and editoraccess=='0' }">
 					<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/glasses-no.png"> You are not an Editor on this Project 
