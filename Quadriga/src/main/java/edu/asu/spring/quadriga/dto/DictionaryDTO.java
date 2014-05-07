@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DictionaryDTO.findAll", query = "SELECT d FROM DictionaryDTO d"),
+    @NamedQuery(name = "DictionaryDTO.findByUsername", query = "SELECT d FROM DictionaryDTO d WHERE d.dictionaryowner.username = :username"),
     @NamedQuery(name = "DictionaryDTO.findByDictionaryname", query = "SELECT d FROM DictionaryDTO d WHERE d.dictionaryname = :dictionaryname"),
     @NamedQuery(name = "DictionaryDTO.findById", query = "SELECT d FROM DictionaryDTO d WHERE d.dictionaryid = :dictionaryid"),
     @NamedQuery(name = "DictionaryDTO.findByAccessibility", query = "SELECT d FROM DictionaryDTO d WHERE d.accessibility = :accessibility"),
