@@ -75,7 +75,7 @@ public class DictionaryCollaborator implements IDictionaryCollaborator
        this.updatedDate = updatedDate;
 	}
 
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -134,5 +134,5 @@ public class DictionaryCollaborator implements IDictionaryCollaborator
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
 		return true;
-	}
+	}*/
 }

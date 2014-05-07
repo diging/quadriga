@@ -71,7 +71,7 @@ public class TransferProjectOwnerController
 		ModelAndView model;
 		IProject project;
 		List<IProjectCollaborator> projectcollaborators = new ArrayList<IProjectCollaborator>();
-		List<IUser> userList = new ArrayList<IUser>();
+		List<IUser> userList = null;
 
 		//create a view
 		model = new ModelAndView("auth/workbench/transferprojectowner");
@@ -90,11 +90,17 @@ public class TransferProjectOwnerController
 		projectcollaborators = project.getProjectCollaborators();
 		if(projectcollaborators != null)
 		{
-			for(IProjectCollaborator projectCollaborator : projectcollaborators)
-			{
-				userList.add(projectCollaborator.getCollaborator().getUserObj());
+			if(projectcollaborators!=null){
+				
+				userList = new ArrayList<IUser>();
+				for(IProjectCollaborator projectCollaborator : projectcollaborators)
+				{
+					userList.add(projectCollaborator.getCollaborator().getUserObj());
+				}
 			}
 
+			
+			
 			model.getModelMap().put("collaboratinguser", userList);
 		}
 

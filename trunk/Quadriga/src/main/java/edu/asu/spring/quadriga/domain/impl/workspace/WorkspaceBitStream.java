@@ -75,7 +75,7 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
         this.updatedDate = updatedDate;
 	}
 
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -134,5 +134,5 @@ public class WorkspaceBitStream implements IWorkspaceBitStream
 		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
-	}
+	}*/
 }

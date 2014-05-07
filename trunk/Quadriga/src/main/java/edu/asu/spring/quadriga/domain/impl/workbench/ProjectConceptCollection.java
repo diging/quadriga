@@ -78,7 +78,7 @@ public class ProjectConceptCollection implements IProjectConceptCollection
          this.updatedDate = updatedDate;
 	}
 
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -96,9 +96,9 @@ public class ProjectConceptCollection implements IProjectConceptCollection
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		return result;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -138,5 +138,5 @@ public class ProjectConceptCollection implements IProjectConceptCollection
 		} else if (!updatedDate.equals(other.updatedDate))
 			return false;
 		return true;
-	}
+	}*/
 }

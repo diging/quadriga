@@ -76,7 +76,7 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
          this.updatedDate = updatedDate;
 	}
 
-	@Override
+	/*@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -135,5 +135,5 @@ public class WorkspaceDictionary implements IWorkspaceDictionary
 		} else if (!workspace.equals(other.workspace))
 			return false;
 		return true;
-	}
+	}*/
 }
