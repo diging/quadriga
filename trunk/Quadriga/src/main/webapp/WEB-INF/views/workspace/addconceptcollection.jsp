@@ -78,7 +78,7 @@
 		});
 	});
 </script>
-<h2>Workspace: ${workspacedetails.name}</h2>
+<h2>Workspace: ${workspacedetails.workspaceName}</h2>
 <hr />
 
 
@@ -112,10 +112,10 @@
 							<tr>
 								<td width="15%"><input type="checkbox" class="selected"
 									name="selected"
-									value='<c:out value="${conceptCollection.id}"></c:out>' /></td>
+									value='<c:out value="${conceptCollection.conceptCollectionId}"></c:out>' /></td>
 								<td width="40%"align="center"><input name="items" type="hidden"
-									value="<c:out value="${conceptCollection.name}"></c:out>" /> <c:out
-										value="${conceptCollection.name}"></c:out></td>
+									value="<c:out value="${conceptCollection.conceptCollectionName}"></c:out>" /> <c:out
+										value="${conceptCollection.conceptCollectionName}"></c:out></td>
 								<td width="50%"align="justify"><c:out
 										value="${conceptCollection.description}"></c:out></td>
 							</tr>

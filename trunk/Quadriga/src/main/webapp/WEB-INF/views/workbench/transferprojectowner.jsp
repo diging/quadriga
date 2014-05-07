@@ -31,7 +31,7 @@
 				<form:select path="userName">
 					<form:option value="" label="--- Select ---" />
 					<form:options items="${collaboratinguser}"
-						itemValue="collaborator.userObj.userName" itemLabel="collaborator.userObj.userName" />
+						itemValue="userName" itemLabel="userName" />
 				</form:select>
 				<form:errors path="userName" class="ui-state-error-text"></form:errors>
 				<div>Note:Current owner will become project admin</div>
