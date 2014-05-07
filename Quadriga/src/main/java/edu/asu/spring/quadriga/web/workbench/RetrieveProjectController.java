@@ -26,19 +26,19 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 public class RetrieveProjectController 
 {
 
-	
+
 	@Autowired 
 	IRetrieveProjectManager projectManager;
-	
+
 	@Autowired 
 	IRetrieveJsonProjectManager jsonProjectManager;
-	
+
 	@Autowired
 	ICheckProjectSecurity projectSecurity;
-	
+
 	@Autowired
 	IListWSManager wsManager;
-	
+
 	public IListWSManager getWsManager() {
 		return wsManager;
 	}
@@ -49,19 +49,19 @@ public class RetrieveProjectController
 
 	public IRetrieveProjectManager getProjectManager(){
 		return projectManager;
-		
+
 	}
-	
+
 	public void setProjectManager(IRetrieveProjectManager projectManager){
-		
+
 		this.projectManager = projectManager;
 	}
-	
+
 	public void setProjectSecurity(ICheckProjectSecurity projectSecurity){
-		
+
 		this.projectSecurity = projectSecurity;
 	}
-	
+
 	/**
 	 *this method acts as a controller for handling all the activities on the workbench
 	 *home page 
@@ -86,57 +86,62 @@ public class RetrieveProjectController
 		String projectListAsCollaboratorJson ;
 		String projectListAsWorkspaceOwnerJson ;
 		String projectListAsWSCollaboratorJson ;
-		
-		
+
+
 		userName = principal.getName();
-		
+
 		List<IProject> projects = projectManager.getProjectList(userName);
 		List<IProject> fullProjects = new ArrayList<IProject>();
-		
-		for (IProject p : projects) {
-			fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
+
+		model = new ModelAndView("auth/workbench");
+		if(projects != null)
+		{
+			for (IProject p : projects) {
+				fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
+			}
+			model.getModelMap().put("projects", fullProjects);
 		}
-		
+
 		//Fetch all the projects for which the user is owner
 		projectListAsOwner = projectManager.getProjectList(userName);
-		
+
 		//Fetch all the projects for which the user is collaborator
 		projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
-		
+
 		//Fetch all the projects for which the user is associated workspace owner
 		projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
-		
+
 		//Fetch all the projects for which the user is associated workspace collaborator
 		projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
-		
+
 		projectListAsOwnerJson = jsonProjectManager.getProjectList(userName);
-		
+
 		allProjectListJson = jsonProjectManager.getAllProjects(userName);
-		
+
 		projectListAsCollaboratorJson = jsonProjectManager.getCollaboratorProjectList(userName);
-		
+
 		projectListAsWorkspaceOwnerJson = jsonProjectManager.getProjectListAsWorkspaceOwner(userName);
-		
+
 		projectListAsWSCollaboratorJson = jsonProjectManager.getProjectListAsWorkspaceCollaborator(userName);
+
+
 		
-		
-		model = new ModelAndView("auth/workbench");
 		model.getModelMap().put("projectlistasowner", projectListAsOwner);
-        model.getModelMap().put("projectlistascollaborator", projectListAsCollaborator);
-        model.getModelMap().put("projectlistaswsowner", projectListAsWorkspaceOwner);
-        model.getModelMap().put("projectlistaswscollaborator", projectListAsWSCollaborator);
-        
-        model.getModelMap().put("owner", projectListAsOwnerJson);
-        model.getModelMap().put("allprojects", allProjectListJson);
-        model.getModelMap().put("collaborator", projectListAsCollaboratorJson);
-        model.getModelMap().put("wsowner", projectListAsWorkspaceOwnerJson);
-        model.getModelMap().put("wscollaborator", projectListAsWSCollaboratorJson);
-        
-        model.getModelMap().put("projects", fullProjects);
-		
+		model.getModelMap().put("projectlistascollaborator", projectListAsCollaborator);
+		model.getModelMap().put("projectlistaswsowner", projectListAsWorkspaceOwner);
+		model.getModelMap().put("projectlistaswscollaborator", projectListAsWSCollaborator);
+
+		model.getModelMap().put("owner", projectListAsOwnerJson);
+		model.getModelMap().put("allprojects", allProjectListJson);
+		model.getModelMap().put("collaborator", projectListAsCollaboratorJson);
+		model.getModelMap().put("wsowner", projectListAsWorkspaceOwnerJson);
+		model.getModelMap().put("wscollaborator", projectListAsWSCollaboratorJson);
+
+
+
 		return model;
 	}
-	
+
 	@RequestMapping(value="auth/workbench/{projectid}", method = RequestMethod.GET)
 	public ModelAndView getProjectDetails(@PathVariable("projectid") String projectid,Principal principal) throws QuadrigaStorageException
 	{
@@ -145,17 +150,17 @@ public class RetrieveProjectController
 		IProject project;
 		List<IWorkSpace> workspaceList;
 		List<IWorkSpace> collaboratorWorkspaceList;
-		
+
 		model = new ModelAndView("auth/workbench/project");
-		
+
 		userName = principal.getName();
 		project = projectManager.getProjectDetails(projectid);
-		
+
 		//retrieve all the workspaces associated with the project
 		workspaceList = wsManager.listActiveWorkspace(projectid,userName);
-		
+
 		collaboratorWorkspaceList = wsManager.listActiveWorkspaceByCollaborator(projectid, userName);
-		
+
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
 		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
@@ -171,21 +176,21 @@ public class RetrieveProjectController
 		}
 		return model;
 	}
-	
+
 	/*@RequestMapping(value="sites/{ProjectUnixName}", method=RequestMethod.GET)
 	public String showProject(@PathVariable("ProjectUnixName") String unixName,Model model) throws QuadrigaStorageException {
-		
-		
-		
+
+
+
 		IProject project = projectManager.getProjectDetailsByUnixName(unixName);
 		if(project!=null){
-			
+
 			model.addAttribute("project", project);
 			return "website";
 		}
 		else
 			return "forbidden";
-		
-		
+
+
 	}*/
 }
