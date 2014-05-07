@@ -74,37 +74,33 @@ public class ModifyProjectCollaboratorDAO extends DAOConnectionManager implement
 	public void deleteColloratorRequest(String userName, String projectid) throws QuadrigaStorageException
 	{
 		List<ProjectCollaboratorDTO> projectCollaborator = null;
-		List<String> collaborators = null;
 		try
 		{
-		   ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
-		   projectCollaborator = project.getProjectCollaboratorDTOList();
-		   collaborators = getList(userName);
-		   if(collaborators.size() == 0)
-		   {
-			   throw new QuadrigaStorageException(messages.getProperty("project_collaborator_invalid"));
-		   }
-		   if(!project.equals(null))
-		   {
-			   Iterator<ProjectCollaboratorDTO> iterator = projectCollaborator.iterator();
-			   
-			   while(iterator.hasNext())
-			   {
-				   String collaborator = iterator.next().getQuadrigaUserDTO().getUsername();
-				   if(collaborators.contains(collaborator))
-				   {
-					   iterator.remove();
-				   }
-			   }
-			   project.setProjectCollaboratorDTOList(projectCollaborator);
-			   
-			   sessionFactory.getCurrentSession().update(project);
-		   }
-		   else
-		   {
-			   throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
-		   }
-		
+			ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectid);
+			if(project != null)
+			{
+				projectCollaborator = project.getProjectCollaboratorDTOList();
+				if(projectCollaborator != null)
+				{
+					Iterator<ProjectCollaboratorDTO> iterator = projectCollaborator.iterator();
+					while(iterator.hasNext())
+					{
+						ProjectCollaboratorDTO projCollaborator = iterator.next();
+						String collaboratorUsername = projCollaborator.getQuadrigaUserDTO().getUsername();
+						if(userName.equals(collaboratorUsername))
+						{
+							iterator.remove();
+							sessionFactory.getCurrentSession().delete(projCollaborator);
+						}
+					}
+					project.setProjectCollaboratorDTOList(projectCollaborator);
+					sessionFactory.getCurrentSession().update(project);
+				}
+			}
+			else
+			{
+				throw new QuadrigaStorageException(messages.getProperty("projectId_invalid"));
+			}
 		}
 		catch(Exception ex)
 		{
