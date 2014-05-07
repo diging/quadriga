@@ -109,7 +109,7 @@ function onSubmit(){
 	<tbody>
 	<c:forEach var="collab" items="${projectCollaborators}">
 		<tr>
-		 <td><c:out value="${collab.collaborator.userObj}"></c:out></td>
+		 <td><c:out value="${collab.collaborator.userObj.userName}"></c:out></td>
 		 <td>
 			<c:forEach var="roles" items="${collab.collaborator.collaboratorRoles}">
 		 	<c:out value="${roles.displayName}"></c:out>||

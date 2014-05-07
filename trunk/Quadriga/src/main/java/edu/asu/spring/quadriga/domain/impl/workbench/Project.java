@@ -216,47 +216,47 @@ public class Project implements IProject {
         this.updatedDate = updatedDate;		
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((createdBy == null) ? 0 : createdBy.hashCode());
-		result = prime * result
-				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
-		result = prime * result
-				+ ((projectAccess == null) ? 0 : projectAccess.hashCode());
-		result = prime
-				* result
-				+ ((projectCollaborators == null) ? 0 : projectCollaborators
-						.hashCode());
-		result = prime
-				* result
-				+ ((projectConceptCollections == null) ? 0
-						: projectConceptCollections.hashCode());
-		result = prime
-				* result
-				+ ((projectDictionaries == null) ? 0 : projectDictionaries
-						.hashCode());
-		result = prime * result
-				+ ((projectId == null) ? 0 : projectId.hashCode());
-		result = prime * result
-				+ ((projectName == null) ? 0 : projectName.hashCode());
-		result = prime
-				* result
-				+ ((projectWorkspaces == null) ? 0 : projectWorkspaces
-						.hashCode());
-		result = prime * result
-				+ ((unixName == null) ? 0 : unixName.hashCode());
-		result = prime * result
-				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
-		result = prime * result
-				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
-		return result;
-	}
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result
+//				+ ((createdBy == null) ? 0 : createdBy.hashCode());
+//		result = prime * result
+//				+ ((createdDate == null) ? 0 : createdDate.hashCode());
+//		result = prime * result
+//				+ ((description == null) ? 0 : description.hashCode());
+//		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+//		result = prime * result
+//				+ ((projectAccess == null) ? 0 : projectAccess.hashCode());
+//		result = prime
+//				* result
+//				+ ((projectCollaborators == null) ? 0 : projectCollaborators
+//						.hashCode());
+//		result = prime
+//				* result
+//				+ ((projectConceptCollections == null) ? 0
+//						: projectConceptCollections.hashCode());
+//		result = prime
+//				* result
+//				+ ((projectDictionaries == null) ? 0 : projectDictionaries
+//						.hashCode());
+//		result = prime * result
+//				+ ((projectId == null) ? 0 : projectId.hashCode());
+//		result = prime * result
+//				+ ((projectName == null) ? 0 : projectName.hashCode());
+//		result = prime
+//				* result
+//				+ ((projectWorkspaces == null) ? 0 : projectWorkspaces
+//						.hashCode());
+//		result = prime * result
+//				+ ((unixName == null) ? 0 : unixName.hashCode());
+//		result = prime * result
+//				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
+//		result = prime * result
+//				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
+//		return result;
+//	}
 
 	@Override
 	public boolean equals(Object obj) {

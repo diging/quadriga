@@ -234,7 +234,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 		return projectCollaboratorList;
 	}
 	
-	public HashMap<String,IProjectCollaborator> mapUserProjectCollaborator(ProjectDTO projectDTO,IProject project)
+	public HashMap<String,IProjectCollaborator> mapUserProjectCollaborator(ProjectDTO projectDTO,IProject project) throws QuadrigaStorageException
 	{		
 		
 		HashMap<String, IProjectCollaborator> userProjectCollaboratorMap = new HashMap<String, IProjectCollaborator>();
@@ -280,6 +280,8 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
+				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
+				
 				
 				// Create ProjectCollaborator object
 				IProjectCollaborator projectCollaborator = projectCollaboratorFactory.createProjectCollaboratorObject();
