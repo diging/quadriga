@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.web.workbench;
 
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
@@ -89,6 +90,13 @@ public class RetrieveProjectController
 		
 		userName = principal.getName();
 		
+		List<IProject> projects = projectManager.getProjectList(userName);
+		List<IProject> fullProjects = new ArrayList<IProject>();
+		
+		for (IProject p : projects) {
+			fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
+		}
+		
 		//Fetch all the projects for which the user is owner
 		projectListAsOwner = projectManager.getProjectList(userName);
 		
@@ -123,6 +131,8 @@ public class RetrieveProjectController
         model.getModelMap().put("collaborator", projectListAsCollaboratorJson);
         model.getModelMap().put("wsowner", projectListAsWorkspaceOwnerJson);
         model.getModelMap().put("wscollaborator", projectListAsWSCollaboratorJson);
+        
+        model.getModelMap().put("projects", fullProjects);
 		
 		return model;
 	}

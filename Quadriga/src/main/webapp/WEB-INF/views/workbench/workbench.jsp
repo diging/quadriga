@@ -240,6 +240,17 @@
 	}
 	
 	
+	$(function() {
+		
+		$( ".toggleBtn" ).click(function(event) {
+	        var options = {};
+	        options = { to: { width: 200, height: 60 } };
+			var toggled =  $(this).find( "div" );
+			toggled.toggle( "Blind", options, 500 );
+			
+		      return false;
+		    });
+	})
 	
 </script>
 <style>
@@ -275,6 +286,29 @@ All
 
 <div id="aswscollaboratorjstree"></div>
 
+
+<!--  Julia is working on this -->
+<c:forEach items="${projects}" var="project">
+<div class="projectList">
+<img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> 
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}">${project.projectName}</a>
+	<br>
+	${project.description}
+	<div class="toggleBtn">
+	toggle
+	
+	<div class="toggled">
+	<ul>
+	<c:forEach items="${project.projectWorkspaces}" var="ws">
+		<li>${ws.workspace.workspaceName}</li>
+	</c:forEach>
+	</ul>
+	</div>
+	</div>
+</div>
+</c:forEach>
+
+<!-- 
 <div id="tabs" class="tabs">
 	<ul>
 		<li><a href="#asowner">Owner</a></li>
@@ -348,7 +382,7 @@ All
 		</c:if>
 	</div>
 </div>
-
+ -->
 
 
 
