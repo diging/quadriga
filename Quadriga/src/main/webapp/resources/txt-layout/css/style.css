@@ -826,7 +826,35 @@
 	.projectList {
 		border: 1px solid #c1cac5;
 		padding: 5px;
+		margin-bottom: 10px;
+		
 	}
+	
+	div.toggleBtn {
+		margin-left: 20px;
+		font-size: 13px;
+	}
+	
+	span.project_owner {
+		font-size: 13px;
+		float:right;
+	}
+	
+	div.toggleBtn img {
+		vertical-align: middle;
+		margin-bottom: 4px;
+	}
+	
+	
+	ul.workspaceToggleList {
+		list-style-image: url('images/ws-sm.png');
+		margin-bottom: 0em;
+	}
+	
+		ul.workspaceToggleList li {
+			margin-left: 45px;
+			line-height: 20px;
+		}
 
 /*********************************************************************************/
 /* Footer                                                                        */

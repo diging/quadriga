@@ -99,7 +99,7 @@ public abstract class DAOConnectionManager {
 		QuadrigaUserDTO quadrigaUser = null;
 		try
 		{
-		quadrigaUser = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
+			quadrigaUser = (QuadrigaUserDTO) sessionFactory.getCurrentSession().get(QuadrigaUserDTO.class, userName);
 		}
 		catch(HibernateException e)
 		{

@@ -243,14 +243,10 @@
 	$(function() {
 		
 		$( ".toggleBtn" ).click(function(event) {
-	        var options = {};
-	        options = { to: { width: 200, height: 60 } };
-			var toggled =  $(this).find( "div" );
-			toggled.toggle( "Blind", options, 500 );
-			
-		      return false;
-		    });
-	})
+	        var toggled =  $(this).find( "div" );
+			toggled.toggle();
+		});
+	});
 	
 </script>
 <style>
@@ -265,7 +261,7 @@
 
 
 <!-- <input type="checkbox"  id="chkboxall" checked > All  -->
-<input type="checkbox" id="chkboxall" checked>
+<!-- <input type="checkbox" id="chkboxall" checked>
 All
 <div id="users">
 	<input type="checkbox" id="chkboxowner" class="users" checked>
@@ -285,23 +281,32 @@ All
 <div id="aswsownerjstree"></div>
 
 <div id="aswscollaboratorjstree"></div>
-
+ -->
 
 <!--  Julia is working on this -->
 <c:forEach items="${projects}" var="project">
 <div class="projectList">
 <img style="vertical-align:middle;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/project-new.png"> 
-<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}">${project.projectName}</a>
-	<br>
+<a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}">${project.projectName}</a> 
+	<span class="project_owner">
+	Owned by: ${project.owner.name}
+	</span>
+	<hr style="clear: right">
 	${project.description}
-	<div class="toggleBtn">
-	toggle
 	
-	<div class="toggled">
-	<ul>
+	<div class="toggleBtn">
+	<img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/open.png"> <a>Show Workspaces</a>
+	
+	<div style="display: none" class="toggled">
+	<ul class="workspaceToggleList">
 	<c:forEach items="${project.projectWorkspaces}" var="ws">
-		<li>${ws.workspace.workspaceName}</li>
+		<li> <a href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/workspacedetails/${ws.workspace.workspaceId}">${ws.workspace.workspaceName}</a>
+			<br>${ws.workspace.description}
+		</li>
 	</c:forEach>
+	<c:if test="${empty  project.projectWorkspaces}">
+		There are workspaces.
+	</c:if>
 	</ul>
 	</div>
 	</div>
