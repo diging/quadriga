@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionListWSManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -100,6 +101,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public IWorkSpace getWorkSpaceDetails(String workspaceId) throws QuadrigaStorageException{
 
 		WorkspaceDTO workspaceDTO = dbConnect.getWorkspaceDTO(workspaceId);
@@ -202,8 +204,9 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 	 * @param workspaceDTO									{@link WorkspaceDTO} object for mapping collaborator
 	 * @param workspace										{@link IWorkSpace} object 
 	 * @return												Returns {@link HashMap} of {@link String} and {@link IWorkspaceCollaborator}
+	 * @throws QuadrigaStorageException 
 	 */
-	public HashMap<String,IWorkspaceCollaborator> mapUserWorkspaceCollaborator(WorkspaceDTO workspaceDTO,IWorkSpace workspace)
+	public HashMap<String,IWorkspaceCollaborator> mapUserWorkspaceCollaborator(WorkspaceDTO workspaceDTO,IWorkSpace workspace) throws QuadrigaStorageException
 	{		
 
 		HashMap<String, IWorkspaceCollaborator> userWorkspaceCollaboratorMap = new HashMap<String, IWorkspaceCollaborator>();
@@ -249,7 +252,8 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
-
+				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
+				
 				// Create ProjectCollaborator object
 				IWorkspaceCollaborator workspaceCollaborator = workspaceCollaboratorFactory.createWorkspaceCollaboratorObject();
 				workspaceCollaborator.setCollaborator(collaborator);

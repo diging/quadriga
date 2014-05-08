@@ -95,11 +95,11 @@ function onSubmit(){
 		</tr>
 	</thead>
 		<tbody>
-	<c:forEach var="collab" items="${collaboratingusers}">
+	<c:forEach var="workspaceCollaborator" items="${collaboratingusers}">
 		<tr>
-		 <td><c:out value="${collab.userObj.name}"></c:out></td>
+		 <td><c:out value="${workspaceCollaborator.collaborator.userObj.name}"></c:out></td>
 		 <td>
-			<c:forEach var="roles" items="${collab.collaboratorRoles}">
+			<c:forEach var="roles" items="${workspaceCollaborator.collaborator.collaboratorRoles}">
 		 	<c:out value="${roles.displayName}"></c:out> ||
 		 	</c:forEach>		 
 		 </td>

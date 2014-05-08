@@ -475,9 +475,9 @@ $(document).ready(function(){
     <c:if test="${not empty workspacedetails.workspaceCollaborators}">
    <h3 class="major"><span>Collaborators</span></h3>
     <ul class="collaborators">
-			<c:forEach var="wscollaborator" items="${workspacedetails.workspaceCollaborators}">
+			<c:forEach var="workspaceCollaborator" items="${workspacedetails.workspaceCollaborators}">
 				<li>
-					<c:out value="${wscollaborator.userObj.name}"></c:out>
+					<c:out value="${workspaceCollaborator.collaborator.userObj.name}"></c:out>
 				</li>
 			</c:forEach>
 		</ul>

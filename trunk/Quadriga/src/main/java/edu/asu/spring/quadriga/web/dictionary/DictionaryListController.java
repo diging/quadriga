@@ -149,7 +149,7 @@ public class DictionaryListController {
 			dictonaryManager.addNewDictionary(dictionary);
 		} catch (QuadrigaStorageException e1) {
 			msg = "DB Error";
-			e1.printStackTrace();
+			logger.error("Issue while adding dictionary",e1);
 		}
 		if (msg.equals("")) {
 			model.addAttribute("adddicsuccess", 1);

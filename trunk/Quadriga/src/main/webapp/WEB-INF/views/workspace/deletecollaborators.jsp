@@ -101,15 +101,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="collab" items="${collaboratingusers}">
+					<c:forEach var="workspaceCollaborator" items="${collaboratingusers}">
 						<tr>
 							<td><input type="checkbox" name="wscollabchecked"
-								value="${collab.userObj.userName}"></td>
+								value="${workspaceCollaborator.collaborator.userObj.userName}"></td>
 							<td><font size="3"> <c:out
-										value="${collab.userObj.name}"></c:out>
+										value="${workspaceCollaborator.collaborator.userObj.name}"></c:out>
 							</font></td>
 							<td><font size="3"> <c:forEach var="roles"
-										items="${collab.collaboratorRoles}">
+										items="${workspaceCollaborator.collaborator.collaboratorRoles}">
 										<c:out value="${roles.displayName}"></c:out> ||
 		 	</c:forEach>
 							</font></td>
