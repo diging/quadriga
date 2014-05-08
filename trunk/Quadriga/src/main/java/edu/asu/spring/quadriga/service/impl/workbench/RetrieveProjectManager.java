@@ -62,7 +62,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 		projectList =  projectShallowMapper.getProjectList(sUserName);
 		return projectList;
 	}
-
+	
 	/**
 	 * This method retrieves the list of projects associated with the logged in user as a collaborator. 
 	 * It uses the Project shallow mapper to give a {@link List} of {@link IProject} of domain type {@link ProjectProxy}.
