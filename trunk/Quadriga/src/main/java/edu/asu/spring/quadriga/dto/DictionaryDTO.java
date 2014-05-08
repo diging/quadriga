@@ -71,9 +71,9 @@ public class DictionaryDTO implements Serializable {
     private List<DictionaryItemsDTO> dictionaryItemsDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO",orphanRemoval=true)
     private List<DictionaryCollaboratorDTO> dictionaryCollaboratorDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionaryDTO",orphanRemoval=true)
     private List<WorkspaceDictionaryDTO> wsDictionaryDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionary")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dictionary",orphanRemoval=true)
     private List<ProjectDictionaryDTO> projectDictionaryDTOList;
 	@JoinColumn(name = "dictionaryowner", referencedColumnName = "username")
     @ManyToOne(optional = false)

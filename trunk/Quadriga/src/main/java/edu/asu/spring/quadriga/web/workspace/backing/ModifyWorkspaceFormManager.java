@@ -94,7 +94,12 @@ public class ModifyWorkspaceFormManager
 		
 		modifyWorkspaceList = new ArrayList<ModifyWorkspace>();
 		
-		workspaceList =  wsManager.listArchivedWorkspace(projectId,userName);;
+		workspaceList =  wsManager.listArchivedWorkspace(projectId,userName);
+		
+		if(workspaceList == null)
+		{
+			return modifyWorkspaceList;
+		}
 		
 		for(IWorkSpace workspace : workspaceList)
 		{

@@ -40,7 +40,7 @@ public class ModifyProjectFormManager
 			{
 				project = new ModifyProject();
 				project.setInternalid(iProject.getProjectId());
-				project.setName(iProject.getProjectName());
+				project.setProjectName(iProject.getProjectName());
 				project.setDescription(iProject.getDescription());
 				project.setProjectOwner(iProject.getOwner().getUserName());
 				modifyProjectList.add(project);
@@ -76,29 +76,34 @@ public class ModifyProjectFormManager
 			collaboratorProjectList = retrieveProjectManager.getProjectListByCollaboratorRole(userName,
 					collaboratorRole);
 			
-			for(IProject iProject : projectList)
+			if(projectList !=null)
 			{
-				project = new ModifyProject();
-				project.setInternalid(iProject.getProjectId());
-				project.setName(iProject.getProjectName());
-				project.setDescription(iProject.getDescription());
-				project.setProjectOwner(iProject.getOwner().getUserName());
-				modifyProjectList.add(project);
-			}
-			
-			for(IProject iCollabProject : collaboratorProjectList)
-			{
-				project = new ModifyProject();
-				project.setInternalid(iCollabProject.getProjectId());
-				project.setName(iCollabProject.getProjectName());
-				project.setDescription(iCollabProject.getDescription());
-				project.setProjectOwner(iCollabProject.getOwner().getUserName());
-				if(!modifyProjectList.contains(project))
+				for(IProject iProject : projectList)
 				{
+					project = new ModifyProject();
+					project.setInternalid(iProject.getProjectId());
+					project.setProjectName(iProject.getProjectName());
+					project.setDescription(iProject.getDescription());
+					project.setProjectOwner(iProject.getOwner().getUserName());
 					modifyProjectList.add(project);
 				}
 			}
 			
+			if(collaboratorProjectList !=null)
+			{
+				for(IProject iCollabProject : collaboratorProjectList)
+				{
+					project = new ModifyProject();
+					project.setInternalid(iCollabProject.getProjectId());
+					project.setProjectName(iCollabProject.getProjectName());
+					project.setDescription(iCollabProject.getDescription());
+					project.setProjectOwner(iCollabProject.getOwner().getUserName());
+					if(!modifyProjectList.contains(project))
+					{
+						modifyProjectList.add(project);
+					}
+				}
+			}
 			return modifyProjectList;
 		}
 }

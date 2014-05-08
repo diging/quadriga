@@ -88,22 +88,22 @@ public class WorkspaceDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO", orphanRemoval=true)
     private List<WorkspaceCollaboratorDTO> workspaceCollaboratorDTOList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<WorkspaceConceptcollectionDTO> workspaceConceptCollectionDTOList;
    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<WorkspaceDictionaryDTO> workspaceDictionaryDTOList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<WorkspaceDspaceDTO> workspaceDspaceDTOList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<WorkspaceEditorDTO> workspaceEditorDTOList;
    
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "workspaceDTO")
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "workspaceDTO",orphanRemoval=true)
     private ProjectWorkspaceDTO projectWorkspaceDTO;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workspaceDTO",orphanRemoval=true)
     private List<NetworkWorkspaceDTO> workspaceNetworkDTOList;
     
     public WorkspaceDTO() {

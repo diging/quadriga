@@ -96,7 +96,7 @@
 						<form:checkbox path="projectList[${status.index}].internalid" value="${project.internalid}"/>
 							</td>
 							<td><font size="3">
-							<form:label path="projectList[${status.index}].name">
+							<form:label path="projectList[${status.index}].projectName">
 							<c:out value="${project.projectName}"></c:out>
 							</form:label> 
 							</font></td>

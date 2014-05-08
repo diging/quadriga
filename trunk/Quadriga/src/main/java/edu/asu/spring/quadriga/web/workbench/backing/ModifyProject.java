@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class ModifyProject 
 {
 	private String internalid;
-	private String name;
+	private String projectName;
 	private String description;
 	private String projectOwner;
 	
@@ -27,11 +27,11 @@ public class ModifyProject
 	public void setInternalid(String internalid) {
 		this.internalid = internalid;
 	}
-	public String getName() {
-		return name;
+	public String getProjectName() {
+		return projectName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setProjectName(String name) {
+		this.projectName = name;
 	}
 	public String getDescription() {
 		return description;

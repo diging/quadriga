@@ -198,9 +198,16 @@ public class ModifyWSManagerDAO extends DAOConnectionManager implements IDBConne
 			deleteWorkspaceEditor(workspaceIdList);
 			deleteWorkspaceNetwork(workspaceIdList);
 
-			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceDTO workspace where workspace.workspaceid IN (:workspaceIdList)");
-			query.setParameter("workspaceIdList", workspaceIdList);
-			query.executeUpdate();
+			//Delete the workspace ids
+			String[] workspaceIds = workspaceIdList.split(",");
+			for(String workspaceId : workspaceIds)
+			{
+				WorkspaceDTO workspace = (WorkspaceDTO) sessionFactory.getCurrentSession().get(WorkspaceDTO.class, workspaceId);
+				sessionFactory.getCurrentSession().delete(workspace);
+			}
+//			Query query = sessionFactory.getCurrentSession().createQuery("Delete from WorkspaceDTO workspace where workspace.workspaceid IN (:workspaceIdList)");
+//			query.setParameter("workspaceIdList", workspaceIdList);
+//			query.executeUpdate();
 		}
 		catch(Exception e)
 		{
