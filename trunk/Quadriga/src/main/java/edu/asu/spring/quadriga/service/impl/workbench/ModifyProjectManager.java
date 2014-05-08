@@ -37,7 +37,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Transactional
 	public void addProjectRequest(IProject project, String userName) throws QuadrigaStorageException
 	{
-		logger.info("Adding project details");
 		dbConnect.addProjectRequest(project,userName);
 	}
 	
@@ -48,7 +47,6 @@ public class ModifyProjectManager implements IModifyProjectManager
 	@Transactional
 	public void updateProjectRequest(String projID, String projName,String projDesc,String projAccess, String unixName,String userName) throws QuadrigaStorageException
 	{
-		logger.info("Updating project details");
 		dbConnect.updateProjectRequest(projID, projName, projDesc, projAccess, unixName, userName);
 	}
 	

@@ -126,10 +126,9 @@ public class ModifyProjectController
 		
 		ModelAndView model;
 		model = new ModelAndView("auth/workbench/addproject");
-        logger.info("Adding project details.");
-		if(result.hasErrors())
+        if(result.hasErrors())
 		{
-			logger.error("Adding project details",result);
+			logger.debug("Adding project details",result);
 			model.getModelMap().put("project",project);
 			model.getModelMap().put("unixnameurl",messages.getProperty("project_unix_name.url"));
 			model.getModelMap().put("success", 0);
@@ -138,9 +137,6 @@ public class ModifyProjectController
 		{
 			IUser user = userManager.getUserDetails(principal.getName());
             project.setOwner(user);
-            if(user != null){
-            	logger.info("user not null"+user.getName() + " "+ user.getUserName());
-            }
 			projectManager.addProjectRequest(project,principal.getName());
 			model.getModelMap().put("success", 1);
 		}
