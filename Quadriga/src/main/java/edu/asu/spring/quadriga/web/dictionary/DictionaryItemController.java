@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -172,8 +171,6 @@ public class DictionaryItemController {
 			return "auth/dictionary/dictionary";
 		}else {
 			for (int i = 0; i < values.length; i++) {
-				logger.info("Deleting item for dictionary id: " + dictionaryId
-						+ " and term id : " + i + " : " + values[i]);
 				dictonaryManager.deleteDictionariesItems(dictionaryId,
 						values[i],user.getUserName());
 				if (!msg.equals("")) {
@@ -204,7 +201,8 @@ public class DictionaryItemController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
-
+		JSONObject core = new JSONObject();
+		model.addAttribute("core", core.toString());
 		return "auth/dictionary/dictionary";
 	}
 
@@ -285,7 +283,8 @@ public class DictionaryItemController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
-
+		JSONObject core = new JSONObject();
+		model.addAttribute("core", core.toString());
 		return "auth/dictionary/dictionary";
 	}
 

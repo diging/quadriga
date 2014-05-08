@@ -60,7 +60,6 @@
 
 	$(document).ready(function() {
 		$("input[type=submit]").button().click(function(event) {
-
 		});
 	});
 	
@@ -310,8 +309,7 @@
 					<!-- <table  class="dataTable" id="pagination1"> -->
 					<thead>
 						<tr>
-							<th align="left"><input type="checkbox" id="selectall">Select
-								All</th>
+							<th align="left"><input type="checkbox" id="selectall"></th>
 							<th>Items</th>
 							<th>ID</th>
 							<th>Pos</th>

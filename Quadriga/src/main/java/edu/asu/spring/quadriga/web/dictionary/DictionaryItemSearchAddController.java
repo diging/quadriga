@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
-import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
-import edu.asu.spring.quadriga.domain.impl.dictionarylist.DictionaryItem;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -132,7 +131,8 @@ public class DictionaryItemSearchAddController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
-
+		JSONObject core = new JSONObject();
+		model.addAttribute("core", core.toString());
 		return "auth/dictionary/dictionary";
 	}
 
