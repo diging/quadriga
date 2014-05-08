@@ -597,11 +597,11 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 	}
 	
 	/**
+	 * this method retrieves list of DictionaryDTOs for the given user
 	 * 
-	 * 
-	 * 
+	 * @param 	userName	logged in user name
+	 * @throws	QuadrigaStorageException
 	 */
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<DictionaryDTO> getDictionaryDTOList(String userName)
