@@ -78,4 +78,14 @@ public interface IDBConnectionModifyProjectManager
 	public abstract void deleteProjectRequest(ArrayList<String> projectIdList)
 			throws QuadrigaStorageException;
 
+	public abstract void deleteProjectEditorMapping(String projectId);
+
+	public abstract void deleteProjectCollaboratorMapping(String projectId);
+
+	public abstract void deleteProjectConceptCollectionMapping(String projectId);
+
+	public abstract void deleteProjectDictionaryMapping(String projectId);
+
+	public abstract void deleteProjectWorkspaceMapping(String projectId);
+
 }

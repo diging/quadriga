@@ -258,84 +258,84 @@ public class Project implements IProject {
 //		return result;
 //	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Project other = (Project) obj;
-		if (createdBy == null) {
-			if (other.createdBy != null)
-				return false;
-		} else if (!createdBy.equals(other.createdBy))
-			return false;
-		if (createdDate == null) {
-			if (other.createdDate != null)
-				return false;
-		} else if (!createdDate.equals(other.createdDate))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (owner == null) {
-			if (other.owner != null)
-				return false;
-		} else if (!owner.equals(other.owner))
-			return false;
-		if (projectAccess != other.projectAccess)
-			return false;
-		if (projectCollaborators == null) {
-			if (other.projectCollaborators != null)
-				return false;
-		} else if (!projectCollaborators.equals(other.projectCollaborators))
-			return false;
-		if (projectConceptCollections == null) {
-			if (other.projectConceptCollections != null)
-				return false;
-		} else if (!projectConceptCollections
-				.equals(other.projectConceptCollections))
-			return false;
-		if (projectDictionaries == null) {
-			if (other.projectDictionaries != null)
-				return false;
-		} else if (!projectDictionaries.equals(other.projectDictionaries))
-			return false;
-		if (projectId == null) {
-			if (other.projectId != null)
-				return false;
-		} else if (!projectId.equals(other.projectId))
-			return false;
-		if (projectName == null) {
-			if (other.projectName != null)
-				return false;
-		} else if (!projectName.equals(other.projectName))
-			return false;
-		if (projectWorkspaces == null) {
-			if (other.projectWorkspaces != null)
-				return false;
-		} else if (!projectWorkspaces.equals(other.projectWorkspaces))
-			return false;
-		if (unixName == null) {
-			if (other.unixName != null)
-				return false;
-		} else if (!unixName.equals(other.unixName))
-			return false;
-		if (updatedBy == null) {
-			if (other.updatedBy != null)
-				return false;
-		} else if (!updatedBy.equals(other.updatedBy))
-			return false;
-		if (updatedDate == null) {
-			if (other.updatedDate != null)
-				return false;
-		} else if (!updatedDate.equals(other.updatedDate))
-			return false;
-		return true;
-	}
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Project other = (Project) obj;
+//		if (createdBy == null) {
+//			if (other.createdBy != null)
+//				return false;
+//		} else if (!createdBy.equals(other.createdBy))
+//			return false;
+//		if (createdDate == null) {
+//			if (other.createdDate != null)
+//				return false;
+//		} else if (!createdDate.equals(other.createdDate))
+//			return false;
+//		if (description == null) {
+//			if (other.description != null)
+//				return false;
+//		} else if (!description.equals(other.description))
+//			return false;
+//		if (owner == null) {
+//			if (other.owner != null)
+//				return false;
+//		} else if (!owner.equals(other.owner))
+//			return false;
+//		if (projectAccess != other.projectAccess)
+//			return false;
+//		if (projectCollaborators == null) {
+//			if (other.projectCollaborators != null)
+//				return false;
+//		} else if (!projectCollaborators.equals(other.projectCollaborators))
+//			return false;
+//		if (projectConceptCollections == null) {
+//			if (other.projectConceptCollections != null)
+//				return false;
+//		} else if (!projectConceptCollections
+//				.equals(other.projectConceptCollections))
+//			return false;
+//		if (projectDictionaries == null) {
+//			if (other.projectDictionaries != null)
+//				return false;
+//		} else if (!projectDictionaries.equals(other.projectDictionaries))
+//			return false;
+//		if (projectId == null) {
+//			if (other.projectId != null)
+//				return false;
+//		} else if (!projectId.equals(other.projectId))
+//			return false;
+//		if (projectName == null) {
+//			if (other.projectName != null)
+//				return false;
+//		} else if (!projectName.equals(other.projectName))
+//			return false;
+//		if (projectWorkspaces == null) {
+//			if (other.projectWorkspaces != null)
+//				return false;
+//		} else if (!projectWorkspaces.equals(other.projectWorkspaces))
+//			return false;
+//		if (unixName == null) {
+//			if (other.unixName != null)
+//				return false;
+//		} else if (!unixName.equals(other.unixName))
+//			return false;
+//		if (updatedBy == null) {
+//			if (other.updatedBy != null)
+//				return false;
+//		} else if (!updatedBy.equals(other.updatedBy))
+//			return false;
+//		if (updatedDate == null) {
+//			if (other.updatedDate != null)
+//				return false;
+//		} else if (!updatedDate.equals(other.updatedDate))
+//			return false;
+//		return true;
+//	}
 
 }

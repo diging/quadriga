@@ -73,15 +73,15 @@ public class ProjectDTO implements Serializable
     @JoinColumn(name = "projectowner", referencedColumnName = "username")
     @ManyToOne(optional = false)
     private QuadrigaUserDTO projectowner;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO",orphanRemoval=true)
     private List<ProjectWorkspaceDTO> projectWorkspaceDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project",orphanRemoval=true)
     private List<ProjectDictionaryDTO> projectDictionaryDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO",orphanRemoval=true)
     private List<ProjectConceptCollectionDTO> projectConceptCollectionDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectDTO",orphanRemoval=true)
     private List<ProjectCollaboratorDTO> projectCollaboratorDTOList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project",orphanRemoval=true)
     private List<ProjectEditorDTO> projectEditorDTOList;
 
 	public ProjectDTO() {

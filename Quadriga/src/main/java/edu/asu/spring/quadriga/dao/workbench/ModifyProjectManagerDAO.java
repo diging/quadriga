@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.dao.workbench;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -18,9 +19,13 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionModifyProjectManager;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
+import edu.asu.spring.quadriga.dto.ProjectConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
+import edu.asu.spring.quadriga.dto.ProjectDictionaryDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTO;
 import edu.asu.spring.quadriga.dto.ProjectEditorDTOPK;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTO;
+import edu.asu.spring.quadriga.dto.ProjectWorkspaceDTOPK;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ProjectCollaboratorDTOMapper;
 import edu.asu.spring.quadriga.mapper.ProjectDTOMapper;
@@ -107,8 +112,16 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 		{
 			for(String projectId : projectIdList)
 			{
-				ProjectDTO  projectDTO = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,projectId);
-				sessionFactory.getCurrentSession().delete(projectDTO);
+				ProjectDTO  project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class,projectId);
+				//retrieve all the foreign key tables associated with them
+				//delete the project workspace DTO
+				deleteProjectWorkspaceMapping(projectId);
+				deleteProjectDictionaryMapping(projectId);
+				deleteProjectConceptCollectionMapping(projectId);
+				deleteProjectCollaboratorMapping(projectId);
+				deleteProjectEditorMapping(projectId);
+				
+				sessionFactory.getCurrentSession().delete(project);
 			}
 		}
 		catch(HibernateException e)
@@ -116,6 +129,91 @@ public class ModifyProjectManagerDAO extends DAOConnectionManager implements IDB
 			logger.error("Delete project details request method :",e);
 			throw new QuadrigaStorageException();
 		}
+	}
+	
+	
+	@Override
+	public void deleteProjectWorkspaceMapping(String projectId)
+	{
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+		List<ProjectWorkspaceDTO> projectWorkspaceList = project.getProjectWorkspaceDTOList();
+		if(projectWorkspaceList != null)
+		{
+			for(ProjectWorkspaceDTO projectWorkspace : projectWorkspaceList)
+			{
+//				ProjectWorkspaceDTOPK tempProjectWorkspaceKey = new ProjectWorkspaceDTOPK(projectId,projectWorkspace.getProjectWorkspaceDTOPK().getWorkspaceid());
+//				ProjectWorkspaceDTO tempProjectWorkspace = (ProjectWorkspaceDTO) sessionFactory.getCurrentSession().get(ProjectWorkspaceDTO.class,tempProjectWorkspaceKey);
+				sessionFactory.getCurrentSession().delete(projectWorkspace);
+			}
+		}
+		project.setProjectWorkspaceDTOList(null);
+		sessionFactory.getCurrentSession().update(project);
+		
+	}
+	
+	@Override
+	public void deleteProjectDictionaryMapping(String projectId)
+	{
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+		List<ProjectDictionaryDTO> projectDictionaryList = project.getProjectDictionaryDTOList();
+		if(projectDictionaryList !=null)
+		{
+			for(ProjectDictionaryDTO projectDictionary : projectDictionaryList)
+			{
+				sessionFactory.getCurrentSession().delete(projectDictionary);
+			}
+		}
+		project.setProjectDictionaryDTOList(null);
+		sessionFactory.getCurrentSession().update(project);
+		
+	}
+	
+	@Override
+	public void deleteProjectConceptCollectionMapping(String projectId)
+	{
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+		List<ProjectConceptCollectionDTO> projectConceptCollectionList = project.getProjectConceptCollectionDTOList();
+		if(projectConceptCollectionList != null)
+		{
+			for(ProjectConceptCollectionDTO projectConceptCollection : projectConceptCollectionList)
+			{
+				sessionFactory.getCurrentSession().delete(projectConceptCollection);
+			}
+		}
+		project.setProjectConceptCollectionDTOList(null);
+		sessionFactory.getCurrentSession().update(project);
+	}
+	
+	@Override
+	public void deleteProjectCollaboratorMapping(String projectId)
+	{
+		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+		List<ProjectCollaboratorDTO> projectCollaboratorList = project.getProjectCollaboratorDTOList();
+		if(projectCollaboratorList != null)
+		{
+			for(ProjectCollaboratorDTO projectCollaborator : projectCollaboratorList)
+			{
+               sessionFactory.getCurrentSession().delete(projectCollaborator);				
+			}
+		}
+		project.setProjectConceptCollectionDTOList(null);
+		sessionFactory.getCurrentSession().update(project);
+	}
+	
+	@Override
+	public void deleteProjectEditorMapping(String projectId)
+	{
+        ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
+		List<ProjectEditorDTO> projectEditorList = project.getProjectEditorDTOList();
+		if(projectEditorList !=null)
+		{
+			for(ProjectEditorDTO projectEditor : projectEditorList)
+			{
+				sessionFactory.getCurrentSession().delete(projectEditor);
+			}
+		}
+	project.setProjectEditorDTOList(null);
+	sessionFactory.getCurrentSession().update(project);
 	}
 	
 
