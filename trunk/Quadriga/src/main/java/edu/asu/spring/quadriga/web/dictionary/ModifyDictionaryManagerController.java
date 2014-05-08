@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.web.dictionary;
 
 import java.security.Principal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -36,6 +38,10 @@ public class ModifyDictionaryManagerController
 	
 	@Autowired
 	private DictionaryValidator validator;
+	
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(ModifyDictionaryManagerController.class);
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder validateBinder){
@@ -85,6 +91,7 @@ public class ModifyDictionaryManagerController
 		model = new ModelAndView("auth/dictionaries/updatedictionary");
 		model.getModelMap().put("dictionaryid", dictionaryid);
 		
+		logger.info("came here");
 		if(result.hasErrors())
 		{
 		 	 model.getModelMap().put("dictionary",dictionary);
