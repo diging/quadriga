@@ -322,15 +322,15 @@
 						<c:forEach var="dictionaryItem" items="${dictionaryItemList}">
 							<tr>
 								<td><input type="checkbox" class="selected" name="selected"
-									value='<c:out value="${dictionaryItem.id}"></c:out>' /></td>
+									value='<c:out value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out>' /></td>
 								<td width="25%" align="center"><input name="items"
 									type="hidden"
-									value="<c:out value="${dictionaryItem.items}"></c:out>" /> <c:out
-										value="${dictionaryItem.items}"></c:out></td>
+									value="<c:out value="${dictionaryItem.dictionaryItem.term}"></c:out>" /> <c:out
+										value="${dictionaryItem.dictionaryItem.term}"></c:out></td>
 								<td width="25%" align="justify"><c:out
-										value="${dictionaryItem.id}"></c:out></td>
+										value="${dictionaryItem.dictionaryItem.dictionaryItemId}"></c:out></td>
 								<td width="25%" align="center"><c:out
-										value="${dictionaryItem.pos}"></c:out></td>
+										value="${dictionaryItem.dictionaryItem.pos}"></c:out></td>
 
 							</tr>
 						</c:forEach>
