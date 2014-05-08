@@ -158,10 +158,10 @@
 										<td><input type="checkbox" class="selected"
 											name="selected"
 											value='<c:out value="${dictionaryEntry.id}"></c:out>' /></td>
-										<td align="center"><input name="items" type="hidden"
+										<td align="center"><input name="term" type="hidden"
 											value="<c:out value="${dictionaryEntry.lemma}"></c:out>" />
 											<c:out value="${dictionaryEntry.lemma}"></c:out></td>
-										<td align="center"><input name="id" type="hidden"
+										<td align="center"><input name="dictionaryItemId" type="hidden"
 											value="<c:out value="${dictionaryEntry.id}"></c:out>" /> <c:out
 												value="${dictionaryEntry.id}"></c:out></td>
 										<td align="center"><input name="pos" type="hidden"
