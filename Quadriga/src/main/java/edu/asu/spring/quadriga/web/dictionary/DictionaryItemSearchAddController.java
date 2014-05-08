@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 import edu.asu.spring.quadriga.domain.implementation.WordpowerReply.DictionaryEntry;
@@ -25,6 +26,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
+import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 
 /**
  * This class will handle add and search dictionaries items controller for the
@@ -37,6 +39,10 @@ import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 public class DictionaryItemSearchAddController {
 	@Autowired
 	IDictionaryManager dictonaryManager;
+	
+	@Autowired
+	IRetrieveDictionaryManager retrieveDictionaryManager;
+	
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryItemSearchAddController.class);
@@ -106,6 +112,9 @@ public class DictionaryItemSearchAddController {
 					.getDictionaryName(dictionaryId);
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
+			//fetch the dictionary details
+			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+			model.addAttribute("dictionary", dictionary);
 			model.addAttribute("dictID", dictionaryId);
 
 			return "auth/dictionary/dictionary";
@@ -131,6 +140,8 @@ public class DictionaryItemSearchAddController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
+		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+		model.addAttribute("dictionary", dictionary);
 		JSONObject core = new JSONObject();
 		model.addAttribute("core", core.toString());
 		return "auth/dictionary/dictionary";

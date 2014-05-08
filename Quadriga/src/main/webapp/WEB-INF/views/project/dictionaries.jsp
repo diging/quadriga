@@ -24,7 +24,7 @@
 		});
 	});
 </script>
-<h2>Project: ${project.name}</h2>
+<h2>Project: ${project.projectName}</h2>
 <hr />
 <input type=button
 	onClick="location.href='${pageContext.servletContext.contextPath}/auth/workbench/${projectid}'"
@@ -54,11 +54,11 @@
 		<c:when test="${not empty dicitonaryList}">
 				
 				<ul class="style2 pagination1">
-					<c:forEach var="dictionary" items="${dicitonaryList}">
+					<c:forEach var="projectDictionary" items="${dicitonaryList}">
 						<li><a
-							href="${pageContext.servletContext.contextPath}/auth/dictionaries/${dictionary.id}"><c:out
-									value="${dictionary.name}"></c:out></a> <br> <c:out
-								value="${dictionary.description}"></c:out></li>
+							href="${pageContext.servletContext.contextPath}/auth/dictionaries/${projectDictionary.dictionary.dictionaryId}"><c:out
+									value="${projectDictionary.dictionary.dictionaryName}"></c:out></a> <br> <c:out
+								value="${projectDictionary.dictionary.description}"></c:out></li>
 					</c:forEach>
 				</ul>
 		</c:when>

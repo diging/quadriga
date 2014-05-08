@@ -33,8 +33,8 @@ function submitClick(id){
 					<table style="width: 100%">
 						<tr>
 							<td style="width: 170px">Name:</td>
-							<td><form:input path="name" size="60" id="name" /></td>
-							<td><form:errors path="name" cssClass="error"></form:errors></td>
+							<td><form:input path="dictionaryName" size="60" id="dictionaryName" /></td>
+							<td><form:errors path="dictionaryName" cssClass="error"></form:errors></td>
 						</tr>
 						<tr>
 							<td style="vertical-align: top">Description:</td>

@@ -78,7 +78,7 @@
 		});
 	});
 </script>
-<h2>Workspace: ${workspacedetails.name}</h2>
+<h2>Workspace: ${workspacedetails.workspaceName}</h2>
 <hr />
 
 <c:choose>
@@ -124,15 +124,15 @@
 				</thead>
 
 				<tbody>
-					<c:forEach var="dictionary" items="${dicitonaryList}">
+					<c:forEach var="workspaceDictionary" items="${dicitonaryList}">
 						<tr>
 							<td width="15%"><input type="checkbox" class="selected"
-								name="selected" value='<c:out value="${dictionary.id}"></c:out>' /></td>
+								name="selected" value='<c:out value="${workspaceDictionary.dictionary.dictionaryId}"></c:out>' /></td>
 							<td width="30%" align="center"><input name="items"
-								type="hidden" value="<c:out value="${dictionary.name}"></c:out>" />
-								<c:out value="${dictionary.name}"></c:out></td>
+								type="hidden" value="<c:out value="${workspaceDictionary.dictionary.dictionaryName}"></c:out>" />
+								<c:out value="${workspaceDictionary.dictionary.dictionaryName}"></c:out></td>
 							<td width="45%" align="justify"><c:out
-									value="${dictionary.description}"></c:out></td>
+									value="${workspaceDictionary.dictionary.description}"></c:out></td>
 						</tr>
 					</c:forEach>
 				</tbody>
