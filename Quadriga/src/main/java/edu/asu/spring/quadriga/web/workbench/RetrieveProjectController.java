@@ -77,67 +77,71 @@ public class RetrieveProjectController
 	{
 		String userName;
 		ModelAndView model;
-		List<IProject> projectListAsOwner;
-		List<IProject> projectListAsCollaborator;
-		List<IProject> projectListAsWorkspaceOwner;
-		List<IProject> projectListAsWSCollaborator;
-		String projectListAsOwnerJson ;
-		String allProjectListJson ;
-		String projectListAsCollaboratorJson ;
-		String projectListAsWorkspaceOwnerJson ;
-		String projectListAsWSCollaboratorJson ;
-
-
+		
 		userName = principal.getName();
 
-		List<IProject> projects = projectManager.getProjectList(userName);
+		List<IProject> projectListAsOwner = projectManager.getProjectList(userName);
 		List<IProject> fullProjects = new ArrayList<IProject>();
 
 		model = new ModelAndView("auth/workbench");
-		if(projects != null)
-		{
-			for (IProject p : projects) {
-				fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
-			}
-			model.getModelMap().put("projects", fullProjects);
-		}
-
-		//Fetch all the projects for which the user is owner
-		projectListAsOwner = projectManager.getProjectList(userName);
-
-		//Fetch all the projects for which the user is collaborator
-		projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
-
-		//Fetch all the projects for which the user is associated workspace owner
-		projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
-
-		//Fetch all the projects for which the user is associated workspace collaborator
-		projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
-
-		projectListAsOwnerJson = jsonProjectManager.getProjectList(userName);
-
-		allProjectListJson = jsonProjectManager.getAllProjects(userName);
-
-		projectListAsCollaboratorJson = jsonProjectManager.getCollaboratorProjectList(userName);
-
-		projectListAsWorkspaceOwnerJson = jsonProjectManager.getProjectListAsWorkspaceOwner(userName);
-
-		projectListAsWSCollaboratorJson = jsonProjectManager.getProjectListAsWorkspaceCollaborator(userName);
-
-
+		List<String> projectIds = new ArrayList<String>();
 		
-		model.getModelMap().put("projectlistasowner", projectListAsOwner);
-		model.getModelMap().put("projectlistascollaborator", projectListAsCollaborator);
-		model.getModelMap().put("projectlistaswsowner", projectListAsWorkspaceOwner);
-		model.getModelMap().put("projectlistaswscollaborator", projectListAsWSCollaborator);
-
-		model.getModelMap().put("owner", projectListAsOwnerJson);
-		model.getModelMap().put("allprojects", allProjectListJson);
-		model.getModelMap().put("collaborator", projectListAsCollaboratorJson);
-		model.getModelMap().put("wsowner", projectListAsWorkspaceOwnerJson);
-		model.getModelMap().put("wscollaborator", projectListAsWSCollaboratorJson);
-
-
+		if(projectListAsOwner != null)
+		{
+			for (IProject p : projectListAsOwner) {
+				fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
+				projectIds.add(p.getProjectId());
+			}
+		}
+		
+		//Fetch all the projects for which the user is collaborator
+		List<IProject> projectListAsCollaborator = projectManager.getCollaboratorProjectList(userName);
+		if(projectListAsCollaborator != null)
+		{
+			for (IProject p : projectListAsCollaborator) {
+				if (!projectIds.contains(p.getProjectId()))
+				{
+					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
+					projectIds.add(p.getProjectId());
+				}
+			}
+		}
+		
+		//Fetch all the projects for which the user is associated workspace owner
+		List<IProject> projectListAsWorkspaceOwner = projectManager.getProjectListAsWorkspaceOwner(userName);
+		if(projectListAsWorkspaceOwner != null)
+		{
+			for (IProject p : projectListAsWorkspaceOwner) {
+				if (!projectIds.contains(p.getProjectId()))
+				{
+					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
+					projectIds.add(p.getProjectId());
+				}	
+			}
+		}
+		
+		//Fetch all the projects for which the user is associated workspace collaborator
+		List<IProject> projectListAsWSCollaborator = projectManager.getProjectListAsWorkspaceCollaborator(userName);
+		if(projectListAsWSCollaborator != null)
+		{
+			for (IProject p : projectListAsWSCollaborator) {
+				if (!projectIds.contains(p.getProjectId()))
+				{
+					fullProjects.add(projectManager.getProjectDetails(p.getProjectId()));		
+					projectIds.add(p.getProjectId());
+				}	
+			}
+		}
+		
+		
+		model.getModelMap().put("projects", fullProjects);
+		
+		
+		
+//		model.getModelMap().put("projectlistasowner", projectListAsOwner);
+//		model.getModelMap().put("projectlistascollaborator", projectListAsCollaborator);
+//		model.getModelMap().put("projectlistaswsowner", projectListAsWorkspaceOwner);
+//		model.getModelMap().put("projectlistaswscollaborator", projectListAsWSCollaborator);
 
 		return model;
 	}
