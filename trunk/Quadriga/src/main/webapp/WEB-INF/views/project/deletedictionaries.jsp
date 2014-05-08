@@ -79,7 +79,7 @@
 	});
 </script>
 
-<h2>Project: ${project.name}</h2>
+<h2>Project: ${project.projectName}</h2>
 <hr />
 
 
@@ -127,16 +127,16 @@
 					</thead>
 
 					<tbody>
-						<c:forEach var="dictionary" items="${dicitonaryList}">
+						<c:forEach var="projectDictionary" items="${dicitonaryList}">
 							<tr>
 								<td width="20%"><input type="checkbox" class="selected"
 									name="selected"
-									value='<c:out value="${dictionary.id}"></c:out>' /></td>
+									value='<c:out value="${projectDictionary.dictionary.dictionaryId}"></c:out>' /></td>
 								<td width="30%" align="center"><input name="items" type="hidden"
-									value="<c:out value="${dictionary.name}"></c:out>" /> <c:out
-										value="${dictionary.name}"></c:out></td>
+									value="<c:out value="${projectDictionary.dictionary.dictionaryName}"></c:out>" /> <c:out
+										value="${projectDictionary.dictionary.dictionaryName}"></c:out></td>
 								<td width="45%" align="justify"><c:out
-										value="${dictionary.description}"></c:out></td>
+										value="${projectDictionary.dictionary.description}"></c:out></td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -168,6 +168,8 @@ public class DictionaryItemController {
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
+			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+			model.addAttribute("dictionary", dictionary);
 			JSONObject core = new JSONObject();
 			model.addAttribute("core", core.toString());
 			return "auth/dictionary/dictionary";
@@ -203,6 +205,8 @@ public class DictionaryItemController {
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
 		model.addAttribute("dictID", dictionaryId);
+		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+		model.addAttribute("dictionary", dictionary);
 		JSONObject core = new JSONObject();
 		model.addAttribute("core", core.toString());
 		return "auth/dictionary/dictionary";
@@ -237,6 +241,8 @@ public class DictionaryItemController {
 			model.addAttribute("dictID", dictionaryId);
 			JSONObject core = new JSONObject();
 			model.addAttribute("core", core.toString());
+			IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+			model.addAttribute("dictionary", dictionary);
 			return "auth/dictionary/dictionary";
 		}else{
 			for (int i = 0; i < values.length; i++) {
@@ -286,6 +292,8 @@ public class DictionaryItemController {
 				.getDictionaryName(dictionaryId);
 		model.addAttribute("dictionaryItemList", dictionaryItemList);
 		model.addAttribute("dictName", dictionaryName);
+		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);	
+		model.addAttribute("dictionary", dictionary);
 		model.addAttribute("dictID", dictionaryId);
 		JSONObject core = new JSONObject();
 		model.addAttribute("core", core.toString());

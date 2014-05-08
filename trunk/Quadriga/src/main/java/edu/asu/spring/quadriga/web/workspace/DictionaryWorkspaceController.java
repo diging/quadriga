@@ -81,7 +81,7 @@ public class DictionaryWorkspaceController {
 			model.addAttribute("workspacedetails", workspace);
 			model.addAttribute("userId", userId);
 		} catch (Exception e) {
-			logger.error(" ----" + e.getMessage());
+			logger.error("issue while adding dictionary " ,e);
 		}
 		return "auth/workbench/workspace/adddictionaries";
 	}
@@ -114,8 +114,7 @@ public class DictionaryWorkspaceController {
 				dicitonaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(
 						workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("issue while adding dictionary " ,e);
 			}
 			if(dicitonaryList == null){
 				logger.info("Dictionary list is empty buddy");
@@ -135,8 +134,7 @@ public class DictionaryWorkspaceController {
 						flag=1;
 					}
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("issue while adding dictionary " ,e);
 				}
 			}
 		}
@@ -145,18 +143,17 @@ public class DictionaryWorkspaceController {
 		}else{
 			model.addAttribute("success", 0);
 		}
-		List<IDictionary> dicitonaryList = null;
+		List<IWorkspaceDictionary> dicitonaryList = null;
 		try {
-			dicitonaryList = workspaceDictionaryManager.getNonAssociatedWorkspaceDictionaries(
-					workspaceId, userId);
+			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("issue while adding dictionary " ,e);
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionar list is empty buddy");
 		}
 		model.addAttribute("dicitonaryList", dicitonaryList);
+
 		IWorkSpace workspace = wsManager.getWorkspaceDetails(workspaceId,userId);
 		model.addAttribute("workspacedetails", workspace);
 		model.addAttribute("workspaceId", workspaceId);
@@ -183,8 +180,7 @@ public class DictionaryWorkspaceController {
 		try {
 			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("issue while adding dictionary " ,e);
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionar list is empty buddy");
@@ -215,8 +211,7 @@ public class DictionaryWorkspaceController {
 		try {
 			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("issue while adding dictionary " ,e);
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionar list is empty buddy");
@@ -254,8 +249,7 @@ public class DictionaryWorkspaceController {
 				dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
 						workspaceId, userId);
 			} catch (QuadrigaStorageException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("issue while adding dictionary " ,e);
 			}
 			if(dicitonaryList == null){
 				logger.info("Dictionary list is empty buddy");
@@ -270,8 +264,7 @@ public class DictionaryWorkspaceController {
 				try {
 					workspaceDictionaryManager.deleteWorkspaceDictionary(workspaceId, userId, values[i]);
 				} catch (QuadrigaStorageException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("issue while adding dictionary " ,e);
 				}
 				if(!msg.equals("")){
 					flag=1;
@@ -288,8 +281,7 @@ public class DictionaryWorkspaceController {
 			dicitonaryList = workspaceDictionaryManager.listWorkspaceDictionary(
 					workspaceId, userId);
 		} catch (QuadrigaStorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("issue while adding dictionary " ,e);
 		}
 		if(dicitonaryList == null){
 			logger.info("Dictionary list is empty buddy");
