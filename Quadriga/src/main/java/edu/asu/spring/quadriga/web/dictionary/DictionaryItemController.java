@@ -168,6 +168,8 @@ public class DictionaryItemController {
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
+			JSONObject core = new JSONObject();
+			model.addAttribute("core", core.toString());
 			return "auth/dictionary/dictionary";
 		}else {
 			for (int i = 0; i < values.length; i++) {
@@ -233,6 +235,8 @@ public class DictionaryItemController {
 			model.addAttribute("dictionaryItemList", dictionaryItemList);
 			model.addAttribute("dictName", dictionaryName);
 			model.addAttribute("dictID", dictionaryId);
+			JSONObject core = new JSONObject();
+			model.addAttribute("core", core.toString());
 			return "auth/dictionary/dictionary";
 		}else{
 			for (int i = 0; i < values.length; i++) {
