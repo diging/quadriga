@@ -4,9 +4,9 @@
 
 #foreach ($dictionaryItems in $list)
 <Quadriga:dictionaryItem>
-	<Quadriga:uri>$dictionaryItems.id</Quadriga:uri>
-	<Quadriga:term>$dictionaryItems.items</Quadriga:term>
-	<Quadriga:pos>$dictionaryItems.pos</Quadriga:pos>
+	<Quadriga:uri>$dictionaryItems.dictionaryItem.dictionaryItemId</Quadriga:uri>
+	<Quadriga:term>$dictionaryItems.dictionaryItem.term</Quadriga:term>
+	<Quadriga:pos>$dictionaryItems.dictionaryItem.pos</Quadriga:pos>
 </Quadriga:dictionaryItem> 	
 #end
 </Quadriga:dictionaryItemsList>

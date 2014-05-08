@@ -3,10 +3,10 @@
 <Quadriga:projectList>
 #foreach ($project in $list)
 <Quadriga:project>
-	<Quadriga:name>$project.name</Quadriga:name>
+	<Quadriga:name>$project.projectName</Quadriga:name>
 	<Quadriga:description>$project.description</Quadriga:description>
-	<Quadriga:id>$project.internalid</Quadriga:id>
-	<Quadriga:uri>$url/rest/projects/$project.internalid/workspaces</Quadriga:uri>
+	<Quadriga:id>$project.projectId</Quadriga:id>
+	<Quadriga:uri>$url/rest/projects/$project.projectId/workspaces</Quadriga:uri>
 </Quadriga:project> 	
 #end
 </Quadriga:projectList>
