@@ -109,7 +109,7 @@ public class WorkspaceRestController {
 			engine.init();
 			//will use in future list workspaces need to be modified
 			String userId = principal.getName();
-			workspaceList = wsManager.listActiveWorkspace(project_id,userId);
+			workspaceList = wsManager.listWorkspace(project_id,userId);
 
 			template = engine.getTemplate("velocitytemplates/workspaces.vm");
 			VelocityContext context = new VelocityContext(restVelocityFactory.getVelocityContext());

@@ -244,6 +244,8 @@ public class DictionaryRestController {
 					+ dictionaryId);
 			dictionaryItemsList = dictionaryManager
 					.getDictionariesItems(dictionaryId,user.getUsername());
+			
+			
 			if( dictionaryItemsList == null){
 				throw new RestException(404);
 			}

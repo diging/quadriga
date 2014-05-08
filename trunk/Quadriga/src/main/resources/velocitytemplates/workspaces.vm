@@ -3,10 +3,10 @@
 <Quadriga:workspacesList>
 #foreach ($workspace in $list)
 <Quadriga:workspace>
-	<Quadriga:name>$workspace.name</Quadriga:name>
+	<Quadriga:name>$workspace.workspaceName</Quadriga:name>
 	<Quadriga:description>$workspace.description</Quadriga:description>
-	<Quadriga:id>$workspace.id</Quadriga:id>
-	<Quadriga:uri>$url/rest/workspaces/$workspace.id</Quadriga:uri>
+	<Quadriga:id>$workspace.workspaceId</Quadriga:id>
+	<Quadriga:uri>$url/rest/workspaces/$workspace.workspaceId</Quadriga:uri>
 </Quadriga:workspace> 	
 #end
 </Quadriga:workspacesList>
