@@ -171,6 +171,7 @@ public class AddCCCollaboratorController {
 			model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 			
 			ccCollaborator =  ccCollaboratorFactory.createConceptCollectionCollaboratorObject();
+			ccCollaborator.setCollaborator(collaboratorFactory.createCollaborator());
 			ccCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
 			model.getModelMap().put("ccCollaborator", ccCollaborator);
 			

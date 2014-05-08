@@ -181,11 +181,11 @@ function addCCtoWorkspace(id,name){
 		<tbody>
 			<c:forEach var="conceptItem" items="${concept.conceptCollectionConcepts}">
 				<tr>
-					<td><input type="checkbox" class="selected" name="selected" value="${conceptItem.concept.uri}"/></td>
+					<td><input type="checkbox" class="selected" name="selected" value="${conceptItem.concept.conceptId}"/></td>
 					<td align="justify"><font size="2"><c:out
-								value="${conceptItem.concept.name}"></c:out></font></td>
+								value="${conceptItem.concept.lemma}"></c:out></font></td>
 					<td width="25%" align="justify"><font size="2"><c:out
-								value="${conceptItem.concept.uri}"></c:out></font></td>
+								value="${conceptItem.concept.conceptId}"></c:out></font></td>
 					<td class="center" align="justify"><font size="2"><c:out
 								value="${conceptItem.concept.pos}"></c:out></font></td>
 					<td width="30%" align="justify"><font size="2"><c:out

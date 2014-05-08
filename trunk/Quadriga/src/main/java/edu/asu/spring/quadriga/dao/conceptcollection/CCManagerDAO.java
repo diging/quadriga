@@ -246,6 +246,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 						ConceptsDTO concept = ccItemsIterator.next().getConceptDTO();
 						tempConcept.setConcept(conceptCollectionDTOMapper.getConceptCollectionItems(concept));
                         tempConcept.setConceptCollection(collection);
+                        concepts.add(tempConcept);
 					}	
 				}
 				collection.setConceptCollectionConcepts(concepts);
