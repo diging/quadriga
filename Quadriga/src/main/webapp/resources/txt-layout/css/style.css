@@ -533,7 +533,7 @@
 						background-position: -384px 0px;
 					}
 
-	ul.collaborators {
+	ul.collaborators, ul.colltools {
 		font-size: 0.9em;
 		color: #a1aaa5;
 	}
@@ -557,6 +557,15 @@
 			top: 50%;
 			margin-top: -8px;
 			background: url('images/user.png');
+		}
+	
+	ul.colltools li
+		{
+			position: relative;
+			padding-left: 8px;
+			margin-left: 0.5em;
+			margin-top: 5px;
+			margin-bottm: 5px;
 		}
 	
 	ul.meta
