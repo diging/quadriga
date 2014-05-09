@@ -14,8 +14,6 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -56,8 +54,6 @@ public class WebsiteProjectController {
 	@Qualifier("qStoreURL_Get")
 	private String qStoreURL_Get;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(WebsiteProjectController.class);
 
 	/*
 	 * Prepare the QStore GET URL
