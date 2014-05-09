@@ -87,7 +87,7 @@ public class DictionaryCollaboratorManagerDAO extends DAOConnectionManager imple
 				{
 					if(!existingRoles.contains(role))
 					{
-						dictCollaboratorDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionaryDTO, collabUser, role);
+						dictCollaboratorDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionaryDTO, collabUser,username, role);
 						collaboratorList.add(dictCollaboratorDTO);
 					}
 				}

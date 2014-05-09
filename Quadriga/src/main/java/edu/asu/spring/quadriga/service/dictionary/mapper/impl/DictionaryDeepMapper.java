@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +49,8 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 	
 	@Autowired
 	private IDictionaryFactory dictionaryFactory;
+	
+	private static final Logger logger = LoggerFactory.getLogger(DictionaryDeepMapper.class);
 	
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
@@ -186,7 +190,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 		return dictionaryCollaboratorList;
 	}
 	
-	public HashMap<String,IDictionaryCollaborator> mapUserDictionaryCollaborator(DictionaryDTO dictionaryDTO,IDictionary dictionary)
+	public HashMap<String,IDictionaryCollaborator> mapUserDictionaryCollaborator(DictionaryDTO dictionaryDTO,IDictionary dictionary) throws QuadrigaStorageException
 	{		
 		
 		HashMap<String, IDictionaryCollaborator> userDictionaryCollaboratorMap = new HashMap<String, IDictionaryCollaborator>();
@@ -199,14 +203,15 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			{
 				String roleName = dictionaryCollaboratorDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
 				
-				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-				collaboratorRole.setRoleDBid(roleName);
-				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
+				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getDictCollaboratorRoleByDBId(roleName);
+//				collaboratorRole.setRoleDBid(roleName);
+//				collaboratorRole.setDisplayName(collaboratorRoleManager.getDictCollaboratorRoleByDBId(roleName));
 				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
 				
 				IDictionaryCollaborator dictionaryCollaborator =userDictionaryCollaboratorMap.get(userName);
 				
 				ICollaborator collaborator = dictionaryCollaborator.getCollaborator();
+				
 				collaborator.getCollaboratorRoles().add(collaboratorRole);
 				
 				// Checking if there is a update latest then previous update date 
@@ -219,10 +224,13 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			else
 			{
 				String roleName = dictionaryCollaboratorDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
+				logger.info("roleName "+roleName);
 				// Prepare collaborator roles
-				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-				collaboratorRole.setRoleDBid(roleName);
-				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
+				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getDictCollaboratorRoleByDBId(roleName);
+//				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
+//				
+//				collaboratorRole.setRoleDBid(roleName);
+//				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
 				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
 				// Create a Collaborator Role list
 				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
@@ -232,7 +240,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
-				
+				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
 				// Create ProjectCollaborator object
 				IDictionaryCollaborator dictionaryCollaborator = dictionaryCollaboratorFactory.createDictionaryCollaboratorObject();
 				dictionaryCollaborator.setCollaborator(collaborator);

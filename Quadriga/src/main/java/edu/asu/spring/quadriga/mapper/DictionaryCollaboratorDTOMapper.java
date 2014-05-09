@@ -47,7 +47,7 @@ public class DictionaryCollaboratorDTOMapper extends DAOConnectionManager
 	 * @return DictionaryCollaboratorDTO object
 	 * @throws QuadrigaStorageException
 	 */
-	public DictionaryCollaboratorDTO getDictionaryCollaboratorDTO(DictionaryDTO dictionary,String userName,String collabRole) throws QuadrigaStorageException
+	public DictionaryCollaboratorDTO getDictionaryCollaboratorDTO(DictionaryDTO dictionary,String userName, String sessionUser,String collabRole) throws QuadrigaStorageException
 	{
 		DictionaryCollaboratorDTO dictionaryCollaborator = null;
 		DictionaryCollaboratorDTOPK dictionaryCollaboratorKey = null;
@@ -58,9 +58,9 @@ public class DictionaryCollaboratorDTOMapper extends DAOConnectionManager
 		dictionaryCollaborator.setDictionaryCollaboratorDTOPK(dictionaryCollaboratorKey);
 		dictionaryCollaborator.setDictionaryDTO(dictionary);
 		dictionaryCollaborator.setQuadrigaUserDTO(getUserDTO(userName));
-		dictionaryCollaborator.setCreatedby(userName);
+		dictionaryCollaborator.setCreatedby(sessionUser);
 		dictionaryCollaborator.setCreateddate(date);
-		dictionaryCollaborator.setUpdatedby(userName);
+		dictionaryCollaborator.setUpdatedby(sessionUser);
 		dictionaryCollaborator.setUpdateddate(date);
 		return dictionaryCollaborator;
 	}
