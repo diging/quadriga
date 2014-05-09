@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.taglibs.standard.lang.jstl.IntegerDivideOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,6 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
-import edu.asu.spring.quadriga.validator.DictionaryCollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
@@ -82,9 +80,7 @@ public class DictionaryCollaboratorController {
 
 	@Autowired
 	CollaboratorValidator collaboratorValidator;
-	
-	@Autowired
-	DictionaryCollaboratorValidator dictCollaboratorValidator;
+
 
 	@Autowired
 	ModifyCollaboratorFormManager collaboratorFormManager;

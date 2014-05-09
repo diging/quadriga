@@ -55,7 +55,6 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.validator.DspaceKeysValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
-import edu.asu.spring.quadriga.web.network.NetworkListController;
 
 /**
  * Controller to handle all the workspace requests for Quadriga.

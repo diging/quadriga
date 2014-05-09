@@ -1,30 +1,6 @@
 package edu.asu.spring.quadriga.web;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.ISearchResultFactory;
-import edu.asu.spring.quadriga.profile.IService;
-import edu.asu.spring.quadriga.profile.IServiceFormFactory;
-import edu.asu.spring.quadriga.profile.IServiceRegistry;
-import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
-import edu.asu.spring.quadriga.profile.validator.ProfileAddValidator;
-import edu.asu.spring.quadriga.service.IUserManager;
-import edu.asu.spring.quadriga.service.IUserProfileManager;
-import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
-import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanForm;
-import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
 
 @Controller
 public class UserProfileAddController {

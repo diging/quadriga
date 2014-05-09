@@ -162,7 +162,7 @@ public class DictionaryItemSearchAddController {
 			@RequestParam("posdropdown") String pos,Principal principal, ModelMap model)
 			throws QuadrigaStorageException, QuadrigaAccessException {
 		IUser user = usermanager.getUserDetails(principal.getName());
-		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
+		dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
 		try {
 			List<DictionaryEntry> dictionaryEntryList = null;
 			if (!item.equals("")) {

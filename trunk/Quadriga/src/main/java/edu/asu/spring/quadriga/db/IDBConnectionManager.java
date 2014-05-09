@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.db;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;

@@ -26,7 +26,6 @@ import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceDeepMapper;
 import edu.asu.spring.quadriga.service.workspace.mapper.IWorkspaceShallowMapper;
 import edu.asu.spring.quadriga.web.network.INetworkStatus;
-import edu.asu.spring.quadriga.web.workspace.ListWSController;
 
 /**
  * Class implements {@link IListWSManager} to

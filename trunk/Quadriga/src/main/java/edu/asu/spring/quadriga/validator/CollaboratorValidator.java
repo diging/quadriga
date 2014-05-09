@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.validator;
 
 import java.util.List;
 
-import org.hamcrest.core.IsInstanceOf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,13 +9,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.impl.dictionary.DictionaryCollaborator;
-import edu.asu.spring.quadriga.domain.impl.workbench.ProjectCollaborator;
 import edu.asu.spring.quadriga.domain.implementation.Collaborator;
-import edu.asu.spring.quadriga.web.dictionary.DictionaryCollaboratorController;
 /**
  * This class checks if the collaborator user name and roles are empty
  * @author kiran batna

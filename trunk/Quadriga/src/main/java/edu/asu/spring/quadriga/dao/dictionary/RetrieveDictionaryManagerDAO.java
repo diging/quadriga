@@ -14,8 +14,6 @@ import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
-import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
-import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.DictionaryDTOMapper;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
@@ -44,7 +42,6 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 	@Override
 	public DictionaryDTO getDictionaryDetails(String dictionaryId) throws QuadrigaStorageException 
 	{
-		IDictionary dictionary = null;
 		DictionaryDTO dictionaryDTO = null;
 		try
 		{
@@ -75,7 +72,6 @@ public class RetrieveDictionaryManagerDAO extends DAOConnectionManager implement
 		}
 		return dictionaryDTO;
 	}
-	
 	
 	@Override
 	public DictionaryDTO getDictionaryDTO(String dictionaryId, String userName) throws QuadrigaStorageException 

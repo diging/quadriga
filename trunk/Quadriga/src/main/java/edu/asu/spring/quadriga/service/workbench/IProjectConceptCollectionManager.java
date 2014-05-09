@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.service.workbench;
 
 import java.util.List;
 
-import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.workbench.IProjectConceptCollection;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
