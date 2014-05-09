@@ -47,7 +47,7 @@ public class ModifyCollaboratorFormManager {
 
 	@Autowired
 	IRetrieveWSCollabManager workspaceManager;
-	
+
 
 	/**
 	 * takes project id to return collaborators of ModifyCollaborator domain
@@ -94,16 +94,18 @@ public class ModifyCollaboratorFormManager {
 		//TODO: showCollaboratingUsers() needs to be modified to call mapper
 		List<IDictionaryCollaborator> collaborators =  dictManager.showCollaboratingUsers(dictionaryId);
 
-		for(IDictionaryCollaborator dictCollaborator:collaborators)
-		{
-			ModifyCollaborator modifyCollab = new ModifyCollaborator();
-			user = dictCollaborator.getCollaborator().getUserObj();
-			modifyCollab.setUserName(user.getUserName());
-			modifyCollab.setName(user.getName());
-			modifyCollab.setCollaboratorRoles(dictCollaborator.getCollaborator().getCollaboratorRoles());
-			modifyCollaborators.add(modifyCollab);
-		}
+		if(collaborators != null){
+			for(IDictionaryCollaborator dictCollaborator:collaborators)
+			{
+				ModifyCollaborator modifyCollab = new ModifyCollaborator();
+				user = dictCollaborator.getCollaborator().getUserObj();
+				modifyCollab.setUserName(user.getUserName());
+				modifyCollab.setName(user.getName());
+				modifyCollab.setCollaboratorRoles(dictCollaborator.getCollaborator().getCollaboratorRoles());
+				modifyCollaborators.add(modifyCollab);
+			}
 
+		}
 		return modifyCollaborators;
 	}
 

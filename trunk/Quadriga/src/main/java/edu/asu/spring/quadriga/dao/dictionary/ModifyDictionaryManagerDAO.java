@@ -82,7 +82,7 @@ public class ModifyDictionaryManagerDAO extends DAOConnectionManager implements 
 				}
 			}
 			
-			DictionaryCollaboratorDTO dictCollaboratorDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionaryDTO, oldOwner, collabRole);
+			DictionaryCollaboratorDTO dictCollaboratorDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionaryDTO, oldOwner,newOwner,collabRole);
 			dictionaryDTO.getDictionaryCollaboratorDTOList().add(dictCollaboratorDTO);
 			
 			sessionFactory.getCurrentSession().update(dictionaryDTO);

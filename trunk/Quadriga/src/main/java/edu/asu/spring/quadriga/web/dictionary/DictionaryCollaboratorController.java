@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.taglibs.standard.lang.jstl.IntegerDivideOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -43,6 +45,7 @@ import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorValidator;
+import edu.asu.spring.quadriga.validator.DictionaryCollaboratorValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManager;
 
@@ -55,66 +58,69 @@ import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorFormManag
  */
 @Controller
 public class DictionaryCollaboratorController {
-	
+
 	@Autowired
 	IDictionaryManager dictionaryManager;
-	
+
 	@Autowired
 	IUserManager userManager;
-	
+
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
-	
+
 	@Autowired
 	IDictionaryCollaboratorFactory dictCollaboratorFactory;
-	
+
 	@Autowired
 	IUserFactory userFactory;
-	
+
 	@Autowired
 	IRetrieveDictionaryManager retrieveDictionaryManager;
-	
+
 	@Autowired
 	ICollaboratorRoleManager collaboratorRoleManager;
-	
+
 	@Autowired
 	CollaboratorValidator collaboratorValidator;
 	
 	@Autowired
+	DictionaryCollaboratorValidator dictCollaboratorValidator;
+
+	@Autowired
 	ModifyCollaboratorFormManager collaboratorFormManager;
-	
+
 	@Autowired
 	IModifyCollaboratorFormFactory collaboratorFormFactory;
-	
+
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryCollaboratorController.class);
-	
+
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder, WebDataBinder validateBinder) throws Exception {
-	    
-		validateBinder.setValidator(collaboratorValidator);
-		
-		binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
-	    @Override
-	    public void setAsText(String text) {
 
-	        IUser user;
-			try {
-				user = userManager.getUserDetails(text);
-				setValue(user);
-			} catch (QuadrigaStorageException e) {
-				logger.error("Issue connecting to DB",e);
+		validateBinder.setValidator(collaboratorValidator);
+
+		binder.registerCustomEditor(IUser.class, "userObj", new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String text) {
+
+				IUser user;
+				try {
+					user = userManager.getUserDetails(text);
+					setValue(user);
+				} catch (QuadrigaStorageException e) {
+					logger.error("Issue connecting to DB",e);
+				}
+
 			}
-	        
-	    }
-	    });
-	    
-	    binder.registerCustomEditor(List.class, "collaboratorRoles", new PropertyEditorSupport() {
+		});
+
+		binder.registerCustomEditor(List.class, "collaboratorRoles", new PropertyEditorSupport() {
 
 			@Override
 			public void setAsText(String text) {
 
-			   String[] roleIds = text.split(",");
+				String[] roleIds = text.split(",");
 				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
 				for (String roleId : roleIds) {
 					ICollaboratorRole role = collaboratorRoleManager.getDictCollaboratorRoleById(roleId.trim());
@@ -122,9 +128,9 @@ public class DictionaryCollaboratorController {
 				}
 				setValue(roles);
 			} 	
-	    }); 
+		}); 
 	}
-	
+
 	/**
 	 * this method is used to display collaborators on the add collaboratos page
 	 * 
@@ -138,42 +144,45 @@ public class DictionaryCollaboratorController {
 	@RequestMapping(value="auth/dictionaries/{dictionaryid}/showAddCollaborators" , method = RequestMethod.GET)
 	public ModelAndView displayCollaborators(@PathVariable("dictionaryid") String dictionaryId, Principal principal) throws QuadrigaStorageException,
 	QuadrigaAccessException{
-	
+
 		ModelAndView modelAndView = new ModelAndView("auth/dictionaries/showAddCollaborators");
-		
+
 		//fetch the dictionary details
 		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
-		
+
 		modelAndView.getModelMap().put("dictionaryid", dictionaryId);
 		modelAndView.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 		modelAndView.getModelMap().put("dictionarydesc", dictionary.getDescription());
-		
-		IDictionaryCollaborator dictCollaborator =  dictCollaboratorFactory.createDictionaryCollaboratorObject();
-		dictCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
-		modelAndView.getModelMap().put("dictCollaborator", dictCollaborator); 
+
+//		IDictionaryCollaborator dictCollaborator =  dictCollaboratorFactory.createDictionaryCollaboratorObject();
+		ICollaborator collaborator = collaboratorFactory.createCollaborator();
+		if(collaborator != null){
+			collaborator.setUserObj(userFactory.createUserObject());
+		}
+		modelAndView.getModelMap().put("collaborator", collaborator); 
 
 		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
 		//remove the restricted user
-				Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
-				while(userIterator.hasNext())
+		Iterator<IUser> userIterator = nonCollaboratingUsers.iterator();
+		while(userIterator.hasNext())
+		{
+			//fetch the quadriga roles and eliminate the restricted user
+			IUser user = userIterator.next();
+			List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
+			for(IQuadrigaRole role : userQuadrigaRole)
+			{
+				if( (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) || (user.getUserName().equals(principal.getName())) )
 				{
-					//fetch the quadriga roles and eliminate the restricted user
-					IUser user = userIterator.next();
-					List<IQuadrigaRole> userQuadrigaRole = user.getQuadrigaRoles();
-					for(IQuadrigaRole role : userQuadrigaRole)
-					{
-						if( (role.getId().equals(RoleNames.ROLE_QUADRIGA_RESTRICTED)) || (user.getUserName().equals(principal.getName())) )
-						{
-							userIterator.remove();
-							break;
-						}
-					}	
+					userIterator.remove();
+					break;
 				}
+			}	
+		}
 		modelAndView.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
-		
+
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
-		
+
 		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
 		while(iterator.hasNext())
 		{
@@ -182,15 +191,15 @@ public class DictionaryCollaboratorController {
 				iterator.remove();
 			}
 		}
-		
+
 		modelAndView.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
-		
+
 		List<IDictionaryCollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
 		modelAndView.getModelMap().put("collaboratingUsers", collaborators);
-		
+
 		return modelAndView;	
 	}
-	
+
 	/**
 	 * this method is used to adds the collaborators from the dictionary
 	 * 
@@ -206,23 +215,24 @@ public class DictionaryCollaboratorController {
 	public ModelAndView addCollaborators( @PathVariable("dictionaryid") String dictionaryId, 
 			@Validated @ModelAttribute("collaborator") Collaborator collaborator, BindingResult result,
 			Principal principal	) throws QuadrigaStorageException,QuadrigaAccessException
-	{
+			{
 		ModelAndView model = null;
 		model = new ModelAndView("auth/dictionaries/showAddCollaborators");
-		
+
 		//fetch dictionary details
 		IDictionary dictionary = retrieveDictionaryManager.getDictionaryDetails(dictionaryId);
 		model.getModelMap().put("dictionaryname", dictionary.getDictionaryName());
 		model.getModelMap().put("dictionarydesc", dictionary.getDescription());
 
 		String collaboratorUser = collaborator.getUserObj().getUserName();
+		logger.info("collaboratorUser " +collaboratorUser);
 		//List<ICollaboratorRole> roles = collaborator.getCollaboratorRoles();
-		
+
 		if(result.hasErrors())
 		{
 			model.getModelMap().put("collaborator", collaborator);
 		}
-		
+
 		else
 		{
 			String username = principal.getName();	
@@ -230,19 +240,19 @@ public class DictionaryCollaboratorController {
 			model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());
 
 		}
-			
+
 		//mapping collaborators absent in the dictionary
 		List<IUser> nonCollaboratingUsers = dictionaryManager.showNonCollaboratingUsers(dictionaryId);
 		model.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
-		
+
 		//mapping existing collaborators present in the dictionary
 		List<IDictionaryCollaborator> collaborators = dictionaryManager.showCollaboratingUsers(dictionaryId);
 		model.getModelMap().put("collaboratingUsers", collaborators);
-		
+
 		//mapping collaborator roles
 		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
 		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
-		
+
 		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
 		while(iterator.hasNext())
 		{
@@ -252,9 +262,9 @@ public class DictionaryCollaboratorController {
 			}
 		}
 		model.getModelMap().put("possibleCollaboratorRoles", collaboratorRoles);
-		
+
 		return model;
-	
-	} 
-	
+
+			} 
+
 }

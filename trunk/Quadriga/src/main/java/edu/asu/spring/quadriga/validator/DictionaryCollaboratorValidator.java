@@ -23,7 +23,7 @@ import edu.asu.spring.quadriga.web.dictionary.DictionaryCollaboratorController;
  *
  */
 @Service
-public class CollaboratorValidator implements Validator {
+public class DictionaryCollaboratorValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> arg0) {
@@ -35,7 +35,7 @@ public class CollaboratorValidator implements Validator {
 
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(CollaboratorValidator.class);
+			.getLogger(DictionaryCollaboratorValidator.class);
 
 	
 	@Override
@@ -44,8 +44,11 @@ public class CollaboratorValidator implements Validator {
 		String userName;
 		List<ICollaboratorRole> role;
 		
-		Collaborator collaborator = (Collaborator)obj;
-		
+		DictionaryCollaborator dictCollaborator = (DictionaryCollaborator)obj;
+		Collaborator collaborator = null;
+		if(dictCollaborator !=  null){
+			collaborator = (Collaborator) dictCollaborator.getCollaborator();
+		}
 		if(obj instanceof DictionaryCollaborator){
 			logger.info("instance of dicitonary ");
 		}else{

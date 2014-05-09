@@ -531,12 +531,12 @@ public class DictionaryManager implements IDictionaryManager {
 	@Transactional
 	public List<IDictionaryCollaborator> showCollaboratingUsers(String dictionaryId) throws QuadrigaStorageException {
 
-		List<IDictionaryCollaborator>  workspaceCollaboratorList =  null;
+		List<IDictionaryCollaborator>  dictionaryCollaboratorList =  null;
 		IDictionary dictionary =  dictDeepMapper.getDictionaryDetails(dictionaryId);
 		if(dictionary != null){
-			workspaceCollaboratorList = dictionary.getDictionaryCollaborators(); 
+			dictionaryCollaboratorList = dictionary.getDictionaryCollaborators(); 
 		}
-		return workspaceCollaboratorList;
+		return dictionaryCollaboratorList;
 	}
 
 	/**

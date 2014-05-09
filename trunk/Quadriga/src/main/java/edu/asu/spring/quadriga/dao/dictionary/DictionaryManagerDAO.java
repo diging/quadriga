@@ -308,7 +308,7 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 				if(collaboratorRole.getRoleDBid()!=null)
 				{
 					String collabRole = collaboratorRole.getRoleDBid();
-					DictionaryCollaboratorDTO dictCollabDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionary, sessionUser, collabRole);
+					DictionaryCollaboratorDTO dictCollabDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionary,userName, sessionUser, collabRole);
 					sessionFactory.getCurrentSession().save(dictCollabDTO);
 				}
 			}
