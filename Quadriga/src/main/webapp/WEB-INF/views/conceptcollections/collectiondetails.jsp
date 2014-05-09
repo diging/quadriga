@@ -200,7 +200,7 @@ function addCCtoWorkspace(id,name){
 			You don't have any items. Click on button to add items.
 			<br />
 			<input type=button
-				onClick="location.href='${pageContext.servletContext.contextPath}//auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
+				onClick="location.href='${pageContext.servletContext.contextPath}/auth/conceptcollections/${concept.conceptCollectionId}/searchitems'"
 				value='Add Items' />
 	</c:otherwise>
 	</c:choose>
@@ -212,7 +212,7 @@ function addCCtoWorkspace(id,name){
 		<h3 class="major"><span>Collaborators</span></h3>
 		<ul class="collaborators">
 			<c:forEach var="collab" items="${collaboratingUsers}">
-				<li><c:out value="${collab.userObj.name}"></c:out></li>
+				<li><c:out value="${collab.collaborator.userObj.name}"></c:out></li>
 			</c:forEach>
 		</ul>
 	</section>
