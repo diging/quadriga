@@ -53,6 +53,7 @@
 					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/deleteconceptcollections">Delete</a></li>
 			</ul>
 		</li>
+		<!-- 
 		<li
 			data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
 			<ul>
@@ -67,5 +68,6 @@
 					href="${pageContext.servletContext.contextPath}/auth/workbench/workspace/${workspacedetails.workspaceId}/updatecollaborators">Update</a></li>
 			</ul>
 		</li>
+		-->
 	</ul>
 </div>

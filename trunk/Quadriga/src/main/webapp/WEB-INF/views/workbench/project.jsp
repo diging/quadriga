@@ -36,7 +36,7 @@
 <table style="width: 100%">
 	<tr>
 		<!-- Display project details -->
-		<td style="width: 90%">
+		<td>
 			<h2>Project: ${project.projectName}</h2>
 			<div>${project.description}</div>
 			<div style="text-align:right">
@@ -80,13 +80,19 @@
 					value="${workspace.description}"></c:out></li>
 			</c:forEach>
 			</ul>
+			
+			<div style="float:right;">
+				<img style="vertical-align: middle; padding-bottom: 4px;" src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add Workspace</a>
+			</div>
+			
+			<div style="clear:right;">
 			<c:if test="${empty workspaceList}">
 			There are no workspaces yet. You should create one!
 			</c:if>
 			<c:if test="${empty collabworkspacelist}">
 				You are not collaborating on any workspace.
 			</c:if>
-			
+			</div>
 			<!-- <div id = "tabs" class="tabs">
 			<ul>
 			  	  <li><a href="#asowner">Owner</a></li>
@@ -172,7 +178,7 @@
 			</div>
 		</td>
 		<!-- Display collaborators -->
-		<td style="width: 10%">
+		<td style="width: 200px">
 			<section>
 				<h3 class="major">
 					<span>Collaborators</span>
@@ -189,6 +195,8 @@
 				<div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
 				<ul class="colltools">
 					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">Add</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletecollaborators">Delete</a></li>
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/updatecollaborators">Update</a></li>
 				</ul>
 				</div>
 			</section>

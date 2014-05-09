@@ -91,8 +91,8 @@ function onSubmit(){
 </c:if>
 <c:if test="${empty notCollaboratingUsers}">
 <hr>
- <span>All collaborators are associated to the project are added</span>
- <input type="button" value="Done" onClick="onSubmit()">
+ <span>You've added all Quadriga users to this project.</span><br>
+ <input type="button" value="Return to Project" onClick="onSubmit()">
 </c:if>
 <br>
 <c:if test="${not empty projectCollaborators}">

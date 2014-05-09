@@ -26,43 +26,44 @@
 	<ul>
 		<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Workspace
 			<ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addworkspace">Add</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteworkspace">Delete</a></li>
 
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/archiveworkspace">Archive</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/unarchiveworkspace">Unarchive</a></li>
 
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deactivateworkspace">Deactivate
 		</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/right.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/right.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/activateworkspace">Activate</a></li>
 			</ul>
 		</li>
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Dictionary
+		<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Dictionary
 			<ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/adddictionary">Add</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/list.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/dictionaries">List</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deletedictionary">Delete</a></li>
 			</ul>
 		</li>
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collections
+		<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Collections
 			<ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addconceptcollection">Add</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/list.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/list.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/conceptcollections">List</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/deleteconceptcollections">Delete</a></li>
 			</ul>
 		</li>
+		<!-- 
 		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Collaborators
 		<ul>
 			<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">
@@ -74,5 +75,6 @@
 			Update</a></li>
 		</ul>
 		</li>
+		 -->
 	</ul>
 </div>
