@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
@@ -70,6 +71,7 @@ public class ConceptCollectionDeepMapper implements
 	private IConceptFactory conceptFactory;
 	
 	@Override
+	@Transactional
 	public IConceptCollection getConceptCollectionDetails(String ccId)
 			throws QuadrigaStorageException {
 		IConceptCollection conceptCollection = null;
@@ -191,7 +193,7 @@ public class ConceptCollectionDeepMapper implements
 				//TODO : we need to fill this
 				concept.setLemma(ccItemsDTO.getConceptDTO().getLemma());
 				concept.setPos(ccItemsDTO.getConceptDTO().getPos());
-				concept.setConceptId(ccItemsDTO.getConceptCollectionItemsDTOPK().getConceptcollectionid());
+				concept.setConceptId(ccItemsDTO.getConceptCollectionItemsDTOPK().getConcept());
 				
 				
 				IConceptCollectionConcepts ccCocnepts= ccConceptsFactory.createConceptCollectionConceptsObject(); 

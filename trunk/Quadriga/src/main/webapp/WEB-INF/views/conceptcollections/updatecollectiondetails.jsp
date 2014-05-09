@@ -13,8 +13,8 @@ $(document).ready(function(){
 		
 	});
 	
-	function submitClick(id) {
-		location.href = '${pageContext.servletContext.contextPath}/auth/conceptcollections/${collection.id}';
+	function submitClick(conceptCollectionId) {
+		location.href = '${pageContext.servletContext.contextPath}/auth/conceptcollections/${collection.conceptCollectionId}';
 	}
 </script>
 <style>
@@ -26,7 +26,7 @@ $(document).ready(function(){
 <article class="is-page-content">
 
 	<form:form commandName="collection" method="POST"
-		action="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${collection.id}">
+		action="${pageContext.servletContext.contextPath}/auth/conceptcollections/updatecollection/${collection.conceptCollectionId}">
 				<c:choose>
 			<c:when test="${success == '0'}">
 			<header>
@@ -46,7 +46,7 @@ $(document).ready(function(){
 						<td><form:errors path="description" cssClass="error"></form:errors></td>
 			</tr>
 			<tr>
-				<td><form:input path="id" type="hidden" /> </td>
+				<td><form:input path="conceptCollectionId" type="hidden" /> </td>
 			</tr>
 			<tr>
 			<td><input class="command" type="submit" value="Update"> </td>
@@ -56,7 +56,7 @@ $(document).ready(function(){
 				<c:when test="${success == '1'}">
 				<span class="byline">Concept collection modified successfully.</span>
 				<ul>
-					<li><input type="button" onClick="submitClick(this.id);"
+					<li><input type="button" onClick="submitClick(this.conceptCollectionName);"
 						value='Okay'></li>
 				</ul>
 			</c:when>

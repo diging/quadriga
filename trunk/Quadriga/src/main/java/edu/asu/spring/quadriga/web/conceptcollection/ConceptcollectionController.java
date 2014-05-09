@@ -27,6 +27,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factory.impl.conceptcollection.ConceptCollectionFactory;
@@ -38,6 +39,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.conceptcollection.mapper.IConceptCollectionDeepMapper;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 /**
@@ -73,6 +75,9 @@ public class ConceptcollectionController {
 	private IConceptFactory conceptFactory;
 
 	private ConceptpowerReply c;
+
+	@Autowired
+	private IConceptCollectionDeepMapper conceptCollectionDeepMapper;
 
 	@Autowired
 	private IUserManager usermanager;
@@ -181,8 +186,8 @@ public class ConceptcollectionController {
 	public String conceptDetailsHandler(
 			@PathVariable("collection_id") String collection_id,
 			ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAccessException,
-			JSONException {
+					throws QuadrigaStorageException, QuadrigaAccessException,
+					JSONException {
 
 		collection = collectionFactory.createConceptCollectionObject();
 		collection.setConceptCollectionId(collection_id);
@@ -223,7 +228,7 @@ public class ConceptcollectionController {
 	public String conceptSearchHandler(
 			@PathVariable("collection_id") String collection_id,
 			HttpServletRequest req, ModelMap model)
-			throws QuadrigaStorageException {
+					throws QuadrigaStorageException {
 
 		c = conceptControllerManager.search(req.getParameter("name"),
 				req.getParameter("pos"));
@@ -253,29 +258,41 @@ public class ConceptcollectionController {
 	public String saveItemsHandler(
 			@PathVariable("collection_id") String collection_id,
 			HttpServletRequest req, ModelMap model, Principal principal)
-			throws QuadrigaStorageException, QuadrigaAccessException {
+					throws QuadrigaStorageException, QuadrigaAccessException {
 
 		String[] values = req.getParameterValues("selected");
-		if (values != null) {
-			for (String id : values) {
-				ConceptEntry temp = new ConceptEntry();
-				temp.setId(id);
-				temp = c.getConceptEntry().get(
-						(c.getConceptEntry().indexOf(temp)));
-				conceptControllerManager.addItems(temp.getLemma(), id,
-						temp.getPos(), temp.getDescription(), collection_id,
-						principal.getName());
+		IConceptCollection conceptCollection = conceptCollectionDeepMapper.getConceptCollectionDetails(collection_id);
+		if(conceptCollection != null){
+			List<IConceptCollectionConcepts> conceptCollectionConceptList = conceptCollection.getConceptCollectionConcepts();
+			if (values != null) {
+				for (String id : values) {
+					ConceptEntry temp = new ConceptEntry();
+					temp.setId(id);
+					temp = c.getConceptEntry().get(
+							(c.getConceptEntry().indexOf(temp)));
+					if(!conceptControllerManager.hasConceptID(conceptCollectionConceptList, id)){
+						conceptControllerManager.addItems(temp.getLemma(), id,
+								temp.getPos(), temp.getDescription(), collection_id,
+								principal.getName());
+					}
+				}
 			}
+		}else{
+			System.out.println("concept colleciton is null");
 		}
 		int index;
-		if ((index = list.indexOf(collection)) >= 0)
-			collection = list.get(index);
+		if(list == null){
+			System.out.println("list is null");
+		}else{
+			if ((index = list.indexOf(collection)) >= 0)
+				collection = list.get(index);
 
-		else if ((index = collab_list.indexOf(collection)) >= 0)
-			collection = collab_list.get(index);
-		conceptControllerManager.getCollectionDetails(collection,
-				principal.getName());
-		model.addAttribute("conceptlist", collection);
+			else if ((index = collab_list.indexOf(collection)) >= 0)
+				collection = collab_list.get(index);
+			conceptControllerManager.getCollectionDetails(collection,
+					principal.getName());
+		}
+		model.addAttribute("conceptlist", conceptCollection);
 		return "redirect:/auth/conceptcollections/" + collection_id + "";
 	}
 
@@ -308,15 +325,15 @@ public class ConceptcollectionController {
 	public ModelAndView addConceptCollection(
 			@Validated @ModelAttribute("collection") ConceptCollection collection,
 			BindingResult result, Model model, Principal principal)
-			throws QuadrigaStorageException {
+					throws QuadrigaStorageException {
 		if (result.hasErrors()) {
 			model.addAttribute("Error",
 					"Error: " + collection.getConceptCollectionName()
-							+ "already exists.");
+					+ "already exists.");
 			return new ModelAndView(
 					"auth/conceptcollections/addCollectionsForm", "command",
 					new ConceptCollectionFactory()
-							.createConceptCollectionObject());
+					.createConceptCollectionObject());
 		}
 
 		IUser user = usermanager.getUserDetails(principal.getName());
@@ -359,7 +376,7 @@ public class ConceptcollectionController {
 							concept)) {
 						collection.getConceptCollectionConcepts().remove(
 								collection.getConceptCollectionConcepts()
-										.indexOf(concept));
+								.indexOf(concept));
 					}
 				}
 
@@ -370,7 +387,7 @@ public class ConceptcollectionController {
 				principal.getName());
 
 		return "redirect:/auth/conceptcollections/"
-				+ collection.getConceptCollectionId() + "";
+		+ collection.getConceptCollectionId() + "";
 
 	}
 
@@ -393,7 +410,9 @@ public class ConceptcollectionController {
 					principal.getName());
 
 		return "redirect:/auth/conceptcollections/"
-				+ collection.getConceptCollectionId() + "";
+		+ collection.getConceptCollectionId() + "";
 	}
+
+
 
 }

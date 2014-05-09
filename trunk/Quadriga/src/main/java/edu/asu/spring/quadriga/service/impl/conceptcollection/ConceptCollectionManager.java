@@ -30,6 +30,7 @@ import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -448,6 +449,21 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 		// return core.toString(SUCCESS);
 		return core.toString(1);
 	}
+	
+	@Override
+	public boolean hasConceptID(List<IConceptCollectionConcepts> conceptCollectionConceptList , String id){
+		logger.info("conceptCollectionConceptList size " +conceptCollectionConceptList.size());
+		for(IConceptCollectionConcepts conceptCollectionConcept : conceptCollectionConceptList){
+			logger.info("conceptCollectionConcept.getConcept().getConceptId() :"+conceptCollectionConcept.getConcept().getConceptId() );
+			logger.info("ID " +id);
+			
+			if(conceptCollectionConcept.getConcept().getConceptId().equals(id)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 	
 }
