@@ -8,6 +8,7 @@ import org.codehaus.jettison.json.JSONException;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcepts;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -158,6 +159,16 @@ public class MockupConceptCollectionManager implements
 	public String getProjectsTree(String userName,String ccId) throws JSONException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	@Override
+	public boolean hasConceptID(
+			List<IConceptCollectionConcepts> conceptCollectionConceptList,
+			String id) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 
