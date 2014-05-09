@@ -485,7 +485,7 @@ function d3init(graph, networkId, path,type) {
 				});
 		//displayAllAnnotationsNew();
 	}
-
+/*
 	function displayItemData(){
 		$.ajax({
 			url : path+"/auth/editing/getitemmetadata/"+networkId,
@@ -507,6 +507,38 @@ function d3init(graph, networkId, path,type) {
 			}
 		});
 	}
+	*/
+	
+	function displayItemData(){
+		var output = "";
+		$.ajax({
+			url : path+"/auth/editing/getitemmetadata/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				console.log(data);
+				//var cnt = 0;
+				output += "<ol>";
+				$.each(data.text, function(key,value){
+					console.log("came in");
+					output+="<li>" + "<b>File Name</b>" + " --> " + value.filename + "</li>"; 
+					output+="<li>" + "<b>Author</b>" + " --> " + value.submitter + "</li>"; 
+					output+="<li>" + "<b>Last Updated</b>" + " --> " + value.modifieddate + "</li>"; 
+					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
+					$('#metadataTable').append(row);
+				});
+				output += "</ol>";
+				//$('#metadataTable').html(row);
+				
+				//drawTable(data.text);
+			},
+			error: function() {
+				alert("error");
+			}
+		});
+	}
+	
+	
 	
 	/*function displayItemData(){
 		console.log("came here");

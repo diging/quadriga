@@ -38,21 +38,21 @@ public class ListWSManager implements IListWSManager
 {
 
 	private static final Logger logger = LoggerFactory.getLogger(ListWSManager.class);
-	
+
 	@Autowired
 	private IDBConnectionListWSManager dbConnect;
-	
+
 	@Autowired
 	private IWorkspaceShallowMapper workspaceShallowMapper;
-	
+
 	@Autowired
 	private IWorkspaceDeepMapper workspaceDeepMapper;
-	
+
 	@Autowired
 	private IDspaceManager dspaceManager;
-	
-	
-	
+
+
+
 	/**
 	 * This will list all the workspaces associated
 	 * with the project.
@@ -70,7 +70,7 @@ public class ListWSManager implements IListWSManager
 		workspaceList = workspaceShallowMapper.getWorkSpaceList(projectid, user);
 		return workspaceList;
 	}
-	
+
 	/**
 	 * This method retrieves all the workspace associated with the given having the user as
 	 * a collaborator.
@@ -88,7 +88,7 @@ public class ListWSManager implements IListWSManager
 		workspaceList = workspaceShallowMapper.listWorkspaceOfCollaborator(projectid, user);
 		return workspaceList;
 	}
-	
+
 	/**
 	 * This will list all the active workspaces associated
 	 * with the project.
@@ -106,7 +106,7 @@ public class ListWSManager implements IListWSManager
 		ownerWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfOwner(projectid, user);
 		return ownerWorkspaceList;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<IWorkSpace> listActiveWorkspaceByCollaborator(String projectid,String user) throws QuadrigaStorageException
@@ -115,7 +115,7 @@ public class ListWSManager implements IListWSManager
 		collaboratorWorkspaceList = workspaceShallowMapper.listActiveWorkspaceOfCollaborator(projectid, user);
 		return collaboratorWorkspaceList;
 	}
-	
+
 	/**
 	 * This will list all the archived workspaces associated
 	 * with the project.
@@ -133,7 +133,7 @@ public class ListWSManager implements IListWSManager
 		workspaceList = workspaceShallowMapper.listArchivedWorkspace(projectid,user);
 		return workspaceList;
 	}
-	
+
 	/**
 	 * This will list all the deactivated workspaces associated
 	 * with the project.
@@ -151,7 +151,7 @@ public class ListWSManager implements IListWSManager
 		workspaceList = workspaceShallowMapper.listDeactivatedWorkspace(projectid, user);
 		return workspaceList;
 	}
-	
+
 	/**
 	 *This method display the workspace details for the workspace submitted.
 	 * @param   workspaceId
@@ -167,8 +167,8 @@ public class ListWSManager implements IListWSManager
 		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId,username);
 		return workspace;
 	}
-	
-	
+
+
 	/**
 	 *This method display the workspace details for the workspace submitted.
 	 * @param   workspaceId
@@ -184,7 +184,7 @@ public class ListWSManager implements IListWSManager
 		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceId);
 		return workspace;
 	}
-	
+
 	/**
 	 * This method get the workspace name for the workspace id.
 	 * @param   workspaceId
@@ -201,26 +201,26 @@ public class ListWSManager implements IListWSManager
 		workspacename = workspaceDeepMapper.getWorkSpaceDetails(workspaceId).getWorkspaceName();
 		return workspacename;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<IWorkspaceNetwork> getWorkspaceNetworkList(String workspaceid)
 			throws QuadrigaStorageException{
-		
+
 		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
 		List<IWorkspaceNetwork> workspaceNetworkList = null;
 		if(workspace != null){
-			 workspaceNetworkList =  workspace.getWorkspaceNetworks();
+			workspaceNetworkList =  workspace.getWorkspaceNetworks();
 		}
 
 		return workspaceNetworkList;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<IWorkspaceNetwork> getWorkspaceRejectedNetworkList(String workspaceid)
 			throws QuadrigaStorageException{
-		
+
 		IWorkSpace workspace = workspaceDeepMapper.getWorkSpaceDetails(workspaceid);
 		List<IWorkspaceNetwork> workspaceNetworkList=null;
 		if(workspace != null){
@@ -247,17 +247,17 @@ public class ListWSManager implements IListWSManager
 					removeList.add(i);
 				}
 			}
-			
-			
+
+
 			for(Integer i : removeList){
 				workspaceNetworkList.remove(i);
 			}
 		}
-			
-		
+
+
 		return workspaceNetworkList;
 	}
-	
+
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -294,40 +294,48 @@ public class ListWSManager implements IListWSManager
 					removeList.add(i);
 				}
 			}
-			
-			
+
+
 			for(Integer i : removeList){
 				workspaceNetworkList.remove(i);
 			}
 		}
 		return workspaceNetworkList;
 	}
-	
+
 	@Override
 	public String getItemMetadataAsJson(String fileid, String dspaceUsername, String dspacePassword, IDspaceKeys dspaceKeys) throws NoSuchAlgorithmException, QuadrigaStorageException, JSONException{
-		
+
 		IDspaceMetadataItemEntity metaData = dspaceManager.getItemMetadata(fileid, dspaceUsername, dspacePassword, dspaceKeys);
-		
+
 		logger.info(metaData.getName()+metaData.getLastModifiedDate()+metaData.getSubmitter().getFullname());
-		
+
 		String itemData = "";
 		JSONArray ja = new JSONArray();
 		JSONObject ja1 = new JSONObject();
 		JSONObject j = new JSONObject();
-		
+
 		j.put("filename", metaData.getName());
-		j.put("submitter", metaData.getSubmitter().getFullname());
-		j.put("modifieddate", metaData.getLastModifiedDate());
-		
-		
-		ja.put(metaData);
-		
+		if(metaData.getSubmitter().getFullname()==null){
+			j.put("submitter", "");
+		}else{
+			j.put("submitter", metaData.getSubmitter().getFullname());
+		}
+		if(metaData.getLastModifiedDate()==null){
+			j.put("modifieddate", "");
+		}else{
+			j.put("modifieddate", metaData.getLastModifiedDate());
+		}
+
+
+		ja.put(j);
+
 		ja1.put("text", ja);
-		
+
 		itemData = ja1.toString();
-		
+
 		return itemData;
-		
+
 	}
 
 }
