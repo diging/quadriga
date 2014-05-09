@@ -515,7 +515,10 @@
 				
 					ul.special a.battery:before
 					{
-						background-position: 0px 0px;
+						background: url('images/project-white.png');
+						background-repeat: no-repeat;
+						margin-top: -32px;
+						margin-left: -38px;
 					}
 				
 					ul.special a.tablet:before
