@@ -186,6 +186,11 @@
 						</c:forEach>
 					</ul>
 				</c:if>
+				<div style="border-top: dashed 1px #e7eae8; padding: 5px;"> 
+				<ul class="colltools">
+					<li><img src="${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png" style="vertical-align: middle; padding-bottom: 2px;"> <a href="${pageContext.servletContext.contextPath}/auth/workbench/${project.projectId}/addcollaborators">Add</a></li>
+				</ul>
+				</div>
 			</section>
 		</td>
 	</tr>
