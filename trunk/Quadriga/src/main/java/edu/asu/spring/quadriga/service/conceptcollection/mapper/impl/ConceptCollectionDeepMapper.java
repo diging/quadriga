@@ -116,7 +116,7 @@ public class ConceptCollectionDeepMapper implements
 		return ccCollaboratorList;
 	}
 	
-	public HashMap<String,IConceptCollectionCollaborator> mapUserCCCollaborator(ConceptCollectionDTO ccDTO,IConceptCollection conceptCollection)
+	public HashMap<String,IConceptCollectionCollaborator> mapUserCCCollaborator(ConceptCollectionDTO ccDTO,IConceptCollection conceptCollection) throws QuadrigaStorageException
 	{		
 		
 		HashMap<String, IConceptCollectionCollaborator> userCCCollaboratorMap = new HashMap<String, IConceptCollectionCollaborator>();
@@ -129,9 +129,10 @@ public class ConceptCollectionDeepMapper implements
 			{
 				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 				
-				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-				collaboratorRole.setRoleDBid(roleName);
-				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
+				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getCollectionCollabRoleByDBId(roleName);
+//						collaboratorRoleFactory.createCollaboratorRoleObject();
+//				collaboratorRole.setRoleDBid(roleName);
+//				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
 				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
 				
 				IConceptCollectionCollaborator ccCollaborator = userCCCollaboratorMap.get(userName);
@@ -150,9 +151,11 @@ public class ConceptCollectionDeepMapper implements
 			{
 				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
-				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-				collaboratorRole.setRoleDBid(roleName);
-				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
+				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getCollectionCollabRoleByDBId(roleName);
+						
+//						collaboratorRoleFactory.createCollaboratorRoleObject();
+//				collaboratorRole.setRoleDBid(roleName);
+//				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
 				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
 				// Create a Collaborator Role list
 				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
@@ -162,6 +165,8 @@ public class ConceptCollectionDeepMapper implements
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
+				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
+				
 				
 				// Create COncept Collection Collaborator object
 				IConceptCollectionCollaborator ccCollaborator = ccCollaboratorFactory.createConceptCollectionCollaboratorObject();

@@ -1,5 +1,7 @@
 package edu.asu.spring.quadriga.service.impl.conceptcollection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,8 @@ import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
 @Service
 public class CCCollaboratorManager implements ICCCollaboratorManager 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CCCollaboratorManager.class);
 	@Autowired
 	private IDBConnectionCCCollaboratorManager dbConnect;
 	
@@ -40,6 +44,8 @@ public class CCCollaboratorManager implements ICCCollaboratorManager
 	@Transactional
 	public void deleteCollaborators(String userName, String collectionid) throws QuadrigaStorageException 
 	{
+		logger.info("USer role collaborator : "+userName);
+		
 		dbConnect.deleteCollaboratorRequest(userName, collectionid);
 	}
 	

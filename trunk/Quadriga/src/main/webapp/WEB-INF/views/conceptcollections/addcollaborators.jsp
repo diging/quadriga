@@ -101,9 +101,9 @@ action="${pageContext.servletContext.contextPath}/auth/conceptcollections/${coll
 	<tbody>
 	<c:forEach var="collab" items="${ccCollaboratingUsers}">
 		<tr>
-		 <td><c:out value="${collab.userObj.name}"></c:out></td>
+		 <td><c:out value="${collab.collaborator.userObj.name}"></c:out></td>
 		 <td>
-			<c:forEach var="roles" items="${collab.collaboratorRoles}">
+			<c:forEach var="roles" items="${collab.collaborator.collaboratorRoles}">
 		 	<c:out value="${roles.displayName}"></c:out> ||
 		 	</c:forEach>		 
 		 </td>

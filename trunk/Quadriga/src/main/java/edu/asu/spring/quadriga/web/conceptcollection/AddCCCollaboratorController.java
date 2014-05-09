@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
+import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -36,7 +37,7 @@ import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
-import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
+import edu.asu.spring.quadriga.domain.implementation.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
@@ -70,7 +71,7 @@ public class AddCCCollaboratorController {
 	private IConceptCollectionFactory collectionFactory;
 	
 	@Autowired
-	private ICCCollaboratorManager CollaboratorManager;
+	private ICCCollaboratorManager collaboratorManager;
 	
 	@Autowired
 	private IConceptCollectionManager conceptControllerManager;
@@ -130,7 +131,7 @@ public class AddCCCollaboratorController {
 	 @RequestMapping(value="auth/conceptcollections/{collectionid}/addcollaborators", method=RequestMethod.GET)
 	 public ModelAndView addCollaborator(@PathVariable("collectionid") String collectionid,Principal principal) throws QuadrigaAccessException, QuadrigaStorageException
 		{
-		    IConceptCollectionCollaborator ccCollaborator;
+		    ICollaborator collaborator;
 			ModelAndView model;
 			List<IUser> nonCollaboratorList;
 			List<ICollaboratorRole> collaboratorRoleList;
@@ -170,10 +171,12 @@ public class AddCCCollaboratorController {
 			model.getModelMap().put("collectionname", conceptCollection.getConceptCollectionName());
 			model.getModelMap().put("collectiondesc", conceptCollection.getDescription());
 			
-			ccCollaborator =  ccCollaboratorFactory.createConceptCollectionCollaboratorObject();
-			ccCollaborator.setCollaborator(collaboratorFactory.createCollaborator());
-			ccCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
-			model.getModelMap().put("ccCollaborator", ccCollaborator);
+			collaborator = collaboratorFactory.createCollaborator();
+			collaborator.setUserObj(userFactory.createUserObject());
+//			ccCollaborator =  ccCollaboratorFactory.createConceptCollectionCollaboratorObject();
+//			ccCollaborator.setCollaborator(collaboratorFactory.createCollaborator());
+//			ccCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
+			model.getModelMap().put("ccCollaborator", collaborator);
 			
 			collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
 			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoleList.iterator();
@@ -206,7 +209,7 @@ public class AddCCCollaboratorController {
 	   @AccessPolicies({ @ElementAccessPolicy(type = CheckedElementType.CONCEPTCOLLECTION,paramIndex = 1, userRole = {RoleNames.ROLE_CC_COLLABORATOR_ADMIN} )})
 	   @RequestMapping(value="auth/conceptcollections/{collection_id}/addcollaborators", method=RequestMethod.POST)
 		public ModelAndView addCollaborators(@PathVariable("collection_id") String collectionid, Principal principal,
-		@Validated @ModelAttribute("ccCollaborator") ConceptCollectionCollaborator ccCollaborator, BindingResult result)throws QuadrigaStorageException, QuadrigaAccessException
+		@Validated @ModelAttribute("ccCollaborator") Collaborator collaborator, BindingResult result)throws QuadrigaStorageException, QuadrigaAccessException
 		{
 		   List<IUser> nonCollaboratorList;
 		   List<ICollaboratorRole> collaboratorRoleList;
@@ -226,12 +229,12 @@ public class AddCCCollaboratorController {
 		   model.getModelMap().put("collectionid", collectionid);
 		   if(result.hasErrors())
 		   {
-			   model.getModelMap().put("collaborator", ccCollaborator.getCollaborator());
+			   model.getModelMap().put("collaborator", collaborator);
 		   }
 		   else
 		   {
 			  //TODO: definition of addCollaborators() needs to be changed. 
-			  CollaboratorManager.addCollaborators(ccCollaborator.getCollaborator(), collectionid, username);
+			  collaboratorManager.addCollaborators(collaborator, collectionid, username);
 			  model.getModelMap().put("collaborator", collaboratorFactory.createCollaborator());  
 		   }
 		   

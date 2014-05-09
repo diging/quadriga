@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -29,6 +31,9 @@ public class ConceptCollectionCollaboratorManagerDAO extends DAOConnectionManage
 	@Autowired
 	private ConceptCollectionCollaboratorDTOMapper collaboratorMapper;
 
+	
+	private static final Logger logger = LoggerFactory.getLogger(ConceptCollectionCollaboratorManagerDAO.class);
+	
 	/**
 	 * This method adds the collaborator for given concept collection
 	 * @param : collaborator - ICollaborator object

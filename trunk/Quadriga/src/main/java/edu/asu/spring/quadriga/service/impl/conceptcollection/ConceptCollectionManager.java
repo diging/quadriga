@@ -452,10 +452,7 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 	
 	@Override
 	public boolean hasConceptID(List<IConceptCollectionConcepts> conceptCollectionConceptList , String id){
-		logger.info("conceptCollectionConceptList size " +conceptCollectionConceptList.size());
 		for(IConceptCollectionConcepts conceptCollectionConcept : conceptCollectionConceptList){
-			logger.info("conceptCollectionConcept.getConcept().getConceptId() :"+conceptCollectionConcept.getConcept().getConceptId() );
-			logger.info("ID " +id);
 			
 			if(conceptCollectionConcept.getConcept().getConceptId().equals(id)){
 				return true;
