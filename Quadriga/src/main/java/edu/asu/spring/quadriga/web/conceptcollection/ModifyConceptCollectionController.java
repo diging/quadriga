@@ -71,7 +71,6 @@ public class ModifyConceptCollectionController
 		collection = collectionFactory.createConceptCollectionObject();
 		collection.setConceptCollectionId(collectionid);
 		conceptControllerManager.getCollectionDetails(collection,userName);
-		
 		model.getModelMap().put("collection", collection);
 		model.getModelMap().put("success", 0);
 		

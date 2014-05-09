@@ -34,7 +34,6 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTO;
 import edu.asu.spring.quadriga.dto.ConceptCollectionItemsDTOPK;
 import edu.asu.spring.quadriga.dto.ConceptsDTO;
-import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -755,7 +754,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		ConceptCollectionDTO ccDTO = null;
 		try
 		{
-			ccDTO = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, ccId);
+			ccDTO = (ConceptCollectionDTO) sessionFactory.getCurrentSession().get(ConceptCollectionDTO.class, ccId);
 		} 
 		catch (HibernateException e) 
 		{

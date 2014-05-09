@@ -23,7 +23,7 @@ public class ConceptCollectionValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors err) 
 	{
-		ValidationUtils.rejectIfEmptyOrWhitespace(err, "name", "collection_name.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(err, "conceptCollectionName", "collection_name.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(err, "description", "collection_description.required");
 	}
 
