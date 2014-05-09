@@ -315,12 +315,18 @@ public class ListWSManager implements IListWSManager
 		JSONObject ja1 = new JSONObject();
 		JSONObject j = new JSONObject();
 
-		j.put("filename", metaData.getName());
+		if(metaData.getName()==null){
+			j.put("filename", "");
+		}else{
+			j.put("filename", metaData.getName());
+		}
+
 		if(metaData.getSubmitter().getFullname()==null){
 			j.put("submitter", "");
 		}else{
 			j.put("submitter", metaData.getSubmitter().getFullname());
 		}
+		
 		if(metaData.getLastModifiedDate()==null){
 			j.put("modifieddate", "");
 		}else{
@@ -329,7 +335,7 @@ public class ListWSManager implements IListWSManager
 
 
 		ja.put(j);
-
+		
 		ja1.put("text", ja);
 
 		itemData = ja1.toString();
