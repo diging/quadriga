@@ -21,17 +21,17 @@ $(function () {
 </h2>
 <div id="workbenchmenu">
 	<ul>
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>Project
+		<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>Project
             <ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/plus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/plus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/addproject">Add</a></li>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/minus.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/minus.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/deleteproject">Delete</a></li>
 			</ul>
 		</li>
-		<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/down.png"}'>DSpace
+		<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/down.png"}'>DSpace
 			<ul>
-				<li data-jstree='{"icon":"/quadriga/resources/txt-layout/css/images/pen.png"}'><a
+				<li data-jstree='{"icon":"${pageContext.servletContext.contextPath}/resources/txt-layout/css/images/pen.png"}'><a
 					href="${pageContext.servletContext.contextPath}/auth/workbench/keys">Manage</a></li>
 			</ul>
 		</li>

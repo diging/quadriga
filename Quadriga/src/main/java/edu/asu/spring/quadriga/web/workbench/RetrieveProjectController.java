@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.web.workbench;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
@@ -28,16 +30,16 @@ public class RetrieveProjectController
 
 
 	@Autowired 
-	IRetrieveProjectManager projectManager;
+	private IRetrieveProjectManager projectManager;
 
 	@Autowired 
-	IRetrieveJsonProjectManager jsonProjectManager;
+	private IRetrieveJsonProjectManager jsonProjectManager;
 
 	@Autowired
-	ICheckProjectSecurity projectSecurity;
+	private ICheckProjectSecurity projectSecurity;
 
 	@Autowired
-	IListWSManager wsManager;
+	private IListWSManager wsManager;
 
 	public IListWSManager getWsManager() {
 		return wsManager;
@@ -133,6 +135,13 @@ public class RetrieveProjectController
 			}
 		}
 		
+		Collections.sort(fullProjects, new Comparator<IProject>() {
+
+			@Override
+			public int compare(IProject o1, IProject o2) {
+				return o1.getProjectName().compareTo(o2.getProjectName());
+			}
+		});
 		
 		model.getModelMap().put("projects", fullProjects);
 		

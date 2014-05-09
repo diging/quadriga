@@ -563,9 +563,7 @@
 		{
 			position: relative;
 			padding-left: 8px;
-			margin-left: 0.5em;
-			margin-top: 5px;
-			margin-bottm: 5px;
+			margin-top: -5px;
 		}
 	
 	ul.meta
