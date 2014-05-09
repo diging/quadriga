@@ -486,7 +486,7 @@ function d3init(graph, networkId, path,type) {
 		//displayAllAnnotationsNew();
 	}
 /*
-	function displayItemData(){
+	/*function displayItemData(){
 		$.ajax({
 			url : path+"/auth/editing/getitemmetadata/"+networkId,
 			type : "GET",
@@ -506,6 +506,31 @@ function d3init(graph, networkId, path,type) {
 				alert("error");
 			}
 		});
+	}*/
+	
+	/*function displayItemData(){
+		$.ajax({
+			url : path+"/auth/editing/getitemmetadata/"+networkId,
+			type : "GET",
+			dataType: 'json',
+			success : function(data) {
+				//var cnt = 0;
+				output += "<ol>";
+				$.each(data.text, function(key,value){
+					//content += ++cnt +'.<li>'+value.name+'</li>'+value.text+'</li>'; 
+					output+="<li>" + File Name + " " + value.filename + "</li>"; 
+					output+="<li>" + Author + " " + value.submitter + "</li>"; 
+					output+="<li>" + Last Updated+ " " + value.modifieddate + "</li>"; 
+				});
+				output += "</ol>";
+				//$('#item_metadata').html(output);
+				
+				//drawTable(data.text);
+			},
+			error: function() {
+				alert("error");
+			}
+		});
 	}
 	*/
 	
@@ -518,16 +543,16 @@ function d3init(graph, networkId, path,type) {
 			success : function(data) {
 				console.log(data);
 				//var cnt = 0;
-				output += "<ol>";
+				//output += "<ol>";
 				$.each(data.text, function(key,value){
 					console.log("came in");
-					output+="<li>" + "<b>File Name</b>" + " --> " + value.filename + "</li>"; 
-					output+="<li>" + "<b>Author</b>" + " --> " + value.submitter + "</li>"; 
-					output+="<li>" + "<b>Last Updated</b>" + " --> " + value.modifieddate + "</li>"; 
+					//output+="<li>" + "<b>File Name</b>" + " --> " + value.filename + "</li>"; 
+					//output+="<li>" + "<b>Author</b>" + " --> " + value.submitter + "</li>"; 
+					//output+="<li>" + "<b>Last Updated</b>" + " --> " + value.modifieddate + "</li>"; 
 					var row = $("<tr><td>" + value.filename + "</td><td>" + value.submitter +"</td><td>"+ value.modifieddate + "</td></tr>");
 					$('#metadataTable').append(row);
 				});
-				output += "</ol>";
+				//output += "</ol>";
 				//$('#metadataTable').html(row);
 				
 				//drawTable(data.text);

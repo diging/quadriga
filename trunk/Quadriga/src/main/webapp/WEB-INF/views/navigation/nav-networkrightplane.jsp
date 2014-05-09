@@ -25,9 +25,12 @@ $(document).ready(function(){
 		margin: 0px;
 		opacity: 0.7;
 	}
-	
-	table {
-		border-collapse: collapse;
+		
+	table,th,td{
+		border:1px solid black;
+	}
+
+		
 	}
 	
 	caption,th,td {
@@ -58,11 +61,12 @@ $(document).ready(function(){
 
 <section>
 	<h2 class="major"><span>Network details</span></h2>
-	<ul class="style3">
+		
+		<ul class="style3">
 		<li>
 			<article class="is-post-summary">
 				<div align="left" id="item_metadata">
-				<table id = metadataTable>
+				<table id = metadataTable border="1" style="width:300px">
 					<tr>
         				<th>Filename</th>
         				<th>Author</th>
@@ -73,6 +77,7 @@ $(document).ready(function(){
 				
 			</article>
 		</li>
+		
 		<li>
 			<article class="is-post-summary">
 				<div align="left" id="lemma_name"></div>
