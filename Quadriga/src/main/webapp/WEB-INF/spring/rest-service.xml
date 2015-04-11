@@ -15,7 +15,7 @@
 
 	<bean id="qStoreURL" class="java.lang.String">
 		<constructor-arg>
-			<value>http://diging.asu.edu:8080/QStore4S</value>
+			<value>http://localhost:8080/QStore4S</value>
 		</constructor-arg>
 	</bean>
 	<bean id="qStoreURL_Add" class="java.lang.String">
@@ -151,9 +151,9 @@
 				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.conceptlist.ConceptList
 				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
+				<value>edu.asu.spring.quadriga.domain.impl.WordpowerReply
 				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
+				<value>edu.asu.spring.quadriga.domain.impl.ConceptpowerReply
 				</value>
 				<value>edu.asu.spring.quadriga.domain.impl.networks.ElementEventsType
 				</value>

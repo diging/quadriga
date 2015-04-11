@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.implementation.User;
+import edu.asu.spring.quadriga.domain.impl.User;
 
 /**
  * This method validates if any user is selected

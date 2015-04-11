@@ -12,6 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
+import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
+import edu.asu.spring.quadriga.domain.impl.User;
 
 /*
 * @Description 	: tests getters and setters for user name, username, password, email and quadrigaRoles

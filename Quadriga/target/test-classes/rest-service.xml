@@ -140,9 +140,9 @@
 				</value>
 				<value>edu.asu.spring.quadriga.dspace.service.impl.DspaceItems
 				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.WordpowerReply
+				<value>edu.asu.spring.quadriga.domain.impl.WordpowerReply
 				</value>
-				<value>edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply
+				<value>edu.asu.spring.quadriga.domain.impl.ConceptpowerReply
 				</value>
 				<value>edu.asu.spring.quadriga.profile.impl.ViafReply
 				</value>

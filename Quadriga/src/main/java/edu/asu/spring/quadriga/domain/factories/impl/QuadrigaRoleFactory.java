@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
-import edu.asu.spring.quadriga.domain.implementation.QuadrigaRole;
+import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 
 /**
  * @description   : Factory class for creating Quadriga Roles.

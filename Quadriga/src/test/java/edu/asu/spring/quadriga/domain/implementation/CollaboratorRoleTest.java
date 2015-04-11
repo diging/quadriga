@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.asu.spring.quadriga.domain.impl.CollaboratorRole;
+
 /*
  * @Description : tests getters and setters for roleId, roleName and roleDescription
  *  

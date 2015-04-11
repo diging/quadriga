@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.domain.implementation.User;
+import edu.asu.spring.quadriga.domain.impl.User;
 
 /**
  * Factory class for creating {@link User}.

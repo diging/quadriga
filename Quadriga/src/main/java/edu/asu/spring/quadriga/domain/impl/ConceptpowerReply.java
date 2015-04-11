@@ -6,7 +6,7 @@
 //
 
 
-package edu.asu.spring.quadriga.domain.implementation;
+package edu.asu.spring.quadriga.domain.impl;
 /**
  * This is used to get the response from conceptpower
  */

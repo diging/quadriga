@@ -64,6 +64,7 @@ public class QuadrigaUserDTO implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")
     private List<DspaceKeysDTO> dspaceKeysDTOList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "quadrigaUserDTO")

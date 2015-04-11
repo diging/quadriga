@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.implementation.Profile;
+import edu.asu.spring.quadriga.domain.impl.Profile;
 
 /**
  * This class validates if the service name and uri in profile page

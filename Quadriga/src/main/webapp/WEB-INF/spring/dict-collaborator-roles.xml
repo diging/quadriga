@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+<bean class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="dictCollaborator" />
 		<property name="roleDBid" value="dict_role1"></property>
 		<property name="roleid" value="ADMIN"></property>
@@ -13,7 +13,7 @@
 			value="Dict Admins have the same rights as the Dict Owner"></property>
 </bean>
 
-<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+<bean class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="dictCollaborator" />
 		<property name="roleDBid" value="dict_role2"></property>
 		<property name="roleid" value="DICT_READ_ACCESS"></property>
@@ -23,7 +23,7 @@
 			value="Dict Collaborators that can read dictionaries"></property>
 </bean>
 
-<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+<bean class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="dictCollaborator" />
 		<property name="roleDBid" value="dict_role3"></property>
 		<property name="roleid" value="DICT_READ/WRITE_ACCESS"></property>

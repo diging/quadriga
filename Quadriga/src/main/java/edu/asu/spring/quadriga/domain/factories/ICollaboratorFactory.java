@@ -1,7 +1,7 @@
 package edu.asu.spring.quadriga.domain.factories;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.implementation.Collaborator;
+import edu.asu.spring.quadriga.domain.impl.Collaborator;
 
 /**
  * Creates {@link Collaborator} objects.

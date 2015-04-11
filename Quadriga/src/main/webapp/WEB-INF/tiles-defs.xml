@@ -86,6 +86,13 @@
 		<put-attribute name="content" value="/WEB-INF/views/NoNetworks.jsp" />
 	</definition>
 	
+	<!-- public pages -->
+	<definition name="requestAccountPage" extends="base.definition.nonav">
+		<put-attribute name="title" value="Quadriga - Create Account" />
+		<put-attribute name="content" value="/WEB-INF/views/requestaccount.jsp" />
+	</definition>
+	
+	
 	<!-- Request pages -->
 	<definition name="requests/accountRequested" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - Account Request" />

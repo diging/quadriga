@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 
 		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role1"></property>
@@ -14,7 +14,7 @@
 			value="Collaborator admin who has same rights as owner"></property>
 	</bean>
 
-	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role2"></property>
 		<property name="roleid" value="PROJECT_ADMIN"></property>
@@ -24,7 +24,7 @@
 			value="performs all administrative work on associated project"></property>
 	</bean>
 
-	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role3"></property>
 		<property name="roleid" value="CONTRIBUTOR"></property>
@@ -34,7 +34,7 @@
 			value="contributes to the project by managing workspaces and uploading networks"></property>
 	</bean>
 
-	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="projectCollaborator" />
 		<property name="roleDBid" value="collaborator_role4"></property>
 		<property name="roleid" value="EDITOR"></property>
@@ -44,7 +44,7 @@
 			value="associates the users who can approve and publish networks"></property>
 	</bean>
 	
-		<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<bean  class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="workspaceCollaborator" />
 		<property name="roleDBid" value="wscollab_role1"></property>
 		<property name="roleid" value="SINGLE_WORKSPACE_ADMIN"></property>
@@ -54,7 +54,7 @@
 			value="workspace collaborator admin who has the same rights as the owner"></property>
 	</bean>
 	
-		<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+		<bean  class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="workspaceCollaborator" />
 		<property name="roleDBid" value="wscollab_role2"></property>
 		<property name="roleid" value="SINGLE_WORKSPACE_CONTRIBUTOR"></property>
@@ -64,7 +64,7 @@
 			value="contributors who can add texts and create/upload networks"></property>
 	</bean>
 	
-	<bean  class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+	<bean  class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="workspaceCollaborator" />
 		<property name="roleDBid" value="wscollab_role3"></property>
 		<property name="roleid" value="WORKSPACE_EDITOR"></property>

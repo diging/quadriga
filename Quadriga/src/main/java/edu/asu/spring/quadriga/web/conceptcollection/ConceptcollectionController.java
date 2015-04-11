@@ -31,10 +31,10 @@ import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionConcep
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptFactory;
 import edu.asu.spring.quadriga.domain.factory.impl.conceptcollection.ConceptCollectionFactory;
+import edu.asu.spring.quadriga.domain.impl.CollectionsValidator;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply;
+import edu.asu.spring.quadriga.domain.impl.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
-import edu.asu.spring.quadriga.domain.implementation.CollectionsValidator;
-import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply;
-import edu.asu.spring.quadriga.domain.implementation.ConceptpowerReply.ConceptEntry;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;

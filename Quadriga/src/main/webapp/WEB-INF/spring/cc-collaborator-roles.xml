@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+<bean class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="ccCollaborator" />
 		<property name="roleDBid" value="cc_role2"></property>
 		<property name="roleid" value="CC_READ_ACCESS"></property>
@@ -12,7 +12,7 @@
 			value="CC Collaborators that can read concept collection"></property>
 </bean>
 
-<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+<bean class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="ccCollaborator" />
 		<property name="roleDBid" value="cc_role1"></property>
 		<property name="roleid" value="ADMIN"></property>
@@ -22,7 +22,7 @@
 			value="Collaborator admin who has same rights as owner"></property>
 </bean>
  
-<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole">
+<bean class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole">
 		<qualifier value="ccCollaborator" />
 		<property name="roleDBid" value="cc_role3"></property>
 		<property name="roleid" value="CC_READ_WRITE_ACCESS"></property>

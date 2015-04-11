@@ -107,7 +107,7 @@
 	<bean class="edu.asu.spring.quadriga.service.impl.QuadrigaRoleManager"></bean>
 
 	<bean id="CollaboratorRole"
-		class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
+		class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole" />
 
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DictionaryFactory" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.DspaceKeysFactory" />
@@ -131,9 +131,9 @@
 	<bean class="edu.asu.spring.quadriga.validator.CollaboratorFormDeleteValidator" />
 
 	<bean
-		class="edu.asu.spring.quadriga.domain.implementation.CollectionsValidator" />
+		class="edu.asu.spring.quadriga.domain.impl.CollectionsValidator" />
 	<bean class="edu.asu.spring.quadriga.domain.factories.impl.WorkspaceFactory" />
-	<bean class="edu.asu.spring.quadriga.domain.implementation.CollaboratorRole" />
+	<bean class="edu.asu.spring.quadriga.domain.impl.CollaboratorRole" />
 
 	<bean id="dspaceStrings"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -221,7 +221,7 @@
 	
 	<bean id="networkNodeInfoFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkNodeInfoFactory" />
 	
-	<bean id="networkOldVersionFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkOldVersionFactory" />
+<!--  	<bean id="networkOldVersionFactory" class="edu.asu.spring.quadriga.domain.factories.impl.NetworkOldVersionFactory" /> -->
 	
 	<bean id="ModifyWSCollabManager" class="edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager" />
 	

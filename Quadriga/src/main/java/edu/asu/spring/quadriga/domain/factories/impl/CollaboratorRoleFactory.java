@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
-import edu.asu.spring.quadriga.domain.implementation.CollaboratorRole;
+import edu.asu.spring.quadriga.domain.impl.CollaboratorRole;
 
 @Service
 public class CollaboratorRoleFactory implements ICollaboratorRoleFactory {

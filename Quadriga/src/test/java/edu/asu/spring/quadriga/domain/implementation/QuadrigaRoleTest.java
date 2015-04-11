@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
+
 /*
 * @Description 	: tests getters and setters for quadriga roleId, name, and description
 * 

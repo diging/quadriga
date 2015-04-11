@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain.factories;
 import org.apache.commons.lang.NotImplementedException;
 
 import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.implementation.User;
+import edu.asu.spring.quadriga.domain.impl.User;
 
 /**
  * Factory interface for user factories.

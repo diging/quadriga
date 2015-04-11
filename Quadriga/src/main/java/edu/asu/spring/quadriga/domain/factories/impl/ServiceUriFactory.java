@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.factories.IServiceUriFactory;
-import edu.asu.spring.quadriga.domain.implementation.Profile;
+import edu.asu.spring.quadriga.domain.impl.Profile;
 
 /**
  * Factory method to create Profile object
