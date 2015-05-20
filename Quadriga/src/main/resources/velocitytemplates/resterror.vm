@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Quadriga:QuadrigaReply xmlns:Quadriga="http://www.digitalhps.org/Quadriga" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="$url/resources/restxmlschema/resterror.xsd">
-<Quadriga:Error>
-	<Quadriga:status>$status</Quadriga:status>
-	<Quadriga:errorcode>$ErrorCode</Quadriga:errorcode>
-	<Quadriga:message>$message</Quadriga:message>
-</Quadriga:Error> 	
-</Quadriga:QuadrigaReply>
