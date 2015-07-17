@@ -1,9 +1,10 @@
 package edu.asu.spring.quadriga.web.manageusers.beans;
 
+
 public class AccountRequest {
 
-	private String name;
-	private String username;
+    private String name;
+    private String username;
 	private String email;
 	private String password;
 	private String repeatedPassword;

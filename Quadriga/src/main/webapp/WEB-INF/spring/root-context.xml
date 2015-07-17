@@ -41,4 +41,6 @@
 	
 	<!-- Reference the hibernate -->
 	<beans:import resource="../hibernate/hibernate.cfg.xml"/>
+	
+	
 </beans:beans>
