@@ -53,7 +53,7 @@ public class WorkspaceDTOMapper extends DAOConnectionManager{
 		workSpace.setWorkspaceName(workspaceDTO.getWorkspacename());
 		workSpace.setDescription(workspaceDTO.getDescription());
 		workSpace.setWorkspaceId(workspaceDTO.getWorkspaceid());
-		workSpace.setOwner(userManager.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+		workSpace.setOwner(userManager.getUser(workspaceDTO.getWorkspaceowner().getUsername()));
 		return workSpace;
 	}
 	

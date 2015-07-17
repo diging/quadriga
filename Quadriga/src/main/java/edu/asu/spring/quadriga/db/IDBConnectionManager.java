@@ -1,5 +1,6 @@
 package edu.asu.spring.quadriga.db;
 
+import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
@@ -151,6 +152,14 @@ public interface IDBConnectionManager
 	 */
 	public abstract List<QuadrigaUserRequestsDTO> getUserRequestDTOList()
 			throws QuadrigaStorageException;
+
+
+    public abstract boolean addNewUserAccountRequest(String username, String password,
+            String fullname, String email) throws QuadrigaStorageException;
+
+
+    public abstract QuadrigaUserRequestsDTO getUserRequestDTO(String username)
+            throws QuadrigaStorageException;
 
 
 }

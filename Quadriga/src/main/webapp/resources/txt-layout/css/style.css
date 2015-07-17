@@ -91,6 +91,8 @@
 		{
 			/*-webkit-appearance: none;*/
 			border: 1px solid rgb(182, 174, 127);
+			padding: 7px;
+			border-radius: 5px;
 		}
 			
 	br.clear
@@ -229,7 +231,7 @@
 	}
 
 		
-	.button
+	.button, input.ui-button
 	{
 		display: inline-block;
 		font-family: 'Open Sans Condensed', sans-serif;
@@ -245,9 +247,11 @@
 		-o-transition: background-color .2s ease-in-out;
 		-ms-transition: background-color .2s ease-in-out;
 		transition: background-color .2s ease-in-out;
+		border: 1px solid rgb(202, 197, 167);
+		margin-top: 15px;
 	}
 
-		.button:hover
+		.button:hover, input.ui-button:hover
 		{
 			background: #ebe3b2;
 		}

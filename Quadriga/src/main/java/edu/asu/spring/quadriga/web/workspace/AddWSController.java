@@ -106,7 +106,7 @@ public class AddWSController
 			}
 			else
 			{
-			user = userManager.getUserDetails(userName);
+			user = userManager.getUser(userName);
 			workspace.setOwner(user);
 			modifyWSManger.addWorkSpaceRequest(workspace, projectid);
 			model.getModelMap().put("success", 1);

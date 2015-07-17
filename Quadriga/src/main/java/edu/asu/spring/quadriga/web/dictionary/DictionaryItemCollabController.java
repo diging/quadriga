@@ -88,7 +88,7 @@ public class DictionaryItemCollabController {
 	@RequestMapping(value = "auth/dictionaries/collab/{dictionaryid}", method = RequestMethod.GET)
 	public String getDictionaryCollabPage(@PathVariable("dictionaryid") String dictionaryid, ModelMap model,Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException{
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		
 		List<IDictionaryItems> dictionaryItemList = dictonaryManager.getDictionaryItemsDetailsCollab(dictionaryid);
 		if (dictionaryItemList == null) {
@@ -126,7 +126,7 @@ public class DictionaryItemCollabController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -216,7 +216,7 @@ public class DictionaryItemCollabController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -326,7 +326,7 @@ public class DictionaryItemCollabController {
 			@ModelAttribute("SpringWeb") Item dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		String msg = "";
 		String[] values = req.getParameterValues("selected");
 		if (values != null) {
@@ -418,7 +418,7 @@ public class DictionaryItemCollabController {
 			@RequestParam("itemName") String item,
 			@RequestParam("posdropdown") String pos, ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		try {
 			List<DictionaryEntry> dictionaryEntryList = null;
 			if (!item.equals("")) {

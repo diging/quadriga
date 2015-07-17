@@ -98,7 +98,7 @@ public class NetworkDTOMapper {
 			network.setNetworkName(networksDTO.getNetworkname());
 			network.setStatus(networksDTO.getStatus());
 			if(networksDTO.getNetworkowner() != null)
-				network.setCreator(userManager.getUserDetails(networksDTO.getNetworkowner()));
+				network.setCreator(userManager.getUser(networksDTO.getNetworkowner()));
 		}
 		return network;
 	}
@@ -125,7 +125,7 @@ public class NetworkDTOMapper {
 				network.setNetworkName(networkDTO.getNetworkname());
 				network.setStatus(networkDTO.getStatus());
 				if(networkDTO.getNetworkowner() != null)
-					network.setCreator(userManager.getUserDetails(networkDTO.getNetworkowner()));
+					network.setCreator(userManager.getUser(networkDTO.getNetworkowner()));
 				networkList.add(network);
 			}
 		}		
@@ -148,7 +148,7 @@ public class NetworkDTOMapper {
 				network.setStatus(networkDTO.getStatus());
 				//network.setNetworkOldVersion(getNetworkOldVersion(getNetworkAssignedDTO(networkDTO.getNetworkid(), assignedUser, networkDTO.getStatus(), INetworkStatus.ARCHIVE_LEVEL_ONE )));
 				if(networkDTO.getNetworkowner() != null)
-					network.setCreator(userManager.getUserDetails(networkDTO.getNetworkowner()));
+					network.setCreator(userManager.getUser(networkDTO.getNetworkowner()));
 				networkList.add(network);
 			}
 		}		

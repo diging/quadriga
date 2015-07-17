@@ -67,7 +67,7 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("nodename") String nodeName,
 			@RequestParam("objecttype") String objectType, 
 			Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		try {
 			editingNetworkAnnotationManager.addAnnotationToNetwork(networkId, nodeId, nodeName,
 					annotationText, user.getUserName(),objectType);
@@ -145,7 +145,7 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("sourceid") String sourceId, 
 			@RequestParam("targetid") String targetId,
 			Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String annotation = "";
 
 		try {
@@ -177,7 +177,7 @@ public class EditingNetworkAnnotationsController {
 			HttpServletResponse response,
 			@PathVariable("networkId") String networkId,
 			Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String annotation = "";
 //		List<NetworkAnnotationsDTO> resultList = new ArrayList<NetworkAnnotationsDTO>();
 //		try {
@@ -229,7 +229,7 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("objecttype") String objectType, 
 			@RequestParam("targettype") String targetType,
 			Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		
 		
 		try {
@@ -264,7 +264,7 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("subjectid") String subjectId, 
 			@RequestParam("objectid") String objectId, 
 			Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String annotation = "";
 
 		try {
@@ -305,7 +305,7 @@ public class EditingNetworkAnnotationsController {
 			@RequestParam("objecttype") String objectType, 
 			@RequestParam("targettype") String targetType,
 			Principal principal) throws QuadrigaStorageException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		try {
 			editingNetworkAnnotationManager.addAnnotationToRelation(annotationText,networkId, predicateId, predicateName,subjectId,
 					subjectName,objectId,objectName, user.getUserName(),objectType);

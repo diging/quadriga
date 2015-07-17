@@ -86,7 +86,7 @@ public class DictionaryCollaboratorDTOMapper extends DAOConnectionManager
 			{
 				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
-				collaborator.setUserObj(userManager.getUserDetails(userID));
+				collaborator.setUserObj(userManager.getUser(userID));
 				for(String roleName: collabMap.get(userID))
 				{
 					ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();

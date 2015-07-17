@@ -47,7 +47,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		//initialize chkAccess variable
 		chkAccess = false;
 
-		user = userManager.getUserDetails(userName);
+		user = userManager.getUser(userName);
 		quadrigaRoles = user.getQuadrigaRoles();
 		for(IQuadrigaRole quadRole : quadrigaRoles)
 		{

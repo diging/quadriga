@@ -51,7 +51,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 				dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
 				dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
 				dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-				dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+				dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
 				dictionaryList.add(dictionaryProxy);
 			}
 		}
@@ -78,7 +78,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 				dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
 				dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
 				dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-				dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+				dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
 				dictionaryList.add(dictionaryProxy);
 			}
 		}
@@ -97,7 +97,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 			dictionaryProxy.setDictionaryId(dictionaryDTO.getDictionaryid());
 			dictionaryProxy.setDictionaryName(dictionaryDTO.getDictionaryname());
 			dictionaryProxy.setDescription(dictionaryDTO.getDescription());
-			dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+			dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
 			dictionaryProxy.setCreatedBy(dictionaryDTO.getCreatedby());
 			dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
 			dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
@@ -122,7 +122,7 @@ public class DictionaryShallowMapper implements IDictionaryShallowMapper {
 			dictionaryProxy.setCreatedDate(dictionaryDTO.getCreateddate());
 			dictionaryProxy.setUpdatedBy(dictionaryDTO.getUpdatedby());
 			dictionaryProxy.setUpdatedDate(dictionaryDTO.getUpdateddate());
-			dictionaryProxy.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+			dictionaryProxy.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
 		}
 		return dictionaryProxy;
 	}

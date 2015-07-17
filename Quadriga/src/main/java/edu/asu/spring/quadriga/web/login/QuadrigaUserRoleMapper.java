@@ -66,7 +66,7 @@ public class QuadrigaUserRoleMapper extends PersonContextMapper {
 		IUser user = null;
 		try
 		{
-		user = userManager.getUserDetails(username);
+		user = userManager.getUser(username);
 
 		// add QuadrigaGrantedAuthorities with roles of user
 		if (user.getQuadrigaRoles() != null) {

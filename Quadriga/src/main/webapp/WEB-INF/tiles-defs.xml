@@ -65,6 +65,11 @@
 		<put-attribute name="title" value="Quadriga - Login" />
 		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
 	</definition>
+	
+	<definition name="register" extends="base.definition.nonav">
+        <put-attribute name="title" value="Quadriga - Register" />
+        <put-attribute name="content" value="/WEB-INF/views/register.jsp" />
+    </definition>
 
 	<definition name="nouser" extends="base.definition">
 		<put-attribute name="title" value="Quadriga - No Account" />

@@ -2,8 +2,13 @@ package edu.asu.spring.quadriga.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
+import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
 /**
  * Interface class that places restraints on the UserManager class to implement
@@ -23,7 +28,7 @@ public interface IUserManager {
 	 * @param sUserId			The unique userid of the user
 	 * @return					User object created based on the userId
 	 */
-	public abstract IUser getUserDetails(String sUserId) throws QuadrigaStorageException;
+	public abstract IUser getUser(String sUserId) throws QuadrigaStorageException;
 
 	
 	/**
@@ -118,5 +123,9 @@ public interface IUserManager {
 	 */
 	public abstract void insertQuadrigaAdminUser(String userName)
 			throws QuadrigaStorageException;
+
+
+    public abstract boolean addNewUser(AccountRequest request)
+            throws QuadrigaStorageException, UsernameExistsException;
 
 }

@@ -49,7 +49,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 				projectProxy.setDescription(projectDTO.getDescription());
 				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 				projectProxy.setUnixName(projectDTO.getUnixname());
-				projectProxy.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 				projectProxy.setCreatedBy(projectDTO.getCreatedby());
 				projectProxy.setCreatedDate(projectDTO.getCreateddate());
 				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
@@ -77,7 +77,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 			projectProxy.setDescription(projectDTO.getDescription());
 			projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			projectProxy.setUnixName(projectDTO.getUnixname());
-			projectProxy.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 			projectProxy.setCreatedBy(projectDTO.getCreatedby());
 			projectProxy.setCreatedDate(projectDTO.getCreateddate());
 			projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
@@ -102,7 +102,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 			projectProxy.setDescription(projectDTO.getDescription());
 			projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			projectProxy.setUnixName(projectDTO.getUnixname());
-			projectProxy.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 			projectProxy.setCreatedBy(projectDTO.getCreatedby());
 			projectProxy.setCreatedDate(projectDTO.getCreateddate());
 			projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
@@ -131,7 +131,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 				projectProxy.setDescription(projectDTO.getDescription());
 				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 				projectProxy.setUnixName(projectDTO.getUnixname());
-				projectProxy.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 				projectProxy.setCreatedBy(projectDTO.getCreatedby());
 				projectProxy.setCreatedDate(projectDTO.getCreateddate());
 				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
@@ -163,7 +163,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 				projectProxy.setDescription(projectDTO.getDescription());
 				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 				projectProxy.setUnixName(projectDTO.getUnixname());
-				projectProxy.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 				projectProxy.setCreatedBy(projectDTO.getCreatedby());
 				projectProxy.setCreatedDate(projectDTO.getCreateddate());
 				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
@@ -196,7 +196,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 				projectProxy.setDescription(projectDTO.getDescription());
 				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 				projectProxy.setUnixName(projectDTO.getUnixname());
-				projectProxy.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 				projectProxy.setCreatedBy(projectDTO.getCreatedby());
 				projectProxy.setCreatedDate(projectDTO.getCreateddate());
 				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());
@@ -228,7 +228,7 @@ public class ProjectShallowMapper implements IProjectShallowMapper {
 				projectProxy.setDescription(projectDTO.getDescription());
 				projectProxy.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 				projectProxy.setUnixName(projectDTO.getUnixname());
-				projectProxy.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+				projectProxy.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 				projectProxy.setCreatedBy(projectDTO.getCreatedby());
 				projectProxy.setCreatedDate(projectDTO.getCreateddate());
 				projectProxy.setUpdatedBy(projectDTO.getUpdatedby());

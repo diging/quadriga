@@ -139,7 +139,7 @@ public class UserManagerTest {
 		testSetupTestEnvironment();
 
 		//A valid user
-		IUser testUser = usermanager.getUserDetails("jdoe");
+		IUser testUser = usermanager.getUser("jdoe");
 		assertEquals(true, user.equals(testUser));
 
 		//Invalid user
@@ -147,7 +147,7 @@ public class UserManagerTest {
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
 		rolesList.add(rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT));
 		failUser.setQuadrigaRoles(rolesList);
-		testUser = usermanager.getUserDetails("123");
+		testUser = usermanager.getUser("123");
 		assertEquals(true, failUser.equals(testUser));
 
 	}

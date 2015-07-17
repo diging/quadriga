@@ -15,8 +15,10 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.UserManager;
+import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
 /**
  * This class is a mock up for the {@link UserManager} for development and
@@ -136,7 +138,7 @@ public class MockupUserManager implements IUserManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IUser getUserDetails(String sUserId) {
+	public IUser getUser(String sUserId) {
 
 		// The user is active in Quad DB
 		if (activeUsers.contains(sUserId)) {
@@ -296,5 +298,10 @@ public class MockupUserManager implements IUserManager {
 	public void insertQuadrigaAdminUser(String userName)
 			throws QuadrigaStorageException {
 	}
+
+    public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException,
+            UsernameExistsException {
+        return false;
+    }
 
 }

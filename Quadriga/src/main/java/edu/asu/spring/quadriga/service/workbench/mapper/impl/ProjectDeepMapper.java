@@ -85,7 +85,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setDescription(projectDTO.getDescription());
 			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 			project.setCreatedBy(projectDTO.getCreatedby());
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
@@ -122,7 +122,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setDescription(projectDTO.getDescription());
 			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 			project.setCreatedBy(projectDTO.getCreatedby());
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
@@ -159,7 +159,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setDescription(projectDTO.getDescription());
 			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 			project.setCreatedBy(projectDTO.getCreatedby());
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
@@ -196,7 +196,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 			project.setDescription(projectDTO.getDescription());
 			project.setProjectAccess(EProjectAccessibility.valueOf(projectDTO.getAccessibility()));
 			project.setUnixName(projectDTO.getUnixname());
-			project.setOwner(userDeepMapper.getUserDetails(projectDTO.getProjectowner().getUsername()));
+			project.setOwner(userDeepMapper.getUser(projectDTO.getProjectowner().getUsername()));
 			project.setCreatedBy(projectDTO.getCreatedby());
 			project.setCreatedDate(projectDTO.getCreateddate());
 			project.setUpdatedBy(projectDTO.getUpdatedby());
@@ -280,7 +280,7 @@ public class ProjectDeepMapper implements IProjectDeepMapper {
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
-				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
+				collaborator.setUserObj(userDeepMapper.getUser(userName));
 				
 				
 				// Create ProjectCollaborator object

@@ -25,7 +25,7 @@ public class UserService implements UserDetailsService {
 			throws UsernameNotFoundException {
 		IUser user;
 		try {
-			user = userManager.getUserDetails(arg0);
+			user = userManager.getUser(arg0);
 		} catch (QuadrigaStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

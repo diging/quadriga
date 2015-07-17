@@ -135,7 +135,7 @@ public class ModifyProjectController
 		}
 		else
 		{
-			IUser user = userManager.getUserDetails(principal.getName());
+			IUser user = userManager.getUser(principal.getName());
             project.setOwner(user);
 			projectManager.addProjectRequest(project,principal.getName());
 			model.getModelMap().put("success", 1);
@@ -216,7 +216,7 @@ public class ModifyProjectController
 	@RequestMapping(value = "auth/workbench/assignownereditor/{projectid}", method = RequestMethod.GET)
 	public String assignOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
 		projectManager.assignEditorToOwner(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);
@@ -248,7 +248,7 @@ public class ModifyProjectController
 	@RequestMapping(value = "auth/workbench/deleteownereditor/{projectid}", method = RequestMethod.GET)
 	public String deleteOwnerEditorRole(@PathVariable("projectid") String projectId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaAccessException
 	{
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
 		projectManager.deleteEditorToOwner(projectId, userName);
 		IProject project = retrieveProjectManager.getProjectDetails(projectId);

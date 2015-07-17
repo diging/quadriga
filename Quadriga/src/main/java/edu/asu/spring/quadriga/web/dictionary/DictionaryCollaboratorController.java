@@ -102,7 +102,7 @@ public class DictionaryCollaboratorController {
 
 				IUser user;
 				try {
-					user = userManager.getUserDetails(text);
+					user = userManager.getUser(text);
 					setValue(user);
 				} catch (QuadrigaStorageException e) {
 					logger.error("Issue connecting to DB",e);

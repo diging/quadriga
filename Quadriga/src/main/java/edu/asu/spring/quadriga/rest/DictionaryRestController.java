@@ -296,7 +296,7 @@ public class DictionaryRestController {
 	public String addConceptCollectionsToWorkspace(@PathVariable("workspaceId") String workspaceId,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept, ModelMap model, Principal principal) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		if(!checkWSSecurity.checkIsWorkspaceExists(workspaceId)){
 			logger.info("Workspace ID : "+workspaceId+" doesn't exist");
 			response.setStatus(404);
@@ -403,7 +403,7 @@ public class DictionaryRestController {
 	public String getCCXMLFromVogon(@PathVariable("dictionaryID") String dictionaryID,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, QuadrigaAccessException, QuadrigaStorageException, RestException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(500);
 			String errorMsg = errorMessageRest.getErrorMsg("Please provide XML in body of the post request.");

@@ -105,7 +105,7 @@ public class WorkspaceCollaboratorDTOMapper extends DAOConnectionManager
 				Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				IUser user = userFactory.createUserObject();
-				user = userManager.getUserDetails((String) pairs.getKey());
+				user = userManager.getUser((String) pairs.getKey());
 				collaborator.setUserObj(user);
 				String userRoleList = (String) pairs.getValue();
 				collaboratorRoles = collaboratorManager.getCollaboratorDBRoleIdList(userRoleList.substring(0, userRoleList.length()-1));

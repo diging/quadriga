@@ -110,7 +110,7 @@ public class NetworkRestController {
 			@RequestHeader("Accept") String accept,Principal principal) throws QuadrigaException, ParserConfigurationException, SAXException, IOException, JAXBException, TransformerException, QuadrigaStorageException {
 
 
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String networkName = request.getParameter("networkname");
 		String networkId="";
 		String workspaceid = request.getParameter("workspaceid");
@@ -184,7 +184,7 @@ public class NetworkRestController {
 			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
 			return errorMsg;
 		}
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
@@ -247,7 +247,7 @@ public class NetworkRestController {
 			String errorMsg = errorMessageRest.getErrorMsg("Network ID : "+networkId+" doesn't exist");
 			return errorMsg;
 		}
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		Template template = null;
 		try {
@@ -513,7 +513,7 @@ public class NetworkRestController {
 			HttpServletResponse response,
 			String accept,Principal principal,HttpServletRequest req) throws Exception {
 
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 
 		List<INetwork> networkList = networkManager.getNetworksOfOwner(user);
 		networkList = networkManager.editNetworkStatusCode(networkList);
@@ -572,7 +572,7 @@ public class NetworkRestController {
 			return errorMsg;
 		}
 		
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String networkXML = networkManager.getNetworkXML(networkId);
 		String status = networkManager.getNetworkStatusCode(network.getStatus())+"";
 		if(networkXML.isEmpty() || networkXML == null){
@@ -635,7 +635,7 @@ public class NetworkRestController {
 			@RequestHeader("Accept") String accept,
 			Principal principal) throws JAXBException, QuadrigaStorageException, RestException, ParserConfigurationException, SAXException, IOException {
 
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 
 		String networkName = request.getParameter("networkname");
 

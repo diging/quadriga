@@ -95,7 +95,7 @@ public class AddCCCollaboratorController {
 
 		        IUser user;
 				try {
-					user = usermanager.getUserDetails(text);
+					user = usermanager.getUser(text);
 					 setValue(user);
 				} catch (QuadrigaStorageException e) {
 					logger.error("",e);

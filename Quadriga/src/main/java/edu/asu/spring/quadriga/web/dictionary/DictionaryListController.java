@@ -141,7 +141,7 @@ public class DictionaryListController {
 	public String addDictionaryHandle(
 			@ModelAttribute("SpringWeb") Dictionary dictionary, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		dictionary.setOwner(user);
 
 		String msg = "";
@@ -207,7 +207,7 @@ public class DictionaryListController {
 	@RequestMapping(value = "auth/dictionaries/deleteDictionary", method = RequestMethod.POST)
 	public String deleteDictionary(HttpServletRequest req, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 
 		String[] values = req.getParameterValues("selected");
 		String msg = "";

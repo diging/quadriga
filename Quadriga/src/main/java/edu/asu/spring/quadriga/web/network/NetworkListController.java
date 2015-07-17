@@ -102,7 +102,7 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/networks", method = RequestMethod.GET)
 	public String listNetworksTreeView(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String jsTreeData = null;
 		jsTreeData = networkManager.getNetworkJSTreeJson(user.getUserName());
 		model.addAttribute("tableview",0);
@@ -123,7 +123,7 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/networks/table", method = RequestMethod.GET)
 	public String listNetworksTableView(ModelMap model, Principal principal) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		List<INetwork> networkList = null;
 		try{
 
@@ -217,7 +217,7 @@ public class NetworkListController {
 	 */
 	@RequestMapping(value = "auth/networks/jstree", method = RequestMethod.GET)
 	public @ResponseBody String listNetworksJson(ModelMap model, Principal principal, HttpServletResponse res) throws QuadrigaStorageException, JSONException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String jsTreeData = null;
 		jsTreeData = networkManager.getNetworkJSTreeJson(user.getUserName());
 		logger.info("JSon : "+ jsTreeData);

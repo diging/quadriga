@@ -85,7 +85,7 @@ public class ConceptCollectionDeepMapper implements
 			conceptCollection.setCreatedDate(ccDTO.getCreateddate());
 			conceptCollection.setUpdatedBy(ccDTO.getUpdatedby());
 			conceptCollection.setUpdatedDate(ccDTO.getUpdateddate());
-			conceptCollection.setOwner(userDeepMapper.getUserDetails(ccDTO.getCollectionowner().getUsername()));
+			conceptCollection.setOwner(userDeepMapper.getUser(ccDTO.getCollectionowner().getUsername()));
 			
 			// Setting dictionary collaborator
 			conceptCollection.setConceptCollectionCollaborators(getConceptCollectionCollaboratorList(ccDTO, conceptCollection));
@@ -165,7 +165,7 @@ public class ConceptCollectionDeepMapper implements
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
-				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
+				collaborator.setUserObj(userDeepMapper.getUser(userName));
 				
 				
 				// Create COncept Collection Collaborator object

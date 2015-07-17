@@ -95,7 +95,7 @@ public class DictionaryItemSearchAddController {
 			@ModelAttribute("SpringWeb") Item dictionaryItems,
 			ModelMap model, Principal principal)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		boolean result=dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryId);
 		logger.info("Came here "+ result);
 		String msg = "";
@@ -161,7 +161,7 @@ public class DictionaryItemSearchAddController {
 			@RequestParam("itemName") String item,
 			@RequestParam("posdropdown") String pos,Principal principal, ModelMap model)
 			throws QuadrigaStorageException, QuadrigaAccessException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		dictonaryManager.userDictionaryPerm(user.getUserName(),dictionaryid);
 		try {
 			List<DictionaryEntry> dictionaryEntryList = null;

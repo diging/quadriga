@@ -12,6 +12,11 @@ $(document).ready(function() {
 <span onload='document.f.j_username.focus();'>
 	<h3>Login</h3>
  
+    <c:if test="${not empty successmsg }">
+        <div class="ui-state-success-text">
+            ${ successmsg }
+        </div>
+    </c:if>
 	<c:if test="${not empty error}">
 		<div class="ui-state-error-text">
 			Your login attempt was not successful, try again.<br /> Caused :
@@ -37,11 +42,16 @@ Language : <a href="${pageContext.servletContext.contextPath}/login?siteLanguage
 			</tr>
 			<tr>
 				<td colspan='2'><input name="submit" type="submit"
-					value="submit" />
+					value="submit" class="button"/>
 				</td>
+			</tr>
+			<tr>
+			     <td colspan="2">
+			         <a href="register">Register new account...</a>
+			     </td>
 			</tr>
 		</table>
  
 	</form>
-	Current Locale : ${pageContext.response.locale}
+	
 </span>

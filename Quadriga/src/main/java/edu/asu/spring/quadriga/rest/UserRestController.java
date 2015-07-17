@@ -68,7 +68,7 @@ public class UserRestController {
 	public String getUserDetails( ModelMap model, Principal principal, HttpServletRequest req)
 			throws Exception {
 		
-		IUser userDetails = userManager.getUserDetails(principal.getName());
+		IUser userDetails = userManager.getUser(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
 		List<SearchResultBackBean> authFiles = profileManager.showUserProfile(userDetails.getUserName());
 		Template template = null;

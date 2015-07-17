@@ -106,7 +106,7 @@ public class EditingListController {
 	@RequestMapping(value = "auth/editing", method = RequestMethod.GET)
 	public String listNetworkAvailableToEditors(ModelMap model, Principal principal) throws QuadrigaStorageException
 	,QuadrigaAccessException{
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 
 		List<INetwork> assignedNetworkList=null;
 		try{
@@ -142,7 +142,7 @@ public class EditingListController {
 	public String listNetworkAssignedToOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException
 	,QuadrigaAccessException
 	{
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 
 		List<INetwork> assignedNetworkList=null;
 		try{
@@ -168,7 +168,7 @@ public class EditingListController {
 	,@ElementAccessPolicy(type=CheckedElementType.NETWORK,paramIndex=0,userRole={})})
 	@RequestMapping(value = "auth/finishednetworksOtherEditors", method = RequestMethod.GET)
 	public String listFinishedNetworksByOtherEditors(ModelMap model, Principal principal) throws QuadrigaStorageException,QuadrigaAccessException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 
 		List<INetwork> finishedNetworkList=null;
 		try{

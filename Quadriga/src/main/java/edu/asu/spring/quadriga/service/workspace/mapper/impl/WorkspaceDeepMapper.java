@@ -112,7 +112,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspace.setDescription(workspaceDTO.getDescription());
-			workspace.setOwner(userDeepMapper.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspace.setOwner(userDeepMapper.getUser(workspaceDTO.getWorkspaceowner().getUsername()));
 			workspace.setCreatedBy(workspaceDTO.getCreatedby());
 			workspace.setCreatedDate(workspaceDTO.getCreateddate());
 			workspace.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -153,7 +153,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 			workspace.setWorkspaceId(workspaceDTO.getWorkspaceid());
 			workspace.setWorkspaceName(workspaceDTO.getWorkspacename());
 			workspace.setDescription(workspaceDTO.getDescription());
-			workspace.setOwner(userDeepMapper.getUserDetails(workspaceDTO.getWorkspaceowner().getUsername()));
+			workspace.setOwner(userDeepMapper.getUser(workspaceDTO.getWorkspaceowner().getUsername()));
 			workspace.setCreatedBy(workspaceDTO.getCreatedby());
 			workspace.setCreatedDate(workspaceDTO.getCreateddate());
 			workspace.setUpdatedBy(workspaceDTO.getUpdatedby());
@@ -252,7 +252,7 @@ public class WorkspaceDeepMapper implements IWorkspaceDeepMapper  {
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
-				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
+				collaborator.setUserObj(userDeepMapper.getUser(userName));
 				
 				// Create ProjectCollaborator object
 				IWorkspaceCollaborator workspaceCollaborator = workspaceCollaboratorFactory.createWorkspaceCollaboratorObject();

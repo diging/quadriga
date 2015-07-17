@@ -3,6 +3,8 @@ package edu.asu.spring.quadriga.service.user.mapper;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.User;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
 public interface IUserDeepMapper {
@@ -13,7 +15,7 @@ public interface IUserDeepMapper {
 	 *  @return      								null - if the user is not present in the quadriga DB else IUser - User object containing the user details.
 	 *  @throws QuadrigaStorageException 			Exception will be thrown when the input parameters do not satisfy the system/database constraints or due to database connection troubles.
 	 */
-	public abstract IUser getUserDetails(String userName)
+	public abstract IUser getUser(String userName)
 			throws QuadrigaStorageException;
 
 	/**

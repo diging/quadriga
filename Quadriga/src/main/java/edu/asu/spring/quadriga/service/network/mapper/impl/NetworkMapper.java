@@ -59,7 +59,7 @@ public class NetworkMapper implements INetworkMapper{
 
 			network.setStatus(networksDTO.getStatus());
 			if(networksDTO.getNetworkowner() != null)
-				network.setCreator(userDeepMapper.getUserDetails(networksDTO.getNetworkowner()));
+				network.setCreator(userDeepMapper.getUser(networksDTO.getNetworkowner()));
 			network.setCreatedBy(networksDTO.getCreatedby());
 			network.setCreatedDate(networksDTO.getCreateddate());
 			network.setUpdatedBy(networksDTO.getUpdatedby());
@@ -110,7 +110,7 @@ public class NetworkMapper implements INetworkMapper{
 
 			network.setStatus(networksDTO.getStatus());
 			if(networksDTO.getNetworkowner() != null)
-				network.setCreator(userDeepMapper.getUserDetails(networksDTO.getNetworkowner()));
+				network.setCreator(userDeepMapper.getUser(networksDTO.getNetworkowner()));
 			network.setCreatedBy(networksDTO.getCreatedby());
 			network.setCreatedDate(networksDTO.getCreateddate());
 			network.setUpdatedBy(networksDTO.getUpdatedby());
@@ -203,7 +203,7 @@ public class NetworkMapper implements INetworkMapper{
 				IWorkspaceNetwork networkworkspace = networkworkspacemapper.getNetworkWorkspaceByNetworkDTO(networkDTO, network);
 				network.setNetworkWorkspace(networkworkspace);
 				if(networkDTO.getNetworkowner() != null)
-					network.setCreator(userDeepMapper.getUserDetails(networkDTO.getNetworkowner()));
+					network.setCreator(userDeepMapper.getUser(networkDTO.getNetworkowner()));
 				networkList.add(network);	
 			}
 		}

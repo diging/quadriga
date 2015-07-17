@@ -91,7 +91,7 @@ public class AddWSCollabController
 
 				IUser user;
 				try {
-					user = userManager.getUserDetails(text);
+					user = userManager.getUser(text);
 					setValue(user);
 				} catch (QuadrigaStorageException e) {
 					logger.error("In ModifyWSCollabController class :"+e);

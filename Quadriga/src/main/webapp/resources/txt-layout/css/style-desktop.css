@@ -62,10 +62,15 @@
 		font-size: 1.25em;
 	}
 
-	.button
+	.button, input.ui-button
 	{
 		font-size: 1.25em;
-		padding: 0.85em 1.85em 0.85em 1.85em;
+		padding: 0.1em 1.1em 0.1em 1.1em;
+	}
+	
+	input.ui-button {
+	   padding: 0.2em 1.1em 0.2em 1.1em;
+	   margin-bottom:20px;
 	}
 
 	.button-big

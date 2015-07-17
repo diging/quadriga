@@ -85,7 +85,7 @@ public class ConceptCollectionShallowMapper implements
 			ccProxy.setConceptCollectionId(ccDTO.getConceptCollectionid());
 			ccProxy.setConceptCollectionName(ccDTO.getCollectionname());
 			ccProxy.setDescription(ccDTO.getDescription());
-			ccProxy.setOwner(userDeepMapper.getUserDetails(ccDTO.getCollectionowner().getUsername()));
+			ccProxy.setOwner(userDeepMapper.getUser(ccDTO.getCollectionowner().getUsername()));
 			ccProxy.setCreatedBy(ccDTO.getCreatedby());
 			ccProxy.setCreatedDate(ccDTO.getCreateddate());
 			ccProxy.setUpdatedBy(ccDTO.getUpdatedby());

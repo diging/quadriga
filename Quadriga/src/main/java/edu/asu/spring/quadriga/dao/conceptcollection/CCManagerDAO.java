@@ -233,7 +233,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 			{
 				collection.setDescription(conceptcollectionsDTO.getDescription());
 				collection.setConceptCollectionName(conceptcollectionsDTO.getCollectionname());
-				owner = userManager.getUserDetails(conceptcollectionsDTO.getCollectionowner().getUsername());
+				owner = userManager.getUser(conceptcollectionsDTO.getCollectionowner().getUsername());
 				collection.setOwner(owner);
 				if(conceptcollectionsDTO.getConceptCollectionItemsDTOList() != null && conceptcollectionsDTO.getConceptCollectionItemsDTOList().size() > 0)
 				{
@@ -333,7 +333,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 				Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				IUser user = userFactory.createUserObject();
-				user = userManager.getUserDetails((String) pairs.getKey());
+				user = userManager.getUser((String) pairs.getKey());
 				collaborator.setUserObj(user);
 				//fetch the collaborator roles
 				String userRoleList = (String) pairs.getValue();
@@ -727,7 +727,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 					Map.Entry pairs = (Map.Entry)userRoleMapItr.next();
 					ICollaborator collaborator = collaboratorFactory.createCollaborator();
 					IUser user = userFactory.createUserObject();
-					user = userManager.getUserDetails((String) pairs.getKey());
+					user = userManager.getUser((String) pairs.getKey());
 					collaborator.setUserObj(user);
 					String userRoleList = (String) pairs.getValue();
 					collaboratorRoles = splitAndgetCollaboratorRolesList(userRoleList.substring(0, userRoleList.length()-1));

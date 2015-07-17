@@ -151,7 +151,7 @@ public class ModifyWSController {
 		String userName = principal.getName();
 		model = new ModelAndView(
 				"auth/workbench/workspace/updateworkspace");
-			wsOwner = userManager.getUserDetails(userName);
+			wsOwner = userManager.getUser(userName);
 
 			// set the workspace owner
 			workspace.setOwner(wsOwner);
@@ -183,7 +183,7 @@ public class ModifyWSController {
 	 */
 	@RequestMapping(value = "auth/workbench/workspace/assignEditorRoleToOwner/{workspaceid}", method = RequestMethod.GET)
 	public String assignEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException, RestException{
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
 		String msg="";
 		modifyWSManager.assignEditorRoleToOwner(workspaceId, userName);
@@ -261,7 +261,7 @@ public class ModifyWSController {
 	 */
 	@RequestMapping(value = "auth/workbench/workspace/deleteEditorRoleToOwner/{workspaceid}", method = RequestMethod.GET)
 	public String deleteEditorRoleToOwner(@PathVariable("workspaceid") String workspaceId, ModelMap model,Principal principal) throws QuadrigaStorageException, QuadrigaException, QuadrigaAccessException, RestException{
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		String userName =user.getUserName();
 		String msg=modifyWSManager.deleteEditorRoleToOwner(workspaceId, userName);
 		IWorkSpace workspace;

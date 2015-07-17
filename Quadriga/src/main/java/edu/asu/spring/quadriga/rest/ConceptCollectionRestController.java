@@ -199,7 +199,7 @@ public class ConceptCollectionRestController {
 			Principal principal) throws QuadrigaException,
 			ParserConfigurationException, SAXException, IOException,
 			JAXBException, QuadrigaAccessException, QuadrigaStorageException, RestException {
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		if (xml.equals("")) {
 			response.setStatus(404);
 			String errorMsg = restMessage.getErrorMsg("Please provide XML in body of the post request.",request);
@@ -340,7 +340,7 @@ public class ConceptCollectionRestController {
 			ModelMap model, Principal principal )
 			throws RestException, QuadrigaStorageException,
 			QuadrigaAccessException {
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		String ccName = request.getParameter("name");
 		String desc = request.getParameter("desc");
 		

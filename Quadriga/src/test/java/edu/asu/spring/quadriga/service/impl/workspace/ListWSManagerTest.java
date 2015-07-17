@@ -97,7 +97,7 @@ public class ListWSManagerTest {
 		workspaceList = dbConnect.listWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
-		user = userManager.getUserDetails("projuser");
+		user = userManager.getUser("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
 		workspace.setWorkspaceName("testprojws1");
@@ -147,7 +147,7 @@ public class ListWSManagerTest {
 		workspaceList = wsManager.listActiveWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
-		user = userManager.getUserDetails("projuser");
+		user = userManager.getUser("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
 		workspace.setWorkspaceName("testprojws1");
@@ -183,7 +183,7 @@ public class ListWSManagerTest {
 		workspaceList = wsManager.listArchivedWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
-		user = userManager.getUserDetails("projuser");
+		user = userManager.getUser("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
 		workspace.setWorkspaceName("testprojws3");
@@ -212,7 +212,7 @@ public class ListWSManagerTest {
 		workspaceList = wsManager.listDeactivatedWorkspace("PROJ_2","projuser");
 		
 		//create workspace objects
-		user = userManager.getUserDetails("projuser");
+		user = userManager.getUser("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
 		workspace.setWorkspaceName("testprojws4");
@@ -240,7 +240,7 @@ public class ListWSManagerTest {
 		workspace = wsManager.getWorkspaceDetails("WS_1","projuser");
 		
 		//create workspace objects
-		user = userManager.getUserDetails("projuser");
+		user = userManager.getUser("projuser");
 		
 		testWorkspace = workspaceFactory.createWorkspaceObject();
 		testWorkspace.setWorkspaceName("testprojws1");

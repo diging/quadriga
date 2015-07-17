@@ -165,7 +165,7 @@ public class ConceptcollectionController {
 		model.addAttribute("conceptlist", list);
 		collab_list = conceptControllerManager.getUserCollaborations(userId);
 		model.addAttribute("collaborationlist", collab_list);
-		user = usermanager.getUserDetails(userId);
+		user = usermanager.getUser(userId);
 		username = user.getUserName();
 		model.addAttribute("username", username);
 		return "auth/conceptcollections";
@@ -336,7 +336,7 @@ public class ConceptcollectionController {
 					.createConceptCollectionObject());
 		}
 
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		collection.setOwner(user);
 
 		conceptControllerManager.addConceptCollection(collection);

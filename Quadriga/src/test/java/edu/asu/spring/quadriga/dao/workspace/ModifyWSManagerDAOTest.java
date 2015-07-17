@@ -332,7 +332,7 @@ public class ModifyWSManagerDAOTest {
 		IWorkSpace testWorkspace;
 		
 		//create workspace objects
-		user = userManager.getUserDetails("projuser");
+		user = userManager.getUser("projuser");
 		
 		workspace = workspaceFactory.createWorkspaceObject();
 		workspace.setWorkspaceName("testprojws2");

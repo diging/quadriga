@@ -125,7 +125,7 @@ public class RetrieveProjectManagerDAOTest {
 		project.setUnixName("testproject1");
 		project.setProjectId("PROJ_1");
 		project.setProjectAccess(EProjectAccessibility.valueOf("PUBLIC"));
-		user = userManager.getUserDetails("projuser");
+		user = userManager.getUser("projuser");
 		project.setOwner(user);
 		testProject = retrieveProjectManager.getProjectDetails("PROJ_1");
 		if(testProject == null)

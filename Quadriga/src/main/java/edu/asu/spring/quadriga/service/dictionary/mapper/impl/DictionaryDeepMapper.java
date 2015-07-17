@@ -96,7 +96,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			dictionary.setCreatedDate(dictionaryDTO.getCreateddate());
 			dictionary.setUpdatedBy(dictionaryDTO.getUpdatedby());
 			dictionary.setUpdatedDate(dictionaryDTO.getUpdateddate());
-			dictionary.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+			dictionary.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
 			
 			// Setting dictionary collaborator
 			dictionary.setDictionaryCollaborators(getDictionaryCollaboratorList(dictionaryDTO, dictionary));
@@ -128,7 +128,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			dictionary.setCreatedDate(dictionaryDTO.getCreateddate());
 			dictionary.setUpdatedBy(dictionaryDTO.getUpdatedby());
 			dictionary.setUpdatedDate(dictionaryDTO.getUpdateddate());
-			dictionary.setOwner(userDeepMapper.getUserDetails(dictionaryDTO.getDictionaryowner().getUsername()));
+			dictionary.setOwner(userDeepMapper.getUser(dictionaryDTO.getDictionaryowner().getUsername()));
 			
 			// Setting dictionary collaborator
 			dictionary.setDictionaryCollaborators(getDictionaryCollaboratorList(dictionaryDTO, dictionary));
@@ -240,7 +240,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				// Set Collaborator Role List to the Collaborator
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
-				collaborator.setUserObj(userDeepMapper.getUserDetails(userName));
+				collaborator.setUserObj(userDeepMapper.getUser(userName));
 				// Create ProjectCollaborator object
 				IDictionaryCollaborator dictionaryCollaborator = dictionaryCollaboratorFactory.createDictionaryCollaboratorObject();
 				dictionaryCollaborator.setCollaborator(collaborator);

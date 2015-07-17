@@ -92,6 +92,31 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 		}		
 	}
 	
+	/**
+	 * Add a new user account request to Quadriga.
+	 * @param username Username of new user.
+	 * @param password Password for new user.
+	 * @param fullname Full name of new user.
+	 * @param email Email of new user.
+	 * @return true if request was stored successfully; otherwise false.
+	 * @throws QuadrigaStorageException in case there is a DB error.
+	 */
+	@Override
+    public boolean addNewUserAccountRequest(String username, String password, String fullname, String email) throws QuadrigaStorageException {
+	    QuadrigaUserRequestsDTO userRequestDTO = new QuadrigaUserRequestsDTO(username, username, new Date(), username, new Date());
+	    userRequestDTO.setPasswd(password);
+	    userRequestDTO.setEmail(email);
+	    userRequestDTO.setFullname(fullname);
+	    
+	    try {
+    	    sessionFactory.getCurrentSession().save(userRequestDTO);
+    	    sessionFactory.getCurrentSession().flush();
+    	    return true;
+	    } catch (Exception e) {
+	        throw new QuadrigaStorageException(e);
+	    }
+	}
+	
 	
 	/**
 	 * {@inheritDoc} 
@@ -111,6 +136,18 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 		catch(Exception e)
 		{
 			logger.error("Error in fetching all user account requests: ",e);
+			throw new QuadrigaStorageException(e);
+		}
+	}
+	
+	public QuadrigaUserDTO findUser(String username) throws QuadrigaStorageException {
+		try {
+			Object userObj = sessionFactory.getCurrentSession().load(QuadrigaUserDTO.class, username);
+			if (userObj != null)
+				return (QuadrigaUserDTO) userObj;
+			return null;
+		} catch (Exception e) {
+			logger.error("Couldn't find user.");
 			throw new QuadrigaStorageException(e);
 		}
 	}
@@ -341,19 +378,30 @@ public class UserManagerDAO extends DAOConnectionManager implements IDBConnectio
 	 * @author Kiran Batna
 	 */
 	@Override
-	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException
-	{
+	public QuadrigaUserDTO getUserDTO(String userName) throws QuadrigaStorageException {
 		try
 		{
-		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
-		query.setParameter("username", userName);
-		return (QuadrigaUserDTO) query.uniqueResult();
+    		Query query = sessionFactory.getCurrentSession().getNamedQuery("QuadrigaUserDTO.findByUsername");
+    		query.setParameter("username", userName);
+    		return (QuadrigaUserDTO) query.uniqueResult();
 		}
 		catch(Exception e)
 		{
 			logger.error("getProjectOwner :",e);
-        	throw new QuadrigaStorageException();
+        	throw new QuadrigaStorageException(e);
 		}
+	}
+	
+	@Override
+    public QuadrigaUserRequestsDTO getUserRequestDTO(String username) throws QuadrigaStorageException {
+	    try {
+	        Object obj = sessionFactory.getCurrentSession().get(QuadrigaUserRequestsDTO.class, username);
+	        if (obj != null)
+	            return (QuadrigaUserRequestsDTO) obj;
+	        return null;
+	    } catch(Exception e) {
+	        throw new QuadrigaStorageException(e);
+	    }
 	}
 	
 	

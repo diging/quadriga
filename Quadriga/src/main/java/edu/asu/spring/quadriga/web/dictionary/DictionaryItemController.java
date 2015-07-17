@@ -150,7 +150,7 @@ public class DictionaryItemController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";
@@ -224,7 +224,7 @@ public class DictionaryItemController {
 			@PathVariable("dictionaryid") String dictionaryId, ModelMap model,
 			Principal principal) throws QuadrigaStorageException {
 
-		IUser user = usermanager.getUserDetails(principal.getName());
+		IUser user = usermanager.getUser(principal.getName());
 		String[] values = req.getParameterValues("selected");
 		String msg = "";
 		String errormsg = "";

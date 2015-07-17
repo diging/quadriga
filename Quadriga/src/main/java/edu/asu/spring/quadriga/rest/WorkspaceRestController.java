@@ -214,7 +214,7 @@ public class WorkspaceRestController {
 	public String addWorkspaceToProject(@PathVariable("project_id") String projectId,HttpServletRequest request,
 			HttpServletResponse response, @RequestBody String xml,
 			@RequestHeader("Accept") String accept, ModelMap model, Principal principal) throws RestException, QuadrigaStorageException, QuadrigaAccessException{
-		IUser user = userManager.getUserDetails(principal.getName());
+		IUser user = userManager.getUser(principal.getName());
 		
 		
 		logger.debug("XML : "+xml);

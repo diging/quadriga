@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +16,16 @@ import edu.asu.spring.quadriga.db.IModifyUserRoles;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
+import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
+import edu.asu.spring.quadriga.dto.QuadrigaUserRequestsDTO;
 import edu.asu.spring.quadriga.email.IEmailNotificationManager;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.exceptions.UsernameExistsException;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.web.login.RoleNames;
+import edu.asu.spring.quadriga.web.manageusers.beans.AccountRequest;
 
 /**
  * @description  UserManager class implementing the User
@@ -54,22 +59,6 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private IDBConnectionManager usermanagerDAO;
 
-	public IEmailNotificationManager getEmailManager() {
-		return emailManager;
-	}
-
-	public void setEmailManager(IEmailNotificationManager emailManager) {
-		this.emailManager = emailManager;
-	}
-
-	public IUserFactory getUserFactory() {
-		return userFactory;
-	}
-
-	public void setUserFactory(IUserFactory userFactory) {
-		this.userFactory = userFactory;
-	}
-
 	/**
 	 * @description : retrieve the user details from DBConectionManager and
 	 *                retrieve the associate roles from the quadriga-roles.xml
@@ -86,11 +75,9 @@ public class UserManager implements IUserManager {
 	 */
 	@Override
 	@Transactional
-	public IUser getUserDetails(String sUserId) throws QuadrigaStorageException
+	public IUser getUser(String sUserId) throws QuadrigaStorageException
 	{
-		IUser user = userDeepMapper.getUserDetails(sUserId);
-
-		return user;	
+		return userDeepMapper.getUser(sUserId);
 	}
 
 	/**
@@ -163,7 +150,7 @@ public class UserManager implements IUserManager {
 		if(iResult == SUCCESS)
 		{
 			logger.info("The admin "+sAdminId+" deactivated the account of "+sUserId);
-			IUser user = this.getUserDetails(sUserId);
+			IUser user = this.getUser(sUserId);
 
 			if(user.getEmail()!=null && !user.getEmail().equals(""))
 				emailManager.sendAccountDeactivationEmail(user, sAdminId);
@@ -249,7 +236,7 @@ public class UserManager implements IUserManager {
 		//Find all the roles of the user
 		IUser user = null;
 
-		user = userDeepMapper.getUserDetails(sUserId);
+		user = userDeepMapper.getUser(sUserId);
 
 		//Remove the deactivated role from user roles
 		if(user!=null)
@@ -285,6 +272,36 @@ public class UserManager implements IUserManager {
 
 		return iResult;
 	}
+	
+	/**
+	 * This method adds a new user account request to the database. it encrypts the
+	 * user's password using the BCrypt algorithm.
+	 * @param request The {@link AccountRequest} encapsulating the user's data.
+	 * @return true if request was successfully added; otherwise false
+	 * @author jdamerow
+	 * @throws QuadrigaStorageException
+	 * @throws UsernameExistsException
+	 */
+	@Override
+    @Transactional
+	public boolean addNewUser(AccountRequest request) throws QuadrigaStorageException, UsernameExistsException {
+	    QuadrigaUserDTO userDTO = usermanagerDAO.getUserDTO(request.getUsername());
+	    
+	    // Check if username is already in use
+	    if (userDTO != null)
+	        throw new UsernameExistsException("Username already in use.");
+	    
+	    QuadrigaUserRequestsDTO userRequest = usermanagerDAO.getUserRequestDTO(request.getUsername());
+	    if (userRequest != null)
+	        throw new UsernameExistsException("Username already in use.");
+	    
+	    String plainPassword = request.getPassword();
+	    return usermanagerDAO.addNewUserAccountRequest(request.getUsername(), encryptPassword(plainPassword), request.getName(), request.getEmail());    
+	}
+	
+	private String encryptPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 
 	/**
 	 * Add a new user request to access quadriga.
