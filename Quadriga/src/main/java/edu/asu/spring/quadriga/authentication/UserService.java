@@ -1,4 +1,4 @@
-package edu.asu.spring.quadriga.service;
+package edu.asu.spring.quadriga.authentication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IUserManager;
+import edu.asu.spring.quadriga.service.QuadrigaUserDetails;
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 
 @Service("userService")
@@ -37,7 +39,7 @@ public class UserService implements UserDetailsService {
 		
 		List<QuadrigaGrantedAuthority> roles = new ArrayList<QuadrigaGrantedAuthority>();
 		for (IQuadrigaRole role : user.getQuadrigaRoles()) {
-			roles.add(new QuadrigaGrantedAuthority(role.getName()));
+			roles.add(new QuadrigaGrantedAuthority(role.getId()));
 		}
 		
 		UserDetails details = new QuadrigaUserDetails(user.getUserName(), user.getName(), user.getPassword(), roles, user.getEmail());

@@ -23,10 +23,10 @@ $(document).ready(function() {
 			${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
 		</div>
 	</c:if>
- <span style="float: right">
+ <!-- <span style="float: right">
 Language : <a href="${pageContext.servletContext.contextPath}/login?siteLanguage=en_US">English</a>|
     <a href="${pageContext.servletContext.contextPath}/login?siteLanguage=zh_CN">Chinese</a>
-</span>
+</span> -->
 	<form name='f' action="<c:url value='j_spring_security_check' />"
 		method='POST'>
 		<table>
@@ -42,7 +42,7 @@ Language : <a href="${pageContext.servletContext.contextPath}/login?siteLanguage
 			</tr>
 			<tr>
 				<td colspan='2'><input name="submit" type="submit"
-					value="submit" class="button"/>
+					value="Login" class="button"/>
 				</td>
 			</tr>
 			<tr>
