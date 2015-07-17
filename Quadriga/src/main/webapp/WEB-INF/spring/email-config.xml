@@ -17,4 +17,7 @@
         </property>
     </bean>
    
+   <bean id="emailNoficationSender" class="edu.asu.spring.quadriga.email.impl.EmailNotificationSender">
+       <property name="enabled" value="false" />
+   </bean>
 </beans>

@@ -119,4 +119,6 @@ public interface IUser
 	 * @param updatedDate - the date on which the user record is updated.
 	 */
 	public abstract  void setUpdatedDate(Date updatedDate);
+	
+	public String getQuadrigaRolesAsString();
 }

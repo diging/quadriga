@@ -2,6 +2,8 @@ package edu.asu.spring.quadriga.web.manageusers;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -68,11 +70,13 @@ public class ModifyUserRolesController
 		List<IUser> activeUserList = userManager.getAllActiveUsers();
 		
 		//remove the admin user from the active user list
-		for(IUser user : activeUserList)
+		Iterator<IUser> userIt = activeUserList.listIterator();
+		while(userIt.hasNext())
 		{
+		    IUser user = userIt.next();
 			if(user.getUserName().equals("admin"))
 			{
-				activeUserList.remove(user);
+				userIt.remove();
 			}
 		}
 		

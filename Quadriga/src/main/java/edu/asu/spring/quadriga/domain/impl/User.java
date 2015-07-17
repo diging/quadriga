@@ -128,4 +128,15 @@ public class User implements IUser
             return false;
         return true;
     }
+    @Override
+    public String getQuadrigaRolesAsString() {
+        StringBuffer sb = new StringBuffer();
+        
+        for (IQuadrigaRole role : quadrigaRoles) {
+            sb.append(role.getDBid());
+            sb.append(",");
+        }
+        
+        return sb.toString();
+    }
 }

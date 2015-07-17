@@ -243,12 +243,12 @@ public class UserManager implements IUserManager {
 		{
 			IQuadrigaRole quadrigaRole = null;
 			List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
-			List<IQuadrigaRole> userRole = user.getQuadrigaRoles();
-			for(int i=0;i<userRole.size();i++)
+			List<IQuadrigaRole> userRoles = user.getQuadrigaRoles();
+			for(IQuadrigaRole role : userRoles)
 			{				
-				if(!userRole.get(i).getDBid().equals(sDeactiveRoleDBId))
+				if(!role.getDBid().equals(sDeactiveRoleDBId))
 				{
-					quadrigaRole = rolemanager.getQuadrigaRole(userRole.get(i).getDBid());
+					quadrigaRole = rolemanager.getQuadrigaRole(role.getDBid());
 					rolesList.add(quadrigaRole);
 				}
 			}
@@ -257,7 +257,7 @@ public class UserManager implements IUserManager {
 			//Convert the user roles to one string with DBROLEIDs
 			//Update the role in the Quadriga Database.
 			//TODO: Change the method to update the user roles.
-//			iResult = usermanagerDAO.updateUserRoles(sUserId, user.getQuadrigaRolesDBId(), sAdminId);
+			iResult = usermanagerDAO.updateUserRoles(sUserId, user.getQuadrigaRolesAsString(), sAdminId);
 			
 			if(iResult == SUCCESS)
 			{
