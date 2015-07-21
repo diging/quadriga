@@ -25,6 +25,6 @@ public interface IServiceRegistry {
 	 * 
 	 * @return	map of serviceName and serviceId
 	 */
-	public abstract Map<String,String> getServiceNameIdMap();
+	public abstract Map<String,String> getServiceIdNameMap();
 
 }

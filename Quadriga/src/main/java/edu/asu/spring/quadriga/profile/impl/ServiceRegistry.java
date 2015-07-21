@@ -29,17 +29,10 @@ public class ServiceRegistry implements IServiceRegistry {
 	@Autowired
 	private ApplicationContext ctx;
 	
-	private Map<String, IService> serviceMap;
-	private Map<String, IService> newServiceMap;
+	private Map<String, IService> servicesMap;
 	private Map<String,String> serviceIdNameMap;
 	
-	public Map<String, String> getServiceIdNameMap() {
-		return serviceIdNameMap;
-	}
-
-	public void setServiceIdNameMap(Map<String, String> serviceIdNameMap) {
-		this.serviceIdNameMap = serviceIdNameMap;
-	} 
+	
 		
 /**
  * instantiates all the services under IService interface
@@ -49,16 +42,16 @@ public class ServiceRegistry implements IServiceRegistry {
 	@PostConstruct
 	public void init(){
 		
-		newServiceMap = new HashMap<String, IService>();
-		serviceMap = ctx.getBeansOfType(IService.class);
-		Iterator<?> serviceIter = serviceMap.entrySet().iterator();
+		servicesMap = new HashMap<String, IService>();
+		Map<String, IService> serviceCtxMap = ctx.getBeansOfType(IService.class);
+		Iterator<?> serviceIter = serviceCtxMap.entrySet().iterator();
 		
 		while(serviceIter.hasNext()){
 			
 			@SuppressWarnings("rawtypes")
 			Map.Entry mEntry = (Map.Entry) serviceIter.next();
 			IService serviceObject = (IService) mEntry.getValue();
-			newServiceMap.put(serviceObject.getServiceId(), serviceObject);	
+			servicesMap.put(serviceObject.getServiceId(), serviceObject);	
 		}
 	}
 
@@ -73,7 +66,7 @@ public class ServiceRegistry implements IServiceRegistry {
 	@Override
 	public IService getServiceObject(String serviceId) {
 		
-		return newServiceMap.get(serviceId);
+		return servicesMap.get(serviceId);
 	}
 
 /**
@@ -84,10 +77,10 @@ public class ServiceRegistry implements IServiceRegistry {
  * 
  */
 	@Override
-	public Map<String, String> getServiceNameIdMap() {
+	public Map<String, String> getServiceIdNameMap() {
 
 		serviceIdNameMap = new HashMap<String,String>();
-		Iterator<?> iterator = newServiceMap.entrySet().iterator();
+		Iterator<?> iterator = servicesMap.entrySet().iterator();
 		
 		while(iterator.hasNext()){
 			

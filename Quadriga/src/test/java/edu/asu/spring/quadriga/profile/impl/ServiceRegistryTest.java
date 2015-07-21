@@ -13,6 +13,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -22,75 +26,58 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
 
-@ContextConfiguration(locations={"file:src/test/resources/spring-security.xml", 
-"file:src/test/resources/root-context.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
 public class ServiceRegistryTest {
 	
-	@Autowired
+	@Mock
 	ApplicationContext ctx;
 	
-	private Map<String,IService> idServiceMap;
-	
+	@InjectMocks
+    private ServiceRegistry serviceRegistry;
+    
 	private Map<String,String> serviceNameIdMap;
 	
-	@Autowired
-	@Qualifier("conceptPowerService")
-	private IService conceptPower;
+	private ViafService viafService;
+	private ConceptPowerService conceptpowerService;
 	
-	@Autowired
-	@Qualifier("viafService")
-	private IService viafService;
 	
-	@Autowired
-	IServiceRegistry serviceRegistry;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		
-	}
-
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Before
 	public void setUp() throws Exception {
-	
-		//conceptPower = new ConceptPowerService();
-		//conceptPower.setName("conceptPower");
+	    ctx = Mockito.mock(ApplicationContext.class);
+	    MockitoAnnotations.initMocks(this);
+	    
+	    viafService = new ViafService();
+	    conceptpowerService = new ConceptPowerService();
+	    Map<String, IService> beanMap = new HashMap<String, IService>();
+	    beanMap.put("conceptPowerService", conceptpowerService);
+	    beanMap.put("viafService", viafService);
+	    
+	    Mockito.when(ctx.getBeansOfType(IService.class)).thenReturn(beanMap);
 		
-		
+	    serviceRegistry.init();
 	}
 	
 	
 
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	@Test
-	public void testInit() {
-		
-		idServiceMap = ctx.getBeansOfType(IService.class);
-		
-		IService service = idServiceMap.get("conceptPowerService");
-		
-		assertEquals(conceptPower,service);
-	}
-
+	
 	@Test
 	public void testGetServiceNameIdMap() {
+		
+		Map<String, String> services = new HashMap<String, String>();
+		services.put(viafService.getServiceId(), viafService.getName());
+		services.put(conceptpowerService.getServiceId(), conceptpowerService.getName());
+		
+		assertEquals(serviceRegistry.getServiceIdNameMap(), services);
+		
+	}
 
-		Map<String, String> dummyNameIdMap = new HashMap<String, String>();
-		
-		dummyNameIdMap.put(viafService.getServiceId(), viafService.getName());
-		dummyNameIdMap.put(conceptPower.getServiceId(), conceptPower.getName());
-		
-		serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
-		
-		assertEquals(dummyNameIdMap, serviceNameIdMap);
-		
+	@Test
+	public void testGetService() {
+	    assertEquals(viafService, serviceRegistry.getServiceObject(viafService.getServiceId()));
+	    assertEquals(conceptpowerService, serviceRegistry.getServiceObject(conceptpowerService.getServiceId()));
 	}
 
 }

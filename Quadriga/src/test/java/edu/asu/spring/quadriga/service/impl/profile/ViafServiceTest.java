@@ -2,51 +2,24 @@ package edu.asu.spring.quadriga.service.impl.profile;
 
 import static org.junit.Assert.assertEquals;
 
-import java.security.Principal;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.sql.DataSource;
-
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
-import edu.asu.spring.quadriga.domain.IProfile;
-import edu.asu.spring.quadriga.domain.IQuadrigaRole;
-import edu.asu.spring.quadriga.domain.IUser;
-import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
-import edu.asu.spring.quadriga.domain.factories.IUserFactory;
-import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.jaxb.viaf.Channel;
 import edu.asu.spring.quadriga.jaxb.viaf.Item;
 import edu.asu.spring.quadriga.profile.ISearchResult;
-import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.impl.SearchResult;
 import edu.asu.spring.quadriga.profile.impl.ViafReply;
 import edu.asu.spring.quadriga.profile.impl.ViafService;
-import edu.asu.spring.quadriga.service.IUserProfileManager;
-import edu.asu.spring.quadriga.service.profile.IAuthorityFileSearchService;
-import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 
 public class ViafServiceTest {
 
@@ -57,7 +30,7 @@ public class ViafServiceTest {
 	private ViafService viafService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 	    template = Mockito.mock(RestTemplate.class);
 	    
 	    MockitoAnnotations.initMocks(this);
@@ -84,7 +57,7 @@ public class ViafServiceTest {
 	}
 	
 	@Test
-	public void testSearch() throws QuadrigaStorageException {
+	public void testSearch() {
 		
 	    List<ISearchResult> searchResults = viafService.search("Pirckheimer");
 	    ISearchResult searchResult = new SearchResult();

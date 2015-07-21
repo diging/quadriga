@@ -195,7 +195,7 @@ public class HomeController {
 
         model.addAttribute("ServiceBackBean", new ServiceBackBean());
         Map<String, String> serviceNameIdMap = serviceRegistry
-                .getServiceNameIdMap();
+                .getServiceIdNameMap();
         model.addAttribute("serviceNameIdMap", serviceNameIdMap);
         model.addAttribute("SearchResultBackBeanForm",
                 new SearchResultBackBeanForm());
@@ -224,7 +224,7 @@ public class HomeController {
 
         model.addAttribute("term", term);
 
-        serviceNameIdMap = serviceRegistry.getServiceNameIdMap();
+        serviceNameIdMap = serviceRegistry.getServiceIdNameMap();
 
         model.addAttribute("serviceNameIdMap", serviceNameIdMap);
 
@@ -266,7 +266,7 @@ public class HomeController {
             Principal principal, Model model) throws QuadrigaStorageException {
         String errmsg = null;
         Map<String, String> serviceidnamemap = serviceRegistry
-                .getServiceNameIdMap();
+                .getServiceIdNameMap();
 
         String profileid = null;
         String serviceid = null;
@@ -316,7 +316,7 @@ public class HomeController {
             throws QuadrigaStorageException {
 
         Map<String, String> serviceNameIdMap = serviceRegistry
-                .getServiceNameIdMap();
+                .getServiceIdNameMap();
         IService serviceObj = serviceRegistry.getServiceObject(serviceid);
 
         boolean atLeastOneTrue = false;
@@ -337,7 +337,7 @@ public class HomeController {
         if (!atLeastOneTrue) {
             model.addAttribute("ServiceBackBean", serviceBackBean);
             model.addAttribute("serviceNameIdMap",
-                    serviceRegistry.getServiceNameIdMap());
+                    serviceRegistry.getServiceIdNameMap());
             model.addAttribute("success", 2);
             model.addAttribute("errmsg",
                     "please select at least one entry from table");
