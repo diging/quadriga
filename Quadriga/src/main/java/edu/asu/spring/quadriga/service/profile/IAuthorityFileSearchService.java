@@ -11,7 +11,7 @@ import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
  * @author rohit pendbhaje
  *
  */
-public interface ISearchResultBackBeanFormManager {
+public interface IAuthorityFileSearchService {
 	
 /**
  * this method copies all the content of ISearchResult object to SearchResultBackBean object
@@ -21,6 +21,6 @@ public interface ISearchResultBackBeanFormManager {
  * @return				List of SearchResultBackBean objects
  */
 	
-	public abstract List<SearchResultBackBean> getsearchResultBackBeanList(String serviceId, String term);
+	public abstract List<SearchResultBackBean> searchInAuthorityFile(String serviceId, String term);
 
 }

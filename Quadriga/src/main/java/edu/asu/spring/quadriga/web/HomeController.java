@@ -33,11 +33,11 @@ import edu.asu.spring.quadriga.profile.IServiceRegistry;
 import edu.asu.spring.quadriga.profile.impl.ServiceBackBean;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
-import edu.asu.spring.quadriga.service.profile.ISearchResultBackBeanFormManager;
+import edu.asu.spring.quadriga.service.profile.IAuthorityFileSearchService;
 import edu.asu.spring.quadriga.validator.ProfileValidator;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanForm;
-import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBeanFormManager;
+import edu.asu.spring.quadriga.web.profile.impl.AuthorityFileSearchService;
 
 /**
  * Handles requests for the application home page.
@@ -65,7 +65,7 @@ public class HomeController {
     private IUserProfileManager userProfileManager;
 
     @Autowired
-    private SearchResultBackBeanFormManager backBeanFormManager;
+    private AuthorityFileSearchService backBeanFormManager;
 
     private Map<String, String> serviceNameIdMap;
 
@@ -229,7 +229,7 @@ public class HomeController {
         model.addAttribute("serviceNameIdMap", serviceNameIdMap);
 
         List<SearchResultBackBean> searchResultList = backBeanFormManager
-                .getsearchResultBackBeanList(serviceId, term);
+                .searchInAuthorityFile(serviceId, term);
 
         if (!searchResultList.isEmpty()) {
             SearchResultBackBeanForm searchResultBackBeanForm = new SearchResultBackBeanForm();

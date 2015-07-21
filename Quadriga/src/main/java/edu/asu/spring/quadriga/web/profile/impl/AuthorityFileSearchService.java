@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.profile.ISearchResult;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
-import edu.asu.spring.quadriga.service.profile.ISearchResultBackBeanFormManager;
+import edu.asu.spring.quadriga.service.profile.IAuthorityFileSearchService;
 
 /**
  * this class retrieves items returned by authority service and copies it into the searchresultbackbean 
@@ -19,7 +19,7 @@ import edu.asu.spring.quadriga.service.profile.ISearchResultBackBeanFormManager;
  */
 
 @Service
-public class SearchResultBackBeanFormManager implements ISearchResultBackBeanFormManager {
+public class AuthorityFileSearchService implements IAuthorityFileSearchService {
 	
 	
 	@Autowired
@@ -37,7 +37,7 @@ public class SearchResultBackBeanFormManager implements ISearchResultBackBeanFor
  * @return	list of copied searchresults of SearchResultBackBean class returned from viaf service
  */
 	@Override
-	public List<SearchResultBackBean> getsearchResultBackBeanList(String serviceId, String term){
+	public List<SearchResultBackBean> searchInAuthorityFile(String serviceId, String term){
 		 	
 		IService serviceObj = serviceRegistry.getServiceObject(serviceId);
 		List<ISearchResult> searchResults = serviceObj.search(term);

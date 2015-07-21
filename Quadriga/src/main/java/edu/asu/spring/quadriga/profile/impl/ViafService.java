@@ -28,9 +28,6 @@ public class ViafService implements IService {
 	@Autowired
 	private ISearchResult searchResult;
 	
-	@Autowired
-	private IDBConnectionProfileManager dbConnectionProfileManager;
-	
 	private final static String SERVICE_ID = "edu.asu.viaf";
 	private final static String SERVICE_NAME = "Viaf";
 		
