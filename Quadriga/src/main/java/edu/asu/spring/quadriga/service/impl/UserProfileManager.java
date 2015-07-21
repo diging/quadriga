@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
+import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserProfileManager;
 import edu.asu.spring.quadriga.web.profile.impl.SearchResultBackBean;
@@ -50,11 +51,8 @@ public class UserProfileManager implements IUserProfileManager {
  */
 	@Override
 	@Transactional
-	public List<SearchResultBackBean> showUserProfile(String loggedinUser) throws QuadrigaStorageException {
-		
-		List<SearchResultBackBean> searchResultList = connectionProfileManager.showProfileDBRequest(loggedinUser);
-		
-		return searchResultList;
+	public List<IProfile> getUserProfiles(String loggedinUser) throws QuadrigaStorageException {	
+		return connectionProfileManager.getUserProfiles(loggedinUser);
 	}
 
 /**

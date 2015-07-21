@@ -13,7 +13,7 @@ public class ProfileFactory implements IProfileFactory {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IProfile createProfileObject() {
+	public IProfile createProfile() {
 		
 		return new Profile();
 	}

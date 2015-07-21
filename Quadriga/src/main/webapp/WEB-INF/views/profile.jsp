@@ -102,12 +102,12 @@ action="${pageContext.servletContext.contextPath}/auth/profile/search">
 	<c:if test="${not empty searchResultList}">
 		<form:form method="POST"  modelAttribute="SearchResultBackBeanForm" 
 		action="${pageContext.servletContext.contextPath}/auth/profile/${serviceid}/${term}/add">
-		 Results of the Search
-		 <br>
+		 <h3>Search results</h3>
+		 
 		 <input type="button" value="Select All" name="selectAll"> 
 		 <input type="button" value="Deselect All" name="deselectAll">
 		
-		 <input type="submit" value="Select & Save">
+		 <input type="submit" value="Save selected">
 			 <table style="width:100%" cellpadding="0" cellspacing="0" border="0" class="display dataTable">	
 				
 				<thead>

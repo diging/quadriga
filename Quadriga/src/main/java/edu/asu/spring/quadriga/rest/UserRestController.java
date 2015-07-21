@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.asu.spring.quadriga.domain.IProfile;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IRestVelocityFactory;
 import edu.asu.spring.quadriga.exceptions.RestException;
@@ -70,7 +71,7 @@ public class UserRestController {
 		
 		IUser userDetails = userManager.getUser(principal.getName());
 		VelocityEngine engine = restVelocityFactory.getVelocityEngine(req);
-		List<SearchResultBackBean> authFiles = profileManager.showUserProfile(userDetails.getUserName());
+		List<IProfile> authFiles = profileManager.getUserProfiles(userDetails.getUserName());
 		Template template = null;
 		try {
 			engine.init();

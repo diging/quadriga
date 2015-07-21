@@ -7,10 +7,10 @@
 	<Quadriga:uri>$url/rest/userDetails/$userdetails.userName</Quadriga:uri>
 	<Quadriga:authorityFileEntryList>
 		#foreach ($authFileList in $list)
-		<Quadriga:authorityFileEntry type="$authFileList">
-			<Quadriga:name>$authFileList.word</Quadriga:name>
-			<Quadriga:url>$authFileList.id</Quadriga:url>
-			<Quadriga:authorityType>$authFileList.id</Quadriga:authorityType>
+		<Quadriga:authorityFileEntry type="$authFileList.serviceId">
+			<Quadriga:name>$authFileList.profilename</Quadriga:name>
+			<Quadriga:url>$authFileList.profileId</Quadriga:url>
+			<Quadriga:authorityType>$authFileList.profileId</Quadriga:authorityType>
 			<Quadriga:description>$authFileList.description</Quadriga:description>
 			<Quadriga:serviceId>$authFileList.serviceId</Quadriga:serviceId>
 		</Quadriga:authorityFileEntry>

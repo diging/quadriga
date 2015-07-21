@@ -10,18 +10,21 @@ import edu.asu.spring.quadriga.domain.IUser;
  */
 public class Profile implements IProfile {
 
-	String serviceName;
-	String uri;
-	IUser userObj;
+	private String serviceId;
+	private String uri;
+	private IUser userObj;
+	private String profilename;
+	private String description;
+	private String profileId;
 	
 	@Override
-	public String getServiceName() {
-		return serviceName;
+	public String getServiceId() {
+		return serviceId;
 	}
 
 	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
 
 	}
 
@@ -45,5 +48,34 @@ public class Profile implements IProfile {
 		
 		this.userObj = userObj;		
 	}
+
+    @Override
+    public String getProfilename() {
+        return profilename;
+    }
+
+    @Override
+    public void setProfilename(String profilename) {
+        this.profilename = profilename;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(String profileid) {
+        this.profileId = profileid;
+    }
 
 }
