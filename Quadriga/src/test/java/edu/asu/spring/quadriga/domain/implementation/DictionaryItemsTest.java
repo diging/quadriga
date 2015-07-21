@@ -20,19 +20,12 @@ import edu.asu.spring.quadriga.domain.factories.impl.UserFactory;
 import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Item;
 
-@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-"file:src/test/resources/root-context.xml" })
-
-@RunWith(SpringJUnit4ClassRunner.class)
 public class DictionaryItemsTest {
 
 	private Item dictionaryItems;
-	private IUser owner;
 	
-	@Autowired
 	UserFactory userFactory;
 	
-	@Autowired
 	DictionaryItemFactory dictionaryItemsFactory;
 
 	
@@ -46,9 +39,10 @@ public class DictionaryItemsTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//this.dictionaryItems =  dictionaryItemsFactory.createDictionaryItemsObject();
+		userFactory = new UserFactory();
+		dictionaryItemsFactory = new DictionaryItemFactory();
+	    
 		this.dictionaryItems = new Item();
-		this.owner = userFactory.createUserObject();
 	}
 
 	@After

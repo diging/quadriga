@@ -418,5 +418,15 @@ public class UserManager implements IUserManager {
 			throw new QuadrigaStorageException(ex.getMessage());
 		}
 	}
+	
+	public IUserFactory getUserFactory() {
+        return userFactory;
+    }
+
+    public void setUserFactory(IUserFactory userFactory) {
+        this.userFactory = userFactory;
+    }
+
+    
 
 }

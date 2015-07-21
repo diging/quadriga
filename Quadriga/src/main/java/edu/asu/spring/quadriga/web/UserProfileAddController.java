@@ -18,9 +18,6 @@ public class UserProfileAddController {
 	private IServiceRegistry serviceRegistry;
 	
 	@Autowired
-	private ISearchResultFactory searchResultFactory;
-	
-	@Autowired
 	private IServiceFormFactory serviceFormFactory;
 	
 	@Autowired

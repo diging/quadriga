@@ -4,15 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.security.Principal;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -24,26 +21,17 @@ import edu.asu.spring.quadriga.web.LoginController;
  * @author Julia Damerow
  *
  */
-@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-"file:src/test/resources/root-context.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
 public class RequestAccountControllerTest {
 	
 	private Principal principalUsername;	
 	private Principal principleNoUsername;
 	private BindingAwareModelMap model;
-	private RequestAccountController requestAccountController;
 	
-	@Autowired
-	private IUserManager userManager;
+	@Mock
+    private IUserManager userManager;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+	@InjectMocks
+	private RequestAccountController requestAccountController;
 
 	/**
 	 * This method sets up the needed objects for testing the {@link LoginController}
@@ -51,6 +39,8 @@ public class RequestAccountControllerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+	    userManager = Mockito.mock(IUserManager.class);
+	    MockitoAnnotations.initMocks(this);
 		
 		model =  new BindingAwareModelMap();		
 		principalUsername = new Principal() {			
@@ -65,28 +55,24 @@ public class RequestAccountControllerTest {
 			public String getName() {
 				return null;
 			}
-		};
-		
-		requestAccountController = new RequestAccountController();
-		requestAccountController.setUserManager(userManager);
-
+		};		
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
-	
 	@Test
 	public void testSubmitAccountRequest() throws QuadrigaStorageException {	
 		
 		String result = requestAccountController.submitAccountRequest(model, principleNoUsername);
 		assertEquals(result, "requests/error");
 		
+		// first time the user doesn't exist yet
+		Mockito.when(userManager.addAccountRequest(Mockito.anyString())).thenReturn(1);
 		result = requestAccountController.submitAccountRequest(model, principalUsername);
 		assertEquals(result, "requests/accountRequested");
 		assertEquals(model.get("requestStatus"), 1);
 		assertEquals(model.get("username"), "jdoe");
 		
+		// now it should exist, so Mockito has to return 0
+		Mockito.when(userManager.addAccountRequest(Mockito.anyString())).thenReturn(0);
 		result = requestAccountController.submitAccountRequest(model, principalUsername);
 		assertEquals(result, "requests/accountRequested");
 		assertEquals(model.get("requestStatus"), 0);

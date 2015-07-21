@@ -2,6 +2,7 @@ package edu.asu.spring.quadriga.service.impl;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.test.context.ContextConfiguration;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Configuration;
 
 
+
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
@@ -27,23 +29,16 @@ import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
  * @author Ram Kumar Kumaresan
  *
  */
-@ContextConfiguration(locations={"file:src/test/resources/quadriga-roles.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
 public class QuadrigaRoleManagerTest {
 
-	@Autowired
+	
 	private List<IQuadrigaRole> quadrigaRoles;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
+	
 	@Before
 	public void setUp() throws Exception {
+	    quadrigaRoles = new ArrayList<IQuadrigaRole>();
+	    quadrigaRoles.add(new QuadrigaRole());
 	}
 
 	@After

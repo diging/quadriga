@@ -117,87 +117,32 @@ public class Concept implements IConcept
        this.updatedDate = updatedDate;		
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((conceptCollections == null) ? 0 : conceptCollections
-						.hashCode());
-		result = prime * result
-				+ ((conceptId == null) ? 0 : conceptId.hashCode());
-		result = prime * result
-				+ ((createdBy == null) ? 0 : createdBy.hashCode());
-		result = prime * result
-				+ ((createdDate == null) ? 0 : createdDate.hashCode());
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((lemma == null) ? 0 : lemma.hashCode());
-		result = prime * result + ((pos == null) ? 0 : pos.hashCode());
-		result = prime * result
-				+ ((updatedBy == null) ? 0 : updatedBy.hashCode());
-		result = prime * result
-				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((conceptId == null) ? 0 : conceptId.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Concept other = (Concept) obj;
-		if (conceptCollections == null) {
-			if (other.conceptCollections != null)
-				return false;
-		} else if (!conceptCollections.equals(other.conceptCollections))
-			return false;
-		if (conceptId == null) {
-			if (other.conceptId != null)
-				return false;
-		} else if (!conceptId.equals(other.conceptId))
-			return false;
-		if (createdBy == null) {
-			if (other.createdBy != null)
-				return false;
-		} else if (!createdBy.equals(other.createdBy))
-			return false;
-		if (createdDate == null) {
-			if (other.createdDate != null)
-				return false;
-		} else if (!createdDate.equals(other.createdDate))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (lemma == null) {
-			if (other.lemma != null)
-				return false;
-		} else if (!lemma.equals(other.lemma))
-			return false;
-		if (pos == null) {
-			if (other.pos != null)
-				return false;
-		} else if (!pos.equals(other.pos))
-			return false;
-		if (updatedBy == null) {
-			if (other.updatedBy != null)
-				return false;
-		} else if (!updatedBy.equals(other.updatedBy))
-			return false;
-		if (updatedDate == null) {
-			if (other.updatedDate != null)
-				return false;
-		} else if (!updatedDate.equals(other.updatedDate))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Concept other = (Concept) obj;
+        if (conceptId == null) {
+            if (other.conceptId != null)
+                return false;
+        } else if (!conceptId.equals(other.conceptId))
+            return false;
+        return true;
+    }
+
 	
 	
 

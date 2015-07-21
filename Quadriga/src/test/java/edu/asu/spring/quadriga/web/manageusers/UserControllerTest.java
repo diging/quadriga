@@ -3,6 +3,7 @@ package edu.asu.spring.quadriga.web.manageusers;
 import static org.junit.Assert.assertEquals;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -11,6 +12,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.CredentialsContainer;
@@ -22,7 +27,9 @@ import org.springframework.validation.support.BindingAwareModelMap;
 
 import edu.asu.spring.quadriga.db.IUserManagerDAO;
 import edu.asu.spring.quadriga.domain.IUser;
+import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -36,33 +43,21 @@ import edu.asu.spring.quadriga.service.IUserManager;
  * @author Ram Kumar Kumaresan
  *
  */
-@ContextConfiguration(locations={"file:src/test/resources/spring-dbconnectionmanager.xml",
-"file:src/test/resources/root-context.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
-@Transactional
 public class UserControllerTest {
 
-	UserController userContoller;
+    @InjectMocks
+	private UserController userContoller;
 
-	@Autowired
-	IUserManagerDAO dbConnection;
-	String sDatabaseSetup;
-
-	@Autowired
-	IUserManager usermanager;
+	@Mock
+	private IUserManager usermanager;
+	@Mock
+	private IQuadrigaRoleManager roleManager;
 
 	Principal principal;	
 	UsernamePasswordAuthenticationToken authentication;
 	CredentialsContainer credentials;
 	BindingAwareModelMap model;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
 	/**
 	 * This method setsup the needed usermanager, model, principal and authentication objects
@@ -70,9 +65,10 @@ public class UserControllerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		userContoller = new UserController();
-		userContoller.setUsermanager(usermanager);
-
+	    usermanager = Mockito.mock(IUserManager.class);
+	    roleManager = Mockito.mock(IQuadrigaRoleManager.class);
+	    MockitoAnnotations.initMocks(this);
+        
 		model =  new BindingAwareModelMap();		
 		principal = new Principal() {			
 			@Override
@@ -81,28 +77,27 @@ public class UserControllerTest {
 			}
 		};
 		authentication = new UsernamePasswordAuthenticationToken(principal, credentials);
-		//Setup the database with the proper data in the tables;
-		sDatabaseSetup = "delete from tbl_quadriga_user_denied&delete from tbl_quadriga_user&delete from tbl_quadriga_user_requests&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Bob','bob',NULL,'bob@lsa.asu.edu','role5,role1',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('Test User','test',NULL,'test2@lsa.asu.edu','role4,role3',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user(fullname,username,passwd,email,quadrigarole,createdby,createddate,updatedby,updateddate)VALUES('John Doe','jdoe',NULL,'jdoe@lsa.asu.edu','role3,role4',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('dexter','dexter',NULL,'dexter@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('deb','deb',NULL,'deb@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())&INSERT INTO tbl_quadriga_user_requests(fullname, username,passwd,email,createdby,createddate,updatedby,updateddate)VALUES('harrison','harrison',NULL,'harrison@lsa.asu.edu',SUBSTRING_INDEX(USER(),'@',1),CURDATE(),SUBSTRING_INDEX(USER(),'@',1),CURDATE())";
+		
+		 // assume there are three user requests
+        List<IUser> requests = new ArrayList<IUser>();
+        requests.add(new User());
+        requests.add(new User());
+        requests.add(new User());
+        
+        // assume there are two active users
+        List<IUser> activeUsers = new ArrayList<IUser>();
+        activeUsers.add(new User());
+        activeUsers.add(new User());
+        
+        // asume there is on inactive user
+        List<IUser> inactiveUser = new ArrayList<IUser>();
+        inactiveUser.add(new User());
+        
+        Mockito.when(usermanager.getUserRequests()).thenReturn(requests);
+        Mockito.when(usermanager.getAllActiveUsers()).thenReturn(activeUsers);
+        Mockito.when(usermanager.getAllInActiveUsers()).thenReturn(inactiveUser);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	/**
-	 * Load the required data into the dependent tables
-	 * @author Ram Kumar Kumaresan
-	 * @throws QuadrigaStorageException 
-	 */
-	@Test
-	public void testSetupTestEnvironment() throws QuadrigaStorageException
-	{
-		String[] sQuery = sDatabaseSetup.split("&");
-		for(String singleQuery: sQuery)
-		{
-			assertEquals(1, dbConnection.setupTestEnvironment(singleQuery));
-		}
-	}
 
 	/**
 	 * This method tests if the appropriate paths are returned. It also checks if the correct
@@ -110,13 +105,9 @@ public class UserControllerTest {
 	 * @throws QuadrigaStorageException 
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
-	@DirtiesContext
 	public void testManageUsers() throws QuadrigaStorageException {
-
-		testSetupTestEnvironment();
-		//Check the return value
+	    //Check the return value
 		assertEquals(userContoller.manageUsers(model, principal),"auth/users/manage");
 
 		//User Requests
@@ -141,8 +132,6 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserRequestList() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
-
 		//Check the return value
 		assertEquals(userContoller.userRequestList(model, principal),"auth/users/requests");
 
@@ -159,7 +148,6 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserAccessHandler() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
 		//Deny a user
 		assertEquals(userContoller.userAccessHandler("deb-denied", model, principal),"redirect:/auth/users/manage");
 
@@ -176,7 +164,6 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserActiveList() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.userActiveList(model, principal),"auth/users/active");
 
@@ -193,7 +180,6 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testUserInactiveList() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.userInactiveList(model, principal),"auth/users/inactive");
 
@@ -209,7 +195,6 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testDeactivateUser() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.deactivateUser("jdoe",model, principal),"redirect:/auth/users/manage");
 	}
@@ -221,7 +206,6 @@ public class UserControllerTest {
 	@Test
 	@DirtiesContext
 	public void testActivateUser() throws QuadrigaStorageException {
-		testSetupTestEnvironment();
 		//Check the return value
 		assertEquals(userContoller.activateUser("jdoe",model, principal),"redirect:/auth/users/manage");
 	}

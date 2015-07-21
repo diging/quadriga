@@ -15,9 +15,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.validation.support.BindingAwareModelMap;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import edu.asu.spring.quadriga.web.login.QuadrigaGrantedAuthority;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -28,12 +28,9 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
  * @author Julia Damerow
  *
  */
-@ContextConfiguration(locations={"file:src/test/resources/spring-security.xml", 
-		"file:src/test/resources/root-context.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
 public class AccessForbiddenControllerTest {
 
-	private Principal principal;
+    private Principal principal;
 	private BindingAwareModelMap model;
 	private Authentication authenticationNoAccount;
 	private Authentication authenticationDeactivated;
