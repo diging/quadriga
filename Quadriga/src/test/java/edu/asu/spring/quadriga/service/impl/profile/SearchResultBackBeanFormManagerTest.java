@@ -1,7 +1,5 @@
 package edu.asu.spring.quadriga.service.impl.profile;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

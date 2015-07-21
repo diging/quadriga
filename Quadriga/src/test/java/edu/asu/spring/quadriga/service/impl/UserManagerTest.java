@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.db.IUserManagerDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
@@ -53,7 +53,7 @@ public class UserManagerTest {
 	private IUserFactory userFactory;
 
 	@Autowired
-	IDBConnectionManager dbConnection;
+	IUserManagerDAO dbConnection;
 
 	@Autowired
 	private IQuadrigaRoleManager rolemanager;

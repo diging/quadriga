@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.support.BindingAwareModelMap;
 
-import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.db.IUserManagerDAO;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.service.IUserManager;
@@ -45,7 +45,7 @@ public class UserControllerTest {
 	UserController userContoller;
 
 	@Autowired
-	IDBConnectionManager dbConnection;
+	IUserManagerDAO dbConnection;
 	String sDatabaseSetup;
 
 	@Autowired

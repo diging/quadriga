@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import edu.asu.spring.quadriga.domain.impl.Profile;
 import edu.asu.spring.quadriga.exceptions.QuadrigaException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
 import edu.asu.spring.quadriga.profile.IServiceFormFactory;
 import edu.asu.spring.quadriga.profile.IServiceRegistry;
@@ -56,9 +55,6 @@ public class HomeController {
 	
 	@Autowired
 	private IServiceRegistry serviceRegistry;
-	
-	@Autowired
-	private ISearchResultFactory searchResultFactory;
 	
 	@Autowired
 	private IServiceFormFactory serviceFormFactory;

@@ -203,6 +203,11 @@ public class ConceptCollectionManager implements IConceptCollectionManager {
 			return null;
 	}
 	
+	@Override
+    public String test(String test) {
+	    return "test";
+	}
+	
 	/**
 	 * This method updates the items associated to the concept collection
 	 * @param id[] - array of items associated with the collection

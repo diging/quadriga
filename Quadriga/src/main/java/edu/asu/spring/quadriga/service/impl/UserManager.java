@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.db.IUserManagerDAO;
 import edu.asu.spring.quadriga.db.IModifyUserRoles;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -57,7 +57,7 @@ public class UserManager implements IUserManager {
 	private IEmailNotificationManager emailManager;
 	
 	@Autowired
-	private IDBConnectionManager usermanagerDAO;
+	private IUserManagerDAO usermanagerDAO;
 
 	/**
 	 * @description : retrieve the user details from DBConectionManager and

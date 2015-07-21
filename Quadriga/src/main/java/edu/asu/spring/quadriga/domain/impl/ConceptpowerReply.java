@@ -92,6 +92,10 @@ public class ConceptpowerReply {
         }
         return this.conceptEntry;
     }
+    
+    public void setConceptEntry(List<ConceptpowerReply.ConceptEntry> entries) {
+        this.conceptEntry = entries;
+    }
 
 
     /**

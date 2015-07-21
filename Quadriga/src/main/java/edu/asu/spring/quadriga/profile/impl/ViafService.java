@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import edu.asu.spring.quadriga.db.profile.IDBConnectionProfileManager;
 import edu.asu.spring.quadriga.jaxb.viaf.Item;
 import edu.asu.spring.quadriga.profile.ISearchResult;
-import edu.asu.spring.quadriga.profile.ISearchResultFactory;
 import edu.asu.spring.quadriga.profile.IService;
 
 /**
@@ -32,11 +31,8 @@ public class ViafService implements IService {
 	@Autowired
 	private IDBConnectionProfileManager dbConnectionProfileManager;
 	
-	@Autowired
-	private ISearchResultFactory searchResultFactory;
-	
-	private String serviceid;
-	private String name;
+	private final static String SERVICE_ID = "edu.asu.viaf";
+	private final static String SERVICE_NAME = "Viaf";
 		
 	@Autowired
 	@Named("restTemplateViaf")
@@ -60,25 +56,14 @@ public class ViafService implements IService {
 	
 
 	@Override
-	public void setServiceId(String serviceid) {
-		this.serviceid = serviceid;
-		
-	}
-
-	@Override
 	public String getServiceId() {
-		return "edu.asu.viaf";
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;	
+		return SERVICE_ID;
 	}
 
 	@Override
 	public String getName() {
 
-		return "Viaf";
+		return SERVICE_NAME;
 	}
 	
 	/**
@@ -104,7 +89,7 @@ public class ViafService implements IService {
 			List<ISearchResult> searchResults = new ArrayList<ISearchResult>();
 			for(Item i : items)
 			{
-				ISearchResult searchResult = searchResultFactory.getSearchResultObject();
+				ISearchResult searchResult = new SearchResult();
 				searchResult.setDescription(i.getPubDate());
 				searchResult.setId(i.getLink());
 				searchResult.setName(i.getTitle());

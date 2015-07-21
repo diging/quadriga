@@ -138,6 +138,9 @@ public interface IConceptCollectionManager {
 			String id);
 
 
+    public abstract String test(String test);
+
+
 	
 
 	

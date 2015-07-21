@@ -72,20 +72,11 @@ public class ServiceRegistryTest {
 	@Test
 	public void testInit() {
 		
-		IService serviceObject = null;
 		idServiceMap = ctx.getBeansOfType(IService.class);
 		
 		IService service = idServiceMap.get("conceptPowerService");
 		
 		assertEquals(conceptPower,service);
-	}
-
-	@Test
-	public void testGetServiceObject() {
-		
-		
-		
-		
 	}
 
 	@Test
@@ -100,20 +91,6 @@ public class ServiceRegistryTest {
 		
 		assertEquals(dummyNameIdMap, serviceNameIdMap);
 		
-	}
-
-	@Test
-	public void testGetServiceIdNameMap() {
-
-	
-	
-	}
-
-	@Test
-	public void testSetServiceIdNameMap() {
-
-	
-	
 	}
 
 }

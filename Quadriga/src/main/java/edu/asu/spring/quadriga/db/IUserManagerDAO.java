@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
  * @author Ram Kumar Kumaresan
  *
  */
-public interface IDBConnectionManager 
+public interface IUserManagerDAO 
 {
 	
 	/**

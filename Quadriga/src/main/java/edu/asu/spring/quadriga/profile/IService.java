@@ -10,11 +10,7 @@ import java.util.List;
  */
 public interface IService {
 	
-	public abstract void setServiceId(String id);
-	
 	public abstract String getServiceId();
-	
-	public abstract void setName(String name);
 	
 	public abstract String getName();
 	
@@ -27,7 +23,7 @@ public interface IService {
 	 */
 	public abstract List<ISearchResult> search(String word);
 	
-	public static final String POS = "noun";
+	public static final String POS_NOUN = "noun";
 	
 	public static final String STARTINDEX = "1";
 

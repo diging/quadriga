@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.db.IDBConnectionManager;
+import edu.asu.spring.quadriga.db.IUserManagerDAO;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class UserDeepMapper implements IUserDeepMapper {
 
     @Autowired
-    private IDBConnectionManager dbConnect;
+    private IUserManagerDAO dbConnect;
 
     @Autowired
     private IUserFactory userFactory;
