@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.domain.ICollaborator;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
@@ -28,7 +28,7 @@ public class ProjectAuthorization implements IAuthorization
 	private IRetrieveProjectManager projectManager;
 	
 	@Autowired
-	private ICheckProjectSecurity projectSecurityManager;
+	private IProjectSecurityChecker projectSecurityManager;
 	
 	/**
 	 * This checks the access permissions for the logged in user for the 
@@ -115,7 +115,7 @@ public class ProjectAuthorization implements IAuthorization
 		haveAccess = false;
 		
 		//fetch the details of the project
-		haveAccess = projectSecurityManager.chkIsProjectAssociated(userName);
+		haveAccess = projectSecurityManager.ownsAtLeastOneProject(userName);
 		
 		//check the user roles if he is not a project owner
 		if(!haveAccess)
@@ -127,7 +127,7 @@ public class ProjectAuthorization implements IAuthorization
 				//check if the user associated with the role has any projects
 				for(String role : roles)
 				{
-					haveAccess = projectSecurityManager.chkIsCollaboratorProjectAssociated(userName, role);
+					haveAccess = projectSecurityManager.collaboratesOnAtLeastOneProject(userName, role);
 					if(haveAccess)
 						break;
 				}

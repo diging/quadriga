@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
+import edu.asu.spring.quadriga.db.workbench.IProjectAccessManager;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 
 @Repository
-public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IDBConnectionProjectAccessManager 
+public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IProjectAccessManager 
 {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -23,106 +23,47 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  ID
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean chkProjectOwner(String userName,String projectId)
+	public String getProjectOwner(String projectId)
 	{
-		boolean isProjectOwner;
-		
-		isProjectOwner = false;
-		
 		ProjectDTO project = (ProjectDTO) sessionFactory.getCurrentSession().get(ProjectDTO.class, projectId);
 		
-		String owner = project.getProjectowner().getUsername();
-		
-		if(owner.equals(userName))
-		{
-			isProjectOwner = true;
-		}
-		else
-		{
-			isProjectOwner = false;
-		}
-		
-		return isProjectOwner;
+		return project.getProjectowner().getUsername();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean chkIsProjectAssociated(String userName)
+	public int getNrOfOwnedProjects(String userName)
 	{
-		boolean isUserAssociated;
-		
-		int count;
-		isUserAssociated = false;
-		
 		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(p.projectid) FROM ProjectDTO p WHERE p.projectowner.username =:userName");
 		query.setParameter("userName", userName);
-		count = ((Number) query.iterate().next()).intValue();
-		if(count > 0)
-		{
-			isUserAssociated = true;
-		}
-		else
-		{
-			isUserAssociated = false;
-		}
-		return isUserAssociated;
+		return ((Number) query.iterate().next()).intValue();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean chkIsCollaboratorProjectAssociated(String userName,String collaboratorRole)
+	public int nrOfProjectsCollaboratingOn(String userName,String collaboratorRole)
 	{
-         boolean isCollaborator;
-		
-		isCollaborator = false;
-		int count;
-		
-		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole");
+        Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole");
 		query.setParameter("userName", userName);
 		query.setParameter("collaboratorRole", collaboratorRole);
-		count = ((Number) query.iterate().next()).intValue();
-		if(count > 0)
-		{
-			isCollaborator = true;
-		}
-		else
-		{
-			isCollaborator = false;
-		}
-		
-		return isCollaborator;
+		return ((Number) query.iterate().next()).intValue();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean chkProjectCollaborator(String userName,String collaboratorRole,String projectId)
+	public boolean isCollaborator(String userName,String collaboratorRole,String projectId)
 	{
-		boolean isCollaborator;
-		
-		isCollaborator = false;
-		int count;
-		
 		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectCollaboratorDTOPK.projectid) FROM ProjectCollaboratorDTO pc WHERE pc.projectCollaboratorDTOPK.collaboratoruser =:userName AND pc.projectCollaboratorDTOPK.collaboratorrole =:collaboratorRole AND pc.projectCollaboratorDTOPK.projectid =:projectId");
 		query.setParameter("userName", userName);
 		query.setParameter("collaboratorRole", collaboratorRole);
 		query.setParameter("projectId",projectId);
-		count = ((Number) query.iterate().next()).intValue();
-		if(count > 0)
-		{
-			isCollaborator = true;
-		}
-		else
-		{
-			isCollaborator = false;
-		}
-		
-		return isCollaborator;
+		return ((Number) query.iterate().next()).intValue() > 0;
 	}
 	
 	/**

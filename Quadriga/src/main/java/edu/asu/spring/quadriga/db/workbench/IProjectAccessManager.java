@@ -2,7 +2,7 @@ package edu.asu.spring.quadriga.db.workbench;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface IDBConnectionProjectAccessManager 
+public interface IProjectAccessManager 
 {
 
 	/**
@@ -34,27 +34,24 @@ public interface IDBConnectionProjectAccessManager
 	 *         false - if the give user is not a collaborator with the specified role for the given project.
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract boolean chkProjectCollaborator(String userName, String collaboratorRole,
+	public abstract boolean isCollaborator(String userName, String collaboratorRole,
 			String projectId) throws QuadrigaStorageException;
 
 	/**
-	 * This method checks if the user is associated to any project
+	 * This method checks how many projects a user owns.
 	 * @param userName
-	 * @return true - if the given user is associated with any project.
-	 *         false - if the given user is not associated with any project.
+	 * @return Number of owned projects
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract boolean chkIsProjectAssociated(String userName) throws QuadrigaStorageException;
+	public int getNrOfOwnedProjects(String userName) throws QuadrigaStorageException;
 
 	/**
 	 * This method checks if the given user is owner for the given project
-	 * @param userName
 	 * @param projectId
-	 * @return true - if the given user is owner of the specified project.
-	 *         false - if the given user is not owner of the specified project.
+	 * @return The project owner
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract boolean chkProjectOwner(String userName, String projectId) throws QuadrigaStorageException;
+	public String getProjectOwner(String projectId) throws QuadrigaStorageException;
 
 	/**
 	 * This method checks if the given user is a collaborator associated to any project
@@ -64,7 +61,7 @@ public interface IDBConnectionProjectAccessManager
 	 *         false - if the given user is not associated with any project with specified collaborator role.
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract boolean chkIsCollaboratorProjectAssociated(String userName,
+	public int nrOfProjectsCollaboratingOn(String userName,
 			String collaboratorRole) throws QuadrigaStorageException;
 
 }

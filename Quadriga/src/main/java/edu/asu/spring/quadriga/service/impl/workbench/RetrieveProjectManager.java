@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.db.workbench.IDBConnectionRetrieveProjectManager;
 import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
@@ -41,7 +41,7 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 	private ICollaboratorRoleManager roleMapper;
 
 	@Autowired
-	private ICheckProjectSecurity projectSecurity;
+	private IProjectSecurityChecker projectSecurity;
 
 	@Autowired
 	private IRetrieveProjCollabManager projectManager;

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
-import edu.asu.spring.quadriga.db.workbench.IDBConnectionProjectAccessManager;
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
+import edu.asu.spring.quadriga.db.workbench.IProjectAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
@@ -18,7 +18,7 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Service
-public class CheckProjectSecurity implements ICheckProjectSecurity 
+public class ProjectSecurityChecker implements IProjectSecurityChecker 
 {
 	@Autowired
 	private IUserManager userManager;
@@ -27,7 +27,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	private IRetrieveProjCollabManager projectManager;
 
 	@Autowired
-	private IDBConnectionProjectAccessManager dbConnect;
+	private IProjectAccessManager accessManager;
 
 	/**
 	 * This method checks if the user is Quadriga Admin
@@ -71,50 +71,27 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 
 	@Override
 	@Transactional
-	public boolean checkProjectOwner(String userName,String projectId) throws QuadrigaStorageException
+	public boolean isProjectOwner(String userName,String projectId) throws QuadrigaStorageException
 	{
-		boolean chkAccess;
-
-		//initialize check Access variable
-		chkAccess = false;
-
 		//check if the user is project owner
-		chkAccess = dbConnect.chkProjectOwner(userName, projectId);
-
-		return chkAccess;
+		String owner = accessManager.getProjectOwner(projectId);
+		return owner.equals(userName);
 
 	}
 
 	@Override
 	@Transactional
-	public boolean chkIsProjectAssociated(String userName) throws QuadrigaStorageException
+	public boolean ownsAtLeastOneProject(String userName) throws QuadrigaStorageException
 	{
-		boolean chkAccess;
-
-		//initialize check access variable
-		chkAccess = false;
-
 		//check if the use is associated with any project
-		chkAccess = dbConnect.chkIsProjectAssociated(userName);
-
-		return chkAccess;
+		return accessManager.getNrOfOwnedProjects(userName) > 0;
 	}
 
 	@Override
 	@Transactional
-	public boolean chkIsCollaboratorProjectAssociated(String userName,String collaboratorRole) throws QuadrigaStorageException
+	public boolean collaboratesOnAtLeastOneProject(String userName,String collaboratorRole) throws QuadrigaStorageException
 	{
-		boolean chkAccess;
-
-		//initialize check access variable
-		chkAccess = false;
-
-		//check if the collaborator is associated with any project
-		chkAccess = dbConnect.chkIsCollaboratorProjectAssociated(userName, collaboratorRole);
-
-
-		return chkAccess;
-
+		return accessManager.nrOfProjectsCollaboratingOn(userName, collaboratorRole) > 0;
 	}
 
 	/**
@@ -126,66 +103,11 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 	 */
 	@Override
 	@Transactional
-	public boolean checkProjectCollaborator(String userName,String collaboratorRole,String projectId) throws QuadrigaStorageException
+	public boolean isCollaborator(String userName,String collaboratorRole,String projectId) throws QuadrigaStorageException
 	{
-		boolean chkAccess;
-
-		//initialize check Access variable
-		chkAccess = false;
-
-		//check if the user is project owner
-		chkAccess = dbConnect.chkProjectCollaborator(userName, collaboratorRole, projectId);
-
-		return chkAccess;
-
+		return accessManager.isCollaborator(userName, collaboratorRole, projectId);
 	}
 
-//	/**
-//	 * This method checks if the project collaborator has access to perform operations.
-//	 * @param userName
-//	 * @param projectId
-//	 * @param collaboratorRole
-//	 * @return boolean - TRUE if he has access else FALSE
-//	 * @throws QuadrigaStorageException
-//	 * @author kiranbatna
-//	 */
-//	@Override
-//	@Transactional
-//	public boolean checkCollabProjectAccess(String userName,String projectId,String collaboratorRole) throws QuadrigaStorageException
-//	{
-//		List<ICollaborator> collaboratorList;
-//		List<ICollaboratorRole> collaboratorRoles;
-//		boolean chkAccess;
-//		
-//		//initialize the local variable
-//		chkAccess = false;
-//		
-//		//fetch the collaborators associated with the project
-//		collaboratorList = projectManager.getProjectCollaborators(projectId);
-//		
-//		//loop through each collaborator
-//		for(ICollaborator collaborator : collaboratorList)
-//		{
-//			//check if the user is one of the collaborators
-//			if(collaborator.getUserObj().getUserName() == userName)
-//			{
-//				collaboratorRoles = collaborator.getCollaboratorRoles();
-//				
-//				//check if the collaborator is Project Admin or Contributor
-//				for(ICollaboratorRole role : collaboratorRoles)
-//				{
-//					if(role.getRoleid() == collaboratorRole)
-//					{
-//						chkAccess = true;
-//						break;
-//					}
-//				}
-//				// break through the outer loop
-//				break;
-//			}
-//		}
-//		return chkAccess;
-//	}
 	/**
 	 * This method checks if the project collaborator has access to perform operations.
 	 * @param userName
@@ -202,10 +124,8 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		List<IProjectCollaborator> projectCollaboratorList = null;
 		List<ICollaboratorRole> collaboratorRoles = null;
 
-		boolean chkAccess;
-
 		//initialize the local variable
-		chkAccess = false;
+		boolean chkAccess = false;
 
 		//fetch the collaborators associated with the project
 
@@ -258,7 +178,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 
 		//check if the user is project owner
-		chkAccess = this.checkProjectOwner(userName,projectId);
+		chkAccess = this.isProjectOwner(userName,projectId);
 
 		if(!chkAccess)
 		{
@@ -284,7 +204,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		chkAccess = false;
 
 		//check if the user is project owner
-		chkAccess = dbConnect.chkProjectOwnerEditorRole(userName, projectId);
+		chkAccess = accessManager.chkProjectOwnerEditorRole(userName, projectId);
 		return chkAccess;
 	}
 
@@ -297,7 +217,7 @@ public class CheckProjectSecurity implements ICheckProjectSecurity
 		//initialize chkAccess variable
 		chkAccess = false;
 
-		chkAccess = dbConnect.chkDuplicateProjUnixName(unixName, projectId);
+		chkAccess = accessManager.chkDuplicateProjUnixName(unixName, projectId);
 
 		return chkAccess;
 	}

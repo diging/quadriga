@@ -2,12 +2,12 @@ package edu.asu.spring.quadriga.accesschecks;
 
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
-public interface ICheckProjectSecurity {
+public interface IProjectSecurityChecker {
 
 	public abstract boolean checkProjectAccess(String userName,String projectId)
 			throws QuadrigaStorageException;
 
-	public abstract boolean checkProjectOwner(String userName,String projectId)
+	public abstract boolean isProjectOwner(String userName,String projectId)
 			throws QuadrigaStorageException;
 
 	public abstract boolean checkQudrigaAdmin(String userName)
@@ -19,12 +19,12 @@ public interface ICheckProjectSecurity {
 	public abstract boolean checkProjectOwnerEditorAccess(String userName, String projectId)
 			throws QuadrigaStorageException;
 
-	public abstract boolean checkProjectCollaborator(String userName, String collaboratorRole,String projectId)
+	public abstract boolean isCollaborator(String userName, String collaboratorRole,String projectId)
 			throws QuadrigaStorageException;
 
-	public abstract boolean chkIsProjectAssociated(String userName) throws QuadrigaStorageException;
+	public abstract boolean ownsAtLeastOneProject(String userName) throws QuadrigaStorageException;
 
-	public abstract boolean chkIsCollaboratorProjectAssociated(String userName,
+	public abstract boolean collaboratesOnAtLeastOneProject(String userName,
 			String collaboratorRole) throws QuadrigaStorageException;
 	
 	public abstract boolean chkDuplicateProjUnixName(String unixName, String projectId) 

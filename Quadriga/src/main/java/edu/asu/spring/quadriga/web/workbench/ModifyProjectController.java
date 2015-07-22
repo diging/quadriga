@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
@@ -56,7 +56,7 @@ public class ModifyProjectController
 	IProjectFactory projectFactory;
 	
 	@Autowired
-	ICheckProjectSecurity projectSecurity;
+	IProjectSecurityChecker projectSecurity;
 	
 	@Autowired 
 	IUserManager userManager;
@@ -223,7 +223,7 @@ public class ModifyProjectController
 
 		//retrieve all the workspaces associated with the project
 		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId, userName);
-		if(projectSecurity.checkProjectOwner(userName,projectId)){
+		if(projectSecurity.isProjectOwner(userName,projectId)){
 			model.addAttribute("owner", 1);
 		}else{
 			model.addAttribute("owner", 0);
@@ -255,7 +255,7 @@ public class ModifyProjectController
 
 		//retrieve all the workspaces associated with the project
 		List <IWorkSpace> workspaceList = wsManager.listActiveWorkspace(projectId,userName);
-		if(projectSecurity.checkProjectOwner(userName,projectId)){
+		if(projectSecurity.isProjectOwner(userName,projectId)){
 			model.addAttribute("owner", 1);
 		}else{
 			model.addAttribute("owner", 0);

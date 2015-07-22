@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
@@ -36,7 +36,7 @@ public class RetrieveProjectController
 	private IRetrieveJsonProjectManager jsonProjectManager;
 
 	@Autowired
-	private ICheckProjectSecurity projectSecurity;
+	private IProjectSecurityChecker projectSecurity;
 
 	@Autowired
 	private IListWSManager wsManager;
@@ -59,7 +59,7 @@ public class RetrieveProjectController
 		this.projectManager = projectManager;
 	}
 
-	public void setProjectSecurity(ICheckProjectSecurity projectSecurity){
+	public void setProjectSecurity(IProjectSecurityChecker projectSecurity){
 
 		this.projectSecurity = projectSecurity;
 	}
@@ -177,7 +177,7 @@ public class RetrieveProjectController
 		model.getModelMap().put("project", project);
 		model.getModelMap().put("workspaceList",workspaceList);
 		model.getModelMap().put("collabworkspacelist", collaboratorWorkspaceList);
-		if(projectSecurity.checkProjectOwner(userName,projectid)){
+		if(projectSecurity.isProjectOwner(userName,projectid)){
 			model.getModelMap().put("owner", 1);
 		}else{
 			model.getModelMap().put("owner", 0);

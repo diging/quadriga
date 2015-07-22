@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.asu.spring.quadriga.accesschecks.ICheckProjectSecurity;
+import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.accesschecks.ICheckWSSecurity;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionWSAccessManager;
 import edu.asu.spring.quadriga.domain.ICollaboratorRole;
@@ -20,7 +20,7 @@ import edu.asu.spring.quadriga.web.login.RoleNames;
 public class CheckWSSecurity implements ICheckWSSecurity 
 {
 	@Autowired
-	private ICheckProjectSecurity projectSecurity;
+	private IProjectSecurityChecker projectSecurity;
 
 	@Autowired
 	private IRetrieveWSCollabManager workspaceManager;
@@ -43,7 +43,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		boolean chkAccess;
 
 		//check if the user is a project owner
-		chkAccess = projectSecurity.checkProjectOwner(userName,projectId);
+		chkAccess = projectSecurity.isProjectOwner(userName,projectId);
 
 		//check if the user is a project collaborator and has a ADMIN role
 		if(!chkAccess)
@@ -85,7 +85,7 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		chkAccess = false;
 
 		//check if the user is a project owner
-		chkAccess = projectSecurity.checkProjectOwner(userName,projectId);
+		chkAccess = projectSecurity.isProjectOwner(userName,projectId);
 
 		//check if the user is workspace owner
 		if(!chkAccess)
