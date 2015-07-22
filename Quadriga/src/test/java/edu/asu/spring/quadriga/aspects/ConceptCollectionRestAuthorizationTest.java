@@ -31,28 +31,28 @@ import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
+import edu.asu.spring.quadriga.service.impl.conceptcollection.ConceptCollectionManager;
 
-public class ConceptCollectionAuthorizationTest {
+public class ConceptCollectionRestAuthorizationTest {
 
     @Mock
-    private IConceptCollectionManager mockedManager;
+    private ConceptCollectionManager mockedManager;
     
     private IConceptCollectionFactory factory;
     
     @InjectMocks
-    private ConceptCollectionAuthorization authorization;
-
+    private ConceptCollectionRestAuthorization authorization;
+    
     private List<IConceptCollectionCollaborator> collaborators;
     
     @Before
     public void init() throws QuadrigaStorageException, QuadrigaAccessException {
-        mockedManager = Mockito.mock(IConceptCollectionManager.class);
+        mockedManager = Mockito.mock(ConceptCollectionManager.class);
         factory = new ConceptCollectionFactory();
         
         MockitoAnnotations.initMocks(this);
         
-        Field fieldToSet = ReflectionUtils.findField(ConceptCollectionAuthorization.class, "collectionFactory");
+        Field fieldToSet = ReflectionUtils.findField(ConceptCollectionRestAuthorization.class, "collectionFactory");
         ReflectionUtils.makeAccessible(fieldToSet);
         ReflectionUtils.setField(fieldToSet, authorization, factory);
         
@@ -80,7 +80,7 @@ public class ConceptCollectionAuthorizationTest {
         collaborators = new ArrayList<IConceptCollectionCollaborator>();
         
         collaborators.add(ccCollaborator);
-         
+        
         Mockito.when(mockedManager.showCollaboratingUsers("collectionid")).thenReturn(collaborators);
         Mockito.doAnswer(new Answer<Object>() {
 
@@ -93,6 +93,7 @@ public class ConceptCollectionAuthorizationTest {
             }
         
         }).when(mockedManager).getCollectionDetails(Mockito.isA(IConceptCollection.class), Mockito.anyString());
+      
     }
     
     @Test
@@ -119,7 +120,7 @@ public class ConceptCollectionAuthorizationTest {
     }
     
     @Test
-    public void testChkAuthorizationIsNoCollaborator() throws QuadrigaStorageException, QuadrigaAccessException {
+    public void testChkAuthorizationIsNotCollaborator() throws QuadrigaStorageException, QuadrigaAccessException {
         // this should fail because testuser2 is not a collaborator
         boolean authorized = authorization.chkAuthorization("testuser2", "collectionid", new String[] { "role1" });
         assertFalse(authorized);

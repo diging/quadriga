@@ -1,6 +1,7 @@
 package edu.asu.spring.quadriga.aspects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,121 +26,95 @@ import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
  */
 @Service("dictionaryAuthorization")
 public class DictionaryAuthorization implements IAuthorization {
-	@Autowired
-	IRetrieveDictionaryManager dictionaryRetrieveManager;
+    @Autowired
+    IRetrieveDictionaryManager dictionaryRetrieveManager;
 
-	@Autowired
-	IDictionaryFactory dictionaryFactory;
+    @Autowired
+    IDictionaryFactory dictionaryFactory;
 
-	@Autowired
-	IDictionaryManager dictonaryManager;
+    @Autowired
+    IDictionaryManager dictonaryManager;
 
-	/**
-	 * This method checks the access permissions for logged in user for given
-	 * dictionary id
-	 * 
-	 * @param - userName - logged in user
-	 * @param - accessObjectId - dictionary id
-	 * @param - userRoles - roles for which access permissions should be
-	 *        checked.
-	 * @return if has access - true if no access - false
-	 */
-	@Override
-	public boolean chkAuthorization(String userName, String accessObjectId,
-			String[] userRoles) throws QuadrigaStorageException,
-			QuadrigaAccessException {
-		boolean haveAccess;
-		String dictionaryOwner;
-		String collaboratorName;
-		String collaboratorRoleId;
-		List<ICollaboratorRole> collaboratorRoles;
-		IDictionary dictionary;
-		ArrayList<String> roles;
+    /**
+     * This method checks the access permissions for logged in user for given
+     * dictionary id
+     * 
+     * @param - userName - logged in user
+     * @param - accessObjectId - dictionary id
+     * @param - userRoles - roles for which access permissions should be
+     *        checked.
+     * @return if has access - true if no access - false
+     */
+    @Override
+    public boolean chkAuthorization(String userName, String accessObjectId,
+            String[] userRoles) throws QuadrigaStorageException,
+            QuadrigaAccessException {
+        String collaboratorName;
+        String collaboratorRoleId;
+        List<ICollaboratorRole> collaboratorRoles;
 
-		haveAccess = false;
+        // fetch the details of the concept collection
+        IDictionary dictionary = dictionaryRetrieveManager
+                .getDictionaryDetails(accessObjectId);
 
-		// fetch the details of the concept collection
-		dictionary = dictionaryRetrieveManager
-				.getDictionaryDetails(accessObjectId);
+        // check if the user is a dictionary owner
+        String dictionaryOwner = dictionary.getOwner().getUserName();
+        if (userName.equals(dictionaryOwner)) {
+            return true;
+        }
 
-		// check if the user is a dictionary owner
-		dictionaryOwner = dictionary.getOwner().getUserName();
-		if (userName.equals(dictionaryOwner)) {
-			haveAccess = true;
-		}
+        if (userRoles.length == 0)
+            return false;
 
-		// check the collaborator roles if he is not owner
-		if (!haveAccess) {
-			if (userRoles.length > 0) {
-				roles = getAccessRoleList(userRoles);
-				// fetch the collaborators of the concept collection
-				List<IDictionaryCollaborator> dictCollaboratorList = dictonaryManager
-						.showCollaboratingUsers(accessObjectId);
-				if (dictCollaboratorList != null) {
-					for (IDictionaryCollaborator dictCollaborator : dictCollaboratorList) {
-						// check if he is the collaborator to the concept
-						// collection
-						collaboratorName = dictCollaborator.getCollaborator()
-								.getUserObj().getUserName();
-						if (userName != null) {
-							if (userName.equals(collaboratorName)) {
-								collaboratorRoles = dictCollaborator
-										.getCollaborator()
-										.getCollaboratorRoles();
-								if (collaboratorRoles != null) {
-									for (ICollaboratorRole collabRole : collaboratorRoles) {
-										collaboratorRoleId = collabRole
-												.getRoleid();
-										if (roles != null) {
-											if (roles
-													.contains(collaboratorRoleId)) {
-												haveAccess = true;
-												return haveAccess;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return haveAccess;
-	}
+        // check the collaborator roles if he is not owner
+        List<String> roles = Arrays.asList(userRoles);
+        // fetch the collaborators of the concept collection
+        List<IDictionaryCollaborator> dictCollaboratorList = dictonaryManager
+                .showCollaboratingUsers(accessObjectId);
 
-	/**
-	 * This method checks if the logged in user has permissions for any of the
-	 * dictionary present in the system.
-	 * 
-	 * @param - userName - logged in User
-	 * @param - userRoles - roles for which the access permissions to be
-	 *        checked.
-	 * @return - if has access - true no access - false
-	 * @throws QuadrigaStorageException
-	 *             , QuadrigaAccessException
-	 */
-	@Override
-	public boolean chkAuthorizationByRole(String userName, String[] userRoles)
-			throws QuadrigaStorageException, QuadrigaAccessException {
-		return false;
+        if (dictCollaboratorList == null || dictCollaboratorList.isEmpty())
+            return false;
 
-	}
+        for (IDictionaryCollaborator dictCollaborator : dictCollaboratorList) {
+            // check if he is the collaborator to the concept
+            // collection
+            collaboratorName = dictCollaborator.getCollaborator().getUserObj()
+                    .getUserName();
+            if (userName != null && userName.equals(collaboratorName)) {
+                collaboratorRoles = dictCollaborator.getCollaborator()
+                        .getCollaboratorRoles();
+                if (collaboratorRoles != null) {
+                    for (ICollaboratorRole collabRole : collaboratorRoles) {
+                        collaboratorRoleId = collabRole.getRoleid();
+                        if (roles != null) {
+                            if (roles.contains(collaboratorRoleId)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-	/**
-	 * This method returns an array of strings to list
-	 * 
-	 * @param userRoles
-	 * @return ArrayList<String>
-	 */
-	public ArrayList<String> getAccessRoleList(String[] userRoles) {
-		ArrayList<String> rolesList = new ArrayList<String>();
+        return false;
+    }
 
-		for (String role : userRoles) {
-			rolesList.add(role);
-		}
+    /**
+     * This method checks if the logged in user has permissions for any of the
+     * dictionary present in the system.
+     * 
+     * @param - userName - logged in User
+     * @param - userRoles - roles for which the access permissions to be
+     *        checked.
+     * @return - if has access - true no access - false
+     * @throws QuadrigaStorageException
+     *             , QuadrigaAccessException
+     */
+    @Override
+    public boolean chkAuthorizationByRole(String userName, String[] userRoles)
+            throws QuadrigaStorageException, QuadrigaAccessException {
+        return false;
 
-		return rolesList;
-	}
+    }
 
 }
