@@ -59,7 +59,7 @@ public class QuadrigaRoleManager implements IQuadrigaRoleManager{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IQuadrigaRole getQuadrigaRole(String type, String sQuadrigaRoleDBId) {
+	public IQuadrigaRole getQuadrigaRoleByDbId(String type, String sQuadrigaRoleDBId) {
 	    List<IQuadrigaRole> roles = rolesMap.get(type);
 	    if (roles == null)
 	        return null;

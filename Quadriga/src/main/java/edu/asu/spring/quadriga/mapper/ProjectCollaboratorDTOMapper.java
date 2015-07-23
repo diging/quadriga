@@ -57,7 +57,7 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 				{
 				    IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
 					collaboratorRole.setDBid(roleName);
-					collaboratorRole.setDisplayName(roleManager.getQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, roleName).getDisplayName());
+					collaboratorRole.setDisplayName(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.PROJECT_ROLES, roleName).getDisplayName());
 					roleManager.fillQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, collaboratorRole);
 					collaboratorRoleList.add(collaboratorRole);
 				}

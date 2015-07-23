@@ -85,7 +85,7 @@ public class ModifyUserRolesController
 		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles(IQuadrigaRoleManager.MAIN_ROLES);
 		
 		//remove the invalid quadriga role object
-		IQuadrigaRole role = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+		IQuadrigaRole role = rolemanager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
 		if(quadrigaRoles.contains(role))
 			quadrigaRoles.remove(role);
 				
@@ -137,7 +137,7 @@ public class ModifyUserRolesController
 				quadrigaRoles = rolemanager.getQuadrigaRoles(IQuadrigaRoleManager.MAIN_ROLES);
 				
 				//remove the invalid quadriga role object
-				IQuadrigaRole role = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+				IQuadrigaRole role = rolemanager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
 				if(quadrigaRoles.contains(role))
 					quadrigaRoles.remove(role);
 						

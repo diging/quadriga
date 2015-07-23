@@ -372,7 +372,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 		collabroles = role.split(",");
 
 		for (int i = 0; i < collabroles.length; i++) {
-			collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collabroles[i]);
+			collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collabroles[i]);
 			collaboratorRoleList.add(collaboratorRole);
 		}
 

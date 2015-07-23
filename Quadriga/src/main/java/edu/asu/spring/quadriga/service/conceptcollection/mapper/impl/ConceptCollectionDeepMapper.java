@@ -126,7 +126,7 @@ public class ConceptCollectionDeepMapper implements
 			{
 				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 				
-				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
 //						collaboratorRoleFactory.createCollaboratorRoleObject();
 //				collaboratorRole.setRoleDBid(roleName);
 //				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
@@ -148,7 +148,7 @@ public class ConceptCollectionDeepMapper implements
 			{
 				String roleName = ccCollaboratorDTO.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
-				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleName);
 
 				roleManager.fillQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collaboratorRole);
 				// Create a Collaborator Role list

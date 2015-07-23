@@ -132,7 +132,7 @@ public class RetrieveWSCollabManagerDAO extends DAOConnectionManager implements 
 		
 		for(String dbRoleId : roleList)
 		{
-			role = roleManager.getQuadrigaRole(IQuadrigaRoleManager.WORKSPACE_ROLES, dbRoleId);
+			role = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.WORKSPACE_ROLES, dbRoleId);
 			collaboratorRole.add(role);
 		}
 		return collaboratorRole;

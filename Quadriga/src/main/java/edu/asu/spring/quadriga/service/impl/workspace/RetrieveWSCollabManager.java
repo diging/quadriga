@@ -58,7 +58,7 @@ public class RetrieveWSCollabManager implements IRetrieveWSCollabManager {
 				roleList = new ArrayList<IQuadrigaRole>();
 				if(workspaceCollaborator.getCollaborator()!=null && workspaceCollaborator.getCollaborator().getCollaboratorRoles() != null){
 					for (IQuadrigaRole collaboratorRole : workspaceCollaborator.getCollaborator().getCollaboratorRoles()) {
-						role = roleManager.getQuadrigaRole(IQuadrigaRoleManager.WORKSPACE_ROLES, collaboratorRole.getDBid());
+						role = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.WORKSPACE_ROLES, collaboratorRole.getDBid());
 						roleList.add(role);
 					}
 				}

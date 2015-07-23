@@ -77,7 +77,7 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		QuadrigaUserDTO userName = conceptCollectionCollaborator.getQuadrigaUserDTO();
 		String role = conceptCollectionCollaborator.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 		
-		collaboratorRoles.add(roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, role));     
+		collaboratorRoles.add(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, role));     
 		
 		collaborator.setUserObj(userDTOMapper.getUser(userName));
 		collaborator.setCollaboratorRoles(collaboratorRoles);

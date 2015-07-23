@@ -24,7 +24,7 @@ public interface IQuadrigaRoleManager {
 	 * @param sQuadrigaRoleDBId		The RoleId for which the corresponding QuadrigaRole object should be returned
 	 * @return						The corresponding QuadrigaRole object.
 	 */
-	public abstract IQuadrigaRole getQuadrigaRole(String type, String sQuadrigaRoleDBId);
+	public abstract IQuadrigaRole getQuadrigaRoleByDbId(String type, String sQuadrigaRoleDBId);
 	
 	
 	/**

@@ -99,7 +99,7 @@ public class DictionaryItemCollabController {
 		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryid);
 		for(String tempRole : role)
 		{
-			String roleType=collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
+			String roleType=collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
 			logger.info("Role :"+role+"  role type : "+roleType);
 			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
 				
@@ -146,7 +146,7 @@ public class DictionaryItemCollabController {
 			List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			for(String tempRole : role)
 			{
-				String roleType=collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
+				String roleType=collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
 				logger.info("Role :"+role+"  role type : "+roleType);
 				if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
 					model.addAttribute("roleAccess", 1);
@@ -190,7 +190,7 @@ public class DictionaryItemCollabController {
 		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		for(String tempRole : role)
 		{
-			String roleType=collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
+			String roleType=collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
 			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
 				model.addAttribute("roleAccess", 1);
 			}
@@ -229,7 +229,7 @@ public class DictionaryItemCollabController {
 			List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			for(String tempRole : role)
 			{
-				String roleType=collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
+				String roleType=collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
 				if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
 					model.addAttribute("roleAccess", 1);
 				}
@@ -291,7 +291,7 @@ public class DictionaryItemCollabController {
 		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		for(String tempRole : role)
 		{
-			String roleType=collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
+			String roleType=collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
 			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
 				model.addAttribute("roleAccess", 1);
 			}
@@ -337,7 +337,7 @@ public class DictionaryItemCollabController {
 			List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 			for(String tempRole : role)
 			{
-				String roleType=collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
+				String roleType=collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
 				if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
 					model.addAttribute("roleAccess", 1);
 				}
@@ -372,7 +372,7 @@ public class DictionaryItemCollabController {
 		List<String> role =dictonaryManager.getDictionaryCollabPerm(user.getUserName(),dictionaryId);
 		for(String tempRole : role)
 		{
-			String roleType=collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
+			String roleType=collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, tempRole).getId();
 			if(roleType.equals(RoleNames.ROLE_DICTIONARY_COLLABORATOR_READ_WRITE)){
 				model.addAttribute("roleAccess", 1);
 			}

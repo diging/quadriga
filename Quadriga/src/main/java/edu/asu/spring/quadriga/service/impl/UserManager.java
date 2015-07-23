@@ -248,7 +248,7 @@ public class UserManager implements IUserManager {
 			{				
 				if(!role.getDBid().equals(sDeactiveRoleDBId))
 				{
-					quadrigaRole = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, role.getDBid());
+					quadrigaRole = rolemanager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, role.getDBid());
 					rolesList.add(quadrigaRole);
 				}
 			}
@@ -347,7 +347,7 @@ public class UserManager implements IUserManager {
 
 					for(IQuadrigaRole role: roles)
 					{
-						quadrigaRole = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, role.getDBid());
+						quadrigaRole = rolemanager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, role.getDBid());
 						if(quadrigaRole.getId().equals(RoleNames.ROLE_QUADRIGA_DEACTIVATED))
 						{
 							//Continue to the next user as this user account is deactivated

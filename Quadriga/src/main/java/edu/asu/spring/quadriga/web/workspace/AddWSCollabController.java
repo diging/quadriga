@@ -106,7 +106,7 @@ public class AddWSCollabController
 				String[] roleIds = text.split(",");
 				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-				    IQuadrigaRole role = roleManager.getQuadrigaRole(IQuadrigaRoleManager.WORKSPACE_ROLES, roleId);
+				    IQuadrigaRole role = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.WORKSPACE_ROLES, roleId);
 					roles.add(role);
 				}
 				setValue(roles);

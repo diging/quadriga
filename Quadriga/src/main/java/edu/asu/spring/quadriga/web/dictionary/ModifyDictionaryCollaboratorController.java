@@ -70,7 +70,7 @@ public class ModifyDictionaryCollaboratorController
 				String[] roleIds = text.split(",");
 				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleId.trim());
+				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);

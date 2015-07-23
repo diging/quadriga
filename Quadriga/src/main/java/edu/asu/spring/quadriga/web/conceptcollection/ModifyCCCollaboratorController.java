@@ -74,7 +74,7 @@ public class ModifyCCCollaboratorController
 				String[] roleIds = text.split(",");
 				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleId.trim());
+				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);

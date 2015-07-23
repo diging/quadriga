@@ -150,7 +150,7 @@ public class UserDTOMapper{
 		    String[] role = roles.split("\\s*,\\s*");
 			for(int i = 0; i<role.length;i++)
 			{
-				userRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, role[i]);
+				userRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.MAIN_ROLES, role[i]);
 				rolesList.add(userRole);
 			}
 		}

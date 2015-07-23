@@ -91,7 +91,7 @@ public class DictionaryCollaboratorDTOMapper extends DAOConnectionManager
 				{
 				    IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
 					collaboratorRole.setDBid(roleName);
-					collaboratorRole.setDisplayName(roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleName).getDisplayName());
+					collaboratorRole.setDisplayName(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, roleName).getDisplayName());
 					roleManager.fillQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, collaboratorRole);
 					collaboratorRoleList.add(collaboratorRole);
 				}

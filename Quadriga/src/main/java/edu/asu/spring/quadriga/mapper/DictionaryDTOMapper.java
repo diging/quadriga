@@ -54,7 +54,7 @@ public class DictionaryDTOMapper extends DAOConnectionManager
 		QuadrigaUserDTO userName = dictionaryCollaborator.getQuadrigaUserDTO();
 		String role = dictionaryCollaborator.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
 		
-		collaboratorRoles.add(roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, role));     
+		collaboratorRoles.add(roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, role));     
 		
 		collaborator.setUserObj(userMapper.getUser(userName));
 		collaborator.setCollaboratorRoles(collaboratorRoles);

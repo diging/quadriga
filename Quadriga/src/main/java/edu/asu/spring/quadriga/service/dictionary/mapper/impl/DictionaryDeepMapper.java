@@ -200,7 +200,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			{
 				String roleName = dictionaryCollaboratorDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
 				
-				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleName);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, roleName);
 				
 				IDictionaryCollaborator dictionaryCollaborator =userDictionaryCollaboratorMap.get(userName);
 				
@@ -219,7 +219,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			{
 				String roleName = dictionaryCollaboratorDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
 				// Prepare collaborator roles
-				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleName);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRoleByDbId(IQuadrigaRoleManager.DICT_ROLES, roleName);
 				// Create a Collaborator Role list
 				List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
 				// Add collaborator role to the list
