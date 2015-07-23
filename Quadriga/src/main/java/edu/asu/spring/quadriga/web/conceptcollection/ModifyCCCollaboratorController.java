@@ -23,13 +23,13 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
@@ -45,7 +45,7 @@ public class ModifyCCCollaboratorController
 	private IModifyCollaboratorFormFactory collaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager collaboratorRoleManager;
 	
 	@Autowired
 	private CollaboratorFormValidator validator;
@@ -72,9 +72,9 @@ public class ModifyCCCollaboratorController
 			@Override
 			public void setAsText(String text) {
 				String[] roleIds = text.split(",");
-				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getCCCollaboratorRoleById(roleId.trim());
+				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);
@@ -99,7 +99,7 @@ public class ModifyCCCollaboratorController
 		 ModelAndView model;
 		 ModifyCollaboratorForm collaboratorForm;
 		 List<ModifyCollaborator> modifyCollaborator;
-		 List<ICollaboratorRole> collaboratorRoles;
+		 List<IQuadrigaRole> collaboratorRoles;
 		 
 		 model = new ModelAndView("auth/conceptcollection/updatecollaborators");
 		 
@@ -119,7 +119,7 @@ public class ModifyCCCollaboratorController
 		 collaboratorForm.setCollaborators(modifyCollaborator);
 		 
 		 //fetch the concept collection collaborator roles
-		 collaboratorRoles = collaboratorRoleManager.getCollectionCollaboratorRoles();
+		 collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES) ;
 			
 	     //add the collaborator roles to the model
 			model.getModelMap().put("cccollabroles", collaboratorRoles);
@@ -151,7 +151,7 @@ public class ModifyCCCollaboratorController
 			List<ModifyCollaborator> ccCollaborators;
 			String userName;
 			String collabUser;
-			List<ICollaboratorRole> values;
+			List<IQuadrigaRole> values;
 			StringBuilder collabRoles;
 			
 			userName = principal.getName();
@@ -180,7 +180,7 @@ public class ModifyCCCollaboratorController
 				
 				//retrieve the collaborator roles and assign it to a map
 				//fetch the roles that can be associated to the workspace collaborator
-				List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getCollectionCollaboratorRoles();
+				List<IQuadrigaRole> collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES);
 				model.getModelMap().put("cccollabroles", collaboratorRoles);
 			}
 			else
@@ -195,10 +195,10 @@ public class ModifyCCCollaboratorController
 					values = collab.getCollaboratorRoles();
 					
 					//fetch the role names for the roles and form a string
-					for(ICollaboratorRole role : values)
+					for(IQuadrigaRole role : values)
 					{
 						collabRoles.append(",");
-						collabRoles.append(role.getRoleDBid());
+						collabRoles.append(role.getDBid());
 					}
 					
 					//adding the logic to retrieve the user name of full name is empty

@@ -27,7 +27,6 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
@@ -37,7 +36,7 @@ import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.domain.workspace.IWorkspaceCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.impl.workspace.ModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
@@ -57,7 +56,7 @@ public class AddWSCollabController
 	IRetrieveWSCollabManager wsCollabManager;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
@@ -105,9 +104,9 @@ public class AddWSCollabController
 			public void setAsText(String text) {
 
 				String[] roleIds = text.split(",");
-				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getWSCollaboratorRoleByDBId(roleId);
+				    IQuadrigaRole role = roleManager.getQuadrigaRole(IQuadrigaRoleManager.WORKSPACE_ROLES, roleId);
 					roles.add(role);
 				}
 				setValue(roles);
@@ -172,7 +171,7 @@ public class AddWSCollabController
 		model.getModelMap().put("noncollabusers", nonCollaboratingUser);
 		
 		//fetch the roles that can be associated to the workspace collaborator
-		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
+		List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
 		
         //add the collaborator roles to the model
 		model.getModelMap().put("wscollabroles", collaboratorRoles);
@@ -226,10 +225,10 @@ public class AddWSCollabController
 			//get all the required input parameters
 			
 			collabUser = collaborator.getUserObj().getUserName();
-			for(ICollaboratorRole role : collaborator.getCollaboratorRoles())
+			for(IQuadrigaRole role : collaborator.getCollaboratorRoles())
 			{
 				roleIdList.append(",");
-				roleIdList.append(role.getRoleDBid());
+				roleIdList.append(role.getDBid());
 			}
 			
 			//call the method to insert the collaborator
@@ -267,7 +266,7 @@ public class AddWSCollabController
 		model.getModelMap().put("noncollabusers", nonCollaboratingUser);
 		
 		//fetch the roles that can be associated to the workspace collaborator
-		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
+		List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
 		
         //add the collaborator roles to the model
 		model.getModelMap().put("wscollabroles", collaboratorRoles);

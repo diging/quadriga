@@ -142,16 +142,15 @@ public class UserDTOMapper{
 	 */
 	public List<IQuadrigaRole> listQuadrigaUserRoles(String roles)
 	{
-		String[] role;
 		List<IQuadrigaRole> rolesList = new ArrayList<IQuadrigaRole>();
 		IQuadrigaRole userRole = null;
 
 		if(roles != null && roles.length()>0)
 		{
-			role = roles.split("\\s*,\\s*");
+		    String[] role = roles.split("\\s*,\\s*");
 			for(int i = 0; i<role.length;i++)
 			{
-				userRole = roleManager.getQuadrigaRole(role[i]);
+				userRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, role[i]);
 				rolesList.add(userRole);
 			}
 		}

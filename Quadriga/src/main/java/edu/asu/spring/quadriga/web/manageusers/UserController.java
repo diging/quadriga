@@ -63,7 +63,7 @@ public class UserController {
 		model.addAttribute("inactiveUserList", inactiveUserList);
 
 		//Get all Quadriga roles
-		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles();
+		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles(IQuadrigaRoleManager.MAIN_ROLES);
 		model.addAttribute("quadrigaroles",quadrigaRoles);
 		model.addAttribute("quadrolessize",quadrigaRoles.size());
 

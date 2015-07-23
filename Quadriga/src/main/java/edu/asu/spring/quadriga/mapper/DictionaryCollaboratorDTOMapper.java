@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
@@ -33,10 +33,10 @@ public class DictionaryCollaboratorDTOMapper extends DAOConnectionManager
 	private IUserManager userManager;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
-	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	private IQuadrigaRoleFactory roleFactory;
 	
 	
 	/**
@@ -84,15 +84,15 @@ public class DictionaryCollaboratorDTOMapper extends DAOConnectionManager
 			HashMap<String,List<String>> collabMap = mapUserRoles(dictionary);
 			for(String userID:collabMap.keySet())
 			{
-				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				collaborator.setUserObj(userManager.getUser(userID));
 				for(String roleName: collabMap.get(userID))
 				{
-					ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-					collaboratorRole.setRoleDBid(roleName);
-					collaboratorRole.setDisplayName(collaboratorRoleManager.getDictCollaboratorRoleIdByDBId(roleName));
-					collaboratorRoleManager.fillDictCollaboratorRole(collaboratorRole);
+				    IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
+					collaboratorRole.setDBid(roleName);
+					collaboratorRole.setDisplayName(roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleName).getDisplayName());
+					roleManager.fillQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, collaboratorRole);
 					collaboratorRoleList.add(collaboratorRole);
 				}
 				collaborator.setCollaboratorRoles(collaboratorRoleList);

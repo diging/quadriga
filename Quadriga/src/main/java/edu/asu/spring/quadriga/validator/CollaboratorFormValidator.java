@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaborator;
 import edu.asu.spring.quadriga.web.workbench.backing.ModifyCollaboratorForm;
 @Service
@@ -38,7 +38,7 @@ public class CollaboratorFormValidator implements Validator {
 	 */
 	public void collaboratorFormValidation(List<ModifyCollaborator> collaboratorList,Errors err)
 	{
-		List<ICollaboratorRole> collaboratorRoles;
+		List<IQuadrigaRole> collaboratorRoles;
 		
 		for(int i = 0;i<collaboratorList.size();i++)
 		{

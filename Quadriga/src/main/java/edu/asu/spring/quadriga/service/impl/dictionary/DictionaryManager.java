@@ -621,6 +621,9 @@ public class DictionaryManager implements IDictionaryManager {
 		List<IProject> dictProjectList = connectProjectDictionary.getprojectsByDictId(dictionaryId);
 		List<IWorkSpace> dictWorkspaceList = connectWorkspaceDictionary.getWorkspaceByDictId(dictionaryId);
 
+		if (projectList == null)
+		    return "";
+		
 		for(IProject project : projectList)
 		{
 			JSONObject data = new JSONObject();

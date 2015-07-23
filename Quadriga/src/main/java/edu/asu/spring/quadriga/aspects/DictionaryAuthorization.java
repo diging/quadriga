@@ -1,13 +1,12 @@
 package edu.asu.spring.quadriga.aspects;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
@@ -51,7 +50,7 @@ public class DictionaryAuthorization implements IAuthorization {
             QuadrigaAccessException {
         String collaboratorName;
         String collaboratorRoleId;
-        List<ICollaboratorRole> collaboratorRoles;
+        List<IQuadrigaRole> collaboratorRoles;
 
         // fetch the details of the concept collection
         IDictionary dictionary = dictionaryRetrieveManager
@@ -84,8 +83,8 @@ public class DictionaryAuthorization implements IAuthorization {
                 collaboratorRoles = dictCollaborator.getCollaborator()
                         .getCollaboratorRoles();
                 if (collaboratorRoles != null) {
-                    for (ICollaboratorRole collabRole : collaboratorRoles) {
-                        collaboratorRoleId = collabRole.getRoleid();
+                    for (IQuadrigaRole collabRole : collaboratorRoles) {
+                        collaboratorRoleId = collabRole.getId();
                         if (roles != null) {
                             if (roles.contains(collaboratorRoleId)) {
                                 return true;

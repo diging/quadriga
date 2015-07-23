@@ -18,14 +18,14 @@ import org.mockito.stubbing.Answer;
 import org.springframework.util.ReflectionUtils;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollectionCollaborator;
 import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.factory.impl.conceptcollection.ConceptCollectionFactory;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
-import edu.asu.spring.quadriga.domain.impl.CollaboratorRole;
+import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollection;
 import edu.asu.spring.quadriga.domain.impl.conceptcollection.ConceptCollectionCollaborator;
@@ -70,9 +70,9 @@ public class ConceptCollectionRestAuthorizationTest {
         collaborator.setUserObj(collabUser);
         
         // create collaborator roles 
-        ICollaboratorRole role = new CollaboratorRole();
-        role.setRoleid("role1");
-        List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+        IQuadrigaRole role = new QuadrigaRole();
+        role.setId("role1");
+        List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
         roles.add(role);
         collaborator.setCollaboratorRoles(roles);
         

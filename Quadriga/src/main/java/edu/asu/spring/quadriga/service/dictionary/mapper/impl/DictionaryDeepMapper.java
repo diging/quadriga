@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryItems;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryCollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryItemFactory;
@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.mapper.IDictionaryDeepMapper;
 import edu.asu.spring.quadriga.service.user.mapper.IUserDeepMapper;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDictionaryShallowMapper;
@@ -39,7 +39,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 
 	
 	@Autowired
-	private ICollaboratorRoleManager roleMapper;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	private IDictionaryCollaboratorFactory dictionaryCollaboratorFactory;
@@ -56,10 +56,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 	private ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleFactory collaboratorRoleFactory;
-	
-	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleFactory roleFactory;
 	
 	@Autowired
 	private IProjectDictionaryShallowMapper projectDictionaryShallowMapper;
@@ -203,10 +200,7 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			{
 				String roleName = dictionaryCollaboratorDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
 				
-				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getDictCollaboratorRoleByDBId(roleName);
-//				collaboratorRole.setRoleDBid(roleName);
-//				collaboratorRole.setDisplayName(collaboratorRoleManager.getDictCollaboratorRoleByDBId(roleName));
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleName);
 				
 				IDictionaryCollaborator dictionaryCollaborator =userDictionaryCollaboratorMap.get(userName);
 				
@@ -224,16 +218,10 @@ public class DictionaryDeepMapper implements IDictionaryDeepMapper {
 			else
 			{
 				String roleName = dictionaryCollaboratorDTO.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
-				logger.info("roleName "+roleName);
 				// Prepare collaborator roles
-				ICollaboratorRole collaboratorRole = collaboratorRoleManager.getDictCollaboratorRoleByDBId(roleName);
-//				ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-//				
-//				collaboratorRole.setRoleDBid(roleName);
-//				collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
-				roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				IQuadrigaRole collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleName);
 				// Create a Collaborator Role list
-				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
 				// Add collaborator role to the list
 				collaboratorRoleList.add(collaboratorRole);
 				// Create a Collaborator
