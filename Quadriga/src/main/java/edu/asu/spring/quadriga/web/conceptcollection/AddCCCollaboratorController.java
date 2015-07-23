@@ -109,7 +109,7 @@ public class AddCCCollaboratorController {
 		    	List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 		    	for(String roleId: roleIds)
 		    	{
-		    	    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleId.trim());
+		    	    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRoleById(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleId.trim());
 		    		roles.add(role);
 		    	}
 		    	setValue(roles);	
@@ -212,8 +212,7 @@ public class AddCCCollaboratorController {
 		{
 		   List<IUser> nonCollaboratorList;
 		   List<IQuadrigaRole> collaboratorRoleList;
-		   ModelAndView model;
-		   model = new ModelAndView("auth/conceptcollection/addcollaborators");
+		   ModelAndView model = new ModelAndView("auth/conceptcollection/addcollaborators");
 		   
 		    String username = principal.getName();
 			//fetch the concept collection details

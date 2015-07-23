@@ -352,7 +352,7 @@
 </h3>
 <ul class="collaborators">
 <c:forEach var="collab" items="${collaboratingUsers}">
-<li><c:out value="${collab.userObj.name}"/></li>
+<li><c:out value="${collab.collaborator.userObj.name}"/></li>
 </c:forEach>
 </ul>
 </section>
