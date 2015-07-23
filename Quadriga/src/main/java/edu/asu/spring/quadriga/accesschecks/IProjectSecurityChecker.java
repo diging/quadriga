@@ -13,10 +13,10 @@ public interface IProjectSecurityChecker {
 	public abstract boolean checkQudrigaAdmin(String userName)
 			throws QuadrigaStorageException;
 
-	public abstract boolean checkCollabProjectAccess(String userName, String projectId,
+	public abstract boolean isUserCollaboratorOnProject(String userName, String projectId,
 			String collaboratorRole) throws QuadrigaStorageException;
 
-	public abstract boolean checkProjectOwnerEditorAccess(String userName, String projectId)
+	public abstract boolean isEditor(String userName, String projectId)
 			throws QuadrigaStorageException;
 
 	public abstract boolean isCollaborator(String userName, String collaboratorRole,String projectId)

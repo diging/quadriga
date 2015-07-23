@@ -98,26 +98,13 @@ public class ProjectAccessManagerDAO extends DAOConnectionManager implements  IP
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean chkProjectOwnerEditorRole(String userName,String projectId)
+	public int isUserEditorOfProject(String userName,String projectId)
 	{
-		boolean isEditor;
-		isEditor = false;
-		int count;
 		Query query = sessionFactory.getCurrentSession().createQuery("SELECT count(pc.projectEditorDTOPK.projectid) FROM ProjectEditorDTO pc WHERE pc.projectEditorDTOPK.projectid =:projectId AND pc.projectEditorDTOPK.editor =:userName");
 		query.setParameter("userName", userName);
 		query.setParameter("projectId",projectId);
 		
-		count = ((Number) query.uniqueResult()).intValue();
-		if(count > 0)
-		{
-			isEditor = true;
-		}
-		else
-		{
-			isEditor = false;
-		}
-		
-		return isEditor;
+		return ((Number) query.uniqueResult()).intValue();
 	}
 
 }

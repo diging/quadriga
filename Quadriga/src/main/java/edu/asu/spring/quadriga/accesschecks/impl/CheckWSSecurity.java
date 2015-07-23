@@ -48,19 +48,19 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		//check if the user is a project collaborator and has a ADMIN role
 		if(!chkAccess)
 		{
-			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_COLLABORATOR_ADMIN);
+			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_COLLABORATOR_ADMIN);
 		}
 
 		//check if the user is a project collaborator and has PROJECT_ADMIN role
 		if(!chkAccess)
 		{
-			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
+			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
 		}
 
 		//check if the user is a project collaborator and has CONTRIBUTOR role
 		if(!chkAccess)
 		{
-			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR);
+			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_CONTRIBUTOR);
 		}
 
 		return chkAccess;
@@ -96,13 +96,13 @@ public class CheckWSSecurity implements ICheckWSSecurity
 		//check if the user is a project collaborator having ADMIN role
 		if(!chkAccess)
 		{
-			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
+			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
 		}
 
 		//check if user is project collaborator having PROJECT_ADMIN role
 		if(!chkAccess)
 		{
-			chkAccess = projectSecurity.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
+			chkAccess = projectSecurity.isUserCollaboratorOnProject(userName, projectId, RoleNames.ROLE_PROJ_COLLABORATOR_ADMIN);
 		}
 
 		return chkAccess;

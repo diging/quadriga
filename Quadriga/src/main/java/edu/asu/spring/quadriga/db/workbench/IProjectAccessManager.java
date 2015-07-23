@@ -13,7 +13,7 @@ public interface IProjectAccessManager
 	 *         false - if the user does not have editor role for the given project.
 	 * @throws QuadrigaStorageException
 	 */
-	public abstract boolean chkProjectOwnerEditorRole(String userName, String projectId) throws QuadrigaStorageException;
+	public int isUserEditorOfProject(String userName, String projectId) throws QuadrigaStorageException;
 
 	/**
 	 * This method checks if the Unix name for a project already exists in the database

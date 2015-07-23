@@ -182,7 +182,7 @@ public class RetrieveProjectController
 		}else{
 			model.getModelMap().put("owner", 0);
 		}
-		if(projectSecurity.checkProjectOwnerEditorAccess(userName, projectid)){
+		if(projectSecurity.isEditor(userName, projectid)){
 			model.getModelMap().put("editoraccess", 1);
 		}else{
 			model.getModelMap().put("editoraccess", 0);

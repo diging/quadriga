@@ -224,7 +224,7 @@ public class ModifyProjectController
 		}else{
 			model.addAttribute("owner", 0);
 		}
-		if(projectSecurity.checkProjectOwnerEditorAccess(userName, projectId)){
+		if(projectSecurity.isEditor(userName, projectId)){
 			model.addAttribute("editoraccess", 1);
 		}else{
 			model.addAttribute("editoraccess", 0);
@@ -256,7 +256,7 @@ public class ModifyProjectController
 		}else{
 			model.addAttribute("owner", 0);
 		}
-		if(projectSecurity.checkProjectOwnerEditorAccess(userName, projectId)){
+		if(projectSecurity.isEditor(userName, projectId)){
 			model.addAttribute("editoraccess", 1);
 		}else{
 			model.addAttribute("editoraccess", 0);

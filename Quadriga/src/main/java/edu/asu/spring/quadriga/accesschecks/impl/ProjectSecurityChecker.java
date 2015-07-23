@@ -17,207 +17,201 @@ import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.web.login.RoleNames;
 
 @Service
-public class ProjectSecurityChecker implements IProjectSecurityChecker 
-{
-	@Autowired
-	private IUserManager userManager;
+public class ProjectSecurityChecker implements IProjectSecurityChecker {
+    @Autowired
+    private IUserManager userManager;
 
-	@Autowired
-	private IRetrieveProjCollabManager projectManager;
+    @Autowired
+    private IRetrieveProjCollabManager projectManager;
 
-	@Autowired
-	private IProjectAccessManager accessManager;
+    @Autowired
+    private IProjectAccessManager accessManager;
 
-	/**
-	 * This method checks if the user is Quadriga Admin
-	 * @param userName
-	 * @return boolean - TRUE if the user is quadriga Admin else FALSE
-	 * @throws QuadrigaStorageException
-	 * @author kiranbatna
-	 */
-	@Override
-	@Transactional
-	public boolean checkQudrigaAdmin(String userName) throws QuadrigaStorageException
-	{
-		boolean chkAccess;
-		IUser user;
-		List<IQuadrigaRole> quadrigaRoles;
+    /**
+     * This method checks if the user is Quadriga Admin
+     * 
+     * @param userName
+     * @return boolean - TRUE if the user is quadriga Admin else FALSE
+     * @throws QuadrigaStorageException
+     * @author kiranbatna
+     */
+    @Override
+    @Transactional
+    public boolean checkQudrigaAdmin(String userName)
+            throws QuadrigaStorageException {
+        boolean chkAccess;
+        IUser user;
+        List<IQuadrigaRole> quadrigaRoles;
 
-		//initialize chkAccess variable
-		chkAccess = false;
+        // initialize chkAccess variable
+        chkAccess = false;
 
-		user = userManager.getUser(userName);
-		quadrigaRoles = user.getQuadrigaRoles();
-		for(IQuadrigaRole quadRole : quadrigaRoles)
-		{
-			if(quadRole.getId().equals(RoleNames.ROLE_QUADRIGA_ADMIN))
-			{
-				chkAccess = true;
-				break;
-			}
-		}
+        user = userManager.getUser(userName);
+        quadrigaRoles = user.getQuadrigaRoles();
+        for (IQuadrigaRole quadRole : quadrigaRoles) {
+            if (quadRole.getId().equals(RoleNames.ROLE_QUADRIGA_ADMIN)) {
+                chkAccess = true;
+                break;
+            }
+        }
 
-		return chkAccess;
-	}
+        return chkAccess;
+    }
 
-	/**
-	 * This method checks if the user is project owner
-	 * @param userName
-	 * @return boolean - TRUE if the user is project owner else FALSE
-	 * @throws QuadrigaStorageException
-	 * @author kiranbatna
-	 */
+    /**
+     * This method checks if the user is project owner
+     * 
+     * @param userName
+     * @return boolean - TRUE if the user is project owner else FALSE
+     * @throws QuadrigaStorageException
+     * @author kiranbatna
+     */
 
-	@Override
-	@Transactional
-	public boolean isProjectOwner(String userName,String projectId) throws QuadrigaStorageException
-	{
-		//check if the user is project owner
-		String owner = accessManager.getProjectOwner(projectId);
-		return owner.equals(userName);
+    @Override
+    @Transactional
+    public boolean isProjectOwner(String userName, String projectId)
+            throws QuadrigaStorageException {
+        // check if the user is project owner
+        String owner = accessManager.getProjectOwner(projectId);
+        return owner.equals(userName);
 
-	}
+    }
 
-	@Override
-	@Transactional
-	public boolean ownsAtLeastOneProject(String userName) throws QuadrigaStorageException
-	{
-		//check if the use is associated with any project
-		return accessManager.getNrOfOwnedProjects(userName) > 0;
-	}
+    @Override
+    @Transactional
+    public boolean ownsAtLeastOneProject(String userName)
+            throws QuadrigaStorageException {
+        // check if the use is associated with any project
+        return accessManager.getNrOfOwnedProjects(userName) > 0;
+    }
 
-	@Override
-	@Transactional
-	public boolean collaboratesOnAtLeastOneProject(String userName,String collaboratorRole) throws QuadrigaStorageException
-	{
-		return accessManager.nrOfProjectsCollaboratingOn(userName, collaboratorRole) > 0;
-	}
+    @Override
+    @Transactional
+    public boolean collaboratesOnAtLeastOneProject(String userName,
+            String collaboratorRole) throws QuadrigaStorageException {
+        return accessManager.nrOfProjectsCollaboratingOn(userName,
+                collaboratorRole) > 0;
+    }
 
-	/**
-	 * This method checks if the user is project owner
-	 * @param userName
-	 * @return boolean - TRUE if the user is project owner else FALSE
-	 * @throws QuadrigaStorageException
-	 * @author kiranbatna
-	 */
-	@Override
-	@Transactional
-	public boolean isCollaborator(String userName,String collaboratorRole,String projectId) throws QuadrigaStorageException
-	{
-		return accessManager.isCollaborator(userName, collaboratorRole, projectId);
-	}
+    /**
+     * This method checks if the user is project owner
+     * 
+     * @param userName
+     * @return boolean - TRUE if the user is project owner else FALSE
+     * @throws QuadrigaStorageException
+     * @author kiranbatna
+     */
+    @Override
+    @Transactional
+    public boolean isCollaborator(String userName, String collaboratorRole,
+            String projectId) throws QuadrigaStorageException {
+        return accessManager.isCollaborator(userName, collaboratorRole,
+                projectId);
+    }
 
-	/**
-	 * This method checks if the project collaborator has access to perform operations.
-	 * @param userName
-	 * @param projectId
-	 * @param collaboratorRole
-	 * @return boolean - TRUE if he has access else FALSE
-	 * @throws QuadrigaStorageException
-	 * @author kiranbatna
-	 */
-	@Override
-	@Transactional
-	public boolean checkCollabProjectAccess(String userName,String projectId,String collaboratorRole) throws QuadrigaStorageException
-	{
-		List<IProjectCollaborator> projectCollaboratorList = null;
-		List<IQuadrigaRole> collaboratorRoles = null;
+    /**
+     * This method checks if the project collaborator has access to perform
+     * operations.
+     * 
+     * @param userName
+     * @param projectId
+     * @param collaboratorRole
+     * @return boolean - TRUE if he has access else FALSE
+     * @throws QuadrigaStorageException
+     * @author kiranbatna
+     */
+    @Override
+    @Transactional
+    public boolean isUserCollaboratorOnProject(String userName,
+            String projectId, String collaboratorRole)
+            throws QuadrigaStorageException {
+        // fetch the collaborators associated with the project
+        List<IProjectCollaborator> projectCollaboratorList = projectManager
+                .getProjectCollaborators(projectId);
+        
+        if (projectCollaboratorList == null)
+            return false;
 
-		//initialize the local variable
-		boolean chkAccess = false;
+        // loop through each collaborator
+        for (IProjectCollaborator projectCollaborator : projectCollaboratorList) {
+            if (projectCollaborator.getCollaborator() != null
+                    && projectCollaborator.getCollaborator().getUserObj()
+                            .getUserName().equals(userName)) {
+                List<IQuadrigaRole> collaboratorRoles = projectCollaborator
+                        .getCollaborator().getCollaboratorRoles();
+                if (collaboratorRoles != null) {
+                    // check if the collaborator is Project Admin or
+                    // Contributor
+                    for (IQuadrigaRole role : collaboratorRoles) {
+                        if (role.getId().equals(collaboratorRole)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
 
-		//fetch the collaborators associated with the project
+        return false;
+    }
 
-		projectCollaboratorList = projectManager.getProjectCollaborators(projectId);
+    /**
+     * This method checks if the user is either a project owner or a quadriga
+     * admin
+     * 
+     * @param userName
+     * @return boolean - TRUE if the user is either a project owner or a
+     *         quadriga admin else FALSE
+     * @throws QuadrigaStorageException
+     * @author kiranbatna
+     */
+    @Override
+    @Transactional
+    public boolean checkProjectAccess(String userName, String projectId)
+            throws QuadrigaStorageException {
+        boolean chkAccess;
 
-		if(projectCollaboratorList != null){
-			//loop through each collaborator
-			for(IProjectCollaborator projectCollaborator : projectCollaboratorList)
-			{
-				if(projectCollaborator.getCollaborator() != null){
-					//check if the user is one of the collaborators
-					if(projectCollaborator.getCollaborator().getUserObj().getUserName() == userName)
-					{
-						collaboratorRoles = projectCollaborator.getCollaborator().getCollaboratorRoles();
+        // initialize chkAccess variable
+        chkAccess = false;
 
-						if(collaboratorRoles != null){
-							//check if the collaborator is Project Admin or Contributor
-							for(IQuadrigaRole role : collaboratorRoles)
-							{
-								if(role.getId() == collaboratorRole)
-								{
-									chkAccess = true;
-									break;
-								}
-							}
-						}
-						// break through the outer loop
-						break;
-					}
-				}
-			}
-		}
-		return chkAccess;
-	}
+        // check if the user is project owner
+        chkAccess = this.isProjectOwner(userName, projectId);
 
-	/**
-	 * This method checks if the user is either a project owner or a quadriga admin
-	 * @param userName
-	 * @return boolean - TRUE if the user is either a project owner or a quadriga admin else FALSE
-	 * @throws QuadrigaStorageException 
-	 * @author kiranbatna
-	 */
-	@Override
-	@Transactional
-	public boolean checkProjectAccess(String userName,String projectId) throws QuadrigaStorageException
-	{
-		boolean chkAccess;
+        if (!chkAccess) {
+            chkAccess = this.isUserCollaboratorOnProject(userName, projectId,
+                    RoleNames.ROLE_QUADRIGA_ADMIN);
+        }
+        return chkAccess;
+    }
 
-		//initialize chkAccess variable
-		chkAccess = false;
+    /**
+     * This method checks if the user has the editor role to
+     * this Project
+     * 
+     * @param userName
+     * @return boolean - TRUE if the user is editor on the project; otherwise false
+     * @throws QuadrigaStorageException
+     * @author kiranbatna
+     */
+    @Override
+    @Transactional
+    public boolean isEditor(String userName,
+            String projectId) throws QuadrigaStorageException {
+        // check if the user is project owner
+        return accessManager
+                .isUserEditorOfProject(userName, projectId) > 0;
+    }
 
-		//check if the user is project owner
-		chkAccess = this.isProjectOwner(userName,projectId);
+    @Override
+    @Transactional
+    public boolean chkDuplicateProjUnixName(String unixName, String projectId)
+            throws QuadrigaStorageException {
+        boolean chkAccess;
 
-		if(!chkAccess)
-		{
-			chkAccess = this.checkCollabProjectAccess(userName, projectId, RoleNames.ROLE_QUADRIGA_ADMIN);
-		}
-		return chkAccess;
-	}
+        // initialize chkAccess variable
+        chkAccess = false;
 
-	/**
-	 * This method checks if the user is Project owner and has editor role to this Project
-	 * @param userName
-	 * @return boolean - TRUE if the user is either a project owner or a quadriga admin else FALSE
-	 * @throws QuadrigaStorageException 
-	 * @author kiranbatna
-	 */
-	@Override
-	@Transactional
-	public boolean checkProjectOwnerEditorAccess(String userName,String projectId) throws QuadrigaStorageException
-	{
-		boolean chkAccess;
+        chkAccess = accessManager.chkDuplicateProjUnixName(unixName, projectId);
 
-		//initialize chkAccess variable
-		chkAccess = false;
-
-		//check if the user is project owner
-		chkAccess = accessManager.chkProjectOwnerEditorRole(userName, projectId);
-		return chkAccess;
-	}
-
-	@Override
-	@Transactional
-	public boolean chkDuplicateProjUnixName(String unixName, String projectId) throws QuadrigaStorageException
-	{
-		boolean chkAccess;
-
-		//initialize chkAccess variable
-		chkAccess = false;
-
-		chkAccess = accessManager.chkDuplicateProjUnixName(unixName, projectId);
-
-		return chkAccess;
-	}
+        return chkAccess;
+    }
 }
