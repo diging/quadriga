@@ -35,7 +35,6 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -69,9 +68,6 @@ public class ModifyProjectController
 	
 	@Autowired
 	ICollaboratorFactory collaboratorFactory;
-	
-	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
 	
 	@Autowired
 	private IModifyProjectFormFactory projectFormFactory; 

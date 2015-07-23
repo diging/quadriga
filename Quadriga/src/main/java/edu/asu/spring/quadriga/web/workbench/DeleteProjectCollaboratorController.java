@@ -24,8 +24,6 @@ import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
-import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -50,12 +48,6 @@ public class DeleteProjectCollaboratorController {
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
 
-	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
-
-	@Autowired
-	private IQuadrigaRoleManager quadrigaRoleManager;
-	
 	@Autowired
 	private IRetrieveProjectManager retrieveprojectManager;
 	

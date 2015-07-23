@@ -67,7 +67,7 @@ $(document).ready(function() {
 	
 	<br><br>
 	
-	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="roleid" itemLabel="roleid" />	
+	<form:checkboxes path="collaboratorRoles" class="roles" items="${possibleCollaboratorRoles}" itemValue="id" itemLabel="id" />	
 	<td><input type="submit" value="Add"></td>
 	<form:errors path="collaboratorRoles" class="ui-state-error-text"></form:errors>
 	&nbsp;

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.dictionary.IDBConnectionDictionaryManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
@@ -303,11 +303,11 @@ public class DictionaryManagerDAO extends DAOConnectionManager implements IDBCon
 		{
 			DictionaryDTO dictionary = (DictionaryDTO) sessionFactory.getCurrentSession().get(DictionaryDTO.class, dictionaryid);
 			
-			for(ICollaboratorRole collaboratorRole:collaborator.getCollaboratorRoles())
+			for(IQuadrigaRole collaboratorRole:collaborator.getCollaboratorRoles())
 			{
-				if(collaboratorRole.getRoleDBid()!=null)
+				if(collaboratorRole.getDBid()!=null)
 				{
-					String collabRole = collaboratorRole.getRoleDBid();
+					String collabRole = collaboratorRole.getDBid();
 					DictionaryCollaboratorDTO dictCollabDTO = collaboratorMapper.getDictionaryCollaboratorDTO(dictionary,userName, sessionUser, collabRole);
 					sessionFactory.getCurrentSession().save(dictCollabDTO);
 				}

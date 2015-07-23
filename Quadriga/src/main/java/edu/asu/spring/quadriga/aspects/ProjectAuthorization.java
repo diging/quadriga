@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
@@ -49,7 +49,7 @@ public class ProjectAuthorization implements IAuthorization
 		String projectOwner;
 		String collaboratorName;
 		String collaboratorRoleId;
-		List<ICollaboratorRole> collaboratorRoles;
+		List<IQuadrigaRole> collaboratorRoles;
 		ArrayList<String> roles;
 		haveAccess = false;
 		
@@ -80,9 +80,9 @@ public class ProjectAuthorization implements IAuthorization
 					{
 						collaboratorRoles = collaborator.getCollaboratorRoles();
 						
-							for(ICollaboratorRole collabRole : collaboratorRoles)
+							for(IQuadrigaRole collabRole : collaboratorRoles)
 							{
-								collaboratorRoleId = collabRole.getRoleid();
+								collaboratorRoleId = collabRole.getId();
 								if(roles.contains(collaboratorRoleId))
 								{
 									haveAccess = true;

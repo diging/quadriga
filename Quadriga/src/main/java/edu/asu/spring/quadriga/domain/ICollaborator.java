@@ -28,14 +28,14 @@ public interface ICollaborator
      * @param collaboratorRoles - List of {@link ICollaboratorRole} objects containing
      * the roles associated to the collaborator
      */
-	public abstract void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles);
+	public abstract void setCollaboratorRoles(List<IQuadrigaRole> collaboratorRoles);
 
     /**
      * Method to retrieve roles associated with the collaborator
      * @return collaboratorRoles - List of {@link ICollaboratorRole} objects containing
      * the roles associated to the collaborator
      */
-	public abstract List<ICollaboratorRole> getCollaboratorRoles();
+	public abstract List<IQuadrigaRole> getCollaboratorRoles();
 
     /**
      * Method to set the collaborator description.

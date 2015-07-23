@@ -23,12 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryCollaboratorManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
 import edu.asu.spring.quadriga.validator.CollaboratorFormValidator;
@@ -47,7 +47,7 @@ public class ModifyDictionaryCollaboratorController
 	private IModifyCollaboratorFormFactory collaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager collaboratorRoleManager;
 	
 	@Autowired
 	IDictionaryCollaboratorManager dictionaryManager;
@@ -68,9 +68,9 @@ public class ModifyDictionaryCollaboratorController
 			@Override
 			public void setAsText(String text) {
 				String[] roleIds = text.split(",");
-				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getDictCollaboratorRoleById(roleId.trim());
+				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);
@@ -94,7 +94,7 @@ public class ModifyDictionaryCollaboratorController
 		 ModelAndView model;
 		 ModifyCollaboratorForm collaboratorForm;
 		 List<ModifyCollaborator> modifyCollaborator;
-		 List<ICollaboratorRole> collaboratorRoles;
+		 List<IQuadrigaRole> collaboratorRoles;
 		 
 		 model = new ModelAndView("auth/dictionaries/updatecollaborators");
 		 
@@ -109,7 +109,7 @@ public class ModifyDictionaryCollaboratorController
 		 collaboratorForm.setCollaborators(modifyCollaborator);
 		 
 		 //fetch the concept collection collaborator roles
-		 collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
+		 collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.DICT_ROLES);
 			
 	     //add the collaborator roles to the model
 			model.getModelMap().put("dictcollabroles", collaboratorRoles);
@@ -140,7 +140,7 @@ public class ModifyDictionaryCollaboratorController
 			List<ModifyCollaborator> dictCollaborators;
 			String userName;
 			String collabUser;
-			List<ICollaboratorRole> values;
+			List<IQuadrigaRole> values;
 			StringBuilder collabRoles;
 			
 			userName = principal.getName();
@@ -166,7 +166,7 @@ public class ModifyDictionaryCollaboratorController
 				
 				//retrieve the collaborator roles and assign it to a map
 				//fetch the roles that can be associated to the workspace collaborator
-				List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();;
+				List<IQuadrigaRole> collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.DICT_ROLES);
 				model.getModelMap().put("dictcollabroles", collaboratorRoles);
 			}
 			else
@@ -181,10 +181,10 @@ public class ModifyDictionaryCollaboratorController
 					values = collab.getCollaboratorRoles();
 					
 					//fetch the role names for the roles and form a string
-					for(ICollaboratorRole role : values)
+					for(IQuadrigaRole role : values)
 					{
 						collabRoles.append(",");
-						collabRoles.append(role.getRoleDBid());
+						collabRoles.append(role.getDBid());
 					}
 					
 					dictionaryManager.updateCollaboratorRoles(dictionaryid, collabUser, collabRoles.toString().substring(1), userName);

@@ -41,7 +41,7 @@
 		</c:otherwise>
 	</c:choose>
 	<form:form modelAttribute="dictionary" method="POST"
-		action="/auth/dictionaries/addDictionary">
+		action="${pageContext.servletContext.contextPath}/auth/dictionaries/addDictionary">
 		<header>
 			<h2> Add dictionary </h2>
 		</header>

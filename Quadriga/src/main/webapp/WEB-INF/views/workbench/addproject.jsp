@@ -25,7 +25,7 @@
 </script>
 <article class="is-page-content">
 	<form:form commandName="project" method="POST"
-		action="/auth/workbench/addproject">
+		action="${pageContext.servletContext.contextPath}/auth/workbench/addproject">
 		<c:choose>
 			<c:when test="${success == '0'}">
 				<header>

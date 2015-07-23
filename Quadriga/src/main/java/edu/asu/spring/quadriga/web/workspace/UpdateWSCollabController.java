@@ -23,12 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.workspace.IWorkSpace;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workspace.IListWSManager;
 import edu.asu.spring.quadriga.service.workspace.IModifyWSCollabManager;
 import edu.asu.spring.quadriga.service.workspace.IRetrieveWSCollabManager;
@@ -45,7 +45,7 @@ public class UpdateWSCollabController
 	private	IRetrieveWSCollabManager wsCollabManager;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	private IModifyCollaboratorFormFactory collaboratorFactory;
@@ -79,9 +79,9 @@ public class UpdateWSCollabController
 			@Override
 			public void setAsText(String text) {
 				String[] roleIds = text.split(",");
-				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getWSCollaboratorRoleByDBId(roleId);
+				    IQuadrigaRole role = roleManager.getQuadrigaRole(IQuadrigaRoleManager.WORKSPACE_ROLES, roleId);
 					roles.add(role);
 				}
 				setValue(roles);
@@ -115,7 +115,7 @@ public class UpdateWSCollabController
 		collaboratorList = collaboratorFormManager.modifyWorkspaceCollaboratorManager(workspaceid);
 		
 		//fetch the roles that can be associated to the workspace collaborator
-		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
+		List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
 		
 		//create a model for collaborators
 		collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
@@ -153,7 +153,7 @@ public class UpdateWSCollabController
 		List<ModifyCollaborator> wsCollaborators;
 		String userName;
 		String collabUser;
-		List<ICollaboratorRole> values;
+		List<IQuadrigaRole> values;
 		String collabRoles;
 		
 		userName = principal.getName();
@@ -179,7 +179,7 @@ public class UpdateWSCollabController
 			
 			//retrieve the collaborator roles and assign it to a map
 			//fetch the roles that can be associated to the workspace collaborator
-			List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getWsCollabRoles();
+			List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.WORKSPACE_ROLES);
 			model.getModelMap().put("wscollabroles", collaboratorRoles);
 		}
 		else
@@ -194,9 +194,9 @@ public class UpdateWSCollabController
 				values = collab.getCollaboratorRoles();
 				
 				//fetch the role names for the roles and form a string
-				for(ICollaboratorRole role : values)
+				for(IQuadrigaRole role : values)
 				{
-					collabRoles = collabRoles + ","+role.getRoleDBid();
+					collabRoles = collabRoles + ","+role.getDBid();
 				}
 				
 				collabRoles = collabRoles.substring(1);

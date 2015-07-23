@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
@@ -21,7 +21,7 @@ import edu.asu.spring.quadriga.dto.ConceptCollectionDTO;
 import edu.asu.spring.quadriga.dto.ConceptsDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 @Service
 public class ConceptCollectionDTOMapper extends DAOConnectionManager
@@ -40,138 +40,8 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 	private UserDTOMapper userDTOMapper;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager roleManager;
 	
-//	public IConceptCollection getConceptCollection(ConceptCollectionDTO collection)
-//	{
-//		List<ICollaborator> collaboratorList = null;
-//		List<IConcept> conceptList = null;
-//		IConceptCollection concept = null;
-//		ICollaborator collaborator= null;
-//		IConcept tempConcept = null;
-//		
-//		concept = conceptCollectionFactory.createConceptCollectionObject();
-//		collaboratorList = new ArrayList<ICollaborator>();
-//		conceptList = new ArrayList<IConcept>();
-//		List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaborators = collection.getConceptCollectionCollaboratorDTOList();
-//		
-//		if(conceptCollectionCollaborators != null)
-//		{
-//			for(ConceptCollectionCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
-//			{
-//				
-//				collaborator = getConceptCollectionCollaborators(conceptCollaborator);
-//				
-//				if(collaboratorList.contains(collaborator))
-//				{
-//					int index = collaboratorList.indexOf(collaborator);
-//					ICollaborator tempCollaborator = collaboratorList.get(index);
-//					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
-//					tempRoles.addAll(collaborator.getCollaboratorRoles());
-//					tempCollaborator.setCollaboratorRoles(tempRoles);
-//					
-//					//set the collaborator with the roles
-//					collaboratorList.set(index, tempCollaborator);
-//				}
-//				else
-//				{
-//					collaboratorList.add(collaborator);
-//				}
-//			}
-//		}
-//		
-//		//loop through all the items and add it to concept collection
-//		List<ConceptCollectionItemsDTO> collectionItems = collection.getConceptCollectionItemsDTOList();
-//		
-//		if(collectionItems != null)
-//		{
-//			for(ConceptCollectionItemsDTO collectionConcept : collectionItems)
-//			{
-//				tempConcept = getConceptCollectionItems(collectionConcept);
-//				conceptList.add(tempConcept);
-//			}
-//			
-//		}
-//		concept.setId(collection.getConceptCollectionid());
-//		concept.setName(collection.getCollectionname());
-//		concept.setDescription(collection.getDescription());
-//        concept.setOwner(userDTOMapper.getUser(collection.getCollectionowner()));
-//        concept.setCollaborators(collaboratorList);   
-//        concept.setItems(conceptList);
-//		
-//		return concept;
-//	}
-//	public IConceptCollection getConceptCollection(ConceptCollectionDTO collection)
-//	{
-//		List<ICollaborator> collaboratorList = null;
-//		List<IConcept> conceptList = null;
-//		IConceptCollection concept = null;
-//		ICollaborator collaborator= null;
-//		IConcept tempConcept = null;
-//		
-//		concept = conceptCollectionFactory.createConceptCollectionObject();
-//		collaboratorList = new ArrayList<ICollaborator>();
-//		conceptList = new ArrayList<IConcept>();
-//		List<ConceptCollectionCollaboratorDTO> conceptCollectionCollaborators = collection.getConceptCollectionCollaboratorDTOList();
-//		
-//		if(conceptCollectionCollaborators != null)
-//		{
-//			for(ConceptCollectionCollaboratorDTO conceptCollaborator : conceptCollectionCollaborators)
-//			{
-//				
-//				collaborator = getConceptCollectionCollaborators(conceptCollaborator);
-//				
-//				if(collaboratorList.contains(collaborator))
-//				{
-//					int index = collaboratorList.indexOf(collaborator);
-//					ICollaborator tempCollaborator = collaboratorList.get(index);
-//					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
-//					tempRoles.addAll(collaborator.getCollaboratorRoles());
-//					tempCollaborator.setCollaboratorRoles(tempRoles);
-//					
-//					//set the collaborator with the roles
-//					collaboratorList.set(index, tempCollaborator);
-//				}
-//				else
-//				{
-//					collaboratorList.add(collaborator);
-//				}
-//			}
-//		}
-//		
-//		//loop through all the items and add it to concept collection
-//		List<ConceptCollectionItemsDTO> collectionItems = collection.getConceptCollectionItemsDTOList();
-//		
-//		if(collectionItems != null)
-//		{
-//			for(ConceptCollectionItemsDTO tempCollectionConcept : collectionItems)
-//			{
-//				ConceptsDTO collectionConcept = tempCollectionConcept.getConceptDTO();
-//				tempConcept = getConceptCollectionItems(collectionConcept);
-//				conceptList.add(tempConcept);
-//			}
-//			
-//		}
-//		concept.setConceptCollectionId(collection.getConceptCollectionid());
-//		concept.setConceptCollectionName(collection.getCollectionname());
-//		concept.setDescription(collection.getDescription());
-//        concept.setOwner(userDTOMapper.getUser(collection.getCollectionowner()));
-//        concept.setConceptCollectionCollaborators(collaboratorList);   
-//        concept.setConcepts(conceptList);
-//		
-//		return concept;
-//	}
-	
-//	public IConcept getConceptCollectionItems(ConceptCollectionItemsDTO conceptCollectionConcept)
-//	{
-//		IConcept concept = null;
-//		concept = conceptCollectionFactory.createConcept();
-//		concept.setId(conceptCollectionConcept.getConceptcollectionsItemsDTOPK().getItem());
-//		concept.setDescription(conceptCollectionConcept.getDescription());
-//		concept.setLemma(conceptCollectionConcept.getLemma());
-//		concept.setPos(conceptCollectionConcept.getPos());
-//		return concept;
-//	}
 	public IConcept getConceptCollectionItems(ConceptsDTO conceptDTO)
 	{
 		IConcept concept = null;
@@ -195,32 +65,19 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		}
 		return conceptList;
 	}
-//	public List<IConcept> getConceptCollectionItemList(List<ConceptCollectionItemsDTO> conceptCollectionConceptList)
-//	{
-//		List<IConcept> conceptList = new ArrayList<IConcept>();
-//		if(conceptCollectionConceptList != null && conceptCollectionConceptList.size() > 0)
-//		{
-//			Iterator<ConceptCollectionItemsDTO> ccItemsIterator = conceptCollectionConceptList.iterator();
-//			while(ccItemsIterator.hasNext())
-//			{
-//				conceptList.add(getConceptCollectionItems(ccItemsIterator.next()));
-//			}	
-//		}
-//		return conceptList;
-//	}
 	
 	public ICollaborator getConceptCollectionCollaborators(ConceptCollectionCollaboratorDTO conceptCollectionCollaborator)
 	{
 		ICollaborator collaborator = null;
-		List<ICollaboratorRole> collaboratorRoles = null;
+		List<IQuadrigaRole> collaboratorRoles = null;
 		
 		collaborator = collaboratorFactory.createCollaborator();
-		collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		collaboratorRoles = new ArrayList<IQuadrigaRole>();
 		
 		QuadrigaUserDTO userName = conceptCollectionCollaborator.getQuadrigaUserDTO();
 		String role = conceptCollectionCollaborator.getConceptCollectionCollaboratorDTOPK().getCollaboratorrole();
 		
-		collaboratorRoles.add(collaboratorRoleManager.getCollectionCollabRoleByDBId(role));     
+		collaboratorRoles.add(roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, role));     
 		
 		collaborator.setUserObj(userDTOMapper.getUser(userName));
 		collaborator.setCollaboratorRoles(collaboratorRoles);
@@ -228,25 +85,6 @@ public class ConceptCollectionDTOMapper extends DAOConnectionManager
 		
 		return collaborator;
 	}
-
-//	/**
-//	 * 
-//	 * Returns list of Conceptcollections mapped to ConceptcollectionsDTO
-//	 * @param conceptCollection
-//	 * @return ConceptCollection
-//	 * @author Karthik Jayaraman
-//	 * 
-//	 */
-//	public List<IConceptCollection> getConceptCollectionList(List<ConceptCollectionDTO> conceptCollectionDTOList) throws QuadrigaException
-//	{
-//		List<IConceptCollection> conceptCollectionList = new ArrayList<IConceptCollection>();
-//		Iterator<ConceptCollectionDTO> conceptIterator = conceptCollectionDTOList.iterator();
-//		while(conceptIterator.hasNext())
-//		{
-//			conceptCollectionList.add(getConceptCollection(conceptIterator.next()));
-//		}
-//		return conceptCollectionList;
-//	}
 	
 	/**
 	 * 

@@ -2,7 +2,6 @@ package edu.asu.spring.quadriga.web.manageusers;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -83,10 +82,10 @@ public class ModifyUserRolesController
 		userForm = quadrigaUserMananger.modifyUserQuadrigaRolesManager(activeUserList);
 		
 		//Get all Quadriga roles
-		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles();
+		List<IQuadrigaRole> quadrigaRoles = rolemanager.getQuadrigaRoles(IQuadrigaRoleManager.MAIN_ROLES);
 		
 		//remove the invalid quadriga role object
-		IQuadrigaRole role = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+		IQuadrigaRole role = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
 		if(quadrigaRoles.contains(role))
 			quadrigaRoles.remove(role);
 				
@@ -135,10 +134,10 @@ public class ModifyUserRolesController
 				userForm = quadrigaUserMananger.modifyUserQuadrigaRolesManager(activeUserList);
 				
 				//Get all Quadriga roles
-				quadrigaRoles = rolemanager.getQuadrigaRoles();
+				quadrigaRoles = rolemanager.getQuadrigaRoles(IQuadrigaRoleManager.MAIN_ROLES);
 				
 				//remove the invalid quadriga role object
-				IQuadrigaRole role = rolemanager.getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+				IQuadrigaRole role = rolemanager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
 				if(quadrigaRoles.contains(role))
 					quadrigaRoles.remove(role);
 						
