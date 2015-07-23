@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.conceptcollection.IDBConnectionCCManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConcept;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
@@ -39,7 +39,7 @@ import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.ConceptCollectionDTOMapper;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 /**
@@ -59,9 +59,6 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	private UserDTOMapper userDTOMapper;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
-	
-	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
@@ -69,6 +66,9 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	
 	@Autowired
 	private IUserFactory userFactory;
+	
+	@Autowired
+	private IQuadrigaRoleManager roleManager;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CCManagerDAO.class);
 	
@@ -301,7 +301,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	public List<ICollaborator> showCollaboratorRequest(String collectionid) throws QuadrigaStorageException 
 	{
 		List<ICollaborator> collaboratorList = new ArrayList<ICollaborator>();
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
 		
 		try
 		{
@@ -359,74 +359,25 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	 * @author Karthik Jayaraman
 	 * 
 	 */
-	public List<ICollaboratorRole> splitAndgetCollaboratorRolesList(String role) {
+	public List<IQuadrigaRole> splitAndgetCollaboratorRolesList(String role) {
 		if(role == null || role.isEmpty())
 		{
 			logger.error("splitAndgetCollaboratorRolesList: input argument role is null");
 			return null;
 		}
 		String[] collabroles;
-		List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
-		ICollaboratorRole collaboratorRole = null;
+		List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
+		IQuadrigaRole collaboratorRole = null;
 
 		collabroles = role.split(",");
 
 		for (int i = 0; i < collabroles.length; i++) {
-			collaboratorRole = collaboratorRoleManager.getCollectionCollabRoleByDBId(collabroles[i]);
+			collaboratorRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, collabroles[i]);
 			collaboratorRoleList.add(collaboratorRole);
 		}
 
 		return collaboratorRoleList;
 	}
-
-	
-
-//	/**
-//	 * This method saves the item associated with the concept collection
-//	 * @param : lemma
-//	 * @param : pos
-//	 * @param : desc
-//	 * @param : conceptId - concept collection id
-//	 * @param : username - logged in user
-//	 * @throws : QuadrigaStorageException, QuadrigaAccessException
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void saveItem(String lemma, String id, String pos, String desc,
-//			String conceptId, String username) throws QuadrigaStorageException,
-//			QuadrigaAccessException {
-//		String errMsg = null;
-//		try
-//		{
-//			Query query = sessionFactory.getCurrentSession().createQuery("from QuadrigaUserDTO user where user.username =:username and ( user.username IN (Select quadrigaUserDTO.username from ConceptCollectionCollaboratorDTO ccCollab where ccCollab.conceptCollectionDTO.conceptCollectionid =:conceptCollectionid) OR user.username IN (Select conceptColl.collectionowner.username from ConceptCollectionDTO conceptColl where conceptColl.conceptCollectionid =:conceptCollectionid))");
-//			query.setParameter("username", username);
-//			query.setParameter("conceptCollectionid", conceptId);
-//			
-//			List<QuadrigaUserDTO> quadrigaUserDTOList = query.list();
-//			if(quadrigaUserDTOList != null && quadrigaUserDTOList.size() > 0)
-//			{
-//				ConceptCollectionItemsDTO conceptcollectionsItemsDTO = new ConceptCollectionItemsDTO();
-//				conceptcollectionsItemsDTO.setCreateddate(new Date());
-//				conceptcollectionsItemsDTO.setDescription(desc);
-//				conceptcollectionsItemsDTO.setLemma(lemma);
-//				conceptcollectionsItemsDTO.setPos(pos);
-//				conceptcollectionsItemsDTO.setUpdateddate(new Date());
-//				conceptcollectionsItemsDTO.setConceptcollectionsItemsDTOPK(new ConceptCollectionItemsDTOPK(conceptId, id));
-//				sessionFactory.getCurrentSession().save(conceptcollectionsItemsDTO);
-//			}
-//			else
-//			{
-//				errMsg = "User dont have access to the collection";
-//				logger.error(errMsg);
-//				throw new QuadrigaAccessException("Hmmm!!  Need to try much more hard to get into this");
-//			}
-//		}
-//		catch(Exception e)
-//		{
-//			logger.info("saveItem method :"+e.getMessage());	
-//			throw new QuadrigaStorageException(e);
-//		}
-//	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -694,7 +645,7 @@ public class CCManagerDAO extends DAOConnectionManager implements IDBConnectionC
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getCollaborators(IConceptCollection collection) throws QuadrigaStorageException {
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
 		List<IConceptCollectionCollaborator> conceptCollectionCollaboratorList = new ArrayList<IConceptCollectionCollaborator>();
 		
 		try

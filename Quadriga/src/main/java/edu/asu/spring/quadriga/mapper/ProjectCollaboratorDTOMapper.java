@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.ProjectCollaboratorDTOPK;
 import edu.asu.spring.quadriga.dto.ProjectDTO;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Service
@@ -31,13 +31,11 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 	@Autowired
     private IUserManager userManager;
 	@Autowired
-	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	private IQuadrigaRoleFactory roleFactory;
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager roleManager;
 	@Autowired
 	private ICollaboratorFactory collaboratorFactory;
-	@Autowired
-	private ICollaboratorRoleManager roleMapper;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -52,15 +50,15 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 			HashMap<String,List<String>> collabMap = mapUserRoles(projectDTO);
 			for(String userID:collabMap.keySet())
 			{
-				List<ICollaboratorRole> collaboratorRoleList = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> collaboratorRoleList = new ArrayList<IQuadrigaRole>();
 				ICollaborator collaborator = collaboratorFactory.createCollaborator();
 				collaborator.setUserObj(userManager.getUser(userID));
 				for(String roleName: collabMap.get(userID))
 				{
-					ICollaboratorRole collaboratorRole = collaboratorRoleFactory.createCollaboratorRoleObject();
-					collaboratorRole.setRoleDBid(roleName);
-					collaboratorRole.setDisplayName(collaboratorRoleManager.getProjectCollaboratorRoleByDBId(roleName));
-					roleMapper.fillProjectCollaboratorRole(collaboratorRole);
+				    IQuadrigaRole collaboratorRole = roleFactory.createQuadrigaRoleObject();
+					collaboratorRole.setDBid(roleName);
+					collaboratorRole.setDisplayName(roleManager.getQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, roleName).getDisplayName());
+					roleManager.fillQuadrigaRole(IQuadrigaRoleManager.PROJECT_ROLES, collaboratorRole);
 					collaboratorRoleList.add(collaboratorRole);
 				}
 				collaborator.setCollaboratorRoles(collaboratorRoleList);
@@ -106,15 +104,15 @@ public class ProjectCollaboratorDTOMapper extends DAOConnectionManager {
 			String projectId = project.getProjectid();
 			List<ProjectCollaboratorDTO> projectCollaborator;
 			String collabUser = collaborator.getUserObj().getUserName();
-			List<ICollaboratorRole> collaboratorRoles = collaborator.getCollaboratorRoles();
+			List<IQuadrigaRole> collaboratorRoles = collaborator.getCollaboratorRoles();
 			QuadrigaUserDTO userDTO = getUserDTO(collabUser);
 			
 			projectCollaborator = project.getProjectCollaboratorDTOList();
 			
-			for(ICollaboratorRole role : collaboratorRoles)
+			for(IQuadrigaRole role : collaboratorRoles)
 			{
 				ProjectCollaboratorDTO collaboratorDTO = new ProjectCollaboratorDTO();
-				ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectId,collabUser,role.getRoleDBid());
+				ProjectCollaboratorDTOPK collaboratorKey = new ProjectCollaboratorDTOPK(projectId,collabUser,role.getDBid());
 				collaboratorDTO.setProjectDTO(project);
 				collaboratorDTO.setQuadrigaUserDTO(userDTO);
 				collaboratorDTO.setProjectCollaboratorDTOPK(collaboratorKey);

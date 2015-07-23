@@ -1,6 +1,5 @@
 package edu.asu.spring.quadriga.db;
 
-import java.util.Date;
 import java.util.List;
 
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;

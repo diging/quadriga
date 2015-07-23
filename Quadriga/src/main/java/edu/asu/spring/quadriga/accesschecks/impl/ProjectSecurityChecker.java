@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.asu.spring.quadriga.accesschecks.IProjectSecurityChecker;
 import edu.asu.spring.quadriga.db.workbench.IProjectAccessManager;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
@@ -122,7 +121,7 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker
 	public boolean checkCollabProjectAccess(String userName,String projectId,String collaboratorRole) throws QuadrigaStorageException
 	{
 		List<IProjectCollaborator> projectCollaboratorList = null;
-		List<ICollaboratorRole> collaboratorRoles = null;
+		List<IQuadrigaRole> collaboratorRoles = null;
 
 		//initialize the local variable
 		boolean chkAccess = false;
@@ -143,9 +142,9 @@ public class ProjectSecurityChecker implements IProjectSecurityChecker
 
 						if(collaboratorRoles != null){
 							//check if the collaborator is Project Admin or Contributor
-							for(ICollaboratorRole role : collaboratorRoles)
+							for(IQuadrigaRole role : collaboratorRoles)
 							{
-								if(role.getRoleid() == collaboratorRole)
+								if(role.getId() == collaboratorRole)
 								{
 									chkAccess = true;
 									break;

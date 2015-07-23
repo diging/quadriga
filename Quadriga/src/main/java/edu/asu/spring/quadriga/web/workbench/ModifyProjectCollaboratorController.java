@@ -24,12 +24,12 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.factories.IModifyCollaboratorFormFactory;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
@@ -55,7 +55,7 @@ public class ModifyProjectCollaboratorController
 	private IRetrieveProjectManager projectDetailsManager;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	private CollaboratorFormValidator validator;
@@ -73,9 +73,9 @@ public class ModifyProjectCollaboratorController
 			@Override
 			public void setAsText(String text) {
 				String[] roleIds = text.split(",");
-				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getProjectCollaboratorRoleById(roleId.trim());
+				    IQuadrigaRole role = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);
@@ -103,7 +103,7 @@ public class ModifyProjectCollaboratorController
 		collaboratorList = collaboratorManager.modifyProjectCollaboratorManager(projectid);
 		
 		//fetch the roles that can be associated to the workspace collaborator
-		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+		List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
 		
 		//create a model for collaborators
 		collaboratorForm = collaboratorFactory.createCollaboratorFormObject();
@@ -131,7 +131,7 @@ public class ModifyProjectCollaboratorController
 		List<ModifyCollaborator> projCollaborators;
 		String userName;
 		String collabUser;
-		List<ICollaboratorRole> values;
+		List<IQuadrigaRole> values;
 		StringBuilder collabRoles;
 		
 		userName = principal.getName();
@@ -158,7 +158,7 @@ public class ModifyProjectCollaboratorController
 				
 				//retrieve the collaborator roles and assign it to a map
 				//fetch the roles that can be associated to the workspace collaborator
-				List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+				List<IQuadrigaRole> collaboratorRoles = roleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
 				model.getModelMap().put("projcollabroles", collaboratorRoles);
 			}
 			else
@@ -173,10 +173,10 @@ public class ModifyProjectCollaboratorController
 					values = collab.getCollaboratorRoles();
 					
 					//fetch the role names for the roles and form a string
-					for(ICollaboratorRole role : values)
+					for(IQuadrigaRole role : values)
 					{
 						collabRoles.append(",");
-						collabRoles.append(role.getRoleDBid());
+						collabRoles.append(role.getDBid());
 					}
 					
 				    projectManager.updateCollaboratorRequest(projectid, collabUser, collabRoles.toString().substring(1), userName);

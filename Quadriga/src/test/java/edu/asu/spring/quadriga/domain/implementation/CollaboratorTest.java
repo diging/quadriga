@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
-import edu.asu.spring.quadriga.domain.impl.CollaboratorRole;
+import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.User;
 
 /*
@@ -27,7 +27,7 @@ import edu.asu.spring.quadriga.domain.impl.User;
 public class CollaboratorTest {
 	
 	private Collaborator collaborator ;
-	private List<ICollaboratorRole> collaboratorRoles;
+	private List<IQuadrigaRole> collaboratorRoles;
 	private IUser userObj;
 	
 	@BeforeClass
@@ -44,10 +44,10 @@ public class CollaboratorTest {
 	public void setUp() throws Exception {
 		
 		this.collaborator = new Collaborator();
-		this.collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		this.collaboratorRoles = new ArrayList<IQuadrigaRole>();
 					
-		collaboratorRoles.add(new CollaboratorRole());
-		collaboratorRoles.add(new CollaboratorRole());
+		collaboratorRoles.add(new QuadrigaRole());
+		collaboratorRoles.add(new QuadrigaRole());
 	
 		this.userObj = new User();
 			

@@ -28,7 +28,7 @@ import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollecti
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
 import edu.asu.spring.quadriga.validator.UserValidator;
 import edu.asu.spring.quadriga.web.login.RoleNames;
@@ -50,7 +50,7 @@ public class TransferCCOwnerController
 	private IConceptCollectionFactory collectionFactory;
 	
 	@Autowired
-	ICollaboratorRoleManager roleManager;
+	IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	IDBConnectionModifyCCManager conceptCollectionModifyManager;
@@ -169,7 +169,7 @@ public class TransferCCOwnerController
         	//fetch the new owner
         	newOwner = collaboratorUser.getUserName();
         	
-        	collaboratorRole = roleManager.getCCCollaboratorRoleById(RoleNames.ROLE_CC_COLLABORATOR_ADMIN).getRoleDBid();       	
+        	collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, RoleNames.ROLE_CC_COLLABORATOR_ADMIN).getDBid();       	
 			
         	//call the method to transfer the ownership
         	conceptCollectionModifyManager.transferCollectionOwnerRequest(collectionId,userName , newOwner, collaboratorRole);

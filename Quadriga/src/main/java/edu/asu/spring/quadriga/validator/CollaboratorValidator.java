@@ -9,7 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.domain.impl.dictionary.DictionaryCollaborator;
 /**
@@ -37,7 +37,7 @@ public class CollaboratorValidator implements Validator {
 	public void validate(Object obj, Errors err) 
 	{
 		String userName;
-		List<ICollaboratorRole> role;
+		List<IQuadrigaRole> role;
 		
 		Collaborator collaborator = (Collaborator)obj;
 		
@@ -83,7 +83,7 @@ public class CollaboratorValidator implements Validator {
 	 * @param err
 	 * @author kiran batna
 	 */
-	public void validateCollaboratorRoles(List<ICollaboratorRole> roles,Errors err)
+	public void validateCollaboratorRoles(List<IQuadrigaRole> roles,Errors err)
 	{
 
 		if(roles == null){

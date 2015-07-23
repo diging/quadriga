@@ -27,7 +27,6 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
@@ -39,7 +38,7 @@ import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryCollaborator
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
@@ -76,7 +75,7 @@ public class DictionaryCollaboratorController {
 	IRetrieveDictionaryManager retrieveDictionaryManager;
 
 	@Autowired
-	ICollaboratorRoleManager collaboratorRoleManager;
+	IQuadrigaRoleManager collaboratorRoleManager;
 
 	@Autowired
 	CollaboratorValidator collaboratorValidator;
@@ -117,9 +116,9 @@ public class DictionaryCollaboratorController {
 			public void setAsText(String text) {
 
 				String[] roleIds = text.split(",");
-				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getDictCollaboratorRoleById(roleId.trim());
+				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);
@@ -176,13 +175,13 @@ public class DictionaryCollaboratorController {
 		}
 		modelAndView.getModelMap().put("nonCollaboratingUsers", nonCollaboratingUsers);
 
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
+		List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
+		collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.DICT_ROLES);
 
-		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
+		Iterator<IQuadrigaRole> iterator = collaboratorRoles.iterator();
 		while(iterator.hasNext())
 		{
-			if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			if(iterator.next().getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 			{
 				iterator.remove();
 			}
@@ -246,13 +245,13 @@ public class DictionaryCollaboratorController {
 		model.getModelMap().put("collaboratingUsers", collaborators);
 
 		//mapping collaborator roles
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-		collaboratorRoles = collaboratorRoleManager.getDictCollaboratorRoles();
+		List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
+		collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.DICT_ROLES);
 
-		Iterator<ICollaboratorRole> iterator = collaboratorRoles.iterator();
+		Iterator<IQuadrigaRole> iterator = collaboratorRoles.iterator();
 		while(iterator.hasNext())
 		{
-			if(iterator.next().getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			if(iterator.next().getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 			{
 				iterator.remove();
 			}

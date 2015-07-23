@@ -28,7 +28,6 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.conceptcollection.IConceptCollection;
@@ -40,7 +39,7 @@ import edu.asu.spring.quadriga.domain.factory.conceptcollection.IConceptCollecti
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.conceptcollection.ICCCollaboratorManager;
 import edu.asu.spring.quadriga.service.conceptcollection.IConceptCollectionManager;
@@ -65,7 +64,7 @@ public class AddCCCollaboratorController {
 	private IUserFactory userFactory;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager collaboratorRoleManager;
 	
 	@Autowired
 	private IConceptCollectionFactory collectionFactory;
@@ -107,10 +106,10 @@ public class AddCCCollaboratorController {
 		    @Override
 		    public void setAsText(String text){
 		    	String roleIds[] = text.split(",");
-		    	List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+		    	List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 		    	for(String roleId: roleIds)
 		    	{
-		    		ICollaboratorRole role = collaboratorRoleManager.getCCCollaboratorRoleById(roleId.trim());
+		    	    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRole(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES, roleId.trim());
 		    		roles.add(role);
 		    	}
 		    	setValue(roles);	
@@ -134,7 +133,7 @@ public class AddCCCollaboratorController {
 		    ICollaborator collaborator;
 			ModelAndView model;
 			List<IUser> nonCollaboratorList;
-			List<ICollaboratorRole> collaboratorRoleList;
+			List<IQuadrigaRole> collaboratorRoleList;
 			List<IConceptCollectionCollaborator>ccCollaboratingUsers;
 
 			String userName = principal.getName();
@@ -178,12 +177,12 @@ public class AddCCCollaboratorController {
 //			ccCollaborator.getCollaborator().setUserObj(userFactory.createUserObject());
 			model.getModelMap().put("ccCollaborator", collaborator);
 			
-			collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
-			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoleList.iterator();
+			collaboratorRoleList = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES);
+			Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoleList.iterator();
 			while(collabRoleIterator.hasNext())
 			{
-				ICollaboratorRole collabRole = collabRoleIterator.next();
-				if(collabRole.getRoleid().equals(RoleNames.ROLE_CC_COLLABORATOR_ADMIN))
+			    IQuadrigaRole collabRole = collabRoleIterator.next();
+				if(collabRole.getId().equals(RoleNames.ROLE_CC_COLLABORATOR_ADMIN))
 				{
 					collabRoleIterator.remove();
 				}
@@ -212,7 +211,7 @@ public class AddCCCollaboratorController {
 		@Validated @ModelAttribute("ccCollaborator") Collaborator collaborator, BindingResult result)throws QuadrigaStorageException, QuadrigaAccessException
 		{
 		   List<IUser> nonCollaboratorList;
-		   List<ICollaboratorRole> collaboratorRoleList;
+		   List<IQuadrigaRole> collaboratorRoleList;
 		   ModelAndView model;
 		   model = new ModelAndView("auth/conceptcollection/addcollaborators");
 		   
@@ -257,12 +256,12 @@ public class AddCCCollaboratorController {
 			}
 		   model.getModelMap().put("nonCollaboratorList", nonCollaboratorList);
 			
-		   collaboratorRoleList = collaboratorRoleManager.getCollectionCollaboratorRoles();
-			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoleList.iterator();
+		   collaboratorRoleList = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.CONCEPT_COLLECTION_ROLES);
+			Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoleList.iterator();
 			while(collabRoleIterator.hasNext())
 			{
-				ICollaboratorRole collabRole = collabRoleIterator.next();
-				if(collabRole.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			    IQuadrigaRole collabRole = collabRoleIterator.next();
+				if(collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 				{
 					collabRoleIterator.remove();
 				}

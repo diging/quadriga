@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.domain.impl;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 
 /**
@@ -17,7 +17,7 @@ public class Collaborator implements ICollaborator
 {
 	private IUser userObj;
 	private String description;
-	private List<ICollaboratorRole> collaboratorRoles;
+	private List<IQuadrigaRole> collaboratorRoles;
 	
 	public IUser getUserObj() {
 		return userObj;
@@ -34,11 +34,11 @@ public class Collaborator implements ICollaborator
 		this.description = description;
 	}
 	@Override
-	public List<ICollaboratorRole> getCollaboratorRoles() {
+	public List<IQuadrigaRole> getCollaboratorRoles() {
 		return collaboratorRoles;
 	}
 	@Override
-	public void setCollaboratorRoles(List<ICollaboratorRole> collaboratorRoles) {
+	public void setCollaboratorRoles(List<IQuadrigaRole> collaboratorRoles) {
 		this.collaboratorRoles = collaboratorRoles;
 	}
 	@Override

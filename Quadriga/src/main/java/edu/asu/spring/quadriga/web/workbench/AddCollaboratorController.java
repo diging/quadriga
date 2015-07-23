@@ -28,7 +28,6 @@ import edu.asu.spring.quadriga.aspects.annotations.AccessPolicies;
 import edu.asu.spring.quadriga.aspects.annotations.CheckedElementType;
 import edu.asu.spring.quadriga.aspects.annotations.ElementAccessPolicy;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
 import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
@@ -39,7 +38,6 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
 import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjCollabManager;
@@ -73,7 +71,7 @@ public class AddCollaboratorController {
 	private ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager collaboratorRoleManager;
 
 	@Autowired
 	private IQuadrigaRoleManager quadrigaRoleManager;
@@ -113,9 +111,9 @@ public class AddCollaboratorController {
 			public void setAsText(String text) {
 
 				String[] roleIds = text.split(",");
-				List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+				List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
 				for (String roleId : roleIds) {
-					ICollaboratorRole role = collaboratorRoleManager.getProjectCollaboratorRoleById(roleId.trim());
+				    IQuadrigaRole role = collaboratorRoleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, roleId.trim());
 					roles.add(role);
 				}
 				setValue(roles);
@@ -181,13 +179,13 @@ public class AddCollaboratorController {
 		model.getModelMap().put("projectCollaborators", projectCollaborators);
 		
 		// mapping collaborator Roles to jsp and restricting ADMIN role for newly added collaborator
-		List<ICollaboratorRole> collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
+		List<IQuadrigaRole> collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
 		
-		Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoles.iterator();
+		Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles.iterator();
 		while(collabRoleIterator.hasNext())
 		{
-			ICollaboratorRole collabRole = collabRoleIterator.next();
-			if(collabRole.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+		    IQuadrigaRole collabRole = collabRoleIterator.next();
+			if(collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 			{
 				collabRoleIterator.remove();
 			}
@@ -246,13 +244,13 @@ public class AddCollaboratorController {
 			}
 			model.getModelMap().put("notCollaboratingUsers", nonCollaboratingUsers);
 			
-			List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
-			collaboratorRoles = collaboratorRoleManager.getProjectCollaboratorRoles();
-			Iterator<ICollaboratorRole> collabRoleIterator = collaboratorRoles.iterator();
+			List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
+			collaboratorRoles = collaboratorRoleManager.getQuadrigaRoles(IQuadrigaRoleManager.PROJECT_ROLES);
+			Iterator<IQuadrigaRole> collabRoleIterator = collaboratorRoles.iterator();
 			while(collabRoleIterator.hasNext())
 			{
-				ICollaboratorRole collabRole = collabRoleIterator.next();
-				if(collabRole.getRoleid().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
+			    IQuadrigaRole collabRole = collabRoleIterator.next();
+				if(collabRole.getId().equals(RoleNames.ROLE_COLLABORATOR_ADMIN))
 				{
 					collabRoleIterator.remove();
 				}
