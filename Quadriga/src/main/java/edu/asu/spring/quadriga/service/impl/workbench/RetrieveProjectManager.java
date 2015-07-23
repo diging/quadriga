@@ -15,7 +15,7 @@ import edu.asu.spring.quadriga.domain.proxy.ProjectProxy;
 import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjCollabManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.service.workbench.mapper.IProjectDeepMapper;
@@ -36,9 +36,6 @@ public class RetrieveProjectManager implements IRetrieveProjectManager
 
 	@Autowired
 	private IProjectDeepMapper projectDeepMapper;	
-
-	@Autowired
-	private ICollaboratorRoleManager roleMapper;
 
 	@Autowired
 	private IProjectSecurityChecker projectSecurity;

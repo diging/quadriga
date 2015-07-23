@@ -22,7 +22,7 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 
@@ -38,23 +38,15 @@ public class DictionaryListController {
 	IDictionaryManager dictonaryManager;
 
 	@Autowired
-	ICollaboratorRoleManager collabRoleManager;
+	IQuadrigaRoleManager collabRoleManager;
 	
 	
 	private static final Logger logger = LoggerFactory
 			.getLogger(DictionaryListController.class);
 
 	@Autowired
-	IUserManager usermanager;
+	private IUserManager usermanager;
 
-	public ICollaboratorRoleManager getCollabRoleManager() {
-		return collabRoleManager;
-	}
-
-	public void setCollabRoleManager(ICollaboratorRoleManager collabRoleManager) {
-		this.collabRoleManager = collabRoleManager;
-	}
-	
 	public IDictionaryManager getDictonaryManager() {
 		return dictonaryManager;
 	}

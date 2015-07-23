@@ -26,7 +26,7 @@ import edu.asu.spring.quadriga.domain.workbench.IProject;
 import edu.asu.spring.quadriga.domain.workbench.IProjectCollaborator;
 import edu.asu.spring.quadriga.exceptions.QuadrigaAccessException;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.workbench.IModifyProjectManager;
 import edu.asu.spring.quadriga.service.workbench.IRetrieveProjectManager;
 import edu.asu.spring.quadriga.validator.UserValidator;
@@ -48,7 +48,7 @@ public class TransferProjectOwnerController
 	IUserFactory userFactory;
 
 	@Autowired
-	ICollaboratorRoleManager roleManager;
+	private IQuadrigaRoleManager roleManager;
 
 	@InitBinder
 	protected void initBinder(WebDataBinder validateBinder){
@@ -166,7 +166,7 @@ public class TransferProjectOwnerController
 			//fetch the new owner
 			newOwner = collaboratorUser.getUserName();
 
-			collaboratorRole = roleManager.getProjectCollaboratorRoleById(RoleNames.ROLE_COLLABORATOR_ADMIN).getRoleDBid();
+			collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.PROJECT_ROLES, RoleNames.ROLE_COLLABORATOR_ADMIN).getDBid();
 
 			//call the method to transfer the ownership
 			projectManager.transferProjectOwnerRequest(projectid, userName, newOwner,collaboratorRole);

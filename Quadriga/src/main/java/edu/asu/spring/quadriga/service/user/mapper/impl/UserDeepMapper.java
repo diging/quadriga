@@ -50,7 +50,7 @@ public class UserDeepMapper implements IUserDeepMapper {
             userRole = user.getQuadrigaRoles();
 
             for (int i = 0; i < userRole.size(); i++) {
-                quadrigaRole = roleManager.getQuadrigaRole(userRole.get(i)
+                quadrigaRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, userRole.get(i)
                         .getDBid());
 
                 // If user account is deactivated remove other roles
@@ -66,7 +66,7 @@ public class UserDeepMapper implements IUserDeepMapper {
         } else {
             user = userFactory.createUserObject();
             quadrigaRole = roleManager
-                    .getQuadrigaRole(RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
+                    .getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.DB_ROLE_QUADRIGA_NOACCOUNT);
             rolesList.add(quadrigaRole);
             user.setQuadrigaRoles(rolesList);
         }
@@ -84,7 +84,7 @@ public class UserDeepMapper implements IUserDeepMapper {
 
         // Find the ROLEDBID for Deactivated account
         String sDeactiveRoleDBId = roleManager
-                .getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+                .getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
         List<QuadrigaUserDTO> usersDTOList = dbConnect
                 .getUserDTOListNotInRole(sDeactiveRoleDBId);
@@ -104,7 +104,7 @@ public class UserDeepMapper implements IUserDeepMapper {
 
         // Find the ROLEDBID for Deactivated account
         String sDeactiveRoleDBId = roleManager
-                .getQuadrigaRoleDBId(RoleNames.ROLE_QUADRIGA_DEACTIVATED);
+                .getQuadrigaRoleDBId(IQuadrigaRoleManager.MAIN_ROLES, RoleNames.ROLE_QUADRIGA_DEACTIVATED);
 
         List<QuadrigaUserDTO> usersDTOList = dbConnect
                 .getUserDTOList(sDeactiveRoleDBId);
@@ -191,7 +191,7 @@ public class UserDeepMapper implements IUserDeepMapper {
         if (roles != null && roles.length() > 0) {
             role = roles.split("\\s*,\\s*");
             for (int i = 0; i < role.length; i++) {
-                userRole = roleManager.getQuadrigaRole(role[i]);
+                userRole = roleManager.getQuadrigaRole(IQuadrigaRoleManager.MAIN_ROLES, role[i]);
                 rolesList.add(userRole);
             }
         }

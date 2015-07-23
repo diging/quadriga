@@ -3,7 +3,7 @@ package edu.asu.spring.quadriga.db.workspace;
 import java.util.List;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 
@@ -34,6 +34,6 @@ public interface IDBConnectionRetrieveWSCollabManager
 	 * @param collabRoles
 	 * @return List<ICollaboratorRole> - list of collaborator roles.
 	 */
-	public abstract List<ICollaboratorRole> getCollaboratorDBRoleIdList(String collabRoles);
+	public abstract List<IQuadrigaRole> getCollaboratorDBRoleIdList(String collabRoles);
 
 }

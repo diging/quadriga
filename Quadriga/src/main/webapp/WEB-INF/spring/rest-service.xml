@@ -48,7 +48,7 @@
 	
 	<bean id="conceptPowerURL" class="java.lang.String">
 		<constructor-arg>
-		<value>http://chps.asu.edu/conceptpower</value>
+		<value>https://chps.asu.edu/conceptpower</value>
 		</constructor-arg>
 	</bean>
 	

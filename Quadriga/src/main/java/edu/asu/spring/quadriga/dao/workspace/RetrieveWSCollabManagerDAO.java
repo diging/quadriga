@@ -13,10 +13,10 @@ import org.springframework.stereotype.Repository;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factories.ICollaboratorRoleFactory;
+import edu.asu.spring.quadriga.domain.factories.IQuadrigaRoleFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.dto.WorkspaceCollaboratorDTO;
@@ -24,7 +24,7 @@ import edu.asu.spring.quadriga.dto.WorkspaceDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
 import edu.asu.spring.quadriga.mapper.UserDTOMapper;
 import edu.asu.spring.quadriga.mapper.WorkspaceCollaboratorDTOMapper;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.IUserManager;
 
 @Repository
@@ -46,10 +46,10 @@ public class RetrieveWSCollabManagerDAO extends DAOConnectionManager implements 
 	private IUserFactory userFactory;
 	
 	@Autowired
-	private ICollaboratorRoleManager collaboratorRoleManager;
+	private IQuadrigaRoleManager roleManager;
 	
 	@Autowired
-	private ICollaboratorRoleFactory collaboratorRoleFactory;
+	private IQuadrigaRoleFactory roleFactory;
 	
 	@Autowired
 	private UserDTOMapper userDTOMapper;
@@ -121,18 +121,18 @@ public class RetrieveWSCollabManagerDAO extends DAOConnectionManager implements 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ICollaboratorRole> getCollaboratorDBRoleIdList(
+	public List<IQuadrigaRole> getCollaboratorDBRoleIdList(
 			String collabRoles) {
 		String[] roleList;
-		List<ICollaboratorRole> collaboratorRole;
-		ICollaboratorRole role;
+		List<IQuadrigaRole> collaboratorRole;
+		IQuadrigaRole role;
 		
-		collaboratorRole = new ArrayList<ICollaboratorRole>();
+		collaboratorRole = new ArrayList<IQuadrigaRole>();
 		roleList = collabRoles.split(",");
 		
 		for(String dbRoleId : roleList)
 		{
-			role = collaboratorRoleManager.getWSCollaboratorRoleByDBId(dbRoleId);
+			role = roleManager.getQuadrigaRole(IQuadrigaRoleManager.WORKSPACE_ROLES, dbRoleId);
 			collaboratorRole.add(role);
 		}
 		return collaboratorRole;

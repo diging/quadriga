@@ -16,14 +16,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.util.ReflectionUtils;
 
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
 import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryFactory;
 import edu.asu.spring.quadriga.domain.impl.Collaborator;
-import edu.asu.spring.quadriga.domain.impl.CollaboratorRole;
+import edu.asu.spring.quadriga.domain.impl.QuadrigaRole;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.domain.impl.dictionary.Dictionary;
 import edu.asu.spring.quadriga.domain.impl.dictionary.DictionaryCollaborator;
@@ -71,9 +71,9 @@ public class DictionaryAuthorizationTest {
         collaborator.setUserObj(collabUser);
         
         // create collaborator roles 
-        ICollaboratorRole role = new CollaboratorRole();
-        role.setRoleid("role1");
-        List<ICollaboratorRole> roles = new ArrayList<ICollaboratorRole>();
+        IQuadrigaRole role = new QuadrigaRole();
+        role.setId("role1");
+        List<IQuadrigaRole> roles = new ArrayList<IQuadrigaRole>();
         roles.add(role);
         collaborator.setCollaboratorRoles(roles);
         

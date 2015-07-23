@@ -10,100 +10,51 @@ import org.springframework.stereotype.Service;
 
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.dictionary.IDictionary;
 import edu.asu.spring.quadriga.domain.dictionary.IItem;
-import edu.asu.spring.quadriga.domain.factories.impl.CollaboratorFactory;
-import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryFactory;
-import edu.asu.spring.quadriga.domain.factory.impl.dictionary.DictionaryItemFactory;
+import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
+import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryFactory;
+import edu.asu.spring.quadriga.domain.factory.dictionary.IDictionaryItemFactory;
 import edu.asu.spring.quadriga.dto.DictionaryCollaboratorDTO;
 import edu.asu.spring.quadriga.dto.DictionaryDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTO;
 import edu.asu.spring.quadriga.dto.DictionaryItemsDTOPK;
 import edu.asu.spring.quadriga.dto.QuadrigaUserDTO;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.impl.CollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 
 @Service
 public class DictionaryDTOMapper extends DAOConnectionManager
 {
 	@Autowired
-	private DictionaryFactory dictionaryFactory;
+	private IDictionaryFactory dictionaryFactory;
 	
 	@Autowired
-	private DictionaryItemFactory dictionaryItemsFactory;
+	private IDictionaryItemFactory dictionaryItemsFactory;
 	
 	@Autowired
 	private UserDTOMapper userMapper;
 	
 	@Autowired
-	private CollaboratorFactory collaboratorFactory;
+	private ICollaboratorFactory collaboratorFactory;
 	
 	@Autowired
-	private CollaboratorRoleManager collaboratorRoleManager;
-	
-//	public IDictionary getDictionary(DictionaryDTO dictionary)
-//	{
-//		List<ICollaborator> collaboratorList = null;
-//		ICollaborator collaborator= null;
-//		IDictionary tempDictionary = null;
-//		List<DictionaryCollaboratorDTO> dictionaryCollaboratorList;
-//		
-//		collaboratorList = new ArrayList<ICollaborator>();
-//		
-//		tempDictionary = dictionaryFactory.createDictionaryObject();
-//		
-//		IUser user = userMapper.getUser(dictionary.getDictionaryowner());
-//		
-//		//fetch the collaborators
-//		dictionaryCollaboratorList = dictionary.getDictionaryCollaboratorDTOList();
-//		
-//		if(dictionaryCollaboratorList != null)
-//		{
-//			for(DictionaryCollaboratorDTO dictionaryCollaborator : dictionaryCollaboratorList)
-//			{
-//				collaborator = getDictionaryCollaborators(dictionaryCollaborator);
-//				
-//				if(collaboratorList.contains(collaborator))
-//				{
-//					int index = collaboratorList.indexOf(collaborator);
-//					ICollaborator tempCollaborator = collaboratorList.get(index);
-//					List<ICollaboratorRole> tempRoles = tempCollaborator.getCollaboratorRoles();
-//					tempRoles.addAll(collaborator.getCollaboratorRoles());
-//					tempCollaborator.setCollaboratorRoles(tempRoles);
-//					
-//					//set the collaborator with the roles
-//					collaboratorList.set(index, tempCollaborator);
-//				}
-//				else
-//				{
-//					collaboratorList.add(collaborator);
-//				}
-//			}
-//		}
-//		
-//		tempDictionary.setDictionaryId(dictionary.getDictionaryid());
-//		tempDictionary.setDictionaryName(dictionary.getDictionaryname());
-//		tempDictionary.setDescription(dictionary.getDescription());
-//		tempDictionary.setOwner(user);
-//		tempDictionary.setCollaborators(collaboratorList);
-//		
-//		return tempDictionary;
-//	}
+	private IQuadrigaRoleManager roleManager;
 	
 	
 	public ICollaborator getDictionaryCollaborators(DictionaryCollaboratorDTO dictionaryCollaborator)
 	{
 		ICollaborator collaborator = null;
-		List<ICollaboratorRole> collaboratorRoles = null;
+		List<IQuadrigaRole> collaboratorRoles = null;
 		
 		collaborator = collaboratorFactory.createCollaborator();
-		collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		collaboratorRoles = new ArrayList<IQuadrigaRole>();
 		
 		QuadrigaUserDTO userName = dictionaryCollaborator.getQuadrigaUserDTO();
 		String role = dictionaryCollaborator.getDictionaryCollaboratorDTOPK().getCollaboratorrole();
 		
-		collaboratorRoles.add(collaboratorRoleManager.getDictCollaboratorRoleById(role));     
+		collaboratorRoles.add(roleManager.getQuadrigaRole(IQuadrigaRoleManager.DICT_ROLES, role));     
 		
 		collaborator.setUserObj(userMapper.getUser(userName));
 		collaborator.setCollaboratorRoles(collaboratorRoles);

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import edu.asu.spring.quadriga.dao.DAOConnectionManager;
 import edu.asu.spring.quadriga.db.workspace.IDBConnectionRetrieveWSCollabManager;
 import edu.asu.spring.quadriga.domain.ICollaborator;
-import edu.asu.spring.quadriga.domain.ICollaboratorRole;
+import edu.asu.spring.quadriga.domain.IQuadrigaRole;
 import edu.asu.spring.quadriga.domain.IUser;
 import edu.asu.spring.quadriga.domain.factories.ICollaboratorFactory;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
@@ -77,7 +77,7 @@ public class WorkspaceCollaboratorDTOMapper extends DAOConnectionManager
 	 */
 	public List<ICollaborator> getWorkspaceCollaborators(List<WorkspaceCollaboratorDTO> wrkCollabList) throws QuadrigaStorageException
 	{
-		List<ICollaboratorRole> collaboratorRoles = new ArrayList<ICollaboratorRole>();
+		List<IQuadrigaRole> collaboratorRoles = new ArrayList<IQuadrigaRole>();
 		List<ICollaborator> wrkspaceCollabList = new ArrayList<ICollaborator>();
 		
 		if(wrkCollabList != null && wrkCollabList.size() > 0)

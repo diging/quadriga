@@ -25,7 +25,7 @@ import edu.asu.spring.quadriga.domain.dictionary.IDictionaryCollaborator;
 import edu.asu.spring.quadriga.domain.factories.IUserFactory;
 import edu.asu.spring.quadriga.domain.impl.User;
 import edu.asu.spring.quadriga.exceptions.QuadrigaStorageException;
-import edu.asu.spring.quadriga.service.ICollaboratorRoleManager;
+import edu.asu.spring.quadriga.service.IQuadrigaRoleManager;
 import edu.asu.spring.quadriga.service.dictionary.IDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IModifyDictionaryManager;
 import edu.asu.spring.quadriga.service.dictionary.IRetrieveDictionaryManager;
@@ -45,7 +45,7 @@ public class TransferDictionaryOwnerController
 	IDictionaryManager dictionaryCollabManager;
 	
 	@Autowired
-	ICollaboratorRoleManager roleManager;
+	IQuadrigaRoleManager roleManager;
 	
 	@Autowired
 	IModifyDictionaryManager modifyDictionaryManager;
@@ -155,7 +155,7 @@ public class TransferDictionaryOwnerController
 			//fetch the new owner
         	newOwner = collaboratorUser.getUserName();
         	
-        	collaboratorRole = roleManager.getDictCollaboratorRoleById(RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN).getRoleDBid();
+        	collaboratorRole = roleManager.getQuadrigaRoleById(IQuadrigaRoleManager.DICT_ROLES, RoleNames.ROLE_DICTIONARY_COLLABORATOR_ADMIN).getDBid();
         	
 			//call the method to transfer the ownership
         	modifyDictionaryManager.transferDictionaryOwner(dictionaryid, userName, newOwner, collaboratorRole);
